@@ -1,0 +1,20 @@
+plugins {
+    id "idea"
+    id "org.sonarqube" version "2.7"
+    id "com.silenteight.gradle.wrapper" version "1.0.25"
+    id "com.silenteight.gradle.release" version "1.0.9"
+    id "com.silenteight.gradle.convention" version "1.11.0"
+}
+
+projectSetup {
+    javaVersion = JavaVersion.VERSION_11
+    lombokVersion = "1.18.8"
+}
+
+idea {
+    module {
+        [".gradle", "build"].each {
+            excludeDirs += file("$projectDir/$it")
+        }
+    }
+}

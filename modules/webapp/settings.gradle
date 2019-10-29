@@ -1,0 +1,4 @@
+rootProject.name = 'webapp'
+
+include 'sens-webapp-backend'
+include 'sens-webapp-frontend'
