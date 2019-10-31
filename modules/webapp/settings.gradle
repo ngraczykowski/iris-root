@@ -2,3 +2,4 @@ rootProject.name = 'webapp'
 
 include 'sens-webapp-backend'
 include 'sens-webapp-frontend'
+include 'sens-webapp-kernel'
