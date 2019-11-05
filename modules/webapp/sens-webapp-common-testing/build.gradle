@@ -1,0 +1,35 @@
+plugins { id "java" }
+
+description = "SENS WebApp Common Testing"
+
+dependencies {
+  compile libraries.spring_jdbc
+  compile libraries.spring_test
+  compile libraries.spring_tx
+
+  compile libraries.spring_boot
+  compile libraries.spring_boot_autoconfigure
+  compile libraries.spring_boot_test
+  compile libraries.spring_boot_test_autoconfigure
+
+  compile libraries.junit_jupiter_api
+
+  compile libraries.test_containers
+  compile libraries.test_containers_elasticsearch
+  compile libraries.test_containers_junit_jupiter
+  compile libraries.test_containers_oracle_xe
+  compile libraries.test_containers_postgresql
+  compile libraries.test_containers_spock
+
+  compile libraries.grpc_stub
+  compile libraries.grpc_testing
+  compile libraries.protobuf_java_util
+
+  compile libraries.bouncycastle_bcprov
+
+  compile libraries.reactor_test
+
+  implementation libraries.spring_amqp
+
+  implementation project(":sens-webapp-common")
+}

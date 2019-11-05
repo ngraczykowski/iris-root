@@ -18,3 +18,29 @@ idea {
         }
     }
 }
+
+ext {
+    gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
+}
+
+subprojects { Project project ->
+    pluginManager.withPlugin("java") {
+        project.apply from: "${gradleScriptDir}/dependencies.gradle"
+
+        project.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure { JavaCompile java ->
+            def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
+
+            java.dependsOn processResources
+        }
+    }
+}
+
+def uncommonSubprojects = subprojects - project(":sens-webapp-common-testing") - project(":sens-webapp-common")
+
+configure(uncommonSubprojects) { Project subproject ->
+  subproject.pluginManager.withPlugin("java") {
+    subproject.dependencies {
+      testImplementation project(":sens-webapp-common-testing")
+    }
+  }
+}
