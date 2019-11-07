@@ -16,7 +16,7 @@ public final class PostgresContainer {
 
   static {
     CONTAINER = new PostgreSQLContainer<>("postgres:10")
-        .withDatabaseName("sens_webapp_test_" + randomAlphabetic(6))
+        .withDatabaseName("webapp_test_" + randomAlphabetic(6))
         .withUsername("user_" + randomAlphabetic(6))
         .withPassword(randomAlphanumeric(12))
         .withTmpFs(Map.of("/var/lib/postgresql/data", "rw"));
