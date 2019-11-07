@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="users-1.0.0-1" author="mastylom">
+    <createTable tableName="webapp_user">
+      <column name="user_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="user_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hashed_password" type="VARCHAR(64)"/>
+      <column name="roles" type="${json.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="active" type="BOOLEAN" defaultValue="false" />
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="users-1.0.0-2" author="mastylom">
+    <addUniqueConstraint tableName="webapp_user"
+                         columnNames="user_name"
+                         constraintName="uq_webapp_user_user_name" />
+  </changeSet>
+
+  <changeSet id="users-1.0.0-3" author="mastylom">
+    <addColumn tableName="webapp_user">
+      <column name="super_user" type="BOOLEAN" defaultValue="false" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="users-1.0.0-4" author="mastylom">
+    <createTable tableName="webapp_user_token">
+      <column name="user_token_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="user_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hashed_token" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alias" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint tableName="webapp_user_token"
+                         columnNames="user_id, alias"
+                         constraintName="uq_webapp_user_token_user_id_alias" />
+  </changeSet>
+
+  <changeSet id="users-1.0.0-5" author="mastylom">
+    <dropUniqueConstraint tableName="webapp_user"
+                          constraintName="uq_webapp_user_user_name" />
+
+    <addColumn tableName="webapp_user">
+      <column name="deleted_at" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="users-1.0.0-6" author="mastylom">
+    <addColumn tableName="webapp_user">
+      <column name="last_login_at" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="users-1.0.0-7" author="mastylom">
+    <addColumn tableName="webapp_user">
+      <column name="display_name" type="VARCHAR(64)"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

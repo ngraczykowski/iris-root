@@ -1,12 +1,11 @@
 plugins {
-    id "java"
+  id "java"
 }
 
 description = "SENS WebApp Secutiry"
 
 configurations {
   implementation.extendsFrom starterDatabase
-
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
   testImplementation.extendsFrom starterSpringTest
@@ -19,6 +18,7 @@ dependencies {
 
     implementation libraries.spring_security_config
 
+    testImplementation project(":sens-webapp-db-changelog")
     testImplementation libraries.caffeine
     testImplementation libraries.spring_context_support
     testImplementation libraries.spring_security_test

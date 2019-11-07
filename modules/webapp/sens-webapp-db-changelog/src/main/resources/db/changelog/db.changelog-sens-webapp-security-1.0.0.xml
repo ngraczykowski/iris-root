@@ -17,6 +17,7 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+
     <addUniqueConstraint tableName="acl_sid"
                          columnNames="sid,principal"
                          constraintName="uq_acl_sid_sid_principal"/>
@@ -29,6 +30,7 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+
     <addUniqueConstraint tableName="acl_class"
                          columnNames="class"
                          constraintName="uq_acl_class_class"/>
@@ -49,10 +51,12 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+
     <addUniqueConstraint
         tableName="acl_object_identity"
         columnNames="object_id_class,object_id_identity"
         constraintName="uq_acl_object_identity_object_id_class_object_id_identity"/>
+
     <addForeignKeyConstraint
         baseTableName="acl_object_identity"
         baseColumnNames="parent_object"
@@ -61,6 +65,7 @@
         referencedColumnNames="id"
         onUpdate="CASCADE"
         onDelete="SET NULL"/>
+
     <addForeignKeyConstraint
         baseTableName="acl_object_identity"
         baseColumnNames="object_id_class"
@@ -69,6 +74,7 @@
         referencedColumnNames="id"
         onUpdate="CASCADE"
         onDelete="CASCADE"/>
+
     <addForeignKeyConstraint
         baseTableName="acl_object_identity"
         baseColumnNames="owner_sid"
@@ -104,10 +110,12 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+
     <addUniqueConstraint
         tableName="acl_entry"
         columnNames="acl_object_identity,ace_order"
         constraintName="uq_acl_entry_class_acl_object_identity_ace_order"/>
+
     <addForeignKeyConstraint
         baseTableName="acl_entry"
         baseColumnNames="acl_object_identity"
@@ -116,6 +124,7 @@
         referencedColumnNames="id"
         onUpdate="CASCADE"
         onDelete="CASCADE"/>
+
     <addForeignKeyConstraint
         baseTableName="acl_entry"
         baseColumnNames="sid"
@@ -131,4 +140,5 @@
       <column name="class_id_type" type="VARCHAR(150)"/>
     </addColumn>
   </changeSet>
+
 </databaseChangeLog>

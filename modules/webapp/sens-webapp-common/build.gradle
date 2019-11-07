@@ -44,6 +44,7 @@ dependencies {
   implementation libraries.spring_context
   implementation libraries.spring_data_commons
   implementation libraries.spring_cloud_starter_sleuth
+  implementation libraries.spring_security_config
 
   implementation libraries.byte_buddy_agent
   implementation libraries.bouncycastle_bcprov

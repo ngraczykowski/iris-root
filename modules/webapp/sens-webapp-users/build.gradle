@@ -1,0 +1,28 @@
+plugins {
+  id "java"
+}
+
+description = "SENS WebApp Users"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  compile project(":sens-webapp-kernel")
+  compile project(":sens-webapp-security")
+
+  implementation project(":sens-webapp-common")
+  implementation libraries.silenteight_commons_core
+  implementation libraries.javax_validation_api
+  implementation libraries.spring_security_config
+
+  implementation libraries.jaxb_osgi
+
+  testImplementation project(":sens-webapp-db-changelog")
+  testImplementation libraries.spring_context_support
+  testImplementation libraries.spring_security_test
+}
