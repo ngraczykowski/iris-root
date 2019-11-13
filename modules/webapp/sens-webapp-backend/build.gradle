@@ -3,3 +3,44 @@ plugins {
 }
 
 description = "SENS WebApp Backend"
+
+configurations {
+  implementation.extendsFrom starterSpringApp
+  implementation.extendsFrom starterJackson
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterDataJpaTest
+}
+
+dependencies {
+  compile project(":sens-webapp-common")
+  compile project(":sens-webapp-kernel")
+  compile project(":sens-webapp-security")
+  compile project(":sens-webapp-users")
+
+  compile libraries.bouncycastle_bcprov
+  compile libraries.commons_lang3
+  compile libraries.jjwt
+
+  compile libraries.spring_boot_starter_actuator
+  compile libraries.spring_boot_starter_undertow
+  compile libraries.spring_boot_starter_web
+
+  compile libraries.spring_security_web
+  compile libraries.spring_security_config
+  compile libraries.spring_security_cas
+
+  compile libraries.hibernate_envers
+
+  runtimeOnly libraries.caffeine
+
+  testImplementation project(":sens-webapp-db-changelog")
+  testImplementation libraries.rest_assured
+  testImplementation libraries.rest_assured_spring_mock_mvc
+}
+
+//bootJar {
+//  mainClassName = "com.silenteight.sens.webapp.backend.WebApplication"
+//}
