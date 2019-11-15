@@ -1,0 +1,18 @@
+@import 'variables';
+
+.maker-comment {
+  display: flex;
+
+  .maker-comment-author {
+    font-weight: 700;
+    margin-right: $space-xs;
+  }
+
+  .maker-comment-description {
+    flex: 1;
+  }
+
+  .maker-commnet-more {
+    margin-left: $space-xs;
+  }
+}

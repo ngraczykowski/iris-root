@@ -1,0 +1,6 @@
+<ng-container *ngIf="data">
+  <p *ngIf="hasData()"
+     class="text-ellipsis">{{data.data.join(', ')}}</p>
+  <p *ngIf="!hasData()"
+     class="text-ellipsis empty-state-data">{{ data.emptyState | translate }}</p>
+</ng-container>

@@ -1,0 +1,47 @@
+<app-overlay [class.is-active]="show"></app-overlay>
+<div class="popup-window" [class.is-active]="show">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'modal.editDecisionTree.title'">
+    </h1>
+  </div>
+  <app-loading [class.is-active]="inProgress"></app-loading>
+  <perfect-scrollbar>
+    <div class="popup-window-content" *ngIf="config">
+      <section class="section section-last">
+        <app-feedback-message
+                [class.is-active]="!dirty['name'] && isNameServerError()"
+                [message]="errorKey" class="error"></app-feedback-message>
+        <app-feedback-message
+                [class.is-active]="dirty['name'] && isNameEmpty()"
+                [message]="'modal.editDecisionTree.name.error.emptyField'" class="error"></app-feedback-message>
+        <app-feedback-message
+                [class.is-active]="dirty['name'] && isNameTooLong()"
+                [message]="'modal.editDecisionTree.name.error.longName'" class="error"></app-feedback-message>
+        <app-feedback-message
+                [class.is-active]="!dirty['name'] && !dirty['model'] && !dirty['assignment'] && isOtherServerError()"
+                [message]="errorKey" class="error"></app-feedback-message>
+        <div class="field-row">
+          <div class="field-row-label required">
+            <label [translate]="'modal.editDecisionTree.inputLabel'"></label>
+          </div>
+          <div class="field-row-option-horizontal-space-between">
+            <input class="input-field"
+                   placeholder="{{ 'modal.editDecisionTree.inputPlaceholder' | translate }}"
+                   [(ngModel)]="config.name"
+                   (ngModelChange)="onChangeName()"
+                   #dtRename>
+          </div>
+        </div>
+      </section>
+    </div>
+  </perfect-scrollbar>
+  <section class="popup-window-footer"
+           *ngIf="config">
+    <button class="button-outline" (click)="close()"
+            [translate]="'modal.button.cancel'"></button>
+    <button class="button-action"
+            [disabled]="shouldDisableConfirmButton()"
+            (click)="confirm()" [translate]="'modal.button.saveChanges'"></button>
+  </section>
+</div>

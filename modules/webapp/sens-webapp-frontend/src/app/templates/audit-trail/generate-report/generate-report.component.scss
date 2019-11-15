@@ -1,0 +1,73 @@
+@import 'variables';
+@import 'mixins';
+@import 'global/buttons';
+
+:host {
+  @include transition(all, $transition-normal, ease-in-out);
+  background: $color-background-element;
+  border: $border-separator;
+  border-radius: 9px;
+  height: 100%;
+  justify-content: space-around;
+  justify-self: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+
+  &:hover,
+  &:focus-within {
+    border-color: $color-action-border;
+  }
+}
+
+section {
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: repeat(1, 100%);
+  height: 100%;
+  justify-items: center;
+  text-align: center;
+
+
+  & > div {
+    padding: $space-l;
+  }
+}
+
+.ready,
+.job-done {
+  & div * {
+    margin-bottom: $space-l;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+}
+
+.ready {
+  p {
+    font-size: $font-size-m;
+    font-weight: 400;
+  }
+}
+
+.job-done {
+  h2 {
+    margin-bottom: $space-xs;
+  }
+
+  p {
+    font-weight: 700;
+  }
+
+  .icon-check-mark ::ng-deep {
+    svg {
+      fill: $color-feedback-positive-background;
+      height: 60px;
+      width: 60px;
+    }
+  }
+}

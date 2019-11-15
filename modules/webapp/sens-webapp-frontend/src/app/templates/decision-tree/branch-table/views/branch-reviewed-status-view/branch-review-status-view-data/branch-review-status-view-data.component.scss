@@ -1,0 +1,16 @@
+@import 'variables';
+
+.branch-reviewed-status {
+  display: flex;
+
+  .branch-reviewed-status-icon {
+    display: inline-block;
+  }
+
+  .branch-reviewed-status-label {
+    display: inline-block;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

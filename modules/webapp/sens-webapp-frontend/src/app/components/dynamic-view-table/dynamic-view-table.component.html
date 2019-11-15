@@ -1,0 +1,46 @@
+<app-preview-element
+        [status]="elementPreviewStatus"
+        [previewData]="elementPreviewData"
+        (closePreview)="elementPreviewStatus = $event"></app-preview-element>
+
+<app-loading [class.is-active]="inProgress"></app-loading>
+<div class="table-error"
+     *ngIf="error">
+  <div [translate]="translatePrefix + '.error'"></div>
+</div>
+<div *ngIf="tableData && !error">
+  <div class="dynamic-view-table" id="rb-table"
+       *ngIf='tableData'>
+    <perfect-scrollbar [config]="perfectScrollbarConfig">
+      <div class="dynamic-view-labels">
+        <div *ngFor="let label of tableData.labels" class="dynamic-view-column">
+          <app-dynamic-view [view]="label.view"></app-dynamic-view>
+        </div>
+        <div class="dynamic-view-column"
+             *ngIf="previewElements"
+             [translate]="'dynamicTable.column.action.label'">
+        </div>
+      </div>
+      <div class="dynamic-view-body">
+        <div class="dynamic-view-row"
+             *ngFor="let row of tableData.rows">
+          <div *ngFor="let view of row.views; trackBy: trackByFn; let i = index;"
+               class="dynamic-view-column" id="{{ getTableRowId(i) }}">
+            <app-dynamic-view [view]="view"></app-dynamic-view>
+          </div>
+          <div class="dynamic-view-column" *ngIf="previewElements">
+            <div class="row-options">
+              <button class="button-outline"
+                      (click)="elementPreview(row)"
+                      [translate]="'dynamicTable.column.action.row.elementPreview'"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <app-empty-state class="empty-state-content"
+                   [hidden]="tableData.total !== 0"
+                   [label]="translatePrefix + '.emptyState'">
+  </app-empty-state>
+</div>

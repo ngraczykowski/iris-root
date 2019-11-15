@@ -1,0 +1,40 @@
+//<section class="page-section">
+//  <div class="page-section-header">
+//    <h2 class="page-section-title"></h2>
+//    <div class="page-section-options">
+//    </div>
+//  </div>
+//  <div class="page-section-content">
+//  </div>
+//</section>
+
+@import 'variables';
+
+.page-section {
+  line-height: 1.5;
+  margin-top: $space-xl;
+
+  .page-section-header {
+    border-bottom: $border-separator;
+    display: flex;
+    justify-content: space-between;
+    line-height: $height-of-interactive-elements;
+    margin-bottom: $space-l;
+    padding-bottom: $space-m;
+  }
+
+  .page-section-title {
+    font-size: $font-size-xl;
+    font-weight: 700;
+  }
+
+  .page-section-options {
+    & > * {
+      margin-left: $space-between-related-elements;
+    }
+  }
+
+  .page-section-content {
+
+  }
+}

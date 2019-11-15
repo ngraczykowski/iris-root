@@ -1,0 +1,10 @@
+// The 8-Point Grid is based on multiples of number 8 and it is an efficient way to create a consistent User Interface with proper harmony between elements.
+//
+// 8 point grid should be used to define dimensions, size, padding, and margin for all elements of the entire User Interface.
+//
+// Please use the function below to calculate all value that will define size or space of Interface element like text, button, etc.
+
+@function grid-value ($multiplier) {
+  $grid-base-value: 8;
+  @return $multiplier * $grid-base-value;
+}

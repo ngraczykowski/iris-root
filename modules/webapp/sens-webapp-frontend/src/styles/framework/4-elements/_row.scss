@@ -1,0 +1,74 @@
+// Universal styles of rows that can be used in lists, tables and other similar.
+
+%-row-base-style {
+  & > * {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+    width: 100%;
+  }
+}
+
+%-row-selectable-style {
+  &,
+  & * {
+    cursor: pointer;
+  }
+
+  & > * {
+    background: transparent;
+    border: 0;
+    color: $color-typography-secondary;
+    text-decoration: none;
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    & > * {
+      background: $color-surface-element-selected;
+      color: $color-action;
+      fill: $color-action;
+      outline: 0;
+    }
+  }
+
+  &.is-active {
+    &:hover,
+    &:focus,
+    &:focus-within,
+    & > * {
+      color: $color-accent;
+      fill: $color-accent;
+    }
+  }
+
+  button {
+    background: transparent;
+    border: 0;
+    margin: 0 auto;
+  }
+}
+
+// Styles for rows
+// Please use only the following styles in other component styles
+
+
+%row {
+  @extend %-row-base-style;
+}
+
+%row-selectable {
+  @extend %row;
+  @extend %-row-selectable-style;
+}
+
+%row-divided {
+  @extend %row;
+  @extend %border-element-divider-bottom;
+}
+
+%row-selectable-divided {
+  @extend %row-divided;
+  @extend %-row-selectable-style;
+}

@@ -1,0 +1,59 @@
+@import 'variables';
+
+.branch-review {
+  border-bottom: $border-outline;
+  margin-bottom: $space-m;
+  margin-top: $space-xl;
+  padding-bottom: $space-m;
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+
+    .description {
+      font-weight: 700;
+      line-height: 34px;
+    }
+  }
+
+  .review-status {
+    $status-size: 22px;
+    border-radius: 50%;
+    display: inline-block;
+    height: $status-size;
+    line-height: 0;
+    margin-right: $space-m;
+    padding: 4px;
+    position: relative;
+    top: 1px;
+    width: $status-size;
+
+    &.unreviewed {
+      background: $color-feedback-info-background;
+
+      i {
+        animation: rotation-counterclockwise 3s infinite linear;
+      }
+    }
+
+    &.reviewed {
+      background: $color-feedback-positive-background;
+    }
+
+    i {
+      $icon-size: 14px;
+      display: block;
+      height: $icon-size;
+      overflow: hidden;
+      width: $icon-size;
+    }
+
+    ::ng-deep {
+      svg {
+        fill: $color-background-element;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}

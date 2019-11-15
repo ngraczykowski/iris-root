@@ -1,0 +1,18 @@
+.widget {
+  @extend %border-element;
+  @extend %shape-level-2;
+
+  padding: $space-element-internal-content-margin;
+  width: 100%;
+
+  .widget-header {
+    @extend %element-header;
+
+    line-height: add-px-to-value(grid-value(4));
+    margin-bottom: $space-element-internal-content-margin;
+
+    & > *:first-child {
+      @extend %typography-element-label;
+    }
+  }
+}

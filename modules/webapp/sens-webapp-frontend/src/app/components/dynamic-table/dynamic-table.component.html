@@ -1,0 +1,168 @@
+<app-preview-element
+        [status]="previewStatus"
+        [previewData]="previewData"
+        (closePreview)="previewStatus = $event"></app-preview-element>
+
+<div class="dynamic-table">
+  <div class="table-header">
+    <div>
+      <h3 class="table-title">
+        <span [translate]="title"></span>
+      </h3>
+    </div>
+    <div *ngIf="tableData" class="pagination">
+      <div class="dropdown-center">
+        <button class="button-outline"
+                (click)="showRowsPerPageDropdown = !showRowsPerPageDropdown"
+                [hidden]="error || isPartiallyFull()"
+                [class.is-active]="showRowsPerPageDropdown">
+          <span [translate]="'dynamicTable.rowsPerPage.prefix'"></span>
+          <span>{{rowsPerPage}}</span>
+        </button>
+        <div class="dropdown-menu" [class.is-active]="showRowsPerPageDropdown">
+          <ul class="dropdown-menu-elements-centered">
+            <li *ngFor="let rowCountOption of possibleRowCountsPerPage"
+                [class.is-active]="rowsPerPage == rowCountOption">
+              <button (click)="showRowsPerPageDropdown = !showRowsPerPageDropdown; onSelectRowsPerPage(rowCountOption)">
+                {{rowCountOption}}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <button class="button-outline" (click)="onPreviousPage()"
+              [disabled]="shouldDisablePreviousPageButton()"
+              [hidden]="error || isPartiallyFull()">
+        <span class="icon icon-arrow left" aria-label="Arrow"
+              [inlineSVG]="'../../../assets/icons/arrow.svg'"></span>
+      </button>
+      <div [hidden]="error || hasNoElements()" class="page-counter">
+          <span [translate]="'dynamicTable.pageCounter'"
+                [translateParams]="{value: visibleRowsText}"
+                [hidden]="isPartiallyFull()"></span>
+        <span>{{tableData.total}}</span>
+        <span [translate]="'dynamicTable.pageCounterUnderTen'"
+              [hidden]="!isPartiallyFull() || hasOnlyOneRow()"></span>
+        <span [translate]="'dynamicTable.pageCounterOneRow'"
+              [hidden]="!hasOnlyOneRow()"></span>
+      </div>
+      <button class="button-outline" (click)="onNextPage()"
+              [disabled]="shouldDisableNextPageButton()"
+              [hidden]="error || isPartiallyFull()">
+        <i class="icon icon-arrow right" aria-label="Arrow"
+           [inlineSVG]="'../../../assets/icons/arrow.svg'"></i>
+      </button>
+    </div>
+  </div>
+  <div class="table-content" [class.is-loading]="inProgress">
+    <div class="loading-content" [class.is-active]="inProgress">
+      <app-loading class="is-active" [hidden]="!inProgress"></app-loading>
+    </div>
+    <div class="table-error" [hidden]="inProgress || !error">
+      <div [translate]="'dynamicTable.error'">
+      </div>
+    </div>
+    <div *ngIf="tableData" [hidden]="error"
+         [ngClass]="'rows-' + (tableData.total < rowsPerPage ? tableData.total : rowsPerPage)">
+      <app-empty-state class="empty-state-content" [hidden]="tableData.total > 0"
+                       [label]="'dynamicTable.emptyState'"></app-empty-state>
+      <perfect-scrollbar class="table-scroll" [config]="perfectScrollbarCustom">
+        <table [hidden]="inProgress">
+          <thead>
+          <th class="action">
+            <div>
+              <p [translate]="'dynamicTable.column.action.label'">
+              </p>
+            </div>
+          </th>
+          <th *ngFor="let label of tableData.labels">
+            <div class="tooltip">
+              <div *ngIf="label.length > 15" class="tooltip-layer one-line"><p>{{ label |
+                      translateOrFriendlyValue: getLabelPrefix() | async }}</p></div>
+              <p>
+                {{ label | translateOrFriendlyValue: getLabelPrefix() | async }}
+              </p>
+            </div>
+          </th>
+          <th>
+            <div>
+              <p [translate]="'dynamicTable.column.action.label'"></p>
+            </div>
+          </th>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of tableData.rows; let i = index;">
+
+            <td class="action">
+              <div>
+                <ng-container *ngTemplateOutlet="extraButtonTemplate; context: { $implicit: row }">
+                </ng-container>
+              </div>
+            </td>
+            <td *ngFor="let value of row.values; let j = index;">
+              <div class="many-values" *ngIf="tableHelper.hasManyValues(value)">
+                                <span
+                                        [translate]="'placeholders.manyValues'"></span>
+              </div>
+              <div class="empty-value" *ngIf="tableHelper.isEmptyValue(value)">
+                                <span
+                                        [translate]="'placeholders.emptyValue'"></span>
+              </div>
+              <div *ngIf="tableHelper.hasOneValue(value)">
+                <div *ngIf="value === row.externalId" class="element-id">
+                  <a (keyup.enter)="onSelectItem(i)"
+                     (click)="onSelectItem(i)"
+                     tabindex="0"
+                     *ngIf="linksInRows">
+                    {{ value }}
+                  </a>
+                  <p *ngIf="!linksInRows">
+                    {{ value }}
+                  </p>
+                  <button class="copy-to-clipboard"
+                          (click)="copyToClipboard(value); $event.stopPropagation();">
+                    <div class="tooltip">
+                      <div class="tooltip-top one-line"><p
+                              [translate]="'dynamicTable.copyElementID'"></p></div>
+                      <div class="icon-copy" aria-label="Inbox"
+                           [inlineSVG]="'../../../assets/icons/copy.svg'"></div>
+                    </div>
+                  </button>
+                </div>
+                <div *ngIf="value !== row.externalId && j !== 0">
+                  <div class="tooltip">
+                    <div *ngIf="value !== row.externalId && value.length > 13"
+                         class="tooltip-top" [class.one-line]='value.length < 35'
+                         [class.multi-lines]='value.length > 35'>
+                      <p>
+                        {{ value }}
+                      </p>
+                    </div>
+                    <p>
+                      {{ value }}
+                    </p>
+                  </div>
+                </div>
+                <div *ngIf="j === 0 && value !== row.externalId">
+                  <p>
+                    {{ value }}
+                  </p>
+                </div>
+              </div>
+            </td>
+            <td class="row-options-placeholder">
+              <div class="row-options">
+                <button class="button-outline"
+                        (click)="elementPreview(row)"
+                        [translate]="'dynamicTable.column.action.row.elementPreview'"></button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="empty-state-placeholder" [hidden]="tableData.total > 0"></div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+  <app-table-hint [tableHints]="tableHints"></app-table-hint>
+</div>

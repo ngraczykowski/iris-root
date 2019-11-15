@@ -1,0 +1,8 @@
+<ng-container *ngIf="data?.score; else noData">
+  {{data.score}}
+</ng-container>
+
+<ng-template #noData>
+  <app-empty-state class="empty-state-data"
+                   [label]="'approver.table.reasoningBranchScore.emptyState'"></app-empty-state>
+</ng-template>

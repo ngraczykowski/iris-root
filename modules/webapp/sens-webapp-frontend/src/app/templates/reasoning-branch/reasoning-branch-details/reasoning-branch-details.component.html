@@ -1,0 +1,103 @@
+<ng-container *ngIf="branchDetails">
+  <app-reasoning-branch-details-changelog-modal
+          [branchDetails]="branchDetails"
+          [showChangeLog]="showChangeLog"
+          (closeClick)="showChangeLog = false"></app-reasoning-branch-details-changelog-modal>
+  <section class="module section-page">
+    <div class="module-header">
+      <h2 class="module-title" [translate]="'reasoningBranch.infobox.details.title'"></h2>
+      <div class="module-options">
+      </div>
+    </div>
+    <perfect-scrollbar class="module-content">
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.labels.rbId'"></p>
+        </div>
+        <div class="element-details-row-value">
+          {{ branchDetails.decisionTreeInfo.id }}-{{ branchDetails.matchGroupId }}
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.labels.solution'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-solution-tag [solution]="branchDetails.solution"></app-solution-tag>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.labels.status'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-element-status
+                  [translatePrefix]="'reasoningBranch.infobox.details.status.options'"
+                  [status]="branchDetails.enabled ? 'active' : 'inactive'">
+          </app-element-status>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.score.title'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-empty-state *ngIf="!branchDetails.score"
+                           [label]="'reasoningBranch.infobox.details.score.values.emptyState'"></app-empty-state>
+          <ng-container *ngIf="branchDetails.score">
+            {{ branchDetails.score }}
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.lastUsedAt.title'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-empty-state *ngIf="!branchDetails.lastUsedAt"
+                           [label]="'reasoningBranch.infobox.details.lastUsedAt.values.emptyState'"></app-empty-state>
+          <ng-container *ngIf="branchDetails.lastUsedAt">
+            {{ formatDate(branchDetails.lastUsedAt) }}
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.statusOfChanges.title'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-empty-state *ngIf="!branchDetails.pendingChanges"
+                           [label]="'reasoningBranch.infobox.details.statusOfChanges.values.emptyState'"></app-empty-state>
+          <button *ngIf="branchDetails.pendingChanges"
+                  (click)="openChangelogModal()"
+                  class="button-flat"
+                  [translate]="'reasoningBranch.infobox.details.statusOfChanges.values.pendingChanges'"></button>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'reasoningBranch.infobox.details.review.status.title'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <div style="display: flex">
+            <app-element-status
+                    [translatePrefix]="'reasoningBranch.infobox.details.review.status.values'"
+                    [status]="branchDetails.reviewed ? 'active' : 'inactive'"></app-element-status>
+            <ng-container *ngIf="branchDetails.reviewed">
+              {{ formatFullDate(branchDetails.reviewedAt) }} by {{ branchDetails.reviewedBy }}
+            </ng-container>
+          </div>
+          <app-branch-review [branch]="branchDetails" (review)="refreshReview()"
+                             class="review-status-button"></app-branch-review>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </section>
+</ng-container>

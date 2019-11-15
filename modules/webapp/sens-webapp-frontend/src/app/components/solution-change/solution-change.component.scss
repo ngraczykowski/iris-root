@@ -1,0 +1,27 @@
+@import 'variables';
+
+$size-suggested-component: 24px;
+
+.suggested-component {
+  display: flex;
+  height: $size-suggested-component;
+  line-height: $size-suggested-component;
+}
+
+.arrow-from-to {
+  display: inline-block;
+  margin: 0 $space-m;
+  position: relative;
+  top: 2px;
+
+  ::ng-deep {
+    .icon {
+      $size-arrow-from-to: 14px;
+      fill: $color-icon;
+      height: $size-arrow-from-to;
+      position: relative;
+      top: 2px;
+      width: $size-arrow-from-to;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.empty-state-field {
+  @extend %-typography-body-text;
+
+  color: $color-typography-tertiary;
+  font-weight: $-font-weight-bold;
+  line-height: add-px-to-value(grid-value(10));
+  text-align: center;
+  width: 100%;
+}
+
+.empty-state-data {
+  @extend %-typography-body-text;
+
+  color: $color-typography-tertiary;
+}

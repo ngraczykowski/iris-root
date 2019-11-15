@@ -1,0 +1,47 @@
+<div class="dropdown-center application-navigation">
+  <button class="button-outline"
+          (click)="showMenu = !showMenu"
+          [class.is-active]="showMenu"
+          [translate]="'appHeader.navigation.button'"></button>
+  <div class="dropdown-menu" [class.is-active]="showMenu">
+    <ul class="dropdown-menu-elements">
+      <li *ngIf="hasDecisionTreeAccess">
+        <a routerLink="/decision-tree"
+           [translate]="'decisionTrees.title'"
+           (click)="showMenu = !showMenu"></a>
+      </li>
+      <li *ngIf="hasInboxAccess" routerLinkActive="is-active">
+        <a routerLink="/inbox"
+           (click)="showMenu = !showMenu">
+          <span [translate]="'inbox.title'"></span>
+          <app-inbox-tab></app-inbox-tab>
+        </a>
+      </li>
+      <li *ngIf="hasAuditTrailAccess">
+        <a routerLink="/audit-trail"
+           [translate]="'auditTrail.title'"
+           (click)="showMenu = !showMenu"></a>
+      </li>
+      <li *ngIf="hasUserManagementAccess">
+        <a routerLink="/user-management"
+           [translate]="'user-management.title'"
+           (click)="showMenu = !showMenu"></a>
+      </li>
+      <li *ngIf="hasUserManagementAccess">
+        <a routerLink="/alert-restrictions-management"
+           [translate]="'alertRestrictionsManagement.header.title'"
+           (click)="showMenu = !showMenu"></a>
+      </li>
+      <li *ngIf="hasWorkflowManagementAccess">
+        <a routerLink="/workflow-management"
+           [translate]="'workflowManagement.title'"
+           (click)="showMenu = !showMenu"></a>
+      </li>
+      <li *ngIf="hasApproverAccess">
+        <a routerLink="/approver"
+           [translate]="'approver.title'"
+           (click)="showMenu = !showMenu"></a>
+      </li>
+    </ul>
+  </div>
+</div>

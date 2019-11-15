@@ -1,0 +1,15 @@
+// Shadows in User Interface helps define hierarchy and focus User attention on the highest element in front of other elements of the UI.
+
+%shadow-element-above-surface {
+  box-shadow: 0 add-px-to-value(grid-value(1)) add-px-to-value(grid-value(2)) 0 $color-shadow-dark;
+}
+
+// Shadow for context elements like a tooltip, menu, etc.
+%shadow-context-element {
+  box-shadow: 0 add-px-to-value(grid-value(1)) add-px-to-value(grid-value(2)) 0 $color-shadow-dark;
+}
+
+// Shadow for any kind of popup elements like modal window, dialog, alert, notification, etc.
+%shadow-popup-window {
+  box-shadow: 0 add-px-to-value(grid-value(2)) add-px-to-value(grid-value(3)) $color-shadow-dark;
+}

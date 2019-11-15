@@ -1,0 +1,19 @@
+@import 'variables';
+@import 'mixins';
+
+.actions {
+  background: $color-table-row-hover;
+  display: none;
+  padding: 0 $space-xl;
+  position: absolute;
+  right: 0;
+  visibility: hidden;
+
+  button {
+    margin-left: $space-between-related-elements;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

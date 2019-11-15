@@ -1,0 +1,105 @@
+@import 'variables';
+@import 'mixins';
+
+.tooltip {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  vertical-align: middle;
+
+  > p,
+  > a,
+  > ul,
+  > h1,
+  > h2,
+  > h3,
+  > h4 {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .tooltip-top,
+  .tooltip-bottom,
+  .tooltip-left,
+  .tooltip-right,
+  .tooltip-layer {
+    @include transition(all, $transition-normal, ease-in-out);
+    background-color: $color-background-element;
+    border-radius: $border-radius-page-element;
+    box-shadow: $shadow-layer-1;
+    color: $color-text;
+    font-size: $font-size-m;
+    font-weight: 700;
+    line-height: 1.4;
+    opacity: 0;
+    padding: $space-xs $space-s;
+    position: absolute;
+    text-align: center;
+    visibility: hidden;
+    z-index: 1;
+  }
+
+  .multi-lines {
+    p {
+      word-wrap: break-word;
+    }
+  }
+
+  .one-line {
+    p {
+      white-space: pre;
+      word-wrap: unset;
+    }
+  }
+
+  .tooltip-top {
+    bottom: calc(80%);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .tooltip-layer {
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%) scale(.5);
+  }
+
+  .tooltip-bottom {
+    bottom: calc(-80%);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &:hover {
+    .tooltip-top {
+      bottom: calc(100% + 9px);
+      opacity: 1;
+      visibility: visible;
+
+      .list-vertical {
+        list-style-type: none;
+      }
+
+      &::after {
+        left: 50%;
+        margin-left: -8px;
+        top: 100%;
+      }
+    }
+
+    .tooltip-layer {
+      opacity: 1;
+      transform: translate(-50%, 50%) scale(1);
+      visibility: visible;
+    }
+
+    .tooltip-bottom {
+      bottom: calc(-100%);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

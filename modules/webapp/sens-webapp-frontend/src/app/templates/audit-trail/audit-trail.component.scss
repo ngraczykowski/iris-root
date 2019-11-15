@@ -1,0 +1,13 @@
+@import 'variables';
+
+.section-reports {
+  display: flex;
+  justify-content: space-around;
+}
+
+.reports {
+  display: grid;
+  grid-auto-rows: 280px;
+  grid-gap: $space-xxl;
+  grid-template-columns: repeat(4, 280px);
+}

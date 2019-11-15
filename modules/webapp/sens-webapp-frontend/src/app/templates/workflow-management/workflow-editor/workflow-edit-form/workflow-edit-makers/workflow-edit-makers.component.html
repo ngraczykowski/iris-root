@@ -1,0 +1,11 @@
+<section class="modal-content-section modal-content-section-divided modal-content-section-first">
+<div class="modal-content-section-label">
+    <p [translate]="'workflowManagement.workflowEditor.makersSection.title'"></p>
+  </div>
+  <div class="modal-content-section-content">
+    <app-workflow-edit-users-management
+            [assignedUsers]="control.value"
+            [requiredRole]="'ROLE_MAKER'"
+            (assignedUsersChange)="updateMakersList($event)"></app-workflow-edit-users-management>
+  </div>
+</section>

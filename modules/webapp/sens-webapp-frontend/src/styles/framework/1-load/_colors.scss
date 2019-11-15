@@ -1,0 +1,26 @@
+// This style is a color palette for the entire user interface. All colors that are used in UI should be defined in this file.
+//
+// How to define a color:
+// + Variable label - Real name of the color. (The Silent Eight brand color is "Radical Red")
+// +  Color - The color should be defined as HSL. (In this file, the colors should be defined in their base form)
+
+// NOTE - The colors defined in this file should not be used anywhere except _colors.scss in the "3-foundations" section.
+
+$-black: hsl(0, 0%, 0%);
+
+$-white: hsl(0, 0%, 100%);
+$-athens-gray: hsl(210, 25%, 97%);
+$-aqua-haze: hsl(217, 30%, 97%);
+
+$-curious-blue: hsl(197, 70%, 50%);
+$-dodger-blue: hsl(217, 100%, 61%);
+$-science-blue: hsl(212, 97%, 43%);
+
+$-web-orange: hsl(40, 100%, 50%);
+
+$-malachite: hsl(132, 100%, 39%);
+
+$-gray-chateau: hsl(207, 5%, 67%);
+
+$-radical-red: hsl(350, 100%, 61%);
+$-red-ribbon: hsl(345, 99%, 47%);

@@ -1,0 +1,25 @@
+<ng-container *ngIf="reportType">
+  <app-loading [class.is-active]="inProgress"
+               [label]="'loading.processingLabel'"></app-loading>
+  <section *ngIf="!jobDone"
+           class="ready">
+    <div>
+      <h2>{{ reportType }}</h2>
+      <p [translate]="reportDescription"></p>
+      <button class="button-action"
+              [translate]="'auditTrail.generateReport.ready.button'"
+              (click)="onGenerateReport()">
+      </button>
+    </div>
+  </section>
+  <section *ngIf="jobDone"
+           class="job-done">
+    <div>
+      <div class="icon-check-mark"
+           aria-label="Job done icon"
+           [inlineSVG]="'../../../assets/icons/check-mark.svg'"></div>
+      <h2 [translate]="'auditTrail.generateReport.jobDone.title'"></h2>
+      <p [translate]="'auditTrail.generateReport.jobDone.description'"></p>
+    </div>
+  </section>
+</ng-container>

@@ -1,0 +1,8 @@
+<ng-container *ngIf="data?.change; else noData">
+  <app-status-change [statusChange]="asAppStatusChangeSolutionView"></app-status-change>
+</ng-container>
+
+<ng-template #noData>
+  <app-empty-state class="empty-state-data"
+  [label]="'approver.table.proposedStatus.emptyState'"></app-empty-state>
+</ng-template>

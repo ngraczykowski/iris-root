@@ -1,0 +1,11 @@
+<app-selectable-dynamic-table
+  class="branch-table selectable-branch-table"
+  *ngIf="providerConfig"
+  [providerConfig]="providerConfig"
+  [rowCountPerPage]="10"
+  [rowCountPerPageOptions]="[5, 10, 15, 20]"
+  [translatePrefix]="'decisionTree.branchTable'"
+  [tableName]="'reasoning-branch-row'"
+  [previewElements]="true"
+  [tableHints]="['verticalScroll', 'openInNewWindow']">
+</app-selectable-dynamic-table>

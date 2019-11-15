@@ -1,0 +1,56 @@
+<app-overlay [class.is-active]="show"></app-overlay>
+<div class="popup-window" [class.is-active]="show">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'modal.createNewDecisionTree.title'"></h1>
+  </div>
+  <app-preloader class="preload-element" [class.is-active]="inProgress"></app-preloader>
+  <perfect-scrollbar>
+    <div class="popup-window-content" *ngIf="config">
+      <section class="section section-last">
+        <app-feedback-message
+                [class.is-active]="!dirty['name'] && isNameServerError()"
+                [message]="errorKey" class="error"></app-feedback-message>
+        <app-feedback-message
+                [class.is-active]="dirty['name'] && isNameEmpty()"
+                [message]="'modal.editDecisionTree.name.error.emptyField'"
+                class="error"></app-feedback-message>
+        <app-feedback-message
+                [class.is-active]="dirty['name'] && isNameTooLong()"
+                [message]="'modal.editDecisionTree.name.error.longName'"
+                class="error is-active"></app-feedback-message>
+        <section class="subsection">
+          <div class="copy-description">
+            <p [translate]="'modal.copyDecisionTree.description'"></p>
+            <p class="copy-description-name">"{{decisionTree ? decisionTree.name : ''}}"</p>
+          </div>
+        </section>
+        <section class="subsection subsection-last">
+          <div class="field-row">
+            <div class="field-row-label required">
+              <label [translate]="'modal.copyDecisionTree.inputLabel'"></label>
+            </div>
+            <div class="field-row-option-horizontal-space-between">
+              <input class="input-field"
+                     placeholder="{{ 'modal.copyDecisionTree.inputPlaceholder' | translate }}"
+                     [(ngModel)]="config.name"
+                     (ngModelChange)="onChangeName()">
+            </div>
+          </div>
+          <app-feedback-message [message]="'modal.copyDecisionTree.infoHistory'"
+                                class="info"
+                                [class.is-active]="!shouldDisableConfirmButton()"></app-feedback-message>
+        </section>
+      </section>
+    </div>
+  </perfect-scrollbar>
+  <section class="popup-window-footer"
+           *ngIf="config">
+    <button class="button-outline" (click)="close()"
+            [translate]="'modal.button.cancel'"></button>
+    <button class="button-action"
+            [disabled]="shouldDisableConfirmButton()"
+            (click)="confirm()"
+            [translate]="'modal.copyDecisionTree.actionButton'"></button>
+  </section>
+</div>

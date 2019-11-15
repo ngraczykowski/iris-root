@@ -1,0 +1,15 @@
+.list-vertical-separator {
+  li {
+    border-bottom: $border-separator;
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: $space-xl;
+    padding: $space-m $space-xl;
+    white-space: nowrap;
+    width: 100%;
+
+    label {
+      font-weight: 700;
+    }
+  }
+}

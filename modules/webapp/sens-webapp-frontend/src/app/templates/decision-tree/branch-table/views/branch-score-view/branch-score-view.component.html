@@ -1,0 +1,11 @@
+<div *ngIf="data">
+  <div *ngIf="data.score">
+    <p>
+      {{data.score}}
+    </p>
+  </div>
+  <div *ngIf="!data.score">
+    <p class="no-data"
+       [translate]="'placeholders.emptyValue'"></p>
+  </div>
+</div>

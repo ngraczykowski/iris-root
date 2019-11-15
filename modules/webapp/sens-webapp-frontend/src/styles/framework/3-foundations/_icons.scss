@@ -1,0 +1,37 @@
+[class^="icon-"], [class*=" icon-"] {
+  // sass-lint:disable-all
+
+  font-family: 'icons' !important; /* !important is to prevent issues with browser extensions that change fonts */
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  // sass-lint:enable-all
+
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  position: relative;
+  speak: none;
+  text-transform: none;
+
+  &::before {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.icon-search {
+  &::before {
+    content: '\e900';
+  }
+}
+
+.icon-warning {
+  &::before {
+    content: '\e901';
+  }
+}

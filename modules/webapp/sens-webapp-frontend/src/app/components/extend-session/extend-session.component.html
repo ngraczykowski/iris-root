@@ -1,0 +1,7 @@
+<div [class.is-hidden]="!show"
+     class="expire-session-notification">
+  <p [translate]="'session.expireNotification.MESSAGE'"
+     [translateParams]="{value: timeFormatted}"></p>
+  <button (click)="extend()"
+          [translate]="'session.expireNotification.button'"></button>
+</div>

@@ -1,0 +1,22 @@
+<app-overlay [class.is-active]="showChangeLog"></app-overlay>
+<div class="popup-window"
+     [class.is-active]="showChangeLog">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'decisionTree.branchTable.data.changelog.title'">
+    </h1>
+  </div>
+  <perfect-scrollbar>
+    <div class="popup-window-content">
+      <app-changelog [decisionTreeId]="decisionTreeId"
+                     [matchGroupId]="matchGroupId"></app-changelog>
+    </div>
+  </perfect-scrollbar>
+  <section class="popup-window-footer">
+    <button class="button-outline "
+            (click)="hideChangeLogModal()"
+            [translate]="'decisionTree.branchTable.data.changelog.buttonClose'">
+    </button>
+  </section>
+</div>
+

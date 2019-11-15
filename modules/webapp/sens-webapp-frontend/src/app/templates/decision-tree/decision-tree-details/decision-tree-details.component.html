@@ -1,0 +1,34 @@
+<app-preloader class="preload-page"
+               [class.is-active]="!decisionTreeDetails"
+               *ngIf="!decisionTreeDetails"></app-preloader>
+
+<div *ngIf="decisionTreeDetails">
+
+  <header class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-name"
+          [translate]="'decisionTree.title'"
+          [translateParams]="{value: decisionTreeDetails.id}"></h1>
+      <div class="page-options ">
+        <app-decision-tree-management [decisionTree]="decisionTreeDetails">
+        </app-decision-tree-management>
+      </div>
+    </div>
+    <div class="page-header-subsection">
+      <app-breadcrumbs *ngIf="breadcrumbsProvider"
+                       [breadcrumbsProvider]="breadcrumbsProvider"></app-breadcrumbs>
+      <app-feedback-message [class.is-active]="decisionTreeDetails.status.name === 'ERROR'"
+                            [message]="this.decisionTreeDetails.status.errorMessage"></app-feedback-message>
+    </div>
+  </header>
+
+  <app-decision-tree-info [decisionTreeDetails]="decisionTreeDetails">
+  </app-decision-tree-info>
+  
+  <div *ngIf="hasDecisionTreeViewAccess">
+    <app-branch-browser *ngIf="!hasDecisionTreeChangeAccess" [decisionTreeId]="decisionTreeId">
+    </app-branch-browser>
+    <app-branch-change *ngIf="hasDecisionTreeChangeAccess" [decisionTreeId]="decisionTreeId">
+    </app-branch-change>
+  </div>
+</div>

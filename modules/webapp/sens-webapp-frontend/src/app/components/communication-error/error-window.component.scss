@@ -1,0 +1,22 @@
+@import 'variables';
+@import 'mixins';
+
+.error-window {
+  @include transition(all, $transition-slow, ease-in-out);
+  background: hsl(345, 99%, 47%);
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+
+  &.is-active {
+    height: 53px;
+  }
+
+  .error-window-description {
+    color: $color-text-white;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 16px;
+    text-align: center;
+  }
+}

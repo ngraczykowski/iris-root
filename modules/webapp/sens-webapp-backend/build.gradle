@@ -15,7 +15,6 @@ configurations {
 }
 
 dependencies {
-  compile project(":sens-webapp-common")
   compile project(":sens-webapp-kernel")
   compile project(":sens-webapp-security")
   compile project(":sens-webapp-users")
@@ -33,6 +32,11 @@ dependencies {
   compile libraries.spring_security_cas
 
   compile libraries.hibernate_envers
+
+  implementation project(":sens-webapp-common")
+  implementation project(":sens-webapp-db-changelog")
+
+  implementation libraries.jaxb_osgi
 
   runtimeOnly libraries.caffeine
 

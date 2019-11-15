@@ -1,0 +1,4 @@
+<div class="inbox-message-cell-action">
+  <button class="button-outline action" *ngIf="!solved" (click)="solve()" [translate]="'inbox.messagesList.actions.buttonMarkAsSolved'"></button>
+  <span *ngIf="solved" class="alert-solved" [translate]="'inbox.messagesList.actions.alertResolved'"></span>
+</div>

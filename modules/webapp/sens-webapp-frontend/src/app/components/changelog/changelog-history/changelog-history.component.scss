@@ -1,0 +1,49 @@
+@import 'variables';
+
+.section-page {
+  margin-bottom: 0;
+}
+
+.changelog-history {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.changelog-history-row {
+  border-bottom: $color-border-light;
+  display: flex;
+  padding-bottom: $space-l;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .changelog-history-row-icon {
+    margin-right: $space-l;
+    padding-top: 4px;
+    width: 24px;
+  }
+
+  .changelog-history-row-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    .changelog-history-row-content-header {
+      display: flex;
+      margin-bottom: $space-s;
+
+      .changelog-history-row-content-header-user {
+        flex: 1;
+        font-weight: 700;
+        margin-right: $space-l;
+      }
+    }
+
+    .changelog-history-row-content-comment {
+      .changelog-history-row-content-comment-changes {
+        margin-bottom: $space-m;
+      }
+    }
+  }
+}

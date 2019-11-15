@@ -1,0 +1,56 @@
+<ng-container *ngIf="usersList"
+              (click)="handleAsideClick($event)">
+  <div class="input-elements-list">
+    <div class="input-single-line">
+      <div class="input-single-line-data">
+        <i class="input-single-line-data-icon-type icon-search"></i>
+        <input [(ngModel)]="searchText"
+               (keyup)="shouldShowSearchSuggestions()"
+               placeholder="{{ prefix + 'search.placeholder' | translate }}">
+        <i class="input-single-line-data-icon-status"></i>
+      </div>
+      <div class="input-single-line-suggestions"
+           [class.is-active]="showSearchSuggestions"
+           id="search-suggestions">
+        <ul class="input-single-line-suggestions-list">
+          <li *ngFor="let user of usersList | filterMultipleValues:{ userName: searchText, displayName: searchText } : false | slice:0:3;">
+            <button (click)="addUserToAssignedUsersList(user.id)">
+              <p>
+                {{ user.userName }}
+                <ng-container *ngIf="user.displayName">
+                  ({{ user.displayName }})
+                </ng-container>
+              </p>
+              <p class="input-single-line-suggestions-list-hint"
+                 [translate]="prefix + 'search.suggestionHint'">
+              </p>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <ul class="list-vertical-elements-divided"
+        *ngIf="assignedUsersList.length > 0"
+        id="assigned-users-list">
+      <li *ngFor="let assignedUser of generateAssignedUsersList()">
+        <div>
+          <p class="vertical-list-of-elements-value">
+            {{ assignedUser.userName }}
+            <ng-container *ngIf="assignedUser.displayName">
+              ({{ assignedUser.displayName }})
+            </ng-container>
+          </p>
+          <button class="button-flat"
+                  (click)="removeUserFromAssignedUsersList(assignedUser.id)"
+                  [translate]="prefix + 'removeMakerButtonLabel'">
+          </button>
+        </div>
+      </li>
+    </ul>
+    <div *ngIf="!assignedUsersList.length > 0">
+      <p class="empty-state-field"
+         [translate]="prefix + 'emptyState'">
+      </p>
+    </div>
+  </div>
+</ng-container>

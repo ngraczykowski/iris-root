@@ -1,0 +1,135 @@
+@import 'variables';
+@import 'mixins';
+
+//<app-overlay [class.is-active]="show"></app-overlay>
+//<div class="popup-window" [class.is-active]="show">
+//  <div class="popup-window-header">
+//    <h1 class="popup-window-title"></h1>
+//  </div>
+//  <app-loading [class.is-active]="inProgress"></app-loading>
+//  <perfect-scrollbar>
+//    <div class="popup-window-content">
+//    </div>
+//  </perfect-scrollbar>
+//  <div class="popup-window-footer">
+//  </div>
+//</div>
+
+$selected-elements-panel-height: 74px;
+$popup-window-header-height: 30px;
+$popup-window-footer-height: 66px;
+$popup-window-margin: $space-m;
+$popup-window-height: calc(100vh - (#{$popup-window-header-height} + #{$popup-window-footer-height} + #{$selected-elements-panel-height} + (2 * #{$popup-window-margin})));
+
+.popup-window {
+  @include transition(transform, $transition-normal, ease-in-out);
+  background: $color-background-element;
+  border-radius: $border-radius-page-element;
+  box-shadow: 0 0 50px 0 $color-shadow-black;
+  left: 50%;
+  margin: $popup-window-margin 0;
+  opacity: 0;
+  overflow: hidden;
+  position: fixed;
+  top: -1000px;
+  transform: translateX(-50%) scale(.5);
+  visibility: hidden;
+  width: 760px;
+  z-index: 10000;
+
+  &.is-active {
+    opacity: 1;
+    top: 0;
+    transform: translateX(-50%) scale(1);
+    visibility: visible;
+  }
+
+  &.popup-wide {
+    width: 90%;
+  }
+
+  perfect-scrollbar {
+    max-height: $popup-window-height;
+  }
+
+  .module {
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+
+    .module-header {
+      border-bottom: 0;
+      padding: 0;
+      margin-bottom: $space-l;
+    }
+
+    .module-title {
+      font-size: 14px;
+    }
+
+    .element-details-row {
+      padding: $space-m 0;
+    }
+  }
+}
+
+.popup-window-header,
+.popup-window-footer {
+  padding: $space-m $space-xl;
+
+  &::after {
+    border-top: $border-separator;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+}
+
+.popup-window-header {
+  position: relative;
+
+  &::after {
+    bottom: 0;
+  }
+
+  .popup-window-title {
+    font-size: $font-size-l;
+    font-weight: 700;
+    line-height: 32px;
+  }
+}
+
+.popup-window-content {
+  padding: $space-l $space-xl;
+
+  ::ng-deep {
+    app-feedback-message {
+      &.is-active {
+        margin-bottom: $space-l;
+      }
+    }
+  }
+}
+
+.popup-window-footer {
+  background: $color-background-element;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  position: relative;
+
+  &::after {
+    top: 0;
+  }
+
+  button {
+    margin-left: $space-between-related-elements;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

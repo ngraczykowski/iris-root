@@ -1,0 +1,25 @@
+// Cards are base elements od User Interface because they are containers to display content on a single topic.
+
+%-card-base-styles {
+  @extend %shape-level-1;
+
+  background: $color-surface-element;
+  position: relative;
+}
+
+%card-on-surface {
+  @extend %-card-base-styles;
+  @extend %border-element;
+}
+
+%card-above-surface {
+  @extend %-card-base-styles;
+  @extend %layer-above-surface;
+  @extend %shadow-element-above-surface;
+}
+
+%card-popup {
+  @extend %-card-base-styles;
+  @extend %layer-popup-window;
+  @extend %shadow-popup-window;
+}

@@ -1,0 +1,15 @@
+@import '../../../../styles/layout/popup';
+
+
+// FIXME Patryk Górski
+::ng-deep {
+  .field-row-label {
+    width: 120px;
+  }
+
+  .user-type {
+    border-bottom: $border-separator;
+    margin-bottom: $space-l;
+    padding-bottom: $space-l;
+  }
+}

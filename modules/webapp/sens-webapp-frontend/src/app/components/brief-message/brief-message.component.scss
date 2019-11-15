@@ -1,0 +1,33 @@
+@import 'variables';
+@import 'mixins';
+
+.brief-message {
+  @include transition(all, $transition-fast, ease-in-out);
+  @include box-shadow(0, 0, $golden-ratio-ascending-2, 0, $color-shadow-black);
+  background: $-color-white;
+  border-radius: $base-size;
+  bottom: $space-xl;
+  display: flex;
+  left: -$space-xxl;
+  opacity: 0;
+  padding: $space-m $space-l;
+  position: fixed;
+  z-index: 20000; //TODO(pgorski): Temporary solution - until use atomic styles
+
+  &.is-active {
+    left: $space-xl;
+    opacity: 1;
+  }
+
+  & > * {
+    margin-right: $space-l;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  p {
+    font-weight: 400;
+  }
+}

@@ -1,0 +1,11 @@
+<ng-container *ngIf="isInitialized()">
+
+  <app-error-feedback
+          [translatePrefix]="'decisionTree.branchReject.changeRequest.validationError'"
+          [data]="errors">
+  </app-error-feedback>
+
+  <app-change-request-comment-option
+          [control]="commentControl">
+  </app-change-request-comment-option>
+</ng-container>

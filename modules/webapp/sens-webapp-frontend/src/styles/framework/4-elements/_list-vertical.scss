@@ -1,0 +1,103 @@
+// The file contains styles for all types of vertical lists of elements.
+
+%-list-vertical-base {
+  display: block;
+  list-style: none;
+  margin-block-end: 0;
+  margin-block-start: 0;
+  margin-inline-end: 0;
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+%-list-vertical-test-base-style {
+  @extend %-list-vertical-base;
+}
+
+// Styles for vertical elements list
+// Please use only the following styles in other component styles
+
+%list-vertical-options {
+  @extend %-list-vertical-base;
+
+  li {
+    @extend %row-selectable;
+
+    & > * {
+      line-height: add-px-to-value(grid-value(5));
+      padding: 0 add-px-to-value(grid-value(2));
+    }
+  }
+}
+
+%list-vertical-elements {
+  @extend %-list-vertical-base;
+
+  li {
+    @extend %row-divided;
+
+    & > * {
+      line-height: add-px-to-value(grid-value(4));
+      padding: add-px-to-value(grid-value(1)) 0;
+    }
+
+    &:last-child {
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+%list-vertical-elements-divided {
+  @extend %-list-vertical-base;
+
+  li {
+    @extend %row-divided;
+
+    & > * {
+      line-height: add-px-to-value(grid-value(4));
+      padding: add-px-to-value(grid-value(1)) 0;
+    }
+  }
+}
+
+%list-vertical-components {
+  @extend %-list-vertical-test-base-style;
+
+  & > * {
+    margin-bottom: add-px-to-value(grid-value(4));
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+%list-vertical-text {
+  @extend %-list-vertical-test-base-style;
+
+  li {
+    @extend %row;
+
+    & > * {
+      line-height: add-px-to-value(grid-value(3));
+    }
+  }
+}
+
+%list-vertical-text-bullets {
+  @extend %list-vertical-text;
+
+  list-style-type: disc;
+  margin-block-end: add-px-to-value(grid-value(1));
+  padding-inline-start: add-px-to-value(grid-value(2));
+
+  li {
+    & > * {
+      @extend %-typography-body-text;
+      color: $color-typography-secondary;
+    }
+  }
+}
+

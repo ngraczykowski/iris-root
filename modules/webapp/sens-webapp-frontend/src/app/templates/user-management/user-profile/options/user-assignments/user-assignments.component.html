@@ -1,0 +1,30 @@
+<ng-container *ngIf="assignments?.length > 0">
+  <section class="modal-content-section modal-content-section-divided modal-content-section-first">
+    <div class="modal-content-section-label">
+      <label class="required"
+             [translate]="'user-management.userProfile.labels.assignedPermissions'"></label>
+    </div>
+    <div class="modal-content-section-content">
+      <div class="profile-section-properties">
+        <p *ngIf="!assignments"
+           [translate]="'user-management.permissions.assigned.noAssigment'"></p>
+        <div *ngIf="assignments" class="assigned-permissions-table">
+          <div class="assigned-permissions-labels">
+            <div class="assigned-permission-column"
+                 [translate]="'user-management.permissions.assigned.decisionTreeName'">
+            </div>
+            <div class="assigned-permission-column"
+                 [translate]="'user-management.permissions.assigned.assignedAs'">
+            </div>
+          </div>
+          <div class="assigned-permissions-body">
+            <div *ngFor="let assignment of assignments" class="assigned-permissions-row">
+              <div class="assigned-permission-column">{{assignment.decisionTreeName}}</div>
+              <div class="assigned-permission-column">{{assignment.role}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>

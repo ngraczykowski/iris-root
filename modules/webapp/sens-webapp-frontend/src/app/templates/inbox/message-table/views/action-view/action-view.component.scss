@@ -1,0 +1,14 @@
+@import 'variables';
+
+.inbox-message-cell-action {
+
+  .alert-solved {
+    color: $color-feedback-positive-label;
+    font-weight: 700;
+  }
+
+  button {
+    padding: $inbox-table-button-padding;
+    width: 140px;
+  }
+}

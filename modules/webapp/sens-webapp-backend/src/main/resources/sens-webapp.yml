@@ -1,0 +1,139 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+sens.webapp.db.host: localhost
+sens.webapp.db.port: 5432
+sens.webapp.db.schema: public
+sens.webapp.db.name: postgres
+sens.webapp.db.user: postgres
+sens.webapp.db.password: postgres
+sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
+
+sens.webapp.db.connections.min: 1
+sens.webapp.db.connections.max: 10
+
+####################################################################################################
+
+info:
+  component: "SENS Web App REST API"
+
+spring:
+  jackson.serialization.write_dates_as_timestamps: false
+
+  cache.cache-names:
+    - aclCache
+
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: ${sens.webapp.db.url}
+    username: ${sens.webapp.db.user}
+    password: ${sens.webapp.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${sens.webapp.db.connections.min}
+      maximum-pool-size: ${sens.webapp.db.connections.max}
+      auto-commit: false
+      schema: ${sens.webapp.db.schema}
+      isolate-internal-queries: true
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: SENS WebApp (${spring.application.name})
+
+    # Database migrations
+    liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.xml
+      default-schema: ${sens.webapp.db.schema}
+      contexts: default
+
+    # Spring Data JPA
+    jpa:
+      database-platform: com.silenteight.sens.webapp.common.support.hibernate.FixedPostgreSql95Dialect
+      database: POSTGRESQL
+      show-sql: false
+      open-in-view: false
+
+      hibernate:
+        ddl-auto: none
+        use-new-id-generator-mappings: true
+
+      properties:
+        hibernate.cache.use_query_cache: false
+        hibernate.connection.provider_disables_autocommit: true
+        hibernate.generate_statistics: false
+        hibernate.jdbc.lob.non_contextual_creation: true
+        hibernate.jdbc.time_zone: UTC
+        hibernate.temp.use_jdbc_metadata_defaults: false
+        org.hibernate.envers.audit_table_suffix: _audit
+        org.hibernate.envers.store_data_at_delete: true
+
+server:
+  port: 7070
+
+management.endpoints.web.base-path: /management
+
+security.basic:
+  enabled: false
+
+sens.web:
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+
+  security.cas:
+    loginUrl: "http://localhost:7071/cas/login"
+    logoutUrl: "http://localhost:7071/cas/logout"
+    ticketValidatorUrl: "http://localhost:7071/cas"
+    serviceId: "http://localhost:7070/login/cas"
+    providerKey: "an_id_for_this_auth_provider_only"
+
+  #   # Colors palette for AI Solutions
+  #   ## Color code
+  #   Colors below are divided into four main groups one for each solution:
+  #   - The red color is related to a negative situation. That's why it should be used only for a dangerous alert like "True positive."
+  #   - The blue color is neutral and associated with information. That's why it should be used in the case when Analyst must do additional investigation.
+  #   - The green color occurs to something positive. That's why it should be used only when the alert is a "False positive," which means it is not a threat.
+  #   - Gray is a neutral color which distinguishes itself from red, blue, and green. Therefore, it should be used only in a situation when there is no solution yet.
+  #   ## Color variants
+  #   For each set use first color to describe the main solution. Use other shades from the particular set for additional   solutions in that group.
+  #   ## Colors
+  #   ### Negative like "True positive"
+  #   ai-solution-negative-1  — Red
+  #   ai-solution-negative-2 — Orange
+  #   ai-solution-negative-3 — Amber
+  #   ### Information like "Further investigation needed"
+  #   ai-solution-info-1 — purple
+  #   ai-solution-info-2 — Indigo
+  #   ai-solution-info-3  — Blue
+  #   ### Positive like "False Positive"
+  #   ai-solution-positive-1 — Green
+  #   ai-solution-positive-2 — Light Green
+  #   ai-solution-positive-3 — Teal
+  #   ### Neutral like "No Decision"
+  #   ai-solution-unset-1 — Gray
+
+  api.frontEnd.decisionsConfiguration:
+    - key: "NO_DECISION"
+      label: "NO_DECISION"
+      className: "ai-solution-unset-1"
+    - key: "FALSE_POSITIVE"
+      label: "FALSE_POSITIVE"
+      className: "ai-solution-positive-1"
+    - key: "HINTED_FALSE_POSITIVE"
+      label: "HINTED_FALSE_POSITIVE"
+      className: "ai-solution-info-1"
+    - key: "HINTED_POTENTIAL_TRUE_POSITIVE"
+      label: "HINTED_POTENTIAL_TRUE_POSITIVE"
+      className: "ai-solution-info-2"
+    - key: "POTENTIAL_TRUE_POSITIVE"
+      label: "POTENTIAL_TRUE_POSITIVE"
+      className: "ai-solution-negative-1"

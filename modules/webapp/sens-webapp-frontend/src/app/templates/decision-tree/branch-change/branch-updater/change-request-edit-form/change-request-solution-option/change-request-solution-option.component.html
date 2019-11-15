@@ -1,0 +1,22 @@
+<ng-container *ngIf="control">
+  <div class="field-row">
+    <div class="field-row-label">
+      <label for="selectAiDecision"
+             [translate]="'decisionTree.branchUpdater.changeRequest.aiDecision.label'"></label>
+    </div>
+    <div class="field-row-option-horizontal-left">
+      <p class="change-request-solution-description"
+         [translate]="'decisionTree.branchUpdater.changeRequest.aiDecision.description'"></p>
+      <div class="select-dropdown">
+        <app-icon [name]="'arrow'"></app-icon>
+        <select class="input-field" id="selectAiDecision" [formControl]="control">
+          <option value="NONE" selected
+                  [translate]="'decisionTree.branchUpdater.changeRequest.aiDecision.select.NONE'"></option>
+          <option *ngFor="let solution of solutionsList"
+                  [value]="solution.key">{{ solution.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</ng-container>

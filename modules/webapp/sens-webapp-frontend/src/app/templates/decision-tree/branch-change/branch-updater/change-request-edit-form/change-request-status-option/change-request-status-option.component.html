@@ -1,0 +1,21 @@
+<ng-container *ngIf="control && availableOptions">
+  <div class="field-row">
+    <div class="field-row-label">
+      <label for="selectStatus"
+             [translate]="'decisionTree.branchUpdater.changeRequest.status.label'"></label>
+    </div>
+    <div class="field-row-option-horizontal-left">
+      <p class="change-request-solution-description"
+         [translate]="'decisionTree.branchUpdater.changeRequest.status.description'"></p>
+      <div class="select-dropdown">
+        <app-icon [name]="'arrow'"></app-icon>
+        <select class="input-field" id="selectStatus" [formControl]="control">
+          <option *ngFor="let option of availableOptions"
+                  [value]="option"
+                  [translate]="'decisionTree.branchUpdater.changeRequest.status.select.' + option">
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</ng-container>

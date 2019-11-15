@@ -1,0 +1,9 @@
+<ng-container *ngIf="data.makers">
+  <p *ngIf="data.makers.length !== 0"
+     [translate]="'workflowManagement.table.rows.makers.label.' + ( data.makers.length === 1 ? 'one' : 'multiple' )"
+     [translateParams]="{ count: data.makers.length }">
+  </p>
+  <app-empty-state class="empty-state-data"
+                   *ngIf="data.makers.length === 0"
+                   [label]="'workflowManagement.table.rows.makers.empty'"></app-empty-state>
+</ng-container>

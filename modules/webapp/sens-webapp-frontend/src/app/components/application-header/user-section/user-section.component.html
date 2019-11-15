@@ -1,0 +1,40 @@
+<div class="user-section">
+  <div class="dropdown-right">
+    <button class="user-menu-trigger"
+            id="user-button"
+            [class.is-active]="userMenu"
+            (click)="toggleUserMenu()">
+    <span class="user-info-label"
+          [translate]="'userProfile.label'"></span>
+      <span class="user-info-username">{{ usernamePrimary }}</span>
+    </button>
+
+    <div class="dropdown-menu"
+         [class.is-active]="userMenu">
+      <div class="dropdown-menu-content user-info">
+        <div class="user-image">
+          <img src="../assets/images/user-icon.svg">
+        </div>
+        <div class="user-data">
+          <div class="username">
+            <div class="username-primary">{{ usernamePrimary }}</div>
+            <div class="username-secondary" *ngIf="usernameSecondary">
+              {{ usernameSecondary }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="dropdown-menu-elements user-navigation">
+        <li id="logout-button">
+          <a (click)="logout()">
+            <span [translate]="'userSection.menu.logOut'"></span>
+          </a>
+        </li>
+      </ul>
+      <div class="dropdown-menu-content app-version">
+        <span [translate]="'userProfile.appVersion.appName'"></span>
+        <span>{{ 'userProfile.appVersion.version' | translate: {value: applicationVersion} }}</span>
+      </div>
+    </div>
+  </div>
+</div>

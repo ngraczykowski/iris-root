@@ -1,0 +1,15 @@
+<section class="module">
+  <div class="module-header module-header-margin">
+    <h2 class="module-title"
+        [translate]="'decisionTree.reasoningBranches.title'"></h2>
+    <div class="module-options">
+    </div>
+  </div>
+  <div class="module-content">
+    <app-branch-table-loader-settings
+            [decisionTreeId]="decisionTreeId"
+            (loaderChange)="onLoaderChange($event)">
+    </app-branch-table-loader-settings>
+    <app-simple-branch-table *ngIf="loader" [loader]="loader"></app-simple-branch-table>
+  </div>
+</section>

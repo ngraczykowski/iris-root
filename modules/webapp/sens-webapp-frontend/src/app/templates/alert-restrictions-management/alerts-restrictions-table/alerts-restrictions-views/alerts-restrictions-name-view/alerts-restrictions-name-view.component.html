@@ -1,0 +1,5 @@
+<ng-container *ngIf="data">
+  <p *ngIf="data.data" class="text-ellipsis">{{data.data}}</p>
+  <p *ngIf="!data.data" class="text-ellipsis"
+     [translate]="'alertRestrictionsManagement.table.data.name.value.emptyState'"></p>
+</ng-container>

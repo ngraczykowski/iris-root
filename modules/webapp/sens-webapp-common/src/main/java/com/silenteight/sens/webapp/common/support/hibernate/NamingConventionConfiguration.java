@@ -19,4 +19,3 @@ public class NamingConventionConfiguration {
     return new SensWebAppPhysicalNamingStrategy();
   }
 }
-

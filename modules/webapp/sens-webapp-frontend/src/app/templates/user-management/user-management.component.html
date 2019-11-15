@@ -1,0 +1,20 @@
+<app-new-user-profile></app-new-user-profile>
+<app-edit-user-profile></app-edit-user-profile>
+<header class="page-header">
+  <div class="page-header-content">
+    <h1 class="page-name"
+        [translate]="'user-management.title'"></h1>
+    <div class="page-options">
+      <button class="button-outline"
+              [translate]="'user-management.options.downloadCSV.buttonLabel'"
+              (click)="onDownloadUserList()"></button>
+      <button class="button-outline"
+              [translate]="'user-management.options.addNewUser'"
+              (click)="onAddNewUser()">
+      </button>
+    </div>
+  </div>
+</header>
+<section>
+  <app-user-table></app-user-table>
+</section>

@@ -1,0 +1,32 @@
+<app-overlay [class.is-active]="show"></app-overlay>
+<div class="popup-window" [class.is-active]="show">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'user-management.userProfile.title.editProfile'"></h1>
+  </div>
+  <app-preloader class="preload-element" [class.is-active]="inProgress"></app-preloader>
+  <perfect-scrollbar #modalContentScroll>
+    <div class="popup-window-content">
+      <app-feedback-message class="error"
+                            [class.is-active]="loadErrorMessage"
+                            [message]="loadErrorMessage">
+      </app-feedback-message>
+      <app-feedback-message class="error"
+                            [class.is-active]="updateErrorMessage"
+                            [message]="updateErrorMessage">
+      </app-feedback-message>
+      <app-edit-user-template></app-edit-user-template>
+    </div>
+  </perfect-scrollbar>
+  <section class="popup-window-footer">
+    <button class="button-outline"
+            [translate]="'user-management.userProfile.actions.cancel'"
+            (click)="onCancel()">
+    </button>
+    <button class="button-action"
+            [disabled]="shouldDisableSaveButton()"
+            [translate]="'user-management.userProfile.actions.saveChanges'"
+            (click)="onSave()">
+    </button>
+  </section>
+</div>

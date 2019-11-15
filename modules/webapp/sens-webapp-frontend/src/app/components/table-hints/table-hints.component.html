@@ -1,0 +1,6 @@
+<ul class="table-hints"
+    *ngIf="tableHints">
+  <li class="table-hints-element"
+      [innerHTML]="'tableHints.' + hint | translate"
+      *ngFor="let hint of tableHints"></li>
+</ul>

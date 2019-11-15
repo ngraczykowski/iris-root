@@ -1,0 +1,7 @@
+<ng-container *ngIf="solutionChange">
+  <div class="suggested-component">
+    <app-solution-tag [solution]="solutionChange.current"></app-solution-tag>
+    <app-icon class="arrow-from-to" [name]="'arrow-direction'"></app-icon>
+    <app-solution-tag [solution]="solutionChange.proposed"></app-solution-tag>
+  </div>
+</ng-container>

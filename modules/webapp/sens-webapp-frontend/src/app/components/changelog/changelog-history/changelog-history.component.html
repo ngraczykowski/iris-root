@@ -1,0 +1,52 @@
+<ng-container *ngIf="changelog">
+  <section
+          class="modal-content-section modal-content-section-first">
+    <div class="modal-content-section-label">
+      <p [translate]="'changelog.history.title'"></p>
+    </div>
+    <div class="modal-content-section-content">
+      <ul class="changelog-history">
+        <li *ngFor="let change of changelog.changelog"
+            class="changelog-history-row">
+          <ng-container *ngIf="change.level == 0">
+            <div class="changelog-history-row-icon">
+              <app-icon [name]="'changelog-history-opened'"></app-icon>
+            </div>
+            <div class="changelog-history-row-content">
+              <div class="changelog-history-row-content-header">
+                <p class="changelog-history-row-content-header-user"
+                   [innerHTML]="formatOpenedByHtml(change)"></p>
+                <p>{{formatDate(change.timestamp)}}</p>
+              </div>
+              <div class="changelog-history-row-content-comment">
+                <div class="changelog-history-row-content-comment-changes">
+                  <p *ngIf="changelog.statusChange" [innerHTML]="changeStatusHtml"></p>
+                  <p *ngIf="changelog.solutionChange" [innerHTML]="changeSolutionHtml"></p>
+                </div>
+                <p>{{change.comment}}</p>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="change.level != 0">
+            <div class="changelog-history-row-icon">
+              <app-icon [name]="'changelog-history-approved'"></app-icon>
+            </div>
+            <div class="changelog-history-row-content">
+              <div class="changelog-history-row-content-header">
+                <p class="changelog-history-row-content-header-user"
+                   [translate]="'changelog.history.approved'"
+                   [translateParams]="{ level: change.level, userName: change.userName }">
+                </p>
+                <p>{{formatDate(change.timestamp)}}</p>
+              </div>
+              <div class="changelog-history-row-content-comment">
+                <p>{{change.comment}}</p>
+              </div>
+            </div>
+          </ng-container>
+        </li>
+      </ul>
+    </div>
+  </section>
+</ng-container>

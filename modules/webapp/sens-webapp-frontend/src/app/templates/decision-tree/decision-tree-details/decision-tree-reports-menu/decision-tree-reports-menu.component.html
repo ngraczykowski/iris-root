@@ -1,0 +1,16 @@
+<div class="dropdown-right"
+     *ngIf="hasDecisionTreeViewPermission">
+  <button class="button-outline"
+          (click)="showMenu = !showMenu"
+          [class.is-active]="showMenu"
+          [translate]="'decisionTree.reports.label'"></button>
+
+  <div class="dropdown-menu" [class.is-active]="showMenu">
+    <ul class="dropdown-menu-elements">
+      <li>
+        <a (click)="showMenu = !showMenu; generateReport()"
+           [translate]="'decisionTree.reports.downloadCBReport'"></a>
+      </li>
+    </ul>
+  </div>
+</div>

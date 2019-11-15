@@ -1,0 +1,22 @@
+<ng-container *ngIf="decisionTreeAgents || decisionTreeFeatures">
+  <section class="module section-page">
+    <div class="module-header">
+      <h2 class="module-title"
+          [translate]="'decisionTree.infobox.features.title'"></h2>
+      <div class="module-options">
+      </div>
+    </div>
+    <perfect-scrollbar class="module-content">
+      <app-decision-tree-info-features-list
+              [features]="decisionTreeFeatures"
+              [hasDecisionTreeViewAccess]="hasDecisionTreeViewAccess"></app-decision-tree-info-features-list>
+      <app-decision-tree-info-features-list
+              [features]="decisionTreeAgents"
+              [hasDecisionTreeViewAccess]="hasDecisionTreeViewAccess"></app-decision-tree-info-features-list>
+      <app-empty-state class="empty-state-content"
+                       *ngIf="shouldShowEmptyState()"
+                       [label]="'decisionTree.infobox.agents.emptyState'">
+      </app-empty-state>
+    </perfect-scrollbar>
+  </section>
+</ng-container>

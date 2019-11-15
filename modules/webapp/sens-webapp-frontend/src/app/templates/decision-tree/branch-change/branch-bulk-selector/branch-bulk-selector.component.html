@@ -1,0 +1,60 @@
+<ng-container *ngIf="data">
+
+  <section class="module">
+    <div class="module-header module-header-margin" id="rb-header">
+      <h2 class="module-title" [translate]="'decisionTree.reasoningBranches.title'"></h2>
+      <div class="module-options">
+      </div>
+    </div>
+    <div class="module-content">
+      <div class="selected-elements-panel"
+           [class.is-active]="hasSelectedBranches()">
+        <div class="selected-elements-panel-info" *ngIf="!loading">
+          <div class="selected-elements-panel-info-count">
+            <p [translate]="'decisionTree.branchSelector.info'"
+               [translateParams]="{value: getSelectedBranchesCount(), count: total}"></p>
+          </div>
+          <button class="button-flat"
+                  (click)="clearSelection()"
+                  [translate]="'decisionTree.branchSelector.clearSelected'"
+                  [translateParams]="{count: getSelectedBranchesCount()}"></button>
+          <button class="button-flat"
+                  *ngIf="!areAllSelected()"
+                  (click)="selectAllBranches()"
+                  [translate]="'decisionTree.branchSelector.selectAll'"
+                  [translateParams]="{count: total}"></button>
+          <p *ngIf="showErrorSelectAll"
+             [translate]="'decisionTree.branchSelector.error'"
+             class="selected-elements-panel-error"></p>
+        </div>
+        <div class="selected-elements-loading"
+             *ngIf="loading">
+          <p [translate]="'decisionTree.branchSelector.loading'"></p>
+        </div>
+        <div class="selected-elements-panel-options">
+          <button class="button-outline"
+                  (click)="onBranchResetSelected()"
+                  [translate]="'decisionTree.branchSelector.bulkRejectButtonText'"
+                  [disabled]="loading">
+          </button>
+          <button class="button-action"
+                  (click)="onBranchSelected()"
+                  [translate]="'decisionTree.branchSelector.bulkChangeButtonText'"
+                  [disabled]="loading">
+          </button>
+        </div>
+      </div>
+      <app-branch-table-loader-settings
+              [decisionTreeId]="data.decisionTreeId"
+              (loaderChange)="onLoaderChange($event)">
+      </app-branch-table-loader-settings>
+      <app-selectable-branch-table
+              *ngIf="loader"
+              [loader]="loader"
+              [store]="store"
+              [discriminator]="discriminator">
+      </app-selectable-branch-table>
+    </div>
+  </section>
+
+</ng-container>

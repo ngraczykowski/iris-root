@@ -1,0 +1,25 @@
+@import 'variables';
+@import "layout/module";
+
+$inbox-table-column-date: 130px + $space-table-gap;
+$inbox-table-column-action: 150px + $space-table-gap;
+
+.unresolved {
+  margin-bottom: $space-xxl;
+
+  ::ng-deep {
+    .dynamic-view-labels,
+    .dynamic-view-row {
+      grid-template-columns: 1fr $inbox-table-column-date $inbox-table-column-action;
+    }
+  }
+}
+
+.solved {
+  ::ng-deep {
+    .dynamic-view-labels,
+    .dynamic-view-row {
+      grid-template-columns: 1fr $inbox-table-column-date;
+    }
+  }
+}

@@ -1,0 +1,56 @@
+@import 'variables';
+
+$input-field-icon-size: 12px;
+
+.input-field-icon {
+  height: $height-of-interactive-elements;
+  position: relative;
+
+  .input-field-icon-left,
+  .input-field-icon-right {
+    fill: $color-icon;
+    height: $input-field-icon-size;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: $input-field-icon-size;
+    z-index: 1;
+
+    svg {
+      height: 100%;
+      position: absolute;
+      width: 100%;
+    }
+  }
+
+  .input-field-icon-left {
+    left: $space-m;
+  }
+
+  .input-field-icon-right {
+    right: $space-m;
+  }
+
+  .input-field {
+    &.input-field-icon-left-space {
+      padding-left: $space-xl;
+    }
+
+    &.input-field-icon-right-space {
+      padding-right: $space-xl;
+    }
+  }
+
+  ::placeholder {
+    color: $color-text-light;
+    opacity: 1;
+  }
+
+  :-ms-input-placeholder {
+    color: $color-text-light;
+  }
+
+  ::-ms-input-placeholder {
+    color: $color-text-light;
+  }
+}

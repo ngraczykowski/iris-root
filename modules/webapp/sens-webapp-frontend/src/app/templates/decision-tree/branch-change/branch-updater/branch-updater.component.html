@@ -1,0 +1,54 @@
+<div class="popup-full-screen" *ngIf="data">
+  <app-loading [class.is-active]="inProgress"></app-loading>
+  <perfect-scrollbar class="page-scroll"
+                     [hidden]="inProgress">
+    <div class="page-wrapper">
+      <main class="page-main">
+        <header class="page-header">
+          <div class="page-header-content">
+            <h1 class="page-name"
+                [translate]="'decisionTree.branchUpdater.title'"></h1>
+            <div class="page-options">
+              <button class="button-outline"
+                      [translate]="'decisionTree.branchUpdater.cancelButtonText'"
+                      (click)="onCancel()"></button>
+            </div>
+          </div>
+        </header>
+        <section class="branch-updater-changes">
+          <app-error-feedback
+                  [translatePrefix]="'decisionTree.branchUpdater.changeRequest.serverError'"
+                  [data]="error">
+          </app-error-feedback>
+          <app-change-request-edit-form></app-change-request-edit-form>
+          <div class="branch-updater-changes">
+            <section class="branch-updater-changes-footer">
+              <button class="button-outline"
+                      [translate]="'decisionTree.branchUpdater.options.reset'"
+                      (click)="onReset()">
+              </button>
+              <button class="button-action"
+                      [translate]="'decisionTree.branchUpdater.options.suggestChanges'"
+                      [disabled]="shouldDisableSuggestChangesButton()"
+                      (click)="onSuggestChanges()">
+              </button>
+            </section>
+          </div>
+          <section class="section-page">
+            <section class="module">
+              <div class="module-header module-header-margin">
+                <h2 class="module-title"
+                    [translate]="'decisionTree.branchUpdater.selectedElementsTable.title'"></h2>
+                <div class="module-options">
+                </div>
+              </div>
+              <div class="module-content">
+                <app-simple-branch-table [loader]="loader"></app-simple-branch-table>
+              </div>
+            </section>
+          </section>
+        </section>
+      </main>
+    </div>
+  </perfect-scrollbar>
+</div>

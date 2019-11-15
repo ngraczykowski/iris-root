@@ -1,0 +1,15 @@
+@import 'variables';
+@import '../../../../styles/components/element-details-row';
+
+.element-details-row-label {
+  width: 80px;
+}
+
+.no-changes {
+  color: $color-disabled-label;
+}
+
+.level-fix {
+  display: block;
+  margin-top: 8px;
+}

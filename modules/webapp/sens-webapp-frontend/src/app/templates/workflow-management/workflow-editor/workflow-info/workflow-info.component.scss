@@ -1,0 +1,15 @@
+@import 'components/element-details-row';
+
+.element-details-row-label {
+  width: 50px;
+}
+
+.element-details-row {
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}

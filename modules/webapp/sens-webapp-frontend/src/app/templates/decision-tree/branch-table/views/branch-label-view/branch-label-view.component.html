@@ -1,0 +1,12 @@
+<div *ngIf="data" class="tooltip">
+  <div *ngIf="data.text.length > 13"
+       class="tooltip-layer" [class.one-line]='data.text.length < 35'
+       [class.multi-lines]='data.text.length > 35'>
+    <p>
+      {{ data.text }}
+    </p>
+  </div>
+  <p>
+    {{ data.text }}
+  </p>
+</div>

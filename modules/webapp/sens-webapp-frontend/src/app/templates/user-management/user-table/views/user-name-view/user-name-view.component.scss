@@ -1,0 +1,7 @@
+@import 'variables';
+
+::ng-deep {
+  b {
+    color: $color-accent;
+  }
+}

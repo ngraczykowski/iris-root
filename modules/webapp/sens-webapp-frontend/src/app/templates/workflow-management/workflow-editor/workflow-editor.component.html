@@ -1,0 +1,32 @@
+<app-overlay [class.is-active]="show"></app-overlay>
+<div class="popup-window" [class.is-active]="show">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'workflowManagement.workflowEditor.title'">
+    </h1>
+  </div>
+  <app-preloader class="preload-element" [class.is-active]="loadInProgress || saveInProgress"></app-preloader>
+  <perfect-scrollbar>
+    <div class="popup-window-content" *ngIf="workflow">
+      <app-feedback-message class="error margin-bottom-l"
+                            [class.is-active]="loadErrorMessage"
+                            [message]="loadErrorMessage">
+      </app-feedback-message>
+      <app-feedback-message class="error margin-bottom-l"
+                            [class.is-active]="saveErrorMessage"
+                            [message]="saveErrorMessage">
+      </app-feedback-message>
+      <app-workflow-info [workflow]="workflow"></app-workflow-info>
+      <app-workflow-edit-form [workflow]="workflow"></app-workflow-edit-form>
+    </div>
+  </perfect-scrollbar>
+  <section class="popup-window-footer">
+    <button class="button-outline"
+            (click)="onClose()"
+            [translate]="'workflowManagement.workflowEditor.footer.cancel'"></button>
+    <button class="button-action"
+            (click)="onSave()"
+            [disabled]="shouldDisableSaveButton()"
+            [translate]="'workflowManagement.workflowEditor.footer.actionButton'"></button>
+  </section>
+</div>

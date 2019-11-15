@@ -1,0 +1,8 @@
+<ul *ngIf="listOfErrors"
+    class="input-validation-list">
+  <li *ngFor="let error of listOfErrors">
+    <p *ngIf="error">
+      {{ error  | translate }}
+    </p>
+  </li>
+</ul>

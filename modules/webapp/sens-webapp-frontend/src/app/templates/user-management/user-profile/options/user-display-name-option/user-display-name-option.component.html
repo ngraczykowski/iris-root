@@ -1,0 +1,14 @@
+<section class="modal-content-section modal-content-section-divided">
+  <div class="modal-content-section-label">
+    <label for="{{optionId}}-displayName"
+           [translate]="'user-management.userProfile.labels.displayName'"></label>
+  </div>
+  <div class="modal-content-section-content">
+    <div>
+      <input id="{{optionId}}-displayName" class="input-field" type="text"
+             [formControl]="control"
+             placeholder="{{ 'user-management.userProfile.inputPlaceholder.displayName' | translate }}"
+             maxlength="64">
+    </div>
+  </div>
+</section>

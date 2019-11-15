@@ -1,0 +1,15 @@
+<div class="full-screen-info">
+  <div class="full-screen-info-content ">
+    <img src="../../../assets/images/silent-eight-logomark.svg" alt="Silent Eight logomark"/>
+    <h1 class="title" [translate]="'error-page.access-denied.title'"></h1>
+    <p class="description"
+       [translate]="'error-page.access-denied.description'"></p>
+    <div>
+      <button class="button-action" routerLink="/"
+              [translate]="'error-page.access-denied.button.openHome'"></button>
+      <button class="button-action"
+              (click)="logout()"
+              [translate]="'error-page.access-denied.button.signOut'"></button>
+    </div>
+  </div>
+</div>

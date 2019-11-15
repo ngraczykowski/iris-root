@@ -1,0 +1,16 @@
+.section-page {
+  margin-bottom: $space-xl;
+
+  .section-page-header {
+    padding-bottom: $space-m;
+    border-bottom: $border-outline;
+  }
+
+  .section-page-title {
+    font-size: $font-size-xl;
+  }
+}
+
+.section-popup {
+  margin-bottom: $space-xxl;
+}

@@ -1,0 +1,7 @@
+<ng-container *ngIf="data">
+  <p class="text-ellipsis" *ngIf="!data.moreInfo" [translate]="data.text"></p>
+  <div class="tooltip" *ngIf="data.moreInfo">
+    <span class="tooltip-top" [translate]="data.moreInfo"></span>
+    <p class="text-ellipsis" [translate]="data.text"></p>
+  </div>
+</ng-container>

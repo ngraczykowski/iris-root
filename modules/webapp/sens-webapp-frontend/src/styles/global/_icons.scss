@@ -1,0 +1,19 @@
+.icon-arrow {
+  &.right {
+    svg {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &.left {
+    svg {
+      transform: rotate(90deg);
+    }
+  }
+
+  &.top {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}

@@ -1,0 +1,22 @@
+@import 'variables';
+
+.empty-state {
+  @extend %text-secondary;
+}
+
+:host(.empty-state-data) {
+  .empty-state {
+    font-size: $font-size-m;
+    font-weight: 400;
+  }
+}
+
+:host(.empty-state-content) {
+  .empty-state {
+    font-size: $font-size-l;
+    font-weight: 700;
+    padding: $space-xxl $space-l;
+    text-align: center;
+    width: 100%;
+  }
+}

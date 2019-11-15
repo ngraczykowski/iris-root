@@ -1,0 +1,13 @@
+@import 'variables';
+
+.changelog-section {
+  margin-bottom: $space-l;
+
+  .changelog-section-header {
+    margin-bottom: $space-l;
+
+    .changelog-section-title {
+      font-size: $font-size-l;
+    }
+  }
+}
