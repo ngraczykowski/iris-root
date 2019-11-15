@@ -1,0 +1,8 @@
+<div *ngIf="data">
+  <div class="tooltip">
+    <div class="tooltip-layer" *ngIf="nameLength() > visibleLengthOfReviewerName">
+      <app-branch-review-status-view-data [data]="data"></app-branch-review-status-view-data>
+    </div>
+    <app-branch-review-status-view-data [data]="data"></app-branch-review-status-view-data>
+  </div>
+</div>

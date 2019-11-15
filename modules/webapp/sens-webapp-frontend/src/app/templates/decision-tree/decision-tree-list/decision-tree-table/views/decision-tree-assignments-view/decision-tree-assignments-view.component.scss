@@ -1,0 +1,50 @@
+@import 'variables';
+@import 'future-component/tooltip';
+
+.assigned-bt-list {
+  list-style-type: none;
+
+  li {
+    display: inline-block;
+    margin-right: $space-s;
+  }
+}
+
+.tooltip-bt-list {
+  padding: $space-s;
+  width: 240px;
+
+  .tooltip-bt-list-no-limited {
+    li {
+      &:last-child {
+        border-bottom: 0px;
+      }
+    }
+  }
+
+  li {
+    font-weight: 400;
+    padding: $space-s 0;
+
+    &:last-child {
+      border-bottom: $border-separator;
+    }
+
+    &:first-child {
+      border-top: 0;
+    }
+
+    .bt-name {
+      text-align: left;
+      font-weight: 400;
+    }
+
+    .bt-type {
+      text-align: right;
+    }
+  }
+
+  .bt-list-limit {
+    padding-top: $space-m;
+  }
+}

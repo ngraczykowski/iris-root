@@ -1,0 +1,15 @@
+<div class="branch-reviewed-status" *ngIf="data">
+  <app-element-status
+          [translatePrefix]="'decisionTree.branchTable.data.rows.reviewed'"
+          [status]="data.reviewed ? 'active' : 'inactive'"
+          class="branch-reviewed-status-icon">
+  </app-element-status>
+  <p *ngIf="data.reviewed" class="branch-reviewed-status-label">
+    <span *ngIf="data.reviewedAt">
+      {{ formatDate(data.reviewedAt) }}
+    </span>
+    <span *ngIf="data.reviewedBy">
+        by {{ data.reviewedBy }}
+    </span>
+  </p>
+</div>

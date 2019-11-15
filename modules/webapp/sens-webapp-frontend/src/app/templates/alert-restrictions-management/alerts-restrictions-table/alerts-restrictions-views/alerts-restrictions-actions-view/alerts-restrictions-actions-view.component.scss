@@ -1,0 +1,11 @@
+@import 'variables';
+
+.restrictions-table-actions {
+  & > * {
+    margin-left: $space-m;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

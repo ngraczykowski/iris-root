@@ -1,0 +1,97 @@
+@import 'variables';
+@import 'mixins';
+
+.switch-view {
+  border: 0;
+  display: flex;
+  list-style-type: none;
+
+  button {
+    background: transparent;
+    border-bottom: $border-outline;
+    border-left: 0;
+    border-top: $border-outline;
+    color: $color-action;
+    cursor: pointer;
+    flex: 1;
+    font-weight: 700;
+    height: 32px;
+    line-height: 30px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+
+    &,
+    &::before,
+    &::after {
+      @include transition(all, $transition-fast, ease-in-out);
+    }
+
+    &:first-child {
+      border-bottom-left-radius: $border-radius-element;
+      border-left: $border-outline;
+      border-right: 0;
+      border-top-left-radius: $border-radius-element;
+
+      &::before {
+        border-left: 0;
+      }
+    }
+
+    &:last-child {
+      border-bottom-right-radius: $border-radius-element;
+      border-right: $border-outline;
+      border-top-right-radius: $border-radius-element;
+      border-left: 0;
+
+      &::before {
+        border-right: 0;
+      }
+    }
+
+    &::before,
+    &::after {
+      content: '';
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    &::before {
+      border-left: 1px solid transparent;
+      border-right: $border-outline;
+      width: calc(100% + 1px);
+    }
+
+    &::after {
+      background: $color-action-background;
+      opacity: 0;
+    }
+
+    &:hover,
+    &:focus {
+      border-color: $color-action-border;
+
+      &::after {
+        opacity: .08;
+      }
+
+      &::before {
+        border-color: $color-action-border;
+      }
+    }
+
+    &.is-active {
+      background: $color-action-background;
+      border-color: $color-action-background;
+      color: $color-text-white;
+
+      &::before {
+        border: 1px solid transparent;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,46 @@
+@import 'variables';
+@import 'mixins';
+
+// Temporary solution - need huge changes in structure
+
+$wrapper-default: 302px;
+
+$wrapper-menu: $wrapper-default + 61px;
+
+.batch-type-list-wrapper {
+  border-radius: 10px;
+
+  & {
+    height: calc(100vh - #{$wrapper-default});
+  }
+
+  &.selected-menu {
+    height: calc(100vh - #{$wrapper-menu});
+  }
+
+  // Hide horizontal scroll
+  .ps-container  {
+    overflow: visible/auto !important;
+    overflow-y: hidden !important;
+    overflow-x: visible !important;
+  }
+}
+
+.batch-type-list {
+  list-style: none;
+  position: relative;
+}
+
+.empty-state {
+  color: $color-text-light;
+  display: block;
+  font-size: $font-size-l;
+  font-weight: 700;
+  left: 50%;
+  padding: 34px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}

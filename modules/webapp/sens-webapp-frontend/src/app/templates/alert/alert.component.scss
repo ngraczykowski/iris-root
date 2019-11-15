@@ -1,0 +1,48 @@
+@import 'variables';
+@import 'components/element-details-row';
+
+$alert-details-module-height: 413px;
+$alert-details-module-half-height: ($alert-details-module-height / 2) - $space-l - 25px;
+
+.hits-section {
+  margin-bottom: $space-l;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.list-vertical-separator {
+  li {
+    & > * {
+      &:first-child {
+        font-weight: 700;
+      }
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+}
+
+.alert-details {
+  ::ng-deep {
+    .module-content {
+      height: $alert-details-module-height;
+    }
+  }
+
+  .alert-details-solution {
+    .module-content {
+      height: $alert-details-module-height;
+    }
+  }
+
+  .alert-details-solutions {
+    .module-content {
+      height: $alert-details-module-half-height;
+    }
+  }
+}
+

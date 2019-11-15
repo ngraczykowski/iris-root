@@ -1,0 +1,16 @@
+@import 'variables';
+
+$height-tag: 20px;
+
+.ai-solution {
+  border-radius: $border-radius-container;
+  color: $color-text-white;
+  display: inline-block;
+  font-size: $font-size-m - 2;
+  font-weight: 700;
+  height: $height-tag;
+  line-height: $height-tag + 1;
+  padding: 0 $space-s;
+  text-transform: capitalize;
+  white-space: pre;
+}

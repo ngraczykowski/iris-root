@@ -1,0 +1,45 @@
+<section class="modal-content-section modal-content-section-first">
+  <div class="modal-content-section-label">
+    <p [translate]="'workflowManagement.workflowEditor.approvalSection.title'"></p>
+  </div>
+  <div class="modal-content-section-content">
+    <div class="modal-content-section-content-value switch-row">
+      <label class="switch">
+        <input id="enableApprovals"
+               type="checkbox"
+               [formControl]="enableApprovalsControl">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+
+    <div class="list-vertical-components"
+         *ngIf="areApprovalLevelsEnabled()">
+      <ul class="list-vertical-components">
+        <li *ngFor="let control of approvalLevelForm.controls; let i = index">
+          <div class="widget">
+            <div class="widget-header">
+              <h3 class="field-group-settings-row-header-name"
+                  [translate]="'workflowManagement.workflowEditor.approvalSection.approvalLevel.title'"
+                  [translateParams]="{value: i + 1}"></h3>
+              <div>
+                <button class="button-outline"
+                        [translate]="'workflowManagement.workflowEditor.approvalSection.removeButton'"
+                        [hidden]="shouldHideRemoveButton()"
+                        (click)="onRemove(i)">
+                </button>
+              </div>
+            </div>
+            <app-workflow-edit-users-management
+                    [assignedUsers]="control.value"
+                    [requiredRole]="'ROLE_APPROVER'"
+                    (assignedUsersChange)="uploadApprovalsList($event, i)"></app-workflow-edit-users-management>
+          </div>
+        </li>
+      </ul>
+      <button class="button-outline button-full-width"
+              [translate]="'workflowManagement.workflowEditor.approvalSection.addButton'"
+              (click)="onAdd()"></button>
+    </div>
+  </div>
+</section>

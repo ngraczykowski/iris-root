@@ -1,0 +1,18 @@
+<div *ngIf="!error">
+  <ul class="breadcrumbs">
+    <li *ngFor="let breadcrumb of breadcrumbs">
+      <div *ngFor="let link of breadcrumb.links"
+           class="tooltip">
+        <span *ngIf="link.name.length > 27"
+              class="tooltip-top one-line"><p>{{ link.name }}</p></span>
+        <a *ngIf="link.url"
+           [routerLink]="link.url"
+           class="link">{{ link.name }}</a>
+        <p *ngIf="!link.url">{{ link.name }}</p>
+      </div>
+    </li>
+  </ul>
+</div>
+<div *ngIf="error"
+     class="breadcrumbs-error"
+     [translate]="'breadcrumbs.error'"></div>

@@ -1,0 +1,33 @@
+@import 'variables';
+
+//  <div class="element-details-row">
+//    <div class="element-details-row-label">
+//      <p></p>
+//    </div>
+//    <div class="element-details-row-value"></div>
+//  </div>
+
+.element-details-row {
+  border-bottom: $border-separator;
+  display: flex;
+  padding: $space-m $space-xl;
+  position: relative;
+
+  &:first-child {
+    border-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .element-details-row-label {
+    font-weight: 700;
+    margin-right: $space-xl;
+  }
+
+  .element-details-row-value {
+    flex: 1;
+    word-break: break-word;
+  }
+}

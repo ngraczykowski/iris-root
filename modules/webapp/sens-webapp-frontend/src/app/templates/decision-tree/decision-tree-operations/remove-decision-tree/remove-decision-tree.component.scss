@@ -1,0 +1,11 @@
+@import 'variables';
+@import 'mixins';
+
+.remove-description {
+  margin-bottom: $space-l;
+
+  .remove-description-name {
+    font-weight: 700;
+    margin-bottom: $space-m;
+  }
+}

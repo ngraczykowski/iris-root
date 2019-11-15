@@ -1,0 +1,148 @@
+// Description
+// Input field allows users to enter data into a User Interface.
+
+// HTML Structure:
+//
+// <div class="input-single-line">
+//    Place code here
+// </div>
+
+// Place to enter data (class = input-single-line-data).
+// This element is the basis of the entire input field and is mandatory.
+
+// HTML Structure:
+//
+// <div class="input-single-line-data">
+//    <i class="input-single-line-data-icon-type icon-search"></i>
+//    <input placeholder="Input placeholder">
+//    <i class="input-single-line-data-icon-status"></i>
+// or (Only one of the elements: status / button can be visible at one time)
+//    <button class="input-single-line-data-option">
+//      <i class="input-single-line-data-option-icon"></i>
+//    </button>
+// </div>
+
+// Elements description:
+// + Icon Type - Suggest the type of field/type of data entered (THis element is mandatory for all inputs)
+// + Status icon - inform the user about the status of the field. For example, error related to data in the input field.
+// + Option button - If an action is allowed for the field, the, e.g. clear field then the button should be visible.
+
+
+// Suggested data (hints)
+// This is additional functionality. Add if you want to show suggestions for data in the input field.
+
+// HTML Structure:
+//
+// <ul class="input-single-line-suggestions">
+//    <li>
+//      <button>
+//        <p>
+//          Lorem ipsum
+//        </p>
+//        <p class="input-single-line-suggestions-hint">
+//          Lorem ipsum
+//        </p>
+//      </button>
+//    </li>
+// </ul>
+
+// Elements description:
+// + <button> - Can be changed to <a>. This tag is added to preserve the semantics of HTML for an element that is clickable.
+// + <p> - Content should appear in this field
+// + <p class="input-single-line-suggestions-hint"> - If additional information is needed for the suggested option
+
+
+// Validation of the field's content.
+// This is additional functionality. Add if the field content should fulfill any requirements
+
+// HTML Structure:
+// <ul class="input-single-line-validation">
+//    <li class="input-single-line-validation-unfulfilled">
+//      <div>
+//        <i class="input-single-line-validation-status"></i>
+//        <p class="input-single-line-validation-label">
+//          Lorem iosum
+//        </p>
+//      </div>
+//    </li>
+// </ul>
+
+// Elements description:
+// + If validation is provided for the field, all guidelines should be listed as "input-single-line-validation-unfulfilled".
+// + When a user connects a guideline, the list item class should be changed to "input-single-line-validation-fulfilled"
+
+// Internal styles
+
+
+$-input-main-data-icon-size: add-px-to-value(grid-value(3));
+$-input-main-data-icon-space: add-px-to-value(grid-value(1) / 2);
+
+// Styles for vertical elements list
+// Please use only the following styles in other component styles
+
+.input-single-line {
+  position: relative;
+
+  .input-single-line-data {
+    @extend %input-field-single-line;
+
+    .input-single-line-data-icon-type,
+    .input-single-line-data-icon-status,
+    .input-single-line-data-option {
+      height: $-input-main-data-icon-size;
+      position: absolute;
+      top: $-input-main-data-icon-space;
+      width: $-input-main-data-icon-size;
+
+      &::before {
+        top: calc(50% - 1px);
+      }
+    }
+
+    .input-single-line-data-icon-type {
+      color: $color-typography-tertiary;
+      left: $-input-main-data-icon-space;
+    }
+
+    .input-single-line-data-icon-status,
+    .input-single-line-data-option {
+      right: $-input-main-data-icon-space;
+    }
+
+    .input-single-line-data-option {
+      border: 0;
+      cursor: pointer;
+
+      &::before {
+        color: $color-action;
+      }
+    }
+  }
+
+  .input-single-line-suggestions {
+    @extend %card-above-surface;
+    @extend %animation-transition-fast;
+
+    opacity: 0;
+    position: absolute;
+    top: $-input-single-line-height;
+    transform: translateY(0) scaleX(.8);
+    visibility: hidden;
+    width: 100%;
+
+    &.is-active {
+      opacity: 1;
+      transform: translateY(8px) scaleX(1);
+      visibility: visible;
+    }
+
+    .input-single-line-suggestions-list {
+      @extend %list-vertical-options;
+      @extend %-typography-body-text;
+
+      .input-single-line-suggestions-list-hint {
+        color: $color-typography-tertiary;
+      }
+    }
+  }
+}

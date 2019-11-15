@@ -1,0 +1,72 @@
+$-input-single-line-height: add-px-to-value(grid-value(4));
+
+%-input-placeholder-base-style {
+  color: $color-typography-tertiary;
+  opacity: 1;
+}
+
+%-input-field-base-style {
+  @extend %border-element;
+  @extend %shape-level-3;
+
+  background: $color-surface-element;
+  position: relative;
+
+  &:hover,
+  &:focus-within {
+    @extend %border-element-active;
+  }
+
+  &.input-field-invalid {
+    @extend %border-element-negative;
+  }
+}
+
+%-input-field-text-box-style {
+  @extend %-typography-body-text;
+
+  border: 0;
+  outline: 0;
+  width: 100%;
+
+  ::placeholder {
+    @extend %-input-placeholder-base-style;
+  }
+
+  :-ms-input-placeholder {
+    @extend %-input-placeholder-base-style;
+  }
+
+  ::-ms-input-placeholder {
+    @extend %-input-placeholder-base-style;
+  }
+}
+
+// Styles for input field
+// Please use only the following styles in other component styles
+
+%input-field-single-line {
+  @extend %-input-field-base-style;
+
+  input {
+    @extend %-input-field-text-box-style;
+
+    background: transparent;
+    height: $-input-single-line-height;
+    line-height: $-input-single-line-height;
+    padding: 0 add-px-to-value(grid-value(4));
+  }
+}
+
+%input-field-multiple-lines {
+  @extend %-input-field-base-style;
+  @extend %-input-field-text-box-style;
+
+  height: add-px-to-value(grid-value(5));
+  line-height: 25px;
+  min-width: 100%;
+  overflow: hidden;
+  padding: 8px 16px 7px;
+  resize: none;
+  width: 100%;
+}

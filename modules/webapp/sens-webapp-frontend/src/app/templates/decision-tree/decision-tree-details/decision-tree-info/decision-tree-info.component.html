@@ -1,0 +1,18 @@
+<ng-container *ngIf="decisionTreeDetails">
+  <div class="grid-system grid-4-4-4">
+    <app-decision-tree-info-details
+            class="decision-tree-details-module"
+            [decisionTreeDetails]="decisionTreeDetails"></app-decision-tree-info-details>
+
+    <app-decision-tree-info-features
+            class="decision-tree-details-module"
+            [decisionTreeAgents]="decisionTreeDetails.agents"
+            [decisionTreeFeatures]="decisionTreeDetails.features"
+            [hasDecisionTreeViewAccess]="hasDecisionTreeViewAccess"></app-decision-tree-info-features>
+
+    <app-decision-tree-info-assignments
+            class="decision-tree-details-module"
+            [activations]="activations"
+            [assignments]="assignments"></app-decision-tree-info-assignments>
+  </div>
+</ng-container>

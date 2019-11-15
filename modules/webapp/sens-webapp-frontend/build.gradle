@@ -1,5 +1,81 @@
-plugins {
-  id "java"
+buildscript {
+  dependencies {
+    classpath group: "commons-io", name: "commons-io", version: "2.6"
+  }
 }
 
-description = "SENS WebApp Frontend"
+plugins {
+  id "base"
+  id "maven-publish"
+  id "com.liferay.node" version "4.6.6"
+}
+
+node {
+  nodeVersion = "10.15.3"
+  npmVersion = "6.9.0"
+  download = true
+  nodeDir = "${project.projectDir}/node"
+}
+
+tasks.register("compile").configure {
+  group = BasePlugin.BUILD_GROUP
+  description = "Compiles this project."
+
+  dependsOn tasks.named("npmRunBuild")
+}
+
+tasks.register("zip", Zip) {
+  group = BasePlugin.BUILD_GROUP
+  description = "Builds ZIP package of this project."
+
+  from("$buildDir/dist") {
+    into "static"
+  }
+  dependsOn tasks.named("compile")
+}
+
+tasks.register("test").configure {
+  group = LifecycleBasePlugin.VERIFICATION_GROUP
+  description = "Runs all tests."
+
+  dependsOn tasks.named("npmRunTestHeadless")
+}
+
+tasks.register("lint").configure {
+  group = LifecycleBasePlugin.VERIFICATION_GROUP
+  description = "Runs TSLint on project."
+
+  dependsOn tasks.named("npmRunLint")
+}
+
+tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
+  // Replace dependencies instead of adding to them.
+  setDependsOn([
+      tasks.named("lint"),
+      tasks.named("test")
+  ])
+}
+
+tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME).configure {
+  dependsOn tasks.named("zip")
+}
+
+tasks.named("publish").configure {
+  dependsOn tasks.named("build")
+}
+
+tasks.named("publishToMavenLocal").configure {
+  dependsOn tasks.named("build")
+}
+
+artifacts {
+  archives zip
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      artifact zip
+    }
+  }
+}

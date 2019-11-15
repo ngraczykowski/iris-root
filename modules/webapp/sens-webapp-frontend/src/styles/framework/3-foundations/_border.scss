@@ -1,0 +1,47 @@
+//
+
+%-element-divider-base-style {
+  background: $color-line-divider;
+  content: '';
+  height: 1px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+%border-element {
+  box-shadow: inset 0 0 0 1px $color-line-border;
+}
+
+%border-element-active {
+  box-shadow: inset 0 0 0 2px $color-line-border-active;
+}
+
+%border-element-negative {
+  box-shadow: inset 0 0 0 2px $color-line-border-error;
+}
+
+%border-element-hidden {
+  box-shadow: inset 0 0 0 0 $color-line-border;
+}
+
+
+%border-element-divider-bottom {
+  position: relative;
+
+  &::after {
+    @extend %-element-divider-base-style;
+
+    bottom: 0;
+  }
+}
+
+%border-element-divider-top {
+  position: relative;
+
+  &::after {
+    @extend %-element-divider-base-style;
+
+    top: 0;
+  }
+}

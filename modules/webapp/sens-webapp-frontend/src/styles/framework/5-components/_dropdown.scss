@@ -1,0 +1,100 @@
+// Description
+// Lorem ipsum
+
+// Internal styles
+
+%-dropdown-show-animation-base {
+  transform: translateY(-24px) scale(.8);
+
+  &.is-active {
+    transform: translateY(8px) scale(1);
+  }
+}
+
+%dropdown-base-styles {
+  position: relative;
+
+  .dropdown-menu {
+    @extend %card-popup;
+    @extend %animation-transition-fast;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    visibility: hidden;
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    & *:last-child {
+      &::after {
+        display: none;
+      }
+    }
+
+    & > * {
+      @extend %border-element-divider-bottom;
+
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    .dropdown-menu-content {
+      padding: 16px $space-internal-content-margin;
+    }
+
+    .dropdown-menu-elements,
+    .dropdown-menu-elements-centered {
+      & * {
+        font-weight: 700;
+      }
+    }
+
+    .dropdown-menu-elements {
+      @extend %list-vertical-options;
+    }
+
+    .dropdown-menu-elements-centered {
+      @extend %list-vertical-options;
+      text-align: center;
+    }
+  }
+}
+
+// Styles for dropdown
+// Please use only the following styles in other component styles
+
+.dropdown-left {
+  @extend %dropdown-base-styles;
+
+  .dropdown-menu {
+    @extend %-dropdown-show-animation-base;
+    left: 0;
+  }
+}
+
+.dropdown-center {
+  @extend %dropdown-base-styles;
+
+  .dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%) translateY(-24px) scale(.8);
+
+    &.is-active {
+      transform: translateX(-50%) translateY(8px) scale(1);
+    }
+  }
+}
+
+.dropdown-right {
+  @extend %dropdown-base-styles;
+
+  .dropdown-menu {
+    @extend %-dropdown-show-animation-base;
+    right: 0;
+  }
+}

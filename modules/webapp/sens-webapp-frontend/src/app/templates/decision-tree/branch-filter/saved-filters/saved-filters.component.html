@@ -1,0 +1,51 @@
+<app-overlay [class.is-active]="show"></app-overlay>
+<div class="popup-window" [class.is-active]="show">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'decisionTree.branchFilter.filters'"></h1>
+  </div>
+  <app-preloader class="preload-element" [class.is-active]="isLoading()"></app-preloader>
+  <section class="popup-window-content" *ngIf="shouldShowSearchBar()">
+
+    <div class="input-single-line">
+      <div class="input-single-line-data">
+        <i class="input-single-line-data-icon-type icon-search"></i>
+        <input placeholder="{{'decisionTree.branchFilter.searchFilter' | translate}}"
+               [(ngModel)]="searchText">
+        <i class="input-single-line-data-icon-status"></i>
+      </div>
+    </div>
+
+  </section>
+  <perfect-scrollbar class="popup-window-content">
+    <ul class="list-vertical-components">
+      <li *ngFor="let filter of filters | filter:searchText:'name'">
+        <div class="widget">
+          <div class="widget-header">
+            <p>{{filter.name}}</p>
+            <div>
+              <button class="button-flat"
+                      (click)="onDelete(filter)"
+                      [translate]="'decisionTree.branchFilter.deleteFilter.buttonLabel'"></button>
+              <button class="button-outline"
+                      (click)="onSelect(filter)"
+                      [translate]="'decisionTree.branchFilter.loadFilter.buttonLabel'"></button>
+            </div>
+          </div>
+          <app-code-block [expandable]="true"
+                          [content]="filter.query"></app-code-block>
+        </div>
+      </li>
+    </ul>
+    <app-empty-state class="empty-state-content" *ngIf="shouldShowEmptyState()"
+                     [label]="'decisionTree.branchFilter.emptyState'">
+    </app-empty-state>
+
+  </perfect-scrollbar>
+  <section class="popup-window-footer">
+    <button class="button-outline "
+            [translate]="'decisionTree.branchFilter.closeButton'"
+            (click)="onClose()">
+    </button>
+  </section>
+</div>

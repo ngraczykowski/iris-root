@@ -1,0 +1,14 @@
+@import 'variables';
+@import 'mixins';
+
+.field-row-label {
+  width: 120px;
+}
+
+.popup-window-content {
+  ::ng-deep {
+    .feedback-message {
+      margin-bottom: $space-m;
+    }
+  }
+}

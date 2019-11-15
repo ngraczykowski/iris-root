@@ -1,0 +1,64 @@
+@import 'variables';
+@import 'mixins';
+
+.section-branch-filter {
+  @include transition(all, $transition-normal, ease-in-out);
+}
+
+.branch-filter {
+  border-bottom: $border-separator;
+  display: grid;
+  grid-gap: $space-l;
+  grid-template-rows: 34px 1fr 34px;
+  margin-bottom: $space-xl;
+  padding: $space-m $space-xl $space-xl;
+
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filter-name {
+    display: flex;
+    white-space: nowrap;
+
+    & > * {
+      margin-right: $space-between-related-elements;
+    }
+
+    label {
+      font-weight: 700;
+      line-height: 34px;
+    }
+
+    input {
+      width: 300px;
+    }
+  }
+
+  .filter-editor {
+    display: flex;
+    position: relative;
+
+    .input-field {
+      min-height: 64px;
+      padding: $space-s $space-m;
+    }
+
+    app-feedback-message {
+      bottom: -$space-xl;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+    }
+  }
+
+  .filter-options {
+    display: flex;
+    justify-content: flex-end;
+
+    & > * {
+      margin-left: $space-between-related-elements;
+    }
+  }
+}

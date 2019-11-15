@@ -1,0 +1,22 @@
+<div class="pagination-controller" *ngIf="isVisible">
+  <button class="button-outline"
+          [class.disable]="page === 1 "
+          [disabled]="page === 1"
+          (click)="onSelectPreviousPage()">
+    <i class="icon icon-arrow left" aria-label=""
+       [inlineSVG]="'../../../assets/icons/arrow.svg'"></i>
+  </button>
+  <div class="page-counter">
+    <span [translate]="'dynamicTable.pageCounter'"
+          [translateParams]="{value: visibleRowsText}">
+    </span>
+    <span>{{total}}</span>
+  </div>
+  <button class="button-outline"
+          [class.disable]="page === lastPage "
+          [disabled]="page === lastPage"
+          (click)="onSelectNextPage()">
+    <i class="icon icon-arrow right" aria-label=""
+       [inlineSVG]="'../../../assets/icons/arrow.svg'"></i>
+  </button>
+</div>

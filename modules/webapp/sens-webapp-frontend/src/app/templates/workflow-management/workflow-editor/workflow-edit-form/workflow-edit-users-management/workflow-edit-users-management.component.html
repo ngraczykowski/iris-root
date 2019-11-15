@@ -1,0 +1,72 @@
+<ng-container *ngIf="usersList"
+              (click)="handleAsideClick($event)">
+  <div class="input-elements-list">
+    <div class="input-single-line">
+      <div class="input-single-line-data">
+        <i class="input-single-line-data-icon-type icon-search"></i>
+        <input [(ngModel)]="searchText"
+               (keyup)="shouldShowSearchSuggestions()"
+               placeholder="{{ prefix + 'search.placeholder' | translate }}">
+        <i class="input-single-line-data-icon-status"></i>
+      </div>
+      <div class="input-single-line-suggestions"
+           id="search-suggestions"
+           [class.is-active]="showSearchSuggestions">
+        <ul class="input-single-line-suggestions-list">
+          <li *ngFor="let user of usersList | filterMultipleValues:{ userName: searchText, displayName: searchText } : false | slice:0:3;">
+            <button (click)="addUserToAssignedUsersList(user.userName)">
+              <p>
+                {{ user.userName }}
+                <ng-container *ngIf="user.displayName">
+                  ({{ user.displayName }})
+                </ng-container>
+              </p>
+              <p class="input-single-line-suggestions-list-hint"
+                 [translate]="prefix + 'search.suggestionHint'">
+              </p>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <ul class="list-vertical-elements"
+        *ngIf="assignedUsers.length > 0"
+        id="assigned-users-list">
+      <li *ngFor="let assignedUser of generateAssignedUsersList()">
+        <div class="list-vertical-elements-row">
+          <p class="vertical-list-of-elements-value">
+            {{ assignedUser.userName }}
+            <ng-container *ngIf="assignedUser.displayName">
+              ({{ assignedUser.displayName }})
+            </ng-container>
+          </p>
+          <div *ngIf="!canBeAssigned(assignedUser)"
+               class="feedback-text-warning">
+            <div class="feedback-text-content">
+              <i class="feedback-text-content-icon icon-warning"></i>
+              <p class="feedback-text-content-label"
+                 [translate]="prefix + 'addRole.description'"
+                 [translateParams]="{role: getMissingRoleName()}"></p>
+            </div>
+            <div class="feedback-text-option">
+              <button class="button-outline"
+                      id="add-maker-role"
+                      (click)="addMissingRole(assignedUser)"
+                      [translate]="prefix + 'addRole.buttonLabel'">
+              </button>
+            </div>
+          </div>
+          <button class="button-flat"
+                  (click)="removeUserFromAssignedUsersList(assignedUser.userName)"
+                  [translate]="prefix + 'removeMakerButtonLabel'">
+          </button>
+        </div>
+      </li>
+    </ul>
+    <div *ngIf="!assignedUsers.length > 0">
+      <p class="empty-state-field"
+         [translate]="prefix + 'emptyState'">
+      </p>
+    </div>
+  </div>
+</ng-container>

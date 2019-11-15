@@ -1,0 +1,9 @@
+@import 'variables';
+@import 'mixins';
+
+.input-description {
+  color: $color-text-light;
+  font-size: $font-size-s;
+  line-height: 14px;
+  padding-top: $space-s;
+}

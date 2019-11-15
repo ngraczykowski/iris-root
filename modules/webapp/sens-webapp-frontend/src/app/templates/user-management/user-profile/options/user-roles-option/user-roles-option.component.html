@@ -1,0 +1,30 @@
+<ng-container *ngIf="control">
+    <section class="modal-content-section modal-content-section-first">
+      <div class="modal-content-section-label">
+        <label class="required"
+               [translate]="'user-management.userProfile.labels.roles'"></label>
+      </div>
+      <div class="modal-content-section-content">
+        <ul class="roles-list">
+          <li *ngFor="let role of control.controls, let i = index"
+              class="field-group">
+            <div class="field-group-header">
+              <label class="field-group-header-label" for="{{optionId}}-role-{{i}}"
+                     [translate]="'user-management.data.roles.' + availableRoles[i]"></label>
+              <label class="switch">
+                <input type="checkbox"
+                       id="{{optionId}}-role-{{i}}"
+                       value="role-{{i}}"
+                       [formControl]="role">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+</ng-container>
+
+
+
+

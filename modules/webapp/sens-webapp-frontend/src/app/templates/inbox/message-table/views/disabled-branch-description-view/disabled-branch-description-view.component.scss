@@ -1,0 +1,72 @@
+@import 'variables';
+@import 'mixins';
+
+.inbox-reasoning-branch {
+  @include transition(all, $transition-fast, ease-in-out);
+  height: $table-row-height;
+  overflow: hidden;
+
+  .inbox-reasoning-branch-content {
+    display: flex;
+    position: relative;
+
+    .element-name {
+      white-space: nowrap;
+    }
+
+    .notification-content {
+      flex: 1;
+      margin: 0 $space-l;
+      margin-bottom: $space-l;
+      position: relative;
+
+      .description-placeholder {
+        height: $table-row-height;
+        overflow: hidden;
+        position: absolute;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+      }
+
+      .description-full {
+        color: transparent;
+        line-height: 1.5;
+        margin-top: 17px;
+        max-width: 100%;
+        white-space: normal;
+        word-break: break-all;
+
+        &.is-active {
+          color: $color-text;
+        }
+      }
+
+      .label {
+        line-height: 1;
+        margin-top: 22px;
+      }
+
+      .alerts-list {
+        display: block;
+        line-height: 1.5;
+        list-style-type: none;
+        margin-top: $space-m;
+
+        li {
+          white-space: normal;
+          word-break: break-word;
+        }
+      }
+    }
+
+    .show-hide-container {
+      line-height: $table-row-height;
+
+      button {
+        padding: $inbox-table-button-padding;
+      }
+    }
+
+  }
+}

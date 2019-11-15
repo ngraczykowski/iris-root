@@ -1,0 +1,8 @@
+<app-dropdown-selector
+        *ngIf="shouldDisplayRowCountPerPageSelector()"
+        class="rows-per-page-selector"
+        [translatePrefix]="'dynamicTable.rowsPerPage'"
+        [possibleOptions]="rowCountPerPageOptions"
+        [option]="rowCountPerPage"
+        (optionChange)="onOptionChange($event)">
+</app-dropdown-selector>

@@ -1,0 +1,6 @@
+<p class="text-ellipsis" *ngIf="!showLink">
+  {{decisionTreeName}}
+</p>
+<a class="text-ellipsis link" *ngIf="showLink" [routerLink]="link">
+  {{decisionTreeName}}
+</a>

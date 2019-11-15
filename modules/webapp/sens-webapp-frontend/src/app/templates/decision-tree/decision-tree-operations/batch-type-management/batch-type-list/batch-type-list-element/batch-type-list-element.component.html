@@ -1,0 +1,26 @@
+<div class="batch-type-list-element">
+  <label for="{{type | translate}}-{{index}}"
+         class="batch-type-list-element-select-area"></label>
+  <div>
+    <input type="checkbox"
+           class="checkbox"
+           name="{{type | translate}}-{{index}}"
+           id="{{type | translate}}-{{index}}"
+           #checkBox
+           (click)="checkElement($event.target)">
+    <label for="{{type | translate}}-{{index}}"
+           class="batch-type-list-element-select"></label>
+  </div>
+  <div class="batch-type-list-element-unused" *ngIf="canActivate()">
+    <label for="{{type | translate}}-{{index}}"
+           class="batch-type-list-element-name text-ellipsis">{{ batchType.name }}</label>
+  </div>
+  <div class="batch-type-list-element-used" *ngIf="!canActivate()">
+    <label for="{{type | translate}}-{{index}}"
+           class="batch-type-list-element-name text-ellipsis">{{ batchType.name }}</label>
+    <label class="batch-type-list-item-used-warning text-ellipsis"
+           for="{{type | translate}}-{{index}}"
+           [translate]="'decisionTree.batchTypeManagement.batchTypeList.batchTypeListElement.status.inUse'"
+           [translateParams]="{ id: batchType.activeForId, name: batchType.activeForName }"></label>
+  </div>
+</div>

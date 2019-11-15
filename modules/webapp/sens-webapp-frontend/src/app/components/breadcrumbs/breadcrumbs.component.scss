@@ -1,0 +1,49 @@
+@import 'variables';
+@import 'future-component/tooltip';
+
+.breadcrumbs {
+  display: flex;
+  list-style-type: none;
+
+  li {
+    display: inline-block;
+    font-weight: 700;
+    margin-right: $space-m;
+    padding-right: $space-l;
+    position: relative;
+
+    div > p,
+    div > a {
+      display: inline-block;
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: pre;
+    }
+
+    &::after {
+      background: $color-icon;
+      content: '';
+      height: 2px;
+      margin: 6px 0;
+      position: absolute;
+      right: 0;
+      top: 3px;
+      width: 10px;
+    }
+
+    &:last-child {
+      color: $color-text;
+      cursor: default;
+
+      &::after {
+        content: '';
+        display: none;
+      }
+    }
+  }
+}
+
+.breadcrumbs-error {
+  color: $color-feedback-error-label;
+}

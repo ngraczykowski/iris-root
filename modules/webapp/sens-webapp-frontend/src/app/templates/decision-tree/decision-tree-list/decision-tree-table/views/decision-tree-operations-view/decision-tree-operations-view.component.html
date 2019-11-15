@@ -1,0 +1,14 @@
+<ng-container *ngIf="data">
+  <div class="actions">
+    <button class="button-outline"
+            (click)="onCopy()"
+            [translate]="'decisionTrees.table.actions.copyTree'"
+            *ngIf="hasPermissionToCopyTree">
+    </button>
+    <button class="button-outline"
+            (click)="onRemove()"
+            [translate]="'decisionTrees.table.actions.removeTree'"
+            *ngIf="hasPermissionToRemoveTree">
+    </button>
+  </div>
+</ng-container>

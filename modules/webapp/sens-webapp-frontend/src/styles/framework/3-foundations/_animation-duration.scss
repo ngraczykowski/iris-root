@@ -1,0 +1,12 @@
+// Variables to determine the duration of the animation in the user interface.
+
+// Animation duration for simple interactions such as: hover, scaling, fading etc.
+
+$animation-duration-very-fast: 100ms;
+$animation-duration-fast: 200ms;
+
+// Animation duration for complex animations like: element show or move large elements
+
+$animation-duration-normal: 300ms;
+$animation-duration-slow: 400ms;
+$animation-duration-very-slow: 500ms;

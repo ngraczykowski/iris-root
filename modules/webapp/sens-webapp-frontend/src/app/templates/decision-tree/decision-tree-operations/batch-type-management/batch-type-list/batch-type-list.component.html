@@ -1,0 +1,35 @@
+<section class="module module-batch-type-list" *ngIf="batchTypes">
+  <div class="module-header">
+    <h2 class="module-title">
+      <span [translate]="type"></span>
+      <span *ngIf="(batchTypes | async | filter:batchTypeNameFilter:'name').length !== 0"> ({{ (batchTypes | async | filter:batchTypeNameFilter:'name').length }})</span>
+    </h2>
+    <div class="module-options">
+      <button class="button-flat"
+              [translate]="'decisionTree.batchTypeManagement.batchTypeList.buttonUncheckAll'"
+              (click)="uncheckAll()"></button>
+      <button class="button-flat"
+              [translate]="'decisionTree.batchTypeManagement.batchTypeList.buttonSelectAll'"
+              (click)="checkAll()"></button>
+    </div>
+  </div>
+  <div class="module-content batch-type-list-wrapper" [class.selected-menu]="selectedElementsPanel">
+    <perfect-scrollbar>
+      <ul *ngIf="(batchTypes | async).length !== 0" class="batch-type-list">
+        <li *ngFor="let batchType of batchTypes | async | sort:'name' | filter:batchTypeNameFilter:'name'; let i = index;"
+            [attr.data-index]="i">
+
+          <app-batch-type-list-element
+                  *ngIf="checkBatchVisibility(batchType)"
+                  [batchType]="batchType"
+                  [index]="i"
+                  [type]="type"
+                  [batchTypeNameFilter]="batchTypeNameFilter"></app-batch-type-list-element>
+        </li>
+      </ul>
+      <div class="empty-state"
+           *ngIf="(batchTypes | async | filter:batchTypeNameFilter:'name').length === 0"
+           [translate]="'decisionTree.batchTypeManagement.emptyState'"></div>
+    </perfect-scrollbar>
+  </div>
+</section>

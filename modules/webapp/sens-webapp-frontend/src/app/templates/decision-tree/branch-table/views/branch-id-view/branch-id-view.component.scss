@@ -1,0 +1,12 @@
+@import 'variables';
+@import 'mixins';
+
+.links {
+  color: $color-action;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

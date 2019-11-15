@@ -1,0 +1,8 @@
+<ng-container *ngIf="data?.change; else noData">
+  <app-solution-change [solutionChange]="changeAsSolutionChange()"></app-solution-change>
+</ng-container>
+
+<ng-template #noData>
+  <app-empty-state class="empty-state-data"
+                   [label]="'approver.table.proposedAiDecision.emptyState'"></app-empty-state>
+</ng-template>

@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'mixins';
+@import 'future-component/tooltip';
+
+.many-values,
+.empty-value,
+.empty-state {
+  color: $color-text-light;
+  white-space: nowrap;
+}

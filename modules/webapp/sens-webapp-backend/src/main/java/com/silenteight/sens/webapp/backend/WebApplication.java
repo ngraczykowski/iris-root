@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.rest.RestModule;
 import com.silenteight.sens.webapp.common.support.app.SensWebAppApplicationTemplate;
+import com.silenteight.sens.webapp.user.UsersModule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -13,7 +14,8 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
 @SpringBootApplication(
     scanBasePackageClasses = {
         RestModule.class,
-        WebModule.class
+        WebModule.class,
+        UsersModule.class
     },
     exclude = {
         FreeMarkerAutoConfiguration.class

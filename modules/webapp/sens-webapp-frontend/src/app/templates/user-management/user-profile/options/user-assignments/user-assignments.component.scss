@@ -1,0 +1,35 @@
+@import 'variables';
+
+.assigned-permissions-labels {
+  border-bottom: $border-separator;
+  color: $color-label;
+  font-size: $font-size-m;
+  font-weight: 700;
+  margin-top: 10px;
+  padding-bottom: $space-s;
+}
+
+.assigned-permissions-row {
+  line-height: 30px;
+  overflow: hidden;
+}
+
+.assigned-permissions-labels,
+.assigned-permissions-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  width: 100%;
+}
+
+.assigned-permissions-column {
+  overflow: hidden;
+  padding: 0 $space-l / 2;
+
+  &:first-child {
+    padding-left: $space-l;
+  }
+
+  &:last-child {
+    padding-right: $space-l;
+  }
+}

@@ -1,0 +1,25 @@
+<div style="display: flex">
+  <app-decision-tree-operations></app-decision-tree-operations>
+  <button class="button-outline"
+          *ngIf="hasPermissionToRenameTree"
+          (click)="onRenameDecisionTree()"
+          [translate]="'decisionTree.options.rename'">
+  </button>
+  <button class="button-outline" id="batch-management-button"
+          *ngIf="hasBatchTypeManageAccess"
+          (click)="onAssignDecisionTree()"
+          [translate]="'decisionTree.batchTypeManagement.title'">
+  </button>
+  <button class="button-outline"
+          *ngIf="hasPermissionToCopyTree"
+          (click)="onCopyDecisionTree()"
+          [translate]="'decisionTree.options.copy'">
+  </button>
+  <button class="button-outline"
+          *ngIf="hasPermissionToRemoveTree"
+          (click)="onRemoveDecisionTree()"
+          [translate]="'decisionTree.options.delete'">
+  </button>
+  <app-decision-tree-reports-menu [hasDecisionTreeViewPermission]="hasDecisionTreeViewPermission">
+  </app-decision-tree-reports-menu>
+</div>

@@ -1,0 +1,13 @@
+<ng-container *ngIf="statusChange">
+  <div class="suggested-component">
+    <app-element-status
+            [translatePrefix]="'statusChange.elementStatus'"
+            [status]="statusChange.current ? 'active' : 'inactive'">
+    </app-element-status>
+    <app-icon class="arrow-from-to" [name]="'arrow-direction'"></app-icon>
+    <app-element-status
+            [translatePrefix]="'statusChange.elementStatus'"
+            [status]="statusChange.proposed ? 'active' : 'inactive'">
+    </app-element-status>
+  </div>
+</ng-container>

@@ -1,0 +1,22 @@
+<div *ngIf="data">
+  <div class="many-values" *ngIf="manyValues">
+    <span [translate]="'placeholders.manyValues'"></span>
+  </div>
+  <div class="empty-value" *ngIf="emptyValue">
+    <span [translate]="'placeholders.emptyValue'"></span>
+  </div>
+  <div class="tooltip" *ngIf="oneValue">
+    <div *ngIf="data.value.length > 13"
+         class="tooltip-layer" [class.one-line]='data.value.length < 35'
+         [class.multi-lines]='data.value.length > 35'>
+      <p>
+        {{ data.value }}
+      </p>
+    </div>
+    <p [class.empty-state]="emptyState">
+      {{ data.value }}
+    </p>
+  </div>
+</div>
+
+

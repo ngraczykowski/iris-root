@@ -1,0 +1,66 @@
+<ng-container *ngIf="decisionTreeDetails">
+
+  <section class="module section-page">
+    <div class="module-header">
+      <h2 class="module-title"
+          [translate]="'decisionTree.infobox.basic.title'"></h2>
+      <div class="module-options">
+      </div>
+    </div>
+    <perfect-scrollbar class="module-content">
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'decisionTree.infobox.basic.id'"></p>
+        </div>
+        <div class="element-details-row-value">
+          {{ decisionTreeDetails.id }}
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'decisionTree.infobox.basic.name'"></p>
+        </div>
+        <div class="element-details-row-value">
+          {{ decisionTreeDetails.name }}
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'decisionTree.infobox.basic.status'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-element-status
+                  [translatePrefix]="'decisionTrees.table.data.status'"
+                  [status]="decisionTreeDetails.status.name.toLowerCase()">
+          </app-element-status>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'decisionTree.infobox.basic.type.label'"></p>
+        </div>
+        <div class="element-details-row-value">
+          <app-element-status
+                  [translatePrefix]="'decisionTree.infobox.basic.type'"
+                  [status]="decisionTreeDetails.active ? 'active' : 'inactive'">
+          </app-element-status>
+        </div>
+      </div>
+
+      <div class="element-details-row">
+        <div class="element-details-row-label">
+          <p [translate]="'decisionTree.infobox.basic.model'"></p>
+        </div>
+        <div class="element-details-row-value">
+          {{ decisionTreeDetails.model.name }}
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </section>
+
+
+</ng-container>
+

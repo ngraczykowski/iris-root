@@ -1,0 +1,16 @@
+@import 'variables';
+
+.modal-content-section {
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.input-single-line-data {
+  input {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

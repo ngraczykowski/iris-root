@@ -1,0 +1,198 @@
+$icon-size: 12px;
+
+.button-action,
+.button-outline {
+  border-radius: $border-radius-element;
+  height: $height-of-interactive-elements;
+}
+
+.button-action,
+.button-outline,
+.button-flat {
+  cursor: pointer;
+  font-size: $font-size-m;
+  font-weight: 700;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 0;
+
+  &,
+  &::after,
+  &::before {
+    @include transition(all, $transition-fast, ease-in-out);
+  }
+
+  .icon {
+    display: inline-block;
+    position: relative;
+    top: 1px;
+
+    svg {
+      display: block;
+      height: $icon-size;
+      overflow: hidden;
+      width: $icon-size;
+    }
+  }
+
+  .icon-left-label {
+    margin-left: $space-m;
+  }
+
+  .icon-right-label {
+    margin-right: $space-m;
+  }
+
+  &:disabled,
+  &[disabled],
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  &.is-active {
+    &,
+    &:hover,
+    &:focus,
+    &:disabled,
+    &[disabled],
+    &.disabled {
+      background: $color-accent;
+      border-color: $color-accent;
+      color: $color-text-white;
+
+      &::after {
+        opacity: 0;
+      }
+
+      svg {
+        fill: $color-icon-white;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      box-shadow: 0 4px 14px 0 $color-shadow-black;
+    }
+
+    &:disabled,
+    &[disabled],
+    &.disabled {
+      cursor: not-allowed;
+
+      &:hover,
+      &:focus {
+        border-color: $color-accent;
+        box-shadow: 0 0 0 0 $color-shadow-black;
+        color: $color-text-white;
+      }
+    }
+  }
+
+  &.button-full-width {
+    width: 100%;
+  }
+}
+
+.button-action {
+  background: $color-action-background;
+  border: 0;
+  box-shadow: $shadow-hidden;
+  color: $color-text-white;
+  fill: $color-icon-white;
+  padding: $space-s $space-m;
+
+  &.negative {
+    background: $color-negative-background;
+
+    &:hover {
+      background: $color-negative-hover;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    background: $color-action-hover;
+    box-shadow: 0 4px 14px 0 $color-shadow-black;
+  }
+
+  &:disabled,
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus {
+      background: $color-disabled-background;
+      box-shadow: 0 0 0 0 $color-shadow-black;
+      color: $color-disabled-label;
+
+      svg {
+        fill: $color-disabled-label;
+      }
+    }
+  }
+}
+
+.button-outline {
+  $size-border: 1px;
+  background: $color-background-element;
+  border: $border-separator;
+  color: $color-action;
+  padding: $space-s - ($size-border * 2) $space-m - ($size-border * 2);
+
+  svg {
+    fill: $color-action;
+  }
+
+  &:hover,
+  &:focus {
+    border: 1px solid $color-action-border;
+
+    &::after {
+      background: $color-action-hover;
+      content: '';
+      height: 100%;
+      left: 0;
+      opacity: .08;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  &:disabled,
+  &[disabled] {
+    ::ng-deep {
+      svg {
+        fill: $color-disabled-label;
+      }
+    }
+
+    &,
+    &:hover,
+    &:focus {
+      border: $border-outline;
+      color: $color-disabled-label;
+
+      &::after {
+        background: transparent;
+      }
+
+      svg {
+        fill: $color-disabled-label;
+      }
+    }
+  }
+}
+
+.button-flat {
+  background: transparent;
+  border: 0;
+  color: $color-action;
+  padding: 0;
+
+  svg {
+    fill: $color-action;
+  }
+}

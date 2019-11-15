@@ -1,0 +1,52 @@
+@import 'variables';
+
+.field-group {
+  border: $border-outline;
+  border-radius: $border-radius-container;
+  margin-bottom: $space-m;
+  padding: $space-m $space-l;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.field-group-header {
+  display: flex;
+  justify-content: space-between;
+
+  .field-group-header-label {
+    @extend %label-for-element;
+    flex: 1;
+  }
+}
+
+.field-group-settings {
+  border-top: $border-separator;
+  margin-top: 13px;
+  padding-top: 21px;
+
+  .field-group-settings-row {
+    margin-bottom: $space-l;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .field-group-settings-row-header {
+      display: flex;
+      margin-bottom: $space-m;
+
+      .field-group-settings-row-header-name {
+        flex: 1;
+        font-size: $font-size-m;
+        line-height: 32px;
+      }
+    }
+
+    .field-group-settings-row-option {
+      flex: 1;
+      margin-right: $space-m;
+    }
+  }
+}

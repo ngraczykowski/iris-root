@@ -1,0 +1,116 @@
+<app-overlay [class.is-active]="show"></app-overlay>
+<div class="popup-window popup-wide" [class.is-active]="show">
+  <div class="popup-window-header">
+    <h1 class="popup-window-title"
+        [translate]="'decisionTree.managingAssignments.title'"></h1>
+  </div>
+  <app-loading [class.is-active]="inProgress"></app-loading>
+  <perfect-scrollbar>
+    <div class="popup-window-content">
+      <div class="message error" *ngIf="serverError" [class.is-active]="serverError">
+        <p [translate]="getErrorMessage()"></p>
+        <ul *ngIf="isBatchTypeAlreadyActivatedErrorServerError()">
+          <li *ngFor="let treeWithBatchType of extractActivationErrorData()">
+            <a routerLink="/decision-tree/{{treeWithBatchType.decisionTreeId}}" target="_blank">{{
+              treeWithBatchType.batchType }} - {{ treeWithBatchType.decisionTreeName }}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="grid-system grid-4-4-4">
+
+        <section class="module section-page">
+          <div class="module-header">
+            <h2 class="module-title"
+                [translate]="'decisionTree.managingAssignments.available.title'"></h2>
+            <div class="module-options">
+            </div>
+          </div>
+          <div class="module-content">
+
+            <ul class="list-vertical-separator">
+              <li class="row-assignment"
+                  *ngFor="let batchType of getAvailableBatchTypes() | async | sort:'name'">
+                <div>{{ batchType.name }}</div>
+                <div class="options">
+                  <button class="button-flat "
+                          (click)="onAssign(batchType)"
+                          [translate]="'decisionTree.managingAssignments.available.buttonAdd'"></button>
+                </div>
+              </li>
+            </ul>
+            <app-empty-state class="empty-state-content"  *ngIf="(getAvailableBatchTypes() | async).length === 0"
+                             [label]="'decisionTree.managingAssignments.available.emptyState'"></app-empty-state>
+
+          </div>
+        </section>
+
+        <section class="module section-page">
+          <div class="module-header">
+            <h2 class="module-title"
+                [translate]="'decisionTree.managingAssignments.assigned.title'"></h2>
+            <div class="module-options">
+            </div>
+          </div>
+          <div class="module-content">
+
+            <ul class="list-vertical-separator">
+              <li class="row-assignment"
+                  *ngFor="let batchType of getAssignedBatchTypes() | async | sort:'name'">
+                <div>{{ batchType.name }}</div>
+                <div class="options">
+                  <button class="button-flat "
+                          (click)="onUnassign(batchType)"
+                          [translate]="'decisionTree.managingAssignments.assigned.buttonRemove'"></button>
+                  <button class="button-flat "
+                          *ngIf="batchType.canActivate"
+                          (click)="onActivate(batchType)"
+                          [translate]="'decisionTree.managingAssignments.assigned.buttonActivate'"></button>
+                </div>
+              </li>
+            </ul>
+            <app-empty-state class="empty-state-content"  *ngIf="(getAssignedBatchTypes() | async).length === 0"
+                             [label]="'decisionTree.managingAssignments.assigned.emptyState'"></app-empty-state>
+
+          </div>
+        </section>
+
+        <section class="module section-page">
+          <div class="module-header">
+            <h2 class="module-title"
+                [translate]="'decisionTree.managingAssignments.active.title'"></h2>
+            <div class="module-options">
+            </div>
+          </div>
+          <div class="module-content">
+            <ul *ngIf="!((getActivatedBatchTypes() | async).length === 0)"
+                class="list-vertical-separator">
+              <li class="row-assignment"
+                  *ngFor="let batchType of getActivatedBatchTypes() | async | sort:'name'">
+                <div class="name">{{ batchType.name }}</div>
+                <div class="options">
+                  <button class="button-flat "
+                          (click)="onDeactivate(batchType)"
+                          [translate]="'decisionTree.managingAssignments.active.buttonDeactivate'"></button>
+                </div>
+              </li>
+            </ul>
+            <app-empty-state class="empty-state-content"  *ngIf="(getActivatedBatchTypes() | async).length === 0"
+                             [label]="'decisionTree.managingAssignments.active.emptyState'"></app-empty-state>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </perfect-scrollbar>
+  <section class="popup-window-footer">
+    <button id="closeButton"
+            class="button-outline" (click)="close()"
+            [translate]="'modal.button.cancel'"></button>
+    <button id="saveButton"
+            class="button-action"
+            [disabled]="!isDirty"
+            (click)="onSaveChanges()"
+            [translate]="'decisionTree.managingAssignments.buttonSave'"></button>
+  </section>
+</div>
+

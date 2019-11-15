@@ -1,0 +1,10 @@
+// Imports all styles groups and combine them into a single file with all styles.
+// The order of style loading is important, so please do not change the order of styles in this file without consultation.
+
+@import 'framework/0-utilities/main';
+@import 'framework/1-load/main';
+@import 'framework/2-global-styles/main';
+@import 'framework/3-foundations/main';
+@import 'framework/4-elements/main';
+@import 'framework/5-components/main';
+@import 'ai-solutions';

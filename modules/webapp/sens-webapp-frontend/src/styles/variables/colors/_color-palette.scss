@@ -1,0 +1,46 @@
+// Do not make any changes in this file
+// If you must change anything in this file please contact Patryk Górski
+
+// Color palette - These colors are variables that should be used only in "Colors assignment"
+
+$-color-brand-500: hsl(350, 100%, 61%); //  Brand color - Do not change this color
+
+$-color-blue-500: hsl(206, 100%, 61%);
+$-color-blue-400: lighten($-color-blue-500, 5%);
+$-color-blue-700: darken($-color-blue-500, 10%);
+$-color-blue-900: darken($-color-blue-500, 20%);
+
+$-color-green-500: hsl(140, 80%, 45%);
+$-color-green-400: lighten($-color-green-500, 5%);
+$-color-green-700: darken($-color-green-500, 10%);
+$-color-green-900: darken($-color-green-500, 20%);
+
+$-color-red-500: hsl(0, 100%, 61%);
+$-color-red-400: lighten($-color-red-500, 5%);
+$-color-red-700: darken($-color-red-500, 10%);
+$-color-red-900: darken($-color-red-500, 20%);
+
+$-color-orange-500: hsl(40, 100%, 61%);
+$-color-orange-400: lighten($-color-orange-500, 5%);
+$-color-orange-700: darken($-color-orange-500, 10%);
+$-color-orange-900: darken($-color-orange-500, 20%);
+
+$-color-white: hsl(0, 0%, 100%);
+
+$-color-gray-01: hsl(0, 0%, 99%);
+$-color-gray-02: hsl(0, 0%, 98%);
+$-color-gray-05: hsl(0, 0%, 95%);
+$-color-gray-10: hsl(0, 0%, 90%);
+$-color-gray-20: hsl(0, 0%, 80%);
+$-color-gray-30: hsl(0, 0%, 70%);
+$-color-gray-40: hsl(0, 0%, 60%);
+$-color-gray-50: hsl(0, 0%, 50%);
+$-color-gray-60: hsl(0, 0%, 40%);
+$-color-gray-70: hsl(0, 0%, 30%);
+$-color-gray-80: hsl(0, 0%, 20%);
+$-color-gray-90: hsl(0, 0%, 10%);
+
+$-color-black: hsl(0, 0%, 0%);
+
+$-color-gray-blue-light: hsl(210, 17%, 98%);
+$-color-gray-blue: hsl(210, 17%, 98%);

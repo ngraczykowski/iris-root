@@ -1,0 +1,9 @@
+@import 'templates/page-full-screen';
+
+.button-action {
+  width: 200px;
+
+  &:first-child {
+    margin-right: $space-l;
+  }
+}

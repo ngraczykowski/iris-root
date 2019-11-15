@@ -1,0 +1,40 @@
+// Typography is the most important element of the user interface because the major part of the information in Interface in presented in the use of typography.
+// Good typography optimize readability and usability.
+
+@mixin typography-base-properties($size, $color, $weight, $case) {
+  @if ($color != null) {
+    color: $color;
+  }
+  font-size: add-px-to-value(grid-value($size) - 3);
+  font-weight: $weight;
+  text-transform: $case;
+}
+
+// Internal variables for this styles file. Please don't use these variables in other styles.
+$-font-weight-regular: 400;
+$-font-weight-bold: 700;
+
+// This value will be used as multiplier in "grid-value" function to get the proper value.
+// For example, the value `2` is 2 * 8 = 16px and the font size will be 16px.
+$-font-size-header-1: 4; // 4 is 32px
+$-font-size-header-2: 3; // 3 is 24px
+$-font-size-base: 2; // 2 is 16px
+
+// Styles for typography
+// Please use only the following styles in other component styles
+
+%typography-header {
+  @include typography-base-properties($-font-size-header-1, $color-typography-primary, $-font-weight-bold, none);
+}
+
+%typography-section-header {
+  @include typography-base-properties($-font-size-header-2, $color-typography-primary, $-font-weight-bold, none);
+}
+
+%typography-element-label {
+  @include typography-base-properties($-font-size-base, $color-typography-primary, $-font-weight-bold, none);
+}
+
+%-typography-body-text {
+  @include typography-base-properties($-font-size-base, null, $-font-weight-regular, none);
+}

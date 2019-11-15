@@ -1,0 +1,13 @@
+// The empty space helps to define relationship between related elements and the separation of elements which are not related to one another.
+
+$space-between-close-related-elements: add-px-to-value(grid-value(1));
+$space-between-related-elements: add-px-to-value(grid-value(2));
+$space-between-unrelated-elements: add-px-to-value(grid-value(3));
+
+$space-internal-content-margin: add-px-to-value(grid-value(3));
+$space-element-internal-content-margin: add-px-to-value(grid-value(2));
+
+$space-between-related-text-rows: add-px-to-value(grid-value(1));
+$space-between-unrelated-text-rows: add-px-to-value(grid-value(2));
+
+$space-grid-gap: add-px-to-value(grid-value(4));

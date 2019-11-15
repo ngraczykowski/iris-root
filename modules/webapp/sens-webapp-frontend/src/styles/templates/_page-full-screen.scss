@@ -1,0 +1,43 @@
+@import 'variables';
+
+.full-screen-info {
+  background: $-color-white;
+  height: 100%;
+  left: 0;
+  margin: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  .full-screen-info-content {
+    left: 50%;
+    padding: $space-xl;
+    position: fixed;
+    text-align: center;
+    top: 40%;
+    transform: translate(-50%, -50%);
+  }
+
+  img {
+    margin-bottom: $space-xl;
+    width: 95px;
+  }
+
+  .title {
+    color: $color-text;
+    font-size: $font-size-xxxl;
+    font-weight: 700;
+    margin-bottom: $space-m;
+  }
+
+  .description {
+    color: $color-text-light;
+    font-size: $font-size-xl;
+  }
+
+  button {
+    height: 36px;
+    margin-top: $space-xxl;
+    padding: 0 $space-m;
+  }
+}

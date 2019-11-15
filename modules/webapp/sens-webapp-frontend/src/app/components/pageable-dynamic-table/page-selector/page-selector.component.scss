@@ -1,0 +1,14 @@
+@import 'variables';
+@import 'mixins';
+
+.pagination-controller {
+  display: flex;
+  flex-direction: row;
+  margin-left: $space-l;
+
+  .page-counter {
+    font-weight: 700;
+    line-height: 34px;
+    margin: 0 $space-m;
+  }
+}

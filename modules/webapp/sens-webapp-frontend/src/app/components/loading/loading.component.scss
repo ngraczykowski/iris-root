@@ -1,0 +1,44 @@
+@import 'variables';
+@import 'mixins';
+
+:host(.is-active) {
+  .loading {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.loading {
+  @include transition(all, $transition-slow, ease-in-out);
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
+  width: 100%;
+  z-index: 1;
+
+  > div {
+    height: 60px;
+    left: 50%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+
+    > p {
+      color: $color-text;
+      font-size: $font-size-l;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .loader {
+      margin: auto;
+      margin-top: $space-m;
+      max-width: 320px;
+    }
+  }
+}

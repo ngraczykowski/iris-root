@@ -1,0 +1,32 @@
+@import 'variables';
+
+$table-column-ai-decision: 400px + $space-table-gap;
+$table-column-status: 190px + $space-table-gap;
+$table-column-changelog: 86px + $space-table-gap;
+$table-column-decision-tree: minmax(1px, 1fr);
+$table-column-branch: 60px + $space-table-gap;
+$table-column-score: 60px + $space-table-gap;
+$table-column-comment: minmax(1px, 1fr);
+
+$table-columns-list: $table-column-decision-tree $table-column-branch $table-column-score $table-column-ai-decision $table-column-status $table-column-comment $table-column-changelog;
+
+.table-approval-queue {
+  ::ng-deep {
+    .dynamic-view-labels,
+    .dynamic-view-row {
+      grid-template-columns: $table-column-checkbox $table-columns-list;
+      white-space: nowrap;
+    }
+  }
+}
+
+.table-approval-queue-selected {
+  ::ng-deep {
+    .dynamic-view-labels,
+    .dynamic-view-row {
+      grid-template-columns: $table-columns-list;
+      white-space: nowrap;
+    }
+  }
+}
+

@@ -1,0 +1,52 @@
+@import 'variables';
+@import 'mixins';
+
+.expire-session-notification {
+  @include transition(all, $transition-slow, ease-in-out);
+  background: $color-feedback-error-background;
+  box-shadow: 0 0 20px 0 $color-shadow-black;
+  color: $color-text-white;
+  line-height: 37px;
+  opacity: 1;
+  padding: $space-m;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  visibility: visible;
+  width: 100%;
+  z-index: 100000;
+
+  &.is-hidden {
+    box-shadow: 0 0 0 0 $color-shadow-black;
+    opacity: 0;
+    top: -100px;
+    visibility: hidden;
+  }
+
+  > * {
+    display: inline-block;
+  }
+
+  p {
+    font-size: $font-size-xl;
+    font-weight: 700;
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid $color-text-white;
+    border-radius: 8px;
+    color: $color-text-white;
+    font-weight: 700;
+    height: 36px;
+    margin-left: $space-l;
+    padding: 0 $space-m;
+    position: relative;
+    top: -1px;
+
+    &:hover {
+      background: $color-background-element;
+      color: $color-feedback-error-label;
+    }
+  }
+}

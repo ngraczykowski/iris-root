@@ -1,0 +1,110 @@
+<div class="popup-full-screen" *ngIf="show">
+
+  <app-loading [class.is-active]="inProgress"></app-loading>
+  <perfect-scrollbar class="page-scroll">
+
+    <div class="page-wrapper">
+      <main class="page-main batch-type-management">
+        <header class="page-header">
+          <div class="page-header-content">
+            <h1 class="page-name"
+                [translate]="'decisionTree.batchTypeManagement.title'"></h1>
+            <div class="page-options">
+              <button id="closeButton"
+                      (click)="close()"
+                      class="button-outline"
+                      [translate]="'decisionTree.batchTypeManagement.buttonDiscard'"></button>
+              <div class="tooltip save-changes-button">
+                <span class="tooltip-bottom one-line"
+                      *ngIf="isFilteringActive()">
+                  <p [translate]="'decisionTree.batchTypeManagement.buttonSaveTooltip'"></p>
+                </span>
+                <button id="saveButton"
+                        class="button-action"
+                        [disabled]="enableSaveButton()"
+                        (click)="onSaveChanges()"
+                        [translate]="'decisionTree.batchTypeManagement.buttonSave'"></button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <perfect-scrollbar class="message error" *ngIf="serverError"
+                           [class.is-active]="serverError">
+          <div class="message-content">
+            <p [translate]="getErrorMessage()"></p>
+            <ul *ngIf="isBatchTypeAlreadyActivatedErrorServerError()">
+              <li *ngFor="let treeWithBatchType of extractActivationErrorData()">
+                <a routerLink="/decision-tree/{{treeWithBatchType.decisionTreeId}}" target="_blank">
+                  {{ treeWithBatchType.batchType }} - {{ treeWithBatchType.decisionTreeName }}</a>
+              </li>
+            </ul>
+          </div>
+        </perfect-scrollbar>
+
+        <section class="batch-type-management-filtering">
+          <div class="input-field-icon batch-type-management-filtering-input">
+            <div class="input-field-icon-left" aria-label="Silent Eight Logo"
+                 [inlineSVG]="'assets/icons/search.svg'"></div>
+            <input class="input-field input-field-icon-left-space"
+                   placeholder="{{ 'decisionTree.batchTypeManagement.filtering.inputPlaceholder' | translate }}"
+                   [(ngModel)]="batchTypeNameFilter"
+                   (ngModelChange)="uncheckNotMatchingBatches()">
+          </div>
+          <button class="button-outline"
+                  [translate]="'decisionTree.batchTypeManagement.filtering.showHideInUse.hideInUse'"
+                  *ngIf="!toggleInUseActive"
+                  (click)="toggleInUse()"></button>
+          <button class="button-outline is-active"
+                  [translate]="'decisionTree.batchTypeManagement.filtering.showHideInUse.showInUse'"
+                  *ngIf="toggleInUseActive"
+                  (click)="toggleInUse()"></button>
+          <button class="button-outline"
+                  (click)="resetFilters()"
+                  [translate]="'decisionTree.batchTypeManagement.filtering.clearButtonLabel'"></button>
+        </section>
+        <section class="batch-type-management-lists">
+          <app-batch-type-list
+                  [type]="'decisionTree.batchTypeManagement.batchTypeList.name.available'"
+                  [batchTypes]="getAvailableBatchTypes()"
+                  [batchTypeNameFilter]="batchTypeNameFilter"
+                  [selectedElementsPanel]="showSelectedElementsPanel()"></app-batch-type-list>
+
+          <app-batch-type-list
+                  [type]="'decisionTree.batchTypeManagement.batchTypeList.name.assigned'"
+                  [batchTypes]="getAssignedBatchTypes()"
+                  [batchTypeNameFilter]="batchTypeNameFilter"
+                  [selectedElementsPanel]="showSelectedElementsPanel()"></app-batch-type-list>
+
+          <app-batch-type-list
+                  [type]="'decisionTree.batchTypeManagement.batchTypeList.name.active'"
+                  [batchTypes]="getActivatedBatchTypes()"
+                  [batchTypeNameFilter]="batchTypeNameFilter"
+                  [selectedElementsPanel]="showSelectedElementsPanel()"></app-batch-type-list>
+        </section>
+
+        <div class="selected-elements-panel"
+             [class.is-active]="showSelectedElementsPanel()">
+          <div class="selected-elements-panel-count">
+            <p>{{ selected.length }} Selected items</p>
+          </div>
+          <div class="selected-elements-panel-options">
+            <button class="button-outline"
+                    [translate]="'decisionTree.batchTypeManagement.batchTypeList.operations.moveToAvailable'"
+                    (click)="moveToAvailable()">
+            </button>
+            <button class="button-outline"
+                    [translate]="'decisionTree.batchTypeManagement.batchTypeList.operations.assign'"
+                    (click)="moveToAssigned()">
+            </button>
+            <button class="button-action"
+                    [translate]="'decisionTree.batchTypeManagement.batchTypeList.operations.activate'"
+                    (click)="moveToActive()">
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+  </perfect-scrollbar>
+</div>

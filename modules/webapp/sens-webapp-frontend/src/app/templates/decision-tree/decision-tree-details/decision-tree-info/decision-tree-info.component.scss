@@ -1,0 +1,52 @@
+@import 'variables';
+
+.informations {
+  td {
+    &:first-child {
+      font-weight: 700;
+      padding-right: $space-l;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    &:last-child {
+      white-space: pre-wrap;
+      word-break: break-word;
+
+      ul {
+        list-style-type: none;
+      }
+    }
+  }
+
+  .status-icon {
+    margin-right: 9px;
+  }
+}
+
+.assignments {
+  .assignments-section {
+    margin-bottom: $space-l;
+
+    .assignments-section-title {
+      font-size: $font-size-l;
+    }
+
+    .assignments-section-content {
+      margin-top: $space-s;
+    }
+  }
+}
+
+.decision-tree-details-module {
+  ::ng-deep {
+    .module {
+      overflow: hidden;
+    }
+
+    .module-content {
+      height: 248px;
+    }
+  }
+}
+

@@ -1,0 +1,36 @@
+<form *ngIf="form" [formGroup]="form">
+  <section class="module">
+    <app-user-display-name-option
+            [control]="form.get('displayName')"></app-user-display-name-option>
+
+    <section
+            class="modal-content-section modal-content-section-divided modal-content-section-first">
+      <div class="modal-content-section-label">
+        <label class="required"
+               for="username"
+               [translate]="'user-management.userProfile.labels.userName'"></label>
+      </div>
+      <div class="modal-content-section-content">
+        <div class="field-row-option-vertical">
+          <input class="disabled input-field"
+                 id="username"
+                 type="text"
+                 disabled
+                 [value]="userName">
+        </div>
+      </div>
+    </section>
+    <app-user-password-option
+            *ngIf="withPassword"
+            [passwordControl]="form.get('password')"
+            [repeatPasswordControl]="form.get('repeatPassword')">
+    </app-user-password-option>
+    <app-user-status-option [control]="form.get('active')"></app-user-status-option>
+    <app-user-super-user-option [control]="form.get('superUser')"></app-user-super-user-option>
+  </section>
+
+  <app-user-assignments [assignments]="assignments"></app-user-assignments>
+  <app-user-roles-option *ngIf="!form.get('superUser').value"
+                         [control]="form.get('roles')"></app-user-roles-option>
+
+</form>

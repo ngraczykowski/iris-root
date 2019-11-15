@@ -1,0 +1,9 @@
+<div class="input-feedback">
+  <div class="input-feedback-section feedback-error"
+       *ngIf="feedbackErrors">
+    <ul>
+      <li *ngFor="let error of feedbackErrors"
+          [translate]="error"></li>
+    </ul>
+  </div>
+</div>

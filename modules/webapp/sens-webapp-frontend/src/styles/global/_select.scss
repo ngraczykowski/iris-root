@@ -1,0 +1,43 @@
+.select-dropdown {
+  flex: 1;
+  position: relative;
+  background: $-color-white;
+
+  app-icon {
+    height: 100%;
+    position: absolute;
+    right: 13px;
+    width: 16px;
+
+    .icon {
+      fill: $color-action;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      z-index: 1;
+    }
+  }
+
+  select {
+    @include transition(all, $transition-normal, ease-in-out);
+    background: transparent;
+    // sass-lint:disable-all
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    // sass-lint:enable-all
+    cursor: pointer;
+    height: 32px;
+    padding: 8px 13px;
+    z-index: 2;
+  }
+
+  .select-placeholder {
+    color: $color-text-light;
+    left: 13px;
+    position: absolute;
+    z-index: 1;
+  }
+}

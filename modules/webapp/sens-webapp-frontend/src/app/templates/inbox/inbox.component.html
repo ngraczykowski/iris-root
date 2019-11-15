@@ -1,0 +1,46 @@
+<div class="page-content">
+  <header class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-name"
+          [translate]="'inbox.title'"></h1>
+    </div>
+  </header>
+  <div class="page-module">
+    <section class="module unresolved"
+             *ngIf='unsolvedMessageTableDataProvider'>
+      <div class="module-header module-header-margin">
+        <h2 class="module-title"
+            [translate]="'inbox.section.unresolved.title'"></h2>
+        <div class="module-options">
+        </div>
+      </div>
+      <div class="module-content">
+        <app-pageable-dynamic-table
+                [provider]="unsolvedMessageTableDataProvider"
+                [rowCountPerPage]="30"
+                [rowCountPerPageOptions]="[8, 15, 30, 100]"
+                [translatePrefix]="'inbox.section.unresolved'">
+        </app-pageable-dynamic-table>
+      </div>
+    </section>
+  </div>
+  <div class="page-module">
+    <section class="module solved"
+             *ngIf='solvedMessageTableDataProvider'>
+      <div class="module-header module-header-margin">
+        <h2 class="module-title"
+            [translate]="'inbox.section.solved.title'"></h2>
+        <div class="module-options">
+        </div>
+      </div>
+      <div class="module-content">
+        <app-pageable-dynamic-table
+                [provider]="solvedMessageTableDataProvider"
+                [rowCountPerPage]="8"
+                [rowCountPerPageOptions]="[8, 15, 30]"
+                [translatePrefix]="'inbox.section.solved'">
+        </app-pageable-dynamic-table>
+      </div>
+    </section>
+  </div>
+</div>

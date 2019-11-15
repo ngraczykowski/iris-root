@@ -1,0 +1,19 @@
+<ng-container>
+
+  <section class="module section-page">
+    <div class="module-header module-header-no-border">
+      <h2 class="module-title">
+        <span [translate]="title"></span>
+        <span *ngIf='count !== 0'>({{ count }})</span>
+      </h2>
+      <div class="module-options">
+      </div>
+    </div>
+    <div class="module-content">
+      <app-dynamic-view-table [translatePrefix]="'decisionTrees.table.active'" [tableData]="tableData">
+      </app-dynamic-view-table>
+    </div>
+  </section>
+
+
+</ng-container>
