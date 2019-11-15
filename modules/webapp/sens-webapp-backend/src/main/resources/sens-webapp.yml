@@ -43,34 +43,34 @@ spring:
       isolate-internal-queries: true
       connection-init-sql: SELECT 1
       data-source-properties:
-        ApplicationName: SENS WebApp (${spring.application.name})
+        ApplicationName: SENS WebApp
 
-    # Database migrations
-    liquibase:
-      change-log: classpath:db/changelog/db.changelog-master.xml
-      default-schema: ${sens.webapp.db.schema}
-      contexts: default
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${sens.webapp.db.schema}
+    contexts: default
 
-    # Spring Data JPA
-    jpa:
-      database-platform: com.silenteight.sens.webapp.common.support.hibernate.FixedPostgreSql95Dialect
-      database: POSTGRESQL
-      show-sql: false
-      open-in-view: false
+  # Spring Data JPA
+  jpa:
+    database-platform: com.silenteight.sens.webapp.common.support.hibernate.FixedPostgreSql95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
 
-      hibernate:
-        ddl-auto: none
-        use-new-id-generator-mappings: true
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
 
-      properties:
-        hibernate.cache.use_query_cache: false
-        hibernate.connection.provider_disables_autocommit: true
-        hibernate.generate_statistics: false
-        hibernate.jdbc.lob.non_contextual_creation: true
-        hibernate.jdbc.time_zone: UTC
-        hibernate.temp.use_jdbc_metadata_defaults: false
-        org.hibernate.envers.audit_table_suffix: _audit
-        org.hibernate.envers.store_data_at_delete: true
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
 
 server:
   port: 7070
