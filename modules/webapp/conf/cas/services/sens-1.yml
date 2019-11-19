@@ -1,0 +1,11 @@
+--- !<org.apereo.cas.services.RegexRegisteredService>
+name: "sens-dev"
+id: 2
+serviceId: "http://localhost:4200/login/cas"
+description: "SENS Development"
+theme: "sens"
+evaluationOrder: 1
+attributeReleasePolicy: !<org.apereo.cas.services.ReturnAllAttributeReleasePolicy> {}
+accessStrategy: !<org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy>
+  enabled: true
+  ssoEnabled: true

@@ -1,0 +1,10 @@
+--- !<org.apereo.cas.services.RegexRegisteredService>
+name: "sens"
+id: 1
+serviceId: "${SENS_WEBAPP_SERVICE_URL_REGEX}"
+description: "SENS Web App"
+evaluationOrder: 10000
+attributeReleasePolicy: !<org.apereo.cas.services.ReturnAllAttributeReleasePolicy> {}
+accessStrategy: !<org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy>
+  enabled: true
+  ssoEnabled: true
