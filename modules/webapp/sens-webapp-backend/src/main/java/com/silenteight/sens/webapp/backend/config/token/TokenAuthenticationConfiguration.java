@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.config.token;
 
-import com.silenteight.sens.webapp.user.UserTokenService;
-import com.silenteight.sens.webapp.user.UserTokenServiceConfiguration;
+import com.silenteight.sens.webapp.users.usertoken.UserTokenConfiguration;
+import com.silenteight.sens.webapp.users.usertoken.UserTokenService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Configuration
-@Import(UserTokenServiceConfiguration.class)
+@Import(UserTokenConfiguration.class)
 class TokenAuthenticationConfiguration {
 
   @Bean
   public TokenAuthenticationProvider tokenAuthenticationProvider(
       UserTokenService userTokenService) {
+
     return new TokenAuthenticationProvider(userTokenService);
   }
 

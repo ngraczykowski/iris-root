@@ -15,7 +15,7 @@ import com.silenteight.sens.webapp.backend.security.dto.PrincipalDtoMapper;
 import com.silenteight.sens.webapp.backend.security.login.SaveToDatabaseAuthenticationSuccessListener;
 import com.silenteight.sens.webapp.backend.security.logout.RemoveSessionApplicationListener;
 import com.silenteight.sens.webapp.backend.security.logout.UpdateSessionApplicationListener;
-import com.silenteight.sens.webapp.user.UserService;
+import com.silenteight.sens.webapp.users.user.UserService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;

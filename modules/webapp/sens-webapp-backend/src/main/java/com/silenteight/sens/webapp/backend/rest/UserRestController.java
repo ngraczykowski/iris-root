@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.ModifyUserDto;
-import com.silenteight.sens.webapp.user.dto.UserDetailedView;
-import com.silenteight.sens.webapp.user.dto.UserResponseView;
+import com.silenteight.sens.webapp.users.user.dto.UserDetailedView;
+import com.silenteight.sens.webapp.users.user.dto.UserResponseView;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

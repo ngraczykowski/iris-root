@@ -23,6 +23,8 @@ ext {
     gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
 }
 
+apply from: "${gradleScriptDir}/resolutionRules.gradle"
+
 subprojects { Project project ->
     pluginManager.withPlugin("java") {
         project.apply from: "${gradleScriptDir}/dependencies.gradle"

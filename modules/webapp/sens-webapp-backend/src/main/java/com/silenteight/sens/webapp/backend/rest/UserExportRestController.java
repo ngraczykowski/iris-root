@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
-import com.silenteight.sens.webapp.user.dto.UserView;
+import com.silenteight.sens.webapp.users.user.dto.UserView;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

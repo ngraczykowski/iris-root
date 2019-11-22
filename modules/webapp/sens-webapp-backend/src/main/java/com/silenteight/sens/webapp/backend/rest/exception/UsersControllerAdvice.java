@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.backend.rest.exception;
 
 import com.silenteight.sens.webapp.backend.rest.exception.dto.ErrorDto;
 import com.silenteight.sens.webapp.common.exception.EntityNotFoundException;
-import com.silenteight.sens.webapp.user.exception.UserAlreadyExistException;
-import com.silenteight.sens.webapp.user.exception.UserIsUsedInWorkflowException;
+import com.silenteight.sens.webapp.users.user.exception.UserAlreadyExistException;
+import com.silenteight.sens.webapp.users.user.exception.UserIsUsedInWorkflowException;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

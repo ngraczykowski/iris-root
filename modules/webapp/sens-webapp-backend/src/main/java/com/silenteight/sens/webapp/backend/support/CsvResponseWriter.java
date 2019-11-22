@@ -11,8 +11,8 @@ public class CsvResponseWriter {
 
   private static final String MEDIA_TYPE_TEXT_CSV = "text/csv";
 
-  public void write(
-      HttpServletResponse response, String filename, CsvBuilder builder) throws IOException {
+  public <T> void write(
+      HttpServletResponse response, String filename, CsvBuilder<T> builder) throws IOException {
 
     response.addHeader("Content-Type", MEDIA_TYPE_TEXT_CSV);
     response.addHeader("Content-Disposition", "attachment; filename=" + filename);
@@ -22,7 +22,7 @@ public class CsvResponseWriter {
   }
 
   @SuppressWarnings("findsecbugs:XSS_SERVLET")
-  private static void writeToOutput(PrintWriter writer, CsvBuilder builder) {
+  private static <T> void writeToOutput(PrintWriter writer, CsvBuilder<T> builder) {
     Stream<String> lines = builder.buildLines();
     lines.forEach(writer::append);
   }

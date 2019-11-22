@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
-import com.silenteight.sens.webapp.user.dto.CreateUserRequest;
+import com.silenteight.sens.webapp.users.user.dto.CreateUserRequest;
 
 import java.util.List;
 

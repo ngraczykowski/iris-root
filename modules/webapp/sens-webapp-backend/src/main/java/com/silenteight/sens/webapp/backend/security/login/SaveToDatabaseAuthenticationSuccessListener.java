@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
-import com.silenteight.sens.webapp.user.UserService;
+import com.silenteight.sens.webapp.users.user.UserService;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
