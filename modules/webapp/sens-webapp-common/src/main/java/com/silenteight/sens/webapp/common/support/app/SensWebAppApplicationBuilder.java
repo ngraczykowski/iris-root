@@ -37,7 +37,6 @@ public class SensWebAppApplicationBuilder {
         "file:${config.dir:${sens.home:${user.dir}}/conf}/override.properties");
 
     springCloud(false);
-    liquibase(false);
 
     properties("spring.aop.proxy-target-class=true");
 
@@ -57,11 +56,6 @@ public class SensWebAppApplicationBuilder {
   public SensWebAppApplicationBuilder springCloudAutoRegistration(boolean enabled) {
     properties(
         "spring.cloud.service-registry.auto-registration.enabled=" + Boolean.toString(enabled));
-    return this;
-  }
-
-  public SensWebAppApplicationBuilder liquibase(boolean enabled) {
-    properties("spring.liquibase.enabled=" + Boolean.toString(enabled));
     return this;
   }
 
