@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
-import com.silenteight.sens.webapp.user.dto.UpdateUserRequest;
+import com.silenteight.sens.webapp.users.user.dto.UpdateUserRequest;
 
 import java.util.List;
 import javax.annotation.Nullable;

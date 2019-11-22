@@ -20,8 +20,6 @@ dependencies {
   implementation libraries.javax_validation_api
   implementation libraries.spring_security_config
 
-  implementation libraries.jaxb_osgi
-
   testImplementation project(":sens-webapp-db-changelog")
   testImplementation libraries.spring_context_support
   testImplementation libraries.spring_security_test

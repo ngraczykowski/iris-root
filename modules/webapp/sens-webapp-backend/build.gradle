@@ -1,6 +1,6 @@
 plugins {
   id "java"
-  id "org.springframework.boot" version "2.2.1.RELEASE"
+  id "org.springframework.boot"
 }
 
 description = "SENS WebApp Backend"
@@ -36,8 +36,6 @@ dependencies {
 
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-db-changelog")
-
-  implementation libraries.jaxb_osgi
 
   runtimeOnly libraries.caffeine
 

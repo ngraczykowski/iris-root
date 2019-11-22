@@ -7,7 +7,7 @@ import com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.Decisio
 import com.silenteight.sens.webapp.backend.presentation.dto.model.AiModelAuditDto;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
-import com.silenteight.sens.webapp.user.dto.UserAuditDto;
+import com.silenteight.sens.webapp.users.user.dto.UserAuditDto;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

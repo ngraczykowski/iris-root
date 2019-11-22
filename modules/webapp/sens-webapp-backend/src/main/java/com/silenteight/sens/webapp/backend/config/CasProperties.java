@@ -2,10 +2,10 @@ package com.silenteight.sens.webapp.backend.config;
 
 import lombok.Data;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.jasig.cas.client.configuration.ConfigurationKeys;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class CasProperties {
