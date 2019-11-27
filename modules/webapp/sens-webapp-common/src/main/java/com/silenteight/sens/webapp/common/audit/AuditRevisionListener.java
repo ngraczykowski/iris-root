@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.common.audit;
 
-import com.silenteight.sens.webapp.common.entity.AuditRevision;
-
 import org.hibernate.envers.RevisionListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

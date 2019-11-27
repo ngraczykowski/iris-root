@@ -16,6 +16,7 @@ dependencies {
   compile project(":sens-webapp-security")
 
   implementation project(":sens-webapp-common")
+
   implementation libraries.silenteight_commons_core
   implementation libraries.javax_validation_api
   implementation libraries.spring_security_config
