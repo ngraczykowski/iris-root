@@ -4,8 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.common.entity.AuditRevision;
-import com.silenteight.sens.webapp.users.user.User;
+import com.silenteight.sens.webapp.common.audit.AuditRevision;
 
 import org.hibernate.envers.RevisionType;
 

@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.users.user;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.common.entity.AuditRevision;
+import com.silenteight.sens.webapp.common.audit.AuditRevision;
 import com.silenteight.sens.webapp.common.query.PageableResult;
 import com.silenteight.sens.webapp.common.support.audit.AuditReaderProvider;
 import com.silenteight.sens.webapp.kernel.security.authority.Role;

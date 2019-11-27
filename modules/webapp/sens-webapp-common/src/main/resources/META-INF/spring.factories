@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.silenteight.sens.webapp.common.database.DataSourceAutoConfiguration
+  com.silenteight.sens.webapp.common.database.DataSourceAutoConfiguration,\
+  com.silenteight.sens.webapp.common.database.HibernateAutoConfiguration

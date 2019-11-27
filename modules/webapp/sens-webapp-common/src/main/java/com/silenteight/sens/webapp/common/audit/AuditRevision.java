@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.common.entity;
+package com.silenteight.sens.webapp.common.audit;
 
 import lombok.*;
 
