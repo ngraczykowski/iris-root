@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.config.CasProperties.Logout;
+import com.silenteight.sens.webapp.backend.config.token.AdminTokenAuthenticationProvider;
 import com.silenteight.sens.webapp.backend.config.token.TokenAuthenticationFilter;
-import com.silenteight.sens.webapp.backend.config.token.TokenAuthenticationProvider;
+import com.silenteight.sens.webapp.backend.config.token.UserTokenAuthenticationProvider;
 import com.silenteight.sens.webapp.backend.security.RestAccessDeniedHandler;
 import com.silenteight.sens.webapp.backend.security.cas.CasAuthenticationUserDetailsService;
 import com.silenteight.sens.webapp.backend.security.cas.RestCasAuthenticationEntryPoint;
@@ -59,7 +60,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
   private final WebApplicationProperties webApplicationProperties;
   private final ObjectMapper objectMapper;
   private final UserService userService;
-  private final TokenAuthenticationProvider tokenAuthenticationProvider;
+  private final AdminTokenAuthenticationProvider adminTokenAuthenticationProvider;
+  private final UserTokenAuthenticationProvider userTokenAuthenticationProvider;
   private final SimpleUrlAuthenticationSuccessHandler successHandler;
 
   @Override
@@ -176,8 +178,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) {
-    auth.authenticationProvider(casAuthenticationProvider())
-        .authenticationProvider(tokenAuthenticationProvider);
+    auth
+        .authenticationProvider(casAuthenticationProvider())
+        .authenticationProvider(adminTokenAuthenticationProvider)
+        .authenticationProvider(userTokenAuthenticationProvider);
   }
 
   @Bean
