@@ -17,7 +17,7 @@ import java.util.Optional;
 import static lombok.AccessLevel.PACKAGE;
 
 @RequiredArgsConstructor(access = PACKAGE)
-public final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public final class UserTokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
   private final UserTokenService userTokenService;
 
@@ -36,7 +36,7 @@ public final class TokenAuthenticationProvider extends AbstractUserDetailsAuthen
 
     return userToken
         .map(UserToken::getUser)
-        .map(TokenAuthenticationProvider::createUserDetails)
+        .map(UserTokenAuthenticationProvider::createUserDetails)
         .orElseThrow(() -> new UsernameNotFoundException(
             "Cannot find user with authentication token=" + token));
   }

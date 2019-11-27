@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.backend.config.token;
 import com.silenteight.sens.webapp.users.usertoken.UserTokenConfiguration;
 import com.silenteight.sens.webapp.users.usertoken.UserTokenService;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,10 +18,24 @@ import javax.servlet.http.HttpServletResponse;
 class TokenAuthenticationConfiguration {
 
   @Bean
-  public TokenAuthenticationProvider tokenAuthenticationProvider(
+  @ConfigurationProperties(prefix = "sens.web.security.token")
+  TokenProperties tokenProperties() {
+    return new TokenProperties();
+  }
+
+  @Bean
+  public UserTokenAuthenticationProvider userTokenAuthenticationProvider(
       UserTokenService userTokenService) {
 
-    return new TokenAuthenticationProvider(userTokenService);
+    return new UserTokenAuthenticationProvider(userTokenService);
+  }
+
+  @Bean
+  public AdminTokenAuthenticationProvider adminTokenAuthenticationProvider(
+      TokenProperties tokenProperties) {
+
+    return new AdminTokenAuthenticationProvider(
+        new AdminTokenSecurity(tokenProperties.getAdmin()));
   }
 
   @Bean

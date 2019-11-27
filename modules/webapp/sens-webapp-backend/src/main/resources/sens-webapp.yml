@@ -89,12 +89,16 @@ sens.web:
     allow-credentials: true
     max-age: 1800
 
-  security.cas:
-    loginUrl: "http://localhost:7071/cas/login"
-    logoutUrl: "http://localhost:7071/cas/logout"
-    ticketValidatorUrl: "http://localhost:7071/cas"
-    serviceId: "http://localhost:7070/login/cas"
-    providerKey: "an_id_for_this_auth_provider_only"
+  security:
+    cas:
+      loginUrl: "http://localhost:7071/cas/login"
+      logoutUrl: "http://localhost:7071/cas/logout"
+      ticketValidatorUrl: "http://localhost:7071/cas"
+      serviceId: "http://localhost:7070/login/cas"
+      providerKey: "an_id_for_this_auth_provider_only"
+
+    token:
+      admin: "Jms4Nqv6CgfGYArdN72FR2Xq5I9RsNSE"
 
   #   # Colors palette for AI Solutions
   #   ## Color code

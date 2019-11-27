@@ -3,12 +3,14 @@ package com.silenteight.sens.webapp.kernel.security.authority;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.silenteight.sens.webapp.kernel.security.authority.Authority.*;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public enum Role implements GrantedAuthority {
   ROLE_AUDITOR(AUDIT_GENERATE_REPORT),
@@ -38,5 +40,9 @@ public enum Role implements GrantedAuthority {
 
   public static List<String> getRoleNames() {
     return stream(values()).map(Enum::name).collect(toList());
+  }
+
+  public static Set<GrantedAuthority> getAllGrantedAuthorities() {
+    return stream(values()).flatMap(r -> r.getGrantedAuthorities().stream()).collect(toSet());
   }
 }
