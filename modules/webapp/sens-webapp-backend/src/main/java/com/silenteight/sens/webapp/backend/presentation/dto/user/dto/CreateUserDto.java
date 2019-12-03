@@ -1,8 +1,6 @@
 package com.silenteight.sens.webapp.backend.presentation.dto.user.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
 import com.silenteight.sens.webapp.users.user.dto.CreateUserRequest;
@@ -11,6 +9,8 @@ import java.util.List;
 
 @Builder
 @Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateUserDto {
 
   @NonNull

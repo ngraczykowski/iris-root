@@ -1,10 +1,12 @@
 package com.silenteight.sens.webapp.backend.rest;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.ModifyUserDto;
+import com.silenteight.sens.webapp.users.user.UserService;
 import com.silenteight.sens.webapp.users.user.dto.UserDetailedView;
 import com.silenteight.sens.webapp.users.user.dto.UserResponseView;
 
@@ -25,6 +27,9 @@ import static java.util.Collections.emptyList;
 @PreAuthorize("hasAuthority('USER_MANAGE')")
 public class UserRestController {
 
+  @NonNull
+  private final UserService userService;
+
   @GetMapping("/users")
   @PreAuthorize("hasAuthority('USER_VIEW')")
   public ResponseEntity<UserResponseView> getUsers(Pageable pageable) {
@@ -44,7 +49,7 @@ public class UserRestController {
 
   @PostMapping("/user")
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto createUserDto) {
-    Long userId = 0l;
+    Long userId = userService.create(createUserDto.getDomainRequest());
 
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest()
