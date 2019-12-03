@@ -44,11 +44,6 @@ public class SensWebAppApplicationBuilder {
     return this;
   }
 
-  public SensWebAppApplicationBuilder additionalConfigLocation(String... additionalLocations) {
-    setArrayValues(additionalConfigLocations, additionalLocations);
-    return this;
-  }
-
   public SensWebAppApplicationBuilder configName(String... names) {
     setArrayValues(configNames, names);
     return this;

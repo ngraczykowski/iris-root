@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.backend.presentation.dto.user.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
 import com.silenteight.sens.webapp.users.user.dto.UpdateUserRequest;
@@ -11,6 +10,8 @@ import javax.annotation.Nullable;
 
 @Builder
 @Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModifyUserDto {
 
   @Nullable
