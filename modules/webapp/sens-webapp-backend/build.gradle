@@ -1,6 +1,7 @@
 plugins {
   id "java"
   id "org.springframework.boot"
+  id "io.freefair.aspectj.post-compile-weaving"
 }
 
 description = "SENS WebApp Backend"
@@ -42,6 +43,8 @@ dependencies {
   testImplementation project(":sens-webapp-db-changelog")
   testImplementation libraries.rest_assured
   testImplementation libraries.rest_assured_spring_mock_mvc
+
+  aspect project(":sens-webapp-aspects")
 }
 
 bootJar {
