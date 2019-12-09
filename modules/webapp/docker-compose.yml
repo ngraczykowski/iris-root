@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:10
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-sens_webapp_db}"
+      POSTGRES_USER: "${POSTGRES_USER:-sens_webapp}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-sens_webapp_pass}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+
+volumes:
+  postgres-storage:
+
