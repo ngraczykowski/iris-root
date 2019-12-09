@@ -3,14 +3,11 @@ package com.silenteight.sens.webapp.users.bulk;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.users.bulk.dto.Analyst;
-import com.silenteight.sens.webapp.users.user.User;
 import com.silenteight.sens.webapp.users.bulk.AnalystSynchronizer.SynchronizedAnalysts;
-import com.silenteight.sens.webapp.users.user.UserService;
-import com.silenteight.sens.webapp.users.bulk.dto.BulkAddRoleToUsersRequest;
-import com.silenteight.sens.webapp.users.bulk.dto.BulkCreateUsersRequest;
+import com.silenteight.sens.webapp.users.bulk.dto.*;
 import com.silenteight.sens.webapp.users.bulk.dto.BulkCreateUsersRequest.NewUser;
-import com.silenteight.sens.webapp.users.bulk.dto.BulkDeleteUsersRequest;
+import com.silenteight.sens.webapp.users.user.User;
+import com.silenteight.sens.webapp.users.user.UserService;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,17 +35,23 @@ public class BulkUserManagementService {
   }
 
   @Transactional
+  public void bulkUpdateUsersDisplayName(BulkUpdateUserDisplayNameRequest request) {
+    request.asUpdateUserRequests().forEach(userService::update);
+  }
+
+  @Transactional
   public void bulkDeleteUsers(BulkDeleteUsersRequest request) {
     request.getUserNames().forEach(userService::delete);
   }
 
   @Transactional
-  public void synchronizeAnalysts(List<Analyst> analysts) {
+  public void synchronizeAnalysts(BulkCreateAnalystsRequest request) {
     List<User> users = userService.findAllOrderByUserName();
-    SynchronizedAnalysts result = analystSynchronizer.synchronize(users, analysts);
+    SynchronizedAnalysts result = analystSynchronizer.synchronize(users, request.getAnalysts());
 
     createAnalysts(result.getAdded());
-    updateAnalysts(result.getUpdated());
+    updateAnalystsRole(result.getMissingRole());
+    updateAnalystsDisplayName(result.getUpdatedDisplayName());
     deleteAnalysts(result.getDeleted());
   }
 
@@ -68,9 +71,14 @@ public class BulkUserManagementService {
         .collect(toList());
   }
 
-  private void updateAnalysts(List<Long> analystIds) {
+  private void updateAnalystsRole(List<Long> analystIds) {
     if (!analystIds.isEmpty())
       bulkAddRoleToUsers(new BulkAddRoleToUsersRequest(analystIds, ROLE_ANALYST));
+  }
+
+  private void updateAnalystsDisplayName(List<UpdatedUser> updatedUsers) {
+    if (!updatedUsers.isEmpty())
+      bulkUpdateUsersDisplayName(new BulkUpdateUserDisplayNameRequest(updatedUsers));
   }
 
   private void deleteAnalysts(List<String> analysts) {
