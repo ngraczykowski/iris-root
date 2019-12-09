@@ -5,9 +5,9 @@
 sens.webapp.db.host: localhost
 sens.webapp.db.port: 5432
 sens.webapp.db.schema: public
-sens.webapp.db.name: postgres
-sens.webapp.db.user: postgres
-sens.webapp.db.password: postgres
+sens.webapp.db.name: sens_webapp_db
+sens.webapp.db.user: sens_webapp
+sens.webapp.db.password: sens_webapp_pass
 sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
 
 sens.webapp.db.connections.min: 1
