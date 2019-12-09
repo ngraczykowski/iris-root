@@ -1,12 +1,9 @@
 package com.silenteight.sens.webapp.users.bulk;
 
-import com.silenteight.sens.webapp.users.bulk.dto.Analyst;
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
-import com.silenteight.sens.webapp.users.user.UserService;
-import com.silenteight.sens.webapp.users.bulk.dto.BulkAddRoleToUsersRequest;
-import com.silenteight.sens.webapp.users.bulk.dto.BulkCreateUsersRequest;
+import com.silenteight.sens.webapp.users.bulk.dto.*;
 import com.silenteight.sens.webapp.users.bulk.dto.BulkCreateUsersRequest.NewUser;
-import com.silenteight.sens.webapp.users.bulk.dto.BulkDeleteUsersRequest;
+import com.silenteight.sens.webapp.users.user.UserService;
 import com.silenteight.sens.webapp.users.user.dto.AddRoleRequest;
 import com.silenteight.sens.webapp.users.user.dto.CreateUserRequest;
 
@@ -98,7 +95,7 @@ public class BulkUserManagementServiceTest {
         new Analyst(USER_NAME_2, DESCRIPTION_2));
 
     // when
-    classUnderTest.synchronizeAnalysts(analysts);
+    classUnderTest.synchronizeAnalysts(new BulkCreateAnalystsRequest(analysts));
 
     // then
     verify(userService).findAllOrderByUserName();

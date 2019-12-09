@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder()
+@Builder
 public class CreateUserRequest {
 
   @NonNull

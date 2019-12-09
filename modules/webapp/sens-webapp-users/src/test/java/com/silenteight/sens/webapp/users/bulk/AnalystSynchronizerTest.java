@@ -1,10 +1,10 @@
 package com.silenteight.sens.webapp.users.bulk;
 
-import com.silenteight.sens.webapp.users.bulk.dto.Analyst;
-import com.silenteight.sens.webapp.users.bulk.AnalystSynchronizer;
-import com.silenteight.sens.webapp.users.user.User;
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
 import com.silenteight.sens.webapp.users.bulk.AnalystSynchronizer.SynchronizedAnalysts;
+import com.silenteight.sens.webapp.users.bulk.dto.Analyst;
+import com.silenteight.sens.webapp.users.bulk.dto.UpdatedUser;
+import com.silenteight.sens.webapp.users.user.User;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +51,8 @@ public class AnalystSynchronizerTest {
 
     // then
     assertThat(result.getAdded()).isEqualTo(analysts);
-    assertThat(result.getUpdated()).isEmpty();
+    assertThat(result.getMissingRole()).isEmpty();
+    assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
   }
 
@@ -62,12 +63,14 @@ public class AnalystSynchronizerTest {
         new Analyst(USER_NAME_1, DESCRIPTION_1),
         new Analyst(USER_NAME_2, DESCRIPTION_2),
         new Analyst(USER_NAME_3, DESCRIPTION_3));
+
     SynchronizedAnalysts result = classUnderTest.synchronize(
-        singletonList(makeAnalyst(USER_ID_1, USER_NAME_1)), analysts);
+        singletonList(makeAnalyst(USER_ID_1, USER_NAME_1, DESCRIPTION_1)), analysts);
 
     // then
     assertThat(result.getAdded()).extracting(Analyst::getLogin).contains(USER_NAME_2, USER_NAME_3);
-    assertThat(result.getUpdated()).isEmpty();
+    assertThat(result.getMissingRole()).isEmpty();
+    assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
   }
 
@@ -78,16 +81,18 @@ public class AnalystSynchronizerTest {
         new Analyst(USER_NAME_1, DESCRIPTION_1),
         new Analyst(USER_NAME_2, DESCRIPTION_2),
         new Analyst(USER_NAME_3, DESCRIPTION_3));
+
     SynchronizedAnalysts result = classUnderTest.synchronize(
         asList(
-            makeAnalyst(USER_ID_1, USER_NAME_1),
-            makeAnalyst(USER_ID_2, USER_NAME_2),
-            makeAnalyst(USER_ID_3, USER_NAME_3)),
+            makeAnalyst(USER_ID_1, USER_NAME_1, DESCRIPTION_1),
+            makeAnalyst(USER_ID_2, USER_NAME_2, DESCRIPTION_2),
+            makeAnalyst(USER_ID_3, USER_NAME_3, DESCRIPTION_3)),
         analysts);
 
     // then
     assertThat(result.getAdded()).isEmpty();
-    assertThat(result.getUpdated()).isEmpty();
+    assertThat(result.getMissingRole()).isEmpty();
+    assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
   }
 
@@ -99,11 +104,15 @@ public class AnalystSynchronizerTest {
         new Analyst(USER_NAME_3, DESCRIPTION_3));
 
     SynchronizedAnalysts result = classUnderTest.synchronize(
-        asList(makeAnalyst(USER_ID_1, USER_NAME_1), makeAnalyst(USER_ID_2, USER_NAME_2)), analysts);
+        asList(
+            makeAnalyst(USER_ID_1, USER_NAME_1, DESCRIPTION_1),
+            makeAnalyst(USER_ID_2, USER_NAME_2, DESCRIPTION_2)),
+        analysts);
 
     // then
     assertThat(result.getAdded()).extracting(Analyst::getLogin).contains(USER_NAME_3);
-    assertThat(result.getUpdated()).isEmpty();
+    assertThat(result.getMissingRole()).isEmpty();
+    assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEqualTo(singletonList(USER_NAME_2));
   }
 
@@ -117,29 +126,48 @@ public class AnalystSynchronizerTest {
 
     SynchronizedAnalysts result = classUnderTest.synchronize(
         asList(
-            makeAnalyst(USER_ID_1, USER_NAME_1),
-            makeUser(USER_ID_2, USER_NAME_2, ROLE_DECISION_TREE_VIEWER)),
+            makeAnalyst(USER_ID_1, USER_NAME_1, DESCRIPTION_1),
+            makeUser(USER_ID_2, USER_NAME_2, null, ROLE_DECISION_TREE_VIEWER)),
         analysts);
 
     // then
     assertThat(result.getAdded()).extracting(Analyst::getLogin).contains(USER_NAME_3);
-    assertThat(result.getUpdated()).isEqualTo(singletonList(USER_ID_2));
+    assertThat(result.getMissingRole()).isEqualTo(singletonList(USER_ID_2));
+    assertThat(result.getUpdatedDisplayName())
+        .extracting(UpdatedUser::getUserId).contains(USER_ID_2);
     assertThat(result.getDeleted()).isEmpty();
   }
 
-  private User makeAnalyst(long userId, String userName) {
-    User user = makeUser(userId, userName, ROLE_ANALYST);
+  @Test
+  public void givenAnalystWithDifferentDisplayName_synchronizeAnalysts() {
+    // when
+    List<Analyst> analysts = singletonList(new Analyst(USER_NAME_1, "new_description"));
+
+    SynchronizedAnalysts result = classUnderTest.synchronize(
+        asList(makeAnalyst(USER_ID_1, USER_NAME_1, DESCRIPTION_1)), analysts);
+
+    // then
+    assertThat(result.getAdded()).isEmpty();
+    assertThat(result.getMissingRole()).isEmpty();
+    assertThat(result.getUpdatedDisplayName())
+        .extracting(UpdatedUser::getUserId).contains(USER_ID_1);
+    assertThat(result.getDeleted()).isEmpty();
+  }
+
+  private User makeAnalyst(long userId, String userName, String displayName) {
+    User user = makeUser(userId, userName, displayName, ROLE_ANALYST);
     when(user.hasOnlyRole(ROLE_ANALYST)).thenReturn(true);
 
     return user;
   }
 
-  private User makeUser(long userId, String userName, Role role) {
+  private User makeUser(long userId, String userName, String displayName, Role role) {
     User user = mock(User.class);
     when(user.getId()).thenReturn(userId);
     when(user.getUserName()).thenReturn(userName);
     when(user.isExternalUser()).thenReturn(true);
     when(user.hasRole(role)).thenReturn(true);
+    when(user.getDisplayName()).thenReturn(displayName);
 
     return user;
   }
