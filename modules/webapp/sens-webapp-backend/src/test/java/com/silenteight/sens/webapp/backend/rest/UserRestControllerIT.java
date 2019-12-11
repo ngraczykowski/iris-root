@@ -78,7 +78,7 @@ class UserRestControllerIT extends BaseRestControllerIT {
     executeAs(USER_MANAGER, () -> {
       CreateAnalystsDto request = createAnalystsRequest("analyst", "Analyst Name");
 
-      performPost("/user/analysts", request)
+      performPost("/users/analysts", request)
           .statusCode(HttpStatus.OK.value());
 
       verify(bulkUserManagementService).synchronizeAnalysts(request.toDomainRequest());
