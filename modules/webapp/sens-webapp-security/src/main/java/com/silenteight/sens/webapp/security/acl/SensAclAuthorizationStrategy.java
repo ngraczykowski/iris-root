@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.security.acl;
 
-
 import com.silenteight.sens.webapp.kernel.security.SensSecurityContext;
 
 import org.springframework.security.acls.domain.AclAuthorizationStrategy;

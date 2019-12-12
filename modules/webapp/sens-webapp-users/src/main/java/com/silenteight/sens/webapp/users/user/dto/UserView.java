@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.users.user.dto;
 
 import lombok.Data;
 
-import com.silenteight.sens.webapp.users.user.User;
 import com.silenteight.sens.webapp.kernel.security.authority.Role;
+import com.silenteight.sens.webapp.users.user.User;
 
 import org.springframework.security.core.GrantedAuthority;
 

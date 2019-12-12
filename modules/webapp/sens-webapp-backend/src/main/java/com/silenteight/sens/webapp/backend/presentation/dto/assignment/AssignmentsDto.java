@@ -24,14 +24,6 @@ public class AssignmentsDto {
   @AllArgsConstructor
   public static class AvailableBatchType implements Comparable<AvailableBatchType> {
 
-    // TODO it is client specific
-//    public AvailableBatchType(BatchTypeActivationInfo batchTypeInfo) {
-//      this(batchTypeInfo.getBatchTypeId(),
-//           !batchTypeInfo.activated(),
-//           batchTypeInfo.getDecisionTreeId(),
-//           batchTypeInfo.getDecisionTreeName());
-//    }
-
     @NonNull
     private final String batchType;
 

@@ -2,9 +2,9 @@ package com.silenteight.sens.webapp.backend.config.token;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
 import com.silenteight.sens.webapp.users.user.User;
 import com.silenteight.sens.webapp.users.usertoken.UserToken;
-import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
 import com.silenteight.sens.webapp.users.usertoken.UserTokenService;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +17,8 @@ import java.util.Optional;
 import static lombok.AccessLevel.PACKAGE;
 
 @RequiredArgsConstructor(access = PACKAGE)
-public final class UserTokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public final class UserTokenAuthenticationProvider
+    extends AbstractUserDetailsAuthenticationProvider {
 
   private final UserTokenService userTokenService;
 

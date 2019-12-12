@@ -66,7 +66,7 @@ public class DecisionTreeRestController {
   public ResponseEntity<Void> createDecisionTree(
       @Valid @RequestBody CreateDecisionTreeRequestDto requestDto) {
 
-    long decisionTreeId = 0l;
+    long decisionTreeId = 0L;
 
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest()

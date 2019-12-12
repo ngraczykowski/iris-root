@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.users.user.User;
 import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
+import com.silenteight.sens.webapp.users.user.User;
 import com.silenteight.sens.webapp.users.user.UserService;
 
 import org.jasig.cas.client.validation.Assertion;

@@ -57,7 +57,9 @@ public class SensWebAppApplicationTemplate {
       throw new SensWebAppApplicationException(exitCode);
   }
 
-  private ConfiguredApplication setupApplication(@Nullable SensWebAppApplicationConfigurer configurer) {
+  private ConfiguredApplication setupApplication(
+      @Nullable SensWebAppApplicationConfigurer configurer) {
+
     SensWebAppApplicationBuilder sensBuilder = new SensWebAppApplicationBuilder();
 
     if (configurer != null)

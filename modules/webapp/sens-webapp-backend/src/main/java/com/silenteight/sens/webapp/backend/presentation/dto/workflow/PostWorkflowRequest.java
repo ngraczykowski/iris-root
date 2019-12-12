@@ -1,6 +1,9 @@
 package com.silenteight.sens.webapp.backend.presentation.dto.workflow;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
+
+import com.silenteight.sens.webapp.kernel.domain.DecisionTreeId;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -18,15 +21,18 @@ public class PostWorkflowRequest {
   List<ApproversView> approvalLevels;
 
   public ConfigureWorkflowRequest createDomainRequest(long decisionTreeId) {
-    return new ConfigureWorkflowRequest();
-    //return new ConfigureWorkflowRequest(DecisionTreeId.of(decisionTreeId), makers, approvalLevels);
+    return new ConfigureWorkflowRequest(DecisionTreeId.of(decisionTreeId), makers, approvalLevels);
   }
 
   private static class ApproversView {
 
   }
 
+  @RequiredArgsConstructor
   private static class ConfigureWorkflowRequest {
 
+    private final DecisionTreeId decisionTreeId;
+    private final List<String> makers;
+    private final List<ApproversView> approvalLevels;
   }
 }

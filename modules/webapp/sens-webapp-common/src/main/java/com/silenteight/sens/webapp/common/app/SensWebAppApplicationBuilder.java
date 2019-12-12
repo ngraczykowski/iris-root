@@ -108,7 +108,8 @@ public class SensWebAppApplicationBuilder {
 
     if (SystemUtils.IS_OS_WINDOWS)
       builder.profiles("windows");
-    else if (SystemUtils.IS_OS_LINUX)
+
+    if (SystemUtils.IS_OS_LINUX)
       builder.profiles("linux");
 
     builder.profiles(additionalProfiles.toArray(new String[0]));

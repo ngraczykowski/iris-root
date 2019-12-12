@@ -3,11 +3,11 @@ package com.silenteight.sens.webapp.users.usertoken;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sens.webapp.users.user.User;
+import com.silenteight.sens.webapp.users.user.UserService;
 import com.silenteight.sens.webapp.users.user.exception.UserNotFoundException;
 import com.silenteight.sens.webapp.users.usertoken.exception.UserTokenAlreadyExistsException;
 import com.silenteight.sens.webapp.users.usertoken.exception.UserTokenNotFoundException;
-import com.silenteight.sens.webapp.users.user.User;
-import com.silenteight.sens.webapp.users.user.UserService;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.transaction.annotation.Transactional;

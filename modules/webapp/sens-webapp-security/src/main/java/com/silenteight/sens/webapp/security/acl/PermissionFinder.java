@@ -32,7 +32,9 @@ public class PermissionFinder {
 
     return Stream
         .of(SensPermission.values())
-        .filter(perm -> permissionEvaluator.hasPermission(authentication, domainObject, perm.name()))
+        .filter(
+            perm -> permissionEvaluator.hasPermission(authentication, domainObject, perm.name()))
         .collect(toSet());
   }
+
 }

@@ -1,9 +1,8 @@
 package com.silenteight.sens.webapp.backend.presentation.dto.workflow;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
+
+import com.silenteight.sens.webapp.kernel.domain.DecisionTreeId;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -34,19 +33,24 @@ public class PostChangeRequest {
   String comment;
 
   public ProposeChangesRequest createDomainRequest() {
-    return new ProposeChangesRequest();
-//    return ProposeChangesRequest
-//        .builder()
-//        .decisionTreeId(DecisionTreeId.of(decisionTreeId))
-//        .matchGroupIds(matchGroupIds)
-//        .solution(solution)
-//        .status(status)
-//        .comment(comment)
-//        .build();
+    return ProposeChangesRequest
+        .builder()
+        .decisionTreeId(DecisionTreeId.of(decisionTreeId))
+        .matchGroupIds(matchGroupIds)
+        .solution(solution)
+        .status(status)
+        .comment(comment)
+        .build();
   }
 
+  @Builder
   private static class ProposeChangesRequest {
 
+    private final DecisionTreeId decisionTreeId;
+    private final List<Long> matchGroupIds;
+    private final SolutionChange solution;
+    private final StatusChange status;
+    private final String comment;
   }
 
   private static class SolutionChange {

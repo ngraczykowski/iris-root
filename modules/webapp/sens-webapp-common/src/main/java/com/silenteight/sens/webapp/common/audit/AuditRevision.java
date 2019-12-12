@@ -2,8 +2,6 @@ package com.silenteight.sens.webapp.common.audit;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.common.audit.AuditRevisionListener;
-
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;

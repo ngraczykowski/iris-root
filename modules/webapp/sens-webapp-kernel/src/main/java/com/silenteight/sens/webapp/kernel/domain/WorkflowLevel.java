@@ -5,7 +5,7 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class WorkflowLevel {
 
-    long decisionTreeId;
+  long decisionTreeId;
 
-    int level;
+  int level;
 }

@@ -35,7 +35,9 @@ public class RestrictionRestController {
   @PutMapping(RESTRICTION + "/")
   public ResponseEntity<Void> createRestriction(
       @Valid @RequestBody EditRestrictionRequest request) {
-    long restrictionId = 0l;
+
+    long restrictionId = 0L;
+
     return ResponseEntity
         .noContent()
         .location(URI.create(RestConstants.ROOT + RESTRICTION + "/" + restrictionId))
