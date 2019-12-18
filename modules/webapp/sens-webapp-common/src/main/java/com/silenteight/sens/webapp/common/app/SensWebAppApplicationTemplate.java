@@ -1,48 +1,34 @@
 package com.silenteight.sens.webapp.common.app;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.commons.app.spring.SpringApplicationContextCallback;
 
+import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import javax.annotation.Nullable;
 
 @Slf4j
 public class SensWebAppApplicationTemplate {
 
   private final String[] args;
-  private final Class<?>[] sources;
+  private final Class<?> source;
 
-  private SpringApplicationContextCallback callback;
-
-  public SensWebAppApplicationTemplate(@NonNull String[] args, @NonNull Class<?>... sources) {
+  public SensWebAppApplicationTemplate(@NonNull String[] args, @NonNull Class<?> source) {
     this.args = args;
-    this.sources = sources;
-  }
-
-  public SensWebAppApplicationTemplate contextCallback(
-      @Nullable SpringApplicationContextCallback callback) {
-
-    this.callback = callback;
-    return this;
+    this.source = source;
   }
 
   public void run() {
-    run(null);
+    doRun(setupApplicationBuilder());
   }
 
-  public void run(@Nullable SensWebAppApplicationConfigurer configurer) {
-    doRun(setupApplication(configurer));
-  }
-
-  private void doRun(ConfiguredApplication application) {
+  private void doRun(SpringApplicationBuilder applicationBuilder) {
     int exitCode;
-    try (ConfigurableApplicationContext context = application.run(args)) {
+    try (ConfigurableApplicationContext context = applicationBuilder.run(args)) {
       onApplicationContext(context);
 
       exitCode = SpringApplication.exit(context);
@@ -57,40 +43,15 @@ public class SensWebAppApplicationTemplate {
       throw new SensWebAppApplicationException(exitCode);
   }
 
-  private ConfiguredApplication setupApplication(
-      @Nullable SensWebAppApplicationConfigurer configurer) {
-
-    SensWebAppApplicationBuilder sensBuilder = new SensWebAppApplicationBuilder();
-
-    if (configurer != null)
-      sensBuilder = configurer.configure(sensBuilder);
-
-    SpringApplicationBuilder springBuilder = sensBuilder.createSpringBuilder(sources);
-
-    if (configurer != null)
-      springBuilder = configurer.customize(springBuilder);
-
-    return new ConfiguredApplication(sensBuilder.getSystemPropertiesSetter(), springBuilder);
+  private SpringApplicationBuilder setupApplicationBuilder() {
+    return new SpringApplicationBuilder(source)
+        .bannerMode(Mode.OFF)
+        .web(WebApplicationType.SERVLET);
   }
 
   private void onApplicationContext(ConfigurableApplicationContext context) {
-    if (callback != null) {
-      log.debug("Running context callback");
-      callback.onApplicationContext(context);
-    }
-  }
-
-  @RequiredArgsConstructor
-  private static final class ConfiguredApplication {
-
-    @NonNull
-    private final Runnable systemPropertiesSetter;
-    @NonNull
-    private final SpringApplicationBuilder springApplicationBuilder;
-
-    ConfigurableApplicationContext run(String[] args) {
-      systemPropertiesSetter.run();
-      return springApplicationBuilder.run(args);
-    }
+    SpringApplicationContextCallback callback = new SensWebAppApplicationContextCallback();
+    log.info("Running context callback");
+    callback.onApplicationContext(context);
   }
 }

@@ -19,6 +19,9 @@ info:
   component: "SENS Web App REST API"
 
 spring:
+  aop:
+    proxy-target-class: true
+
   jackson.serialization.write_dates_as_timestamps: false
 
   cache.cache-names:
