@@ -13,6 +13,8 @@ configurations {
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
+  implementation.extendsFrom starterGrpc
+
   testImplementation.extendsFrom starterDataJpaTest
 }
 
@@ -37,6 +39,13 @@ dependencies {
 
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-db-changelog")
+
+  implementation libraries.silenteight_spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+
+  implementation libraries.grpc_stub
+
+  implementation libraries.protobuf_java_util
 
   runtimeOnly libraries.caffeine
 

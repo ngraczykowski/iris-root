@@ -3,11 +3,11 @@
 ####################################################################################################
 
 sens.webapp.db.host: localhost
-sens.webapp.db.port: 5432
+sens.webapp.db.port: ${POSTGRES_PORT:5432}
 sens.webapp.db.schema: public
-sens.webapp.db.name: sens_webapp_db
-sens.webapp.db.user: sens_webapp
-sens.webapp.db.password: sens_webapp_pass
+sens.webapp.db.name: ${POSTGRES_DB:sens}
+sens.webapp.db.user: ${POSTGRES_USER:sens}
+sens.webapp.db.password: ${POSTGRES_PASSWORD:sens}
 sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
 
 sens.webapp.db.connections.min: 1
@@ -71,6 +71,23 @@ spring:
       hibernate.temp.use_jdbc_metadata_defaults: false
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
+
+grpc:
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: TLS
+      security:
+        clientAuthEnabled: true
+        certificateChain: file:${serp.home}/cert/user/user-chain.pem
+        privateKey: file:${serp.home}/cert/user/user-key-pkcs8.pem
+        trustCertCollection: file:${serp.home}/cert/chain.pem
+
+    governance:
+      address: discovery:///grpc-governance
+
+    reco:
+      address: discovery:///grpc-reco
 
 server:
   port: 7070

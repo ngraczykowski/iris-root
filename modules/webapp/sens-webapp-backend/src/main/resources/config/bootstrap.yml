@@ -1,0 +1,47 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+sens.webapp.consul.enabled: true
+sens.webapp.consul.config.enabled: ${sens.webapp.consul.enabled}
+sens.webapp.consul.host: localhost
+sens.webapp.consul.port: 24999
+sens.webapp.consul.instance: ${spring.application.name}-${HOSTNAME:localhost}
+
+sens.webapp.keystore.password: LZKH70td5n
+sens.webapp.truststore.password: ${sens.webapp.keystore.password}
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# CLOUD
+#---------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: webapp
+
+  cloud:
+    consul:
+      scheme: https
+      host: ${sens.webapp.consul.host}
+      port: ${sens.webapp.consul.port}
+
+      config:
+        enabled: ${sens.webapp.consul.config.enabled}
+        defaultContext: sens
+        name: ${spring.application.name}
+        format: FILES
+
+        watch:
+          # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
+          #  Do not enable.
+          enabled: false
+
+      tls:
+        key-store-instance-type: JKS
+        key-store-path: ${serp.home}/cert/truststore.jks
+        key-store-password: ${sens.webapp.truststore.password}
+        certificate-path: ${serp.home}/cert/keystore.jks
+        certificate-password: ${sens.webapp.keystore.password}

@@ -21,6 +21,7 @@
   * [sens-webapp-backend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-backend): Web App REST API 
 * [scb-screening](https://gitlab.silenteight.com/scb/scb-screening): SENS application repository also that handle Auth server (CAS):
   * [cas-server](https://gitlab.silenteight.com/scb/scb-screening/tree/master/cas-server): [CAS project](https://apereo.github.io/cas/6.1.x/index.html) used to provide Single Sign-On mechanism for Web App users. 
+* [serp](https://gitlab.silenteight.com/sens/serp): Silent Eight Realtime Platform responsible for recommendations generation for given alerts
 
 ### Run services
 
@@ -36,6 +37,12 @@
     
         <Started CasWebApplication in XX.YY seconds (JVM running for XX.YYY)>
 
+**SERP**
+
+1. Pull `serp` git repository.
+
+2. Follow installation instructions from [README](https://gitlab.silenteight.com/sens/serp/blob/master/README.md) file.
+
 **Web App API**
 
 1. Run PostgreSQL database as a Docker container:
@@ -46,11 +53,14 @@
 
         database system is ready to accept connections
     
-2. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
+2. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**.
+In Spring Boot Run Configuration add following program arguments:
+
+        --serp.home=<path_to_root_of_serp_project>
    
    As an alternative you can start Web App API from Gradle script:
    
-        ./gradlew sens-webapp-backend:bootRun
+        ./gradlew sens-webapp-backend:bootRun --args='--serp.home=<path_to_root_of_serp_project>'
     
 **Web App UI**
 
@@ -71,7 +81,8 @@
 #### Database
 
 Web App API is using PostgreSQL database to keep Web App specific data.  
-Database configuration stored in a file: `sens-webapp-backend/resources/sens-webapp.yml`  
+Database configuration stored in a file: `sens-webapp-backend/resources/sens-webapp.yml`.  
+It operates on database started by docker-compose command, but can be custom if needed.
 
 Example configuration:
 
