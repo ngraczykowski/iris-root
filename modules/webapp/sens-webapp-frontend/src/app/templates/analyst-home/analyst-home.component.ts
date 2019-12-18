@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
 
 @Component({
   selector: 'app-analyst-home',
@@ -8,14 +8,14 @@ import { AuthService } from '@app/shared/auth/auth.service';
 })
 export class AnalystHomeComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authenticatedUser: AuthenticatedUserFacade) { }
 
   ngOnInit() {
     setTimeout('window.location.reload();', 600000);
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authenticatedUser.logout();
   }
 
 }

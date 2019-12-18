@@ -10,11 +10,8 @@ import { InternalServerErrorComponent } from './pages/internal-server-error/inte
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
 
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { AccessGuard } from './shared/auth/access-guard';
 import { AuthGuard } from './shared/auth/auth-guard';
 import { Authority } from './shared/auth/principal.model';
-
-import { StartPageGuard } from './shared/auth/start-page-guard';
 import { AlertComponent } from './templates/alert/alert.component';
 import { AnalystHomeComponent } from './templates/analyst-home/analyst-home.component';
 import { ApproverComponent } from './templates/approver/approver.component';
@@ -31,105 +28,104 @@ import { WorkflowManagementComponent } from './templates/workflow-management/wor
 export const routes: Routes = [
   {
     path: '',
-    canActivate: [StartPageGuard],
-    children: [],
+    redirectTo: 'decision-tree',
     pathMatch: 'full'
   },
   {
     path: '',
     canActivate: [AuthGuard],
-    canActivateChild: [AccessGuard],
     component: InternalComponent,
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'decision-tree',
         component: DecisionTreeListComponent,
         data: {
-          authority: Authority.DECISION_TREE_LIST
+          authorities: [Authority.DECISION_TREE_LIST]
         },
       },
       {
         path: 'decision-tree/:decisionTreeId',
         component: DecisionTreeDetailsComponent,
         data: {
-          authority: Authority.DECISION_TREE_LIST
+          authorities: [Authority.DECISION_TREE_LIST]
         },
       },
       {
         path: 'decision-tree/:decisionTreeId/reasoning-branch/:matchGroupId',
         component: ReasoningBranchComponent,
         data: {
-          authority: Authority.DECISION_TREE_LIST
+          authorities: [Authority.DECISION_TREE_LIST]
         },
       },
       {
         path: 'decision-tree/:decisionTreeId/reasoning-branch/:matchGroupId/alert/:externalId',
         component: AlertComponent,
         data: {
-          authority: Authority.DECISION_TREE_LIST
+          authorities: [Authority.DECISION_TREE_LIST]
         },
       },
       {
         path: 'decision-tree/:decisionTreeId/alert/:externalId',
         component: AlertComponent,
         data: {
-          authority: Authority.DECISION_TREE_LIST
+          authorities: [Authority.DECISION_TREE_LIST]
         },
       },
       {
         path: 'alert/:alertIdOrExternalId',
         component: AlertComponent,
         data: {
-          authority: Authority.DECISION_TREE_LIST
+          authorities: [Authority.DECISION_TREE_LIST]
         },
       },
       {
         path: 'inbox',
         component: InboxComponent,
         data: {
-          authority: Authority.INBOX_MANAGE
+          authorities: [Authority.INBOX_MANAGE]
         },
       },
       {
         path: 'audit-trail',
         component: AuditTrailComponent,
         data: {
-          authority: Authority.AUDIT_GENERATE_REPORT
+          authorities: [Authority.AUDIT_GENERATE_REPORT]
         },
       },
       {
         path: 'user-management',
         component: UserManagementComponent,
         data: {
-          authority: Authority.USER_MANAGE
+          authorities: [Authority.USER_MANAGE]
         }
       },
       {
         path: 'alert-restrictions-management',
         component: AlertRestrictionsManagementComponent,
         data: {
-          authority: Authority.USER_MANAGE
+          authorities: [Authority.USER_MANAGE]
         }
       },
       {
         path: 'workflow-management',
         component: WorkflowManagementComponent,
         data: {
-          authority: Authority.WORKFLOW_MANAGE
+          authorities: [Authority.WORKFLOW_MANAGE]
         }
       },
       {
         path: 'analyst-home',
         component: AnalystHomeComponent,
         data: {
-          authority: Authority.SOLUTION_VIEW
+          authorities: [Authority.SOLUTION_VIEW]
         }
       },
       {
         path: 'approver',
         component: ApproverComponent,
         data: {
-          authority: UserRole.ROLE_APPROVER
+          authorities: [UserRole.ROLE_APPROVER]
         }
       }
     ]

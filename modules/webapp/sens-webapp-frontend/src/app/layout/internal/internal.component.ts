@@ -10,6 +10,7 @@ export class InternalComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

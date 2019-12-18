@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { Event, EventKey } from '../../../shared/event/event.service.model';
 import { LocalEventService } from '../../../shared/event/local-event.service';
@@ -51,13 +52,13 @@ export class DisabledBranchNotificationComponent implements OnInit {
 
   inboxMessageId: number;
   notification: DisabledBranchNotification;
-  private hasInboxAuthorities: boolean;
+  private hasInboxAuthorities: Observable<boolean>;
 
   constructor(
       private inboxService: InboxService,
       private notificationMapper: DisabledBranchNotificationMapper,
       private eventService: LocalEventService,
-      private authService: AuthService
+      private authenticatedUser: AuthenticatedUserFacade
   ) {
   }
 
@@ -79,7 +80,7 @@ export class DisabledBranchNotificationComponent implements OnInit {
   }
 
   private load() {
-    this.hasInboxAuthorities = this.authService.hasAccessToUrl('/inbox');
+    this.hasInboxAuthorities = this.authenticatedUser.hasAccessToUrl('/inbox');
     this.inProgressLoadingInboxMessage = true;
     this.inboxService.getInboxMessage(this.type, this.getReferenceId())
         .pipe(finalize(() => this.inProgressLoadingInboxMessage = false))

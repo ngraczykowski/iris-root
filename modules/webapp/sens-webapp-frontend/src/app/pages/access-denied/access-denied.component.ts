@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
 
 @Component({
   selector: 'app-access-denied',
@@ -8,12 +8,12 @@ import { AuthService } from '@app/shared/auth/auth.service';
 })
 export class AccessDeniedComponent implements OnInit {
 
-  constructor(private eRef: ElementRef, private authService: AuthService) { }
+  constructor(private eRef: ElementRef, private authenticatedUser: AuthenticatedUserFacade) { }
 
   ngOnInit() {
   }
 
   logout() {
-    this.authService.logout();
+    this.authenticatedUser.logout();
   }
 }

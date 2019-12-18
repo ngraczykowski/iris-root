@@ -35,6 +35,9 @@ dependencies {
   compile libraries.spring_security_config
   compile libraries.spring_security_cas
 
+  // TODO(bgulowaty): move to separate module (WA-83)
+  implementation libraries.keycloak
+
   compile libraries.hibernate_envers
 
   implementation project(":sens-webapp-common")

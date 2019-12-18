@@ -17,7 +17,7 @@ services:
       - sens-webapp
 
   keycloak:
-    image: jboss/keycloak:8.0.0
+    image: jboss/keycloak:8.0.1
     restart: unless-stopped
     volumes:
       - ./conf/keycloak:/config/
@@ -30,6 +30,8 @@ services:
       DB_USER: "${POSTGRES_USER:-sens}"
       DB_PASSWORD: "${POSTGRES_PASSWORD:-sens}"
       DB_DATABASE: "${POSTGRES_DB:-sens}"
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.import=/config/sens-webapp-realm.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
     depends_on:
       - webapp-db
     ports:

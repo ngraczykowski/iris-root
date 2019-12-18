@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
 import { Authority } from '@app/shared/auth/principal.model';
 import { CollectionResponse } from '@app/templates/model/collection-response.model';
 import { DecisionTree } from '@app/templates/model/decision-tree.model';
@@ -16,7 +16,7 @@ export class DecisionTreeListService {
 
   constructor(
       private client: DecisionTreeListClient,
-      private authService: AuthService,
+      private authenticatedUser: AuthenticatedUserFacade,
       private decisionTreeOperationService: DecisionTreeOperationService
   ) { }
 
@@ -28,8 +28,8 @@ export class DecisionTreeListService {
     return this.client.getDecisionTrees({active: false});
   }
 
-  hasDecisionTreeManageAccess(): boolean {
-    return this.authService.hasAuthority(Authority.DECISION_TREE_MANAGE);
+  hasDecisionTreeManageAccess(): Observable<boolean> {
+    return this.authenticatedUser.hasAuthority(Authority.DECISION_TREE_MANAGE);
   }
 
   openCreateDecisionTreeWindow() {

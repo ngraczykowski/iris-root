@@ -5,39 +5,39 @@
           [translate]="'appHeader.navigation.button'"></button>
   <div class="dropdown-menu" [class.is-active]="showMenu">
     <ul class="dropdown-menu-elements">
-      <li *ngIf="hasDecisionTreeAccess">
+      <li *ngIf="hasDecisionTreeAccess | async">
         <a routerLink="/decision-tree"
            [translate]="'decisionTrees.title'"
            (click)="showMenu = !showMenu"></a>
       </li>
-      <li *ngIf="hasInboxAccess" routerLinkActive="is-active">
+      <li *ngIf="hasInboxAccess | async" routerLinkActive="is-active">
         <a routerLink="/inbox"
            (click)="showMenu = !showMenu">
           <span [translate]="'inbox.title'"></span>
           <app-inbox-tab></app-inbox-tab>
         </a>
       </li>
-      <li *ngIf="hasAuditTrailAccess">
+      <li *ngIf="hasAuditTrailAccess | async">
         <a routerLink="/audit-trail"
            [translate]="'auditTrail.title'"
            (click)="showMenu = !showMenu"></a>
       </li>
-      <li *ngIf="hasUserManagementAccess">
+      <li *ngIf="hasUserManagementAccess | async">
         <a routerLink="/user-management"
            [translate]="'user-management.title'"
            (click)="showMenu = !showMenu"></a>
       </li>
-      <li *ngIf="hasUserManagementAccess">
+      <li *ngIf="hasUserManagementAccess | async">
         <a routerLink="/alert-restrictions-management"
            [translate]="'alertRestrictionsManagement.header.title'"
            (click)="showMenu = !showMenu"></a>
       </li>
-      <li *ngIf="hasWorkflowManagementAccess">
+      <li *ngIf="hasWorkflowManagementAccess | async">
         <a routerLink="/workflow-management"
            [translate]="'workflowManagement.title'"
            (click)="showMenu = !showMenu"></a>
       </li>
-      <li *ngIf="hasApproverAccess">
+      <li *ngIf="hasApproverAccess | async">
         <a routerLink="/approver"
            [translate]="'approver.title'"
            (click)="showMenu = !showMenu"></a>

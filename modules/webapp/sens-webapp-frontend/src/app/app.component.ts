@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
       private translate: TranslateService,
       private backgroundServicesManager: BackgroundServicesManager,
       private localEventService: LocalEventService,
-      private solutionSettingsService: SolutionSettingsService
+      private solutionSettingsService: SolutionSettingsService,
   ) {
     translate.setDefaultLang('en');
     translate.use('en');

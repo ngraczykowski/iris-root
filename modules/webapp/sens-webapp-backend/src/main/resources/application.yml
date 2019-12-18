@@ -100,6 +100,18 @@ management.endpoints.web.base-path: /management
 security.basic:
   enabled: false
 
+keycloak:
+  auth-server-url: http://localhost:8081/auth
+  realm: sens-webapp
+  resource: backend
+  ssl-required: external
+  public-client: false
+  confidential-port: 0
+  principal-attribute: preferred_username
+  credentials:
+    secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
+  use-resource-role-mappings: true
+
 sens.web:
   cors:
     allowed-origins: "*"
@@ -110,13 +122,6 @@ sens.web:
     max-age: 1800
 
   security:
-    cas:
-      loginUrl: "http://localhost:7071/cas/login"
-      logoutUrl: "http://localhost:7071/cas/logout"
-      ticketValidatorUrl: "http://localhost:7071/cas"
-      serviceId: "http://localhost:7070/login/cas"
-      providerKey: "an_id_for_this_auth_provider_only"
-
     token:
       admin: "Jms4Nqv6CgfGYArdN72FR2Xq5I9RsNSE"
 

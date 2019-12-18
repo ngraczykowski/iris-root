@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { routes } from '@app/app-routes';
 import { AppComponent } from '@app/app.component';
@@ -25,10 +25,14 @@ import { InboxModule } from '@app/templates/inbox/inbox.module';
 import { ReasoningBranchModule } from '@app/templates/reasoning-branch/reasoning-branch.module';
 import { UserManagementModule } from '@app/templates/user-management/user-management.module';
 import { WorkflowManagementModule } from '@app/templates/workflow-management/workflow-management.module';
+import { environment } from '@env/environment.prod';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { reducers } from './reducers';
+
+const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [
@@ -62,9 +66,49 @@ import { reducers } from './reducers';
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 10
-    })
+    }),
+    KeycloakAngularModule,
   ],
-  providers: [WINDOW_PROVIDERS],
-  bootstrap: [AppComponent]
+  providers: [
+    WINDOW_PROVIDERS,
+    {
+      provide: KeycloakService,
+      useValue: keycloakService,
+
+    }
+
+  ],
+  entryComponents: [AppComponent]
 })
-export class AppModule {}
+export class AppModule implements DoBootstrap {
+  ngDoBootstrap(appRef: ApplicationRef): void {
+    console.log('[ngDoBootstrap] bootstrap app');
+    keycloakService
+        .init({
+          config: {
+            url: environment.auth.keycloak.url,
+            realm: environment.auth.keycloak.realm,
+            clientId: environment.auth.keycloak.clientId
+          },
+          initOptions: {
+            onLoad: 'check-sso',
+            checkLoginIframe: false,
+          },
+          bearerExcludedUrls: [
+            '/403',
+            '/404',
+            '/maintenance',
+            '/500',
+            '/error-page',
+            '/welcome$'
+          ]
+        })
+        .then(() => {
+          console.log('[ngDoBootstrap] Keycloak init success, we are safe');
+        })
+        .then(() => appRef.bootstrap(AppComponent))
+        .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
+
+  }
+
+}

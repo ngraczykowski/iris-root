@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-main-navigation',
@@ -8,12 +9,12 @@ import { AuthService } from '@app/shared/auth/auth.service';
 })
 export class MainNavigationComponent implements OnInit {
 
-  hasDecisionTreeAccess: boolean;
-  hasInboxAccess: boolean;
-  hasAuditTrailAccess: boolean;
-  hasUserManagementAccess: boolean;
-  hasWorkflowManagementAccess: boolean;
-  hasApproverAccess: boolean;
+  hasDecisionTreeAccess: Observable<boolean>;
+  hasInboxAccess: Observable<boolean>;
+  hasAuditTrailAccess: Observable<boolean>;
+  hasUserManagementAccess: Observable<boolean>;
+  hasWorkflowManagementAccess: Observable<boolean>;
+  hasApproverAccess: Observable<boolean>;
 
   showMenu: boolean;
 
@@ -25,18 +26,18 @@ export class MainNavigationComponent implements OnInit {
     }
   }
 
-  constructor(private eRef: ElementRef, private authService: AuthService) { }
+  constructor(private eRef: ElementRef, private authenticatedUser: AuthenticatedUserFacade) { }
 
   ngOnInit() {
-    this.hasDecisionTreeAccess = this.authService.hasAccessToUrl('/decision-tree');
-    this.hasInboxAccess = false;
-    this.hasAuditTrailAccess = this.authService.hasAccessToUrl('/audit-trail');
-    this.hasUserManagementAccess = this.authService.hasAccessToUrl('/user-management');
-    this.hasWorkflowManagementAccess = this.authService.hasAccessToUrl('/workflow-management');
-    this.hasApproverAccess = this.authService.hasAccessToUrl('/approver');
+    this.hasDecisionTreeAccess = this.authenticatedUser.hasAccessToUrl('/decision-tree');
+    this.hasInboxAccess = of(false);
+    this.hasAuditTrailAccess = this.authenticatedUser.hasAccessToUrl('/audit-trail');
+    this.hasUserManagementAccess = this.authenticatedUser.hasAccessToUrl('/user-management');
+    this.hasWorkflowManagementAccess = this.authenticatedUser.hasAccessToUrl('/workflow-management');
+    this.hasApproverAccess = this.authenticatedUser.hasAccessToUrl('/approver');
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authenticatedUser.logout();
   }
 }

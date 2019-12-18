@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
 import { Authority } from '@app/shared/auth/principal.model';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BatchTypeManagementComponent } from './batch-type-management/batch-type-management.component';
 import { CopyDecisionTreeComponent } from './copy-decision-tree/copy-decision-tree.component';
 import { CreateNewDecisionTreeComponent } from './create-new-decision-tree/create-new-decision-tree.component';
@@ -20,8 +20,8 @@ import { RemoveDecisionTreeComponent } from './remove-decision-tree/remove-decis
 })
 export class DecisionTreeOperationsComponent implements OnInit, OnDestroy {
 
-  hasDecisionTreeManageAccess: boolean;
-  hasBatchTypeManageAccess: boolean;
+  hasDecisionTreeManageAccess: Observable<boolean>;
+  hasBatchTypeManageAccess: Observable<boolean>;
 
   @ViewChild(RemoveDecisionTreeComponent, {static: false}) removeComponent: RemoveDecisionTreeComponent;
   @ViewChild(CopyDecisionTreeComponent, {static: false}) copyComponent: CopyDecisionTreeComponent;
@@ -33,7 +33,7 @@ export class DecisionTreeOperationsComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
 
-  constructor(private authService: AuthService, private service: DecisionTreeOperationService) { }
+  constructor(private authenticatedUser: AuthenticatedUserFacade, private service: DecisionTreeOperationService) { }
 
   ngOnInit() {
     this.initAccess();
@@ -42,8 +42,8 @@ export class DecisionTreeOperationsComponent implements OnInit, OnDestroy {
   }
 
   private initAccess() {
-    this.hasDecisionTreeManageAccess = this.authService.hasAuthority(Authority.DECISION_TREE_MANAGE);
-    this.hasBatchTypeManageAccess = this.authService.hasAuthority(Authority.BATCH_TYPE_MANAGE);
+    this.hasDecisionTreeManageAccess = this.authenticatedUser.hasAuthority(Authority.DECISION_TREE_MANAGE);
+    this.hasBatchTypeManageAccess = this.authenticatedUser.hasAuthority(Authority.BATCH_TYPE_MANAGE);
   }
 
   ngOnDestroy() {

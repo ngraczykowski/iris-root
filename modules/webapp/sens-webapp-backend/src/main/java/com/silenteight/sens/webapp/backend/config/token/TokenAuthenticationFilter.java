@@ -20,9 +20,9 @@ public final class TokenAuthenticationFilter extends AbstractAuthenticationProce
 
   private static final String BEARER = "Bearer";
 
-  public TokenAuthenticationFilter(RequestMatcher requiresAuth) {
-    super(requiresAuth);
-  }
+public TokenAuthenticationFilter(RequestMatcher requiresAuth) {
+  super(requiresAuth);
+}
 
   @Override
   protected boolean requiresAuthentication(HttpServletRequest req, HttpServletResponse res) {

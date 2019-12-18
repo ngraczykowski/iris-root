@@ -14,7 +14,7 @@
                [(ngModel)]="searchText"
                placeholder="{{'decisionTrees.options.search' | translate}}">
       </div>
-      <button *ngIf="hasDecisionTreeManageAccess"
+      <button *ngIf="hasDecisionTreeManageAccess | async"
               (click)="onCreateDecisionTree()" class="button-outline"
               [translate]="'modal.createNewDecisionTree.title'"></button>
     </div>

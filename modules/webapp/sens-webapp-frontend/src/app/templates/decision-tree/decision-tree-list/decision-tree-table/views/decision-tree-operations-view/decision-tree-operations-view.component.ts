@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CellViewFactory } from '@app/components/dynamic-view-table/table-data-mapper';
 import { View } from '@app/components/dynamic-view/dynamic-view.component';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
 import { Authority } from '@app/shared/auth/principal.model';
 import { DecisionTree, DecisionTreeStatus } from '@app/templates/model/decision-tree.model';
+import { Observable } from 'rxjs';
 import {
   DecisionTreeOperation,
   DecisionTreeOperationService
@@ -24,17 +25,17 @@ export class DecisionTreeOperationsViewComponent implements OnInit {
 
   @Input() data: DecisionTreeOperationsViewData;
 
-  hasPermissionToCopyTree: boolean;
-  hasPermissionToRemoveTree: boolean;
+  hasPermissionToCopyTree: Observable<boolean>;
+  hasPermissionToRemoveTree: Observable<boolean>;
 
   constructor(
-      private authService: AuthService,
+      private authenticatedUser: AuthenticatedUserFacade,
       private decisionTreeOperationService: DecisionTreeOperationService
   ) { }
 
   ngOnInit() {
-    this.hasPermissionToCopyTree = this.authService.hasAuthority(Authority.DECISION_TREE_MANAGE);
-    this.hasPermissionToRemoveTree = this.authService.hasSuperuserPermissions();
+    this.hasPermissionToCopyTree = this.authenticatedUser.hasAuthority(Authority.DECISION_TREE_MANAGE);
+    this.hasPermissionToRemoveTree = this.authenticatedUser.hasSuperuserPermissions();
   }
 
   onRemove() {

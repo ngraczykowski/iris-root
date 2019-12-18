@@ -20,7 +20,7 @@ export class DecisionTreeListComponent implements OnInit, OnDestroy {
 
   private static ERROR_MAPPER = new ErrorMapper({}, 'decisionTrees.message.find.error.');
 
-  hasDecisionTreeManageAccess: boolean;
+  hasDecisionTreeManageAccess: Observable<boolean>;
 
   firstTimeLoaded: boolean;
 

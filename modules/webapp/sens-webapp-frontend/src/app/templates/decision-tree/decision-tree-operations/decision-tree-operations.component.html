@@ -1,8 +1,8 @@
-<ng-container *ngIf="hasDecisionTreeManageAccess">
+<ng-container *ngIf="hasDecisionTreeManageAccess | async">
   <app-remove-decision-tree (remove)="onRemoved()"></app-remove-decision-tree>
   <app-copy-decision-tree (copy)="onCopied()"></app-copy-decision-tree>
   <app-edit-decision-tree (edit)="onEdited()"></app-edit-decision-tree>
   <app-create-new-decision-tree (create)="onCreated()"></app-create-new-decision-tree>
 </ng-container>
-<app-batch-type-management *ngIf="hasBatchTypeManageAccess" (edit)="onAssigned()">
+<app-batch-type-management *ngIf="hasBatchTypeManageAccess | async" (edit)="onAssigned()">
 </app-batch-type-management>

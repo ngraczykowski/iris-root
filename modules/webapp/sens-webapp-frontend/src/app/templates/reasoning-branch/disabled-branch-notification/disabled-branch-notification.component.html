@@ -2,7 +2,7 @@
   <div class="header">
     <h2 class="title" [translate]="'reasoningBranch.notification.rbDisabled.title'"></h2>
     <button class="button-outline"
-            *ngIf="hasInboxAuthorities"
+            *ngIf="hasInboxAuthorities | async"
             [translate]="'reasoningBranch.notification.rbDisabled.button'"
             (click)="markAsSolved()"></button>
   </div>

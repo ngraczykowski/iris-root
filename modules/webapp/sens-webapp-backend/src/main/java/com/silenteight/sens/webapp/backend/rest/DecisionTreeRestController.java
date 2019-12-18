@@ -29,7 +29,7 @@ import static java.util.Collections.emptyList;
 @AllArgsConstructor
 @RestController
 @RequestMapping(RestConstants.ROOT)
-@PreAuthorize("hasAuthority('DECISION_TREE_LIST')")
+@PreAuthorize("hasRole('view-decision-trees')")
 public class DecisionTreeRestController {
 
   private static final String CIRCUIT_BREAKER_TRIGGERED_ALERTS =
@@ -37,7 +37,6 @@ public class DecisionTreeRestController {
   private final CsvResponseWriter csvResponseWriter = new CsvResponseWriter();
 
   @GetMapping("/decision-trees")
-  @PreAuthorize("hasAuthority('DECISION_TREE_LIST')")
   public ResponseEntity<DecisionTreeResponseDto> getAll(
       DecisionTreeSearchFilterDto searchFilter) {
     DecisionTreeResponseDto response = new DecisionTreeResponseDto(0, emptyList());

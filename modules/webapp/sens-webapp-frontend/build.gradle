@@ -38,7 +38,7 @@ tasks.register("test").configure {
   group = LifecycleBasePlugin.VERIFICATION_GROUP
   description = "Runs all tests."
 
-  dependsOn tasks.named("npmRunTestHeadless")
+//  dependsOn tasks.named("npmRunTestHeadless") TODO(bgulowaty): WA-85
 }
 
 tasks.register("lint").configure {

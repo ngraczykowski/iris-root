@@ -34,10 +34,10 @@ export const environment = {
       '/decision-tree', '/inbox', '/audit-trail', '/user-management', '/workflow-management',
       '/analyst-home', '/approver'
     ],
-    oauth2: {
-      clientId: 'SENS-frontend',
-      clientSecret: 'yQTUy6aJp1OXI4a5LvYyyvFUJlfFo4lp',
-      refreshTokenMaxAttempts: 3
+    keycloak: {
+      url: 'http://localhost:8081/auth',
+      realm: 'sens-webapp',
+      clientId: 'frontend',
     },
     activityMonitor: {
       inactivityTimeToLogoutInSec: 15 * 60,

@@ -1,44 +1,52 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  CanActivateChild,
+  Router,
+  RouterStateSnapshot,
+  UrlTree
+} from '@angular/router';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
 
-import { AuthService } from '@app/shared/auth/auth.service';
-import { StartPageGuard } from '@app/shared/auth/start-page-guard';
-
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(
-      private authService: AuthService,
-      private router: Router,
-      private startPageGuard: StartPageGuard) {
+      private readonly router: Router,
+      private readonly authenticatedUserFacade: AuthenticatedUserFacade) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    const login = this.authService.login();
+  // TODO(bgulowaty): think about it
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+      boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    return this._canActivate(childRoute);
+  }
 
-    if (login instanceof Observable) {
-      return login.pipe(
-          tap(loggedIn => {
-            // NOTE(ahaczewski): We store requested URL if and only if we were unable to login with
-            // simple request to backend. After login observable is completed, user will be
-            // redirected to external authentication server and upon return it would be nice that
-            // StartPageGuard navigates the user to originally requested page, therefore we store it
-            // here.
-            //
-            // On the other hand loggedIn will be true when login request to backend was
-            // successful, i.e. confirmed that user holds valid session cookie and returned user
-            // authorities. In such a case user is not redirected out of our Angular app and
-            // navigation can commence as usual.
-            if (!loggedIn) {
-              this.startPageGuard.forceStartPageUrl(state.url);
-            }
-          })
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+      Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this._canActivate(route);
+  }
+
+  private _canActivate(route: ActivatedRouteSnapshot) {
+    const isLoggedIn$ = this.authenticatedUserFacade.isLoggedIn();
+
+    const requiredAuthorities: string[] = route.data.authorities;
+
+    if (requiredAuthorities == null || requiredAuthorities.length === 0) {
+      return isLoggedIn$.pipe(
+          map(canHaveAccess => canHaveAccess ? canHaveAccess : this.router.parseUrl('/403')),
       );
-    } else {
-      return login;
     }
+
+    const hasRequiredAuthorities$ = this.authenticatedUserFacade.hasAuthorities(requiredAuthorities);
+
+    return combineLatest([isLoggedIn$, hasRequiredAuthorities$]).pipe(
+        map(([isLoggedIn, hasRequiredAuthorities]) => isLoggedIn && hasRequiredAuthorities),
+        map(canHaveAccess => canHaveAccess ? canHaveAccess : this.router.parseUrl('/403')),
+    );
   }
 }

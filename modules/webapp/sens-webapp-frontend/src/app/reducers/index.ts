@@ -1,31 +1,31 @@
-import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer
-} from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import authReducer, { State as AuthReducerState } from '@app/shared/auth/store/auth.reducer';
 import * as fromUserManagement from '@app/templates/user-management/store/reducers/userManagement.reducer';
+import { environment } from '@env/environment';
+import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 
 export interface State {
   userManagement: fromUserManagement.State;
+  auth: AuthReducerState;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  userManagement: fromUserManagement.reducer
+  userManagement: fromUserManagement.reducer,
+  auth: authReducer
 };
 
 export const selectUserManagement = (state: State) => state.userManagement;
 
+export const selectAuth = (state: State) => state.auth;
+
+// TODO(bgulowaty): move those to dedicated userManagment selectors file
 export const getUsers = createSelector(
-  selectUserManagement,
-  (state: fromUserManagement.State) => state.usersTable
+    selectUserManagement,
+    (state: fromUserManagement.State) => state.usersTable
 );
 
 export const getUsersLoaded = createSelector(
-  selectUserManagement,
-  (state: fromUserManagement.State) => state.loaded
+    selectUserManagement,
+    (state: fromUserManagement.State) => state.loaded
 );
 
 export const getUsersTablePage = createSelector(

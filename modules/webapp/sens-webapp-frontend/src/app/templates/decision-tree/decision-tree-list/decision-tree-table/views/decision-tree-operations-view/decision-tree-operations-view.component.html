@@ -3,12 +3,12 @@
     <button class="button-outline"
             (click)="onCopy()"
             [translate]="'decisionTrees.table.actions.copyTree'"
-            *ngIf="hasPermissionToCopyTree">
+            *ngIf="hasPermissionToCopyTree | async">
     </button>
     <button class="button-outline"
             (click)="onRemove()"
             [translate]="'decisionTrees.table.actions.removeTree'"
-            *ngIf="hasPermissionToRemoveTree">
+            *ngIf="hasPermissionToRemoveTree | async">
     </button>
   </div>
 </ng-container>

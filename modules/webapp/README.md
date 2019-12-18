@@ -6,9 +6,8 @@
 
 |Prerequisite|Necessity|Remarks|
 |:-----------:|:-------:|-------|
-|**Java 8**  |Mandatory| CAS uses Java 8, you can  [download and install packages for your system from Azul Systems, Inc.](https://www.azul.com/downloads/zulu-community/?&version=java-8-lts); make sure you install full Java Development Kit (JDK). |
 |**Java 11** |Mandatory| Web App API uses Java 11, you can  [download and install packages for your system from Azul Systems, Inc.](https://www.azul.com/downloads/zulu-community/?&version=java-11-lts); make sure you install full Java Development Kit (JDK). |
-|**Docker**  |Mandatory| Running database for Web App API, which greatly simplifies development setup. |
+|**Docker**  |Mandatory| Running database and keycloak server for Web App API, which greatly simplifies development setup. |
 |**IntelliJ**|Mandatory| Project is prepared for being worked on in IntelliJ IDEA. |
 |**jEnv**    |Optional | jEnv helps with managing Java versions. [Download it from jEnv site](https://www.jenv.be/) and follow instructions for installing.|   
 |**Gradle**  |Optional | SERP comes with gradle wrapper that you should use for building the project. Nevertheless you might want to have Gradle installed.|
@@ -19,23 +18,16 @@
 * [sens-webapp](https://gitlab.silenteight.com/sens/sens-webapp): main project responsible for:
   * [sens-webapp-frontend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-frontend): Web App User Interface
   * [sens-webapp-backend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-backend): Web App REST API 
-* [scb-screening](https://gitlab.silenteight.com/scb/scb-screening): SENS application repository also that handle Auth server (CAS):
-  * [cas-server](https://gitlab.silenteight.com/scb/scb-screening/tree/master/cas-server): [CAS project](https://apereo.github.io/cas/6.1.x/index.html) used to provide Single Sign-On mechanism for Web App users. 
+* [scb-screening](https://gitlab.silenteight.com/scb/scb-screening): SENS application repository
 * [serp](https://gitlab.silenteight.com/sens/serp): Silent Eight Realtime Platform responsible for recommendations generation for given alerts
 
 ### Run services
 
-**CAS**
+**Keycloak auth server and main database**
 
-1. Pull `scb-screening` git repository.   
-2. Set `Java 8`
-3. Run script to start CAS server:
-
-        ./scb-screening/cas-server/start.sh
-
-    Successfully started CAS server displays below message on a console:
-    
-        <Started CasWebApplication in XX.YY seconds (JVM running for XX.YYY)>
+1. Definitions for both containers can be found in `docker-compose.yml`. Run Keycloak and PostgreSQL with:
+        
+        docker-compose up
 
 **SERP**
 
@@ -44,16 +36,9 @@
 2. Follow installation instructions from [README](https://gitlab.silenteight.com/sens/serp/blob/master/README.md) file.
 
 **Web App API**
-
-1. Run PostgreSQL database as a Docker container:
-
-        docker-compose up
-
-    Successfully started PostgreSQL instance displays below message on a console:
-
-        database system is ready to accept connections
     
-2. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**.
+1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
+
 In Spring Boot Run Configuration add following program arguments:
 
         --serp.home=<path_to_root_of_serp_project>
@@ -74,15 +59,19 @@ In Spring Boot Run Configuration add following program arguments:
 
 2. Open `http://localhost:4200/` URL in a browser.  
 
-3. Browser redirects unauthenticated user to `http://localhost:7071/cas/login?service=http%3A%2F%2Flocalhost%3A7070%2Flogin%2Fcas` to perform authentication.
-
 ### Configuration
+
+#### Keycloak
+
+Whole development keycloak configuration should be stored in file: `/conf/keycloak/sens-webapp-realm.json`.
+Everything can be configured using GUI available at [localhost:8081](http://localhost:8081).
+To export created configuration use script: `./keycloak-scripts/export-realm.sh`. (WARNING: After 'boot-up' is completed, you need to kill the script by hand with CTRL-C).
 
 #### Database
 
-Web App API is using PostgreSQL database to keep Web App specific data.  
-Database configuration stored in a file: `sens-webapp-backend/resources/sens-webapp.yml`.  
-It operates on database started by docker-compose command, but can be custom if needed.
+Web App API is using PostgreSQL database to persist Web App specific data.  
+Database connection configuration is stored in file: `sens-webapp-backend/resources/sens-webapp.yml`.  
+It operates on database started by docker-compose command, but can be customized if needed.
 
 Example configuration:
 

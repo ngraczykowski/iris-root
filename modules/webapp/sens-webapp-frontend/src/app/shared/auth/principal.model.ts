@@ -7,7 +7,9 @@ export class Principal {
   ) { }
 
   hasAuthority(authority: string): boolean {
-    return this.authorities.includes(authority);
+    return this.authorities
+        .map(auth => auth.toUpperCase())
+        .includes(authority.toUpperCase());
   }
 }
 

@@ -9,7 +9,6 @@ import { StoreModule } from '@ngrx/store';
 import * as fromUserManagement from './store/reducers/userManagement.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { UserManagementEffects } from './store/effects/userManagement.effects';
-import { HighlightSearchPipe } from './highlight-search.pipe';
 
 @NgModule({
   imports: [

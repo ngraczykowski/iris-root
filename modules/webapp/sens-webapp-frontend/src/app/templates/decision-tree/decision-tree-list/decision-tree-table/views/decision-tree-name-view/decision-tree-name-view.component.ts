@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { Observable } from 'rxjs';
 import { CellViewFactory } from '../../../../../../components/dynamic-view-table/table-data-mapper';
 import { View } from '../../../../../../components/dynamic-view/dynamic-view.component';
-import { AuthService } from '../../../../../../shared/auth/auth.service';
 import { Authority } from '../../../../../../shared/auth/principal.model';
 import { DecisionTree } from '../../../../../model/decision-tree.model';
 
@@ -24,13 +25,13 @@ export class DecisionTreeNameViewComponent implements OnInit {
   }
 
   decisionTreeName: string;
-  showLink: boolean;
+  showLink: Observable<boolean>;
   link: string;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authenticatedUser: AuthenticatedUserFacade) { }
 
   ngOnInit() {
-    this.showLink = this.authService.hasAuthority(Authority.DECISION_TREE_LIST);
+    this.showLink = this.authenticatedUser.hasAuthority(Authority.DECISION_TREE_LIST);
   }
 }
 

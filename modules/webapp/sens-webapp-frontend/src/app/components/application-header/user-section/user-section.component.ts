@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '@app/shared/auth/auth.service';
-import { Subscription } from 'rxjs';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { Principal } from '@app/shared/auth/principal.model';
+import { Observable, Subscription } from 'rxjs';
 import { ApplicationHeaderService } from '../application-header.service';
 
 @Component({
@@ -10,8 +11,7 @@ import { ApplicationHeaderService } from '../application-header.service';
 })
 export class UserSectionComponent implements OnInit, OnDestroy {
 
-  public usernamePrimary;
-  public usernameSecondary;
+  public userDetails: Observable<Principal> = this.authenticatedUser.getPrincipal();
   userMenu = false;
   applicationVersion: string;
   applicationVersionSubscription: Subscription;
@@ -25,29 +25,16 @@ export class UserSectionComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private eRef: ElementRef,
-    private authService: AuthService,
-    private applicationHeaderService: ApplicationHeaderService
+      private eRef: ElementRef,
+      private authenticatedUser: AuthenticatedUserFacade,
+      private applicationHeaderService: ApplicationHeaderService
   ) {}
 
   ngOnInit() {
-    this.loadUsername();
     this.applicationVersionSubscription = this.applicationHeaderService.getAppInfo().subscribe((data) => {
       this.applicationVersion = data.build.version;
     });
 
-  }
-
-  loadUsername() {
-    const userName = this.authService.getUserName();
-    const displayName = this.authService.getDisplayName();
-
-    if (displayName) {
-      this.usernamePrimary = displayName;
-      this.usernameSecondary = userName;
-    } else {
-      this.usernamePrimary = userName;
-    }
   }
 
   ngOnDestroy() {
@@ -59,7 +46,7 @@ export class UserSectionComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authenticatedUser.logout();
   }
 
 }

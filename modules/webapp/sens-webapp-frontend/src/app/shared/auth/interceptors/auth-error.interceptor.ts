@@ -10,7 +10,7 @@ import { UnauthorizedHttpUserEvent } from '@app/shared/auth/auth.http-user-event
 import { AuthService } from '@app/shared/auth/auth.service';
 
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 /**
  * Intercepts 401 HTTP error responses returned from API and tries to handle them gracefully.
@@ -32,39 +32,12 @@ export class AuthErrorInterceptor implements HttpInterceptor {
       const response = <HttpErrorResponse>error;
 
       if (response.status === 401) {
-        return this.handleUnauthorized(error, request, next);
+        return of(new UnauthorizedHttpUserEvent());
       } else {
         console.warn('Unhandled HTTP error: response=%o', response);
       }
     }
 
     return throwError(error);
-  }
-
-  private handleUnauthorized(
-      response: HttpErrorResponse,
-      request: HttpRequest<any>,
-      next: HttpHandler): Observable<HttpEvent<any>> {
-
-    if (this.authService.isLoginUrl(request.url)) {
-      return throwError(response);
-    }
-
-    const loginAttempt = this.authService.login();
-    if (loginAttempt instanceof Observable) {
-      return loginAttempt.pipe(
-          mergeMap(loggedIn => {
-            if (loggedIn) {
-              console.log('Retrying request after logging in');
-              return next.handle(request.clone());
-            } else {
-              console.log('Failed to log in');
-              return throwError(response);
-            }
-          })
-      );
-    } else {
-      return of(new UnauthorizedHttpUserEvent());
-    }
   }
 }

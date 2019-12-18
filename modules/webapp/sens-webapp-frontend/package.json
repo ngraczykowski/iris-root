@@ -31,6 +31,8 @@
     "core-js": "^2.6.0",
     "immutable": "^3.8.2",
     "jasmine-marbles": "^0.6.0",
+    "keycloak-angular": "^7.0.1",
+    "keycloak-js": "^8.0.1",
     "ng-inline-svg": "^8.2.1",
     "ngx-cookie-service": "^2.0.2",
     "ngx-perfect-scrollbar": "~7.1.0",

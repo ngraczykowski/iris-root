@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { Observable } from 'rxjs';
 import { DynamicComponent } from '../../../../../components/dynamic-view/dynamic-view.component';
-import { AuthService } from '../../../../../shared/auth/auth.service';
 import { Authority } from '../../../../../shared/auth/principal.model';
 
 export interface WorkflowDecisionTreeNameViewData {
@@ -21,16 +22,16 @@ export class WorkflowDecisionTreeNameViewComponent implements DynamicComponent, 
   }
 
   decisionTreeName: string;
-  showLink: boolean;
+  showLink: Observable<boolean>;
   link: string;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authenticatedUser: AuthenticatedUserFacade) { }
 
   ngOnInit() {
   }
 
   private refreshData(data: WorkflowDecisionTreeNameViewData) {
-    this.showLink = this.authService.hasAuthority(Authority.DECISION_TREE_LIST);
+    this.showLink = this.authenticatedUser.hasAuthority(Authority.DECISION_TREE_LIST);
     this.link = `/decision-tree/${data.decisionTreeId}`;
     this.decisionTreeName = data.decisionTreeName;
   }

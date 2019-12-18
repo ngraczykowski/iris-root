@@ -6,7 +6,7 @@
             (click)="toggleUserMenu()">
     <span class="user-info-label"
           [translate]="'userProfile.label'"></span>
-      <span class="user-info-username">{{ usernamePrimary }}</span>
+      <span class="user-info-username">{{ (userDetails | async).userName }}</span>
     </button>
 
     <div class="dropdown-menu"
@@ -17,9 +17,9 @@
         </div>
         <div class="user-data">
           <div class="username">
-            <div class="username-primary">{{ usernamePrimary }}</div>
-            <div class="username-secondary" *ngIf="usernameSecondary">
-              {{ usernameSecondary }}
+            <div class="username-primary">{{ (userDetails | async).userName }}</div>
+            <div class="username-secondary" *ngIf="(userDetails | async).displayName">
+              {{ (userDetails | async).displayName }}
             </div>
           </div>
         </div>
