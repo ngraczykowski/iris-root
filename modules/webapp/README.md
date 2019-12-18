@@ -83,4 +83,17 @@ Example configuration:
     sens.webapp.db.password: sens_webapp_pass
     sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
 
+### Continuous Integration
 
+Jenkins job: [sens/sens-webapp](https://jenkins.silenteight.com/job/sens/job/sens%252Fsens-webapp/)  
+Project in Sonar: [Silent Eight Name Screening Web Application](https://sonar.silenteight.com/dashboard?id=com.silenteight.sens.webapp%3Awebapp)
+
+Based on `Jenkinsfile` added to the project source code:
+* Jenkins automatically [creates jobs](https://jenkins.silenteight.com/view/Current/job/sens/job/sens%252Fsens-webapp/) for each branch and runs pipeline for each change in the branch.  
+[GitLab Branch Source Plugin](https://jenkins.io/blog/2019/08/23/introducing-gitlab-branch-source-plugin/) in Jenkins scans projects and creates Jenkins jobs automatically.   
+In addition, git hooks in project have been configured to run Jenkins job.
+* MergeBot automatically merges MRs that have at least 2 thumb-up approvals and 'ready for merge' label.   
+* Jenkins executes pipeline that:
+  * Checkouts source code,
+  * Runs tests,
+  * Verifies code base changes against SonarQube Quality Gate.
