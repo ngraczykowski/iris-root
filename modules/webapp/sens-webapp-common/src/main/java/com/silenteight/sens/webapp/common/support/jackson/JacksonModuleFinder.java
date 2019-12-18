@@ -1,5 +1,8 @@
 package com.silenteight.sens.webapp.common.support.jackson;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import com.silenteight.commons.collections.SetBuilder;
 
 import com.fasterxml.jackson.databind.Module;
@@ -10,6 +13,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class JacksonModuleFinder {
 
   private static final Set<String> DEFAULT_ALLOWED_MODULES = SetBuilder.of(
@@ -31,9 +35,6 @@ final class JacksonModuleFinder {
 
   private static boolean isAllowed(Module module) {
     return DEFAULT_ALLOWED_MODULES.contains(module.getClass().getName());
-  }
-
-  private JacksonModuleFinder() {
   }
 }
 
