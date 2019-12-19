@@ -15,9 +15,4 @@ public class SolutionDto {
   private final String comment;
   private final Instant date;
   private final Boolean isOutdated;
-
-  public SolutionDto(
-      String externalId, String discriminator, String decision, String comment, Instant date) {
-    this(externalId, discriminator, decision, comment, date, false);
-  }
 }

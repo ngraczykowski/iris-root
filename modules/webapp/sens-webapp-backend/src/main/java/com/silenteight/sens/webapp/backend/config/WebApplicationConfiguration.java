@@ -45,7 +45,7 @@ public class WebApplicationConfiguration {
 
   // TODO(bgulowaty): move to separate module (WA-83)
   @Bean
-  public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+  public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
     return new KeycloakSpringBootConfigResolver();
   }
 }

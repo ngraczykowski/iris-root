@@ -74,7 +74,6 @@ public class WebSecurityConfigurer extends KeycloakWebSecurityConfigurerAdapter 
         .anyRequest().authenticated();
   }
 
-
   @Bean
   RestAccessDeniedHandler restAccessDeniedHandler() {
     return new RestAccessDeniedHandler(objectMapper);
@@ -84,7 +83,6 @@ public class WebSecurityConfigurer extends KeycloakWebSecurityConfigurerAdapter 
   PrincipalDtoMapper principalDtoMapper() {
     return new PrincipalDtoMapper();
   }
-
 
   @Bean
   ApplicationListener<AbstractAuthenticationEvent> saveToDatabaseAuthenticationSuccessHandler() {
