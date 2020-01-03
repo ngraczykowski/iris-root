@@ -1,15 +1,16 @@
-package com.silenteight.sens.webapp.backend.rest;
+package com.silenteight.sens.webapp.backend.rest.decisiontree;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.application.decisiontree.copy.dto.CopyDecisionTreeRequestDto;
 import com.silenteight.sens.webapp.backend.application.decisiontree.copy.dto.CopyDecisionTreeResponseDto;
 import com.silenteight.sens.webapp.backend.application.decisiontree.create.dto.CreateDecisionTreeRequestDto;
 import com.silenteight.sens.webapp.backend.application.decisiontree.patch.dto.PatchDecisionTreeRequestDto;
-import com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.DecisionTreeDto;
-import com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.DecisionTreeResponseDto;
-import com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.DecisionTreeSearchFilterDto;
+import com.silenteight.sens.webapp.backend.rest.decisiontree.dto.DecisionTreeDto;
+import com.silenteight.sens.webapp.backend.rest.decisiontree.dto.DecisionTreesDto;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 
@@ -25,22 +26,27 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static java.util.Collections.emptyList;
+import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 @RequestMapping(RestConstants.ROOT)
 @PreAuthorize("hasRole('view-decision-trees')")
 public class DecisionTreeRestController {
 
+  @NonNull
+  private final DecisionTreeFacade decisionTreeFacade;
+
   private static final String CIRCUIT_BREAKER_TRIGGERED_ALERTS =
       "circuit_breaker_triggered_alerts.csv";
   private final CsvResponseWriter csvResponseWriter = new CsvResponseWriter();
 
   @GetMapping("/decision-trees")
-  public ResponseEntity<DecisionTreeResponseDto> getAll(
-      DecisionTreeSearchFilterDto searchFilter) {
-    DecisionTreeResponseDto response = new DecisionTreeResponseDto(0, emptyList());
-    return ResponseEntity.ok(response);
+  public ResponseEntity<DecisionTreesDto> list() {
+    log.debug("Requesting Decision Trees");
+
+    return ok(decisionTreeFacade.list());
   }
 
   @DeleteMapping("/decision-tree/{id}")
@@ -76,17 +82,17 @@ public class DecisionTreeRestController {
     return ResponseEntity.created(location).build();
   }
 
-  @GetMapping("/decision-tree/{id}")
+  @GetMapping("/decision-trees/{id}/branches")
   public ResponseEntity<DecisionTreeDto> getDecisionTreeDetails(@PathVariable long id) {
     DecisionTreeDto response = null;
-    return ResponseEntity.ok(response);
+    return ok(response);
   }
 
   @GetMapping("/alert/{externalId}/decision-trees")
-  public ResponseEntity<DecisionTreeResponseDto> getAlertDecisionTrees(
+  public ResponseEntity<DecisionTreesDto> getAlertDecisionTrees(
       @PathVariable String externalId) {
-    DecisionTreeResponseDto response = new DecisionTreeResponseDto(0, emptyList());
-    return ResponseEntity.ok(response);
+    DecisionTreesDto response = new DecisionTreesDto(0, emptyList());
+    return ok(response);
   }
 
   @GetMapping("/decision-tree/{id}/circuit-breaker-triggered-alerts")

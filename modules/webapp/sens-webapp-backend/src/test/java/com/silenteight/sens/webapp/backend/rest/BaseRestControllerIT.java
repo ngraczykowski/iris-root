@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.config.WebModule;
+import com.silenteight.sens.webapp.backend.domain.decisiontree.DecisionTreeService;
 import com.silenteight.sens.webapp.backend.rest.BaseRestControllerIT.TestRestConfiguration;
 import com.silenteight.sens.webapp.common.database.DataSourceAutoConfiguration;
 import com.silenteight.sens.webapp.common.testing.containers.PostgresContainer.PostgresTestInitializer;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +42,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Optional;
 import java.util.Set;
-import javax.sql.DataSource;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
@@ -59,10 +60,7 @@ abstract class BaseRestControllerIT {
   private UserDetailsService userDetailsService;
 
   @Autowired
-  private DataSource dataSource;
-
-  @Autowired
-  TestDataFacade testDataFacade;
+  private TestDataFacade testDataFacade;
 
   @BeforeEach
   public void initUsers() {
@@ -113,6 +111,9 @@ abstract class BaseRestControllerIT {
       UsersDataInitializer.class })
   @ContextConfiguration(classes = GlobalMethodSecurityConfiguration.class)
   static class TestRestConfiguration {
+
+    @MockBean
+    private DecisionTreeService decisionTreeService;
 
     @Bean
     ObjectMapper objectMapper() {

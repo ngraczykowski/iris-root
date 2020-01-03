@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.status;
+package com.silenteight.sens.webapp.backend.rest.decisiontree.dto;
 
 import lombok.Builder;
 import lombok.Data;

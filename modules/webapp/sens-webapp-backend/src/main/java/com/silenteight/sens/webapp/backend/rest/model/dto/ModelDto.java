@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.presentation.dto.model;
+package com.silenteight.sens.webapp.backend.rest.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,8 +8,7 @@ import lombok.NonNull;
 @Builder
 public class ModelDto {
 
-  @NonNull
-  private final Long id;
+  private final long id;
   @NonNull
   private final String name;
 }
