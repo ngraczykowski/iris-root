@@ -10,25 +10,15 @@ import { SolutionSettingsService } from './shared/solution-settings.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
 
   constructor(
       private translate: TranslateService,
       private backgroundServicesManager: BackgroundServicesManager,
       private localEventService: LocalEventService,
-      private solutionSettingsService: SolutionSettingsService,
   ) {
     translate.setDefaultLang('en');
     translate.use('en');
-  }
-
-  ngOnInit() {
-    this.backgroundServicesManager.startService();
-    this.solutionSettingsService.getSolutionSettings();
-  }
-
-  ngOnDestroy() {
-    this.backgroundServicesManager.stopService();
   }
 
   @HostListener('click', ['$event.target'])

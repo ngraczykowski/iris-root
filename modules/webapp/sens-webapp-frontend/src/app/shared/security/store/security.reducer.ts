@@ -1,6 +1,6 @@
-import { Principal } from '@app/shared/auth/principal.model';
+import { Principal } from '@app/shared/security/principal.model';
 import { Action, createReducer, on } from '@ngrx/store';
-import AuthActions from './auth.actions';
+import SecurityActions from './security.actions';
 
 export interface State {
   principal: Principal;
@@ -18,44 +18,50 @@ export const initialState: State = {
 
 const reducer = createReducer(
     initialState,
-    on(AuthActions.loginSuccess,
-        (state, {principal}) => ({
+    on(SecurityActions.loginSuccess,
+        (state) => ({
               ...state,
-              principal: principal,
               isLoggedIn: true,
               processing: false,
             }
         )),
-    on(AuthActions.tryLogin,
+    on(SecurityActions.tryLogin,
         (state) => ({
           ...state,
           error: null,
           processing: true,
         })),
-    on(AuthActions.loginFailed,
+    on(SecurityActions.loginFailed,
         (state, {reason}) => ({
           ...state,
           isLoggedIn: false,
           processing: false,
           error: reason
         })),
-    on(AuthActions.logout,
+    on(SecurityActions.logout,
         (state) => ({
           ...state,
           processing: true,
           error: false,
         })),
-    on(AuthActions.logoutSuccess,
+    on(SecurityActions.logoutSuccess,
         (state) => ({
           ...state,
           processing: false,
-          error: false
+          error: false,
+          principal: null,
+          isLoggedIn: false
         })),
-    on(AuthActions.logoutFailed,
+    on(SecurityActions.logoutFailed,
         (state, {reason}) => ({
           ...state,
           processing: false,
           error: reason
+        })),
+    on(SecurityActions.setPrincipal,
+        (state, {principal}) => ({
+          ...state,
+          principal: principal
         }))
 );
 

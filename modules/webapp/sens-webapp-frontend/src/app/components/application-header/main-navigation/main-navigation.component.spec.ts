@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY } from 'rxjs';
-import { AuthService } from '../../../shared/auth/auth.service';
+import { AuthService } from '../../../shared/security/auth.service';
 import { InboxService } from '../../../templates/inbox/inbox.service';
 import { TestModule } from '../../../test/test.module';
 import { ApplicationHeaderModule } from '../application-header.module';

@@ -1,9 +1,9 @@
 export class Principal {
   constructor(
-      public userName: string,
-      public displayName: string,
-      public authorities: string[],
-      public superUser: boolean
+      public readonly userName: string,
+      public readonly displayName: string,
+      public readonly authorities: string[],
+      public readonly superUser: boolean
   ) { }
 
   hasAuthority(authority: string): boolean {

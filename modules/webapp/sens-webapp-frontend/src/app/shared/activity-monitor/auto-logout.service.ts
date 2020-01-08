@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 import { BackgroundService } from '@app/shared/background-services-manager';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';

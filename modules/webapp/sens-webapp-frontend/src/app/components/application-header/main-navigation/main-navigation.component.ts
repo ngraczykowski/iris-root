@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 import { Observable, of } from 'rxjs';
 
 @Component({

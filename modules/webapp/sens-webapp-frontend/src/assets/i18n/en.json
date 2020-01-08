@@ -1187,6 +1187,13 @@
         "signOut": "Sign out of SENS"
       }
     },
+    "not-authenticated": {
+      "title": "You aren't authenticated",
+      "description": "To access this page you need to be authenticated. Please log in.",
+      "button": {
+        "login": "Log in to SENS"
+      }
+    },
     "internalServerError": {
       "title": "This page cannot be loaded",
       "description": "There is a problem with the server software causing it to malfunction.",

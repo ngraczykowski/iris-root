@@ -13,8 +13,8 @@ export class SolutionSettingsService {
   constructor(private http: HttpClient) { }
 
   getSolutionSettings() {
-    this.http.get(`${environment.serverApiUrl}api/settings/decisions`).subscribe(data => {
-      this.settings.next(data);
+    this.http.get(`${environment.serverApiUrl}api/settings/decisions`)
+        .subscribe(data => {this.settings.next(data);
     });
   }
 

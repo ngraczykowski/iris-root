@@ -58,6 +58,8 @@ public class WebSecurityConfigurer extends KeycloakWebSecurityConfigurerAdapter 
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    super.configure(http);
+
     http
         // Cross-Site Request Forgery and security Headers disabled for REST API
         .csrf()

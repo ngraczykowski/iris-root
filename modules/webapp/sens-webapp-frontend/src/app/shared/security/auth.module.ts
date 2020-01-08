@@ -1,18 +1,18 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ActivityMonitorModule } from '@app/shared/activity-monitor/activity-monitor.module';
+import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 
-import { AuthGuard } from '@app/shared/auth/auth-guard';
+import { AuthorityGuard } from '@app/shared/security/guard/authority-guard.service';
 
-import { AuthService } from '@app/shared/auth/auth.service';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
-import { AuthEffects } from '@app/shared/auth/store/auth.effects';
+import { AuthService } from '@app/shared/security/auth.service';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { SecurityEffects } from '@app/shared/security/store/security-effects.service';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { KeycloakAngularModule } from 'keycloak-angular';
-import { CookieService } from 'ngx-cookie-service';
 import { Ng2Webstorage } from 'ngx-webstorage';
-import authReducer from './store/auth.reducer';
+import securityReducer from './store/security.reducer';
 
 @NgModule({
   declarations: [],
@@ -21,15 +21,15 @@ import authReducer from './store/auth.reducer';
     HttpClientModule,
     ActivityMonitorModule,
     KeycloakAngularModule,
-    StoreModule.forFeature('auth', authReducer),
-    EffectsModule.forFeature([AuthEffects])
+    StoreModule.forFeature('security', securityReducer),
+    EffectsModule.forFeature([SecurityEffects])
   ],
   providers: [
     HttpClientModule,
     AuthService,
-    AuthGuard,
+    AuthenticationGuard,
+    AuthorityGuard,
     // {provide: BackgroundServiceToken, useClass: AutoLogoutService, multi: true},
-    CookieService,
     AuthenticatedUserFacade,
     // {provide: BackgroundServiceToken, useClass: AuthActivityMonitorService, multi: true}
   ]

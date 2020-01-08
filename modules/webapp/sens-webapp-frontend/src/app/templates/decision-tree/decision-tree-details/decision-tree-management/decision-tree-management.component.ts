@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
-import { Authority } from '@app/shared/auth/principal.model';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { Authority } from '@app/shared/security/principal.model';
 import {
   DecisionTreeOperation,
   DecisionTreeOperationService

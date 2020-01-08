@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as fromRoot from '@app/reducers';
-import { Principal } from '@app/shared/auth/principal.model';
-import { logout } from '@app/shared/auth/store/auth.actions';
+import { Principal } from '@app/shared/security/principal.model';
+import { logout } from '@app/shared/security/store/security.actions';
 import { select, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { getLoggedInPrincipal, hasAllAuthorities, isLoggedIn } from './store/auth.selectors';
+import { getLoggedInPrincipal, hasAllAuthorities, isLoggedIn } from './store/security.selectors';
 
 @Injectable()
 export class AuthenticatedUserFacade {

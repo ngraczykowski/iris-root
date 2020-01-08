@@ -7,20 +7,19 @@ import {
   RouterStateSnapshot,
   UrlTree
 } from '@angular/router';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class AuthGuard implements CanActivate, CanActivateChild {
+export class AuthorityGuard implements CanActivate, CanActivateChild {
 
   constructor(
       private readonly router: Router,
       private readonly authenticatedUserFacade: AuthenticatedUserFacade) {
   }
 
-  // TODO(bgulowaty): think about it
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot):
       boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     return this._canActivate(childRoute);
@@ -32,20 +31,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   private _canActivate(route: ActivatedRouteSnapshot) {
-    const isLoggedIn$ = this.authenticatedUserFacade.isLoggedIn();
-
     const requiredAuthorities: string[] = route.data.authorities;
-
-    if (requiredAuthorities == null || requiredAuthorities.length === 0) {
-      return isLoggedIn$.pipe(
-          map(canHaveAccess => canHaveAccess ? canHaveAccess : this.router.parseUrl('/403')),
-      );
-    }
 
     const hasRequiredAuthorities$ = this.authenticatedUserFacade.hasAuthorities(requiredAuthorities);
 
-    return combineLatest([isLoggedIn$, hasRequiredAuthorities$]).pipe(
-        map(([isLoggedIn, hasRequiredAuthorities]) => isLoggedIn && hasRequiredAuthorities),
+    return hasRequiredAuthorities$.pipe(
         map(canHaveAccess => canHaveAccess ? canHaveAccess : this.router.parseUrl('/403')),
     );
   }

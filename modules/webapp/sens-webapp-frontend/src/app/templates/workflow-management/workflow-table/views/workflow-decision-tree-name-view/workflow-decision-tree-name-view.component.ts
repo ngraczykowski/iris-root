@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 import { Observable } from 'rxjs';
 import { DynamicComponent } from '../../../../../components/dynamic-view/dynamic-view.component';
-import { Authority } from '../../../../../shared/auth/principal.model';
+import { Authority } from '../../../../../shared/security/principal.model';
 
 export interface WorkflowDecisionTreeNameViewData {
   decisionTreeId: number;

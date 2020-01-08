@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
+import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AlertRestrictionsManagementComponent } from '@app/templates/alert-restrictions-management/alert-restrictions-management.component';
 import { UserRole } from '@app/templates/model/user.model';
 import { ExternalComponent } from './layout/external/external.component';
@@ -10,8 +12,8 @@ import { InternalServerErrorComponent } from './pages/internal-server-error/inte
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
 
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { AuthGuard } from './shared/auth/auth-guard';
-import { Authority } from './shared/auth/principal.model';
+import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
+import { Authority } from './shared/security/principal.model';
 import { AlertComponent } from './templates/alert/alert.component';
 import { AnalystHomeComponent } from './templates/analyst-home/analyst-home.component';
 import { ApproverComponent } from './templates/approver/approver.component';
@@ -33,9 +35,9 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [AuthGuard],
+    canActivate: [AuthenticationGuard],
     component: InternalComponent,
-    canActivateChild: [AuthGuard],
+    canActivateChild: [AuthorityGuard],
     children: [
       {
         path: 'decision-tree',
@@ -141,6 +143,11 @@ export const routes: Routes = [
       {
         path: '403',
         component: AccessDeniedComponent,
+        canActivate: [AuthenticationGuard]
+      },
+      {
+        path: '401',
+        component: NotAuthenticatedComponent,
       },
       {
         path: 'maintenance',

@@ -1,21 +1,21 @@
-import authReducer, { State as AuthReducerState } from '@app/shared/auth/store/auth.reducer';
+import authReducer, { State as AuthReducerState } from '@app/shared/security/store/security.reducer';
 import * as fromUserManagement from '@app/templates/user-management/store/reducers/userManagement.reducer';
 import { environment } from '@env/environment';
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 
 export interface State {
   userManagement: fromUserManagement.State;
-  auth: AuthReducerState;
+  security: AuthReducerState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   userManagement: fromUserManagement.reducer,
-  auth: authReducer
+  security: authReducer
 };
 
 export const selectUserManagement = (state: State) => state.userManagement;
 
-export const selectAuth = (state: State) => state.auth;
+export const selectSecurity = (state: State) => state.security;
 
 // TODO(bgulowaty): move those to dedicated userManagment selectors file
 export const getUsers = createSelector(

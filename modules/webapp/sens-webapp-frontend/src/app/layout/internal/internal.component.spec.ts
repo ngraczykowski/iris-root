@@ -4,7 +4,7 @@ import { MainNavigationComponent } from '@app/components/application-header/main
 import { UserSectionComponent } from '@app/components/application-header/user-section/user-section.component';
 
 import { InternalComponent } from '@app/layout/internal/internal.component';
-import { AuthService } from '@app/shared/auth/auth.service';
+import { AuthService } from '@app/shared/security/auth.service';
 import { InboxModule } from '@app/templates/inbox/inbox.module';
 import { InboxService } from '@app/templates/inbox/inbox.service';
 import { TestModule } from '@app/test/test.module';

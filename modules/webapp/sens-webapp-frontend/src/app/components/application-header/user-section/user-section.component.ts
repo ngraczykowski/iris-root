@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
-import { Principal } from '@app/shared/auth/principal.model';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { Principal } from '@app/shared/security/principal.model';
 import { Observable, Subscription } from 'rxjs';
 import { ApplicationHeaderService } from '../application-header.service';
 

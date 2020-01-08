@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { Event, EventKey } from '../../../shared/event/event.service.model';

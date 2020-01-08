@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
-import { Authority } from '@app/shared/auth/principal.model';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { Authority } from '@app/shared/security/principal.model';
 import { CollectionResponse } from '@app/templates/model/collection-response.model';
 import { DecisionTree } from '@app/templates/model/decision-tree.model';
 import 'rxjs/add/operator/map';

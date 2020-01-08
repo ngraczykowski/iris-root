@@ -1,4 +1,4 @@
-import { Principal } from '@app/shared/auth/principal.model';
+import { Principal } from '@app/shared/security/principal.model';
 import { createAction, props } from '@ngrx/store';
 
 export const tryLogin = createAction(
@@ -6,7 +6,11 @@ export const tryLogin = createAction(
 );
 
 export const loginSuccess = createAction(
-    '[Auth] Login success',
+    '[Auth] Login success'
+);
+
+export const setPrincipal = createAction(
+    '[Auth] Fetched principal data',
     props<{ principal: Principal }>(),
 );
 
@@ -34,5 +38,6 @@ export default {
   loginFailed,
   logout,
   logoutSuccess,
-  logoutFailed
+  logoutFailed,
+  setPrincipal
 };

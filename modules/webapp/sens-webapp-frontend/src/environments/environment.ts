@@ -3,7 +3,7 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-import { Authority } from '@app/shared/auth/principal.model';
+import { Authority } from '@app/shared/security/principal.model';
 import { UserRole } from '@app/templates/model/user.model';
 
 export const environment = {
@@ -38,6 +38,10 @@ export const environment = {
       url: 'http://localhost:8081/auth',
       realm: 'sens-webapp',
       clientId: 'frontend',
+      adminRoleName: 'admin',
+      excludedTokenUrls: [
+        '/assets'
+      ]
     },
     activityMonitor: {
       inactivityTimeToLogoutInSec: 15 * 60,

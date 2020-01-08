@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService } from '../../../../../../shared/auth/auth.service';
-import { Authority } from '../../../../../../shared/auth/principal.model';
+import { AuthService } from '../../../../../../shared/security/auth.service';
+import { Authority } from '../../../../../../shared/security/principal.model';
 import { TestModule } from '../../../../../../test/test.module';
 import { DecisionTreeTableViewsModule } from '../decision-tree-table-views.module';
 

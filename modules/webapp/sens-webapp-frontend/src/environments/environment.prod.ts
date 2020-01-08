@@ -1,4 +1,4 @@
-import { Authority } from '@app/shared/auth/principal.model';
+import { Authority } from '@app/shared/security/principal.model';
 import { UserRole } from '@app/templates/model/user.model';
 
 export const environment = {
@@ -33,6 +33,10 @@ export const environment = {
       url: 'http://localhost:8081/auth',
       realm: 'sens-webapp',
       clientId: 'frontend',
+      adminRoleName: 'admin',
+      excludedTokenUrls: [
+          '/assets'
+      ]
     },
     activityMonitor: {
       inactivityTimeToLogoutInSec: 15 * 60,

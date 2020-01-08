@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
-import { Authority } from '@app/shared/auth/principal.model';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { Authority } from '@app/shared/security/principal.model';
 import { Observable, Subscription } from 'rxjs';
 import { BatchTypeManagementComponent } from './batch-type-management/batch-type-management.component';
 import { CopyDecisionTreeComponent } from './copy-decision-tree/copy-decision-tree.component';

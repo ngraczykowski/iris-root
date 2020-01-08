@@ -33,7 +33,7 @@ import { SwitchViewComponent } from '@app/components/switch-view/switch-view.com
 import { TableHintsComponent } from '@app/components/table-hints/table-hints.component';
 import { TagComponent } from '@app/components/tag/tag.component';
 import { ActivityMonitorModule } from '@app/shared/activity-monitor/activity-monitor.module';
-import { AuthModule } from '@app/shared/auth/auth.module';
+import { AuthModule } from '@app/shared/security/auth.module';
 import {
   BackgroundServicesManager,
   BackgroundServiceToken

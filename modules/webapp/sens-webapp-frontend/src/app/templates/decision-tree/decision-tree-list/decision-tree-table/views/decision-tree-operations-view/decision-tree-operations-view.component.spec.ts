@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService } from '@app/shared/auth/auth.service';
-import { Authority, Principal } from '@app/shared/auth/principal.model';
+import { AuthService } from '@app/shared/security/auth.service';
+import { Authority, Principal } from '@app/shared/security/principal.model';
 import { DecisionTreeTableViewsModule } from '@app/templates/decision-tree/decision-tree-list/decision-tree-table/views/decision-tree-table-views.module';
 import {
   DecisionTreeOperation,

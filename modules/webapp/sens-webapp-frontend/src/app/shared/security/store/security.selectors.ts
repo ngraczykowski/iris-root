@@ -1,15 +1,15 @@
-import { selectAuth } from '@app/reducers';
-import { Principal } from '@app/shared/auth/principal.model';
+import { selectSecurity } from '@app/reducers';
+import { Principal } from '@app/shared/security/principal.model';
 import { createSelector } from '@ngrx/store';
-import { State } from './auth.reducer';
+import { State } from './security.reducer';
 
 export const isLoggedIn = createSelector(
-    selectAuth,
+    selectSecurity,
     (state: State) => state.isLoggedIn
 );
 
 export const getLoggedInPrincipal = createSelector(
-    selectAuth,
+    selectSecurity,
     (state: State) => state.principal
 );
 

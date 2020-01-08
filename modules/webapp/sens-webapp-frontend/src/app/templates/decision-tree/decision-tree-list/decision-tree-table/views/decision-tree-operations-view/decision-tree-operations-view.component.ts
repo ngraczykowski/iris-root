@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CellViewFactory } from '@app/components/dynamic-view-table/table-data-mapper';
 import { View } from '@app/components/dynamic-view/dynamic-view.component';
-import { AuthenticatedUserFacade } from '@app/shared/auth/authenticated-user-facade.service';
-import { Authority } from '@app/shared/auth/principal.model';
+import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { Authority } from '@app/shared/security/principal.model';
 import { DecisionTree, DecisionTreeStatus } from '@app/templates/model/decision-tree.model';
 import { Observable } from 'rxjs';
 import {

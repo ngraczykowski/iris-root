@@ -6,8 +6,8 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
-import { AuthService } from '@app/shared/auth/auth.service';
-import { Authority } from '@app/shared/auth/principal.model';
+import { AuthService } from '@app/shared/security/auth.service';
+import { Authority } from '@app/shared/security/principal.model';
 import { TestModule } from '@app/test/test.module';
 import { CollectionResponse } from '@model/collection-response.model';
 import { DecisionTree } from '@model/decision-tree.model';
