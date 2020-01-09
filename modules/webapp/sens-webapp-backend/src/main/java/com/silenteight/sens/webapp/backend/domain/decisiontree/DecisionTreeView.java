@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.List;
+
 @Data
 @Builder
 public class DecisionTreeView {
@@ -12,7 +14,5 @@ public class DecisionTreeView {
   @NonNull
   private final String name;
   @NonNull
-  private final String status;
-  @NonNull
-  private final String modelName;
+  private final List<String> activations;
 }

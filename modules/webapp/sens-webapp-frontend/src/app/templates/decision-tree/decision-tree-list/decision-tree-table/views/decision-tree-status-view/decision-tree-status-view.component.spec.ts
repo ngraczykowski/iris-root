@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestModule } from '@app/test/test.module';
 import { DecisionTreeTableViewsModule } from '../decision-tree-table-views.module';
-
 import { DecisionTreeStatusViewComponent } from './decision-tree-status-view.component';
 
 describe('DecisionTreeStatusViewComponent', () => {

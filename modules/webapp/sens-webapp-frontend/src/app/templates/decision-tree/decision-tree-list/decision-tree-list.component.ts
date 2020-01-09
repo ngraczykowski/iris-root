@@ -26,8 +26,7 @@ export class DecisionTreeListComponent implements OnInit, OnDestroy {
 
   searchText: string;
 
-  activeDecisionTrees: DecisionTree[];
-  inactiveDecisionTrees: DecisionTree[];
+  decisionTrees: DecisionTree[];
 
   private _decisionTreesSubscription: Subscription;
   private _pollSubscription: Subscription;
@@ -59,8 +58,7 @@ export class DecisionTreeListComponent implements OnInit, OnDestroy {
       this._decisionTreesSubscription =
           of({})
               .pipe(
-                  flatMap(() => this.updateActiveDecisionTrees()),
-                  flatMap(() => this.updateInactiveDecisionTrees()),
+                  flatMap(() => this.reloadDecisionTrees()),
                   catchError((err) => this.handleError(err)),
                   finalize(() => this._decisionTreesIsPending = false)
               )
@@ -91,20 +89,11 @@ export class DecisionTreeListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateActiveDecisionTrees(): Observable<any> {
-    return this.decisionTreesService.getActiveDecisionTrees()
+  private reloadDecisionTrees(): Observable<any> {
+    return this.decisionTreesService.listDecisionTrees()
       .pipe(tap(response => {
-        if (this.checkIfTreeListChanged(this.activeDecisionTrees, response.results)) {
-          this.activeDecisionTrees = response.results;
-        }
-      }));
-  }
-
-  private updateInactiveDecisionTrees(): Observable<any> {
-    return this.decisionTreesService.getInactiveDecisionTrees()
-      .pipe(tap(response => {
-        if (this.checkIfTreeListChanged(this.inactiveDecisionTrees, response.results)) {
-          this.inactiveDecisionTrees = response.results;
+        if (this.checkIfTreeListChanged(this.decisionTrees, response.results)) {
+          this.decisionTrees = response.results;
         }
       }));
   }
@@ -131,11 +120,10 @@ export class DecisionTreeListComponent implements OnInit, OnDestroy {
 
   private compareDecisionTrees(tree: DecisionTree, otherTree: DecisionTree): boolean {
     return tree.id === otherTree.id
-      && tree.active === otherTree.active
-      && tree.name === otherTree.name
-      && (tree.status === otherTree.status ||
-        (tree.status && otherTree.status && tree.status.name === otherTree.status.name))
-      && ArrayHelper.compareArrays(tree.assignments, otherTree.assignments);
+        && tree.name === otherTree.name
+        && (tree.status === otherTree.status ||
+            (tree.status && otherTree.status && tree.status.name === otherTree.status.name))
+        && ArrayHelper.compareArrays(tree.activations, otherTree.activations);
   }
 
   showDecisionTrees(decisionTrees: DecisionTree[]) {

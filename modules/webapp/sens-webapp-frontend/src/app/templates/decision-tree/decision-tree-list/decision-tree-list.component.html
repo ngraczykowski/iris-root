@@ -23,13 +23,7 @@
 </header>
 <app-decision-trees-list-table
         class="page-module decision-trees-list-table"
-        *ngIf="showDecisionTrees(activeDecisionTrees)"
-        [decisionTrees]="activeDecisionTrees | filter:searchText:'name' | sort:'name'"
-        [title]="'decisionTrees.table.active.title'">
-</app-decision-trees-list-table>
-<app-decision-trees-list-table
-        class="page-module decision-trees-list-table"
-        *ngIf="showDecisionTrees(inactiveDecisionTrees)"
-        [decisionTrees]="inactiveDecisionTrees | filter:searchText:'name' | sort:'name'"
-        [title]="'decisionTrees.table.inactive.title'">
+        *ngIf="showDecisionTrees(decisionTrees)"
+        [decisionTrees]="decisionTrees | filter:searchText:'name' | sort:'name'"
+        [title]="'decisionTrees.table.title'">
 </app-decision-trees-list-table>

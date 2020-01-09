@@ -13,8 +13,7 @@ export class DecisionTreeListClient {
       private http: HttpClient
   ) { }
 
-  getDecisionTrees(filters?): Observable<CollectionResponse<DecisionTree>> {
-    return this.http.get<CollectionResponse<DecisionTree>>(environment.serverApiUrl + 'api/decision-trees',
-        {params: filters});
+  listDecisionTrees(): Observable<CollectionResponse<DecisionTree>> {
+    return this.http.get<CollectionResponse<DecisionTree>>(environment.serverApiUrl + 'api/decision-trees');
   }
 }

@@ -23,7 +23,6 @@ export class DecisionTreeStatusViewComponent implements DynamicComponent, OnInit
 
   ngOnInit() {
   }
-
 }
 
 export class DecisionTreeStatusCellViewFactory implements CellViewFactory<DecisionTree> {

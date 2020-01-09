@@ -20,12 +20,8 @@ export class DecisionTreeListService {
       private decisionTreeOperationService: DecisionTreeOperationService
   ) { }
 
-  getActiveDecisionTrees(): Observable<CollectionResponse<DecisionTree>> {
-    return this.client.getDecisionTrees({active: true});
-  }
-
-  getInactiveDecisionTrees(): Observable<CollectionResponse<DecisionTree>> {
-    return this.client.getDecisionTrees({active: false});
+  listDecisionTrees(): Observable<CollectionResponse<DecisionTree>> {
+    return this.client.listDecisionTrees();
   }
 
   hasDecisionTreeManageAccess(): Observable<boolean> {

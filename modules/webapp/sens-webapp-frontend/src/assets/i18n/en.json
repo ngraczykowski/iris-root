@@ -783,6 +783,8 @@
       "search": "Search by name"
     },
     "table": {
+      "title": "In Use",
+      "emptyState": "No decision trees are available",
       "labels": {
         "id": "ID",
         "name": "Name",
@@ -808,14 +810,6 @@
         "active": "Active",
         "assigned": "Assigned",
         "showMore": "Show all Batch Types"
-      },
-      "active": {
-        "title": "In Use ",
-        "emptyState": "So far, no decision tree has been activated yet"
-      },
-      "inactive": {
-        "title": "Available ",
-        "emptyState": "There are no trees in this forest!"
       }
     },
     "message": {

@@ -43,8 +43,7 @@ describe('DecisionTreesComponent', () => {
   }
 
   it('should create', () => {
-    spyOn(decisionTreesService, 'getActiveDecisionTrees').and.returnValue(EMPTY);
-    spyOn(decisionTreesService, 'getInactiveDecisionTrees').and.returnValue(EMPTY);
+    spyOn(decisionTreesService, 'listDecisionTrees').and.returnValue(EMPTY);
 
     initComponent();
 
@@ -53,9 +52,7 @@ describe('DecisionTreesComponent', () => {
 
   it('should set firstTimeLoaded true, after first load', fakeAsync(() => {
     const response = <CollectionResponse<DecisionTree>>{total: 0, results: []};
-    spyOn(decisionTreesService, 'getActiveDecisionTrees')
-        .and.returnValue(timer(50).pipe(mapTo(response)));
-    spyOn(decisionTreesService, 'getInactiveDecisionTrees')
+    spyOn(decisionTreesService, 'listDecisionTrees')
         .and.returnValue(timer(50).pipe(mapTo(response)));
     initComponent();
 
@@ -89,17 +86,15 @@ describe('DecisionTreesComponent', () => {
   it('should update decisionTrees only if server response changed', fakeAsync(() => {
     const dt1 = {
       id: 1,
-      active: true,
       name: 'dt1',
-      status: { name: 'PROCESSING' },
+      status: { name: 'ACTIVE' },
       assignments: ['BT1']
     } as DecisionTree;
 
     const dt2 = {
       id: 2,
-      active: false,
       name: 'dt2',
-      status: { name: 'PROCESSED' },
+      status: { name: 'ACTIVE' },
       assignments: ['BT2']
     } as DecisionTree;
 
@@ -110,17 +105,7 @@ describe('DecisionTreesComponent', () => {
     const response5 = <CollectionResponse<DecisionTree>>{ total: 0, results: [dt1, dt2] };
     const response6 = <CollectionResponse<DecisionTree>>{ total: 0, results: [dt1] };
 
-    spyOn(decisionTreesService, 'getActiveDecisionTrees')
-      .and.returnValues(
-        of(response1),
-        of(response2),
-        of(response2),
-        of(response3),
-        of(response4),
-        of(response5),
-        of(response6)
-      );
-    spyOn(decisionTreesService, 'getInactiveDecisionTrees')
+    spyOn(decisionTreesService, 'listDecisionTrees')
       .and.returnValues(
         of(response1),
         of(response2),
@@ -134,66 +119,42 @@ describe('DecisionTreesComponent', () => {
     initComponent();
     tick();
 
-    let previousActive = component.activeDecisionTrees;
-    let previousInactive = component.inactiveDecisionTrees;
-    expect(component.activeDecisionTrees).toEqual(response1.results);
-    expect(component.inactiveDecisionTrees).toEqual(response1.results);
+    let previousDecisionTrees = component.decisionTrees;
+    expect(component.decisionTrees).toEqual(response1.results);
 
     component.updateDecisionTrees();
-    expect(component.activeDecisionTrees).toEqual(response2.results);
-    expect(component.inactiveDecisionTrees).toEqual(response2.results);
-    expect(component.activeDecisionTrees).not.toEqual(previousActive);
-    expect(component.inactiveDecisionTrees).not.toEqual(previousInactive);
-    expect(component.activeDecisionTrees === previousActive).toBeFalsy();
-    expect(component.inactiveDecisionTrees === previousInactive).toBeFalsy();
-    previousActive = component.activeDecisionTrees;
-    previousInactive = component.inactiveDecisionTrees;
+    expect(component.decisionTrees).toEqual(response2.results);
+    expect(component.decisionTrees).not.toEqual(previousDecisionTrees);
+    expect(component.decisionTrees === previousDecisionTrees).toBeFalsy();
+    previousDecisionTrees = component.decisionTrees;
 
     component.updateDecisionTrees();
-    expect(component.activeDecisionTrees).toEqual(response2.results);
-    expect(component.inactiveDecisionTrees).toEqual(response2.results);
-    expect(component.activeDecisionTrees).toEqual(previousActive);
-    expect(component.inactiveDecisionTrees).toEqual(previousInactive);
-    expect(component.activeDecisionTrees === previousActive).toBeTruthy();
-    expect(component.inactiveDecisionTrees === previousInactive).toBeTruthy();
-    previousActive = component.activeDecisionTrees;
-    previousInactive = component.inactiveDecisionTrees;
+    expect(component.decisionTrees).toEqual(response2.results);
+    expect(component.decisionTrees).toEqual(previousDecisionTrees);
+    expect(component.decisionTrees === previousDecisionTrees).toBeTruthy();
+    previousDecisionTrees = component.decisionTrees;
 
     component.updateDecisionTrees();
-    expect(component.activeDecisionTrees).toEqual(response3.results);
-    expect(component.inactiveDecisionTrees).toEqual(response3.results);
-    expect(component.activeDecisionTrees).toEqual(previousActive);
-    expect(component.inactiveDecisionTrees).toEqual(previousInactive);
-    expect(component.activeDecisionTrees === previousActive).toBeTruthy();
-    expect(component.inactiveDecisionTrees === previousInactive).toBeTruthy();
-    previousActive = component.activeDecisionTrees;
-    previousInactive = component.inactiveDecisionTrees;
+    expect(component.decisionTrees).toEqual(response3.results);
+    expect(component.decisionTrees).toEqual(previousDecisionTrees);
+    expect(component.decisionTrees === previousDecisionTrees).toBeTruthy();
+    previousDecisionTrees = component.decisionTrees;
 
     component.updateDecisionTrees();
-    expect(component.activeDecisionTrees).toEqual(response4.results);
-    expect(component.inactiveDecisionTrees).toEqual(response4.results);
-    expect(component.activeDecisionTrees).not.toEqual(previousActive);
-    expect(component.inactiveDecisionTrees).not.toEqual(previousInactive);
-    expect(component.activeDecisionTrees === previousActive).toBeFalsy();
-    expect(component.inactiveDecisionTrees === previousInactive).toBeFalsy();
-    previousActive = component.activeDecisionTrees;
-    previousInactive = component.inactiveDecisionTrees;
+    expect(component.decisionTrees).toEqual(response4.results);
+    expect(component.decisionTrees).not.toEqual(previousDecisionTrees);
+    expect(component.decisionTrees === previousDecisionTrees).toBeFalsy();
+    previousDecisionTrees = component.decisionTrees;
 
     component.updateDecisionTrees();
-    expect(component.activeDecisionTrees).toEqual(response5.results);
-    expect(component.inactiveDecisionTrees).toEqual(response5.results);
-    expect(component.activeDecisionTrees).not.toEqual(previousActive);
-    expect(component.inactiveDecisionTrees).not.toEqual(previousInactive);
-    expect(component.activeDecisionTrees === previousActive).toBeFalsy();
-    expect(component.inactiveDecisionTrees === previousInactive).toBeFalsy();
+    expect(component.decisionTrees).toEqual(response5.results);
+    expect(component.decisionTrees).not.toEqual(previousDecisionTrees);
+    expect(component.decisionTrees === previousDecisionTrees).toBeFalsy();
 
     component.updateDecisionTrees();
-    expect(component.activeDecisionTrees).toEqual(response6.results);
-    expect(component.inactiveDecisionTrees).toEqual(response6.results);
-    expect(component.activeDecisionTrees).not.toEqual(previousActive);
-    expect(component.inactiveDecisionTrees).not.toEqual(previousInactive);
-    expect(component.activeDecisionTrees === previousActive).toBeFalsy();
-    expect(component.inactiveDecisionTrees === previousInactive).toBeFalsy();
+    expect(component.decisionTrees).toEqual(response6.results);
+    expect(component.decisionTrees).not.toEqual(previousDecisionTrees);
+    expect(component.decisionTrees === previousDecisionTrees).toBeFalsy();
 
     discardPeriodicTasks();
   }));

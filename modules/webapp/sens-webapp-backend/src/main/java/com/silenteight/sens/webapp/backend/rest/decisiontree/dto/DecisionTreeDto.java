@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.NonNull;
 
 import com.silenteight.sens.webapp.backend.domain.decisiontree.DecisionTreeView;
-import com.silenteight.sens.webapp.backend.rest.model.dto.ModelDto;
+import com.silenteight.sens.webapp.backend.domain.decisiontree.Status;
+
+import java.util.List;
 
 @Data
 public class DecisionTreeDto {
@@ -15,28 +17,23 @@ public class DecisionTreeDto {
   @NonNull
   private final StatusDto status;
   @NonNull
-  private final ModelDto model;
+  private final List<String> activations;
 
   public DecisionTreeDto(DecisionTreeView view) {
     id = view.getId();
     name = view.getName();
-    status = createStatus(view.getStatus());
-    model = createModel(view.getModelName());
+    status = createStatus(view.getActivations());
+    activations = view.getActivations();
   }
 
-  private static StatusDto createStatus(String name) {
+  private static StatusDto createStatus(List<String> activations) {
     return StatusDto
         .builder()
-        .name(name)
+        .name(createStatusName(activations))
         .build();
   }
 
-  private static ModelDto createModel(String name) {
-    return ModelDto
-        .builder()
-        // will be removed in next MR
-        .id(1L)
-        .name(name)
-        .build();
+  private static String createStatusName(List<String> activations) {
+    return activations.isEmpty() ? Status.INACTIVE.name() : Status.ACTIVE.name();
   }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
 
 class DecisionTreeServiceTest {
@@ -48,23 +49,20 @@ class DecisionTreeServiceTest {
     private static final long ID_2 = 2L;
     private static final String NAME_1 = "name-1";
     private static final String NAME_2 = "name-2";
-    private static final String STATUS = "status";
-    private static final String MODEL_NAME = "model-name";
+    private static final List<String> ACTIVATIONS = asList("activation-1", "activation-2");
 
     DecisionTreeView firstDecisionTree = DecisionTreeView
         .builder()
         .id(ID_1)
         .name(NAME_1)
-        .status(STATUS)
-        .modelName(MODEL_NAME)
+        .activations(ACTIVATIONS)
         .build();
 
     DecisionTreeView secondDecisionTree = DecisionTreeView
         .builder()
         .id(ID_2)
         .name(NAME_2)
-        .status(STATUS)
-        .modelName(MODEL_NAME)
+        .activations(ACTIVATIONS)
         .build();
   }
 }

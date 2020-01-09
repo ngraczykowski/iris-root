@@ -15,8 +15,6 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class GrpcDecisionTreeRepository implements DecisionTreeRepository {
 
-  private static final String DEFAULT_STATUS = "FINISHED";
-
   private final DecisionTreeGovernanceBlockingStub client;
 
   @Override
@@ -38,8 +36,7 @@ class GrpcDecisionTreeRepository implements DecisionTreeRepository {
         .builder()
         .id(decisionTreeSummary.getId())
         .name(decisionTreeSummary.getName())
-        .status(DEFAULT_STATUS)
-        .modelName(decisionTreeSummary.getModelSummary().getName())
+        .activations(decisionTreeSummary.getDecisionGroupList())
         .build();
   }
 }
