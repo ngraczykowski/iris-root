@@ -15,4 +15,8 @@ public class DecisionTreeView {
   private final String name;
   @NonNull
   private final List<String> activations;
+
+  public boolean isActive() {
+    return !activations.isEmpty();
+  }
 }
