@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.domain.decisiontree;
+package com.silenteight.sens.webapp.backend.decisiontree.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,11 +8,13 @@ import java.util.List;
 
 @Data
 @Builder
-public class DecisionTreeView {
+public class DecisionTreeDto {
 
   private final long id;
   @NonNull
   private final String name;
+  @NonNull
+  private final StatusDto status;
   @NonNull
   private final List<String> activations;
 

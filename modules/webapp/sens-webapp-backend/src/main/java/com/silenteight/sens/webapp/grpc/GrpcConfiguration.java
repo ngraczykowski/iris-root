@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.domain.decisiontree;
+package com.silenteight.sens.webapp.grpc;
 
 import lombok.Setter;
 
@@ -10,18 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class DecisionTreeDomainConfiguration {
+class GrpcConfiguration {
 
   @Setter(onMethod_ = @GrpcClient("governance"))
   private Channel channel;
 
   @Bean
-  DecisionTreeService decisionTreeService(DecisionTreeRepository repository) {
-    return new DecisionTreeService(repository);
-  }
-
-  @Bean
-  DecisionTreeRepository decisionTreeRepository() {
+  GrpcDecisionTreeRepository grpcDecisionTreeRepository() {
     return new GrpcDecisionTreeRepository(
         DecisionTreeGovernanceGrpc
             .newBlockingStub(channel)

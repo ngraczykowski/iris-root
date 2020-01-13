@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.rest.decisiontree.dto;
+package com.silenteight.sens.webapp.backend.decisiontree.dto;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -11,4 +11,9 @@ public class DecisionTreesDto {
   private final int total;
   @NonNull
   private final List<DecisionTreeDto> results;
+
+  public DecisionTreesDto(List<DecisionTreeDto> decisionTrees) {
+    total = decisionTrees.size();
+    results = decisionTrees;
+  }
 }

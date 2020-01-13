@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.common.testing;
+package com.silenteight.sens.webapp.common.repository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

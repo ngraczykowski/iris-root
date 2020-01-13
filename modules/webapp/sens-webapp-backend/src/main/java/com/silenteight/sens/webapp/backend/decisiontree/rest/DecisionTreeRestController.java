@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.rest.decisiontree;
+package com.silenteight.sens.webapp.backend.decisiontree.rest;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -9,8 +9,9 @@ import com.silenteight.sens.webapp.backend.application.decisiontree.copy.dto.Cop
 import com.silenteight.sens.webapp.backend.application.decisiontree.copy.dto.CopyDecisionTreeResponseDto;
 import com.silenteight.sens.webapp.backend.application.decisiontree.create.dto.CreateDecisionTreeRequestDto;
 import com.silenteight.sens.webapp.backend.application.decisiontree.patch.dto.PatchDecisionTreeRequestDto;
-import com.silenteight.sens.webapp.backend.rest.decisiontree.dto.DecisionTreeDto;
-import com.silenteight.sens.webapp.backend.rest.decisiontree.dto.DecisionTreesDto;
+import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeFacade;
+import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDto;
+import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreesDto;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 
@@ -33,7 +34,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(RestConstants.ROOT)
 @PreAuthorize("hasRole('view-decision-trees')")
-public class DecisionTreeRestController {
+class DecisionTreeRestController {
 
   @NonNull
   private final DecisionTreeFacade decisionTreeFacade;
@@ -91,7 +92,7 @@ public class DecisionTreeRestController {
   @GetMapping("/alert/{externalId}/decision-trees")
   public ResponseEntity<DecisionTreesDto> getAlertDecisionTrees(
       @PathVariable String externalId) {
-    DecisionTreesDto response = new DecisionTreesDto(0, emptyList());
+    DecisionTreesDto response = new DecisionTreesDto(emptyList());
     return ok(response);
   }
 
