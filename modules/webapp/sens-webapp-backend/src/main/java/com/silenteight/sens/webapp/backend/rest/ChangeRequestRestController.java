@@ -2,11 +2,11 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.workflow.PostApprovalChangesRequest;
 import com.silenteight.sens.webapp.backend.presentation.dto.workflow.PostChangeRequest;
 import com.silenteight.sens.webapp.backend.presentation.dto.workflow.PostRejectChangeRequest;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 
 import org.springframework.http.ResponseEntity;

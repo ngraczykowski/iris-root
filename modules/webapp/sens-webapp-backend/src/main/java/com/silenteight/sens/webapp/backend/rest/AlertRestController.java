@@ -2,12 +2,12 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.alert.AlertCategory;
 import com.silenteight.sens.webapp.backend.presentation.dto.alert.AlertModelDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.alert.AlertResponseDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.alert.AlertSearchFilterDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.alert.details.AlertDetailsView;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

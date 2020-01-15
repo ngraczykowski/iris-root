@@ -2,12 +2,12 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.application.inbox.dto.SolveInboxMessageRequestDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.common.StatisticsDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.inbox.InboxMessageDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.inbox.InboxMessageSearchFilterDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.inbox.InboxResposneDto;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
 
 import org.springframework.data.domain.Pageable;

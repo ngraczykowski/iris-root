@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.model.ModelResponseDto;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

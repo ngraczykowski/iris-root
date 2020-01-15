@@ -1,9 +1,9 @@
 package com.silenteight.sens.webapp.backend.rest;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.rest.BaseRestControllerIT.TestRestConfiguration;
 import com.silenteight.sens.webapp.common.database.DataSourceAutoConfiguration;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
 import com.silenteight.sens.webapp.security.SecurityModule;

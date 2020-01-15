@@ -2,12 +2,12 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.branch.BranchModelDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.branch.BranchResponseDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.branch.BranchSearchFilterDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.branch.details.BranchDetailsDto;
 import com.silenteight.sens.webapp.backend.support.Paging;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.backend.rest;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.security.dto.PrincipalDto;
 import com.silenteight.sens.webapp.backend.security.dto.PrincipalDtoMapper;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
 
 import org.springframework.http.ResponseEntity;

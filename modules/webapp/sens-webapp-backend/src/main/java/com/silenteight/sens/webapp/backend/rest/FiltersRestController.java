@@ -2,9 +2,9 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.application.filters.save.dto.CreateFilterDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.filters.FilterDto;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

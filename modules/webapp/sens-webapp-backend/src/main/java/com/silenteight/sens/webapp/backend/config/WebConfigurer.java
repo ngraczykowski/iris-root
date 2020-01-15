@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.config;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

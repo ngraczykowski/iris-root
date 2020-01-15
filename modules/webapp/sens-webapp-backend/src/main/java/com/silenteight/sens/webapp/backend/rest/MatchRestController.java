@@ -2,9 +2,9 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.match.MatchResponseDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.match.MatchSearchFilterDto;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

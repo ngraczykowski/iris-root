@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend;
+package com.silenteight.sens.webapp.common.rest;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

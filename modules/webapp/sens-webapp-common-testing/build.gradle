@@ -14,6 +14,8 @@ dependencies {
   compile libraries.spring_boot_test
   compile libraries.spring_boot_test_autoconfigure
 
+  compile libraries.spring_boot_starter_web
+
   compile libraries.junit_jupiter_api
 
   compile libraries.test_containers
@@ -34,4 +36,7 @@ dependencies {
   implementation libraries.spring_amqp
 
   implementation project(":sens-webapp-common")
+
+  implementation libraries.rest_assured
+  implementation libraries.rest_assured_spring_mock_mvc
 }

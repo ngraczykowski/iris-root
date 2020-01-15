@@ -17,8 +17,4 @@ public class DecisionTreeDto {
   private final StatusDto status;
   @NonNull
   private final List<String> activations;
-
-  public boolean isActive() {
-    return !activations.isEmpty();
-  }
 }

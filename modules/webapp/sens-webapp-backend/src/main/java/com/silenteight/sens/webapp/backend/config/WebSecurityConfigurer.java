@@ -2,12 +2,12 @@ package com.silenteight.sens.webapp.backend.config;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.config.token.AdminTokenAuthenticationProvider;
 import com.silenteight.sens.webapp.backend.config.token.UserTokenAuthenticationProvider;
 import com.silenteight.sens.webapp.backend.security.RestAccessDeniedHandler;
 import com.silenteight.sens.webapp.backend.security.dto.PrincipalDtoMapper;
 import com.silenteight.sens.webapp.backend.security.login.SaveToDatabaseAuthenticationSuccessListener;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.users.user.UserService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

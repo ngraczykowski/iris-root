@@ -2,10 +2,10 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.DecisionTreeAuditDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.model.AiModelAuditDto;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.users.user.dto.UserAuditDto;
 

@@ -3,10 +3,10 @@ package com.silenteight.sens.webapp.backend.rest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.RestConstants;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.CreateAnalystsDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.ModifyUserDto;
+import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.users.bulk.BulkUserManagementService;
 import com.silenteight.sens.webapp.users.user.UserService;
 import com.silenteight.sens.webapp.users.user.dto.UserDetailedView;
