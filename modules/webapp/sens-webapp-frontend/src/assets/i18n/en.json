@@ -524,12 +524,6 @@
         "title": "Details",
         "id": "Id",
         "name": "Name",
-        "model": "AI Model",
-        "type": {
-          "label": "Active",
-          "active": "Active Decision Tree",
-          "inactive": "Inactive Decision Tree"
-        },
         "status": "Status",
         "branches": "Branches"
       },

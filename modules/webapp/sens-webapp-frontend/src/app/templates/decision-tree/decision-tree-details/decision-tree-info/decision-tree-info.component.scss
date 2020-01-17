@@ -24,15 +24,15 @@
   }
 }
 
-.assignments {
-  .assignments-section {
+.activations {
+  .activations-section {
     margin-bottom: $space-l;
 
-    .assignments-section-title {
+    .activations-section-title {
       font-size: $font-size-l;
     }
 
-    .assignments-section-content {
+    .activations-section-content {
       margin-top: $space-s;
     }
   }
@@ -45,7 +45,7 @@
     }
 
     .module-content {
-      height: 248px;
+      height: 144px;
     }
   }
 }

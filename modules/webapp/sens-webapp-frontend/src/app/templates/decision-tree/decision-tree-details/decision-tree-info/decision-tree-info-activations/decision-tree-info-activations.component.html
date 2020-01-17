@@ -1,0 +1,24 @@
+<ng-container *ngIf="activations">
+
+  <section class="module section-page">
+    <div class="module-header">
+      <h2 class="module-title">
+        <span [translate]="'decisionTree.infobox.batchTypes.title'"></span>
+        <span *ngIf="activations.length > 0">
+        (<span *ngIf="activations.length > 0">{{ activations.length }} Active</span>)
+        </span>
+      </h2>
+    </div>
+    <perfect-scrollbar class="module-content">
+      <app-decision-tree-batch-types-list
+              *ngIf="activations.length > 0"
+              [batchTypeList]="activations"
+              [batchTypeStatus]="'Active'"></app-decision-tree-batch-types-list>
+
+      <app-empty-state *ngIf="activations.length === 0"
+                       class="empty-state-content"
+                       [label]="'decisionTree.infobox.batchTypes.emptyState'"></app-empty-state>
+    </perfect-scrollbar>
+  </section>
+
+</ng-container>

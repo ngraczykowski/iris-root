@@ -11,11 +11,12 @@ export class DecisionTreeInfoComponent implements OnInit {
 
   @Input()
   set decisionTreeDetails(decisionTreeDetails: DecisionTreeDetails) {
-    this.hasDecisionTreeViewAccess =
-        decisionTreeDetails.permissions.includes(DecisionTreePermission.DECISION_TREE_VIEW);
+    // TODO(mmastylo): execute separate call for permissions
+    this.hasDecisionTreeViewAccess = false;
+    // this.hasDecisionTreeViewAccess =
+    //     decisionTreeDetails.permissions.includes(DecisionTreePermission.DECISION_TREE_VIEW);
     this._decisionTreeDetails = decisionTreeDetails;
     this.activations = decisionTreeDetails.activations;
-    this.assignments = decisionTreeDetails.assignments.filter(a => !this.activations.includes(a));
   }
 
   get decisionTreeDetails(): DecisionTreeDetails {
@@ -25,7 +26,6 @@ export class DecisionTreeInfoComponent implements OnInit {
   hasDecisionTreeViewAccess: boolean;
   _decisionTreeDetails: DecisionTreeDetails;
   activations: string[];
-  assignments: string[];
 
   constructor(private clipboardService: ClipboardService) { }
 

@@ -37,30 +37,8 @@
           </app-element-status>
         </div>
       </div>
-
-      <div class="element-details-row">
-        <div class="element-details-row-label">
-          <p [translate]="'decisionTree.infobox.basic.type.label'"></p>
-        </div>
-        <div class="element-details-row-value">
-          <app-element-status
-                  [translatePrefix]="'decisionTree.infobox.basic.type'"
-                  [status]="decisionTreeDetails.active ? 'active' : 'inactive'">
-          </app-element-status>
-        </div>
-      </div>
-
-      <div class="element-details-row">
-        <div class="element-details-row-label">
-          <p [translate]="'decisionTree.infobox.basic.model'"></p>
-        </div>
-        <div class="element-details-row-value">
-          {{ decisionTreeDetails.model.name }}
-        </div>
-      </div>
     </perfect-scrollbar>
   </section>
-
 
 </ng-container>
 

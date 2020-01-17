@@ -1,23 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestModule } from '../../../../../test/test.module';
 
-import { DecisionTreeInfoAssignmentsComponent } from './decision-tree-info-assignments.component';
+import { DecisionTreeInfoActivationsComponent } from './decision-tree-info-activations.component';
 import { DecisionTreeBatchTypesListComponent } from './decision-tree-batch-types-list/decision-tree-batch-types-list.component';
 
-describe('DecisionTreeInfoAssignmentsComponent', () => {
-  let component: DecisionTreeInfoAssignmentsComponent;
-  let fixture: ComponentFixture<DecisionTreeInfoAssignmentsComponent>;
+describe('DecisionTreeInfoActivationsComponent', () => {
+  let component: DecisionTreeInfoActivationsComponent;
+  let fixture: ComponentFixture<DecisionTreeInfoActivationsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ TestModule ],
-      declarations: [ DecisionTreeInfoAssignmentsComponent, DecisionTreeBatchTypesListComponent ]
+      declarations: [ DecisionTreeInfoActivationsComponent, DecisionTreeBatchTypesListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DecisionTreeInfoAssignmentsComponent);
+    fixture = TestBed.createComponent(DecisionTreeInfoActivationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

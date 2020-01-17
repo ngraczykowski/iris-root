@@ -27,7 +27,7 @@ describe('DecisionTreeInfoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load assignments and activations correctly', () => {
+  it('should load activations correctly', () => {
     component.decisionTreeDetails = <DecisionTreeDetails> {
       agents: [],
       model: {},
@@ -35,11 +35,9 @@ describe('DecisionTreeInfoComponent', () => {
       permissions: [],
       summary: {},
       status: {},
-      assignments: ['1', '2', '3', '4'],
       activations: ['3', '4', '5', '6']
     };
 
-    expect(component.assignments).toEqual(['1', '2']);
     expect(component.activations).toEqual(['3', '4', '5', '6']);
   });
 });
