@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 
+import static com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeDetailsDtoFixtures.DEFAULT;
 import static com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeDtoFixtures.ACTIVE;
 import static com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeDtoFixtures.INACTIVE;
 import static java.util.Arrays.asList;
@@ -49,5 +50,16 @@ class DecisionTreeRestControllerTest extends BaseRestControllerTest {
         .body("results[1].name", equalTo(ACTIVE.getName()))
         .body("results[1].status.name", equalTo(ACTIVE.getStatus().getName()))
         .body("results[1].activations", equalTo(ACTIVE.getActivations()));
+  }
+
+  @Test
+  void shouldProduceSuccessOutput_whenServiceReturnsDecisionTreeDetails() {
+    when(facade.details(DEFAULT.getId())).thenReturn(DEFAULT);
+
+    get("/decision-trees/" + DEFAULT.getId())
+        .statusCode(HttpStatus.OK.value())
+        .body("id", is((int) DEFAULT.getId()))
+        .body("name", is(DEFAULT.getName()))
+        .body("status.name", is(DEFAULT.getStatus().getName()));
   }
 }

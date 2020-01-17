@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDto;
-import com.silenteight.sens.webapp.backend.decisiontree.dto.StatusDto;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -16,7 +15,7 @@ public final class DecisionTreeDtoFixtures {
       .builder()
       .id(1L)
       .name("inactive-decision-tree")
-      .status(createStatus("INACTIVE"))
+      .status(StatusDtoFixtures.INACTIVE)
       .activations(emptyList())
       .build();
 
@@ -24,14 +23,7 @@ public final class DecisionTreeDtoFixtures {
       .builder()
       .id(2L)
       .name("active-decision-tree")
-      .status(createStatus("ACTIVE"))
+      .status(StatusDtoFixtures.ACTIVE)
       .activations(asList("US_PERD_DENY", "HK_PRVB_DUDL"))
       .build();
-
-  private static StatusDto createStatus(String name) {
-    return StatusDto
-        .builder()
-        .name(name)
-        .build();
-  }
 }
