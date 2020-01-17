@@ -13,6 +13,6 @@ export class DecisionTreeDetailsClient {
   ) { }
 
   getDecisionTreeDetails(id): Observable<DecisionTreeDetails> {
-    return this.http.get<DecisionTreeDetails>(environment.serverApiUrl + 'api/decision-tree/' + id);
+    return this.http.get<DecisionTreeDetails>(environment.serverApiUrl + 'api/decision-trees/' + id);
   }
 }

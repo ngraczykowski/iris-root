@@ -23,9 +23,4 @@ class DecisionTreeConfiguration {
   private static DecisionTreeService decisionTreeService(DecisionTreeRepository repository) {
     return new DecisionTreeService(repository);
   }
-
-  DecisionTreeFacade decisionTreeFacadeForTest() {
-    InMemoryDecisionTreeRepository repository = new InMemoryDecisionTreeRepository();
-    return decisionTreeFacade(repository, repository);
-  }
 }

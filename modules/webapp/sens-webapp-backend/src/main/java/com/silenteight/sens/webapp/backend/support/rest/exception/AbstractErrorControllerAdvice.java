@@ -1,8 +1,8 @@
-package com.silenteight.sens.webapp.backend.rest.exception;
+package com.silenteight.sens.webapp.backend.support.rest.exception;
 
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.backend.rest.exception.dto.ErrorDto;
+import com.silenteight.sens.webapp.backend.support.rest.exception.dto.ErrorDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,20 +14,17 @@ import javax.validation.constraints.NotNull;
 
 import static java.util.Collections.emptyMap;
 
-public abstract class ErrorControllerAdvice {
+public abstract class AbstractErrorControllerAdvice {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  protected ResponseEntity<ErrorDto> handle(
-      @NonNull Exception e,
-      @NonNull HttpStatus status) {
+  protected ResponseEntity<ErrorDto> handle(@NonNull Exception e, @NonNull HttpStatus status) {
     return handle(e, e.getClass().getSimpleName(), status);
   }
 
   protected ResponseEntity<ErrorDto> handle(
-      @NonNull Exception e,
-      @NonNull String key,
-      @NonNull HttpStatus status) {
+      @NonNull Exception e, @NonNull String key, @NonNull HttpStatus status) {
+
     return handle(e, key, status, emptyMap());
   }
 
@@ -36,8 +33,8 @@ public abstract class ErrorControllerAdvice {
       @NonNull String key,
       @NonNull HttpStatus status,
       @NotNull Map<String, Object> extras) {
-    log(e);
 
+    log(e);
     ErrorDto error = new ErrorDto(e, key, extras);
 
     return new ResponseEntity<>(error, status);

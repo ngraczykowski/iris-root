@@ -1,6 +1,8 @@
 package com.silenteight.sens.webapp.backend.rest.exception;
 
-import com.silenteight.sens.webapp.backend.rest.exception.dto.ErrorDto;
+import com.silenteight.sens.webapp.backend.support.rest.exception.AbstractErrorControllerAdvice;
+import com.silenteight.sens.webapp.backend.support.rest.exception.ControllerAdviceOrder;
+import com.silenteight.sens.webapp.backend.support.rest.exception.dto.ErrorDto;
 import com.silenteight.sens.webapp.common.exception.EntityNotFoundException;
 import com.silenteight.sens.webapp.users.user.exception.UserAlreadyExistException;
 import com.silenteight.sens.webapp.users.user.exception.UserIsUsedInWorkflowException;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 @Order(ControllerAdviceOrder.USERS)
-public class UsersControllerAdvice extends ErrorControllerAdvice {
+public class UsersControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(UserAlreadyExistException.class)
   public ResponseEntity<ErrorDto> handle(UserAlreadyExistException e) {

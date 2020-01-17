@@ -1,5 +1,6 @@
-package com.silenteight.sens.webapp.backend.rest.exception;
+package com.silenteight.sens.webapp.backend.decisiontree.rest.exception;
 
+import com.silenteight.sens.webapp.backend.decisiontree.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.support.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.backend.support.rest.exception.ControllerAdviceOrder;
 import com.silenteight.sens.webapp.backend.support.rest.exception.dto.ErrorDto;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-@Order(ControllerAdviceOrder.UNKNOWN)
-public class UnknownExceptionControllerAdvice extends AbstractErrorControllerAdvice {
+@Order(ControllerAdviceOrder.DECISION_TREE)
+public class DecisionTreeControllerAdvice extends AbstractErrorControllerAdvice {
 
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErrorDto> handle(Exception e) {
-    return handle(e, "InternalServerError", HttpStatus.INTERNAL_SERVER_ERROR);
+  @ExceptionHandler(DecisionTreeNotFoundException.class)
+  public ResponseEntity<ErrorDto> handle(DecisionTreeNotFoundException e) {
+    return handle(e, "DecisionTreeNotFoundException", HttpStatus.NOT_FOUND);
   }
 }

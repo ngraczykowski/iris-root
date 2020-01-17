@@ -1,6 +1,8 @@
 package com.silenteight.sens.webapp.backend.rest.exception;
 
-import com.silenteight.sens.webapp.backend.rest.exception.dto.ErrorDto;
+import com.silenteight.sens.webapp.backend.support.rest.exception.AbstractErrorControllerAdvice;
+import com.silenteight.sens.webapp.backend.support.rest.exception.ControllerAdviceOrder;
+import com.silenteight.sens.webapp.backend.support.rest.exception.dto.ErrorDto;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,7 @@ import javax.persistence.EntityNotFoundException;
 
 @ControllerAdvice
 @Order(ControllerAdviceOrder.GLOBAL)
-public class GenericExceptionControllerAdvice extends ErrorControllerAdvice {
+public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ErrorDto> handle(AccessDeniedException e) {

@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.rest.exception.dto;
+package com.silenteight.sens.webapp.backend.support.rest.exception.dto;
 
 import lombok.Data;
 
