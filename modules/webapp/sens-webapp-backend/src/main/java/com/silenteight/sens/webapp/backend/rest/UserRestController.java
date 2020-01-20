@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.backend.rest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.CreateAnalystsDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.user.dto.ModifyUserDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
@@ -63,13 +62,6 @@ public class UserRestController {
         .toUri();
 
     return ResponseEntity.created(location).build();
-  }
-
-  @PostMapping("/users/analysts")
-  public ResponseEntity<Void> createAnalysts(@Valid @RequestBody CreateAnalystsDto dto) {
-    bulkUserManagementService.synchronizeAnalysts(dto.toDomainRequest());
-
-    return ResponseEntity.ok().build();
   }
 
   @PostMapping("/user/{id}")

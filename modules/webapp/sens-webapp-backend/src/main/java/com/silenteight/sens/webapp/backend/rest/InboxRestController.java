@@ -8,7 +8,7 @@ import com.silenteight.sens.webapp.backend.presentation.dto.inbox.InboxMessageDt
 import com.silenteight.sens.webapp.backend.presentation.dto.inbox.InboxMessageSearchFilterDto;
 import com.silenteight.sens.webapp.backend.presentation.dto.inbox.InboxResposneDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
-import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
+import com.silenteight.sens.webapp.kernel.security.WebappUserDetails;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +56,7 @@ public class InboxRestController {
 
   @PostMapping("/inbox/message/solve")
   public ResponseEntity<Void> solveMessage(
-      @AuthenticationPrincipal SensUserDetails user,
+      @AuthenticationPrincipal WebappUserDetails user,
       @Valid @RequestBody SolveInboxMessageRequestDto requestDto) {
     return ResponseEntity.noContent().build();
   }

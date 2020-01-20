@@ -20,7 +20,6 @@ configurations {
 
 dependencies {
   compile project(":sens-webapp-kernel")
-  compile project(":sens-webapp-security")
   compile project(":sens-webapp-users")
 
   compile libraries.bouncycastle_bcprov
@@ -37,6 +36,8 @@ dependencies {
 
   // TODO(bgulowaty): move to separate module (WA-83)
   implementation libraries.keycloak
+  implementation libraries.keycloak_spring_security_adapter
+  implementation libraries.keycloak_admin_client
 
   compile libraries.hibernate_envers
 

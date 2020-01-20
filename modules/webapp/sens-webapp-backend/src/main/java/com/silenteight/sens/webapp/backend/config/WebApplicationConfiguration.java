@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.backend.config;
 import com.silenteight.sens.webapp.backend.rest.FrontendSettingsController;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -41,11 +40,5 @@ public class WebApplicationConfiguration {
         .initializeDataSourceBuilder()
         .type(HikariDataSource.class)
         .build();
-  }
-
-  // TODO(bgulowaty): move to separate module (WA-83)
-  @Bean
-  public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
-    return new KeycloakSpringBootConfigResolver();
   }
 }

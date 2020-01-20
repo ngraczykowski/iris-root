@@ -1,21 +1,25 @@
 package com.silenteight.sens.webapp.backend.security.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.List;
+import com.silenteight.sens.webapp.kernel.security.WebappUserDetails;
 
-@Data
-@Builder
+import java.util.Set;
+
+@Getter
 public class PrincipalDto {
 
   @NonNull
   private final String userName;
   @NonNull
-  private final List<String> authorities;
+  private final Set<String> authorities;
 
   private final String displayName;
 
-  private final boolean superUser;
+  public PrincipalDto(WebappUserDetails webappUserDetails) {
+    userName = webappUserDetails.getUsername();
+    authorities = webappUserDetails.getAuthorityNames();
+    displayName = webappUserDetails.getDisplayName();
+  }
 }

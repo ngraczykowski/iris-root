@@ -2,8 +2,10 @@ package com.silenteight.sens.webapp.backend.config;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sens.webapp.backend.security.RestAccessDeniedHandler;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.MimeMappings;
@@ -17,16 +19,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * @author Andrzej Haczewski
- */
 @Configuration
 @RequiredArgsConstructor
-public class WebConfigurer
+class WebConfigurer
     implements WebMvcConfigurer, WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
   private final WebApplicationProperties properties;
+  private final ObjectMapper objectMapper;
 
   @Override
   public void customize(ConfigurableServletWebServerFactory factory) {
@@ -48,5 +48,10 @@ public class WebConfigurer
       source.registerCorsConfiguration(RestConstants.MANAGEMENT_PREFIX + "/**", config);
     }
     return new CorsFilter(source);
+  }
+
+  @Bean
+  RestAccessDeniedHandler restAccessDeniedHandler() {
+    return new RestAccessDeniedHandler(objectMapper);
   }
 }

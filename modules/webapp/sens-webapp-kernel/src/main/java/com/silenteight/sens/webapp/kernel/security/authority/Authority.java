@@ -11,7 +11,8 @@ public enum Authority implements GrantedAuthority {
   WORKFLOW_MANAGE,
   USER_MANAGE,
   USER_VIEW,
-  SOLUTION_VIEW;
+  SOLUTION_VIEW,
+  SUPERUSER;
 
   @Override
   public String getAuthority() {

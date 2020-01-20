@@ -121,9 +121,6 @@ sens.web:
     allow-credentials: true
     max-age: 1800
 
-  security:
-    token:
-      admin: "Jms4Nqv6CgfGYArdN72FR2Xq5I9RsNSE"
 
   #   # Colors palette for AI Solutions
   #   ## Color code
@@ -166,3 +163,4 @@ sens.web:
     - key: "POTENTIAL_TRUE_POSITIVE"
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
+

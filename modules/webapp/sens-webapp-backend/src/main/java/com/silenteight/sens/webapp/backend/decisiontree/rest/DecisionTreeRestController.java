@@ -36,7 +36,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @AllArgsConstructor
 @RestController
 @RequestMapping(RestConstants.ROOT)
-@PreAuthorize("hasRole('view-decision-trees')")
+@SuppressWarnings("squid:S1200")
 class DecisionTreeRestController {
 
   @NonNull
@@ -47,9 +47,9 @@ class DecisionTreeRestController {
   private final CsvResponseWriter csvResponseWriter = new CsvResponseWriter();
 
   @GetMapping("/decision-trees")
+  @PreAuthorize("hasAuthority('DECISION_TREE_LIST') || hasRole('DECISION_TREE_VIEWER')")
   public ResponseEntity<DecisionTreesDto> list() {
     log.debug("Requesting Decision Trees");
-
     return ok(decisionTreeFacade.list());
   }
 

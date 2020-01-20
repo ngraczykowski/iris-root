@@ -1,12 +1,10 @@
 package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 
 import com.silenteight.sens.webapp.backend.security.dto.PrincipalDto;
-import com.silenteight.sens.webapp.backend.security.dto.PrincipalDtoMapper;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
-import com.silenteight.sens.webapp.kernel.security.SensUserDetails;
+import com.silenteight.sens.webapp.kernel.security.WebappUserDetails;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,13 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(RestConstants.ROOT)
 public class AuthController {
 
-  private final @NonNull PrincipalDtoMapper principalDtoMapper;
-
   @GetMapping(path = "/check-auth")
-  public ResponseEntity<PrincipalDto> checkAuth(@AuthenticationPrincipal SensUserDetails user) {
-    if (user == null || !user.hasAnyAuthorities())
+  public ResponseEntity<PrincipalDto> checkAuth(@AuthenticationPrincipal WebappUserDetails user) {
+    if (user == null || user.hasNoAuthorities())
       throw new AccessDeniedException("Not authorized");
 
-    return ResponseEntity.ok(principalDtoMapper.map(user));
+    return ResponseEntity.ok(new PrincipalDto(user));
   }
 }
