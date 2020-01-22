@@ -12,7 +12,7 @@ export class DecisionTreeInfoComponent implements OnInit {
   @Input()
   set decisionTreeDetails(decisionTreeDetails: DecisionTreeDetails) {
     // TODO(mmastylo): execute separate call for permissions
-    this.hasDecisionTreeViewAccess = false;
+    this.hasDecisionTreeViewAccess = true;
     // this.hasDecisionTreeViewAccess =
     //     decisionTreeDetails.permissions.includes(DecisionTreePermission.DECISION_TREE_VIEW);
     this._decisionTreeDetails = decisionTreeDetails;

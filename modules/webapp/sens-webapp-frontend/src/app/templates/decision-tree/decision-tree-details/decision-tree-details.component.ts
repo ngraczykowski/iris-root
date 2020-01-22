@@ -63,13 +63,13 @@ export class DecisionTreeDetailsComponent implements OnInit, OnDestroy {
 
   private hasDecisionTreeChangePermission() {
     // TODO(mmastylo): execute separate call for permissions
-    return false;
+    return true;
     // return this.decisionTreeDetails.permissions.indexOf(DecisionTreePermission.DECISION_TREE_CHANGE) !== -1;
   }
 
   private hasDecisionTreeViewPermission() {
     // TODO(mmastylo): execute separate call for permissions
-    return false;
+    return true;
     // return this.decisionTreeDetails.permissions.indexOf(DecisionTreePermission.DECISION_TREE_VIEW) !== -1;
   }
 

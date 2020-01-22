@@ -56,7 +56,6 @@ class DecisionTreeRestController {
   @GetMapping("/decision-trees/{id}")
   public ResponseEntity<DecisionTreeDetailsDto> details(@PathVariable long id) {
     log.debug("Requesting Decision Tree details. decisionTreeId={}", id);
-
     return ok(decisionTreeFacade.details(id));
   }
 

@@ -37,7 +37,7 @@ export class DecisionTreeManagementComponent implements OnInit {
     this.hasPermissionToRemoveTree = this.authenticatedUser.hasSuperuserPermissions();
     this.hasBatchTypeManageAccess = this.authenticatedUser.hasAuthority(Authority.BATCH_TYPE_MANAGE);
     // TODO(mmastylo): execute separate call for permissions
-    this.hasDecisionTreeViewPermission = false;
+    this.hasDecisionTreeViewPermission = true;
     // this.hasDecisionTreeViewPermission =
     //     this.decisionTree.permissions.indexOf(DecisionTreePermission.DECISION_TREE_VIEW) !== -1;
   }
