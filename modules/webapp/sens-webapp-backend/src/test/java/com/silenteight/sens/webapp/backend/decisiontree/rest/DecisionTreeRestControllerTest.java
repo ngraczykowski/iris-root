@@ -45,11 +45,11 @@ class DecisionTreeRestControllerTest extends BaseRestControllerTest {
         .body("results[0].id", equalTo((int) INACTIVE.getId()))
         .body("results[0].name", equalTo(INACTIVE.getName()))
         .body("results[0].status.name", equalTo(INACTIVE.getStatus().getName()))
-        .body("results[0].activations", equalTo(INACTIVE.getActivations()))
+        .body("results[0].activations.size()", is(INACTIVE.getActivations().size()))
         .body("results[1].id", equalTo((int) ACTIVE.getId()))
         .body("results[1].name", equalTo(ACTIVE.getName()))
         .body("results[1].status.name", equalTo(ACTIVE.getStatus().getName()))
-        .body("results[1].activations", equalTo(ACTIVE.getActivations()));
+        .body("results[1].activations.size()", is(ACTIVE.getActivations().size()));
   }
 
   @Test
@@ -58,8 +58,9 @@ class DecisionTreeRestControllerTest extends BaseRestControllerTest {
 
     get("/decision-trees/" + DEFAULT.getId())
         .statusCode(HttpStatus.OK.value())
-        .body("id", is((int) DEFAULT.getId()))
-        .body("name", is(DEFAULT.getName()))
-        .body("status.name", is(DEFAULT.getStatus().getName()));
+        .body("id", equalTo((int) DEFAULT.getId()))
+        .body("name", equalTo(DEFAULT.getName()))
+        .body("status.name", equalTo(DEFAULT.getStatus().getName()))
+        .body("activations.size()", is(DEFAULT.getActivations().size()));
   }
 }

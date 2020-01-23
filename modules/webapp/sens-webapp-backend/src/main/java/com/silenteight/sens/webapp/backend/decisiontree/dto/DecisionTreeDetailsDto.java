@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.List;
+
 @Data
 @Builder
 public class DecisionTreeDetailsDto {
@@ -13,4 +15,6 @@ public class DecisionTreeDetailsDto {
   private final String name;
   @NonNull
   private final StatusDto status;
+  @NonNull
+  private final List<DecisionGroupDto> activations;
 }

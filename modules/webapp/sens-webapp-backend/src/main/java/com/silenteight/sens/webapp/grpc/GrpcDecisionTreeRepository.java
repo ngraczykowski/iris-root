@@ -8,10 +8,7 @@ import com.silenteight.proto.serp.v1.api.GetDecisionTreeRequest;
 import com.silenteight.proto.serp.v1.governance.DecisionTreeSummary;
 import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeQueryRepository;
 import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeRepository;
-import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDetailsDto;
-import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDto;
-import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreesDto;
-import com.silenteight.sens.webapp.backend.decisiontree.dto.StatusDto;
+import com.silenteight.sens.webapp.backend.decisiontree.dto.*;
 import com.silenteight.sens.webapp.backend.decisiontree.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.decisiontree.exception.GrpcDecisionTreeRepositoryException;
 
@@ -50,19 +47,33 @@ class GrpcDecisionTreeRepository implements
         .id(decisionTreeSummary.getId())
         .name(decisionTreeSummary.getName())
         .status(mapToStatus(decisionTreeSummary.getDecisionGroupList()))
-        .activations(decisionTreeSummary.getDecisionGroupList())
+        .activations(mapToDecisionGroups(decisionTreeSummary.getDecisionGroupList()))
         .build();
   }
 
-  private static StatusDto mapToStatus(List<String> activations) {
+  private static StatusDto mapToStatus(List<String> decisionGroupNames) {
     return StatusDto
         .builder()
-        .name(mapToStatusName(activations))
+        .name(mapToStatusName(decisionGroupNames))
         .build();
   }
 
-  private static String mapToStatusName(List<String> activations) {
-    return activations.isEmpty() ? Status.INACTIVE.name() : Status.ACTIVE.name();
+  private static List<DecisionGroupDto> mapToDecisionGroups(List<String> decisionGroupNames) {
+    return decisionGroupNames
+        .stream()
+        .map(GrpcDecisionTreeRepository::mapToDecisionGroup)
+        .collect(toList());
+  }
+
+  private static DecisionGroupDto mapToDecisionGroup(String decisionGroupName) {
+    return DecisionGroupDto
+        .builder()
+        .name(decisionGroupName)
+        .build();
+  }
+
+  private static String mapToStatusName(List<String> decisionGroupNames) {
+    return decisionGroupNames.isEmpty() ? Status.INACTIVE.name() : Status.ACTIVE.name();
   }
 
   @Override
@@ -99,6 +110,7 @@ class GrpcDecisionTreeRepository implements
         .id(decisionTreeSummary.getId())
         .name(decisionTreeSummary.getName())
         .status(mapToStatus(decisionTreeSummary.getDecisionGroupList()))
+        .activations(mapToDecisionGroups(decisionTreeSummary.getDecisionGroupList()))
         .build();
   }
 

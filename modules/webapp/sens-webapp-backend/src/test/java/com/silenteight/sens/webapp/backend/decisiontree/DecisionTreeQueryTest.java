@@ -24,7 +24,7 @@ class DecisionTreeQueryTest {
   }
 
   @Test
-  void emptyDecisionTreesListDetailsWhenDecisionTreesNotAvailable() {
+  void emptyDecisionTreesListWhenDecisionTreesNotAvailable() {
     // when
     DecisionTreesDto decisionTrees = underTest.list();
 
@@ -34,7 +34,7 @@ class DecisionTreeQueryTest {
   }
 
   @Test
-  void decisionTreesListDetailsWhenDecisionTreesAvailable() {
+  void decisionTreesListWhenDecisionTreesAvailable() {
     // given
     repository.save(INACTIVE);
     repository.save(ACTIVE);
@@ -56,16 +56,17 @@ class DecisionTreeQueryTest {
   @Test
   void decisionTreeDetailsWhenDecisionTreeAvailable() {
     // given
-    repository.save(INACTIVE);
+    repository.save(ACTIVE);
     DecisionTreeDetailsDto expectedDetails = DecisionTreeDetailsDto
         .builder()
-        .id(INACTIVE.getId())
-        .name(INACTIVE.getName())
-        .status(INACTIVE.getStatus())
+        .id(ACTIVE.getId())
+        .name(ACTIVE.getName())
+        .status(ACTIVE.getStatus())
+        .activations(ACTIVE.getActivations())
         .build();
 
     // when
-    DecisionTreeDetailsDto details = underTest.details(INACTIVE.getId());
+    DecisionTreeDetailsDto details = underTest.details(ACTIVE.getId());
 
     // then
     assertThat(details).isEqualTo(expectedDetails);

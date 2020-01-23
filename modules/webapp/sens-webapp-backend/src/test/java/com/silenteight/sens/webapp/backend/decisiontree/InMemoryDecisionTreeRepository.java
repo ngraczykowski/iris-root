@@ -39,6 +39,7 @@ class InMemoryDecisionTreeRepository
         .id(decisionTree.getId())
         .name(decisionTree.getName())
         .status(decisionTree.getStatus())
+        .activations(decisionTree.getActivations())
         .build();
   }
 }

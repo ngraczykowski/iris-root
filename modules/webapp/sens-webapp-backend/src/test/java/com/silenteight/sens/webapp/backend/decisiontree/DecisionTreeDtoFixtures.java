@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDto;
 
+import static com.silenteight.sens.webapp.backend.decisiontree.DecisionGroupDtoFixtures.HK_PRVB_DUDL;
+import static com.silenteight.sens.webapp.backend.decisiontree.DecisionGroupDtoFixtures.US_PERD_DENY;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
@@ -24,6 +26,6 @@ public final class DecisionTreeDtoFixtures {
       .id(2L)
       .name("active-decision-tree")
       .status(StatusDtoFixtures.ACTIVE)
-      .activations(asList("US_PERD_DENY", "HK_PRVB_DUDL"))
+      .activations(asList(US_PERD_DENY, HK_PRVB_DUDL))
       .build();
 }

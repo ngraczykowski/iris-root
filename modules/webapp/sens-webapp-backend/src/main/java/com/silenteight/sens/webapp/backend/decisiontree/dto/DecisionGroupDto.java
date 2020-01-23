@@ -4,17 +4,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.util.List;
-
 @Data
 @Builder
-public class DecisionTreeDto {
+public class DecisionGroupDto {
 
-  private final long id;
   @NonNull
   private final String name;
-  @NonNull
-  private final StatusDto status;
-  @NonNull
-  private final List<DecisionGroupDto> activations;
 }
