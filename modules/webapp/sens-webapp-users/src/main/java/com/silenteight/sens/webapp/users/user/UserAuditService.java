@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.common.adapter.audit.AuditService;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
+import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.users.user.dto.UserAuditDto;
 
 @RequiredArgsConstructor
-public class UserAuditService implements AuditService<UserAuditDto> {
+public class UserAuditService implements AuditService {
 
   static final String USER_ID_HEADER = "webapp_user_id";
   static final String USER_NAME_HEADER = "user_name";
@@ -29,7 +30,7 @@ public class UserAuditService implements AuditService<UserAuditDto> {
   private final UserFinder userFinder;
 
   @Override
-  public CsvBuilder<UserAuditDto> generateAuditReport() {
+  public LinesSupplier generateAuditReport() {
     return new CsvBuilder<>(userFinder.findAudited().stream())
         .cell(USER_ID_HEADER, a -> a.getUserId().toString())
         .cell(USER_NAME_HEADER, UserAuditDto::getUserName)

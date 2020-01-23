@@ -37,7 +37,7 @@ class UserReportServiceTest {
   @Mock
   private UserFinder userFind;
 
-  private AuditService<UserView> underTest;
+  private AuditService underTest;
 
   @BeforeEach
   void setUp() {
@@ -51,7 +51,7 @@ class UserReportServiceTest {
     when(userFind.findAll()).thenReturn(userViews);
 
     //when
-    List<String> lines = underTest.generateAuditReport().buildLines().collect(toList());
+    List<String> lines = underTest.generateAuditReport().lines().collect(toList());
 
     //then
     assertThat(lines).hasSize(3);

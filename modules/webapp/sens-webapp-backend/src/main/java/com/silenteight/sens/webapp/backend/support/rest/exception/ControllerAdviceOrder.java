@@ -11,6 +11,7 @@ public final class ControllerAdviceOrder {
   public static final int USERS = 2;
   public static final int WORKFLOW = 3;
   public static final int RESTRICTION = 4;
+  public static final int REPORT = 5;
   public static final int GLOBAL = Integer.MAX_VALUE - 1;
   public static final int UNKNOWN = Integer.MAX_VALUE;
 }

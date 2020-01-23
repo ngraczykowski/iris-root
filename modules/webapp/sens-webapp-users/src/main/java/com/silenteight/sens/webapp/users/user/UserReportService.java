@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.common.adapter.audit.AuditService;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
+import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.users.user.dto.UserView;
 
 import java.time.Instant;
@@ -12,7 +13,7 @@ import java.time.Instant;
 import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
-public class UserReportService implements AuditService<UserView> {
+public class UserReportService implements AuditService {
 
   private static final String USER_ID_HEADER = "webapp_user_id";
   private static final String USER_NAME_HEADER = "user_name";
@@ -28,7 +29,7 @@ public class UserReportService implements AuditService<UserView> {
   private final UserFinder userFinder;
 
   @Override
-  public CsvBuilder<UserView> generateAuditReport() {
+  public LinesSupplier generateAuditReport() {
     return new CsvBuilder<>(userFinder.findAll().stream())
         .cell(USER_ID_HEADER, v -> String.valueOf(v.getId()))
         .cell(USER_NAME_HEADER, UserView::getUserName)

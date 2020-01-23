@@ -2,12 +2,10 @@ package com.silenteight.sens.webapp.backend.rest;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.presentation.dto.decisiontree.DecisionTreeAuditDto;
-import com.silenteight.sens.webapp.backend.presentation.dto.model.AiModelAuditDto;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
-import com.silenteight.sens.webapp.users.user.dto.UserAuditDto;
+import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
+
+import static java.util.stream.Stream.empty;
 
 @RequiredArgsConstructor
 @RestController
@@ -46,50 +45,37 @@ public class AuditTrailController {
   @GetMapping("/audit-trail/model")
   public void modelAudit(HttpServletResponse response) throws IOException {
     // TODO move csv building to service
-    CsvBuilder<AiModelAuditDto> builder =
-        new CsvBuilder<>(new ArrayList<AiModelAuditDto>().stream());
+    LinesSupplier linesSupplier = new CsvBuilder<>(empty());
 
-    csvResponseWriter.write(response, AUDIT_MODEL_FILENAME, builder);
+    csvResponseWriter.write(response, AUDIT_MODEL_FILENAME, linesSupplier);
   }
 
   @GetMapping("/audit-trail/decision-tree")
   public void decisionTreeAudit(HttpServletResponse response) throws IOException {
     // TODO move csv building to service
-    CsvBuilder<DecisionTreeAuditDto> builder =
-        new CsvBuilder<>(new ArrayList<DecisionTreeAuditDto>().stream());
+    LinesSupplier linesSupplier = new CsvBuilder<>(empty());
 
-    csvResponseWriter.write(response, AUDIT_DECISION_TREE_FILENAME, builder);
+    csvResponseWriter.write(response, AUDIT_DECISION_TREE_FILENAME, linesSupplier);
   }
 
   @GetMapping("/audit-trail/reasoning-branch")
   public void reasoningBranchAudit(HttpServletResponse response) throws IOException {
-    CsvBuilder<ReasoningBranchAuditDto> builder =
-        new CsvBuilder<>(new ArrayList<ReasoningBranchAuditDto>().stream());
+    LinesSupplier linesSupplier = new CsvBuilder<>(empty());
 
-    csvResponseWriter.write(response, AUDIT_REASONING_BRANCH_FILENAME, builder);
+    csvResponseWriter.write(response, AUDIT_REASONING_BRANCH_FILENAME, linesSupplier);
   }
 
   @GetMapping("/audit-trail/user")
   public void userAudit(HttpServletResponse response) throws IOException {
-    CsvBuilder<UserAuditDto> builder =
-        new CsvBuilder<>(new ArrayList<UserAuditDto>().stream());
+    LinesSupplier linesSupplier = new CsvBuilder<>(empty());
 
-    csvResponseWriter.write(response, AUDIT_USER_FILENAME, builder);
+    csvResponseWriter.write(response, AUDIT_USER_FILENAME, linesSupplier);
   }
 
   @GetMapping("/audit-trail/circuit-breaker-triggered-alerts")
   public void wronglySolvedBranchAudit(HttpServletResponse response) throws IOException {
-    CsvBuilder<AlertsFromWronglySolvedBranchesAuditDto> builder =
-        new CsvBuilder<>(new ArrayList<AlertsFromWronglySolvedBranchesAuditDto>().stream());
+    LinesSupplier linesSupplier = new CsvBuilder<>(empty());
 
-    csvResponseWriter.write(response, CIRCUIT_BREAKER_TRIGGERED_ALERTS, builder);
-  }
-
-  private static class ReasoningBranchAuditDto {
-
-  }
-
-  private static class AlertsFromWronglySolvedBranchesAuditDto {
-
+    csvResponseWriter.write(response, CIRCUIT_BREAKER_TRIGGERED_ALERTS, linesSupplier);
   }
 }

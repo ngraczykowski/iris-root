@@ -48,7 +48,7 @@ class UserAuditServiceTest {
     when(userFind.findAudited()).thenReturn(userAuditDto);
 
     //when
-    List<String> lines = underTest.generateAuditReport().buildLines().collect(toList());
+    List<String> lines = underTest.generateAuditReport().lines().collect(toList());
 
     //then
     assertThat(lines).hasSize(3);

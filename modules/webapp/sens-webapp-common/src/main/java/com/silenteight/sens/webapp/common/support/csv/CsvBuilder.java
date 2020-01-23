@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-public class CsvBuilder<T> {
+public class CsvBuilder<T> implements LinesSupplier {
 
   private final Stream<T> elements;
   private final Collection<String> headers;
@@ -28,7 +28,8 @@ public class CsvBuilder<T> {
     return this;
   }
 
-  public Stream<String> buildLines() {
+  @Override
+  public Stream<String> lines() {
     final Builder<String> builder = Stream.builder();
     builder.add(buildHeader());
     this.elements.forEach(element -> builder.add(buildRow(element)));

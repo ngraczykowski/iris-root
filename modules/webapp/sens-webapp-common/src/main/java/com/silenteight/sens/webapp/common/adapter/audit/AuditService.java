@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.common.adapter.audit;
 
-import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
+import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 
-public interface AuditService<T> {
+public interface AuditService {
 
-  CsvBuilder<T> generateAuditReport();
+  LinesSupplier generateAuditReport();
 }

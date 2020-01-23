@@ -8,6 +8,7 @@ import com.silenteight.sens.webapp.backend.presentation.dto.workflow.PostRejectC
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
+import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,7 +54,8 @@ public class ChangeRequestRestController {
   @GetMapping("/audit-trail/change-request")
   @PreAuthorize("hasAuthority('AUDIT_GENERATE_REPORT')")
   public void changeRequestAudit(HttpServletResponse response) throws IOException {
-    CsvBuilder<ChangeRequestAuditView> builder =
+    LinesSupplier
+        builder =
         new CsvBuilder<>(new ArrayList<ChangeRequestAuditView>().stream());
     CsvResponseWriter csvResponseWriter = new CsvResponseWriter();
     csvResponseWriter.write(response, AUDIT_CHANGE_REQUEST_FILENAME, builder);

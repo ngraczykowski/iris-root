@@ -14,6 +14,7 @@ import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreesDto;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
+import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -106,9 +107,10 @@ class DecisionTreeRestController {
   public void getWronglySolvedAlertsForDecisionTree(
       HttpServletResponse response, @PathVariable long id) throws IOException {
 
-    CsvBuilder<AlertsFromWronglySolvedBranchesAuditDto> csvBuilder =
+    LinesSupplier
+        linesSupplier =
         new CsvBuilder<>(new ArrayList<AlertsFromWronglySolvedBranchesAuditDto>().stream());
-    csvResponseWriter.write(response, CIRCUIT_BREAKER_TRIGGERED_ALERTS, csvBuilder);
+    csvResponseWriter.write(response, CIRCUIT_BREAKER_TRIGGERED_ALERTS, linesSupplier);
   }
 
   private static class AlertsFromWronglySolvedBranchesAuditDto {
