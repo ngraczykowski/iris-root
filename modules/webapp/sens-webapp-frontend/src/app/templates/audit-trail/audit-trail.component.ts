@@ -14,7 +14,7 @@ interface AuditTrailReport {
 export class AuditTrailComponent implements OnInit {
 
   readonly reports: AuditTrailReport[] = [
-    {
+    /* {
       name: 'Model',
       description: 'model',
       url: '/api/audit-trail/model'
@@ -38,12 +38,12 @@ export class AuditTrailComponent implements OnInit {
       name: 'Change Request',
       description: 'change-request',
       url: '/api/audit-trail/change-request'
-    },
+    }, */
     {
       name: 'Security Matrix',
       description: 'security-matrix',
       url: '/assets/files/security-matrix/security-matrix-report.xlsx'
-    },
+    } /*,
     {
       name: 'Users List',
       description: 'users-list',
@@ -53,7 +53,7 @@ export class AuditTrailComponent implements OnInit {
       name: 'Circuit Breaker Triggered Alerts',
       description: 'cb-triggered-alerts',
       url: '/api/audit-trail/circuit-breaker-triggered-alerts'
-    },
+    } */
   ];
 
   constructor() { }
