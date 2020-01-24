@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TableDataMapperConfiguration } from '@app/components/dynamic-view-table/table-data-mapper';
 import { DecisionTree } from '@model/decision-tree.model';
 import { DecisionTreeTableBaseComponent } from './base/decision-tree-table-base.component';
-import { DecisionTreeAssignmentsCellViewFactory } from './views/decision-tree-assignments-view/decision-tree-assignments-view.component';
+import { DecisionTreeActivationsCellViewFactory } from './views/decision-tree-activations-view/decision-tree-activations-view.component';
 import { DecisionTreeIdCellViewFactory } from './views/decision-tree-id-view/decision-tree-id-view.component';
 import { DecisionTreeLabelViewFactory } from './views/decision-tree-label-view/decision-tree-label-view.component';
 import { DecisionTreeNameCellViewFactory } from './views/decision-tree-name-view/decision-tree-name-view.component';
@@ -24,8 +24,8 @@ const config: TableDataMapperConfiguration<DecisionTree> = {
       cellFactory: new DecisionTreeStatusCellViewFactory()
     },
     {
-      labelFactory: new DecisionTreeLabelViewFactory('decisionTrees.table.labels.assignedTo'),
-      cellFactory: new DecisionTreeAssignmentsCellViewFactory()
+      labelFactory: new DecisionTreeLabelViewFactory('decisionTrees.table.labels.activated'),
+      cellFactory: new DecisionTreeActivationsCellViewFactory()
     },
     {
       labelFactory: new DecisionTreeLabelViewFactory(''),

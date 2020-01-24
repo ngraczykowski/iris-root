@@ -1,0 +1,30 @@
+<ng-container *ngIf="decisionGroups">
+  <div class="ellipsis tooltip" *ngIf="decisionGroups.length > 0">
+    <div class="tooltip-layer" *ngIf="decisionGroups.length > showTooltipForListLongerThan">
+      <div class="tooltip-bt-list">
+        <ul id="bt-tooltip-list" class="list-vertical-separator" [class.tooltip-bt-list-no-limited]="!shouldShowEllipsisInTooltip()">
+          <ng-container *ngFor="let decisionGroup of decisionGroups; let i = index">
+            <li *ngIf="i < decisionGroupsTooltipListLimit">
+              <p class="bt-name">{{ decisionGroup.value }}</p>
+            </li>
+          </ng-container>
+        </ul>
+        <div class="bt-list-limit" *ngIf="shouldShowEllipsisInTooltip()">
+          <a class="text-ellipsis link"
+             [routerLink]="link"
+             [translate]="'decisionTrees.table.activated.showMore'"></a>
+        </div>
+      </div>
+    </div>
+    <ul class="activated-dg-list">
+      <li *ngFor="let decisionGroup of decisionGroups">
+        <app-tag class="active-bt"
+                 [value]="decisionGroup.value">
+        </app-tag>
+      </li>
+    </ul>
+  </div>
+  <app-empty-state *ngIf="decisionGroups.length === 0"
+                   class="empty-state-data"
+                   [label]="'decisionTree.infobox.decisionGroups.emptyState'"></app-empty-state>
+</ng-container>

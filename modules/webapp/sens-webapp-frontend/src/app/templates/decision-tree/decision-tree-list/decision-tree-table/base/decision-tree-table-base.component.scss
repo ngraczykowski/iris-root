@@ -3,7 +3,7 @@
 $column-id: 30px + $space-table-gap;
 $column-name: minmax(340px + $space-table-gap, 1fr);
 $column-status: 110px + $space-table-gap;
-$column-assigned: minmax(1px, 2fr);
+$column-activated: minmax(1px, 2fr);
 
 .section-decision-trees {
   margin-top: $space-xl;
@@ -13,7 +13,7 @@ $column-assigned: minmax(1px, 2fr);
   ::ng-deep {
     .dynamic-view-row,
     .dynamic-view-labels {
-      grid-template-columns: $column-id $column-name $column-status $column-assigned;
+      grid-template-columns: $column-id $column-name $column-status $column-activated;
       white-space: pre;
 
       .dynamic-view-column {

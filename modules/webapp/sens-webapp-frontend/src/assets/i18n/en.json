@@ -532,15 +532,9 @@
         "copyButtonLabel": "Copy name",
         "emptyState": "No Agents assigned to this tree"
       },
-      "batchTypes": {
-        "title": "Batch Types",
-        "assigned": {
-          "title": "Assigned Batch Types"
-        },
-        "active": {
-          "title": "Active Batch Types"
-        },
-        "emptyState": "There is no Batch Type belonging to this Tree"
+      "decisionGroups": {
+        "title": "Decision Groups",
+        "emptyState": "There is no Decision Group belonging to this Tree"
       },
       "agents": {
         "emptyState": "No Agents assigned to this tree"
@@ -783,8 +777,7 @@
         "id": "ID",
         "name": "Name",
         "status": "Status",
-        "model": "AI Model",
-        "assignedTo": "Batch Types",
+        "activated": "Decision Groups",
         "branches": "Branches",
         "actions": "Actions"
       },
@@ -800,10 +793,8 @@
           "error": "Error"
         }
       },
-      "assignedTo": {
-        "active": "Active",
-        "assigned": "Assigned",
-        "showMore": "Show all Batch Types"
+      "activated": {
+        "showMore": "Show all Decision Groups"
       }
     },
     "message": {

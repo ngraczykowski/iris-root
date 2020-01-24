@@ -88,14 +88,14 @@ describe('DecisionTreesComponent', () => {
       id: 1,
       name: 'dt1',
       status: { name: 'ACTIVE' },
-      assignments: ['BT1']
+      activations: ['BT1']
     } as DecisionTree;
 
     const dt2 = {
       id: 2,
       name: 'dt2',
       status: { name: 'ACTIVE' },
-      assignments: ['BT2']
+      activations: ['BT2']
     } as DecisionTree;
 
     const response1 = <CollectionResponse<DecisionTree>>{ total: 0, results: [] };

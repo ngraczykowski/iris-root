@@ -31,7 +31,6 @@ export interface DecisionTree {
   totalReasoningBranches: number;
   outputPorts: string[];
   activations: string[];
-  assignments: string[];
   matchAlerts: number;
   permissions: DecisionTreePermission[];
 }
@@ -50,7 +49,6 @@ export interface DecisionTreeDetails {
   summary: Summary;
   agents: Agent[];
   outputPorts: OutputPort[];
-  assignments: string[];
   activations: string[];
   activeReasoningBranches: number;
   totalReasoningBranches: number;

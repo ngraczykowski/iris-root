@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestModule } from '../../../../../test/test.module';
 
 import { DecisionTreeInfoActivationsComponent } from './decision-tree-info-activations.component';
-import { DecisionTreeBatchTypesListComponent } from './decision-tree-batch-types-list/decision-tree-batch-types-list.component';
+import { DecisionTreeDecisionGroupsListComponent } from './decision-tree-decision-groups-list/decision-tree-decision-groups-list.component';
 
 describe('DecisionTreeInfoActivationsComponent', () => {
   let component: DecisionTreeInfoActivationsComponent;
@@ -11,7 +11,7 @@ describe('DecisionTreeInfoActivationsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ TestModule ],
-      declarations: [ DecisionTreeInfoActivationsComponent, DecisionTreeBatchTypesListComponent ]
+      declarations: [ DecisionTreeInfoActivationsComponent, DecisionTreeDecisionGroupsListComponent ]
     })
     .compileComponents();
   }));

@@ -1,7 +1,7 @@
 @import 'variables';
 @import 'future-component/tooltip';
 
-.assigned-bt-list {
+.activated-dg-list {
   list-style-type: none;
 
   li {
@@ -12,7 +12,7 @@
 
 .tooltip-bt-list {
   padding: $space-s;
-  width: 240px;
+  width: 180px;
 
   .tooltip-bt-list-no-limited {
     li {
@@ -35,12 +35,8 @@
     }
 
     .bt-name {
-      text-align: left;
+      text-align: center;
       font-weight: 400;
-    }
-
-    .bt-type {
-      text-align: right;
     }
   }
 
