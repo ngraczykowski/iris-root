@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.authentication;
 
 import com.silenteight.sens.webapp.kernel.security.WebappUserDetails;
-import com.silenteight.sens.webapp.kernel.security.authority.Authority;
 
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
@@ -21,21 +20,6 @@ class KeycloakWebappUserDetails implements WebappUserDetails {
       Set<GrantedAuthority> grantedAuthorities, KeycloakAuthenticationToken authToken) {
     this.grantedAuthorities = grantedAuthorities;
     this.accessToken = authToken.getAccount().getKeycloakSecurityContext().getToken();
-  }
-
-  // TODO(bgulowaty): Will be changed during WA-138
-  @Override
-  public Long getUserId() {
-    return 0L;
-  }
-
-  // TODO(bgulowaty): Will be changed during WA-138
-  @Override
-  public boolean isSuperUser() {
-    return grantedAuthorities
-        .stream()
-        .map(GrantedAuthority::getAuthority)
-        .anyMatch(authority -> authority.equalsIgnoreCase(Authority.SUPERUSER.name()));
   }
 
   @Override

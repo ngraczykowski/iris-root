@@ -9,10 +9,6 @@ import static java.util.stream.Collectors.toSet;
 
 public interface WebappUserDetails extends UserDetails {
 
-  Long getUserId();
-
-  boolean isSuperUser();
-
   String getDisplayName();
 
   default boolean hasNoAuthorities() {

@@ -35,6 +35,7 @@ dependencies {
   implementation libraries.commons_codec
   implementation libraries.commons_lang3
   implementation libraries.guava
+  implementation libraries.vavr
   implementation libraries.javax_servlet_api
   implementation libraries.protobuf_java_util
   implementation libraries.grpc_protobuf

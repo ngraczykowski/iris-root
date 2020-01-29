@@ -4,10 +4,10 @@ import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeModule;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
 import com.silenteight.sens.webapp.backend.rest.RestModule;
+import com.silenteight.sens.webapp.backend.users.UsersModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.keycloak.KeycloakModule;
-import com.silenteight.sens.webapp.users.UsersModule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;

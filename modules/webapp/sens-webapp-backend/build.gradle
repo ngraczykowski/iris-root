@@ -20,7 +20,6 @@ configurations {
 
 dependencies {
   compile project(":sens-webapp-kernel")
-  compile project(":sens-webapp-users")
 
   compile libraries.bouncycastle_bcprov
   compile libraries.commons_lang3

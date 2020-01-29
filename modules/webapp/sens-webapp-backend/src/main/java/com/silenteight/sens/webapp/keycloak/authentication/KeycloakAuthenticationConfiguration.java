@@ -9,8 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 
 @KeycloakConfiguration
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ class KeycloakAuthenticationConfiguration extends KeycloakWebSecurityConfigurerA
 
   @Override
   protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-    return new SessionFixationProtectionStrategy();
+    return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
   }
 
   @Autowired
