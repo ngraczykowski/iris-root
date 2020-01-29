@@ -17,7 +17,7 @@ class ReportConfiguration {
 
   @Bean
   ReportProvider reportProvider() {
-    RaportProvidersRegistry reportProvider = new RaportProvidersRegistry();
+    ReportProvidersRegistry reportProvider = new ReportProvidersRegistry();
     reportGenerators.forEach(reportProvider::registerReportGenerator);
     return reportProvider;
   }

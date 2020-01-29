@@ -9,7 +9,13 @@ import org.springframework.context.annotation.Configuration;
 class ScbReportsConfiguration {
 
   @Bean
-  EntitlementReportGenerator entitlementReportService() {
-    return new EntitlementReportGenerator(DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
+  EntitlementReportGenerator entitlementReportGenerator() {
+    return new EntitlementReportGenerator(
+        DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
+  }
+
+  @Bean
+  SecurityMatrixReportGenerator securityMatrixReportGenerator() {
+    return new SecurityMatrixReportGenerator();
   }
 }

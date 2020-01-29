@@ -51,6 +51,8 @@ dependencies {
 
   implementation libraries.protobuf_java_util
 
+  implementation libraries.vavr
+
   runtimeOnly libraries.caffeine
 
   testImplementation project(":sens-webapp-db-changelog")

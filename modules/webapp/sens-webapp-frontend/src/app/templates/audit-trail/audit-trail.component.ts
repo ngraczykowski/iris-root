@@ -42,7 +42,7 @@ export class AuditTrailComponent implements OnInit {
     {
       name: 'Security Matrix',
       description: 'security-matrix',
-      url: '/assets/files/security-matrix/security-matrix-report.xlsx'
+      url: '/api/report/security-matrix-report'
     } /*,
     {
       name: 'Users List',
