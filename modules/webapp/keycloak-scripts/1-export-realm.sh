@@ -6,8 +6,7 @@ KEYCLOAK_PATH=/opt/jboss/keycloak/bin/standalone.sh
 
 docker-compose exec keycloak ${KEYCLOAK_PATH} \
 -Djboss.socket.binding.port-offset=100 -Dkeycloak.migration.action=export \
--Dkeycloak.migration.provider=singleFile \
+-Dkeycloak.migration.provider=dir \
 -Dkeycloak.migration.realmName=sens-webapp \
--Dkeycloak.migration.usersExportStrategy=REALM_FILE \
--Dkeycloak.migration.file=/config/sens-webapp-realm.json
-
+-Dkeycloak.migration.usersExportStrategy=SAME_FILE \
+-Dkeycloak.migration.dir=/config

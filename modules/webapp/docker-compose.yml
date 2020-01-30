@@ -31,7 +31,7 @@ services:
       DB_PASSWORD: "${POSTGRES_PASSWORD:-sens}"
       DB_DATABASE: "${POSTGRES_DB:-sens}"
     command:
-      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.import=/config/sens-webapp-realm.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/config -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
     depends_on:
       - webapp-db
     ports:

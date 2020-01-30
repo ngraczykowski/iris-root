@@ -1,0 +1,69 @@
+{
+  "realm": "sens-webapp",
+  "users": [
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ],
+        "backend": [
+          "batch-type-manage",
+          "inbox-manage"
+        ]
+      },
+      "createdTimestamp": 1576144677014,
+      "credentials": [
+        {
+          "createdDate": 1576144696233,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"OTjwb2MAvk+WZZ8ITPCWDfOJSZ3480fODPmM5yRZ7RFoMVstkPOxWssTAjxUt2Ue4uTCtLJ5+rpFwc9duy2fHw==\",\"salt\":\"aFqfY9p4NPduUCU2q7s58Q==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "email": "test@silenteight.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Test",
+      "groups": [],
+      "lastName": "User",
+      "notBefore": 0,
+      "realmRoles": [
+        "Analyst",
+        "Decision tree viewer",
+        "offline_access",
+        "uma_authorization"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "test_user"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ],
+        "backend": [
+          "uma_protection"
+        ]
+      },
+      "createdTimestamp": 1580390323546,
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "emailVerified": false,
+      "enabled": true,
+      "groups": [],
+      "notBefore": 0,
+      "realmRoles": [
+        "offline_access",
+        "uma_authorization"
+      ],
+      "requiredActions": [],
+      "serviceAccountClientId": "backend",
+      "totp": false,
+      "username": "service-account-backend"
+    }
+  ]
+}
