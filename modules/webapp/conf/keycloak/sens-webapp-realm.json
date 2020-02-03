@@ -1816,6 +1816,12 @@
           "attributes": {},
           "clientRole": true,
           "composite": false,
+          "name": "audit_generate_report"
+        },
+        {
+          "attributes": {},
+          "clientRole": true,
+          "composite": false,
           "name": "decision_tree_list"
         }
       ],

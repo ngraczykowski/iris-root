@@ -10,6 +10,9 @@
         "backend": [
           "batch-type-manage",
           "inbox-manage"
+        ],
+        "frontend": [
+          "audit_generate_report"
         ]
       },
       "createdTimestamp": 1576144677014,
@@ -31,6 +34,7 @@
       "notBefore": 0,
       "realmRoles": [
         "Analyst",
+        "Auditor",
         "Decision tree viewer",
         "offline_access",
         "uma_authorization"
