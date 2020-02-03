@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.users.registration.RegisteredUserRepository;
-import com.silenteight.sens.webapp.backend.users.registration.domain.CompletedUserRegistration;
-import com.silenteight.sens.webapp.backend.users.registration.domain.CompletedUserRegistration.NewUserCredentials;
+import com.silenteight.sens.webapp.backend.user.registration.RegisteredUserRepository;
+import com.silenteight.sens.webapp.backend.user.registration.domain.CompletedUserRegistration;
+import com.silenteight.sens.webapp.backend.user.registration.domain.CompletedUserRegistration.NewUserCredentials;
 
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;

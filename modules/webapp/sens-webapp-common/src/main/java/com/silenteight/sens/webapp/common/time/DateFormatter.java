@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.common.time;
 
-import java.time.Instant;
+import java.time.temporal.TemporalAccessor;
 
 public interface DateFormatter {
 
-  String format(Instant value);
+  String format(TemporalAccessor value);
 }
