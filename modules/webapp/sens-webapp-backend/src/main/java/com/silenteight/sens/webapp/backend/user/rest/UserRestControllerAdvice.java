@@ -2,9 +2,8 @@ package com.silenteight.sens.webapp.backend.user.rest;
 
 import com.silenteight.sens.webapp.backend.support.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.backend.support.rest.exception.ControllerAdviceOrder;
-import com.silenteight.sens.webapp.backend.user.registration.UserRegistrationDomainError;
-import com.silenteight.sens.webapp.backend.user.registration.domain.RolesValidator.RolesDontExist;
-import com.silenteight.sens.webapp.backend.user.registration.domain.UsernameValidator.UsernameNotUnique;
+import com.silenteight.sens.webapp.backend.user.registration.domain.UserRegistrationDomainError;
+import com.silenteight.sens.webapp.backend.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestController.UserRegistrationException;
 
 import org.springframework.core.annotation.Order;
@@ -26,11 +25,9 @@ class UserRestControllerAdvice extends AbstractErrorControllerAdvice {
   public ResponseEntity<String> handle(UserRegistrationException e) {
     UserRegistrationDomainError error = e.getError();
 
-    // TODO(bgulowaty): this is just example
     HttpStatus status = Match(error).of(
-        Case($(instanceOf(RolesDontExist.class)), HttpStatus.BAD_REQUEST),
-        Case($(instanceOf(UsernameNotUnique.class)), HttpStatus.BAD_REQUEST),
-        Case($(), () -> HttpStatus.INTERNAL_SERVER_ERROR)
+        Case($(instanceOf(UsernameNotUnique.class)), HttpStatus.CONFLICT),
+        Case($(), () -> HttpStatus.UNPROCESSABLE_ENTITY)
     );
 
     return ResponseEntity.status(status).body(error.getReason());

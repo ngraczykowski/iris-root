@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.user.UserQuery;
-import com.silenteight.sens.webapp.backend.user.registration.RegisterUserUseCase;
-import com.silenteight.sens.webapp.backend.user.registration.RegisterUserUseCase.Success;
-import com.silenteight.sens.webapp.backend.user.registration.UserRegistrationDomainError;
+import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase;
+import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase.Success;
+import com.silenteight.sens.webapp.backend.user.registration.domain.UserRegistrationDomainError;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.UserDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
@@ -31,7 +31,7 @@ import javax.validation.Valid;
 public class UserRestController {
 
   @NonNull
-  private final RegisterUserUseCase registerUserUseCase;
+  private final RegisterInternalUserUseCase registerInternalUserUseCase;
 
   @NonNull
   private final UserQuery userQuery = pageable -> null;
@@ -45,8 +45,8 @@ public class UserRestController {
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.debug("Creating new user. {}", dto);
 
-    Either<UserRegistrationDomainError, RegisterUserUseCase.Success> result =
-        registerUserUseCase.apply(dto.toCommand());
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> result =
+        registerInternalUserUseCase.apply(dto.toCommand());
 
     return result.map(Success::getUsername)
         .map(UserRestController::buildUserUri)

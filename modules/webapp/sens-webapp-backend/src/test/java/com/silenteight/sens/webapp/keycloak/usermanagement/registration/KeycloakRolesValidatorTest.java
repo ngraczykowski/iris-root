@@ -3,6 +3,9 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.sens.webapp.backend.user.registration.domain.RolesValidator.RolesDontExist;
+
+import io.vavr.control.Option;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,9 +21,8 @@ import java.util.List;
 
 import static java.util.Collections.emptySet;
 import static java.util.Set.of;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,15 +35,15 @@ class KeycloakRolesValidatorTest {
   private KeycloakRolesValidator underTest;
 
   @Test
-  void noRolesInKeycloak_returnsFalse() {
-    boolean actual = underTest.rolesExist(of(Fixtures.ANALYST));
+  void noRolesInKeycloak_returnsError() {
+    Option<RolesDontExist> error = underTest.validate(of(Fixtures.ANALYST));
 
-    assertFalse(actual);
+    assertThat(error).isNotEmpty();
   }
 
   @Test
   void emptySetPassed_throwsException() {
-    Executable when = () -> underTest.rolesExist(emptySet());
+    Executable when = () -> underTest.validate(emptySet());
 
     assertThrows(IllegalArgumentException.class, when);
   }
@@ -55,31 +57,31 @@ class KeycloakRolesValidatorTest {
     }
 
     @Test
-    void approverAndMakerRolesPassed_returnsFalse() {
-      boolean actual = underTest.rolesExist(of(Fixtures.APPROVER, Fixtures.MAKER));
+    void approverAndMakerRolesPassed_returnsError() {
+      Option<RolesDontExist> error = underTest.validate(of(Fixtures.APPROVER, Fixtures.MAKER));
 
-      assertFalse(actual);
+      assertThat(error).isNotEmpty();
     }
 
     @Test
-    void analystRolePassed_returnsTrue() {
-      boolean actual = underTest.rolesExist(of(Fixtures.ANALYST));
+    void analystRolePassed_returnsNoError() {
+      Option<RolesDontExist> error = underTest.validate(of(Fixtures.ANALYST));
 
-      assertTrue(actual);
+      assertThat(error).isEmpty();
     }
 
     @Test
-    void approverRolePassed_returnsFalse() {
-      boolean actual = underTest.rolesExist(of(Fixtures.APPROVER));
+    void approverRolePassed_returnsError() {
+      Option<RolesDontExist> error = underTest.validate(of(Fixtures.APPROVER));
 
-      assertFalse(actual);
+      assertThat(error).isNotEmpty();
     }
 
     @Test
-    void analystAndMakerRolesPassed_returnsTrue() {
-      boolean actual = underTest.rolesExist(of(Fixtures.ANALYST, Fixtures.MAKER));
+    void analystAndMakerRolesPassed_returnsNoError() {
+      Option<RolesDontExist> error = underTest.validate(of(Fixtures.ANALYST, Fixtures.MAKER));
 
-      assertTrue(actual);
+      assertThat(error).isEmpty();
     }
   }
 

@@ -20,8 +20,8 @@ class KeycloakUserManagementConfiguration {
   }
 
   @Bean
-  KeycloakUsernameValidator keycloakUsernameValidator(UsersResource usersResource) {
-    return new KeycloakUsernameValidator(usersResource);
+  KeycloakUsernameUniquenessValidator keycloakUsernameValidator(UsersResource usersResource) {
+    return new KeycloakUsernameUniquenessValidator(usersResource);
   }
 
   @Bean

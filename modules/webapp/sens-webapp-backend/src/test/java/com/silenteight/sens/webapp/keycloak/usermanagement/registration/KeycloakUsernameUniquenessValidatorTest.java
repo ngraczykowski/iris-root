@@ -1,5 +1,8 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
+import com.silenteight.sens.webapp.backend.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
+
+import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -11,34 +14,33 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class KeycloakUsernameValidatorTest {
+class KeycloakUsernameUniquenessValidatorTest {
 
   @InjectMocks
-  KeycloakUsernameValidator underTest;
+  KeycloakUsernameUniquenessValidator underTest;
   @Mock
   private UsersResource usersResource;
 
   @Test
-  void searchReturnsNoUsers_returnsTrue() {
+  void searchReturnsNoUsers_noError() {
     given(usersResource.search(Fixtures.USERNAME)).willReturn(emptyList());
 
-    boolean actual = underTest.isUnique(Fixtures.USERNAME);
+    Option<UsernameNotUnique> error = underTest.validate(Fixtures.USERNAME);
 
-    assertTrue(actual);
+    assertThat(error).isEmpty();
   }
 
   @Test
   void searchReturnsOneUser_returnsFalse() {
     given(usersResource.search(Fixtures.USERNAME)).willReturn(List.of(new UserRepresentation()));
 
-    boolean actual = underTest.isUnique(Fixtures.USERNAME);
+    Option<UsernameNotUnique> error = underTest.validate(Fixtures.USERNAME);
 
-    assertFalse(actual);
+    assertThat(error).isNotEmpty();
   }
 
   private static class Fixtures {

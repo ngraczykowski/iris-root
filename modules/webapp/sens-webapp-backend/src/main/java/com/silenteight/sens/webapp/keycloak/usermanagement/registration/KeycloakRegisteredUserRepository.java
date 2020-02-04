@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.user.registration.RegisteredUserRepository;
 import com.silenteight.sens.webapp.backend.user.registration.domain.CompletedUserRegistration;
-import com.silenteight.sens.webapp.backend.user.registration.domain.CompletedUserRegistration.NewUserCredentials;
+import com.silenteight.sens.webapp.backend.user.registration.domain.NewUserDetails.Credentials;
 
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -31,7 +31,7 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
   private static UserRepresentation toUserRepresentation(CompletedUserRegistration registration) {
     UserRepresentation userRepresentation = new UserRepresentation();
 
-    NewUserCredentials credentials = registration.getCredentials();
+    Credentials credentials = registration.getCredentials();
     String username = registration.getUsername();
 
     userRepresentation.setUsername(username);

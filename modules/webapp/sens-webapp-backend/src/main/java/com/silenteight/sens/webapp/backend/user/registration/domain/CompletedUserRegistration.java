@@ -2,30 +2,19 @@ package com.silenteight.sens.webapp.backend.user.registration.domain;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.Value;
+
+import com.silenteight.sens.webapp.backend.user.registration.domain.NewUserDetails.Credentials;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Value
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class CompletedUserRegistration {
 
-  String username;
   NewUserDetails userDetails;
-  NewUserCredentials credentials;
   OffsetDateTime registrationDate;
-
-  CompletedUserRegistration(
-      NewUserRegistration newUserRegistration, OffsetDateTime registrationTime) {
-    this(
-        newUserRegistration.getUsername(),
-        newUserRegistration.getUserDetails(),
-        newUserRegistration.getCredentials(),
-        registrationTime
-    );
-  }
 
   public Set<String> getRoles() {
     return userDetails.getRoles();
@@ -35,17 +24,11 @@ public class CompletedUserRegistration {
     return userDetails.getDisplayName();
   }
 
-  @Value
-  public static class NewUserDetails {
-
-    String displayName;
-    Set<String> roles;
+  public String getUsername() {
+    return userDetails.getUsername();
   }
 
-  @Value
-  public static class NewUserCredentials {
-
-    @ToString.Exclude
-    String password;
+  public Credentials getCredentials() {
+    return userDetails.getCredentials();
   }
 }

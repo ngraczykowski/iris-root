@@ -45,6 +45,18 @@ public abstract class BaseRestControllerTest {
         .ifValidationFails();
   }
 
+  public <T> ValidatableMockMvcResponse post(String mapping, T body) {
+    return given()
+        .contentType(ContentType.JSON)
+        .body(body)
+        .when()
+        .post(RestConstants.ROOT + mapping)
+        .then()
+        .log()
+        .ifValidationFails();
+  }
+
+
   @Configuration
   @EnableWebMvc
   static class TestRestConfiguration {

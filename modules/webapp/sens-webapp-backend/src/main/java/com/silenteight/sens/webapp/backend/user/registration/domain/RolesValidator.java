@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.user.registration.domain;
 
-import com.silenteight.sens.webapp.backend.user.registration.UserRegistrationDomainError;
+import io.vavr.control.Option;
 
 import java.util.Set;
 
@@ -8,13 +8,13 @@ import static java.lang.String.join;
 
 public interface RolesValidator {
 
-  boolean rolesExist(Set<String> roles);
+  Option<RolesDontExist> validate(Set<String> roles);
 
-  class RolesDontExist extends UserRegistrationDomainError {
+  class RolesDontExist extends SimpleUserRegistrationDomainError {
 
     private static final long serialVersionUID = -3940878504019982914L;
 
-    RolesDontExist(Set<String> roles) {
+    public RolesDontExist(Set<String> roles) {
       super("One of roles [" + join(",", roles) + "] do not exist in the system");
     }
   }

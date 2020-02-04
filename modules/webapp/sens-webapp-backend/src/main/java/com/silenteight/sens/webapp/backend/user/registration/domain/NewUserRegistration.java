@@ -3,22 +3,18 @@ package com.silenteight.sens.webapp.backend.user.registration.domain;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.sens.webapp.backend.user.registration.domain.CompletedUserRegistration.NewUserCredentials;
-import com.silenteight.sens.webapp.backend.user.registration.domain.CompletedUserRegistration.NewUserDetails;
-
-import java.util.Set;
+import com.silenteight.sens.webapp.backend.user.registration.domain.ExternalUserRegisterer.ExternalUserRegistration;
+import com.silenteight.sens.webapp.backend.user.registration.domain.InternalUserRegisterer.InternalUserRegistration;
 
 @Value
-public class NewUserRegistration {
+public class NewUserRegistration implements ExternalUserRegistration, InternalUserRegistration {
 
-  @NonNull
-  String username;
   @NonNull
   NewUserDetails userDetails;
   @NonNull
-  NewUserCredentials credentials;
+  RegistrationSource source;
 
-  Set<String> getRoles() {
-    return userDetails.getRoles();
+  boolean isInternal() {
+    return RegistrationSource.INTERNAL == source;
   }
 }

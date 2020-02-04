@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.backend.user.registration;
 
-import com.silenteight.sens.webapp.backend.user.registration.RegisterUserUseCase.Success;
+import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase.Success;
+import com.silenteight.sens.webapp.backend.user.registration.domain.UserRegistrationDomainError;
 
 import io.vavr.control.Either;
 import org.assertj.core.api.AbstractAssert;
