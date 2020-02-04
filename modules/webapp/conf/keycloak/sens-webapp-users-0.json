@@ -51,6 +51,14 @@
         ],
         "backend": [
           "uma_protection"
+        ],
+        "realm-management": [
+          "manage-authorization",
+          "manage-users",
+          "query-users",
+          "view-authorization",
+          "view-events",
+          "view-users"
         ]
       },
       "createdTimestamp": 1580390323546,
