@@ -10,6 +10,7 @@ import com.silenteight.sens.webapp.backend.report.ReportProvider;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ class ReportRestController {
   private final ReportProvider reportProvider;
 
   @GetMapping("/report/{reportName}")
+  @PreAuthorize("hasAnyRole('AUDITOR') || hasAuthority('AUDITOR')")
   public void getReport(
       HttpServletResponse response, @PathVariable String reportName) throws IOException {
 

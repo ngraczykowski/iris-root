@@ -48,6 +48,29 @@
         "account": [
           "manage-account",
           "view-profile"
+        ]
+      },
+      "createdTimestamp": 1580890115562,
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "emailVerified": false,
+      "enabled": true,
+      "groups": [],
+      "notBefore": 0,
+      "realmRoles": [
+        "Auditor",
+        "uma_authorization"
+      ],
+      "requiredActions": [],
+      "serviceAccountClientId": "report-cli",
+      "totp": false,
+      "username": "service-account-report-cli"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
         ],
         "backend": [
           "uma_protection"
