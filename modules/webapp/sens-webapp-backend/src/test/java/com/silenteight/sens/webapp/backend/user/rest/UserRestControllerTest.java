@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
+import com.silenteight.sens.webapp.backend.user.UserQuery;
 import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 
@@ -24,6 +25,9 @@ class UserRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private RegisterInternalUserUseCase registerInternalUserUseCase;
+
+  @MockBean
+  private UserQuery userQuery;
 
   @Nested
   class InternalRegistrationUseCaseTests {

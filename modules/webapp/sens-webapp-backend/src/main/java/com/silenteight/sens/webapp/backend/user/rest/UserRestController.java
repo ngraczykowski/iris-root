@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.user.UserQuery;
+import com.silenteight.sens.webapp.backend.user.dto.UserDto;
 import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase;
 import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase.Success;
 import com.silenteight.sens.webapp.backend.user.registration.domain.UserRegistrationDomainError;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
-import com.silenteight.sens.webapp.backend.user.rest.dto.UserDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import io.vavr.control.Either;
@@ -34,7 +34,7 @@ public class UserRestController {
   private final RegisterInternalUserUseCase registerInternalUserUseCase;
 
   @NonNull
-  private final UserQuery userQuery = pageable -> null;
+  private final UserQuery userQuery;
 
   @GetMapping("/users")
   public Page<UserDto> users(Pageable pageable) {

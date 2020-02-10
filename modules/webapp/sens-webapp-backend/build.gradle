@@ -38,6 +38,9 @@ dependencies {
   implementation libraries.keycloak_spring_security_adapter
   implementation libraries.keycloak_admin_client
 
+  implementation libraries.caffeine
+  implementation libraries.streamex
+
   compile libraries.hibernate_envers
 
   implementation project(":sens-webapp-common")
