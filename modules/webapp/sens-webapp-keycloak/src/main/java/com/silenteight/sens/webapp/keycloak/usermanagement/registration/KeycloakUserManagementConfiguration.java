@@ -13,10 +13,10 @@ class KeycloakUserManagementConfiguration {
   @Bean
   KeycloakRegisteredUserRepository keycloakUserRegistrationRepository(
       RolesResource rolesResource, UsersResource usersResource) {
+
     return new KeycloakRegisteredUserRepository(
         new KeycloakUserCreator(usersResource),
-        new KeycloakUserRoleAssigner(usersResource, rolesResource)
-    );
+        new KeycloakUserRoleAssigner(usersResource, rolesResource));
   }
 
   @Bean

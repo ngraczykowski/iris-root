@@ -44,7 +44,7 @@ class DecisionTreeQueryTest {
 
     // then
     assertThat(decisionTrees.getTotal()).isEqualTo(2L);
-    assertThat(decisionTrees.getResults()).containsExactly(INACTIVE, ACTIVE);
+    assertThat(decisionTrees.getResults()).containsExactlyInAnyOrder(INACTIVE, ACTIVE);
   }
 
   @Test

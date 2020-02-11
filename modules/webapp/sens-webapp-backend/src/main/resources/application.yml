@@ -109,7 +109,6 @@ sens.web:
     allow-credentials: true
     max-age: 1800
 
-
   #   # Colors palette for AI Solutions
   #   ## Color code
   #   Colors below are divided into four main groups one for each solution:
@@ -151,4 +150,3 @@ sens.web:
     - key: "POTENTIAL_TRUE_POSITIVE"
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
-

@@ -1,0 +1,20 @@
+plugins {
+  id "java"
+}
+
+description = "SENS WebApp User Sync"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+}
+
+dependencies {
+  compile libraries.javax_validation_api
+
+  compile libraries.spring_boot_autoconfigure
+
+  implementation project(":sens-webapp-common")
+
+  implementation libraries.oracle
+}

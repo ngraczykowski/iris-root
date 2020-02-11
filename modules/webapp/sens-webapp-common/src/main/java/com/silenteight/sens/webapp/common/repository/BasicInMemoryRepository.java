@@ -5,11 +5,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
 
-public class BasicInMemoryRepository<T> {
+public class BasicInMemoryRepository<K, T> {
 
-  private final ConcurrentMap<Long, T> store = new ConcurrentHashMap<>();
+  private final ConcurrentMap<K, T> store = new ConcurrentHashMap<>();
 
-  protected final Map<Long, T> getInternalStore() {
+  protected final Map<K, T> getInternalStore() {
     return store;
   }
 

@@ -8,7 +8,8 @@ import com.silenteight.sens.webapp.backend.rest.RestModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.keycloak.KeycloakModule;
-import com.silenteight.sens.webapp.user.UsersModule;
+import com.silenteight.sens.webapp.user.UserModule;
+import com.silenteight.sens.webapp.user.sync.UserSyncModule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -20,7 +21,8 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         DecisionTreeModule.class,
         GrpcModule.class,
         KeycloakModule.class,
-        UsersModule.class,
+        UserModule.class,
+        UserSyncModule.class,
         ReportModule.class,
         ScbReportModule.class
     },

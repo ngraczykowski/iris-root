@@ -11,7 +11,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 class InMemoryDecisionTreeRepository
-    extends BasicInMemoryRepository<DecisionTreeDto>
+    extends BasicInMemoryRepository<Long, DecisionTreeDto>
     implements DecisionTreeQueryRepository, DecisionTreeRepository {
 
   @Override
@@ -20,17 +20,17 @@ class InMemoryDecisionTreeRepository
     return new DecisionTreesDto(decisionTrees);
   }
 
-  public DecisionTreeDto save(DecisionTreeDto decisionTree) {
-    getInternalStore().put(decisionTree.getId(), decisionTree);
-    return decisionTree;
-  }
-
   @Override
   public DecisionTreeDetailsDto getById(long id) {
     if (getInternalStore().containsKey(id))
       return toDetails(getInternalStore().get(id));
     else
       throw new DecisionTreeNotFoundException(id);
+  }
+
+  DecisionTreeDto save(DecisionTreeDto decisionTree) {
+    getInternalStore().put(decisionTree.getId(), decisionTree);
+    return decisionTree;
   }
 
   private static DecisionTreeDetailsDto toDetails(DecisionTreeDto decisionTree) {
