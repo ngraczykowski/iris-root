@@ -1,0 +1,31 @@
+plugins {
+  id "java"
+}
+
+description = "SENS WebApp Keycloak"
+
+configurations {
+  implementation.extendsFrom starterSpring
+}
+
+dependencies {
+  // TODO(mmastylo) remove Spring dependencies (WA-292)
+  compile libraries.spring_boot_starter_actuator
+  compile libraries.spring_boot_starter_undertow
+  compile libraries.spring_boot_starter_web
+
+  compile libraries.spring_security_web
+  compile libraries.spring_security_config
+
+  implementation project(":sens-webapp-common")
+  implementation project(":sens-webapp-user")
+
+  implementation libraries.caffeine
+  implementation libraries.streamex
+
+  implementation libraries.vavr
+
+  implementation libraries.keycloak
+  implementation libraries.keycloak_spring_security_adapter
+  implementation libraries.keycloak_admin_client
+}

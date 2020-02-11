@@ -5,13 +5,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.user.UserQuery;
-import com.silenteight.sens.webapp.backend.user.dto.UserDto;
-import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase;
-import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase.Success;
-import com.silenteight.sens.webapp.backend.user.registration.domain.UserRegistrationDomainError;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
+import com.silenteight.sens.webapp.user.UserQuery;
+import com.silenteight.sens.webapp.user.dto.UserDto;
+import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
+import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.Success;
+import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
 
 import io.vavr.control.Either;
 import org.jetbrains.annotations.NotNull;

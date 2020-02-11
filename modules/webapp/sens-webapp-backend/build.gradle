@@ -33,18 +33,12 @@ dependencies {
   compile libraries.spring_security_config
   compile libraries.spring_security_cas
 
-  // TODO(bgulowaty): move to separate module (WA-83)
-  implementation libraries.keycloak
-  implementation libraries.keycloak_spring_security_adapter
-  implementation libraries.keycloak_admin_client
-
-  implementation libraries.caffeine
-  implementation libraries.streamex
-
   compile libraries.hibernate_envers
 
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-db-changelog")
+  implementation project(":sens-webapp-keycloak")
+  implementation project(":sens-webapp-user")
 
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
@@ -54,8 +48,6 @@ dependencies {
   implementation libraries.protobuf_java_util
 
   implementation libraries.vavr
-
-  runtimeOnly libraries.caffeine
 
   testImplementation project(":sens-webapp-db-changelog")
   testImplementation libraries.rest_assured

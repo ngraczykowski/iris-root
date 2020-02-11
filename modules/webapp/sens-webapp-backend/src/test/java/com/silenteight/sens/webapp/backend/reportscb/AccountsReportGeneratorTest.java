@@ -1,9 +1,8 @@
 package com.silenteight.sens.webapp.backend.reportscb;
 
 import com.silenteight.sens.webapp.backend.report.Report;
-import com.silenteight.sens.webapp.backend.user.UsersFixtures;
-import com.silenteight.sens.webapp.backend.user.dto.UserDto;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
+import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +18,8 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.stream.Stream;
 
+import static com.silenteight.sens.webapp.backend.reportscb.UserFixtures.MULTIPLE_ROLES_USERS;
+import static com.silenteight.sens.webapp.backend.reportscb.UserFixtures.SINGLE_ROLE_USERS;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.*;
@@ -57,11 +58,10 @@ class AccountsReportGeneratorTest {
   private static Stream<Arguments> reportTestCases() {
     return Stream.of(
         Arguments.of(emptyList(), "webapp/backend/report/husa/accounts/headerOnly.csv"),
-        Arguments.of(UsersFixtures.SINGLE_ROLE_USERS,
+        Arguments.of(SINGLE_ROLE_USERS,
             "webapp/backend/report/husa/accounts/singleRole.csv"),
-        Arguments.of(UsersFixtures.MULTIPLE_ROLES_USERS,
-            "webapp/backend/report/husa/accounts/multipleRoles.csv")
-    );
+        Arguments.of(MULTIPLE_ROLES_USERS,
+            "webapp/backend/report/husa/accounts/multipleRoles.csv"));
   }
 
   @NotNull

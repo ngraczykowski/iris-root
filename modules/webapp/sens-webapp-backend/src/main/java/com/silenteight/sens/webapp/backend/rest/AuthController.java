@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.security.dto.PrincipalDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
-import com.silenteight.sens.webapp.kernel.security.WebappUserDetails;
+import com.silenteight.sens.webapp.keycloak.authentication.WebappUserDetails;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

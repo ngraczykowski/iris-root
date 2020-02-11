@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.backend.security.dto;
 import lombok.Getter;
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.kernel.security.WebappUserDetails;
+import com.silenteight.sens.webapp.keycloak.authentication.WebappUserDetails;
 
 import java.util.Set;
 

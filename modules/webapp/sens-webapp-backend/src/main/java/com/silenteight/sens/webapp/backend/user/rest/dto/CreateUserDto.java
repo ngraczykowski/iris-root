@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.user.rest.dto;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
+import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
 
 import java.util.Set;
 import javax.validation.constraints.NotEmpty;

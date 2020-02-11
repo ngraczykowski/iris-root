@@ -1,0 +1,15 @@
+plugins {
+  id "java"
+}
+
+description = "SENS WebApp User"
+
+configurations {
+  implementation.extendsFrom starterSpring
+}
+
+dependencies {
+  implementation project(":sens-webapp-common")
+
+  implementation libraries.vavr
+}

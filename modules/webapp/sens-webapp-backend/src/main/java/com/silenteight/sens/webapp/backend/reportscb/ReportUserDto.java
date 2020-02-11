@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.backend.reportscb;
 
 import lombok.Data;
 
-import com.silenteight.sens.webapp.backend.user.dto.UserDto;
 import com.silenteight.sens.webapp.common.time.DateFormatter;
+import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import static java.util.Optional.ofNullable;
 

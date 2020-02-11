@@ -2,15 +2,15 @@ package com.silenteight.sens.webapp.backend.user.rest;
 
 import lombok.experimental.UtilityClass;
 
-import com.silenteight.sens.webapp.backend.user.registration.RegisterInternalUserUseCase;
-import com.silenteight.sens.webapp.backend.user.registration.domain.UserRegistrationDomainError;
-import com.silenteight.sens.webapp.backend.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
+import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.Success;
+import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
+import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
 
 @UtilityClass
 class UserRestControllerFixtures {
 
   static final String USERNAME = "jdoe123";
-  static final RegisterInternalUserUseCase.Success USER_REGISTRATION_SUCCESS =
+  static final Success USER_REGISTRATION_SUCCESS =
       () -> USERNAME;
 
   static final String USER_REGISTRATION_ERROR_REASON = "some reason";
