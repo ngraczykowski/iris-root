@@ -81,6 +81,7 @@
           "query-users",
           "view-authorization",
           "view-events",
+          "view-realm",
           "view-users"
         ]
       },
