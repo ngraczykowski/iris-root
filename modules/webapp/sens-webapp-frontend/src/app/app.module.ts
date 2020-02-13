@@ -25,7 +25,6 @@ import { AuditTrailModule } from '@app/templates/audit-trail/audit-trail.module'
 import { DecisionTreeModule } from '@app/templates/decision-tree/decision-tree.module';
 import { InboxModule } from '@app/templates/inbox/inbox.module';
 import { ReasoningBranchModule } from '@app/templates/reasoning-branch/reasoning-branch.module';
-import { UserManagementModule } from '@app/templates/user-management/user-management.module';
 import { WorkflowManagementModule } from '@app/templates/workflow-management/workflow-management.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -33,6 +32,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { concat, Observable } from 'rxjs';
 import { reducers } from './reducers';
+import { ReasoningBranchManagementModule } from './reasoning-branch-management/reasoning-branch-management.module';
+import { UserManagementModule } from './user-management/user-management.module';
 
 
 @NgModule({
@@ -58,7 +59,6 @@ import { reducers } from './reducers';
     ReasoningBranchModule,
     AlertModule,
     InboxModule,
-    UserManagementModule,
     AuditTrailModule,
     AnalystHomeModule,
     WorkflowManagementModule,
@@ -70,6 +70,8 @@ import { reducers } from './reducers';
       maxAge: 10
     }),
     KeycloakAngularModule,
+    ReasoningBranchManagementModule,
+    UserManagementModule
   ],
   providers: [
     WINDOW_PROVIDERS,
