@@ -1,11 +1,10 @@
 package com.silenteight.sens.webapp.backend.reportscb;
 
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
+import com.silenteight.sens.webapp.user.UserListQuery;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Collections;
 
 @Configuration
 class ScbReportsConfiguration {
@@ -17,14 +16,9 @@ class ScbReportsConfiguration {
   }
 
   @Bean
-  AccountsReportGenerator accountsReportGenerator(UserListRepository repository) {
+  AccountsReportGenerator accountsReportGenerator(UserListQuery userListQuery) {
     return new AccountsReportGenerator(
-        repository, DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
-  }
-
-  @Bean
-  UserListRepository userQueryRepository() {
-    return Collections::emptyList;
+        userListQuery, DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
   }
 
   @Bean

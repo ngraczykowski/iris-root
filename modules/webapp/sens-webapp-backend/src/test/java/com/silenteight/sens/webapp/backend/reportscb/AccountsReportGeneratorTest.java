@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.backend.reportscb;
 
 import com.silenteight.sens.webapp.backend.report.Report;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
+import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.*;
 class AccountsReportGeneratorTest {
 
   @Mock
-  private UserListRepository repository;
+  private UserListQuery repository;
 
   private AccountsReportGenerator underTest;
 

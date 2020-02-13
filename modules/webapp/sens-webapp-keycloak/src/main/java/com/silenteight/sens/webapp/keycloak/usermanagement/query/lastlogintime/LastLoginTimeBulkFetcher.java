@@ -37,7 +37,7 @@ class LastLoginTimeBulkFetcher {
     return EntryStream.of(lastLoginTimestampsByUserId)
         .reverseSorted(Entry.comparingByValue())
         .limit(limit)
-        .mapValues(timeConverter::toOffsetFromSeconds)
+        .mapValues(timeConverter::toOffsetFromMilli)
         .toMap();
   }
 

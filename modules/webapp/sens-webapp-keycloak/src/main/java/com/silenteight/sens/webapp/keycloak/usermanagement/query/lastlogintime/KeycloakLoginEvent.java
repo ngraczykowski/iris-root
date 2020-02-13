@@ -57,7 +57,7 @@ class KeycloakLoginEvent {
         throw new IllegalArgumentException("Provide time");
 
       EventRepresentation eventRepresentation = new EventRepresentation();
-      eventRepresentation.setTime(time.toInstant().getEpochSecond());
+      eventRepresentation.setTime(time.toInstant().toEpochMilli());
 
       ofNullable(userId).ifPresent(eventRepresentation::setUserId);
 

@@ -8,9 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import javax.annotation.Nullable;
 
 import static java.time.OffsetDateTime.parse;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.UUID.randomUUID;
 
@@ -18,12 +20,14 @@ class KeycloakUserQueryTestFixtures {
 
   static final Pageable PAGE_REQUEST = PageRequest.of(0, 5);
 
+  static final List<String> USER_1_ROLES = asList("ANALYST", "AUDITOR");
+
   static final KeycloakUser USER_1 =
       new KeycloakUser("jdoe1", "John Doe", parse("2011-12-03T10:15:30+01:00"),
-          parse("2011-12-10T15:15:30+01:00"));
+          parse("2011-12-10T15:15:30+01:00"), USER_1_ROLES);
   static final KeycloakUser USER_2 =
       new KeycloakUser("jdoe1", "John Doe", parse("2011-12-10T10:15:30+01:00"),
-          parse("2011-12-10T15:15:30+01:00"));
+          parse("2011-12-10T15:15:30+01:00"), emptyList());
 
   @RequiredArgsConstructor
   @Getter
@@ -38,13 +42,14 @@ class KeycloakUserQueryTestFixtures {
         String username,
         String displayName,
         OffsetDateTime createdAt,
-        @Nullable OffsetDateTime lastLoginAt) {
+        @Nullable OffsetDateTime lastLoginAt,
+        List<String> roles) {
       this.userRepresentation = new UserRepresentation();
       this.userId = randomUUID().toString();
 
       userRepresentation.setId(userId);
-      userRepresentation.setCreatedTimestamp(createdAt.toEpochSecond());
-      userRepresentation.setRealmRoles(emptyList());
+      userRepresentation.setCreatedTimestamp(createdAt.toInstant().toEpochMilli());
+      userRepresentation.setRealmRoles(roles);
       userRepresentation.setFirstName(displayName);
       userRepresentation.setUsername(username);
 

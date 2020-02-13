@@ -40,7 +40,7 @@ class KeycloakLastLoginTimeConfiguration {
   }
 
   @Bean
-  LastLoginTimeCacheUpdater cacheUpdater(
+  LastLoginTimeCacheUpdater lastLoginTimeCacheUpdater(
       CachedLastLoginTimeProvider lastLoginTimeProvider,
       LastLoginTimeBulkFetcher lastLoginTimeBulkFetcher) {
     return new LastLoginTimeCacheUpdater(lastLoginTimeBulkFetcher, lastLoginTimeProvider);

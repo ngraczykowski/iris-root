@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.common.time.TimeConverter;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
+import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
+import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
@@ -13,15 +15,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @RequiredArgsConstructor
-public class KeycloakUserQuery implements UserQuery {
+public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
   private final UsersResource usersResource;
   private final LastLoginTimeProvider lastLoginTimeProvider;
+  private final RolesProvider userRolesProvider;
   private final TimeConverter timeConverter;
 
   @Override
@@ -46,15 +51,27 @@ public class KeycloakUserQuery implements UserQuery {
     UserDto userDto = new UserDto();
 
     userDto.setCreatedAt(
-        timeConverter.toOffsetFromSeconds(userRepresentation.getCreatedTimestamp()));
+        timeConverter.toOffsetFromMilli(userRepresentation.getCreatedTimestamp()));
     userDto.setDisplayName(userRepresentation.getFirstName());
     userDto.setUserName(userRepresentation.getUsername());
-    userDto.setRoles(userRepresentation.getRealmRoles());
+
+    String userId = userRepresentation.getId();
 
     lastLoginTimeProvider
-        .getForUserId(userRepresentation.getId())
+        .getForUserId(userId)
         .ifPresent(userDto::setLastLoginAt);
 
+    userDto.setRoles(userRolesProvider.getForUserId(userId));
+
     return userDto;
+  }
+
+  @Override
+  public Collection<UserDto> list() {
+    return usersResource
+        .list()
+        .stream()
+        .map(this::mapToDto)
+        .collect(toUnmodifiableList());
   }
 }

@@ -17,10 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTest.KeycloakUserQueryUserDtoAssert.assertThatUserDto;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.KeycloakUser;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.PAGE_REQUEST;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.USER_1;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.USER_2;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -36,11 +33,14 @@ class KeycloakUserQueryTest {
   private InMemoryTestLastLoginTimeProvider lastLoginTimeProvider =
       new InMemoryTestLastLoginTimeProvider();
 
+  private InMemoryTestRoleProvider roleProvider = new InMemoryTestRoleProvider();
+
   private KeycloakUserQuery underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new KeycloakUserQuery(usersResource, lastLoginTimeProvider, TIME_CONVERTER);
+    underTest = new KeycloakUserQuery(
+        usersResource, lastLoginTimeProvider, roleProvider, TIME_CONVERTER);
   }
 
   @Test
@@ -50,6 +50,8 @@ class KeycloakUserQueryTest {
 
     lastLoginTimeProvider.add(USER_1.getUserId(), USER_1.getLastLoginAtDate());
     lastLoginTimeProvider.add(USER_2.getUserId(), USER_2.getLastLoginAtDate());
+
+    roleProvider.add(USER_1.getUserId(), USER_1_ROLES);
 
     Page<UserDto> actual = underTest.list(PAGE_REQUEST);
 
@@ -76,7 +78,7 @@ class KeycloakUserQueryTest {
       hasUsername(userRepresentation.getUsername());
 
       OffsetDateTime assertedCreationTime =
-          TIME_CONVERTER.toOffsetFromSeconds(userRepresentation.getCreatedTimestamp());
+          TIME_CONVERTER.toOffsetFromMilli(userRepresentation.getCreatedTimestamp());
       hasCreatedAtTime(assertedCreationTime);
 
       hasLastLoginAtTime(keycloakUser.getLastLoginAtDate());

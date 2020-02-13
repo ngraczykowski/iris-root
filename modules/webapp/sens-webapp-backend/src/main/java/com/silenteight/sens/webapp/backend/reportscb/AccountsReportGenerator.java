@@ -11,6 +11,7 @@ import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.time.DateFormatter;
 import com.silenteight.sens.webapp.common.time.TimeSource;
+import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import java.util.List;
@@ -29,7 +30,7 @@ class AccountsReportGenerator implements ReportGenerator {
   private static final String FILE_NAME = REPORT_NAME + ".csv";
 
   @NonNull
-  private final UserListRepository repository;
+  private final UserListQuery userQuery;
 
   @NonNull
   private final TimeSource timeSource;
@@ -55,18 +56,15 @@ class AccountsReportGenerator implements ReportGenerator {
   }
 
   private List<ReportUserDto> getUsersDto() {
-    return repository.list().stream().flatMap(this::getUserDto).collect(toList());
+    return userQuery.list().stream().flatMap(this::getUserDto).collect(toList());
   }
 
   private Stream<ReportUserDto> getUserDto(UserDto user) {
-    if (user.getRoles().isEmpty())
-      return of(new ReportUserDto(user, "", timeFormatter));
-
     return user.getRoles().stream().map(role -> new ReportUserDto(user, role, timeFormatter));
   }
 
   private Stream<String> buildReportData(List<ReportUserDto> usersToReport) {
-    return new CsvBuilder<>(usersToReport.stream())
+    return of(new CsvBuilder<>(usersToReport.stream())
         .cell(APPLICATION_NAME, a -> APPLICATION_NAME_VALUE)
         .cell(ACCOUNT_OWNER, ReportUserDto::getUserName)
         .cell(ACCOUNT_NAME, ReportUserDto::getUserName)
@@ -78,7 +76,7 @@ class AccountsReportGenerator implements ReportGenerator {
         .cell(LAST_LOGIN, ReportUserDto::getLastLoginAt)
         .cell(EXPIRY_DATE, a -> "")
         .cell(ENTITLEMENT_NAME, ReportUserDto::getRole)
-        .lines();
+        .build());
   }
 
   private static class ReportHeaderTemplate {

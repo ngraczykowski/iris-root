@@ -2,8 +2,6 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.keycloak.KeycloakException;
-
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -21,7 +19,7 @@ class KeycloakUserCreator {
       boolean isSuccessful = response.getStatusInfo().getFamily() == Family.SUCCESSFUL;
 
       if (!isSuccessful)
-        throw new KeycloakException(response);
+        throw new CreateUserException(response);
 
       return getUserId(response);
     }

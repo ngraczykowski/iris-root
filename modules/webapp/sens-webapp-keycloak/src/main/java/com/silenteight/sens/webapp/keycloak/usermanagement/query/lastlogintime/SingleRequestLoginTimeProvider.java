@@ -27,7 +27,7 @@ class SingleRequestLoginTimeProvider implements LastLoginTimeProvider {
     return userLoginEvents.stream()
         .max(Comparator.comparingLong(EventRepresentation::getTime))
         .map(EventRepresentation::getTime)
-        .map(timeConverter::toOffsetFromSeconds);
+        .map(timeConverter::toOffsetFromMilli);
   }
 
   private List<EventRepresentation> getUserLoginEvents(String userId) {

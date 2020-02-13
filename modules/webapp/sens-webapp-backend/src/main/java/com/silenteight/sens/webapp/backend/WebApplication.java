@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         UserModule.class,
         UserRestModule.class,
         UserSyncModule.class,
+        UserRestModule.class,
         ReportModule.class,
         ScbReportModule.class
     },

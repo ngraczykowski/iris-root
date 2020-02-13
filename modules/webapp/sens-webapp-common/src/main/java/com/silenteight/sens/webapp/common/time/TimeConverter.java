@@ -11,8 +11,8 @@ public class TimeConverter {
 
   private final TimeSource timeSource;
 
-  public OffsetDateTime toOffsetFromSeconds(long epochSeconds) {
-    return toOffset(Instant.ofEpochSecond(epochSeconds));
+  public OffsetDateTime toOffsetFromMilli(long epochSeconds) {
+    return toOffset(Instant.ofEpochMilli(epochSeconds));
   }
 
   public OffsetDateTime toOffset(Instant instant) {
