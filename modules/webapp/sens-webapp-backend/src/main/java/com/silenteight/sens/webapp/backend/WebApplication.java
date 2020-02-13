@@ -5,6 +5,7 @@ import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeModule;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
 import com.silenteight.sens.webapp.backend.reportscb.ScbReportModule;
 import com.silenteight.sens.webapp.backend.rest.RestModule;
+import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.keycloak.KeycloakModule;
@@ -22,6 +23,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         GrpcModule.class,
         KeycloakModule.class,
         UserModule.class,
+        UserRestModule.class,
         UserSyncModule.class,
         ReportModule.class,
         ScbReportModule.class

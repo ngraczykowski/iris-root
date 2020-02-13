@@ -28,7 +28,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(RestConstants.ROOT)
-public class UserRestController {
+class UserRestController {
 
   @NonNull
   private final RegisterInternalUserUseCase registerInternalUserUseCase;
