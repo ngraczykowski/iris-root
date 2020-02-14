@@ -1,4 +1,37 @@
 {
+  "branch": {
+    "load": {
+      "inputPlaceholder": "Enter Reasoning Branch UI number e.g. 1-546",
+      "buttonLoad": "Load Reasoning Branch"
+    },
+    "emptyState": {
+      "default": {
+        "message": "You have not loaded any Reasoning Branch yet",
+        "description": "To load Reasoning Branch please enter Reasoning Branch ID and click on the “Load Reasoning Branch” button."
+      }
+    },
+    "details": {
+      "title": "Reasoning Branch Details",
+      "sections": {
+        "branchId": {
+          "label": "Branch ID",
+          "hint": "Unique Reasoning Branch ID"
+        },
+        "aiSolution": {
+          "label": "AI Solution",
+          "hint": "Set AI Solution for the selected Reasoning Branch"
+        },
+        "status": {
+          "label": "Status",
+          "hint": "Set status for the selected Reasoning Branch"
+        }
+      },
+      "footer": {
+        "buttonReset": "Reset",
+        "buttonApply": "Apply Changes"
+      }
+    }
+  },
   "previewElement": {
     "title": "Element Preview",
     "buttonClose": "Close Preview"

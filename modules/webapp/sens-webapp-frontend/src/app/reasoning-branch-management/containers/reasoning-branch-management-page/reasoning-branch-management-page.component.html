@@ -1,1 +1,14 @@
 <app-application-header></app-application-header>
+<div class="rb-management">
+  <div class="rb-management-wrapper">
+    <div class="rb-management-header">
+      <app-load-branch></app-load-branch>
+    </div>
+    <div class="rb-management-details module">
+      <div class="rb-management-details-header">
+        <h2 [translate]="'branch.details.title'"></h2>
+      </div>
+      <app-branch-details *ngIf="branchDetails" [branchDetails]="branchDetails"></app-branch-details>
+    </div>
+  </div>
+</div>

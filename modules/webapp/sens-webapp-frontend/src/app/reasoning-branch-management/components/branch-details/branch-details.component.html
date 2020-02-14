@@ -1,0 +1,53 @@
+<div class="branch-content-details">
+  <div class="branch-content-details-row">
+    <p class="branch-content-details-row-label"
+       [translate]="'branch.details.sections.branchId.label'"></p>
+    <div class="branch-content-details-row-content">
+      <p class="branch-content-details-row-content-data">{{ branchDetails.branchId }}</p>
+      <p class="branch-content-details-row-content-hint"
+         [translate]="'branch.details.sections.branchId.hint'"></p>
+    </div>
+  </div>
+  <div class="branch-content-details-row">
+    <p class="branch-content-details-row-label"
+       [translate]="'branch.details.sections.aiSolution.label'"></p>
+    <div class="branch-content-details-row-content">
+      <div class="select-dropdown branch-content-details-row-content-data">
+        <app-icon [name]="'arrow'"></app-icon>
+        <select class="input-field">
+          <option *ngFor="let aiSolutions of branchDetails.aiSolutions"
+                  [selected]="branchDetails.aiSolutions.active == true">
+            {{ aiSolutions.label }}
+          </option>
+        </select>
+      </div>
+      <p class="branch-content-details-row-content-hint"
+         [translate]="'branch.details.sections.aiSolution.hint'"></p>
+    </div>
+  </div>
+  <div class="branch-content-details-row">
+    <p class="branch-content-details-row-label"
+       [translate]="'branch.details.sections.status.label'"></p>
+    <div class="branch-content-details-row-content">
+      <div class="select-dropdown branch-content-details-row-content-data">
+        <app-icon [name]="'arrow'"></app-icon>
+        <select class="input-field">
+          <option *ngFor="let status of branchDetails.statuses"
+                  [selected]="branchDetails.aiSolutions.active == true">
+            {{status.label}}
+          </option>
+        </select>
+      </div>
+      <p class="branch-content-details-row-content-hint"
+         [translate]="'branch.details.sections.status.hint'"></p>
+    </div>
+  </div>
+  <div class="branch-content-details-footer">
+    <div class="empty-space"></div>
+    <button class="button-flat" (click)="reset()"
+            [translate]="'branch.details.footer.buttonReset'"></button>
+    <button class="button-action" (click)="submit()"
+            [translate]="'branch.details.footer.buttonApply'"></button>
+  </div>
+</div>
+
