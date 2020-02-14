@@ -3,12 +3,13 @@ package com.silenteight.sens.webapp.user.sync.analyst;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.sync.analyst.dto.ExternalAnalyst;
+import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -36,10 +37,10 @@ class DatabaseExternalAnalystRepository implements ExternalAnalystRepository {
   }
 
   @Override
-  public List<ExternalAnalyst> list() {
+  public Collection<Analyst> list() {
     log.debug("Querying Analysts with {} query", activeUsersQuery);
 
-    List<ExternalAnalyst> analysts =
+    List<Analyst> analysts =
         jdbcTemplate.query(activeUsersQuery, (rs, rowNum) -> createAnalyst(rs));
 
     log.debug("Found {} Analysts", analysts.size());
@@ -47,8 +48,8 @@ class DatabaseExternalAnalystRepository implements ExternalAnalystRepository {
     return analysts;
   }
 
-  private static ExternalAnalyst createAnalyst(ResultSet resultSet) throws SQLException {
-    return ExternalAnalyst
+  private static Analyst createAnalyst(ResultSet resultSet) throws SQLException {
+    return Analyst
         .builder()
         .userName(resultSet.getString(USER_NAME_COLUMN_NAME))
         .displayName(resultSet.getString(DISPLAY_NAME_COLUMN_NAME))

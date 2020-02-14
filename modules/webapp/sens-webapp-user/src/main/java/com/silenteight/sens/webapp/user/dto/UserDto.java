@@ -22,4 +22,12 @@ public class UserDto {
   private OffsetDateTime lastLoginAt;
   private OffsetDateTime createdAt;
   private boolean isActive;
+
+  public boolean hasRole(String role) {
+    return roles.contains(role);
+  }
+
+  public boolean hasOnlyRole(String role) {
+    return roles.size() == 1 && hasRole(role);
+  }
 }

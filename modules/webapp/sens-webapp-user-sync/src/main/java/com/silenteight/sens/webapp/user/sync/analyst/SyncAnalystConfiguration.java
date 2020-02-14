@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
+import com.silenteight.sens.webapp.user.UserListQuery;
+
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,19 +19,9 @@ class SyncAnalystConfiguration {
 
   @Bean
   SyncAnalystService syncAnalystService(
-      AnalystQuery analystQuery, ExternalAnalystRepository repository) {
+      UserListQuery userListQuery, ExternalAnalystRepository repository) {
 
-    return new SyncAnalystService(analystQuery, repository);
-  }
-
-  @Bean
-  AnalystQuery analystQuery(AnalystQueryRepository repository) {
-    return new AnalystQuery(repository);
-  }
-
-  @Bean
-  AnalystQueryRepository databaseAnalystQueryRepository() {
-    return new DatabaseAnalystQueryRepository();
+    return new SyncAnalystService(userListQuery, repository);
   }
 
   @Bean

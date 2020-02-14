@@ -4,16 +4,17 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
-import com.silenteight.sens.webapp.user.sync.analyst.dto.ExternalAnalyst;
-import com.silenteight.sens.webapp.user.sync.analyst.dto.InternalAnalyst;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -22,90 +23,109 @@ import static java.util.stream.Collectors.toSet;
 class AnalystSynchronizer {
 
   SynchronizedAnalysts synchronize(
-      List<InternalAnalyst> internalAnalysts, List<ExternalAnalyst> externalAnalysts) {
+      Collection<UserDto> users, Collection<Analyst> analysts) {
 
     return new SynchronizedAnalysts(
-        analystsToCreate(internalAnalysts, externalAnalysts),
-        analystsToUpdate(internalAnalysts, externalAnalysts),
-        analystsToDelete(internalAnalysts, externalAnalysts));
+        analystsToCreate(users, analysts),
+        analystsToUpdateRole(users, analysts),
+        analystsToUpdateDisplayName(users, analysts),
+        analystsToDelete(users, analysts));
   }
 
-  private static List<NewAnalyst> analystsToCreate(
-      List<InternalAnalyst> internalAnalysts, List<ExternalAnalyst> externalAnalysts) {
+  private static List<Analyst> analystsToCreate(
+      Collection<UserDto> users, Collection<Analyst> analysts) {
 
-    Set<String> userNames = extractUserNames(internalAnalysts);
-    return externalAnalysts
+    Set<String> userNames = extractUserNames(users);
+    return analysts
         .stream()
         .filter(it -> !userNames.contains(it.getUserName()))
-        .map(NewAnalyst::toNewAnalyst)
         .collect(toList());
   }
 
-  private static Set<String> extractUserNames(List<? extends Analyst> analysts) {
+  private static Set<String> extractUserNames(Collection<UserDto> users) {
+    return users
+        .stream()
+        .map(UserDto::getUserName)
+        .collect(toSet());
+  }
+
+  private static List<String> analystsToUpdateRole(
+      Collection<UserDto> users, Collection<Analyst> analysts) {
+
+    Set<String> analystUserNames = extractAnalystsUserNames(analysts);
+    return users
+        .stream()
+        .filter(it -> analystUserNames.contains(it.getUserName()))
+        .filter(it -> !it.hasRole(ANALYST))
+        .map(UserDto::getUserName)
+        .collect(toList());
+  }
+
+  private static List<UpdatedAnalyst> analystsToUpdateDisplayName(
+      Collection<UserDto> users, Collection<Analyst> analysts) {
+
+    Map<String, Analyst> analystByUserName = groupByUserName(analysts);
+    return users
+        .stream()
+        .filter(it -> analystByUserName.containsKey(it.getUserName()))
+        .map(it -> new UserAnalystPair(it, analystByUserName.get(it.getUserName())))
+        .filter(UserAnalystPair::haveDifferentDisplayNames)
+        .map(UserAnalystPair::toUpdatedAnalyst)
+        .collect(toList());
+  }
+
+  private static Map<String, Analyst> groupByUserName(Collection<Analyst> analysts) {
+    return analysts
+        .stream()
+        .collect(toMap(Analyst::getUserName, identity()));
+  }
+
+  private static List<String> analystsToDelete(
+      Collection<UserDto> users, Collection<Analyst> analysts) {
+
+    Set<String> analystUserNames = extractAnalystsUserNames(analysts);
+    return users
+        .stream()
+        .filter(it -> !analystUserNames.contains(it.getUserName()))
+        .filter(it -> it.hasOnlyRole(ANALYST))
+        .map(UserDto::getUserName)
+        .collect(toList());
+  }
+
+  private static Set<String> extractAnalystsUserNames(Collection<Analyst> analysts) {
     return analysts
         .stream()
         .map(Analyst::getUserName)
         .collect(toSet());
   }
 
-  private static List<UpdatedAnalyst> analystsToUpdate(
-      List<InternalAnalyst> internalAnalysts, List<ExternalAnalyst> externalAnalysts) {
-
-    Map<String, ExternalAnalyst> groupedByUserName =
-        groupByUserName(externalAnalysts);
-    return internalAnalysts
-        .stream()
-        .filter(it -> groupedByUserName.containsKey(it.getUserName()))
-        .map(it -> new AnalystPair(it, groupedByUserName.get(it.getUserName())))
-        .filter(AnalystPair::haveDifferentDisplayNames)
-        .map(AnalystPair::toUpdatedAnalyst)
-        .collect(toList());
-  }
-
-  private static Map<String, ExternalAnalyst> groupByUserName(List<ExternalAnalyst> analysts) {
-    return analysts
-        .stream()
-        .collect(toMap(ExternalAnalyst::getUserName, identity()));
-  }
-
-  private static List<String> analystsToDelete(
-      List<InternalAnalyst> internalAnalysts, List<ExternalAnalyst> externalAnalysts) {
-
-    Set<String> userNames = extractUserNames(externalAnalysts);
-    return internalAnalysts
-        .stream()
-        .filter(it -> !userNames.contains(it.getUserName()))
-        .map(InternalAnalyst::getUserName)
-        .collect(toList());
-  }
-
   @RequiredArgsConstructor
-  private static class AnalystPair {
+  private static class UserAnalystPair {
 
     @NonNull
-    private final InternalAnalyst internal;
+    private final UserDto user;
 
     @NonNull
-    private final ExternalAnalyst external;
+    private final Analyst analyst;
 
     boolean haveDifferentDisplayNames() {
-      return !StringUtils.equals(getInternalDisplayName(), getExternalDisplayName());
+      return !StringUtils.equals(getUserDisplayName(), getAnalystDisplayName());
     }
 
-    private String getInternalUserName() {
-      return internal.getUserName();
+    private String getUserUserName() {
+      return user.getUserName();
     }
 
-    private String getInternalDisplayName() {
-      return internal.getDisplayName();
+    private String getUserDisplayName() {
+      return user.getDisplayName();
     }
 
-    private String getExternalDisplayName() {
-      return external.getDisplayName();
+    private String getAnalystDisplayName() {
+      return analyst.getDisplayName();
     }
 
     UpdatedAnalyst toUpdatedAnalyst() {
-      return new UpdatedAnalyst(getInternalUserName(), getExternalDisplayName());
+      return new UpdatedAnalyst(getUserUserName(), getAnalystDisplayName());
     }
   }
 
@@ -113,26 +133,16 @@ class AnalystSynchronizer {
   static class SynchronizedAnalysts {
 
     @NonNull
-    List<NewAnalyst> added;
+    List<Analyst> added;
 
     @NonNull
-    List<UpdatedAnalyst> updated;
+    List<String> updatedRole;
+
+    @NonNull
+    List<UpdatedAnalyst> updatedDisplayName;
 
     @NonNull
     List<String> deleted;
-  }
-
-  @Value
-  static class NewAnalyst {
-
-    @NonNull
-    String userName;
-
-    String displayName;
-
-    static NewAnalyst toNewAnalyst(ExternalAnalyst externalAnalyst) {
-      return new NewAnalyst(externalAnalyst.getUserName(), externalAnalyst.getDisplayName());
-    }
   }
 
   @Value

@@ -1,18 +1,21 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
-import com.silenteight.sens.webapp.user.sync.analyst.dto.InternalAnalyst;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AnalystFixtures {
 
-  static final InternalAnalyst INTERNAL_ANALYST_JOHN_SMITH = InternalAnalyst
+  static final Analyst ANALYST_WITHOUT_DISPLAY_NAME = Analyst
       .builder()
-      .userName("jsmith")
-      .displayName("John Smith")
+      .userName("4783589366")
       .build();
 
-  static final InternalAnalyst INTERNAL_ANALYST_ROBERT_DOE = InternalAnalyst
+  static final Analyst ANALYST_WITH_DISPLAY_NAME = Analyst
       .builder()
-      .userName("rdoe")
-      .displayName("Robert Doe")
+      .userName("1853900357")
+      .displayName("5050185537")
       .build();
 }

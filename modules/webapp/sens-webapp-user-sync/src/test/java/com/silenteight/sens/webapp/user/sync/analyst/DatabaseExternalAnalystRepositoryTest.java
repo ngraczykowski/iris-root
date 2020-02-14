@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
-import com.silenteight.sens.webapp.user.sync.analyst.dto.ExternalAnalyst;
+import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.util.List;
+import java.util.Collection;
 
-import static com.silenteight.sens.webapp.user.sync.analyst.ExternalAnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
-import static com.silenteight.sens.webapp.user.sync.analyst.ExternalAnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
+import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
+import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +40,7 @@ class DatabaseExternalAnalystRepositoryTest {
         .willReturn(asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME));
 
     // when
-    List<ExternalAnalyst> analysts = underTest.list();
+    Collection<Analyst> analysts = underTest.list();
 
     // then
     assertThat(analysts.size()).isEqualTo(2);

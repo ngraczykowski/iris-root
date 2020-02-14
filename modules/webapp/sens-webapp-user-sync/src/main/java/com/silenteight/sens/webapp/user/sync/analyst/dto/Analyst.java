@@ -1,8 +1,14 @@
 package com.silenteight.sens.webapp.user.sync.analyst.dto;
 
-public interface Analyst {
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
 
-  String getUserName();
+@Data
+@Builder
+public class Analyst {
 
-  String getDisplayName();
+  @NonNull
+  private final String userName;
+  private final String displayName;
 }

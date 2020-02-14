@@ -1,10 +1,10 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
-import com.silenteight.sens.webapp.user.sync.analyst.dto.ExternalAnalyst;
+import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
 
-import java.util.List;
+import java.util.Collection;
 
 interface ExternalAnalystRepository {
 
-  List<ExternalAnalyst> list();
+  Collection<Analyst> list();
 }
