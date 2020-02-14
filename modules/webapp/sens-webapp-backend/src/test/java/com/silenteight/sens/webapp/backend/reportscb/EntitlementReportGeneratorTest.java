@@ -32,15 +32,10 @@ class EntitlementReportGeneratorTest {
         "Run Date,20111203101530,,",
         "Number of data records,9,,",
         "Entitlement Name,Entitlement Type,Entitlement Description,Entitlement Link",
-        "ROLE_AUDITOR,USER,A user that can generate and download reports from UI",
-        "ROLE_INBOX_OPERATOR,USER,A user that can see a list of inbox messages,",
-        "ROLE_USER_MANAGER,USER,A user that can manage users,",
         "ROLE_ANALYST,USER,A user that can use a SENS Chrome Extension,",
-        "ROLE_BATCH_TYPE_MANAGER,USER,A user that can manage an assigned and "
-            + "an activated batch types,",
-        "ROLE_DECISION_TREE_MANAGER,USER,A user that can manage decision trees,",
-        "ROLE_MAKER,USER,A user that can submit changes to reasoning branches,",
-        "ROLE_APPROVER,USER,A user that can approve changes in reasoning branches,",
-        "SUPERUSER,ADMIN,A user that have all roles mentioned above,"};
+        "ROLE_AUDITOR,USER,A user that can generate and download reports from UI and CLI,",
+        "ROLE_BUSINESS_OPERATOR,USER,A user that can manage users and submit changes to reasoning branches,",
+        "ADMIN,ADMIN,A user that have all roles mentioned above,"
+    };
   }
 }
