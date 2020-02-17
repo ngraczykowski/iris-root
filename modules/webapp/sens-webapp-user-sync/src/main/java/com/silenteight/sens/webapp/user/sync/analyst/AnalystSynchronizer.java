@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static java.util.function.Function.identity;
@@ -53,20 +54,31 @@ class AnalystSynchronizer {
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
-    return users
-        .stream()
+    return getExternalUsers(users)
         .filter(it -> analystUserNames.contains(it.getUserName()))
         .filter(it -> !it.hasRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
 
+  private static Set<String> extractAnalystsUserNames(Collection<Analyst> analysts) {
+    return analysts
+        .stream()
+        .map(Analyst::getUserName)
+        .collect(toSet());
+  }
+
+  private static Stream<UserDto> getExternalUsers(Collection<UserDto> users) {
+    return users
+        .stream()
+        .filter(UserDto::isExternalUser);
+  }
+
   private static List<UpdatedAnalyst> analystsToUpdateDisplayName(
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Map<String, Analyst> analystByUserName = groupByUserName(analysts);
-    return users
-        .stream()
+    return getExternalUsers(users)
         .filter(it -> analystByUserName.containsKey(it.getUserName()))
         .map(it -> new UserAnalystPair(it, analystByUserName.get(it.getUserName())))
         .filter(UserAnalystPair::haveDifferentDisplayNames)
@@ -84,19 +96,11 @@ class AnalystSynchronizer {
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
-    return users
-        .stream()
+    return getExternalUsers(users)
         .filter(it -> !analystUserNames.contains(it.getUserName()))
         .filter(it -> it.hasOnlyRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
-  }
-
-  private static Set<String> extractAnalystsUserNames(Collection<Analyst> analysts) {
-    return analysts
-        .stream()
-        .map(Analyst::getUserName)
-        .collect(toSet());
   }
 
   @RequiredArgsConstructor

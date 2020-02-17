@@ -45,6 +45,7 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
     userRepresentation.setCredentials(of(password));
     userRepresentation.setCreatedTimestamp(registration.getRegistrationDate().toEpochSecond());
     userRepresentation.setFirstName(registration.getDisplayName());
+    // WA-344(mmastylo) set origin for UserRepresentation
 
     return userRepresentation;
   }

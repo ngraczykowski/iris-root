@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
+import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.List;
 
+import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
+import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
@@ -90,16 +93,12 @@ class AnalystSynchronizerTest {
     // given
     String otherLogin = "other-login";
     Collection<UserDto> users = asList(
-        createAnalystUser(
-            otherLogin,
-            "other-display-name"),
+        createAnalystUser(otherLogin, "other-display-name"),
         createAnalystUser(
             ANALYST_WITH_DISPLAY_NAME.getUserName(),
             ANALYST_WITH_DISPLAY_NAME.getDisplayName()),
-        createUser(
-            "no-analyst-role-login",
-            "other-display-name",
-            "Maker"));
+        createUser("no-analyst-role-login", "no-analyst-role-name", "Maker", GNS),
+        createUser("no-gns-login", "no-gns-display-name", ANALYST, SENS));
     Collection<Analyst> analysts = asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME);
 
     // when
@@ -115,11 +114,13 @@ class AnalystSynchronizerTest {
   @Test
   void analystsToUpdateRoleWhenSameUserNameAndMissingAnalystRole() {
     // given
-    Collection<UserDto> users = singletonList(
+    Collection<UserDto> users = asList(
         createUser(
             ANALYST_WITHOUT_DISPLAY_NAME.getUserName(),
             ANALYST_WITHOUT_DISPLAY_NAME.getDisplayName(),
-            "Maker"));
+            "Maker",
+            GNS),
+        createUser("other-login", "other-display-name", "Maker", SENS));
     Collection<Analyst> analysts = asList(ANALYST_WITHOUT_DISPLAY_NAME);
 
     // when
@@ -140,9 +141,7 @@ class AnalystSynchronizerTest {
         createAnalystUser(
             ANALYST_WITHOUT_DISPLAY_NAME.getUserName(),
             ANALYST_WITHOUT_DISPLAY_NAME.getDisplayName()),
-        createAnalystUser(
-            ANALYST_WITH_DISPLAY_NAME.getUserName(),
-            "other-display-name"));
+        createAnalystUser(ANALYST_WITH_DISPLAY_NAME.getUserName(), "other-display-name"));
     Collection<Analyst> analysts = asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME);
 
     // when
@@ -160,15 +159,18 @@ class AnalystSynchronizerTest {
   }
 
   private static final UserDto createAnalystUser(String login, String displayName) {
-    return createUser(login, displayName, ANALYST);
+    return createUser(login, displayName, ANALYST, GNS);
   }
 
-  private static final UserDto createUser(String login, String displayName, String role) {
+  private static final UserDto createUser(
+      String login, String displayName, String role, UserOrigin origin) {
+
     return UserDto
         .builder()
         .userName(login)
         .displayName(displayName)
         .roles(singletonList(role))
+        .origin(origin)
         .build();
   }
 }
