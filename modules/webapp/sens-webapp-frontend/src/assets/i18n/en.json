@@ -30,6 +30,20 @@
         "buttonReset": "Reset",
         "buttonApply": "Apply Changes"
       }
+    },
+    "confirm": {
+      "content": {
+        "header": "Apply changes to the Reasoning Branch {{ branchId }}?",
+        "description": "Changes in the Reasoning Branches will affect the AI Solutions that Analysts will get, for the alerts."
+      },
+      "footer": {
+        "buttonCancel": "No, Cancel",
+        "buttonConfirm": "Yes, Apply my Changes"
+      },
+      "feedback": {
+        "success": "Changes applied to the Reasoning Branch",
+        "failed": "Failed to apply changes. Please try again or contact with Administrator."
+      }
     }
   },
   "previewElement": {

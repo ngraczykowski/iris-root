@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-branch-details',
@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class BranchDetailsComponent implements OnInit {
 
   @Input() branchDetails;
+  @Output() confirm = new EventEmitter();
 
   constructor() { }
 
@@ -16,5 +17,7 @@ export class BranchDetailsComponent implements OnInit {
 
   reset() {}
 
-  submit() {}
+  submit() {
+    this.confirm.emit();
+  }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { EventKey } from '@app/shared/event/event.service.model';
+import { LocalEventService } from '@app/shared/event/local-event.service';
 
 @Component({
   selector: 'app-reasoning-branch-management-page',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./reasoning-branch-management-page.component.scss']
 })
 export class ReasoningBranchManagementPageComponent implements OnInit {
+
+  showConfirmWindow = false;
 
   showDetails = false;
 
@@ -28,7 +32,39 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
     hint: 'branch.emptyState.default.description'
   };
 
-  constructor() { }
+  constructor(private readonly eventService: LocalEventService) { }
+
+  hideConfirm() {
+    this.showConfirmWindow = false;
+  }
+
+  showConfirm() {
+    this.showConfirmWindow = true;
+  }
+
+  applyChanges() {
+    // TODO(kjaworowski): Send request (WA-349)
+    this.hideConfirm();
+    this.successfullyAppliedChanges(); // TODO(kjaworowski): Show feedback for success (WA-351)
+    // this.failedAppliedChanges(); // TODO(kjaworowski): Show feedback when fail (WA-351)
+  }
+
+  successfullyAppliedChanges() {
+    this.sendBriefMessage('branch.confirm.feedback.success');
+  }
+
+  failedAppliedChanges() {
+    this.sendBriefMessage('branch.confirm.feedback.failed');
+  }
+
+  private sendBriefMessage(messageContent) {
+    this.eventService.sendEvent({
+      key: EventKey.NOTIFICATION,
+      data: {
+        message: messageContent
+      }
+    });
+  }
 
   ngOnInit() {}
 }

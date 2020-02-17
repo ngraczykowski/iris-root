@@ -1,0 +1,22 @@
+.popup-window {
+  width: 480px;
+
+  .popup-window-header {
+    padding: 16px 24px;
+  }
+
+  .popup-window-header,
+  .popup-window-footer {
+    &:after {
+      border-top: 0;
+    }
+  }
+
+  .popup-window-footer {
+    padding: 24px;
+  }
+
+  .popup-window-content {
+    padding: 0 24px;
+  }
+}
