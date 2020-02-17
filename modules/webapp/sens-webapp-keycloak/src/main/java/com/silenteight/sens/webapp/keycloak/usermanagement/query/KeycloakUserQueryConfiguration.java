@@ -4,6 +4,7 @@ import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
 
+import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,5 +22,10 @@ class KeycloakUserQueryConfiguration {
         lastLoginTimeProvider,
         rolesProvider,
         DefaultTimeSource.TIME_CONVERTER);
+  }
+
+  @Bean
+  KeycloakRolesQuery keycloakRolesQuery(RolesResource rolesResource) {
+    return new KeycloakRolesQuery(rolesResource);
   }
 }

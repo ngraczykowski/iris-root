@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
+import com.silenteight.sens.webapp.user.RolesQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
+import com.silenteight.sens.webapp.user.dto.RolesDto;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.Success;
@@ -24,10 +26,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import javax.validation.Valid;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(RestConstants.ROOT)
+@RequestMapping(RestConstants.ROOT + "/users")
 class UserRestController {
 
   @NonNull
@@ -36,12 +40,15 @@ class UserRestController {
   @NonNull
   private final UserQuery userQuery;
 
-  @GetMapping("/users")
+  @NonNull
+  private final RolesQuery rolesQuery;
+
+  @GetMapping
   public Page<UserDto> users(Pageable pageable) {
     return userQuery.list(pageable);
   }
 
-  @PostMapping("/users")
+  @PostMapping
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.debug("Creating new user. {}", dto);
 
@@ -74,5 +81,10 @@ class UserRestController {
       super(error.getReason());
       this.error = error;
     }
+  }
+
+  @GetMapping("/roles")
+  public ResponseEntity<RolesDto> roles() {
+    return ok(rolesQuery.list());
   }
 }
