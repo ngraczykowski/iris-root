@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReasoningBranchManagementPageComponent implements OnInit {
 
+  showDetails = false;
+
   // Temporary
   branchDetails = {
     branchId: '1-546',
@@ -19,6 +21,11 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
       {label: 'Potential True Positive', active: true},
       {label: 'No Decision', active: false}
     ],
+  };
+
+  emptyStateMessage = {
+    message: 'branch.emptyState.default.message',
+    hint: 'branch.emptyState.default.description'
   };
 
   constructor() { }

@@ -8,7 +8,9 @@
       <div class="rb-management-details-header">
         <h2 [translate]="'branch.details.title'"></h2>
       </div>
-      <app-branch-details *ngIf="branchDetails" [branchDetails]="branchDetails"></app-branch-details>
+      <app-branch-empty-state *ngIf="!showDetails" [emptyStateMessage]="emptyStateMessage"></app-branch-empty-state>
+      <app-branch-details *ngIf="showDetails"
+                          [branchDetails]="branchDetails"></app-branch-details>
     </div>
   </div>
 </div>

@@ -17,7 +17,7 @@ $color-status-inactive: $-color-gray-20;
 $color-label: $-color-gray-70;
 
 $color-text-primary: $-color-gray-80;
-$color-text-secondary: $-color-gray-50;
+$color-text-secondary: $-color-gray-40;
 
 // TODO REFACTOR Patryk Górski
 
@@ -44,7 +44,7 @@ $color-text-header: $-color-gray-90;
 
 $color-shadow-black: hsla(hue($-color-black), saturation($-color-black), lightness($-color-black), .13);
 
-$color-overlay: hsla(hue($-color-white), saturation($-color-white), lightness($-color-white), .85);
+$color-overlay: hsla(hue($-color-black), saturation($-color-black), lightness($-color-black), .7);
 
 $color-border-light: hsl(220, 9%, 87%);
 $color-border: $-color-gray-20;

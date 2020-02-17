@@ -13,4 +13,3 @@ export class LoadBranchComponent implements OnInit {
   }
 
 }
-
