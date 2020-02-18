@@ -1,0 +1,79 @@
+{
+  "users": {
+    "content": [
+      {
+        "userName": "test_user",
+        "displayName": "Test",
+        "roles": null,
+        "lastLoginAt": null,
+        "createdAt": "+51916-01-15T06:50:14+01:00",
+        "active": false
+      },
+      {
+        "userName": "admin",
+        "displayName": "Mr. Admin",
+        "roles": ["admin", "analyst"],
+        "lastLoginAt": null,
+        "createdAt": "+51916-01-15T06:50:14+01:00",
+        "active": false
+      },
+      {
+        "userName": "1",
+        "displayName": "Mr. 1",
+        "roles": ["admin", "analyst"],
+        "lastLoginAt": null,
+        "createdAt": "+51916-01-15T06:50:14+01:00",
+        "active": false
+      },
+      {
+        "userName": "2",
+        "displayName": "Mr. 2",
+        "roles": ["admin", "analyst"],
+        "lastLoginAt": null,
+        "createdAt": "+51916-01-15T06:50:14+01:00",
+        "active": false
+      },
+      {
+        "userName": "3",
+        "displayName": "Mr. 3",
+        "roles": ["admin", "analyst"],
+        "lastLoginAt": null,
+        "createdAt": "+51916-01-15T06:50:14+01:00",
+        "active": false
+      },
+      {
+        "userName": "4",
+        "displayName": "Mr. 4",
+        "roles": ["admin", "analyst"],
+        "lastLoginAt": null,
+        "createdAt": "+51916-01-15T06:50:14+01:00",
+        "active": false
+      }
+    ],
+    "pageable": {
+      "sort": {
+        "sorted": false,
+        "unsorted": true,
+        "empty": true
+      },
+      "pageSize": 5,
+      "pageNumber": 0,
+      "offset": 0,
+      "paged": true,
+      "unpaged": false
+    },
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 1,
+    "first": true,
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "number": 0,
+    "numberOfElements": 1,
+    "size": 5,
+    "empty": false
+  }
+}

@@ -1,0 +1,6 @@
+<input 
+  type="text" 
+  placeholder="{{ 'user-management.userTable.header.search.placeholder' | translate }}"
+  [(ngModel)]="userNameFilter"
+  (ngModelChange)="inputChange.next($event)"
+/>

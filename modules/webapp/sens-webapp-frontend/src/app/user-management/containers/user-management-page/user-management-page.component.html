@@ -1,1 +1,3 @@
 <app-application-header></app-application-header>
+<app-search (inputChange)="onFilterChange($event)"></app-search>
+<app-user-table [users]="isFiltering ? filteredList : usersList"></app-user-table>
