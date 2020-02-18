@@ -1,8 +1,15 @@
 {
   "branch": {
     "load": {
-      "inputPlaceholder": "Enter Reasoning Branch UI number e.g. 1-546",
-      "buttonLoad": "Load Reasoning Branch"
+      "input": {
+        "placeholder": "Enter Reasoning Branch ID number e.g. 1-546"
+      },
+      "button": {
+        "label": "Load Reasoning Branch",
+        "tooltip": {
+          "emptyInput": "Enter Reasoning Branch ID to load details"
+        }
+      }
     },
     "emptyState": {
       "default": {

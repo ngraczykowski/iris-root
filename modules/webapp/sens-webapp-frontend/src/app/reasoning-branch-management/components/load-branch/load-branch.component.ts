@@ -7,7 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoadBranchComponent implements OnInit {
 
+  enteredID: string;
+
   constructor() { }
+
+  onInput(value: string) {
+    this.enteredID = value;
+  }
+
+  onPaste(event: ClipboardEvent) {
+    this.enteredID = event.clipboardData.toString();
+  }
 
   ngOnInit() {
   }

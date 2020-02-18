@@ -1,15 +1,27 @@
+@import 'future-component/tooltip';
+
 .load-branch {
   display: flex;
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 
   & > * {
     margin-right: 24px;
 
+    &:first-child {
+      flex: 1;
+    }
+
     &:last-child {
       margin-right: 0;
     }
-  }
-
-  .load-branch-search {
-    flex: 1;
   }
 }
