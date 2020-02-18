@@ -147,6 +147,22 @@ class AnalystSynchronizer {
 
     @NonNull
     List<String> deleted;
+
+    int addedCount() {
+      return added.size();
+    }
+
+    int updatedRoleCount() {
+      return updatedRole.size();
+    }
+
+    int updatedDisplayNameCount() {
+      return updatedDisplayName.size();
+    }
+
+    int deletedCount() {
+      return deleted.size();
+    }
   }
 
   @Value

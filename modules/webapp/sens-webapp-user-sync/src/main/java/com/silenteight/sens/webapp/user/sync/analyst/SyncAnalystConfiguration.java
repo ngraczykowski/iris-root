@@ -25,7 +25,7 @@ class SyncAnalystConfiguration {
   }
 
   @Bean
-  ExternalAnalystRepository databaseExternalExternalAnalystRepository(
+  ExternalAnalystRepository databaseExternalAnalystRepository(
       @Qualifier("externalDataSource") DataSource externalDataSource,
       SyncAnalystProperties syncAnalystProperties) {
 
@@ -54,7 +54,7 @@ class SyncAnalystConfiguration {
 
   @Bean
   @ConfigurationProperties(prefix = "user.sync.analyst")
-  SyncAnalystProperties analystSyncProperties() {
+  SyncAnalystProperties syncAnalystProperties() {
     return new SyncAnalystProperties();
   }
 }
