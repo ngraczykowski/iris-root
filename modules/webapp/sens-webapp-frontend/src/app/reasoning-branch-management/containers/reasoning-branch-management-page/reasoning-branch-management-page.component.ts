@@ -32,6 +32,11 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
     hint: 'branch.emptyState.default.description'
   };
 
+  noResults = {
+    message: 'branch.emptyState.noResults.message',
+    hint: 'branch.emptyState.noResults.description'
+  };
+
   constructor(private readonly eventService: LocalEventService) { }
 
   hideConfirm() {
