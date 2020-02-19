@@ -5,13 +5,10 @@ public class UserRegistrationDomainTestConfiguration {
   private final UserRegistrationDomainConfiguration configuration =
       new UserRegistrationDomainConfiguration();
 
-  public UserRegisteringDomainService userRegisteringService(
+  public UserRegisteringDomainService userRegisteringDomainService(
       UsernameUniquenessValidator usernameUniquenessValidator,
-      RolesValidator rolesValidator
-  ) {
-    return configuration.userRegisteringService(
-        configuration.internalUserRegisterer(usernameUniquenessValidator, rolesValidator),
-        configuration.externalUserRegisterer()
-    );
+      RolesValidator rolesValidator) {
+
+    return configuration.userRegisteringDomainService(usernameUniquenessValidator, rolesValidator);
   }
 }

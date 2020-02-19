@@ -1,10 +1,9 @@
 package com.silenteight.sens.webapp.user.registration;
 
-import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.Success;
 import com.silenteight.sens.webapp.user.registration.domain.*;
-import com.silenteight.sens.webapp.user.registration.domain.NameLengthValidator.InvalidNameLength;
-import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExist;
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
+import com.silenteight.sens.webapp.user.registration.domain.NameLengthValidator.InvalidNameLengthError;
+import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExistError;
+import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -15,8 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.sens.webapp.user.registration.UserRegistrationUseCaseFixtures.ANALYST_REGISTRATION_REQUEST;
-import static com.silenteight.sens.webapp.user.registration.UserRegistrationUseCaseFixtures.NO_ROLES_REGISTRATION_REQUEST;
+import static com.silenteight.sens.webapp.user.registration.ResultAssert.assertThatResult;
+import static com.silenteight.sens.webapp.user.registration.UserRegistrationUseCaseFixtures.*;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.verify;
@@ -40,45 +39,49 @@ class RegisterInternalUserUseCaseTest {
   void setUp() {
     UserRegistrationUseCaseConfiguration configuration =
         new UserRegistrationUseCaseConfiguration();
-    UserRegisteringDomainService userRegisteringService =
+    UserRegisteringDomainService userRegisteringDomainService =
         new UserRegistrationDomainTestConfiguration()
-            .userRegisteringService(usernameUniquenessValidator, rolesValidator);
+            .userRegisteringDomainService(usernameUniquenessValidator, rolesValidator);
 
     underTest =
         configuration.registerInternalUserUseCase(
-            userRegisteringService, registeredUserRepository);
+            userRegisteringDomainService, registeredUserRepository);
   }
 
   @Test
   void usernameTooLong_returnsValidDomainError() {
-    Either<UserRegistrationDomainError, Success> actual =
-        underTest.apply(UserRegistrationUseCaseFixtures.TOO_LONG_USERNAME_REQUEST);
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(TOO_LONG_USERNAME_REQUEST);
 
-    ResultAssert.assertThatResult(actual).isFailureOfType(InvalidNameLength.class);
+    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
   }
 
   @Test
   void usernameTooShort_returnsValidDomainError() {
-    Either<UserRegistrationDomainError, Success> actual =
-        underTest.apply(UserRegistrationUseCaseFixtures.TOO_SHORT_USERNAME_REQUEST);
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(TOO_SHORT_USERNAME_REQUEST);
 
-    ResultAssert.assertThatResult(actual).isFailureOfType(InvalidNameLength.class);
+    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
   }
 
   @Test
   void displayNameTooLong_returnsValidDomainError() {
-    Either<UserRegistrationDomainError, Success> actual =
-        underTest.apply(UserRegistrationUseCaseFixtures.TOO_LONG_DISPLAYNAME_REQUEST);
+    given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
 
-    ResultAssert.assertThatResult(actual).isFailureOfType(InvalidNameLength.class);
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(TOO_LONG_DISPLAYNAME_REQUEST);
+
+    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
   }
 
   @Test
   void displayNameTooShort_returnsValidDomainError() {
-    Either<UserRegistrationDomainError, Success> actual =
-        underTest.apply(UserRegistrationUseCaseFixtures.TOO_SHORT_DISPLAYNAME_REQUEST);
+    given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
 
-    ResultAssert.assertThatResult(actual).isFailureOfType(InvalidNameLength.class);
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(TOO_SHORT_DISPLAYNAME_REQUEST);
+
+    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
   }
 
   @Nested
@@ -91,10 +94,10 @@ class RegisterInternalUserUseCaseTest {
 
     @Test
     void whenNoRoles_returnsValidSuccess() {
-      Either<UserRegistrationDomainError, Success> actual =
+      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
           underTest.apply(NO_ROLES_REGISTRATION_REQUEST);
 
-      ResultAssert.assertThatResult(actual)
+      assertThatResult(actual)
           .isSuccessWithUsername(NO_ROLES_REGISTRATION_REQUEST.getUsername());
     }
 
@@ -117,16 +120,16 @@ class RegisterInternalUserUseCaseTest {
 
     @Test
     void registerWithRoles_returnsValidSuccess() {
-      Either<UserRegistrationDomainError, Success> actual =
-          underTest.apply(ANALYST_REGISTRATION_REQUEST);
+      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+          underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
-      ResultAssert.assertThatResult(actual)
-          .isSuccessWithUsername(ANALYST_REGISTRATION_REQUEST.getUsername());
+      assertThatResult(actual)
+          .isSuccessWithUsername(ONE_ROLE_REGISTRATION_REQUEST.getUsername());
     }
 
     @Test
     void registerWithRoles_savesToRepo() {
-      underTest.apply(ANALYST_REGISTRATION_REQUEST);
+      underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
       verify(registeredUserRepository).save(any());
     }
@@ -143,10 +146,10 @@ class RegisterInternalUserUseCaseTest {
 
     @Test
     void whenNoRoles_returnsValidDomainError() {
-      Either<UserRegistrationDomainError, Success> actual =
+      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
           underTest.apply(NO_ROLES_REGISTRATION_REQUEST);
 
-      ResultAssert.assertThatResult(actual).isFailureOfType(UsernameNotUnique.class);
+      assertThatResult(actual).isFailureOfType(UsernameNotUniqueError.class);
     }
 
     @Test
@@ -169,15 +172,15 @@ class RegisterInternalUserUseCaseTest {
 
     @Test
     void registerWithRoles_returnsValidDomainError() {
-      Either<UserRegistrationDomainError, Success> actual =
-          underTest.apply(ANALYST_REGISTRATION_REQUEST);
+      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+          underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
-      ResultAssert.assertThatResult(actual).isFailureOfType(RolesDontExist.class);
+      assertThatResult(actual).isFailureOfType(RolesDontExistError.class);
     }
 
     @Test
     void registerWithRoles_doesNotSaveToRepo() {
-      underTest.apply(ANALYST_REGISTRATION_REQUEST);
+      underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
       verifyZeroInteractions(registeredUserRepository);
     }

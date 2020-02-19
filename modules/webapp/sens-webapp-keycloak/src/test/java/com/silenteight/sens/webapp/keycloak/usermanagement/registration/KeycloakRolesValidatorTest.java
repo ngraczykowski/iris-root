@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExist;
+import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExistError;
 
 import io.vavr.control.Option;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ class KeycloakRolesValidatorTest {
 
   @Test
   void noRolesInKeycloak_returnsError() {
-    Option<RolesDontExist> error = underTest.validate(of(Fixtures.ANALYST));
+    Option<RolesDontExistError> error = underTest.validate(of(Fixtures.ANALYST));
 
     assertThat(error).isNotEmpty();
   }
@@ -58,28 +58,28 @@ class KeycloakRolesValidatorTest {
 
     @Test
     void approverAndMakerRolesPassed_returnsError() {
-      Option<RolesDontExist> error = underTest.validate(of(Fixtures.APPROVER, Fixtures.MAKER));
+      Option<RolesDontExistError> error = underTest.validate(of(Fixtures.APPROVER, Fixtures.MAKER));
 
       assertThat(error).isNotEmpty();
     }
 
     @Test
     void analystRolePassed_returnsNoError() {
-      Option<RolesDontExist> error = underTest.validate(of(Fixtures.ANALYST));
+      Option<RolesDontExistError> error = underTest.validate(of(Fixtures.ANALYST));
 
       assertThat(error).isEmpty();
     }
 
     @Test
     void approverRolePassed_returnsError() {
-      Option<RolesDontExist> error = underTest.validate(of(Fixtures.APPROVER));
+      Option<RolesDontExistError> error = underTest.validate(of(Fixtures.APPROVER));
 
       assertThat(error).isNotEmpty();
     }
 
     @Test
     void analystAndMakerRolesPassed_returnsNoError() {
-      Option<RolesDontExist> error = underTest.validate(of(Fixtures.ANALYST, Fixtures.MAKER));
+      Option<RolesDontExistError> error = underTest.validate(of(Fixtures.ANALYST, Fixtures.MAKER));
 
       assertThat(error).isEmpty();
     }

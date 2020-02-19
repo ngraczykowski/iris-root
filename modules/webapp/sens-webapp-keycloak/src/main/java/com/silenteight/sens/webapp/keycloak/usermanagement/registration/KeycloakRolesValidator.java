@@ -23,7 +23,7 @@ class KeycloakRolesValidator implements RolesValidator {
   private final RolesResource keycloak;
 
   @Override
-  public Option<RolesDontExist> validate(@NonNull Set<String> roles) {
+  public Option<RolesDontExistError> validate(@NonNull Set<String> roles) {
     log.debug("Checking if roles exist. {}", roles);
 
     if (roles.isEmpty())
@@ -36,6 +36,6 @@ class KeycloakRolesValidator implements RolesValidator {
     if (availableRoles.containsAll(roles))
       return none();
 
-    return of(new RolesDontExist(roles));
+    return of(new RolesDontExistError(roles));
   }
 }

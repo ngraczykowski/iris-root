@@ -10,8 +10,17 @@ class UserRegistrationUseCaseConfiguration {
 
   @Bean
   RegisterInternalUserUseCase registerInternalUserUseCase(
-      UserRegisteringDomainService userRegisteringService,
+      UserRegisteringDomainService userRegisteringDomainService,
       RegisteredUserRepository registeredUserRepository) {
-    return new RegisterInternalUserUseCase(userRegisteringService, registeredUserRepository);
+
+    return new RegisterInternalUserUseCase(userRegisteringDomainService, registeredUserRepository);
+  }
+
+  @Bean
+  RegisterAnalystUseCase registerAnalystUseCase(
+      UserRegisteringDomainService userRegisteringDomainService,
+      RegisteredUserRepository registeredUserRepository) {
+
+    return new RegisterAnalystUseCase(userRegisteringDomainService, registeredUserRepository);
   }
 }

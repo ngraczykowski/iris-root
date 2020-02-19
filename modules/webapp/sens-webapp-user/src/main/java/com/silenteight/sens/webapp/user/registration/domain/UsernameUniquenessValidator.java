@@ -4,13 +4,13 @@ import io.vavr.control.Option;
 
 public interface UsernameUniquenessValidator {
 
-  Option<UsernameNotUnique> validate(String username);
+  Option<UsernameNotUniqueError> validate(String username);
 
-  class UsernameNotUnique extends SimpleUserRegistrationDomainError {
+  class UsernameNotUniqueError extends SimpleUserRegistrationDomainError {
 
     private static final long serialVersionUID = 2443691316375936859L;
 
-    public UsernameNotUnique(String username) {
+    public UsernameNotUniqueError(String username) {
       super("Username " + username + " is not unique");
     }
   }

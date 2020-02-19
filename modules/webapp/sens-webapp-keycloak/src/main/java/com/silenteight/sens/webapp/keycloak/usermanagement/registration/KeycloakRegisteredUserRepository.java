@@ -10,11 +10,15 @@ import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Crede
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import static java.util.List.of;
+import static java.lang.Boolean.TRUE;
+import static java.util.Collections.singletonList;
+import static org.keycloak.representations.idm.CredentialRepresentation.PASSWORD;
 
 @RequiredArgsConstructor
 @Slf4j
 class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
+
+  private static final String SOURCE_ATTRIBUTE_NAME = "source";
 
   private final KeycloakUserCreator keycloakUserCreator;
   private final KeycloakUserRoleAssigner roleAssigner;
@@ -23,30 +27,33 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
   public void save(CompletedUserRegistration userRegistration) {
     UserRepresentation userRepresentation = toUserRepresentation(userRegistration);
 
-    KeycloakUserId newlyCreatedUserId = keycloakUserCreator.createUser(userRepresentation);
+    KeycloakUserId newlyCreatedUserId = keycloakUserCreator.create(userRepresentation);
 
     roleAssigner.assignRoles(newlyCreatedUserId, userRegistration.getRoles());
   }
 
   private static UserRepresentation toUserRepresentation(CompletedUserRegistration registration) {
     UserRepresentation userRepresentation = new UserRepresentation();
-
-    Credentials credentials = registration.getCredentials();
-    String username = registration.getUsername();
-
-    userRepresentation.setUsername(username);
-    userRepresentation.setEnabled(Boolean.TRUE);
-
-    CredentialRepresentation password = new CredentialRepresentation();
-    password.setValue(credentials.getPassword());
-    password.setType(CredentialRepresentation.PASSWORD);
-    password.setTemporary(Boolean.TRUE);
-
-    userRepresentation.setCredentials(of(password));
+    userRepresentation.setUsername(registration.getUsername());
+    userRepresentation.setEnabled(TRUE);
     userRepresentation.setCreatedTimestamp(registration.getRegistrationDate().toEpochSecond());
     userRepresentation.setFirstName(registration.getDisplayName());
-    // WA-344(mmastylo) set origin for UserRepresentation
+    userRepresentation.singleAttribute(SOURCE_ATTRIBUTE_NAME, registration.getSourceName());
+
+    registration
+        .getCredentials()
+        .ifPresent(it -> userRepresentation.setCredentials(
+            singletonList(createPasswordCredential(it))));
 
     return userRepresentation;
+  }
+
+  private static CredentialRepresentation createPasswordCredential(Credentials credentials) {
+    CredentialRepresentation passwordCredential = new CredentialRepresentation();
+    passwordCredential.setValue(credentials.getPassword());
+    passwordCredential.setType(PASSWORD);
+    passwordCredential.setTemporary(TRUE);
+
+    return passwordCredential;
   }
 }

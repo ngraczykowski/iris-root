@@ -1,13 +1,17 @@
 package com.silenteight.sens.webapp.user.registration;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
-import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExist;
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
+import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExistError;
+import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import static java.util.Collections.emptySet;
 import static java.util.Set.of;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class UserRegistrationUseCaseFixtures {
 
   static final RegisterInternalUserCommand NO_ROLES_REGISTRATION_REQUEST =
@@ -18,7 +22,7 @@ class UserRegistrationUseCaseFixtures {
           .password("jdoe125")
           .build();
 
-  static final RegisterInternalUserCommand ANALYST_REGISTRATION_REQUEST =
+  static final RegisterInternalUserCommand ONE_ROLE_REGISTRATION_REQUEST =
       RegisterInternalUserCommand.builder()
           .displayName("John Doe")
           .username("jdoe5")
@@ -54,9 +58,9 @@ class UserRegistrationUseCaseFixtures {
           .password("jdoe125")
           .build();
 
-  static final UsernameNotUnique USERNAME_NOT_UNIQUE =
-      new UsernameNotUnique("some username");
+  static final UsernameNotUniqueError USERNAME_NOT_UNIQUE =
+      new UsernameNotUniqueError("some username");
 
-  static final RolesDontExist ROLES_DONT_EXIST =
-      new RolesDontExist(emptySet());
+  static final RolesDontExistError ROLES_DONT_EXIST =
+      new RolesDontExistError(emptySet());
 }

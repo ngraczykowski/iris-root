@@ -6,13 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
-import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.user.RolesQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
 import com.silenteight.sens.webapp.user.dto.RolesDto;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
-import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.Success;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
 
 import io.vavr.control.Either;
@@ -26,12 +24,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import javax.validation.Valid;
 
+import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(RestConstants.ROOT + "/users")
+@RequestMapping(ROOT + "/users")
 class UserRestController {
 
   @NonNull
@@ -55,7 +54,8 @@ class UserRestController {
     Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> result =
         registerInternalUserUseCase.apply(dto.toCommand());
 
-    return result.map(Success::getUsername)
+    return result
+        .map(RegisterInternalUserUseCase.Success::getUsername)
         .map(UserRestController::buildUserUri)
         .map(uri -> ResponseEntity.created(uri).<Void>build())
         .getOrElseThrow(UserRegistrationException::new);

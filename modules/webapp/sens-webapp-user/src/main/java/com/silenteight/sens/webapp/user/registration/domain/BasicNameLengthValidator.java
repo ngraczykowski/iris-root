@@ -14,12 +14,12 @@ class BasicNameLengthValidator implements NameLengthValidator {
   private final int maxLength;
 
   @Override
-  public Option<InvalidNameLength> validate(@NonNull String name) {
+  public Option<InvalidNameLengthError> validate(@NonNull String name) {
     int length = name.length();
     boolean isValid = length >= minLength && length <= maxLength;
 
     if (!isValid)
-      return Option.of(new InvalidNameLength(name, minLength, maxLength));
+      return Option.of(new InvalidNameLengthError(name, minLength, maxLength));
 
     return Option.none();
   }

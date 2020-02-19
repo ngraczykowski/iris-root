@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUnique;
+import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class KeycloakUsernameUniquenessValidatorTest {
   void searchReturnsNoUsers_noError() {
     given(usersResource.search(Fixtures.USERNAME)).willReturn(emptyList());
 
-    Option<UsernameNotUnique> error = underTest.validate(Fixtures.USERNAME);
+    Option<UsernameNotUniqueError> error = underTest.validate(Fixtures.USERNAME);
 
     assertThat(error).isEmpty();
   }
@@ -38,7 +38,7 @@ class KeycloakUsernameUniquenessValidatorTest {
   void searchReturnsOneUser_returnsFalse() {
     given(usersResource.search(Fixtures.USERNAME)).willReturn(List.of(new UserRepresentation()));
 
-    Option<UsernameNotUnique> error = underTest.validate(Fixtures.USERNAME);
+    Option<UsernameNotUniqueError> error = underTest.validate(Fixtures.USERNAME);
 
     assertThat(error).isNotEmpty();
   }

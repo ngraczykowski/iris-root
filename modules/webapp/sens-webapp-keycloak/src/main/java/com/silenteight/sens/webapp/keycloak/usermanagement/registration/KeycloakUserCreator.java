@@ -14,7 +14,7 @@ class KeycloakUserCreator {
 
   private final UsersResource usersResource;
 
-  KeycloakUserId createUser(UserRepresentation userRepresentation) {
+  KeycloakUserId create(UserRepresentation userRepresentation) {
     try (Response response = usersResource.create(userRepresentation)) {
       boolean isSuccessful = response.getStatusInfo().getFamily() == Family.SUCCESSFUL;
 

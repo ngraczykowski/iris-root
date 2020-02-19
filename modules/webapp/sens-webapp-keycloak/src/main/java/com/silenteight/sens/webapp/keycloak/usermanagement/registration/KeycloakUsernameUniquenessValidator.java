@@ -18,12 +18,12 @@ class KeycloakUsernameUniquenessValidator implements UsernameUniquenessValidator
   private final UsersResource userResource;
 
   @Override
-  public Option<UsernameNotUnique> validate(String username) {
+  public Option<UsernameNotUniqueError> validate(String username) {
     log.debug("Checking if username is unique in Keycloak. {}", username);
 
     if (userResource.search(username).isEmpty())
       return none();
 
-    return of(new UsernameNotUnique(username));
+    return of(new UsernameNotUniqueError(username));
   }
 }

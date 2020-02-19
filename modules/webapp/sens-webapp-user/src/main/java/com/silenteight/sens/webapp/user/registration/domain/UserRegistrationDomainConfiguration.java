@@ -1,50 +1,38 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
-import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.silenteight.sens.webapp.common.time.DefaultTimeSource.INSTANCE;
 
 @Configuration
 class UserRegistrationDomainConfiguration {
 
-  private static final int MIN_INTERNAL_USER_USERNAME_LENGTH = 3;
-  private static final int MAX_INTERNAL_USER_USERNAME_LENGTH = 30;
-  private static final int MIN_INTERNAL_USER_DISPLAYNAME_LENGTH = 3;
-  private static final int MAX_INTERNAL_USER_DISPLAYNAME_LENGTH = 50;
+  private static final int MIN_USERNAME_LENGTH = 3;
+  private static final int MAX_USERNAME_LENGTH = 30;
+  private static final int MIN_DISPLAY_NAME_LENGTH = 3;
+  private static final int MAX_DISPLAY_NAME_LENGTH = 50;
 
   @Bean
-  InternalUserRegisterer internalUserRegisterer(
+  UserRegisteringDomainService userRegisteringDomainService(
       UsernameUniquenessValidator usernameUniquenessValidator,
       RolesValidator rolesValidator) {
-    return new InternalUserRegisterer(
-        DefaultTimeSource.INSTANCE,
-        internalUsernameLengthValidator(),
-        internalDisplayNameLengthValidator(),
+
+    return new UserRegisteringDomainService(
+        INSTANCE,
+        usernameLengthValidator(),
+        displayNameLengthValidator(),
         rolesValidator,
-        usernameUniquenessValidator
-    );
+        usernameUniquenessValidator);
   }
 
-  private static BasicNameLengthValidator internalUsernameLengthValidator() {
+  private static BasicNameLengthValidator usernameLengthValidator() {
     return new BasicNameLengthValidator(
-        MIN_INTERNAL_USER_USERNAME_LENGTH, MAX_INTERNAL_USER_USERNAME_LENGTH);
+        MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
   }
 
-  private static BasicNameLengthValidator internalDisplayNameLengthValidator() {
+  private static BasicNameLengthValidator displayNameLengthValidator() {
     return new BasicNameLengthValidator(
-        MIN_INTERNAL_USER_DISPLAYNAME_LENGTH, MAX_INTERNAL_USER_DISPLAYNAME_LENGTH);
-  }
-
-  @Bean
-  ExternalUserRegisterer externalUserRegisterer() {
-    return new ExternalUserRegisterer();
-  }
-
-  @Bean
-  UserRegisteringDomainService userRegisteringService(
-      InternalUserRegisterer internalUserRegisterer,
-      ExternalUserRegisterer externalUserRegisterer) {
-    return new UserRegisteringDomainService(internalUserRegisterer, externalUserRegisterer);
+        MIN_DISPLAY_NAME_LENGTH, MAX_DISPLAY_NAME_LENGTH);
   }
 }
