@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.grpc;
+package com.silenteight.sens.webapp.grpc.decisiontree;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeQueryReposit
 import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeRepository;
 import com.silenteight.sens.webapp.backend.decisiontree.dto.*;
 import com.silenteight.sens.webapp.backend.decisiontree.exception.DecisionTreeNotFoundException;
-import com.silenteight.sens.webapp.backend.decisiontree.exception.GrpcDecisionTreeRepositoryException;
+import com.silenteight.sens.webapp.backend.decisiontree.exception.DecisionTreeRepositoryException;
 
 import io.grpc.StatusRuntimeException;
 
@@ -92,7 +92,7 @@ class GrpcDecisionTreeRepository implements
 
         throw new DecisionTreeNotFoundException(id, e);
       } else {
-        throw new GrpcDecisionTreeRepositoryException(e);
+        throw new DecisionTreeRepositoryException(e);
       }
     }
   }

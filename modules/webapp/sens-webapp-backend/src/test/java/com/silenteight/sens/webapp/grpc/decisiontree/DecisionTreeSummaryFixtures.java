@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.grpc;
+package com.silenteight.sens.webapp.grpc.decisiontree;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 import com.silenteight.proto.serp.v1.governance.DecisionTreeSummary;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class DecisionTreeSummaryFixtures {
+final class DecisionTreeSummaryFixtures {
 
-  public static final DecisionTreeSummary INACTIVE = DecisionTreeSummary
+  static final DecisionTreeSummary INACTIVE = DecisionTreeSummary
       .newBuilder()
       .setId(1L)
       .setName("inactive-decision-tree")
       .build();
 
-  public static final DecisionTreeSummary ACTIVE = DecisionTreeSummary
+  static final DecisionTreeSummary ACTIVE = DecisionTreeSummary
       .newBuilder()
       .setId(2L)
       .setName("active-decision-tree")

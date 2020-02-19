@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.grpc;
+package com.silenteight.sens.webapp.grpc.decisiontree;
 
 import com.silenteight.proto.serp.v1.api.DecisionTreeGovernanceGrpc.DecisionTreeGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.DecisionTreeResponse;
@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDetailsD
 import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreeDto;
 import com.silenteight.sens.webapp.backend.decisiontree.dto.DecisionTreesDto;
 import com.silenteight.sens.webapp.backend.decisiontree.exception.DecisionTreeNotFoundException;
-import com.silenteight.sens.webapp.backend.decisiontree.exception.GrpcDecisionTreeRepositoryException;
+import com.silenteight.sens.webapp.backend.decisiontree.exception.DecisionTreeRepositoryException;
 
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -23,9 +23,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.google.protobuf.Empty.getDefaultInstance;
-import static com.silenteight.sens.webapp.grpc.DecisionTreeSummaryFixtures.ACTIVE;
-import static com.silenteight.sens.webapp.grpc.DecisionTreeSummaryFixtures.INACTIVE;
-import static com.silenteight.sens.webapp.grpc.ListDecisionTreesResponseFixtures.DECISION_TREES;
+import static com.silenteight.sens.webapp.grpc.decisiontree.DecisionTreeSummaryFixtures.ACTIVE;
+import static com.silenteight.sens.webapp.grpc.decisiontree.DecisionTreeSummaryFixtures.INACTIVE;
+import static com.silenteight.sens.webapp.grpc.decisiontree.ListDecisionTreesResponseFixtures.DECISION_TREES;
 import static io.grpc.Status.Code.ABORTED;
 import static io.grpc.Status.Code.NOT_FOUND;
 import static java.util.stream.Collectors.toList;
@@ -99,7 +99,7 @@ class GrpcDecisionTreeRepositoryTest {
   }
 
   @Test
-  void throwGrpcDecisionTreeRepositoryExceptionWhenRequestAborted() {
+  void throwDecisionTreeRepositoryExceptionWhenRequestAborted() {
     // given
     GetDecisionTreeRequest request = createGetDecisionTreeRequest(ACTIVE.getId());
     when(client.getDecisionTree(request))
@@ -107,7 +107,7 @@ class GrpcDecisionTreeRepositoryTest {
 
     // when, then
     assertThrows(
-        GrpcDecisionTreeRepositoryException.class,
+        DecisionTreeRepositoryException.class,
         () -> underTest.getById(DecisionTreeDtoFixtures.ACTIVE.getId()));
   }
 

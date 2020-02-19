@@ -53,7 +53,6 @@ public abstract class BaseRestControllerTest {
   private static ValidatableMockMvcResponse toValidatableResponse(MockMvcResponse response) {
     return response
         .then()
-        .contentType(JSON)
         .log()
         .ifValidationFails();
   }
