@@ -17,10 +17,10 @@ class UserRegistrationUseCaseConfiguration {
   }
 
   @Bean
-  RegisterAnalystUseCase registerAnalystUseCase(
+  RegisterExternalUserUseCase registerExternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
       RegisteredUserRepository registeredUserRepository) {
 
-    return new RegisterAnalystUseCase(userRegisteringDomainService, registeredUserRepository);
+    return new RegisterExternalUserUseCase(userRegisteringDomainService, registeredUserRepository);
   }
 }

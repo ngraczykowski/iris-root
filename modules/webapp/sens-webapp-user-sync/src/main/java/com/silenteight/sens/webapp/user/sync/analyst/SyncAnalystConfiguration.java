@@ -1,6 +1,11 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
 import com.silenteight.sens.webapp.user.UserListQuery;
+import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
+import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
+import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
+import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,10 +23,13 @@ import javax.sql.DataSource;
 class SyncAnalystConfiguration {
 
   @Bean
-  SyncAnalystService syncAnalystService(
-      UserListQuery userListQuery, ExternalAnalystRepository repository) {
+  SyncAnalystsUseCase syncAnalystsUseCase(
+      UserListQuery userListQuery,
+      ExternalAnalystRepository externalAnalystRepository,
+      BulkAnalystService bulkAnalystService) {
 
-    return new SyncAnalystService(userListQuery, repository);
+    return new SyncAnalystsUseCase(
+        userListQuery, externalAnalystRepository, new AnalystSynchronizer(), bulkAnalystService);
   }
 
   @Bean
@@ -56,5 +64,19 @@ class SyncAnalystConfiguration {
   @ConfigurationProperties(prefix = "user.sync.analyst")
   SyncAnalystProperties syncAnalystProperties() {
     return new SyncAnalystProperties();
+  }
+
+  @Bean
+  BulkAnalystService analystService(
+      RegisterExternalUserUseCase registerExternalUserUseCase,
+      AddRolesToUserUseCase addRolesToUserUseCase,
+      UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase,
+      LockUserUseCase lockUserUseCase) {
+
+    return new BulkAnalystService(
+        registerExternalUserUseCase,
+        addRolesToUserUseCase,
+        updateUserDisplayNameUseCase,
+        lockUserUseCase);
   }
 }

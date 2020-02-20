@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.user.sync.analyst.SyncAnalystService;
+import com.silenteight.sens.webapp.user.sync.analyst.SyncAnalystsUseCase;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTest {
 
   @MockBean
-  private SyncAnalystService service;
+  private SyncAnalystsUseCase service;
 
   @Test
   void producesStats_whenAnalystsAreSync() {
@@ -27,7 +27,7 @@ public class SyncAnalystRestControllerServiceAvailableTest extends BaseRestContr
     post("/users/sync/analysts")
         .statusCode(OK.value())
         .body("added", is(ALL_CHANGED.getAdded()))
-        .body("updatedRole", is(ALL_CHANGED.getUpdatedRole()))
+        .body("addedRole", is(ALL_CHANGED.getAddedRole()))
         .body("updatedDisplayName", is(ALL_CHANGED.getUpdatedDisplayName()))
         .body("deleted", is(ALL_CHANGED.getDeleted()));
   }

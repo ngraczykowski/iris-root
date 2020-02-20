@@ -42,7 +42,7 @@ class AnalystSynchronizerTest {
     // then
     assertThat(result.getAdded()).isEqualTo(
         asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME));
-    assertThat(result.getUpdatedRole()).isEmpty();
+    assertThat(result.getAddedRole()).isEmpty();
     assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
   }
@@ -61,7 +61,7 @@ class AnalystSynchronizerTest {
 
     // then
     assertThat(result.getAdded()).isEqualTo(singletonList(ANALYST_WITH_DISPLAY_NAME));
-    assertThat(result.getUpdatedRole()).isEmpty();
+    assertThat(result.getAddedRole()).isEmpty();
     assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
   }
@@ -83,7 +83,7 @@ class AnalystSynchronizerTest {
 
     // then
     assertThat(result.getAdded()).isEmpty();
-    assertThat(result.getUpdatedRole()).isEmpty();
+    assertThat(result.getAddedRole()).isEmpty();
     assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
   }
@@ -106,13 +106,13 @@ class AnalystSynchronizerTest {
 
     // then
     assertThat(result.getAdded()).isEqualTo(singletonList(ANALYST_WITHOUT_DISPLAY_NAME));
-    assertThat(result.getUpdatedRole()).isEmpty();
+    assertThat(result.getAddedRole()).isEmpty();
     assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEqualTo(singletonList(otherLogin));
   }
 
   @Test
-  void analystsToUpdateRoleWhenSameUserNameAndMissingAnalystRole() {
+  void analystsToAddRoleWhenSameUserNameAndMissingAnalystRole() {
     // given
     Collection<UserDto> users = asList(
         createUser(
@@ -128,7 +128,7 @@ class AnalystSynchronizerTest {
 
     // then
     assertThat(result.getAdded()).isEmpty();
-    assertThat(result.getUpdatedRole()).isEqualTo(
+    assertThat(result.getAddedRole()).isEqualTo(
         singletonList(ANALYST_WITHOUT_DISPLAY_NAME.getUserName()));
     assertThat(result.getUpdatedDisplayName()).isEmpty();
     assertThat(result.getDeleted()).isEmpty();
@@ -149,7 +149,7 @@ class AnalystSynchronizerTest {
 
     // then
     assertThat(result.getAdded()).isEmpty();
-    assertThat(result.getUpdatedRole()).isEmpty();
+    assertThat(result.getAddedRole()).isEmpty();
     assertThat(result.getUpdatedDisplayName()).isEqualTo(
         singletonList(
             new UpdatedAnalyst(

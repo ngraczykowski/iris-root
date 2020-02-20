@@ -6,39 +6,41 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.NEW_DISPLAY_NAME_COMMAND;
+import java.util.Set;
+
+import static com.silenteight.sens.webapp.user.update.AddRolesToUserUseCaseFixtures.ADD_ANALYST_ROLE_COMMAND;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateUserDisplayNameUseCaseTest {
+class AddRolesToUserUseCaseTest {
 
   @Mock
   private UpdatedUserRepository updatedUserRepository;
 
-  private UpdateUserDisplayNameUseCase underTest;
+  private AddRolesToUserUseCase underTest;
 
   @BeforeEach
   void setUp() {
     underTest = new UserUpdateUseCaseConfiguration()
-        .updateUserDisplayNameUseCase(updatedUserRepository);
+        .addRolesToUserUseCase(updatedUserRepository);
   }
 
   @Test
-  void updateDisplayNameCommand_updateUser() {
+  void addRoleToUserCommand_updateUser() {
     // when
-    underTest.apply(NEW_DISPLAY_NAME_COMMAND);
+    underTest.apply(ADD_ANALYST_ROLE_COMMAND);
 
     // then
     verify(updatedUserRepository).save(
         updatedUser(
-            NEW_DISPLAY_NAME_COMMAND.getUsername(), NEW_DISPLAY_NAME_COMMAND.getDisplayName()));
+            ADD_ANALYST_ROLE_COMMAND.getUsername(), ADD_ANALYST_ROLE_COMMAND.getRoles()));
   }
 
-  private static UpdatedUser updatedUser(String username, String displayName) {
+  private static UpdatedUser updatedUser(String username, Set<String> roles) {
     return UpdatedUser
         .builder()
         .username(username)
-        .displayName(displayName)
+        .roles(roles)
         .build();
   }
 }

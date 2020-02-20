@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 class SyncAnalystRestControllerServiceUnavailableTest extends BaseRestControllerTest  {
 
   @Test
-  void its503_whenSyncAnalystServiceNotAvailable() {
+  void its503_whenSyncAnalystsUseCaseNotAvailable() {
     // when, then
     post("/users/sync/analysts")
         .statusCode(SERVICE_UNAVAILABLE.value())

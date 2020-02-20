@@ -18,4 +18,6 @@ dependencies {
   implementation project(":sens-webapp-user")
 
   implementation libraries.oracle
+
+  implementation libraries.vavr
 }

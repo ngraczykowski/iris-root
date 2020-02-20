@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static java.lang.Integer.MAX_VALUE;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
@@ -72,7 +73,7 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   @Override
   public Collection<UserDto> list() {
     return usersResource
-        .list()
+        .list(0, MAX_VALUE)
         .stream()
         .map(this::mapToDto)
         .collect(toUnmodifiableList());

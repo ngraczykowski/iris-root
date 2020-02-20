@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
@@ -24,11 +25,11 @@ import static java.util.stream.Collectors.toSet;
 class AnalystSynchronizer {
 
   SynchronizedAnalysts synchronize(
-      Collection<UserDto> users, Collection<Analyst> analysts) {
+      @NonNull Collection<UserDto> users, @NonNull Collection<Analyst> analysts) {
 
     return new SynchronizedAnalysts(
         analystsToCreate(users, analysts),
-        analystsToUpdateRole(users, analysts),
+        analystsToAddRole(users, analysts),
         analystsToUpdateDisplayName(users, analysts),
         analystsToDelete(users, analysts));
   }
@@ -39,7 +40,7 @@ class AnalystSynchronizer {
     Set<String> userNames = extractUserNames(users);
     return analysts
         .stream()
-        .filter(it -> !userNames.contains(it.getUserName()))
+        .filter(analyst -> !userNames.contains(analyst.getUserName()))
         .collect(toList());
   }
 
@@ -50,13 +51,13 @@ class AnalystSynchronizer {
         .collect(toSet());
   }
 
-  private static List<String> analystsToUpdateRole(
+  private static List<String> analystsToAddRole(
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getExternalUsers(users)
-        .filter(it -> analystUserNames.contains(it.getUserName()))
-        .filter(it -> !it.hasRole(ANALYST))
+        .filter(user -> analystUserNames.contains(user.getUserName()))
+        .filter(user -> !user.hasRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
@@ -71,7 +72,7 @@ class AnalystSynchronizer {
   private static Stream<UserDto> getExternalUsers(Collection<UserDto> users) {
     return users
         .stream()
-        .filter(UserDto::isExternalUser);
+        .filter(user -> user.hasOrigin(GNS));
   }
 
   private static List<UpdatedAnalyst> analystsToUpdateDisplayName(
@@ -79,8 +80,8 @@ class AnalystSynchronizer {
 
     Map<String, Analyst> analystByUserName = groupByUserName(analysts);
     return getExternalUsers(users)
-        .filter(it -> analystByUserName.containsKey(it.getUserName()))
-        .map(it -> new UserAnalystPair(it, analystByUserName.get(it.getUserName())))
+        .filter(user -> analystByUserName.containsKey(user.getUserName()))
+        .map(user -> new UserAnalystPair(user, analystByUserName.get(user.getUserName())))
         .filter(UserAnalystPair::haveDifferentDisplayNames)
         .map(UserAnalystPair::toUpdatedAnalyst)
         .collect(toList());
@@ -97,8 +98,8 @@ class AnalystSynchronizer {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getExternalUsers(users)
-        .filter(it -> !analystUserNames.contains(it.getUserName()))
-        .filter(it -> it.hasOnlyRole(ANALYST))
+        .filter(user -> !analystUserNames.contains(user.getUserName()))
+        .filter(user -> user.hasOnlyRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
@@ -140,7 +141,7 @@ class AnalystSynchronizer {
     List<Analyst> added;
 
     @NonNull
-    List<String> updatedRole;
+    List<String> addedRole;
 
     @NonNull
     List<UpdatedAnalyst> updatedDisplayName;
@@ -152,8 +153,8 @@ class AnalystSynchronizer {
       return added.size();
     }
 
-    int updatedRoleCount() {
-      return updatedRole.size();
+    int addedRoleCount() {
+      return addedRole.size();
     }
 
     int updatedDisplayNameCount() {

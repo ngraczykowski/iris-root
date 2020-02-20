@@ -26,7 +26,7 @@ class UserRegistrationUseCaseFixtures {
       RegisterInternalUserCommand.builder()
           .displayName("John Doe")
           .username("jdoe5")
-          .roles(of("Analyst"))
+          .roles(of("Role"))
           .password("jdoe125")
           .build();
 

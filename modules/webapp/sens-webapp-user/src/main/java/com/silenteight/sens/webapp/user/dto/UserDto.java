@@ -8,7 +8,6 @@ import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.util.Collections.emptyList;
 
 @Builder
@@ -36,7 +35,7 @@ public class UserDto {
     return roles.size() == 1 && hasRole(role);
   }
 
-  public boolean isExternalUser() {
-    return origin != SENS;
+  public boolean hasOrigin(UserOrigin origin) {
+    return this.origin == origin;
   }
 }

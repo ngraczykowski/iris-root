@@ -12,4 +12,9 @@ class UserUpdateUseCaseConfiguration {
 
     return new UpdateUserDisplayNameUseCase(updatedUserRepository);
   }
+
+  @Bean
+  AddRolesToUserUseCase addRolesToUserUseCase(UpdatedUserRepository updatedUserRepository) {
+    return new AddRolesToUserUseCase(updatedUserRepository);
+  }
 }
