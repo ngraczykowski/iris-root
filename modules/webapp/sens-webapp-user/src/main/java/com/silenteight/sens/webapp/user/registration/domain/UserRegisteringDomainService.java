@@ -51,7 +51,7 @@ public class UserRegisteringDomainService {
     return right(
         new CompletedUserRegistration(
             registration.getUserDetails(),
-            registration.getSource(),
+            registration.getOrigin(),
             timeSource.offsetDateTime()));
   }
 }

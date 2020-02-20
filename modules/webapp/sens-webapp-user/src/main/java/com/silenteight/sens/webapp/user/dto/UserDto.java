@@ -31,10 +31,6 @@ public class UserDto {
     return roles.contains(role);
   }
 
-  public boolean hasOnlyRole(String role) {
-    return roles.size() == 1 && hasRole(role);
-  }
-
   public boolean hasOrigin(UserOrigin origin) {
     return this.origin == origin;
   }

@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.L
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
+import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import org.keycloak.admin.client.resource.UsersResource;
@@ -18,8 +19,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.Collection;
 import java.util.List;
 
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.lang.Integer.MAX_VALUE;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
@@ -64,10 +68,18 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
         .ifPresent(userDto::setLastLoginAt);
 
     userDto.setRoles(userRolesProvider.getForUserId(userId));
-    // WA-344(mmastylo) read origin from UserRepresentation
-    userDto.setOrigin(SENS);
+    userDto.setOrigin(getOrigin(userRepresentation));
 
     return userDto;
+  }
+
+  private static UserOrigin getOrigin(UserRepresentation userRepresentation) {
+    return ofNullable(userRepresentation.getAttributes())
+        .map(attributes -> attributes.getOrDefault(ORIGIN, emptyList()))
+        .filter(attribute -> !attribute.isEmpty())
+        .map(attribute -> attribute.get(0))
+        .map(UserOrigin::valueOf)
+        .orElse(SENS);
   }
 
   @Override

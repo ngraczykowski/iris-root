@@ -11,7 +11,7 @@ import com.silenteight.sens.webapp.user.lock.UserLocker;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.lock.UserLockerConstants.DELETED_AT_ATTRIBUTE_NAME;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
 import static java.lang.Boolean.FALSE;
 
 @Slf4j
@@ -30,7 +30,7 @@ class KeycloakUserLocker implements UserLocker {
     UserResource userResource = keycloakUserRetriever.retrieve(username);
     UserRepresentation userRepresentation = userResource.toRepresentation();
     userRepresentation.setEnabled(FALSE);
-    userRepresentation.singleAttribute(DELETED_AT_ATTRIBUTE_NAME, deletedAtTime());
+    userRepresentation.singleAttribute(DELETED_AT, deletedAtTime());
     userResource.update(userRepresentation);
   }
 

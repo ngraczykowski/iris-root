@@ -13,7 +13,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.lock.UserLockerConstants.DELETED_AT_ATTRIBUTE_NAME;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
 import static java.time.Instant.parse;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,8 +55,8 @@ class KeycloakUserLockerTest {
     UserRepresentation captured = userRepresentationCaptor.getValue();
     assertThat(captured.getUsername()).isEqualTo(username);
     assertThat(captured.isEnabled()).isFalse();
-    assertThat(captured.getAttributes()).containsKey(DELETED_AT_ATTRIBUTE_NAME);
-    assertThat(captured.getAttributes().get(DELETED_AT_ATTRIBUTE_NAME))
+    assertThat(captured.getAttributes()).containsKey(DELETED_AT);
+    assertThat(captured.getAttributes().get(DELETED_AT))
         .containsExactly(DELETED_AT_TIME);
   }
 

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 
+import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import org.assertj.core.api.AbstractAssert;
@@ -33,6 +34,12 @@ class UserDtoAssert extends AbstractAssert<UserDtoAssert, UserDto> {
 
   UserDtoAssert hasDisplayName(String displayName) {
     assertThat(actual).extracting(UserDto::getDisplayName).isEqualTo(displayName);
+
+    return this;
+  }
+
+  UserDtoAssert hasOrigin(UserOrigin origin) {
+    assertThat(actual).extracting(UserDto::getOrigin).isEqualTo(origin);
 
     return this;
   }

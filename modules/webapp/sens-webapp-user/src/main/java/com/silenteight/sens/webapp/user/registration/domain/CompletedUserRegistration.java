@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 
 import java.time.OffsetDateTime;
@@ -18,7 +19,7 @@ public class CompletedUserRegistration {
   @NonNull
   NewUserDetails userDetails;
   @NonNull
-  RegistrationSource source;
+  UserOrigin origin;
   @NonNull
   OffsetDateTime registrationDate;
 
@@ -38,7 +39,7 @@ public class CompletedUserRegistration {
     return userDetails.getCredentials();
   }
 
-  public String getSourceName() {
-    return source.toString();
+  public String getOriginName() {
+    return origin.toString();
   }
 }

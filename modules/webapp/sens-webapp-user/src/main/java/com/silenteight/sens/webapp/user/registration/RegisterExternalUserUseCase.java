@@ -5,7 +5,11 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.registration.domain.*;
+import com.silenteight.sens.webapp.user.domain.UserOrigin;
+import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
+import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
+import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
+import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
 
 import io.vavr.control.Either;
 
@@ -43,12 +47,12 @@ public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
     @Builder.Default
     private final Set<String> roles = emptySet();
     @NonNull
-    private final RegistrationSource source;
+    private final UserOrigin origin;
 
     NewUserRegistration toUserRegistration() {
       return new NewUserRegistration(
           new NewUserDetails(username, displayName, empty(), roles),
-          source);
+          origin);
     }
   }
 }

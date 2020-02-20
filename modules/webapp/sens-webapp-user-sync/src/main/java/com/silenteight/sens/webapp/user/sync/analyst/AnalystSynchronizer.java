@@ -99,7 +99,8 @@ class AnalystSynchronizer {
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getExternalUsers(users)
         .filter(user -> !analystUserNames.contains(user.getUserName()))
-        .filter(user -> user.hasOnlyRole(ANALYST))
+        // WA-365(mmastylo) change to hasOnlyRole(ANALYST)
+        .filter(user -> user.hasRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
