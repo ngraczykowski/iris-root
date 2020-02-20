@@ -6,6 +6,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse;
 import io.restassured.module.mockmvc.specification.MockMvcRequestAsyncSender;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,8 @@ public abstract class BaseRestControllerTest {
     RestAssuredMockMvc.standaloneSetup(MockMvcBuilders.webAppContextSetup(context));
   }
 
-  public ValidatableMockMvcResponse get(String mapping) {
-    return toValidatableResponse(asyncSender().get(ROOT + mapping));
-  }
-
-  public ValidatableMockMvcResponse post(String mapping) {
-    return toValidatableResponse(asyncSender().post(ROOT + mapping));
+  public static ValidatableMockMvcResponse get(String mapping) {
+    return toValidatableResponse(asyncSender().get(withRoot(mapping)));
   }
 
   private static MockMvcRequestAsyncSender asyncSender() {
@@ -57,15 +54,29 @@ public abstract class BaseRestControllerTest {
         .ifValidationFails();
   }
 
-  public <T> ValidatableMockMvcResponse post(String mapping, T body) {
+  @NotNull
+  private static String withRoot(String mapping) {
+    return ROOT + mapping;
+  }
+
+  public static ValidatableMockMvcResponse post(String mapping) {
+    return toValidatableResponse(asyncSender().post(withRoot(mapping)));
+  }
+
+  public static <T> ValidatableMockMvcResponse post(String mapping, T body) {
+    return toValidatableResponse(asyncSender(body).post(withRoot(mapping)));
+  }
+
+  private static <T> MockMvcRequestAsyncSender asyncSender(T body) {
     return given()
+        .accept(JSON)
         .contentType(JSON)
         .body(body)
-        .when()
-        .post(ROOT + mapping)
-        .then()
-        .log()
-        .ifValidationFails();
+        .when();
+  }
+
+  public static <T> ValidatableMockMvcResponse patch(String mapping, T body) {
+    return toValidatableResponse(asyncSender(body).patch(withRoot(mapping)));
   }
 
   @Configuration

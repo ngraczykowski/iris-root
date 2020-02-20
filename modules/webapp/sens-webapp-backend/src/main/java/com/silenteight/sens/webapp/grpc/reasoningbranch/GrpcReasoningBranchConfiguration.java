@@ -19,4 +19,14 @@ class GrpcReasoningBranchConfiguration {
             .withWaitForReady()
     );
   }
+
+  @Bean
+  GrpcReasoningBranchUpdateRepository grpcReasoningBranchUpdateRepository(
+      @Qualifier("governance") Channel channel) {
+    return new GrpcReasoningBranchUpdateRepository(
+        BranchGovernanceGrpc
+            .newBlockingStub(channel)
+            .withWaitForReady()
+    );
+  }
 }
