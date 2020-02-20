@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.keycloak.representations.idm.EventRepresentation;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static java.util.Optional.ofNullable;
 
@@ -34,16 +33,6 @@ class KeycloakLoginEvent {
 
     KeycloakLoginEventBuilder time(String time) {
       this.time = OffsetDateTime.parse(time);
-      return this;
-    }
-
-    KeycloakLoginEventBuilder time(String time, DateTimeFormatter timeFormatter) {
-      this.time = OffsetDateTime.parse(time, timeFormatter);
-      return this;
-    }
-
-    KeycloakLoginEventBuilder time(OffsetDateTime time) {
-      this.time = time;
       return this;
     }
 

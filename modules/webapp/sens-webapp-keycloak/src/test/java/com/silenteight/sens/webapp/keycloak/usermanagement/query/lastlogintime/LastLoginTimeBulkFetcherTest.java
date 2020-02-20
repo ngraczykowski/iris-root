@@ -20,6 +20,7 @@ import java.util.Map;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.KeycloakLastLoginTimeConfiguration.LOGIN_EVENT_TYPE;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeBulkFetcherTest.LastLoginTimeBulkFetcherFixtures.*;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
@@ -50,24 +51,11 @@ class LastLoginTimeBulkFetcherTest {
     assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class);
   }
 
-  static class LastLoginTimeBulkFetcherFixtures {
+  @Test
+  void limitNegative_illegalArgumentException() {
+    ThrowingCallable when = () -> underTest.fetch(-5);
 
-    static final String USER_1_ID = "6d521a7c-8066-4e10-bec4-d33f7a0191ae";
-    static final String USER_2_ID = "d2262382-ea61-4ffc-a459-0e20557e8dba";
-    static final String USER_3_ID = "30da08c2-6fcc-4350-8ba1-a5ba7798b857";
-
-    static final KeycloakLoginEvent EVENT_1 = KeycloakLoginEvent.builder()
-        .time("2020-02-01T10:10:10Z").userId(USER_1_ID).build();
-    static final KeycloakLoginEvent EVENT_2 = KeycloakLoginEvent.builder()
-        .time("2020-02-02T10:10:10Z").userId(USER_2_ID).build();
-    static final KeycloakLoginEvent EVENT_3 = KeycloakLoginEvent.builder()
-        .time("2020-02-03T10:10:10Z").userId(USER_2_ID).build();
-    static final KeycloakLoginEvent EVENT_4 = KeycloakLoginEvent.builder()
-        .time("2020-02-04T10:10:10Z").userId(USER_1_ID).build();
-    static final KeycloakLoginEvent EVENT_5 = KeycloakLoginEvent.builder()
-        .time("2020-02-05T10:10:10Z").userId(USER_3_ID).build();
-    static final KeycloakLoginEvent EVENT_6 = KeycloakLoginEvent.builder()
-        .time("2020-02-06T10:10:10Z").userId(USER_2_ID).build();
+    assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -131,5 +119,43 @@ class LastLoginTimeBulkFetcherTest {
           .containsOnly(
               entry(USER_2_ID, EVENT_6.getTime()));
     }
+  }
+
+  @Nested
+  class GivenFixtureEventWithoutUserId {
+
+    @BeforeEach
+    void setUp() {
+      givenEvents(singletonList(EVENT_WITHOUT_USER_ID));
+    }
+
+    @Test
+    void limit1_returnsEmptyLastLoginTimes() {
+      Map<String, OffsetDateTime> actual = underTest.fetch(1);
+
+      assertThat(actual).isEmpty();
+    }
+  }
+
+  static class LastLoginTimeBulkFetcherFixtures {
+
+    static final String USER_1_ID = "6d521a7c-8066-4e10-bec4-d33f7a0191ae";
+    static final String USER_2_ID = "d2262382-ea61-4ffc-a459-0e20557e8dba";
+    static final String USER_3_ID = "30da08c2-6fcc-4350-8ba1-a5ba7798b857";
+
+    static final KeycloakLoginEvent EVENT_1 = KeycloakLoginEvent.builder()
+        .time("2020-02-01T10:10:10Z").userId(USER_1_ID).build();
+    static final KeycloakLoginEvent EVENT_2 = KeycloakLoginEvent.builder()
+        .time("2020-02-02T10:10:10Z").userId(USER_2_ID).build();
+    static final KeycloakLoginEvent EVENT_3 = KeycloakLoginEvent.builder()
+        .time("2020-02-03T10:10:10Z").userId(USER_2_ID).build();
+    static final KeycloakLoginEvent EVENT_4 = KeycloakLoginEvent.builder()
+        .time("2020-02-04T10:10:10Z").userId(USER_1_ID).build();
+    static final KeycloakLoginEvent EVENT_5 = KeycloakLoginEvent.builder()
+        .time("2020-02-05T10:10:10Z").userId(USER_3_ID).build();
+    static final KeycloakLoginEvent EVENT_6 = KeycloakLoginEvent.builder()
+        .time("2020-02-06T10:10:10Z").userId(USER_2_ID).build();
+    static final KeycloakLoginEvent EVENT_WITHOUT_USER_ID = KeycloakLoginEvent.builder()
+        .time("2020-02-07T10:10:10Z").build();
   }
 }

@@ -24,12 +24,13 @@ class LastLoginTimeBulkFetcher {
   private final TimeConverter timeConverter;
 
   Map<String, OffsetDateTime> fetch(long limit) {
-    if (limit == 0)
-      throw new IllegalArgumentException("Limit can't be 0");
+    if (limit <= 0)
+      throw new IllegalArgumentException("Limit must be positive");
 
     List<EventRepresentation> loginEvents = getAllLoginEvents();
 
     Map<String, Long> lastLoginTimestampsByUserId = of(loginEvents)
+        .filter(event -> event.getUserId() != null)
         .reverseSorted(Comparator.comparingLong(EventRepresentation::getTime))
         .distinct(EventRepresentation::getUserId)
         .toMap(EventRepresentation::getUserId, EventRepresentation::getTime, Long::max);
@@ -43,7 +44,6 @@ class LastLoginTimeBulkFetcher {
 
   private List<EventRepresentation> getAllLoginEvents() {
     return realmResource.getEvents(
-        List.of(LOGIN_EVENT_TYPE), null, null, null, null, null, null, null
-    );
+        List.of(LOGIN_EVENT_TYPE), null, null, null, null, null, null, null);
   }
 }
