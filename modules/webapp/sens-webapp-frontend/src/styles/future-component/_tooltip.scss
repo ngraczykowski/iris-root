@@ -25,7 +25,8 @@
   .tooltip-bottom,
   .tooltip-left,
   .tooltip-right,
-  .tooltip-layer {
+  .tooltip-layer,
+  .all-time {
     @include transition(all, $transition-normal, ease-in-out);
     background-color: $color-background-element;
     border-radius: $border-radius-page-element;
@@ -35,7 +36,7 @@
     font-weight: 700;
     line-height: 1.4;
     opacity: 0;
-    padding: $space-xs $space-s;
+    padding: $space-xs $space-m;
     position: absolute;
     text-align: center;
     visibility: hidden;
@@ -71,6 +72,19 @@
     bottom: calc(-80%);
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .all-time {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(-100%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .all-time-visible {
+    opacity: 1;
+    visibility: visible;
   }
 
   &:hover {

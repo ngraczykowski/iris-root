@@ -1,8 +1,16 @@
 <div class="load-branch">
-  <div>
+  <div class="tooltip save-changes-button">
+      <span class="all-time one-line"
+            [class.all-time-visible]="!validInput">
+        <p [translate]="'branch.load.input.tooltip.incorrectValue'"></p>
+      </span>
     <input class="input-field load-branch-search"
-           placeholder="{{ 'branch.load.input.placeholder' | translate }}" #rbID
-           (paste)="onPaste($event)" (keyup)="onInput(rbID.value)">
+           placeholder="{{ 'branch.load.input.placeholder' | translate }}"
+           #rbID
+           (paste)="onPaste($event)"
+           (keyup)="onInput(rbID.value)"
+           [class.error]="!validInput"
+           (focusout)="validateInput(fullIdCheck)">
   </div>
   <div>
     <div class="tooltip save-changes-button">
@@ -10,8 +18,9 @@
             *ngIf="!enteredID">
         <p [translate]="'branch.load.button.tooltip.emptyInput'"></p>
       </span>
-      <button class="button-outline" [translate]="'branch.load.button.label'"
-              [disabled]="!enteredID"></button>
+      <button class="button-outline"
+              [translate]="'branch.load.button.label'"
+              [disabled]="!enteredID || !validInput"></button>
     </div>
   </div>
 </div>

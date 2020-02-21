@@ -2,7 +2,10 @@
   "branch": {
     "load": {
       "input": {
-        "placeholder": "Enter Reasoning Branch ID number e.g. 1-546"
+        "placeholder": "Enter Reasoning Branch ID number e.g. 1-546",
+        "tooltip": {
+          "incorrectValue": "Please enter Reasoning Branch ID in the following format (Decision Tree ID)-(Match Group ID), for example, 1-546"
+        }
       },
       "button": {
         "label": "Load Reasoning Branch",
