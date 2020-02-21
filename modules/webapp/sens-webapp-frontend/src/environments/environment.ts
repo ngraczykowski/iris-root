@@ -8,7 +8,7 @@ import { UserRole } from '@app/templates/model/user.model';
 
 export const environment = {
   production: false,
-  serverApiUrl: '/',
+  serverApiUrl: 'http://localhost:7070/api',
 
   decisionTrees: {
     pollIntervalInMs: 5 * 1000
