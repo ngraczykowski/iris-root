@@ -22,8 +22,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-class GrpcDecisionTreeRepository implements
-    DecisionTreeQueryRepository, DecisionTreeRepository {
+class GrpcDecisionTreeRepository implements DecisionTreeQueryRepository, DecisionTreeRepository {
 
   private final DecisionTreeGovernanceBlockingStub client;
 

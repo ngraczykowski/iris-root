@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 
 import org.assertj.core.api.AbstractAssert;
 
@@ -31,6 +32,14 @@ public class ChangeBranchesRequestAssert
     assertThat(actual.getBranchChangeList())
         .anySatisfy(branchChange -> assertThatBranchChange(branchChange)
             .hasAiSolutionChange(solution));
+
+    return this;
+  }
+
+  ChangeBranchesRequestAssert hasBranchId(BranchId branchId) {
+    assertThat(actual.getBranchChangeList())
+        .anySatisfy(branchChange -> assertThatBranchChange(branchChange)
+            .hasBranchId(branchId));
 
     return this;
   }

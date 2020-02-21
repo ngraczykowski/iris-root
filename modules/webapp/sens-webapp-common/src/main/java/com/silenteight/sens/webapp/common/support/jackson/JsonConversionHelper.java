@@ -125,6 +125,8 @@ public enum JsonConversionHelper {
 
   public static final class FailedToGenerateJsonException extends RuntimeException {
 
+    private static final long serialVersionUID = -5469532072591567562L;
+
     public FailedToGenerateJsonException(Object value, Throwable cause) {
       super("Failed to generate json while serializing object " + value, cause);
     }

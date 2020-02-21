@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.grpc;
 
 import lombok.NonNull;
+import lombok.ToString;
 
 import com.google.rpc.Code;
 import com.google.rpc.Status;
@@ -15,14 +16,15 @@ import java.util.function.Predicate;
 import static io.grpc.protobuf.StatusProto.fromThrowable;
 import static io.vavr.control.Try.failure;
 
+@ToString(callSuper = true)
 public class GrpcCommunicationException extends RuntimeException {
 
   private static final long serialVersionUID = 1775536480348716595L;
 
   private final Status status;
 
-  private GrpcCommunicationException(Status status) {
-    super(status.getMessage());
+  private GrpcCommunicationException(Throwable cause, Status status) {
+    super(status.getMessage(), cause);
     this.status = status;
   }
 
@@ -33,11 +35,11 @@ public class GrpcCommunicationException extends RuntimeException {
   }
 
   public static GrpcCommunicationException from(@NonNull StatusException exception) {
-    return new GrpcCommunicationException(getStatus(exception));
+    return new GrpcCommunicationException(exception, getStatus(exception));
   }
 
   public static GrpcCommunicationException from(@NonNull StatusRuntimeException exception) {
-    return new GrpcCommunicationException(getStatus(exception));
+    return new GrpcCommunicationException(exception, getStatus(exception));
   }
 
   @NotNull

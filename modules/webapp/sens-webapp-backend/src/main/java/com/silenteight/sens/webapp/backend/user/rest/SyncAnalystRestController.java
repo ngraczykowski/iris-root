@@ -36,6 +36,8 @@ class SyncAnalystRestController {
 
   static class SyncAnalystNotAvailableException extends RuntimeException {
 
+    private static final long serialVersionUID = 1295617718134359709L;
+
     SyncAnalystNotAvailableException() {
       super("Analyst synchronization not available.");
     }

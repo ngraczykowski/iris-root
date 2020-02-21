@@ -7,6 +7,7 @@ import com.silenteight.proto.serp.v1.api.BranchChange;
 import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
+import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranch;
@@ -42,6 +43,8 @@ class TestUpdatedBranch implements UpdatedBranch {
   ChangeBranchesRequest getRequest() {
     BranchChange.Builder branchChange = BranchChange.newBuilder();
 
+    branchChange.setReasoningBranchId(buildGrpcBranchId(getBranchId()));
+
     getNewAiSolution()
         .map(TestUpdatedBranch::buildSolutionChange)
         .ifPresent(branchChange::setSolutionChange);
@@ -58,6 +61,13 @@ class TestUpdatedBranch implements UpdatedBranch {
   private static EnablementChange buildEnablementChange(boolean newStatus) {
     return EnablementChange.newBuilder()
         .setEnabled(newStatus)
+        .build();
+  }
+
+  private static ReasoningBranchId buildGrpcBranchId(BranchId branchId) {
+    return ReasoningBranchId.newBuilder()
+        .setFeatureVectorId(branchId.getBranchNo())
+        .setDecisionTreeId(branchId.getTreeId())
         .build();
   }
 

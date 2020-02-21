@@ -9,7 +9,9 @@ import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBl
 import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
+import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.ReasoningBranchUpdateRepository;
@@ -48,6 +50,8 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
   private static ChangeBranchesRequest createRequest(UpdatedBranch updatedBranch) {
     Builder branchChange = BranchChange.newBuilder();
 
+    branchChange.setReasoningBranchId(buildGrpcBranchId(updatedBranch.getBranchId()));
+
     updatedBranch.getNewAiSolution()
         .map(GrpcReasoningBranchUpdateRepository::buildSolutionChange)
         .ifPresent(branchChange::setSolutionChange);
@@ -58,6 +62,13 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
 
     return ChangeBranchesRequest.newBuilder()
         .addBranchChange(branchChange)
+        .build();
+  }
+
+  private static ReasoningBranchId buildGrpcBranchId(BranchId branchId) {
+    return ReasoningBranchId.newBuilder()
+        .setFeatureVectorId(branchId.getBranchNo())
+        .setDecisionTreeId(branchId.getTreeId())
         .build();
   }
 

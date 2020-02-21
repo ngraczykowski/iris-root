@@ -61,7 +61,8 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     verify(governanceBlockingStub).changeBranches(requestCaptor.capture());
     ChangeBranchesRequest actualRequest = requestCaptor.getValue();
     assertThatChangeBranchRequest(actualRequest)
-        .hasStatusChange(BRANCH_WITH_STATUS_CHANGED.getNewIsActive().orElseThrow());
+        .hasStatusChange(BRANCH_WITH_STATUS_CHANGED.getNewIsActive().orElseThrow())
+        .hasBranchId(BRANCH_WITH_STATUS_CHANGED.getBranchId());
   }
 
   private static void assertSuccess(Try<Void> actual) {
@@ -77,7 +78,8 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     verify(governanceBlockingStub).changeBranches(requestCaptor.capture());
     ChangeBranchesRequest actualRequest = requestCaptor.getValue();
     assertThatChangeBranchRequest(actualRequest)
-        .hasSolutionChange(BRANCH_WITH_AI_SOLUTION_CHANGED.getNewAiSolution().orElseThrow());
+        .hasSolutionChange(BRANCH_WITH_AI_SOLUTION_CHANGED.getNewAiSolution().orElseThrow())
+        .hasBranchId(BRANCH_WITH_AI_SOLUTION_CHANGED.getBranchId());
   }
 
   @Test
@@ -90,7 +92,8 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     ChangeBranchesRequest actualRequest = requestCaptor.getValue();
     assertThatChangeBranchRequest(actualRequest)
         .hasSolutionChange(BRANCH_WITH_ALL_CHANGES.getNewAiSolution().orElseThrow())
-        .hasStatusChange(BRANCH_WITH_ALL_CHANGES.getNewIsActive().orElseThrow());
+        .hasStatusChange(BRANCH_WITH_ALL_CHANGES.getNewIsActive().orElseThrow())
+        .hasBranchId(BRANCH_WITH_ALL_CHANGES.getBranchId());
   }
 
   static class ReasoningBranchUpdateRepositoryUpdateFixtures {
