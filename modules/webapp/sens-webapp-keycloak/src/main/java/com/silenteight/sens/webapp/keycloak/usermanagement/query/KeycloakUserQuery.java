@@ -26,6 +26,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @RequiredArgsConstructor
 public class KeycloakUserQuery implements UserQuery, UserListQuery {
@@ -37,20 +38,16 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
   @Override
   public Page<UserDto> list(Pageable pageable) {
-    List<UserRepresentation> users = getUsers(pageable);
+    Collection<UserRepresentation> enabledUsers = listEnabled();
 
-    List<UserDto> usersPage = users.stream()
+    List<UserDto> usersPage = enabledUsers
+        .stream()
+        .skip(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .map(this::mapToDto)
         .collect(toList());
 
-    return new PageImpl<>(usersPage, pageable, usersResource.count());
-  }
-
-  private List<UserRepresentation> getUsers(Pageable pageable) {
-    int pageSize = pageable.getPageSize();
-    long offset = pageable.getOffset();
-
-    return usersResource.list((int) offset, pageSize);
+    return new PageImpl<>(usersPage, pageable, enabledUsers.size());
   }
 
   UserDto mapToDto(UserRepresentation userRepresentation) {
@@ -84,10 +81,17 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
   @Override
   public Collection<UserDto> list() {
+    return listEnabled()
+        .stream()
+        .map(this::mapToDto)
+        .collect(toUnmodifiableList());
+  }
+
+  private Collection<UserRepresentation> listEnabled() {
     return usersResource
         .list(0, MAX_VALUE)
         .stream()
-        .map(this::mapToDto)
+        .filter(user -> isTrue(user.isEnabled()))
         .collect(toUnmodifiableList());
   }
 }

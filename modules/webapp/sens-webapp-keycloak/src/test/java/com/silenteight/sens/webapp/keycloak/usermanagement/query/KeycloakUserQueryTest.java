@@ -15,11 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTest.KeycloakUserQueryUserDtoAssert.assertThatUserDto;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.*;
+import static java.lang.Integer.MAX_VALUE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -43,19 +45,47 @@ class KeycloakUserQueryTest {
   void setUp() {
     underTest = new KeycloakUserQuery(
         usersResource, lastLoginTimeProvider, roleProvider, TIME_CONVERTER);
+
+    given(usersResource.list(0, MAX_VALUE))
+        .willReturn(List.of(SENS_USER.getUserRepresentation(), GNS_USER.getUserRepresentation()));
   }
 
   @Test
-  void returnsCorrectPage_givenTwoUsersInRepo() {
-    given(usersResource.list((int) PAGE_REQUEST.getOffset(), PAGE_REQUEST.getPageSize()))
-        .willReturn(List.of(SENS_USER.getUserRepresentation(), GNS_USER.getUserRepresentation()));
-
+  void returnsCorrectPage_givenTwoUsersInRepoAndPageRequest() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
     lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
 
     roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
 
     Page<UserDto> actual = underTest.list(PAGE_REQUEST);
+
+    assertThat(actual)
+        .hasSize(2)
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER))
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(GNS_USER));
+  }
+
+  @Test
+  void returnsCorrectPage_givenTwoUsersInRepoAndOneElementPageRequest() {
+    lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
+
+    roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
+
+    Page<UserDto> actual = underTest.list(ONE_ELEMENT_PAGE_REQUEST);
+
+    assertThat(actual)
+        .hasSize(1)
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER));
+  }
+
+  @Test
+  void returnsUsers_givenTwoUsersInRepo() {
+    lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
+    lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
+
+    roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
+
+    Collection<UserDto> actual = underTest.list();
 
     assertThat(actual)
         .hasSize(2)

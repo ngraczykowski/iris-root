@@ -25,6 +25,8 @@ class KeycloakUserQueryTestFixtures {
 
   static final Pageable PAGE_REQUEST = PageRequest.of(0, 5);
 
+  static final Pageable ONE_ELEMENT_PAGE_REQUEST = PageRequest.of(0, 1);
+
   static final List<String> SENS_USER_ROLES = asList("ANALYST", "AUDITOR");
 
   static final KeycloakUser SENS_USER =
@@ -55,6 +57,7 @@ class KeycloakUserQueryTestFixtures {
       this.userId = randomUUID().toString();
 
       userRepresentation.setId(userId);
+      userRepresentation.setEnabled(true);
       userRepresentation.setCreatedTimestamp(createdAt.toInstant().toEpochMilli());
       userRepresentation.setRealmRoles(roles);
       userRepresentation.setFirstName(displayName);
