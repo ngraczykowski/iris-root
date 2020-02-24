@@ -11,7 +11,7 @@ export class LoadBranchComponent implements OnInit {
   validInput = true;
 
   basicIdVerification = new RegExp('[1-9]+|[1-9]+-+[0-9]+');
-  fullIdCheck = new RegExp('[1-9]\d*-\d+');
+  fullIdCheck = new RegExp('[1-9][0-9]*-[0-9]+');
 
   constructor() { }
 
