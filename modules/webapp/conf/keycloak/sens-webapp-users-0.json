@@ -50,6 +50,35 @@
           "view-profile"
         ]
       },
+      "createdTimestamp": 1582201959305,
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "emailVerified": false,
+      "enabled": true,
+      "federatedIdentities": [
+        {
+          "identityProvider": "scb-saml",
+          "userId": "G-04add0ba-1b63-4e46-bf19-0aea1647103e",
+          "userName": "g-04add0ba-1b63-4e46-bf19-0aea1647103e"
+        }
+      ],
+      "groups": [],
+      "notBefore": 0,
+      "realmRoles": [
+        "offline_access",
+        "uma_authorization"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "scb-user-1"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
       "createdTimestamp": 1580890115562,
       "credentials": [],
       "disableableCredentialTypes": [],

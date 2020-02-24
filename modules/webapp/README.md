@@ -1,5 +1,7 @@
 # Silent Eight Names Screening Web Application
 
+[[_TOC_]]
+
 ## Development setup
 
 ### Prerequisites
@@ -11,6 +13,7 @@
 |**IntelliJ**|Mandatory| Project is prepared for being worked on in IntelliJ IDEA. |
 |**jEnv**    |Optional | jEnv helps with managing Java versions. [Download it from jEnv site](https://www.jenv.be/) and follow instructions for installing.|   
 |**Gradle**  |Optional | SERP comes with gradle wrapper that you should use for building the project. Nevertheless you might want to have Gradle installed.|
+|**jq**      |Optional | jq is JSON manipulating utility that is being used during Keycloak configuration export. Is is widely used, therefore should be in every popular linux distro repositories. |
 
 
 ### Git repositories
@@ -23,11 +26,14 @@
 
 ### Run services
 
-**Keycloak auth server and main database**
+**Keycloak auth server, external SAML and main database**
 
-1. Definitions for both containers can be found in `docker-compose.yml`. Run Keycloak and PostgreSQL with:
+1. Definitions for all containers can be found in [docker-compose.yml](docker-compose.yml). Run Keycloak and PostgreSQL with:
         
         docker-compose up
+
+2. Log into [Keycloak admin console](http://localhost:8081/auth/admin/) using `sens:sens` credentials, 
+go to `Import` and import users file located in [conf/keycloak dir](conf/keycloak), with `Overwrite` setting.
 
 **SERP**
 
@@ -63,9 +69,23 @@ In Spring Boot Run Configuration add following program arguments:
 
 #### Keycloak
 
-Whole development keycloak configuration should be stored in file: `/conf/keycloak/sens-webapp-realm.json`.
-Everything can be configured using GUI available at [localhost:8081](http://localhost:8081).
-To export created configuration use script: `./keycloak-scripts/export-realm.sh`. (WARNING: After 'boot-up' is completed, you need to kill the script by hand with CTRL-C).
+Whole Keycloak development configuration is stored in [conf/keycloak](conf/keycloak) (or [conf/keycloak-saml-idp](conf/keycloak-saml-idp) for SAML idP).
+It is separated in two files, [sens-webapp-realm.json](conf/keycloak/sens-webapp-realm.json) and [sens-webapp-users-0.json](conf/keycloak/sens-webapp-users-0.json).
+Everything can be configured using GUI available at:
+- [localhost:8081](http://localhost:8081) for main Keycloak instance
+- [localhost:8095](http://localhost:8095) for SAML idP Keycloak instance
+##### Exporting
+To export created configuration use either: 
+- [keycloak-scripts/export-config-for-main-keycloak.sh](keycloak-scripts/export-config-for-main-keycloak.sh).
+- [keycloak-scripts/export-config-for-saml-keycloak.sh](keycloak-scripts/export-config-for-saml-keycloak.sh).
+>>>
+WARNING: Exporting requires booting up another Keycloak instance in desired container.
+Afterwards such instance is being automatically killed, but on lower spec machines it might take longer.
+Therefore, if the config is not exported within default 20 seconds, you can set `KEYCLOAK_EXPORT_TIMEOUT` 
+environment variable or modify default timeout in [this](keycloak-scripts/1-export-realm.sh) file.
+>>>
+##### Reloading new configuration
+`docker-compose down -v && docker-compose up -d`
 
 #### Database
 
@@ -88,7 +108,7 @@ Example configuration:
 Jenkins job: [sens/sens-webapp](https://jenkins.silenteight.com/job/sens/job/sens%252Fsens-webapp/)  
 Project in Sonar: [Silent Eight Name Screening Web Application](https://sonar.silenteight.com/dashboard?id=com.silenteight.sens.webapp%3Awebapp)
 
-Based on `Jenkinsfile` added to the project source code:
+Based on [Jenkinsfile](Jenkinsfile) added to the project source code:
 * Jenkins automatically [creates jobs](https://jenkins.silenteight.com/view/Current/job/sens/job/sens%252Fsens-webapp/) for each branch and runs pipeline for each change in the branch.  
 [GitLab Branch Source Plugin](https://jenkins.io/blog/2019/08/23/introducing-gitlab-branch-source-plugin/) in Jenkins scans projects and creates Jenkins jobs automatically.   
 In addition, git hooks in project have been configured to run Jenkins job.

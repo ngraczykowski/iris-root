@@ -39,9 +39,26 @@ services:
     networks:
       - sens-webapp
 
+  keycloak-saml-idp:
+    image: jboss/keycloak:8.0.1
+    restart: unless-stopped
+    volumes:
+      - ./conf/keycloak-saml-idp:/config/
+    environment:
+      KEYCLOAK_USER: "${EXTERNAL_SAML_ADMIN_USERNAME:-scb}"
+      KEYCLOAK_PASSWORD: "${EXTERNAL_SAML_ADMIN_PASSWORD:-scb}"
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/config -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+    ports:
+      - "${EXTERNAL_SAML_PORT:-8095}:8080"
+    networks:
+      - external-premises
+
 volumes:
   postgres-storage:
 
 networks:
   sens-webapp:
+    driver: bridge
+  external-premises:
     driver: bridge
