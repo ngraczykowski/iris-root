@@ -1,0 +1,48 @@
+.users-list {
+  table-layout: fixed;
+  width: 100%;
+
+  &,
+  th,
+  td {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  th, td {
+    border-bottom: 1px solid #ddd;
+    line-height: 48px;
+    text-align: left;
+    padding: 0 8px;
+
+    &:first-child {
+      padding-left: 24px;
+    }
+
+    &:last-child {
+      padding-right: 24px;
+    }
+
+    &.actions {
+      width: 150px;
+    }
+  }
+
+  tr:hover {
+    background: #fafafa;
+  }
+
+  tbody {
+    .user-role {
+      text-transform: capitalize;
+    }
+
+    .origin {
+      img {
+        position: relative;
+        top: 4px;
+        margin-right: 6px;
+      }
+    }
+  }
+}

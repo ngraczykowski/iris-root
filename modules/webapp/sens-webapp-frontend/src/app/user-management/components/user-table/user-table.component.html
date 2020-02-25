@@ -1,14 +1,46 @@
-<table>
+<table class="users-list">
   <thead>
-    <td>Username</td>
-    <td>Display name</td>
-    <td>Roles</td>
-    <td>Profile</td>
+  <th [translate]="usersListTranslate + 'username.label'"></th>
+  <th [translate]="usersListTranslate + 'displayName.label'"></th>
+  <th [translate]="usersListTranslate + 'roles.label'"></th>
+  <th [translate]="usersListTranslate + 'origin.label'"></th>
+  <th class="actions" [translate]="usersListTranslate + 'profile.label'"></th>
   </thead>
+  <tbody>
   <tr *ngFor="let user of users">
-    <td>{{user.userName}}</td>
-    <td>{{user.displayName}}</td>
-    <td>{{user.roles}}</td>
-    <td>edit profile</td>
+    <td>
+      <span class="text-ellipsis">{{user.userName}}</span>
+    </td>
+    <td>
+      <span *ngIf="user.displayName" class="text-ellipsis">{{user.displayName}}</span>
+      <span *ngIf="!user.displayName"
+            class="empty-state-data text-ellipsis"
+            [translate]="usersListTranslate + 'displayName.emptyState'"></span>
+    </td>
+    <td>
+      <ul class="list-horizontal text-ellipsis"
+          *ngIf="user.roles">
+        <li *ngFor="let role of user.roles"
+            class="user-role">{{role}}</li>
+      </ul>
+      <span *ngIf="!user.roles"
+            class="empty-state-data"
+            [translate]="usersListTranslate + 'roles.emptyState'"></span>
+    </td>
+    <td>
+      <div class="origin">
+        <div>
+          <img src="../../../../assets/images/silent-eight-logomark.svg"
+               height="16px"
+               alt="Silent Eight">
+          <span>SENS</span>
+        </div>
+      </div>
+    </td>
+    <td class="actions">
+      <button class="button-flat"
+              [translate]="usersListTranslate + 'profile.edit'"></button>
+    </td>
   </tr>
+  </tbody>
 </table>

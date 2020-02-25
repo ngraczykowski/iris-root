@@ -1,6 +1,14 @@
-<input 
-  type="text" 
-  placeholder="{{ 'user-management.userTable.header.search.placeholder' | translate }}"
-  [(ngModel)]="userNameFilter"
-  (ngModelChange)="inputChange.next($event)"
-/>
+<div class="search-filed">
+  <div class="input-field-icon">
+    <i class="input-field-icon-left search-icon"
+       aria-label="Search"
+       [inlineSVG]="'../../../assets/icons/search.svg'"></i>
+    <input
+            class="input-field input-field-icon-left-space"
+            type="text"
+            placeholder="{{ 'user-management.userTable.header.search.placeholder' | translate }}"
+            [(ngModel)]="userNameFilter"
+            (ngModelChange)="inputChange.next($event)"
+    />
+  </div>
+</div>

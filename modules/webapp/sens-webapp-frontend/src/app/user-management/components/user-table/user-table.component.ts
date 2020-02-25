@@ -9,6 +9,8 @@ import { User } from '@app/user-management/models/users';
 export class UserTableComponent implements OnInit, OnChanges {
   @Input() users: User[];
 
+  usersListTranslate = 'usersManagement.usersList.usersTable.';
+
   constructor(
     private readonly changeDetectionRef: ChangeDetectorRef
   ) { }

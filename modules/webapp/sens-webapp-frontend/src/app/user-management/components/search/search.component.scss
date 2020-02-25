@@ -1,0 +1,16 @@
+.search-filed {
+  display: flex;
+  justify-content: flex-end;
+
+  .input-field-icon {
+    width: 240px;
+
+    .search-icon {
+      ::ng-deep {
+        svg {
+          left: 0;
+        }
+      }
+    }
+  }
+}

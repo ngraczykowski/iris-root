@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { UserManagementPageComponent } from './containers/user-management-page/user-management-page.component';
@@ -27,7 +28,8 @@ import { UserFormContainerComponent } from './containers/user-form-container/use
     ReactiveFormsModule,
     ApplicationHeaderModule,
     UserManagementRoutingModule,
-    NewUserProfileModule
+    NewUserProfileModule,
+    AngularSvgIconModule
   ],
   providers: [
     UserManagementClient

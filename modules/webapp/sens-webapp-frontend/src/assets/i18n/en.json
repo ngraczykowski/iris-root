@@ -1,4 +1,32 @@
 {
+  "usersManagement": {
+    "usersList": {
+      "options": {
+        "addUser": "Add User",
+        "search": "Search user e.g. John Doe"
+      },
+      "usersTable": {
+        "username": {
+          "label": "Username"
+        },
+        "displayName": {
+          "label": "Display name",
+          "emptyState": "Display name not specified"
+        },
+        "roles": {
+          "label": "Roles",
+          "emptyState": "No role assigned"
+        },
+        "origin": {
+          "label": "Origin"
+        },
+        "profile": {
+          "label": "Profile",
+          "edit": "Edit Profile"
+        }
+      }
+    }
+  },
   "branch": {
     "load": {
       "input": {
