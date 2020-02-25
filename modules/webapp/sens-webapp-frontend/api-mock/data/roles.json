@@ -1,0 +1,8 @@
+{
+    "roles": [
+        "Admin", 
+        "Analyst", 
+        "Business Operator", 
+        "Auditor"
+    ]
+}

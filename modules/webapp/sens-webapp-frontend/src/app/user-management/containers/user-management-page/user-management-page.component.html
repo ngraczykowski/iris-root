@@ -1,3 +1,5 @@
 <app-application-header></app-application-header>
+<button (click)="showNewUser()">Add user</button>
 <app-search (inputChange)="onFilterChange($event)"></app-search>
 <app-user-table [users]="isFiltering ? filteredList : usersList"></app-user-table>
+<app-user-form-container></app-user-form-container>

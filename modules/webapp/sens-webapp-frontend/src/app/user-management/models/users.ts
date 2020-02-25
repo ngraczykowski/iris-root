@@ -1,8 +1,16 @@
-export interface Users {
-    userName: string;
-    displayName: string;
-    roles: string[];
-    lastLoginAt: string;
-    createdAt: string;
-    active: boolean;
+export interface User {
+  userName: String;
+  displayName: String;
+  roles: String[];
+  lastLoginAt: String;
+  createdAt: String;
+  active: boolean;
+}
+
+export interface UserResponse {
+  content: User[];
+}
+
+export interface UserRoles {
+  roles: String[];
 }

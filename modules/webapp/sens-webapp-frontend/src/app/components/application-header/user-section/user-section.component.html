@@ -6,7 +6,8 @@
             (click)="toggleUserMenu()">
     <span class="user-info-label"
           [translate]="'userProfile.label'"></span>
-      <span class="user-info-username">{{ (userDetails | async).userName }}</span>
+      <!-- @kjaworowski remove comment after WA-375 implementation -->
+      <!-- <span class="user-info-username">{{ (userDetails | async).userName }}</span> -->
     </button>
 
     <div class="dropdown-menu"

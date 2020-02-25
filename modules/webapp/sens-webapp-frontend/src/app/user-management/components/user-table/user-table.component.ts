@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { Users } from '@app/user-management/models/users';
+import { User } from '@app/user-management/models/users';
 
 @Component({
   selector: 'app-user-table',
@@ -7,7 +7,7 @@ import { Users } from '@app/user-management/models/users';
   styleUrls: ['./user-table.component.scss']
 })
 export class UserTableComponent implements OnInit, OnChanges {
-  @Input() users: Users[];
+  @Input() users: User[];
 
   constructor(
     private readonly changeDetectionRef: ChangeDetectorRef

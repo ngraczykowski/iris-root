@@ -1,23 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserManagementService } from '@app/user-management/services/user-management.service';
-import { Users } from '@app/user-management/models/users';
+import { User } from '@app/user-management/models/users';
+import { Subscription } from 'rxjs';
+import { LocalEventService } from '@app/shared/event/local-event.service';
+import { Event, EventKey } from '@app/shared/event/event.service.model';
 
 @Component({
   selector: 'app-user-management-page',
   templateUrl: './user-management-page.component.html',
   styleUrls: ['./user-management-page.component.scss']
 })
-export class UserManagementPageComponent implements OnInit {
-  usersList: Users[];
-  filteredList: Users[];
+export class UserManagementPageComponent implements OnInit, OnDestroy {
+  usersList: User[];
+  filteredList: User[];
   isFiltering = false;
-
+  subscriptions: Subscription[] = [];
   constructor(
-    private readonly userManagementService: UserManagementService
+    private readonly userManagementService: UserManagementService,
+    private eventService: LocalEventService
   ) { }
 
   ngOnInit() {
-    this.userManagementService.getUsers().subscribe(data => this.usersList = data.content);
+    this.subscriptions.push(
+      this.fetchUsers(),
+      this.eventService.subscribe(event => {
+        if ('data' in event && event.data.message === 'user-management.userProfile.success.create') {
+          this.fetchUsers();
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   onFilterChange(userName): void {
@@ -29,8 +44,19 @@ export class UserManagementPageComponent implements OnInit {
     }
   }
 
-  private filterUsers(userNameFilter: string): Users[] {
-    const isInFilterQuery = (field: string) => field.indexOf(userNameFilter) > -1;
+  showNewUser() {
+    this.eventService.sendEvent(<Event> {
+      key: EventKey.OPEN_NEW_PROFILE
+    });
+  }
+
+  private fetchUsers(): Subscription {
+    return this.userManagementService.getUsers()
+      .subscribe(data => this.usersList = data.content);
+  }
+
+  private filterUsers(userNameFilter: string): User[] {
+    const isInFilterQuery = (field: String) => field.indexOf(userNameFilter) > -1;
     return this.usersList.filter((user) => isInFilterQuery(user.userName)
       || (user.displayName !== null && isInFilterQuery(user.displayName)));
   }

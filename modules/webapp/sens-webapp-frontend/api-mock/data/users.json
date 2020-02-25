@@ -1,0 +1,73 @@
+{
+    "content": [
+        {
+            "userName": "test_user",
+            "displayName": "Test",
+            "roles": [
+                "Admin"
+            ],
+            "lastLoginAt": null,
+            "createdAt": "+51916-01-15T06:50:14+01:00",
+            "active": false,
+            "origin": "SENS"
+        },
+        {
+            "userName": "admin",
+            "displayName": "Mr. Admin",
+            "roles": [
+                "Admin"
+            ],
+            "lastLoginAt": null,
+            "createdAt": "+51916-01-15T06:50:14+01:00",
+            "active": false,
+            "origin": "SENS"
+        },
+        {
+            "userName": "1003386108",
+            "displayName": "1003386108",
+            "roles": [
+                "Analyst"
+            ],
+            "lastLoginAt": null,
+            "createdAt": "+51916-01-15T06:50:14+01:00",
+            "active": false,
+            "origin": "GNS"
+        },
+        {
+            "userName": "1003386109",
+            "displayName": "1003386109",
+            "roles": [
+                "Analyst"
+            ],
+            "lastLoginAt": null,
+            "createdAt": "+51916-01-15T06:50:14+01:00",
+            "active": false,
+            "origin": "GNS"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+        },
+        "pageSize": 5,
+        "pageNumber": 0,
+        "offset": 0,
+        "paged": true,
+        "unpaged": false
+    },
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 1,
+    "first": true,
+    "sort": {
+        "sorted": false,
+        "unsorted": true,
+        "empty": true
+    },
+    "number": 0,
+    "numberOfElements": 1,
+    "size": 5,
+    "empty": false
+}

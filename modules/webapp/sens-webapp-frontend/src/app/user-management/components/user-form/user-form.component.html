@@ -1,0 +1,27 @@
+<form [formGroup]="userForm">
+  <section>
+    <label>User name:</label>
+    <input type="text" formControlName="userName" />
+  </section>
+  <section>
+    <label>Display name:</label>
+    <input type="text" formControlName="displayName" />
+  </section>
+  <section>
+    <label>Passsword:</label>
+    <input type="password" formControlName="password" />
+    <span *ngIf="hasError('minOneLetter', 'password')">Minimum one letter required</span>
+    <span *ngIf="hasError('minOneDigit', 'password')">Minimum one digit required</span>
+    <span *ngIf="hasError('minlength', 'password')">Minimum password length is 8, current length is {{userForm.controls.password.errors.minlength.actualLength}}</span>
+  </section>
+  <section formGroupName="roles">
+    <label>Role:</label>
+    <ng-container *ngFor="let role of rolesControls.controls; let i = index">
+      <section>
+        <input type="checkbox" [id]="userRoles.roles[i]" [formControlName]="i"/>
+        <label [for]="userRoles.roles[i]">{{userRoles.roles[i]}}</label>
+      </section>
+    </ng-container>
+    <span *ngIf="hasError('selectRole', 'roles') && !userForm.controls.roles.untouched">Select at least one role</span>
+  </section>
+</form>
