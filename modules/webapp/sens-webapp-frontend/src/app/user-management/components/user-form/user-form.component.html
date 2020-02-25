@@ -1,27 +1,80 @@
-<form [formGroup]="userForm">
-  <section>
-    <label>User name:</label>
-    <input type="text" formControlName="userName" />
+<form [formGroup]="userForm" class="user-profile">
+  <section class="user-profile-section user-profile-row ">
+    <label class="user-profile-section-label required"
+           [translate]="userProfilePrefix + 'username.label'"></label>
+    <div class="user-profile-section-content">
+      <div class="user-profile-section-content-main">
+        <input type="text" class="input-field"
+               formControlName="userName"
+               placeholder="{{ userProfilePrefix + 'username.input.placeholder' | translate }}"/>
+      </div>
+      <p class="user-profile-section-content-hint"
+         [translate]="userProfilePrefix + 'username.input.hint'"></p>
+    </div>
   </section>
-  <section>
-    <label>Display name:</label>
-    <input type="text" formControlName="displayName" />
+  <section class="user-profile-section user-profile-row ">
+    <label class="user-profile-section-label"
+           [translate]="userProfilePrefix + 'displayName.label'"></label>
+    <div class="user-profile-section-content">
+      <input type="text" class="input-field" formControlName="displayName"
+             placeholder="{{ userProfilePrefix + 'displayName.input.placeholder' | translate }}"/>
+      <p class="user-profile-section-content-hint"
+         [translate]="userProfilePrefix + 'displayName.input.hint'"></p>
+    </div>
   </section>
-  <section>
-    <label>Passsword:</label>
-    <input type="password" formControlName="password" />
-    <span *ngIf="hasError('minOneLetter', 'password')">Minimum one letter required</span>
-    <span *ngIf="hasError('minOneDigit', 'password')">Minimum one digit required</span>
-    <span *ngIf="hasError('minlength', 'password')">Minimum password length is 8, current length is {{userForm.controls.password.errors.minlength.actualLength}}</span>
+  <section class="user-profile-section user-profile-row ">
+    <label class="user-profile-section-label required"
+           [translate]="userProfilePrefix + 'password.label'"></label>
+    <div class="user-profile-section-content">
+      <input type="password" class="input-field" formControlName="password"
+             placeholder="{{ userProfilePrefix + 'password.input.placeholder' | translate }}"
+             #password/>
+      <p class="user-profile-section-content-hint"
+         [class.password-validation-positive]="password.value && !hasError('minlength', 'password')">
+        <i class="icon icon-right-label"
+           aria-label="add"
+           [inlineSVG]="'../../../assets/icons/check-mark.svg'"
+           *ngIf="password.value && !hasError('minlength', 'password')"></i>
+        <span [translate]="userProfilePrefix + 'password.validation.length.minLength'"></span>
+        <span *ngIf="hasError('minlength', 'password')">{{ userProfilePrefix
+        + 'password.validation.length.counter' | translate:{value: userForm.controls.password.errors.minlength.actualLength} }}</span>
+      </p>
+      <p class="user-profile-section-content-hint"
+         [class.password-validation-positive]="password.value && !hasError('minOneLetter', 'password')">
+        <i class="icon icon-right-label"
+           aria-label="add"
+           [inlineSVG]="'../../../assets/icons/check-mark.svg'"
+           *ngIf="password.value && !hasError('minOneLetter', 'password')"></i>
+        <span [translate]="userProfilePrefix
+        + 'password.validation.letter'"></span></p>
+      <p class="user-profile-section-content-hint"
+         [class.password-validation-positive]="password.value && !hasError('minOneDigit', 'password')">
+        <i class="icon icon-right-label"
+           aria-label="add"
+           [inlineSVG]="'../../../assets/icons/check-mark.svg'"
+           *ngIf="password.value && !hasError('minOneDigit', 'password')"></i>
+        <span [translate]="userProfilePrefix
+        + 'password.validation.digit'"></span></p>
+    </div>
   </section>
-  <section formGroupName="roles">
-    <label>Role:</label>
-    <ng-container *ngFor="let role of rolesControls.controls; let i = index">
-      <section>
-        <input type="checkbox" [id]="userRoles.roles[i]" [formControlName]="i"/>
-        <label [for]="userRoles.roles[i]">{{userRoles.roles[i]}}</label>
-      </section>
-    </ng-container>
-    <span *ngIf="hasError('selectRole', 'roles') && !userForm.controls.roles.untouched">Select at least one role</span>
+  <section formGroupName="roles" class="user-profile-section">
+    <label class="user-profile-section-label required">Role</label>
+    <div class="user-profile-section-content">
+      <ng-container *ngFor="let role of rolesControls.controls; let i = index">
+        <section class="user-profile-role">
+          <label class="role-checkbox">
+              <span [translate]="userProfilePrefix
+        + 'role.roles.' + userRoles.roles[i].label + '.label'"></span>
+            <input type="checkbox" [id]="userRoles.roles[i].role" [formControlName]="i">
+            <span class="checkmark"></span>
+          </label>
+          <p class="user-profile-section-content-hint"
+             [translate]="userProfilePrefix + 'role.roles.' + userRoles.roles[i].label + '.hint'"></p>
+        </section>
+      </ng-container>
+      <span class="role-validation-info"
+            *ngIf="hasError('selectRole', 'roles') && !userForm.controls.roles.untouched"
+            [translate]="userProfilePrefix + 'role.validation.atLeastOneRole'"></span>
+    </div>
   </section>
 </form>

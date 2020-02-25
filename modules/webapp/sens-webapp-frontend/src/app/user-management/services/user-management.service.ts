@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '@env/environment';
-import { User, UserResponse, UserRoles } from '../models/users';
+import { User, UserResponse, UserRoles, UserRolesResponse } from '../models/users';
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +13,22 @@ export class UserManagementService {
   constructor(
     private http: HttpClient
   ) {
-    this.getUserRoles().subscribe(response => this.userRoles$.next(response));
+    this.getUserRoles().subscribe(response => {
+      const mappedRoles = response.roles.map(role => {
+        let translationLabel = role.replace(/\s/g, '');
+        translationLabel = translationLabel.charAt(0).toLowerCase() + translationLabel.substring(1);
+        return { role: role, label: translationLabel };
+      });
+      this.userRoles$.next({ roles: mappedRoles });
+    });
   }
 
   getUsers(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${environment.serverApiUrl}/users`);
   }
 
-  getUserRoles(): Observable<UserRoles> {
-    return this.http.get<UserRoles>(`${environment.serverApiUrl}/users/roles`);
+  getUserRoles(): Observable<UserRolesResponse> {
+    return this.http.get<UserRolesResponse>(`${environment.serverApiUrl}/users/roles`);
   }
 
   createUser(payload: User) {

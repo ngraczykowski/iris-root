@@ -90,7 +90,7 @@ export class AppModule implements DoBootstrap {
 
   ngDoBootstrap(appRef: ApplicationRef): void {
     concat(
-        // new KeycloakInitializer(this.keycloakService).doInitialize(),
+        new KeycloakInitializer(this.keycloakService).doInitialize(),
         this.bootstrapApp(appRef)
     ).subscribe({
       error: error => console.error('[ngDoBootstrap] init failed', error),

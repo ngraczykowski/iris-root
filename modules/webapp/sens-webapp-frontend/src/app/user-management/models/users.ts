@@ -11,6 +11,15 @@ export interface UserResponse {
   content: User[];
 }
 
-export interface UserRoles {
+export interface UserRolesResponse {
   roles: String[];
+}
+
+export interface UserRoles {
+  roles: UserRoleEntity[];
+}
+
+export interface UserRoleEntity {
+  role: String;
+  label: String;
 }

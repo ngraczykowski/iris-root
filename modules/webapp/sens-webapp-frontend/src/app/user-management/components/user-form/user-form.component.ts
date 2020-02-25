@@ -16,6 +16,8 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   @Output() isValid = new EventEmitter();
   @Input() userRoles: UserRoles;
 
+  userProfilePrefix = 'usersManagement.userProfile.content.';
+
   get rolesControls() { return <FormArray>this.userForm.controls['roles']; }
 
   constructor() { }

@@ -25,6 +25,73 @@
           "edit": "Edit Profile"
         }
       }
+    },
+    "userProfile": {
+      "header": {
+        "headline": {
+          "add": "Add New SENS User",
+          "edit": "Edit User Profile"
+        }
+      },
+      "content": {
+        "username": {
+          "label": "Username",
+          "input": {
+            "placeholder": "username@silenteight.com",
+            "hint": "The username is login and ID in the application that why it cannot be changed."
+          }
+        },
+        "displayName": {
+          "label": "Display name",
+          "input": {
+            "placeholder": "John Doe",
+            "hint": "The full name of a user that will help to identify him."
+          }
+        },
+        "password": {
+          "label": "Password",
+          "input": {
+            "placeholder": "Password of 8 characters with one digit"
+          },
+          "validation": {
+            "length": {
+              "minLength": "The password length is a minimum of 8 characters",
+              "counter": ", current length is {{value}}"
+            },
+            "letter": "The password contains minimum of one letter",
+            "digit": "The password contains minimum of one digit"
+          }
+        },
+        "role": {
+          "label": "Role",
+          "roles": {
+            "analyst": {
+              "label": "Analyst",
+              "hint": "The role needed for the analyst to use the chrome extension."
+            },
+            "auditor": {
+              "label": "Auditor",
+              "hint": "Has access to all reports about the application modules."
+            },
+            "admin": {
+              "label": "Admin",
+              "hint": "Has access and rights to everything in the application and can manage users."
+            },
+            "businessOperator": {
+              "label": "Business Operator",
+              "hint": "Has access to all Decision Trees, Reasoning Branches, and can manage it."
+            }
+          },
+          "validation": {
+            "atLeastOneRole": "At least one role must be assigned to the user."
+          }
+        }
+      },
+      "footer": {
+        "buttonClose": "Cancel",
+        "buttonAdd": "Add New User",
+        "buttonApply": "Apply Changes"
+      }
     }
   },
   "branch": {

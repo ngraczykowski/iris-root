@@ -15,6 +15,7 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   filteredList: User[];
   isFiltering = false;
   subscriptions: Subscription[] = [];
+
   constructor(
     private readonly userManagementService: UserManagementService,
     private eventService: LocalEventService
