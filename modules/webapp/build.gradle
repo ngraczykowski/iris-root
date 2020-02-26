@@ -48,12 +48,31 @@ subprojects { Project project ->
     }
 }
 
-def uncommonSubprojects = subprojects - project(":sens-webapp-common-testing") - project(":sens-webapp-common")
-
-configure(uncommonSubprojects) { Project subproject ->
+configure(subprojects) { Project subproject ->
   subproject.pluginManager.withPlugin("java") {
     subproject.dependencies {
       testImplementation project(":sens-webapp-common-testing")
+    }
+
+    subproject.afterEvaluate {
+      if (!subproject.pluginManager.hasPlugin("java-library"))
+        generateClassPathInManifest(subproject)
+    }
+  }
+}
+
+static def generateClassPathInManifest(Project project) {
+  project.tasks.named(JavaPlugin.JAR_TASK_NAME).configure { Jar jar ->
+    jar.doFirst {
+      jar.manifest {
+        def runtimeClasspath = project.configurations.runtimeClasspath
+
+        if (!runtimeClasspath.isEmpty()) {
+          def classPathJars = runtimeClasspath.collect { it.getName() }.join(" ")
+
+          attributes "Class-Path": classPathJars
+        }
+      }
     }
   }
 }

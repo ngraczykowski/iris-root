@@ -11,7 +11,7 @@ ext {
 
   // NOTE(ahaczewski): This must be synchronized with gradle/scripts/dependencies.gradle for
   //   Spring Boot Gradle plugin to work correctly.
-  springBootVersion = "2.1.9.RELEASE"
+  springBootVersion = "2.2.4.RELEASE"
 }
 
 repositories {

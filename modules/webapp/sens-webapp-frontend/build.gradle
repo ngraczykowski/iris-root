@@ -28,9 +28,7 @@ tasks.register("zip", Zip) {
   group = BasePlugin.BUILD_GROUP
   description = "Builds ZIP package of this project."
 
-  from("$buildDir/dist") {
-    into "static"
-  }
+  from("$buildDir/dist")
   dependsOn tasks.named("compile")
 }
 

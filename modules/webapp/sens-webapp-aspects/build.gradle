@@ -1,6 +1,7 @@
 plugins {
   id "java-library"
   id "io.freefair.aspectj.post-compile-weaving"
+  id "maven-publish"
 }
 
 description = "SENS WebApp Aspects"
