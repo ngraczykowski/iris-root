@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NewUserProfileModule } from '@app/templates/user-management/user-profile/new-user-profile/new-user-profile.module';
 import { UserManagementClient } from '@app/templates/user-management/user-management-client';
 import { UserFormContainerComponent } from './containers/user-form-container/user-form-container.component';
+import { ValidationFeedbackComponent } from './components/validation-feedback/validation-feedback.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { UserFormContainerComponent } from './containers/user-form-container/use
     UserTableComponent,
     SearchComponent,
     UserFormComponent,
-    UserFormContainerComponent
+    UserFormContainerComponent,
+    ValidationFeedbackComponent
   ],
   imports: [
     CommonModule,

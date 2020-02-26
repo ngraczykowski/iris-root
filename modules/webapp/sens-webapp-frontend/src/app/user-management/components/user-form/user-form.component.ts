@@ -24,15 +24,23 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.userForm = new FormGroup({
-      userName: new FormControl(null, Validators.required),
-      displayName: new FormControl(null),
+      userName: new FormControl(null, [Validators.required, Validators.compose([
+        Validators.required,
+        UserValidators.usernameMinLength(),
+        UserValidators.usernameMaxLength(),
+        UserValidators.usernameCharacters()
+      ])]),
+      displayName: new FormControl(null, [Validators.compose([
+        UserValidators.displayNameMinLength(),
+        UserValidators.displayNameMaxLength()
+      ])]),
       password: new FormControl(null, [Validators.required, Validators.compose([
         Validators.required,
         UserValidators.atLeastOneLetter(),
         UserValidators.atLeastOneDigit(),
         UserValidators.passwordMinLength()
       ])]),
-      roles: new FormArray([], this.validateRoles()),
+      roles: new FormArray([]),
     });
     this.onFormChanges();
   }

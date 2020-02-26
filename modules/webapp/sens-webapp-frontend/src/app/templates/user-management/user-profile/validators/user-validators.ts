@@ -7,6 +7,22 @@ export class UserValidators {
     return Validators.minLength(3);
   }
 
+  static usernameMaxLength(): ValidatorFn {
+    return Validators.maxLength(30);
+  }
+
+  static usernameCharacters(): ValidatorFn {
+    return patternValidator('usernameCharacters', /^[a-z0-9\-_@.]+$/);
+  }
+
+  static displayNameMinLength(): ValidatorFn {
+    return Validators.minLength(3);
+  }
+
+  static displayNameMaxLength(): ValidatorFn {
+    return Validators.maxLength(50);
+  }
+
   static passwordMinLength(): ValidatorFn {
     return Validators.minLength(8);
   }

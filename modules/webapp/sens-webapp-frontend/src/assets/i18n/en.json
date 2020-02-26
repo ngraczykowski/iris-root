@@ -37,15 +37,20 @@
         "username": {
           "label": "Username",
           "input": {
-            "placeholder": "username@silenteight.com",
-            "hint": "The username is login and ID in the application that why it cannot be changed."
+            "placeholder": "username@silenteight.com"
+          },
+          "validation": {
+            "length":"The username length is between 3 - 30 characters",
+            "characters": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
           }
         },
         "displayName": {
           "label": "Display name",
           "input": {
-            "placeholder": "John Doe",
-            "hint": "The full name of a user that will help to identify him."
+            "placeholder": "John Doe"
+          },
+          "validation": {
+            "length":"The username length is between 3 - 50 characters"
           }
         },
         "password": {
@@ -55,8 +60,7 @@
           },
           "validation": {
             "length": {
-              "minLength": "The password length is a minimum of 8 characters",
-              "counter": ", current length is {{value}}"
+              "minLength": "The password length is a minimum of 8 characters"
             },
             "letter": "The password contains minimum of one letter",
             "digit": "The password contains minimum of one digit"
