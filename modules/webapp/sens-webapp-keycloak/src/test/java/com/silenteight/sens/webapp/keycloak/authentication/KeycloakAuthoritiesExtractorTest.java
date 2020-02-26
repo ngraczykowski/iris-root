@@ -50,7 +50,7 @@ class KeycloakAuthoritiesExtractorTest {
   void givenExampleRolesAndAuthorities_noChangeNormalizer_mapsCorrect() {
     underTest = new KeycloakAuthoritiesExtractor(
         NO_CHANGE_NORMALIZER, NO_CHANGE_NORMALIZER);
-    mockRoles(Fixtures.ANALYST_ROLE, Fixtures.DECISION_TREE_MANAGER_ROLE);
+    mockRoles(Fixtures.ANALYST_ROLE, Fixtures.AUDITOR_ROLE);
     mockAuthorities(
         Fixtures.VIEW_DECISION_TREES_AUTHORITY, Fixtures.MANAGE_DECISION_TREES_AUTHORITY);
 
@@ -64,7 +64,7 @@ class KeycloakAuthoritiesExtractorTest {
     AuthorityNameNormalizer prefixAppendingNormalizer = (name) -> "ROLE_" + name;
     underTest = new KeycloakAuthoritiesExtractor(
         prefixAppendingNormalizer, NO_CHANGE_NORMALIZER);
-    mockRoles(Fixtures.ANALYST_ROLE, Fixtures.DECISION_TREE_MANAGER_ROLE);
+    mockRoles(Fixtures.ANALYST_ROLE, Fixtures.AUDITOR_ROLE);
     mockAuthorities(
         Fixtures.VIEW_DECISION_TREES_AUTHORITY, Fixtures.MANAGE_DECISION_TREES_AUTHORITY);
 
@@ -74,7 +74,7 @@ class KeycloakAuthoritiesExtractorTest {
         .extracting(GrantedAuthority::getAuthority)
         .containsAll(Set.of(
             "ROLE_" + Fixtures.ANALYST_ROLE,
-            "ROLE_" + Fixtures.DECISION_TREE_MANAGER_ROLE,
+            "ROLE_" + Fixtures.AUDITOR_ROLE,
             Fixtures.VIEW_DECISION_TREES_AUTHORITY,
             Fixtures.MANAGE_DECISION_TREES_AUTHORITY
         ));
@@ -95,7 +95,7 @@ class KeycloakAuthoritiesExtractorTest {
   private static class Fixtures {
 
     static final String ANALYST_ROLE = "Analyst";
-    static final String DECISION_TREE_MANAGER_ROLE = "Decision Tree Manager";
+    static final String AUDITOR_ROLE = "Auditor";
 
     static final String VIEW_DECISION_TREES_AUTHORITY = "view-decision-trees";
     static final String MANAGE_DECISION_TREES_AUTHORITY = "manage-decision-trees";
@@ -103,7 +103,7 @@ class KeycloakAuthoritiesExtractorTest {
     static Set<GrantedAuthority> allAuthorities() {
       return Stream.of(
           ANALYST_ROLE,
-          DECISION_TREE_MANAGER_ROLE,
+          AUDITOR_ROLE,
           VIEW_DECISION_TREES_AUTHORITY,
           MANAGE_DECISION_TREES_AUTHORITY
       ).map(SimpleGrantedAuthority::new).collect(toSet());

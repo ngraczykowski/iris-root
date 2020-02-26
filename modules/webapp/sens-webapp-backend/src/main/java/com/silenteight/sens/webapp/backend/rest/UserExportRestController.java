@@ -20,7 +20,7 @@ import static java.util.stream.Stream.empty;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(RestConstants.ROOT)
-@PreAuthorize("hasAnyAuthority('USER_VIEW', 'AUDIT_GENERATE_REPORT')")
+@PreAuthorize("hasAnyAuthority('AUDIT_GENERATE_REPORT')")
 public class UserExportRestController {
 
   private static final String USERS_FILENAME = "users.csv";

@@ -2031,36 +2031,6 @@
           "attributes": {},
           "clientRole": true,
           "composite": false,
-          "name": "batch-type-manage"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
-          "name": "decision-tree-list"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
-          "name": "decision-tree-manage"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
-          "name": "inbox-manage"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
-          "name": "solution-view"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
           "name": "uma_protection"
         },
         {
@@ -2074,12 +2044,6 @@
           "clientRole": true,
           "composite": false,
           "name": "user-view"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
-          "name": "workflow-manage"
         }
       ],
       "broker": [
@@ -2097,12 +2061,6 @@
           "clientRole": true,
           "composite": false,
           "name": "audit_generate_report"
-        },
-        {
-          "attributes": {},
-          "clientRole": true,
-          "composite": false,
-          "name": "decision_tree_list"
         }
       ],
       "postman": [],
@@ -2285,7 +2243,11 @@
     },
     "realm": [
       {
-        "attributes": {},
+        "attributes": {
+          "origin": [
+            "webapp"
+          ]
+        },
         "clientRole": false,
         "composite": true,
         "composites": {
@@ -2298,137 +2260,51 @@
         "name": "Auditor"
       },
       {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "batch-type-manage",
-              "decision-tree-list"
-            ]
-          }
+        "attributes": {
+          "origin": [
+            "webapp"
+          ]
         },
-        "name": "Batch type manager"
-      },
-      {
-        "attributes": {},
         "clientRole": false,
         "composite": true,
         "composites": {
           "client": {
-            "backend": [
-              "decision-tree-list"
-            ]
-          }
-        },
-        "name": "Approver"
-      },
-      {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "decision-tree-list"
-            ]
-          }
-        },
-        "name": "Maker"
-      },
-      {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "inbox-manage"
-            ]
-          }
-        },
-        "name": "Inbox operator"
-      },
-      {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "solution-view"
-            ]
+            "backend": []
           }
         },
         "name": "Analyst"
       },
       {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "user-manage",
-              "user-view",
-              "workflow-manage"
-            ]
-          }
-        },
-        "name": "User manager"
-      },
-      {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "decision-tree-list"
-            ],
-            "frontend": [
-              "decision_tree_list"
-            ]
-          }
-        },
-        "name": "Decision tree viewer"
-      },
-      {
-        "attributes": {},
-        "clientRole": false,
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend": [
-              "decision-tree-list",
-              "decision-tree-manage"
-            ]
-          },
-          "realm": [
-            "Decision tree viewer"
+        "attributes": {
+          "origin": [
+            "webapp"
           ]
         },
-        "name": "Decision tree manager"
+        "clientRole": false,
+        "composite": true,
+        "composites": {
+          "client": {
+            "backend": []
+          }
+        },
+        "name": "Business Operator"
       },
       {
-        "attributes": {},
+        "attributes": {
+          "origin": [
+            "webapp"
+          ]
+        },
         "clientRole": false,
         "composite": true,
         "composites": {
           "realm": [
             "Analyst",
-            "Approver",
             "Auditor",
-            "Batch type manager",
-            "Decision tree manager",
-            "Decision tree viewer",
-            "Inbox operator",
-            "Maker",
-            "User manager"
+            "Business Operator"
           ]
         },
-        "name": "Superuser"
+        "name": "Admin"
       },
       {
         "attributes": {},

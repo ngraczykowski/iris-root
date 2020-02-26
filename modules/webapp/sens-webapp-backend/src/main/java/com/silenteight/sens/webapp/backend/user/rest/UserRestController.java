@@ -60,6 +60,11 @@ class UserRestController {
         .map(uri -> ResponseEntity.created(uri).<Void>build())
         .getOrElseThrow(UserRegistrationException::new);
   }
+  
+  @GetMapping("/roles")
+  public ResponseEntity<RolesDto> roles() {
+    return ok(rolesQuery.list());
+  }
 
   @NotNull
   private static URI buildUserUri(String username) {
@@ -81,10 +86,5 @@ class UserRestController {
       super(error.getReason());
       this.error = error;
     }
-  }
-
-  @GetMapping("/roles")
-  public ResponseEntity<RolesDto> roles() {
-    return ok(rolesQuery.list());
   }
 }

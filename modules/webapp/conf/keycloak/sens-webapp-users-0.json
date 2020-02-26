@@ -7,10 +7,7 @@
           "manage-account",
           "view-profile"
         ],
-        "backend": [
-          "batch-type-manage",
-          "inbox-manage"
-        ],
+        "backend": [],
         "frontend": [
           "audit_generate_report"
         ]
@@ -35,7 +32,7 @@
       "realmRoles": [
         "Analyst",
         "Auditor",
-        "Decision tree viewer",
+        "Business Operator",
         "offline_access",
         "uma_authorization"
       ],

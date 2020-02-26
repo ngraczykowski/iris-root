@@ -46,7 +46,6 @@ public class InboxRestController {
     return ResponseEntity.ok(response);
   }
 
-  @PreAuthorize("hasAnyAuthority('INBOX_MANAGE','DECISION_TREE_LIST')")
   @GetMapping("/inbox/message")
   public ResponseEntity<InboxMessageDto> getMessage(
       @RequestParam String type, @RequestParam String referenceId) {

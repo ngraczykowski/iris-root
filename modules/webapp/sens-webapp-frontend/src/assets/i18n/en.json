@@ -400,10 +400,6 @@
         "ROLE_ANALYST": "Analyst",
         "ROLE_APPROVER": "Approver",
         "ROLE_AUDITOR": "Auditor",
-        "ROLE_BATCH_TYPE_MANAGER": "Batch Type Manager",
-        "ROLE_DECISION_TREE_MANAGER": "Decision Tree Manager",
-        "ROLE_DECISION_TREE_VIEWER": "Decision Tree Viewer",
-        "ROLE_INBOX_OPERATOR": "Inbox Operator",
         "ROLE_MAKER": "Maker",
         "ROLE_USER_MANAGER": "User Manager"
       },

@@ -5,10 +5,14 @@ import com.silenteight.sens.webapp.user.dto.RolesDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
@@ -20,6 +24,8 @@ class KeycloakRolesQueryTest {
 
   private static final String AUDITOR = "Auditor";
   private static final String ANALYST = "Analyst";
+  private static final String KEYCLOAK_ROLE = "uma_authorization";
+
   @Mock
   private RolesResource rolesResource;
 
@@ -31,8 +37,8 @@ class KeycloakRolesQueryTest {
   }
 
   @Test
-  void rolesDtoWith2SortedRoles_whenTwoRolesReturnedFromResource() {
-    givenTwoRoles();
+  void twoWebAppSortedRoles_whenThreeRolesReturnedFromResource() {
+    givenThreeRoles();
 
     RolesDto result = underTest.list();
 
@@ -48,14 +54,34 @@ class KeycloakRolesQueryTest {
     assertThat(result.getRoles()).isEmpty();
   }
 
-  private void givenTwoRoles() {
-    RoleRepresentation role1 = mock(RoleRepresentation.class);
-    when(role1.getName()).thenReturn(AUDITOR);
+  private void givenThreeRoles() {
+    Map<String, List<String>> attributesWithWebAppOrigin = Map.of("origin", of("webapp"));
 
-    RoleRepresentation role2 = mock(RoleRepresentation.class);
-    when(role2.getName()).thenReturn(ANALYST);
+    RoleRepresentation auditor = roleRepresentation(AUDITOR, attributesWithWebAppOrigin);
+    RoleRepresentation analyst = roleRepresentation(ANALYST, attributesWithWebAppOrigin);
+    RoleRepresentation keycloakRole = roleRepresentation(KEYCLOAK_ROLE, null);
 
-    when(rolesResource.list()).thenReturn(of(role1, role2));
+    when(rolesResource.list()).thenReturn(of(auditor, analyst, keycloakRole));
+
+    RoleResource auditorRoleResource = mock(RoleResource.class);
+    when(auditorRoleResource.toRepresentation()).thenReturn(auditor);
+
+    RoleResource analystRoleResource = mock(RoleResource.class);
+    when(analystRoleResource.toRepresentation()).thenReturn(analyst);
+
+    RoleResource keycloakRoleResource = mock(RoleResource.class);
+    when(keycloakRoleResource.toRepresentation()).thenReturn(keycloakRole);
+
+    when(rolesResource.get(auditor.getName())).thenReturn(auditorRoleResource);
+    when(rolesResource.get(analyst.getName())).thenReturn(analystRoleResource);
+    when(rolesResource.get(keycloakRole.getName())).thenReturn(keycloakRoleResource);
+  }
+
+  private RoleRepresentation roleRepresentation(String name, Map<String, List<String>> attributes) {
+    RoleRepresentation auditor = new RoleRepresentation();
+    auditor.setName(name);
+    auditor.setAttributes(attributes);
+    return auditor;
   }
 
   private void givenNoRoles() {
