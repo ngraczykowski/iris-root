@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.user.registration;
 
 import com.silenteight.sens.webapp.user.registration.domain.*;
 import com.silenteight.sens.webapp.user.registration.domain.NameLengthValidator.InvalidNameLengthError;
+import com.silenteight.sens.webapp.user.registration.domain.RegexValidator.InvalidNameCharsError;
 import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExistError;
 import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
 
@@ -65,6 +66,30 @@ class RegisterInternalUserUseCaseTest {
   }
 
   @Test
+  void usernameContainsUppercaseLetters_returnsValidDomainError() {
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(RESTRICTED_CHAR_UPPERCASE_USERNAME_REQUEST);
+
+    assertThatResult(actual).isFailureOfType(InvalidNameCharsError.class);
+  }
+
+  @Test
+  void usernameContainsNonAsciiChars_returnsValidDomainError() {
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(RESTRICTED_CHAR_NONASCII_USERNAME_REQUEST);
+
+    assertThatResult(actual).isFailureOfType(InvalidNameCharsError.class);
+  }
+
+  @Test
+  void usernameContainsInvalidSpecialChars_returnsValidDomainError() {
+    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+        underTest.apply(RESTRICTED_CHAR_INVALID_SPECIAL_USERNAME_REQUEST);
+
+    assertThatResult(actual).isFailureOfType(InvalidNameCharsError.class);
+  }
+
+  @Test
   void displayNameTooLong_returnsValidDomainError() {
     given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
 
@@ -99,6 +124,15 @@ class RegisterInternalUserUseCaseTest {
 
       assertThatResult(actual)
           .isSuccessWithUsername(NO_ROLES_REGISTRATION_REQUEST.getUsername());
+    }
+
+    @Test
+    void usernameContainsValidSpecialChars_returnsValidSuccess() {
+      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> actual =
+          underTest.apply(RESTRICTED_CHAR_VALID_SPECIAL_USERNAME_REQUEST);
+
+      assertThatResult(actual)
+          .isSuccessWithUsername(RESTRICTED_CHAR_VALID_SPECIAL_USERNAME_REQUEST.getUsername());
     }
 
     @Test

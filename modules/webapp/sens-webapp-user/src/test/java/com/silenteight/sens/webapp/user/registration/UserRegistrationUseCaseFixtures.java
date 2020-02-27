@@ -58,6 +58,34 @@ class UserRegistrationUseCaseFixtures {
           .password("jdoe125")
           .build();
 
+  static final RegisterInternalUserCommand RESTRICTED_CHAR_UPPERCASE_USERNAME_REQUEST =
+      RegisterInternalUserCommand.builder()
+          .displayName("John Doe")
+          .username("JohnDoe")
+          .password("jdoe125")
+          .build();
+
+  static final RegisterInternalUserCommand RESTRICTED_CHAR_NONASCII_USERNAME_REQUEST =
+      RegisterInternalUserCommand.builder()
+          .displayName("John Doe")
+          .username("aażółcićgęśląjaźń")
+          .password("jdoe125")
+          .build();
+
+  static final RegisterInternalUserCommand RESTRICTED_CHAR_INVALID_SPECIAL_USERNAME_REQUEST =
+      RegisterInternalUserCommand.builder()
+          .displayName("John Doe")
+          .username("john$doe")
+          .password("jdoe125")
+          .build();
+
+  static final RegisterInternalUserCommand RESTRICTED_CHAR_VALID_SPECIAL_USERNAME_REQUEST =
+      RegisterInternalUserCommand.builder()
+          .displayName("John Doe")
+          .username("john-_@.doe")
+          .password("jdoe125")
+          .build();
+
   static final UsernameNotUniqueError USERNAME_NOT_UNIQUE =
       new UsernameNotUniqueError("some username");
 

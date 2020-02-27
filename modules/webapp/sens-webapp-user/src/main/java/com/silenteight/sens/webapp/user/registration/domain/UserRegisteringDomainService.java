@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.registration.domain.NameLengthValidator.InvalidNameLengthError;
+import com.silenteight.sens.webapp.user.registration.domain.RegexValidator.InvalidNameCharsError;
 import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExistError;
 import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
 
@@ -18,6 +19,7 @@ public class UserRegisteringDomainService {
 
   private final TimeSource timeSource;
   private final NameLengthValidator usernameLengthValidator;
+  private final RegexValidator usernameCharsValidator;
   private final NameLengthValidator displayNameLengthValidator;
   private final RolesValidator rolesValidator;
   private final UsernameUniquenessValidator usernameUniquenessValidator;
@@ -29,6 +31,11 @@ public class UserRegisteringDomainService {
         usernameLengthValidator.validate(registration.getUsername());
     if (invalidUsernameLengthError.isDefined())
       return left(invalidUsernameLengthError.get());
+
+    Option<InvalidNameCharsError> usernameConstainRestricedCharsError =
+        usernameCharsValidator.validate(registration.getUsername());
+    if (usernameConstainRestricedCharsError.isDefined())
+      return left(usernameConstainRestricedCharsError.get());
 
     Option<UsernameNotUniqueError> usernameNotUniqueError =
         usernameUniquenessValidator.validate(registration.getUsername());
