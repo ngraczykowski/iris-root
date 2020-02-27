@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static java.time.OffsetDateTime.parse;
 import static java.util.Collections.singletonList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -44,5 +45,15 @@ final class UserDtoFixtures {
           .displayName("00001111")
           .roles(singletonList("Analyst"))
           .origin(GNS)
+          .build();
+
+  static final UserDto DELETED_GNS_USER =
+      UserDto
+          .builder()
+          .userName("2233445566")
+          .displayName("11112222")
+          .roles(singletonList("Analyst"))
+          .origin(GNS)
+          .deletedAt(parse("2011-12-03T10:15:30+01:00"))
           .build();
 }

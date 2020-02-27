@@ -4,11 +4,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
+import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkAddAnalystRoleRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkDeleteAnalystsRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
 
@@ -18,6 +16,8 @@ public class BulkAnalystService {
   @NonNull
   private final RegisterExternalUserUseCase registerExternalUserUseCase;
   @NonNull
+  private final UnlockUserUseCase unlockUserUseCase;
+  @NonNull
   private final AddRolesToUserUseCase addRolesToUserUseCase;
   @NonNull
   private final UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase;
@@ -26,6 +26,10 @@ public class BulkAnalystService {
 
   public void create(BulkCreateAnalystsRequest request) {
     request.asRegisterExternalUserCommands().forEach(registerExternalUserUseCase::apply);
+  }
+
+  public void restore(BulkRestoreAnalystsRequest request) {
+    request.asUnlockUserCommands().forEach(unlockUserUseCase::apply);
   }
 
   public void addRole(BulkAddAnalystRoleRequest request) {

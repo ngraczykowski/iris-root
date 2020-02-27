@@ -56,7 +56,7 @@ class AccountsReportGenerator implements ReportGenerator {
   }
 
   private List<ReportUserDto> getUsersDto() {
-    return userQuery.list().stream().flatMap(this::getUserDto).collect(toList());
+    return userQuery.listEnabled().stream().flatMap(this::getUserDto).collect(toList());
   }
 
   private Stream<ReportUserDto> getUserDto(UserDto user) {

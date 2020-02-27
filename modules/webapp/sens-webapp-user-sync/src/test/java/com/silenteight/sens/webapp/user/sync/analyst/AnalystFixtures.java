@@ -27,4 +27,11 @@ class AnalystFixtures {
           .userName("8747091287")
           .displayName("7836441098")
           .build();
+
+  static final Analyst RESTORED_ANALYST =
+      Analyst
+          .builder()
+          .userName("2233445566")
+          .displayName("11112222")
+          .build();
 }

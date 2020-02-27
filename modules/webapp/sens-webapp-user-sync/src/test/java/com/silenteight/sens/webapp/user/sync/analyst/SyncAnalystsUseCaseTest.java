@@ -2,11 +2,8 @@ package com.silenteight.sens.webapp.user.sync.analyst;
 
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkAddAnalystRoleRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkDeleteAnalystsRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.user.sync.analyst.dto.SyncAnalystStatsDto;
 
@@ -19,10 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.NEW_ANALYST;
-import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.GNS_USER;
-import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.GNS_USER_WITHOUT_ANALYST_ROLE;
-import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.GNS_USER_WITHOUT_DISPLAY_NAME;
-import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.SENS_USER;
+import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.RESTORED_ANALYST;
+import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -52,12 +47,13 @@ class SyncAnalystsUseCaseTest {
   @Test
   void usersAvailable_syncAnalysts() {
     // given
-    when(userListQuery.list()).thenReturn(
+    when(userListQuery.listAll()).thenReturn(
         asList(
             SENS_USER,
             GNS_USER_WITHOUT_ANALYST_ROLE,
             GNS_USER_WITHOUT_DISPLAY_NAME,
-            GNS_USER));
+            GNS_USER,
+            DELETED_GNS_USER));
     when(externalAnalystRepository.list()).thenReturn(emptyList());
 
     // when
@@ -65,10 +61,12 @@ class SyncAnalystsUseCaseTest {
 
     // then
     assertThat(stats.getAdded()).isEqualTo(0);
+    assertThat(stats.getRestored()).isEqualTo(0);
     assertThat(stats.getAddedRole()).isEqualTo(0);
     assertThat(stats.getUpdatedDisplayName()).isEqualTo(0);
     assertThat(stats.getDeleted()).isEqualTo(2);
     verify(bulkAnalystService, never()).create(any());
+    verify(bulkAnalystService, never()).restore(any());
     verify(bulkAnalystService, never()).addRole(any());
     verify(bulkAnalystService, never()).updateDisplayName(any());
     verify(bulkAnalystService).delete(
@@ -81,7 +79,7 @@ class SyncAnalystsUseCaseTest {
   @Test
   void analystsAvailable_syncAnalysts() {
     // given
-    when(userListQuery.list()).thenReturn(emptyList());
+    when(userListQuery.listAll()).thenReturn(emptyList());
     when(externalAnalystRepository.list()).thenReturn(
         asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME, NEW_ANALYST));
 
@@ -90,6 +88,7 @@ class SyncAnalystsUseCaseTest {
 
     // then
     assertThat(stats.getAdded()).isEqualTo(3);
+    assertThat(stats.getRestored()).isEqualTo(0);
     assertThat(stats.getAddedRole()).isEqualTo(0);
     assertThat(stats.getUpdatedDisplayName()).isEqualTo(0);
     assertThat(stats.getDeleted()).isEqualTo(0);
@@ -103,6 +102,7 @@ class SyncAnalystsUseCaseTest {
                     ANALYST_WITH_DISPLAY_NAME.getUserName(),
                     ANALYST_WITH_DISPLAY_NAME.getDisplayName()),
                 new NewAnalyst(NEW_ANALYST.getUserName(), NEW_ANALYST.getDisplayName()))));
+    verify(bulkAnalystService, never()).restore(any());
     verify(bulkAnalystService, never()).addRole(any());
     verify(bulkAnalystService, never()).updateDisplayName(any());
     verify(bulkAnalystService, never()).delete(any());
@@ -111,20 +111,26 @@ class SyncAnalystsUseCaseTest {
   @Test
   void usersAndAnalystsAvailable_syncAnalysts() {
     // given
-    when(userListQuery.list()).thenReturn(
+    when(userListQuery.listAll()).thenReturn(
         asList(
             SENS_USER,
             GNS_USER_WITHOUT_ANALYST_ROLE,
             GNS_USER_WITHOUT_DISPLAY_NAME,
-            GNS_USER));
+            GNS_USER,
+            DELETED_GNS_USER));
     when(externalAnalystRepository.list()).thenReturn(
-        asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME, NEW_ANALYST));
+        asList(
+            ANALYST_WITHOUT_DISPLAY_NAME,
+            ANALYST_WITH_DISPLAY_NAME,
+            NEW_ANALYST,
+            RESTORED_ANALYST));
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();
 
     // then
     assertThat(stats.getAdded()).isEqualTo(1);
+    assertThat(stats.getRestored()).isEqualTo(1);
     assertThat(stats.getAddedRole()).isEqualTo(1);
     assertThat(stats.getUpdatedDisplayName()).isEqualTo(1);
     assertThat(stats.getDeleted()).isEqualTo(1);
@@ -132,6 +138,8 @@ class SyncAnalystsUseCaseTest {
         new BulkCreateAnalystsRequest(
             singletonList(
                 new NewAnalyst(NEW_ANALYST.getUserName(), NEW_ANALYST.getDisplayName()))));
+    verify(bulkAnalystService).restore(
+        new BulkRestoreAnalystsRequest(singletonList(RESTORED_ANALYST.getUserName())));
     verify(bulkAnalystService).addRole(
         new BulkAddAnalystRoleRequest(
             singletonList(GNS_USER_WITHOUT_ANALYST_ROLE.getUserName())));

@@ -6,6 +6,7 @@ import lombok.Value;
 public class SyncAnalystStatsDto {
 
   int added;
+  int restored;
   int addedRole;
   int updatedDisplayName;
   int deleted;

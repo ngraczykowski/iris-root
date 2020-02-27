@@ -46,7 +46,7 @@ class AccountsReportGeneratorTest {
   @MethodSource("reportTestCases")
   void reportTest(Collection<UserDto> users, String expectedReportFile) throws Exception {
     //given
-    when(repository.list()).thenReturn(users);
+    when(repository.listEnabled()).thenReturn(users);
 
     //when
     Report report = underTest.generateReport();

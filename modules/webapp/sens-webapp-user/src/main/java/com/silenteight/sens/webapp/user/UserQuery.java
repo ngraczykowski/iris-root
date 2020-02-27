@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserQuery {
 
-  Page<UserDto> list(Pageable pageable);
+  Page<UserDto> listEnabled(Pageable pageable);
 }

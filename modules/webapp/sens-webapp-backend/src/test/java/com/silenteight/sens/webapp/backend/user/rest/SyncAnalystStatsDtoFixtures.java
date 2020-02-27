@@ -8,5 +8,5 @@ import com.silenteight.sens.webapp.user.sync.analyst.dto.SyncAnalystStatsDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class SyncAnalystStatsDtoFixtures {
 
-  static final SyncAnalystStatsDto ALL_CHANGED = new SyncAnalystStatsDto(5, 1, 7, 2);
+  static final SyncAnalystStatsDto ALL_CHANGED = new SyncAnalystStatsDto(5, 3, 1, 7, 2);
 }

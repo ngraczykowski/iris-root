@@ -17,6 +17,8 @@ import java.util.stream.Stream;
 
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -29,6 +31,7 @@ class AnalystSynchronizer {
 
     return new SynchronizedAnalysts(
         analystsToCreate(users, analysts),
+        analystsToRestore(users, analysts),
         analystsToAddRole(users, analysts),
         analystsToUpdateDisplayName(users, analysts),
         analystsToDelete(users, analysts));
@@ -51,13 +54,14 @@ class AnalystSynchronizer {
         .collect(toSet());
   }
 
-  private static List<String> analystsToAddRole(
+  private static List<String> analystsToRestore(
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
-    return getExternalUsers(users)
+    return getDeletedExternalUsers(users)
         .filter(user -> analystUserNames.contains(user.getUserName()))
-        .filter(user -> !user.hasRole(ANALYST))
+        // WA-365(mmastylo) change to hasOnlyRole(ANALYST)
+        .filter(user -> user.hasRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
@@ -69,9 +73,28 @@ class AnalystSynchronizer {
         .collect(toSet());
   }
 
-  private static Stream<UserDto> getExternalUsers(Collection<UserDto> users) {
+  private static Stream<UserDto> getDeletedExternalUsers(Collection<UserDto> users) {
     return users
         .stream()
+        .filter(user -> nonNull(user.getDeletedAt()))
+        .filter(user -> user.hasOrigin(GNS));
+  }
+
+  private static List<String> analystsToAddRole(
+      Collection<UserDto> users, Collection<Analyst> analysts) {
+
+    Set<String> analystUserNames = extractAnalystsUserNames(analysts);
+    return getNonDeletedExternalUsers(users)
+        .filter(user -> analystUserNames.contains(user.getUserName()))
+        .filter(user -> !user.hasRole(ANALYST))
+        .map(UserDto::getUserName)
+        .collect(toList());
+  }
+
+  private static Stream<UserDto> getNonDeletedExternalUsers(Collection<UserDto> users) {
+    return users
+        .stream()
+        .filter(user -> isNull(user.getDeletedAt()))
         .filter(user -> user.hasOrigin(GNS));
   }
 
@@ -79,7 +102,7 @@ class AnalystSynchronizer {
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Map<String, Analyst> analystByUserName = groupByUserName(analysts);
-    return getExternalUsers(users)
+    return getNonDeletedExternalUsers(users)
         .filter(user -> analystByUserName.containsKey(user.getUserName()))
         .map(user -> new UserAnalystPair(user, analystByUserName.get(user.getUserName())))
         .filter(UserAnalystPair::haveDifferentDisplayNames)
@@ -97,7 +120,7 @@ class AnalystSynchronizer {
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
-    return getExternalUsers(users)
+    return getNonDeletedExternalUsers(users)
         .filter(user -> !analystUserNames.contains(user.getUserName()))
         // WA-365(mmastylo) change to hasOnlyRole(ANALYST)
         .filter(user -> user.hasRole(ANALYST))
@@ -142,6 +165,9 @@ class AnalystSynchronizer {
     List<Analyst> added;
 
     @NonNull
+    List<String> restored;
+
+    @NonNull
     List<String> addedRole;
 
     @NonNull
@@ -152,6 +178,10 @@ class AnalystSynchronizer {
 
     int addedCount() {
       return added.size();
+    }
+
+    int restoredCount() {
+      return restored.size();
     }
 
     int addedRoleCount() {

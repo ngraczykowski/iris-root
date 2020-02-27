@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
@@ -33,8 +34,12 @@ class KeycloakUserQueryTestFixtures {
       new KeycloakUser("jdoe1", "John Doe", parse("2011-12-03T10:15:30+01:00"),
           parse("2011-12-10T15:15:30+01:00"), SENS_USER_ROLES, SENS);
   static final KeycloakUser GNS_USER =
-      new KeycloakUser("jdoe1", "John Doe", parse("2011-12-10T10:15:30+01:00"),
+      new KeycloakUser("175698365", "8642367866", parse("2011-12-10T10:15:30+01:00"),
           parse("2011-12-10T15:15:30+01:00"), emptyList(), GNS);
+  static final KeycloakUser DELETED_SENS_USER =
+      new KeycloakUser("asmith", "Adam Smith", parse("2011-12-12T10:15:30+01:00"),
+          parse("2011-12-12T15:15:30+01:00"), parse("2011-12-20T11:25:30+01:00"), emptyList(),
+          SENS);
 
   @RequiredArgsConstructor
   @Getter
@@ -53,16 +58,35 @@ class KeycloakUserQueryTestFixtures {
         List<String> roles,
         UserOrigin origin) {
 
+      this(username, displayName, createdAt, lastLoginAt, null, roles, origin);
+    }
+
+    KeycloakUser(
+        String username,
+        String displayName,
+        OffsetDateTime createdAt,
+        @Nullable OffsetDateTime lastLoginAt,
+        @Nullable OffsetDateTime deletedAt,
+        List<String> roles,
+        UserOrigin origin) {
+
       this.userRepresentation = new UserRepresentation();
       this.userId = randomUUID().toString();
 
       userRepresentation.setId(userId);
-      userRepresentation.setEnabled(true);
+
       userRepresentation.setCreatedTimestamp(createdAt.toInstant().toEpochMilli());
       userRepresentation.setRealmRoles(roles);
       userRepresentation.setFirstName(displayName);
       userRepresentation.setUsername(username);
       userRepresentation.singleAttribute(ORIGIN, origin.toString());
+
+      if (deletedAt != null) {
+        userRepresentation.setEnabled(false);
+        userRepresentation.singleAttribute(DELETED_AT, deletedAt.toString());
+      } else {
+        userRepresentation.setEnabled(true);
+      }
 
       this.lastLoginAtDate = lastLoginAt;
     }

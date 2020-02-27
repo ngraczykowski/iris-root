@@ -23,7 +23,7 @@ public class UserDto {
   private List<String> roles = emptyList();
   private OffsetDateTime lastLoginAt;
   private OffsetDateTime createdAt;
-  private boolean isActive;
+  private OffsetDateTime deletedAt;
   @NonNull
   private UserOrigin origin;
 

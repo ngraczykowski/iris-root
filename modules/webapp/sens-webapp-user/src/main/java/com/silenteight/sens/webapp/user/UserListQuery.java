@@ -6,5 +6,7 @@ import java.util.Collection;
 
 public interface UserListQuery {
 
-  Collection<UserDto> list();
+  Collection<UserDto> listEnabled();
+
+  Collection<UserDto> listAll();
 }

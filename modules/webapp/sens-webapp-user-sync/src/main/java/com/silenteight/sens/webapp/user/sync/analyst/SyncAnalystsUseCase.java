@@ -8,11 +8,8 @@ import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkAddAnalystRoleRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkDeleteAnalystsRequest;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
 import com.silenteight.sens.webapp.user.sync.analyst.dto.SyncAnalystStatsDto;
@@ -32,17 +29,19 @@ public class SyncAnalystsUseCase {
   private final BulkAnalystService bulkAnalystService;
 
   public SyncAnalystStatsDto synchronize() {
-    Collection<UserDto> users = userListQuery.list();
+    Collection<UserDto> users = userListQuery.listAll();
     Collection<Analyst> analysts = externalAnalystRepository.list();
     SynchronizedAnalysts result = analystSynchronizer.synchronize(users, analysts);
 
     createAnalysts(result.getAdded());
+    restoreAnalysts(result.getRestored());
     addAnalystRoles(result.getAddedRole());
     updateDisplayNames(result.getUpdatedDisplayName());
     deleteAnalysts(result.getDeleted());
 
     return new SyncAnalystStatsDto(
         result.addedCount(),
+        result.restoredCount(),
         result.addedRoleCount(),
         result.updatedDisplayNameCount(),
         result.deletedCount());
@@ -64,6 +63,11 @@ public class SyncAnalystsUseCase {
         .stream()
         .map(analyst -> new NewAnalyst(analyst.getUserName(), analyst.getDisplayName()))
         .collect(toList());
+  }
+
+  private void restoreAnalysts(List<String> usernames) {
+    if (!usernames.isEmpty())
+      bulkAnalystService.restore(new BulkRestoreAnalystsRequest(usernames));
   }
 
   private void addAnalystRoles(List<String> usernames) {

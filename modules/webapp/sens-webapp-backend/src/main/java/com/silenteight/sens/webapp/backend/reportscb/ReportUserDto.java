@@ -31,7 +31,7 @@ class ReportUserDto {
   }
 
   String getAccountStatus() {
-    return user.isActive() ? "Active" : "Disabled";
+    return "Active";
   }
 
   String isPrivileged() {

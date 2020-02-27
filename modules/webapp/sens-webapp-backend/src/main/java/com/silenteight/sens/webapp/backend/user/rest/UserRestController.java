@@ -44,7 +44,7 @@ class UserRestController {
 
   @GetMapping
   public Page<UserDto> users(Pageable pageable) {
-    return userQuery.list(pageable);
+    return userQuery.listEnabled(pageable);
   }
 
   @PostMapping

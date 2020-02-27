@@ -10,4 +10,9 @@ class UserLockUseCaseConfiguration {
   LockUserUseCase lockUserUseCase(UserLocker userLocker) {
     return new LockUserUseCase(userLocker);
   }
+
+  @Bean
+  UnlockUserUseCase unlockUserUseCase(UserLocker userLocker) {
+    return new UnlockUserUseCase(userLocker);
+  }
 }

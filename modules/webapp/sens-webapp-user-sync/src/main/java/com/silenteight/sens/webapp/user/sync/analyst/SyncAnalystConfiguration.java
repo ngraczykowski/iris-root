@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.user.sync.analyst;
 
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
+import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
@@ -69,12 +70,14 @@ class SyncAnalystConfiguration {
   @Bean
   BulkAnalystService analystService(
       RegisterExternalUserUseCase registerExternalUserUseCase,
+      UnlockUserUseCase unlockUserUseCase,
       AddRolesToUserUseCase addRolesToUserUseCase,
       UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase,
       LockUserUseCase lockUserUseCase) {
 
     return new BulkAnalystService(
         registerExternalUserUseCase,
+        unlockUserUseCase,
         addRolesToUserUseCase,
         updateUserDisplayNameUseCase,
         lockUserUseCase);

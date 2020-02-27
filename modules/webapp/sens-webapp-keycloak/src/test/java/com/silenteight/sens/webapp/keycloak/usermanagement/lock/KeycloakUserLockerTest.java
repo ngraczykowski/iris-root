@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.time.Instant.parse;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class KeycloakUserLockerTest {
 
+  private static final String USERNAME = "jsmith";
   private static final String DELETED_AT_TIME = "2011-12-03T10:15:30Z";
 
   @Mock
@@ -40,29 +43,56 @@ class KeycloakUserLockerTest {
   @Test
   void givenUsername_lockUser() {
     // given
-    String username = "jsmith";
     UserResource userResource = mock(UserResource.class);
-    UserRepresentation userRepresentation = asUserRepresentation(username);
-    when(keycloakUserRetriever.retrieve(username)).thenReturn(userResource);
+    UserRepresentation userRepresentation = asUserRepresentation(USERNAME);
+    when(keycloakUserRetriever.retrieve(USERNAME)).thenReturn(userResource);
     when(userResource.toRepresentation()).thenReturn(userRepresentation);
 
     // when
-    underTest.lock(username);
+    underTest.lock(USERNAME);
 
     // then
-    verify(keycloakUserRetriever).retrieve(username);
+    verify(keycloakUserRetriever).retrieve(USERNAME);
     verify(userResource).update(userRepresentationCaptor.capture());
     UserRepresentation captured = userRepresentationCaptor.getValue();
-    assertThat(captured.getUsername()).isEqualTo(username);
+    assertThat(captured.getUsername()).isEqualTo(USERNAME);
     assertThat(captured.isEnabled()).isFalse();
     assertThat(captured.getAttributes()).containsKey(DELETED_AT);
     assertThat(captured.getAttributes().get(DELETED_AT))
         .containsExactly(DELETED_AT_TIME);
   }
 
+  @Test
+  void givenUsername_unlockUser() {
+    // given
+    UserResource userResource = mock(UserResource.class);
+    UserRepresentation userRepresentation = asDeletedUserRepresentation(USERNAME);
+    when(keycloakUserRetriever.retrieve(USERNAME)).thenReturn(userResource);
+    when(userResource.toRepresentation()).thenReturn(userRepresentation);
+
+    // when
+    underTest.unlock(USERNAME);
+
+    // then
+    verify(keycloakUserRetriever).retrieve(USERNAME);
+    verify(userResource).update(userRepresentationCaptor.capture());
+    UserRepresentation captured = userRepresentationCaptor.getValue();
+    assertThat(captured.getUsername()).isEqualTo(USERNAME);
+    assertThat(captured.isEnabled()).isTrue();
+    assertThat(captured.getAttributes()).doesNotContainKeys(DELETED_AT);
+  }
+
   private static UserRepresentation asUserRepresentation(String username) {
     UserRepresentation userRepresentation = new UserRepresentation();
     userRepresentation.setUsername(username);
+    userRepresentation.setEnabled(TRUE);
+    return userRepresentation;
+  }
+
+  private static UserRepresentation asDeletedUserRepresentation(String username) {
+    UserRepresentation userRepresentation = asUserRepresentation(username);
+    userRepresentation.setEnabled(FALSE);
+    userRepresentation.singleAttribute(DELETED_AT, DELETED_AT_TIME);
     return userRepresentation;
   }
 }

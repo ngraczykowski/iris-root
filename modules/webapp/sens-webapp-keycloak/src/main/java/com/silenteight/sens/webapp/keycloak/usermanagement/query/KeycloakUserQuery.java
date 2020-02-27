@@ -16,9 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.lang.Integer.MAX_VALUE;
@@ -37,8 +40,8 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   private final TimeConverter timeConverter;
 
   @Override
-  public Page<UserDto> list(Pageable pageable) {
-    Collection<UserRepresentation> enabledUsers = listEnabled();
+  public Page<UserDto> listEnabled(Pageable pageable) {
+    Collection<UserRepresentation> enabledUsers = fetchEnabledUsers();
 
     List<UserDto> usersPage = enabledUsers
         .stream()
@@ -50,6 +53,14 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
     return new PageImpl<>(usersPage, pageable, enabledUsers.size());
   }
 
+  private Collection<UserRepresentation> fetchEnabledUsers() {
+    return usersResource
+        .list(0, MAX_VALUE)
+        .stream()
+        .filter(user -> isTrue(user.isEnabled()))
+        .collect(toUnmodifiableList());
+  }
+
   UserDto mapToDto(UserRepresentation userRepresentation) {
     UserDto userDto = new UserDto();
 
@@ -57,6 +68,7 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
         timeConverter.toOffsetFromMilli(userRepresentation.getCreatedTimestamp()));
     userDto.setDisplayName(userRepresentation.getFirstName());
     userDto.setUserName(userRepresentation.getUsername());
+    userDto.setDeletedAt(getDeletedAt(userRepresentation));
 
     String userId = userRepresentation.getId();
 
@@ -71,27 +83,40 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   }
 
   private static UserOrigin getOrigin(UserRepresentation userRepresentation) {
-    return ofNullable(userRepresentation.getAttributes())
-        .map(attributes -> attributes.getOrDefault(ORIGIN, emptyList()))
-        .filter(attribute -> !attribute.isEmpty())
-        .map(attribute -> attribute.get(0))
+    return getAttribute(userRepresentation, ORIGIN)
         .map(UserOrigin::valueOf)
         .orElse(SENS);
   }
 
+  private static OffsetDateTime getDeletedAt(UserRepresentation userRepresentation) {
+    return getAttribute(userRepresentation, DELETED_AT)
+        .map(OffsetDateTime::parse)
+        .orElse(null);
+  }
+
+  private static Optional<String> getAttribute(
+      UserRepresentation userRepresentation, String attributeName) {
+
+    return ofNullable(userRepresentation.getAttributes())
+        .map(attributes -> attributes.getOrDefault(attributeName, emptyList()))
+        .filter(attribute -> !attribute.isEmpty())
+        .map(attribute -> attribute.get(0));
+  }
+
   @Override
-  public Collection<UserDto> list() {
-    return listEnabled()
+  public Collection<UserDto> listEnabled() {
+    return fetchEnabledUsers()
         .stream()
         .map(this::mapToDto)
         .collect(toUnmodifiableList());
   }
 
-  private Collection<UserRepresentation> listEnabled() {
+  @Override
+  public Collection<UserDto> listAll() {
     return usersResource
         .list(0, MAX_VALUE)
         .stream()
-        .filter(user -> isTrue(user.isEnabled()))
+        .map(this::mapToDto)
         .collect(toUnmodifiableList());
   }
 }

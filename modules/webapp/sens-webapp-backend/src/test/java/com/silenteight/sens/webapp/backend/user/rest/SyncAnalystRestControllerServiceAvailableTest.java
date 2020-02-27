@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({ SyncAnalystRestController.class, SyncAnalystRestControllerAdvice.class })
-public class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTest {
+class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTest {
 
   @MockBean
   private SyncAnalystsUseCase service;
@@ -27,6 +27,7 @@ public class SyncAnalystRestControllerServiceAvailableTest extends BaseRestContr
     post("/users/sync/analysts")
         .statusCode(OK.value())
         .body("added", is(ALL_CHANGED.getAdded()))
+        .body("restored", is(ALL_CHANGED.getRestored()))
         .body("addedRole", is(ALL_CHANGED.getAddedRole()))
         .body("updatedDisplayName", is(ALL_CHANGED.getUpdatedDisplayName()))
         .body("deleted", is(ALL_CHANGED.getDeleted()));

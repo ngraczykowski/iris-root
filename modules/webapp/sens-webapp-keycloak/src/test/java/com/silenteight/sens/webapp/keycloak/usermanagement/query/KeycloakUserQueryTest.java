@@ -47,17 +47,20 @@ class KeycloakUserQueryTest {
         usersResource, lastLoginTimeProvider, roleProvider, TIME_CONVERTER);
 
     given(usersResource.list(0, MAX_VALUE))
-        .willReturn(List.of(SENS_USER.getUserRepresentation(), GNS_USER.getUserRepresentation()));
+        .willReturn(List.of(
+            SENS_USER.getUserRepresentation(),
+            GNS_USER.getUserRepresentation(),
+            DELETED_SENS_USER.getUserRepresentation()));
   }
 
   @Test
-  void returnsCorrectPage_givenTwoUsersInRepoAndPageRequest() {
+  void returnsCorrectPage_givenThreeUsersInRepoAndPageRequest() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
     lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
 
     roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
 
-    Page<UserDto> actual = underTest.list(PAGE_REQUEST);
+    Page<UserDto> actual = underTest.listEnabled(PAGE_REQUEST);
 
     assertThat(actual)
         .hasSize(2)
@@ -66,12 +69,12 @@ class KeycloakUserQueryTest {
   }
 
   @Test
-  void returnsCorrectPage_givenTwoUsersInRepoAndOneElementPageRequest() {
+  void returnsCorrectPage_givenThreeUsersInRepoAndOneElementPageRequest() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
 
     roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
 
-    Page<UserDto> actual = underTest.list(ONE_ELEMENT_PAGE_REQUEST);
+    Page<UserDto> actual = underTest.listEnabled(ONE_ELEMENT_PAGE_REQUEST);
 
     assertThat(actual)
         .hasSize(1)
@@ -79,18 +82,36 @@ class KeycloakUserQueryTest {
   }
 
   @Test
-  void returnsUsers_givenTwoUsersInRepo() {
+  void returnsEnabledUsers_givenThreeUsersInRepo() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
     lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
 
     roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
 
-    Collection<UserDto> actual = underTest.list();
+    Collection<UserDto> actual = underTest.listEnabled();
 
     assertThat(actual)
         .hasSize(2)
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER))
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(GNS_USER));
+  }
+
+  @Test
+  void returnsAllUsers_givenThreeUsersInRepo() {
+    lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
+    lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
+    lastLoginTimeProvider.add(
+        DELETED_SENS_USER.getUserId(), DELETED_SENS_USER.getLastLoginAtDate());
+
+    roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
+
+    Collection<UserDto> actual = underTest.listAll();
+
+    assertThat(actual)
+        .hasSize(3)
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER))
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(GNS_USER))
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(DELETED_SENS_USER));
   }
 
   static class KeycloakUserQueryUserDtoAssert extends UserDtoAssert {

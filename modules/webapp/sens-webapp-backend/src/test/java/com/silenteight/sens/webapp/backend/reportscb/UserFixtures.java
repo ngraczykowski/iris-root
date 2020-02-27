@@ -23,7 +23,6 @@ class UserFixtures {
           .displayName("Jan Nowak")
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
-          .isActive(true)
           .roles(singletonList("admin"))
           .origin(SENS)
           .build(),
@@ -32,7 +31,6 @@ class UserFixtures {
           .displayName("Adam Kowalski")
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
-          .isActive(false)
           .roles(singletonList("analyst"))
           .origin(SENS)
           .build());
@@ -43,7 +41,6 @@ class UserFixtures {
           .displayName("Jan Nowak")
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
-          .isActive(true)
           .roles(singletonList("admin"))
           .origin(SENS)
           .build(),
@@ -52,7 +49,6 @@ class UserFixtures {
           .displayName("Adam Kowalski")
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
-          .isActive(false)
           .roles(asList("analyst", "auditor"))
           .origin(SENS)
           .build());
