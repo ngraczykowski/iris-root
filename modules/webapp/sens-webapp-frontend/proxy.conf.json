@@ -21,5 +21,11 @@
     "target": "http://localhost:7070",
     "secure": false,
     "logLevel": "debug"
+  },
+
+  "/auth": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "logLevel": "debug"
   }
 }

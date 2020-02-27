@@ -35,7 +35,7 @@ export const environment = {
       '/analyst-home', '/approver'
     ],
     keycloak: {
-      url: 'http://localhost:8081/auth',
+      url: '/auth',
       realm: 'sens-webapp',
       clientId: 'frontend',
       adminRoleName: 'admin',
