@@ -4,6 +4,7 @@ export interface User {
   roles: String[];
   lastLoginAt: String;
   createdAt: String;
+  origin: String;
   active: boolean;
 }
 
