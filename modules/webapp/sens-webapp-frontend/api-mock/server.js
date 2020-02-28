@@ -31,17 +31,24 @@ app.post('/api/users', (req, res) => {
     dataFile = fs.readFileSync(`${dataFolder}/users.json`);
     let json = JSON.parse(dataFile);
 
-    json.content.push({
-      userName: req.body.userName,
-      displayName: req.body.displayName,
-      roles: req.body.roles,
-      lastLoginAt: null,
-      createdAt: "+51916-01-15T06:50:14+01:00",
-      origin: "GNS"
-    });
+    if (isUserNameUnique(req.body.userName, json.content) && !hasForbiddenCharacters(req.body.userName)) {
+      json.content.push({
+        userName: req.body.userName,
+        displayName: req.body.displayName,
+        roles: req.body.roles,
+        lastLoginAt: null,
+        createdAt: "+51916-01-15T06:50:14+01:00",
+        origin: "GNS"
+      });
+
+      fs.writeFileSync(`${dataFolder}/users.json`, JSON.stringify(json));
+      res.status(200).send(JSON.parse(dataFile));
+    } else if(hasForbiddenCharacters(req.body.userName)) {
+      res.status(422).send();
+    } else {
+      res.status(409).send();
+    };
     
-    fs.writeFileSync(`${dataFolder}/users.json`, JSON.stringify(json));
-    res.status(200).send(JSON.parse(dataFile));
   } catch (err) {
     if (err.code === 'ENOENT') {
       res.status(404).send()
@@ -54,6 +61,36 @@ app.get('/api/users/roles', (req, res) => {
 
   try {
     dataFile = fs.readFileSync(`${dataFolder}/roles.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+})
+
+app.get('/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
+  let dataFile;
+  const id = req.params.branchId
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+})
+
+app.patch('/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
+  let dataFile;
+  const id = req.params.branchId
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
+    let json = JSON.parse(dataFile);
+    json.active = req.body.active;
+    json.aiSolution = req.body.aiSolution;
+    fs.writeFileSync(`${dataFolder}/reasoning-branch/${id}.json`, JSON.stringify(json));
     res.status(200).send(JSON.parse(dataFile));
   } catch (err) {
     if (err.code === 'ENOENT') {

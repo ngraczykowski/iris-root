@@ -19,6 +19,16 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    redirectTo: '/reasoning-branch',
+  },
+  {
+    path: 'reasoning-branch/:id',
+    pathMatch: 'full',
+    component: ReasoningBranchManagementPageComponent
+  },
+  {
+    path: 'reasoning-branch',
+    pathMatch: 'full',
     component: ReasoningBranchManagementPageComponent
   },
   {

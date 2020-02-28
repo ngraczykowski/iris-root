@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';
+import { ReasoningBranchManagementService } from '@app/reasoning-branch-management/services/reasoning-branch-management.service';
+import { ReasoningBranchDetails } from '@app/reasoning-branch-management/models/reasoning-branch-management';
+import { BranchDetailsComponent } from '@app/reasoning-branch-management/components/branch-details/branch-details.component';
+import { LoadBranchComponent } from '@app/reasoning-branch-management/components/load-branch/load-branch.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reasoning-branch-management-page',
@@ -8,24 +13,13 @@ import { LocalEventService } from '@app/shared/event/local-event.service';
   styleUrls: ['./reasoning-branch-management-page.component.scss']
 })
 export class ReasoningBranchManagementPageComponent implements OnInit {
-
   showConfirmWindow = false;
-
   showDetails = false;
+  showNoResults = false;
+  branchDetails: ReasoningBranchDetails;
 
-  // Temporary
-  branchDetails = {
-    branchId: '1-546',
-    statuses: [
-      {label: 'Active', active: false},
-      {label: 'Inactive', active: true}
-    ],
-    aiSolutions: [
-      {label: 'False Positive', active: false},
-      {label: 'Potential True Positive', active: true},
-      {label: 'No Decision', active: false}
-    ],
-  };
+  @ViewChild('branchDetailsForm', { static: false }) branchDetailsForm: BranchDetailsComponent;
+  @ViewChild('loadBranch', { static: true }) loadBranch: LoadBranchComponent;
 
   emptyStateMessage = {
     message: 'branch.emptyState.default.message',
@@ -37,7 +31,21 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
     hint: 'branch.emptyState.noResults.description'
   };
 
-  constructor(private readonly eventService: LocalEventService) { }
+  constructor(
+    private readonly eventService: LocalEventService,
+    private readonly reasoningBranchManagementService: ReasoningBranchManagementService,
+    private activatedRoute: ActivatedRoute
+  ) { }
+
+  ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      if (params.id) {
+        this.onLoadBranchSubmitClicked(params.id);
+        this.loadBranch.enteredID = params.id;
+        this.loadBranch.validateInput(this.loadBranch.fullIdCheck);
+      }
+    });
+  }
 
   hideConfirm() {
     this.showConfirmWindow = false;
@@ -48,10 +56,7 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   }
 
   applyChanges() {
-    // TODO(kjaworowski): Send request (WA-349)
-    this.hideConfirm();
-    this.successfullyAppliedChanges(); // TODO(kjaworowski): Show feedback for success (WA-351)
-    // this.failedAppliedChanges(); // TODO(kjaworowski): Show feedback when fail (WA-351)
+    this.updateReasoningBranch(this.loadBranch.enteredID);
   }
 
   successfullyAppliedChanges() {
@@ -60,6 +65,28 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
 
   failedAppliedChanges() {
     this.sendBriefMessage('branch.confirm.feedback.failed');
+  }
+
+  onLoadBranchSubmitClicked(id: string) {
+    this.reasoningBranchManagementService.getReasoningBranch(id).subscribe(response => {
+      this.branchDetails = response;
+      this.showDetails = true;
+      this.showNoResults = false;
+    }, () => {
+      this.showNoResults = true;
+      this.showDetails = false;
+    });
+  }
+
+  updateReasoningBranch(id: string) {
+    this.reasoningBranchManagementService
+      .updateReasoningBranch(id, this.branchDetailsForm.branchForm.value)
+      .subscribe(() => {
+        this.successfullyAppliedChanges();
+        this.hideConfirm();
+      }, () => {
+        this.failedAppliedChanges();
+      });
   }
 
   private sendBriefMessage(messageContent) {
@@ -71,5 +98,4 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
 }

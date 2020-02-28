@@ -7,8 +7,8 @@
     <input class="input-field load-branch-search"
            placeholder="{{ 'branch.load.input.placeholder' | translate }}"
            #rbID
-           (paste)="onPaste($event)"
-           (keyup)="onInput(rbID.value)"
+           [(ngModel)]="enteredID"
+           (ngModelChange)="validateInput(fullIdCheck)"
            [class.error]="!validInput"
            (focusout)="validateInput(fullIdCheck)">
   </div>
@@ -20,7 +20,9 @@
       </span>
       <button class="button-outline"
               [translate]="'branch.load.button.label'"
-              [disabled]="!enteredID || !validInput"></button>
+              [disabled]="!enteredID || !validInput"
+              (click)="onLoadBranchClicked()">
+      </button>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-load-branch',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./load-branch.component.scss']
 })
 export class LoadBranchComponent implements OnInit {
+  @Output() loadBranch = new EventEmitter();
 
   enteredID: string;
   validInput = true;
@@ -14,6 +15,8 @@ export class LoadBranchComponent implements OnInit {
   fullIdCheck = new RegExp('[1-9][0-9]*-[0-9]+');
 
   constructor() { }
+
+  ngOnInit() { }
 
   onInput(value: string) {
     this.enteredID = value;
@@ -33,7 +36,10 @@ export class LoadBranchComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  onLoadBranchClicked() {
+    if (this.validInput) {
+      this.loadBranch.emit(this.enteredID);
+    }
   }
 
 }
