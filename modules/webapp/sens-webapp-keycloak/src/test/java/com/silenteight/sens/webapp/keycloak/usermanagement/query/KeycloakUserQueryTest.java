@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTest.KeycloakUserQueryUserDtoAssert.assertThatUserDto;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.KeycloakUserQueryTestFixtures.*;
 import static java.lang.Integer.MAX_VALUE;
@@ -141,7 +141,7 @@ class KeycloakUserQueryTest {
     }
 
     private UserOrigin getOrigin(UserRepresentation userRepresentation) {
-      return UserOrigin.valueOf(userRepresentation.getAttributes().get(ORIGIN).get(0));
+      return UserOrigin.valueOf(userRepresentation.getAttributes().get(USER_ORIGIN).get(0));
     }
   }
 }

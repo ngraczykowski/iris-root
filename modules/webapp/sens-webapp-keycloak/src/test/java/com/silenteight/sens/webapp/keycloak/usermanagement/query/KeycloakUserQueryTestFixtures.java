@@ -14,7 +14,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.time.OffsetDateTime.parse;
@@ -79,7 +79,7 @@ class KeycloakUserQueryTestFixtures {
       userRepresentation.setRealmRoles(roles);
       userRepresentation.setFirstName(displayName);
       userRepresentation.setUsername(username);
-      userRepresentation.singleAttribute(ORIGIN, origin.toString());
+      userRepresentation.singleAttribute(USER_ORIGIN, origin.toString());
 
       if (deletedAt != null) {
         userRepresentation.setEnabled(false);

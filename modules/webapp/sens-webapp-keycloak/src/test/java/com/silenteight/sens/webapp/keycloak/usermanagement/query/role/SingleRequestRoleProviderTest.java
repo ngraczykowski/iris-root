@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.role;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.UserRoles;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.admin.client.resource.RealmResource;
@@ -9,39 +10,36 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.MappingsRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.ANALYST;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.AUDITOR;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_1_ROLES;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_2_NO_ROLES;
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
+import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 @ExtendWith(MockitoExtension.class)
-class SingleRequestLoginTimeProviderTest {
+class SingleRequestRoleProviderTest {
 
-  static final String LOGIN_EVENT_TYPE = "LOGIN";
-
+  @InjectMocks
   private SingleRequestRoleProvider underTest;
 
   @Mock
   private RealmResource realmResource;
-
-  @BeforeEach
-  void setUp() {
-    underTest = new SingleRequestRoleProvider(realmResource);
-  }
+  @Mock
+  private InternalRoleFilter internalRoleFilter;
 
   @Test
   void returnsEmptySet_whenUserHasNoRoles() {
-    givenUser(emptyList());
+    givenUser(USER_2_NO_ROLES);
 
     List<String> actual = underTest.getForUserId(USER_2_NO_ROLES.getUserId());
 
@@ -50,18 +48,18 @@ class SingleRequestLoginTimeProviderTest {
 
   @Test
   void returnsRoles_whenUserHasRoles() {
-    givenUser(asList(AUDITOR, ANALYST));
+    givenUser(USER_1_ROLES);
 
-    List<String> actual = underTest.getForUserId(USER_2_NO_ROLES.getUserId());
+    List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
 
     assertThat(actual).containsExactlyInAnyOrder(AUDITOR, ANALYST);
   }
 
-
-  private void givenUser(List<String> roles) {
-    List<RoleRepresentation> rolesRepresentation = roles
+  private void givenUser(UserRoles userRoles) {
+    List<RoleRepresentation> rolesRepresentation = userRoles
+        .getRoles()
         .stream()
-        .map(this::getRoleRepresentationMock)
+        .map(SingleRequestRoleProviderTest::roleRepresentation)
         .collect(toList());
 
     MappingsRepresentation mappingsRepresentation = mock(MappingsRepresentation.class);
@@ -74,14 +72,16 @@ class SingleRequestLoginTimeProviderTest {
     when(userResource.roles()).thenReturn(roleMappingResource);
 
     UsersResource usersResource = mock(UsersResource.class);
-    when(usersResource.get(USER_2_NO_ROLES.getUserId())).thenReturn(userResource);
+    when(usersResource.get(userRoles.getUserId())).thenReturn(userResource);
 
     when(realmResource.users()).thenReturn(usersResource);
+    userRoles.getRoles().forEach(name -> when(internalRoleFilter.test(name)).thenReturn(true));
   }
 
-  private RoleRepresentation getRoleRepresentationMock(String role) {
-    RoleRepresentation roleRepresentation = mock(RoleRepresentation.class);
-    when(roleRepresentation.getName()).thenReturn(role);
-    return roleRepresentation;
+  private static RoleRepresentation roleRepresentation(String name) {
+    RoleRepresentation auditor = new RoleRepresentation();
+    auditor.setName(name);
+    auditor.setAttributes(Map.of("origin", of("webapp")));
+    return auditor;
   }
 }

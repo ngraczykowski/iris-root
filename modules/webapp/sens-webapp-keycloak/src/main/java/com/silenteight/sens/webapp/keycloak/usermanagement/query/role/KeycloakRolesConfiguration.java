@@ -25,15 +25,23 @@ class KeycloakRolesConfiguration {
 
   @Bean
   CachedRolesProvider cachedRolesProvider(
-      RealmResource realmResource, RolesFetcher rolesFetcher) {
+      RealmResource realmResource,
+      InternalRoleFilter internalRoleFilter,
+      RolesFetcher rolesFetcher) {
+
     SingleRequestRoleProvider defaultProvider =
-        new SingleRequestRoleProvider(realmResource);
+        new SingleRequestRoleProvider(realmResource, internalRoleFilter);
 
     return new CachedRolesProvider(
         defaultProvider,
         rolesFetcher,
         10_000,
         CACHE_EXPIRATION_DURATION);
+  }
+
+  @Bean
+  InternalRoleFilter internalRoleFilter(RolesResource rolesResource) {
+    return new InternalRoleFilter(rolesResource);
   }
 
   @Bean

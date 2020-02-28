@@ -12,7 +12,7 @@ import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Crede
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
 import static java.lang.Boolean.TRUE;
 import static java.util.Collections.singletonList;
 import static org.keycloak.representations.idm.CredentialRepresentation.PASSWORD;
@@ -39,7 +39,7 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
     userRepresentation.setEnabled(TRUE);
     userRepresentation.setCreatedTimestamp(registration.getRegistrationDate().toEpochSecond());
     userRepresentation.setFirstName(registration.getDisplayName());
-    userRepresentation.singleAttribute(ORIGIN, registration.getOriginName());
+    userRepresentation.singleAttribute(USER_ORIGIN, registration.getOriginName());
 
     registration
         .getCredentials()

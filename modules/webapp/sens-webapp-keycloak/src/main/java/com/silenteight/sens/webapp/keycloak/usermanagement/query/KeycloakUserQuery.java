@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.ORIGIN;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Collections.emptyList;
@@ -83,7 +83,7 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   }
 
   private static UserOrigin getOrigin(UserRepresentation userRepresentation) {
-    return getAttribute(userRepresentation, ORIGIN)
+    return getAttribute(userRepresentation, USER_ORIGIN)
         .map(UserOrigin::valueOf)
         .orElse(SENS);
   }

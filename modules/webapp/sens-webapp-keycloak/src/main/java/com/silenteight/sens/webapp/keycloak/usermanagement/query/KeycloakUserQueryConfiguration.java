@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
+import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.InternalRoleFilter;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
 
 import org.keycloak.admin.client.resource.RolesResource;
@@ -17,6 +18,7 @@ class KeycloakUserQueryConfiguration {
       LastLoginTimeProvider lastLoginTimeProvider,
       RolesProvider rolesProvider,
       UsersResource usersResource) {
+
     return new KeycloakUserQuery(
         usersResource,
         lastLoginTimeProvider,
@@ -25,7 +27,9 @@ class KeycloakUserQueryConfiguration {
   }
 
   @Bean
-  KeycloakRolesQuery keycloakRolesQuery(RolesResource rolesResource) {
-    return new KeycloakRolesQuery(rolesResource);
+  KeycloakRolesQuery keycloakRolesQuery(
+      RolesResource rolesResource, InternalRoleFilter internalRoleFilter) {
+
+    return new KeycloakRolesQuery(rolesResource, internalRoleFilter);
   }
 }
