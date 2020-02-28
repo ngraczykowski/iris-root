@@ -40,6 +40,7 @@
             "placeholder": "username@silenteight.com"
           },
           "validation": {
+            "unique": "Provided username is already in use",
             "length":"The username length is between 3 - 30 characters",
             "characters": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
           }
@@ -89,6 +90,9 @@
           "validation": {
             "atLeastOneRole": "At least one role must be assigned to the user."
           }
+        },
+        "validation": {
+          "generalValidationError": "Failed to save changes. Please make sure that the provided data meets the input field requirements."
         }
       },
       "footer": {

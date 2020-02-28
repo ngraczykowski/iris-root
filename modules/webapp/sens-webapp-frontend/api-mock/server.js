@@ -30,7 +30,16 @@ app.post('/api/users', (req, res) => {
   try {
     dataFile = fs.readFileSync(`${dataFolder}/users.json`);
     let json = JSON.parse(dataFile);
-    json.content.push(req.body)
+
+    json.content.push({
+      userName: req.body.userName,
+      displayName: req.body.displayName,
+      roles: req.body.roles,
+      lastLoginAt: null,
+      createdAt: "+51916-01-15T06:50:14+01:00",
+      origin: "GNS"
+    });
+    
     fs.writeFileSync(`${dataFolder}/users.json`, JSON.stringify(json));
     res.status(200).send(JSON.parse(dataFile));
   } catch (err) {
@@ -52,6 +61,17 @@ app.get('/api/users/roles', (req, res) => {
     }
   }
 })
+
+function isUserNameUnique(userName, currentUsersList) {
+  const isUnique = currentUsersList.filter((user) => {
+    return user.userName == userName;
+  });
+  return isUnique.length === 0;
+}
+
+function hasForbiddenCharacters(userName) {
+  return userName.indexOf('!') >= 0;
+}
 
 app.listen(7070, () => console.log('REST API mock server started at http://localhost:7070/'))
 module.exports = app;

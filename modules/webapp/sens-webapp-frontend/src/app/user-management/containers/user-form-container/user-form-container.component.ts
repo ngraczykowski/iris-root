@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LocalEventService } from '@app/shared/event/local-event.service';
 import { Subscription, Observable } from 'rxjs';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { UserManagementService } from '@app/user-management/services/user-management.service';
 import { UserRoles, User } from '@app/user-management/models/users';
+import { UserFormComponent } from '@app/user-management/components/user-form/user-form.component';
 
 @Component({
   selector: 'app-user-form-container',
@@ -11,6 +12,8 @@ import { UserRoles, User } from '@app/user-management/models/users';
   styleUrls: ['./user-form-container.component.scss']
 })
 export class UserFormContainerComponent implements OnInit {
+  @ViewChild('userForm', {static: true}) userFormRef: UserFormComponent;
+
   showModal = false;
   formValid = false;
   userRoles$: Observable<UserRoles>;
@@ -48,6 +51,8 @@ export class UserFormContainerComponent implements OnInit {
         }
       });
       this.showModal = false;
+    }, error => {
+      this.userFormRef.showError(error.status);
     });
   }
 

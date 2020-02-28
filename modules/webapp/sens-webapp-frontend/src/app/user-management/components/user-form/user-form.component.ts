@@ -1,8 +1,23 @@
-import { Component, OnInit, Output, OnDestroy, EventEmitter, Input, OnChanges } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn, FormArray, ValidationErrors } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { UserRoles } from '@app/user-management/models/users';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { UserValidators } from '@app/templates/user-management/user-profile/validators/user-validators';
+import { UserRoles } from '@app/user-management/models/users';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-form',
@@ -57,6 +72,14 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   hasError(errorName: string, field: string): boolean {
     return this.userForm.controls[field].hasError(errorName);
+  }
+
+  showError(httpStatusCode: number): void {
+    if (httpStatusCode === 409) {
+      this.userForm.controls.userName.setErrors({notUnique: true});
+    } else {
+      this.userForm.setErrors({entityProcessingError: true});
+    }
   }
 
   private onFormChanges(): void {

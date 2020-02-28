@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HintFeedbackModule } from '@app/components/hint-feedback/hint-feedback.module';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 
 import { UserManagementRoutingModule } from './user-management-routing.module';
@@ -31,7 +32,8 @@ import { ValidationFeedbackComponent } from './components/validation-feedback/va
     ApplicationHeaderModule,
     UserManagementRoutingModule,
     NewUserProfileModule,
-    AngularSvgIconModule
+    AngularSvgIconModule,
+    HintFeedbackModule
   ],
   providers: [
     UserManagementClient

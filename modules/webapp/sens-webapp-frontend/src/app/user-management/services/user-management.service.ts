@@ -42,7 +42,7 @@ export class UserManagementService {
 
   private mapToRoles(rolesPayload: String[]): String[] {
     const mappedRoles = [];
-    rolesPayload.forEach((role, index) => role ? mappedRoles.push(this.userRoles$.value.roles[index]) : false);
+    rolesPayload.forEach((role, index) => role ? mappedRoles.push(this.userRoles$.value.roles[index].role) : false);
     return mappedRoles;
   }
 }
