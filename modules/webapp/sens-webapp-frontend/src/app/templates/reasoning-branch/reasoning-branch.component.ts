@@ -201,7 +201,7 @@ export class ReasoningBranchComponent implements OnInit, OnDestroy {
   }
 
   private buildCircuitBreakerReportUrl(): string {
-    return `/api/decision-tree/${this.decisionTreeId}/circuit-breaker-triggered-alerts`;
+    return `/rest/webapp/api/decision-tree/${this.decisionTreeId}/circuit-breaker-triggered-alerts`;
   }
 
   private sendBriefMessage(messageContent) {

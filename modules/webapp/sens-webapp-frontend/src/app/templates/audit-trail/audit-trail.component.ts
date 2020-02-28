@@ -17,42 +17,42 @@ export class AuditTrailComponent implements OnInit {
     /* {
       name: 'Model',
       description: 'model',
-      url: '/api/audit-trail/model'
+      url: '/rest/webapp/api/audit-trail/model'
     },
     {
       name: 'Decision Tree',
       description: 'decision-tree',
-      url: '/api/audit-trail/decision-tree'
+      url: '/rest/webapp/api/audit-trail/decision-tree'
     },
     {
       name: 'Reasoning Branch',
       description: 'reasoning-branch',
-      url: '/api/audit-trail/reasoning-branch'
+      url: '/rest/webapp/api/audit-trail/reasoning-branch'
     },
     {
       name: 'User Profile',
       description: 'user-profile',
-      url: '/api/audit-trail/user'
+      url: '/rest/webapp/api/audit-trail/user'
     },
     {
       name: 'Change Request',
       description: 'change-request',
-      url: '/api/audit-trail/change-request'
+      url: '/rest/webapp/api/audit-trail/change-request'
     }, */
     {
       name: 'Security Matrix',
       description: 'security-matrix',
-      url: '/api/report/security-matrix-report'
+      url: '/rest/webapp/api/report/security-matrix-report'
     } /*,
     {
       name: 'Users List',
       description: 'users-list',
-      url: '/api/users/export'
+      url: '/rest/webapp/api/users/export'
     },
     {
       name: 'Circuit Breaker Triggered Alerts',
       description: 'cb-triggered-alerts',
-      url: '/api/audit-trail/circuit-breaker-triggered-alerts'
+      url: '/rest/webapp/api/audit-trail/circuit-breaker-triggered-alerts'
     } */
   ];
 

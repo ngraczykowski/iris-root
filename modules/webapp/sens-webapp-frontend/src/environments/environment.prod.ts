@@ -3,7 +3,7 @@ import { UserRole } from '@app/templates/model/user.model';
 
 export const environment = {
   production: true,
-  serverApiUrl: '/',
+  serverApiUrl: '/rest/webapp/',
 
   decisionTrees: {
     pollIntervalInMs: 5 * 1000
@@ -30,7 +30,7 @@ export const environment = {
       '/analyst-home', '/approver'
     ],
     keycloak: {
-      url: 'http://localhost:8081/auth',
+      url: '/auth',
       realm: 'sens-webapp',
       clientId: 'frontend',
       adminRoleName: 'admin',
@@ -58,27 +58,27 @@ export const environment = {
 
   internalServerErrorRedirectRequestMatchers: [
     {
-      urlRegex: /^api\/.*/,
+      urlRegex: /^rest\/webapp\/api\/.*/,
       httpMethods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
     }
   ],
   accessDeniedErrorRedirectRequestMatchers: [
     {
-      urlRegex: /^api\/.*/,
+      urlRegex: /^rest\/webapp\/api\/.*/,
       httpMethods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
     }
   ],
   notFoundErrorRedirectRequestMatchers: [
     {
-      urlRegex: /^api\/decision-tree\/[0-9]+$/,
+      urlRegex: /^rest\/webapp\/api\/decision-tree\/[0-9]+$/,
       httpMethods: ['GET']
     },
     {
-      urlRegex: /^api\/decision-tree\/[0-9]+\/branch\/[0-9]+$/,
+      urlRegex: /^rest\/webapp\/api\/decision-tree\/[0-9]+\/branch\/[0-9]+$/,
       httpMethods: ['GET']
     },
     {
-      urlRegex: /^api(\/decision-tree\/[0-9]+)?(\/branch\/[0-9]+)?\/alert\/.+$/,
+      urlRegex: /^rest\/webapp\/api(\/decision-tree\/[0-9]+)?(\/branch\/[0-9]+)?\/alert\/.+$/,
       httpMethods: ['GET']
     }
   ]

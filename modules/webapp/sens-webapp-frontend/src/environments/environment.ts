@@ -8,7 +8,7 @@ import { UserRole } from '@app/templates/model/user.model';
 
 export const environment = {
   production: false,
-  serverApiUrl: 'http://localhost:7070/api',
+  serverApiUrl: '/rest/webapp/',
 
   decisionTrees: {
     pollIntervalInMs: 5 * 1000
@@ -63,27 +63,27 @@ export const environment = {
 
   internalServerErrorRedirectRequestMatchers: [
     {
-      urlRegex: /^api\/.*/,
+      urlRegex: /^rest\/webapp\/api\/.*/,
       httpMethods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
     }
   ],
   accessDeniedErrorRedirectRequestMatchers: [
     {
-      urlRegex: /^api\/.*/,
+      urlRegex: /^rest\/webapp\/api\/.*/,
       httpMethods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
     }
   ],
   notFoundErrorRedirectRequestMatchers: [
     {
-      urlRegex: /^api\/decision-tree\/[0-9]+$/,
+      urlRegex: /^rest\/webapp\/api\/decision-tree\/[0-9]+$/,
       httpMethods: ['GET']
     },
     {
-      urlRegex: /^api\/decision-tree\/[0-9]+\/branch\/[0-9]+$/,
+      urlRegex: /^rest\/webapp\/api\/decision-tree\/[0-9]+\/branch\/[0-9]+$/,
       httpMethods: ['GET']
     },
     {
-      urlRegex: /^api(\/decision-tree\/[0-9]+)?(\/branch\/[0-9]+)?\/alert\/.+$/,
+      urlRegex: /^rest\/webapp\/api(\/decision-tree\/[0-9]+)?(\/branch\/[0-9]+)?\/alert\/.+$/,
       httpMethods: ['GET']
     }
   ]

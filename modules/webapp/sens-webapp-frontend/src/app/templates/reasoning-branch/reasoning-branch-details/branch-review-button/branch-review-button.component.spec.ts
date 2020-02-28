@@ -63,7 +63,7 @@ describe('BranchReviewButtonComponent', () => {
 
     it('should call review branch post method onReviewBranch()', () => {
       component.onBranchReview();
-      const req = httpMock.expectOne('/api/decision-tree/1/branch/2/review');
+      const req = httpMock.expectOne('/rest/webapp/api/decision-tree/1/branch/2/review');
 
       expect(req.request.method).toEqual('POST');
       expect(req.request.body).toEqual({});
@@ -72,7 +72,7 @@ describe('BranchReviewButtonComponent', () => {
     it('should emit review event after review success', () => {
       spyOn(component.review, 'emit');
       component.onBranchReview();
-      const req = httpMock.expectOne('/api/decision-tree/1/branch/2/review');
+      const req = httpMock.expectOne('/rest/webapp/api/decision-tree/1/branch/2/review');
 
       req.flush({});
 
@@ -81,14 +81,14 @@ describe('BranchReviewButtonComponent', () => {
 
     it('should inProgress be true while request is in progress', () => {
       component.onBranchReview();
-      httpMock.expectOne('/api/decision-tree/1/branch/2/review');
+      httpMock.expectOne('/rest/webapp/api/decision-tree/1/branch/2/review');
 
       expect(component.inProgress).toBeTruthy();
     });
 
     it('should set inProgress to false after review success', () => {
       component.onBranchReview();
-      const req = httpMock.expectOne('/api/decision-tree/1/branch/2/review');
+      const req = httpMock.expectOne('/rest/webapp/api/decision-tree/1/branch/2/review');
 
       req.flush({});
 
@@ -97,7 +97,7 @@ describe('BranchReviewButtonComponent', () => {
 
     it('should set inProgress to false after review error', () => {
       component.onBranchReview();
-      const req = httpMock.expectOne('/api/decision-tree/1/branch/2/review');
+      const req = httpMock.expectOne('/rest/webapp/api/decision-tree/1/branch/2/review');
 
       req.error(<ErrorEvent> {});
 
@@ -107,7 +107,7 @@ describe('BranchReviewButtonComponent', () => {
     it('should send error message when failed to review branch', () => {
       spyOn(eventService, 'sendEvent');
       component.onBranchReview();
-      const req = httpMock.expectOne('/api/decision-tree/1/branch/2/review');
+      const req = httpMock.expectOne('/rest/webapp/api/decision-tree/1/branch/2/review');
 
       req.error(<ErrorEvent> {});
 

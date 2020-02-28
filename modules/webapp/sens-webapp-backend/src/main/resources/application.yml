@@ -94,8 +94,23 @@ grpc:
 
 server:
   port: 7070
+  servlet:
+    context-path: /rest/${spring.application.name}
 
-management.endpoints.web.base-path: /management
+# Management HTTP server
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 security.basic:
   enabled: false

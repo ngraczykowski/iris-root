@@ -52,6 +52,6 @@ describe('DecisionTreeReportsMenuComponent', () => {
     component.generateReport();
 
     expect(component.decisionTreeId).toEqual(1);
-    expect(spy).toHaveBeenCalledWith('/api/decision-tree/1/circuit-breaker-triggered-alerts');
+    expect(spy).toHaveBeenCalledWith('/rest/webapp/api/decision-tree/1/circuit-breaker-triggered-alerts');
   });
 });

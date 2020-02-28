@@ -37,7 +37,7 @@ export class RestrictionPanelEditorComponent implements OnInit {
   translatePrefix = 'alertRestrictionsManagement.modal.';
   translateSectionPrefix = this.translatePrefix + 'content.';
 
-  apiURL = '/api/restriction/';
+  apiURL = '/rest/webapp/api/restriction/';
 
   restrictionNameError: string[] = [];
 

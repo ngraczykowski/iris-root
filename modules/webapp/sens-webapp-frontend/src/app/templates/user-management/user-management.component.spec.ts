@@ -83,6 +83,6 @@ describe('UserManagementComponent', () => {
     const spy = spyOn(component.window.location, 'assign');
 
     component.onDownloadUserList();
-    expect(spy).toHaveBeenCalledWith('/api/users/export');
+    expect(spy).toHaveBeenCalledWith('/rest/webapp/api/users/export');
   });
 });

@@ -9,7 +9,7 @@ import { WINDOW } from '@app/shared/window.service';
   styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent {
-  private readonly downloadUserListUrl = '/api/users/export';
+  private readonly downloadUserListUrl = '/rest/webapp/api/users/export';
 
 
   constructor(
