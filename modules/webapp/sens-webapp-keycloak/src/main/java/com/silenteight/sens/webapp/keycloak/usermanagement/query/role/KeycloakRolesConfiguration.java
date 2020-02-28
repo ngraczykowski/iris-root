@@ -19,8 +19,8 @@ class KeycloakRolesConfiguration {
   static final Duration CACHE_EXPIRATION_DURATION = ofMinutes(30);
 
   @Bean
-  RolesFetcher rolesFetcher(RolesResource rolesResource) {
-    return new RolesFetcher(rolesResource);
+  RolesFetcher rolesFetcher(RolesResource rolesResource, InternalRoleFilter internalRoleFilter) {
+    return new RolesFetcher(rolesResource, internalRoleFilter);
   }
 
   @Bean

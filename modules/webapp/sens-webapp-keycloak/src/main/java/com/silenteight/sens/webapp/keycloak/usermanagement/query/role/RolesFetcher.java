@@ -23,6 +23,8 @@ class RolesFetcher {
 
   @NonNull
   private final RolesResource rolesResource;
+  @NonNull
+  private final InternalRoleFilter internalRoleFilter;
 
   @NonNull
   Map<String, @NonNull List<String>> fetch() {
@@ -30,6 +32,7 @@ class RolesFetcher {
         .list()
         .stream()
         .map(RoleRepresentation::getName)
+        .filter(internalRoleFilter)
         .map(this::getRoleWithUsers)
         .flatMap(this::getUserWithRole)
         .collect(groupingBy(UserWithRole::getUserId, mapping(UserWithRole::getRole, toList())));
@@ -47,12 +50,14 @@ class RolesFetcher {
 
   @Value
   private static class RoleWithUsers {
+
     String role;
     Set<UserRepresentation> users;
   }
 
   @Value
   private static class UserWithRole {
+
     private final UserRepresentation user;
     private final String role;
 
