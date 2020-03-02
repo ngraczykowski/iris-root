@@ -103,6 +103,7 @@
     }
   },
   "branch": {
+    "title": "Reasoning Branch Management",
     "load": {
       "input": {
         "placeholder": "Enter Reasoning Branch ID number e.g. 1-546",
@@ -568,7 +569,7 @@
     "title": "Plugins"
   },
   "auditTrail": {
-    "title": "Audit Trail",
+    "title": "Reports",
     "report": {
       "model": "The report contains information about all models in SENS Application.",
       "decision-tree": "The report contains information about changes in Decision Trees.",
