@@ -92,8 +92,6 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
       given(updateReasoningBranchUseCase.apply(eq(BRANCH_UPDATE_COMMAND)))
           .willReturn(failure(UNKNOWN_EXCEPTION));
 
-      System.out.println(BRANCH_UPDATE_COMMAND);
-
       patch(mappingForBranch(TREE_ID, BRANCH_NO), BRANCH_CHANGE_REQUEST)
           .statusCode(INTERNAL_SERVER_ERROR.value());
     }
