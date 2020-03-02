@@ -13,7 +13,7 @@ configurations {
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
-  implementation.extendsFrom starterGrpc
+  implementation.extendsFrom starterGrpcClient
 
   testImplementation.extendsFrom starterDataJpaTest
 }
@@ -43,8 +43,6 @@ dependencies {
 
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
-
-  implementation libraries.grpc_stub
 
   implementation libraries.protobuf_java_util
 
