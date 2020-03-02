@@ -1,15 +1,15 @@
-<header class="page-header">
-  <div class="page-header-content">
-    <h1 class="page-name">Audit Trail</h1>
-  </div>
-</header>
-<section class="section-reports">
-  <div class="reports">
-    <app-generate-report
-            *ngFor="let report of reports"
-            [reportType]="report.name"
-            [reportUrl]="report.url"
-            [reportDescription]="'auditTrail.report.' + report.description">
-    </app-generate-report>
-  </div>
-</section>
+<app-application-header></app-application-header>
+<div class="reports">
+  <div class="header"></div>
+  <section class="section-reports">
+    <div class="reports-list ">
+      <app-generate-report
+              *ngFor="let report of reports"
+              [reportType]="report.name"
+              [reportUrl]="report.url"
+              [reportDescription]="'auditTrail.report.' + report.description">
+      </app-generate-report>
+    </div>
+  </section>
+</div>
+
