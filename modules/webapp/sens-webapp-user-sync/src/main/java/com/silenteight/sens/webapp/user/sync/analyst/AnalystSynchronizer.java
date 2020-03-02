@@ -60,8 +60,7 @@ class AnalystSynchronizer {
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getDeletedExternalUsers(users)
         .filter(user -> analystUserNames.contains(user.getUserName()))
-        // WA-365(mmastylo) change to hasOnlyRole(ANALYST)
-        .filter(user -> user.hasRole(ANALYST))
+        .filter(user -> user.hasOnlyRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
@@ -122,8 +121,7 @@ class AnalystSynchronizer {
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getNonDeletedExternalUsers(users)
         .filter(user -> !analystUserNames.contains(user.getUserName()))
-        // WA-365(mmastylo) change to hasOnlyRole(ANALYST)
-        .filter(user -> user.hasRole(ANALYST))
+        .filter(user -> user.hasOnlyRole(ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
