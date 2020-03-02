@@ -8,7 +8,7 @@ import { Keycloak } from 'keycloak-angular/lib/core/services/keycloak.service';
 
 import { from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, tap } from 'rxjs/operators';
-import { loginSuccess, setPrincipal } from './store/security.actions';
+import { LoginSuccess, SetPrincipal } from './store/security.actions';
 
 @Injectable()
 export class AuthService implements OnDestroy {
@@ -21,11 +21,11 @@ export class AuthService implements OnDestroy {
   ) {
     this.subscriptions.push(
         this.authenticationSuccessfulEvent(keycloak).pipe(
-            tap(() => this.store.dispatch(loginSuccess())),
+            tap(() => this.store.dispatch(new LoginSuccess())),
             mergeMap(() => this.fetchPrincipal()),
         ).subscribe({
           next: (principal: Principal) =>
-              this.store.dispatch(setPrincipal({principal: principal}))
+              this.store.dispatch(new SetPrincipal(principal))
         })
     );
   }

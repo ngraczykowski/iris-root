@@ -12,7 +12,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { KeycloakAngularModule } from 'keycloak-angular';
 import { Ng2Webstorage } from 'ngx-webstorage';
-import securityReducer from './store/security.reducer';
+import * as fromSecurity from './store/security.reducer';
 
 @NgModule({
   declarations: [],
@@ -21,7 +21,7 @@ import securityReducer from './store/security.reducer';
     HttpClientModule,
     ActivityMonitorModule,
     KeycloakAngularModule,
-    StoreModule.forFeature('security', securityReducer),
+    StoreModule.forFeature('security', fromSecurity.reducer),
     EffectsModule.forFeature([SecurityEffects])
   ],
   providers: [

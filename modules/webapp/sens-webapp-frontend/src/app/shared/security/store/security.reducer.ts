@@ -1,6 +1,6 @@
 import { Principal } from '@app/shared/security/principal.model';
 import { Action, createReducer, on } from '@ngrx/store';
-import SecurityActions from './security.actions';
+import { SecurityActions, SecurityActionTypes } from './security.actions';
 
 export interface State {
   principal: Principal;
@@ -16,54 +16,58 @@ export const initialState: State = {
   error: null
 };
 
-const reducer = createReducer(
-    initialState,
-    on(SecurityActions.loginSuccess,
-        (state) => ({
-              ...state,
-              isLoggedIn: true,
-              processing: false,
-            }
-        )),
-    on(SecurityActions.tryLogin,
-        (state) => ({
-          ...state,
-          error: null,
-          processing: true,
-        })),
-    on(SecurityActions.loginFailed,
-        (state, {reason}) => ({
-          ...state,
-          isLoggedIn: false,
-          processing: false,
-          error: reason
-        })),
-    on(SecurityActions.logout,
-        (state) => ({
-          ...state,
-          processing: true,
-          error: false,
-        })),
-    on(SecurityActions.logoutSuccess,
-        (state) => ({
-          ...state,
-          processing: false,
-          error: false,
-          principal: null,
-          isLoggedIn: false
-        })),
-    on(SecurityActions.logoutFailed,
-        (state, {reason}) => ({
-          ...state,
-          processing: false,
-          error: reason
-        })),
-    on(SecurityActions.setPrincipal,
-        (state, {principal}) => ({
-          ...state,
-          principal: principal
-        }))
-);
 
-export default (state: State | undefined, action: Action) => reducer(state, action);
+export function reducer(state = initialState, action: SecurityActions): State {
+  switch (action.type) {
+    case SecurityActionTypes.loginSuccess:
+      return {
+        ...state,
+        isLoggedIn: true,
+        processing: false,
+      };
 
+    case SecurityActionTypes.tryLogin:
+      return {
+        ...state,
+        error: null,
+        processing: true,
+      };
+
+    case SecurityActionTypes.loginFailed:
+      return {
+        ...state,
+        isLoggedIn: false,
+        processing: false,
+        error: action.payload.reason
+      };
+
+    case SecurityActionTypes.logout:
+      return {
+        ...state,
+        processing: true,
+        error: false,
+      };
+
+    case SecurityActionTypes.logoutSuccess:
+      return {
+        ...state,
+        processing: false,
+        error: false,
+        principal: null,
+        isLoggedIn: false
+      };
+
+    case SecurityActionTypes.logoutFailed:
+      return {
+        ...state,
+        processing: false,
+        error: action.payload.reason
+      };
+
+    case SecurityActionTypes.setPrincipal:
+      return {
+        ...state,
+        principal: action.payload
+      };
+  }
+}

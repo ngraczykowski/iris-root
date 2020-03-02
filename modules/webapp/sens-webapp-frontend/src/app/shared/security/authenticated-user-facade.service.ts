@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as fromRoot from '@app/reducers';
 import { Principal } from '@app/shared/security/principal.model';
-import { logout } from '@app/shared/security/store/security.actions';
+import { Logout } from '@app/shared/security/store/security.actions';
 import { select, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { getLoggedInPrincipal, hasAllAuthorities, isLoggedIn } from './store/security.selectors';
@@ -33,7 +33,7 @@ export class AuthenticatedUserFacade {
   }
 
   logout() {
-    return this.store.dispatch(logout());
+    return this.store.dispatch(new Logout());
   }
 
   getPrincipal(): Observable<Principal> {

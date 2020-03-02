@@ -1,43 +1,48 @@
 import { Principal } from '@app/shared/security/principal.model';
-import { createAction, props } from '@ngrx/store';
+import { createAction, props, Action } from '@ngrx/store';
 
-export const tryLogin = createAction(
-    '[Auth] Try login',
-);
+export enum SecurityActionTypes {
+    tryLogin = '[Auth] Try login',
+    loginSuccess = '[Auth] Login success',
+    setPrincipal = '[Auth] Fetched principal data',
+    loginFailed = '[Auth] Login failed',
+    logout =  '[Auth] Logout',
+    logoutSuccess = '[Auth] Logout success',
+    logoutFailed = '[Auth] Logout failed'
+}
 
-export const loginSuccess = createAction(
-    '[Auth] Login success'
-);
+export class TryLogin implements Action {
+    readonly type = SecurityActionTypes.tryLogin;
+}
+export class LoginSuccess implements Action {
+    readonly type = SecurityActionTypes.loginSuccess;
+}
+export class SetPrincipal implements Action {
+    readonly type = SecurityActionTypes.setPrincipal;
 
-export const setPrincipal = createAction(
-    '[Auth] Fetched principal data',
-    props<{ principal: Principal }>(),
-);
+    constructor(public payload: Principal) {}
+}
+export class LoginFailed implements Action {
+    readonly type = SecurityActionTypes.loginFailed;
 
-export const loginFailed = createAction(
-    '[Auth] Login failed',
-    props<{ reason }>(),
-);
+    constructor(public payload: any) {}
+}
+export class Logout implements Action {
+    readonly type = SecurityActionTypes.logout;
+}
+export class LogoutSuccess implements Action {
+    readonly type = SecurityActionTypes.logoutSuccess;
+}
+export class LogoutFailed implements Action {
+    readonly type = SecurityActionTypes.logoutFailed;
 
-export const logout = createAction(
-    '[Auth] Logout'
-);
+    constructor(public payload: any) {}
+}
 
-export const logoutSuccess = createAction(
-    '[Auth] Logout success'
-);
-
-export const logoutFailed = createAction(
-    '[Auth] Logout failed',
-    props<{ reason }>()
-);
-
-export default {
-  tryLogin,
-  loginSuccess,
-  loginFailed,
-  logout,
-  logoutSuccess,
-  logoutFailed,
-  setPrincipal
-};
+export type SecurityActions = TryLogin
+  | LoginSuccess
+  | LoginFailed
+  | Logout
+  | LogoutSuccess
+  | LogoutFailed
+  | SetPrincipal;
