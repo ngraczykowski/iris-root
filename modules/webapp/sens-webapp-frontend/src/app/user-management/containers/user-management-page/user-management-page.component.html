@@ -1,22 +1,23 @@
 <app-application-header></app-application-header>
-<div class="users-management">
-  <div class="header">
-    <div class="add">
-      <button (click)="showNewUser()"
-              class="button-outline">
-        <i class="icon icon-right-label"
-           aria-label="add"
-           [inlineSVG]="'../../../assets/icons/plus-mark.svg'"></i>
-        Add User
-      </button>
+<div class="native-scroll native-scroll--light">
+  <div class="users-management">
+    <div class="header">
+      <div class="add">
+        <button (click)="showNewUser()"
+                class="button-outline">
+          <i class="icon icon-right-label"
+             aria-label="add"
+             [inlineSVG]="'../../../assets/icons/plus-mark.svg'"></i>
+          Add User
+        </button>
+      </div>
+      <div class="search">
+        <app-search (inputChange)="onFilterChange($event)"></app-search>
+      </div>
     </div>
-    <div class="search">
-      <app-search (inputChange)="onFilterChange($event)"></app-search>
+    <div class="module users-list-table">
+      <app-user-table [users]="isFiltering ? filteredList : usersList" [filterQuery]="filterQuery"></app-user-table>
     </div>
-  </div>
-  <div class="module users-list-table">
-    <app-user-table [users]="isFiltering ? filteredList : usersList" [filterQuery]="filterQuery"></app-user-table>
   </div>
 </div>
-
 <app-user-form-container></app-user-form-container>
