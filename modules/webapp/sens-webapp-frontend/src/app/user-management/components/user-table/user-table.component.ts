@@ -8,6 +8,7 @@ import { User } from '@app/user-management/models/users';
 })
 export class UserTableComponent implements OnInit, OnChanges {
   @Input() users: User[];
+  @Input() filterQuery: String;
 
   usersListTranslate = 'usersManagement.usersList.usersTable.';
 

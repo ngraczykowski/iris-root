@@ -15,6 +15,7 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   filteredList: User[];
   isFiltering = false;
   subscriptions: Subscription[] = [];
+  filterQuery: String;
 
   constructor(
     private readonly userManagementService: UserManagementService,
@@ -40,8 +41,10 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
     if (userName.length > 0) {
       this.isFiltering = true;
       this.filteredList = this.filterUsers(userName);
+      this.filterQuery = userName;
     } else {
       this.isFiltering = false;
+      this.filterQuery = '';
     }
   }
 
@@ -59,7 +62,7 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   private filterUsers(userNameFilter: string): User[] {
     const isInFilterQuery = (field: String) => field.indexOf(userNameFilter) > -1;
     return this.usersList.filter((user) => isInFilterQuery(user.userName)
-      || (user.displayName !== null && isInFilterQuery(user.displayName)));
+      || (user.displayName !== null && typeof user.displayName !== 'undefined' && isInFilterQuery(user.displayName)));
   }
 
 }

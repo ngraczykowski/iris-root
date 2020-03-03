@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="module users-list-table">
-    <app-user-table [users]="isFiltering ? filteredList : usersList"></app-user-table>
+    <app-user-table [users]="isFiltering ? filteredList : usersList" [filterQuery]="filterQuery"></app-user-table>
   </div>
 </div>
 
