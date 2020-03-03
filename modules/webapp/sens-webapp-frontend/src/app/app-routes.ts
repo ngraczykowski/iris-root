@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AlertRestrictionsManagementComponent } from '@app/templates/alert-restrictions-management/alert-restrictions-management.component';
+import { AuditTrailComponent } from '@app/templates/audit-trail/audit-trail.component';
 import { ExternalComponent } from './layout/external/external.component';
 
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
@@ -34,6 +35,13 @@ export const routes: Routes = [
   {
     path: 'user-management',
     component: UserManagementPageComponent
+  },
+  {
+    path: 'reports',
+    component: AuditTrailComponent,
+    data: {
+      authorities: [Authority.AUDIT_GENERATE_REPORT]
+    },
   },
   {
     path: '',
