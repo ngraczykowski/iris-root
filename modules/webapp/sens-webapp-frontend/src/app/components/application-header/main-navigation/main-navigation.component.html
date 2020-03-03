@@ -1,25 +1,23 @@
-<div class="dropdown-center application-navigation">
-  <button class="button-outline"
-          (click)="showMenu = !showMenu"
-          [class.is-active]="showMenu"
-          [translate]="'appHeader.navigation.button'"></button>
-  <div class="dropdown-menu" [class.is-active]="showMenu">
-    <ul class="dropdown-menu-elements">
-      <li *ngIf="hasDecisionTreeAccess | async">
-        <a routerLink="/reasoning-branch"
-           [translate]="'branch.title'"
-           (click)="showMenu = !showMenu"></a>
-      </li>
-      <li *ngIf="hasUserManagementAccess | async">
-        <a routerLink="/user-management"
-           [translate]="'user-management.title'"
-           (click)="showMenu = !showMenu"></a>
-      </li>
-      <li *ngIf="hasAuditTrailAccess | async">
-        <a routerLink="/reports"
-           [translate]="'auditTrail.title'"
-           (click)="showMenu = !showMenu"></a>
-      </li>
-    </ul>
-  </div>
-</div>
+<ul class="navigation">
+  <li *ngIf="hasDecisionTreeAccess | async">
+    <a class="navigation__element"
+       routerLink="/reasoning-branch"
+       [translate]="'branch.title'"
+       (click)="showMenu = !showMenu"
+       routerLinkActive="navigation__element--active"></a>
+  </li>
+  <li *ngIf="hasUserManagementAccess | async">
+    <a class="navigation__element"
+       routerLink="/user-management"
+       [translate]="'user-management.title'"
+       (click)="showMenu = !showMenu"
+       routerLinkActive="navigation__element--active"></a>
+  </li>
+  <li *ngIf="hasAuditTrailAccess | async">
+    <a class="navigation__element"
+       routerLink="/audit-trail"
+       [translate]="'auditTrail.title'"
+       (click)="showMenu = !showMenu"
+       routerLinkActive="navigation__element--active"></a>
+  </li>
+</ul>

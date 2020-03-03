@@ -24,12 +24,9 @@
       }
     }
   }
+
+  .empty-space {
+    flex: 1;
+  }
+
 }
-
-.search {
-  line-height: $app-header-height;
-  opacity: .6;
-  width: 100%;
-}
-
-
