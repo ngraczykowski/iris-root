@@ -10,7 +10,8 @@
            [class.error]="!validInput"
            (focusout)="validateInput(fullIdCheck)"
            [(ngModel)]="enteredID"
-           (ngModelChange)="validateInput(basicIdVerification)">
+           (ngModelChange)="validateInput(basicIdVerification)"
+           (keyup)="onInput(rbID.value)">
   </div>
   <div>
     <div class="tooltip save-changes-button">

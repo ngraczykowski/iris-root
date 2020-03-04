@@ -18,6 +18,11 @@ export class LoadBranchComponent implements OnInit {
 
   ngOnInit() { }
 
+  onInput(value: string) {
+    this.enteredID = value;
+    this.validateInput(this.basicIdVerification);
+  }
+
   validateInput(value) {
     if (this.enteredID) {
       this.validInput = value.test(this.enteredID);
