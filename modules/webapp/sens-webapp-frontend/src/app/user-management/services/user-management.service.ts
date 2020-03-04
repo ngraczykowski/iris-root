@@ -24,7 +24,7 @@ export class UserManagementService {
   }
 
   getUsers(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${environment.serverApiUrl}/users?page=0&size=9999`);
+    return this.http.get<UserResponse>(`${environment.serverApiUrl}api/users?page=0&size=9999`);
   }
 
   getUserRoles(): Observable<UserRolesResponse> {
