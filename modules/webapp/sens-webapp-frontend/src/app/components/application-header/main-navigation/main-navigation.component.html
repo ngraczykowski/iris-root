@@ -15,7 +15,7 @@
   </li>
   <li *ngIf="hasAuditTrailAccess | async">
     <a class="navigation__element"
-       routerLink="/audit-trail"
+       routerLink="/reports"
        [translate]="'auditTrail.title'"
        (click)="showMenu = !showMenu"
        routerLinkActive="navigation__element--active"></a>
