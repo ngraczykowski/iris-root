@@ -7,10 +7,10 @@
     <input class="input-field load-branch-search"
            placeholder="{{ 'branch.load.input.placeholder' | translate }}"
            #rbID
-           [(ngModel)]="enteredID"
-           (ngModelChange)="validateInput(fullIdCheck)"
            [class.error]="!validInput"
-           (focusout)="validateInput(fullIdCheck)">
+           (focusout)="validateInput(fullIdCheck)"
+           [(ngModel)]="enteredID"
+           (ngModelChange)="validateInput(basicIdVerification)">
   </div>
   <div>
     <div class="tooltip save-changes-button">
