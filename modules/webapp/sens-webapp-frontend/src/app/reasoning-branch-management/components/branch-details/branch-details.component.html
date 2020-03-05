@@ -16,8 +16,8 @@
         <div class="select-dropdown branch-content-details-row-content-data">
           <app-icon [name]="'arrow'"></app-icon>
           <select class="input-field" formControlName="aiSolution">
-            <option *ngFor="let aiSolution of aiSolutions" [selected]="aiSolution === branchDetails.aiSolution">
-              {{ aiSolution }}
+            <option *ngFor="let aiSolution of aiSolutions" [selected]="aiSolution.key === branchDetails.aiSolution">
+              {{ aiSolution.label }}
             </option>
           </select>
         </div>

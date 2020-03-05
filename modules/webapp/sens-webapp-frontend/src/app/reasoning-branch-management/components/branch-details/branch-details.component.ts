@@ -10,11 +10,26 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class BranchDetailsComponent implements OnInit {
   branchForm: FormGroup;
   aiSolutions = [
-    'NO_DECISION',
-    'FALSE_POSITIVE',
-    'HINTED_FALSE_POSITIVE',
-    'HINTED_POTENTIAL_TRUE_POSITIVE',
-    'POTENTIAL_TRUE_POSITIVE'
+    {
+      label: 'No Decision',
+      key: 'NO_DECISION'
+    },
+    {
+      label: 'False Positive',
+      key: 'FALSE_POSITIVE'
+    },
+    {
+      label: 'Hinted False Positive',
+      key: 'HINTED_FALSE_POSITIVE'
+    },
+    {
+      label: 'Hinted Potential True Positive',
+      key: 'HINTED_POTENTIAL_TRUE_POSITIVE'
+    },
+    {
+      label: 'Potential True Positive',
+      key: 'POTENTIAL_TRUE_POSITIVE'
+    }
   ];
 
   @Input() branchDetails: ReasoningBranchDetails;
