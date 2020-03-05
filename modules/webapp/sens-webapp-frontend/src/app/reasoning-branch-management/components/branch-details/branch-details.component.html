@@ -16,7 +16,8 @@
         <div class="select-dropdown branch-content-details-row-content-data">
           <app-icon [name]="'arrow'"></app-icon>
           <select class="input-field" formControlName="aiSolution">
-            <option *ngFor="let aiSolution of aiSolutions" [selected]="aiSolution.key === branchDetails.aiSolution">
+            <option *ngFor="let aiSolution of aiSolutions"
+                    [selected]="aiSolution.key === branchDetails.aiSolution">
               {{ aiSolution.label }}
             </option>
           </select>
@@ -44,9 +45,16 @@
       <div class="empty-space"></div>
       <button class="button-flat" (click)="reset()"
               [translate]="'branch.details.footer.buttonReset'"></button>
-      <button class="button-action" (click)="submit()"
-              [disabled]="branchForm.invalid || branchForm.pristine"
-              [translate]="'branch.details.footer.buttonApply'"></button>
+
+      <div class="tooltip save-changes-button">
+      <span class="tooltip-bottom one-line"
+            *ngIf="branchForm.invalid || branchForm.pristine">
+        <p [translate]="'branch.details.footer.buttonApply.tooltip'"></p>
+      </span>
+        <button class="button-action" (click)="submit()"
+                [disabled]="branchForm.invalid || branchForm.pristine"
+                [translate]="'branch.details.footer.buttonApply.label'"></button>
+      </div>
     </div>
   </div>
 </form>
