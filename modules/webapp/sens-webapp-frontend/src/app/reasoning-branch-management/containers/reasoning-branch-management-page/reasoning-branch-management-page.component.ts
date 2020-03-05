@@ -6,6 +6,7 @@ import { ReasoningBranchDetails } from '@app/reasoning-branch-management/models/
 import { BranchDetailsComponent } from '@app/reasoning-branch-management/components/branch-details/branch-details.component';
 import { LoadBranchComponent } from '@app/reasoning-branch-management/components/load-branch/load-branch.component';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reasoning-branch-management-page',
@@ -34,7 +35,8 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   constructor(
     private readonly eventService: LocalEventService,
     private readonly reasoningBranchManagementService: ReasoningBranchManagementService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -72,6 +74,7 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
       this.branchDetails = response;
       this.showDetails = true;
       this.showNoResults = false;
+      this.updateUrl(id);
     }, () => {
       this.showNoResults = true;
       this.showDetails = false;
@@ -87,6 +90,10 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
       }, () => {
         this.failedAppliedChanges();
       });
+  }
+
+  private updateUrl(id: string): void {
+    this.location.go(`/reasoning-branch/${id}`);
   }
 
   private sendBriefMessage(messageContent) {
