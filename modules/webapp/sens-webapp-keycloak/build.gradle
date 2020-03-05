@@ -27,7 +27,6 @@ dependencies {
 
   implementation libraries.vavr
 
-  implementation libraries.keycloak
   implementation libraries.keycloak_spring_security_adapter
   implementation libraries.keycloak_admin_client
 }

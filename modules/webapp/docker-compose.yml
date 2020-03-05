@@ -30,10 +30,10 @@ services:
       DB_USER: "${POSTGRES_USER:-sens}"
       DB_PASSWORD: "${POSTGRES_PASSWORD:-sens}"
       DB_DATABASE: "${POSTGRES_DB:-sens}"
-    command:
-      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/config -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
     depends_on:
       - webapp-db
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled"
     ports:
       - "${KEYCLOAK_PORT:-8081}:8080"
     networks:

@@ -19,7 +19,7 @@ public class KeycloakHttpConfigLoader {
   private final KeycloakRealmApiFacade keycloak;
   private final KeycloakConfigParser keycloakConfigParser;
 
-  Try<Void> load(KeycloakConfigProvider keycloakConfigProvider) {
+  public Try<Void> load(KeycloakConfigProvider keycloakConfigProvider) {
     log.info("Importing Keycloak config through HTTP");
 
     return keycloakConfigParser.processJson(keycloakConfigProvider.json())
@@ -29,7 +29,7 @@ public class KeycloakHttpConfigLoader {
 
   private Try<RealmWithConfig> getOrCreateRealm(KeycloakRealmConfig keycloakRealmConfig) {
     return keycloak.getRealm(keycloakRealmConfig.getRealmName())
-        .recoverWith(FailedToFindRealmException.class, createAndGetRealm(keycloakRealmConfig))
+        .recoverWith(FailedToFindRealmException.class, e -> createAndGetRealm(keycloakRealmConfig))
         .map(realmResource -> new RealmWithConfig(realmResource, keycloakRealmConfig));
   }
 

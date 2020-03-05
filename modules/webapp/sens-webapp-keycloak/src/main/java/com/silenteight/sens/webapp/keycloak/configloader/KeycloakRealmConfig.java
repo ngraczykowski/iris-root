@@ -12,6 +12,6 @@ class KeycloakRealmConfig {
   private final PartialImportRepresentation partialImportRepresentation;
 
   String getRealmName() {
-    return realmRepresentation.getDisplayName();
+    return realmRepresentation.getRealm();
   }
 }

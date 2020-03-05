@@ -28,11 +28,11 @@ class TemplateKeycloakConfigProviderTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new TemplateKeycloakConfigProviderConfiguration()
-        .productionKeycloakConfigProvider(
-            TEMPLATE_NAME,
-            keycloakConfigTemplateProvider,
-            ProductionKeycloakConfigProviderFixtures.CONFIG);
+    underTest = new TemplateKeycloakConfigProvider(
+        TEMPLATE_NAME,
+        keycloakConfigTemplateProvider,
+        ProductionKeycloakConfigProviderFixtures.CONFIG
+    );
   }
 
   @Test
@@ -73,7 +73,8 @@ class TemplateKeycloakConfigProviderTest {
     static final String TEMPLATE_NAME = "configTemplate";
     static final KeycloakTemplateConfigValues CONFIG = new KeycloakTemplateConfigValues(
         Map.of(KeycloakConfigurationKey.BACKEND_BASE_URL, "backendUrl",
-            KeycloakConfigurationKey.BACKEND_SECRET, "backendSecret"));
+            KeycloakConfigurationKey.BACKEND_SECRET, "backendSecret")
+    );
     static final RuntimeException CANT_FIND_TEMPLATE_EXCEPTION = new RuntimeException();
     static final RuntimeException CANT_PARSE_TEMPLATE_EXCEPTION = new RuntimeException();
     static final String PARSED_CONFIG = "someConfig";

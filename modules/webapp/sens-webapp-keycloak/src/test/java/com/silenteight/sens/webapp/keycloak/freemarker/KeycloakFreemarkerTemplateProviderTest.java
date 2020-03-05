@@ -14,12 +14,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey.BACKEND_BASE_URL;
-import static com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey.BACKEND_SECRET;
-import static com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey.CLI_SECRET;
-import static com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey.FRONTEND_SECRET;
+import static com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey.*;
 import static com.silenteight.sens.webapp.keycloak.freemarker.KeycloakFreemarkerTemplateProviderTest.KeycloakFreemarkerTemplateProviderFixtures.*;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.*;
@@ -31,7 +29,7 @@ class KeycloakFreemarkerTemplateProviderTest {
   @BeforeEach
   void setUp() throws IOException {
     var freemarkerConfig = new KeycloakFreemarkerConfiguration()
-        .freemarkerConfiguration(new KeycloakTemplatesConfiguration(TEST_RESOURCES_DIR));
+        .freemarkerConfiguration(() -> TEST_RESOURCES_DIR);
 
     underTest = new KeycloakFreemarkerTemplateProvider(freemarkerConfig);
   }
@@ -61,10 +59,21 @@ class KeycloakFreemarkerTemplateProviderTest {
     Try<KeycloakConfigTemplate> keycloakConfigTemplates =
         underTest.byName("keycloak-config-template.ftl.json");
 
-    Try<String> config = processWith(keycloakConfigTemplates, BASE_URL_AND_ONE_EXTRA_CONFIG);
+    Try<String> config = processWith(keycloakConfigTemplates, EMPTY_CONFIG);
 
     assertThat(config.getCause())
         .isInstanceOf(CouldNotProcessTemplateException.class);
+  }
+
+  @Test
+  void nestedConfiguration_replacesCorrectly() {
+    Try<KeycloakConfigTemplate> keycloakConfigTemplates =
+        underTest.byName("keycloak-config-template-nested.ftl.json");
+
+    Try<String> config = processWith(keycloakConfigTemplates, NESTED_CONFIG);
+
+    assertThat(config.get())
+        .isEqualTo(loadExpected("keycloak-config-template-nested-replaced.json"));
   }
 
   @Test
@@ -97,30 +106,37 @@ class KeycloakFreemarkerTemplateProviderTest {
 
   private static Try<String> processWith(
       Try<KeycloakConfigTemplate> keycloakConfigTemplates,
-      Map<KeycloakConfigurationKey, String> variables) {
+      Map<KeycloakConfigurationKey, Object> variables) {
     return keycloakConfigTemplates.flatMap(
         keycloakConfigTemplate -> keycloakConfigTemplate.process(variables));
   }
 
   static class KeycloakFreemarkerTemplateProviderFixtures {
 
-    static final Map<KeycloakConfigurationKey, String> ALL_TWO_VARIABLES_CONFIG =
+    static final Map<KeycloakConfigurationKey, Object> NESTED_CONFIG =
+        Map.of(
+            FRONTEND_BASE_URL, Map.of("first", "someUrl1",
+                "second", "someUrl2"),
+            FRONTEND_REDIRECT_URLS, Arrays.asList("firstRedirectUrl", "secondRedirectUrl")
+        );
+
+    static final Map<KeycloakConfigurationKey, Object> ALL_TWO_VARIABLES_CONFIG =
         Map.of(
             BACKEND_BASE_URL, "http://localhost:7070",
             BACKEND_SECRET, "theSecret"
         );
-    static final Map<KeycloakConfigurationKey, String> ALL_VARIABLES_WITH_EXTRA_CONFIG =
+    static final Map<KeycloakConfigurationKey, Object> ALL_VARIABLES_WITH_EXTRA_CONFIG =
         Map.of(
             BACKEND_BASE_URL, "http://localhost:7070",
             BACKEND_SECRET, "theSecret",
             FRONTEND_SECRET, "frontendSecret"
         );
-    static final Map<KeycloakConfigurationKey, String> BASE_URL_AND_ONE_EXTRA_CONFIG =
+    static final Map<KeycloakConfigurationKey, Object> BASE_URL_AND_ONE_EXTRA_CONFIG =
         Map.of(
             BACKEND_BASE_URL, "http://localhost:7070",
             CLI_SECRET, "theCliSecret"
         );
-    static final Map<KeycloakConfigurationKey, String> EMPTY_CONFIG = emptyMap();
+    static final Map<KeycloakConfigurationKey, Object> EMPTY_CONFIG = emptyMap();
 
     static final File TEST_RESOURCES_DIR = getFile("freemarker");
 

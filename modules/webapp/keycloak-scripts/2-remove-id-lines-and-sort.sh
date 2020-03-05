@@ -23,17 +23,12 @@ then
 fi
 
 REALM_CONFIG_FILE=$KEYCLOAK_CONFIG_DIR/${KEYCLOAK_REALM_NAME}-realm.json
-USERS_FILE=$KEYCLOAK_CONFIG_DIR/${KEYCLOAK_REALM_NAME}-users-0.json
 
 echo "Realm file ${REALM_CONFIG_FILE}"
-echo "Users file ${USERS_FILE}"
 
 sed -i '/"id"/d' "$REALM_CONFIG_FILE"
 sed -i '/"containerId"/d' "$REALM_CONFIG_FILE"
-sed -i '/"id"/d' "$USERS_FILE"
 
 jq -S -f "$DIR"/normalize.jq "$REALM_CONFIG_FILE" > "$REALM_CONFIG_FILE"_sorted
-jq -S -f "$DIR"/normalize.jq "$USERS_FILE" > "$USERS_FILE"_sorted
 
 mv "$REALM_CONFIG_FILE"_sorted "$REALM_CONFIG_FILE"
-mv "$USERS_FILE"_sorted "$USERS_FILE"

@@ -22,21 +22,21 @@ class FreemarkerKeycloakConfigTemplate implements KeycloakConfigTemplate {
   private final Template template;
 
   @Override
-  public Try<String> process(Map<KeycloakConfigurationKey, String> values) {
+  public Try<String> process(Map<KeycloakConfigurationKey, Object> values) {
     return Try.of(() -> fillTemplate(values))
         .recoverWith(IOException.class, CouldNotProcessTemplateException::from)
         .recoverWith(TemplateException.class, CouldNotProcessTemplateException::from);
   }
 
-  private String fillTemplate(Map<KeycloakConfigurationKey, String> values)
-      throws IOException, TemplateException {
+  private String fillTemplate(Map<KeycloakConfigurationKey, Object> values) throws IOException,
+      TemplateException {
     StringWriter stringWriter = new StringWriter();
     template.process(toStringKeys(values), stringWriter);
 
     return stringWriter.toString();
   }
 
-  private static Map<String, String> toStringKeys(Map<KeycloakConfigurationKey, String> values) {
+  private static Map<String, Object> toStringKeys(Map<KeycloakConfigurationKey, Object> values) {
     return EntryStream.of(values).mapKeys(Enum::name).toMap();
   }
 }

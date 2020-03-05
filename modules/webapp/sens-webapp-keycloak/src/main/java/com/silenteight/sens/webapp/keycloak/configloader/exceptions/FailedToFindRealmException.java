@@ -6,7 +6,11 @@ public final class FailedToFindRealmException extends RuntimeException {
 
   private static final long serialVersionUID = -4191581098632966390L;
 
-  private FailedToFindRealmException(Throwable cause) {
+  public FailedToFindRealmException(String realmName) {
+    super("Realm " + realmName + " does not exist");
+  }
+
+  FailedToFindRealmException(Throwable cause) {
     super(cause);
   }
 

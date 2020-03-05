@@ -26,13 +26,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response.Status;
 
 import static com.silenteight.sens.webapp.common.support.jackson.JsonConversionHelper.INSTANCE;
 import static com.silenteight.sens.webapp.keycloak.configloader.KeycloakHttpConfigLoaderTest.KeycloakHttpConfigLoaderFixtures.CLIENT_ERROR_EXCEPTION;
-import static com.silenteight.sens.webapp.keycloak.configloader.KeycloakHttpConfigLoaderTest.KeycloakHttpConfigLoaderFixtures.NOT_FOUND_EXCEPTION;
 import static com.silenteight.sens.webapp.keycloak.configloader.RecursiveEqualsMatcher.eqRecursively;
 import static java.nio.charset.Charset.defaultCharset;
+import static java.util.Collections.emptyList;
+import static java.util.List.of;
 import static java.util.Objects.requireNonNull;
+import static javax.ws.rs.core.Response.ok;
+import static javax.ws.rs.core.Response.status;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
@@ -43,6 +47,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class KeycloakHttpConfigLoaderTest {
 
+  public static final Policy POLICY = Policy.OVERWRITE;
   @Mock
   private Keycloak keycloak;
 
@@ -71,7 +76,7 @@ class KeycloakHttpConfigLoaderTest {
 
     @BeforeEach
     void setUp() {
-      willThrow(NOT_FOUND_EXCEPTION).given(realmsResource).realm(fixtures.config.realmName());
+      realmDoesntExist();
     }
 
     @Test
@@ -90,20 +95,24 @@ class KeycloakHttpConfigLoaderTest {
     }
   }
 
+  private void realmDoesntExist() {
+    willReturn(emptyList()).given(realmsResource).findAll();
+  }
+
   @Nested
   class GivenRealmDoesntExistAndCantCreateNew {
 
     @BeforeEach
     void setUp() {
-      willThrow(NOT_FOUND_EXCEPTION).given(realmsResource).realm(fixtures.config.realmName());
-      willThrow(CLIENT_ERROR_EXCEPTION).given(realmsResource).create(any());
+      realmDoesntExist();
+      cantCreateRealm();
     }
 
     @Test
     void correctConfig_triesToFindAndCreateRealm() {
       underTest.load(fixtures.config);
 
-      then(realmsResource).should().realm(fixtures.config.realmName());
+      then(realmsResource).should().findAll();
       then(realmsResource).should().create(eqRecursively(fixtures.config.asRealmRepresentation()));
     }
 
@@ -115,16 +124,17 @@ class KeycloakHttpConfigLoaderTest {
     }
   }
 
+  private void cantCreateRealm() {
+    willThrow(CLIENT_ERROR_EXCEPTION).given(realmsResource).create(any());
+  }
+
   @Nested
   class GivenCantFindRealmAndCanCreateRealmAndCantPartialImport {
 
     @BeforeEach
     void setUp() {
-      willThrow(NOT_FOUND_EXCEPTION)
-          .willReturn(realmResource)
-          .given(realmsResource).realm(fixtures.config.realmName());
-
-      willThrow(CLIENT_ERROR_EXCEPTION).given(realmResource).partialImport(any());
+      cantFindAtFirstButCanCreateRealm();
+      cantPerformPartialImport();
     }
 
     @Test
@@ -132,11 +142,12 @@ class KeycloakHttpConfigLoaderTest {
       underTest.load(fixtures.config);
 
       then(realmsResource).should().create(eqRecursively(fixtures.config.asRealmRepresentation()));
-      then(realmsResource).should(times(2)).realm(fixtures.config.realmName());
+      then(realmsResource).should().realm(fixtures.config.realmName());
+      then(realmsResource).should(times(2)).findAll();
       then(realmResource)
           .should()
           .partialImport(
-              eqRecursively(fixtures.config.asPartialImportRepresentation(Policy.OVERWRITE)));
+              eqRecursively(fixtures.config.asPartialImportRepresentation(POLICY)));
     }
 
     @Test
@@ -147,13 +158,24 @@ class KeycloakHttpConfigLoaderTest {
     }
   }
 
+  private void cantFindAtFirstButCanCreateRealm() {
+    willReturn(emptyList(), of(fixtures.config.asRealmRepresentation()))
+        .given(realmsResource).findAll();
+    willReturn(realmResource).given(realmsResource).realm(fixtures.config.realmName());
+  }
+
+  private void cantPerformPartialImport() {
+    willReturn(status(Status.INTERNAL_SERVER_ERROR).build())
+        .given(realmResource).partialImport(any());
+  }
+
   @Nested
   class GivenCanFindRealmAndCantPartialImport {
 
     @BeforeEach
     void setUp() {
-      willReturn(realmResource).given(realmsResource).realm(fixtures.config.realmName());
-      willThrow(CLIENT_ERROR_EXCEPTION).given(realmResource).partialImport(any());
+      canFindRealm();
+      cantPerformPartialImport();
     }
 
     @Test
@@ -163,7 +185,7 @@ class KeycloakHttpConfigLoaderTest {
       then(realmResource)
           .should()
           .partialImport(
-              eqRecursively(fixtures.config.asPartialImportRepresentation(Policy.OVERWRITE)));
+              eqRecursively(fixtures.config.asPartialImportRepresentation(POLICY)));
     }
 
     @Test
@@ -174,13 +196,19 @@ class KeycloakHttpConfigLoaderTest {
     }
   }
 
+  private void canFindRealm() {
+    willReturn(of(fixtures.config.asRealmRepresentation())).given(realmsResource).findAll();
+    willReturn(realmResource).given(realmsResource).realm(fixtures.config.realmName());
+  }
+
 
   @Nested
   class GivenCanFindRealmAndPerformPartialImport {
 
     @BeforeEach
     void setUp() {
-      willReturn(realmResource).given(realmsResource).realm(fixtures.config.realmName());
+      canFindRealm();
+      canPerformPartialImport();
     }
 
     @Test
@@ -189,6 +217,13 @@ class KeycloakHttpConfigLoaderTest {
 
       assertThat(actual.isSuccess()).isTrue();
     }
+  }
+
+  private void canPerformPartialImport() {
+    willReturn(ok().build())
+        .given(realmResource)
+        .partialImport(
+            eqRecursively(fixtures.config.asPartialImportRepresentation(Policy.OVERWRITE)));
   }
 
   @RequiredArgsConstructor
@@ -209,7 +244,7 @@ class KeycloakHttpConfigLoaderTest {
     }
 
     String realmName() {
-      return asRealmRepresentation().getDisplayName();
+      return asRealmRepresentation().getRealm();
     }
 
     RealmRepresentation asRealmRepresentation() {

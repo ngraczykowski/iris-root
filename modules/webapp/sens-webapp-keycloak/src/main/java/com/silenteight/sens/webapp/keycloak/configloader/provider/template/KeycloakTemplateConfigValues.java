@@ -7,5 +7,5 @@ import java.util.Map;
 @Value
 public class KeycloakTemplateConfigValues {
 
-  Map<KeycloakConfigurationKey, String> valueByConfigurationKey;
+  Map<KeycloakConfigurationKey, Object> valueByConfigurationKey;
 }

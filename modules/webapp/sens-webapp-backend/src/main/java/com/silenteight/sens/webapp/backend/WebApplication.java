@@ -29,7 +29,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         UserRestModule.class,
         UserRestModule.class,
         UserSyncModule.class,
-        WebModule.class
+        WebModule.class,
     },
     exclude = {
         FreeMarkerAutoConfiguration.class

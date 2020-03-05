@@ -19,9 +19,9 @@ sleep 3
 
 KEYCLOAK_PATH=/opt/jboss/keycloak/bin/standalone.sh
 docker-compose exec "${CONTAINER_NAME}" timeout --foreground "$TIMEOUT" ${KEYCLOAK_PATH} \
-                            -Djboss.socket.binding.port-offset=63 -Dkeycloak.migration.action=export \
-                            -Dkeycloak.migration.provider=dir \
+                            -Djboss.socket.binding.port-offset=99 -Dkeycloak.migration.action=export \
+                            -Dkeycloak.migration.provider=singleFile \
                             -Dkeycloak.migration.realmName="${REALM_NAME}" \
-                            -Dkeycloak.migration.usersExportStrategy=SAME_FILE \
-                            -Dkeycloak.migration.dir=/config
+                            -Dkeycloak.migration.usersExportStrategy=REALM_FILE \
+                            -Dkeycloak.migration.file=/config/"${REALM_NAME}"-realm.json
 

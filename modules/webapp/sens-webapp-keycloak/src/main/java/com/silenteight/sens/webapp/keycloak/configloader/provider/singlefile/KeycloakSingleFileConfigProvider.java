@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import static org.apache.commons.io.FileUtils.readFileToString;
 
 @RequiredArgsConstructor
-class KeycloakSingleFileConfigProvider implements KeycloakConfigProvider {
+public class KeycloakSingleFileConfigProvider implements KeycloakConfigProvider {
 
   private final File configFile;
   private final Charset charset;

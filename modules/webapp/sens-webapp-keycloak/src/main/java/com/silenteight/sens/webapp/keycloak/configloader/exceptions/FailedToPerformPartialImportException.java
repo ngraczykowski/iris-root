@@ -2,11 +2,17 @@ package com.silenteight.sens.webapp.keycloak.configloader.exceptions;
 
 import io.vavr.control.Try;
 
+import javax.ws.rs.core.Response;
+
 public final class FailedToPerformPartialImportException extends RuntimeException {
 
   private static final long serialVersionUID = -6564291696060401788L;
 
-  private FailedToPerformPartialImportException(Throwable cause) {
+  public FailedToPerformPartialImportException(Response response) {
+    super("Keycloak HTTP response is " + response.getStatusInfo());
+  }
+
+  FailedToPerformPartialImportException(Throwable cause) {
     super(cause);
   }
 

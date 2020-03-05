@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface KeycloakConfigTemplate {
 
-  Try<String> process(Map<KeycloakConfigurationKey, String> values);
+  Try<String> process(Map<KeycloakConfigurationKey, Object> values);
 }

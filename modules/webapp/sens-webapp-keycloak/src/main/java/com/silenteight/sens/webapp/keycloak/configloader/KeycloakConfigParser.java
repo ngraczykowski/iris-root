@@ -13,7 +13,7 @@ import org.keycloak.representations.idm.RealmRepresentation;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-class KeycloakConfigParser {
+public class KeycloakConfigParser {
 
   private final ObjectMapper objectMapper;
 

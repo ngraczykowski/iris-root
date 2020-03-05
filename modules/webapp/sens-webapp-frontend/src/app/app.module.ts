@@ -31,8 +31,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { concat, Observable } from 'rxjs';
-import { reducers } from './reducers';
 import { ReasoningBranchManagementModule } from './reasoning-branch-management/reasoning-branch-management.module';
+import { reducers } from './reducers';
 import { UserManagementModule } from './user-management/user-management.module';
 
 
@@ -90,7 +90,7 @@ export class AppModule implements DoBootstrap {
 
   ngDoBootstrap(appRef: ApplicationRef): void {
     concat(
-        // new KeycloakInitializer(this.keycloakService).doInitialize(),
+        new KeycloakInitializer(this.keycloakService).doInitialize(),
         this.bootstrapApp(appRef)
     ).subscribe({
       error: error => console.error('[ngDoBootstrap] init failed', error),
