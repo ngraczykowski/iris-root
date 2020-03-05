@@ -23,6 +23,7 @@ dependencies {
 
   implementation libraries.caffeine
   implementation libraries.streamex
+  implementation libraries.freemarker
 
   implementation libraries.vavr
 

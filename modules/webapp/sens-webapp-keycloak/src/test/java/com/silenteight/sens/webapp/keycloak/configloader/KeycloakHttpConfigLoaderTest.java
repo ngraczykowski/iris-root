@@ -225,7 +225,7 @@ class KeycloakHttpConfigLoaderTest {
   @Getter
   static class KeycloakHttpConfigLoaderFixtures {
 
-    static final String CONFIG_LOCATION = "keycloak-realm-config.json";
+    static final String CONFIG_LOCATION = "configloader/keycloak-realm-config.json";
     static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException();
     static final ClientErrorException CLIENT_ERROR_EXCEPTION = new ClientErrorException(400);
     final KeycloakConfig config;

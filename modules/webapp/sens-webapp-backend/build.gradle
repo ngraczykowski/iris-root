@@ -43,6 +43,7 @@ dependencies {
 
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.freemarker
 
   implementation libraries.protobuf_java_util
 
