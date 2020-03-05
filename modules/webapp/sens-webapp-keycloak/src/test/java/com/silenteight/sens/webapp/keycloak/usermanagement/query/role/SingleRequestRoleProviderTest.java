@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.query.role;
 
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.UserRoles;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.admin.client.resource.RealmResource;
@@ -56,11 +57,7 @@ class SingleRequestRoleProviderTest {
   }
 
   private void givenUser(UserRoles userRoles) {
-    List<RoleRepresentation> rolesRepresentation = userRoles
-        .getRoles()
-        .stream()
-        .map(SingleRequestRoleProviderTest::roleRepresentation)
-        .collect(toList());
+    List<RoleRepresentation> rolesRepresentation = getRoleRepresentations(userRoles);
 
     MappingsRepresentation mappingsRepresentation = mock(MappingsRepresentation.class);
     when(mappingsRepresentation.getRealmMappings()).thenReturn(rolesRepresentation);
@@ -75,7 +72,20 @@ class SingleRequestRoleProviderTest {
     when(usersResource.get(userRoles.getUserId())).thenReturn(userResource);
 
     when(realmResource.users()).thenReturn(usersResource);
-    userRoles.getRoles().forEach(name -> when(internalRoleFilter.test(name)).thenReturn(true));
+    if (userRoles.getRoles() != null)
+      userRoles.getRoles().forEach(name -> when(internalRoleFilter.test(name)).thenReturn(true));
+  }
+
+  @Nullable
+  private  List<RoleRepresentation> getRoleRepresentations(UserRoles userRoles) {
+    if (userRoles.getRoles() == null)
+      return null;
+
+    return userRoles
+          .getRoles()
+          .stream()
+          .map(SingleRequestRoleProviderTest::roleRepresentation)
+          .collect(toList());
   }
 
   private static RoleRepresentation roleRepresentation(String name) {

@@ -8,6 +8,8 @@ import org.keycloak.representations.idm.RoleRepresentation;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -20,7 +22,8 @@ class SingleRequestRoleProvider implements RolesProvider {
 
   @Override
   public List<String> getForUserId(String userId) {
-    List<String> r = fetchUserRoles(userId)
+    List<String> r = ofNullable(fetchUserRoles(userId))
+        .orElse(emptyList())
         .stream()
         .map(RoleRepresentation::getName)
         .sorted().collect(toList());

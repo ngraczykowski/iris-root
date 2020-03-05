@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.role;
 
+import lombok.NonNull;
+
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.UserRoles;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import java.util.List;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_1_ROLES;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_2_NO_ROLES;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Map.of;
 import static java.util.Objects.requireNonNull;
@@ -38,7 +41,8 @@ class CachedRolesProviderTest {
   }
 
   private void givenNestedProviderReturns(UserRoles user) {
-    given(nestedRolesProvider.getForUserId(user.getUserId())).willReturn(user.getRoles());
+    @NonNull List<String> roles = user.getRoles() == null ? emptyList() : user.getRoles();
+    given(nestedRolesProvider.getForUserId(user.getUserId())).willReturn(roles);
   }
 
   @Nested
@@ -124,7 +128,7 @@ class CachedRolesProviderTest {
 
       then(nestedRolesProvider).should().getForUserId(USER_2_NO_ROLES.getUserId());
 
-      assertThat(actual).isEqualTo(USER_2_NO_ROLES.getRoles());
+      assertThat(actual).isEqualTo(emptyList());
     }
   }
 }
