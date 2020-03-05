@@ -1,4 +1,5 @@
 <app-application-header></app-application-header>
+<app-preloader class="preload-element" [class.is-active]="loadingUsers"></app-preloader>
 <div class="native-scroll native-scroll--light">
   <div class="users-management">
     <div class="header">
@@ -20,4 +21,3 @@
     </div>
   </div>
 </div>
-<app-user-form-container></app-user-form-container>

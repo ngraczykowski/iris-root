@@ -16,6 +16,7 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   isFiltering = false;
   subscriptions: Subscription[] = [];
   filterQuery: String;
+  loadingUsers = false;
 
   constructor(
     private readonly userManagementService: UserManagementService,
@@ -55,8 +56,12 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   }
 
   private fetchUsers(): Subscription {
+    this.loadingUsers = true;
     return this.userManagementService.getUsers()
-      .subscribe(data => this.usersList = data.content);
+      .subscribe(data => {
+        this.usersList = data.content;
+        this.loadingUsers = false;
+      });
   }
 
   private filterUsers(userNameFilter: string): User[] {
