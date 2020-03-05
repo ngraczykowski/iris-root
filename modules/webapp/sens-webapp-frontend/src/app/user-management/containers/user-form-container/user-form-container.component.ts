@@ -39,6 +39,7 @@ export class UserFormContainerComponent implements OnInit {
 
   onCancel() {
     this.showModal = false;
+    this.userFormRef.userForm.reset();
   }
 
   onSave() {
@@ -51,6 +52,7 @@ export class UserFormContainerComponent implements OnInit {
         }
       });
       this.showModal = false;
+      this.userFormRef.userForm.reset();
     }, error => {
       this.userFormRef.showError(error.status);
     });
