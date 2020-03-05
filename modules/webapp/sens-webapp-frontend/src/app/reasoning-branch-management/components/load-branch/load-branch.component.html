@@ -11,7 +11,8 @@
            (focusout)="validateInput(fullIdCheck)"
            [(ngModel)]="enteredID"
            (ngModelChange)="validateInput(basicIdVerification)"
-           (keyup)="onInput(rbID.value)">
+           (keyup)="onInput(rbID.value)"
+           (keyup.enter)="onLoadBranch()">
   </div>
   <div>
     <div class="tooltip save-changes-button">
@@ -22,7 +23,7 @@
       <button class="button-outline"
               [translate]="'branch.load.button.label'"
               [disabled]="!enteredID || !validInput"
-              (click)="onLoadBranchClicked()">
+              (click)="onLoadBranch()">
       </button>
     </div>
   </div>

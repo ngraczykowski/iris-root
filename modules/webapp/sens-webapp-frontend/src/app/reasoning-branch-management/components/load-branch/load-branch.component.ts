@@ -31,7 +31,8 @@ export class LoadBranchComponent implements OnInit {
     }
   }
 
-  onLoadBranchClicked() {
+  onLoadBranch() {
+    this.validateInput(this.fullIdCheck);
     if (this.validInput) {
       this.loadBranch.emit(this.enteredID);
     }
