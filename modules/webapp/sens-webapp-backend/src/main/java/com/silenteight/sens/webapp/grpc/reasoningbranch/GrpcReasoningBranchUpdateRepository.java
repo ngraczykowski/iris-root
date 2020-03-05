@@ -10,7 +10,6 @@ import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
-import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
@@ -30,6 +29,7 @@ import static io.vavr.API.Case;
 @Slf4j
 class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateRepository {
 
+  private final BranchSolutionMapper branchSolutionMapper;
   private final BranchGovernanceBlockingStub governanceBlockingStub;
 
   @Override
@@ -47,13 +47,13 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
         .mapFailure(Case($(codeIs(NOT_FOUND)), BranchNotFoundException::new));
   }
 
-  private static ChangeBranchesRequest createRequest(UpdatedBranch updatedBranch) {
+  private ChangeBranchesRequest createRequest(UpdatedBranch updatedBranch) {
     Builder branchChange = BranchChange.newBuilder();
 
     branchChange.setReasoningBranchId(buildGrpcBranchId(updatedBranch.getBranchId()));
 
     updatedBranch.getNewAiSolution()
-        .map(GrpcReasoningBranchUpdateRepository::buildSolutionChange)
+        .map(this::buildSolutionChange)
         .ifPresent(branchChange::setSolutionChange);
 
     updatedBranch.getNewIsActive()
@@ -78,9 +78,9 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
         .build();
   }
 
-  private static BranchSolutionChange buildSolutionChange(String newSolution) {
+  private BranchSolutionChange buildSolutionChange(String newSolution) {
     return BranchSolutionChange.newBuilder()
-        .setSolution(BranchSolution.valueOf(newSolution))
+        .setSolution(branchSolutionMapper.map(newSolution))
         .build();
   }
 }

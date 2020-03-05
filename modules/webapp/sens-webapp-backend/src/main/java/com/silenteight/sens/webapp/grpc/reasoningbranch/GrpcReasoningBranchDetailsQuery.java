@@ -27,6 +27,7 @@ import static java.util.Optional.empty;
 @Slf4j
 class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
 
+  private final BranchSolutionMapper mapper;
   private final BranchGovernanceBlockingStub branches;
 
   @Override
@@ -36,7 +37,7 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
             + "treeId={}, branchId={}", treeId, branchId);
     Try<Optional<BranchDetailsDto>> details =
         of(() -> branches.getReasoningBranch(buildRequest(treeId, branchId)))
-            .map(GrpcReasoningBranchDetailsQuery::mapToDetailsDto)
+            .map(this::mapToDetailsDto)
             .map(Optional::of);
 
     return mapStatusExceptionsToCommunicationException(details)
@@ -48,11 +49,11 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
         ).get();
   }
 
-  private static BranchDetailsDto mapToDetailsDto(ReasoningBranchResponse grpcResponse) {
+  private BranchDetailsDto mapToDetailsDto(ReasoningBranchResponse grpcResponse) {
     ReasoningBranchSummary reasoningBranch = grpcResponse.getReasoningBranch();
 
     return BranchDetailsDto.builder()
-        .aiSolution(reasoningBranch.getSolution().name())
+        .aiSolution(mapper.map(reasoningBranch.getSolution()))
         .isActive(reasoningBranch.getEnabled())
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
         .build();

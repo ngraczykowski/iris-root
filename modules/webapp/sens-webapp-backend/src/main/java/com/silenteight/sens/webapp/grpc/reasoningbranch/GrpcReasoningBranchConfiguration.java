@@ -10,10 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class GrpcReasoningBranchConfiguration {
 
+  private BranchSolutionMapper branchSolutionMapper = new BranchSolutionMapper();
+
   @Bean
   GrpcReasoningBranchDetailsQuery grpcReasoningBranchDetailsQuery(
       @Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchDetailsQuery(
+        branchSolutionMapper,
         BranchGovernanceGrpc
             .newBlockingStub(channel)
             .withWaitForReady()
@@ -24,9 +27,8 @@ class GrpcReasoningBranchConfiguration {
   GrpcReasoningBranchUpdateRepository grpcReasoningBranchUpdateRepository(
       @Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchUpdateRepository(
-        BranchGovernanceGrpc
-            .newBlockingStub(channel)
-            .withWaitForReady()
+        branchSolutionMapper,
+        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady()
     );
   }
 }

@@ -60,5 +60,7 @@ class GrpcReasoningBranchDetailsQueryFixtures {
           .setReasoningBranchId(getProtoBranchId())
           .build();
     }
+
+
   }
 }

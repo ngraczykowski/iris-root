@@ -6,9 +6,9 @@ import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 import com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchDetailsQueryFixtures.ReasoningBranch;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -29,8 +29,14 @@ class GrpcReasoningBranchDetailsQueryTest {
   @Mock
   private BranchGovernanceBlockingStub stub;
 
-  @InjectMocks
   private GrpcReasoningBranchDetailsQuery underTest;
+  private BranchSolutionMapper mapper;
+
+  @BeforeEach
+  void setUp() {
+    mapper = new BranchSolutionMapper();
+    underTest = new GrpcReasoningBranchDetailsQuery(mapper, stub);
+  }
 
   @Test
   void returnsEmptyOptional_whenGrpcThrowsNotFoundStatusException() {
@@ -64,10 +70,10 @@ class GrpcReasoningBranchDetailsQueryTest {
     assertEquals(actual.get(), ENABLED_REASONING_BRANCH);
   }
 
-  private static void assertEquals(BranchDetailsDto actual, ReasoningBranch expected) {
+  private void assertEquals(BranchDetailsDto actual, ReasoningBranch expected) {
     assertThatDetails(actual)
         .hasBranchId(expected.getBranchId())
-        .hasAiSolution(expected.getSolution().name())
+        .hasAiSolution(mapper.map(expected.getSolution()))
         .hasEnabledSetTo(expected.isEnabled());
   }
 

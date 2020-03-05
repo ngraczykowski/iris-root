@@ -18,13 +18,13 @@ public class BranchChangesRequestDto {
   private String aiSolution;
 
   @Nullable
-  private Boolean isActive;
+  private Boolean active;
 
   UpdateBranchCommand toCommand(BranchId branchId) {
     return new UpdateBranchCommand(
         branchId,
         aiSolution,
-        isActive
+        active
     );
   }
 }

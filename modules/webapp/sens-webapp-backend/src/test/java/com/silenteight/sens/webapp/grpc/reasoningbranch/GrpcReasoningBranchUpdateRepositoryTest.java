@@ -2,18 +2,17 @@ package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
-import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.vavr.control.Try;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -29,11 +28,16 @@ class GrpcReasoningBranchUpdateRepositoryTest {
   @Mock
   private BranchGovernanceBlockingStub governanceBlockingStub;
 
-  @InjectMocks
   private GrpcReasoningBranchUpdateRepository underTest;
 
   @Captor
   private ArgumentCaptor<ChangeBranchesRequest> requestCaptor;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new GrpcReasoningBranchUpdateRepository(
+        new BranchSolutionMapper(), governanceBlockingStub);
+  }
 
   @Test
   void unknownSolutionValue_throwsAiSolutionNotSupportedException() {
@@ -109,7 +113,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
             .builder()
             .treeId(1)
             .branchId(3)
-            .newAiSolution(BranchSolution.BRANCH_FALSE_POSITIVE.name())
+            .newAiSolution("FALSE_POSITIVE")
             .build();
 
     static final TestUpdatedBranch BRANCH_WITH_UNKNOWN_SOLUTION_CHANGED =
@@ -121,7 +125,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
             .treeId(1)
             .branchId(4)
             .newStatus(true)
-            .newAiSolution(BranchSolution.BRANCH_HINTED_FALSE_POSITIVE.name())
+            .newAiSolution("HINTED_FALSE_POSITIVE")
             .build();
 
     static final StatusRuntimeException NOT_FOUND_STATUS_EXCEPTION = new StatusRuntimeException(
