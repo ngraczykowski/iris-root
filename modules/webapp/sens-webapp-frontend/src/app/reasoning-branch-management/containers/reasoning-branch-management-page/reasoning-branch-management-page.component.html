@@ -12,6 +12,7 @@
       <app-branch-empty-state *ngIf="showNoResults" [emptyStateMessage]="noResults"></app-branch-empty-state>
       <app-branch-details *ngIf="showDetails"
                           #branchDetailsForm 
+                          [fullId]="loadBranch.enteredID"
                           [branchDetails]="branchDetails"
                           (confirm)="showConfirm()"></app-branch-details>
     </div>

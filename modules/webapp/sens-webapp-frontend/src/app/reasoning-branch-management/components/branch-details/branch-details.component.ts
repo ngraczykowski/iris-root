@@ -32,6 +32,7 @@ export class BranchDetailsComponent implements OnInit {
     }
   ];
 
+  @Input() fullId: number;
   @Input() branchDetails: ReasoningBranchDetails;
   @Output() confirm = new EventEmitter();
 
