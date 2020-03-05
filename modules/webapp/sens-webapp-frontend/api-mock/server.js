@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.get('/api/users', (req, res) => {
+app.get('/rest/webapp/api/users', (req, res) => {
   let dataFile;
 
   try {
@@ -24,7 +24,7 @@ app.get('/api/users', (req, res) => {
   }
 });
 
-app.post('/api/users', (req, res) => {
+app.post('/rest/webapp/api/users', (req, res) => {
   let dataFile;
 
   try {
@@ -56,7 +56,7 @@ app.post('/api/users', (req, res) => {
   }
 });
 
-app.get('/api/users/roles', (req, res) => {
+app.get('/rest/webapp/api/users/roles', (req, res) => {
   let dataFile;
 
   try {
@@ -69,7 +69,7 @@ app.get('/api/users/roles', (req, res) => {
   }
 })
 
-app.get('/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
+app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
   const id = req.params.branchId
   try {
@@ -82,7 +82,19 @@ app.get('/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   }
 })
 
-app.patch('/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
+app.get('/rest/webapp/management/info', (req, res) => {
+  let dataFile;
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/management_info.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+})
+
+app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
   const id = req.params.branchId
   try {

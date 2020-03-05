@@ -24,20 +24,20 @@ export class UserManagementService {
   }
 
   getUsers(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${environment.serverApiUrl}api/users?page=0&size=9999`);
+    return this.http.get<UserResponse>(`${environment.serverApiUrl}/users?page=0&size=9999`);
   }
 
   getUserRoles(): Observable<UserRolesResponse> {
-    return this.http.get<UserRolesResponse>(`${environment.serverApiUrl}api/users/roles`);
+    return this.http.get<UserRolesResponse>(`${environment.serverApiUrl}/users/roles`);
   }
 
   createUser(payload: User) {
     payload.roles = this.mapToRoles(payload.roles);
-    return this.http.post(`${environment.serverApiUrl}api/users`, payload);
+    return this.http.post(`${environment.serverApiUrl}/users`, payload);
   }
 
   editUser(payload: User) {
-    return this.http.post(`${environment.serverApiUrl}api/users`, payload);
+    return this.http.post(`${environment.serverApiUrl}/users`, payload);
   }
 
   private mapToRoles(rolesPayload: String[]): String[] {

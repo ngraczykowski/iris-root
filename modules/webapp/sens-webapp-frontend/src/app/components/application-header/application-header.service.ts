@@ -14,6 +14,6 @@ export class ApplicationHeaderService {
   ) { }
 
   getAppInfo(): Observable<ApplicationInfo> {
-    return this.http.get<ApplicationInfo>(`${environment.serverApiUrl}management/info`);
+    return this.http.get<ApplicationInfo>(`${environment.managementApiUrl}/info`);
   }
 }

@@ -1,0 +1,17 @@
+{
+    "component": "SENS Web App REST API",
+    "git": {
+        "commit": {
+            "time": "2020-02-04T08:11:48Z",
+            "id": "6e6d6e1"
+        },
+        "branch": "master"
+    },
+    "build": {
+        "version": "2.10.0-SNAPSHOT",
+        "artifact": "sens-web-app",
+        "name": "SENS Web App",
+        "group": "com.silenteight.sens",
+        "time": "2020-03-03T18:01:32.247Z"
+    }
+}
