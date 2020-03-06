@@ -5,10 +5,12 @@ import lombok.Value;
 
 import com.silenteight.sens.webapp.keycloak.config.KeycloakAdapterConfigFactory;
 import com.silenteight.sens.webapp.keycloak.config.KeycloakAdminClientFactory;
+import com.silenteight.sens.webapp.keycloak.configloader.KeycloakImportingPolicyProvider;
 
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.adapters.config.AdapterConfig;
+import org.keycloak.representations.idm.PartialImportRepresentation.Policy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
@@ -16,11 +18,11 @@ import javax.validation.constraints.NotEmpty;
 
 import static java.util.Map.of;
 
-@ConfigurationProperties(prefix = "keycloak", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "keycloak")
 @Value
 @ConstructorBinding
 class KeycloakDevConfigProperties implements
-    KeycloakAdapterConfigFactory, KeycloakAdminClientFactory {
+    KeycloakAdapterConfigFactory, KeycloakAdminClientFactory, KeycloakImportingPolicyProvider {
 
   private static final String ADMIN_CLIENT_ID = "admin-cli";
   private static final String ADMIN_CLIENT_REALM = "master";
@@ -47,6 +49,9 @@ class KeycloakDevConfigProperties implements
 
   @NotEmpty
   String configPath;
+
+  @NotEmpty
+  Policy importingPolicy;
 
   @Override
   public AdapterConfig getAdapterConfig() {

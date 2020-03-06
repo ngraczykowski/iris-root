@@ -56,6 +56,8 @@ class KeycloakHttpConfigLoaderTest {
 
   ObjectMapper objectMapper = INSTANCE.objectMapper();
 
+  private static final KeycloakImportingPolicyProvider POLICY_PROVIDER = () -> POLICY;
+
   @Mock
   private RealmResource realmResource;
 
@@ -68,7 +70,8 @@ class KeycloakHttpConfigLoaderTest {
   void setUp() {
     willReturn(realmsResource).given(keycloak).realms();
     underTest =
-        new KeycloakConfigLoaderConfiguration().keycloakHttpConfigLoader(keycloak, objectMapper);
+        new KeycloakConfigLoaderConfiguration().keycloakHttpConfigLoader(
+            keycloak, objectMapper, POLICY_PROVIDER);
   }
 
   @Nested
@@ -223,7 +226,7 @@ class KeycloakHttpConfigLoaderTest {
     willReturn(ok().build())
         .given(realmResource)
         .partialImport(
-            eqRecursively(fixtures.config.asPartialImportRepresentation(Policy.OVERWRITE)));
+            eqRecursively(fixtures.config.asPartialImportRepresentation(POLICY)));
   }
 
   @RequiredArgsConstructor

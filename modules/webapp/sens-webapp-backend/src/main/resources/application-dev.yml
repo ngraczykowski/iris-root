@@ -1,8 +1,9 @@
 keycloak:
-  auth-server-url: http://localhost:4200/auth
-  realm-name: sens-webapp
-  admin-username: sens
-  admin-password: sens
-  client-name: backend
-  client-secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
-  config-path: conf/keycloak/sens-webapp-realm.json
+  authServerUrl: http://localhost:4200/auth
+  realmName: sens-webapp
+  adminUsername: sens
+  adminPassword: sens
+  clientName: backend
+  clientSecret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
+  configPath: conf/keycloak/sens-webapp-realm.json
+  importingPolicy: SKIP

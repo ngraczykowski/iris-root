@@ -2,31 +2,37 @@ package com.silenteight.sens.webapp.keycloak.config.prod;
 
 import lombok.Value;
 
+import com.silenteight.sens.webapp.keycloak.configloader.KeycloakImportingPolicyProvider;
 import com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey;
 import com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakTemplateConfigValues;
 import com.silenteight.sens.webapp.keycloak.freemarker.KeycloakTemplatesConfiguration;
 
 import com.google.common.collect.ImmutableMap;
+import io.vavr.control.Try;
+import org.keycloak.representations.idm.PartialImportRepresentation.Policy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import static com.silenteight.sens.webapp.keycloak.configloader.provider.template.KeycloakConfigurationKey.*;
 
 @Value
 @ConfigurationProperties(prefix = "keycloak")
 @ConstructorBinding
-public class KeycloakProdProperties implements KeycloakTemplatesConfiguration {
-
-  @NotEmpty
-  String configTemplateName;
+public class KeycloakProdProperties implements
+    KeycloakTemplatesConfiguration, KeycloakImportingPolicyProvider {
 
   @NotEmpty
   String configTemplatesDir;
+
+  @NotEmpty
+  String configTemplateName;
 
   @Nullable
   String authServerUrl;
@@ -37,7 +43,11 @@ public class KeycloakProdProperties implements KeycloakTemplatesConfiguration {
   @NotEmpty
   String password;
 
+  @NotNull
   Clients clients;
+
+  @NotEmpty
+  Policy importingPolicy;
 
   @Value
   public static class Clients {
@@ -52,7 +62,6 @@ public class KeycloakProdProperties implements KeycloakTemplatesConfiguration {
 
     KeycloakClient adminCli;
 
-    @Nullable
     KeycloakClient realmManagement;
   }
 
@@ -74,7 +83,7 @@ public class KeycloakProdProperties implements KeycloakTemplatesConfiguration {
 
   @Override
   public File getTemplatesDir() {
-    return new File(getConfigTemplatesDir());
+    return Try.of(() -> ResourceUtils.getFile(getConfigTemplatesDir())).get();
   }
 
   KeycloakTemplateConfigValues getConfigValues() {

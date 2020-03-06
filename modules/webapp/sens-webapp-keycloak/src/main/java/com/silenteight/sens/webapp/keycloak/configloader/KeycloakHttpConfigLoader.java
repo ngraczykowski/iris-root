@@ -20,7 +20,7 @@ public class KeycloakHttpConfigLoader {
   private final KeycloakConfigParser keycloakConfigParser;
 
   public Try<Void> load(KeycloakConfigProvider keycloakConfigProvider) {
-    log.info("Importing Keycloak config through HTTP");
+    log.info("Importing Keycloak config through HTTP with policy {}", importPolicy);
 
     return keycloakConfigParser.processJson(keycloakConfigProvider.json())
         .flatMap(this::getOrCreateRealm)

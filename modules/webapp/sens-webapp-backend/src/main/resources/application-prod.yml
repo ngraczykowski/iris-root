@@ -1,6 +1,7 @@
 keycloak:
+  configTemplatesDir: classpath:configuration-templates
   configTemplateName: sens-webapp-realm-prod.ftl.json
-  configTemplatesDir: conf/keycloak
+  importingPolicy: SKIP
   authServerUrl: http://localhost:4200/auth
   user: sens
   password: sens
