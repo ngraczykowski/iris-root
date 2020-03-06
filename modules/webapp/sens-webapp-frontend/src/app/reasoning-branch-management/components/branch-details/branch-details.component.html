@@ -17,7 +17,7 @@
           <app-icon [name]="'arrow'"></app-icon>
           <select class="input-field" formControlName="aiSolution">
             <option *ngFor="let aiSolution of aiSolutions"
-                    [selected]="aiSolution.key === branchDetails.aiSolution">
+                    [value]="aiSolution.key">
               {{ aiSolution.label }}
             </option>
           </select>
@@ -52,7 +52,7 @@
         <p [translate]="'branch.details.footer.buttonApply.tooltip'"></p>
       </span>
         <button class="button-action" (click)="submit()"
-                [disabled]="branchForm.invalid || branchForm.pristine"
+                [disabled]="branchForm.invalid || branchForm.pristine || isOriginalValue"
                 [translate]="'branch.details.footer.buttonApply.label'"></button>
       </div>
     </div>

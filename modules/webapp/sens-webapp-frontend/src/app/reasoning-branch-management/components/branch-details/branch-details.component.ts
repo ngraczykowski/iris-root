@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { ReasoningBranchDetails } from '@app/reasoning-branch-management/models/reasoning-branch-management';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -7,7 +7,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   templateUrl: './branch-details.component.html',
   styleUrls: ['./branch-details.component.scss']
 })
-export class BranchDetailsComponent implements OnInit {
+export class BranchDetailsComponent implements OnInit, OnChanges {
+  isOriginalValue = true;
   branchForm: FormGroup;
   aiSolutions = [
     {
@@ -32,17 +33,29 @@ export class BranchDetailsComponent implements OnInit {
     }
   ];
 
-  @Input() fullId: number;
+  @Input() fullId: string;
   @Input() branchDetails: ReasoningBranchDetails;
   @Output() confirm = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private changeDetector: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     this.branchForm = new FormGroup({
       aiSolution: new FormControl(this.branchDetails.aiSolution, Validators.required),
       active: new FormControl(this.branchDetails.active, Validators.required)
     });
+
+    this.branchForm.valueChanges.subscribe(data => {
+      this.isOriginalValue =
+        this.checkIsFormValueOriginal(data, {aiSolution: this.branchDetails.aiSolution, active: this.branchDetails.active});
+    });
+  }
+
+  ngOnChanges() {
+    this.changeDetector.detectChanges();
+    this.reset();
   }
 
   reset() {
@@ -53,5 +66,9 @@ export class BranchDetailsComponent implements OnInit {
 
   submit() {
     this.confirm.emit(this.branchForm.value);
+  }
+
+  private checkIsFormValueOriginal(currentData, originalData): boolean {
+    return JSON.stringify(currentData) === JSON.stringify(originalData);
   }
 }

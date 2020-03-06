@@ -18,6 +18,7 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   showDetails = false;
   showNoResults = false;
   branchDetails: ReasoningBranchDetails;
+  fullId: string;
 
   @ViewChild('branchDetailsForm', { static: false }) branchDetailsForm: BranchDetailsComponent;
   @ViewChild('loadBranch', { static: true }) loadBranch: LoadBranchComponent;
@@ -74,6 +75,7 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
       this.branchDetails = response;
       this.showDetails = true;
       this.showNoResults = false;
+      this.fullId = id;
       this.updateUrl(id);
     }, () => {
       this.showNoResults = true;

@@ -16,8 +16,8 @@
       <app-branch-empty-state *ngIf="showNoResults"
                               [message]="noResults.message"></app-branch-empty-state>
       <app-branch-details *ngIf="showDetails"
-                          #branchDetailsForm
-                          [fullId]="loadBranch.enteredID"
+                          #branchDetailsForm 
+                          [fullId]="fullId"
                           [branchDetails]="branchDetails"
                           (confirm)="showConfirm()"></app-branch-details>
     </div>
@@ -25,6 +25,6 @@
 </div>
 
 <app-confirm-changes [show]="showConfirmWindow"
-                     [branchId]="showConfirmWindow ? branchDetails.reasoningBranchId : null"
+                     [branchId]="showConfirmWindow ? fullId : null"
                      (closeModal)="hideConfirm()"
                      (applyChanges)="applyChanges()"></app-confirm-changes>
