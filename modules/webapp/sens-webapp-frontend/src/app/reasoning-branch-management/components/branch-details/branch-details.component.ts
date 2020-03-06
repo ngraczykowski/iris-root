@@ -9,7 +9,12 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class BranchDetailsComponent implements OnInit, OnChanges {
   isOriginalValue = true;
-  branchForm: FormGroup;
+
+  branchForm: FormGroup = new FormGroup({
+    aiSolution: new FormControl(null, Validators.required),
+    active: new FormControl(null, Validators.required)
+  });
+
   aiSolutions = [
     {
       label: 'No Decision',
@@ -42,9 +47,11 @@ export class BranchDetailsComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.branchForm = new FormGroup({
-      aiSolution: new FormControl(this.branchDetails.aiSolution, Validators.required),
-      active: new FormControl(this.branchDetails.active, Validators.required)
+    this.reset();
+
+    this.branchForm.valueChanges.subscribe(data => {
+      this.isOriginalValue =
+        this.checkIsFormValueOriginal(data, {aiSolution: this.branchDetails.aiSolution, active: this.branchDetails.active});
     });
 
     this.branchForm.valueChanges.subscribe(data => {
