@@ -2002,6 +2002,9 @@
         "composite": true,
         "composites": {
           "client": {
+            "account": [
+              "view-profile"
+            ],
             "backend": [
               "audit-generate-report"
             ]
@@ -2047,7 +2050,14 @@
           ]
         },
         "clientRole": false,
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "client": {
+            "account": [
+              "view-profile"
+            ]
+          }
+        },
         "name": "Analyst"
       },
       {
@@ -2057,7 +2067,14 @@
           ]
         },
         "clientRole": false,
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "client": {
+            "account": [
+              "view-profile"
+            ]
+          }
+        },
         "name": "Business Operator"
       }
     ]
@@ -2122,6 +2139,7 @@
           "manage-authorization",
           "manage-users",
           "query-users",
+          "realm-admin",
           "view-authorization",
           "view-events",
           "view-realm",
