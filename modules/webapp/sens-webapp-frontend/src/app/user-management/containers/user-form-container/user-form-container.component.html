@@ -2,12 +2,12 @@
 <div class="popup-window" [class.is-active]="showModal">
   <div class="popup-window-header">
     <h1 class="popup-window-title"
-        [translate]="'user-management.userProfile.title.addNewUser'">
+        [translate]="'usersManagement.userProfile.header.headline.add'">
     </h1>
   </div>
   <perfect-scrollbar #modalContentScroll>
     <div class="popup-window-content">
-      <app-user-form 
+      <app-user-form
         #userForm
         [userRoles]="userRoles$ | async"
         (formValueChanged)="onValueChanged($event)"
@@ -17,13 +17,19 @@
   </perfect-scrollbar>
   <section class="popup-window-footer">
     <button class="button-flat"
-            [translate]="'user-management.userProfile.actions.cancel'"
+            [translate]="'usersManagement.userProfile.footer.buttonClose'"
             (click)="onCancel()">
     </button>
-    <button class="button-action"
-            [translate]="'user-management.userProfile.actions.addUser'"
-            [disabled]="!formValid"
-            (click)="onSave()">
-    </button>
+    <div class="tooltip save-changes-button">
+      <span class="tooltip-bottom one-line"
+            *ngIf="!formValid">
+        <p [translate]="'usersManagement.userProfile.footer.buttonActionTooltip'"></p>
+      </span>
+      <button class="button-action"
+              [translate]="'usersManagement.userProfile.footer.buttonAdd'"
+              [disabled]="!formValid"
+              (click)="onSave()">
+      </button>
+    </div>
   </section>
 </div>

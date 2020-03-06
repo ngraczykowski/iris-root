@@ -98,7 +98,8 @@
       "footer": {
         "buttonClose": "Cancel",
         "buttonAdd": "Add New User",
-        "buttonApply": "Apply Changes"
+        "buttonApply": "Apply Changes",
+        "buttonActionTooltip": "Fill required field to enable this button"
       }
     }
   },
@@ -147,7 +148,7 @@
         "buttonReset": "Reset",
         "buttonApply": {
           "label": "Apply Changes",
-          "tooltip": "This button will be enabled when the AI ​​Solution or Status changes"
+          "tooltip": "This button will be enabled when the AI Solution or Status changes"
         }
       }
     },

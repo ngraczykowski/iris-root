@@ -1,11 +1,27 @@
 @import '../../../../styles/layout/popup';
+@import 'future-component/tooltip';
+
+.popup-window {
+  overflow: visible;
+}
 
 .popup-window-content {
   padding: 24px 24px 0;
+  overflow: hidden;
 }
 
 .popup-window-footer {
   padding: 24px;
+  border-bottom-right-radius: 13px;
+  border-bottom-left-radius: 13px;
+
+  & > * {
+    margin-left: 21px;
+  }
+
+  button {
+    margin-left: 0;
+  }
 
   &:after {
     display: none;
