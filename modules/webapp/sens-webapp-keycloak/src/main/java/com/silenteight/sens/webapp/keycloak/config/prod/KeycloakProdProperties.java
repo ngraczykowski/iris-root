@@ -8,13 +8,10 @@ import com.silenteight.sens.webapp.keycloak.configloader.provider.template.Keycl
 import com.silenteight.sens.webapp.keycloak.freemarker.KeycloakTemplatesConfiguration;
 
 import com.google.common.collect.ImmutableMap;
-import io.vavr.control.Try;
 import org.keycloak.representations.idm.PartialImportRepresentation.Policy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotEmpty;
@@ -82,8 +79,8 @@ public class KeycloakProdProperties implements
   }
 
   @Override
-  public File getTemplatesDir() {
-    return Try.of(() -> ResourceUtils.getFile(getConfigTemplatesDir())).get();
+  public String getTemplatesDir() {
+    return getConfigTemplatesDir();
   }
 
   KeycloakTemplateConfigValues getConfigValues() {

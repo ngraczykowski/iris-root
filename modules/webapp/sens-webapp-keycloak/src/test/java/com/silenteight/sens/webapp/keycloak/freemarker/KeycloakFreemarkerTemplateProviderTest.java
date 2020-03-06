@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
@@ -27,9 +26,9 @@ class KeycloakFreemarkerTemplateProviderTest {
   private KeycloakFreemarkerTemplateProvider underTest;
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() {
     var freemarkerConfig = new KeycloakFreemarkerConfiguration()
-        .freemarkerConfiguration(() -> TEST_RESOURCES_DIR);
+        .freemarkerConfiguration(() -> TEST_RESOURCES_DIR_PATH);
 
     underTest = new KeycloakFreemarkerTemplateProvider(freemarkerConfig);
   }
@@ -113,6 +112,8 @@ class KeycloakFreemarkerTemplateProviderTest {
 
   static class KeycloakFreemarkerTemplateProviderFixtures {
 
+    static final String TEST_RESOURCES_DIR_PATH = "freemarker";
+
     static final Map<KeycloakConfigurationKey, Object> NESTED_CONFIG =
         Map.of(
             FRONTEND_BASE_URL, Map.of("first", "someUrl1",
@@ -131,14 +132,9 @@ class KeycloakFreemarkerTemplateProviderTest {
             BACKEND_SECRET, "theSecret",
             FRONTEND_SECRET, "frontendSecret"
         );
-    static final Map<KeycloakConfigurationKey, Object> BASE_URL_AND_ONE_EXTRA_CONFIG =
-        Map.of(
-            BACKEND_BASE_URL, "http://localhost:7070",
-            CLI_SECRET, "theCliSecret"
-        );
     static final Map<KeycloakConfigurationKey, Object> EMPTY_CONFIG = emptyMap();
 
-    static final File TEST_RESOURCES_DIR = getFile("freemarker");
+    static final File TEST_RESOURCES_DIR = getFile(TEST_RESOURCES_DIR_PATH);
 
     private static File getFile(String resourceName) {
       return new File(Resources.getResource(resourceName).getFile());
