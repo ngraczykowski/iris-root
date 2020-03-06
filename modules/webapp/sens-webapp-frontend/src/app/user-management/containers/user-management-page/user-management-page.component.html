@@ -1,5 +1,4 @@
 <app-application-header></app-application-header>
-<app-preloader class="preload-element" [class.is-active]="loadingUsers"></app-preloader>
 <div class="native-scroll native-scroll--light">
   <div class="users-management">
     <div class="header">
@@ -17,7 +16,11 @@
       </div>
     </div>
     <div class="module users-list-table">
-      <app-user-table [users]="isFiltering ? filteredList : usersList" [filterQuery]="filterQuery"></app-user-table>
+      <app-preloader class="preload-content is-active"
+                     *ngIf="loadingUsers"></app-preloader>
+      <app-user-table [users]="isFiltering ? filteredList : usersList"
+                      [filterQuery]="filterQuery"
+                      *ngIf="!loadingUsers"></app-user-table>
     </div>
   </div>
 </div>

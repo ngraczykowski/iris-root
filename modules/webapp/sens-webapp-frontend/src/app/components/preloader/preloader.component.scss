@@ -15,6 +15,14 @@
   }
 }
 
+:host(.preload-content) {
+  .preloader {
+    background: $color-background-element;
+    position: relative;
+    height: 240px;
+  }
+}
+
 :host(.preload-page) {
   .preloader {
     background: $color-background-body;
