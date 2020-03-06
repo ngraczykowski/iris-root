@@ -1,4 +1,4 @@
 <div class="branch-content-empty">
-  <h3 class="branch-content-empty-primary" [translate]="emptyStateMessage.message"></h3>
-  <p class="branch-content-empty-secondary" [translate]="emptyStateMessage.hint"></p>
+    <h3 class="branch-content-empty-primary" [translate]="message"></h3>
+    <p class="branch-content-empty-secondary" *ngIf="hint" [translate]="hint"></p>
 </div>

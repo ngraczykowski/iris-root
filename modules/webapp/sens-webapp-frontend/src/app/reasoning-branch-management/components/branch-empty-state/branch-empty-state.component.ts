@@ -7,7 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class BranchEmptyStateComponent implements OnInit {
 
-  @Input() emptyStateMessage;
+  @Input() message;
+  @Input() hint;
 
   constructor() { }
 

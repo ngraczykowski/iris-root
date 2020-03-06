@@ -124,8 +124,7 @@
         "description": "To load Reasoning Branch please enter Reasoning Branch ID and click on the “Load Reasoning Branch” button."
       },
       "noResults": {
-        "message": "Reasoning Branch with the given ID does not exist",
-        "description": "Please check in the \"Reasoning Branch Scorer\" report, if the entered Reasoning Branch ID is correct."
+        "message": "Reasoning Branch with the given ID does not exist"
       }
     },
     "details": {
