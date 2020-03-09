@@ -25,38 +25,38 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
-  userForm: FormGroup;
+  userForm = new FormGroup({
+    userName: new FormControl(null, [Validators.required, Validators.compose([
+      Validators.required,
+      UserValidators.usernameMinLength(),
+      UserValidators.usernameMaxLength(),
+      UserValidators.usernameCharacters()
+    ])]),
+    displayName: new FormControl(null, [Validators.compose([
+      UserValidators.displayNameMinLength(),
+      UserValidators.displayNameMaxLength()
+    ])]),
+    password: new FormControl(null, [Validators.required, Validators.compose([
+      Validators.required,
+      UserValidators.atLeastOneLetter(),
+      UserValidators.atLeastOneDigit(),
+      UserValidators.passwordMinLength()
+    ])]),
+    roles: new FormArray([]),
+  });
   valueChangesSubscription: Subscription;
+  userProfilePrefix = 'usersManagement.userProfile.content.';
+
   @Output() formValueChanged = new EventEmitter();
   @Output() isValid = new EventEmitter();
   @Input() userRoles: UserRoles;
 
-  userProfilePrefix = 'usersManagement.userProfile.content.';
 
   get rolesControls() { return <FormArray>this.userForm.controls['roles']; }
 
   constructor() { }
 
   ngOnInit() {
-    this.userForm = new FormGroup({
-      userName: new FormControl(null, [Validators.required, Validators.compose([
-        Validators.required,
-        UserValidators.usernameMinLength(),
-        UserValidators.usernameMaxLength(),
-        UserValidators.usernameCharacters()
-      ])]),
-      displayName: new FormControl(null, [Validators.compose([
-        UserValidators.displayNameMinLength(),
-        UserValidators.displayNameMaxLength()
-      ])]),
-      password: new FormControl(null, [Validators.required, Validators.compose([
-        Validators.required,
-        UserValidators.atLeastOneLetter(),
-        UserValidators.atLeastOneDigit(),
-        UserValidators.passwordMinLength()
-      ])]),
-      roles: new FormArray([]),
-    });
     this.onFormChanges();
   }
 

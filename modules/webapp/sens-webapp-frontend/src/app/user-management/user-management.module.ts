@@ -15,6 +15,7 @@ import { NewUserProfileModule } from '@app/templates/user-management/user-profil
 import { UserManagementClient } from '@app/templates/user-management/user-management-client';
 import { UserFormContainerComponent } from './containers/user-form-container/user-form-container.component';
 import { ValidationFeedbackComponent } from './components/validation-feedback/validation-feedback.component';
+import { UserManagementService } from './services/user-management.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ValidationFeedbackComponent } from './components/validation-feedback/va
     HintFeedbackModule
   ],
   providers: [
-    UserManagementClient
+    UserManagementClient,
+    UserManagementService
   ]
 })
 export class UserManagementModule { }

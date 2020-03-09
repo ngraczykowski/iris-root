@@ -4,14 +4,12 @@ import { environment } from '@env/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User, UserResponse, UserRoles, UserRolesResponse } from '../models/users';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserManagementService {
   userRoles$ = new BehaviorSubject<UserRoles>(null);
 
   constructor(
-      private http: HttpClient
+    private http: HttpClient
   ) {
     this.getUserRoles().subscribe(response => {
       const mappedRoles = response.roles.map(role => {
