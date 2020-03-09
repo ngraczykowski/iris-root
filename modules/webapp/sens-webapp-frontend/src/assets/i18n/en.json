@@ -1,5 +1,6 @@
 {
   "usersManagement": {
+    "title": "Users",
     "usersList": {
       "options": {
         "addUser": "Add User",
@@ -104,7 +105,7 @@
     }
   },
   "branch": {
-    "title": "Reasoning Branch Management",
+    "title": "Reasoning Branches",
     "load": {
       "input": {
         "placeholder": "Enter Reasoning Branch ID number e.g. 1-546",
