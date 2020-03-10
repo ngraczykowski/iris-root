@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessVa
 
 import io.vavr.control.Option;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.UserRepresentation;
 
 import static io.vavr.control.Option.none;
 import static io.vavr.control.Option.of;
@@ -21,9 +22,17 @@ class KeycloakUsernameUniquenessValidator implements UsernameUniquenessValidator
   public Option<UsernameNotUniqueError> validate(String username) {
     log.debug("Checking if username is unique in Keycloak. {}", username);
 
-    if (userResource.search(username).isEmpty())
+    if (isUnique(username))
       return none();
 
     return of(new UsernameNotUniqueError(username));
+  }
+
+  private boolean isUnique(String username) {
+    return userResource
+        .search(username)
+        .stream()
+        .map(UserRepresentation::getUsername)
+        .noneMatch(name -> name.equals(username));
   }
 }
