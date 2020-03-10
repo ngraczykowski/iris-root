@@ -103,7 +103,7 @@ Example configuration:
     sens.webapp.db.password: sens_webapp_pass
     sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
 
-### Continuous Integration
+## Continuous Integration
 
 Jenkins job: [sens/sens-webapp](https://jenkins.silenteight.com/job/sens/job/sens%252Fsens-webapp/)  
 Project in Sonar: [Silent Eight Name Screening Web Application](https://sonar.silenteight.com/dashboard?id=com.silenteight.sens.webapp%3Awebapp)
@@ -117,3 +117,25 @@ In addition, git hooks in project have been configured to run Jenkins job.
   * Checkouts source code,
   * Runs tests,
   * Verifies code base changes against SonarQube Quality Gate.
+
+## Web App Release
+
+Web App is a dependency of the SERP product.  
+It means that Web App is packed into `jar` file and included in SERP project to run Web App API
+next to other SERP services.
+
+### Release procedure
+
+1. Make sure that all [required commits are in `master` branch](https://gitlab.silenteight.com/sens/sens-webapp/commits/master),
+1. Open [Web App project Jenkins job](https://jenkins.silenteight.com/job/sens/job/sens%252Fsens-webapp/job/master/),
+1. Use `Build with Parameters` action to build Web App release `jar`.   
+Select `release` option to release a build and publish `jars` into a Artifactory.
+1. After successful build you can check `jar` files [directly in Artifactory](https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp).  
+Note: Please login to Artifactory to see the newly published files.
+1. Adjust Web App version in SERP project.  
+Change value of the `silenteightSensWebappVersion` property in `gradle/scripts/dependencies.gradle` 
+Gradle script to the released Web App version. 
+1. Create MR with your changes. Wait for an approval and merge it.
+1. [SERP release can be prepared now](https://jenkins.silenteight.com/job/sens/job/sens%252Fserp/).  
+New snapshot/release version will start using newly released Web App release.
+
