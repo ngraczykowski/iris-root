@@ -1774,10 +1774,6 @@
     "offline_access",
     "phone"
   ],
-  "defaultRoles": [
-    "offline_access",
-    "uma_authorization"
-  ],
   "directGrantFlow": "direct grant",
   "displayName": "SENS",
   "displayNameHtml": "<h1>Silent Eight Name Screening</h1>",
@@ -2358,44 +2354,6 @@
         "account": [
           "manage-account",
           "view-profile"
-        ],
-        "frontend": [
-          "audit_generate_report"
-        ]
-      },
-      "createdTimestamp": 1576144677014,
-      "credentials": [
-        {
-          "createdDate": 1576144696233,
-          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
-          "secretData": "{\"value\":\"OTjwb2MAvk+WZZ8ITPCWDfOJSZ3480fODPmM5yRZ7RFoMVstkPOxWssTAjxUt2Ue4uTCtLJ5+rpFwc9duy2fHw==\",\"salt\":\"aFqfY9p4NPduUCU2q7s58Q==\"}",
-          "type": "password"
-        }
-      ],
-      "disableableCredentialTypes": [],
-      "email": "test@silenteight.com",
-      "emailVerified": true,
-      "enabled": true,
-      "firstName": "Test",
-      "groups": [],
-      "lastName": "User",
-      "notBefore": 0,
-      "realmRoles": [
-        "Analyst",
-        "Auditor",
-        "Business Operator",
-        "offline_access",
-        "uma_authorization"
-      ],
-      "requiredActions": [],
-      "totp": false,
-      "username": "test_user"
-    },
-    {
-      "clientRoles": {
-        "account": [
-          "manage-account",
-          "view-profile"
         ]
       },
       "createdTimestamp": 1582201959305,
@@ -2419,6 +2377,126 @@
       "requiredActions": [],
       "totp": false,
       "username": "scb-user-1"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1583844544472,
+      "credentials": [
+        {
+          "createdDate": 1583844555320,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"XyyKCpAg5i/qxVXXnVDYvjE3lO1zQwr2oSURgpK3fJuMoRpkuOfrUUTxD60DoiUzT6rg80sgcG8c1PD3f8+1FQ==\",\"salt\":\"tiYEAzYB2302FEgvvHgPJg==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Admin First Name",
+      "groups": [],
+      "lastName": "Admin Surname",
+      "notBefore": 0,
+      "realmRoles": [
+        "Admin"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "admin"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1583844732030,
+      "credentials": [
+        {
+          "createdDate": 1583844747191,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"RFqlb6JGZDQEIvdlnxI0GHDMiIgfa5eupUmQzfNSCHLURrA/k6W9GP9NrSb15ZHZG9tm3YMfZpFGXzOhpY0SVQ==\",\"salt\":\"8QllFuKyd/Tuqnv9A+RUSg==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Auditor First Name",
+      "groups": [],
+      "lastName": "Auditor Surname",
+      "notBefore": 0,
+      "realmRoles": [
+        "Auditor"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "auditor"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1583844795188,
+      "credentials": [
+        {
+          "createdDate": 1583844811304,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"pHO3vc1K/zJcZEorI9EUR8NZid3k33gbeIAn4+s8YOLd/VXAfcQ2jYy81xN1r20cVGq1ZGZ+hmHuB2ZL7G3u+Q==\",\"salt\":\"oDfJrwVFu01aNYGd8jrjtg==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Analyst First Name",
+      "groups": [],
+      "lastName": "Analyst Surname",
+      "notBefore": 0,
+      "realmRoles": [
+        "Analyst"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "analyst"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1583844851585,
+      "credentials": [
+        {
+          "createdDate": 1583844876289,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"5i8p1upLYUa1yYeoNZh1BBjGWiHG02MbAT5mNEBad1VezXK3NqxKn9/Gkhgq1kcinE4cqVDCIxoy+BW+r2eJ4g==\",\"salt\":\"WHiMXD6oCne67nwxS9/Wqg==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Business Operator First Name",
+      "groups": [],
+      "lastName": "Business Operator Surname",
+      "notBefore": 0,
+      "realmRoles": [
+        "Business Operator"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "business_operator"
     },
     {
       "clientRoles": {
@@ -2456,11 +2534,7 @@
           "manage-authorization",
           "manage-users",
           "query-users",
-          "realm-admin",
-          "view-authorization",
-          "view-events",
-          "view-realm",
-          "view-users"
+          "realm-admin"
         ]
       },
       "createdTimestamp": 1583246982010,
