@@ -8,8 +8,10 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchUseCase;
+import com.silenteight.sens.webapp.backend.security.Authority;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
@@ -31,6 +33,7 @@ class ReasoningBranchRestController {
   private final UpdateReasoningBranchUseCase updateReasoningBranchUseCase;
 
   @GetMapping("/decision-trees/{treeId}/branches/{branchNo}")
+  @PreAuthorize(Authority.BUSINESS_OPERATOR)
   public ResponseEntity<BranchDetailsDto> details(
       @PathVariable long treeId, @PathVariable long branchNo) {
     log.debug("Requesting Reasoning Branch details. treeId={}, branchNo={}", treeId, branchNo);
@@ -41,6 +44,7 @@ class ReasoningBranchRestController {
   }
 
   @PatchMapping("/decision-trees/{treeId}/branches/{branchNo}")
+  @PreAuthorize(Authority.BUSINESS_OPERATOR)
   public ResponseEntity<Void> update(
       @PathVariable long treeId,
       @PathVariable long branchNo,

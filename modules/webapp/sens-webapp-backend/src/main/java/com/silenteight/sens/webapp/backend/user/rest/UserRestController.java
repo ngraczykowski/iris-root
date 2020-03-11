@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.backend.security.Authority;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.user.RolesQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -43,11 +45,13 @@ class UserRestController {
   private final RolesQuery rolesQuery;
 
   @GetMapping
+  @PreAuthorize(Authority.ADMIN)
   public Page<UserDto> users(Pageable pageable) {
     return userQuery.listEnabled(pageable);
   }
 
   @PostMapping
+  @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.debug("Creating new user. {}", dto);
 

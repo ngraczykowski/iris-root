@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.report.Report;
 import com.silenteight.sens.webapp.backend.report.ReportGenerator;
 import com.silenteight.sens.webapp.backend.report.ReportProvider;
+import com.silenteight.sens.webapp.backend.security.Authority;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 
@@ -32,7 +33,7 @@ class ReportRestController {
   private final ReportProvider reportProvider;
 
   @GetMapping("/report/{reportName}")
-  @PreAuthorize("hasAnyRole('AUDITOR') || hasAuthority('AUDITOR')")
+  @PreAuthorize(Authority.AUDITOR_OR_REPORT_CLI)
   public void getReport(
       HttpServletResponse response, @PathVariable String reportName) throws IOException {
 
