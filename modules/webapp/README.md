@@ -26,7 +26,7 @@
 
 ### Run services
 
-**Keycloak auth server, external SAML and main database**
+#### Keycloak auth server, external SAML and main database
 
 1. Definitions for all containers can be found in [docker-compose.yml](docker-compose.yml). Run Keycloak and PostgreSQL with:
         
@@ -35,25 +35,13 @@
 2. Log into [Keycloak admin console](http://localhost:8081/auth/admin/) using `sens:sens` credentials, 
 go to `Import` and import users file located in [conf/keycloak dir](conf/keycloak), with `Overwrite` setting.
 
-**SERP**
+#### SERP
 
 1. Pull `serp` git repository.
 
 2. Follow installation instructions from [README](https://gitlab.silenteight.com/sens/serp/blob/master/README.md) file.
 
-**Web App API**
-    
-1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
-
-In Spring Boot Run Configuration add following program arguments:
-
-        --serp.home=<path_to_root_of_serp_project>
-   
-   As an alternative you can start Web App API from Gradle script:
-   
-        ./gradlew sens-webapp-backend:bootRun --args='--serp.home=<path_to_root_of_serp_project>'
-    
-**Web App UI**
+#### Web App UI
 
 1. Run script to start Web App UI:
 
@@ -65,15 +53,34 @@ In Spring Boot Run Configuration add following program arguments:
 
 2. Open `http://localhost:4200/` URL in a browser.  
 
+#### Web App API
+
+Prior to running API make sure you ran [UI](#web-app-ui), as it starts reverse proxy required by whole app to run correctly.
+   
+| Profile | Behaviour                                                                                                                                                                                                                                                                                                                   |
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads raw Keycloak config stored in [`conf/keycloak/sens-webapp-realm.json`](conf/keycloak/sens-webapp-realm.json).                                                                          |
+| `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak production template stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates) and fills it with values passed in properties. |
+    
+1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
+
+In Spring Boot Run Configuration add following program arguments:
+
+        --serp.home=<path_to_root_of_serp_project>
+   
+   As an alternative you can start Web App API from Gradle script:
+   
+        ./gradlew sens-webapp-backend:bootRun --args='--serp.home=<path_to_root_of_serp_project>'
+    
+
 ### Configuration
 
 #### Keycloak
-
 Whole Keycloak development configuration is stored in [conf/keycloak](conf/keycloak) (or [conf/keycloak-saml-idp](conf/keycloak-saml-idp) for SAML idP).
-It is separated in two files, [sens-webapp-realm.json](conf/keycloak/sens-webapp-realm.json) and [sens-webapp-users-0.json](conf/keycloak/sens-webapp-users-0.json).
 Everything can be configured using GUI available at:
 - [localhost:8081](http://localhost:8081) for main Keycloak instance
 - [localhost:8095](http://localhost:8095) for SAML idP Keycloak instance
+
 ##### Exporting
 To export created configuration use either: 
 - [keycloak-scripts/export-config-for-main-keycloak.sh](keycloak-scripts/export-config-for-main-keycloak.sh).
@@ -85,7 +92,7 @@ Therefore, if the config is not exported within default 20 seconds, you can set 
 environment variable or modify default timeout in [this](keycloak-scripts/1-export-realm.sh) file.
 >>>
 ##### Reloading new configuration
-`docker-compose down -v && docker-compose up -d`
+`docker-compose down -v --remove-orphans && docker-compose up -d`
 
 #### Database
 
