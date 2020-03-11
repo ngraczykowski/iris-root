@@ -13,7 +13,6 @@ sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.po
 sens.webapp.db.connections.min: 1
 sens.webapp.db.connections.max: 10
 
-
 sens.user.sync.analyst.enabled: ${SENS_USER_SYNC_ANALYST_ENABLED}
 sens.gns.db.users.table: ${GNS_DB_USERS_TABLE}
 sens.gns.db.host: ${GNS_DB_HOST}
@@ -25,6 +24,8 @@ sens.gns.db.password: ${GNS_DB_PASSWORD}
 
 sens.gns.db.connections.min: 1
 sens.gns.db.connections.max: 3
+
+sens.webapp.grpc.timeout: PT7S
 
 ####################################################################################################
 info:
@@ -103,6 +104,9 @@ grpc:
 
     reco:
       address: discovery:///grpc-reco
+
+sens.grpc:
+  timeout: ${sens.webapp.grpc.timeout}
 
 server:
   port: 7070
