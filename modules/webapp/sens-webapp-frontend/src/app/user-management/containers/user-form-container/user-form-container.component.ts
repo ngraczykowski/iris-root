@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LocalEventService } from '@app/shared/event/local-event.service';
-import { Subscription, Observable } from 'rxjs';
 import { EventKey } from '@app/shared/event/event.service.model';
-import { UserManagementService } from '@app/user-management/services/user-management.service';
-import { UserRoles, User } from '@app/user-management/models/users';
+import { LocalEventService } from '@app/shared/event/local-event.service';
 import { UserFormComponent } from '@app/user-management/components/user-form/user-form.component';
+import { User, UserRoles } from '@app/user-management/models/users';
+import { UserManagementService } from '@app/user-management/services/user-management.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-form-container',
@@ -21,15 +21,15 @@ export class UserFormContainerComponent implements OnInit {
   userData: User;
 
   constructor(
-    private userManagementService: UserManagementService,
-    private eventService: LocalEventService,
+      private userManagementService: UserManagementService,
+      private eventService: LocalEventService,
   ) { }
 
   ngOnInit() {
     this.userRoles$ = this.userManagementService.userRoles$;
     this.eventServiceSubscription = this.eventService.subscribe(
-      () => this.showModal = true,
-            [EventKey.OPEN_NEW_PROFILE]
+        () => this.showModal = true,
+        [EventKey.OPEN_NEW_PROFILE]
     );
   }
 

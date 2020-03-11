@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { UserValidators } from '@app/templates/user-management/user-profile/validators/user-validators';
-import { UserRoles } from '@app/user-management/models/users';
+import { User, UserResponse, UserRoles } from '@app/user-management/models/users';
+import { UserManagementService } from '@app/user-management/services/user-management.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -47,21 +48,31 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   valueChangesSubscription: Subscription;
   userProfilePrefix = 'usersManagement.userProfile.content.';
 
+  usersList: User[];
+
   @Output() formValueChanged = new EventEmitter();
   @Output() isValid = new EventEmitter();
   @Input() userRoles: UserRoles;
 
-
   get rolesControls() { return <FormArray>this.userForm.controls['roles']; }
 
-  constructor() { }
+  constructor(
+      private userManagementService: UserManagementService,
+  ) { }
 
   ngOnInit() {
     this.onFormChanges();
+    this.getUsersList();
   }
 
   ngOnDestroy() {
     this.valueChangesSubscription.unsubscribe();
+  }
+
+  getUsersList() {
+    this.userManagementService.getUsers().subscribe(
+        val => this.usersList = val.content
+    );
   }
 
   ngOnChanges() {
@@ -106,5 +117,11 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
+  isUsernameUnique(userName) {
+    if (this.usersList.some(e => e.userName === userName)) {
+      this.userForm.controls.userName.setErrors({notUnique: true});
+      this.isValid.emit(this.userForm.valid);
+    }
+  }
 }
 

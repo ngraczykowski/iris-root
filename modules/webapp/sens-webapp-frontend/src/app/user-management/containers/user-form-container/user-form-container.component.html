@@ -8,10 +8,10 @@
   <perfect-scrollbar #modalContentScroll>
     <div class="popup-window-content">
       <app-user-form
-        #userForm
-        [userRoles]="userRoles$ | async"
-        (formValueChanged)="onValueChanged($event)"
-        (isValid)="isValid($event)">
+              #userForm
+              [userRoles]="userRoles$ | async"
+              (formValueChanged)="onValueChanged($event)"
+              (isValid)="isValid($event)">
       </app-user-form>
     </div>
   </perfect-scrollbar>

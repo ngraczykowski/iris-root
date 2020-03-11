@@ -1,6 +1,6 @@
 <app-feedback-message
         class="error margin-bottom-m"
-        [class.is-active]="hasError('notUnique','userName') || userForm.hasError('entityProcessingError')"
+        [class.is-active]="userForm.hasError('entityProcessingError')"
         [message]="userProfilePrefix + 'validation.generalValidationError'"></app-feedback-message>
 <form [formGroup]="userForm" class="user-profile">
   <section class="user-profile-section user-profile-row ">
@@ -11,13 +11,13 @@
         <input type="text" class="input-field"
                formControlName="userName"
                placeholder="{{ userProfilePrefix + 'username.input.placeholder' | translate }}"
+               (keyup)="isUsernameUnique(username.value)"
                #username/>
       </div>
       <app-validation-feedback
-              *ngIf="hasError('notUnique','userName')"
               [content]="userProfilePrefix + 'username.validation.unique'"
-              [active]="true"
-              [type]="'negative'"></app-validation-feedback>
+              [active]="username.value"
+              [type]="!hasError('notUnique','userName') ? 'positive' : 'negative'"></app-validation-feedback>
       <app-validation-feedback
               [content]="userProfilePrefix + 'username.validation.length'"
               [active]="username.value && username.value.length >= 3"

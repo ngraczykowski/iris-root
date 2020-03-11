@@ -41,7 +41,7 @@
             "placeholder": "username@silenteight.com"
           },
           "validation": {
-            "unique": "Provided username is already in use",
+            "unique": "The username is unique",
             "length":"The username length is between 3 - 30 characters",
             "characters": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
           }
