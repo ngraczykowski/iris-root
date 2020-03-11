@@ -6,8 +6,7 @@
             (click)="toggleUserMenu()">
     <span class="user-info-label"
           [translate]="'userProfile.label'"></span>
-      <!-- @kjaworowski remove comment after WA-375 implementation -->
-      <!-- <span class="user-info-username">{{ (userDetails | async).userName }}</span> -->
+      <span class="user-info-username">{{ (userDetails | async).username }}</span>
     </button>
 
     <div class="dropdown-menu"
@@ -17,12 +16,12 @@
           <img src="../assets/images/user-icon.svg">
         </div>
         <div class="user-data">
-          <!-- <div class="username">
-            <div class="username-primary">{{ (userDetails | async).userName }}</div>
-            <div class="username-secondary" *ngIf="(userDetails | async).displayName">
-              {{ (userDetails | async).displayName }}
+          <div class="username">
+            <div class="username-primary">{{ (userDetails | async).username }}</div>
+            <div class="username-secondary" *ngIf="(userDetails | async).displayname">
+              {{ (userDetails | async).displayname }}
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
       <ul class="dropdown-menu-elements user-navigation">
@@ -34,7 +33,8 @@
       </ul>
       <div class="dropdown-menu-content app-version">
         <span [translate]="'userProfile.appVersion.appName'"></span>
-        <span>{{ 'userProfile.appVersion.version' | translate: {value: applicationVersion} }}</span>
+        <!-- @TODO WA-467 -->
+        <span>1.6.0-RELEASE</span>
       </div>
     </div>
   </div>

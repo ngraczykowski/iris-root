@@ -3,6 +3,7 @@ import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user
 import { Principal } from '@app/shared/security/principal.model';
 import { Observable, Subscription } from 'rxjs';
 import { ApplicationHeaderService } from '../application-header.service';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'app-user-section',
@@ -11,7 +12,7 @@ import { ApplicationHeaderService } from '../application-header.service';
 })
 export class UserSectionComponent implements OnInit, OnDestroy {
 
-  public userDetails: Observable<Principal> = this.authenticatedUser.getPrincipal();
+  public userDetails: Observable<KeycloakProfile> = this.authenticatedUser.getPrincipal();
   userMenu = false;
   applicationVersion: string;
   applicationVersionSubscription: Subscription;

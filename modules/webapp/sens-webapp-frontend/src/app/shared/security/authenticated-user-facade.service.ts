@@ -1,26 +1,32 @@
 import { Injectable } from '@angular/core';
 import * as fromRoot from '@app/reducers';
 import { Principal } from '@app/shared/security/principal.model';
-import { Logout } from '@app/shared/security/store/security.actions';
+import { Logout, TryLogin } from '@app/shared/security/store/security.actions';
 import { select, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable, of, from } from 'rxjs';
 import { getLoggedInPrincipal, hasAllAuthorities, isLoggedIn } from './store/security.selectors';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Injectable()
 export class AuthenticatedUserFacade {
 
-  constructor(private readonly store: Store<fromRoot.State>) {
-  }
+  constructor(
+    private readonly store: Store<fromRoot.State>,
+    private readonly keycloak: KeycloakService,
+  ) { }
 
   isLoggedIn(): Observable<boolean> {
-    return this.store.pipe(
-        select(isLoggedIn),
-    );
+    return from(this.keycloak.isLoggedIn());
+    // @TODO WA-375
+    // return this.store.pipe(
+    //   select(isLoggedIn),
+    // );
   }
 
   hasAuthorities(requiredAuthorities: string[]): Observable<boolean> {
     return this.store.pipe(
-        select(hasAllAuthorities(requiredAuthorities))
+      select(hasAllAuthorities(requiredAuthorities))
     );
   }
 
@@ -36,10 +42,12 @@ export class AuthenticatedUserFacade {
     return this.store.dispatch(new Logout());
   }
 
-  getPrincipal(): Observable<Principal> {
-    return this.store.pipe(
-        select(getLoggedInPrincipal)
-    );
+  getPrincipal(): Observable<KeycloakProfile> {
+    return from(this.keycloak.loadUserProfile());
+    // @TODO WA-375
+    // return this.store.pipe(
+    //   select(getLoggedInPrincipal)
+    // );
   }
 
   hasSuperuserPermissions(): Observable<boolean> {

@@ -21,20 +21,24 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: '/reasoning-branch',
+    canActivate: [AuthenticationGuard]
   },
   {
     path: 'reasoning-branch/:id',
     pathMatch: 'full',
-    component: ReasoningBranchManagementPageComponent
+    component: ReasoningBranchManagementPageComponent,
+    canActivate: [AuthenticationGuard]
   },
   {
     path: 'reasoning-branch',
     pathMatch: 'full',
-    component: ReasoningBranchManagementPageComponent
+    component: ReasoningBranchManagementPageComponent,
+    canActivate: [AuthenticationGuard]
   },
   {
     path: 'user-management',
-    component: UserManagementPageComponent
+    component: UserManagementPageComponent,
+    canActivate: [AuthenticationGuard]
   },
   {
     path: 'reports',
