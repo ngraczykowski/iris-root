@@ -24,4 +24,5 @@ public class Authority {
   // COMBINED_AUTHORITIES
   public static final String AUDITOR_OR_REPORT_CLI =
       AUDITOR + " || " + REPORT_CLI_CLIENT;
+  public static final String ADMIN_OR_BACKEND = ADMIN + " || " + BACKEND_CLIENT;
 }
