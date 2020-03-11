@@ -81,6 +81,22 @@ Everything can be configured using GUI available at:
 - [localhost:8081](http://localhost:8081) for main Keycloak instance
 - [localhost:8095](http://localhost:8095) for SAML idP Keycloak instance
 
+##### Users and roles
+Currently we support following roles:
+- Analyst
+- Auditor
+- Business Operator
+- Admin (composes of Analyst, Auditor, Business Operator)
+
+Users for development purposes are as follows:
+
+| username            | password            | roles             |
+|---------------------|---------------------|-------------------|
+| `admin`             | `admin`             | Admin             |
+| `analyst`           | `analyst`           | Analyst           |
+| `auditor`           | `auditor`           | Auditor           |
+| `business_operator` | `business_operator` | Business Operator |
+
 ##### Exporting
 To export created configuration use either: 
 - [keycloak-scripts/export-config-for-main-keycloak.sh](keycloak-scripts/export-config-for-main-keycloak.sh).
