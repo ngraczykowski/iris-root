@@ -24,6 +24,10 @@ export class AuthenticatedUserFacade {
     // );
   }
 
+  getUserRoles() {
+    return this.keycloak.getUserRoles(true);
+  }
+
   hasAuthorities(requiredAuthorities: string[]): Observable<boolean> {
     return this.store.pipe(
       select(hasAllAuthorities(requiredAuthorities))

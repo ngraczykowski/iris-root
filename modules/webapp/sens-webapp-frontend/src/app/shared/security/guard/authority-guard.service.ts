@@ -32,11 +32,21 @@ export class AuthorityGuard implements CanActivate, CanActivateChild {
 
   private _canActivate(route: ActivatedRouteSnapshot) {
     const requiredAuthorities: string[] = route.data.authorities;
+    const userRoles = this.authenticatedUserFacade.getUserRoles();
+    // @TODO WA-375
+    // const hasRequiredAuthorities$ = this.authenticatedUserFacade.hasAuthorities(requiredAuthorities);
 
-    const hasRequiredAuthorities$ = this.authenticatedUserFacade.hasAuthorities(requiredAuthorities);
+    const userRolesContainsRequiredRole = userRoles.map(role => requiredAuthorities.includes(role));
 
-    return hasRequiredAuthorities$.pipe(
-        map(canHaveAccess => canHaveAccess ? canHaveAccess : this.router.parseUrl('/403')),
-    );
+    if (userRolesContainsRequiredRole.includes(true)) {
+      return true;
+    } else {
+      return this.router.parseUrl('/403');
+    }
+
+    // @TODO WA-375
+    // return hasRequiredAuthorities$.pipe(
+    //     map(canHaveAccess => true ? true : this.router.parseUrl('/403')),
+    // );
   }
 }

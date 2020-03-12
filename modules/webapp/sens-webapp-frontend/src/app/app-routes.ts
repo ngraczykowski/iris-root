@@ -21,30 +21,43 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: '/reasoning-branch',
-    canActivate: [AuthenticationGuard]
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator']
+    }
   },
   {
     path: 'reasoning-branch/:id',
     pathMatch: 'full',
     component: ReasoningBranchManagementPageComponent,
-    canActivate: [AuthenticationGuard]
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator']
+    }
   },
   {
     path: 'reasoning-branch',
     pathMatch: 'full',
     component: ReasoningBranchManagementPageComponent,
-    canActivate: [AuthenticationGuard]
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator']
+    }
   },
   {
     path: 'user-management',
     component: UserManagementPageComponent,
-    canActivate: [AuthenticationGuard]
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Admin']
+    }
   },
   {
     path: 'reports',
     component: AuditTrailComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: [Authority.AUDIT_GENERATE_REPORT]
+      authorities: ['Auditor']
     },
   },
   {
