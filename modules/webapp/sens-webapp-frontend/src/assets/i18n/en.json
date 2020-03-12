@@ -52,7 +52,7 @@
             "placeholder": "John Doe"
           },
           "validation": {
-            "length":"The username length is between 3 - 50 characters"
+            "length":"The display name length is between 3 - 50 characters"
           }
         },
         "password": {
