@@ -118,6 +118,8 @@ management:
   endpoint:
     health.show-details: always
 
+  info.git.mode: full
+
   endpoints:
     web:
       base-path: /management
