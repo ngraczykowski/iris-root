@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
-import { AlertRestrictionsManagementComponent } from '@app/templates/alert-restrictions-management/alert-restrictions-management.component';
+import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
 import { AuditTrailComponent } from '@app/templates/audit-trail/audit-trail.component';
 import { ExternalComponent } from './layout/external/external.component';
 
@@ -11,9 +11,8 @@ import { InternalServerErrorComponent } from './pages/internal-server-error/inte
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
 
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
-import { Authority } from './shared/security/principal.model';
 import { ReasoningBranchManagementPageComponent } from './reasoning-branch-management/containers/reasoning-branch-management-page/reasoning-branch-management-page.component';
+import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
 
 export const routes: Routes = [
@@ -61,6 +60,14 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'analyst',
+    component: AnalystHomeComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Analyst']
+    }
+  },
+  {
     path: '',
     component: ExternalComponent,
     children: [
@@ -96,3 +103,10 @@ export const routes: Routes = [
     redirectTo: '/404',
   }
 ];
+
+export const rolesByRedirect: Map<string, string> = new Map([
+  ['Admin', '/user-management'],
+  ['Business Operator', '/reasoning-branch'],
+  ['Auditor', '/reports'],
+  ['Analyst', '/analyst'],
+]);

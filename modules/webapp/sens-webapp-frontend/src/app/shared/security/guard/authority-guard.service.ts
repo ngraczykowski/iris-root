@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -8,14 +8,18 @@ import {
   UrlTree
 } from '@angular/router';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import {
+  RoleDefaultPageMappings,
+  ROLES_REDIRECT_CONFIG
+} from '@app/shared/security/role-default-page-mappings';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthorityGuard implements CanActivate, CanActivateChild {
 
   constructor(
+      @Inject(ROLES_REDIRECT_CONFIG) private readonly roleDefaultPageMappings: RoleDefaultPageMappings,
       private readonly router: Router,
       private readonly authenticatedUserFacade: AuthenticatedUserFacade) {
   }
@@ -36,17 +40,24 @@ export class AuthorityGuard implements CanActivate, CanActivateChild {
     // @TODO WA-375
     // const hasRequiredAuthorities$ = this.authenticatedUserFacade.hasAuthorities(requiredAuthorities);
 
-    const userRolesContainsRequiredRole = userRoles.map(role => requiredAuthorities.includes(role));
+    const userRolesContainsRequiredRole = userRoles.some(userRole => requiredAuthorities.includes(userRole));
 
-    if (userRolesContainsRequiredRole.includes(true)) {
+    if (userRolesContainsRequiredRole) {
       return true;
     } else {
-      return this.router.parseUrl('/403');
+      const defaultPathForRole = this.roleDefaultPageMappings.getForRoles(userRoles);
+      return defaultPathForRole !== undefined
+          ? this.goTo(defaultPathForRole)
+          : this.goTo('/403');
     }
 
     // @TODO WA-375
     // return hasRequiredAuthorities$.pipe(
     //     map(canHaveAccess => true ? true : this.router.parseUrl('/403')),
     // );
+  }
+
+  private goTo(url) {
+    return this.router.parseUrl(url);
   }
 }

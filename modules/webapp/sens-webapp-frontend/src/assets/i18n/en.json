@@ -381,7 +381,7 @@
     }
   },
   "analyst-home": {
-    "title": "Your chrome extension is now ready to work!",
+    "title": "You don't have any permissions to use SENS WebApp yet.",
     "description": "You can close this window.",
     "logoutButton": "Log out"
   },

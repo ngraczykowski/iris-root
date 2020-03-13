@@ -9,13 +9,6 @@ import { Observable, of } from 'rxjs';
 })
 export class MainNavigationComponent implements OnInit {
 
-  hasDecisionTreeAccess: Observable<boolean>;
-  hasInboxAccess: Observable<boolean>;
-  hasAuditTrailAccess: Observable<boolean>;
-  hasUserManagementAccess: Observable<boolean>;
-  hasWorkflowManagementAccess: Observable<boolean>;
-  hasApproverAccess: Observable<boolean>;
-
   showMenu: boolean;
 
   @HostListener('document:click', ['$event'])
@@ -28,16 +21,13 @@ export class MainNavigationComponent implements OnInit {
 
   constructor(private eRef: ElementRef, private authenticatedUser: AuthenticatedUserFacade) { }
 
-  ngOnInit() {
-    this.hasDecisionTreeAccess = this.authenticatedUser.hasAccessToUrl('/decision-tree');
-    this.hasInboxAccess = of(false);
-    this.hasAuditTrailAccess = this.authenticatedUser.hasAccessToUrl('/audit-trail');
-    this.hasUserManagementAccess = this.authenticatedUser.hasAccessToUrl('/user-management');
-    this.hasWorkflowManagementAccess = this.authenticatedUser.hasAccessToUrl('/workflow-management');
-    this.hasApproverAccess = this.authenticatedUser.hasAccessToUrl('/approver');
-  }
+  ngOnInit() { }
 
   logout(): void {
     this.authenticatedUser.logout();
+  }
+
+  hasAccessToUrl(url: string): Observable<boolean> {
+    return this.authenticatedUser.hasAccessToUrl(url);
   }
 }

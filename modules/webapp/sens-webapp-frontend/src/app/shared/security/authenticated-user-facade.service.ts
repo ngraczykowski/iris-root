@@ -7,6 +7,7 @@ import { Observable, of, from } from 'rxjs';
 import { getLoggedInPrincipal, hasAllAuthorities, isLoggedIn } from './store/security.selectors';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
+import { rolesByRedirect } from '@app/app-routes';
 
 @Injectable()
 export class AuthenticatedUserFacade {
@@ -39,7 +40,7 @@ export class AuthenticatedUserFacade {
   }
 
   hasAccessToUrl(url: string): Observable<boolean> {
-    return of(true);
+    return of(this.checkUrlAccess(url));
   }
 
   logout() {
@@ -56,6 +57,24 @@ export class AuthenticatedUserFacade {
 
   hasSuperuserPermissions(): Observable<boolean> {
     return of(true);
+  }
+
+  private checkUrlAccess(url: string): boolean {
+    const roles = this.getUserRoles();
+    if (roles.includes('Admin')) {
+      return true;
+    }
+
+    switch (url) {
+      case '/reasoning-branch':
+        return roles.includes('Business Operator');
+
+      case '/reports':
+        return roles.includes('Auditor');
+
+      default:
+        return false;
+    }
   }
 
 }

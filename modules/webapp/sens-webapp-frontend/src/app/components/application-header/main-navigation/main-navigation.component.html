@@ -1,19 +1,19 @@
 <ul class="navigation">
-  <li *ngIf="hasDecisionTreeAccess | async">
+  <li *ngIf="hasAccessToUrl('/reasoning-branch') | async">
     <a class="navigation__element"
        routerLink="/reasoning-branch"
        [translate]="'branch.title'"
        (click)="showMenu = !showMenu"
        routerLinkActive="navigation__element--active"></a>
   </li>
-  <li *ngIf="hasUserManagementAccess | async">
+  <li *ngIf="hasAccessToUrl('/user-management') | async">
     <a class="navigation__element"
        routerLink="/user-management"
        [translate]="'usersManagement.title'"
        (click)="showMenu = !showMenu"
        routerLinkActive="navigation__element--active"></a>
   </li>
-  <li *ngIf="hasAuditTrailAccess | async">
+  <li *ngIf="hasAccessToUrl('/reports') | async">
     <a class="navigation__element"
        routerLink="/reports"
        [translate]="'auditTrail.title'"

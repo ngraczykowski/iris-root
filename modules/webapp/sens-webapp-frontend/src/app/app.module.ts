@@ -1,7 +1,8 @@
 import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { routes } from '@app/app-routes';
+import { rolesByRedirect, routes } from '@app/app-routes';
 import { AppComponent } from '@app/app.component';
+import { BasicRoleDefaultPageMappings } from '@app/basic-default-paegs-mappings';
 import { ApplicationHeaderModule } from '@app/components/application-header/application-header.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
@@ -15,6 +16,7 @@ import { MaintenanceComponent } from '@app/pages/maintenance/maintenance.compone
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { PageNotFoundComponent } from '@app/pages/page-not-found/page-not-found.component';
 import { KeycloakInitializer } from '@app/shared/security/bootstrap/keycloak-initializer';
+import { ROLES_REDIRECT_CONFIG } from '@app/shared/security/role-default-page-mappings';
 import { SharedModule } from '@app/shared/shared.module';
 import { WINDOW_PROVIDERS } from '@app/shared/window.service';
 import { AlertRestrictionsManagementModule } from '@app/templates/alert-restrictions-management/alert-restrictions-management.module';
@@ -78,7 +80,8 @@ import { UserManagementModule } from './user-management/user-management.module';
     {
       provide: KeycloakService,
       useFactory: () => new KeycloakService(),
-    }
+    },
+    {provide: ROLES_REDIRECT_CONFIG, useValue: new BasicRoleDefaultPageMappings(rolesByRedirect)}
 
   ],
   entryComponents: [AppComponent]
@@ -97,6 +100,7 @@ export class AppModule implements DoBootstrap {
       complete: () => console.log('[ngDoBootstrap] completed')
     });
   }
+
   private bootstrapApp(appRef: ApplicationRef): Observable<void> {
     return new Observable(obs => {
       console.log('[ngDoBootstrap] bootstraping AppComponent');
