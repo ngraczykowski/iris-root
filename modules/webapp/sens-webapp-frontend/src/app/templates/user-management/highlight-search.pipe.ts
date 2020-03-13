@@ -9,6 +9,6 @@ export class HighlightSearchPipe implements PipeTransform {
       return value;
     }
     const regexp = new RegExp(args, 'gi');
-    return value.replace(regexp, '<b>' + args + '</b>');
+    return value.replace(regexp, '<b>$&</b>');
   }
 }

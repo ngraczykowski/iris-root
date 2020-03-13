@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserManagementService } from '@app/user-management/services/user-management.service';
-import { User } from '@app/user-management/models/users';
-import { Subscription } from 'rxjs';
-import { LocalEventService } from '@app/shared/event/local-event.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Event, EventKey } from '@app/shared/event/event.service.model';
+import { LocalEventService } from '@app/shared/event/local-event.service';
+import { User } from '@app/user-management/models/users';
+import { UserManagementService } from '@app/user-management/services/user-management.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-management-page',
@@ -19,18 +19,18 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   loadingUsers = false;
 
   constructor(
-    private readonly userManagementService: UserManagementService,
-    private eventService: LocalEventService
+      private readonly userManagementService: UserManagementService,
+      private eventService: LocalEventService
   ) { }
 
   ngOnInit() {
     this.subscriptions.push(
-      this.fetchUsers(),
-      this.eventService.subscribe(event => {
-        if ('data' in event && event.data.message === 'user-management.userProfile.success.create') {
-          this.fetchUsers();
-        }
-      })
+        this.fetchUsers(),
+        this.eventService.subscribe(event => {
+          if ('data' in event && event.data.message === 'user-management.userProfile.success.create') {
+            this.fetchUsers();
+          }
+        })
     );
   }
 
@@ -50,7 +50,7 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   }
 
   showNewUser() {
-    this.eventService.sendEvent(<Event> {
+    this.eventService.sendEvent(<Event>{
       key: EventKey.OPEN_NEW_PROFILE
     });
   }
@@ -58,16 +58,19 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   private fetchUsers(): Subscription {
     this.loadingUsers = true;
     return this.userManagementService.getUsers()
-      .subscribe(data => {
-        this.usersList = data.content;
-        this.loadingUsers = false;
-      });
+        .subscribe(data => {
+          this.usersList = data.content;
+          this.loadingUsers = false;
+        });
   }
 
-  private filterUsers(userNameFilter: string): User[] {
-    const isInFilterQuery = (field: String) => field.indexOf(userNameFilter) > -1;
-    return this.usersList.filter((user) => isInFilterQuery(user.userName)
-      || (user.displayName !== null && typeof user.displayName !== 'undefined' && isInFilterQuery(user.displayName)));
-  }
+  private filterUsers(filterQuery: string): User[] {
+    const lowercaseQuery = filterQuery.toLowerCase();
 
+    const isInFilterQuery = (field: String) => field.toLowerCase().includes(lowercaseQuery);
+    const matchesByUsernameOrDisplayName = (user: User) => isInFilterQuery(user.userName)
+        || (user.displayName !== null && typeof user.displayName !== 'undefined' && isInFilterQuery(user.displayName));
+
+    return this.usersList.filter(matchesByUsernameOrDisplayName);
+  }
 }
