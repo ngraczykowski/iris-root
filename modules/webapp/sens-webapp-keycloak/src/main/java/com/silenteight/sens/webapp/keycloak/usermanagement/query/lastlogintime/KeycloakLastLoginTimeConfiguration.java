@@ -16,6 +16,7 @@ import static java.time.Duration.ofMinutes;
 class KeycloakLastLoginTimeConfiguration {
 
   static final String CACHE_UPDATE_INTERVAL = "PT15M";
+  static final String CACHE_FIRST_LOAD_DELAY = "PT5S";
 
   static final String LOGIN_EVENT_TYPE = "LOGIN";
 
@@ -27,16 +28,11 @@ class KeycloakLastLoginTimeConfiguration {
   }
 
   @Bean
-  CachedLastLoginTimeProvider cachedLastLoginUserDateProvider(
-      RealmResource realmResource, LastLoginTimeBulkFetcher lastLoginTimeBulkFetcher) {
+  CachedLastLoginTimeProvider cachedLastLoginUserDateProvider(RealmResource realmResource) {
     SingleRequestLoginTimeProvider defaultProvider =
         new SingleRequestLoginTimeProvider(realmResource, DefaultTimeSource.TIME_CONVERTER);
 
-    return new CachedLastLoginTimeProvider(
-        defaultProvider,
-        lastLoginTimeBulkFetcher,
-        10_000,
-        CACHE_EXPIRATION_DURATION);
+    return new CachedLastLoginTimeProvider(defaultProvider, 10_000, CACHE_EXPIRATION_DURATION);
   }
 
   @Bean

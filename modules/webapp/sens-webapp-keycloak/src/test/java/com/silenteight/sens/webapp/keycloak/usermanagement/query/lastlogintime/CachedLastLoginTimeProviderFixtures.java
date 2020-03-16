@@ -16,10 +16,6 @@ class CachedLastLoginTimeProviderFixtures {
       "30da08c2-6fcc-4350-8ba1-a5ba7798b857", parse("2011-12-03T10:15:30+01:00")
   );
 
-  static final LastLoginTime USER_2_LAST_LOGIN_TIME = new LastLoginTime(
-      "f757bc03-ef62-4f69-a127-206ffc5b877c", null
-  );
-
   @Value
   static class LastLoginTime {
 

@@ -1,8 +1,10 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime;
 
 import one.util.streamex.EntryStream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +16,7 @@ import static com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogi
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeCacheUpdaterTest.LastLoginTimeCacheUpdaterFixtures.FETCHED_LOGIN_TIMES;
 import static java.time.OffsetDateTime.parse;
 import static java.util.Map.of;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -29,9 +32,13 @@ class LastLoginTimeCacheUpdaterTest {
   @Mock
   private CachedLastLoginTimeProvider cachedLastLoginTimeProvider;
 
+  @BeforeEach
+  void setUp() {
+    given(cachedLastLoginTimeProvider.getCacheSize()).willReturn(CACHE_SIZE);
+  }
+
   @Test
   void updatesCorrectly() {
-    given(cachedLastLoginTimeProvider.getCacheSize()).willReturn(CACHE_SIZE);
     given(lastLoginTimeBulkFetcher.fetch(CACHE_SIZE)).willReturn(FETCHED_LOGIN_TIMES);
 
     underTest.update();
@@ -40,6 +47,15 @@ class LastLoginTimeCacheUpdaterTest {
         .forKeyValue(
             (userId, time) -> then(cachedLastLoginTimeProvider)
                 .should().update(userId, time));
+  }
+
+  @Test
+  void whenCannotUpdate_doesNotPropagateException() {
+    given(lastLoginTimeBulkFetcher.fetch(CACHE_SIZE)).willThrow(RuntimeException.class);
+
+    Executable when = () -> underTest.update();
+
+    assertDoesNotThrow(when);
   }
 
   static class LastLoginTimeCacheUpdaterFixtures {

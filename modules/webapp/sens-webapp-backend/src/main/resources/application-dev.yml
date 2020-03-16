@@ -7,3 +7,7 @@ keycloak:
   clientSecret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
   configPath: conf/keycloak/sens-webapp-realm.json
   importingPolicy: SKIP
+
+logging:
+  level:
+    com.silenteight: DEBUG

@@ -3,11 +3,13 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.query.role;
 import one.util.streamex.EntryStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USERS;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -32,5 +34,14 @@ class RolesCacheUpdaterTest {
     EntryStream
         .of(USERS)
         .forKeyValue((userId, roles) -> then(cachedRolesProvider).should().update(userId, roles));
+  }
+
+  @Test
+  void whenCannotUpdate_doesNotPropagateException() {
+    given(rolesFetcher.fetch()).willThrow(RuntimeException.class);
+
+    Executable when = () -> underTest.update();
+
+    assertDoesNotThrow(when);
   }
 }

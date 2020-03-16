@@ -47,7 +47,7 @@ class KeycloakRealmApiFacade {
   }
 
   Try<RealmResource> getRealm(String realmName) {
-    log.info("Getting realm {}", realmName);
+    log.debug("Getting realm {}", realmName);
     return realmExists(realmName)
         .filter(realmExists -> realmExists == TRUE, () -> new FailedToFindRealmException(realmName))
         .map(unused -> realmsResource.realm(realmName))
@@ -55,7 +55,7 @@ class KeycloakRealmApiFacade {
   }
 
   private Try<Boolean> realmExists(String realmName) {
-    log.info("Checking if realm {} exists", realmName);
+    log.debug("Checking if realm {} exists", realmName);
     Predicate<RealmRepresentation> sameName = realm -> realm.getRealm().equals(realmName);
     return Try.of(realmsResource::findAll)
         .map(Collection::stream)

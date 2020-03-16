@@ -15,6 +15,7 @@ import static java.time.Duration.ofMinutes;
 class KeycloakRolesConfiguration {
 
   static final String CACHE_UPDATE_INTERVAL = "PT15M";
+  static final String CACHE_FIRST_LOAD_DELAY = "PT5S";
 
   static final Duration CACHE_EXPIRATION_DURATION = ofMinutes(30);
 
@@ -25,18 +26,12 @@ class KeycloakRolesConfiguration {
 
   @Bean
   CachedRolesProvider cachedRolesProvider(
-      RealmResource realmResource,
-      InternalRoleFilter internalRoleFilter,
-      RolesFetcher rolesFetcher) {
+      RealmResource realmResource, InternalRoleFilter internalRoleFilter) {
 
     SingleRequestRoleProvider defaultProvider =
         new SingleRequestRoleProvider(realmResource, internalRoleFilter);
 
-    return new CachedRolesProvider(
-        defaultProvider,
-        rolesFetcher,
-        10_000,
-        CACHE_EXPIRATION_DURATION);
+    return new CachedRolesProvider(defaultProvider, 10_000, CACHE_EXPIRATION_DURATION);
   }
 
   @Bean
@@ -45,9 +40,7 @@ class KeycloakRolesConfiguration {
   }
 
   @Bean
-  RolesCacheUpdater rolesCacheUpdater(
-      CachedRolesProvider rolesProvider,
-      RolesFetcher rolesFetcher) {
-    return new RolesCacheUpdater(rolesFetcher, rolesProvider);
+  RolesCacheUpdater rolesCacheUpdater(CachedRolesProvider provider, RolesFetcher fetcher) {
+    return new RolesCacheUpdater(fetcher, provider);
   }
 }

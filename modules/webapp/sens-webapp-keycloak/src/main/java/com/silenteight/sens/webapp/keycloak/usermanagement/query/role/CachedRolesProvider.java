@@ -10,32 +10,20 @@ import java.util.List;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
-import static one.util.streamex.EntryStream.of;
 
 class CachedRolesProvider implements RolesProvider {
-
-  @NonNull
-  private final RolesFetcher rolesFetcher;
 
   private final LoadingCache<String, @NonNull List<String>> cache;
 
   CachedRolesProvider(
       @NonNull RolesProvider rolesProvider,
-      @NonNull RolesFetcher rolesFetcher,
       int cacheSize,
-      Duration cacheExpirationDuration) {
+      @NonNull Duration cacheExpirationDuration) {
 
-    this.rolesFetcher = rolesFetcher;
     this.cache = Caffeine.newBuilder()
         .maximumSize(cacheSize)
         .expireAfterWrite(cacheExpirationDuration)
         .build(rolesProvider::getForUserId);
-
-    loadInitialData();
-  }
-
-  private void loadInitialData() {
-    of(rolesFetcher.fetch()).forKeyValue(cache::put);
   }
 
   @Override

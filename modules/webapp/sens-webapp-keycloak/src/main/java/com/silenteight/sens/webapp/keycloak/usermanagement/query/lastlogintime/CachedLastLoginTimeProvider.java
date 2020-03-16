@@ -11,11 +11,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import static one.util.streamex.EntryStream.of;
-
 class CachedLastLoginTimeProvider implements LastLoginTimeProvider {
-
-  private final LastLoginTimeBulkFetcher lastLoginTimeBulkFetcher;
 
   @Getter(value = AccessLevel.PACKAGE)
   private final int cacheSize;
@@ -24,11 +20,9 @@ class CachedLastLoginTimeProvider implements LastLoginTimeProvider {
 
   CachedLastLoginTimeProvider(
       @NonNull LastLoginTimeProvider lastLoginTimeProvider,
-      @NonNull LastLoginTimeBulkFetcher lastLoginTimeBulkFetcher,
       int cacheSize,
-      Duration cacheExpirationDuration) {
+      @NonNull Duration cacheExpirationDuration) {
 
-    this.lastLoginTimeBulkFetcher = lastLoginTimeBulkFetcher;
     this.cacheSize = cacheSize;
     this.cache = Caffeine.newBuilder()
         .maximumSize(cacheSize)
@@ -36,14 +30,6 @@ class CachedLastLoginTimeProvider implements LastLoginTimeProvider {
         .weakValues()
         .expireAfterWrite(cacheExpirationDuration)
         .build(lastLoginTimeProvider::getForUserId);
-
-    loadInitialData();
-  }
-
-  private void loadInitialData() {
-    of(lastLoginTimeBulkFetcher.fetch(cacheSize))
-        .mapValues(Optional::of)
-        .forKeyValue(cache::put);
   }
 
   @Override

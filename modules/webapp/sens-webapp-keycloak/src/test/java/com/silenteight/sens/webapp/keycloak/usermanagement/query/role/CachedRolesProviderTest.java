@@ -5,7 +5,6 @@ import lombok.NonNull;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.UserRoles;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -17,11 +16,7 @@ import java.util.List;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_1_ROLES;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_2_NO_ROLES;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Map.of;
-import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.atMost;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -31,13 +26,11 @@ class CachedRolesProviderTest {
   private static final int CACHE_SIZE = 4;
   @Mock
   private RolesProvider nestedRolesProvider;
-  @Mock
-  private RolesFetcher rolesFetcher;
   private CachedRolesProvider underTest;
 
-  private void createUnderTest() {
-    underTest = new CachedRolesProvider(nestedRolesProvider, rolesFetcher,
-        CACHE_SIZE, Duration.ofMinutes(1));
+  @BeforeEach
+  void setUp() {
+    underTest = new CachedRolesProvider(nestedRolesProvider, CACHE_SIZE, Duration.ofMinutes(1));
   }
 
   private void givenNestedProviderReturns(UserRoles user) {
@@ -45,90 +38,33 @@ class CachedRolesProviderTest {
     given(nestedRolesProvider.getForUserId(user.getUserId())).willReturn(roles);
   }
 
-  @Nested
-  class GivenBulkFetcherReturnsEmpty {
+  @Test
+  void requiredNonCachedRole_fetchesFromNestedProvider() {
+    givenNestedProviderReturns(USER_1_ROLES);
 
-    @BeforeEach
-    void setUp() {
-      given(rolesFetcher.fetch()).willReturn(emptyMap());
-      createUnderTest();
-    }
+    List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
 
-    @Test
-    void correctlyCallsBulkFetcherUponCreationToLoadInitialData() {
-      then(rolesFetcher).should().fetch();
-    }
-
-    @Test
-    void firstUserDataCorrectlyReturnedFromCache_afterUpdatingWithFirstUserData() {
-      underTest.update(USER_1_ROLES.getUserId(), USER_1_ROLES.getRoles());
-      List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
-
-      then(nestedRolesProvider).shouldHaveZeroInteractions();
-      assertThat(actual).isEqualTo(USER_1_ROLES.getRoles());
-    }
+    then(nestedRolesProvider).should().getForUserId(USER_1_ROLES.getUserId());
+    assertThat(actual).isEqualTo(USER_1_ROLES.getRoles());
   }
 
-  @Nested
-  class GivenBulkFetcherReturnsEmptyAndNestedProviderReturnsUserOneData {
+  @Test
+  void requiredCachedRoles_returnsFromCache() {
+    underTest.update(USER_1_ROLES.getUserId(), USER_1_ROLES.getRoles());
 
-    @BeforeEach
-    void setUp() {
-      givenNestedProviderReturns(USER_1_ROLES);
-      given(rolesFetcher.fetch()).willReturn(emptyMap());
+    List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
 
-      createUnderTest();
-    }
-
-    @Test
-    void usesNestedLoginTimeProviderAndReturnsCorrectResult_whenGettingLastLoginTime() {
-      List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
-
-      then(nestedRolesProvider).should().getForUserId(USER_1_ROLES.getUserId());
-      assertThat(actual).isEqualTo(USER_1_ROLES.getRoles());
-    }
-
-    @Test
-    void secondRequestReturnsFromCache_whenGettingLoginTimeTwoTimesForSameUser() {
-      underTest.getForUserId(USER_1_ROLES.getUserId());
-      underTest.getForUserId(USER_1_ROLES.getUserId());
-
-      then(nestedRolesProvider)
-          .should(atMost(1)).getForUserId(USER_1_ROLES.getUserId());
-    }
+    then(nestedRolesProvider).shouldHaveNoInteractions();
+    assertThat(actual).isEqualTo(USER_1_ROLES.getRoles());
   }
 
-  @Nested
-  class GivenBulkFetcherReturnsUser1Fixture {
+  @Test
+  void requiredCachedRolesOfUserWithNoRoles_returnsEmptyListFromCache() {
+    underTest.update(USER_2_NO_ROLES.getUserId(), USER_2_NO_ROLES.getRoles());
 
-    @BeforeEach
-    void setUp() {
-      given(rolesFetcher.fetch())
-          .willReturn(of(
-              USER_1_ROLES.getUserId(),
-              requireNonNull(USER_1_ROLES.getRoles())
-          ));
+    List<String> actual = underTest.getForUserId(USER_2_NO_ROLES.getUserId());
 
-      createUnderTest();
-    }
-
-    @Test
-    void userOneDataIsCorrectlyReturnedFromCache() {
-      List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
-
-      then(nestedRolesProvider).shouldHaveZeroInteractions();
-
-      assertThat(actual).isEqualTo(USER_1_ROLES.getRoles());
-    }
-
-    @Test
-    void userTwoDataIsFetchedFromNestedProvider() {
-      givenNestedProviderReturns(USER_2_NO_ROLES);
-      List<String> actual = underTest.getForUserId(USER_2_NO_ROLES.getUserId());
-
-      then(nestedRolesProvider).should().getForUserId(USER_2_NO_ROLES.getUserId());
-
-      assertThat(actual).isEqualTo(emptyList());
-    }
+    then(nestedRolesProvider).shouldHaveNoInteractions();
+    assertThat(actual).isEmpty();
   }
 }
