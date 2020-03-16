@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';
 import { UserFormComponent } from '@app/user-management/components/user-form/user-form.component';
@@ -13,6 +13,8 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class UserFormContainerComponent implements OnInit {
   @ViewChild('userForm', {static: true}) userFormRef: UserFormComponent;
+
+  @Input() usersList = [];
 
   showModal = false;
   formValid = false;

@@ -16,8 +16,7 @@ import {
   Validators
 } from '@angular/forms';
 import { UserValidators } from '@app/templates/user-management/user-profile/validators/user-validators';
-import { User, UserResponse, UserRoles } from '@app/user-management/models/users';
-import { UserManagementService } from '@app/user-management/services/user-management.service';
+import { UserRoles } from '@app/user-management/models/users';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -48,31 +47,21 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   valueChangesSubscription: Subscription;
   userProfilePrefix = 'usersManagement.userProfile.content.';
 
-  usersList: User[];
-
   @Output() formValueChanged = new EventEmitter();
   @Output() isValid = new EventEmitter();
+  @Input() usersList;
   @Input() userRoles: UserRoles;
 
   get rolesControls() { return <FormArray>this.userForm.controls['roles']; }
 
-  constructor(
-      private userManagementService: UserManagementService,
-  ) { }
+  constructor() { }
 
   ngOnInit() {
     this.onFormChanges();
-    this.getUsersList();
   }
 
   ngOnDestroy() {
     this.valueChangesSubscription.unsubscribe();
-  }
-
-  getUsersList() {
-    this.userManagementService.getUsers().subscribe(
-        val => this.usersList = val.content
-    );
   }
 
   ngOnChanges() {
@@ -90,6 +79,13 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
       this.userForm.controls.userName.setErrors({notUnique: true});
     } else {
       this.userForm.setErrors({entityProcessingError: true});
+    }
+  }
+
+  isUsernameUnique(userName) {
+    if (this.usersList.some(e => e.userName === userName)) {
+      this.userForm.controls.userName.setErrors({notUnique: true});
+      this.isValid.emit(this.userForm.valid);
     }
   }
 
@@ -112,16 +108,10 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getUserRolesFormControls(): void {
+    this.userForm.controls.roles = new FormArray([]);
     this.userRoles.roles.map(() => {
       (this.userForm.controls.roles as FormArray).push(new FormControl(false));
     });
   }
 
-  isUsernameUnique(userName) {
-    if (this.usersList.some(e => e.userName === userName)) {
-      this.userForm.controls.userName.setErrors({notUnique: true});
-      this.isValid.emit(this.userForm.valid);
-    }
-  }
 }
-
