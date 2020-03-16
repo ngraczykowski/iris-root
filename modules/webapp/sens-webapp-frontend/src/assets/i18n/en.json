@@ -38,7 +38,7 @@
         "username": {
           "label": "Username",
           "input": {
-            "placeholder": "username@silenteight.com"
+            "placeholder": "john_doe"
           },
           "validation": {
             "unique": "The username is unique",
