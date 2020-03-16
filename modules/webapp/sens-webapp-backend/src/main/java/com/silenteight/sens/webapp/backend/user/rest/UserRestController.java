@@ -51,7 +51,7 @@ class UserRestController {
   }
 
   @PostMapping
-  @PreAuthorize(Authority.ADMIN_OR_BACKEND)
+  @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.debug("Creating new user. {}", dto);
 

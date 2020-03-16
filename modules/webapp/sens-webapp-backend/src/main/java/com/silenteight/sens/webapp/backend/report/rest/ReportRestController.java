@@ -33,7 +33,7 @@ class ReportRestController {
   private final ReportProvider reportProvider;
 
   @GetMapping("/report/{reportName}")
-  @PreAuthorize(Authority.AUDITOR_OR_REPORT_CLI)
+  @PreAuthorize(Authority.AUDITOR)
   public void getReport(
       HttpServletResponse response, @PathVariable String reportName) throws IOException {
 

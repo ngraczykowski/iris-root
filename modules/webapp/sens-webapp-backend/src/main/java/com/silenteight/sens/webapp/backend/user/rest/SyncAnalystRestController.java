@@ -29,7 +29,7 @@ class SyncAnalystRestController {
   private final Optional<SyncAnalystsUseCase> syncAnalystsUseCase;
 
   @PostMapping("/users/sync/analysts")
-  @PreAuthorize(Authority.BACKEND_CLIENT)
+  @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<SyncAnalystStatsDto> synchronize() {
     return ok(
         syncAnalystsUseCase
