@@ -2,4 +2,4 @@
 
 DIR=$(dirname "$(readlink -f "$0")")
 
-"${DIR}"/export-and-normalize.sh keycloak-saml-idp saml-realm "${DIR}"/../conf/keycloak-saml-idp
+"${DIR}"/internal/export-and-normalize.sh keycloak-saml-idp saml-realm "${DIR}"/../conf/keycloak-saml-idp

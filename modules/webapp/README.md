@@ -105,7 +105,7 @@ To export created configuration use either:
 WARNING: Exporting requires booting up another Keycloak instance in desired container.
 Afterwards such instance is being automatically killed, but on lower spec machines it might take longer.
 Therefore, if the config is not exported within default 20 seconds, you can set `KEYCLOAK_EXPORT_TIMEOUT` 
-environment variable or modify default timeout in [this](keycloak-scripts/1-export-realm.sh) file.
+environment variable or modify default timeout in [this](keycloak-scripts/internal/1-export-realm.sh) file.
 >>>
 ##### Reloading new configuration
 `docker-compose down -v --remove-orphans && docker-compose up -d`

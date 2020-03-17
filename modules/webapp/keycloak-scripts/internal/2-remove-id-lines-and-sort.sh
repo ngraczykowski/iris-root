@@ -5,8 +5,8 @@ if ! [ -x "$(command -v jq)" ]; then
   exit 1
 fi
 
-KEYCLOAK_CONFIG_DIR=$1
-KEYCLOAK_REALM_NAME=$2
+KEYCLOAK_REALM_NAME=$1
+KEYCLOAK_CONFIG_DIR=$2
 SCRIPT_NAME=$(basename "$0")
 DIR=$(dirname "$(readlink -f "$0")")
 
@@ -24,7 +24,7 @@ fi
 
 REALM_CONFIG_FILE=$KEYCLOAK_CONFIG_DIR/${KEYCLOAK_REALM_NAME}-realm.json
 
-echo "Realm file ${REALM_CONFIG_FILE}"
+echo "Configuration file ${REALM_CONFIG_FILE}"
 
 sed -i '/"id"/d' "$REALM_CONFIG_FILE"
 sed -i '/"containerId"/d' "$REALM_CONFIG_FILE"
@@ -32,3 +32,5 @@ sed -i '/"containerId"/d' "$REALM_CONFIG_FILE"
 jq -S -f "$DIR"/normalize.jq "$REALM_CONFIG_FILE" > "$REALM_CONFIG_FILE"_sorted
 
 mv "$REALM_CONFIG_FILE"_sorted "$REALM_CONFIG_FILE"
+
+echo "Normalization complete."

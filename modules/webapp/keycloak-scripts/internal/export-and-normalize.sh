@@ -12,4 +12,4 @@ KEYCLOAK_CONFIG_DIR=$3
 DIR=$(dirname "$(readlink -f "$0")")
 
 "${DIR}"/1-export-realm.sh "${KEYCLOAK_CONTAINER_NAME}" "${KEYCLOAK_REALM_NAME}"
-"${DIR}"/2-remove-id-lines-and-sort.sh "${KEYCLOAK_CONFIG_DIR}" "${KEYCLOAK_REALM_NAME}"
+"${DIR}"/2-remove-id-lines-and-sort.sh "${KEYCLOAK_REALM_NAME}" "${KEYCLOAK_CONFIG_DIR}"
