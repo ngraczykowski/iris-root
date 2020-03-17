@@ -2118,6 +2118,7 @@
       "groups": [],
       "notBefore": 0,
       "realmRoles": [
+        "Auditor",
         "offline_access",
         "uma_authorization"
       ],
@@ -2154,6 +2155,7 @@
       "groups": [],
       "notBefore": 0,
       "realmRoles": [
+        "Admin",
         "offline_access",
         "uma_authorization"
       ],

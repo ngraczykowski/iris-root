@@ -1396,7 +1396,7 @@
       "publicClient": false,
       "redirectUris": [],
       "secret": "09b3be8d-bcd0-4bd1-a893-4bb45aa0fb48",
-      "serviceAccountsEnabled": false,
+      "serviceAccountsEnabled": true,
       "standardFlowEnabled": false,
       "surrogateAuthRequired": false,
       "webOrigins": []
@@ -2513,6 +2513,7 @@
       "groups": [],
       "notBefore": 0,
       "realmRoles": [
+        "Auditor",
         "offline_access",
         "uma_authorization"
       ],
@@ -2520,6 +2521,28 @@
       "serviceAccountClientId": "report-cli",
       "totp": false,
       "username": "service-account-report-cli"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1584119916576,
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "emailVerified": false,
+      "enabled": true,
+      "groups": [],
+      "notBefore": 0,
+      "realmRoles": [
+        "Admin"
+      ],
+      "requiredActions": [],
+      "serviceAccountClientId": "postman",
+      "totp": false,
+      "username": "service-account-postman"
     },
     {
       "clientRoles": {
@@ -2545,6 +2568,7 @@
       "groups": [],
       "notBefore": 0,
       "realmRoles": [
+        "Admin",
         "offline_access",
         "uma_authorization"
       ],
