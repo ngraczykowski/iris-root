@@ -33,8 +33,7 @@
       </ul>
       <div class="dropdown-menu-content app-version">
         <span [translate]="'userProfile.appVersion.appName'"></span>
-        <!-- @TODO WA-467 -->
-        <span>1.6.0-RELEASE</span>
+        <span>{{ 'userProfile.appVersion.version' | translate: {value: applicationVersion} }}</span>
       </div>
     </div>
   </div>

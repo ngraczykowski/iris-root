@@ -6,20 +6,10 @@ import { ApplicationInfo } from './models/application-info';
 import { environment } from '../../../environments/environment';
 
 export const mockResponse: ApplicationInfo = {
-  'component': 'SENS Web App REST API',
   'git': {
-    'commit': {
-      'time': '2019-01-09T09:13:08.000+0000',
-      'id': '055ee0f'
-    },
-    'branch': 'release-2.4'
-  },
-  'build': {
-    'version': '2.4.10-SNAPSHOT',
-    'artifact': 'sens-web-app',
-    'name': 'SENS Web App',
-    'group': 'com.silenteight.sens',
-    'time': '2019-01-09T11:55:18.000+0000'
+    'build': {
+      'version': '2.4.10-SNAPSHOT',
+    }
   }
 };
 

@@ -33,7 +33,7 @@ export class UserSectionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.applicationVersionSubscription = this.applicationHeaderService.getAppInfo().subscribe((data) => {
-      this.applicationVersion = data.build.version;
+      this.applicationVersion = data.git.build.version;
     });
 
   }
