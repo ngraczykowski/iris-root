@@ -1,0 +1,54 @@
+:release_version: 1.7.0
+
+= Release {release_version}
+
+- STATUS: *RELEASED*
+- Release date: *13.03.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v1.7.0[Web App {release_version} tag]
+- https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp/sens-webapp-backend/1.7.0[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/1e8915a3348ca0c889e539014f302a5b57f4ddc1[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1107[SERP master MR]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1108[SERP release-3.4 cherry-pick]
+
+// --------------------------------------------------------------------
+
+== New features
+
+[cols="1,3",options="header"]
+|===
+|User story
+|Description
+
+|https://youtrack.silenteight.com/issue/WA-1[WA-1]
+|Allow signing in to SENS UI using Keycloak auth server and OpenID protocol.
+
+|https://youtrack.silenteight.com/issue/WA-250[WA-250]
+|Create a Reasoning Branch details page, which allows to find branch details, including Status and AI Solution.
+
+|https://youtrack.silenteight.com/issue/WA-295[WA-295]
+|Add possibility to change Reasoning Branch Status and AI Solution using Reasoning Branch details page.
+
+|https://youtrack.silenteight.com/issue/WA-168[WA-168]
+|Allow downloading of the Security Matrix Report through SENS UI.
+
+|https://youtrack.silenteight.com/issue/WA-219[WA-219]
+|Create Users Management page, which allows listing available users along with details, including username, display name,  roles and origin.
+
+|https://youtrack.silenteight.com/issue/WA-166[WA-166]
+|Allow creating internal SENS users through the User Management page.
+
+|https://youtrack.silenteight.com/issue/WA-153[WA-153]
+|Allow generating and downloading HUSA reports using SERP CLI commands `serp report accounts` and `serp report entitlement`.
+
+|https://youtrack.silenteight.com/issue/WA-435[WA-435]
+|Create restrictions for users based on following roles: Admin, Business Operator, Analyst and Auditor. Users can only access pages/endpoints whom they are explicitly allowed to.
+
+|https://youtrack.silenteight.com/issue/WA-169[WA-169]
+|Add SERP CLI command `serp user create` that allows creating users.
+
+|https://youtrack.silenteight.com/issue/WA-171[WA-171]
+|Add SERP CLI command `serp user sync-analysts` that allows synchronizing GNS analysts with SENS UI Keycloak auth server.
+
+|https://youtrack.silenteight.com/issue/WA-172[WA-172]
+|Allow exporting and importing SAML metadata through SERP CLI in order to configure SSO.
+|===
