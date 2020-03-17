@@ -15,8 +15,12 @@
       ></app-branch-empty-state>
       <app-branch-empty-state *ngIf="showNoResults"
                               [message]="noResults.message"></app-branch-empty-state>
+      <app-feedback-message *ngIf="failedAppliedChanges"
+                            [message]="'branch.confirm.feedback.failed'"
+                            class="error is-active"
+                            style="margin: 24px 24px 0;"></app-feedback-message>
       <app-branch-details *ngIf="showDetails"
-                          #branchDetailsForm 
+                          #branchDetailsForm
                           [fullId]="fullId"
                           [branchDetails]="branchDetails"
                           (confirm)="showConfirm()"></app-branch-details>
