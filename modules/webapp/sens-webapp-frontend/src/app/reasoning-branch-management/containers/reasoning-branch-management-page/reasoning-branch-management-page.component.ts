@@ -3,7 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BranchDetailsComponent } from '@app/reasoning-branch-management/components/branch-details/branch-details.component';
 import { LoadBranchComponent } from '@app/reasoning-branch-management/components/load-branch/load-branch.component';
-import { ReasoningBranchDetails } from '@app/reasoning-branch-management/models/reasoning-branch-management';
+import {
+  ReasoningBranchDetails,
+  ReasoningBranchEmptyStates
+} from '@app/reasoning-branch-management/models/reasoning-branch-management';
 import { ReasoningBranchManagementService } from '@app/reasoning-branch-management/services/reasoning-branch-management.service';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';
@@ -16,23 +19,13 @@ import { LocalEventService } from '@app/shared/event/local-event.service';
 export class ReasoningBranchManagementPageComponent implements OnInit {
   showConfirmWindow = false;
   showDetails = false;
-  showNoResults = false;
   failedAppliedChanges = false;
+  emptyState;
   branchDetails: ReasoningBranchDetails;
   fullId: string;
 
   @ViewChild('branchDetailsForm', {static: false}) branchDetailsForm: BranchDetailsComponent;
   @ViewChild('loadBranch', {static: true}) loadBranch: LoadBranchComponent;
-
-  emptyStateMessage = {
-    message: 'branch.emptyState.default.message',
-    hint: 'branch.emptyState.default.description'
-  };
-
-  noResults = {
-    message: 'branch.emptyState.noResults.message',
-    hint: 'branch.emptyState.noResults.description'
-  };
 
   constructor(
       private readonly eventService: LocalEventService,
@@ -78,12 +71,15 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
     this.reasoningBranchManagementService.getReasoningBranch(id).subscribe(response => {
       this.branchDetails = response;
       this.showDetails = true;
-      this.showNoResults = false;
       this.fullId = id;
       this.updateUrl(id);
-    }, () => {
-      this.showNoResults = true;
+    }, (error) => {
       this.showDetails = false;
+      if (error.status === 404) {
+        this.emptyState = ReasoningBranchEmptyStates.NORESULTS;
+      } else {
+        this.emptyState = ReasoningBranchEmptyStates.TIMEOUT;
+      }
     });
   }
 

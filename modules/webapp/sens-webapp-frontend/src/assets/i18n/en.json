@@ -127,6 +127,10 @@
       },
       "noResults": {
         "message": "Reasoning Branch with the given ID does not exist"
+      },
+      "timeOut": {
+        "message": "Could not load Reasoning Branch details because of a connection problem",
+        "description": "Please try again. If a problem persists, contact the administrator."
       }
     },
     "details": {

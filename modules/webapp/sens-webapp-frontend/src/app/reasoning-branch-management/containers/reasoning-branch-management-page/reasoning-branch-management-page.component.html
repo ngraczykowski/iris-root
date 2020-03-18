@@ -9,12 +9,21 @@
       <div class="rb-management-details-header">
         <h2 [translate]="'branch.details.title'"></h2>
       </div>
-      <app-branch-empty-state *ngIf="!showDetails && !showNoResults"
-                              [message]="emptyStateMessage.message"
-                              [hint]="emptyStateMessage.hint"
-      ></app-branch-empty-state>
-      <app-branch-empty-state *ngIf="showNoResults"
-                              [message]="noResults.message"></app-branch-empty-state>
+
+      <div *ngIf="!showDetails" [ngSwitch]="emptyState">
+        <app-branch-empty-state *ngSwitchDefault
+                                [message]="'branch.emptyState.default.message'"
+                                [hint]="'branch.emptyState.default.description'"
+        ></app-branch-empty-state>
+        <app-branch-empty-state *ngSwitchCase="'NORESULTS'"
+                                [message]="'branch.emptyState.noResults.message'"
+        ></app-branch-empty-state>
+        <app-branch-empty-state *ngSwitchCase="'TIMEOUT'"
+                                [message]="'branch.emptyState.timeOut.message'"
+                                [hint]="'branch.emptyState.timeOut.description'"
+        ></app-branch-empty-state>
+      </div>
+
       <app-feedback-message *ngIf="failedAppliedChanges"
                             [message]="'branch.confirm.feedback.failed'"
                             class="error is-active"

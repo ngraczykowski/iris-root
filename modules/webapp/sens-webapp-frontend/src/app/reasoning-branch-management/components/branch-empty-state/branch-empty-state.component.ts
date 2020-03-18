@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ReasoningBranchEmptyStates } from '@app/reasoning-branch-management/models/reasoning-branch-management';
 
 @Component({
   selector: 'app-branch-empty-state',
