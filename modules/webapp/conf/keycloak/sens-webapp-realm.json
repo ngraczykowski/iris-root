@@ -1350,58 +1350,6 @@
       ]
     },
     {
-      "attributes": {
-        "display.on.consent.screen": "false",
-        "exclude.session.state.from.auth.response": "false",
-        "saml.assertion.signature": "false",
-        "saml.authnstatement": "false",
-        "saml.client.signature": "false",
-        "saml.encrypt": "false",
-        "saml.force.post.binding": "false",
-        "saml.multivalued.roles": "false",
-        "saml.onetimeuse.condition": "false",
-        "saml.server.signature": "false",
-        "saml.server.signature.keyinfo.ext": "false",
-        "saml_force_name_id_format": "false",
-        "tls.client.certificate.bound.access.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "bearerOnly": false,
-      "clientAuthenticatorType": "client-secret",
-      "clientId": "postman",
-      "consentRequired": false,
-      "defaultClientScopes": [
-        "email",
-        "profile",
-        "role_list",
-        "roles",
-        "web-origins"
-      ],
-      "description": "Postman client created for sake of testing",
-      "directAccessGrantsEnabled": true,
-      "enabled": true,
-      "frontchannelLogout": false,
-      "fullScopeAllowed": true,
-      "implicitFlowEnabled": false,
-      "name": "Postman dev client",
-      "nodeReRegistrationTimeout": -1,
-      "notBefore": 0,
-      "optionalClientScopes": [
-        "address",
-        "microprofile-jwt",
-        "offline_access",
-        "phone"
-      ],
-      "protocol": "openid-connect",
-      "publicClient": false,
-      "redirectUris": [],
-      "secret": "09b3be8d-bcd0-4bd1-a893-4bb45aa0fb48",
-      "serviceAccountsEnabled": true,
-      "standardFlowEnabled": false,
-      "surrogateAuthRequired": false,
-      "webOrigins": []
-    },
-    {
       "attributes": {},
       "authenticationFlowBindingOverrides": {},
       "bearerOnly": false,
@@ -2059,7 +2007,6 @@
           "name": "audit_generate_report"
         }
       ],
-      "postman": [],
       "realm-management": [
         {
           "attributes": {},
@@ -2350,39 +2297,14 @@
   "userManagedAccessAllowed": false,
   "users": [
     {
-      "clientRoles": {
-        "account": [
-          "manage-account",
-          "view-profile"
+      "attributes": {
+        "origin": [
+          "SENS"
         ]
       },
-      "createdTimestamp": 1582201959305,
-      "credentials": [],
-      "disableableCredentialTypes": [],
-      "emailVerified": false,
-      "enabled": true,
-      "federatedIdentities": [
-        {
-          "identityProvider": "scb-saml",
-          "userId": "G-04add0ba-1b63-4e46-bf19-0aea1647103e",
-          "userName": "g-04add0ba-1b63-4e46-bf19-0aea1647103e"
-        }
-      ],
-      "groups": [],
-      "notBefore": 0,
-      "realmRoles": [
-        "offline_access",
-        "uma_authorization"
-      ],
-      "requiredActions": [],
-      "totp": false,
-      "username": "scb-user-1"
-    },
-    {
       "clientRoles": {
         "account": [
-          "manage-account",
-          "view-profile"
+          "manage-account"
         ]
       },
       "createdTimestamp": 1583844544472,
@@ -2409,10 +2331,14 @@
       "username": "admin"
     },
     {
+      "attributes": {
+        "origin": [
+          "SENS"
+        ]
+      },
       "clientRoles": {
         "account": [
-          "manage-account",
-          "view-profile"
+          "manage-account"
         ]
       },
       "createdTimestamp": 1583844732030,
@@ -2439,10 +2365,14 @@
       "username": "auditor"
     },
     {
+      "attributes": {
+        "origin": [
+          "SENS"
+        ]
+      },
       "clientRoles": {
         "account": [
-          "manage-account",
-          "view-profile"
+          "manage-account"
         ]
       },
       "createdTimestamp": 1583844795188,
@@ -2469,10 +2399,14 @@
       "username": "analyst"
     },
     {
+      "attributes": {
+        "origin": [
+          "SENS"
+        ]
+      },
       "clientRoles": {
         "account": [
-          "manage-account",
-          "view-profile"
+          "manage-account"
         ]
       },
       "createdTimestamp": 1583844851585,
@@ -2501,8 +2435,7 @@
     {
       "clientRoles": {
         "account": [
-          "manage-account",
-          "view-profile"
+          "manage-account"
         ]
       },
       "createdTimestamp": 1583246982209,
@@ -2525,30 +2458,7 @@
     {
       "clientRoles": {
         "account": [
-          "manage-account",
-          "view-profile"
-        ]
-      },
-      "createdTimestamp": 1584119916576,
-      "credentials": [],
-      "disableableCredentialTypes": [],
-      "emailVerified": false,
-      "enabled": true,
-      "groups": [],
-      "notBefore": 0,
-      "realmRoles": [
-        "Admin"
-      ],
-      "requiredActions": [],
-      "serviceAccountClientId": "postman",
-      "totp": false,
-      "username": "service-account-postman"
-    },
-    {
-      "clientRoles": {
-        "account": [
-          "manage-account",
-          "view-profile"
+          "manage-account"
         ],
         "backend": [
           "uma_protection"
