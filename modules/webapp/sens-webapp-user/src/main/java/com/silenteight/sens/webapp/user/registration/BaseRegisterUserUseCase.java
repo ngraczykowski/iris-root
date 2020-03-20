@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.user.registration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.user.registration.domain.CompletedUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
@@ -9,7 +10,10 @@ import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDoma
 
 import io.vavr.control.Either;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+
 @RequiredArgsConstructor
+@Slf4j
 class BaseRegisterUserUseCase {
 
   private final UserRegisteringDomainService userRegisteringDomainService;
@@ -20,6 +24,7 @@ class BaseRegisterUserUseCase {
         userRegisteringDomainService.register(registration);
 
     result.forEach(registeredUserRepository::save);
+    log.debug(USER_MANAGEMENT, "User registration result={}", result);
 
     return result.map(completedRegistration -> completedRegistration::getUsername);
   }

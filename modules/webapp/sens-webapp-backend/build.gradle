@@ -40,6 +40,7 @@ dependencies {
   implementation project(":sens-webapp-keycloak")
   implementation project(":sens-webapp-user")
   implementation project(":sens-webapp-user-sync")
+  implementation project(":sens-webapp-logging")
 
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config

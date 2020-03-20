@@ -1,0 +1,12 @@
+plugins {
+  id 'java-library'
+  id "maven-publish"
+}
+
+description = "SENS WebApp Logging"
+
+dependencies {
+  implementation libraries.logback_classic
+  implementation libraries.streamex
+  implementation libraries.commons_lang3
+}

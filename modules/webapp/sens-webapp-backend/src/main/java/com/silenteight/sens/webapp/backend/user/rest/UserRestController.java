@@ -33,6 +33,7 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -60,13 +61,17 @@ class UserRestController {
   @GetMapping
   @PreAuthorize(Authority.ADMIN)
   public Page<UserDto> users(Pageable pageable) {
+    log.debug(USER_MANAGEMENT,
+        "Listing users. pageNumber={},pageSize={}",
+        pageable.getPageNumber(),
+        pageable.getPageSize());
     return userQuery.listEnabled(pageable);
   }
 
   @PostMapping
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
-    log.debug("Creating new user. {}", dto);
+    log.debug(USER_MANAGEMENT, "Creating new user. dto={}", dto);
 
     Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> result =
         registerInternalUserUseCase.apply(dto.toCommand());
@@ -76,6 +81,15 @@ class UserRestController {
         .map(UserRestController::buildUserUri)
         .map(uri -> created(uri).<Void>build())
         .getOrElseThrow(UserRegistrationException::new);
+  }
+
+  @NotNull
+  private static URI buildUserUri(String username) {
+    return ServletUriComponentsBuilder
+        .fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(username)
+        .toUri();
   }
 
   @PatchMapping("/{username}/password/reset")
@@ -97,16 +111,8 @@ class UserRestController {
 
   @GetMapping("/roles")
   public ResponseEntity<RolesDto> roles() {
+    log.debug(USER_MANAGEMENT, "Listing roles");
     return ok(rolesQuery.list());
-  }
-
-  @NotNull
-  private static URI buildUserUri(String username) {
-    return ServletUriComponentsBuilder
-        .fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(username)
-        .toUri();
   }
 
   @Getter

@@ -11,6 +11,7 @@ configurations {
 
 dependencies {
   implementation project(":sens-webapp-common")
+  implementation project(":sens-webapp-logging")
 
   implementation libraries.vavr
 }

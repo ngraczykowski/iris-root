@@ -16,6 +16,7 @@ import io.vavr.control.Either;
 import java.util.Set;
 import javax.annotation.Nullable;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.empty;
 
@@ -30,7 +31,7 @@ public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
   }
 
   public Either<UserRegistrationDomainError, Success> apply(RegisterExternalUserCommand command) {
-    log.debug("Registering external user. command={}", command);
+    log.debug(USER_MANAGEMENT, "Registering external user. command={}", command);
 
     return register(command.toUserRegistration());
   }

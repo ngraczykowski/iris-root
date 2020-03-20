@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend;
 
+import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         DecisionTreeModule.class,
         GrpcModule.class,
         KeycloakModule.class,
+        ApplicationLoggingModule.class,
         ReasoningBranchModule.class,
         ReportModule.class,
         RestModule.class,
@@ -29,7 +31,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         UserRestModule.class,
         UserRestModule.class,
         UserSyncModule.class,
-        WebModule.class,
+        WebModule.class
     },
     exclude = {
         FreeMarkerAutoConfiguration.class

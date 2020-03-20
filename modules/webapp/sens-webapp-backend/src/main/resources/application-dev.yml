@@ -11,3 +11,4 @@ keycloak:
 logging:
   level:
     com.silenteight: DEBUG
+    org.springframework: INFO

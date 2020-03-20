@@ -16,6 +16,7 @@ import io.vavr.control.Either;
 import java.util.Set;
 import javax.annotation.Nullable;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.of;
@@ -31,7 +32,7 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
   }
 
   public Either<UserRegistrationDomainError, Success> apply(RegisterInternalUserCommand command) {
-    log.debug("Registering internal user. command={}", command);
+    log.debug(USER_MANAGEMENT, "Registering internal user. command={}", command);
 
     return register(command.toUserRegistration());
   }
