@@ -23,15 +23,16 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   emptyState;
   branchDetails: ReasoningBranchDetails;
   fullId: string;
+  inProgress = false;
 
-  @ViewChild('branchDetailsForm', {static: false}) branchDetailsForm: BranchDetailsComponent;
-  @ViewChild('loadBranch', {static: true}) loadBranch: LoadBranchComponent;
+  @ViewChild('branchDetailsForm', { static: false }) branchDetailsForm: BranchDetailsComponent;
+  @ViewChild('loadBranch', { static: true }) loadBranch: LoadBranchComponent;
 
   constructor(
-      private readonly eventService: LocalEventService,
-      private readonly reasoningBranchManagementService: ReasoningBranchManagementService,
-      private activatedRoute: ActivatedRoute,
-      private location: Location
+    private readonly eventService: LocalEventService,
+    private readonly reasoningBranchManagementService: ReasoningBranchManagementService,
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -60,22 +61,27 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
     this.sendBriefMessage('branch.confirm.feedback.success');
     this.hideConfirm();
     this.failedAppliedChanges = false;
+    this.inProgress = false;
   }
 
   reasoningBranchUpdateError() {
     this.hideConfirm();
     this.failedAppliedChanges = true;
+    this.inProgress = false;
   }
 
   onLoadBranchSubmitClicked(id: string) {
+    this.inProgress = true;
     this.failedAppliedChanges = false;
     this.reasoningBranchManagementService.getReasoningBranch(id).subscribe(response => {
       this.branchDetails = response;
       this.showDetails = true;
       this.fullId = id;
+      this.inProgress = false;
       this.updateUrl(id);
     }, (error) => {
       this.showDetails = false;
+      this.inProgress = false;
       if (error.status === 404) {
         this.emptyState = ReasoningBranchEmptyStates.NORESULTS;
       } else {
@@ -85,13 +91,14 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   }
 
   updateReasoningBranch(id: string) {
+    this.inProgress = true;
     this.reasoningBranchManagementService
-        .updateReasoningBranch(id, this.branchDetailsForm.branchForm.value)
-        .subscribe(() => {
-          this.successfullyAppliedChanges();
-        }, () => {
-          this.reasoningBranchUpdateError();
-        });
+      .updateReasoningBranch(id, this.branchDetailsForm.branchForm.value)
+      .subscribe(() => {
+        this.successfullyAppliedChanges();
+      }, () => {
+        this.reasoningBranchUpdateError();
+      });
   }
 
   private updateUrl(id: string): void {

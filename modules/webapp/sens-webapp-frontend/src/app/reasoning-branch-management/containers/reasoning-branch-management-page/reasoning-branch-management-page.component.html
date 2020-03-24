@@ -1,16 +1,18 @@
 <app-application-header></app-application-header>
+
 <div class="rb-management">
   <div class="rb-management-wrapper">
     <div class="rb-management-header">
       <app-load-branch #loadBranch
-                       (loadBranch)="onLoadBranchSubmitClicked($event)"></app-load-branch>
+                       (loadBranch)="onLoadBranchSubmitClicked($event)">
+      </app-load-branch>
     </div>
-    <div class="rb-management-details module">
+    <div class="rb-management-details module" style="position: relative;">
       <div class="rb-management-details-header">
         <h2 [translate]="'branch.details.title'"></h2>
       </div>
 
-      <div *ngIf="!showDetails" [ngSwitch]="emptyState">
+      <div *ngIf="!showDetails && !inProgress" [ngSwitch]="emptyState">
         <app-branch-empty-state *ngSwitchDefault
                                 [message]="'branch.emptyState.default.message'"
                                 [hint]="'branch.emptyState.default.description'"
@@ -23,12 +25,15 @@
                                 [hint]="'branch.emptyState.timeOut.description'"
         ></app-branch-empty-state>
       </div>
-
-      <app-feedback-message *ngIf="failedAppliedChanges"
+      <app-preloader 
+        class="preload-content is-active"
+        *ngIf="inProgress">
+      </app-preloader>
+      <app-feedback-message *ngIf="failedAppliedChanges && !inProgress"
                             [message]="'branch.confirm.feedback.failed'"
                             class="error is-active"
                             style="margin: 24px 24px 0;"></app-feedback-message>
-      <app-branch-details *ngIf="showDetails"
+      <app-branch-details *ngIf="showDetails && !inProgress"
                           #branchDetailsForm
                           [fullId]="fullId"
                           [branchDetails]="branchDetails"
