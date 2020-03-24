@@ -10,7 +10,7 @@ import { ReasoningBranchDetails } from '../models/reasoning-branch-management';
 export class ReasoningBranchManagementService {
 
   constructor(
-      private http: HttpClient
+    private http: HttpClient
   ) { }
 
   getReasoningBranch(id: string): Observable<ReasoningBranchDetails> {

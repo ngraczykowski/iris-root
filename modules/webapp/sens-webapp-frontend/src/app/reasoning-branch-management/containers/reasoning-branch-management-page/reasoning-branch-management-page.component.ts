@@ -68,6 +68,7 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   }
 
   onLoadBranchSubmitClicked(id: string) {
+    this.failedAppliedChanges = false;
     this.reasoningBranchManagementService.getReasoningBranch(id).subscribe(response => {
       this.branchDetails = response;
       this.showDetails = true;
