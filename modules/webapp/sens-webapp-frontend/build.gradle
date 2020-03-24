@@ -7,7 +7,7 @@ buildscript {
 plugins {
   id "base"
   id "maven-publish"
-  id "com.liferay.node" version "4.6.6"
+  id "com.silenteight.gradle.node" version "7.0.3"
 }
 
 node {
@@ -21,7 +21,7 @@ tasks.register("compile").configure {
   group = BasePlugin.BUILD_GROUP
   description = "Compiles this project."
 
-  dependsOn tasks.named("npmRunBuild")
+  dependsOn tasks.named("packageRunBuild")
 }
 
 tasks.register("zip", Zip) {
@@ -43,7 +43,7 @@ tasks.register("lint").configure {
   group = LifecycleBasePlugin.VERIFICATION_GROUP
   description = "Runs TSLint on project."
 
-  dependsOn tasks.named("npmRunLint")
+  dependsOn tasks.named("packageRunLint")
 }
 
 tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
