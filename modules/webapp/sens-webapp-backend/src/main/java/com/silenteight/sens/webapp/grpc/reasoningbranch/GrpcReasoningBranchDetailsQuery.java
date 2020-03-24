@@ -19,8 +19,13 @@ import java.util.Optional;
 import static com.google.rpc.Code.NOT_FOUND;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
-import static io.vavr.API.*;
-import static io.vavr.control.Try.*;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.control.Try.failure;
+import static io.vavr.control.Try.of;
+import static io.vavr.control.Try.success;
 import static java.util.Optional.empty;
 
 @RequiredArgsConstructor
@@ -32,9 +37,10 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
 
   @Override
   public Optional<BranchDetailsDto> findByTreeIdAndBranchId(long treeId, long branchId) {
-    log.debug(
-        "Using gRPC BranchGovernance stub to fetch reasoning branch details. "
-            + "treeId={}, branchId={}", treeId, branchId);
+    log.debug(REASONING_BRANCH,
+        "Fetching Reasoning Branch details using gRPC BranchGovernance. treeId={}, branchId={}",
+        treeId, branchId);
+
     Try<Optional<BranchDetailsDto>> details =
         of(() -> branches.getReasoningBranch(buildRequest(treeId, branchId)))
             .map(this::mapToDetailsDto)
@@ -46,7 +52,18 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
             exception -> Match(exception).of(
                 Case($(codeIs(NOT_FOUND)), () -> success(empty())),
                 Case($(), () -> failure(exception)))
-        ).get();
+        )
+        .onSuccess(GrpcReasoningBranchDetailsQuery::logFetchingSuccess)
+        .onFailure(GrpcReasoningBranchDetailsQuery::logFetchingFailed)
+        .get();
+  }
+
+  private static void logFetchingFailed(Throwable throwable) {
+    log.error(REASONING_BRANCH, "Could not fetch Branch details", throwable);
+  }
+
+  private static void logFetchingSuccess(Optional<BranchDetailsDto> branchDetails) {
+    log.info(REASONING_BRANCH, "Fetched Branch details. {}", branchDetails);
   }
 
   private BranchDetailsDto mapToDetailsDto(ReasoningBranchResponse grpcResponse) {

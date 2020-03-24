@@ -22,6 +22,7 @@ import static com.google.common.base.Predicates.instanceOf;
 import static com.google.rpc.Code.NOT_FOUND;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 
@@ -35,16 +36,18 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
   @Override
   @SuppressWarnings("unchecked") // https://github.com/vavr-io/vavr/issues/2411
   public Try<Void> save(UpdatedBranch updatedBranch) {
-    log.debug("Saving updated branch in gRPC repository. branchId={}", updatedBranch.getBranchId());
+    log.debug(REASONING_BRANCH, "Saving updated Branch using gRPC BranchGovernance. branchId={}",
+        updatedBranch.getBranchId());
 
     Try<Void> tryUpdate = Try.of(() -> createRequest(updatedBranch))
         .mapFailure(Case(
-            $(instanceOf(IllegalArgumentException.class)),
-            AiSolutionNotSupportedException::new))
+            $(instanceOf(IllegalArgumentException.class)), AiSolutionNotSupportedException::new))
         .flatMapTry(request -> Try.run(() -> governanceBlockingStub.changeBranches(request)));
 
     return mapStatusExceptionsToCommunicationException(tryUpdate)
-        .mapFailure(Case($(codeIs(NOT_FOUND)), BranchNotFoundException::new));
+        .mapFailure(Case($(codeIs(NOT_FOUND)), BranchNotFoundException::new))
+        .onSuccess(ignored -> log.debug(REASONING_BRANCH, "Saved updated Branch"))
+        .onFailure(reason -> log.error(REASONING_BRANCH, "Could not save updated Branch", reason));
   }
 
   private ChangeBranchesRequest createRequest(UpdatedBranch updatedBranch) {

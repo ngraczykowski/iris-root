@@ -7,6 +7,8 @@ public final class SensWebappLogMarkers {
 
   public static final Marker USER_MANAGEMENT = MarkerFactory.getMarker("USER_MANAGEMENT");
 
+  public static final Marker REASONING_BRANCH = MarkerFactory.getMarker("REASONING_BRANCH");
+
   public static final Marker SECURITY = MarkerFactory.getMarker("SECURITY");
 
   public static final Marker INTERNAL = MarkerFactory.getMarker("INTERNAL");

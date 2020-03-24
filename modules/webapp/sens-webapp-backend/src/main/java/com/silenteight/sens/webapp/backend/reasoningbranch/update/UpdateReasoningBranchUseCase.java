@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import io.vavr.control.Try;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
+
 @RequiredArgsConstructor
 @Slf4j
 public class UpdateReasoningBranchUseCase {
@@ -13,12 +15,16 @@ public class UpdateReasoningBranchUseCase {
 
   private final ReasoningBranchUpdateRepository repository;
 
-  public Try<Void> apply(UpdateBranchCommand updateBranchCommand) {
-    log.debug("Update reasoning branch use case. branchId={}", updateBranchCommand.getBranchId());
+  public Try<Void> apply(UpdateBranchCommand updateCommand) {
+    log.debug(REASONING_BRANCH, "Updating Reasoning Branch details. command={}", updateCommand);
 
-    if (updateBranchCommand.doesNotHaveChanges())
+    if (updateCommand.doesNotHaveChanges()) {
+      log.debug(REASONING_BRANCH, "No changes detected in Reasoning Branch update data.");
       return NO_CHANGES;
+    }
 
-    return repository.save(updateBranchCommand);
+    return repository.save(updateCommand)
+        .onSuccess(ignored -> log.debug(REASONING_BRANCH, "Reasoning Branch update applied."))
+        .onFailure(reason -> log.error(REASONING_BRANCH, "Could not apply update", reason));
   }
 }
