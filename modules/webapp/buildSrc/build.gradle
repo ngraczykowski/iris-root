@@ -22,7 +22,7 @@ repositories {
 dependencies {
   compile "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
   compile "com.netflix.nebula:gradle-resolution-rules-plugin:7.0.8"
-  compile "io.freefair.gradle:aspectj-plugin:4.1.6"
+  compile "io.freefair.gradle:aspectj-plugin:3.7.5"
 
   compile gradleApi()
 
