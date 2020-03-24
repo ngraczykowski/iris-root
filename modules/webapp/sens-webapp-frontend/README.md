@@ -8,6 +8,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - Navigate to [http://localhost:4200/]. 
 - The app will automatically reload if you change any of the source files.
 
+## Development server with mock API
+- Run `./npm start` for a dev server. This starts development server that will proxy API requests to `http://localhost:7070/api`.
+- Go to `api-mock` directory.
+- Run `node server.js`, this will run local mock REST API on `7070` port.
+
 ## Code scaffolding
 
 Run `./ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
