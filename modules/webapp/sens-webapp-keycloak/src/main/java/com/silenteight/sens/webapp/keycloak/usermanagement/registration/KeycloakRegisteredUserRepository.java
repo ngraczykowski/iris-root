@@ -13,12 +13,13 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.lang.Boolean.TRUE;
 import static java.util.Collections.singletonList;
 import static org.keycloak.representations.idm.CredentialRepresentation.PASSWORD;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
 
   private final KeycloakUserCreator keycloakUserCreator;
@@ -26,6 +27,7 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
 
   @Override
   public void save(CompletedUserRegistration userRegistration) {
+    log.debug(USER_MANAGEMENT, "Registering User. userRegistration={}", userRegistration);
     UserRepresentation userRepresentation = toUserRepresentation(userRegistration);
 
     KeycloakUserId newlyCreatedUserId = keycloakUserCreator.create(userRepresentation);

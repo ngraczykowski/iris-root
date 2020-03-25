@@ -83,10 +83,15 @@ class UserRestController {
   @PostMapping
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
-    log.debug(USER_MANAGEMENT, "Creating new user. dto={}", dto);
+    log.debug(USER_MANAGEMENT, "Creating new User. dto={}", dto);
 
     Either<UserDomainError, RegisterInternalUserUseCase.Success> result =
         registerInternalUserUseCase.apply(dto.toCommand());
+
+    if (result.isRight())
+      log.debug(USER_MANAGEMENT, "Successfully created new User. dto={}", dto);
+    else
+      log.error(USER_MANAGEMENT, "User creation error. dto={}", dto);
 
     return result
         .map(RegisterInternalUserUseCase.Success::getUsername)
@@ -123,14 +128,16 @@ class UserRestController {
 
   @PatchMapping("/{username}/password/reset")
   public ResponseEntity<TemporaryPasswordDto> resetPassword(@PathVariable String username) {
-    log.debug("Reset password. username={}", username);
+    log.debug(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
     Try<TemporaryPassword> result = Try.of(() -> resetPasswordUseCase.execute(username));
 
-    if (result.isSuccess())
+    if (result.isSuccess()) {
+      log.debug(USER_MANAGEMENT, "Password has been reset. username={}", username);
       return ok(result.map(TemporaryPasswordDto::from).get());
+    }
 
     Throwable problem = result.getCause();
-    log.error("Could not reset password for user {}", username, problem);
+    log.error(USER_MANAGEMENT, "Could not reset password. username={}", username, problem);
 
     return Match(problem).of(
         Case($(instanceOf(UserNotFoundException.class)), () -> notFound().build()),

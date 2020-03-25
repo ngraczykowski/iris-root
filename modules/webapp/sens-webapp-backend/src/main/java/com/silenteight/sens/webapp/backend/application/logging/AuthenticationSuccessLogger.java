@@ -12,8 +12,7 @@ import static com.silenteight.sens.webapp.logging.SensWebappMdcKeys.USERNAME;
 class AuthenticationSuccessLogger implements ApplicationListener<AuthenticationSuccessEvent> {
 
   @Override
-  public void onApplicationEvent(
-      AuthenticationSuccessEvent event) {
+  public void onApplicationEvent(AuthenticationSuccessEvent event) {
     String name = event.getAuthentication().getName();
 
     MDC.put(USERNAME.getKey(), name);

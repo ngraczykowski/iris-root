@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.user.password.ResettableUserCredentials;
 import com.silenteight.sens.webapp.user.password.TemporaryPassword;
@@ -9,9 +10,11 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
 import static java.util.Optional.ofNullable;
 
+@Slf4j
 @RequiredArgsConstructor
 class KeycloakResettableUserCredentials implements ResettableUserCredentials {
 
@@ -19,6 +22,8 @@ class KeycloakResettableUserCredentials implements ResettableUserCredentials {
 
   @Override
   public void reset(TemporaryPassword temporaryPassword) {
+    log.debug(USER_MANAGEMENT, "Resetting password");
+
     userResource.resetPassword(createCredentials(temporaryPassword));
   }
 

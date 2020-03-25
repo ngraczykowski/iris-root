@@ -3,24 +3,26 @@ package com.silenteight.sens.webapp.user.password;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+
 @RequiredArgsConstructor
 @Slf4j
 public class ResetInternalUserPasswordUseCase {
 
-  private final UserCredentialsRepository credentialsRepo;
+  private final UserCredentialsRepository credentialsRepository;
   private final TemporaryPasswordGenerator temporaryPasswordGenerator;
 
   public TemporaryPassword execute(String username) {
-    log.debug("Reset password for user {} use case", username);
+    log.debug(USER_MANAGEMENT, "Reset password. username={}", username);
 
-    ResettableUserCredentials userCredentials = credentialsRepo
+    ResettableUserCredentials userCredentials = credentialsRepository
         .findUserCredentials(username)
         .orElseThrow(() -> new UserNotFoundException(username));
 
     if (userCredentials.ownerIsNotInternal())
       throw new UserIsNotInternalException(username);
 
-    log.debug("Resetting password for user {}", userCredentials);
+    log.debug(USER_MANAGEMENT, "Resetting password for user. credentials={}", userCredentials);
     return resetPassword(userCredentials);
   }
 

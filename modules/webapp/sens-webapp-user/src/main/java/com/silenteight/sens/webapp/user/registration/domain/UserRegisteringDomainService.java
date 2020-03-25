@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.domain.validator.*;
@@ -12,9 +13,11 @@ import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValid
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
+@Slf4j
 @RequiredArgsConstructor
 public class UserRegisteringDomainService {
 
@@ -28,6 +31,7 @@ public class UserRegisteringDomainService {
   public Either<UserDomainError, CompletedUserRegistration> register(
       NewUserRegistration registration) {
 
+    log.debug(USER_MANAGEMENT, "Registering User. registration={}", registration);
     Option<InvalidNameLengthError> invalidUsernameLengthError =
         usernameLengthValidator.validate(registration.getUsername());
     if (invalidUsernameLengthError.isDefined())
