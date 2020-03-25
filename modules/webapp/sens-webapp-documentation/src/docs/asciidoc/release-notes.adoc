@@ -1,0 +1,21 @@
+[id="webapp-relese-notes"]
+= {productname} Release Notes
+Silent Eight Pte._Ltd.
+:context: webapp-configuration
+:productname: Silent Eight Name Screening Web Application
+:doctype: article
+:toc: left
+//Showing only releases in a table of contents without New Features/Enhancements/Bugs level
+:toclevels: 1
+:xrefstyle: full
+
+//Issues are divided into 3 groups:
+//- New features - new features that the client should know about, mostly User Stories, but it can be Tasks as well
+//- Enhancements - small fixes or enhancements that the client should know about, too small to present them as new functionality, mostly Tasks, but it can be User Stories as well
+//- Bugs - contains ONLY bugs reported by the clients, or bugs that clients know about.
+
+//Release notes sorted by number - newer on the top
+include::releases/release-1.9.0.adoc[leveloffset=+1]
+include::releases/release-1.8.0.adoc[leveloffset=+1]
+include::releases/release-1.7.0.adoc[leveloffset=+1]
+

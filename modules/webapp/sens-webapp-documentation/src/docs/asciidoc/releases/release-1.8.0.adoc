@@ -1,0 +1,33 @@
+:release_version: 1.8.0
+
+= Release {release_version}
+
+- STATUS: *RELEASED*
+- Release date: *20.03.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+- https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp/sens-webapp-backend/{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/1e8915a3348ca0c889e539014f302a5b57f4ddc1[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1146[SERP master MR]
+
+
+// --------------------------------------------------------------------
+
+== Enhancements
+
+[cols="1,3",options="header"]
+|===
+|Issue
+|Description
+
+|https://youtrack.silenteight.com/issue/WA-453[WA-453], https://youtrack.silenteight.com/issue/WA-478[WA-478]
+|User list filtering is now case-insensitive.
+
+|https://youtrack.silenteight.com/issue/WA-464[WA-464]
+|The real-time validation for unique username
+
+|https://youtrack.silenteight.com/issue/WA-465[WA-465], https://youtrack.silenteight.com/issue/WA-481[WA-481]
+|Error notification when loading branch details fails
+
+|https://youtrack.silenteight.com/issue/WA-339[WA-339]
+|Prevent cache loading failure from starting up the webapp application
+|===

@@ -16,7 +16,7 @@
 
 [cols="1,3",options="header"]
 |===
-|User story
+|Issue
 |Description
 
 |https://youtrack.silenteight.com/issue/WA-1[WA-1]
