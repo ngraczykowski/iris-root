@@ -98,6 +98,7 @@ class KeycloakUserCredentialsRepositoryTest {
         .satisfies(credentials -> {
           assertThat(credentials.getType()).isEqualTo("password");
           assertThat(credentials.getValue()).isEqualTo(TEMPORARY_PASSWORD.getPassword());
+          assertThat(credentials.isTemporary()).isTrue();
         });
   }
 

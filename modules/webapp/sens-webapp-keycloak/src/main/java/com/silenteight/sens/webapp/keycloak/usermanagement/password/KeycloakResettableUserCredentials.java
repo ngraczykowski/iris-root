@@ -26,6 +26,7 @@ class KeycloakResettableUserCredentials implements ResettableUserCredentials {
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
     credentialRepresentation.setType("password");
     credentialRepresentation.setValue(temporaryPassword.getPassword());
+    credentialRepresentation.setTemporary(true);
 
     return credentialRepresentation;
   }
