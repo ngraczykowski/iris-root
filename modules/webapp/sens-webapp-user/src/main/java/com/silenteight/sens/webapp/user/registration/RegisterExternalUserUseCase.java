@@ -6,10 +6,10 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.user.domain.UserOrigin;
+import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
-import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
 
 import io.vavr.control.Either;
 
@@ -30,7 +30,7 @@ public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
     super(userRegisteringDomainService, registeredUserRepository);
   }
 
-  public Either<UserRegistrationDomainError, Success> apply(RegisterExternalUserCommand command) {
+  public Either<UserDomainError, Success> apply(RegisterExternalUserCommand command) {
     log.debug(USER_MANAGEMENT, "Registering external user. command={}", command);
 
     return register(command.toUserRegistration());

@@ -53,6 +53,15 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
     return new PageImpl<>(usersPage, pageable, enabledUsers.size());
   }
 
+  @Override
+  public Optional<UserDto> find(String username) {
+    return usersResource
+        .search(username)
+        .stream()
+        .map(this::mapToDto)
+        .findFirst();
+  }
+
   private Collection<UserRepresentation> fetchEnabledUsers() {
     return usersResource
         .list(0, MAX_VALUE)

@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Option;
 import org.jetbrains.annotations.NotNull;

@@ -2,6 +2,8 @@ package com.silenteight.sens.webapp.backend.user.rest.dto;
 
 import lombok.*;
 
+import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserCommand;
+
 import java.util.Set;
 import javax.annotation.Nullable;
 
@@ -9,18 +11,20 @@ import javax.annotation.Nullable;
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ModifyUserDto {
-
-  @Nullable
-  @ToString.Exclude
-  private String password;
+public class UpdateUserDto {
 
   @Nullable
   private String displayName;
 
   @Nullable
-  private Boolean active;
-
-  @Nullable
   private Set<String> roles;
+
+  public UpdateUserCommand toCommand(String username) {
+    return UpdateUserCommand
+        .builder()
+        .username(username)
+        .displayName(displayName)
+        .roles(roles)
+        .build();
+  }
 }

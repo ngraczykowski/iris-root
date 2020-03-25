@@ -3,10 +3,11 @@ package com.silenteight.sens.webapp.user.registration.domain;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.common.time.TimeSource;
-import com.silenteight.sens.webapp.user.registration.domain.NameLengthValidator.InvalidNameLengthError;
-import com.silenteight.sens.webapp.user.registration.domain.RegexValidator.InvalidNameCharsError;
-import com.silenteight.sens.webapp.user.registration.domain.RolesValidator.RolesDontExistError;
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sens.webapp.user.domain.validator.*;
+import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
+import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.InvalidNameCharsError;
+import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
+import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -24,7 +25,7 @@ public class UserRegisteringDomainService {
   private final RolesValidator rolesValidator;
   private final UsernameUniquenessValidator usernameUniquenessValidator;
 
-  public Either<UserRegistrationDomainError, CompletedUserRegistration> register(
+  public Either<UserDomainError, CompletedUserRegistration> register(
       NewUserRegistration registration) {
 
     Option<InvalidNameLengthError> invalidUsernameLengthError =

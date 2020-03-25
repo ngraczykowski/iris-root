@@ -1,17 +1,20 @@
 package com.silenteight.sens.webapp.user.update;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.Value;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Nullable;
 
 import static java.util.Optional.ofNullable;
 
-@Data
+@Value
 @Builder
+@EqualsAndHashCode(doNotUseGetters = true)
 public class UpdatedUser {
 
   @NonNull
@@ -20,6 +23,8 @@ public class UpdatedUser {
   private final String displayName;
   @Nullable
   private final Set<String> roles;
+  @NonNull
+  private final OffsetDateTime updateDate;
 
   public String getUsername() {
     return username;

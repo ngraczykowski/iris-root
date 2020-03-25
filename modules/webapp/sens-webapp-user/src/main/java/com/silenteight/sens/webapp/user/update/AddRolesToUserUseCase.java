@@ -1,23 +1,39 @@
 package com.silenteight.sens.webapp.user.update;
 
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
+import com.silenteight.sens.webapp.common.time.TimeSource;
+import com.silenteight.sens.webapp.user.UserQuery;
+import com.silenteight.sens.webapp.user.dto.UserDto;
+
+import java.util.Collection;
 import java.util.Set;
 
-@Slf4j
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.concat;
+
 @RequiredArgsConstructor
+@Slf4j
 public class AddRolesToUserUseCase {
 
   private final UpdatedUserRepository updatedUserRepository;
 
-  public void apply(AddRolesToUserCommand command) {
-    log.debug("Adding roles to user. command={}", command);
+  private final UserQuery userQuery;
 
-    updatedUserRepository.save(command.toUpdatedUser());
+  public void apply(AddRolesToUserCommand command) {
+    userQuery
+        .find(command.getUsername())
+        .map(UserDto::getRoles)
+        .map(command::toUpdatedUser)
+        .ifPresentOrElse(
+            updatedUserRepository::save,
+            () -> log.warn("Could not find user. username={}", command.getUsername()));
   }
 
   @Data
@@ -27,14 +43,27 @@ public class AddRolesToUserUseCase {
     @NonNull
     private final String username;
     @NonNull
-    private final Set<String> roles;
+    private final Set<String> rolesToAdd;
+    @NonNull
+    @Default
+    private final TimeSource timeSource = DefaultTimeSource.INSTANCE;
 
-    UpdatedUser toUpdatedUser() {
+    UpdatedUser toUpdatedUser(Collection<String> userRoles) {
       return UpdatedUser
           .builder()
           .username(username)
-          .roles(roles)
+          .roles(concat(userRoles.stream(), rolesToAdd.stream()).collect(toSet()))
+          .updateDate(timeSource.offsetDateTime())
           .build();
+    }
+  }
+
+  public static class UserNotFoundException extends RuntimeException {
+
+    private static final long serialVersionUID = -6412227439390462594L;
+
+    UserNotFoundException(String username) {
+      super("User " + username + " could not be found.");
     }
   }
 }

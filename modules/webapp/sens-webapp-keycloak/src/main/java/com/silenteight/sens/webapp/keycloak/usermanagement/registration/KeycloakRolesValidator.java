@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.registration.domain.RolesValidator;
+import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
 
 import io.vavr.control.Option;
 import org.keycloak.admin.client.resource.RolesResource;

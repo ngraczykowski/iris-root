@@ -1,4 +1,6 @@
-package com.silenteight.sens.webapp.user.registration.domain;
+package com.silenteight.sens.webapp.user.domain.validator;
+
+import com.silenteight.sens.webapp.user.update.exception.RolesValidationException;
 
 import io.vavr.control.Option;
 
@@ -10,12 +12,16 @@ public interface RolesValidator {
 
   Option<RolesDontExistError> validate(Set<String> roles);
 
-  class RolesDontExistError extends SimpleUserRegistrationDomainError {
+  class RolesDontExistError extends SimpleUserDomainError {
 
     private static final long serialVersionUID = -3940878504019982914L;
 
     public RolesDontExistError(Set<String> roles) {
       super("One of roles [" + join(",", roles) + "] do not exist in the system");
+    }
+
+    public RolesValidationException toException() {
+      return RolesValidationException.of(getReason());
     }
   }
 }

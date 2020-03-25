@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator;
+import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator;
 
 import io.vavr.control.Option;
 import org.keycloak.admin.client.resource.UsersResource;

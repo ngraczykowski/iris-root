@@ -14,6 +14,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 
 import java.util.Set;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+
 @Slf4j
 @RequiredArgsConstructor
 class KeycloakUserUpdater {
@@ -25,7 +27,7 @@ class KeycloakUserUpdater {
   private final KeycloakUserRoleAssigner roleAssigner;
 
   void update(UpdatedUser updatedUser) {
-    log.debug("Updating user. updatedUser={}", updatedUser);
+    log.debug(USER_MANAGEMENT, "Updating user. updatedUser={}", updatedUser);
 
     UserResource userResource = keycloakUserRetriever.retrieve(updatedUser.getUsername());
     UserRepresentation userRepresentation = userResource.toRepresentation();

@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.registration.domain;
+package com.silenteight.sens.webapp.user.domain.validator;
 
 import io.vavr.control.Option;
 
@@ -6,7 +6,7 @@ public interface RegexValidator {
 
   Option<RegexValidator.InvalidNameCharsError> validate(String name);
 
-  class InvalidNameCharsError extends SimpleUserRegistrationDomainError {
+  class InvalidNameCharsError extends SimpleUserDomainError {
 
     private static final long serialVersionUID = 2934904087256642065L;
 

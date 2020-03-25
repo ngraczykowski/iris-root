@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.security.Authority;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.TemporaryPasswordDto;
+import com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDto;
 import com.silenteight.sens.webapp.user.RolesQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
+import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.dto.RolesDto;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCase;
@@ -17,7 +19,10 @@ import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCas
 import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCase.UserNotFoundException;
 import com.silenteight.sens.webapp.user.password.TemporaryPassword;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
-import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
+import com.silenteight.sens.webapp.user.update.UpdateUserUseCase;
+import com.silenteight.sens.webapp.user.update.UpdatedUserRepository.UserUpdateException;
+import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
+import com.silenteight.sens.webapp.user.update.exception.RolesValidationException;
 
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -38,6 +43,10 @@ import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
+import static org.springframework.http.HttpStatus.INSUFFICIENT_STORAGE;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.ResponseEntity.*;
 
 @Slf4j
@@ -48,6 +57,9 @@ class UserRestController {
 
   @NonNull
   private final RegisterInternalUserUseCase registerInternalUserUseCase;
+
+  @NonNull
+  private final UpdateUserUseCase updateUserUseCase;
 
   @NonNull
   private final ResetInternalUserPasswordUseCase resetPasswordUseCase;
@@ -73,7 +85,7 @@ class UserRestController {
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.debug(USER_MANAGEMENT, "Creating new user. dto={}", dto);
 
-    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> result =
+    Either<UserDomainError, RegisterInternalUserUseCase.Success> result =
         registerInternalUserUseCase.apply(dto.toCommand());
 
     return result
@@ -81,6 +93,23 @@ class UserRestController {
         .map(UserRestController::buildUserUri)
         .map(uri -> created(uri).<Void>build())
         .getOrElseThrow(UserRegistrationException::new);
+  }
+
+  @PatchMapping("/{username}")
+  @PreAuthorize(Authority.ADMIN)
+  public ResponseEntity<Void> update(
+      @PathVariable String username, @Valid @RequestBody UpdateUserDto dto) {
+    log.debug(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
+
+    return Try.run(() -> updateUserUseCase.apply(dto.toCommand(username)))
+        .onSuccess(ignore -> log.debug(USER_MANAGEMENT, "Updated user. username={}", username))
+        .onFailure(
+            e -> log.error(USER_MANAGEMENT, "Could not update user. username={}", username, e))
+        .mapTry(ignore -> new ResponseEntity<Void>(NO_CONTENT))
+        .recover(UserUpdateException.class, e -> status(INSUFFICIENT_STORAGE).build())
+        .recover(DisplayNameValidationException.class, e -> status(UNPROCESSABLE_ENTITY).build())
+        .recover(RolesValidationException.class, e -> status(UNPROCESSABLE_ENTITY).build())
+        .getOrElse(status(INTERNAL_SERVER_ERROR).build());
   }
 
   @NotNull
@@ -106,7 +135,7 @@ class UserRestController {
     return Match(problem).of(
         Case($(instanceOf(UserNotFoundException.class)), () -> notFound().build()),
         Case($(instanceOf(UserIsNotInternalException.class)), () -> badRequest().build()),
-        Case($(), () -> status(500).build()));
+        Case($(), () -> status(INTERNAL_SERVER_ERROR).build()));
   }
 
   @GetMapping("/roles")
@@ -120,9 +149,9 @@ class UserRestController {
 
     private static final long serialVersionUID = -2018001506771795525L;
 
-    private final UserRegistrationDomainError error;
+    private final UserDomainError error;
 
-    UserRegistrationException(UserRegistrationDomainError error) {
+    UserRegistrationException(UserDomainError error) {
       super(error.getReason());
       this.error = error;
     }

@@ -3,10 +3,10 @@ package com.silenteight.sens.webapp.user.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.CompletedUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
-import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
 
 import io.vavr.control.Either;
 
@@ -19,8 +19,8 @@ class BaseRegisterUserUseCase {
   private final UserRegisteringDomainService userRegisteringDomainService;
   private final RegisteredUserRepository registeredUserRepository;
 
-  Either<UserRegistrationDomainError, Success> register(NewUserRegistration registration) {
-    Either<UserRegistrationDomainError, CompletedUserRegistration> result =
+  Either<UserDomainError, Success> register(NewUserRegistration registration) {
+    Either<UserDomainError, CompletedUserRegistration> result =
         userRegisteringDomainService.register(registration);
 
     result.forEach(registeredUserRepository::save);

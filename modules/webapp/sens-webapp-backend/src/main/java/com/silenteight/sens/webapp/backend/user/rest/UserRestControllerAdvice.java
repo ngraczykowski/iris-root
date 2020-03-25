@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.backend.user.rest;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestController.UserRegistrationException;
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
-import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
-import com.silenteight.sens.webapp.user.registration.domain.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
+import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ class UserRestControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(UserRegistrationException.class)
   public ResponseEntity<String> handle(UserRegistrationException e) {
-    UserRegistrationDomainError error = e.getError();
+    UserDomainError error = e.getError();
 
     HttpStatus status = Match(error).of(
         Case($(instanceOf(UsernameNotUniqueError.class)), CONFLICT),

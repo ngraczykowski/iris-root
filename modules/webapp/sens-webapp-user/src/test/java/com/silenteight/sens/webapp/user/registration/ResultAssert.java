@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.user.registration;
 
-import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainError;
+import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 
 import io.vavr.control.Either;
 import org.assertj.core.api.AbstractAssert;
@@ -9,15 +9,15 @@ import static org.assertj.core.api.Assertions.*;
 
 class ResultAssert
     extends AbstractAssert<ResultAssert,
-    Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success>> {
+    Either<UserDomainError, RegisterInternalUserUseCase.Success>> {
 
   private ResultAssert(
-      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> result) {
+      Either<UserDomainError, RegisterInternalUserUseCase.Success> result) {
     super(result, ResultAssert.class);
   }
 
   static ResultAssert assertThatResult(
-      Either<UserRegistrationDomainError, RegisterInternalUserUseCase.Success> result) {
+      Either<UserDomainError, RegisterInternalUserUseCase.Success> result) {
     return new ResultAssert(result);
   }
 

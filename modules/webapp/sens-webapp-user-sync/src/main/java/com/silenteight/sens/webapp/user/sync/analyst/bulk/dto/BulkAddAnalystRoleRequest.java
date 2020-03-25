@@ -29,7 +29,7 @@ public class BulkAddAnalystRoleRequest {
     return AddRolesToUserCommand
         .builder()
         .username(username)
-        .roles(singleton(ANALYST))
+        .rolesToAdd(singleton(ANALYST))
         .build();
   }
 }

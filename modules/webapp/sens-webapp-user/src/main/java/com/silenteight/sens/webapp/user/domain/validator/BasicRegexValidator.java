@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.registration.domain;
+package com.silenteight.sens.webapp.user.domain.validator;
 
 import lombok.RequiredArgsConstructor;
 

@@ -13,7 +13,11 @@ class KeycloakUpdatedUserRepository implements UpdatedUserRepository {
   private final KeycloakUserUpdater keycloakUserUpdater;
 
   @Override
-  public void save(UpdatedUser updatedUser) {
-    keycloakUserUpdater.update(updatedUser);
+  public void save(UpdatedUser updatedUser) throws UserUpdateException {
+    try {
+      keycloakUserUpdater.update(updatedUser);
+    } catch (Exception e) {
+      throw UserUpdateException.of(updatedUser.getUsername(), e);
+    }
   }
 }
