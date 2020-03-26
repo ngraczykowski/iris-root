@@ -25,7 +25,6 @@ public class CreateUserDto {
   private String password;
 
   @NonNull
-  @NotEmpty
   private String displayName;
 
   @Builder.Default
