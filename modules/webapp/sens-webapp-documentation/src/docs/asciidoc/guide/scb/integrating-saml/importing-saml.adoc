@@ -1,0 +1,44 @@
+[id="import-saml-{context}"]
+
+= Importing the SAML Configuration
+
+
+Follow this procedure to import a SAML configuration to the SENS WebApp Auth Server.
+
+//========================================================================================
+.Prerequisites
+
+* You have installed all the Platform services.
+* SAML configuration exported from the Identity Provider in an XML format (e.g. [filename]`saml-descriptor.xml`) that can be imported by the SENS WebApp Auth Server.
+
+//========================================================================================
+.Procedure
+
+//========================================================================================
+
+. Change the current working directory to the Platform installation directory:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd _<installation-directory>_
+----
++
+//------------------------------------------------------------------------------
+. Run the following command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp saml import _<saml-descriptor.xml>_
+----
++
+
+. Verify that the output is correct.
+Example output with expected response looks like this:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    SAML configuration imported successfully.
+----

@@ -61,7 +61,8 @@ asciidoctorj {
 tasks.named("asciidoctor").configure {
   sourceDir "$projectDir/src/docs/asciidoc"
   sources {
-    include "changelog.adoc"
+    include "release-notes.adoc"
+    include "webapp-guide.adoc"
   }
   resources {
     from(sourceDir) {

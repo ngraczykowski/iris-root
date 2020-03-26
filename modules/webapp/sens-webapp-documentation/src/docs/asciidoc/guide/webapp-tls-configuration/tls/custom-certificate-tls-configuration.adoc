@@ -1,0 +1,143 @@
+[id="custom-certificate-tls-configuration-webapp-tls-configuration"]
+= Custom Certificate TLS Configuration
+
+Configure custom TLS certificates to start Caddy web server serving HTTPS requests encrypted with TLS connection with your own certificates.
+
+.Prerequisites
+
+- SERP is installed and configured.
+- You have certificates forming public certificate chain:
+* application certificate,
+* intermediate certificate,
+* root certificate.
+- You have a private key corresponding to the application certificate.
+
+.Procedure
+
+. Prepare a directory for storing certificates using commands:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd _<installation-directory>_
+    $ mkdir -p cert-custom
+----
+
+. Copy root certificate.
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cp _<path-to-root-certificate>_ _<installation-directory>_/cert-custom/root.pem
+----
+
+. Prepare a public certificate chain.
+* If you have application, intermediate and root certificates in separate files then you must merge them into single certificate chain file using the command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cat _<path to application certificate>_ _<path to intermediate certificate>_ _<path to root certificate>_ > _<installation-directory>_/cert-custom/cert-chain.pem
+----
+Order of certificates in `cert-chain.pem` file is important.
+
+* If you have certificate chain in single file already, copy it using the command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cp _<path to certificate chain>_ > _<installation-directory>_/cert-custom/cert-chain.pem
+----
+
+. Copy private key using the command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cp _<path to private key file>_ > _<installation-directory>_/cert-custom/cert-key.pem
+----
+
+. Open configuration file: [filename]`_<installation-directory>_/conf/settings.toml` in an editor.
+
+- Configure a path to certificate and private key in `settings.toml`:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    caddy.tls.cert="${serp_home}/cert-custom/cert-chain.pem"
+    caddy.tls.key="${serp_home}/cert-custom/cert-key.pem"
+----
++
+[NOTE]
+====
+If the setting line starts with `\#` it means it is commented, ignored and the default value is used.
+To change the value, you must remove leading `#` character.
+
+You can use the `${serp_home}` variable in setting value.
+SERP automatically resolves this value to `<installation-directory>`.
+====
+
+- Configure the domain name to which the application certificate was issued.
+The certificate contains the domain name in one of the fields: _Common Name_ or _Subject Alternative Name_.
+If you have the certificate issued to the IP address, you can use it instead of the domain name.
+The host must be accessible using the configured domain name from the network.
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    caddy.domain="_<domain name>_"
+----
+
+- Save configuration file.
+
+. Import root certificate to the trusted certificate storage.
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp cert import custom-cert _<installation-directory>_/cert-custom/root.pem
+----
+
+. Reload SERP to restart services using the command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp reload
+----
+
+.Verification
+. Find Caddy port using the command:
++
+[listing,indent=0,subs=+quotes]
+----
+    $ cd _<installation-directory>_
+    $ bin/serp config show --format=toml | grep "caddy.port"
+    #caddy.port="24100"
+----
++
+[NOTE]
+====
+The default Caddy port is 24100.
+====
+
+. Run the command:
++
+[listing,indent=0,subs=+quotes]
+----
+    $ curl -v -k https://localhost:__<caddy-port>__/
+----
+It should print web page content.
+
+. Open web page in browser: `https://_<domain-name>_:__<caddy-port>__/`
++
+You should see SENS UI.
+
+.Troubleshooting
+
+- You can check Caddy log files in the directory:
++
+[listing,indent=0,subs=+quotes]
+----
+    _<installation-directory>_/log/caddy
+----
