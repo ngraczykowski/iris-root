@@ -22,8 +22,8 @@ class SensMdcClearingInterceptor extends HandlerInterceptorAdapter {
       HttpServletResponse response, 
       Object handler,
       ModelAndView modelAndView) {
-    log.debug(INTERNAL, "Clearing MDC after request");
+    log.trace(INTERNAL, "Clearing MDC after request");
     SensWebappMdcKeys.getAllKeys().forEach(MDC::remove);
-    log.debug(INTERNAL, "MDC cleared");
+    log.trace(INTERNAL, "MDC cleared");
   }
 }
