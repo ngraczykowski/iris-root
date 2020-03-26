@@ -1,0 +1,18 @@
+[id="webapp-test-cases"]
+= {productname} Test Cases
+Silent Eight Pte._Ltd.
+:context: webapp-test-cases
+:productname: Silent Eight Name Screening Web Application
+:doctype: article
+:toc: left
+:sectnums:
+:sectnumlevels: 4
+:toclevels: 4
+:xrefstyle: full
+
+
+:requiredSerpVersion: min v.3.4
+:requiredOptVersion: min. v1.21
+include::test-cases/pre-requisites.adoc[leveloffset=+1]
+
+include::test-cases/cli-test-cases.adoc[leveloffset=+1]

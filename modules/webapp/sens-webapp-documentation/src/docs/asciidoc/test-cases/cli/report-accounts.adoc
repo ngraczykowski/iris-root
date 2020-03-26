@@ -1,0 +1,19 @@
+= Surveillance Optimization Accounts Report
+
+Get a surveillance optimization accounts report.
+
+.Command for getting the report.
+[source,bash]
+----
+./bin/serp report accounts
+----
+
+:testCasesName: Accounts Report
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |execute the command |Verify that the report is saved under `$SERP_HOME/data/reports/` directory.
+
+|{counter:case-number} |execute `./bin/serp report accounts --output-dir <path>`
+|Verify that the report is saved under `<path>` directory.
+
+include::../templates/test-cases-table-footer.adoc[]

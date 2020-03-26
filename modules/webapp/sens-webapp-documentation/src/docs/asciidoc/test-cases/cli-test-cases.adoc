@@ -1,0 +1,23 @@
+= CLI Test Cases
+
+== User
+
+WebApp user manipulation.
+
+include::cli/user-create.adoc[leveloffset=+2]
+include::cli/user-sync-analysts.adoc[leveloffset=+2]
+
+== HUSA Reports
+
+Creates a CSV reports.
+
+include::cli/report-entitlements.adoc[leveloffset=+2]
+include::cli/report-accounts.adoc[leveloffset=+2]
+
+== SAML
+
+Allow performing import/export/remove of a SAML configuration to the SENS WebApp Auth Server.
+
+include::cli/saml-import.adoc[leveloffset=+2]
+include::cli/saml-export.adoc[leveloffset=+2]
+include::cli/saml-remove.adoc[leveloffset=+2]

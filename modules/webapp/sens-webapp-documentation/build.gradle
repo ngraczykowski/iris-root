@@ -63,6 +63,7 @@ tasks.named("asciidoctor").configure {
   sources {
     include "release-notes.adoc"
     include "webapp-guide.adoc"
+    include "test-cases.adoc"
   }
   resources {
     from(sourceDir) {

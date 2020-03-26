@@ -1,0 +1,25 @@
+= Export
+
+Export a SAML configuration from the SENS WebApp Auth Server.
+
+.Command for exporting SAML descriptor.
+[source,bash]
+----
+./bin/serp saml export <descriptor_file_path>
+----
+
+:testCasesName: SAML export
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |execute the command without `<descriptor_file_path>`
+|Validate that there was no exception and there is a file with XML descriptor located in `WORKING_DIR/saml-descriptor-{timestamp}.xml`.
+
+|{counter:case-number} |execute the command with <descriptor_file_path> |Validate that there was no exception and there is a file with XML descriptor located in `<descriptor_file_path>`.
+
+|{counter:case-number} |execute the command with `<descriptor_file_path_same_as_in_point_2>` and confirm overwriting the file.
+|Validate that there you were asked for a decision to override previously exported file and the file was overwritten.
+
+|{counter:case-number} |execute the command with <descriptor_file_path_same_as_in_point_2> and deny overwriting the file |Validate that there you were asked for a decision to override previously exported file and the file was not overwritten.
+
+
+include::../templates/test-cases-table-footer.adoc[]

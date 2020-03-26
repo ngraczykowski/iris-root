@@ -1,0 +1,8 @@
+:case-number: 0
+
+.{testCasesName} test cases.
+[cols="10%a,45%a,45%a",options=header]
+|===
+|
+|Action
+|Expected

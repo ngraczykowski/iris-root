@@ -1,0 +1,16 @@
+= Import
+
+Import a SAML configuration to the SENS WebApp Auth Server.
+
+.Command for importing SAML descriptor.
+[source,bash]
+----
+./bin/serp saml import <descriptor_file_path>
+----
+
+:testCasesName: SAML import
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |execute the command |Validate that there was no exception and there is a message confirming that the operation was successful.
+
+include::../templates/test-cases-table-footer.adoc[]

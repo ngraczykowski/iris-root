@@ -1,0 +1,17 @@
+= Remove
+
+Remove a SAML configuration from the SENS WebApp Auth Server.
+
+.Command for removing SAML configuration.
+[source,bash]
+----
+./bin/serp saml remove
+----
+
+:testCasesName: SAML export
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |execute the command |Validate that there you were asked for decisions to remove configuration and there is a message confirming that the operation was successful.
+Ensure that you are unable to export the SAML.
+
+include::../templates/test-cases-table-footer.adoc[]
