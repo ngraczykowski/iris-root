@@ -1006,7 +1006,8 @@
             "id.token.claim": "true",
             "jsonType.label": "String",
             "multivalued": "true",
-            "user.attribute": "foo"
+            "user.attribute": "foo",
+            "userinfo.token.claim": "true"
           },
           "consentRequired": false,
           "name": "groups",
@@ -1263,7 +1264,7 @@
         "saml.signing.certificate": "MIICpTCCAY0CBgFu+YooiDANBgkqhkiG9w0BAQsFADAWMRQwEgYDVQQDDAtzZW5zLXdlYmFwcDAeFw0xOTEyMTIwOTU1MTFaFw0yOTEyMTIwOTU2NTFaMBYxFDASBgNVBAMMC3NlbnMtd2ViYXBwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjWBkB98LTP0ZV92BXqemhq4c/E/2tC+MuNy5hMXQcxFCBbtkjio348bu2TbiXyNbmxTq40grhslLTnI+/LIVzSyZiM6usEahPF3Iz1BqF64z0037MW5FUaDE728eO9Os8RYnG13KrHddcPAb1l7w2zK3dZE6/7HXqZ8E2K+ptLnq0xuUqyWB5VFHj02OVd15YFdFp4tbWUAeDwlLDHk8mFmXEPhI4tBRQPWnkYc8IuqLJEVSC2OMk9BexmpnQvKDyVkRpFr9dDiL4+qgmoqh9laGAZCOJIsI7wyBAx0PJxemHrd5DiHw6caH/bWXOf8Zf+Bb+o1QdSpGev/3O6rl9QIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQAW11aSbq6WnxHDw6rFoc5NfiryDoELNWeIyG0J9Xn7EbJFLc1bhRID1/Qbd03pmY+/QGxEugLX7GRHGEItlfO5MxIq5Uyda9lcEujUnAvVxybqgxfIxVw324Evk2P5yfPyauYGr7eOH9HyaEveHzBWh9GMXxXxEJdPvwhKSnAG33NtTJqgJD+GkS+vqqxyz6UsMg87bSSsCRyJ/O6+h14klr1q0pBmEWx9KwiGQX7jWwu49TfVoFt98/Vu0QSYcCxyqFB+Qu5BxNOAgiGxhC5B2Qto73uqPzc9c37fD3Bsb7UVdGs6ETYj/yEtW5+vOA+O/QelRhE+OwITuDuwdk8i",
         "saml_assertion_consumer_url_post": "http://localhost:8081/auth/realms/sens-webapp/broker/scb-saml/endpoint",
         "saml_force_name_id_format": "false",
-        "saml_name_id_format": "persistent",
+        "saml_name_id_format": "username",
         "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#",
         "saml_single_logout_service_url_post": "http://localhost:8081/auth/realms/sens-webapp/broker/scb-saml/endpoint",
         "tls.client.certificate.bound.access.tokens": "false"
@@ -1271,7 +1272,7 @@
       "authenticationFlowBindingOverrides": {},
       "bearerOnly": false,
       "clientAuthenticatorType": "client-secret",
-      "clientId": "http://localhost:8081/auth/realms/sens-webapp",
+      "clientId": "http://localhost:4200/auth/realms/sens-webapp",
       "consentRequired": false,
       "defaultClientScopes": [
         "email",
@@ -1294,23 +1295,9 @@
         "phone"
       ],
       "protocol": "saml",
-      "protocolMappers": [
-        {
-          "config": {
-            "attribute.name": "username",
-            "attribute.nameformat": "Basic",
-            "friendly.name": "username",
-            "user.attribute": "username"
-          },
-          "consentRequired": false,
-          "name": "scb-username",
-          "protocol": "saml",
-          "protocolMapper": "saml-user-property-mapper"
-        }
-      ],
       "publicClient": false,
       "redirectUris": [
-        "http://localhost:8081/auth/realms/sens-webapp/broker/scb-saml/endpoint"
+        "http://localhost:4200/auth/realms/sens-webapp/broker/scb-saml/endpoint"
       ],
       "secret": "9034a955-ddab-45c2-8b88-cd9fb32d64fb",
       "serviceAccountsEnabled": false,
@@ -1629,7 +1616,7 @@
           "name": "read-token"
         }
       ],
-      "http://localhost:8081/auth/realms/sens-webapp": [],
+      "http://localhost:4200/auth/realms/sens-webapp": [],
       "realm-management": [
         {
           "attributes": {},
@@ -1839,6 +1826,68 @@
   "ssoSessionMaxLifespanRememberMe": 0,
   "supportedLocales": [],
   "userManagedAccessAllowed": false,
+  "users": [
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1582200661046,
+      "credentials": [
+        {
+          "createdDate": 1582201902232,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"xvRnYE37+pem1z073b32KWsM1Crlj+UZyUSzD3PxLpIsS0kzr3KE5/NY35stzQRBORFM/FvnseDCuxtH3hcQPw==\",\"salt\":\"tW2hvuSgPBusdvAwWctgYA==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "UserOneFirstName",
+      "groups": [],
+      "lastName": "UserOneLastName",
+      "notBefore": 0,
+      "realmRoles": [
+        "offline_access",
+        "uma_authorization"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "scb-user-1"
+    },
+    {
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "createdTimestamp": 1582204616452,
+      "credentials": [
+        {
+          "createdDate": 1582204630007,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"bD29+Nt1Qa3BYcbFEVO7kjtmAJYOLloOo/Kz2IzF6cHpyc74aZ9NHFNqZtz3OOJ5+i6rnyL68c2JPCEruN6hGg==\",\"salt\":\"jl+SPdTlNS7tRZwE6txShQ==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": false,
+      "enabled": true,
+      "groups": [],
+      "notBefore": 0,
+      "realmRoles": [
+        "offline_access",
+        "uma_authorization"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "scb-user-2"
+    }
+  ],
   "verifyEmail": false,
   "waitIncrementSeconds": 60,
   "webAuthnPolicyAcceptableAaguids": [],

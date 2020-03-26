@@ -213,9 +213,17 @@
       "alias": "SCB login flow",
       "authenticationExecutions": [
         {
-          "authenticator": "idp-auto-link",
+          "authenticator": "auth-script-based",
+          "authenticatorConfig": "automatically-login-existing-user",
           "autheticatorFlow": false,
           "priority": 2,
+          "requirement": "REQUIRED",
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "idp-auto-link",
+          "autheticatorFlow": false,
+          "priority": 3,
           "requirement": "REQUIRED",
           "userSetupAllowed": false
         }
@@ -571,6 +579,12 @@
     }
   ],
   "authenticatorConfig": [
+    {
+      "alias": "automatically-login-existing-user",
+      "config": {
+        "scriptCode": "/*\n * Template for JavaScript based authenticator's.\n * See org.keycloak.authentication.authenticators.browser.ScriptBasedAuthenticatorFactory\n */\n\n// import enum for error lookup\nAuthenticationFlowError = Java.type(\"org.keycloak.authentication.AuthenticationFlowError\");\nSerializedBrokeredIdentityContext = Java.type(\"org.keycloak.authentication.authenticators.broker.util.SerializedBrokeredIdentityContext\");\nAbstractIdpAuthenticator = Java.type(\"org.keycloak.authentication.authenticators.broker.AbstractIdpAuthenticator\");\nUserModel = Java.type('org.keycloak.models.UserModel');\nExistingUserInfo = Java.type('org.keycloak.authentication.authenticators.broker.util.ExistingUserInfo');\n/**\n * An example authenticate function.\n *\n * The following variables are available for convenience:\n * user - current user {@see org.keycloak.models.UserModel}\n * realm - current realm {@see org.keycloak.models.RealmModel}\n * session - current KeycloakSession {@see org.keycloak.models.KeycloakSession}\n * httpRequest - current HttpRequest {@see org.jboss.resteasy.spi.HttpRequest}\n * script - current script {@see org.keycloak.models.ScriptModel}\n * authenticationSession - current authentication session {@see org.keycloak.sessions.AuthenticationSessionModel}\n * LOG - current logger {@see org.jboss.logging.Logger}\n *\n * You one can extract current http request headers via:\n * httpRequest.getHttpHeaders().getHeaderString(\"Forwarded\")\n *\n * @param context {@see org.keycloak.authentication.AuthenticationFlowContext}\n */\nfunction authenticate(context) {\n    var serializedCtx = SerializedBrokeredIdentityContext.readFromAuthenticationSession(authenticationSession, AbstractIdpAuthenticator.BROKERED_CONTEXT_NOTE);\n    var brokerIdentityCtx = serializedCtx.deserialize(session, authenticationSession);\n    \n    var idpUsername = brokerIdentityCtx.username;\n    \n    LOG.info(\"Broker context: \" + brokerIdentityCtx);\n    LOG.info(\"Trying to login: \" + idpUsername);\n\n    var existingUser = context.getSession().users().getUserByUsername(idpUsername, context.getRealm());\n    \n    \n    if (existingUser === null) {\n        LOG.info(\"Could not find user \" + idpUsername);\n        context.failure(AuthenticationFlowError.INVALID_USER);\n        return;\n    }\n\n    LOG.info(\"User \" + idpUsername + \" found.\")\n    \n    var existingUserInfo = new ExistingUserInfo(existingUser.id, UserModel.USERNAME, existingUser.username);\n    context.getAuthenticationSession().setAuthNote(AbstractIdpAuthenticator.EXISTING_USER_INFO,existingUserInfo.serialize());\n\n    context.success();\n    return;\n}"
+      }
+    },
     {
       "alias": "create unique user config",
       "config": {
