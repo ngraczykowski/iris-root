@@ -31,6 +31,7 @@ export class UserManagementService {
 
   createUser(payload: User) {
     payload.roles = this.mapToRoles(payload.roles);
+    payload.displayName = payload.displayName === null ? '' : payload.displayName;
     return this.http.post(`${environment.serverApiUrl}/users`, payload);
   }
 
