@@ -17,14 +17,12 @@ class ValidatorConfiguration {
 
   @Bean
   BasicNameLengthValidator usernameLengthValidator() {
-    return new BasicNameLengthValidator(
-        MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
+    return new BasicNameLengthValidator(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
   }
 
   @Bean
   BasicNameLengthValidator displayNameLengthValidator() {
-    return new BasicNameLengthValidator(
-        MIN_DISPLAY_NAME_LENGTH, MAX_DISPLAY_NAME_LENGTH);
+    return new OptionalNameLengthValidator(MIN_DISPLAY_NAME_LENGTH, MAX_DISPLAY_NAME_LENGTH);
   }
 
   @Bean
