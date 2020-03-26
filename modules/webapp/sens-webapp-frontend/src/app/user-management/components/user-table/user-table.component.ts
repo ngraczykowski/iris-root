@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { User } from '@app/user-management/models/users';
 
 @Component({
@@ -9,6 +9,7 @@ import { User } from '@app/user-management/models/users';
 export class UserTableComponent implements OnInit, OnChanges {
   @Input() users: User[];
   @Input() filterQuery: String;
+  @Output() openEditUserForm = new EventEmitter(null);
 
   usersListTranslate = 'usersManagement.usersList.usersTable.';
 
@@ -21,6 +22,10 @@ export class UserTableComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.changeDetectionRef.detectChanges();
+  }
+
+  openEditForm(user) {
+    this.openEditUserForm.emit(user);
   }
 
 }

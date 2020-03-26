@@ -20,6 +20,7 @@
                      *ngIf="loadingUsers"></app-preloader>
       <app-user-table [users]="isFiltering ? filteredList : usersList"
                       [filterQuery]="filterQuery"
+                      (openEditUserForm)="openEditUserForm($event)"
                       *ngIf="!loadingUsers"></app-user-table>
     </div>
   </div>

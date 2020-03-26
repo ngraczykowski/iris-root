@@ -2,17 +2,21 @@
         class="error margin-bottom-m"
         [class.is-active]="userForm.hasError('entityProcessingError')"
         [message]="userProfilePrefix + 'validation.generalValidationError'"></app-feedback-message>
+<app-feedback-message
+        class="error margin-bottom-m"
+        [class.is-active]="userForm.hasError('insufficientStorage')"
+        [message]="userProfilePrefix + 'validation.insufficientStorage'"></app-feedback-message>
 <form [formGroup]="userForm" class="user-profile">
-  <section class="user-profile-section user-profile-row ">
+  <section class="user-profile-section user-profile-row " *ngIf="!editProfile">
     <label class="user-profile-section-label"
-           [translate]="userProfilePrefix + 'username.label'"></label>
+          [translate]="userProfilePrefix + 'username.label'"></label>
     <div class="user-profile-section-content">
       <div class="user-profile-section-content-main">
         <input type="text" class="input-field"
-               formControlName="userName"
-               placeholder="{{ userProfilePrefix + 'username.input.placeholder' | translate }}"
-               (keyup)="isUsernameUnique(username.value)"
-               #username/>
+              formControlName="userName"
+              placeholder="{{ userProfilePrefix + 'username.input.placeholder' | translate }}"
+              (keyup)="isUsernameUnique(username.value)"
+              #username/>
       </div>
       <app-validation-feedback
               [content]="userProfilePrefix + 'username.validation.unique'"
@@ -43,7 +47,7 @@
               [type]="displayName.value.length <= 50 ? 'positive' : 'negative'"></app-validation-feedback>
     </div>
   </section>
-  <section class="user-profile-section user-profile-row ">
+  <section class="user-profile-section user-profile-row" *ngIf="!editProfile">
     <label class="user-profile-section-label"
            [translate]="userProfilePrefix + 'password.label'"></label>
     <div class="user-profile-section-content">
@@ -70,10 +74,9 @@
     <div class="user-profile-section-content">
       <ng-container *ngFor="let role of rolesControls.controls; let i = index">
         <section class="user-profile-role">
-          <label class="role-checkbox">
-              <span [translate]="userProfilePrefix
-        + 'role.roles.' + userRoles.roles[i].label + '.label'"></span>
-            <input type="checkbox" [id]="userRoles.roles[i].role" [formControlName]="i">
+          <label class="role-checkbox" [for]="userRoles.roles[i].role">
+            <span [translate]="userProfilePrefix + 'role.roles.' + userRoles.roles[i].label + '.label'"></span>
+            <input type="checkbox" [id]="userRoles.roles[i].role" [formControlName]="i" (change)="checkBoxChanged()">
             <span class="checkmark"></span>
           </label>
           <p class="user-profile-section-content-hint"

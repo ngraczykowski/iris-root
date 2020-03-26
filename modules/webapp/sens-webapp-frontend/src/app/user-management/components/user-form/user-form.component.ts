@@ -18,6 +18,7 @@ import {
 import { UserValidators } from '@app/templates/user-management/user-profile/validators/user-validators';
 import { UserRoles } from '@app/user-management/models/users';
 import { Subscription } from 'rxjs';
+import { UserManagementService } from '@app/user-management/services/user-management.service';
 
 @Component({
   selector: 'app-user-form',
@@ -25,23 +26,26 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
+  userNameControl = new FormControl(null, [Validators.required, Validators.compose([
+    Validators.required,
+    UserValidators.usernameMinLength(),
+    UserValidators.usernameMaxLength(),
+    UserValidators.usernameCharacters()
+  ])]);
+  displayNameControl = new FormControl(null, [Validators.compose([
+    UserValidators.displayNameMinLength(),
+    UserValidators.displayNameMaxLength()
+  ])]);
+  passwordControl = new FormControl(null, [Validators.required, Validators.compose([
+    Validators.required,
+    UserValidators.atLeastOneLetter(),
+    UserValidators.atLeastOneDigit(),
+    UserValidators.passwordMinLength()
+  ])]);
   userForm = new FormGroup({
-    userName: new FormControl(null, [Validators.required, Validators.compose([
-      Validators.required,
-      UserValidators.usernameMinLength(),
-      UserValidators.usernameMaxLength(),
-      UserValidators.usernameCharacters()
-    ])]),
-    displayName: new FormControl(null, [Validators.compose([
-      UserValidators.displayNameMinLength(),
-      UserValidators.displayNameMaxLength()
-    ])]),
-    password: new FormControl(null, [Validators.required, Validators.compose([
-      Validators.required,
-      UserValidators.atLeastOneLetter(),
-      UserValidators.atLeastOneDigit(),
-      UserValidators.passwordMinLength()
-    ])]),
+    userName: this.userNameControl,
+    displayName: this.displayNameControl,
+    password: this.passwordControl,
     roles: new FormArray([]),
   });
   valueChangesSubscription: Subscription;
@@ -51,10 +55,13 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   @Output() isValid = new EventEmitter();
   @Input() usersList;
   @Input() userRoles: UserRoles;
+  @Input() editProfile = false;
 
   get rolesControls() { return <FormArray>this.userForm.controls['roles']; }
 
-  constructor() { }
+  constructor(
+    private userManagementService: UserManagementService,
+  ) { }
 
   ngOnInit() {
     this.onFormChanges();
@@ -68,6 +75,31 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
     if (this.userRoles !== null && this.userRoles.roles.length > 0) {
       this.getUserRolesFormControls();
     }
+
+    if (!this.editProfile && !this.userForm.contains('password')) {
+      this.userForm.addControl('password', this.passwordControl);
+    }
+  }
+
+  getUsersList() {
+    this.userManagementService.getUsers().subscribe(
+      val => this.usersList = val.content
+    );
+  }
+
+  setEditProfileData({userData}) {
+    this.userForm.controls.userName.setValue(userData.userName);
+    this.userForm.controls.displayName.setValue(userData.displayName);
+    const userRolesControl = <FormArray> this.userForm.get('roles');
+    userData.roles.forEach((role) => {
+      Object.values(this.userRoles.roles).filter((val, elementIndex) => {
+        if (val.role === role) {
+          userRolesControl.controls[elementIndex].setValue(true);
+        }
+      });
+    });
+
+    this.userForm.removeControl('password');
   }
 
   hasError(errorName: string, field: string): boolean {
@@ -75,10 +107,21 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showError(httpStatusCode: number): void {
-    if (httpStatusCode === 409) {
-      this.userForm.controls.userName.setErrors({notUnique: true});
-    } else {
-      this.userForm.setErrors({entityProcessingError: true});
+    switch (httpStatusCode) {
+      case 409:
+        this.userForm.controls.userName.setErrors({notUnique: true});
+        break;
+
+      case 422:
+        this.userForm.setErrors({entityProcessingError: true});
+        break;
+
+      case 507:
+        this.userForm.setErrors({insufficientStorage: true});
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -87,6 +130,10 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
       this.userForm.controls.userName.setErrors({notUnique: true});
       this.isValid.emit(this.userForm.valid);
     }
+  }
+
+  checkBoxChanged() {
+    this.formValueChanged.emit({...this.userForm.value, roles: this.userForm.controls.roles.value});
   }
 
   private onFormChanges(): void {
@@ -108,10 +155,11 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getUserRolesFormControls(): void {
-    this.userForm.controls.roles = new FormArray([]);
-    this.userRoles.roles.map(() => {
-      (this.userForm.controls.roles as FormArray).push(new FormControl(false));
-    });
+    if (!this.editProfile) {
+      this.userForm.controls.roles = new FormArray([]);
+      this.userRoles.roles.map(() => {
+        (this.userForm.controls.roles as FormArray).push(new FormControl(false));
+      });
+    }
   }
-
 }

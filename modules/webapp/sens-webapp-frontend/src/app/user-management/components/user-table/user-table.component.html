@@ -4,9 +4,7 @@
   <th [translate]="usersListTranslate + 'displayName.label'"></th>
   <th [translate]="usersListTranslate + 'roles.label'"></th>
   <th [translate]="usersListTranslate + 'origin.label'"></th>
-  <!--
   <th class="actions" [translate]="usersListTranslate + 'profile.label'"></th>
-  -->
   </thead>
   <tbody>
   <tr *ngFor="let user of users">
@@ -34,12 +32,11 @@
         <span>{{user.origin}}</span>
       </div>
     </td>
-    <!--
     <td class="actions">
       <button class="button-flat"
-              [translate]="usersListTranslate + 'profile.edit'"></button>
+              [translate]="usersListTranslate + 'profile.edit'"
+              (click)="openEditForm(user)"></button>
     </td>
-    -->
   </tr>
   </tbody>
 </table>

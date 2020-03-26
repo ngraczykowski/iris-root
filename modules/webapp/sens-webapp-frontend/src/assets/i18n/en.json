@@ -23,7 +23,7 @@
         },
         "profile": {
           "label": "Profile",
-          "edit": "Edit Profile"
+          "edit": "Edit"
         }
       }
     },
@@ -93,7 +93,8 @@
           }
         },
         "validation": {
-          "generalValidationError": "Failed to save changes. Please make sure that the provided data meets the input field requirements."
+          "generalValidationError": "Failed to save changes. Please make sure that the provided data meets the input field requirements.",
+          "insufficientStorage": "Failed to save changes to auth server, please try again."
         }
       },
       "footer": {

@@ -19,18 +19,21 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
   loadingUsers = false;
 
   constructor(
-      private readonly userManagementService: UserManagementService,
-      private eventService: LocalEventService
+    private readonly userManagementService: UserManagementService,
+    private eventService: LocalEventService
   ) { }
 
   ngOnInit() {
     this.subscriptions.push(
-        this.fetchUsers(),
-        this.eventService.subscribe(event => {
-          if ('data' in event && event.data.message === 'user-management.userProfile.success.create') {
-            this.fetchUsers();
-          }
-        })
+      this.fetchUsers(),
+      this.eventService.subscribe(event => {
+        if ('data' in event && (
+            event.data.message === 'user-management.userProfile.success.create' ||
+            event.data.message === 'user-management.userProfile.success.update')
+          ) {
+          this.fetchUsers();
+        }
+      })
     );
   }
 
@@ -55,13 +58,22 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  openEditUserForm(user) {
+    this.eventService.sendEvent(<Event>{
+      key: EventKey.OPEN_EDIT_PROFILE,
+      data: {
+        userData: user
+      }
+    });
+  }
+
   private fetchUsers(): Subscription {
     this.loadingUsers = true;
     return this.userManagementService.getUsers()
-        .subscribe(data => {
-          this.usersList = data.content;
-          this.loadingUsers = false;
-        });
+      .subscribe(data => {
+        this.usersList = data.content;
+        this.loadingUsers = false;
+      });
   }
 
   private filterUsers(filterQuery: string): User[] {
@@ -69,7 +81,7 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
 
     const isInFilterQuery = (field: String) => field.toLowerCase().includes(lowercaseQuery);
     const matchesByUsernameOrDisplayName = (user: User) => isInFilterQuery(user.userName)
-        || (user.displayName !== null && typeof user.displayName !== 'undefined' && isInFilterQuery(user.displayName));
+      || (user.displayName !== null && typeof user.displayName !== 'undefined' && isInFilterQuery(user.displayName));
 
     return this.usersList.filter(matchesByUsernameOrDisplayName);
   }

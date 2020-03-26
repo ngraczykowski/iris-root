@@ -67,7 +67,29 @@ app.get('/rest/webapp/api/users/roles', (req, res) => {
       res.status(404).send()
     }
   }
-})
+});
+
+app.patch('/rest/webapp/api/users/:userName', (req, res) => {
+  dataFile = fs.readFileSync(`${dataFolder}/users.json`);
+  let json = JSON.parse(dataFile);
+  const userObject = getUserObjectByUserName(req.params.userName, json.content);
+
+  if (userObject.index !== null && userObject.user !== null) {
+    json.content[userObject.index].displayName = req.body.displayName;
+    json.content[userObject.index].roles = req.body.roles;
+    try {
+      fs.writeFileSync(`${dataFolder}/users.json`, JSON.stringify(json));
+      res.status(204).send();
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        res.status(404).send()
+      }
+    }
+  } else {
+    res.status(507).send(); //insufficientStorage
+    // res.status(422).send(); //entityProcessingError
+  }
+});
 
 app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
@@ -80,7 +102,7 @@ app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res)
       res.status(404).send()
     }
   }
-})
+});
 
 app.get('/rest/webapp/management/info', (req, res) => {
   let dataFile;
@@ -92,7 +114,7 @@ app.get('/rest/webapp/management/info', (req, res) => {
       res.status(404).send()
     }
   }
-})
+});
 
 app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
@@ -109,7 +131,7 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, re
       res.status(404).send()
     }
   }
-})
+});
 
 function isUserNameUnique(userName, currentUsersList) {
   const isUnique = currentUsersList.filter((user) => {
@@ -120,6 +142,22 @@ function isUserNameUnique(userName, currentUsersList) {
 
 function hasForbiddenCharacters(userName) {
   return userName.indexOf('!') >= 0;
+}
+
+function getUserObjectByUserName(userName, userList) { 
+  let userObject = {
+    index: null,
+    user: null
+  };
+
+  userObject.user = userList.filter((user, index) => {
+    if (user.userName === userName) {
+      userObject.index = index;
+      return user;
+    }
+  });
+
+  return userObject;
 }
 
 app.listen(7070, () => console.log('REST API mock server started at http://localhost:7070/'))

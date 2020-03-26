@@ -35,7 +35,8 @@ export class UserManagementService {
   }
 
   editUser(payload: User) {
-    return this.http.post(`${environment.serverApiUrl}/users`, payload);
+    payload.roles = this.mapToRoles(payload.roles);
+    return this.http.patch(`${environment.serverApiUrl}/users/${payload.userName}`, payload);
   }
 
   private mapToRoles(rolesPayload: String[]): String[] {
