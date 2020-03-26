@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 @UtilityClass
-class CachedRolesProviderFixtures {
+class RolesProviderFixtures {
 
   static final String AUDITOR = "Auditor";
   static final String ANALYST = "Analyst";

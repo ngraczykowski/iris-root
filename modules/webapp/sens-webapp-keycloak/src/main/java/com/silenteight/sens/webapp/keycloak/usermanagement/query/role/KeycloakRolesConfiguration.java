@@ -6,18 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.time.Duration;
-
-import static java.time.Duration.ofMinutes;
-
 @Configuration
 @EnableScheduling
 class KeycloakRolesConfiguration {
-
-  static final String CACHE_UPDATE_INTERVAL = "PT15M";
-  static final String CACHE_FIRST_LOAD_DELAY = "PT5S";
-
-  static final Duration CACHE_EXPIRATION_DURATION = ofMinutes(30);
 
   @Bean
   RolesFetcher rolesFetcher(RolesResource rolesResource, InternalRoleFilter internalRoleFilter) {
@@ -25,22 +16,12 @@ class KeycloakRolesConfiguration {
   }
 
   @Bean
-  CachedRolesProvider cachedRolesProvider(
-      RealmResource realmResource, InternalRoleFilter internalRoleFilter) {
-
-    SingleRequestRoleProvider defaultProvider =
-        new SingleRequestRoleProvider(realmResource, internalRoleFilter);
-
-    return new CachedRolesProvider(defaultProvider, 10_000, CACHE_EXPIRATION_DURATION);
+  RolesProvider rolesProvider(RealmResource realmResource, InternalRoleFilter internalRoleFilter) {
+    return new SingleRequestRoleProvider(realmResource, internalRoleFilter);
   }
 
   @Bean
   InternalRoleFilter internalRoleFilter(RolesResource rolesResource) {
     return new InternalRoleFilter(rolesResource);
-  }
-
-  @Bean
-  RolesCacheUpdater rolesCacheUpdater(CachedRolesProvider provider, RolesFetcher fetcher) {
-    return new RolesCacheUpdater(fetcher, provider);
   }
 }

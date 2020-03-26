@@ -15,9 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.ANALYST;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.AUDITOR;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_1_ROLES;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.ANALYST;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.AUDITOR;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.USER_1_ROLES;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;

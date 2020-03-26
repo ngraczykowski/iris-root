@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.role;
 
-import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.UserRoles;
+import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.UserRoles;
 
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
@@ -18,10 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.ANALYST;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.AUDITOR;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_1_ROLES;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.CachedRolesProviderFixtures.USER_2_NO_ROLES;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.ANALYST;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.AUDITOR;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.USER_1_ROLES;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProviderFixtures.USER_2_NO_ROLES;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
