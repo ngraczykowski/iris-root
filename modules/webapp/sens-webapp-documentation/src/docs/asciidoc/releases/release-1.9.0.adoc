@@ -20,4 +20,7 @@
 
 |https://youtrack.silenteight.com/issue/WA-370[WA-370], https://youtrack.silenteight.com/issue/WA-371[WA-371]
 |Add changes auditing through application logs for Reasoning Branches and User Management modules.
+
+|https://youtrack.silenteight.com/issue/WA-165[WA-165], https://youtrack.silenteight.com/issue/WA-220[WA-220]
+|Add the ability to edit display names and roles of the users by a user with Admin role.
 |===
