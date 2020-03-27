@@ -1,13 +1,13 @@
 ifdef::context[:parent-context: {context}]
-[id="managing-users-{context}"]
-= Managing Users
-:context: managing-users
+[id="reports-{context}"]
+= Reports
+:context: reports
 // ASSEMBLY
 
 //========================================================================================
 
-include::managing-users/creating-user.adoc[leveloffset=+1]
-include::managing-users/sync-analysts.adoc[leveloffset=+1]
+include::reports/husa/accounts.adoc[leveloffset=+1]
+include::reports/husa/entitlements.adoc[leveloffset=+1]
 
 //========================================================================================
 ifdef::parent-context[:context: {parent-context}]

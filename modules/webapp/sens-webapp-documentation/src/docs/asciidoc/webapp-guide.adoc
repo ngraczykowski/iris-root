@@ -26,6 +26,8 @@ link:mailto:support@silenteight.com?subject=SERP%20Installation%20Guide[Silent E
 
 include::guide/cli/managing-users.adoc[leveloffset=+1]
 
-include::guide/scb/integrating-saml.adoc[leveloffset=+1]
+include::guide/scb/cli/integrating-saml.adoc[leveloffset=+1]
+
+include::guide/cli/reports.adoc[leveloffset=+1]
 
 include::guide/webapp-tls-configuration/webapp-tls-configuration.adoc[leveloffset=+1]

@@ -40,6 +40,7 @@ include::integrating-saml/importing-saml.adoc[leveloffset=+1]
 
 include::integrating-saml/exporting-saml.adoc[leveloffset=+1]
 
+include::integrating-saml/removing-saml.adoc[leveloffset=+1]
 
 //========================================================================================
 ifdef::parent-context[:context: {parent-context}]

@@ -1,14 +1,17 @@
-[id="create-user-{context}"]
+[id="remove-saml-{context}"]
 
-= Creating a User
+= Remove the SAML Configuration
 
-Follow this procedure to create the first user with the administrator role in {productname}.
-A user with administrator role has all permissions in {productname}.
+
+Follow this procedure to remove a SAML configuration from the SENS WebApp Auth Server.
+
+Removing SAML configuration from the SENS WebApp Auth Server will disable the ability to Single Sign-On to Sens WebApp.
 
 //========================================================================================
 .Prerequisites
 
 * You have installed all the Platform services.
+* SAML configuration imported to the SENS WebApp Auth Server, see <<import-saml-{context}>>.
 
 //========================================================================================
 .Procedure
@@ -29,23 +32,17 @@ A user with administrator role has all permissions in {productname}.
 [listing,indent=0]
 [subs=+quotes]
 ----
-    $ bin/serp user create -u _<user-name>_ -d _<display-name>_ -r Admin
+    $ bin/serp saml remove
 ----
 +
 
-[NOTE]
-====
-With this command, you are able to create a user with other roles (`Admin`, `Analyst`, `Auditor` and `Business Operator`) but for a sake of simplicity this procedure focus only on an admin user.
-====
-
+. Confirm operation.
 +
-. You will be asked to provide a password and confirm it.
 
-. Verify that the output is correct.
-Example output with expected response looks like this:
+. Example output with expected response looks like this:
 +
 [listing,indent=0]
 [subs=+quotes]
 ----
-    User _<user-name>_ created successfully.
+    Removed SAML configuration from the SENS WebApp Auth Server.
 ----

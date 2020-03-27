@@ -1,0 +1,68 @@
+[id="sync-analysts-{context}"]
+
+= Sync Analysts
+
+Follow this procedure to synchronize external users.
+Created users will have `Analyst` role in {productname}.
+
+Running this command will result in:
+
+* users found in the external source will be added with the `Analyst` role.
+* users found in the external source that already exist in the SENS database, but without the `Analyst` role, will have the `Analyst` role.
+* users that have a different value of the displayName in the SENS database than in the external source will be updated to have the same value in the displayName field.
+* users that were created by the synchronization and were removed from the external source will be deactivated.
+* users found in the external source that already exist in the SENS database, but are inactive (removed in the past), will be restored with the `Analyst` role.
+
+//========================================================================================
+.Prerequisites
+
+* You have installed all the Platform services.
+
+//========================================================================================
+.Procedure
+
+//========================================================================================
+
+. Change the current working directory to the Platform installation directory:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd _<installation-directory>_
+----
++
+//------------------------------------------------------------------------------
+. Run the following command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp user sync-analysts
+----
+
+. Verify that the output is correct.
+Example output with expected response looks like this:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+Analysts synchronized. Following operations were performed:
+- added users: 40 / 40
+- restored users: 0 / 0
+- added "Analyst" role to users: 0 / 0
+- updated users display name: 0 / 0
+- deleted users: 0 / 0
+----
++
+[NOTE]
+====
+First number in each line means successful operations, the second one all operations.
+====
+
+.How to configure?
+
+. Open the configuration file in text editor: `conf/settings.toml`.
+
+. Configure the table or view from which users will be fetched:
+
+    webapp.gns.db.users.table="SENS_USERS"
