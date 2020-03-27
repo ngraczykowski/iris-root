@@ -1,0 +1,64 @@
+= Management
+Cases here assume you're logged in as user with Business Operator role and are in the "Reasoning Branch Management" tab.
+
+Definitions:
+
+* RB loading input - input field at the top of page used for loading RB by ID
+* Correct RB id - any string in format of (treeId)-(branchId)
+* Partially correct RB id - any string containing only numbers, or numbers and dash
+* Incorrect RB id - any string not matching format of Correct RB id
+
+:testCasesName: Reasoning Branch management
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number}
+|Focus and de-focus (click anywhere else) RB loading input
+|Nothing has changed (you don't see and red text error)
+
+|{counter:case-number}
+|Type Incorrect RB id in RB loading input
+|Input indicates that it contains error and you can see hint describing Correct RB id format
+
+|{counter:case-number}
+|Type Incorrect RB id in RB loading input and de-focus
+|Input indicates that it contains error and you can see hint describing Correct RB id format
+
+|{counter:case-number}
+|Type Partially correct RB id
+|Nothing has changed (you don't see and red text error)
+
+|{counter:case-number}
+|Type Partially correct RB id and de-focus
+|Input indicates that it contains error and you can see hint describing Correct RB id format
+
+|{counter:case-number}
+|Type Correct RB id of non existing branch and click Enter or `Load Reasoning Branch Button`
+|You are presented with information, that such branch does not exist
+
+|{counter:case-number}
+|Type Correct RB id of existing branch and click Enter or `Load Reasoning Branch Button`
+|You are presented with Reasoning Branch details, including:
+
+* Branch Id
+* AI Solution
+* Status
+
+`Apply changes` button is inactive
+
+`Reset` button is inactive
+
+|{counter:case-number}
+|Load existing Reasoning Branch and use input to change either status or solution
+|`Apply changes` button is active
+
+`Reset` button reverts introduced change to original state and renders `Apply changes` button as inactive
+
+|{counter:case-number}
+|Load existing Reasoning Branch, use input to change either status or solution and click `Apply changes`
+|You are presented with confirmation dialog, which has `Apply` and `Cancel` buttons
+
+|{counter:case-number}
+|Load existing Reasoning Branch, use input to change either status or solution and click `Apply changes` and confirm the change
+|The reasoning branch was successfully updated. When you refresh the page, the change is persisted. (alternatively, check governance's db tables)
+
+include::../templates/test-cases-table-footer.adoc[]

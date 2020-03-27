@@ -1,0 +1,17 @@
+= Frontend Test Cases
+
+== Notes
+We assume that, in this document, user having specific role is described by this role, eg. when we say business operator, we can mean either user with role Business Operator or user with role Admin, as Admin role contains all others
+for brevity we have omitted test cases for user with Admin role only, but we encourage tester to test all the happy-paths also for admin user
+
+== Reasoning Branch Management
+
+include::frontend/rb-authorization.adoc[leveloffset=+2]
+include::frontend/rb-management.adoc[leveloffset=+2]
+
+== Users
+
+include::frontend/users-authorization.adoc[leveloffset=+2]
+include::frontend/users-add.adoc[leveloffset=+2]
+
+include::frontend/reports.adoc[leveloffset=+2]

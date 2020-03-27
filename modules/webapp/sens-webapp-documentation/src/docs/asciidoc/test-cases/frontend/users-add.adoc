@@ -1,0 +1,33 @@
+= Add new user
+
+Cases here assume you're logged in as admin user and are in the "Add New User" dialog.
+
+Definitions:
+
+* Correct username - string between 3 and 30 characters inclusive, consisting of lowercase alphanumeric characters and/or optionally special characters including - _ @
+* Incorrect username - any string not matching rules of Correct name
+* Correct display name - any string between 3 and 50 characters inclusive
+* Incorrect display name - any string shorter than 3 characters and longer than 50 characters exclusive
+* Correct password - any string longer than 8 characters inclusive, with at least one letter and one digit
+* Incorrect password - any string not matching rules of Correct password
+
+:testCasesName: Add new user
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number}
+|Input correct username, correct display name, correct password and click `Add new user`
+|User is created,, dialog windows is closed, user list is refreshed. New user is listed on users list and you can login with given credentials
+
+|{counter:case-number}
+|Input all correct fields but one (either incorrect username, incorrect display name or incorrect password)
+|Can't click "Add new user" button and related mistake is indicated with red text below input field
+
+|{counter:case-number}
+|Input correct username, correct display name, correct password, check arbitrary roles and click "Add new user"
+|User is created, dialog windows is closed, user list is refreshed. New user is listed on users list and you can login with given credentials. User has selected roles.
+
+|{counter:case-number}
+|Input all correct fields but with username of already existing user and click "Add new user"
+|You are presented with related red text message below username fields and user has not been created.
+
+include::../templates/test-cases-table-footer.adoc[]

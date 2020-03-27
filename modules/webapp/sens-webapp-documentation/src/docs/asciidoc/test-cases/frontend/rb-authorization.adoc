@@ -1,0 +1,18 @@
+= Authorization
+
+:testCasesName: Reasoning Branch authorization
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number}
+|Login as non-business operator user
+|You are not able to see Reasoning Branch Management tab
+
+|{counter:case-number}
+|Login as business operator user
+|You are able to see Reasoning Branch Management tab
+
+|{counter:case-number}
+|Login as business operator user and go to Reasoning Branch Management tab.
+|You should see empty Reasoning Branch ID input with grayed out button next to it and empty Reasoning Branch Details panel
+
+include::../templates/test-cases-table-footer.adoc[]
