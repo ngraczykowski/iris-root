@@ -18,3 +18,5 @@ include::test-cases/pre-requisites.adoc[leveloffset=+1]
 include::test-cases/cli-test-cases.adoc[leveloffset=+1]
 
 include::test-cases/frontend-test-cases.adoc[leveloffset=+1]
+
+include::test-cases/audit-test-cases.adoc[leveloffset=+1]

@@ -1,0 +1,35 @@
+= Audit logs
+
+.Command for viewing audit logs.
+[source,bash]
+----
+cat $SERP_HOME/logs/<webapp-log-file> | grep <marker-name>
+----
+
+:testCasesName: Audit logs
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |
+
+1. Perform some User Management operations like:
+
+* creating user
+* editing user details
+* synchronizing users
+
+2. Select logs for User Management (`USER_MANAGEMENT` marker).
+
+|You are able to see all performed operations with details, like new display name and new roles.
+
+|{counter:case-number} |
+
+1. Perform some Reasoning Branch operations like:
+
+* deactivate/activate Branch
+* change Branch solution
+
+2. Select logs for Reasoning Branch operations (`REASONING_BRANCH` marker).
+
+|You are able to see all performed operations with details, like branch id and new branch solution.
+
+include::../templates/test-cases-table-footer.adoc[]
