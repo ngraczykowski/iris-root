@@ -40,6 +40,10 @@ export class UserManagementService {
     return this.http.patch(`${environment.serverApiUrl}/users/${payload.userName}`, payload);
   }
 
+  resetPassword(userName: string) {
+    return this.http.patch(`${environment.serverApiUrl}/users/${userName}/password/reset`, null);
+  }
+
   private mapToRoles(rolesPayload: String[]): String[] {
     const mappedRoles = [];
     rolesPayload.forEach((role, index) => role ? mappedRoles.push(this.userRoles$.value.roles[index].role) : false);

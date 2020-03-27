@@ -10,6 +10,7 @@ export class UserTableComponent implements OnInit, OnChanges {
   @Input() users: User[];
   @Input() filterQuery: String;
   @Output() openEditUserForm = new EventEmitter(null);
+  @Output() openResetUserPassword = new EventEmitter(null);
 
   usersListTranslate = 'usersManagement.usersList.usersTable.';
 
@@ -26,6 +27,10 @@ export class UserTableComponent implements OnInit, OnChanges {
 
   openEditForm(user) {
     this.openEditUserForm.emit(user);
+  }
+
+  resetUserPassword(user) {
+    this.openResetUserPassword.emit(user);
   }
 
 }

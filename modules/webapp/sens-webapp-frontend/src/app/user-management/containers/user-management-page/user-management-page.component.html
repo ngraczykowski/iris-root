@@ -21,6 +21,7 @@
       <app-user-table [users]="isFiltering ? filteredList : usersList"
                       [filterQuery]="filterQuery"
                       (openEditUserForm)="openEditUserForm($event)"
+                      (openResetUserPassword)="openResetUserPasswordConfirmation($event)"
                       *ngIf="!loadingUsers"></app-user-table>
     </div>
   </div>

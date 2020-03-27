@@ -53,9 +53,12 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() formValueChanged = new EventEmitter();
   @Output() isValid = new EventEmitter();
+  @Output() resetPassword = new EventEmitter();
   @Input() usersList;
   @Input() userRoles: UserRoles;
   @Input() editProfile = false;
+  @Input() temporaryPassword;
+  @Input() resetPasswordInProgress;
 
   get rolesControls() { return <FormArray>this.userForm.controls['roles']; }
 
@@ -120,6 +123,14 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
         this.userForm.setErrors({insufficientStorage: true});
         break;
 
+      case 401:
+        this.userForm.setErrors({unauthorized: true});
+        break;
+
+      case 404:
+        this.userForm.setErrors({notFound: true});
+        break;
+
       default:
         break;
     }
@@ -134,6 +145,10 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   checkBoxChanged() {
     this.formValueChanged.emit({...this.userForm.value, roles: this.userForm.controls.roles.value});
+  }
+
+  onResetPassword(userName) {
+    this.resetPassword.emit(userName);
   }
 
   private onFormChanges(): void {

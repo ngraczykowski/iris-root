@@ -67,6 +67,15 @@ export class UserManagementPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  openResetUserPasswordConfirmation(user) {
+    this.eventService.sendEvent(<Event>{
+      key: EventKey.OPEN_RESET_PASSWORD,
+      data: {
+        userData: user
+      }
+    });
+  }
+
   private fetchUsers(): Subscription {
     this.loadingUsers = true;
     return this.userManagementService.getUsers()

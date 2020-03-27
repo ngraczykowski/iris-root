@@ -23,6 +23,8 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
   eventServiceSubscription: Subscription;
   openEditSubscription: Subscription;
   userData: User;
+  resetPasswordInProgress = false;
+  temporaryPassword: string;
 
   constructor(
     private userManagementService: UserManagementService,
@@ -60,6 +62,8 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
 
   onCancel() {
     this.showModal = false;
+    this.temporaryPassword = null;
+    this.resetPasswordInProgress = false;
     this.userFormRef.userForm.reset();
   }
 
@@ -81,6 +85,8 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
         }
       });
       this.showModal = false;
+      this.temporaryPassword = null;
+      this.resetPasswordInProgress = false;
       this.userFormRef.userForm.reset();
     }, error => this.userFormRef.showError(error.status));
   }
@@ -99,6 +105,18 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
     }, error => {
       this.userFormRef.showError(error.status);
     });
+  }
+
+  resetPassword(userName) {
+    this.resetPasswordInProgress = true;
+    this.userManagementService.resetPassword(userName)
+      .subscribe((res: any) => {
+        this.resetPasswordInProgress = false;
+        this.temporaryPassword = res.temporaryPassword;
+      }, error => {
+        this.resetPasswordInProgress = false;
+        this.userFormRef.showError(error.status);
+      });
   }
 
   isValid(isFormValid: boolean): void {

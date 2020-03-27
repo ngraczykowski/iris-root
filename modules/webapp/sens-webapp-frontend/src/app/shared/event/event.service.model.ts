@@ -26,4 +26,5 @@ export const enum EventKey {
 
   OPEN_EDIT_PROFILE = 'openEditProfile',
   OPEN_NEW_PROFILE = 'openNewProfile',
+  OPEN_RESET_PASSWORD = 'openResetPassword',
 }

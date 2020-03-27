@@ -91,6 +91,22 @@ app.patch('/rest/webapp/api/users/:userName', (req, res) => {
   }
 });
 
+app.patch('/rest/webapp/api/users/:userName/password/reset', (req, res) => {
+  dataFile = fs.readFileSync(`${dataFolder}/users.json`);
+  let json = JSON.parse(dataFile);
+  const userObject = getUserObjectByUserName(req.params.userName, json.content);
+
+  if (userObject.index !== null && userObject.user !== null) {
+    res.status(200).send(JSON.stringify(
+      {
+        "temporaryPassword": "Q2fqvnHW"
+      }
+    ));
+  } else {
+    res.status(404).send();
+  }
+});
+
 app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
   const id = req.params.branchId

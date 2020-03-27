@@ -23,7 +23,8 @@
         },
         "profile": {
           "label": "Profile",
-          "edit": "Edit"
+          "edit": "Edit",
+          "resetPassword": "Reset password"
         }
       }
     },
@@ -31,7 +32,8 @@
       "header": {
         "headline": {
           "add": "Add New SENS User",
-          "edit": "Edit User Profile"
+          "edit": "Edit User Profile",
+          "resetPassword":"Reset password"
         }
       },
       "content": {
@@ -57,6 +59,7 @@
         },
         "password": {
           "label": "Password",
+          "temporaryPassword": "Temporary password",
           "input": {
             "placeholder": "Password of 8 characters with one digit"
           },
@@ -66,6 +69,11 @@
             },
             "letter": "The password contains minimum of one letter",
             "digit": "The password contains minimum of one digit"
+          },
+          "popup": {
+            "content": "Are you sure you want to reset {{ user }} user password?",
+            "loading": "Reseting password please wait.",
+            "newPassword": "New password for {{ user }} is: <b>{{ password }}</b>."
           }
         },
         "role": {
@@ -94,14 +102,17 @@
         },
         "validation": {
           "generalValidationError": "Failed to save changes. Please make sure that the provided data meets the input field requirements.",
-          "insufficientStorage": "Failed to save changes to auth server, please try again."
+          "insufficientStorage": "Failed to save changes to auth server, please try again.",
+          "unauthorized": "Unauthorized error occured, please log in and try again.",
+          "notFound": "Not found error occured, please try again."
         }
       },
       "footer": {
         "buttonClose": "Cancel",
         "buttonAdd": "Add New User",
         "buttonApply": "Apply Changes",
-        "buttonActionTooltip": "Fill required field to enable this button"
+        "buttonActionTooltip": "Fill required field to enable this button",
+        "buttonResetPassword": "Reset password"
       }
     }
   },
