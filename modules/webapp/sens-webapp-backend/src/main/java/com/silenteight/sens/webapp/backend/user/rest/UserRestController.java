@@ -127,6 +127,7 @@ class UserRestController {
   }
 
   @PatchMapping("/{username}/password/reset")
+  @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<TemporaryPasswordDto> resetPassword(@PathVariable String username) {
     log.debug(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
     Try<TemporaryPassword> result = Try.of(() -> resetPasswordUseCase.execute(username));
