@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.password.ResettableUserCredentials;
-import com.silenteight.sens.webapp.user.password.TemporaryPassword;
+import com.silenteight.sens.webapp.user.password.reset.ResettableUserCredentials;
+import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;

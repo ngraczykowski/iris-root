@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 
 import com.silenteight.sens.webapp.keycloak.usermanagement.id.KeycloakUserIdProvider;
 import com.silenteight.sens.webapp.user.domain.UserOrigin;
-import com.silenteight.sens.webapp.user.password.TemporaryPassword;
+import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

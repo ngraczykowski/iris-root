@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.password;
+package com.silenteight.sens.webapp.user.password.reset;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

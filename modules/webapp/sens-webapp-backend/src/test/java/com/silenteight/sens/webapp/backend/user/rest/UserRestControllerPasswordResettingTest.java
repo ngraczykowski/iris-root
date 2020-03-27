@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
-import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
-import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCase.UserNotFoundException;
-import com.silenteight.sens.webapp.user.password.TemporaryPassword;
+import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
+import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
+import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
 
 import org.junit.jupiter.api.Test;
 

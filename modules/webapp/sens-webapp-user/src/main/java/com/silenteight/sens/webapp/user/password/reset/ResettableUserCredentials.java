@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.password;
+package com.silenteight.sens.webapp.user.password.reset;
 
 public interface ResettableUserCredentials {
 

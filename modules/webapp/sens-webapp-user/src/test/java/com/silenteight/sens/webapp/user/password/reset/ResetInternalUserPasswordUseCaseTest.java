@@ -1,11 +1,12 @@
-package com.silenteight.sens.webapp.user.password;
+package com.silenteight.sens.webapp.user.password.reset;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
-import com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCase.UserNotFoundException;
+import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator;
+import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
+import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
@@ -14,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.GENERATED_PASSWORD;
-import static com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.INTERNAL_CREDENTIALS;
-import static com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.NON_INTERNAL_CREDENTIALS;
-import static com.silenteight.sens.webapp.user.password.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.USERNAME;
+import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.GENERATED_PASSWORD;
+import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.INTERNAL_CREDENTIALS;
+import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.NON_INTERNAL_CREDENTIALS;
+import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.USERNAME;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -35,7 +36,7 @@ class ResetInternalUserPasswordUseCaseTest {
   private UserCredentialsRepository credentialsRepo;
 
   @Mock
-  private TemporaryPasswordGenerator passwordGenerator;
+  private SensCompatiblePasswordGenerator passwordGenerator;
 
   @Test
   void userDoesntExist_throwsException() {

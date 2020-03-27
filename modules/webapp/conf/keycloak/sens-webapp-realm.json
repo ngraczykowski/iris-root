@@ -1884,6 +1884,7 @@
     "FreeOTP",
     "Google Authenticator"
   ],
+  "passwordPolicy": "length(8) and lowerCase(1) and digits(1)",
   "permanentLockout": false,
   "quickLoginCheckMilliSeconds": 1000,
   "realm": "sens-webapp",
