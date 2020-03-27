@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
@@ -31,6 +32,8 @@ class SyncAnalystRestController {
   @PostMapping("/users/sync/analysts")
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<SyncAnalystStatsDto> synchronize() {
+    log.debug(USER_MANAGEMENT, "Synchronizing Analysts");
+
     return ok(
         syncAnalystsUseCase
             .map(SyncAnalystsUseCase::synchronize)

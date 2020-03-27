@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.lang.String.format;
 
 @Slf4j
@@ -38,12 +39,12 @@ class DatabaseExternalAnalystRepository implements ExternalAnalystRepository {
 
   @Override
   public Collection<Analyst> list() {
-    log.debug("Querying Analysts with {} query", activeUsersQuery);
+    log.debug(USER_MANAGEMENT, "Querying Analysts. query={}", activeUsersQuery);
 
     List<Analyst> analysts =
         jdbcTemplate.query(activeUsersQuery, (rs, rowNum) -> createAnalyst(rs));
 
-    log.debug("Found {} Analysts", analysts.size());
+    log.debug(USER_MANAGEMENT, "Found {} Analysts", analysts.size());
 
     return analysts;
   }

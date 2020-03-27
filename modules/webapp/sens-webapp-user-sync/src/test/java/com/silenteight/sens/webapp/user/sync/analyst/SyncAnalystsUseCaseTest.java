@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.user.sync.analyst;
 
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.Result;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
@@ -18,9 +19,12 @@ import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANAL
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.NEW_ANALYST;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.RESTORED_ANALYST;
 import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.*;
+import static com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.OperationResult.SUCCESS;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.LongStream.range;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -55,20 +59,30 @@ class SyncAnalystsUseCaseTest {
             GNS_USER,
             DELETED_GNS_USER));
     when(externalAnalystRepository.list()).thenReturn(emptyList());
+    when(bulkAnalystService.create(any(BulkCreateAnalystsRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.restore(any(BulkRestoreAnalystsRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.addRole(any(BulkAddAnalystRoleRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.updateDisplayName(any(BulkUpdateDisplayNameRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.delete(any(BulkDeleteAnalystsRequest.class)))
+        .thenReturn(createResult(2));
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();
 
     // then
-    assertThat(stats.getAdded()).isEqualTo(0);
-    assertThat(stats.getRestored()).isEqualTo(0);
-    assertThat(stats.getAddedRole()).isEqualTo(0);
-    assertThat(stats.getUpdatedDisplayName()).isEqualTo(0);
-    assertThat(stats.getDeleted()).isEqualTo(2);
-    verify(bulkAnalystService, never()).create(any());
-    verify(bulkAnalystService, never()).restore(any());
-    verify(bulkAnalystService, never()).addRole(any());
-    verify(bulkAnalystService, never()).updateDisplayName(any());
+    assertThat(stats.getAdded()).isEqualTo("0 / 0");
+    assertThat(stats.getRestored()).isEqualTo("0 / 0");
+    assertThat(stats.getAddedRole()).isEqualTo("0 / 0");
+    assertThat(stats.getUpdatedDisplayName()).isEqualTo("0 / 0");
+    assertThat(stats.getDeleted()).isEqualTo("2 / 2");
+    verify(bulkAnalystService).create(new BulkCreateAnalystsRequest(emptyList()));
+    verify(bulkAnalystService).restore(new BulkRestoreAnalystsRequest(emptyList()));
+    verify(bulkAnalystService).addRole(new BulkAddAnalystRoleRequest(emptyList()));
+    verify(bulkAnalystService).updateDisplayName(new BulkUpdateDisplayNameRequest(emptyList()));
     verify(bulkAnalystService).delete(
         new BulkDeleteAnalystsRequest(
             asList(
@@ -82,16 +96,26 @@ class SyncAnalystsUseCaseTest {
     when(userListQuery.listAll()).thenReturn(emptyList());
     when(externalAnalystRepository.list()).thenReturn(
         asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME, NEW_ANALYST));
+    when(bulkAnalystService.create(any(BulkCreateAnalystsRequest.class)))
+        .thenReturn(createResult(3));
+    when(bulkAnalystService.restore(any(BulkRestoreAnalystsRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.addRole(any(BulkAddAnalystRoleRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.updateDisplayName(any(BulkUpdateDisplayNameRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.delete(any(BulkDeleteAnalystsRequest.class)))
+        .thenReturn(createResult(0));
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();
 
     // then
-    assertThat(stats.getAdded()).isEqualTo(3);
-    assertThat(stats.getRestored()).isEqualTo(0);
-    assertThat(stats.getAddedRole()).isEqualTo(0);
-    assertThat(stats.getUpdatedDisplayName()).isEqualTo(0);
-    assertThat(stats.getDeleted()).isEqualTo(0);
+    assertThat(stats.getAdded()).isEqualTo("3 / 3");
+    assertThat(stats.getRestored()).isEqualTo("0 / 0");
+    assertThat(stats.getAddedRole()).isEqualTo("0 / 0");
+    assertThat(stats.getUpdatedDisplayName()).isEqualTo("0 / 0");
+    assertThat(stats.getDeleted()).isEqualTo("0 / 0");
     verify(bulkAnalystService).create(
         new BulkCreateAnalystsRequest(
             asList(
@@ -102,10 +126,10 @@ class SyncAnalystsUseCaseTest {
                     ANALYST_WITH_DISPLAY_NAME.getUserName(),
                     ANALYST_WITH_DISPLAY_NAME.getDisplayName()),
                 new NewAnalyst(NEW_ANALYST.getUserName(), NEW_ANALYST.getDisplayName()))));
-    verify(bulkAnalystService, never()).restore(any());
-    verify(bulkAnalystService, never()).addRole(any());
-    verify(bulkAnalystService, never()).updateDisplayName(any());
-    verify(bulkAnalystService, never()).delete(any());
+    verify(bulkAnalystService).restore(new BulkRestoreAnalystsRequest(emptyList()));
+    verify(bulkAnalystService).addRole(new BulkAddAnalystRoleRequest(emptyList()));
+    verify(bulkAnalystService).updateDisplayName(new BulkUpdateDisplayNameRequest(emptyList()));
+    verify(bulkAnalystService).delete(new BulkDeleteAnalystsRequest(emptyList()));
   }
 
   @Test
@@ -124,16 +148,26 @@ class SyncAnalystsUseCaseTest {
             ANALYST_WITH_DISPLAY_NAME,
             NEW_ANALYST,
             RESTORED_ANALYST));
+    when(bulkAnalystService.create(any(BulkCreateAnalystsRequest.class)))
+        .thenReturn(createResult(1));
+    when(bulkAnalystService.restore(any(BulkRestoreAnalystsRequest.class)))
+        .thenReturn(createResult(1));
+    when(bulkAnalystService.addRole(any(BulkAddAnalystRoleRequest.class)))
+        .thenReturn(createResult(1));
+    when(bulkAnalystService.updateDisplayName(any(BulkUpdateDisplayNameRequest.class)))
+        .thenReturn(createResult(1));
+    when(bulkAnalystService.delete(any(BulkDeleteAnalystsRequest.class)))
+        .thenReturn(createResult(1));
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();
 
     // then
-    assertThat(stats.getAdded()).isEqualTo(1);
-    assertThat(stats.getRestored()).isEqualTo(1);
-    assertThat(stats.getAddedRole()).isEqualTo(1);
-    assertThat(stats.getUpdatedDisplayName()).isEqualTo(1);
-    assertThat(stats.getDeleted()).isEqualTo(1);
+    assertThat(stats.getAdded()).isEqualTo("1 / 1");
+    assertThat(stats.getRestored()).isEqualTo("1 / 1");
+    assertThat(stats.getAddedRole()).isEqualTo("1 / 1");
+    assertThat(stats.getUpdatedDisplayName()).isEqualTo("1 / 1");
+    assertThat(stats.getDeleted()).isEqualTo("1 / 1");
     verify(bulkAnalystService).create(
         new BulkCreateAnalystsRequest(
             singletonList(
@@ -151,5 +185,9 @@ class SyncAnalystsUseCaseTest {
                     ANALYST_WITH_DISPLAY_NAME.getDisplayName()))));
     verify(bulkAnalystService).delete(
         new BulkDeleteAnalystsRequest(singletonList(GNS_USER.getUserName())));
+  }
+
+  private static Result createResult(long success) {
+    return new Result(range(0, success).mapToObj(i -> SUCCESS).collect(toList()));
   }
 }

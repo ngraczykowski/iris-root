@@ -8,6 +8,7 @@ import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.Result;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
@@ -17,6 +18,7 @@ import com.silenteight.sens.webapp.user.sync.analyst.dto.SyncAnalystStatsDto;
 import java.util.Collection;
 import java.util.List;
 
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -29,27 +31,28 @@ public class SyncAnalystsUseCase {
   private final BulkAnalystService bulkAnalystService;
 
   public SyncAnalystStatsDto synchronize() {
+    log.debug(USER_MANAGEMENT, "Synchronizing Analysts");
+
     Collection<UserDto> users = userListQuery.listAll();
     Collection<Analyst> analysts = externalAnalystRepository.list();
-    SynchronizedAnalysts result = analystSynchronizer.synchronize(users, analysts);
+    SynchronizedAnalysts syncResult = analystSynchronizer.synchronize(users, analysts);
 
-    createAnalysts(result.getAdded());
-    restoreAnalysts(result.getRestored());
-    addAnalystRoles(result.getAddedRole());
-    updateDisplayNames(result.getUpdatedDisplayName());
-    deleteAnalysts(result.getDeleted());
+    Result addedResult = createAnalysts(syncResult.getAdded());
+    Result restoredResult = restoreAnalysts(syncResult.getRestored());
+    Result addedRoleResult = addAnalystRoles(syncResult.getAddedRole());
+    Result updatedDisplayNameResult = updateDisplayNames(syncResult.getUpdatedDisplayName());
+    Result deletedResult = deleteAnalysts(syncResult.getDeleted());
 
     return new SyncAnalystStatsDto(
-        result.addedCount(),
-        result.restoredCount(),
-        result.addedRoleCount(),
-        result.updatedDisplayNameCount(),
-        result.deletedCount());
+        addedResult.asMessage(),
+        restoredResult.asMessage(),
+        addedRoleResult.asMessage(),
+        updatedDisplayNameResult.asMessage(),
+        deletedResult.asMessage());
   }
 
-  private void createAnalysts(List<Analyst> analysts) {
-    if (!analysts.isEmpty())
-      bulkAnalystService.create(createBulkCreateAnalystsRequest(analysts));
+  private Result createAnalysts(List<Analyst> analysts) {
+    return bulkAnalystService.create(createBulkCreateAnalystsRequest(analysts));
   }
 
   private static BulkCreateAnalystsRequest createBulkCreateAnalystsRequest(
@@ -65,19 +68,16 @@ public class SyncAnalystsUseCase {
         .collect(toList());
   }
 
-  private void restoreAnalysts(List<String> usernames) {
-    if (!usernames.isEmpty())
-      bulkAnalystService.restore(new BulkRestoreAnalystsRequest(usernames));
+  private Result restoreAnalysts(List<String> usernames) {
+    return bulkAnalystService.restore(new BulkRestoreAnalystsRequest(usernames));
   }
 
-  private void addAnalystRoles(List<String> usernames) {
-    if (!usernames.isEmpty())
-      bulkAnalystService.addRole(new BulkAddAnalystRoleRequest(usernames));
+  private Result addAnalystRoles(List<String> usernames) {
+    return bulkAnalystService.addRole(new BulkAddAnalystRoleRequest(usernames));
   }
 
-  private void updateDisplayNames(List<UpdatedAnalyst> analysts) {
-    if (!analysts.isEmpty())
-      bulkAnalystService.updateDisplayName(createBulkUpdateDisplayNameRequest(analysts));
+  private Result updateDisplayNames(List<UpdatedAnalyst> analysts) {
+    return bulkAnalystService.updateDisplayName(createBulkUpdateDisplayNameRequest(analysts));
   }
 
   private static BulkUpdateDisplayNameRequest createBulkUpdateDisplayNameRequest(
@@ -93,8 +93,7 @@ public class SyncAnalystsUseCase {
         .collect(toList());
   }
 
-  private void deleteAnalysts(List<String> usernames) {
-    if (!usernames.isEmpty())
-      bulkAnalystService.delete(new BulkDeleteAnalystsRequest(usernames));
+  private Result deleteAnalysts(List<String> usernames) {
+    return bulkAnalystService.delete(new BulkDeleteAnalystsRequest(usernames));
   }
 }

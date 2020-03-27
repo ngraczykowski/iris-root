@@ -5,9 +5,9 @@ import lombok.Value;
 @Value
 public class SyncAnalystStatsDto {
 
-  int added;
-  int restored;
-  int addedRole;
-  int updatedDisplayName;
-  int deleted;
+  String added;
+  String restored;
+  String addedRole;
+  String updatedDisplayName;
+  String deleted;
 }
