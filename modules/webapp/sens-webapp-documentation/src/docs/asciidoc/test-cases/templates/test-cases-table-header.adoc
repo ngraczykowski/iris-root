@@ -1,7 +1,9 @@
 :case-number: 0
 
+// Do not append "a" param to counter column
+// https://github.com/asciidoctor/asciidoctor-pdf/issues/912
 .{testCasesName} test cases.
-[cols="10%a,45%a,45%a",options=header]
+[cols="10%,45%a,45%a",options=header]
 |===
 |
 |Action
