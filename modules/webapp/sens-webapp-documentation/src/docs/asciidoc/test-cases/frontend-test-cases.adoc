@@ -9,9 +9,5 @@ for brevity we have omitted test cases for user with Admin role only, but we enc
 include::frontend/rb-authorization.adoc[leveloffset=+2]
 include::frontend/rb-management.adoc[leveloffset=+2]
 
-== Users
-
-include::frontend/users-authorization.adoc[leveloffset=+2]
-include::frontend/users-add.adoc[leveloffset=+2]
-
-include::frontend/reports.adoc[leveloffset=+2]
+include::frontend/users.adoc[leveloffset=+1]
+include::frontend/reports.adoc[leveloffset=+1]

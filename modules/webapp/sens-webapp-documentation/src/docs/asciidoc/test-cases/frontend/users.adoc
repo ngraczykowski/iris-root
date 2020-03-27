@@ -1,0 +1,16 @@
+= Users
+Definitions:
+
+* Correct username - string between 3 and 30 characters inclusive, consisting of lowercase alphanumeric characters and/or optionally special characters including - _ @
+* Incorrect username - any string not matching rules of Correct name
+* Correct display name - any string between 3 and 50 characters inclusive
+* Incorrect display name - any string shorter than 3 characters and longer than 50 characters exclusive
+* Correct password - any string longer than 8 characters inclusive, with at least one letter and one digit
+* Incorrect password - any string not matching rules of Correct password
+* Temporary password - a generated password that is shown after clicking `Reset password` on user edit dialog
+
+include::users/authorization.adoc[leveloffset=+1]
+
+include::users/add.adoc[leveloffset=+1]
+include::users/edit.adoc[leveloffset=+1]
+

@@ -1,4 +1,4 @@
-= Sync analysts
+= Sync Analysts
 
 Synchronize external users with an analyst role.
 

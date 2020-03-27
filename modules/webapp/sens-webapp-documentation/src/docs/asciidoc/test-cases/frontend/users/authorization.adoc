@@ -1,7 +1,7 @@
 = Authorization
 
 :testCasesName: User Management authorization
-include::../templates/test-cases-table-header.adoc[]
+include::../../templates/test-cases-table-header.adoc[]
 
 |{counter:case-number}
 |Login as non-admin user
@@ -27,4 +27,4 @@ include::../templates/test-cases-table-header.adoc[]
 |Login as admin user, click User Management tab, click "Add new user" button and click "Cancel" button
 |You should see users lists with no changes and no reload
 
-include::../templates/test-cases-table-footer.adoc[]
+include::../../templates/test-cases-table-footer.adoc[]
