@@ -46,7 +46,8 @@ Example output with expected response looks like this:
 [listing,indent=0]
 [subs=+quotes]
 ----
-Analysts synchronized. Following operations were performed:
+Analysts synchronized. Following operations were performed
+(presented in the following format: successful operations / all operations):
 - added users: 40 / 40
 - restored users: 0 / 0
 - added "Analyst" role to users: 0 / 0
