@@ -8,15 +8,16 @@
   <perfect-scrollbar #modalContentScroll>
     <div class="popup-window-content">
       <app-user-form
-        #userForm
-        [editProfile]="editProfile"
-        [userRoles]="userRoles$ | async"
-        [usersList]="usersList"
-        [resetPasswordInProgress]="resetPasswordInProgress"
-        [temporaryPassword]="temporaryPassword"
-        (formValueChanged)="onValueChanged($event)"
-        (isValid)="isValid($event)"
-        (resetPassword)="resetPassword($event)"
+              #userForm
+              [editProfile]="editProfile"
+              [userRoles]="userRoles$ | async"
+              [userData]="userData"
+              [usersList]="usersList"
+              [resetPasswordInProgress]="resetPasswordInProgress"
+              [temporaryPassword]="temporaryPassword"
+              (formValueChanged)="onValueChanged($event)"
+              (isValid)="isValid($event)"
+              (resetPassword)="resetPassword($event)"
       >
       </app-user-form>
     </div>

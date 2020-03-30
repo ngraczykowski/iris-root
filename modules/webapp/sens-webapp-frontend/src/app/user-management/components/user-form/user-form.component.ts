@@ -16,9 +16,9 @@ import {
   Validators
 } from '@angular/forms';
 import { UserValidators } from '@app/templates/user-management/user-profile/validators/user-validators';
-import { UserRoles } from '@app/user-management/models/users';
-import { Subscription } from 'rxjs';
+import { User, UserRoles } from '@app/user-management/models/users';
 import { UserManagementService } from '@app/user-management/services/user-management.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-form',
@@ -56,6 +56,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   @Output() resetPassword = new EventEmitter();
   @Input() usersList;
   @Input() userRoles: UserRoles;
+  @Input() userData: User;
   @Input() editProfile = false;
   @Input() temporaryPassword;
   @Input() resetPasswordInProgress;

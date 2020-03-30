@@ -15,16 +15,27 @@
         [class.is-active]="userForm.hasError('notFound')"
         [message]="userProfilePrefix + 'validation.notFound'"></app-feedback-message>
 <form [formGroup]="userForm" class="user-profile">
+  <section class="user-profile-section user-profile-row " *ngIf="editProfile">
+    <label class="user-profile-section-label"
+           [translate]="userProfilePrefix + 'username.label'"></label>
+    <div class="user-profile-section-content">
+      <div class="user-profile-section-content-main">
+        <input type="text" class="disabled input-field"
+               placeholder="{{userData.userName}}"
+               disabled/>
+      </div>
+    </div>
+  </section>
   <section class="user-profile-section user-profile-row " *ngIf="!editProfile">
     <label class="user-profile-section-label"
-          [translate]="userProfilePrefix + 'username.label'"></label>
+           [translate]="userProfilePrefix + 'username.label'"></label>
     <div class="user-profile-section-content">
       <div class="user-profile-section-content-main">
         <input type="text" class="input-field"
-              formControlName="userName"
-              placeholder="{{ userProfilePrefix + 'username.input.placeholder' | translate }}"
-              (keyup)="isUsernameUnique(username.value)"
-              #username/>
+               formControlName="userName"
+               placeholder="{{ userProfilePrefix + 'username.input.placeholder' | translate }}"
+               (keyup)="isUsernameUnique(username.value)"
+               #username/>
       </div>
       <app-validation-feedback
               [content]="userProfilePrefix + 'username.validation.unique'"
@@ -79,20 +90,20 @@
   <section class="user-profile-section user-profile-row" *ngIf="editProfile">
     <label class="user-profile-section-label"
            [translate]="userProfilePrefix + 'password.temporaryPassword'"></label>
-    <button 
-      class="button-outline" 
-      *ngIf="!resetPasswordInProgress && !temporaryPassword"
-      (click)="onResetPassword(userForm.controls.userName.value)"
+    <button
+            class="button-outline"
+            *ngIf="!resetPasswordInProgress && !temporaryPassword"
+            (click)="onResetPassword(userForm.controls.userName.value)"
     >
       Reset password
     </button>
-    <span 
-      *ngIf="resetPasswordInProgress"
-      [translate]="'usersManagement.userProfile.content.password.popup.loading'">
+    <span
+            *ngIf="resetPasswordInProgress"
+            [translate]="'usersManagement.userProfile.content.password.popup.loading'">
     </span>
-    <span 
-      *ngIf="temporaryPassword && !resetPasswordInProgress" 
-      [innerHTML]="'usersManagement.userProfile.content.password.popup.newPassword' | translate: {user: userForm.controls.userName.value, password: temporaryPassword}">
+    <span
+            *ngIf="temporaryPassword && !resetPasswordInProgress"
+            [innerHTML]="'usersManagement.userProfile.content.password.popup.newPassword' | translate: {user: userForm.controls.userName.value, password: temporaryPassword}">
     </span>
   </section>
   <section formGroupName="roles" class="user-profile-section">
