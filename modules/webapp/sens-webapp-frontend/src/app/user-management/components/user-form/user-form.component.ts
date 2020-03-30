@@ -144,11 +144,20 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   checkBoxChanged() {
+    this.checkIfAdminCheckboxChecked();
     this.formValueChanged.emit({...this.userForm.value, roles: this.userForm.controls.roles.value});
   }
 
   onResetPassword(userName) {
     this.resetPassword.emit(userName);
+  }
+
+  private checkIfAdminCheckboxChecked() {
+    const adminIndex = this.userRoles.roles.findIndex(role => role.label === 'admin');
+    if (this.userForm.controls.roles.value[adminIndex]) {
+      const expectedRoles = new Array(this.userRoles.roles.length).fill(true);
+      this.userForm.controls.roles.setValue(expectedRoles);
+    }
   }
 
   private onFormChanges(): void {
