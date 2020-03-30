@@ -11,11 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 class KeycloakRolesConfiguration {
 
   @Bean
-  RolesFetcher rolesFetcher(RolesResource rolesResource, InternalRoleFilter internalRoleFilter) {
-    return new RolesFetcher(rolesResource, internalRoleFilter);
-  }
-
-  @Bean
   RolesProvider rolesProvider(RealmResource realmResource, InternalRoleFilter internalRoleFilter) {
     return new SingleRequestRoleProvider(realmResource, internalRoleFilter);
   }
