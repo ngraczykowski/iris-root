@@ -43,8 +43,8 @@
               [type]="!hasError('notUnique','userName') ? 'positive' : 'negative'"></app-validation-feedback>
       <app-validation-feedback
               [content]="userProfilePrefix + 'username.validation.length'"
-              [active]="username.value && username.value.length >= 3"
-              [type]="username.value.length <= 30 ? 'positive' : 'negative'"></app-validation-feedback>
+              [active]="username.value"
+              [type]="username.value.length <= 30 && username.value.length >= 3 ? 'positive' : 'negative'"></app-validation-feedback>
       <app-validation-feedback
               [content]="userProfilePrefix + 'username.validation.characters'"
               [active]="username.value"
@@ -62,8 +62,8 @@
       </div>
       <app-validation-feedback
               [content]="userProfilePrefix + 'displayName.validation.length'"
-              [active]="displayName.value && displayName.value.length >= 3"
-              [type]="displayName.value.length <= 50 ? 'positive' : 'negative'"></app-validation-feedback>
+              [active]="displayName.value"
+              [type]="displayName.value.length <= 50 && displayName.value.length >= 3 ? 'positive' : 'negative'"></app-validation-feedback>
     </div>
   </section>
   <section class="user-profile-section user-profile-row" *ngIf="!editProfile">
@@ -75,16 +75,16 @@
              #password/>
       <app-validation-feedback
               [content]="userProfilePrefix + 'password.validation.length.minLength'"
-              [active]="password.value && !hasError('minlength', 'password')"
-              [type]="'positive'"></app-validation-feedback>
+              [active]="password.value"
+              [type]="!hasError('minlength', 'password') ? 'positive' : 'negative'"></app-validation-feedback>
       <app-validation-feedback
               [content]="userProfilePrefix + 'password.validation.letter'"
-              [active]="password.value && !hasError('minOneLetter', 'password')"
-              [type]="'positive'"></app-validation-feedback>
+              [active]="password.value"
+              [type]="!hasError('minOneLetter', 'password') ? 'positive' : 'negative'"></app-validation-feedback>
       <app-validation-feedback
               [content]="userProfilePrefix + 'password.validation.digit'"
-              [active]="password.value && !hasError('minOneDigit', 'password')"
-              [type]="'positive'"></app-validation-feedback>
+              [active]="password.value"
+              [type]="!hasError('minOneDigit', 'password') ? 'positive' : 'negative'"></app-validation-feedback>
     </div>
   </section>
   <section class="user-profile-section user-profile-row" *ngIf="editProfile">
