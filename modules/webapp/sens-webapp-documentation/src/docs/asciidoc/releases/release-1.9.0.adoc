@@ -1,13 +1,14 @@
 :release_version: 1.9.0
+:issue_url: https://youtrack.silenteight.com/issue/
 
 = Release {release_version}
 
-- STATUS: *DEVELOPMENT*
-- Release date: *TBA*
+- STATUS: *RELEASED*
+- Release date: *30.03.2020*
 - https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
 - https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp/sens-webapp-backend/{release_version}[Jars in Artifactory]
-- [WebApp version bump commit]
-- [SERP master MR]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/46d227c3e12a6868e80a9b4124cd58b2dedd3bcb[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1198[SERP master MR]
 
 // --------------------------------------------------------------------
 
@@ -18,12 +19,43 @@
 |Issues
 |Description
 
-|https://youtrack.silenteight.com/issue/WA-370[WA-370], https://youtrack.silenteight.com/issue/WA-371[WA-371]
-|Add changes auditing through application logs for Reasoning Branches and User Management modules.
+|{issue_url}WA-370[WA-370]
+|Auditing changes in Reasoning Branches module through application logs.
 
-|https://youtrack.silenteight.com/issue/WA-165[WA-165], https://youtrack.silenteight.com/issue/WA-220[WA-220]
-|Add ability to edit user's display names and roles by a user with Admin role.
+|{issue_url}WA-371[WA-371]
+|Auditing changes in User Management module through application logs.
 
-|https://youtrack.silenteight.com/issue/WA-175[WA-175]
+|{issue_url}WA-220[WA-220]
+|Add ability to edit user's display names by a user with Admin role.
+
+|{issue_url}WA-165[WA-165]
+|Add ability to edit user's roles by a user with Admin role.
+
+|{issue_url}WA-175[WA-175]
 |Add ability to change user's password by a user with Admin role.
+|===
+
+== Enhancements
+
+[cols="1,3",options="header"]
+|===
+|Issues
+|Description
+
+|{issue_url}WA-473[WA-473]
+|Present error message when Security Matrix reports cannot be downloaded.
+
+|{issue_url}WA-519[WA-519]
+|Enforce the same password validation rules on Auth server side as on SENS UI side.
+|===
+
+== Bug fixes
+
+[cols="1,3",options="header"]
+|===
+|Issues
+|Description
+
+|{issue_url}WA-483[WA-483]
+|Add possibility to display and edit Reasoning Branches which weren't created automatically by the system.
 |===
