@@ -54,6 +54,7 @@ export class ReasoningBranchManagementPageComponent implements OnInit {
   }
 
   applyChanges() {
+    this.branchDetails = this.branchDetailsForm.branchForm.value;
     this.updateReasoningBranch(this.loadBranch.enteredID);
   }
 
