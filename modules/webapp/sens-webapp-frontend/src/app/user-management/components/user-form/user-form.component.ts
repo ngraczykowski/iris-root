@@ -50,6 +50,8 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   });
   valueChangesSubscription: Subscription;
   userProfilePrefix = 'usersManagement.userProfile.content.';
+  adminCheckboxIndex: number;
+  adminChecked = false;
 
   @Output() formValueChanged = new EventEmitter();
   @Output() isValid = new EventEmitter();
@@ -77,6 +79,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges() {
     if (this.userRoles !== null && this.userRoles.roles.length > 0) {
+      this.adminCheckboxIndex = this.userRoles.roles.findIndex(role => role.label === 'admin');
       this.getUserRolesFormControls();
     }
 
@@ -102,7 +105,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
     });
-
+    this.checkIfAdminCheckboxChecked();
     this.userForm.removeControl('password');
   }
 
@@ -154,10 +157,12 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private checkIfAdminCheckboxChecked() {
-    const adminIndex = this.userRoles.roles.findIndex(role => role.label === 'admin');
-    if (this.userForm.controls.roles.value[adminIndex]) {
+    if (this.userForm.controls.roles.value[this.adminCheckboxIndex]) {
+      this.adminChecked = true;
       const expectedRoles = new Array(this.userRoles.roles.length).fill(true);
       this.userForm.controls.roles.setValue(expectedRoles);
+    } else {
+      this.adminChecked = false;
     }
   }
 
@@ -180,7 +185,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getUserRolesFormControls(): void {
-    if (!this.editProfile) {
+    if (!this.editProfile && this.userForm.controls.roles.value.length === 0) {
       this.userForm.controls.roles = new FormArray([]);
       this.userRoles.roles.map(() => {
         (this.userForm.controls.roles as FormArray).push(new FormControl(false));

@@ -64,6 +64,7 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
     this.showModal = false;
     this.temporaryPassword = null;
     this.resetPasswordInProgress = false;
+    this.userFormRef.adminChecked = false;
     this.userFormRef.userForm.reset();
   }
 
@@ -87,6 +88,7 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
       this.showModal = false;
       this.temporaryPassword = null;
       this.resetPasswordInProgress = false;
+      this.userFormRef.adminChecked = false;
       this.userFormRef.userForm.reset();
     }, error => this.userFormRef.showError(error.status));
   }

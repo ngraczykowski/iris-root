@@ -110,8 +110,8 @@
     <label class="user-profile-section-label optional"
            [translate]="userProfilePrefix + 'role.label'"></label>
     <div class="user-profile-section-content">
-      <ng-container *ngFor="let role of rolesControls.controls; let i = index">
-        <section class="user-profile-role">
+      <ng-container *ngFor="let role of rolesControls.controls; let i = index;">
+        <section class="user-profile-role" [hidden]="adminChecked && i !== adminCheckboxIndex">
           <label class="role-checkbox" [for]="userRoles.roles[i].role">
             <span [translate]="userProfilePrefix + 'role.roles.' + userRoles.roles[i].label + '.label'"></span>
             <input type="checkbox" [id]="userRoles.roles[i].role" [formControlName]="i" (change)="checkBoxChanged()">

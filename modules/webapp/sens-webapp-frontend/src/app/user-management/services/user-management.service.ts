@@ -7,12 +7,17 @@ import { User, UserResponse, UserRoles, UserRolesResponse } from '../models/user
 @Injectable()
 export class UserManagementService {
   userRoles$ = new BehaviorSubject<UserRoles>(null);
+  adminIndex;
 
   constructor(
     private http: HttpClient
   ) {
     this.getUserRoles().subscribe(response => {
-      const mappedRoles = response.roles.map(role => {
+      const mappedRoles = response.roles.map((role, index) => {
+        if (role === 'Admin') {
+          this.adminIndex = index;
+        }
+
         let translationLabel = role.replace(/\s/g, '');
         translationLabel = translationLabel.charAt(0).toLowerCase() + translationLabel.substring(1);
         return {role: role, label: translationLabel};
@@ -44,9 +49,15 @@ export class UserManagementService {
     return this.http.patch(`${environment.serverApiUrl}/users/${userName}/password/reset`, null);
   }
 
-  private mapToRoles(rolesPayload: String[]): String[] {
+  private mapToRoles(rolesPayload: Array<String | boolean>): String[] {
     const mappedRoles = [];
-    rolesPayload.forEach((role, index) => role ? mappedRoles.push(this.userRoles$.value.roles[index].role) : false);
+
+    if (rolesPayload[this.adminIndex]) {
+      mappedRoles.push('Admin');
+    } else {
+      rolesPayload.forEach((role, index) => role ? mappedRoles.push(this.userRoles$.value.roles[index].role) : false);
+    }
+
     return mappedRoles;
   }
 }
