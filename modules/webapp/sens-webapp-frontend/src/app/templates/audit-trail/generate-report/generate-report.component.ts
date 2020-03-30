@@ -2,6 +2,8 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';
 import { WINDOW } from '@app/shared/window.service';
+import { HttpClient } from '@angular/common/http';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-generate-report',
@@ -19,6 +21,7 @@ export class GenerateReportComponent implements OnInit {
 
   constructor(
     @Inject(WINDOW) public window: Window,
+    private http: HttpClient,
     private eventService: LocalEventService
   ) { }
 
@@ -26,8 +29,12 @@ export class GenerateReportComponent implements OnInit {
   }
 
   onGenerateReport() {
-    this.window.location.assign(this.reportUrl);
-    this.sendBriefMessage('auditTrail.generateReport.ready.briefMessage');
+    this.http.get(this.reportUrl, { responseType: 'text' })
+      .subscribe(res => {
+        const blob = new Blob([res], { type: 'text/xlsx' });
+        FileSaver.saveAs(blob, 'security-matrix-report.xlsx');
+        this.sendBriefMessage('auditTrail.generateReport.ready.briefMessage');
+      }, () => this.showErrorNotification());
   }
 
   private sendBriefMessage(messageContent) {
@@ -36,6 +43,12 @@ export class GenerateReportComponent implements OnInit {
       data: {
         message: messageContent
       }
+    });
+  }
+
+  private showErrorNotification() {
+    this.eventService.sendEvent({
+      key: EventKey.SHOW_ERROR_WINDOW
     });
   }
 }

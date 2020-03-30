@@ -30,6 +30,7 @@
     "angular-svg-icon": "^7.0.0",
     "core-js": "^2.6.0",
     "cors": "^2.8.5",
+    "file-saver": "^2.0.2",
     "immutable": "^3.8.2",
     "jasmine-marbles": "^0.6.0",
     "keycloak-angular": "^7.0.1",

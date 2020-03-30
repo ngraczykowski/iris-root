@@ -149,6 +149,11 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, re
   }
 });
 
+app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.sendFile(__dirname + '/data/security-matrix-report.xlsx');
+});
+
 function isUserNameUnique(userName, currentUsersList) {
   const isUnique = currentUsersList.filter((user) => {
     return user.userName == userName;
