@@ -73,7 +73,7 @@
           "popup": {
             "content": "Are you sure you want to reset {{ user }} user password?",
             "loading": "Reseting password please wait.",
-            "newPassword": "New password for {{ user }} is: <b>{{ password }}</b>."
+            "newPassword": "New password for {{ user }} is: <b>{{ password }}</b>"
           }
         },
         "role": {

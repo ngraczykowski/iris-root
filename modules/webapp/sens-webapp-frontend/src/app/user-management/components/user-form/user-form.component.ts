@@ -19,6 +19,7 @@ import { UserValidators } from '@app/templates/user-management/user-profile/vali
 import { User, UserRoles } from '@app/user-management/models/users';
 import { UserManagementService } from '@app/user-management/services/user-management.service';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-form',
@@ -67,6 +68,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private userManagementService: UserManagementService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -94,10 +96,10 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  setEditProfileData({userData}) {
+  setEditProfileData({ userData }) {
     this.userForm.controls.userName.setValue(userData.userName);
     this.userForm.controls.displayName.setValue(userData.displayName);
-    const userRolesControl = <FormArray> this.userForm.get('roles');
+    const userRolesControl = <FormArray>this.userForm.get('roles');
     userData.roles.forEach((role) => {
       Object.values(this.userRoles.roles).filter((val, elementIndex) => {
         if (val.role === role) {
@@ -116,23 +118,23 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   showError(httpStatusCode: number): void {
     switch (httpStatusCode) {
       case 409:
-        this.userForm.controls.userName.setErrors({notUnique: true});
+        this.userForm.controls.userName.setErrors({ notUnique: true });
         break;
 
       case 422:
-        this.userForm.setErrors({entityProcessingError: true});
+        this.userForm.setErrors({ entityProcessingError: true });
         break;
 
       case 507:
-        this.userForm.setErrors({insufficientStorage: true});
+        this.userForm.setErrors({ insufficientStorage: true });
         break;
 
       case 401:
-        this.userForm.setErrors({unauthorized: true});
+        this.userForm.setErrors({ unauthorized: true });
         break;
 
       case 404:
-        this.userForm.setErrors({notFound: true});
+        this.userForm.setErrors({ notFound: true });
         break;
 
       default:
@@ -142,18 +144,26 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
 
   isUsernameUnique(userName) {
     if (this.usersList.some(e => e.userName === userName)) {
-      this.userForm.controls.userName.setErrors({notUnique: true});
+      this.userForm.controls.userName.setErrors({ notUnique: true });
       this.isValid.emit(this.userForm.valid);
     }
   }
 
   checkBoxChanged() {
     this.checkIfAdminCheckboxChecked();
-    this.formValueChanged.emit({...this.userForm.value, roles: this.userForm.controls.roles.value});
+    this.formValueChanged.emit({ ...this.userForm.value, roles: this.userForm.controls.roles.value });
   }
 
   onResetPassword(userName) {
-    this.resetPassword.emit(userName);
+    if (confirm(
+        this.translate.instant(
+          'usersManagement.userProfile.content.password.popup.content',
+          { user: userName }
+        )
+      )
+    ) {
+      this.resetPassword.emit(userName);
+    }
   }
 
   private checkIfAdminCheckboxChecked() {

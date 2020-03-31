@@ -47,10 +47,6 @@
         color: $color-text-secondary;
       }
     }
-
-    span {
-      line-height: 36px;
-    }
   }
 
   .role-validation-info {
@@ -141,6 +137,12 @@
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
       border-radius: 2px;
+    }
+  }
+
+  .user-password-reset-row {
+    span {
+      line-height: 36px;
     }
   }
 }
