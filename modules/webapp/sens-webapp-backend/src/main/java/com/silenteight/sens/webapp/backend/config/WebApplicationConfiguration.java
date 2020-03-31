@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.backend.config;
 
-import com.silenteight.sens.webapp.backend.rest.FrontendSettingsController;
-
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,11 +16,6 @@ public class WebApplicationConfiguration {
   @ConfigurationProperties(prefix = "sens.web")
   WebApplicationProperties webApplicationProperties() {
     return new WebApplicationProperties();
-  }
-
-  @Bean
-  FrontendSettingsController frontendSettingsController() {
-    return new FrontendSettingsController();
   }
 
   @Bean

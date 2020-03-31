@@ -6,7 +6,6 @@ import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
 import com.silenteight.sens.webapp.backend.reportscb.ScbReportModule;
-import com.silenteight.sens.webapp.backend.rest.RestModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
@@ -25,7 +24,6 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ApplicationLoggingModule.class,
         ReasoningBranchModule.class,
         ReportModule.class,
-        RestModule.class,
         ScbReportModule.class,
         UserModule.class,
         UserRestModule.class,

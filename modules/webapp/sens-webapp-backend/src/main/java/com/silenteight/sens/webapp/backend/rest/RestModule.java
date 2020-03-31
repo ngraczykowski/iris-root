@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
  * Marker interface for Rest Controllers configuration.
  */
 @Configuration
-public class RestModule {
+interface RestModule {
 
 }

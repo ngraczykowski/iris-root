@@ -3,9 +3,6 @@ package com.silenteight.sens.webapp.common.support.csv;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import com.silenteight.sens.webapp.common.audit.AuditDto;
-
-import org.hibernate.envers.RevisionType;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
@@ -42,15 +39,10 @@ class CsvBuilderTest {
 
   @Data
   @AllArgsConstructor
-  private class SimpleDto implements AuditDto {
+  private class SimpleDto {
 
     private String fieldA;
     private int fieldB;
     private Long fieldC;
-
-    @Override
-    public RevisionType getRevisionType() {
-      return RevisionType.ADD;
-    }
   }
 }
