@@ -103,6 +103,7 @@ export class UserFormContainerComponent implements OnInit, OnDestroy {
         }
       });
       this.showModal = false;
+      this.userFormRef.adminChecked = false;
       this.userFormRef.userForm.reset();
     }, error => {
       this.userFormRef.showError(error.status);
