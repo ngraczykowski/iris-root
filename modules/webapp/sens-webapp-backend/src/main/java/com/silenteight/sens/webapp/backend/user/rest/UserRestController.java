@@ -73,7 +73,7 @@ class UserRestController {
   @GetMapping
   @PreAuthorize(Authority.ADMIN)
   public Page<UserDto> users(Pageable pageable) {
-    log.debug(USER_MANAGEMENT,
+    log.info(USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
         pageable.getPageNumber(),
         pageable.getPageSize());
@@ -83,13 +83,13 @@ class UserRestController {
   @PostMapping
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
-    log.debug(USER_MANAGEMENT, "Creating new User. dto={}", dto);
+    log.info(USER_MANAGEMENT, "Creating new User. dto={}", dto);
 
     Either<UserDomainError, RegisterInternalUserUseCase.Success> result =
         registerInternalUserUseCase.apply(dto.toCommand());
 
     if (result.isRight())
-      log.debug(USER_MANAGEMENT, "Successfully created new User. dto={}", dto);
+      log.info(USER_MANAGEMENT, "Successfully created new User. dto={}", dto);
     else
       log.error(USER_MANAGEMENT, "User creation error. dto={}", dto);
 
@@ -104,10 +104,10 @@ class UserRestController {
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> update(
       @PathVariable String username, @Valid @RequestBody UpdateUserDto dto) {
-    log.debug(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
+    log.info(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
 
     return Try.run(() -> updateUserUseCase.apply(dto.toCommand(username)))
-        .onSuccess(ignore -> log.debug(USER_MANAGEMENT, "Updated user. username={}", username))
+        .onSuccess(ignore -> log.info(USER_MANAGEMENT, "Updated user. username={}", username))
         .onFailure(
             e -> log.error(USER_MANAGEMENT, "Could not update user. username={}", username, e))
         .mapTry(ignore -> new ResponseEntity<Void>(NO_CONTENT))
@@ -129,11 +129,11 @@ class UserRestController {
   @PatchMapping("/{username}/password/reset")
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<TemporaryPasswordDto> resetPassword(@PathVariable String username) {
-    log.debug(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
+    log.info(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
     Try<TemporaryPassword> result = Try.of(() -> resetPasswordUseCase.execute(username));
 
     if (result.isSuccess()) {
-      log.debug(USER_MANAGEMENT, "Password has been reset. username={}", username);
+      log.info(USER_MANAGEMENT, "Password has been reset. username={}", username);
       return ok(result.map(TemporaryPasswordDto::from).get());
     }
 
@@ -148,7 +148,7 @@ class UserRestController {
 
   @GetMapping("/roles")
   public ResponseEntity<RolesDto> roles() {
-    log.debug(USER_MANAGEMENT, "Listing roles");
+    log.info(USER_MANAGEMENT, "Listing roles");
     return ok(rolesQuery.list());
   }
 

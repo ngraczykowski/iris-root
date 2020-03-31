@@ -31,7 +31,7 @@ class AnalystSynchronizer {
 
   SynchronizedAnalysts synchronize(
       @NonNull Collection<UserDto> users, @NonNull Collection<Analyst> analysts) {
-    log.debug(USER_MANAGEMENT, "Synchronizing Analysts");
+    log.info(USER_MANAGEMENT, "Synchronizing Analysts");
 
     return new SynchronizedAnalysts(
         analystsToCreate(users, analysts),

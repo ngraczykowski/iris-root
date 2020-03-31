@@ -39,14 +39,14 @@ class ReasoningBranchRestController {
   @PreAuthorize(Authority.BUSINESS_OPERATOR)
   public ResponseEntity<BranchDetailsDto> details(
       @PathVariable long treeId, @PathVariable long branchNo) {
-    log.debug(REASONING_BRANCH, "Requesting Reasoning Branch details. treeId={}, branchNo={}",
+    log.info(REASONING_BRANCH, "Requesting Reasoning Branch details. treeId={}, branchNo={}",
         treeId, branchNo);
 
     Optional<BranchDetailsDto> branchDetails =
         reasoningBranchDetailsQuery.findByTreeIdAndBranchId(treeId, branchNo);
 
     branchDetails.ifPresentOrElse(
-        details -> log.debug(REASONING_BRANCH, "Found Reasoning Branch details. {}", details),
+        details -> log.info(REASONING_BRANCH, "Found Reasoning Branch details. {}", details),
         () -> log.error(REASONING_BRANCH, "Reasoning Branch details not found.")
     );
     return branchDetails
@@ -60,13 +60,13 @@ class ReasoningBranchRestController {
       @PathVariable long treeId,
       @PathVariable long branchNo,
       @RequestBody BranchChangesRequestDto branchChanges) {
-    log.debug(REASONING_BRANCH, "Updating Reasoning Branch. treeId={}, branchNo={}",
+    log.info(REASONING_BRANCH, "Updating Reasoning Branch. treeId={}, branchNo={}",
         treeId, branchNo);
 
     return updateReasoningBranchUseCase
         .apply(branchChanges.toCommand(BranchId.of(treeId, branchNo)))
         .map(ResponseEntity::ok)
-        .onSuccess(ignored -> log.debug(REASONING_BRANCH, "Reasoning Branch updated"))
+        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branch updated"))
         .onFailure(ex -> log.error(REASONING_BRANCH, "Could not update Reasoning Branch", ex))
         .recover(BranchNotFoundException.class, e -> notFound().build())
         .recover(AiSolutionNotSupportedException.class, e -> status(BAD_REQUEST).build())

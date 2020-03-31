@@ -24,7 +24,7 @@ class BaseRegisterUserUseCase {
         userRegisteringDomainService.register(registration);
 
     result.forEach(registeredUserRepository::save);
-    log.debug(USER_MANAGEMENT, "User registration result={}", result);
+    log.info(USER_MANAGEMENT, "User registration result={}", result);
 
     return result.map(completedRegistration -> completedRegistration::getUsername);
   }

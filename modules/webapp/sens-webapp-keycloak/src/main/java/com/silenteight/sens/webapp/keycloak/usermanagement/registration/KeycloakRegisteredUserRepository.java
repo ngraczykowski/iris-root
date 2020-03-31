@@ -27,7 +27,7 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
 
   @Override
   public void save(CompletedUserRegistration userRegistration) {
-    log.debug(USER_MANAGEMENT, "Registering User. userRegistration={}", userRegistration);
+    log.info(USER_MANAGEMENT, "Registering User. userRegistration={}", userRegistration);
     UserRepresentation userRepresentation = toUserRepresentation(userRegistration);
 
     KeycloakUserId newlyCreatedUserId = keycloakUserCreator.create(userRepresentation);

@@ -36,7 +36,7 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
   @Override
   @SuppressWarnings("unchecked") // https://github.com/vavr-io/vavr/issues/2411
   public Try<Void> save(UpdatedBranch updatedBranch) {
-    log.debug(REASONING_BRANCH, "Saving updated Branch using gRPC BranchGovernance. branchId={}",
+    log.info(REASONING_BRANCH, "Saving updated Branch using gRPC BranchGovernance. branchId={}",
         updatedBranch.getBranchId());
 
     Try<Void> tryUpdate = Try.of(() -> createRequest(updatedBranch))
@@ -46,7 +46,7 @@ class GrpcReasoningBranchUpdateRepository implements ReasoningBranchUpdateReposi
 
     return mapStatusExceptionsToCommunicationException(tryUpdate)
         .mapFailure(Case($(codeIs(NOT_FOUND)), BranchNotFoundException::new))
-        .onSuccess(ignored -> log.debug(REASONING_BRANCH, "Saved updated Branch"))
+        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Saved updated Branch"))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not save updated Branch", reason));
   }
 

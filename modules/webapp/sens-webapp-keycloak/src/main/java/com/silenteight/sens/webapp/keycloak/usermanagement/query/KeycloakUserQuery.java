@@ -125,7 +125,7 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
   @Override
   public Collection<UserDto> listAll() {
-    log.debug(USER_MANAGEMENT, "Listing all users");
+    log.info(USER_MANAGEMENT, "Listing all users");
     return usersResource
         .list(0, MAX_VALUE)
         .stream()

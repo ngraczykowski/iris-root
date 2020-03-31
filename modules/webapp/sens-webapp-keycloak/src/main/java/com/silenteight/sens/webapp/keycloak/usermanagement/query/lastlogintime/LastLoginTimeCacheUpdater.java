@@ -20,13 +20,13 @@ class LastLoginTimeCacheUpdater {
 
   @Scheduled(fixedDelayString = CACHE_UPDATE_INTERVAL, initialDelayString = CACHE_FIRST_LOAD_DELAY)
   void update() {
-    log.debug(USER_MANAGEMENT, "Updating lastLoginTime cache");
+    log.info(USER_MANAGEMENT, "Updating lastLoginTime cache");
 
     int cacheSize = cachedLastLoginTimeProvider.getCacheSize();
 
     Try.run(() -> doUpdateCache(cacheSize))
         .onFailure(e -> log.error(USER_MANAGEMENT, "Could not update lastLoginTime cache", e))
-        .onSuccess(ignored -> log.debug(USER_MANAGEMENT, "LastLoginTime cache updated"));
+        .onSuccess(ignored -> log.info(USER_MANAGEMENT, "LastLoginTime cache updated"));
   }
 
   private void doUpdateCache(int cacheSize) {

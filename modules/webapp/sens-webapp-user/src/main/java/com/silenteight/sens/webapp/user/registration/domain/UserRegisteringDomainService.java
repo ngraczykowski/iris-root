@@ -31,7 +31,7 @@ public class UserRegisteringDomainService {
   public Either<UserDomainError, CompletedUserRegistration> register(
       NewUserRegistration registration) {
 
-    log.debug(USER_MANAGEMENT, "Registering User. registration={}", registration);
+    log.info(USER_MANAGEMENT, "Registering User. registration={}", registration);
     Option<InvalidNameLengthError> invalidUsernameLengthError =
         usernameLengthValidator.validate(registration.getUsername());
     if (invalidUsernameLengthError.isDefined())

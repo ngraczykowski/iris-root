@@ -37,7 +37,7 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
 
   @Override
   public Optional<BranchDetailsDto> findByTreeIdAndBranchId(long treeId, long branchId) {
-    log.debug(REASONING_BRANCH,
+    log.info(REASONING_BRANCH,
         "Fetching Reasoning Branch details using gRPC BranchGovernance. treeId={}, branchId={}",
         treeId, branchId);
 

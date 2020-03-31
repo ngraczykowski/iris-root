@@ -32,7 +32,7 @@ class SyncAnalystRestController {
   @PostMapping("/users/sync/analysts")
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<SyncAnalystStatsDto> synchronize() {
-    log.debug(USER_MANAGEMENT, "Synchronizing Analysts");
+    log.info(USER_MANAGEMENT, "Synchronizing Analysts");
 
     return ok(
         syncAnalystsUseCase

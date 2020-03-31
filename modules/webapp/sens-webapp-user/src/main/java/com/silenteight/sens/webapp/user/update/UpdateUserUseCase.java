@@ -35,7 +35,7 @@ public class UpdateUserUseCase {
   private final RolesValidator rolesValidator;
 
   public void apply(UpdateUserCommand command) {
-    log.debug(USER_MANAGEMENT, "Updating user. command={}", command);
+    log.info(USER_MANAGEMENT, "Updating user. command={}", command);
 
     command.getDisplayName().ifPresent(this::validateDisplayName);
     command.getRoles().ifPresent(this::validateRoles);

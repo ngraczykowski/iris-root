@@ -22,7 +22,7 @@ class KeycloakResettableUserCredentials implements ResettableUserCredentials {
 
   @Override
   public void reset(TemporaryPassword temporaryPassword) {
-    log.debug(USER_MANAGEMENT, "Resetting password");
+    log.info(USER_MANAGEMENT, "Resetting password");
 
     userResource.resetPassword(createCredentials(temporaryPassword));
   }

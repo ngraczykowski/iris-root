@@ -32,7 +32,7 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
   }
 
   public Either<UserDomainError, Success> apply(RegisterInternalUserCommand command) {
-    log.debug(USER_MANAGEMENT, "Registering internal user. command={}", command);
+    log.info(USER_MANAGEMENT, "Registering internal user. command={}", command);
 
     return register(command.toUserRegistration());
   }

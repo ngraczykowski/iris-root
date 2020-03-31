@@ -21,7 +21,7 @@ class KeycloakUserCreator {
   private final UsersResource usersResource;
 
   KeycloakUserId create(UserRepresentation userRepresentation) {
-    log.debug(USER_MANAGEMENT, "Creating new User. username={}", userRepresentation.getUsername());
+    log.info(USER_MANAGEMENT, "Creating new User. username={}", userRepresentation.getUsername());
 
     try (Response response = usersResource.create(userRepresentation)) {
       boolean isSuccessful = response.getStatusInfo().getFamily() == Family.SUCCESSFUL;

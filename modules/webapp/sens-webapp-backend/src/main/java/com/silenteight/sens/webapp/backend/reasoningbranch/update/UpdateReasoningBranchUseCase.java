@@ -16,15 +16,15 @@ public class UpdateReasoningBranchUseCase {
   private final ReasoningBranchUpdateRepository repository;
 
   public Try<Void> apply(UpdateBranchCommand updateCommand) {
-    log.debug(REASONING_BRANCH, "Updating Reasoning Branch details. command={}", updateCommand);
+    log.info(REASONING_BRANCH, "Updating Reasoning Branch details. command={}", updateCommand);
 
     if (updateCommand.doesNotHaveChanges()) {
-      log.debug(REASONING_BRANCH, "No changes detected in Reasoning Branch update data.");
+      log.info(REASONING_BRANCH, "No changes detected in Reasoning Branch update data.");
       return NO_CHANGES;
     }
 
     return repository.save(updateCommand)
-        .onSuccess(ignored -> log.debug(REASONING_BRANCH, "Reasoning Branch update applied."))
+        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branch update applied."))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not apply update", reason));
   }
 }

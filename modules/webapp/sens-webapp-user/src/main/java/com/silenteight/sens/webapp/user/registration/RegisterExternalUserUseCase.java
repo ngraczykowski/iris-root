@@ -31,7 +31,7 @@ public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
   }
 
   public Either<UserDomainError, Success> apply(RegisterExternalUserCommand command) {
-    log.debug(USER_MANAGEMENT, "Registering external user. command={}", command);
+    log.info(USER_MANAGEMENT, "Registering external user. command={}", command);
 
     return register(command.toUserRegistration());
   }

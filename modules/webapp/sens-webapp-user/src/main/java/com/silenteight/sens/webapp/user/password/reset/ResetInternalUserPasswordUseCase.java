@@ -13,7 +13,7 @@ public class ResetInternalUserPasswordUseCase {
   private final TemporaryPasswordGenerator temporaryPasswordGenerator;
 
   public TemporaryPassword execute(String username) {
-    log.debug(USER_MANAGEMENT, "Reset password. username={}", username);
+    log.info(USER_MANAGEMENT, "Reset password. username={}", username);
 
     ResettableUserCredentials userCredentials = credentialsRepository
         .findUserCredentials(username)
@@ -22,7 +22,7 @@ public class ResetInternalUserPasswordUseCase {
     if (userCredentials.ownerIsNotInternal())
       throw new UserIsNotInternalException(username);
 
-    log.debug(USER_MANAGEMENT, "Resetting password for user. credentials={}", userCredentials);
+    log.info(USER_MANAGEMENT, "Resetting password for user. credentials={}", userCredentials);
     return resetPassword(userCredentials);
   }
 

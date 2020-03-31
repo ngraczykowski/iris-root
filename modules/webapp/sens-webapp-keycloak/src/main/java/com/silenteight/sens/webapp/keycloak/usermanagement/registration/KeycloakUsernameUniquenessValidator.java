@@ -21,7 +21,7 @@ class KeycloakUsernameUniquenessValidator implements UsernameUniquenessValidator
 
   @Override
   public Option<UsernameNotUniqueError> validate(String username) {
-    log.debug(USER_MANAGEMENT, "Checking if username is unique in Keycloak. {}", username);
+    log.info(USER_MANAGEMENT, "Checking if username is unique in Keycloak. {}", username);
 
     if (isUnique(username))
       return none();

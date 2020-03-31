@@ -26,7 +26,7 @@ public class KeycloakUserRoleAssigner {
   private final RolesResource rolesResource;
 
   public void assignRoles(KeycloakUserId userId, Set<String> roles) {
-    log.debug(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
+    log.info(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
 
     UserResource user = usersResource.get(userId.getUserId());
     RoleScopeResource userRoles = user.roles().realmLevel();

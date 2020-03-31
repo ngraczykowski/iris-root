@@ -31,7 +31,7 @@ public class SyncAnalystsUseCase {
   private final BulkAnalystService bulkAnalystService;
 
   public SyncAnalystStatsDto synchronize() {
-    log.debug(USER_MANAGEMENT, "Synchronizing Analysts");
+    log.info(USER_MANAGEMENT, "Synchronizing Analysts");
 
     Collection<UserDto> users = userListQuery.listAll();
     Collection<Analyst> analysts = externalAnalystRepository.list();
