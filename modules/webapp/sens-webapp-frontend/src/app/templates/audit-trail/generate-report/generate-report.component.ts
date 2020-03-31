@@ -1,8 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';
 import { WINDOW } from '@app/shared/window.service';
-import { HttpClient } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
 
 @Component({
@@ -31,8 +31,8 @@ export class GenerateReportComponent implements OnInit {
   onGenerateReport() {
     this.http.get(this.reportUrl, { responseType: 'text' })
       .subscribe(res => {
-        const blob = new Blob([res], { type: 'text/xlsx' });
-        FileSaver.saveAs(blob, 'security-matrix-report.xlsx');
+        const blob = new Blob([res], { type: 'text/csv' });
+        FileSaver.saveAs(blob, 'security-matrix-report.csv');
         this.sendBriefMessage('auditTrail.generateReport.ready.briefMessage');
       }, () => this.showErrorNotification());
   }

@@ -5,7 +5,7 @@ const dataFolder = './data';
 const fs = require('fs');
 const cors = require('cors');
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -47,8 +47,8 @@ app.post('/rest/webapp/api/users', (req, res) => {
       res.status(422).send();
     } else {
       res.status(409).send();
-    };
-    
+    }
+
   } catch (err) {
     if (err.code === 'ENOENT') {
       res.status(404).send()
@@ -109,7 +109,7 @@ app.patch('/rest/webapp/api/users/:userName/password/reset', (req, res) => {
 
 app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
-  const id = req.params.branchId
+  const id = req.params.branchId;
   try {
     dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
     res.status(200).send(JSON.parse(dataFile));
@@ -134,7 +134,7 @@ app.get('/rest/webapp/management/info', (req, res) => {
 
 app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
   let dataFile;
-  const id = req.params.branchId
+  const id = req.params.branchId;
   try {
     dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
     let json = JSON.parse(dataFile);
@@ -150,8 +150,8 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, re
 });
 
 app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
-  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.sendFile(__dirname + '/data/security-matrix-report.xlsx');
+  res.setHeader('Content-Type', 'text/csv');
+  res.sendFile(__dirname + '/data/security-matrix-report.csv');
 });
 
 function isUserNameUnique(userName, currentUsersList) {
@@ -165,7 +165,7 @@ function hasForbiddenCharacters(userName) {
   return userName.indexOf('!') >= 0;
 }
 
-function getUserObjectByUserName(userName, userList) { 
+function getUserObjectByUserName(userName, userList) {
   let userObject = {
     index: null,
     user: null
@@ -181,5 +181,5 @@ function getUserObjectByUserName(userName, userList) {
   return userObject;
 }
 
-app.listen(7070, () => console.log('REST API mock server started at http://localhost:7070/'))
+app.listen(7070, () => console.log('REST API mock server started at http://localhost:7070/'));
 module.exports = app;
