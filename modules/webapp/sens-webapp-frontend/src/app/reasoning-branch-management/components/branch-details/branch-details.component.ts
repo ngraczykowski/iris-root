@@ -1,6 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output
+} from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReasoningBranchDetails } from '@app/reasoning-branch-management/models/reasoning-branch-management';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-branch-details',
@@ -23,14 +31,6 @@ export class BranchDetailsComponent implements OnInit, OnChanges {
     {
       label: 'False Positive',
       key: 'FALSE_POSITIVE'
-    },
-    {
-      label: 'Hinted False Positive',
-      key: 'HINTED_FALSE_POSITIVE'
-    },
-    {
-      label: 'Hinted Potential True Positive',
-      key: 'HINTED_POTENTIAL_TRUE_POSITIVE'
     },
     {
       label: 'Potential True Positive',
