@@ -5,6 +5,7 @@ import java.util.regex.Pattern
 
 plugins {
   id "base"
+  id "maven-publish"
   id "org.asciidoctor.jvm.convert" version "2.3.0"
 }
 
@@ -103,6 +104,7 @@ tasks.register("docx") {
 
 tasks.register("docs", Zip) {
   from("$asciidoctor.outputDir/pdf") {
+    include "**/*.pdf"
     into "docs/pdf"
   }
 
@@ -129,4 +131,20 @@ private static boolean commandExists(String command) {
   pathArray.stream()
       .map(Paths.&get)
       .anyMatch {path -> Files.exists(path.resolve(command))}
+}
+
+tasks.named("publish").configure {
+  dependsOn tasks.named("docs")
+}
+
+tasks.named("publishToMavenLocal").configure {
+  dependsOn tasks.named("docs")
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      artifact docs
+    }
+  }
 }

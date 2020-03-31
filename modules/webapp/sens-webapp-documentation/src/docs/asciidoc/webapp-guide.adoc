@@ -5,6 +5,9 @@ Silent Eight Pte._Ltd.
 :productname: Silent Eight Name Screening Web Application
 :doctype: article
 :toc: left
+:sectnums:
+:sectnumlevels: 4
+:toclevels: 4
 :xrefstyle: full
 
 [abstract]

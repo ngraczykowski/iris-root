@@ -5,8 +5,9 @@ Silent Eight Pte._Ltd.
 :productname: Silent Eight Name Screening Web Application
 :doctype: article
 :toc: left
-//Showing only releases in a table of contents without New Features/Enhancements/Bugs level
-:toclevels: 1
+:sectnums:
+:sectnumlevels: 4
+:toclevels: 4
 :xrefstyle: full
 
 //Issues are divided into 3 groups:
