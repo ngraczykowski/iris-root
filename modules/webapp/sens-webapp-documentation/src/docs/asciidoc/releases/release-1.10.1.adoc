@@ -1,0 +1,43 @@
+:release_version: 1.10.1
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *RELEASED*
+- Release date: *31.03.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+- https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp/sens-webapp-backend/{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/b0a01dcf49156586fb47db3c9223b05f2c1322d0[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1234[SERP master MR]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1235[SERP release-3.5 MR]
+
+:leveloffset: +1
+
+// --------------------------------------------------------------------
+
+:table-name: Enhancements
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-585[WA-585]
+|Remove `HINTED` AI solutions as they are not supported by the SERP platform.
+
+|{issue_url}WA-516[WA-516]
+|Add confirmation popup for reset password action.
+
+|{issue_url}WA-549[WA-549]
+|Hide other roles once `Admin` role selected during add new user or edit user actions.
+
+include::./templates/changelog-table-footer.adoc[]
+
+// --------------------------------------------------------------------
+
+:table-name: Bug fixes
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-573[WA-573]
+|Change file extension of Security Matrix report from XLSX to CSV.
+
+|{issue_url}WA-576[WA-576]
+|Use `INFO` log level for an audit logs related with changes in Reasoning Branches and Users.
+
+include::./templates/changelog-table-footer.adoc[]
