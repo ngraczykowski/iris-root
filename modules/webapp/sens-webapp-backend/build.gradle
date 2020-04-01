@@ -42,6 +42,11 @@ dependencies {
   implementation project(":sens-webapp-user-sync")
   implementation project(":sens-webapp-logging")
 
+  implementation libraries.springdoc_ui
+  implementation libraries.springdoc_data_rest
+  implementation libraries.springdoc_security
+
+
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
   implementation libraries.freemarker

@@ -35,7 +35,7 @@ class HttpSecurityConfiguration {
         .accessDeniedHandler(restAccessDeniedHandler)
         .and()
         .authorizeRequests()
-        .antMatchers(RestConstants.MANAGEMENT_PREFIX + "/health").permitAll()
+        .antMatchers(RestConstants.OPENAPI_PREFIX + "/**").permitAll()
         .antMatchers(RestConstants.MANAGEMENT_PREFIX + "/**").permitAll()
         .anyRequest().authenticated();
   }

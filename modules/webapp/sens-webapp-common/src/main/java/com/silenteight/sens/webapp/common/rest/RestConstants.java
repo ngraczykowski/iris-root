@@ -8,5 +8,5 @@ public final class RestConstants {
 
   public static final String ROOT = "/api";
   public static final String MANAGEMENT_PREFIX = "/management";
-  public static final String LOGOUT_URL = "/logout";
+  public static final String OPENAPI_PREFIX = "/openapi";
 }

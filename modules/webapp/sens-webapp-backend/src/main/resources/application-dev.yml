@@ -12,3 +12,12 @@ logging:
   level:
     com.silenteight: DEBUG
     org.springframework: INFO
+
+springdoc:
+  show-actuator: true
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    path: /openapi/
+    url: ${server.servlet.context-path}/openapi/api-docs/
