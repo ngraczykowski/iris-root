@@ -16,11 +16,12 @@ class UserRegistrationDomainConfiguration {
 
   @Bean
   UserRegisteringDomainService userRegisteringDomainService(
-      UsernameUniquenessValidator usernameUniquenessValidator,
-      RolesValidator rolesValidator,
       @Qualifier("usernameLengthValidator") NameLengthValidator usernameLengthValidator,
+      @Qualifier("usernameCharsValidator") RegexValidator usernameCharsValidator,
       @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator,
-      @Qualifier("usernameCharsValidator") RegexValidator usernameCharsValidator) {
+      RolesValidator rolesValidator,
+      UsernameUniquenessValidator usernameUniquenessValidator,
+      @Qualifier("passwordCharsValidator") RegexValidator passwordCharsValidator) {
 
     return new UserRegisteringDomainService(
         INSTANCE,
@@ -28,6 +29,7 @@ class UserRegistrationDomainConfiguration {
         usernameCharsValidator,
         displayNameLengthValidator,
         rolesValidator,
-        usernameUniquenessValidator);
+        usernameUniquenessValidator,
+        passwordCharsValidator);
   }
 }

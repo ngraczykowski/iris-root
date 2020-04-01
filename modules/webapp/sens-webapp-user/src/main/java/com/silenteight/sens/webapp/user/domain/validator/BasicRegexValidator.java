@@ -1,21 +1,26 @@
 package com.silenteight.sens.webapp.user.domain.validator;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import io.vavr.control.Option;
 
 import java.util.regex.Pattern;
 
+import static io.vavr.control.Option.none;
+import static io.vavr.control.Option.of;
+
 @RequiredArgsConstructor
 class BasicRegexValidator implements RegexValidator {
 
   private final Pattern pattern;
+  private final String correctCharsInformation;
 
   @Override
-  public Option<InvalidNameCharsError> validate(String name) {
-    if (!pattern.matcher(name).matches())
-      return Option.of(new InvalidNameCharsError(name));
+  public Option<RegexError> validate(@NonNull String value) {
+    if (!pattern.matcher(value).matches())
+      return of(new RegexError(value + " has invalid chars. " + correctCharsInformation));
 
-    return Option.none();
+    return none();
   }
 }

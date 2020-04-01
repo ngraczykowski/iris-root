@@ -4,15 +4,14 @@ import io.vavr.control.Option;
 
 public interface RegexValidator {
 
-  Option<RegexValidator.InvalidNameCharsError> validate(String name);
+  Option<RegexError> validate(String value);
 
-  class InvalidNameCharsError extends SimpleUserDomainError {
+  class RegexError extends SimpleUserDomainError {
 
-    private static final long serialVersionUID = 2934904087256642065L;
+    private static final long serialVersionUID = 1259998410863028001L;
 
-    InvalidNameCharsError(String name) {
-      super(name + " has invalid chars. "
-          + "Only lowercase letters, numbers and -_@. chars allowed.");
+    RegexError(String message) {
+      super(message);
     }
   }
 }

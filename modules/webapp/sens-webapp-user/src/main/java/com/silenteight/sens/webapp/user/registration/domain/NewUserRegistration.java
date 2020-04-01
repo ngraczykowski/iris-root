@@ -4,7 +4,9 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.sens.webapp.user.domain.UserOrigin;
+import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Value
@@ -21,6 +23,10 @@ public class NewUserRegistration {
 
   public String getDisplayName() {
     return getUserDetails().getDisplayName();
+  }
+
+  public Optional<Credentials> getCredentials() {
+    return getUserDetails().getCredentials();
   }
 
   public boolean hasRoles() {

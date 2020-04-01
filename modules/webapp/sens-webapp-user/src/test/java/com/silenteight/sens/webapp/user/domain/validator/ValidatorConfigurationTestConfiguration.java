@@ -15,4 +15,8 @@ public class ValidatorConfigurationTestConfiguration {
   public RegexValidator usernameCharsValidator() {
     return validatorConfiguration.usernameCharsValidator();
   }
+
+  public RegexValidator passwordCharsValidator() {
+    return validatorConfiguration.passwordCharsValidator();
+  }
 }

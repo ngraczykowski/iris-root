@@ -16,10 +16,11 @@ public class UserRegistrationDomainTestConfiguration {
       RolesValidator rolesValidator) {
 
     return configuration.userRegisteringDomainService(
-        usernameUniquenessValidator,
-        rolesValidator,
         validationConfiguration.usernameLengthValidator(),
+        validationConfiguration.usernameCharsValidator(),
         validationConfiguration.displayNameLengthValidator(),
-        validationConfiguration.usernameCharsValidator());
+        rolesValidator,
+        usernameUniquenessValidator,
+        validationConfiguration.passwordCharsValidator());
   }
 }

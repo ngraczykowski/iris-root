@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 
@@ -18,6 +19,7 @@ public class NewUserDetails {
   @Value
   public static class Credentials {
 
+    @NonNull
     @ToString.Exclude
     String password;
   }

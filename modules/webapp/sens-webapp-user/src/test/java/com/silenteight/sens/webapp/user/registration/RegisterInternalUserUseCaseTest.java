@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.user.registration;
 
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
-import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.InvalidNameCharsError;
+import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
@@ -74,7 +74,7 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(RESTRICTED_CHAR_UPPERCASE_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameCharsError.class);
+    assertThatResult(actual).isFailureOfType(RegexError.class);
   }
 
   @Test
@@ -82,7 +82,7 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(RESTRICTED_CHAR_NONASCII_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameCharsError.class);
+    assertThatResult(actual).isFailureOfType(RegexError.class);
   }
 
   @Test
@@ -90,7 +90,7 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(RESTRICTED_CHAR_INVALID_SPECIAL_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameCharsError.class);
+    assertThatResult(actual).isFailureOfType(RegexError.class);
   }
 
   @Test
@@ -148,7 +148,7 @@ class RegisterInternalUserUseCaseTest {
   }
 
   @Nested
-  class GivenRolesAreValidAndUsernameIsUnique {
+  class GivenRolesAreValidAndUsernameIsUniqueAndCredentialsAreValid {
 
     @BeforeEach
     void setUp() {
@@ -221,6 +221,40 @@ class RegisterInternalUserUseCaseTest {
       underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
       verifyZeroInteractions(registeredUserRepository);
+    }
+  }
+
+  @Nested
+  class GivenUsernameIsUniqueRolesAreValidAndCredentialsAreInvalid {
+
+    @BeforeEach
+    void setUp() {
+      given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
+      given(rolesValidator.validate(any())).willReturn(Option.none());
+    }
+
+    @Test
+    void whenPasswordIsTooShort_returnsValidDomainError() {
+      Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
+          underTest.apply(TOO_SHORT_PASSWORD_REQUEST);
+
+      assertThatResult(actual).isFailureOfType(RegexError.class);
+    }
+
+    @Test
+    void whenPasswordDoesNotHaveDigit_returnsValidDomainError() {
+      Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
+          underTest.apply(NO_DIGIT_PASSWORD_REQUEST);
+
+      assertThatResult(actual).isFailureOfType(RegexError.class);
+    }
+
+    @Test
+    void whenPasswordDoesNotHaveLetter_returnsValidDomainError() {
+      Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
+          underTest.apply(NO_LETTER_PASSWORD_REQUEST);
+
+      assertThatResult(actual).isFailureOfType(RegexError.class);
     }
   }
 }
