@@ -9,15 +9,13 @@
 - https://gitlab.silenteight.com/sens/sens-webapp/commit/1e8915a3348ca0c889e539014f302a5b57f4ddc1[WebApp version bump commit]
 - https://gitlab.silenteight.com/sens/serp/merge_requests/1107[SERP master MR]
 - https://gitlab.silenteight.com/sens/serp/merge_requests/1108[SERP release-3.4 cherry-pick]
-
 // --------------------------------------------------------------------
 
-== New features
+:leveloffset: +1
 
-[cols="1,3",options="header"]
-|===
-|Issue
-|Description
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
 
 |https://youtrack.silenteight.com/issue/WA-1[WA-1]
 |Allow signing in to SENS UI using Keycloak auth server and OpenID protocol.
@@ -41,7 +39,8 @@
 |Allow generating and downloading HUSA reports using SERP CLI commands `serp report accounts` and `serp report entitlement`.
 
 |https://youtrack.silenteight.com/issue/WA-435[WA-435]
-|Create restrictions for users based on following roles: Admin, Business Operator, Analyst and Auditor. Users can only access pages/endpoints whom they are explicitly allowed to.
+|Create restrictions for users based on following roles: Admin, Business Operator, Analyst and Auditor.
+Users can only access pages/endpoints whom they are explicitly allowed to.
 
 |https://youtrack.silenteight.com/issue/WA-169[WA-169]
 |Add SERP CLI command `serp user create` that allows creating users.
@@ -51,4 +50,5 @@
 
 |https://youtrack.silenteight.com/issue/WA-172[WA-172]
 |Allow exporting and importing SAML metadata through SERP CLI in order to configure SSO.
-|===
+
+include::./templates/changelog-table-footer.adoc[]

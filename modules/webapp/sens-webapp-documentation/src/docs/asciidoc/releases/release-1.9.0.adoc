@@ -9,15 +9,13 @@
 - https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp/sens-webapp-backend/{release_version}[Jars in Artifactory]
 - https://gitlab.silenteight.com/sens/sens-webapp/commit/46d227c3e12a6868e80a9b4124cd58b2dedd3bcb[WebApp version bump commit]
 - https://gitlab.silenteight.com/sens/serp/merge_requests/1198[SERP master MR]
-
 // --------------------------------------------------------------------
 
-== New features
+:leveloffset: +1
 
-[cols="1,3",options="header"]
-|===
-|Issues
-|Description
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-370[WA-370]
 |Auditing changes in Reasoning Branches module through application logs.
@@ -33,29 +31,26 @@
 
 |{issue_url}WA-175[WA-175]
 |Add ability to change user's password by a user with Admin role.
-|===
 
-== Enhancements
+include::./templates/changelog-table-footer.adoc[]
 
-[cols="1,3",options="header"]
-|===
-|Issues
-|Description
+
+:table-name: Enhancements
+include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-473[WA-473]
 |Present error message when Security Matrix reports cannot be downloaded.
 
 |{issue_url}WA-519[WA-519]
 |Enforce the same password validation rules on Auth server side as on SENS UI side.
-|===
 
-== Bug fixes
+include::./templates/changelog-table-footer.adoc[]
 
-[cols="1,3",options="header"]
-|===
-|Issues
-|Description
+
+:table-name: Bug fixes
+include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-483[WA-483]
 |Add possibility to display and edit Reasoning Branches which weren't created automatically by the system.
-|===
+
+include::./templates/changelog-table-footer.adoc[]

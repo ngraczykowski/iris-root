@@ -1,0 +1,38 @@
+:release_version: 1.10.0
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *RELEASED*
+- Release date: *30.03.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+- https://repo.silenteight.com/webapp/#/artifacts/browse/tree/General/libs-release-local/com/silenteight/sens/webapp/sens-webapp-backend/{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/bdcf2071406ba9d48db6c7daf7172008ccec3641[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1219[SERP master MR]
+// --------------------------------------------------------------------
+
+:leveloffset: +1
+
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-553[WA-553]
+|Show username in edit user dialog.
+
+include::./templates/changelog-table-footer.adoc[]
+
+
+:table-name: Bug fixes
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-546[WA-546]
+|Improve display name validation in edit/add user dialogs.
+
+|{issue_url}WA-530[WA-530]
+|Old values for Reasoning Branch details page are no longer present after update action.
+
+|{issue_url}WA-549[WA-549]
+|Fix creating new user with `Admin` role.
+
+include::./templates/changelog-table-footer.adoc[]
