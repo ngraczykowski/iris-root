@@ -13,7 +13,7 @@
 |**IntelliJ**|Mandatory| Project is prepared for being worked on in IntelliJ IDEA. |
 |**jEnv**    |Optional | jEnv helps with managing Java versions. [Download it from jEnv site](https://www.jenv.be/) and follow instructions for installing.|   
 |**Gradle**  |Optional | SERP comes with gradle wrapper that you should use for building the project. Nevertheless you might want to have Gradle installed.|
-|**jq**      |Optional | jq is JSON manipulating utility that is being used during Keycloak configuration export. Is is widely used, therefore should be in every popular linux distro repositories. |
+|**jq**      |Optional | jq is JSON manipulation utility that is being used during Keycloak configuration export. Is is widely used, therefore should be in every popular linux distro repositories. |
 
 
 ### Git repositories
@@ -57,10 +57,10 @@ go to `Import` and import users file located in [conf/keycloak dir](conf/keycloa
 
 Prior to running API make sure you ran [UI](#web-app-ui), as it starts reverse proxy required by whole app to run correctly.
    
-| Profile | Behaviour                                                                                                                                                                                                                                                                                                                   |
-|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads raw Keycloak config stored in [`conf/keycloak/sens-webapp-realm.json`](conf/keycloak/sens-webapp-realm.json).                                                                          |
-| `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak production template stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates) and fills it with values passed in properties. |
+| Profile | Behaviour                                                                                                                                                                                                                                                                                                                                       |
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads raw Keycloak config stored in [`conf/keycloak/sens-webapp-realm.json`](conf/keycloak/sens-webapp-realm.json). Additionally launches Swagger UI at [/openapi/ endpoint](localhost:7070/rest/webapp/openapi).|
+| `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak production template stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates) and fills it with values passed in properties.                     |
     
 1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
 
