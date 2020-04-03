@@ -89,9 +89,9 @@ class UserRestController {
         registerInternalUserUseCase.apply(dto.toCommand());
 
     if (result.isRight())
-      log.info(USER_MANAGEMENT, "Successfully created new User. dto={}", dto);
+      log.info(USER_MANAGEMENT, "Successfully created new User");
     else
-      log.error(USER_MANAGEMENT, "User creation error. dto={}", dto);
+      log.error(USER_MANAGEMENT, "User creation error. reason={}", result.getLeft().getReason());
 
     return result
         .map(RegisterInternalUserUseCase.Success::getUsername)
