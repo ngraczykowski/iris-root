@@ -1884,7 +1884,7 @@
     "FreeOTP",
     "Google Authenticator"
   ],
-  "passwordPolicy": "length(8) and lowerCase(1) and digits(1)",
+  "passwordPolicy": "regexPattern(^(?=.*?[0-9])(?=.*?[A-Za-z]).{8,}$)",
   "permanentLockout": false,
   "quickLoginCheckMilliSeconds": 1000,
   "realm": "sens-webapp",

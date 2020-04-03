@@ -14,12 +14,12 @@ import static io.vavr.control.Option.of;
 class BasicRegexValidator implements RegexValidator {
 
   private final Pattern pattern;
-  private final String correctCharsInformation;
+  private final String errorMessage;
 
   @Override
   public Option<RegexError> validate(@NonNull String value) {
     if (!pattern.matcher(value).matches())
-      return of(new RegexError(value + " has invalid chars. " + correctCharsInformation));
+      return of(new RegexError(errorMessage));
 
     return none();
   }
