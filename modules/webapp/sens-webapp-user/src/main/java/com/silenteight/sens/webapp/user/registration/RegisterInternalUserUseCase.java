@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.user.registration;
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,6 +45,7 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
     @NonNull
     private final String username;
     @NonNull
+    @ToString.Exclude
     private final String password;
     @Nullable
     private final String displayName;
