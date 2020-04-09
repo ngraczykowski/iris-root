@@ -1,9 +1,14 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
+import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
+
 import io.vavr.control.Either;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
 
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME_NOT_UNIQUE;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_DOMAIN_ERROR;
@@ -14,11 +19,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 class UserRestControllerInternalUserRegistrationTest extends UserRestControllerTest {
 
-  @Test
+  @TestWithRole(role = ADMIN)
   void its422_whenUseCaseReturnsDomainException() {
     given(registerInternalUserUseCase.apply(any()))
         .willReturn(left(USER_REGISTRATION_DOMAIN_ERROR));
@@ -27,7 +33,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
         .statusCode(UNPROCESSABLE_ENTITY.value());
   }
 
-  @Test
+  @TestWithRole(role = ADMIN)
   void its409_whenUseCaseReturnsUsernameNotUnique() {
     given(registerInternalUserUseCase.apply(any()))
         .willReturn(left(USERNAME_NOT_UNIQUE));
@@ -36,7 +42,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
         .statusCode(CONFLICT.value());
   }
 
-  @Test
+  @TestWithRole(role = ADMIN)
   void its201WithValidLocationUri_whenUseCaseReturnsSuccess() {
     given(registerInternalUserUseCase.apply(any()))
         .willReturn(Either.right(USER_REGISTRATION_SUCCESS));
@@ -44,5 +50,11 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
     post("/users", VALID_REQUEST)
         .statusCode(CREATED.value())
         .header("Location", Matchers.endsWith("/users/" + USERNAME));
+  }
+
+  @TestWithRole(roles = { ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  void its403_whenNotPermittedRole() {
+    post("/users", VALID_REQUEST)
+        .statusCode(FORBIDDEN.value());
   }
 }

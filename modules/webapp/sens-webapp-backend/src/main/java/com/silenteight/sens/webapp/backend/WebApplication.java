@@ -2,7 +2,6 @@ package com.silenteight.sens.webapp.backend;
 
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
-import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
 import com.silenteight.sens.webapp.backend.reportscb.ScbReportModule;
@@ -18,7 +17,6 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
 
 @SpringBootApplication(
     scanBasePackageClasses = {
-        DecisionTreeModule.class,
         GrpcModule.class,
         KeycloakModule.class,
         ApplicationLoggingModule.class,

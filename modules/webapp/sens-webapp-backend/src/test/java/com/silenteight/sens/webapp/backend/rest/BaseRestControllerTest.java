@@ -1,6 +1,7 @@
-package com.silenteight.sens.webapp.common.testing.rest;
+package com.silenteight.sens.webapp.backend.rest;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest.TestRestConfiguration;
+import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest.TestRestConfiguration;
+import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRoleExtension;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
@@ -9,9 +10,14 @@ import io.restassured.module.mockmvc.specification.MockMvcRequestAsyncSender;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -22,19 +28,25 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @WebAppConfiguration
-@SpringBootTest(classes = TestRestConfiguration.class)
-@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = { TestRestConfiguration.class })
+@ExtendWith({ SpringExtension.class })
 @TestPropertySource(properties = { "spring.cloud.consul.enabled=false" })
 public abstract class BaseRestControllerTest {
 
   @Autowired
   private WebApplicationContext context;
 
+  @RegisterExtension
+  public static TestWithRoleExtension testWithRoleExtension =
+      new TestWithRoleExtension(new NewContextRoleSetter());
+
   @BeforeEach
   void setUp() {
-    RestAssuredMockMvc.standaloneSetup(MockMvcBuilders.webAppContextSetup(context));
+    RestAssuredMockMvc.standaloneSetup(
+        MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()));
   }
 
   public static ValidatableMockMvcResponse get(String mapping) {
@@ -89,6 +101,13 @@ public abstract class BaseRestControllerTest {
 
   @Configuration
   @EnableWebMvc
-  static class TestRestConfiguration {
+  @EnableWebSecurity
+  @EnableGlobalMethodSecurity(prePostEnabled = true)
+  static class TestRestConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.csrf().disable();
+    }
   }
 }

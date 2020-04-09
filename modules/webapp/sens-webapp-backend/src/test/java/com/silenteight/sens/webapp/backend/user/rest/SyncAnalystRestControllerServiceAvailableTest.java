@@ -1,15 +1,20 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest;
+import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.user.sync.analyst.SyncAnalystsUseCase;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.backend.user.rest.SyncAnalystStatsDtoFixtures.ALL_CHANGED;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({ SyncAnalystRestController.class, SyncAnalystRestControllerAdvice.class })
@@ -18,7 +23,7 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
   @MockBean
   private SyncAnalystsUseCase service;
 
-  @Test
+  @TestWithRole(role = ADMIN)
   void producesStats_whenAnalystsAreSync() {
     // given
     when(service.synchronize()).thenReturn(ALL_CHANGED);
@@ -31,5 +36,10 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
         .body("addedRole", is(ALL_CHANGED.getAddedRole()))
         .body("updatedDisplayName", is(ALL_CHANGED.getUpdatedDisplayName()))
         .body("deleted", is(ALL_CHANGED.getDeleted()));
+  }
+
+  @TestWithRole(roles = { ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  void its403_whenNotPermittedRole() {
+    post("/users/sync/analysts").statusCode(FORBIDDEN.value());
   }
 }

@@ -58,6 +58,7 @@ dependencies {
   testImplementation project(":sens-webapp-db-changelog")
   testImplementation libraries.rest_assured
   testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libraries.spring_security_test
 }
 
 jar {
