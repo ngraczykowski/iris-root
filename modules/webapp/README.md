@@ -162,3 +162,10 @@ Gradle script to the released Web App version.
 1. [SERP release can be prepared now](https://jenkins.silenteight.com/job/sens/job/sens%252Fserp/).  
 New snapshot/release version will start using newly released Web App release.
 
+## Using Swagger UI
+To use Swagger UI you need to run WebApp in `dev` profile 
+and go to [/openapi/](localhost:7070/rest/webapp/openapi). 
+
+In order to make authenticated requests 
+click the key lock icon, type in desired client id (normally this would be `frontend`) 
+and click the `Authorize` button. 
