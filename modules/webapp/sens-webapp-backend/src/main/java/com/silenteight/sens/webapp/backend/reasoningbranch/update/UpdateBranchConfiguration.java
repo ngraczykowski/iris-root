@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Configuration;
 class UpdateBranchConfiguration {
 
   @Bean
-  UpdateReasoningBranchUseCase updateReasoningBranchUseCase(
-      ReasoningBranchUpdateRepository reasoningBranchUpdateRepository) {
-    return new UpdateReasoningBranchUseCase(reasoningBranchUpdateRepository);
+  UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase(
+      ChangeRequestRepository changeRequestRepository) {
+
+    return new UpdateReasoningBranchesUseCase(changeRequestRepository);
   }
 }

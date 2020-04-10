@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 
 import io.vavr.control.Try;
 
-public interface ReasoningBranchUpdateRepository {
+public interface ChangeRequestRepository {
 
-  Try<Void> save(UpdatedBranch updatedBranch);
+  Try<Void> save(UpdatedBranches updateBranches);
 }

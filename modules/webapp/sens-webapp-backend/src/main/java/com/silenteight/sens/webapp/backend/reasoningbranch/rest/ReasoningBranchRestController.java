@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchUseCase;
+import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
 import com.silenteight.sens.webapp.backend.security.Authority;
 
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
+import static java.util.Collections.singletonList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.ResponseEntity.notFound;
@@ -33,7 +34,7 @@ class ReasoningBranchRestController {
   private final ReasoningBranchDetailsQuery reasoningBranchDetailsQuery;
 
   @NonNull
-  private final UpdateReasoningBranchUseCase updateReasoningBranchUseCase;
+  private final UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase;
 
   @GetMapping("/decision-trees/{treeId}/branches/{branchNo}")
   @PreAuthorize(Authority.BUSINESS_OPERATOR)
@@ -63,8 +64,9 @@ class ReasoningBranchRestController {
     log.info(REASONING_BRANCH, "Updating Reasoning Branch. treeId={}, branchNo={}",
         treeId, branchNo);
 
-    return updateReasoningBranchUseCase
-        .apply(branchChanges.toCommand(BranchId.of(treeId, branchNo)))
+
+    return updateReasoningBranchesUseCase
+        .apply(branchChanges.toCommand(singletonList(BranchId.of(treeId, branchNo))))
         .map(ResponseEntity::ok)
         .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branch updated"))
         .onFailure(ex -> log.error(REASONING_BRANCH, "Could not update Reasoning Branch", ex))

@@ -9,22 +9,22 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING
 
 @RequiredArgsConstructor
 @Slf4j
-public class UpdateReasoningBranchUseCase {
+public class UpdateReasoningBranchesUseCase {
 
   private static final Try<Void> NO_CHANGES = Try.success(null);
 
-  private final ReasoningBranchUpdateRepository repository;
+  private final ChangeRequestRepository repository;
 
-  public Try<Void> apply(UpdateBranchCommand updateCommand) {
-    log.info(REASONING_BRANCH, "Updating Reasoning Branch details. command={}", updateCommand);
+  public Try<Void> apply(UpdateBranchesCommand updateCommand) {
+    log.info(REASONING_BRANCH, "Updating Reasoning Branches details. command={}", updateCommand);
 
     if (updateCommand.doesNotHaveChanges()) {
-      log.info(REASONING_BRANCH, "No changes detected in Reasoning Branch update data.");
+      log.info(REASONING_BRANCH, "No changes detected in Reasoning Branches update data.");
       return NO_CHANGES;
     }
 
     return repository.save(updateCommand)
-        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branch update applied."))
+        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branches update applied."))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not apply update", reason));
   }
 }

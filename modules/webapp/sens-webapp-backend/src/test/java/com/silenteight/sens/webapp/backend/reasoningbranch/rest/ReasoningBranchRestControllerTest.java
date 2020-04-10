@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.rest;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchCommand;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchUseCase;
+import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchesCommand;
+import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
 import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
 
@@ -20,6 +20,7 @@ import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
 import static io.vavr.control.Try.failure;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.anything;
@@ -35,7 +36,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
   private ReasoningBranchDetailsQuery reasoningBranchDetailsQuery;
 
   @MockBean
-  private UpdateReasoningBranchUseCase updateReasoningBranchUseCase;
+  private UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase;
 
   private static String mappingForBranch(long treeId, long branchNo) {
     return format("/decision-trees/%s/branches/%s", treeId, branchNo);
@@ -77,7 +78,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(role = BUSINESS_OPERATOR)
     void its404_whenBranchNotFound() {
-      given(updateReasoningBranchUseCase.apply(eq(BRANCH_UPDATE_COMMAND)))
+      given(updateReasoningBranchesUseCase.apply(eq(BRANCHES_UPDATE_COMMAND)))
           .willReturn(failure(BRANCH_NOT_FOUND_EXCEPTION));
 
       patch(mappingForBranch(TREE_ID, BRANCH_NO), BRANCH_CHANGE_REQUEST)
@@ -86,7 +87,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(role = BUSINESS_OPERATOR)
     void its400_whenNotSupportedAiSolution() {
-      given(updateReasoningBranchUseCase.apply(eq(BRANCH_UPDATE_COMMAND)))
+      given(updateReasoningBranchesUseCase.apply(eq(BRANCHES_UPDATE_COMMAND)))
           .willReturn(failure(AI_SOLUTION_NOT_SUPPORTED_EXCEPTION));
 
       patch(mappingForBranch(TREE_ID, BRANCH_NO), BRANCH_CHANGE_REQUEST)
@@ -95,7 +96,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(role = BUSINESS_OPERATOR)
     void its500_whenUnknownException() {
-      given(updateReasoningBranchUseCase.apply(eq(BRANCH_UPDATE_COMMAND)))
+      given(updateReasoningBranchesUseCase.apply(eq(BRANCHES_UPDATE_COMMAND)))
           .willReturn(failure(UNKNOWN_EXCEPTION));
 
       patch(mappingForBranch(TREE_ID, BRANCH_NO), BRANCH_CHANGE_REQUEST)
@@ -104,7 +105,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(role = BUSINESS_OPERATOR)
     void its200_whenSuccess() {
-      given(updateReasoningBranchUseCase.apply(eq(BRANCH_UPDATE_COMMAND)))
+      given(updateReasoningBranchesUseCase.apply(eq(BRANCHES_UPDATE_COMMAND)))
           .willReturn(Try.success(null));
 
       patch(mappingForBranch(TREE_ID, BRANCH_NO), BRANCH_CHANGE_REQUEST)
@@ -129,9 +130,9 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     static final BranchChangesRequestDto BRANCH_CHANGE_REQUEST = new BranchChangesRequestDto(
         AI_SOLUTION, IS_ACTIVE);
 
-    static final UpdateBranchCommand
-        BRANCH_UPDATE_COMMAND =
-        new UpdateBranchCommand(BranchId.of(TREE_ID, BRANCH_NO), AI_SOLUTION, IS_ACTIVE);
+    static final UpdateBranchesCommand BRANCHES_UPDATE_COMMAND =
+        new UpdateBranchesCommand(
+            singletonList(BranchId.of(TREE_ID, BRANCH_NO)), AI_SOLUTION, IS_ACTIVE);
 
     static final BranchNotFoundException BRANCH_NOT_FOUND_EXCEPTION =
         new BranchNotFoundException(new RuntimeException("someCause"));

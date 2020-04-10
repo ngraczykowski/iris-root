@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchCommand;
+import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchesCommand;
 
+import java.util.List;
 import javax.annotation.Nullable;
 
 @Data
@@ -20,11 +21,7 @@ public class BranchChangesRequestDto {
   @Nullable
   private Boolean active;
 
-  UpdateBranchCommand toCommand(BranchId branchId) {
-    return new UpdateBranchCommand(
-        branchId,
-        aiSolution,
-        active
-    );
+  UpdateBranchesCommand toCommand(List<BranchId> branchIds) {
+    return new UpdateBranchesCommand(branchIds, aiSolution, active);
   }
 }
