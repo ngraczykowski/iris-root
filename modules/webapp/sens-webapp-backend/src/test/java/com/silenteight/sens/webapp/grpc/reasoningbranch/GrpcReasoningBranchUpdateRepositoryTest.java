@@ -76,7 +76,6 @@ class GrpcReasoningBranchUpdateRepositoryTest {
 
   @Test
   void twoBranches_successAndGrpcRequestWithStatusChangeOnly() {
-
     Try<Void> actual = underTest.save(TWO_BRANCHES_WITH_ALL_CHANGES);
 
     assertSuccess(actual);
@@ -103,7 +102,6 @@ class GrpcReasoningBranchUpdateRepositoryTest {
                 TWO_BRANCHES_WITH_ALL_CHANGES.getNewAiSolution().orElseThrow())
             .hasEnablementChange(
                 TWO_BRANCHES_WITH_ALL_CHANGES.getNewStatus().orElseThrow()));
-
   }
 
 

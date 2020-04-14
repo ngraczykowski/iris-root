@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
@@ -18,7 +17,6 @@ import java.util.Optional;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
-import static java.util.Collections.singletonList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.ResponseEntity.notFound;
@@ -48,28 +46,25 @@ class ReasoningBranchRestController {
 
     branchDetails.ifPresentOrElse(
         details -> log.info(REASONING_BRANCH, "Found Reasoning Branch details. {}", details),
-        () -> log.error(REASONING_BRANCH, "Reasoning Branch details not found.")
-    );
+        () -> log.error(REASONING_BRANCH, "Reasoning Branch details not found."));
+
     return branchDetails
         .map(ResponseEntity::ok)
         .orElseGet(() -> notFound().build());
   }
 
-  @PatchMapping("/decision-trees/{treeId}/branches/{branchNo}")
+  @PatchMapping("/decision-trees/{treeId}/branches")
   @PreAuthorize(Authority.BUSINESS_OPERATOR)
   public ResponseEntity<Void> update(
-      @PathVariable long treeId,
-      @PathVariable long branchNo,
-      @RequestBody BranchChangesRequestDto branchChanges) {
-    log.info(REASONING_BRANCH, "Updating Reasoning Branch. treeId={}, branchNo={}",
-        treeId, branchNo);
-
+      @PathVariable long treeId, @RequestBody BranchesChangesRequestDto branchesChanges) {
+    log.info(REASONING_BRANCH, "Updating Reasoning Branches. treeId={}, dto={}",
+        treeId, branchesChanges);
 
     return updateReasoningBranchesUseCase
-        .apply(branchChanges.toCommand(singletonList(BranchId.of(treeId, branchNo))))
+        .apply(branchesChanges.toCommand(treeId))
         .map(ResponseEntity::ok)
-        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branch updated"))
-        .onFailure(ex -> log.error(REASONING_BRANCH, "Could not update Reasoning Branch", ex))
+        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branches updated"))
+        .onFailure(ex -> log.error(REASONING_BRANCH, "Could not update Reasoning Branches", ex))
         .recover(BranchNotFoundException.class, e -> notFound().build())
         .recover(AiSolutionNotSupportedException.class, e -> status(BAD_REQUEST).build())
         .getOrElse(() -> status(INTERNAL_SERVER_ERROR).build());

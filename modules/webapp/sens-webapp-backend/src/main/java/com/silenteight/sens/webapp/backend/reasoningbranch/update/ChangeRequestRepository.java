@@ -4,5 +4,5 @@ import io.vavr.control.Try;
 
 public interface ChangeRequestRepository {
 
-  Try<Void> save(UpdatedBranches updateBranches);
+  Try<Void> save(UpdatedBranches updatedBranches);
 }

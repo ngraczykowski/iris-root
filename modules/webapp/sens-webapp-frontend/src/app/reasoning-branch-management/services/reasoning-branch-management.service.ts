@@ -15,17 +15,20 @@ export class ReasoningBranchManagementService {
 
   getReasoningBranch(id: string): Observable<ReasoningBranchDetails> {
     const decisionTreeId = this.parseId(id)[0];
-    const reasonignBranchId = this.parseId(id)[1];
+    const reasoningBranchId = this.parseId(id)[1];
 
     // tslint:disable-next-line:max-line-length
-    return this.http.get<ReasoningBranchDetails>(`${environment.serverApiUrl}/decision-trees/${decisionTreeId}/branches/${reasonignBranchId}`);
+    return this.http.get<ReasoningBranchDetails>(`${environment.serverApiUrl}/decision-trees/${decisionTreeId}/branches/${reasoningBranchId}`);
   }
 
   updateReasoningBranch(id: string, payload): Observable<any> {
     const decisionTreeId = this.parseId(id)[0];
-    const reasonignBranchId = this.parseId(id)[1];
+    const reasoningBranchId = this.parseId(id)[1];
+    Object.assign(payload, {
+      branchIds: [reasoningBranchId]
+    });
 
-    return this.http.patch(`${environment.serverApiUrl}/decision-trees/${decisionTreeId}/branches/${reasonignBranchId}`, payload);
+    return this.http.patch(`${environment.serverApiUrl}/decision-trees/${decisionTreeId}/branches`, payload);
   }
 
   private parseId(id: string): string[] {

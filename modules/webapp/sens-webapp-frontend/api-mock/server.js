@@ -132,9 +132,9 @@ app.get('/rest/webapp/management/info', (req, res) => {
   }
 });
 
-app.patch('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
+app.patch('/rest/webapp/api/decision-trees/:treeId/branches', (req, res) => {
   let dataFile;
-  const id = req.params.branchId;
+  const id = req.body.branchIds[0];
   try {
     dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
     let json = JSON.parse(dataFile);
