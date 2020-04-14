@@ -1,0 +1,7 @@
+= ADR#1
+
+- Reference ticket: https://youtrack.silenteight.com/issue/WA-593[WA-593]
+
+[plantuml,sequence-diagram,svg]
+....
+include::diagrams/keycloak-migrations-1.puml[leveloffset=+1]
