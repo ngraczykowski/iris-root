@@ -4,4 +4,4 @@
 
 [plantuml,sequence-diagram,svg]
 ....
-include::diagrams/keycloak-migrations-1.puml[leveloffset=+1]
+include::diagrams/keycloak-migrations.puml[leveloffset=+1]
