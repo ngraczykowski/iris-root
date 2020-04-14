@@ -1,0 +1,17 @@
+= ADR#2
+
+- Reference ticket: https://youtrack.silenteight.com/issue/WA-620|[WA-620]
+- Reason: As a Business Operator I want to suggest changes into a multiple Reasoning Branches
+          and Approver can accept of reject suggested changes so safe Governance process is provides.
+
+== Maker flow
+[plantuml,maker-creates-change-request,svg]
+....
+include::diagrams/maker-creates-change-request.puml[leveloffset=+1]
+....
+
+== Approver flow
+[plantuml,approver-accept-or-reject-change-request,svg]
+....
+include::diagrams/approver-accept-or-reject-change-request.puml[leveloffset=+1]
+....
