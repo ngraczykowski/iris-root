@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import com.silenteight.proto.serp.v1.api.GetReasoningBranchRequest;
@@ -8,26 +10,16 @@ import com.silenteight.proto.serp.v1.api.ReasoningBranchResponse.Builder;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 
-import com.google.rpc.Code;
-import com.google.rpc.Status;
-import io.grpc.StatusRuntimeException;
+import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_FALSE_POSITIVE;
+import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_HINTED_FALSE_POSITIVE;
 
-import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.*;
-import static io.grpc.protobuf.StatusProto.toStatusRuntimeException;
-
-class GrpcReasoningBranchDetailsQueryFixtures {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+final class GrpcReasoningBranchDetailsQueryFixtures {
 
   static final ReasoningBranch ENABLED_REASONING_BRANCH =
       new ReasoningBranch(1, 2, true, BRANCH_FALSE_POSITIVE);
   static final ReasoningBranch DISABLED_REASONING_BRANCH =
       new ReasoningBranch(1, 3, false, BRANCH_HINTED_FALSE_POSITIVE);
-  static final Status NOT_FOUND_STATUS =
-      Status.newBuilder().setCode(Code.NOT_FOUND_VALUE).build();
-  static final StatusRuntimeException NOT_FOUND_RUNTIME_EXCEPTION = toStatusRuntimeException(
-      NOT_FOUND_STATUS);
-  static final StatusRuntimeException OTHER_STATUS_RUNTIME_EXCEPTION = toStatusRuntimeException(
-      Status.newBuilder().setCode(Code.INTERNAL_VALUE).build()
-  );
 
   @Value
   static class ReasoningBranch {
@@ -60,7 +52,5 @@ class GrpcReasoningBranchDetailsQueryFixtures {
           .setReasoningBranchId(getProtoBranchId())
           .build();
     }
-
-
   }
 }

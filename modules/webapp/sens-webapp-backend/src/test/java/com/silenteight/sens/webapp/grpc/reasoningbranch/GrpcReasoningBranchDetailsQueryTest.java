@@ -15,10 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.BranchDetailsDtoAssert.assertThatDetails;
+import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcFixtures.NOT_FOUND_RUNTIME_EXCEPTION;
+import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchDetailsQueryFixtures.DISABLED_REASONING_BRANCH;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchDetailsQueryFixtures.ENABLED_REASONING_BRANCH;
-import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchDetailsQueryFixtures.NOT_FOUND_RUNTIME_EXCEPTION;
-import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchDetailsQueryFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

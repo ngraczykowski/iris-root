@@ -25,6 +25,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.*;
@@ -34,6 +35,9 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private ReasoningBranchDetailsQuery reasoningBranchDetailsQuery;
+
+  @MockBean
+  private ReasoningBranchesQuery reasoningBranchesQuery;
 
   @MockBean
   private UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase;
@@ -74,6 +78,34 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(mappingForBranch(TREE_ID, BRANCH_NO_1)).statusCode(FORBIDDEN.value());
+    }
+  }
+
+  @Nested
+  class BranchList {
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void its200WithCorrectBody_whenFound() {
+      given(reasoningBranchesQuery.findByTreeIdAndBranchIds(
+          TREE_ID, asList(BRANCH_NO_1, BRANCH_NO_2)))
+          .willReturn(asList(
+              new BranchDto(BRANCH_NO_1, AI_SOLUTION, IS_ACTIVE),
+              new BranchDto(BRANCH_NO_2, AI_SOLUTION, IS_ACTIVE)));
+
+      post(mappingForBranches(TREE_ID), LIST_BRANCHES)
+          .statusCode(OK.value())
+          .body("size()", is(2))
+          .body("[0].reasoningBranchId", equalTo((int) BRANCH_NO_1))
+          .body("[0].aiSolution", equalTo(AI_SOLUTION))
+          .body("[0].active", equalTo(IS_ACTIVE))
+          .body("[1].reasoningBranchId", equalTo((int) BRANCH_NO_2))
+          .body("[1].aiSolution", equalTo(AI_SOLUTION))
+          .body("[1].active", equalTo(IS_ACTIVE));
+    }
+
+    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      post(mappingForBranches(TREE_ID), LIST_BRANCHES).statusCode(FORBIDDEN.value());
     }
   }
 
@@ -131,6 +163,9 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     static final String AI_SOLUTION = "True Positive";
     static final boolean IS_ACTIVE = false;
+
+    static final ListBranchesRequestDto LIST_BRANCHES =
+        new ListBranchesRequestDto(asList(BRANCH_NO_1, BRANCH_NO_2));
 
     static final BranchesChangesRequestDto BRANCHES_CHANGE_REQUEST =
         new BranchesChangesRequestDto(asList(BRANCH_NO_1, BRANCH_NO_2), AI_SOLUTION, IS_ACTIVE);

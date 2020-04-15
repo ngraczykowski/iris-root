@@ -19,8 +19,16 @@ class GrpcReasoningBranchConfiguration {
         branchSolutionMapper,
         BranchGovernanceGrpc
             .newBlockingStub(channel)
-            .withWaitForReady()
-    );
+            .withWaitForReady());
+  }
+
+  @Bean
+  GrpcReasoningBranchesQuery grpcReasoningBranchesQuery(@Qualifier("governance") Channel channel) {
+    return new GrpcReasoningBranchesQuery(
+        branchSolutionMapper,
+        BranchGovernanceGrpc
+            .newBlockingStub(channel)
+            .withWaitForReady());
   }
 
   @Bean
@@ -28,7 +36,6 @@ class GrpcReasoningBranchConfiguration {
       @Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchUpdateRepository(
         branchSolutionMapper,
-        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady()
-    );
+        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady());
   }
 }

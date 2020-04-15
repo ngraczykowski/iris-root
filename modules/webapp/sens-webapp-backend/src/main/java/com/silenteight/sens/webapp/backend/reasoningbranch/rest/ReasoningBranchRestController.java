@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
@@ -20,6 +21,7 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.ResponseEntity.notFound;
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -30,6 +32,9 @@ class ReasoningBranchRestController {
 
   @NonNull
   private final ReasoningBranchDetailsQuery reasoningBranchDetailsQuery;
+
+  @NonNull
+  private final ReasoningBranchesQuery reasoningBranchesQuery;
 
   @NonNull
   private final UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase;
@@ -51,6 +56,21 @@ class ReasoningBranchRestController {
     return branchDetails
         .map(ResponseEntity::ok)
         .orElseGet(() -> notFound().build());
+  }
+
+  @PostMapping("/decision-trees/{treeId}/branches")
+  @PreAuthorize(Authority.BUSINESS_OPERATOR)
+  public ResponseEntity<List<BranchDto>> list(
+      @PathVariable long treeId, @RequestBody ListBranchesRequestDto request) {
+    log.info(REASONING_BRANCH, "Listing Reasoning Branches. treeId={}, request={}",
+        treeId, request);
+
+    List<BranchDto> branches =
+        reasoningBranchesQuery.findByTreeIdAndBranchIds(treeId, request.getBranchIds());
+
+    log.info(REASONING_BRANCH, "Found {} Reasoning Branches.", branches.size());
+
+    return ok(branches);
   }
 
   @PatchMapping("/decision-trees/{treeId}/branches")
