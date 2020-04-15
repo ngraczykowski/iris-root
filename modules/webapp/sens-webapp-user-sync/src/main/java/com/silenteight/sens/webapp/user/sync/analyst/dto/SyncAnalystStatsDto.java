@@ -2,6 +2,8 @@ package com.silenteight.sens.webapp.user.sync.analyst.dto;
 
 import lombok.Value;
 
+import java.util.List;
+
 @Value
 public class SyncAnalystStatsDto {
 
@@ -10,4 +12,5 @@ public class SyncAnalystStatsDto {
   String addedRole;
   String updatedDisplayName;
   String deleted;
+  List<String> errors;
 }

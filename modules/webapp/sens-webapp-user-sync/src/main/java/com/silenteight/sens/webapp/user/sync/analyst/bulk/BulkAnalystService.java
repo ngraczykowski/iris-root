@@ -2,7 +2,6 @@ package com.silenteight.sens.webapp.user.sync.analyst.bulk;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
@@ -21,8 +20,8 @@ import io.vavr.control.Either;
 
 import java.util.List;
 
-import static com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.OperationResult.FAILURE;
-import static com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.OperationResult.SUCCESS;
+import static com.silenteight.sens.webapp.user.sync.analyst.bulk.SingleResult.failure;
+import static com.silenteight.sens.webapp.user.sync.analyst.bulk.SingleResult.success;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -39,98 +38,67 @@ public class BulkAnalystService {
   @NonNull
   private final LockUserUseCase lockUserUseCase;
 
-  public Result create(BulkCreateAnalystsRequest request) {
-    List<OperationResult> operationResults =
+  public BulkResult create(BulkCreateAnalystsRequest request) {
+    List<SingleResult> results =
         request.asRegisterExternalUserCommands().stream().map(this::create).collect(toList());
-    return new Result(operationResults);
+    return new BulkResult(results);
   }
 
-  private OperationResult create(RegisterExternalUserCommand command) {
+  private SingleResult create(RegisterExternalUserCommand command) {
     Either<UserDomainError, RegisterExternalUserUseCase.Success> registration =
         registerExternalUserUseCase.apply(command);
 
     if (registration.isRight())
-      return SUCCESS;
+      return success();
     else
-      return FAILURE;
+      return failure(registration.getLeft().getReason());
+
   }
 
-  public Result restore(BulkRestoreAnalystsRequest request) {
-    List<OperationResult> operationResults =
+  public BulkResult restore(BulkRestoreAnalystsRequest request) {
+    List<SingleResult> results =
         request.asUnlockUserCommands().stream().map(this::restore).collect(toList());
-    return new Result(operationResults);
+    return new BulkResult(results);
   }
 
-  private OperationResult restore(UnlockUserCommand command) {
+  private SingleResult restore(UnlockUserCommand command) {
     unlockUserUseCase.apply(command);
-    return SUCCESS;
+    return success();
   }
 
-  public Result addRole(BulkAddAnalystRoleRequest request) {
-    List<OperationResult> operationResults =
+  public BulkResult addRole(BulkAddAnalystRoleRequest request) {
+    List<SingleResult> operationResults =
         request.asAddRolesToUserCommands().stream().map(this::addRole).collect(toList());
-    return new Result(operationResults);
+    return new BulkResult(operationResults);
   }
 
-  private OperationResult addRole(AddRolesToUserCommand command) {
+  private SingleResult addRole(AddRolesToUserCommand command) {
     addRolesToUserUseCase.apply(command);
-    return SUCCESS;
+    return success();
   }
 
-  public Result updateDisplayName(BulkUpdateDisplayNameRequest request) {
-    List<OperationResult> operationResults =
+  public BulkResult updateDisplayName(BulkUpdateDisplayNameRequest request) {
+    List<SingleResult> operationResults =
         request
             .asUpdateUserDisplayNameCommands()
             .stream()
             .map(this::updateDisplayName).collect(toList());
-    return new Result(operationResults);
+    return new BulkResult(operationResults);
   }
 
-  private OperationResult updateDisplayName(UpdateUserDisplayNameCommand command) {
+  private SingleResult updateDisplayName(UpdateUserDisplayNameCommand command) {
     updateUserDisplayNameUseCase.apply(command);
-    return SUCCESS;
+    return success();
   }
 
-  public Result delete(BulkDeleteAnalystsRequest request) {
-    List<OperationResult> operationResults =
+  public BulkResult delete(BulkDeleteAnalystsRequest request) {
+    List<SingleResult> operationResults =
         request.asLockUserCommands().stream().map(this::delete).collect(toList());
-    return new Result(operationResults);
+    return new BulkResult(operationResults);
   }
 
-  private OperationResult delete(LockUserCommand command) {
+  private SingleResult delete(LockUserCommand command) {
     lockUserUseCase.apply(command);
-    return SUCCESS;
-  }
-
-  @Value
-  public static class Result {
-
-    private static final String MESSAGE_JOINER = " / ";
-
-    private final long success;
-    private final long failure;
-
-    public Result(List<OperationResult> operationResults) {
-      success = countOperationResults(operationResults, SUCCESS);
-      failure = countOperationResults(operationResults, FAILURE);
-    }
-
-    private static long countOperationResults(
-        List<OperationResult> operationResults, OperationResult expected) {
-
-      return operationResults
-          .stream()
-          .filter(operationResult -> operationResult == expected)
-          .count();
-    }
-
-    public String asMessage() {
-      return success + MESSAGE_JOINER + (success + failure);
-    }
-  }
-
-  public enum OperationResult {
-
-    SUCCESS, FAILURE;
+    return success();
   }
 }

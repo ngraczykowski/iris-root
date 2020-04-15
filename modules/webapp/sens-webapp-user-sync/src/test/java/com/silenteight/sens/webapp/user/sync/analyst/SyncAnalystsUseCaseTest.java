@@ -2,7 +2,8 @@ package com.silenteight.sens.webapp.user.sync.analyst;
 
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
-import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.Result;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkResult;
+import com.silenteight.sens.webapp.user.sync.analyst.bulk.SingleResult;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
@@ -19,7 +20,8 @@ import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANAL
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.NEW_ANALYST;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.RESTORED_ANALYST;
 import static com.silenteight.sens.webapp.user.sync.analyst.UserDtoFixtures.*;
-import static com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService.OperationResult.SUCCESS;
+import static com.silenteight.sens.webapp.user.sync.analyst.bulk.SingleResult.failure;
+import static com.silenteight.sens.webapp.user.sync.analyst.bulk.SingleResult.success;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -40,12 +42,16 @@ class SyncAnalystsUseCaseTest {
   @Mock
   private BulkAnalystService bulkAnalystService;
 
+  private SyncAnalystProperties syncAnalystProperties;
+
   private SyncAnalystsUseCase underTest;
 
   @BeforeEach
   void setUp() {
+    syncAnalystProperties = new SyncAnalystProperties();
     underTest = new SyncAnalystConfiguration()
-        .syncAnalystsUseCase(userListQuery, externalAnalystRepository, bulkAnalystService);
+        .syncAnalystsUseCase(
+            userListQuery, externalAnalystRepository, bulkAnalystService, syncAnalystProperties);
   }
 
   @Test
@@ -187,7 +193,46 @@ class SyncAnalystsUseCaseTest {
         new BulkDeleteAnalystsRequest(singletonList(GNS_USER.getUserName())));
   }
 
-  private static Result createResult(long success) {
-    return new Result(range(0, success).mapToObj(i -> SUCCESS).collect(toList()));
+  @Test
+  void analystsCreationFailed_syncAnalysts() {
+    // given
+    setUpDefaultNonCreationSyncResults();
+    String msg1 = "msg1";
+    String msg2 = "msg2";
+    String msg3 = "msg3";
+    when(bulkAnalystService.create(any(BulkCreateAnalystsRequest.class)))
+        .thenReturn(
+            bulkResult(failure(msg1), success(), failure(msg2), failure(msg3), failure("msg4")));
+
+    syncAnalystProperties.setMaxErrors(3);
+    underTest = new SyncAnalystConfiguration()
+        .syncAnalystsUseCase(
+            userListQuery, externalAnalystRepository, bulkAnalystService, syncAnalystProperties);
+
+    // when
+    SyncAnalystStatsDto stats = underTest.synchronize();
+
+    // then
+    assertThat(stats.getAdded()).isEqualTo("1 / 5");
+    assertThat(stats.getErrors()).containsExactly(msg1, msg2, msg3);
+  }
+
+  private void setUpDefaultNonCreationSyncResults() {
+    when(bulkAnalystService.restore(any(BulkRestoreAnalystsRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.addRole(any(BulkAddAnalystRoleRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.updateDisplayName(any(BulkUpdateDisplayNameRequest.class)))
+        .thenReturn(createResult(0));
+    when(bulkAnalystService.delete(any(BulkDeleteAnalystsRequest.class)))
+        .thenReturn(createResult(0));
+  }
+
+  private static BulkResult bulkResult(SingleResult... results) {
+    return new BulkResult(asList(results));
+  }
+
+  private static BulkResult createResult(long success) {
+    return new BulkResult(range(0, success).mapToObj(i -> success()).collect(toList()));
   }
 }

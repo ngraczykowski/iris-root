@@ -14,6 +14,7 @@ sens.webapp.db.connections.min: 1
 sens.webapp.db.connections.max: 10
 
 sens.user.sync.analyst.enabled: ${SENS_USER_SYNC_ANALYST_ENABLED}
+sens.user.sync.analyst.errors.max: 10
 sens.gns.db.users.table: ${GNS_DB_USERS_TABLE}
 sens.gns.db.host: ${GNS_DB_HOST}
 sens.gns.db.port: ${GNS_DB_PORT}
@@ -145,6 +146,7 @@ user:
     analyst:
       enabled: ${sens.user.sync.analyst.enabled}
       user-db-relation-name: ${sens.gns.db.users.table}
+      max-errors: ${sens.user.sync.analyst.errors.max}
       datasource:
         url: ${sens.gns.db.url}
         username: ${sens.gns.db.user}

@@ -27,10 +27,12 @@ class SyncAnalystConfiguration {
   SyncAnalystsUseCase syncAnalystsUseCase(
       UserListQuery userListQuery,
       ExternalAnalystRepository externalAnalystRepository,
-      BulkAnalystService bulkAnalystService) {
+      BulkAnalystService bulkAnalystService,
+      SyncAnalystProperties syncAnalystProperties) {
 
     return new SyncAnalystsUseCase(
-        userListQuery, externalAnalystRepository, new AnalystSynchronizer(), bulkAnalystService);
+        userListQuery, externalAnalystRepository, new AnalystSynchronizer(), bulkAnalystService,
+        syncAnalystProperties.getMaxErrors());
   }
 
   @Bean
