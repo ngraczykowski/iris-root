@@ -1,0 +1,87 @@
+@startuml
+header Reporter flow
+
+title  Generate report **on-demand**
+
+participant Reporter order 10
+database SERP_DB as "SERP Database" order 20
+participant RabbitMQ as "Rabbit MQ" order 30
+database Data_Sources as "Data Source" order 40
+database HDD order 50
+
+box "Reporter [SERP]"
+participant Reporter
+participant SERP_DB
+end box
+
+loop scheduler fetch reports to generation
+
+    Reporter <-> SERP_DB: Fetch report requests waiting for generation
+    note over Reporter, SERP_DB
+        Fetch report requests in QUEUE state.
+        Apply any limitations and constraints (e.g. 5 concurrent reports).
+    end note
+
+    activate Reporter #LightBlue
+
+    Reporter -> RabbitMQ: Publish event to generate a report
+    note over Reporter, RabbitMQ
+        Event contains all required data to start report generation
+    end note
+
+    deactivate Reporter
+end
+
+|||
+
+loop listen on report generation events
+    Reporter <-> RabbitMQ: Listen and fetch report generation event(s)
+    activate Reporter
+
+    Reporter <-> SERP_DB: Update report state
+    note over Reporter, SERP_DB
+        QUEUE -> IN PROGRESS
+    end note
+
+    activate Reporter #Salmon
+
+    Reporter <-> Data_Sources: Fetch required report data
+    note over Reporter, Data_Sources
+        Data can come from different Data Sources, e.g.:
+        * Warehouse DB (preferably via Warehouse API)
+        * SERP DB
+        * other APIs (e.g. Keycloak)
+    end note
+
+    alt Report Generated Successfully
+
+        Reporter -[#green]> Reporter: Generate report data
+        note over Reporter: Apply report core business logic
+
+        Reporter -> Reporter: Create report file
+
+        Reporter <-> HDD: Store report
+
+        Reporter <-> SERP_DB: Update report entity
+        note over Reporter, SERP_DB
+            * generated at
+            * status: IN PROGRESS -> DONE
+            * path to report stored on HDD
+        end note
+
+    else Report Can't Be Generated
+
+        Reporter -[#red]>x Reporter: Generate report data
+
+        Reporter <-> SERP_DB: Update report entity
+        note over Reporter, SERP_DB
+            * status: IN PROGRESS -> ERROR
+            * error message
+        end note
+
+        deactivate Reporter
+    end
+end
+
+deactivate Reporter
+@enduml

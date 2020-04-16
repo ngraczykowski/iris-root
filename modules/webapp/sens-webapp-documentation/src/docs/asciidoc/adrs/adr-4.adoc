@@ -1,0 +1,19 @@
+= ADR#4
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-602[WA-602]*
+- Reason: As a Business Operator or Auditor I want to generate report on-demand,
+          so I can download it once the report will be ready.
+
+== User flow
+
+[plantuml,request-report-on-demand,svg]
+....
+include::diagrams/request-report-on-demand.puml[leveloffset=+1]
+....
+
+== Reporter flow
+
+[plantuml,generate-report-on-demand,svg]
+....
+include::diagrams/generate-report-on-demand.puml[leveloffset=+1]
+....

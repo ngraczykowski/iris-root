@@ -57,7 +57,7 @@ alt Report Scheduled
         * status (QUEUE)
     end note
 
-    Reporter --[#green]> Web_App: Scheduled report result
+    Reporter -[#green]> Web_App: Scheduled report result
 
     deactivate Reporter
 
