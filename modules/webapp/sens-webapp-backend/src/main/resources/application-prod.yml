@@ -1,23 +1,31 @@
 keycloak:
-  configTemplatesDir: /configuration-templates
-  configTemplateName: sens-webapp-realm-prod.ftl.json
-  importingPolicy: SKIP
-  authServerUrl: http://localhost:4200/auth
-  user: sens
-  password: sens
-  clients:
-    frontend:
-      root-url: http://localhost:4200
-      base-url: http://localhost:4200
-      secret: unused
-      redirect-uris:
-        - http://localhost:4200/*
-
-    backend:
+  adapter:
+    authServerUrl: http://localhost:4200/auth
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials:
       secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
-
-    admin-cli.secret: 37f0abbf-c95b-47ad-92d9-92165c9a549b
-    report-cli.secret: 5ddbddc0-9da2-41b7-92c3-7b1948339add
+  migrator:
+    migrations: classpath:configuration-migrations/*
+    user: sens
+    password: sens
+    authServerUrl: ${keycloak.adapter.authServerUrl}
+    templateProperties:
+      clients:
+        frontend:
+          rootUrl: http://localhost:4200
+          baseUrl: http://localhost:4200
+          secret: unused
+          redirectUris:
+            - http://localhost:4200/*
+        backend:
+          secret: ${keycloak.adapter.credentials.secret}
+        adminCli.secret: 37f0abbf-c95b-47ad-92d9-92165c9a549b
+        reportCli.secret: 5ddbddc0-9da2-41b7-92c3-7b1948339add
 
 springdoc:
   api-docs:

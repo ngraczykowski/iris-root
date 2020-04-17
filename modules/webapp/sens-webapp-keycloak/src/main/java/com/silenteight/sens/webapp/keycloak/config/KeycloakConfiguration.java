@@ -8,6 +8,7 @@ import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.adapters.config.AdapterConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.DependsOn;
 import static com.silenteight.sens.webapp.keycloak.config.startup.ImportKeycloakConfiguration.IMPORT_KEYCLOAK_CONFIG_BEAN;
 
 @Configuration
+@EnableConfigurationProperties(KeycloakConfigurationProperties.class)
 public class KeycloakConfiguration {
 
   public static final String KEYCLOAK_ADMIN_CLIENT = "keycloakAdminClient";
@@ -27,7 +29,7 @@ public class KeycloakConfiguration {
 
   @Bean
   AdapterConfig adapterConfig(KeycloakAdapterConfigFactory keycloakAdapterConfigFactory) {
-    return keycloakAdapterConfigFactory.getAdapterConfig();
+    return keycloakAdapterConfigFactory.getAdapter();
   }
 
   @Bean(KEYCLOAK_WEBAPP_CLIENT)

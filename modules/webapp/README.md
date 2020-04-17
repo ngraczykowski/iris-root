@@ -59,8 +59,8 @@ Prior to running API make sure you ran [UI](#web-app-ui), as it starts reverse p
    
 | Profile | Behaviour                                                                                                                                                                                                                                                                                                                                       |
 |---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads raw Keycloak config stored in [`conf/keycloak/sens-webapp-realm.json`](conf/keycloak/sens-webapp-realm.json). Additionally launches Swagger UI at [/openapi/ endpoint](localhost:7070/rest/webapp/openapi).|
-| `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak production template stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates) and fills it with values passed in properties.                     |
+| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:7070/rest/webapp/openapi).|
+| `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak config stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates).                                   |
     
 1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
 
@@ -80,6 +80,13 @@ Whole Keycloak development configuration is stored in [conf/keycloak](conf/keycl
 Everything can be configured using GUI available at:
 - [localhost:8081](http://localhost:8081) for main Keycloak instance
 - [localhost:8095](http://localhost:8095) for SAML idP Keycloak instance
+
+##### Migrations
+Application loads ordered Keycloak migration files. 
+Every file should conform to template: `number-policy-name.json(ftl)`, valid examples are: `1-onEveryRun-myMigration.json` and `2-onFirstRun-myOtherMigration.json.ftl`. 
+The template values can be set in valid `application.yaml` file. First migration is treated as base migration (creates realm) 
+and is always needed, while the others are Keycloak's partial imports. To create such partial import, please refer
+to examples [here](https://github.com/adorsys/keycloak-config-cli/tree/master/src/test/resources/import-files).
 
 ##### Users and roles
 Currently we support following roles:

@@ -4,5 +4,5 @@ import org.keycloak.representations.adapters.config.AdapterConfig;
 
 public interface KeycloakAdapterConfigFactory {
 
-  AdapterConfig getAdapterConfig();
+  AdapterConfig getAdapter();
 }
