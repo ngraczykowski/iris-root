@@ -15,6 +15,8 @@ public final class SensWebappLogMarkers {
 
   public static final Marker INTERNAL = MarkerFactory.getMarker("INTERNAL");
 
+  public static final Marker CHANGE_REQUEST = MarkerFactory.getMarker("CHANGE_REQUEST");
+
   private SensWebappLogMarkers() {
   }
 }

@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.backend;
 
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
+import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
@@ -17,9 +18,10 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
 
 @SpringBootApplication(
     scanBasePackageClasses = {
+        ApplicationLoggingModule.class,
+        ChangeRequestModule.class,
         GrpcModule.class,
         KeycloakModule.class,
-        ApplicationLoggingModule.class,
         ReasoningBranchModule.class,
         ReportModule.class,
         ScbReportModule.class,
@@ -38,3 +40,4 @@ public class WebApplication {
     new SensWebAppApplicationTemplate(args, WebApplication.class).run();
   }
 }
+
