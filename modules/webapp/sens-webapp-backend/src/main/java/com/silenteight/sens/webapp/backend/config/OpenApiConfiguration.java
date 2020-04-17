@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @OpenAPIDefinition(security = {
-    @SecurityRequirement(name = OpenApiConfig.WEBAPP_OPENID_SECURITY_SCHEMA)
+    @SecurityRequirement(name = OpenApiConfiguration.WEBAPP_OPENID_SECURITY_SCHEMA)
 })
 @SecurityScheme(
-    name = OpenApiConfig.WEBAPP_OPENID_SECURITY_SCHEMA,
+    name = OpenApiConfiguration.WEBAPP_OPENID_SECURITY_SCHEMA,
     type = SecuritySchemeType.OAUTH2,
     in = SecuritySchemeIn.HEADER,
     bearerFormat = "jwt",
@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Profile;
 )
 @Configuration
 @Profile("dev")
-class OpenApiConfig {
+class OpenApiConfiguration {
 
   static final String WEBAPP_OPENID_SECURITY_SCHEMA = "oauth2-webapp";
 }

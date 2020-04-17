@@ -15,6 +15,16 @@ keycloak:
     password: sens
     authServerUrl: ${keycloak.adapter.authServerUrl}
 
+chrome-extension:
+  auth-url: https://serp-master.silenteight.com/auth/realms/sens-webapp/
+  recommendation-url: https://localhost:24443/rest/scb-bridge/v1/recommendation
+  open-record-url-pattern: https://sens-master.silenteight.com/gns-demo/*/homepage_files/openRecord.html*
+  solution-url-pattern: https://sens-master.silenteight.com/gns-demo/*/homepage_files/setDecision.html*
+  hits-url-pattern: https://sens-master.silenteight.com/gns-demo/*/homepage_files/displayHits.html*
+  log-level: debug
+  comment-length-threshold: 1024
+  refresh-interval-in-ms: 1000
+
 logging:
   level:
     com.silenteight: DEBUG

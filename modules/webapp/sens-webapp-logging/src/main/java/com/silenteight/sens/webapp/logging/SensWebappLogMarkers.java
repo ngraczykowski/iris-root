@@ -9,8 +9,6 @@ public final class SensWebappLogMarkers {
 
   public static final Marker REASONING_BRANCH = MarkerFactory.getMarker("REASONING_BRANCH");
 
-  public static final Marker KEYCLOAK = MarkerFactory.getMarker("KEYCLOAK");
-
   public static final Marker KEYCLOAK_MIGRATION = MarkerFactory.getMarker("KEYCLOAK_MIGRATION");
 
   public static final Marker INTERNAL = MarkerFactory.getMarker("INTERNAL");
