@@ -1,0 +1,19 @@
+:release_version: 1.11.0
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *PENDING*
+- Release date: *NA*
+
+:leveloffset: +1
+
+// --------------------------------------------------------------------
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-593[WA-593]
+|Add Keycloak config migration feature, which allows updating configuration on every startup of Webapp and simplifies maintenance of occurring changes.
+
+include::./templates/changelog-table-footer.adoc[]
