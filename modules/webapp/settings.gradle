@@ -1,5 +1,6 @@
 rootProject.name = 'webapp'
 
+include 'sens-webapp-audit'
 include 'sens-webapp-backend'
 include 'sens-webapp-common'
 include 'sens-webapp-common-testing'
@@ -8,7 +9,7 @@ include 'sens-webapp-documentation'
 include 'sens-webapp-frontend'
 include 'sens-webapp-kernel'
 include 'sens-webapp-keycloak'
+include 'sens-webapp-logging'
 include 'sens-webapp-user'
 include 'sens-webapp-user-sync'
-include 'sens-webapp-logging'
 
