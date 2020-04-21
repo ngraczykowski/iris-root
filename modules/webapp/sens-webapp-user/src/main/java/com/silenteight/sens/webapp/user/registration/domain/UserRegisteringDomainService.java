@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.domain.validator.*;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
@@ -16,11 +16,10 @@ import io.vavr.control.Option;
 
 import java.util.Optional;
 
-import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
-@Slf4j
 @RequiredArgsConstructor
 public class UserRegisteringDomainService {
 
@@ -31,11 +30,12 @@ public class UserRegisteringDomainService {
   private final RolesValidator rolesValidator;
   private final UsernameUniquenessValidator usernameUniquenessValidator;
   private final RegexValidator passwordCharsValidator;
+  private final AuditLog auditLog;
 
   public Either<UserDomainError, CompletedUserRegistration> register(
       NewUserRegistration registration) {
 
-    log.info(USER_MANAGEMENT, "Registering User. registration={}", registration);
+    auditLog.logInfo(USER_MANAGEMENT, "Registering User. registration={}", registration);
     Option<InvalidNameLengthError> invalidUsernameLengthError =
         usernameLengthValidator.validate(registration.getUsername());
     if (invalidUsernameLengthError.isDefined())

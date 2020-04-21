@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.configmigration.migrator;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrations;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrator;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrator.CouldNotPerformMigrationException;
@@ -39,6 +40,8 @@ class KeycloakHttpMigratorTest {
   private KeycloakHttpBodiesParser keycloakHttpBodiesParser;
   @Mock
   private RealmNameExtractor realmNameExtractor;
+  @Mock
+  private AuditLog auditLog;
 
   static final String REALM_NAME = "sens-webapp";
 
@@ -47,7 +50,7 @@ class KeycloakHttpMigratorTest {
   @BeforeEach
   void setUp() {
     underTest = new KeycloakHttpMigratorConfiguration()
-        .keycloakMigrator(keycloakHttpBodiesParser, realmNameExtractor, keycloak);
+        .keycloakMigrator(keycloakHttpBodiesParser, realmNameExtractor, keycloak, auditLog);
   }
 
   @Nested

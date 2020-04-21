@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
@@ -25,6 +26,8 @@ class GrpcReasoningBranchesQueryTest {
 
   @Mock
   private BranchGovernanceBlockingStub stub;
+  @Mock
+  private AuditLog auditLog;
 
   private GrpcReasoningBranchesQuery underTest;
   private BranchSolutionMapper mapper;
@@ -32,7 +35,7 @@ class GrpcReasoningBranchesQueryTest {
   @BeforeEach
   void setUp() {
     mapper = new BranchSolutionMapper();
-    underTest = new GrpcReasoningBranchesQuery(mapper, stub);
+    underTest = new GrpcReasoningBranchesQuery(mapper, stub, auditLog);
   }
 
   @Test

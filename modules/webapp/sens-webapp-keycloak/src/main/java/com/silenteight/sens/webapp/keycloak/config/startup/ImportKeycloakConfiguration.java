@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.config.startup;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrationsLoader;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrator;
 
@@ -14,7 +15,8 @@ public class ImportKeycloakConfiguration {
   @Bean(IMPORT_KEYCLOAK_CONFIG_BEAN)
   ImportKeycloakMigrationsTask importKeycloakConfig(
       KeycloakMigrator migrator,
-      KeycloakMigrationsLoader migrationsLoader) {
-    return new ImportKeycloakMigrationsTask(migrator, migrationsLoader);
+      KeycloakMigrationsLoader migrationsLoader,
+      AuditLog auditLog) {
+    return new ImportKeycloakMigrationsTask(migrator, migrationsLoader, auditLog);
   }
 }

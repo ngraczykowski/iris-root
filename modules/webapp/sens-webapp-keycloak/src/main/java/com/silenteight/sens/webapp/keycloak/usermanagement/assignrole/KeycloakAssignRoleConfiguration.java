@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.assignrole;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
+
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +12,8 @@ class KeycloakAssignRoleConfiguration {
 
   @Bean
   KeycloakUserRoleAssigner keycloakUserRoleAssigner(
-      RolesResource rolesResource, UsersResource usersResource) {
+      RolesResource rolesResource, UsersResource usersResource, AuditLog auditLog) {
 
-    return new KeycloakUserRoleAssigner(usersResource, rolesResource);
+    return new KeycloakUserRoleAssigner(usersResource, rolesResource, auditLog);
   }
 }

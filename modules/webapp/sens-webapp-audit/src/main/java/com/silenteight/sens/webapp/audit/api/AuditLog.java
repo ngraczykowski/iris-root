@@ -1,7 +1,7 @@
-package com.silenteight.sens.webapp.audit;
+package com.silenteight.sens.webapp.audit.api;
 
-import static com.silenteight.sens.webapp.audit.SeverityLevel.ERROR;
-import static com.silenteight.sens.webapp.audit.SeverityLevel.INFO;
+import static com.silenteight.sens.webapp.audit.api.SeverityLevel.ERROR;
+import static com.silenteight.sens.webapp.audit.api.SeverityLevel.INFO;
 
 public interface AuditLog {
 

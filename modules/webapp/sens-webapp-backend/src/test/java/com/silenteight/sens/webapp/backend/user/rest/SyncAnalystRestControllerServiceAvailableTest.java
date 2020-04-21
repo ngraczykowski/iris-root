@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.user.sync.analyst.SyncAnalystsUseCase;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
 import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
@@ -42,5 +43,17 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
   @TestWithRole(roles = { ANALYST, AUDITOR, BUSINESS_OPERATOR })
   void its403_whenNotPermittedRole() {
     post("/users/sync/analysts").statusCode(FORBIDDEN.value());
+  }
+
+  @TestWithRole(role = ADMIN)
+  void registersAuditLogMessage() {
+    // given
+    when(service.synchronize()).thenReturn(ALL_CHANGED_WITH_ONE_ERROR);
+
+    // when
+    post("/users/sync/analysts");
+
+    // then
+    verify(auditLog).logInfo(USER_MANAGEMENT, "Synchronizing Analysts", new Object[0]);
   }
 }

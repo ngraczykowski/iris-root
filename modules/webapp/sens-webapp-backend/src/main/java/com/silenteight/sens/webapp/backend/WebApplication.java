@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend;
 
+import com.silenteight.sens.webapp.audit.slf4j.Slf4jBasedAuditLogModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
 import com.silenteight.sens.webapp.backend.chromeextension.ChromeExtensionModule;
@@ -27,6 +28,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ReasoningBranchModule.class,
         ReportModule.class,
         ScbReportModule.class,
+        Slf4jBasedAuditLogModule.class,
         UserModule.class,
         UserRestModule.class,
         UserSyncModule.class,

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.assignrole.KeycloakUserRoleAssigner;
 
 import org.keycloak.admin.client.resource.RolesResource;
@@ -14,16 +15,19 @@ class KeycloakUserManagementConfiguration {
 
   @Bean
   KeycloakRegisteredUserRepository keycloakUserRegistrationRepository(
-      UsersResource usersResource, KeycloakUserRoleAssigner keycloakUserRoleAssigner) {
+      UsersResource usersResource, KeycloakUserRoleAssigner keycloakUserRoleAssigner,
+      AuditLog auditLog) {
 
     return new KeycloakRegisteredUserRepository(
-        new KeycloakUserCreator(usersResource),
-        keycloakUserRoleAssigner);
+        new KeycloakUserCreator(usersResource, auditLog),
+        keycloakUserRoleAssigner,
+        auditLog);
   }
 
   @Bean
-  KeycloakUsernameUniquenessValidator keycloakUsernameValidator(UsersResource usersResource) {
-    return new KeycloakUsernameUniquenessValidator(usersResource);
+  KeycloakUsernameUniquenessValidator keycloakUsernameValidator(
+      UsersResource usersResource, AuditLog auditLog) {
+    return new KeycloakUsernameUniquenessValidator(usersResource, auditLog);
   }
 
   @Bean

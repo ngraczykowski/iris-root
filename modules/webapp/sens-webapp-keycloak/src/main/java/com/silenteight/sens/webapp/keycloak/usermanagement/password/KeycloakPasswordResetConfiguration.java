@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.id.KeycloakUserIdProvider;
 
 import org.keycloak.admin.client.resource.UsersResource;
@@ -11,7 +12,8 @@ class KeycloakPasswordResetConfiguration {
 
   @Bean
   KeycloakUserCredentialsRepository keycloakUserCredentialsRepository(
-      KeycloakUserIdProvider keycloakUserIdProvider, UsersResource usersResource) {
-    return new KeycloakUserCredentialsRepository(usersResource, keycloakUserIdProvider);
+      KeycloakUserIdProvider keycloakUserIdProvider, UsersResource usersResource,
+      AuditLog auditLog) {
+    return new KeycloakUserCredentialsRepository(usersResource, keycloakUserIdProvider, auditLog);
   }
 }

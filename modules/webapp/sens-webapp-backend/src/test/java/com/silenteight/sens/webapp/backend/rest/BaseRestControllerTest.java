@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.rest;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest.TestRestConfiguration;
 import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRoleExtension;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,6 +40,9 @@ public abstract class BaseRestControllerTest {
 
   @Autowired
   private WebApplicationContext context;
+
+  @MockBean
+  protected AuditLog auditLog;
 
   @RegisterExtension
   public static TestWithRoleExtension testWithRoleExtension =

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.id.KeycloakUserIdProvider;
 import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
@@ -37,6 +38,9 @@ class KeycloakUserCredentialsRepositoryTest {
 
   @Mock
   private KeycloakUserIdProvider keycloakUserIdProvider;
+
+  @Mock
+  private AuditLog auditLog;
 
   @Captor
   private ArgumentCaptor<CredentialRepresentation> credentialsCaptor;

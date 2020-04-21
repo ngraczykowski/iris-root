@@ -4,3 +4,7 @@ plugins {
 }
 
 description = "SENS WebApp Audit"
+
+configurations {
+  implementation.extendsFrom starterSpring
+}

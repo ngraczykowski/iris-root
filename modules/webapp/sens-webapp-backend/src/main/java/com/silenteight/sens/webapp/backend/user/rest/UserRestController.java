@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.security.Authority;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.TemporaryPasswordDto;
@@ -37,8 +38,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import javax.validation.Valid;
 
+import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
-import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -70,10 +71,14 @@ class UserRestController {
   @NonNull
   private final RolesQuery rolesQuery;
 
+  @NonNull
+  private final AuditLog auditLog;
+
   @GetMapping
   @PreAuthorize(Authority.ADMIN)
   public Page<UserDto> users(Pageable pageable) {
-    log.info(USER_MANAGEMENT,
+    auditLog.logInfo(
+        USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
         pageable.getPageNumber(),
         pageable.getPageSize());
@@ -83,15 +88,16 @@ class UserRestController {
   @PostMapping
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
-    log.info(USER_MANAGEMENT, "Creating new User. dto={}", dto);
+    auditLog.logInfo(USER_MANAGEMENT, "Creating new User. dto={}", dto);
 
     Either<UserDomainError, RegisterInternalUserUseCase.Success> result =
         registerInternalUserUseCase.apply(dto.toCommand());
 
     if (result.isRight())
-      log.info(USER_MANAGEMENT, "Successfully created new User");
+      auditLog.logInfo(USER_MANAGEMENT, "Successfully created new User");
     else
-      log.error(USER_MANAGEMENT, "User creation error. reason={}", result.getLeft().getReason());
+      auditLog.logError(
+          USER_MANAGEMENT, "User creation error. reason={}", result.getLeft().getReason());
 
     return result
         .map(RegisterInternalUserUseCase.Success::getUsername)
@@ -104,12 +110,14 @@ class UserRestController {
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<Void> update(
       @PathVariable String username, @Valid @RequestBody UpdateUserDto dto) {
-    log.info(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
+    auditLog.logInfo(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
 
     return Try.run(() -> updateUserUseCase.apply(dto.toCommand(username)))
-        .onSuccess(ignore -> log.info(USER_MANAGEMENT, "Updated user. username={}", username))
+        .onSuccess(
+            ignore -> auditLog.logInfo(USER_MANAGEMENT, "Updated user. username={}", username))
         .onFailure(
-            e -> log.error(USER_MANAGEMENT, "Could not update user. username={}", username, e))
+            e -> auditLog.logError(
+                USER_MANAGEMENT, "Could not update user. username={}", username, e))
         .mapTry(ignore -> new ResponseEntity<Void>(NO_CONTENT))
         .recover(UserUpdateException.class, e -> status(INSUFFICIENT_STORAGE).build())
         .recover(DisplayNameValidationException.class, e -> status(UNPROCESSABLE_ENTITY).build())
@@ -129,16 +137,16 @@ class UserRestController {
   @PatchMapping("/{username}/password/reset")
   @PreAuthorize(Authority.ADMIN)
   public ResponseEntity<TemporaryPasswordDto> resetPassword(@PathVariable String username) {
-    log.info(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
+    auditLog.logInfo(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
     Try<TemporaryPassword> result = Try.of(() -> resetPasswordUseCase.execute(username));
 
     if (result.isSuccess()) {
-      log.info(USER_MANAGEMENT, "Password has been reset. username={}", username);
+      auditLog.logInfo(USER_MANAGEMENT, "Password has been reset. username={}", username);
       return ok(result.map(TemporaryPasswordDto::from).get());
     }
 
     Throwable problem = result.getCause();
-    log.error(USER_MANAGEMENT, "Could not reset password. username={}", username, problem);
+    auditLog.logError(USER_MANAGEMENT, "Could not reset password. username={}", username, problem);
 
     return Match(problem).of(
         Case($(instanceOf(UserNotFoundException.class)), () -> notFound().build()),
@@ -148,7 +156,7 @@ class UserRestController {
 
   @GetMapping("/roles")
   public ResponseEntity<RolesDto> roles() {
-    log.info(USER_MANAGEMENT, "Listing roles");
+    auditLog.logInfo(USER_MANAGEMENT, "Listing roles");
     return ok(rolesQuery.list());
   }
 

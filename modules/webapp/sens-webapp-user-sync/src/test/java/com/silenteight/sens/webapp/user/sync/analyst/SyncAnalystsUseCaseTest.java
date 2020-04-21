@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.user.sync.analyst.bulk.BulkResult;
@@ -42,6 +43,9 @@ class SyncAnalystsUseCaseTest {
   @Mock
   private BulkAnalystService bulkAnalystService;
 
+  @Mock
+  private AuditLog auditLog;
+
   private SyncAnalystProperties syncAnalystProperties;
 
   private SyncAnalystsUseCase underTest;
@@ -50,8 +54,8 @@ class SyncAnalystsUseCaseTest {
   void setUp() {
     syncAnalystProperties = new SyncAnalystProperties();
     underTest = new SyncAnalystConfiguration()
-        .syncAnalystsUseCase(
-            userListQuery, externalAnalystRepository, bulkAnalystService, syncAnalystProperties);
+        .syncAnalystsUseCase(userListQuery, externalAnalystRepository, bulkAnalystService,
+            syncAnalystProperties, auditLog);
   }
 
   @Test
@@ -206,8 +210,8 @@ class SyncAnalystsUseCaseTest {
 
     syncAnalystProperties.setMaxErrors(3);
     underTest = new SyncAnalystConfiguration()
-        .syncAnalystsUseCase(
-            userListQuery, externalAnalystRepository, bulkAnalystService, syncAnalystProperties);
+        .syncAnalystsUseCase(userListQuery, externalAnalystRepository, bulkAnalystService,
+            syncAnalystProperties, auditLog);
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 
 import org.keycloak.admin.client.resource.RealmResource;
@@ -38,7 +39,8 @@ class KeycloakLastLoginTimeConfiguration {
   @Bean
   LastLoginTimeCacheUpdater lastLoginTimeCacheUpdater(
       CachedLastLoginTimeProvider lastLoginTimeProvider,
-      LastLoginTimeBulkFetcher lastLoginTimeBulkFetcher) {
-    return new LastLoginTimeCacheUpdater(lastLoginTimeBulkFetcher, lastLoginTimeProvider);
+      LastLoginTimeBulkFetcher lastLoginTimeBulkFetcher,
+      AuditLog auditLog) {
+    return new LastLoginTimeCacheUpdater(lastLoginTimeBulkFetcher, lastLoginTimeProvider, auditLog);
   }
 }

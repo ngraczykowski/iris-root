@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.user.update;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
+
 import io.vavr.control.Option;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,12 +19,15 @@ class UpdateUserUseCaseTest {
   @Mock
   private UpdatedUserRepository updatedUserRepository;
 
+  @Mock
+  private AuditLog auditLog;
+
   private UpdateUserUseCase underTest;
 
   @BeforeEach
   void setUp() {
     underTest = new UserUpdateUseCaseConfiguration().updateUserUseCase(
-        updatedUserRepository, roles -> Option.none(), displayName -> Option.none());
+        updatedUserRepository, roles -> Option.none(), displayName -> Option.none(), auditLog);
   }
 
   @Test

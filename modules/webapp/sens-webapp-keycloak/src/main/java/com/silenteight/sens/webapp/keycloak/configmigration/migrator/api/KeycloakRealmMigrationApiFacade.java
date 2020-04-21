@@ -3,6 +3,8 @@ package com.silenteight.sens.webapp.keycloak.configmigration.migrator.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
+import com.silenteight.sens.webapp.audit.api.AuditMarker;
 import com.silenteight.sens.webapp.keycloak.configmigration.migrator.KeycloakRealmMigrationApi;
 
 import org.keycloak.admin.client.resource.RealmsResource;
@@ -16,12 +18,14 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.KEYCLOAK_MIGRATION;
 
+
 @Slf4j
 @RequiredArgsConstructor
 class KeycloakRealmMigrationApiFacade implements KeycloakRealmMigrationApi {
 
   private final Policy importPolicy;
   private final RealmsResource realmsResource;
+  private final AuditLog auditLog;
 
   @Override
   public void partialImport(
@@ -32,8 +36,8 @@ class KeycloakRealmMigrationApiFacade implements KeycloakRealmMigrationApi {
         .partialImport(partialImportRepresentation);
 
     if (isNotSuccessful(response)) {
-      log.error(
-          KEYCLOAK_MIGRATION, "Could not perform partial import. response={}",
+      auditLog.logError(
+          AuditMarker.KEYCLOAK_MIGRATION, "Could not perform partial import. response={}",
           response.getStatusInfo());
       throw new FailedToPerformMigration(response);
     }

@@ -35,12 +35,13 @@ dependencies {
 
   compile libraries.hibernate_envers
 
+  implementation project(":sens-webapp-audit")
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-db-changelog")
   implementation project(":sens-webapp-keycloak")
+  implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-user")
   implementation project(":sens-webapp-user-sync")
-  implementation project(":sens-webapp-logging")
 
   implementation libraries.springdoc_ui
   implementation libraries.springdoc_data_rest

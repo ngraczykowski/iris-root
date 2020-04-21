@@ -1,13 +1,13 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.GetReasoningBranchRequest;
 import com.silenteight.proto.serp.v1.api.GetReasoningBranchRequest.Builder;
 import com.silenteight.proto.serp.v1.api.ReasoningBranchResponse;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDetailsDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchDetailsQuery;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
@@ -17,9 +17,9 @@ import io.vavr.control.Try;
 import java.util.Optional;
 
 import static com.google.rpc.Code.NOT_FOUND;
+import static com.silenteight.sens.webapp.audit.api.AuditMarker.REASONING_BRANCH;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
-import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -29,15 +29,15 @@ import static io.vavr.control.Try.success;
 import static java.util.Optional.empty;
 
 @RequiredArgsConstructor
-@Slf4j
 class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
 
   private final BranchSolutionMapper mapper;
   private final BranchGovernanceBlockingStub branches;
+  private final AuditLog auditLog;
 
   @Override
   public Optional<BranchDetailsDto> findByTreeIdAndBranchId(long treeId, long branchId) {
-    log.info(REASONING_BRANCH,
+    auditLog.logInfo(REASONING_BRANCH,
         "Fetching Reasoning Branch details using gRPC BranchGovernance. treeId={}, branchId={}",
         treeId, branchId);
 
@@ -53,17 +53,17 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
                 Case($(codeIs(NOT_FOUND)), () -> success(empty())),
                 Case($(), () -> failure(exception)))
         )
-        .onSuccess(GrpcReasoningBranchDetailsQuery::logFetchingSuccess)
-        .onFailure(GrpcReasoningBranchDetailsQuery::logFetchingFailed)
+        .onSuccess(this::logFetchingSuccess)
+        .onFailure(this::logFetchingFailed)
         .get();
   }
 
-  private static void logFetchingFailed(Throwable throwable) {
-    log.error(REASONING_BRANCH, "Could not fetch Branch details", throwable);
+  private void logFetchingFailed(Throwable throwable) {
+    auditLog.logError(REASONING_BRANCH, "Could not fetch Branch details", throwable);
   }
 
-  private static void logFetchingSuccess(Optional<BranchDetailsDto> branchDetails) {
-    log.info(REASONING_BRANCH, "Fetched Branch details. {}", branchDetails);
+  private void logFetchingSuccess(Optional<BranchDetailsDto> branchDetails) {
+    auditLog.logInfo(REASONING_BRANCH, "Fetched Branch details. {}", branchDetails);
   }
 
   private BranchDetailsDto mapToDetailsDto(ReasoningBranchResponse grpcResponse) {

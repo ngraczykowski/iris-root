@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.user.sync.analyst;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static java.util.Objects.isNull;
@@ -26,12 +26,14 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
-@Slf4j
+@RequiredArgsConstructor
 class AnalystSynchronizer {
+
+  private final AuditLog auditLog;
 
   SynchronizedAnalysts synchronize(
       @NonNull Collection<UserDto> users, @NonNull Collection<Analyst> analysts) {
-    log.info(USER_MANAGEMENT, "Synchronizing Analysts");
+    auditLog.logInfo(USER_MANAGEMENT, "Synchronizing Analysts");
 
     return new SynchronizedAnalysts(
         analystsToCreate(users, analysts),

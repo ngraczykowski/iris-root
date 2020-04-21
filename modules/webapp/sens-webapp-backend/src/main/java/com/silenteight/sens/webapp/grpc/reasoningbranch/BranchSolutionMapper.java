@@ -10,11 +10,11 @@ class BranchSolutionMapper {
     return BranchSolution.valueOf(addBranchPrefix(solution));
   }
 
-  String map(BranchSolution solution) {
-    return solution.name().replaceFirst(SOLUTION_PREFIX, "");
-  }
-
   private static String addBranchPrefix(String newSolution) {
     return SOLUTION_PREFIX + newSolution.toUpperCase().replace(" ", "_");
+  }
+
+  String map(BranchSolution solution) {
+    return solution.name().replaceFirst(SOLUTION_PREFIX, "");
   }
 }
