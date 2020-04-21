@@ -62,7 +62,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(TOO_LONG_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
+    assertThatResult(actual)
+        .isFailureOfType(InvalidNameLengthError.class)
+        .containsErrorReason(TOO_LONG_USERNAME_REQUEST.getUsername()
+            + " has invalid length. Should be between 3 and 30 inclusive.");
   }
 
   @Test
@@ -70,7 +73,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(TOO_SHORT_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
+    assertThatResult(actual)
+        .isFailureOfType(InvalidNameLengthError.class)
+        .containsErrorReason(TOO_SHORT_USERNAME_REQUEST.getUsername()
+            + " has invalid length. Should be between 3 and 30 inclusive.");
   }
 
   @Test
@@ -78,7 +84,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(RESTRICTED_CHAR_UPPERCASE_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(RegexError.class);
+    assertThatResult(actual)
+        .isFailureOfType(RegexError.class)
+        .containsErrorReason(RESTRICTED_CHAR_UPPERCASE_USERNAME_REQUEST.getUsername()
+            + " has invalid chars. Only lowercase letters, numbers and -_@. chars allowed.");
   }
 
   @Test
@@ -86,7 +95,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(RESTRICTED_CHAR_NONASCII_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(RegexError.class);
+    assertThatResult(actual)
+        .isFailureOfType(RegexError.class)
+        .containsErrorReason(RESTRICTED_CHAR_NONASCII_USERNAME_REQUEST.getUsername()
+            + " has invalid chars. Only lowercase letters, numbers and -_@. chars allowed.");
   }
 
   @Test
@@ -94,7 +106,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(RESTRICTED_CHAR_INVALID_SPECIAL_USERNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(RegexError.class);
+    assertThatResult(actual)
+        .isFailureOfType(RegexError.class)
+        .containsErrorReason(RESTRICTED_CHAR_INVALID_SPECIAL_USERNAME_REQUEST.getUsername()
+            + " has invalid chars. Only lowercase letters, numbers and -_@. chars allowed.");
   }
 
   @Test
@@ -104,7 +119,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(TOO_LONG_DISPLAYNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
+    assertThatResult(actual)
+        .isFailureOfType(InvalidNameLengthError.class)
+        .containsErrorReason(TOO_LONG_DISPLAYNAME_REQUEST.getDisplayName()
+            + " has invalid length. Should be between 3 and 50 inclusive.");
   }
 
   @Test
@@ -114,7 +132,10 @@ class RegisterInternalUserUseCaseTest {
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(TOO_SHORT_DISPLAYNAME_REQUEST);
 
-    assertThatResult(actual).isFailureOfType(InvalidNameLengthError.class);
+    assertThatResult(actual)
+        .isFailureOfType(InvalidNameLengthError.class)
+        .containsErrorReason(TOO_SHORT_DISPLAYNAME_REQUEST.getDisplayName()
+            + " has invalid length. Should be between 3 and 50 inclusive.");
   }
 
   @Nested
@@ -152,7 +173,7 @@ class RegisterInternalUserUseCaseTest {
   }
 
   @Nested
-  class GivenRolesAreValidAndUsernameIsUniqueAndCredentialsAreValid {
+  class GivenRolesAndCredentialsAreValidAndUsernameIsUnique {
 
     @BeforeEach
     void setUp() {
@@ -224,12 +245,12 @@ class RegisterInternalUserUseCaseTest {
     void registerWithRoles_doesNotSaveToRepo() {
       underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
-      verifyZeroInteractions(registeredUserRepository);
+      verifyNoInteractions(registeredUserRepository);
     }
   }
 
   @Nested
-  class GivenUsernameIsUniqueRolesAreValidAndCredentialsAreInvalid {
+  class GivenUsernameIsUniqueRolesAndCredentialsAreInvalid {
 
     @BeforeEach
     void setUp() {

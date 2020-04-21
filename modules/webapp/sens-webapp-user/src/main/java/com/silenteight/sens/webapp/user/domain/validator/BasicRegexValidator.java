@@ -19,7 +19,7 @@ class BasicRegexValidator implements RegexValidator {
   @Override
   public Option<RegexError> validate(@NonNull String value) {
     if (!pattern.matcher(value).matches())
-      return of(new RegexError(errorMessage));
+      return of(new RegexError(String.format(errorMessage, value)));
 
     return none();
   }

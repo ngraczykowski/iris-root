@@ -36,4 +36,10 @@ class ResultAssert
 
     return this;
   }
+
+  ResultAssert containsErrorReason(String errorReason) {
+    assertThat(actual.getLeft().getReason()).isEqualTo(errorReason);
+
+    return this;
+  }
 }

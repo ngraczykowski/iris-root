@@ -16,7 +16,7 @@ class ValidatorConfiguration {
   private static final String USERNAME_CHARS_REGEX = "[a-z0-9._@\\-]*";
   private static final Pattern USERNAME_CHARS_PATTERN = Pattern.compile(USERNAME_CHARS_REGEX);
   private static final String USERNAME_CHARS_MESSAGE =
-      "Username has invalid chars. Only lowercase letters, numbers and -_@. chars allowed.";
+      "%s has invalid chars. Only lowercase letters, numbers and -_@. chars allowed.";
   private static final String PASSWORD_CHARS_REGEX = "^(?=.*?[0-9])(?=.*?[A-Za-z]).{8,}$";
   private static final Pattern PASSWORD_CHARS_PATTERN = Pattern.compile(PASSWORD_CHARS_REGEX);
   private static final String PASSWORD_CHARS_MESSAGE =
