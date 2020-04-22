@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.reportscb;
 
-import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.api.Report;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.dto.UserDto;
@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -47,7 +48,7 @@ class AccountsReportGeneratorTest {
     when(repository.listEnabled()).thenReturn(users);
 
     //when
-    Report report = underTest.generateReport();
+    Report report = underTest.generateReport(emptyMap());
 
     //then
     assertThat(report.getReportFileName()).isEqualTo("accounts-report.csv");

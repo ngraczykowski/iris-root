@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.report.exception;
+package com.silenteight.sens.webapp.backend.report.api.exception;
 
 public class ReportNotFoundException extends RuntimeException {
 

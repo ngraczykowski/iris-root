@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.report;
+package com.silenteight.sens.webapp.backend.report.api;
 
 public interface ReportProvider {
 

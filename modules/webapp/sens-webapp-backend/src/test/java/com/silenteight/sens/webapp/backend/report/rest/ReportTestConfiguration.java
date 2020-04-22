@@ -1,8 +1,11 @@
 package com.silenteight.sens.webapp.backend.report.rest;
 
-import com.silenteight.sens.webapp.backend.report.Report;
-import com.silenteight.sens.webapp.backend.report.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.ReportModule;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.sens.webapp.backend.report.api.Report;
+import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
+import com.silenteight.sens.webapp.backend.report.config.ReportConfigModule;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.support.csv.SimpleLinesSupplier;
 
@@ -10,11 +13,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.sens.webapp.backend.report.rest.ReportTestFixtures.REPORT_NAME;
-import static java.util.Arrays.asList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import static java.lang.String.format;
+import static java.util.Map.Entry.comparingByKey;
+import static java.util.stream.Collectors.toList;
 
 @Configuration
-@ComponentScan(basePackageClasses = ReportModule.class)
+@ComponentScan(basePackageClasses = { ReportConfigModule.class, ReportRestModule.class })
 class ReportTestConfiguration {
 
   @Bean
@@ -26,25 +34,38 @@ class ReportTestConfiguration {
 
     @Override
     public String getName() {
-      return REPORT_NAME;
+      return ReportTestFixtures.REPORT_NAME;
     }
 
     @Override
-    public Report generateReport() {
-      return new DummyReport();
+    public Report generateReport(Map<String, String> parameters) {
+      return new DummyReport(parameters);
     }
   }
 
+  @RequiredArgsConstructor
   private static class DummyReport implements Report {
+
+    @NonNull
+    private final Map<String, String> parameters;
 
     @Override
     public String getReportFileName() {
-      return REPORT_NAME;
+      return ReportTestFixtures.REPORT_NAME;
     }
 
     @Override
     public LinesSupplier getReportContent() {
-      return new SimpleLinesSupplier(asList("first_report_line", "second_report_line"));
+      List<String> lines = new LinkedList<>();
+      lines.add("Requested query parameters:");
+      lines.addAll(
+          parameters.entrySet()
+              .stream()
+              .sorted(comparingByKey())
+              .map(e -> format("%s=%s", e.getKey(), e.getValue()))
+              .collect(toList()));
+
+      return new SimpleLinesSupplier(lines);
     }
   }
 }

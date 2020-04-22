@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.reportscb;
 
-import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.api.Report;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.*;
 
 class EntitlementReportGeneratorTest {
@@ -18,7 +19,7 @@ class EntitlementReportGeneratorTest {
 
   @Test
   void generateEntitlementReportWhenRequested() {
-    Report report = underTest.generateReport();
+    Report report = underTest.generateReport(emptyMap());
 
     assertThat(report.getReportFileName()).isEqualTo("entitlement-report.csv");
     assertThat(report.getReportContent().lines()).containsExactly(getExpectedReport());

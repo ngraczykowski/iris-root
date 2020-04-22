@@ -1,11 +1,12 @@
 package com.silenteight.sens.webapp.reportscb;
 
-import com.silenteight.sens.webapp.backend.report.Report;
-import com.silenteight.sens.webapp.backend.report.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.ReportLinesReader;
+import com.silenteight.sens.webapp.backend.report.api.Report;
+import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
+import com.silenteight.sens.webapp.backend.report.api.ReportLinesReader;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -24,7 +25,7 @@ class SecurityMatrixReportGenerator implements ReportGenerator {
   }
 
   @Override
-  public Report generateReport() {
+  public Report generateReport(Map<String, String> parameters) {
     return new SimpleReport(FILE_NAME, getReportData());
   }
 

@@ -30,13 +30,17 @@ class ReportRestControllerIT extends BaseRestControllerTest {
   @TestWithRole(role = AUDITOR)
   void reportDataWhenValidReportNameRequested() {
     given()
+        .queryParam("paramA", "paramValueABC")
+        .queryParam("paramB", "paramValueEFG")
         .accept("text/csv")
         .when().get(RestConstants.ROOT + "/report/" + REPORT_NAME)
         .then().contentType("text/csv")
         .log().ifValidationFails()
         .statusCode(OK.value())
         .headers(from("Content-Disposition", "attachment; filename=" + REPORT_NAME))
-        .content(containsString("first_report_line\nsecond_report_line"));
+        .content(
+            containsString(
+                "Requested query parameters:\nparamA=paramValueABC\nparamB=paramValueEFG"));
   }
 
   @TestWithRole(roles = { ADMIN, ANALYST, BUSINESS_OPERATOR })

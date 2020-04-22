@@ -1,10 +1,11 @@
 package com.silenteight.sens.webapp.reportscb;
 
-import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.api.Report;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.*;
 
 class SecurityMatrixReportGeneratorTest {
@@ -13,7 +14,7 @@ class SecurityMatrixReportGeneratorTest {
 
   @Test
   void generateEntitlementReportWhenRequested() {
-    Report report = underTest.generateReport();
+    Report report = underTest.generateReport(emptyMap());
 
     assertThat(report.getReportFileName()).isEqualTo("security-matrix-report.csv");
     assertThat(report.getReportContent().lines()).containsExactly(getExpectedReport());
@@ -53,6 +54,6 @@ class SecurityMatrixReportGeneratorTest {
         "F,,,SOLUTION_VIEW,Reading recommendations through Chrome Extension for all"
             + " Batch Types,,,,,,,,,X",
         ",,,DECISION_TREE_VIEW_ALL,\"May view contents of all decision trees"
-            + " (RBs, alerts)\",,,X?,,,,,,"};
+            + " (RBs, alerts)\",,,X?,,,,,," };
   }
 }

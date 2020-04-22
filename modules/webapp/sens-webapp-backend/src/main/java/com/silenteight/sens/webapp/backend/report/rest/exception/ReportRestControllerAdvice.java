@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.report.rest.exception;
 
-import com.silenteight.sens.webapp.backend.report.exception.ReportNotFoundException;
+import com.silenteight.sens.webapp.backend.report.api.exception.ReportNotFoundException;
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
 import com.silenteight.sens.webapp.common.rest.exception.dto.ErrorDto;

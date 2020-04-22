@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.reportscb;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.api.Report;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.support.csv.SimpleLinesSupplier;
 
