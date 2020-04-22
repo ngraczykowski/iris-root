@@ -11,3 +11,7 @@ database.
 - JDBC Template-based so the txs are supported correctly
 
 Must be done by Friday.
+
+Table as in https://youtrack.silenteight.com/issue/Idea-29
+
+API must allow to add all the fields as in table in Idea-29.
