@@ -5,5 +5,9 @@ database.
 
 ## TODO
 
-- liquibase migration to create single table in the database
+- liquibase migration to create single table in the database (table named
+  `audit`)
 - API for inserting audit events to the database
+- JDBC Template-based so the txs are supported correctly
+
+Must be done by friday.
