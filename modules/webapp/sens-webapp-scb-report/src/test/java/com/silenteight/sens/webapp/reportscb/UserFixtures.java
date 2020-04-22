@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.reportscb;
+package com.silenteight.sens.webapp.reportscb;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

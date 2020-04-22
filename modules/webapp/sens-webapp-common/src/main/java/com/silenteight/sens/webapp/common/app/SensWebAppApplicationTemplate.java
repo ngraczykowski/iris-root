@@ -14,12 +14,21 @@ import org.springframework.context.ConfigurableApplicationContext;
 @Slf4j
 public class SensWebAppApplicationTemplate {
 
+  private final String appName;
   private final String[] args;
   private final Class<?> source;
 
-  public SensWebAppApplicationTemplate(@NonNull String[] args, @NonNull Class<?> source) {
+  public SensWebAppApplicationTemplate(
+      @NonNull String appName,
+      @NonNull String[] args,
+      @NonNull Class<?> source) {
+
+    this.appName = appName;
     this.args = args;
     this.source = source;
+
+    new ApplicationBootstrapper(appName, "sens.home", new HomeDirectoryDiscoverer("SENS_HOME"))
+        .bootstrapApplication();
   }
 
   public void run() {

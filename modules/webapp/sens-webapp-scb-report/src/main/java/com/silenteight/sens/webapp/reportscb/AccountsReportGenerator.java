@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.reportscb;
+package com.silenteight.sens.webapp.reportscb;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import com.silenteight.sens.webapp.user.dto.UserDto;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.sens.webapp.backend.reportscb.ReportColumns.*;
+import static com.silenteight.sens.webapp.reportscb.ReportColumns.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;

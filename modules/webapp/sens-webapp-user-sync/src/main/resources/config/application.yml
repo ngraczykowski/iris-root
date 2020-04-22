@@ -1,0 +1,33 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+sens.user.sync.analyst.enabled: ${SENS_USER_SYNC_ANALYST_ENABLED}
+sens.user.sync.analyst.errors.max: 10
+sens.gns.db.users.table: ${GNS_DB_USERS_TABLE}
+sens.gns.db.host: ${GNS_DB_HOST}
+sens.gns.db.port: ${GNS_DB_PORT}
+sens.gns.db.service.name: ${GNS_DB_SERVICE}
+sens.gns.db.url: jdbc:oracle:thin:@${sens.gns.db.host}:${sens.gns.db.port}/${sens.gns.db.service.name}
+sens.gns.db.user: ${GNS_DB_USER}
+sens.gns.db.password: ${GNS_DB_PASSWORD}
+
+sens.gns.db.connections.min: 1
+sens.gns.db.connections.max: 3
+
+####################################################################################################
+# Users synchronisation
+####################################################################################################
+user:
+  sync:
+    analyst:
+      enabled: ${sens.user.sync.analyst.enabled}
+      user-db-relation-name: ${sens.gns.db.users.table}
+      max-errors: ${sens.user.sync.analyst.errors.max}
+      datasource:
+        url: ${sens.gns.db.url}
+        username: ${sens.gns.db.user}
+        password: ${sens.gns.db.password}
+        hikari:
+          minimum-idle: ${sens.gns.db.connections.min}
+          maximum-pool-size: ${sens.gns.db.connections.max}

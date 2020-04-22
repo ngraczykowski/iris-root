@@ -56,6 +56,7 @@ go to `Import` and import users file located in [conf/keycloak dir](conf/keycloa
 #### Web App API
 
 Prior to running API make sure you ran [UI](#web-app-ui), as it starts reverse proxy required by whole app to run correctly.
+Also make sure that the project was built (`gw build`) before starting the API and the plugins are present in the ./plugin/webapp folder as they are used by the Web Application.
    
 | Profile | Behaviour                                                                                                                                                                                                                                                                                                                                       |
 |---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
