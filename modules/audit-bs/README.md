@@ -10,4 +10,4 @@ database.
 - API for inserting audit events to the database
 - JDBC Template-based so the txs are supported correctly
 
-Must be done by friday.
+Must be done by Friday.
