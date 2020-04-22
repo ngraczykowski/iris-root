@@ -1,6 +1,7 @@
 plugins {
   id "idea"
   id "java-library"
+  id "maven-publish"
   id "com.silenteight.gradle.wrapper" version "1.0.25"
   id "com.silenteight.gradle.release" version "1.0.9"
   id "com.silenteight.gradle.convention" version "1.14.0"
@@ -9,4 +10,3 @@ plugins {
 projectSetup {
   javaVersion = JavaVersion.VERSION_11
 }
-
