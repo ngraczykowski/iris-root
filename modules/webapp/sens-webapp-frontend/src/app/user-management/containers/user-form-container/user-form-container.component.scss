@@ -1,5 +1,6 @@
-@import '../../../../styles/layout/popup';
-@import 'future-component/tooltip';
+@import '_old-main';
+@import '../../../../styles/_old/layout/popup';
+@import '_old/future-component/tooltip';
 
 .popup-window {
   overflow: visible;

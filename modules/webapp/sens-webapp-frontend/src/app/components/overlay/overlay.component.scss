@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import '_old/variables';
+@import '_old/mixins';
 
 :host(.is-active) {
   .overlay {

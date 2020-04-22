@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'components/element-details-row';
+@import '_old/variables';
+@import '_old/components/element-details-row';
 
 $alert-details-module-height: 413px;
 $alert-details-module-half-height: ($alert-details-module-height / 2) - $space-l - 25px;

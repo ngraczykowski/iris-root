@@ -1,8 +1,10 @@
+@import '_old-main';
+
 .search-filed {
   display: flex;
   justify-content: flex-end;
 
-  .input-field-icon {
+  .input-field {
     width: 240px;
 
     .search-icon {

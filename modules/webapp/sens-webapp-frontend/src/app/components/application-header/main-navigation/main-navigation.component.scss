@@ -1,7 +1,8 @@
-@import 'variables';
-@import '../../../../styles/framework/1-load/colors';
-@import '../../../../styles/framework/3-foundations/colors';
-@import 'mixins';
+@import '_old-main';
+@import '_old/variables';
+@import '../../../../styles/_old/framework/1-load/colors';
+@import '../../../../styles/_old/framework/3-foundations/colors';
+@import '_old/mixins';
 
 .navigation {
   display: flex;

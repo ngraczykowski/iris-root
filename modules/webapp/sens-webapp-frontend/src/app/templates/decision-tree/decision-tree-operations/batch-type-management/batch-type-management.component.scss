@@ -1,6 +1,7 @@
-@import 'components/popup-full-screen';
-@import 'components/selected-elements-panel';
-@import 'future-component/tooltip';
+@import '_old/components/popup-full-screen';
+
+@import '_old/components/selected-elements-panel';
+@import '_old/future-component/tooltip';
 
 .page-scroll {
   .page-wrapper {

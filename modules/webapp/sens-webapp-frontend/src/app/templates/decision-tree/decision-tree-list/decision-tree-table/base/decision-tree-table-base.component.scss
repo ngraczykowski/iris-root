@@ -1,4 +1,4 @@
-@import 'variables';
+@import '_old/variables';
 
 $column-id: 30px + $space-table-gap;
 $column-name: minmax(340px + $space-table-gap, 1fr);

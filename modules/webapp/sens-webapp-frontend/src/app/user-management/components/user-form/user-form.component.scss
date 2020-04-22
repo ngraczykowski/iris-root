@@ -1,6 +1,7 @@
-@import 'variables';
-@import "src/styles/framework/1-load/colors";
-@import "src/styles/framework/3-foundations/colors";
+@import '_old-main';
+@import '_old/variables';
+@import "../../../../styles/_old/framework/1-load/colors";
+@import "../../../../styles/_old/framework/3-foundations/colors";
 
 .user-profile {
   .user-profile-row {

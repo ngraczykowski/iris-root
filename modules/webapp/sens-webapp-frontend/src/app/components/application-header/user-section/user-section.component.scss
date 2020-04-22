@@ -1,5 +1,6 @@
-@import 'variables';
-@import 'mixins';
+@import '_old-main';
+@import '_old/variables';
+@import '_old/mixins';
 
 .user-section {
   margin-left: $space-l;

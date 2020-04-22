@@ -1,6 +1,7 @@
-@import 'variables';
-@import 'mixins';
-@import 'global/buttons';
+@import '_old-main';
+@import '_old/variables';
+@import '_old/mixins';
+@import '_old/global/buttons';
 
 :host {
   @include transition(all, $transition-normal, ease-in-out);

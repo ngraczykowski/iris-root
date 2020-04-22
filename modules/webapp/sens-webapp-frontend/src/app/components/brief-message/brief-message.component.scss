@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import '_old/variables';
+@import '_old/mixins';
 
 .brief-message {
   @include transition(all, $transition-fast, ease-in-out);

@@ -1,4 +1,4 @@
-@import 'mixins';
+@import '_old/mixins';
 
 .selected-elements-panel {
   @include transition(all, $transition-fast, ease-in-out);
