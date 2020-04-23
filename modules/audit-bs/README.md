@@ -16,6 +16,8 @@ database.
 1. Inject the bean of type `AuditingLogger`
 2. Call the method `log(AuditDataDto auditDataDto)`
 
+The `AuditDataDto` class has a related builder
+
 ## TODO
 
 + liquibase migration to create single table in the database (table named
