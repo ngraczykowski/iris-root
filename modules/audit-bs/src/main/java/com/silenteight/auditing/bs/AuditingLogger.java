@@ -21,7 +21,8 @@ public class AuditingLogger {
         + " VALUES (:evid, :coid, :time, :type, :prnc, :enid, :encl, :enac, :detl)";
 
     jdbcTemplate.update(insertLogSQL,
-        new MapSqlParameterSource().addValue("evid", auditDataDto.getEventId())
+        new MapSqlParameterSource()
+            .addValue("evid", auditDataDto.getEventId())
             .addValue("coid", auditDataDto.getCorrelationId())
             .addValue("time", auditDataDto.getTimestamp())
             .addValue("type", auditDataDto.getType())
