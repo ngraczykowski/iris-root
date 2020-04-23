@@ -1,0 +1,6 @@
+serp.db.schema: public
+spring:
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${serp.db.schema}
+    contexts: default
