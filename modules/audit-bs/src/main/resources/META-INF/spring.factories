@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.silenteight.auditing.bs.AuditingConfig
+  com.silenteight.auditing.bs.AuditingConfiguration

@@ -21,33 +21,24 @@ repositories {
 }
 
 libraries.platform_spring_boot = [group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: springBootVersion]
-libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.8.5']
-libraries.javax_transaction_api = [group: 'javax.transaction', name: 'javax.transaction-api', version: '1.2']
-libraries.spring_data_jpa = [group: 'org.springframework.data', name: 'spring-data-jpa']
+libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
 libraries.spring_jdbc = [group: 'org.springframework', name: 'spring-jdbc']
+
 libraries.hikari_cp = [group: 'com.zaxxer', name: 'HikariCP', version: '3.4.2']
+libraries.javax_transaction_api = [group: 'javax.transaction', name: 'javax.transaction-api', version: '1.2']
+libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.8.5']
 libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.9']
 
 dependencies {
-  implementation "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
   implementation platform(libraries.platform_spring_boot)
 
-  // Liquibase for handling migrations
-  implementation libraries.liquibase_core
+  api libraries.spring_context
+  api libraries.spring_jdbc
+  api libraries.javax_transaction_api
 
-  // Transaction API
-  implementation  libraries.javax_transaction_api
+  testImplementation libraries.liquibase_core
+  testImplementation libraries.hikari_cp
+  testImplementation libraries.postgresql
 
-  // Spring Data JPA
-  implementation (libraries.spring_data_jpa) {
-    //exclude group:'org.aspectj', module:'aspectjrt'
-  }
-
-  implementation  libraries.spring_jdbc
-
-  // Connection Pool
-  implementation  libraries.hikari_cp
-
-  // JDBC Driver for PostgreSQL
-  implementation  libraries.postgresql
+  // TODO(ahaczewski): Add testcontainers and tests against PostgreSQL.
 }

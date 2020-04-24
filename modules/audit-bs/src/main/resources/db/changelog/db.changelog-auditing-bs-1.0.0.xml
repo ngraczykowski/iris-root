@@ -8,12 +8,12 @@
   <property name="uuid.type" value="UUID" dbms="postgresql"/>
   <property name="uuid.type" value="BINARY(16)" dbms="mysql,hsqldb"/>
 
-  <changeSet id="serp-reco-1.0.0-0" author="ajaromin">
+  <changeSet id="auditing-bs-1.0.0_0" author="ajaromin">
     <createTable tableName="audit">
-      <column name="event_id" type="UUID">
+      <column name="event_id" type="${uuid.type}">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="correlation_id" type="UUID">
+      <column name="correlation_id" type="${uuid.type}">
         <constraints nullable="false"/>
       </column>
       <column name="timestamp" type="TIMESTAMP">

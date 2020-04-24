@@ -1,26 +1,35 @@
 package com.silenteight.auditing.bs;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.NonNull;
+import lombok.Value;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Data
+@Value
 @Builder
 public class AuditDataDto {
+
   @NonNull
-  private UUID eventId;
+  UUID eventId;
+
   @NonNull
-  private UUID correlationId;
+  UUID correlationId;
+
   @NonNull
-  private Timestamp timestamp;
+  Timestamp timestamp;
+
   @NonNull
-  private String type;
-  private String principal;
-  private String entityId;
-  private String entityClass;
-  private String entityAction;
-  private String details;
+  String type;
+
+  String principal;
+
+  String entityId;
+
+  String entityClass;
+
+  String entityAction;
+
+  String details;
 }

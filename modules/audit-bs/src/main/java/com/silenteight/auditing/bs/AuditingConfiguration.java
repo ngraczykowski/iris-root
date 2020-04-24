@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import javax.sql.DataSource;
 
 @Configuration
-class AuditingConfig {
+class AuditingConfiguration {
 
   @Bean
   public AuditingLogger auditingLogger(DataSource dataSource) {
