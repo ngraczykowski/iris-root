@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.user.sync.analyst;
 
 import com.silenteight.sens.webapp.audit.api.AuditLog;
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
@@ -17,11 +16,11 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
+import static com.silenteight.sens.webapp.user.sync.analyst.domain.GnsOrigin.GNS_ORIGIN;
 import static java.time.OffsetDateTime.parse;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -104,8 +103,9 @@ class AnalystSynchronizerTest {
         createAnalystUser(otherLogin, "other-display-name"),
         createAnalystUser(
             ANALYST_WITH_DISPLAY_NAME.getUserName(), ANALYST_WITH_DISPLAY_NAME.getDisplayName()),
-        createUser("no-analyst-role-login", "no-analyst-role-name", "Maker", GNS),
-        createUser("no-gns-login", "no-gns-display-name", ANALYST, SENS));
+        createUser("no-analyst-role-login", "no-analyst-role-name", "Maker",
+            GNS_ORIGIN),
+        createUser("no-gns-login", "no-gns-display-name", ANALYST, SENS_ORIGIN));
     Collection<Analyst> analysts = asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME);
 
     // when
@@ -127,8 +127,8 @@ class AnalystSynchronizerTest {
             ANALYST_WITHOUT_DISPLAY_NAME.getUserName(),
             ANALYST_WITHOUT_DISPLAY_NAME.getDisplayName(),
             "Maker",
-            GNS),
-        createUser("other-login", "other-display-name", "Maker", SENS));
+            GNS_ORIGIN),
+        createUser("other-login", "other-display-name", "Maker", SENS_ORIGIN));
     Collection<Analyst> analysts = asList(ANALYST_WITHOUT_DISPLAY_NAME);
 
     // when
@@ -197,17 +197,17 @@ class AnalystSynchronizerTest {
   private static final UserDto createDeletedAnalystUser(
       String login, String displayName, OffsetDateTime deletedAt) {
 
-    return createUser(login, displayName, ANALYST, GNS, deletedAt);
+    return createUser(login, displayName, ANALYST, GNS_ORIGIN, deletedAt);
   }
 
   private static final UserDto createUser(
-      String login, String displayName, String role, UserOrigin origin) {
+      String login, String displayName, String role, String origin) {
 
     return createUser(login, displayName, role, origin, null);
   }
 
   private static final UserDto createUser(
-      String login, String displayName, String role, UserOrigin origin, OffsetDateTime deletedAt) {
+      String login, String displayName, String role, String origin, OffsetDateTime deletedAt) {
 
     return UserDto
         .builder()

@@ -4,12 +4,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase.AddRolesToUserCommand;
 
 import java.time.OffsetDateTime;
 
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 
@@ -31,6 +31,6 @@ class AddRolesToUserUseCaseFixtures {
       .builder()
       .userName(USERNAME)
       .roles(emptyList())
-      .origin(UserOrigin.SENS)
+      .origin(SENS_ORIGIN)
       .build();
 }

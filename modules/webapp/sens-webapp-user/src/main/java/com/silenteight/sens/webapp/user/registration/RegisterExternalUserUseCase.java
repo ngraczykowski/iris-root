@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.sens.webapp.audit.api.AuditLog;
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
@@ -48,7 +47,7 @@ public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
     @Builder.Default
     private final Set<String> roles = emptySet();
     @NonNull
-    private final UserOrigin origin;
+    private final String origin;
 
     NewUserRegistration toUserRegistration() {
       return new NewUserRegistration(

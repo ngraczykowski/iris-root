@@ -8,7 +8,6 @@ import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.L
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import org.keycloak.admin.client.resource.UsersResource;
@@ -23,9 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.*;
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
@@ -94,10 +92,9 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
     return userDto;
   }
 
-  private static UserOrigin getOrigin(UserRepresentation userRepresentation) {
+  private static String getOrigin(UserRepresentation userRepresentation) {
     return getAttribute(userRepresentation, USER_ORIGIN)
-        .map(UserOrigin::valueOf)
-        .orElse(SENS);
+        .orElse(SENS_ORIGIN);
   }
 
   private static OffsetDateTime getDeletedAt(UserRepresentation userRepresentation) {

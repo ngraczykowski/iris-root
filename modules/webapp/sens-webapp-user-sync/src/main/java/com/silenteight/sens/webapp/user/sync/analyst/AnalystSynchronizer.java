@@ -6,6 +6,7 @@ import lombok.Value;
 
 import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.dto.UserDto;
+import com.silenteight.sens.webapp.user.sync.analyst.domain.GnsOrigin;
 import com.silenteight.sens.webapp.user.sync.analyst.dto.Analyst;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -82,7 +82,7 @@ class AnalystSynchronizer {
     return users
         .stream()
         .filter(user -> nonNull(user.getDeletedAt()))
-        .filter(user -> user.hasOrigin(GNS));
+        .filter(user -> user.hasOrigin(new GnsOrigin()));
   }
 
   private static List<String> analystsToAddRole(
@@ -100,7 +100,7 @@ class AnalystSynchronizer {
     return users
         .stream()
         .filter(user -> isNull(user.getDeletedAt()))
-        .filter(user -> user.hasOrigin(GNS));
+        .filter(user -> user.hasOrigin(new GnsOrigin()));
   }
 
   private static List<UpdatedAnalyst> analystsToUpdateDisplayName(

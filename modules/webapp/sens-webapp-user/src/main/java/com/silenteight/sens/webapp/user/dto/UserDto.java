@@ -25,7 +25,7 @@ public class UserDto {
   private OffsetDateTime createdAt;
   private OffsetDateTime deletedAt;
   @NonNull
-  private UserOrigin origin;
+  private String origin;
 
   public boolean hasRole(String role) {
     return roles.contains(role);
@@ -36,6 +36,6 @@ public class UserDto {
   }
 
   public boolean hasOrigin(UserOrigin origin) {
-    return this.origin == origin;
+    return this.origin.equals(origin.toString());
   }
 }

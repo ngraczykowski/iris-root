@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.common.time.TimeConverter;
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -53,14 +52,14 @@ class KeycloakUserQueryTest {
     given(usersResource.list(0, MAX_VALUE))
         .willReturn(List.of(
             SENS_USER.getUserRepresentation(),
-            GNS_USER.getUserRepresentation(),
+            EXTERNAL_USER.getUserRepresentation(),
             DELETED_SENS_USER.getUserRepresentation()));
   }
 
   @Test
   void returnsCorrectPage_givenThreeUsersInRepoAndPageRequest() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
-    lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
+    lastLoginTimeProvider.add(EXTERNAL_USER.getUserId(), EXTERNAL_USER.getLastLoginAtDate());
 
     roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
 
@@ -69,7 +68,7 @@ class KeycloakUserQueryTest {
     assertThat(actual)
         .hasSize(2)
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER))
-        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(GNS_USER));
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(EXTERNAL_USER));
   }
 
   @Test
@@ -88,7 +87,7 @@ class KeycloakUserQueryTest {
   @Test
   void returnsEnabledUsers_givenThreeUsersInRepo() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
-    lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
+    lastLoginTimeProvider.add(EXTERNAL_USER.getUserId(), EXTERNAL_USER.getLastLoginAtDate());
 
     roleProvider.add(SENS_USER.getUserId(), SENS_USER_ROLES);
 
@@ -97,13 +96,13 @@ class KeycloakUserQueryTest {
     assertThat(actual)
         .hasSize(2)
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER))
-        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(GNS_USER));
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(EXTERNAL_USER));
   }
 
   @Test
   void returnsAllUsers_givenThreeUsersInRepo() {
     lastLoginTimeProvider.add(SENS_USER.getUserId(), SENS_USER.getLastLoginAtDate());
-    lastLoginTimeProvider.add(GNS_USER.getUserId(), GNS_USER.getLastLoginAtDate());
+    lastLoginTimeProvider.add(EXTERNAL_USER.getUserId(), EXTERNAL_USER.getLastLoginAtDate());
     lastLoginTimeProvider.add(
         DELETED_SENS_USER.getUserId(), DELETED_SENS_USER.getLastLoginAtDate());
 
@@ -114,7 +113,7 @@ class KeycloakUserQueryTest {
     assertThat(actual)
         .hasSize(3)
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER))
-        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(GNS_USER))
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(EXTERNAL_USER))
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(DELETED_SENS_USER));
   }
 
@@ -144,8 +143,8 @@ class KeycloakUserQueryTest {
       return this;
     }
 
-    private UserOrigin getOrigin(UserRepresentation userRepresentation) {
-      return UserOrigin.valueOf(userRepresentation.getAttributes().get(USER_ORIGIN).get(0));
+    private String getOrigin(UserRepresentation userRepresentation) {
+      return userRepresentation.getAttributes().get(USER_ORIGIN).get(0);
     }
   }
 }

@@ -18,7 +18,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.of;
 
@@ -56,7 +56,7 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
     NewUserRegistration toUserRegistration() {
       return new NewUserRegistration(
           new NewUserDetails(username, displayName, of(new Credentials(password)), roles),
-          SENS);
+          SENS_ORIGIN);
     }
   }
 }

@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
+import static com.silenteight.sens.webapp.user.sync.analyst.domain.GnsOrigin.GNS_ORIGIN;
 import static java.time.OffsetDateTime.parse;
 import static java.util.Collections.singletonList;
 
@@ -19,7 +19,7 @@ final class UserDtoFixtures {
           .userName("jsmith")
           .displayName("John Smith")
           .roles(singletonList("Analyst"))
-          .origin(SENS)
+          .origin(SENS_ORIGIN)
           .build();
 
   static final UserDto GNS_USER_WITHOUT_ANALYST_ROLE =
@@ -27,7 +27,7 @@ final class UserDtoFixtures {
           .builder()
           .userName("4783589366")
           .roles(singletonList("Maker"))
-          .origin(GNS)
+          .origin(GNS_ORIGIN)
           .build();
 
   static final UserDto GNS_USER_WITHOUT_DISPLAY_NAME =
@@ -35,7 +35,7 @@ final class UserDtoFixtures {
           .builder()
           .userName("1853900357")
           .roles(singletonList("Analyst"))
-          .origin(GNS)
+          .origin(GNS_ORIGIN)
           .build();
 
   static final UserDto GNS_USER =
@@ -44,7 +44,7 @@ final class UserDtoFixtures {
           .userName("1122334455")
           .displayName("00001111")
           .roles(singletonList("Analyst"))
-          .origin(GNS)
+          .origin(GNS_ORIGIN)
           .build();
 
   static final UserDto DELETED_GNS_USER =
@@ -53,7 +53,7 @@ final class UserDtoFixtures {
           .userName("2233445566")
           .displayName("11112222")
           .roles(singletonList("Analyst"))
-          .origin(GNS)
+          .origin(GNS_ORIGIN)
           .deletedAt(parse("2011-12-03T10:15:30+01:00"))
           .build();
 }

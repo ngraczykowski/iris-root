@@ -8,8 +8,8 @@ import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase
 import java.util.Collection;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
+import static com.silenteight.sens.webapp.user.sync.analyst.domain.GnsOrigin.GNS_ORIGIN;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
 
@@ -32,7 +32,7 @@ public class BulkCreateAnalystsRequest {
         .username(newAnalyst.getUsername())
         .displayName(newAnalyst.getDisplayName())
         .roles(singleton(ANALYST))
-        .origin(GNS)
+        .origin(GNS_ORIGIN)
         .build();
   }
 

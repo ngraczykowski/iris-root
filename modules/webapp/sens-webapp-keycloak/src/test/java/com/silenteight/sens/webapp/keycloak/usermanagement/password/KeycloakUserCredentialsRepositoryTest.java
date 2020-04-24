@@ -2,7 +2,6 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 
 import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.id.KeycloakUserIdProvider;
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
 
 import org.junit.jupiter.api.Test;
@@ -17,12 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.*;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.password.KeycloakUserCredentialsRepositoryTest.KeycloakInternalUserCredentialsRepositoryFixtures.TEMPORARY_PASSWORD;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.password.KeycloakUserCredentialsRepositoryTest.KeycloakInternalUserCredentialsRepositoryFixtures.USERNAME;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.password.KeycloakUserCredentialsRepositoryTest.KeycloakInternalUserCredentialsRepositoryFixtures.USER_ID;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.GNS;
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static com.silenteight.sens.webapp.user.domain.ExternalOrigin.EXTERNAL_ORIGIN;
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -70,7 +69,7 @@ class KeycloakUserCredentialsRepositoryTest {
   }
 
   private static UserResource nonInternalUser() {
-    return userWithOrigin(GNS);
+    return userWithOrigin(EXTERNAL_ORIGIN);
   }
 
   @Test
@@ -107,18 +106,18 @@ class KeycloakUserCredentialsRepositoryTest {
   }
 
   private static UserResource internalUser() {
-    return userWithOrigin(SENS);
+    return userWithOrigin(SENS_ORIGIN);
   }
 
-  private static UserResource userWithOrigin(UserOrigin origin) {
+  private static UserResource userWithOrigin(String origin) {
     UserResource userResource = mock(UserResource.class);
     given(userResource.toRepresentation()).willReturn(userRepresentation(origin));
     return userResource;
   }
 
-  private static UserRepresentation userRepresentation(UserOrigin origin) {
+  private static UserRepresentation userRepresentation(String origin) {
     UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.singleAttribute(USER_ORIGIN, origin.toString());
+    userRepresentation.singleAttribute(USER_ORIGIN, origin);
     return userRepresentation;
   }
 

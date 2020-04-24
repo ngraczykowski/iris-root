@@ -8,7 +8,7 @@ import com.silenteight.sens.webapp.user.dto.UserDto;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
-import static com.silenteight.sens.webapp.user.domain.UserOrigin.SENS;
+import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
@@ -24,7 +24,7 @@ class UserFixtures {
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
           .roles(singletonList("admin"))
-          .origin(SENS)
+          .origin(SENS_ORIGIN)
           .build(),
       UserDto.builder()
           .userName("adamkowalski")
@@ -32,7 +32,7 @@ class UserFixtures {
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
           .roles(singletonList("analyst"))
-          .origin(SENS)
+          .origin(SENS_ORIGIN)
           .build());
 
   static final Collection<UserDto> MULTIPLE_ROLES_USERS = asList(
@@ -42,7 +42,7 @@ class UserFixtures {
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
           .roles(singletonList("admin"))
-          .origin(SENS)
+          .origin(SENS_ORIGIN)
           .build(),
       UserDto.builder()
           .userName("adamkowalski")
@@ -50,6 +50,6 @@ class UserFixtures {
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
           .roles(asList("analyst", "auditor"))
-          .origin(SENS)
+          .origin(SENS_ORIGIN)
           .build());
 }

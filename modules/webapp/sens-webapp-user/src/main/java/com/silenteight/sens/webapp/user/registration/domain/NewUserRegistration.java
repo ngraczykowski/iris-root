@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.user.registration.domain;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.sens.webapp.user.domain.UserOrigin;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 
 import java.util.Optional;
@@ -15,7 +14,7 @@ public class NewUserRegistration {
   @NonNull
   NewUserDetails userDetails;
   @NonNull
-  UserOrigin origin;
+  String origin;
 
   public String getUsername() {
     return getUserDetails().getUsername();
