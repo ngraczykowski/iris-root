@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 class AuditingConfiguration {
 
   @Bean
-  public AuditingLogger auditingLogger(DataSource dataSource) {
+  AuditingLogger auditingLogger(DataSource dataSource) {
     NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     return new AuditingLogger(jdbcTemplate);
   }
