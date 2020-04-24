@@ -32,8 +32,7 @@ public class AuditingLogger {
     }
   }
 
-  @NotNull
-  private Integer doLog(AuditDataDto auditDataDto) {
+  private int doLog(AuditDataDto auditDataDto) {
     MapSqlParameterSource paramSource = new MapSqlParameterSource()
         .addValue("evid", auditDataDto.getEventId())
         .addValue("coid", auditDataDto.getCorrelationId())
