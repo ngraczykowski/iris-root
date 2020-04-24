@@ -3,7 +3,6 @@ package com.silenteight.auditing.bs;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
