@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sens.webapp.backend.report.api.Report;
+import com.silenteight.sens.webapp.backend.report.Report;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.dto.UserDto;

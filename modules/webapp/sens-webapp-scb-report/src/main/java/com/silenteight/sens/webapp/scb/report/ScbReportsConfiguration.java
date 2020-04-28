@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Configuration;
 class ScbReportsConfiguration {
 
   @Bean
-  EntitlementReportGenerator entitlementReportGenerator() {
-    return new EntitlementReportGenerator(
-        DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
-  }
-
-  @Bean
   AccountsReportGenerator accountsReportGenerator(UserListQuery userListQuery) {
     return new AccountsReportGenerator(
         userListQuery, DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
+  }
+
+  @Bean
+  EntitlementReportGenerator entitlementReportGenerator() {
+    return new EntitlementReportGenerator(
+        DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
   }
 
   @Bean

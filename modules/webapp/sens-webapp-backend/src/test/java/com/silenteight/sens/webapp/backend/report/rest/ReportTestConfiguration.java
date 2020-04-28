@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.backend.report.rest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.report.api.Report;
-import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.config.ReportConfigModule;
+import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.ReportGenerator;
+import com.silenteight.sens.webapp.backend.report.ReportModule;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.support.csv.SimpleLinesSupplier;
 
@@ -22,7 +22,7 @@ import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toList;
 
 @Configuration
-@ComponentScan(basePackageClasses = { ReportConfigModule.class, ReportRestModule.class })
+@ComponentScan(basePackageClasses = { ReportModule.class })
 class ReportTestConfiguration {
 
   @Bean

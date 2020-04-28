@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sens.webapp.backend.report.api.Report;
+import com.silenteight.sens.webapp.backend.report.Report;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 
 import org.jetbrains.annotations.NotNull;

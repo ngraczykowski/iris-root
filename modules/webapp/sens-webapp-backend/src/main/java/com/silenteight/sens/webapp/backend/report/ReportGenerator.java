@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.report.api;
+package com.silenteight.sens.webapp.backend.report;
 
 import java.util.Map;
 

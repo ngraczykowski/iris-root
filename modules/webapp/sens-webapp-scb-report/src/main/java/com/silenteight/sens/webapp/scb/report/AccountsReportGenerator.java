@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.report.api.Report;
-import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
+import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.ReportGenerator;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.time.DateFormatter;

@@ -1,16 +1,15 @@
-package com.silenteight.sens.webapp.scb.report;
+package com.silenteight.sens.webapp.backend.report;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.report.api.Report;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.support.csv.SimpleLinesSupplier;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-class SimpleReport implements Report {
+public class SimpleReport implements Report {
 
   @NonNull
   private final String fileName;

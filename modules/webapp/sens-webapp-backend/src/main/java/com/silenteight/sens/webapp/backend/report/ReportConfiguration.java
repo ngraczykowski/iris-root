@@ -1,10 +1,7 @@
-package com.silenteight.sens.webapp.backend.report.config;
+package com.silenteight.sens.webapp.backend.report;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-
-import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.api.ReportProvider;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

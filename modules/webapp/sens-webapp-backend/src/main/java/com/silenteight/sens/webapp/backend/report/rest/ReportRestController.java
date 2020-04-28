@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.report.api.Report;
-import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.api.ReportProvider;
+import com.silenteight.sens.webapp.backend.report.Report;
+import com.silenteight.sens.webapp.backend.report.ReportGenerator;
+import com.silenteight.sens.webapp.backend.report.ReportProvider;
 import com.silenteight.sens.webapp.backend.security.Authority;
 import com.silenteight.sens.webapp.backend.support.CsvResponseWriter;
 import com.silenteight.sens.webapp.common.rest.RestConstants;

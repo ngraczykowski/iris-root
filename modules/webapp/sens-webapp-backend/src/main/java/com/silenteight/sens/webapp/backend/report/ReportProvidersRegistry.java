@@ -1,8 +1,6 @@
-package com.silenteight.sens.webapp.backend.report.config;
+package com.silenteight.sens.webapp.backend.report;
 
-import com.silenteight.sens.webapp.backend.report.api.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.api.ReportProvider;
-import com.silenteight.sens.webapp.backend.report.api.exception.ReportNotFoundException;
+import com.silenteight.sens.webapp.backend.report.exception.ReportNotFoundException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
