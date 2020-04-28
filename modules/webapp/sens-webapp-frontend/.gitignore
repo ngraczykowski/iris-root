@@ -48,3 +48,6 @@ Thumbs.db
 /target
 /node
 /bin
+
+#Plugins
+/plugin/
