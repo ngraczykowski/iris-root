@@ -36,7 +36,7 @@ dependencies {
   implementation project(":sens-webapp-db-changelog")
   implementation project(":sens-webapp-keycloak")
   implementation project(":sens-webapp-user")
-  implementation project(":sens-webapp-user-sync")
+  implementation project(":sens-webapp-scb-user-sync")
   implementation project(":sens-webapp-logging")
 
   implementation libraries.springdoc_ui

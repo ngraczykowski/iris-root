@@ -1,18 +1,18 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
-import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.user.update.UpdatedUserRepository.UserUpdateException;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
 import com.silenteight.sens.webapp.user.update.exception.RolesValidationException;
 
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME;
 import static com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDtoFixtures.VALID_UPDATE_REQUEST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.*;
 

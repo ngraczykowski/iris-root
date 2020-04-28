@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.sens.webapp.scb.user.sync.analyst.SyncAnalystConfiguration

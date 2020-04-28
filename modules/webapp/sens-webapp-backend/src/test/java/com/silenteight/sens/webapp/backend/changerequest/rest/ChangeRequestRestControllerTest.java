@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ChangeRequestDto;
-import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Nested;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,7 +16,7 @@ import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchA
 import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchAiSolutionDto.NO_CHANGE;
 import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchStatusDto.ACTIVE;
 import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchStatusDto.DISABLED;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.emptyList;

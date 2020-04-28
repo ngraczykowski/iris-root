@@ -1,17 +1,17 @@
 package com.silenteight.sens.webapp.backend.report.rest;
 
-import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
+import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.silenteight.commons.collections.MapBuilder.from;
 import static com.silenteight.sens.webapp.backend.report.rest.ReportTestFixtures.REPORT_NAME;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.http.HttpStatus.FORBIDDEN;

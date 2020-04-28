@@ -1,19 +1,19 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
-import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import io.vavr.control.Either;
 import org.hamcrest.Matchers;
 
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME_NOT_UNIQUE;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_DOMAIN_ERROR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_SUCCESS;
 import static com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDtoFixtures.VALID_REQUEST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static io.vavr.control.Either.left;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

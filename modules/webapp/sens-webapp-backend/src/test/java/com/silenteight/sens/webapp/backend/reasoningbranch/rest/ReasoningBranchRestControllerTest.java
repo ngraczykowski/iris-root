@@ -5,8 +5,8 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundExcepti
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchesCommand;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
-import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import io.vavr.control.Try;
 import org.junit.jupiter.api.Nested;
@@ -14,10 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchRestControllerTest.ReasoningBranchRestControllerFixtures.*;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static io.vavr.control.Try.failure;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;

@@ -41,18 +41,19 @@ dependencies {
   implementation project(":sens-webapp-keycloak")
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-user")
-  implementation project(":sens-webapp-user-sync")
 
   implementation libraries.springdoc_ui
   implementation libraries.springdoc_data_rest
   implementation libraries.springdoc_security
-
 
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
   implementation libraries.freemarker
 
   implementation libraries.protobuf_java_util
+
+  // Oracle is used by plugins to allow connecting to Oracle DB
+  implementation libraries.oracle
 
   implementation libraries.vavr
 

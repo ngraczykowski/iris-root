@@ -1,17 +1,17 @@
 package com.silenteight.sens.webapp.backend.chromeextension.rest;
 
 import com.silenteight.sens.webapp.backend.chromeextension.GetChromeExtensionConfigurationUseCase;
-import com.silenteight.sens.webapp.backend.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.backend.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.webapp.backend.chromeextension.rest.ChromeExtensionRestControllerFixtures.*;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.backend.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.OK;
