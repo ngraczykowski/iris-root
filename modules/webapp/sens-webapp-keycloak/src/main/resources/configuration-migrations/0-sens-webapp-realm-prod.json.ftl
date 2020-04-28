@@ -210,7 +210,7 @@
       "topLevel": false
     },
     {
-      "alias": "SCB login flow",
+      "alias": "SAML login flow",
       "authenticationExecutions": [
         {
           "authenticator": "auth-script-based",
@@ -1666,7 +1666,7 @@
       "config": {
         "template": "${ATTRIBUTE.username}"
       },
-      "identityProviderAlias": "scb-saml",
+      "identityProviderAlias": "saml",
       "identityProviderMapper": "saml-username-idp-mapper",
       "name": "Map NAMEID to username"
     }

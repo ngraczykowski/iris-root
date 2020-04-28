@@ -210,7 +210,7 @@
       "topLevel": false
     },
     {
-      "alias": "SCB login flow",
+      "alias": "SAML login flow",
       "authenticationExecutions": [
         {
           "authenticator": "auth-script-based",
@@ -1824,7 +1824,7 @@
       "config": {
         "template": "${NAMEID}"
       },
-      "identityProviderAlias": "scb-saml",
+      "identityProviderAlias": "saml",
       "identityProviderMapper": "saml-username-idp-mapper",
       "name": "Map NAMEID to username"
     }
@@ -1832,7 +1832,7 @@
   "identityProviders": [
     {
       "addReadTokenRoleOnCreate": false,
-      "alias": "scb-saml",
+      "alias": "saml",
       "authenticateByDefault": false,
       "config": {
         "addExtensionsElementWithKeyInfo": "false",
@@ -1854,9 +1854,9 @@
         "wantAssertionsSigned": "",
         "wantAuthnRequestsSigned": "true"
       },
-      "displayName": "SCB Single sign-on",
+      "displayName": "SAML Single sign-on",
       "enabled": true,
-      "firstBrokerLoginFlowAlias": "SCB login flow",
+      "firstBrokerLoginFlowAlias": "SAML login flow",
       "internalId": "bee6a027-4576-4cc2-bea8-5a6469ebe631",
       "linkOnly": false,
       "providerId": "saml",
@@ -2472,7 +2472,7 @@
       ],
       "requiredActions": [],
       "totp": false,
-      "username": "scb-user-1"
+      "username": "saml-user-1"
     },
     {
       "clientRoles": {
