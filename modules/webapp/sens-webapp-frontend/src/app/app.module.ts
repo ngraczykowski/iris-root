@@ -36,6 +36,7 @@ import { concat, Observable } from 'rxjs';
 import { ReasoningBranchManagementModule } from './reasoning-branch-management/reasoning-branch-management.module';
 import { reducers } from './reducers';
 import { UserManagementModule } from './user-management/user-management.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { UserManagementModule } from './user-management/user-management.module';
     }),
     KeycloakAngularModule,
     ReasoningBranchManagementModule,
-    UserManagementModule
+    UserManagementModule,
+    BrowserAnimationsModule
   ],
   providers: [
     WINDOW_PROVIDERS,
