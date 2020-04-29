@@ -2,23 +2,27 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
+import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
+import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ApproveChangeRequestDto;
 import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ChangeRequestDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.CHANGE_REQUEST;
 import static com.silenteight.sens.webapp.backend.security.Authority.APPROVER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -28,16 +32,32 @@ class ChangeRequestRestController {
   private final ChangeRequestQuery changeRequestQuery;
 
   @NonNull
-  private final AuditLog auditLog;
+  private final ApproveChangeRequestUseCase approveChangeRequestUseCase;
 
   @GetMapping("/change-requests")
   @PreAuthorize(APPROVER)
   public ResponseEntity<List<ChangeRequestDto>> pending() {
-    auditLog.logInfo(CHANGE_REQUEST, "Listing pending Change Requests");
+    log.debug(CHANGE_REQUEST, "Listing pending Change Requests");
 
     List<ChangeRequestDto> changeRequests = changeRequestQuery.pending();
 
-    auditLog.logInfo(CHANGE_REQUEST, "Found {} pending Change Requests", changeRequests.size());
+    log.debug(
+        CHANGE_REQUEST, "Found {} pending Change Requests", changeRequests.size());
     return ok(changeRequests);
+  }
+
+  @PostMapping("/change-requests-approvals")
+  @PreAuthorize(APPROVER)
+  public ResponseEntity<Void> approve(
+      @RequestBody ApproveChangeRequestDto request, Authentication authentication) {
+    log.debug(
+        CHANGE_REQUEST, "Requested to approve Change Request, request={}, username={}",
+        request, authentication.getName());
+
+    final long approvalId =
+        approveChangeRequestUseCase.apply(request.toCommand(authentication.getName()));
+
+    log.debug(CHANGE_REQUEST, "Approved Change Request, approvalId={}", approvalId);
+    return created(URI.create("/change-requests-approvals/" + approvalId)).build();
   }
 }

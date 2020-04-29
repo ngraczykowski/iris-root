@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ChangeRequestDto;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
@@ -31,6 +32,9 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private ChangeRequestQuery changeRequestsQuery;
+
+  @MockBean
+  private ApproveChangeRequestUseCase approveChangeRequestUseCase;
 
   @Nested
   class ListChangeRequests {
