@@ -11,7 +11,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.*;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.ExternalOrigin.EXTERNAL_ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.time.OffsetDateTime.parse;

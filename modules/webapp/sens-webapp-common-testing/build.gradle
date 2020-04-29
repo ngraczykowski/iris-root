@@ -42,7 +42,6 @@ dependencies {
   implementation libraries.spring_amqp
   implementation libraries.springdoc_security
 
-  implementation project(":sens-webapp-audit")
   implementation project(":sens-webapp-common")
 
 

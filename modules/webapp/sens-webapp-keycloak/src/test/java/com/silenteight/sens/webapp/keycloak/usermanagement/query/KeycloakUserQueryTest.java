@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.common.time.TimeConverter;
 import com.silenteight.sens.webapp.user.dto.UserDto;
@@ -34,9 +33,6 @@ class KeycloakUserQueryTest {
   @Mock
   private UsersResource usersResource;
 
-  @Mock
-  private AuditLog auditLog;
-
   private InMemoryTestLastLoginTimeProvider lastLoginTimeProvider =
       new InMemoryTestLastLoginTimeProvider();
 
@@ -47,7 +43,7 @@ class KeycloakUserQueryTest {
   @BeforeEach
   void setUp() {
     underTest = new KeycloakUserQuery(
-        usersResource, lastLoginTimeProvider, roleProvider, TIME_CONVERTER, auditLog);
+        usersResource, lastLoginTimeProvider, roleProvider, TIME_CONVERTER);
 
     given(usersResource.list(0, MAX_VALUE))
         .willReturn(List.of(

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
@@ -38,9 +37,6 @@ class ResetInternalUserPasswordUseCaseTest {
 
   @Mock
   private SensCompatiblePasswordGenerator passwordGenerator;
-
-  @Mock
-  private AuditLog auditLog;
 
   @Test
   void userDoesntExist_throwsException() {

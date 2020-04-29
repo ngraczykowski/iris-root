@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.v1.api.BranchChange;
 import com.silenteight.proto.serp.v1.api.BranchChange.Builder;
@@ -9,7 +10,6 @@ import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
@@ -24,24 +24,24 @@ import java.util.Optional;
 
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.rpc.Code.NOT_FOUND;
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.REASONING_BRANCH;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Slf4j
 class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
 
   private final BranchSolutionMapper branchSolutionMapper;
   private final BranchGovernanceBlockingStub governanceBlockingStub;
-  private final AuditLog auditLog;
 
   @Override
   @SuppressWarnings("unchecked") // https://github.com/vavr-io/vavr/issues/2411
   public Try<Void> save(UpdatedBranches updatedBranches) {
-    auditLog.logInfo(REASONING_BRANCH, "Saving updated Branches using gRPC BranchGovernance");
+    log.info(REASONING_BRANCH, "Saving updated Branches using gRPC BranchGovernance");
     Try<Void> tryUpdate = Try.of(() -> createRequest(updatedBranches))
         .mapFailure(Case(
             $(instanceOf(IllegalArgumentException.class)), AiSolutionNotSupportedException::new))
@@ -49,9 +49,8 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
 
     return mapStatusExceptionsToCommunicationException(tryUpdate)
         .mapFailure(Case($(codeIs(NOT_FOUND)), BranchNotFoundException::new))
-        .onSuccess(ignored -> auditLog.logInfo(REASONING_BRANCH, "Saved updated Branch"))
-        .onFailure(
-            reason -> auditLog.logError(REASONING_BRANCH, "Could not save updated Branch", reason));
+        .onSuccess(ignored -> log.info(REASONING_BRANCH, "Saved updated Branch"))
+        .onFailure(reason -> log.error(REASONING_BRANCH, "Could not save updated Branch", reason));
   }
 
   private ChangeBranchesRequest createRequest(UpdatedBranches updatedBranches) {

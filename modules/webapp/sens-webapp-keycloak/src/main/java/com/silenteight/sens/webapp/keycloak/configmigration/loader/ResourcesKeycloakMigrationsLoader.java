@@ -3,8 +3,6 @@ package com.silenteight.sens.webapp.keycloak.configmigration.loader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
-import com.silenteight.sens.webapp.audit.api.AuditMarker;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrations;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrationsLoader;
 import com.silenteight.sens.webapp.keycloak.configmigration.Migration;
@@ -25,7 +23,6 @@ class ResourcesKeycloakMigrationsLoader implements KeycloakMigrationsLoader {
   private final KeycloakResourcesMigrationsLoaderProperties config;
   private final KeycloakConfigTemplateParser keycloakConfigTemplateParser;
   private final MigrationFilesLoader migrationFilesLoader;
-  private final AuditLog auditLog;
 
   @Override
   public KeycloakMigrations load() throws CouldNotLoadMigrationsException {
@@ -35,9 +32,7 @@ class ResourcesKeycloakMigrationsLoader implements KeycloakMigrationsLoader {
     if (migrationFiles.empty())
       return KeycloakMigrations.empty();
 
-    auditLog.logInfo(
-        AuditMarker.KEYCLOAK_MIGRATION, "Loaded migration files. migrationFiles={}",
-        migrationFiles);
+    log.info(KEYCLOAK_MIGRATION, "Loaded migration files. migrationFiles={}", migrationFiles);
     MigrationFile baseMigrationFile = getBaseMigration(migrationFiles);
 
     return new KeycloakMigrations(

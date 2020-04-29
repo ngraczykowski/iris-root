@@ -1,6 +1,5 @@
 rootProject.name = 'webapp'
 
-include 'sens-webapp-audit'
 include 'sens-webapp-backend'
 include 'sens-webapp-common'
 include 'sens-webapp-common-testing'

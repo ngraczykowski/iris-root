@@ -2,7 +2,6 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.password;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.id.KeycloakUserIdProvider;
 import com.silenteight.sens.webapp.user.password.reset.ResettableUserCredentials;
 import com.silenteight.sens.webapp.user.password.reset.UserCredentialsRepository;
@@ -16,12 +15,11 @@ class KeycloakUserCredentialsRepository implements UserCredentialsRepository {
 
   private final UsersResource usersResource;
   private final KeycloakUserIdProvider keycloakUserIdProvider;
-  private final AuditLog auditLog;
 
   @Override
   public Optional<ResettableUserCredentials> findUserCredentials(String username) {
     return keycloakUserIdProvider.findId(username)
         .map(usersResource::get)
-        .map(userResource -> new KeycloakResettableUserCredentials(userResource, auditLog));
+        .map(KeycloakResettableUserCredentials::new);
   }
 }

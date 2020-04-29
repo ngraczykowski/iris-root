@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.user.update;
 
 import lombok.*;
 import lombok.Builder.Default;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
@@ -18,10 +18,11 @@ import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
+@Slf4j
 public class UpdateUserUseCase {
 
   @NonNull
@@ -33,11 +34,8 @@ public class UpdateUserUseCase {
   @NonNull
   private final RolesValidator rolesValidator;
 
-  @NonNull
-  private final AuditLog auditLog;
-
   public void apply(UpdateUserCommand command) {
-    auditLog.logInfo(USER_MANAGEMENT, "Updating user. command={}", command);
+    log.info(USER_MANAGEMENT, "Updating user. command={}", command);
 
     command.getDisplayName().ifPresent(this::validateDisplayName);
     command.getRoles().ifPresent(this::validateRoles);

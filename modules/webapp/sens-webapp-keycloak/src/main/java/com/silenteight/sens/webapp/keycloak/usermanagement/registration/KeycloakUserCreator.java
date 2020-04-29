@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 
 import org.keycloak.admin.client.resource.UsersResource;
@@ -12,18 +12,16 @@ import java.net.URI;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 
-
+@Slf4j
 @RequiredArgsConstructor
 class KeycloakUserCreator {
 
   private final UsersResource usersResource;
-  private final AuditLog auditLog;
 
   KeycloakUserId create(UserRepresentation userRepresentation) {
-    auditLog.logInfo(
-        USER_MANAGEMENT, "Creating new User. username={}", userRepresentation.getUsername());
+    log.info(USER_MANAGEMENT, "Creating new User. username={}", userRepresentation.getUsername());
 
     try (Response response = usersResource.create(userRepresentation)) {
       boolean isSuccessful = response.getStatusInfo().getFamily() == Family.SUCCESSFUL;

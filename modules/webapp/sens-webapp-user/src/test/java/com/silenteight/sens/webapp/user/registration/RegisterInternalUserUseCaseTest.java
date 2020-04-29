@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.user.registration;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
@@ -41,20 +40,17 @@ class RegisterInternalUserUseCaseTest {
   @Mock
   private RegisteredUserRepository registeredUserRepository;
 
-  @Mock
-  private AuditLog auditLog;
-
   @BeforeEach
   void setUp() {
     UserRegistrationUseCaseConfiguration configuration =
         new UserRegistrationUseCaseConfiguration();
     UserRegisteringDomainService userRegisteringDomainService =
         new UserRegistrationDomainTestConfiguration()
-            .userRegisteringDomainService(usernameUniquenessValidator, rolesValidator, auditLog);
+            .userRegisteringDomainService(usernameUniquenessValidator, rolesValidator);
 
     underTest =
         configuration.registerInternalUserUseCase(
-            userRegisteringDomainService, registeredUserRepository, auditLog);
+            userRegisteringDomainService, registeredUserRepository);
   }
 
   @Test

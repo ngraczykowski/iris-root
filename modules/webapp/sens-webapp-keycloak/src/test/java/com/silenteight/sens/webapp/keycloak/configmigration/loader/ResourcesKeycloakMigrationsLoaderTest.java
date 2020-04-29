@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.keycloak.configmigration.loader;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrations;
 import com.silenteight.sens.webapp.keycloak.configmigration.Migration;
 import com.silenteight.sens.webapp.keycloak.configmigration.loader.template.KeycloakConfigTemplateParser;
@@ -11,7 +10,6 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -36,9 +34,6 @@ class ResourcesKeycloakMigrationsLoaderTest {
 
   @Spy
   protected KeycloakConfigTemplateParser simpleTemplateParser = new NoopTemplateParser();
-  @Mock
-  private AuditLog auditLog;
-
 
   static final File TEST_RESOURCES_DIR =
       new File(getResource("migrations").getFile());
@@ -63,7 +58,7 @@ class ResourcesKeycloakMigrationsLoaderTest {
     var config = new ResourcesKeycloakMigrationLoaderConfiguration();
     underTest = config.resourcesKeycloakMigrationsLoader(
         configBuilder.migrationsPath("classpath:migrations/" + migrationsDir + "/*").build(),
-        simpleTemplateParser, auditLog);
+        simpleTemplateParser);
   }
 
   @Test

@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 
 import io.vavr.control.Try;
@@ -30,8 +29,6 @@ class UpdateReasoningBranchesUseCaseTest {
 
   @Mock
   private ChangeRequestRepository updateRepository;
-  @Mock
-  private AuditLog auditLog;
 
   @InjectMocks
   private UpdateReasoningBranchesUseCase underTest;

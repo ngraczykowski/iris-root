@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.grpc.reasoningbranch;
 import com.silenteight.proto.serp.v1.api.BranchChange;
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
@@ -34,9 +33,6 @@ class GrpcReasoningBranchUpdateRepositoryTest {
   @Mock
   private BranchGovernanceBlockingStub governanceBlockingStub;
 
-  @Mock
-  private AuditLog auditLog;
-
   private GrpcReasoningBranchUpdateRepository underTest;
 
   @Captor
@@ -45,7 +41,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
   @BeforeEach
   void setUp() {
     underTest = new GrpcReasoningBranchUpdateRepository(
-        new BranchSolutionMapper(), governanceBlockingStub, auditLog);
+        new BranchSolutionMapper(), governanceBlockingStub);
   }
 
   @Test

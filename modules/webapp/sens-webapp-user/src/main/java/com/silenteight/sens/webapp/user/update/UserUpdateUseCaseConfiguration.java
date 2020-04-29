@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.user.update;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.UserQuery;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
@@ -29,9 +28,7 @@ class UserUpdateUseCaseConfiguration {
   UpdateUserUseCase updateUserUseCase(
       UpdatedUserRepository updatedUserRepository,
       RolesValidator rolesValidator,
-      @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator,
-      AuditLog auditLog) {
-    return new UpdateUserUseCase(updatedUserRepository, displayNameLengthValidator, rolesValidator,
-        auditLog);
+      @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator) {
+    return new UpdateUserUseCase(updatedUserRepository, displayNameLengthValidator, rolesValidator);
   }
 }

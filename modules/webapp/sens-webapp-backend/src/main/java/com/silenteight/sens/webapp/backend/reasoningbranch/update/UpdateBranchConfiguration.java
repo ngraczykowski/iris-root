@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,8 +8,8 @@ class UpdateBranchConfiguration {
 
   @Bean
   UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase(
-      ChangeRequestRepository changeRequestRepository, AuditLog auditLog) {
+      ChangeRequestRepository changeRequestRepository) {
 
-    return new UpdateReasoningBranchesUseCase(changeRequestRepository, auditLog);
+    return new UpdateReasoningBranchesUseCase(changeRequestRepository);
   }
 }

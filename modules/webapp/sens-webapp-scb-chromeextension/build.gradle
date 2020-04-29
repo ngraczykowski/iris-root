@@ -19,7 +19,6 @@ dependencies {
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web
 
-  implementation project(":sens-webapp-audit")
   implementation project(":sens-webapp-common")
 
   testImplementation libraries.rest_assured

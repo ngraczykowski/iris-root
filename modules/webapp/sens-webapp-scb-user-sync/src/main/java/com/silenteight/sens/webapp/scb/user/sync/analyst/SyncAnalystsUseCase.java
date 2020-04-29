@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
@@ -19,7 +18,7 @@ import com.silenteight.sens.webapp.user.dto.UserDto;
 import java.util.Collection;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -30,11 +29,10 @@ public class SyncAnalystsUseCase {
   private final ExternalAnalystRepository externalAnalystRepository;
   private final AnalystSynchronizer analystSynchronizer;
   private final BulkAnalystService bulkAnalystService;
-  private final AuditLog auditLog;
   private final int maxErrors;
 
   public SyncAnalystStatsDto synchronize() {
-    auditLog.logInfo(USER_MANAGEMENT, "Synchronizing Analysts");
+    log.info(USER_MANAGEMENT, "Synchronizing Analysts");
 
     Collection<UserDto> users = userListQuery.listAll();
     Collection<Analyst> analysts = externalAnalystRepository.list();

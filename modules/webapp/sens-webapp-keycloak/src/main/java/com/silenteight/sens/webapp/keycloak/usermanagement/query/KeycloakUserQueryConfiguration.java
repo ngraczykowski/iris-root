@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.InternalRoleFilter;
@@ -18,15 +17,13 @@ class KeycloakUserQueryConfiguration {
   KeycloakUserQuery keycloakUserQuery(
       LastLoginTimeProvider lastLoginTimeProvider,
       RolesProvider rolesProvider,
-      UsersResource usersResource,
-      AuditLog auditLog) {
+      UsersResource usersResource) {
 
     return new KeycloakUserQuery(
         usersResource,
         lastLoginTimeProvider,
         rolesProvider,
-        DefaultTimeSource.TIME_CONVERTER,
-        auditLog);
+        DefaultTimeSource.TIME_CONVERTER);
   }
 
   @Bean

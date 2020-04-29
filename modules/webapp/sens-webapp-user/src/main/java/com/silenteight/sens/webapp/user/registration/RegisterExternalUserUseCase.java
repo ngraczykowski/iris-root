@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.user.registration;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
@@ -15,22 +15,22 @@ import io.vavr.control.Either;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.empty;
 
+@Slf4j
 public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
 
   public RegisterExternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
-      RegisteredUserRepository registeredUserRepository,
-      AuditLog auditLog) {
+      RegisteredUserRepository registeredUserRepository) {
 
-    super(userRegisteringDomainService, registeredUserRepository, auditLog);
+    super(userRegisteringDomainService, registeredUserRepository);
   }
 
   public Either<UserDomainError, Success> apply(RegisterExternalUserCommand command) {
-    auditLog.logInfo(USER_MANAGEMENT, "Registering external user. command={}", command);
+    log.info(USER_MANAGEMENT, "Registering external user. command={}", command);
 
     return register(command.toUserRegistration());
   }

@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,14 +26,11 @@ class DatabaseExternalAnalystRepositoryTest {
   @Mock
   private JdbcTemplate jdbcTemplate;
 
-  @Mock
-  private AuditLog auditLog;
-
   private DatabaseExternalAnalystRepository underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new DatabaseExternalAnalystRepository("relation-name", jdbcTemplate, auditLog);
+    underTest = new DatabaseExternalAnalystRepository("relation-name", jdbcTemplate);
   }
 
   @Test

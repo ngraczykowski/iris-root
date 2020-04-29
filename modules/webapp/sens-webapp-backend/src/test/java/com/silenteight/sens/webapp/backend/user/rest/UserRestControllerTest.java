@@ -27,5 +27,4 @@ abstract class UserRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   protected ResetInternalUserPasswordUseCase resetInternalUserPasswordUseCase;
-
 }

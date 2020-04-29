@@ -2,8 +2,6 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.sens.webapp.scb.user.sync.analyst.SyncAnalystRestController;
-import com.silenteight.sens.webapp.scb.user.sync.analyst.SyncAnalystRestControllerAdvice;
 
 import org.springframework.context.annotation.Import;
 

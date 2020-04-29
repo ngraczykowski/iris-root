@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
@@ -17,23 +17,23 @@ import io.vavr.control.Either;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.of;
 
+@Slf4j
 public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
 
   public RegisterInternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
-      RegisteredUserRepository registeredUserRepository,
-      AuditLog auditLog) {
+      RegisteredUserRepository registeredUserRepository) {
 
-    super(userRegisteringDomainService, registeredUserRepository, auditLog);
+    super(userRegisteringDomainService, registeredUserRepository);
   }
 
   public Either<UserDomainError, Success> apply(RegisterInternalUserCommand command) {
-    auditLog.logInfo(USER_MANAGEMENT, "Registering internal user. command={}", command);
+    log.info(USER_MANAGEMENT, "Registering internal user. command={}", command);
 
     return register(command.toUserRegistration());
   }

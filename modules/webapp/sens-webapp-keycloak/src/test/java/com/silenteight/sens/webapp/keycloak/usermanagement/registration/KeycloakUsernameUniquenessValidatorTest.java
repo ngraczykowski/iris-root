@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Option;
@@ -27,8 +26,6 @@ class KeycloakUsernameUniquenessValidatorTest {
   KeycloakUsernameUniquenessValidator underTest;
   @Mock
   private UsersResource usersResource;
-  @Mock
-  private AuditLog auditLog;
 
   @Test
   void searchReturnsNoUsers_noError() {

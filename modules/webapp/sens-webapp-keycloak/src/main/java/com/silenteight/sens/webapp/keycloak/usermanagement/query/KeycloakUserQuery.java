@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.common.time.TimeConverter;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
@@ -21,8 +21,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
-import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.*;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.DELETED_AT;
+import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Collections.emptyList;
@@ -31,6 +32,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
+@Slf4j
 @RequiredArgsConstructor
 public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
@@ -38,7 +40,6 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   private final LastLoginTimeProvider lastLoginTimeProvider;
   private final RolesProvider userRolesProvider;
   private final TimeConverter timeConverter;
-  private final AuditLog auditLog;
 
   @Override
   public Page<UserDto> listEnabled(Pageable pageable) {
@@ -122,7 +123,7 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
   @Override
   public Collection<UserDto> listAll() {
-    auditLog.logInfo(USER_MANAGEMENT, "Listing all users");
+    log.info(USER_MANAGEMENT, "Listing all users");
     return usersResource
         .list(0, MAX_VALUE)
         .stream()

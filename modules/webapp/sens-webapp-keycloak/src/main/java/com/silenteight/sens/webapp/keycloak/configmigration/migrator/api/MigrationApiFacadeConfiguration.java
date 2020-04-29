@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.keycloak.configmigration.migrator.api;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
-
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.PartialImportRepresentation.Policy;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +13,7 @@ class MigrationApiFacadeConfiguration {
 
   @Bean
   KeycloakRealmMigrationApiFacade keycloakRealmMigrationApiFacade(
-      @Qualifier(KEYCLOAK_ADMIN_CLIENT) Keycloak apiClient, AuditLog auditLog) {
-    return new KeycloakRealmMigrationApiFacade(Policy.OVERWRITE, apiClient.realms(), auditLog);
+      @Qualifier(KEYCLOAK_ADMIN_CLIENT) Keycloak apiClient) {
+    return new KeycloakRealmMigrationApiFacade(Policy.OVERWRITE, apiClient.realms());
   }
 }

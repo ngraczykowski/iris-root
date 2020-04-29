@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
-
 import one.util.streamex.EntryStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,9 +31,6 @@ class LastLoginTimeCacheUpdaterTest {
 
   @Mock
   private CachedLastLoginTimeProvider cachedLastLoginTimeProvider;
-
-  @Mock
-  private AuditLog auditLog;
 
   @BeforeEach
   void setUp() {

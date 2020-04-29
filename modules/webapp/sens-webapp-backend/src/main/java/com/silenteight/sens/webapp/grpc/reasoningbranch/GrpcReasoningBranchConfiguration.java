@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc;
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 
 import io.grpc.Channel;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,32 +14,28 @@ class GrpcReasoningBranchConfiguration {
 
   @Bean
   GrpcReasoningBranchDetailsQuery grpcReasoningBranchDetailsQuery(
-      @Qualifier("governance") Channel channel, AuditLog auditLog) {
+      @Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchDetailsQuery(
         branchSolutionMapper,
         BranchGovernanceGrpc
             .newBlockingStub(channel)
-            .withWaitForReady(),
-        auditLog);
+            .withWaitForReady());
   }
 
   @Bean
-  GrpcReasoningBranchesQuery grpcReasoningBranchesQuery(
-      @Qualifier("governance") Channel channel, AuditLog auditLog) {
+  GrpcReasoningBranchesQuery grpcReasoningBranchesQuery(@Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchesQuery(
         branchSolutionMapper,
         BranchGovernanceGrpc
             .newBlockingStub(channel)
-            .withWaitForReady(),
-        auditLog);
+            .withWaitForReady());
   }
 
   @Bean
   GrpcReasoningBranchUpdateRepository grpcReasoningBranchUpdateRepository(
-      @Qualifier("governance") Channel channel, AuditLog auditLog) {
+      @Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchUpdateRepository(
         branchSolutionMapper,
-        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady(),
-        auditLog);
+        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady());
   }
 }

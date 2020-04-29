@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 import com.silenteight.sens.webapp.keycloak.usermanagement.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sens.webapp.user.registration.RegisteredUserRepository;
@@ -12,22 +12,22 @@ import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Crede
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserAttributeNames.USER_ORIGIN;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.lang.Boolean.TRUE;
 import static java.util.Collections.singletonList;
 import static org.keycloak.representations.idm.CredentialRepresentation.PASSWORD;
 
+@Slf4j
 @RequiredArgsConstructor
 class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
 
   private final KeycloakUserCreator keycloakUserCreator;
   private final KeycloakUserRoleAssigner roleAssigner;
-  private final AuditLog auditLog;
 
   @Override
   public void save(CompletedUserRegistration userRegistration) {
-    auditLog.logInfo(USER_MANAGEMENT, "Registering User. userRegistration={}", userRegistration);
+    log.info(USER_MANAGEMENT, "Registering User. userRegistration={}", userRegistration);
     UserRepresentation userRepresentation = toUserRepresentation(userRegistration);
 
     KeycloakUserId newlyCreatedUserId = keycloakUserCreator.create(userRepresentation);

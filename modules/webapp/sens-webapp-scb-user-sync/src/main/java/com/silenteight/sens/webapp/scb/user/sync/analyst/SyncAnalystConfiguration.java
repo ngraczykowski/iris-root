@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
@@ -31,23 +30,20 @@ class SyncAnalystConfiguration {
       UserListQuery userListQuery,
       ExternalAnalystRepository externalAnalystRepository,
       BulkAnalystService bulkAnalystService,
-      SyncAnalystProperties syncAnalystProperties,
-      AuditLog auditLog) {
+      SyncAnalystProperties syncAnalystProperties) {
 
     return new SyncAnalystsUseCase(
-        userListQuery, externalAnalystRepository, new AnalystSynchronizer(auditLog),
-        bulkAnalystService, auditLog, syncAnalystProperties.getMaxErrors());
+        userListQuery, externalAnalystRepository, new AnalystSynchronizer(), bulkAnalystService,
+        syncAnalystProperties.getMaxErrors());
   }
 
   @Bean
   ExternalAnalystRepository databaseExternalAnalystRepository(
       @Qualifier("externalDataSource") DataSource externalDataSource,
-      SyncAnalystProperties syncAnalystProperties,
-      AuditLog auditLog) {
+      SyncAnalystProperties syncAnalystProperties) {
 
     return new DatabaseExternalAnalystRepository(
-        syncAnalystProperties.getUserDbRelationName(), new JdbcTemplate(externalDataSource),
-        auditLog);
+        syncAnalystProperties.getUserDbRelationName(), new JdbcTemplate(externalDataSource));
   }
 
   @Bean

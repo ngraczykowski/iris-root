@@ -5,7 +5,6 @@ import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary.Builder;
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.BranchWithFeaturesDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
@@ -23,33 +22,27 @@ import java.util.List;
 
 import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_FALSE_POSITIVE;
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.REASONING_BRANCH;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.NOT_FOUND_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchesQueryTestFixtures.*;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GrpcReasoningBranchesQueryTest {
 
   @Mock
   private BranchGovernanceBlockingStub branchStub;
-  @Mock
-  private AuditLog auditLog;
 
   private GrpcReasoningBranchesQuery underTest;
 
   @BeforeEach
   void setUp() {
-
-    underTest = new GrpcReasoningBranchesQuery(new BranchSolutionMapper(), branchStub, auditLog);
+    underTest = new GrpcReasoningBranchesQuery(new BranchSolutionMapper(), branchStub);
   }
 
   @Test
@@ -134,32 +127,6 @@ class GrpcReasoningBranchesQueryTest {
 
     assertThatThrownBy(() -> underTest.findByTreeId(DECISION_TREE_ID))
         .isInstanceOf(GrpcCommunicationException.class);
-  }
-
-  @Test
-  void auditLogPositiveFlow() {
-    given(branchStub.listReasoningBranches(any())).willReturn(
-        reasoningBranchesResponseWithTwoBranches());
-    long treeId = 15;
-
-    underTest.findByTreeId(treeId);
-
-    verify(auditLog).logInfo(REASONING_BRANCH,
-        "Listing Reasoning Branches using gRPC BranchGovernance. treeId={}", treeId);
-    verify(auditLog).logInfo(REASONING_BRANCH, "Found {} Reasoning Branches.", 2);
-  }
-
-  @Test
-  void auditErrorFetchingBranches() {
-    given(branchStub.listReasoningBranches(any())).willThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
-    long treeId = 16;
-
-    Exception exceptionThrown = assertThrows(Exception.class, () -> underTest.findByTreeId(treeId));
-
-    verify(auditLog).logInfo(REASONING_BRANCH,
-        "Listing Reasoning Branches using gRPC BranchGovernance. treeId={}", treeId);
-    verify(auditLog).logError(REASONING_BRANCH,
-        "Could not list Reasoning Branches", exceptionThrown);
   }
 
   private ListReasoningBranchesResponse reasoningBranchesResponseWithTwoBranches() {

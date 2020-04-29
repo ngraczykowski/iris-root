@@ -1,16 +1,12 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
 import com.silenteight.sens.webapp.user.dto.UserDto;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -27,14 +23,14 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 class AnalystSynchronizerTest {
 
-  @Mock
-  private AuditLog auditLog;
-
-  @InjectMocks
   private AnalystSynchronizer underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new AnalystSynchronizer();
+  }
 
   @Test
   void analystsToAddWhenNoAnalystsAvailable() {

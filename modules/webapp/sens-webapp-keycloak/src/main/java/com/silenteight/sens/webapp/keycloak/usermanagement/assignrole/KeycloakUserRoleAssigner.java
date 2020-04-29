@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.assignrole;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.api.AuditLog;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +13,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.silenteight.sens.webapp.audit.api.AuditMarker.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class KeycloakUserRoleAssigner {
 
@@ -23,12 +24,9 @@ public class KeycloakUserRoleAssigner {
   private final UsersResource usersResource;
   @NotNull
   private final RolesResource rolesResource;
-  @NotNull
-  private final AuditLog auditLog;
 
   public void assignRoles(KeycloakUserId userId, Set<String> roles) {
-    auditLog.logInfo(
-        USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
+    log.info(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
 
     UserResource user = usersResource.get(userId.getUserId());
     RoleScopeResource userRoles = user.roles().realmLevel();
