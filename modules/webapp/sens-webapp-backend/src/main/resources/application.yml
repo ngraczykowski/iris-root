@@ -135,19 +135,6 @@ sens.logging.file:
   name: ${spring.application.name}
 
 ####################################################################################################
-# Chrome Extension
-####################################################################################################
-chrome-extension:
-  auth-url: ${keycloak.auth-server-url}
-  recommendation-url: ${sens.chrome-extension.recommendation-url}
-  open-record-url-pattern: ${sens.chrome-extension.open-record-url-pattern}
-  solution-url-pattern: ${sens.chrome-extension.solution-url-pattern}
-  hits-url-pattern: ${sens.chrome-extension.hits-url-pattern}
-  log-level: ${sens.chrome-extension.log-level}
-  comment-length-threshold: ${sens.chrome-extension.comment-length-threshold}
-  refresh-interval-in-ms: ${sens.chrome-extension.refresh-interval-in-ms}
-
-####################################################################################################
 sens.web:
   cors:
     allowed-origins: "*"
