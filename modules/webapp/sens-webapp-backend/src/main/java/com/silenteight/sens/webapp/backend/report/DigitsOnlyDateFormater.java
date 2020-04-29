@@ -1,18 +1,17 @@
-package com.silenteight.sens.webapp.scb.report;
+package com.silenteight.sens.webapp.backend.report;
 
 import com.silenteight.sens.webapp.common.time.DateFormatter;
 
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
 import static com.silenteight.sens.webapp.common.time.ApplicationTimeZone.TIME_ZONE;
 
-class ScbReportDateFormatter implements DateFormatter {
+public class DigitsOnlyDateFormater implements DateFormatter {
 
-  private static final ZoneId ZONE_ID = TIME_ZONE.toZoneId();
   private static final DateTimeFormatter FORMATTER =
-      DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZONE_ID);
+      DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(TIME_ZONE.toZoneId());
+  public static final DigitsOnlyDateFormater INSTANCE = new DigitsOnlyDateFormater();
 
   @Override
   public String format(TemporalAccessor value) {

@@ -9,6 +9,7 @@ import com.silenteight.sens.webapp.common.time.TimeSource;
 import java.time.Instant;
 import java.util.TimeZone;
 
+import static com.silenteight.sens.webapp.common.time.ApplicationTimeZone.TIME_ZONE;
 import static java.time.Instant.ofEpochMilli;
 
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class MockTimeSource implements TimeSource {
 
   @Setter
   @NonNull
-  private TimeZone timeZone = TimeZone.getDefault();
+  private TimeZone timeZone = TIME_ZONE;
 
   @Override
   public Instant now() {

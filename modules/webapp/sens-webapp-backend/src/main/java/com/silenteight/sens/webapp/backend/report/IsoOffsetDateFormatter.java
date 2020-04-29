@@ -2,17 +2,16 @@ package com.silenteight.sens.webapp.backend.report;
 
 import com.silenteight.sens.webapp.common.time.DateFormatter;
 
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
-import static java.util.TimeZone.getDefault;
+import static com.silenteight.sens.webapp.common.time.ApplicationTimeZone.TIME_ZONE;
 
-class ReportDateFormatter implements DateFormatter {
+public class IsoOffsetDateFormatter implements DateFormatter {
 
-  private static final ZoneId ZONE_ID = getDefault().toZoneId();
   private static final DateTimeFormatter FORMATTER =
-      DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZONE_ID);
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX").withZone(TIME_ZONE.toZoneId());
+  public static final IsoOffsetDateFormatter INSTANCE = new IsoOffsetDateFormatter();
 
   @Override
   public String format(TemporalAccessor value) {

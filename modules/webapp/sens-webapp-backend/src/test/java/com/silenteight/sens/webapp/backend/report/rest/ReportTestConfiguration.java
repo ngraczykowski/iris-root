@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sens.webapp.backend.report.Report;
 import com.silenteight.sens.webapp.backend.report.ReportGenerator;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
+import com.silenteight.sens.webapp.backend.report.exception.IllegalParameterException;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.support.csv.SimpleLinesSupplier;
 
@@ -46,6 +47,7 @@ class ReportTestConfiguration {
   @RequiredArgsConstructor
   private static class DummyReport implements Report {
 
+    private static final String MANDATORY_PARAM = "paramA";
     @NonNull
     private final Map<String, String> parameters;
 
@@ -56,6 +58,8 @@ class ReportTestConfiguration {
 
     @Override
     public LinesSupplier getReportContent() {
+      if (parameters.get(MANDATORY_PARAM) == null)
+        throw new IllegalParameterException(MANDATORY_PARAM + " not provided");
       List<String> lines = new LinkedList<>();
       lines.add("Requested query parameters:");
       lines.addAll(

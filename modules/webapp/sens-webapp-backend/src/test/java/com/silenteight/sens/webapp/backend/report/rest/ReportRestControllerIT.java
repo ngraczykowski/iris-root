@@ -14,6 +14,7 @@ import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -41,6 +42,11 @@ class ReportRestControllerIT extends BaseRestControllerTest {
         .content(
             containsString(
                 "Requested query parameters:\nparamA=paramValueABC\nparamB=paramValueEFG"));
+  }
+
+  @TestWithRole(role = AUDITOR)
+  void badRequestResponseIfMandatoryParameterNotProvided() {
+    get("/report/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }
 
   @TestWithRole(roles = { ADMIN, ANALYST, BUSINESS_OPERATOR })
