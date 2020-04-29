@@ -1,0 +1,5 @@
+@for $i from 1 through 14 {
+  .vertical-rhythm--#{$i} {
+    margin-bottom: calculate-8-pt-grid($i);
+  }
+}
