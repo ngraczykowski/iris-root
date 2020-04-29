@@ -1,9 +1,9 @@
-package com.silenteight.sens.webapp.backend.chromeextension;
+package com.silenteight.sens.webapp.scb.chromeextension;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.chromeextension.rest.dto.ChromeExtensionConfigurationDto;
-import com.silenteight.sens.webapp.backend.chromeextension.rest.dto.GnsUrlPatternDto;
+import com.silenteight.sens.webapp.scb.chromeextension.rest.dto.ChromeExtensionConfigurationDto;
+import com.silenteight.sens.webapp.scb.chromeextension.rest.dto.GnsUrlPatternDto;
 
 @RequiredArgsConstructor
 public class GetChromeExtensionConfigurationUseCase {

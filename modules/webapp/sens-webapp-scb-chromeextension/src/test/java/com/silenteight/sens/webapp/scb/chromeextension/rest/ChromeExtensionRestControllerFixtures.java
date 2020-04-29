@@ -1,10 +1,11 @@
-package com.silenteight.sens.webapp.backend.chromeextension.rest;
+package com.silenteight.sens.webapp.scb.chromeextension.rest;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.chromeextension.rest.dto.ChromeExtensionConfigurationDto;
-import com.silenteight.sens.webapp.backend.chromeextension.rest.dto.GnsUrlPatternDto;
+import com.silenteight.sens.webapp.scb.chromeextension.rest.dto.ChromeExtensionConfigurationDto;
+import com.silenteight.sens.webapp.scb.chromeextension.rest.dto.GnsUrlPatternDto;
+
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ChromeExtensionRestControllerFixtures {

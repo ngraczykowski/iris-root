@@ -4,8 +4,6 @@ import com.silenteight.sens.webapp.audit.slf4j.Slf4jBasedAuditLogModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
-import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
-import com.silenteight.sens.webapp.backend.chromeextension.ChromeExtensionModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.report.ReportModule;
@@ -25,7 +23,6 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ChangeRequestModule.class,
         GrpcModule.class,
         ChangeRequestModule.class,
-        ChromeExtensionModule.class,
         GrpcModule.class,
         KeycloakModule.class,
         ReasoningBranchModule.class,

@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.chromeextension.rest.dto;
+package com.silenteight.sens.webapp.scb.chromeextension.rest.dto;
 
 import lombok.Builder;
 import lombok.Data;

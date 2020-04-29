@@ -1,11 +1,11 @@
-package com.silenteight.sens.webapp.backend.chromeextension.rest;
+package com.silenteight.sens.webapp.scb.chromeextension.rest;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.audit.api.AuditLog;
-import com.silenteight.sens.webapp.backend.chromeextension.GetChromeExtensionConfigurationUseCase;
-import com.silenteight.sens.webapp.backend.chromeextension.rest.dto.ChromeExtensionConfigurationDto;
+import com.silenteight.sens.webapp.scb.chromeextension.GetChromeExtensionConfigurationUseCase;
+import com.silenteight.sens.webapp.scb.chromeextension.rest.dto.ChromeExtensionConfigurationDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

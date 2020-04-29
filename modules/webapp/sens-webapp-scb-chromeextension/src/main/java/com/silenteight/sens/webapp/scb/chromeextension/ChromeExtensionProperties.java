@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.chromeextension;
+package com.silenteight.sens.webapp.scb.chromeextension;
 
 import lombok.Data;
 
