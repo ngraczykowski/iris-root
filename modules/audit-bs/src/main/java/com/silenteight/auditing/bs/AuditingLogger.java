@@ -1,5 +1,6 @@
 package com.silenteight.auditing.bs;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
@@ -12,23 +13,21 @@ import javax.annotation.Nullable;
 @RequiredArgsConstructor
 public class AuditingLogger {
 
+  private static final String INSERT_LOG_QUERY = "INSERT INTO audit"
+      + " VALUES (:evid, :coid, :time, :type, :prnc, :enid, :encl, :enac, :detl)";
+
+  @NonNull
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   @Setter
   @Nullable
   private TransactionTemplate transactionTemplate;
 
-  private static final String INSERT_LOG_QUERY = "INSERT INTO audit"
-      + " (event_id, correlation_id, timestamp, type, principal, entity_id, entity_class,"
-      + "  entity_action, details) "
-      + " VALUES (:evid, :coid, :time, :type, :prnc, :enid, :encl, :enac, :detl)";
-
   public void log(AuditDataDto auditDataDto) {
-    if (transactionTemplate != null) {
+    if (transactionTemplate != null)
       transactionTemplate.execute(status -> doLog(auditDataDto));
-    } else {
+    else
       doLog(auditDataDto);
-    }
   }
 
   private int doLog(AuditDataDto auditDataDto) {
