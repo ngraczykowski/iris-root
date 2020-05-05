@@ -1,0 +1,11 @@
+plugins {
+  id "java"
+  id "maven-publish"
+}
+
+description = "SENS WebApp Audit"
+
+dependencies {
+  implementation project(":sens-webapp-common")
+  implementation project(":sens-webapp-report")
+}

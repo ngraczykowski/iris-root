@@ -1,15 +1,15 @@
 package com.silenteight.sens.webapp.backend;
 
+import com.silenteight.sens.webapp.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
-import com.silenteight.sens.webapp.backend.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
-import com.silenteight.sens.webapp.backend.report.ReportModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.keycloak.KeycloakModule;
+import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.user.UserModule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;

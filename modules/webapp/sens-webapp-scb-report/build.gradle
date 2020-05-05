@@ -31,10 +31,10 @@ dependencies {
 
   implementation libraries.hibernate_envers
 
-  implementation project(":sens-webapp-backend")
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-db-changelog")
   implementation project(":sens-webapp-logging")
+  implementation project(":sens-webapp-report")
   implementation project(":sens-webapp-user")
 
   implementation libraries.springdoc_ui

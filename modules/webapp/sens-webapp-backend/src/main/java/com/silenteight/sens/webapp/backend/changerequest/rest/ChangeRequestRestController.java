@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.backend.security.Authority.APPROVER;
+import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
 import static org.springframework.http.ResponseEntity.created;

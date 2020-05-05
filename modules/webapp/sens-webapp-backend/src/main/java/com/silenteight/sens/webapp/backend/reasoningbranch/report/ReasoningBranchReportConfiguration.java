@@ -2,9 +2,9 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.report;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.sens.webapp.backend.report.DigitsOnlyDateFormater;
-import com.silenteight.sens.webapp.backend.report.IsoOffsetDateFormatter;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
+import com.silenteight.sens.webapp.common.time.DigitsOnlyDateFormatter;
+import com.silenteight.sens.webapp.common.time.IsoOffsetDateFormatter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ class ReasoningBranchReportConfiguration {
         reasoningBranchesByTreeQuery,
         featureQuery,
         DefaultTimeSource.INSTANCE,
-        DigitsOnlyDateFormater.INSTANCE,
+        DigitsOnlyDateFormatter.INSTANCE,
         IsoOffsetDateFormatter.INSTANCE);
   }
 }

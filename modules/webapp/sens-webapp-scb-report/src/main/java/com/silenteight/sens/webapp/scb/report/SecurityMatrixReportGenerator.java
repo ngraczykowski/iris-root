@@ -1,9 +1,9 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sens.webapp.backend.report.Report;
-import com.silenteight.sens.webapp.backend.report.ReportGenerator;
-import com.silenteight.sens.webapp.backend.report.ReportLinesReader;
-import com.silenteight.sens.webapp.backend.report.SimpleReport;
+import com.silenteight.sens.webapp.report.Report;
+import com.silenteight.sens.webapp.report.ReportGenerator;
+import com.silenteight.sens.webapp.report.ReportLinesReader;
+import com.silenteight.sens.webapp.report.SimpleReport;
 
 import java.nio.charset.Charset;
 import java.util.List;
