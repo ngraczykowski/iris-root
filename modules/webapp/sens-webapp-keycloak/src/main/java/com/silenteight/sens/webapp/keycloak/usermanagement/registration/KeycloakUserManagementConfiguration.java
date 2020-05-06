@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.keycloak.usermanagement.assignrole.KeycloakUserRoleAssigner;
 
 import org.keycloak.admin.client.resource.RolesResource;
@@ -14,10 +15,12 @@ class KeycloakUserManagementConfiguration {
 
   @Bean
   KeycloakRegisteredUserRepository keycloakUserRegistrationRepository(
-      UsersResource usersResource, KeycloakUserRoleAssigner keycloakUserRoleAssigner) {
+      UsersResource usersResource,
+      KeycloakUserRoleAssigner keycloakUserRoleAssigner,
+      AuditTracer auditTracer) {
 
     return new KeycloakRegisteredUserRepository(
-        new KeycloakUserCreator(usersResource),
+        new KeycloakUserCreator(usersResource, auditTracer),
         keycloakUserRoleAssigner);
   }
 

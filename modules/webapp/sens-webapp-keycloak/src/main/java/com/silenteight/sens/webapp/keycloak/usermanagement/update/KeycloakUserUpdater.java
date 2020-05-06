@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 import com.silenteight.sens.webapp.keycloak.usermanagement.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sens.webapp.keycloak.usermanagement.retrieval.KeycloakUserRetriever;
@@ -22,9 +23,10 @@ class KeycloakUserUpdater {
 
   @NonNull
   private final KeycloakUserRetriever keycloakUserRetriever;
-
   @NonNull
   private final KeycloakUserRoleAssigner roleAssigner;
+  @NonNull
+  private final AuditTracer auditTracer;
 
   void update(UpdatedUser updatedUser) {
     log.info(USER_MANAGEMENT, "Updating user. updatedUser={}", updatedUser);
@@ -34,6 +36,9 @@ class KeycloakUserUpdater {
     updatedUser.getDisplayName().ifPresent(userRepresentation::setFirstName);
     updatedUser.getRoles().ifPresent(roles -> assignRoles(userRepresentation.getId(), roles));
     userResource.update(userRepresentation);
+
+    auditTracer.save(new KeycloakUserUpdatedEvent(updatedUser, userRepresentation.getId(),
+        UserRepresentation.class.getName(), "update"));
   }
 
   void assignRoles(String id, Set<String> roles) {

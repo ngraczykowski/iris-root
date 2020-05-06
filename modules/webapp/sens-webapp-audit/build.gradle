@@ -8,4 +8,6 @@ description = "SENS WebApp Audit"
 dependencies {
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-report")
+
+  implementation libraries.javax_servlet_api
 }

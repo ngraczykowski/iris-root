@@ -3,6 +3,8 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+
 import io.vavr.control.Try;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
@@ -15,6 +17,8 @@ public class UpdateReasoningBranchesUseCase {
 
   private final ChangeRequestRepository repository;
 
+  private final AuditTracer auditTracer;
+
   public Try<Void> apply(UpdateBranchesCommand updateCommand) {
     log.info(REASONING_BRANCH, "Updating Reasoning Branches details. command={}", updateCommand);
 
@@ -23,6 +27,8 @@ public class UpdateReasoningBranchesUseCase {
       return NO_CHANGES;
     }
 
+    auditTracer.save(new ReasoningBranchUpdateRequestedEvent(updateCommand));
+    
     return repository.save(updateCommand)
         .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branches update applied."))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not apply update", reason));
