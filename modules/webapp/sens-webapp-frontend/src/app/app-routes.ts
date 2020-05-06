@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
-import { AuditTrailComponent } from '@app/templates/audit-trail/audit-trail.component';
 import { ExternalComponent } from './layout/external/external.component';
 
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
@@ -14,6 +13,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { ReasoningBranchManagementPageComponent } from './reasoning-branch-management/containers/reasoning-branch-management-page/reasoning-branch-management-page.component';
 import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
+import { AuditTrailComponent } from './templates/audit-trail/audit-trail.component';
 
 export const routes: Routes = [
   {

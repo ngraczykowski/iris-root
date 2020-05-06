@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserFormComponent } from './user-form.component';
+import { TestModule } from '@app/test/test.module';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { UserManagementService } from '@app/user-management/services/user-management.service';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
@@ -8,7 +11,10 @@ describe('UserFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserFormComponent ]
+      declarations: [ UserFormComponent ],
+      providers: [ UserManagementService ],
+      imports: [ TestModule ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));

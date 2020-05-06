@@ -1,5 +1,0 @@
-<div class="switch-view">
-  <button *ngFor="let item of items" [class.is-active]="isActive(item)" (click)="onClick(item)">
-    {{ getName(item) | translateValue | async }}
-  </button>
-</div>

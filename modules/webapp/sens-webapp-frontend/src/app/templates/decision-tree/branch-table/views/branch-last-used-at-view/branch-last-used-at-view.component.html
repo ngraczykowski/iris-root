@@ -1,9 +1,0 @@
-<ng-container *ngIf="data">
-  <ng-container *ngIf="data.lastUsedAt">
-    {{ formatDate(data.lastUsedAt) }}
-  </ng-container>
-  <ng-container *ngIf="!data.lastUsedAt">
-    <p class="empty-state-data"
-       [translate]="'decisionTree.branchTable.data.rows.lastUsedAt.emptyState'"></p>
-  </ng-container>
-</ng-container>

@@ -15,11 +15,11 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { UserValidators } from '@app/templates/user-management/user-profile/validators/user-validators';
 import { User, UserRoles } from '@app/user-management/models/users';
 import { UserManagementService } from '@app/user-management/services/user-management.service';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { UserValidators } from '../validators/user-validators';
 
 @Component({
   selector: 'app-user-form',

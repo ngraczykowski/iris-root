@@ -274,5 +274,144 @@
     "menu": {
       "logOut": "Log Out"
     }
+  },
+  "user-management": {
+    "title": "User Management",
+    "options": {
+      "downloadCSV": {
+        "buttonLabel": "Download list in CSV",
+        "briefMessage": "Generating report..."
+      },
+      "addNewUser": "Add New User",
+      "editProfile": "Edit Profile"
+    },
+    "userTable": {
+      "header": {
+        "title": "Users list",
+        "search": {
+          "placeholder": "Search user e.g. John Doe"
+        }
+      }
+    },
+    "superUser": "Superuser",
+    "data": {
+      "roles": {
+        "ROLE_ANALYST": "Analyst",
+        "ROLE_APPROVER": "Approver",
+        "ROLE_AUDITOR": "Auditor",
+        "ROLE_MAKER": "Maker",
+        "ROLE_USER_MANAGER": "User Manager"
+      },
+      "status": "If this option is active, the user will be able to log into SENS",
+      "userType": {
+        "INTERNAL": "SENS User",
+        "EXTERNAL": "External User"
+      }
+    },
+    "permissions": {
+      "decisionTree": {
+        "addButton": "Add Another Decision Tree",
+        "removeButton": "Remove",
+        "defaultText": "Select decision tree"
+      },
+      "assigned": {
+        "noAssigment": "This user is not assigned",
+        "decisionTreeName": "Decision tree name",
+        "assignedAs": "Assigned as",
+        "ROLE_MAKER": "Maker",
+        "ROLE_APPROVER": "Approver level {{level}}"
+      }
+    },
+    "userList": {
+      "error": "Failed to retrieve data",
+      "emptyState": "This list should contain at least one user. Contact the administrator to solve the problem.",
+      "labels": {
+        "userName": "Username",
+        "displayName": "Display name",
+        "roles": "Roles",
+        "status": "Status",
+        "type": "User type",
+        "userProfile": "Profile"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "userProfile": {
+      "title": {
+        "addNewUser": "Add New User",
+        "editProfile": "Edit User Profile"
+      },
+      "actions": {
+        "addUser": "Add new user",
+        "saveChanges": "Save changes",
+        "cancel": "Cancel"
+      },
+      "labels": {
+        "userName": "Username",
+        "displayName": "Display name",
+        "password": "Password",
+        "repeatPassword": "Repeat password",
+        "roles": "Roles",
+        "permissions": "Permissions",
+        "status": "Status",
+        "type": "User type",
+        "superUser": "Super user",
+        "assignedPermissions": "Assigned to"
+      },
+      "error": {
+        "load": {
+          "USER_NOT_FOUND": "User does not exist.",
+          "UNKNOWN": "Unknown error occured while loading user profile."
+        },
+        "create": {
+          "USER_ALREADY_EXISTS": "User name already exists.",
+          "UNKNOWN": "Unknown error occured while saving new user profile."
+        },
+        "update": {
+          "UNKNOWN": "Unknown error occured while updating user profile.",
+          "USER_ROLE_IN_USE": "User has role {{role}} in trees ({{treeList}})."
+        }
+      },
+      "success": {
+        "update": "User has been updated successfully",
+        "create": "User has been created successfully"
+      },
+      "superUser": {
+        "description": "Give the user all permissions."
+      },
+      "inputDescripions": {
+        "userName": "Minimum 3 characters.",
+        "password": "Minimum 8 characters witch at least one letter and digit."
+      },
+      "inputPlaceholder": {
+        "userName": "Username that user will use to login, e.g. johnDoe",
+        "displayName": "Human-readable user name, e.g. John Doe",
+        "password": "e.g. MySecretPassword00"
+      },
+      "validationError": {
+        "userName": {
+          "required": "This field cannot be empty.",
+          "minlength": "Username must be at least 3 characters in length.",
+          "pattern": "This field cannot contain white-space characters."
+        },
+        "password": {
+          "required": "This field cannot be empty.",
+          "minlength": "Password must be at least 8 characters in length.",
+          "minOneDigit": "Password must contain at least one digit.",
+          "minOneLetter": "Password must contain at least one letter."
+        },
+        "repeatPassword": {
+          "required": "This field cannot be empty.",
+          "mismatched": "Repeat password does not match password."
+        }
+      }
+    }
+  },
+  "briefMessage": {
+    "button": {
+      "dismiss": "Dismiss"
+    }
   }
 }

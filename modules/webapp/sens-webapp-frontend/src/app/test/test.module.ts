@@ -7,6 +7,8 @@ import { SharedModule } from '@app/shared/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { WINDOW_PROVIDERS } from '@app/shared/window.service';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { WINDOW_PROVIDERS } from '@app/shared/window.service';
     RouterTestingModule.withRoutes([]),
     FormsModule,
     SharedModule,
-    HttpClientTestingModule
+    HttpClientTestingModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([])
   ],
   exports: [
     TranslateModule,

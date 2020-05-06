@@ -1,7 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { async, TestBed, } from '@angular/core/testing';
-import { FrontendSettings } from '@app/shared/frontend-settings/frontend-settings.model';
-import { environment } from '@env/environment.prod';
 import { FrontendSettingsService } from './frontend-settings.service';
 
 describe('FrontendSettingsService', () => {
@@ -15,6 +13,7 @@ describe('FrontendSettingsService', () => {
     }).compileComponents();
 
     service = TestBed.get(FrontendSettingsService);
+    // tslint:disable-next-line
     httpMock = TestBed.get(HttpTestingController);
   }));
 

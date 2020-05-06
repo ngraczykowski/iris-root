@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmChangesComponent } from './confirm-changes.component';
+import { SharedModule } from '@app/shared/shared.module';
+import { TestModule } from '@app/test/test.module';
 
 describe('ConfirmChangesComponent', () => {
   let component: ConfirmChangesComponent;
@@ -8,9 +10,9 @@ describe('ConfirmChangesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmChangesComponent ]
-    })
-    .compileComponents();
+      declarations: [ ConfirmChangesComponent ],
+      imports: [ TestModule ]
+    });
   }));
 
   beforeEach(() => {

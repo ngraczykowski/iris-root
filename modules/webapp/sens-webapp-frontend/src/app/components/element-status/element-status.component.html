@@ -1,7 +1,0 @@
-<div class="element-status" *ngIf="status">
-  <div class="element-status-icon" [ngClass]="status"></div>
-  <p class="element-status-label" [ngClass]="status">
-    {{ status | translateValue: translatePrefix + '.' | async }}
-    <ng-content></ng-content>
-  </p>
-</div>

@@ -3,7 +3,6 @@ import { BackgroundServicesManager } from '@app/shared/background-services-manag
 import { EventKey } from '@app/shared/event/event.service.model';
 import { LocalEventService } from '@app/shared/event/local-event.service';
 import { TranslateService } from '@ngx-translate/core';
-import { SolutionSettingsService } from './shared/solution-settings.service';
 
 @Component({
   selector: 'app-root',

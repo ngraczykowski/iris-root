@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ValidationFeedbackComponent } from './validation-feedback.component';
+import { TestModule } from '@app/test/test.module';
 
 describe('ValidationFeedbackComponent', () => {
   let component: ValidationFeedbackComponent;
@@ -8,7 +9,8 @@ describe('ValidationFeedbackComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ValidationFeedbackComponent ]
+      declarations: [ ValidationFeedbackComponent ],
+      imports: [ TestModule ]
     })
     .compileComponents();
   }));

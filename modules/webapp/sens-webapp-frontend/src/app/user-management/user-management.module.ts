@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HintFeedbackModule } from '@app/components/hint-feedback/hint-feedback.module';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 
 import { UserManagementRoutingModule } from './user-management-routing.module';
@@ -11,11 +10,10 @@ import { SearchComponent } from './components/search/search.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NewUserProfileModule } from '@app/templates/user-management/user-profile/new-user-profile/new-user-profile.module';
-import { UserManagementClient } from '@app/templates/user-management/user-management-client';
 import { UserFormContainerComponent } from './containers/user-form-container/user-form-container.component';
 import { ValidationFeedbackComponent } from './components/validation-feedback/validation-feedback.component';
 import { UserManagementService } from './services/user-management.service';
+import { HighlightSearchPipe } from './highlight-search.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +22,8 @@ import { UserManagementService } from './services/user-management.service';
     SearchComponent,
     UserFormComponent,
     UserFormContainerComponent,
-    ValidationFeedbackComponent
+    ValidationFeedbackComponent,
+    HighlightSearchPipe
   ],
   imports: [
     CommonModule,
@@ -32,12 +31,9 @@ import { UserManagementService } from './services/user-management.service';
     ReactiveFormsModule,
     ApplicationHeaderModule,
     UserManagementRoutingModule,
-    NewUserProfileModule,
     AngularSvgIconModule,
-    HintFeedbackModule
   ],
   providers: [
-    UserManagementClient,
     UserManagementService
   ]
 })

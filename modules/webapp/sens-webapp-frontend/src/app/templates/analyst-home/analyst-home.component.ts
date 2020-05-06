@@ -11,7 +11,6 @@ export class AnalystHomeComponent implements OnInit {
   constructor(private authenticatedUser: AuthenticatedUserFacade) { }
 
   ngOnInit() {
-    setTimeout('window.location.reload();', 600000);
   }
 
   logout(): void {

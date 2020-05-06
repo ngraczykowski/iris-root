@@ -6,9 +6,7 @@ import { BasicRoleDefaultPageMappings } from '@app/basic-default-paegs-mappings'
 import { ApplicationHeaderModule } from '@app/components/application-header/application-header.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
-import { ExtendSessionComponent } from '@app/components/extend-session/extend-session.component';
 import { ExternalComponent } from '@app/layout/external/external.component';
-import { InternalComponent } from '@app/layout/internal/internal.component';
 import { AccessDeniedComponent } from '@app/pages/access-denied/access-denied.component';
 import { ErrorPageComponent } from '@app/pages/error-page/error-page.component';
 import { InternalServerErrorComponent } from '@app/pages/internal-server-error/internal-server-error.component';
@@ -19,15 +17,7 @@ import { KeycloakInitializer } from '@app/shared/security/bootstrap/keycloak-ini
 import { ROLES_REDIRECT_CONFIG } from '@app/shared/security/role-default-page-mappings';
 import { SharedModule } from '@app/shared/shared.module';
 import { WINDOW_PROVIDERS } from '@app/shared/window.service';
-import { AlertRestrictionsManagementModule } from '@app/templates/alert-restrictions-management/alert-restrictions-management.module';
-import { AlertModule } from '@app/templates/alert/alert.module';
 import { AnalystHomeModule } from '@app/templates/analyst-home/analyst-home.module';
-import { ApproverModule } from '@app/templates/approver/approver.module';
-import { AuditTrailModule } from '@app/templates/audit-trail/audit-trail.module';
-import { DecisionTreeModule } from '@app/templates/decision-tree/decision-tree.module';
-import { InboxModule } from '@app/templates/inbox/inbox.module';
-import { ReasoningBranchModule } from '@app/templates/reasoning-branch/reasoning-branch.module';
-import { WorkflowManagementModule } from '@app/templates/workflow-management/workflow-management.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -37,6 +27,7 @@ import { ReasoningBranchManagementModule } from './reasoning-branch-management/r
 import { reducers } from './reducers';
 import { UserManagementModule } from './user-management/user-management.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuditTrailModule } from './templates/audit-trail/audit-trail.module';
 
 
 @NgModule({
@@ -45,10 +36,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AccessDeniedComponent,
     NotAuthenticatedComponent,
     BriefMessageComponent,
-    ExtendSessionComponent,
     ErrorWindowComponent,
     PageNotFoundComponent,
-    InternalComponent,
     ExternalComponent,
     MaintenanceComponent,
     ErrorPageComponent,
@@ -58,15 +47,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RouterModule.forRoot(routes),
     SharedModule,
     ApplicationHeaderModule,
-    DecisionTreeModule,
-    ReasoningBranchModule,
-    AlertModule,
-    InboxModule,
-    AuditTrailModule,
     AnalystHomeModule,
-    WorkflowManagementModule,
-    AlertRestrictionsManagementModule,
-    ApproverModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
@@ -74,6 +55,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     }),
     KeycloakAngularModule,
     ReasoningBranchManagementModule,
+    AuditTrailModule,
     UserManagementModule,
     BrowserAnimationsModule
   ],

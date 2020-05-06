@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from '@app/app.component';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
-import { ExtendSessionComponent } from '@app/components/extend-session/extend-session.component';
 import { TestModule } from '@app/test/test.module';
 
 describe('AppComponent', () => {
@@ -17,8 +16,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         ErrorWindowComponent,
-        BriefMessageComponent,
-        ExtendSessionComponent
+        BriefMessageComponent
       ],
     }).compileComponents();
   }));

@@ -43,7 +43,7 @@ describe('ApplicationHeaderService', () => {
         expect(data).toEqual(mockResponse);
       });
 
-      const req = httpMock.expectOne(`${environment.serverApiUrl}management/info`);
+      const req = httpMock.expectOne(`${environment.managementApiUrl}/info`);
       expect(req.request.method).toBe('GET');
       req.flush(mockResponse);
     });
