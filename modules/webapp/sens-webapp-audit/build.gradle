@@ -9,5 +9,8 @@ dependencies {
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-report")
 
+
+  implementation libraries.silenteight_audit_bs
+
   implementation libraries.javax_servlet_api
 }

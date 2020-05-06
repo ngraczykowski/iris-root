@@ -55,9 +55,9 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
 
   private static long decisionTreeIdFrom(Map<String, String> parameters) {
     String decisionTreeId = parameters.get(DECISION_TREE_ID_PARAM);
-    if (decisionTreeId == null) {
+    if (decisionTreeId == null)
       throw new IllegalParameterException(DECISION_TREE_ID_PARAM + " not provided");
-    }
+
     try {
       return parseLong(decisionTreeId);
     } catch (NumberFormatException e) {
@@ -66,7 +66,6 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
   }
 
   private LinesSupplier reportData(long decisionTreeId) {
-
     List<BranchWithFeaturesDto> branches = branchesOf(decisionTreeId);
     CsvBuilder<BranchWithFeaturesDto> csvBuilder =
         csvWithFixedColumns(decisionTreeId, branches.stream());

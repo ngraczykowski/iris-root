@@ -48,6 +48,7 @@ class ReportTestConfiguration {
   private static class DummyReport implements Report {
 
     private static final String MANDATORY_PARAM = "paramA";
+
     @NonNull
     private final Map<String, String> parameters;
 
@@ -60,6 +61,7 @@ class ReportTestConfiguration {
     public LinesSupplier getReportContent() {
       if (parameters.get(MANDATORY_PARAM) == null)
         throw new IllegalParameterException(MANDATORY_PARAM + " not provided");
+
       List<String> lines = new LinkedList<>();
       lines.add("Requested query parameters:");
       lines.addAll(

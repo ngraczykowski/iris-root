@@ -11,4 +11,6 @@
 
   <include file="db/changelog/db.changelog-sens-webapp-audit-trail-1.0.0.xml"/>
 
+  <include file="db/changelog/db.changelog-auditing.xml"/>
+
 </databaseChangeLog>

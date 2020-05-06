@@ -1,0 +1,3 @@
+event_id,correlation_id,timestamp,type,principal,entity_id,entity_class,entity_action,details
+05bf9714-b1ee-4778-a733-6151df70fca3,2e9f8302-12e3-47c0-ae6c-2c9313785d1d,2020-04-15 12:14:32.456,add,jsmith,1234,decisionTree,add,Decision Tree added
+306659cf-569d-4138-8a71-2ec0578653b1,eacffbea-567a-40b8-af84-a10cec371a70,2020-04-25 15:47:12.834,change,jdoe,9876,reasoningBranch,change,Reasoning branch changed

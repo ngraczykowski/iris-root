@@ -1,14 +1,14 @@
 package com.silenteight.sens.webapp.common.support.csv;
 
-import com.silenteight.commons.CSVUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
+
+import static com.silenteight.commons.CSVUtils.getCSVRecordWithDefaultDelimiter;
+import static java.util.stream.Collectors.toList;
 
 public class CsvBuilder<T> implements LinesSupplier {
 
@@ -50,12 +50,12 @@ public class CsvBuilder<T> implements LinesSupplier {
     List<String> cellsInRow = this.cells
         .stream()
         .map(columnFunction -> columnFunction.apply(element))
-        .collect(Collectors.toList());
-    return CSVUtils.getCSVRecordWithDefaultDelimiter(toArray(cellsInRow));
+        .collect(toList());
+    return getCSVRecordWithDefaultDelimiter(toArray(cellsInRow));
   }
 
   private String buildHeader() {
-    return CSVUtils.getCSVRecordWithDefaultDelimiter(toArray(this.headers));
+    return getCSVRecordWithDefaultDelimiter(toArray(headers));
   }
 
   private static String[] toArray(Collection<String> collection) {
