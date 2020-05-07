@@ -9,6 +9,7 @@ import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
+import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static java.util.Optional.ofNullable;
 
 @Builder
@@ -60,6 +62,7 @@ public class TestUpdatedBranches implements UpdatedBranches {
 
     return ChangeBranchesRequest.newBuilder()
         .addBranchChange(branchChange)
+        .setCorrelationId(fromJavaUuid(RequestCorrelation.id()))
         .build();
   }
 

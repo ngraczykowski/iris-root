@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.grpc.reasoningbranch;
 import com.silenteight.proto.serp.v1.api.BranchChange;
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
@@ -19,7 +20,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.UUID;
 
+import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.BranchChangeAssert.assertThatBranchChange;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.ChangeBranchesRequestAssert.assertThatChangeBranchRequest;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchUpdateRepositoryTest.ReasoningBranchUpdateRepositoryUpdateFixtures.*;
@@ -134,6 +137,17 @@ class GrpcReasoningBranchUpdateRepositoryTest {
         .hasSolutionChange(BRANCH_WITH_ALL_CHANGES.getNewAiSolution().orElseThrow())
         .hasStatusChange(BRANCH_WITH_ALL_CHANGES.getNewStatus().orElseThrow())
         .hasBranchId(BRANCH_WITH_ALL_CHANGES.getBranchIds().get(0));
+  }
+
+  @Test
+  void passCorrelationIdInTheRequest() {
+    UUID correlationId = RequestCorrelation.id();
+
+    underTest.save(BRANCH_WITH_ALL_CHANGES);
+
+    verify(governanceBlockingStub).changeBranches(requestCaptor.capture());
+    ChangeBranchesRequest actualRequest = requestCaptor.getValue();
+    assertThat(actualRequest.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
   }
 
   static class ReasoningBranchUpdateRepositoryUpdateFixtures {

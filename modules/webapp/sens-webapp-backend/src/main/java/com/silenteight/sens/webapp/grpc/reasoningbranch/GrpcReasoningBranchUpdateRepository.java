@@ -10,6 +10,7 @@ import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.rpc.Code.NOT_FOUND;
+import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
@@ -56,6 +58,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
   private ChangeBranchesRequest createRequest(UpdatedBranches updatedBranches) {
     return ChangeBranchesRequest.newBuilder()
         .addAllBranchChange(createBranchChanges(updatedBranches))
+        .setCorrelationId(fromJavaUuid(RequestCorrelation.id()))
         .build();
   }
 
