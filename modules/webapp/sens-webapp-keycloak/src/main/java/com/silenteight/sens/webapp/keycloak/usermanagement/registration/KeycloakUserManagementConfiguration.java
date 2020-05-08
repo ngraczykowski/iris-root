@@ -20,8 +20,9 @@ class KeycloakUserManagementConfiguration {
       AuditTracer auditTracer) {
 
     return new KeycloakRegisteredUserRepository(
-        new KeycloakUserCreator(usersResource, auditTracer),
-        keycloakUserRoleAssigner);
+        new KeycloakUserCreator(usersResource),
+        keycloakUserRoleAssigner,
+        auditTracer);
   }
 
   @Bean

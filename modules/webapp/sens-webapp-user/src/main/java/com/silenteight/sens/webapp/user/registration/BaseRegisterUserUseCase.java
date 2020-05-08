@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.registration;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +17,9 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANA
 @Slf4j
 class BaseRegisterUserUseCase {
 
+  @NonNull
   private final UserRegisteringDomainService userRegisteringDomainService;
+  @NonNull
   private final RegisteredUserRepository registeredUserRepository;
 
   Either<UserDomainError, Success> register(NewUserRegistration registration) {

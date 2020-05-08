@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
@@ -30,10 +31,15 @@ class SyncAnalystConfiguration {
       UserListQuery userListQuery,
       ExternalAnalystRepository externalAnalystRepository,
       BulkAnalystService bulkAnalystService,
+      AuditTracer auditTracer,
       SyncAnalystProperties syncAnalystProperties) {
 
     return new SyncAnalystsUseCase(
-        userListQuery, externalAnalystRepository, new AnalystSynchronizer(), bulkAnalystService,
+        userListQuery,
+        externalAnalystRepository,
+        new AnalystSynchronizer(),
+        bulkAnalystService,
+        auditTracer,
         syncAnalystProperties.getMaxErrors());
   }
 

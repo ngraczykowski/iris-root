@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.user.lock;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 class UserLockUseCaseConfiguration {
 
   @Bean
-  LockUserUseCase lockUserUseCase(UserLocker userLocker) {
-    return new LockUserUseCase(userLocker);
+  LockUserUseCase lockUserUseCase(UserLocker userLocker, AuditTracer auditTracer) {
+    return new LockUserUseCase(userLocker, auditTracer);
   }
 
   @Bean
-  UnlockUserUseCase unlockUserUseCase(UserLocker userLocker) {
-    return new UnlockUserUseCase(userLocker);
+  UnlockUserUseCase unlockUserUseCase(UserLocker userLocker, AuditTracer auditTracer) {
+    return new UnlockUserUseCase(userLocker, auditTracer);
   }
 }

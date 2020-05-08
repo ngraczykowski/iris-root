@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.UserQuery;
@@ -22,11 +23,17 @@ import static java.util.stream.Stream.concat;
 @Slf4j
 public class AddRolesToUserUseCase {
 
+  @NonNull
   private final UpdatedUserRepository updatedUserRepository;
-
+  @NonNull
   private final UserQuery userQuery;
+  @NonNull
+  private final AuditTracer auditTracer;
 
   public void apply(AddRolesToUserCommand command) {
+    auditTracer.save(new UserUpdateRequestedEvent(
+        command.getUsername(), AddRolesToUserCommand.class.getName(), command));
+
     userQuery
         .find(command.getUsername())
         .map(UserDto::getRoles)

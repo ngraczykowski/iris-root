@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
@@ -22,15 +23,24 @@ import static java.util.Optional.empty;
 @Slf4j
 public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
 
+  @NonNull
+  private final AuditTracer auditTracer;
+
   public RegisterExternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
-      RegisteredUserRepository registeredUserRepository) {
+      RegisteredUserRepository registeredUserRepository,
+      AuditTracer auditTracer) {
 
     super(userRegisteringDomainService, registeredUserRepository);
+    this.auditTracer = auditTracer;
   }
 
   public Either<UserDomainError, Success> apply(RegisterExternalUserCommand command) {
     log.info(USER_MANAGEMENT, "Registering external user. command={}", command);
+
+    auditTracer.save(
+        new ExternalUserCreationRequestedEvent(
+            command.getUsername(), RegisterExternalUserCommand.class.getName(), command));
 
     return register(command.toUserRegistration());
   }

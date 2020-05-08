@@ -1,0 +1,19 @@
+:release_version: 1.16.0
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *PENDING*
+- Release date: *NA*
+
+:leveloffset: +1
+
+// --------------------------------------------------------------------
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-651[WA-651]
+|As a Front-end Developer, I want to have an endpoint to download Audit report in a CSV format.
+
+include::./templates/changelog-table-footer.adoc[]

@@ -6,6 +6,7 @@ import lombok.ToString;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
@@ -25,15 +26,24 @@ import static java.util.Optional.of;
 @Slf4j
 public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
 
+  @NonNull
+  private final AuditTracer auditTracer;
+
   public RegisterInternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
-      RegisteredUserRepository registeredUserRepository) {
+      RegisteredUserRepository registeredUserRepository,
+      AuditTracer auditTracer) {
 
     super(userRegisteringDomainService, registeredUserRepository);
+    this.auditTracer = auditTracer;
   }
 
   public Either<UserDomainError, Success> apply(RegisterInternalUserCommand command) {
     log.info(USER_MANAGEMENT, "Registering internal user. command={}", command);
+
+    auditTracer.save(
+        new InternalUserCreationRequestedEvent(
+            command.getUsername(), RegisterInternalUserCommand.class.getName(), command));
 
     return register(command.toUserRegistration());
   }

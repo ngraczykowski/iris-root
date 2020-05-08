@@ -4,6 +4,8 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class NewUserDetails {
   String username;
   String displayName;
   @ToString.Exclude
+  @JsonIgnore
   Optional<Credentials> credentials;
   Set<String> roles;
 

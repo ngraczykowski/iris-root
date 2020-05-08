@@ -95,6 +95,14 @@ public enum JsonConversionHelper {
     }
   }
 
+  public String serializeToString(Object object) {
+    try {
+      return objectMapper.writeValueAsString(object);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException("Failed to serialize object to string.", e);
+    }
+  }
+
   public <T extends TreeNode> T deserializeFromString(String jsonString, JavaType type) {
     try {
       return objectMapper.readValue(jsonString, type);
@@ -131,7 +139,6 @@ public enum JsonConversionHelper {
       super("Failed to generate json while serializing object " + value, cause);
     }
   }
-
 
   public static final class FailedToParseJsonException extends IllegalArgumentException {
 

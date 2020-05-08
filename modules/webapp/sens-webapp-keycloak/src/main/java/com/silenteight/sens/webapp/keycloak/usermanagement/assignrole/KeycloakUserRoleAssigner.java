@@ -3,13 +3,11 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.assignrole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 
 import org.jetbrains.annotations.NotNull;
 import org.keycloak.admin.client.resource.*;
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,8 +24,6 @@ public class KeycloakUserRoleAssigner {
   private final UsersResource usersResource;
   @NotNull
   private final RolesResource rolesResource;
-  @NotNull
-  private final AuditTracer auditTracer;
 
   public void assignRoles(KeycloakUserId userId, Set<String> roles) {
     log.info(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
@@ -37,10 +33,6 @@ public class KeycloakUserRoleAssigner {
 
     userRoles.remove(mapToRepresentation(getRolesToRemove(roles, userRoles)));
     userRoles.add(mapToRepresentation(roles));
-
-    auditTracer.save(
-        new RolesAssignedEvent(roles, userId.getUserId(), UserRepresentation.class.getName(),
-            "assignRoles"));
   }
 
   @NotNull

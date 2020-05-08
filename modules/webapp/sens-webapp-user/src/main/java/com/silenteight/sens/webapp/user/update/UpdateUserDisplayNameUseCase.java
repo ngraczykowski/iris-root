@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.common.time.TimeSource;
 
@@ -14,9 +15,15 @@ import com.silenteight.sens.webapp.common.time.TimeSource;
 @RequiredArgsConstructor
 public class UpdateUserDisplayNameUseCase {
 
+  @NonNull
   private final UpdatedUserRepository updatedUserRepository;
+  @NonNull
+  private final AuditTracer auditTracer;
 
   public void apply(UpdateUserDisplayNameCommand command) {
+    auditTracer.save(new UserUpdateRequestedEvent(
+        command.getUsername(), UpdateUserDisplayNameCommand.class.getName(), command));
+
     updatedUserRepository.save(command.toUpdatedUser());
   }
 

@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.audit.trace;
 
+import com.silenteight.auditing.bs.AuditingLogger;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 class AuditTracerConfiguration {
 
   @Bean
-  Slf4jAuditTracer slf4jAuditTracer() {
-    return new Slf4jAuditTracer();
+  DatabaseAuditTracer databaseAuditTracer(AuditingLogger auditingLogger) {
+    return new DatabaseAuditTracer(auditingLogger);
   }
 }

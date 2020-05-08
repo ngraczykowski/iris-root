@@ -1,5 +1,8 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkResult;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.SingleResult;
@@ -12,8 +15,11 @@ import com.silenteight.sens.webapp.user.UserListQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
 
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
@@ -35,12 +41,12 @@ class SyncAnalystsUseCaseTest {
 
   @Mock
   private UserListQuery userListQuery;
-
   @Mock
   private ExternalAnalystRepository externalAnalystRepository;
-
   @Mock
   private BulkAnalystService bulkAnalystService;
+  @Mock
+  private AuditTracer auditTracer;
 
   private SyncAnalystProperties syncAnalystProperties;
 
@@ -51,7 +57,11 @@ class SyncAnalystsUseCaseTest {
     syncAnalystProperties = new SyncAnalystProperties();
     underTest = new SyncAnalystConfiguration()
         .syncAnalystsUseCase(
-            userListQuery, externalAnalystRepository, bulkAnalystService, syncAnalystProperties);
+            userListQuery,
+            externalAnalystRepository,
+            bulkAnalystService,
+            auditTracer,
+            syncAnalystProperties);
   }
 
   @Test
@@ -94,6 +104,7 @@ class SyncAnalystsUseCaseTest {
             asList(
                 GNS_USER_WITHOUT_DISPLAY_NAME.getUserName(),
                 GNS_USER.getUserName())));
+    verifyAuditLog();
   }
 
   @Test
@@ -136,11 +147,12 @@ class SyncAnalystsUseCaseTest {
     verify(bulkAnalystService).addRole(new BulkAddAnalystRoleRequest(emptyList()));
     verify(bulkAnalystService).updateDisplayName(new BulkUpdateDisplayNameRequest(emptyList()));
     verify(bulkAnalystService).delete(new BulkDeleteAnalystsRequest(emptyList()));
+    verifyAuditLog();
   }
 
   @Test
   void usersAndAnalystsAvailable_syncAnalysts() {
-    // given
+    // give
     when(userListQuery.listAll()).thenReturn(
         asList(
             SENS_USER,
@@ -191,6 +203,7 @@ class SyncAnalystsUseCaseTest {
                     ANALYST_WITH_DISPLAY_NAME.getDisplayName()))));
     verify(bulkAnalystService).delete(
         new BulkDeleteAnalystsRequest(singletonList(GNS_USER.getUserName())));
+    verifyAuditLog();
   }
 
   @Test
@@ -207,7 +220,11 @@ class SyncAnalystsUseCaseTest {
     syncAnalystProperties.setMaxErrors(3);
     underTest = new SyncAnalystConfiguration()
         .syncAnalystsUseCase(
-            userListQuery, externalAnalystRepository, bulkAnalystService, syncAnalystProperties);
+            userListQuery,
+            externalAnalystRepository,
+            bulkAnalystService,
+            auditTracer,
+            syncAnalystProperties);
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();
@@ -234,5 +251,17 @@ class SyncAnalystsUseCaseTest {
 
   private static BulkResult createResult(long success) {
     return new BulkResult(range(0, success).mapToObj(i -> success()).collect(toList()));
+  }
+
+  private void verifyAuditLog() {
+    UUID correlationId = RequestCorrelation.id();
+
+    ArgumentCaptor<AuditEvent> eventCaptor = ArgumentCaptor.forClass(AuditEvent.class);
+    verify(auditTracer).save(eventCaptor.capture());
+    AuditEvent auditEvent = eventCaptor.getValue();
+
+    assertThat(auditEvent.getType()).isEqualTo("AnalystsSyncRequested");
+    assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
+    assertThat(auditEvent.getDetails()).isNull();
   }
 }

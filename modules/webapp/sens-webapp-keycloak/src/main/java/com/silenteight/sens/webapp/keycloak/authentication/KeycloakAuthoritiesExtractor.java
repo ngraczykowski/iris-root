@@ -35,7 +35,6 @@ class KeycloakAuthoritiesExtractor {
     ).collect(toSet());
   }
 
-
   private Stream<GrantedAuthority> backendAuthorities(KeycloakAuthenticationToken token) {
     return token.getAuthorities()
         .stream()

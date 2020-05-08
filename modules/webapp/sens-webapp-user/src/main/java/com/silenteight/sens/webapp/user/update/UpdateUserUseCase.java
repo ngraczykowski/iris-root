@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.Builder.Default;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
@@ -27,15 +28,18 @@ public class UpdateUserUseCase {
 
   @NonNull
   private final UpdatedUserRepository updatedUserRepository;
-
   @NonNull
   private final NameLengthValidator displayNameLengthValidator;
-
   @NonNull
   private final RolesValidator rolesValidator;
+  @NonNull
+  private final AuditTracer auditTracer;
 
   public void apply(UpdateUserCommand command) {
     log.info(USER_MANAGEMENT, "Updating user. command={}", command);
+
+    auditTracer.save(new UserUpdateRequestedEvent(
+        command.getUsername(), UpdateUserCommand.class.getName(), command));
 
     command.getDisplayName().ifPresent(this::validateDisplayName);
     command.getRoles().ifPresent(this::validateRoles);

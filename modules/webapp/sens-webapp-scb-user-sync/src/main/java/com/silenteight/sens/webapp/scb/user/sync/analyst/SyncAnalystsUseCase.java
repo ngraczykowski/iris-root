@@ -1,8 +1,10 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
@@ -25,14 +27,22 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class SyncAnalystsUseCase {
 
+  @NonNull
   private final UserListQuery userListQuery;
+  @NonNull
   private final ExternalAnalystRepository externalAnalystRepository;
+  @NonNull
   private final AnalystSynchronizer analystSynchronizer;
+  @NonNull
   private final BulkAnalystService bulkAnalystService;
+  @NonNull
+  private final AuditTracer auditTracer;
   private final int maxErrors;
 
   public SyncAnalystStatsDto synchronize() {
     log.info(USER_MANAGEMENT, "Synchronizing Analysts");
+
+    auditTracer.save(new AnalystsSyncRequestedEvent());
 
     Collection<UserDto> users = userListQuery.listAll();
     Collection<Analyst> analysts = externalAnalystRepository.list();

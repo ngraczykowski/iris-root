@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 import com.silenteight.sens.webapp.keycloak.usermanagement.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sens.webapp.user.registration.RegisteredUserRepository;
@@ -24,15 +25,27 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
 
   private final KeycloakUserCreator keycloakUserCreator;
   private final KeycloakUserRoleAssigner roleAssigner;
+  private final AuditTracer auditTracer;
 
   @Override
   public void save(CompletedUserRegistration userRegistration) {
     log.info(USER_MANAGEMENT, "Registering User. userRegistration={}", userRegistration);
     UserRepresentation userRepresentation = toUserRepresentation(userRegistration);
-
     KeycloakUserId newlyCreatedUserId = keycloakUserCreator.create(userRepresentation);
 
+    auditTracer.save(
+        new UserCreatedEvent(
+            userRegistration.getUsername(),
+            CompletedUserRegistration.class.getName(),
+            userRegistration));
+
     roleAssigner.assignRoles(newlyCreatedUserId, userRegistration.getRoles());
+
+    auditTracer.save(
+        new RolesAssignedEvent(
+            userRegistration.getUsername(),
+            CompletedUserRegistration.class.getName(),
+            userRegistration.getRoles()));
   }
 
   private static UserRepresentation toUserRepresentation(CompletedUserRegistration registration) {

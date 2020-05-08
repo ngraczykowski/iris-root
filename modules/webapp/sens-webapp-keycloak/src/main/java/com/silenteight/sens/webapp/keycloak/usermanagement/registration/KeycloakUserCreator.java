@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.keycloak.usermanagement.KeycloakUserId;
 
 import org.keycloak.admin.client.resource.UsersResource;
@@ -20,7 +19,6 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANA
 class KeycloakUserCreator {
 
   private final UsersResource usersResource;
-  private final AuditTracer auditTracer;
 
   KeycloakUserId create(UserRepresentation userRepresentation) {
     log.info(USER_MANAGEMENT, "Creating new User. username={}", userRepresentation.getUsername());
@@ -31,13 +29,7 @@ class KeycloakUserCreator {
       if (!isSuccessful)
         throw new CreateUserException(response);
 
-      KeycloakUserId userId = getUserId(response);
-
-      auditTracer.save(
-          new KeycloakUserCreatedEvent(userRepresentation, userId.getUserId(),
-              UserRepresentation.class.getName(), "create"));
-
-      return userId;
+      return getUserId(response);
     }
   }
 

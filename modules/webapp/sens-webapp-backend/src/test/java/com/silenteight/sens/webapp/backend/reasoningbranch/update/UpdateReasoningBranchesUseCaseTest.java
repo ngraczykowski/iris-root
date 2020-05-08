@@ -36,7 +36,6 @@ class UpdateReasoningBranchesUseCaseTest {
 
   @Mock
   private ChangeRequestRepository updateRepository;
-
   @Mock
   private AuditTracer auditTracer;
 
