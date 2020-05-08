@@ -10,7 +10,6 @@ import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
 
 import java.util.List;
@@ -24,13 +23,19 @@ import static java.util.Optional.ofNullable;
 public class TestUpdatedBranches implements UpdatedBranches {
 
   @NonNull
-  private final List<BranchId> branchIds;
+  private final long treeId;
+
+  @NonNull
+  private final List<Long> branchIds;
 
   @Nullable
   private final String newAiSolution;
 
   @Nullable
   private final Boolean newStatus;
+
+  @Nullable
+  private final String comment;
 
   @Override
   public Optional<String> getNewAiSolution() {
@@ -43,14 +48,24 @@ public class TestUpdatedBranches implements UpdatedBranches {
   }
 
   @Override
-  public List<BranchId> getBranchIds() {
+  public Optional<String> getComment() {
+    return ofNullable(comment);
+  }
+
+  @Override
+  public long getTreeId() {
+    return treeId;
+  }
+
+  @Override
+  public List<Long> getBranchIds() {
     return branchIds;
   }
 
   ChangeBranchesRequest getRequest() {
     BranchChange.Builder branchChange = BranchChange.newBuilder();
 
-    branchChange.setReasoningBranchId(buildGrpcBranchId(getBranchIds().get(0)));
+    branchChange.setReasoningBranchId(buildGrpcBranchId(getTreeId(), getBranchIds().get(0)));
 
     getNewAiSolution()
         .map(TestUpdatedBranches::buildSolutionChange)
@@ -72,10 +87,10 @@ public class TestUpdatedBranches implements UpdatedBranches {
         .build();
   }
 
-  private static ReasoningBranchId buildGrpcBranchId(BranchId branchId) {
+  private static ReasoningBranchId buildGrpcBranchId(Long treeId, Long branchId) {
     return ReasoningBranchId.newBuilder()
-        .setFeatureVectorId(branchId.getBranchNo())
-        .setDecisionTreeId(branchId.getTreeId())
+        .setDecisionTreeId(treeId)
+        .setFeatureVectorId(branchId)
         .build();
   }
 

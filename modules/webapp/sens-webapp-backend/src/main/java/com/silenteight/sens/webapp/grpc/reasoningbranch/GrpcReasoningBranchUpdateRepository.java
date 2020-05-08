@@ -11,8 +11,7 @@ import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.ChangeRequestRepository;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
@@ -50,7 +49,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
         .flatMapTry(request -> Try.run(() -> governanceBlockingStub.changeBranches(request)));
 
     return mapStatusExceptionsToCommunicationException(tryUpdate)
-        .mapFailure(Case($(codeIs(NOT_FOUND)), BranchNotFoundException::new))
+        .mapFailure(Case($(codeIs(NOT_FOUND)), BranchesNotFoundException::new))
         .onSuccess(ignored -> log.info(REASONING_BRANCH, "Saved updated Branch"))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not save updated Branch", reason));
   }
@@ -68,6 +67,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
         .stream()
         .map(branchId ->
             createBranchChange(
+                updatedBranches.getTreeId(),
                 branchId,
                 updatedBranches.getNewAiSolution(),
                 updatedBranches.getNewStatus()))
@@ -76,11 +76,11 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
 
   @NotNull
   private BranchChange createBranchChange(
-      BranchId branchId, Optional<String> newAiSolution, Optional<Boolean> newIsActive) {
+      long treeId, long branchId, Optional<String> newAiSolution, Optional<Boolean> newIsActive) {
 
     Builder branchChange = BranchChange.newBuilder();
 
-    branchChange.setReasoningBranchId(buildGrpcBranchId(branchId));
+    branchChange.setReasoningBranchId(buildGrpcBranchId(treeId, branchId));
 
     newAiSolution
         .map(this::buildSolutionChange)
@@ -93,10 +93,10 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
     return branchChange.build();
   }
 
-  private static ReasoningBranchId buildGrpcBranchId(BranchId branchId) {
+  private static ReasoningBranchId buildGrpcBranchId(long treeId, long branchId) {
     return ReasoningBranchId.newBuilder()
-        .setFeatureVectorId(branchId.getBranchNo())
-        .setDecisionTreeId(branchId.getTreeId())
+        .setDecisionTreeId(treeId)
+        .setFeatureVectorId(branchId)
         .build();
   }
 

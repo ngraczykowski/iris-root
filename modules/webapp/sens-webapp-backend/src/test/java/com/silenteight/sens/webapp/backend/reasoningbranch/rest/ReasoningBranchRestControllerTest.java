@@ -1,10 +1,11 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.rest;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchesCommand;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
+import com.silenteight.sens.webapp.backend.rest.exception.GenericExceptionControllerAdvice;
+import com.silenteight.sens.webapp.backend.rest.exception.UnknownExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
@@ -12,6 +13,8 @@ import io.vavr.control.Try;
 import org.junit.jupiter.api.Nested;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+
+import java.util.List;
 
 import static com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchRestControllerTest.ReasoningBranchRestControllerFixtures.*;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
@@ -21,16 +24,22 @@ import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS
 import static io.vavr.control.Try.failure;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.*;
 
-@Import({ ReasoningBranchRestController.class })
+@Import({
+    ReasoningBranchRestController.class,
+    ReasoningBranchRestControllerAdvice.class,
+    UnknownExceptionControllerAdvice.class,
+    GenericExceptionControllerAdvice.class })
 class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
@@ -113,12 +122,13 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
   class BranchesUpdating {
 
     @TestWithRole(role = BUSINESS_OPERATOR)
-    void its404_whenBranchNotFound() {
+    void its400_whenBranchNotFound() {
       given(updateReasoningBranchesUseCase.apply(eq(BRANCHES_UPDATE_COMMAND)))
-          .willReturn(failure(BRANCH_NOT_FOUND_EXCEPTION));
+          .willReturn(failure(new BranchesNotFoundException(List.of(123L, 456L))));
 
       patch(mappingForBranches(TREE_ID), BRANCHES_CHANGE_REQUEST)
-          .statusCode(NOT_FOUND.value());
+          .body(containsString("\"branchIds\":[123,456]"))
+          .statusCode(BAD_REQUEST.value());
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
@@ -163,21 +173,21 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     static final String AI_SOLUTION = "True Positive";
     static final boolean IS_ACTIVE = false;
+    private static final String COMMENT = "comment ABC";
 
     static final ListBranchesRequestDto LIST_BRANCHES =
         new ListBranchesRequestDto(asList(BRANCH_NO_1, BRANCH_NO_2));
 
     static final BranchesChangesRequestDto BRANCHES_CHANGE_REQUEST =
-        new BranchesChangesRequestDto(asList(BRANCH_NO_1, BRANCH_NO_2), AI_SOLUTION, IS_ACTIVE);
+        new BranchesChangesRequestDto(
+            asList(BRANCH_NO_1, BRANCH_NO_2), AI_SOLUTION, IS_ACTIVE, COMMENT);
 
     static final UpdateBranchesCommand BRANCHES_UPDATE_COMMAND =
-        new UpdateBranchesCommand(
-            asList(BranchId.of(TREE_ID, BRANCH_NO_1), BranchId.of(TREE_ID, BRANCH_NO_2)),
-            AI_SOLUTION,
-            IS_ACTIVE);
+        new UpdateBranchesCommand(TREE_ID, asList(BRANCH_NO_1, BRANCH_NO_2),
+            AI_SOLUTION, IS_ACTIVE, COMMENT);
 
-    static final BranchNotFoundException BRANCH_NOT_FOUND_EXCEPTION =
-        new BranchNotFoundException(new RuntimeException("someCause"));
+    static final BranchesNotFoundException BRANCH_NOT_FOUND_EXCEPTION =
+        new BranchesNotFoundException(emptyList());
 
     static final AiSolutionNotSupportedException AI_SOLUTION_NOT_SUPPORTED_EXCEPTION =
         new AiSolutionNotSupportedException(new RuntimeException("someCause"));

@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
 
 import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
@@ -20,11 +20,11 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static com.silenteight.sens.webapp.backend.reasoningbranch.BranchId.of;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.BOTH_CHANGES_COMMAND;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.NO_CHANGES_COMMAND;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.SOLUTION_CHANGE_COMMAND;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.STATUS_CHANGE_COMMAND;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -38,6 +38,9 @@ class UpdateReasoningBranchesUseCaseTest {
   private ChangeRequestRepository updateRepository;
   @Mock
   private AuditTracer auditTracer;
+
+  @Mock
+  private ReasoningBranchValidator reasoningBranchValidator;
 
   @InjectMocks
   private UpdateReasoningBranchesUseCase underTest;
@@ -92,21 +95,67 @@ class UpdateReasoningBranchesUseCaseTest {
         .isBeforeOrEqualTo(timeAfter);
   }
 
+  @Test
+  void validatesBranches() {
+    UpdateBranchesCommand command = STATUS_CHANGE_COMMAND;
+    given(updateRepository.save(command)).willReturn(Try.success(null));
+
+    underTest.apply(command);
+
+    verify(reasoningBranchValidator).validate(command.getTreeId(), command.getBranchIds());
+  }
+
+  @Test
+  void throwsExceptionIfValidatorThrowsException() {
+    BranchesNotFoundException exception = new BranchesNotFoundException(emptyList());
+    doThrow(exception).when(reasoningBranchValidator).validate(anyLong(), anyList());
+
+    assertThatThrownBy(() -> underTest.apply(STATUS_CHANGE_COMMAND)).isEqualTo(exception);
+  }
+
+  @Test
+  void doesNotSaveIfValidationExceptionThrown() {
+    doThrow(new BranchesNotFoundException(emptyList()))
+        .when(reasoningBranchValidator).validate(anyLong(), anyList());
+
+    try {
+      underTest.apply(STATUS_CHANGE_COMMAND);
+    } catch (BranchesNotFoundException e) {
+      //do nothing
+    }
+
+    verifyNoInteractions(updateRepository);
+  }
+
+  @Test
+  void doesNotAuditIfValidationExceptionThrown() {
+    doThrow(new BranchesNotFoundException(emptyList()))
+        .when(reasoningBranchValidator).validate(anyLong(), anyList());
+
+    try {
+      underTest.apply(STATUS_CHANGE_COMMAND);
+    } catch (BranchesNotFoundException e) {
+      //do nothing
+    }
+
+    verifyNoInteractions(auditTracer);
+  }
+
   static class ReasoningBranchesUpdateServiceFixtures {
 
-    static final BranchId BRANCH_ID = of(1, 2);
+    static final Long TREE_ID = 1L;
+    static final Long BRANCH_ID = 2L;
 
     static final UpdateBranchesCommand NO_CHANGES_COMMAND =
-        new UpdateBranchesCommand(singletonList(BRANCH_ID), null, null);
+        new UpdateBranchesCommand(TREE_ID, singletonList(BRANCH_ID), null, null, null);
 
     static final UpdateBranchesCommand STATUS_CHANGE_COMMAND =
-        new UpdateBranchesCommand(singletonList(BRANCH_ID), null, false);
+        new UpdateBranchesCommand(TREE_ID, singletonList(BRANCH_ID), null, false, null);
 
     static final UpdateBranchesCommand SOLUTION_CHANGE_COMMAND =
-        new UpdateBranchesCommand(singletonList(BRANCH_ID), "someSolution", null);
+        new UpdateBranchesCommand(TREE_ID, singletonList(BRANCH_ID), "someSolution", null, null);
 
     static final UpdateBranchesCommand BOTH_CHANGES_COMMAND =
-        new UpdateBranchesCommand(singletonList(BRANCH_ID), "someSolution", true);
-
+        new UpdateBranchesCommand(TREE_ID, singletonList(BRANCH_ID), "someSolution", true, null);
   }
 }

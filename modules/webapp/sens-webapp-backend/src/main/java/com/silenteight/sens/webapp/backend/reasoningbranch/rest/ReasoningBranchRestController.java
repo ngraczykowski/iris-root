@@ -4,8 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
 import com.silenteight.sens.webapp.common.rest.Authority;
 
@@ -18,11 +16,8 @@ import java.util.Optional;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(ROOT)
@@ -85,8 +80,6 @@ class ReasoningBranchRestController {
         .map(ResponseEntity::ok)
         .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branches updated"))
         .onFailure(ex -> log.error(REASONING_BRANCH, "Could not update Reasoning Branches", ex))
-        .recover(BranchNotFoundException.class, e -> notFound().build())
-        .recover(AiSolutionNotSupportedException.class, e -> status(BAD_REQUEST).build())
-        .getOrElse(() -> status(INTERNAL_SERVER_ERROR).build());
+        .get();
   }
 }

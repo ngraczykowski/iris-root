@@ -5,13 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchesCommand;
 
 import java.util.List;
 import javax.annotation.Nullable;
-
-import static java.util.stream.Collectors.toList;
 
 @Data
 @NoArgsConstructor
@@ -27,14 +24,10 @@ public class BranchesChangesRequestDto {
   @Nullable
   private Boolean active;
 
-  UpdateBranchesCommand toCommand(long treeId) {
-    return new UpdateBranchesCommand(toBranchIds(treeId), aiSolution, active);
-  }
+  @Nullable
+  private String comment;
 
-  private List<BranchId> toBranchIds(long treeId) {
-    return branchIds
-        .stream()
-        .map(branchId -> BranchId.of(treeId, branchId))
-        .collect(toList());
+  UpdateBranchesCommand toCommand(long treeId) {
+    return new UpdateBranchesCommand(treeId, branchIds, aiSolution, active, comment);
   }
 }

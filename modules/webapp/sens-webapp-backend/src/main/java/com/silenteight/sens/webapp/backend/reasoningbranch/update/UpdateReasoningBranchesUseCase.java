@@ -17,6 +17,8 @@ public class UpdateReasoningBranchesUseCase {
 
   private final ChangeRequestRepository repository;
 
+  private final ReasoningBranchValidator reasoningBranchValidator;
+
   private final AuditTracer auditTracer;
 
   public Try<Void> apply(UpdateBranchesCommand updateCommand) {
@@ -27,8 +29,10 @@ public class UpdateReasoningBranchesUseCase {
       return NO_CHANGES;
     }
 
+    reasoningBranchValidator.validate(updateCommand.getTreeId(), updateCommand.getBranchIds());
+
     auditTracer.save(new ReasoningBranchUpdateRequestedEvent(updateCommand));
-    
+
     return repository.save(updateCommand)
         .onSuccess(ignored -> log.info(REASONING_BRANCH, "Reasoning Branches update applied."))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not apply update", reason));

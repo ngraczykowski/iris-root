@@ -5,7 +5,6 @@ import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
 
 import org.assertj.core.api.AbstractAssert;
 
@@ -43,14 +42,18 @@ public class BranchChangeAssert extends AbstractAssert<BranchChangeAssert, Branc
     return this;
   }
 
-  BranchChangeAssert hasBranchId(BranchId branchId) {
+  BranchChangeAssert hasTreeId(Long treeId) {
     assertThat(actual.getReasoningBranchId())
         .extracting(ReasoningBranchId::getDecisionTreeId)
-        .isEqualTo(branchId.getTreeId());
+        .isEqualTo(treeId);
 
+    return this;
+  }
+
+  BranchChangeAssert hasBranchId(Long branchId) {
     assertThat(actual.getReasoningBranchId())
         .extracting(ReasoningBranchId::getFeatureVectorId)
-        .isEqualTo(branchId.getBranchNo());
+        .isEqualTo(branchId);
 
     return this;
   }

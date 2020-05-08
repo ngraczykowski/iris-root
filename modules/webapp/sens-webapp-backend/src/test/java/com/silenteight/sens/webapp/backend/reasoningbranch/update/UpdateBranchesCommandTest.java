@@ -10,19 +10,20 @@ class UpdateBranchesCommandTest {
 
   @Test
   void shouldReturnNoChangesIfNewAiSolutionAndNewIsActiveAreNull() {
-    UpdateBranchesCommand command = new UpdateBranchesCommand(emptyList(), null, null);
+    UpdateBranchesCommand command = new UpdateBranchesCommand(1L, emptyList(), null, null, null);
     assertThat(command.doesNotHaveChanges()).isTrue();
   }
 
   @Test
   void shouldShowChangesIfNewAiSolutionNullAndActiveNotNull() {
-    UpdateBranchesCommand command = new UpdateBranchesCommand(emptyList(), null, FALSE);
+    UpdateBranchesCommand command = new UpdateBranchesCommand(1L, emptyList(), null, FALSE, null);
     assertThat(command.doesNotHaveChanges()).isFalse();
   }
 
   @Test
   void shouldShowChangesIfNewAiSolutionNotNullAndActiveNull() {
-    UpdateBranchesCommand command = new UpdateBranchesCommand(emptyList(), "SOME_SOLUTION", null);
+    UpdateBranchesCommand command =
+        new UpdateBranchesCommand(1L, emptyList(), "SOME_SOLUTION", null, null);
     assertThat(command.doesNotHaveChanges()).isFalse();
   }
 }

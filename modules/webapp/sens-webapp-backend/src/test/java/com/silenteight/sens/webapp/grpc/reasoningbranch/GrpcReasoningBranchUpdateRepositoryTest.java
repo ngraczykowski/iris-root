@@ -4,8 +4,7 @@ import com.silenteight.proto.serp.v1.api.BranchChange;
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchId;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 
 import io.grpc.Status;
@@ -61,7 +60,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
 
     Try<Void> actual = underTest.save(NON_EXISTING_BRANCH);
 
-    assertThat(actual.getCause()).isInstanceOf(BranchNotFoundException.class);
+    assertThat(actual.getCause()).isInstanceOf(BranchesNotFoundException.class);
   }
 
   @Test
@@ -74,6 +73,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     ChangeBranchesRequest actualRequest = requestCaptor.getValue();
     assertThatChangeBranchRequest(actualRequest)
         .hasStatusChange(BRANCH_WITH_STATUS_CHANGED.getNewStatus().orElseThrow())
+        .hasTreeId(BRANCH_WITH_STATUS_CHANGED.getTreeId())
         .hasBranchId(BRANCH_WITH_STATUS_CHANGED.getBranchIds().get(0));
   }
 
@@ -122,6 +122,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     ChangeBranchesRequest actualRequest = requestCaptor.getValue();
     assertThatChangeBranchRequest(actualRequest)
         .hasSolutionChange(BRANCH_WITH_AI_SOLUTION_CHANGED.getNewAiSolution().orElseThrow())
+        .hasTreeId(BRANCH_WITH_AI_SOLUTION_CHANGED.getTreeId())
         .hasBranchId(BRANCH_WITH_AI_SOLUTION_CHANGED.getBranchIds().get(0));
   }
 
@@ -136,6 +137,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     assertThatChangeBranchRequest(actualRequest)
         .hasSolutionChange(BRANCH_WITH_ALL_CHANGES.getNewAiSolution().orElseThrow())
         .hasStatusChange(BRANCH_WITH_ALL_CHANGES.getNewStatus().orElseThrow())
+        .hasTreeId(BRANCH_WITH_ALL_CHANGES.getTreeId())
         .hasBranchId(BRANCH_WITH_ALL_CHANGES.getBranchIds().get(0));
   }
 
@@ -153,33 +155,37 @@ class GrpcReasoningBranchUpdateRepositoryTest {
   static class ReasoningBranchUpdateRepositoryUpdateFixtures {
 
     static final TestUpdatedBranches NON_EXISTING_BRANCH =
-        TestUpdatedBranches.builder().branchIds(List.of(BranchId.of(2, 2))).build();
+        TestUpdatedBranches.builder().treeId(2L).branchIds(List.of(2L)).build();
 
     static final TestUpdatedBranches BRANCH_WITH_STATUS_CHANGED =
         TestUpdatedBranches
             .builder()
-            .branchIds(List.of(BranchId.of(1, 4)))
+            .treeId(1L)
+            .branchIds(List.of(4L))
             .newStatus(false)
             .build();
 
     static final TestUpdatedBranches BRANCH_WITH_AI_SOLUTION_CHANGED =
         TestUpdatedBranches
             .builder()
-            .branchIds(List.of(BranchId.of(1, 4)))
+            .treeId(1L)
+            .branchIds(List.of(4L))
             .newAiSolution("FALSE_POSITIVE")
             .build();
 
     static final TestUpdatedBranches BRANCH_WITH_UNKNOWN_SOLUTION_CHANGED =
         TestUpdatedBranches
             .builder()
-            .branchIds(List.of(BranchId.of(1, 4)))
+            .treeId(1L)
+            .branchIds(List.of(4L))
             .newAiSolution("UNKNOWN_AI_SOLUTION")
             .build();
 
     static final TestUpdatedBranches BRANCH_WITH_ALL_CHANGES =
         TestUpdatedBranches
             .builder()
-            .branchIds(List.of(BranchId.of(1, 4)))
+            .treeId(1L)
+            .branchIds(List.of(4L))
             .newStatus(true)
             .newAiSolution("HINTED_FALSE_POSITIVE")
             .build();
@@ -187,7 +193,8 @@ class GrpcReasoningBranchUpdateRepositoryTest {
     static final TestUpdatedBranches TWO_BRANCHES_WITH_ALL_CHANGES =
         TestUpdatedBranches
             .builder()
-            .branchIds(List.of(BranchId.of(20, 5), BranchId.of(20, 6)))
+            .treeId(20L)
+            .branchIds(List.of(5L, 6L))
             .newAiSolution("HINTED_FALSE_POSITIVE")
             .newStatus(true)
             .build();
