@@ -1,0 +1,37 @@
+@startuml
+header Maker flow
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 20
+    database WebAppDB as "WebApp Database" order 30
+end box
+
+box "RabbitMQ"
+    queue Queue order 10
+end box
+
+Queue -> Backend : ChangeRequest Approve Message
+
+note over Queue, Backend
+    * changeRequest id
+    * maker username
+    * maker comment
+    * creation_at timestamp
+end note
+
+activate Backend
+
+Backend -> WebAppDB : Save new approval
+
+note over Backend, WebAppDB
+    * changeRequest id
+    * maker username
+    * maker comment
+    * creation_at
+end note
+
+Backend -> WebAppDB: Modify Change Request status to approved
+
+deactivate Backend
+
+@enduml

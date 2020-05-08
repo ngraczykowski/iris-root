@@ -1,0 +1,56 @@
+@startuml
+header Approver flow
+
+actor Approver
+box "WebApp Frontend"
+    participant Frontend as "Approver Queue GUI"
+end box
+
+box "WebApp Backend"
+    participant Backend as "WebApp"
+    database WebAppDB as "WebApp Database"
+end box
+
+box "SERP"
+    queue Queue
+    participant Governance
+end box
+
+Frontend ->> Backend : Fetch approver queue
+
+activate Backend
+Backend <-> WebAppDB : Fetch pending Change Requests
+note over Backend, WebAppDB
+    Not declined and with missing approval levels
+end note
+Backend <-> Governance : Fetch BulkChange (Reasoning Branches details)
+
+Backend -->> Frontend : Change Requests list
+deactivate Backend
+
+Frontend -->> Approver : Present list of Change Requests \nwaiting for approval
+
+
+==  Approve Change Request  ==
+
+Approver -> Frontend : Click "Approve"
+Frontend ->> Backend : Change Request approve request
+
+Backend -> Queue : Send ChangeRequest Approve Message
+
+Backend -->> Frontend : Approval success result
+
+Frontend -->> Approver : Inform about success
+
+==  Reject Change Request  ==
+
+Approver -> Frontend : Click "Reject"
+Frontend ->> Backend : Change Request reject request
+
+Backend -> Queue : Send ChangeRequest Reject Message
+
+Backend -->> Frontend : Approval reject result
+
+Frontend -->> Approver : Inform about success
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+header Maker flow
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 20
+    database WebAppDB as "WebApp Database" order 30
+end box
+
+box "RabbitMQ"
+    queue Queue order 10
+end box
+
+Queue -> Backend : ChangeRequest Reject Message
+
+activate Backend
+
+Backend -> WebAppDB : Save new rejection
+
+Backend -> WebAppDB : Modify Change Request status to declined
+
+deactivate Backend
+
+@enduml

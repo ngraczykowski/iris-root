@@ -1,0 +1,33 @@
+@startuml
+header Maker flow
+
+box "RabbitMQ"
+    queue Queue order 10
+end box
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 20
+    database WebAppDB as "WebApp Database" order 30
+end box
+
+activate Backend
+
+Queue -> Backend : ChangeRequest Message
+    note over Queue, Backend
+        * ChangeRequest Id
+        * maker username
+        * maker comment
+        * creation_at timestamp
+    end note
+
+Backend -> WebAppDB : Persist new Change Request
+    note over Backend, WebAppDB
+        * ChangeRequest Id
+        * maker username
+        * maker comment
+        * creation_at timestamp
+    end note
+
+deactivate Backend
+
+@enduml

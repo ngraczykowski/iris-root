@@ -1,0 +1,81 @@
+@startuml
+header Maker flow
+
+actor Maker order 10
+
+box "WebApp Frontend"
+    participant Frontend as "Change Request UI" order 20
+end box
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 30
+    database WebAppDB as "WebApp Database" order 40
+end box
+
+box "RabbitMQ"
+    queue Queue order 50
+end box
+
+box "Governance"
+    participant Governance as "Governance" order 45
+end box
+
+Maker -> Frontend : Input DT id
+Maker -> Frontend : Input RB ids OR feature vector signatures
+
+loop until comment and at least one of: AI Solution, Status provided
+   Maker -> Frontend : Input RB Solution OR Status change
+   Maker -> Frontend : Input Change Request comment
+end
+
+Maker -> Frontend: Click "Submit change request" button
+
+Frontend -> Backend: Create Change Request
+note over Frontend, Backend
+    * Decision Tree id
+    * Reasoning Branches ids OR feature vector signatures
+    * AI solution (possible "no change")
+    * Status (possible "no change")
+    * Comment
+end note
+
+activate Backend
+activate Backend #DarkSalmon
+
+Backend -> Governance : Validate DecisionTree \nand Reasoning Branches exist
+
+activate Governance
+activate Governance #DarkSalmon
+
+alt Validation error
+    Governance -->> Backend : Validation result Error
+    deactivate Governance
+
+    Backend -->> Frontend: ChangeRequest creation failure
+    deactivate Backend
+
+    Frontend -->> Maker : Inform about failure
+
+else Successful validation
+
+    Governance -->> Backend: Validation result OK
+    deactivate Governance
+
+    Backend -> Queue : Send ChangeRequest Message
+    note over Backend, Queue
+        * ChangeRequest Id
+        * Decision Tree id
+        * list of RB ids or feature vector signatures
+        * maker username
+        * maker comment
+        * creation_at timestamp
+    end note
+
+    Backend -->> Frontend: Change Request successfully \ncreated result
+    deactivate Backend
+
+    Frontend -->> Maker : Inform about success
+
+end
+
+@enduml
