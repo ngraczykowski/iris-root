@@ -1,0 +1,38 @@
+@import "src/styles/theme/theme_variables";
+@import 'src/styles/abstracts/8-pt-grid';
+
+.nav-element {
+  &.mat-list-item {
+    height: calculate-8-pt-grid(5);
+    $navigationBorderRadius: calculate-8-pt-grid(1);
+    border-bottom-right-radius: $navigationBorderRadius;
+    border-top-right-radius: $navigationBorderRadius;
+  }
+
+  .nav-element__icon {
+    opacity: .6;
+  }
+
+  .nav-element__label {
+    opacity: .9;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  &--active {
+    .nav-element__label {
+      font-weight: 500;
+    }
+
+    .nav-element__label,
+    .nav-element__icon {
+      color: $primary;
+      opacity: 1;
+    }
+
+    &,
+    &:hover {
+      background-color: rgba($primary, .1);
+    }
+  }
+}

@@ -1,4 +1,13 @@
 <app-app-bar></app-app-bar>
 <app-error-window></app-error-window>
 <app-brief-message></app-brief-message>
-<router-outlet (activate)="onActivate($event)"></router-outlet>
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav mode="side" disableClose opened class="app-container__navigation">
+    <app-sidenav></app-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="app-container__content">
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

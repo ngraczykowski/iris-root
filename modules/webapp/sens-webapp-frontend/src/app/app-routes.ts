@@ -56,7 +56,7 @@ export const routes: Routes = [
     component: AuditTrailComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Auditor']
+      authorities: ['Admin']
     },
   },
   {

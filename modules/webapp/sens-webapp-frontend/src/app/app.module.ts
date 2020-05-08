@@ -1,4 +1,5 @@
 import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { AppBarModule } from '@app/app-bar/app-bar.module';
 import { rolesByRedirect, routes } from '@app/app-routes';
@@ -17,6 +18,7 @@ import { KeycloakInitializer } from '@app/shared/security/bootstrap/keycloak-ini
 import { ROLES_REDIRECT_CONFIG } from '@app/shared/security/role-default-page-mappings';
 import { SharedModule } from '@app/shared/shared.module';
 import { WINDOW_PROVIDERS } from '@app/shared/window.service';
+import { SidenavModule } from '@app/sidenav/sidenav.module';
 import { AnalystHomeModule } from '@app/templates/analyst-home/analyst-home.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -58,7 +60,9 @@ import { AuditTrailModule } from './templates/audit-trail/audit-trail.module';
     AuditTrailModule,
     UserManagementModule,
     BrowserAnimationsModule,
-    AppBarModule
+    AppBarModule,
+    SidenavModule,
+    MatSidenavModule,
   ],
   providers: [
     WINDOW_PROVIDERS,

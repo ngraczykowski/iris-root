@@ -18,6 +18,6 @@
     display: grid;
     grid-auto-rows: 280px;
     grid-gap: $space-xxl;
-    grid-template-columns: repeat(4, 280px);
+    grid-template-columns: repeat(1, 280px);
   }
 }

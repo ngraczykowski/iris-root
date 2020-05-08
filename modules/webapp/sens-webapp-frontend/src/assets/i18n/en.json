@@ -9,6 +9,24 @@
       }
     }
   },
+  "reasoningBranches": {
+    "title": "Reasoning Branches",
+    "changeRequest": {
+      "title": "Change Request"
+    }
+  },
+  "users": {
+    "title": "Users",
+    "usersList": {
+      "title": "Users List"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "auditTrail": {
+      "title": "Audit Trail"
+    }
+  },
   "usersManagement": {
     "title": "Users",
     "usersList": {
@@ -127,7 +145,7 @@
     }
   },
   "auditTrail": {
-    "title": "Reports",
+    "title": "Security Matrix",
     "report": {
       "model": "The report contains information about all models in SENS Application.",
       "decision-tree": "The report contains information about changes in Decision Trees.",

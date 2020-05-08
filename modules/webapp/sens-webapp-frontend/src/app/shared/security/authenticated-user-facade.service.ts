@@ -55,12 +55,9 @@ export class AuthenticatedUserFacade {
     // );
   }
 
-  hasSuperuserPermissions(): Observable<boolean> {
-    return of(true);
-  }
-
-  private checkUrlAccess(url: string): boolean {
+  checkUrlAccess(url: string): boolean {
     const roles = this.getUserRoles();
+
     if (roles.includes('Admin')) {
       return true;
     }
@@ -76,5 +73,4 @@ export class AuthenticatedUserFacade {
         return false;
     }
   }
-
 }
