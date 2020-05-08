@@ -1,9 +1,9 @@
 import { TestBed, async, getTestBed } from '@angular/core/testing';
 
-import { ApplicationHeaderService } from './application-header.service';
+import { AppBarService } from './app-bar.service';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
-import { ApplicationInfo } from './models/application-info';
-import { environment } from '../../../environments/environment';
+import { environment } from '@env/environment';
+import { ApplicationInfo } from '../models/application-info';
 
 export const mockResponse: ApplicationInfo = {
   'git': {
@@ -15,17 +15,17 @@ export const mockResponse: ApplicationInfo = {
 
 describe('ApplicationHeaderService', () => {
   let injector: TestBed;
-  let service: ApplicationHeaderService;
+  let service: AppBarService;
   let httpMock: HttpTestingController;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ApplicationHeaderService]
+      providers: [AppBarService]
     });
 
     injector = getTestBed();
-    service = TestBed.get(ApplicationHeaderService);
+    service = TestBed.get(AppBarService);
     httpMock = injector.get(HttpTestingController);
   }));
 

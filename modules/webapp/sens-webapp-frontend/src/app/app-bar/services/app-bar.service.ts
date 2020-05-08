@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApplicationInfo } from './models/application-info';
+import { ApplicationInfo } from '../models/application-info';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '@env/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApplicationHeaderService {
+export class AppBarService {
 
   constructor(
     private http: HttpClient

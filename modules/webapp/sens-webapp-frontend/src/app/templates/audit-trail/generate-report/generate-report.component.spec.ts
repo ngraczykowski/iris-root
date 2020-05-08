@@ -38,13 +38,4 @@ describe('GenerateReportComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call open with given url, when onGenerateReport invoked', () => {
-    const spy = spyOn(component.window.location, 'assign');
-    component.reportType = 'type';
-    component.reportUrl = 'url';
-
-    component.onGenerateReport();
-
-    expect(spy).toHaveBeenCalledWith(component.reportUrl);
-  });
 });

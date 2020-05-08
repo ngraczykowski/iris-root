@@ -4,14 +4,6 @@
 @import 'styles/_old/variables';
 
 body {
-  background: $color-background-body;
   color: $color-text;
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: $font-size-m;
-  font-weight: 400;
-  line-height: 1.5;
-  min-width: 1000px;
-  overflow-y: hidden;
-  margin: 0;
-  padding: 0;
 }

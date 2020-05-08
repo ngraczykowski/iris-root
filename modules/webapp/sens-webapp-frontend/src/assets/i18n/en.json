@@ -1,4 +1,14 @@
 {
+  "appBar": {
+    "brandHero": {
+      "title": "Name Screening"
+    },
+    "userMenu": {
+      "navigation": {
+        "signOut": "Sign out"
+      }
+    }
+  },
   "usersManagement": {
     "title": "Users",
     "usersList": {

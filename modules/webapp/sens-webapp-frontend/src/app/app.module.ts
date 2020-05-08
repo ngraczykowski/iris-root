@@ -1,9 +1,9 @@
 import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AppBarModule } from '@app/app-bar/app-bar.module';
 import { rolesByRedirect, routes } from '@app/app-routes';
 import { AppComponent } from '@app/app.component';
 import { BasicRoleDefaultPageMappings } from '@app/basic-default-paegs-mappings';
-import { ApplicationHeaderModule } from '@app/components/application-header/application-header.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
 import { ExternalComponent } from '@app/layout/external/external.component';
@@ -46,7 +46,7 @@ import { AuditTrailModule } from './templates/audit-trail/audit-trail.module';
   imports: [
     RouterModule.forRoot(routes),
     SharedModule,
-    ApplicationHeaderModule,
+    AuditTrailModule,
     AnalystHomeModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([]),
@@ -57,7 +57,8 @@ import { AuditTrailModule } from './templates/audit-trail/audit-trail.module';
     ReasoningBranchManagementModule,
     AuditTrailModule,
     UserManagementModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AppBarModule
   ],
   providers: [
     WINDOW_PROVIDERS,

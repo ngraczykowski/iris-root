@@ -3,6 +3,7 @@ import { AppComponent } from '@app/app.component';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
 import { TestModule } from '@app/test/test.module';
+import { AppBarModule } from './app-bar/app-bar.module';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -11,7 +12,8 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        TestModule
+        TestModule,
+        AppBarModule
       ],
       declarations: [
         AppComponent,

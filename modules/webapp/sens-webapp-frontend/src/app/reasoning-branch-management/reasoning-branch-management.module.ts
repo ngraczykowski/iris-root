@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ApplicationHeaderModule } from '@app/components/application-header/application-header.module';
 import { ConfirmChangesComponent } from '@app/reasoning-branch-management/components/confirm-changes/confirm-changes.component';
 import { SharedModule } from '@app/shared/shared.module';
 
@@ -21,7 +20,6 @@ import { BranchEmptyStateComponent } from '@app/reasoning-branch-management/comp
   ],
   imports: [
     CommonModule,
-    ApplicationHeaderModule,
     ReasoningBranchManagementRoutingModule,
     SharedModule
   ]
