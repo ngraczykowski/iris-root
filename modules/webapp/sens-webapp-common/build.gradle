@@ -59,6 +59,4 @@ dependencies {
   databaseImplementation libraries.hibernate_envers
   databaseImplementation libraries.javax_persistence_api
   databaseImplementation libraries.spring_orm
-
-  annotationProcessor libraries.spring_boot_autoconfigure_processor
 }

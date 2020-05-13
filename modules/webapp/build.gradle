@@ -33,7 +33,6 @@ subprojects { Project project ->
 
         project.dependencies {
           implementation libraries.jaxb_api
-          annotationProcessor libraries.spring_boot_configuration_processor
         }
 
         project.aspectj {
