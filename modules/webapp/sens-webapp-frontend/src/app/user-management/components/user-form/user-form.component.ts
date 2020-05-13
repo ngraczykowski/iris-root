@@ -53,6 +53,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   userProfilePrefix = 'usersManagement.userProfile.content.';
   adminCheckboxIndex: number;
   adminChecked = false;
+  internalUser: boolean;
 
   @Output() formValueChanged = new EventEmitter();
   @Output() isValid = new EventEmitter();
@@ -99,6 +100,7 @@ export class UserFormComponent implements OnInit, OnDestroy, OnChanges {
   setEditProfileData({ userData }) {
     this.userForm.controls.userName.setValue(userData.userName);
     this.userForm.controls.displayName.setValue(userData.displayName);
+    this.internalUser = userData.origin === 'SENS';
     const userRolesControl = <FormArray>this.userForm.get('roles');
     userData.roles.forEach((role) => {
       Object.values(this.userRoles.roles).filter((val, elementIndex) => {

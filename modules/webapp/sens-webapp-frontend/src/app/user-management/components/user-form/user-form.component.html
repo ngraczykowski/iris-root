@@ -87,7 +87,7 @@
               [type]="!hasError('minOneDigit', 'password') ? 'positive' : 'negative'"></app-validation-feedback>
     </div>
   </section>
-  <section class="user-profile-section user-profile-row user-password-reset-row" *ngIf="editProfile">
+  <section class="user-profile-section user-profile-row user-password-reset-row" *ngIf="editProfile && internalUser">
     <label class="user-profile-section-label"
            [translate]="userProfilePrefix + 'password.temporaryPassword'"></label>
     <button
