@@ -13,4 +13,6 @@
 
   <include file="db/changelog/db.changelog-auditing.xml"/>
 
+  <include file="db/changelog/db.changelog-sens-webapp-change-request-1.16.0.xml"/>
+
 </databaseChangeLog>

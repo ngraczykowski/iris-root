@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="change-request-1.16.0-1" author="mastylom">
+    <createTable tableName="webapp_change_request">
+      <column name="change_request_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="bulk_change_id" type="${uuid.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="maker_username" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="maker_comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="approver_username" type="VARCHAR(64)"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint
+        tableName="webapp_change_request"
+        columnNames="bulk_change_id"
+        constraintName="uq_change_request_bulk_change_id" />
+
+    <createIndex
+        tableName="webapp_change_request"
+        indexName="ix_change_request_bulk_change_id">
+      <column name="bulk_change_id"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>
