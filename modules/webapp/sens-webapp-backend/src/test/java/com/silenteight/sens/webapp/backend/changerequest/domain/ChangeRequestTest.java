@@ -8,6 +8,7 @@ import org.junit.jupiter.api.function.Executable;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,6 +41,32 @@ class ChangeRequestTest {
 
     // when
     Executable when = () -> changeRequest.approve(APPROVER_USERNAME);
+
+    // then
+    assertThrows(ChangeRequestNotInPendingStateException.class, when);
+  }
+
+  @Test
+  void changeRequestRejected_stateIsChangedToRejected() {
+    // give
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+
+    // when
+    changeRequest.reject(APPROVER_USERNAME);
+
+    // then
+    assertThat(changeRequest.getState()).isEqualTo(REJECTED.toString());
+    assertThat(changeRequest.getApproverUsername()).isEqualTo(APPROVER_USERNAME);
+  }
+
+  @Test
+  void changeRequestInRejectedState_rejectThrowsChangeRequestNotInPendingStateException() {
+    // give
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    changeRequest.setState(REJECTED.name());
+
+    // when
+    Executable when = () -> changeRequest.reject(APPROVER_USERNAME);
 
     // then
     assertThrows(ChangeRequestNotInPendingStateException.class, when);

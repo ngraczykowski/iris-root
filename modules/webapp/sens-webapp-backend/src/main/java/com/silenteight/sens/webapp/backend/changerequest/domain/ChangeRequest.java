@@ -13,6 +13,7 @@ import javax.persistence.*;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 
 @Entity
 @Data
@@ -71,11 +72,22 @@ class ChangeRequest {
   }
 
   void approve(String username) {
-    if (isNotInPendingState())
-      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
+    validatePendingState();
 
     state = APPROVED.name();
     approverUsername = username;
+  }
+
+  void reject(String username) {
+    validatePendingState();
+
+    state = REJECTED.name();
+    approverUsername = username;
+  }
+
+  private void validatePendingState() {
+    if (isNotInPendingState())
+      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
   }
 
   private boolean isNotInPendingState() {

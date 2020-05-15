@@ -40,4 +40,28 @@ public class ChangeRequestService {
             ChangeRequest.class.getName(),
             changeRequest));
   }
+
+  public void reject(UUID bulkChangeId, String username) {
+    log.info(CHANGE_REQUEST,
+        "Rejecting Change Request. bulkChangeId={}, username={}", bulkChangeId, username);
+
+    repository
+        .findByBulkChangeId(bulkChangeId)
+        .ifPresentOrElse(cr -> this.reject(cr, username), () -> {
+          throw new ChangeRequestNotFoundException(bulkChangeId);
+        });
+  }
+
+  private void reject(ChangeRequest changeRequest, String username) {
+    changeRequest.reject(username);
+    repository.save(changeRequest);
+
+    log.info(CHANGE_REQUEST, "Change Request rejected. changeRequest={}", changeRequest);
+
+    auditTracer.save(
+        new ChangeRequestRejectedEvent(
+            changeRequest.getBulkChangeId().toString(),
+            ChangeRequest.class.getName(),
+            changeRequest));
+  }
 }

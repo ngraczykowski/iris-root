@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.fromString;
@@ -31,6 +32,7 @@ class ChangeRequestServiceTest {
   private static final UUID BULK_CHANGE_ID = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
   private static final String MAKER_USERNAME = "maker";
   private static final String MAKER_COMMENT = "This is comment from Maker";
+  private static final String APPROVER_USERNAME = "approver";
 
   @InjectMocks
   private ChangeRequestService underTest;
@@ -42,13 +44,12 @@ class ChangeRequestServiceTest {
   private AuditTracer auditTracer;
 
   @Test
-  void changeRequestNotFound_throwChangeRequestNotFoundException() {
+  void changeRequestNotFoundWhenApproving_throwChangeRequestNotFoundException() {
     // given
-    String approverUsername = "approver";
     given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(empty());
 
     // when
-    Executable when = () -> underTest.approve(BULK_CHANGE_ID, approverUsername);
+    Executable when = () -> underTest.approve(BULK_CHANGE_ID, APPROVER_USERNAME);
 
     // then
     assertThrows(ChangeRequestNotFoundException.class, when);
@@ -58,28 +59,61 @@ class ChangeRequestServiceTest {
   void changeRequestFound_approveChangeRequest() {
     // given
     ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
-    String approverUsername = "approver";
     given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(of(changeRequest));
 
     // when
-    underTest.approve(BULK_CHANGE_ID, approverUsername);
+    underTest.approve(BULK_CHANGE_ID, APPROVER_USERNAME);
 
     // then
+    verifyChangeRequest(APPROVED, APPROVER_USERNAME);
+    verifyAuditLog("ChangeRequestApproved", changeRequest);
+  }
+
+  @Test
+  void changeRequestNotFoundWhenRejecting_throwChangeRequestNotFoundException() {
+    // given
+    given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(empty());
+
+    // when
+    Executable when = () -> underTest.reject(BULK_CHANGE_ID, APPROVER_USERNAME);
+
+    // then
+    assertThrows(ChangeRequestNotFoundException.class, when);
+  }
+
+  @Test
+  void changeRequestFound_rejectChangeRequest() {
+    // given
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(of(changeRequest));
+
+    // when
+    underTest.reject(BULK_CHANGE_ID, APPROVER_USERNAME);
+
+    // then
+    verifyChangeRequest(REJECTED, APPROVER_USERNAME);
+    verifyAuditLog("ChangeRequestRejected", changeRequest);
+  }
+
+  private void verifyChangeRequest(ChangeRequestState expectedState, String approverUsername) {
     ArgumentCaptor<ChangeRequest> changeRequestCaptor =
         ArgumentCaptor.forClass(ChangeRequest.class);
     verify(repository).save(changeRequestCaptor.capture());
-    ChangeRequest changeRequestCaptured = changeRequestCaptor.getValue();
-    assertThat(changeRequestCaptured.getState()).isEqualTo(APPROVED.toString());
-    assertThat(changeRequestCaptured.getApproverUsername()).isEqualTo(approverUsername);
+    ChangeRequest changeRequest = changeRequestCaptor.getValue();
+    assertThat(changeRequest.getState()).isEqualTo(expectedState.toString());
+    assertThat(changeRequest.getApproverUsername()).isEqualTo(approverUsername);
+  }
 
+  private void verifyAuditLog(String type, ChangeRequest details) {
     UUID correlationId = RequestCorrelation.id();
+
     ArgumentCaptor<AuditEvent> eventCaptor = ArgumentCaptor.forClass(AuditEvent.class);
     verify(auditTracer).save(eventCaptor.capture());
     AuditEvent auditEvent = eventCaptor.getValue();
 
-    assertThat(auditEvent.getType()).isEqualTo("ChangeRequestApproved");
+    assertThat(auditEvent.getType()).isEqualTo(type);
     assertThat(auditEvent.getEntityAction()).isEqualTo(UPDATE.toString());
     assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
-    assertThat(auditEvent.getDetails()).isEqualTo(changeRequest);
+    assertThat(auditEvent.getDetails()).isEqualTo(details);
   }
 }
