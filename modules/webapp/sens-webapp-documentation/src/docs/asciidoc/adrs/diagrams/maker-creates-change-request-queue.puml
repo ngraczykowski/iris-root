@@ -3,79 +3,133 @@ header Maker flow
 
 actor Maker order 10
 
-box "WebApp Frontend"
+box "WebApp Frontend" #MintCream
     participant Frontend as "Change Request UI" order 20
 end box
 
-box "WebApp Backend"
+box "WebApp Backend" #LightGreen
     participant Backend as "WebApp" order 30
     database WebAppDB as "WebApp Database" order 40
+end box
+
+box "Governance" #LightBlue
+    participant Governance as "Governance" order 45
 end box
 
 box "RabbitMQ"
     queue Queue order 50
 end box
 
-box "Governance"
-    participant Governance as "Governance" order 45
-end box
+== STEP 1 ==
 
 Maker -> Frontend : Input DT id
 Maker -> Frontend : Input RB ids OR feature vector signatures
 
 loop until comment and at least one of: AI Solution, Status provided
    Maker -> Frontend : Input RB Solution OR Status change
-   Maker -> Frontend : Input Change Request comment
 end
 
-Maker -> Frontend: Click "Submit change request" button
+Maker -> Frontend: Click "Next" button
 
-Frontend -> Backend: Create Change Request
-note over Frontend, Backend
-    * Decision Tree id
-    * Reasoning Branches ids OR feature vector signatures
-    * AI solution (possible "no change")
-    * Status (possible "no change")
-    * Comment
-end note
+Frontend -> Backend: Validate
+                note over Frontend, Backend
+                    * Decision Tree Id
+                    * Feature Vector Ids OR Feature Vector Signatures
+                end note
 
 activate Backend
 activate Backend #DarkSalmon
 
-Backend -> Governance : Validate DecisionTree \nand Reasoning Branches exist
-
 activate Governance
 activate Governance #DarkSalmon
 
-alt Validation error
-    Governance -->> Backend : Validation result Error
-    deactivate Governance
-
-    Backend -->> Frontend: ChangeRequest creation failure
-    deactivate Backend
-
-    Frontend -->> Maker : Inform about failure
-
-else Successful validation
-
-    Governance -->> Backend: Validation result OK
-    deactivate Governance
-
-    Backend -> Queue : Send ChangeRequest Message
-    note over Backend, Queue
-        * ChangeRequest Id
-        * Decision Tree id
-        * list of RB ids or feature vector signatures
-        * maker username
-        * maker comment
-        * creation_at timestamp
-    end note
-
-    Backend -->> Frontend: Change Request successfully \ncreated result
-    deactivate Backend
-
-    Frontend -->> Maker : Inform about success
-
+alt Validation DecisionTree Id + Feature Vector Ids
+    Backend -> Governance : Validate FVIds
+else Validation DecisionTree Id + Feature Vector Signatures
+    Backend -> Governance : Validate DecisionTreeId and Feature Vector Signatures
+    Backend <-> Governance : Fetch FVIds based on FVS
 end
+
+alt Validation error
+        note over Backend
+            This validation can be removed after we stop supporting strings in an RB Ids field.
+            Commands will be always successful.
+        end note
+    Governance --> Backend : Validation result Error
+    deactivate Governance
+    Backend --> Frontend: Validation failure
+    deactivate Backend
+    Frontend --> Maker : Inform about failure
+else Successful validation
+    deactivate Governance
+    Backend --> Frontend: Validation successful
+        note over Backend, Frontend
+            * Feature Vector Ids
+        end note
+    deactivate Backend
+    Frontend --> Maker : Inform about success
+end
+
+== STEP 2 ==
+
+Maker -> Frontend : Add attachments
+loop until comment provided
+   Maker -> Frontend : Input comment
+end
+
+Maker -> Frontend: Click "Next"
+
+== STEP 3 (Confirm) ==
+
+Maker -> Frontend: Click "Submit Change Request" button
+
+activate Backend
+Frontend -> Frontend : Generate Bulk Change Id (UUID)
+Frontend ->> Backend : Create Bulk Change Request
+
+        note over Frontend, Backend
+            * Bulk Change Id (UUID)
+            * Decision Tree Id
+            * Feature Vector Ids
+            * AI solution (possible "no change")
+            * Status (possible "no change")
+        end note
+
+Backend -> Queue : Send Bulk Change Create Command
+        note over Backend, Queue
+            * Bulk Change Id
+            * Decision Tree Id
+            * Feature Vector Ids
+            * AI Solution (possible 'no change')
+            * Status (possible 'no change')
+            * Creation at (timestamp)
+        end note
+
+Backend -->> Frontend: Bulk Change successfully created
+Frontend ->> Backend : Create Change Request Request
+
+        note over Frontend, Backend
+            * Bulk Change Id (UUID)
+            * Username
+            * Comment
+            * Attachments URLs
+            * Creation at (timestamp)
+        end note
+
+Backend -> Queue : Send ChangeRequest Command
+
+        note over Backend, Queue
+            * Bulk Change Id (UUID)
+            * Username
+            * Comment
+            * Attachments URLs
+            * Creation at (timestamp)
+        end note
+
+Backend -->> Frontend: Change Request successfully \ncreated result
+
+deactivate Backend
+
+Frontend --> Maker : Inform about success
 
 @enduml

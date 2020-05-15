@@ -2,18 +2,22 @@
 header Approver flow
 
 actor Approver
-box "WebApp Frontend"
+
+box "WebApp Frontend" #MintCream
     participant Frontend as "Approver Queue GUI"
 end box
 
-box "WebApp Backend"
+box "WebApp Backend" #LightGreen
     participant Backend as "WebApp"
     database WebAppDB as "WebApp Database"
 end box
 
-box "SERP"
-    queue Queue
-    participant Governance
+box "Governance" #LightBlue
+    participant Governance as "Governance" order 45
+end box
+
+box "RabbitMQ"
+    queue Queue order 50
 end box
 
 Frontend ->> Backend : Fetch approver queue
@@ -21,33 +25,57 @@ Frontend ->> Backend : Fetch approver queue
 activate Backend
 Backend <-> WebAppDB : Fetch pending Change Requests
 note over Backend, WebAppDB
-    Not declined and with missing approval levels
+    * Change Request Id
+    * Bulk Change Id (UUID)
+    * Username
+    * Comment
+    * Attachments URLs
+    * Creation At
 end note
 Backend <-> Governance : Fetch BulkChange (Reasoning Branches details)
+note over Backend, Governance
+    * List of RB Ids
+    * AI Solution (possible 'no change')
+    * Status (possible 'no change')
+end note
+note over Frontend, Governance
+    If we are not able to fetch BulkChange details we should hide the apply/reject button.
+end note
 
 Backend -->> Frontend : Change Requests list
 deactivate Backend
 
-Frontend -->> Approver : Present list of Change Requests \nwaiting for approval
+Frontend -->> Approver : Present list of Pending Change Requests
 
 
 ==  Approve Change Request  ==
 
 Approver -> Frontend : Click "Approve"
-Frontend ->> Backend : Change Request approve request
+Frontend ->> Backend : Change Request Approve request
 
-Backend -> Queue : Send ChangeRequest Approve Message
+Backend -> Queue : Send ChangeRequest Approve Command
+note over Backend, Queue
+    * Bulk Change Id (UUID)
+    * Approver Username
+    * Created At
+end note
 
 Backend -->> Frontend : Approval success result
 
 Frontend -->> Approver : Inform about success
+
 
 ==  Reject Change Request  ==
 
 Approver -> Frontend : Click "Reject"
 Frontend ->> Backend : Change Request reject request
 
-Backend -> Queue : Send ChangeRequest Reject Message
+Backend -> Queue : Send ChangeRequest Reject Command
+note over Backend, Queue
+    * Bulk Change Id (UUID)
+    * Approver Username
+    * Created At
+end note
 
 Backend -->> Frontend : Approval reject result
 

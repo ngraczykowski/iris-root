@@ -38,3 +38,9 @@ include::diagrams/handling-approve-message.puml[leveloffset=+1]
 ....
 include::diagrams/handling-reject-message.puml[leveloffset=+1]
 ....
+
+== Governance Commands and Events
+
+. Bulk Change Create Command
+. Bulk Change Apply Command
+. Bulk Change Reject Command

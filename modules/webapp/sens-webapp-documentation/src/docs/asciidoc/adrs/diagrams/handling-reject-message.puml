@@ -10,13 +10,28 @@ box "RabbitMQ"
     queue Queue order 10
 end box
 
-Queue -> Backend : ChangeRequest Reject Message
+Queue -> Backend : ChangeRequest Reject Command
+
+note over Queue, Backend
+    * Bulk Change Id
+    * Username
+    * Creation At
+end note
 
 activate Backend
 
-Backend -> WebAppDB : Save new rejection
+Backend -> WebAppDB : Update ChangeRequest
 
-Backend -> WebAppDB : Modify Change Request status to declined
+note over Backend, WebAppDB
+    * Status = Rejected
+    * Approver Username
+end note
+
+Backend -> Queue : Bulk Change Reject Command
+note over Queue, Backend
+    * Bulk Change Id
+end note
+
 
 deactivate Backend
 

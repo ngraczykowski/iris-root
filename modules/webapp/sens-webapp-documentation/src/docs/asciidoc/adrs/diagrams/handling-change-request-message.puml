@@ -12,20 +12,22 @@ end box
 
 activate Backend
 
-Queue -> Backend : ChangeRequest Message
+Queue -> Backend : ChangeRequest Command
     note over Queue, Backend
-        * ChangeRequest Id
-        * maker username
-        * maker comment
-        * creation_at timestamp
+        * Bulk Change Id (UUID)
+        * Username
+        * Comment
+        * Attachments Urls
+        * Creation At
     end note
 
 Backend -> WebAppDB : Persist new Change Request
     note over Backend, WebAppDB
-        * ChangeRequest Id
-        * maker username
-        * maker comment
-        * creation_at timestamp
+        * Bulk Change Id (UUID)
+        * Username
+        * Comment
+        * Attachments Urls
+        * Creation At
     end note
 
 deactivate Backend

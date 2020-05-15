@@ -10,27 +10,28 @@ box "RabbitMQ"
     queue Queue order 10
 end box
 
-Queue -> Backend : ChangeRequest Approve Message
+Queue -> Backend : ChangeRequest Approve Command
 
 note over Queue, Backend
-    * changeRequest id
-    * maker username
-    * maker comment
-    * creation_at timestamp
+    * Bulk Change Id
+    * Username
+    * Creation At
 end note
 
 activate Backend
 
-Backend -> WebAppDB : Save new approval
+Backend -> WebAppDB : Update ChangeRequest
 
 note over Backend, WebAppDB
-    * changeRequest id
-    * maker username
-    * maker comment
-    * creation_at
+    * Status = Accepted
+    * Approver Username
 end note
 
-Backend -> WebAppDB: Modify Change Request status to approved
+Backend -> Queue : Bulk Change Apply Command
+note over Queue, Backend
+    * Bulk Change Id
+end note
+
 
 deactivate Backend
 
