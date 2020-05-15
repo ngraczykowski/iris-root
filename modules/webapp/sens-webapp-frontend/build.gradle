@@ -7,7 +7,7 @@ buildscript {
 plugins {
   id "base"
   id "maven-publish"
-  id "com.liferay.node" version "7.0.5"
+  id "com.liferay.node" version "4.6.6"
 }
 
 node {
@@ -21,7 +21,7 @@ tasks.register("compile").configure {
   group = BasePlugin.BUILD_GROUP
   description = "Compiles this project."
 
-  dependsOn tasks.named("packageRunBuild")
+  dependsOn tasks.named("npmRunBuild")
 }
 
 tasks.register("zip", Zip) {
@@ -36,14 +36,14 @@ tasks.register("test").configure {
   group = LifecycleBasePlugin.VERIFICATION_GROUP
   description = "Runs all tests."
 
-//  dependsOn tasks.named("packageRunTestHeadless") TODO(bgulowaty): WA-85
+//  dependsOn tasks.named("npmRunTestHeadless") TODO(bgulowaty): WA-85
 }
 
 tasks.register("lint").configure {
   group = LifecycleBasePlugin.VERIFICATION_GROUP
   description = "Runs TSLint on project."
 
-  dependsOn tasks.named("packageRunLint")
+  dependsOn tasks.named("npmRunLint")
 }
 
 tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
