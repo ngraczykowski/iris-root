@@ -2,6 +2,8 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import lombok.*;
 
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
 
 @Entity
@@ -65,5 +68,17 @@ class ChangeRequest {
     this.bulkChangeId = bulkChangeId;
     this.makerUsername = makerUsername;
     this.makerComment = makerComment;
+  }
+
+  void approve(String username) {
+    if (isNotInPendingState())
+      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
+
+    state = APPROVED.name();
+    approverUsername = username;
+  }
+
+  private boolean isNotInPendingState() {
+    return !state.equals(PENDING.name());
   }
 }

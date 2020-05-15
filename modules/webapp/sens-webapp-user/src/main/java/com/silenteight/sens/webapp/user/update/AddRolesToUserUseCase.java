@@ -64,13 +64,4 @@ public class AddRolesToUserUseCase {
           .build();
     }
   }
-
-  public static class UserNotFoundException extends RuntimeException {
-
-    private static final long serialVersionUID = -6412227439390462594L;
-
-    UserNotFoundException(String username) {
-      super("User " + username + " could not be found.");
-    }
-  }
 }
