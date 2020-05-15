@@ -31,6 +31,7 @@
     "@ngx-translate/http-loader": "~4.0.0",
     "angular-svg-icon": "^7.0.0",
     "core-js": "^2.6.0",
+    "core-util-is": "^1.0.2",
     "cors": "^2.8.5",
     "file-saver": "^2.0.2",
     "immutable": "^3.8.2",
