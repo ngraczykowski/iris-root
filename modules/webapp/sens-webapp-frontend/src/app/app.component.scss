@@ -1,4 +1,4 @@
-@import 'src/styles/abstracts/8-pt-grid';
+@import 'abstracts/8-pt-grid';
 
 .app-container {
   background: #ffffff;
@@ -12,7 +12,7 @@
   }
 
   &__content {
-    padding: calculate-8-pt-grid(2) calculate-8-pt-grid(2);
+    padding: calculate-8-pt-grid(4) calculate-8-pt-grid(2);
     z-index: 10; // NOTE fix for the old overlay - TODO Remove with old styles
   }
 }

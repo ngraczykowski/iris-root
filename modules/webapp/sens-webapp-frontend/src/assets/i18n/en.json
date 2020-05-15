@@ -1,8 +1,5 @@
 {
   "appBar": {
-    "brandHero": {
-      "title": "Name Screening"
-    },
     "userMenu": {
       "navigation": {
         "signOut": "Sign out"
@@ -22,9 +19,36 @@
     }
   },
   "reports": {
-    "title": "Reports",
-    "auditTrail": {
-      "title": "Audit Trail"
+    "title": "Reports"
+  },
+  "auditTrail": {
+    "title": "Audit Trail",
+    "steps": {
+      "configure": "Configure Audit Trail Report",
+      "generate": "Generate",
+      "download": "Download"
+    },
+    "form": {
+      "startDate": "Start date",
+      "endDate": "End date",
+      "resetButton": "Reset",
+      "actionButton": "Generate Audit trail Report",
+      "required": "This field cannot be empty."
+    },
+    "inProgress": {
+      "title": "Generating a report",
+      "description": "Please do not turn off the browser window and wait until the report is ready for download.",
+      "button": "Abort report generation"
+    },
+    "errorTimeout": {
+      "title": "Sorry but, your report is too enormous!",
+      "description": "We cannot generate your report because of the technical limitations. Please reduce the date range and try again.",
+      "button": "Change report configuration"
+    },
+    "download": {
+      "title": "Your report is ready!",
+      "description": "The report will download automatically.",
+      "button": "Generate new report"
     }
   },
   "usersManagement": {
@@ -144,7 +168,7 @@
       }
     }
   },
-  "auditTrail": {
+  "securityMatrix": {
     "title": "Security Matrix",
     "report": {
       "model": "The report contains information about all models in SENS Application.",

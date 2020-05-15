@@ -4,25 +4,21 @@
   @include for-phone-only {
     grid-column-gap: calculate-8-pt-grid(2);
     grid-template-columns: repeat(4, 1fr);
-    padding: 0 calculate-8-pt-grid(2);
   }
 
   @include for-tablet-portrait-up {
     grid-column-gap: calculate-8-pt-grid(2);
     grid-template-columns: repeat(8, 1fr);
-    padding: 0 calculate-8-pt-grid(3);
   }
 
-  @include for-tablet-portrait-up {
+  @include for-tablet-landscape-up {
     grid-column-gap: calculate-8-pt-grid(2);
     grid-template-columns: repeat(12, 1fr);
-    padding: 0 calculate-8-pt-grid(3);
   }
 
   @include for-desktop-up {
     grid-column-gap: calculate-8-pt-grid(3);
     grid-template-columns: repeat(12, 1fr);
-    padding: 0 calculate-8-pt-grid(3);
   }
 }
 

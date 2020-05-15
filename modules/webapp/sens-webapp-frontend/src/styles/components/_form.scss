@@ -1,0 +1,18 @@
+.form {
+  &__content {
+    margin-bottom: calculate-8-pt-grid(4);
+
+    & > * {
+      margin-bottom: calculate-8-pt-grid(2);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

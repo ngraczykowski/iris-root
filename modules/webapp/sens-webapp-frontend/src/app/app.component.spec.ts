@@ -3,7 +3,7 @@ import { AppComponent } from '@app/app.component';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
 import { TestModule } from '@app/test/test.module';
-import { AppBarModule } from './app-bar/app-bar.module';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -12,14 +12,14 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        TestModule,
-        AppBarModule
+        TestModule
       ],
       declarations: [
         AppComponent,
         ErrorWindowComponent,
         BriefMessageComponent
       ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

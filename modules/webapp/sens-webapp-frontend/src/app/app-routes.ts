@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/audit-trail.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
@@ -13,7 +14,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { ReasoningBranchManagementPageComponent } from './reasoning-branch-management/containers/reasoning-branch-management-page/reasoning-branch-management-page.component';
 import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
-import { AuditTrailComponent } from './templates/audit-trail/audit-trail.component';
+import { SecurityMatrixComponent } from './templates/audit-trail/audit-trail.component';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,15 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'reports/audit-trail',
+    pathMatch: 'full',
+    component: AuditTrailComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Admin', 'Auditor']
+    }
+  },
+  {
     path: 'user-management',
     component: UserManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
@@ -52,12 +62,12 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'reports',
-    component: AuditTrailComponent,
+    path: 'security-matrix',
+    component: SecurityMatrixComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin']
-    },
+      authorities: ['Admin', 'Auditor']
+    }
   },
   {
     path: 'analyst',

@@ -38,7 +38,12 @@ export class SidenavComponent implements OnInit {
       links: [
         {
           label: 'auditTrail.title',
-          url: '/reports',
+          url: '/reports/audit-trail',
+          icon: 'playlist_add_check'
+        },
+        {
+          label: 'securityMatrix.title',
+          url: '/security-matrix',
           icon: 'lock'
         }
       ]

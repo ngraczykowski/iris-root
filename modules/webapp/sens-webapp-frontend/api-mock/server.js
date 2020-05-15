@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const dataFolder = './data';
 const fs = require('fs');
 const cors = require('cors');
+const path = require('path');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -152,6 +153,20 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches', (req, res) => {
 app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
   res.sendFile(__dirname + '/data/security-matrix-report.csv');
+});
+
+app.get('/rest/webapp/api/report/audit-report', (req, res) => {
+  let filePath = path.join(__dirname, 'data/security-matrix-report.csv');
+  let stat = fs.statSync(filePath);
+
+  setTimeout(() => {
+    res.writeHead(200, {
+      "Content-Type": "text/csv",
+      "Content-Disposition": "attachment; filename=report.csv",
+      'Content-Length': stat.size
+    });
+    fs.createReadStream(filePath).pipe(res);
+  }, 5000);
 });
 
 function isUserNameUnique(userName, currentUsersList) {
