@@ -66,10 +66,6 @@ tasks.named("publishToMavenLocal").configure {
   dependsOn tasks.named("build")
 }
 
-tasks.named("npmInstall").configure {
-  useNpmCI = true
-}
-
 artifacts {
   archives zip
 }
