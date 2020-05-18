@@ -1,43 +1,51 @@
 plugins {
-  id "java"
+  id "java-library"
   id "maven-publish"
 }
 
 description = "SENS WebApp Common Testing"
 
 dependencies {
-  compile libraries.spring_jdbc
-  compile libraries.spring_test
-  compile libraries.spring_tx
+  api libraries.junit_jupiter_api
+  api libraries.spring_test
+  api libraries.spring_boot_test
+  api libraries.spring_boot_test_autoconfigure
+  api libraries.test_containers
+  api libraries.grpc_testing
+  api libraries.reactor_test
 
-  compile libraries.spring_boot
-  compile libraries.spring_boot_autoconfigure
-  compile libraries.spring_boot_test
-  compile libraries.spring_boot_test_autoconfigure
+  implementation libraries.spring_jdbc
+  implementation libraries.spring_test
+  implementation libraries.spring_tx
 
-  compile libraries.spring_boot_starter_web
-  compile libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot
+  implementation libraries.spring_boot_autoconfigure
+  implementation libraries.spring_boot_test
+  implementation libraries.spring_boot_test_autoconfigure
 
-  compile libraries.spring_security_web
-  compile libraries.spring_security_config
-  compile libraries.spring_security_cas
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_undertow
 
-  compile libraries.junit_jupiter_api
+  implementation libraries.spring_security_web
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_cas
 
-  compile libraries.test_containers
-  compile libraries.test_containers_elasticsearch
-  compile libraries.test_containers_junit_jupiter
-  compile libraries.test_containers_oracle_xe
-  compile libraries.test_containers_postgresql
-  compile libraries.test_containers_spock
+  implementation libraries.junit_jupiter_api
 
-  compile libraries.grpc_stub
-  compile libraries.grpc_testing
-  compile libraries.protobuf_java_util
+  implementation libraries.test_containers
+  implementation libraries.test_containers_elasticsearch
+  implementation libraries.test_containers_junit_jupiter
+  implementation libraries.test_containers_oracle_xe
+  implementation libraries.test_containers_postgresql
+  implementation libraries.test_containers_spock
 
-  compile libraries.bouncycastle_bcprov
+  implementation libraries.grpc_stub
+  implementation libraries.grpc_testing
+  implementation libraries.protobuf_java_util
 
-  compile libraries.reactor_test
+  implementation libraries.bouncycastle_bcprov
+
+  implementation libraries.reactor_test
 
   implementation libraries.spring_amqp
   implementation libraries.springdoc_security

@@ -19,21 +19,21 @@ configurations {
 }
 
 dependencies {
-  compile project(":sens-webapp-kernel")
+  implementation project(":sens-webapp-kernel")
 
-  compile libraries.bouncycastle_bcprov
-  compile libraries.commons_lang3
-  compile libraries.jjwt
+  implementation libraries.bouncycastle_bcprov
+  implementation libraries.commons_lang3
+  implementation libraries.jjwt
 
-  compile libraries.spring_boot_starter_actuator
-  compile libraries.spring_boot_starter_undertow
-  compile libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
 
-  compile libraries.spring_security_web
-  compile libraries.spring_security_config
-  compile libraries.spring_security_cas
+  implementation libraries.spring_security_web
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_cas
 
-  compile libraries.hibernate_envers
+  implementation libraries.hibernate_envers
 
   implementation project(":sens-webapp-audit")
   implementation project(":sens-webapp-common")
