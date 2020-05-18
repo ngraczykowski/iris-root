@@ -5,8 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
+import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
+import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
 import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ApproveChangeRequestDto;
-import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ChangeRequestDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ class ChangeRequestRestController {
   public ResponseEntity<List<ChangeRequestDto>> pending() {
     log.debug(CHANGE_REQUEST, "Listing pending Change Requests");
 
-    List<ChangeRequestDto> changeRequests = changeRequestQuery.pending();
+    List<ChangeRequestDto> changeRequests = changeRequestQuery.listPending();
 
     log.debug(
         CHANGE_REQUEST, "Found {} pending Change Requests", changeRequests.size());

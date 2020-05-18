@@ -3,7 +3,8 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
-import com.silenteight.sens.webapp.backend.changerequest.rest.dto.ChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
+import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
@@ -13,15 +14,15 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
-import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchAiSolutionDto.FALSE_POSITIVE;
-import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchAiSolutionDto.NO_CHANGE;
-import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchStatusDto.ACTIVE;
-import static com.silenteight.sens.webapp.backend.changerequest.rest.dto.BranchStatusDto.DISABLED;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.emptyList;
-import static org.hamcrest.CoreMatchers.*;
+import static java.util.UUID.fromString;
+import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -43,7 +44,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(role = APPROVER)
     void its200_whenNoPendingChangeRequest() {
-      given(changeRequestsQuery.pending()).willReturn(emptyList());
+      given(changeRequestsQuery.listPending()).willReturn(emptyList());
 
       get(mappingForList())
           .contentType(anything())
@@ -53,25 +54,21 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(role = APPROVER)
     void its200WithCorrectBody_whenFound() {
-      given(changeRequestsQuery.pending()).willReturn(
+      given(changeRequestsQuery.listPending()).willReturn(
           List.of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
 
       get(mappingForList())
           .statusCode(OK.value())
           .body("size()", is(2))
           .body("[0].id", equalTo(1))
+          .body("[0].bulkChangeId", equalTo("05bf9714-b1ee-4778-a733-6151df70fca3"))
           .body("[0].createdBy", equalTo("Business Operator #1"))
           .body("[0].createdAt", notNullValue())
-          .body("[0].affectedBranchesCount", equalTo(35))
-          .body("[0].branchAiSolution", equalTo("FALSE_POSITIVE"))
-          .body("[0].branchStatus", equalTo("ACTIVE"))
           .body("[0].comment", equalTo("Increase efficiency by 20% on Asia markets"))
           .body("[1].id", equalTo(2))
+          .body("[1].bulkChangeId", equalTo("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
           .body("[1].createdBy", equalTo("Business Operator #2"))
           .body("[1].createdAt", notNullValue())
-          .body("[1].affectedBranchesCount", nullValue())
-          .body("[1].branchAiSolution", equalTo("NO_CHANGE"))
-          .body("[1].branchStatus", equalTo("DISABLED"))
           .body("[1].comment", equalTo("Disable redundant RBs based on analyses from 2020.04.02"));
     }
 
@@ -88,21 +85,17 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
       ChangeRequestDto firstChangeRequest = ChangeRequestDto.builder()
           .id(1L)
+          .bulkChangeId(fromString("05bf9714-b1ee-4778-a733-6151df70fca3"))
           .createdBy("Business Operator #1")
           .createdAt(parse("2020-04-15T10:15:30+01:00", ISO_OFFSET_DATE_TIME))
-          .affectedBranchesCount(35)
-          .branchAiSolution(FALSE_POSITIVE)
-          .branchStatus(ACTIVE)
           .comment("Increase efficiency by 20% on Asia markets")
           .build();
 
       ChangeRequestDto secondChangeRequest = ChangeRequestDto.builder()
           .id(2L)
+          .bulkChangeId(fromString("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
           .createdBy("Business Operator #2")
           .createdAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
-          .affectedBranchesCount(null)
-          .branchAiSolution(NO_CHANGE)
-          .branchStatus(DISABLED)
           .comment("Disable redundant RBs based on analyses from 2020.04.02")
           .build();
     }

@@ -6,9 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.math.BigInteger.valueOf;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
@@ -16,7 +20,6 @@ import static org.assertj.core.api.Assertions.*;
 @TestPropertySource("classpath:data-test.properties")
 class ChangeRequestRepositoryIT extends BaseDataJpaTest {
 
-  private static final UUID BULK_CHANGE_ID = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
   private static final String MAKER_USERNAME = "maker";
   private static final String MAKER_COMMENT = "This is comment from Maker";
 
@@ -26,7 +29,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   @Test
   void changeRequestSavedToDatabase() {
     // given
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
 
     // when
     repository.save(changeRequest);
@@ -40,9 +44,31 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   }
 
   @Test
-  void givenChangeRequest_notFindByDifferentBulkChangeId() {
+  void givenChangeRequestsInDifferentStates_listPending() {
     // given
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    ChangeRequest pendingChangeRequest =
+        makePendingChangeRequest(fromString("de1afe98-0b58-4941-9791-4e081f9b8139"));
+    ChangeRequest approvedChangeRequest =
+        makeApprovedChangeRequest(fromString("30131be0-7405-41f1-b79e-fe109a5d2a41"));
+    ChangeRequest rejectedChangeRequest =
+        makeRejectedChangeRequest(fromString("ecbadfff-164b-4751-b131-7177438e9903"));
+    repository.save(pendingChangeRequest);
+    repository.save(approvedChangeRequest);
+    repository.save(rejectedChangeRequest);
+
+    // when
+    List<ChangeRequest> result = repository.findAllByState(PENDING.name());
+
+    // then
+    assertThat(result.size()).isEqualTo(1);
+    assertThat(result).containsExactly(pendingChangeRequest);
+  }
+
+  @Test
+  void givenChangeRequests_notFindByDifferentBulkChangeId() {
+    // given
+    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
     UUID differentBulkChangeId = fromString("30131be0-7405-41f1-b79e-fe109a5d2a41");
 
     // when
@@ -54,16 +80,51 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   }
 
   @Test
-  void givenChangeRequest_findByTheSameBulkChangeId() {
+  void givenChangeRequest_notFindByDifferentBulkChangeId() {
     // given
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
+    UUID differentBulkChangeId = fromString("30131be0-7405-41f1-b79e-fe109a5d2a41");
     repository.save(changeRequest);
 
     // when
-    Optional<ChangeRequest> result = repository.findByBulkChangeId(BULK_CHANGE_ID);
+    Optional<ChangeRequest> result = repository.findByBulkChangeId(differentBulkChangeId);
+
+    // then
+    assertThat(result).isEmpty();
+  }
+
+  @Test
+  void givenChangeRequest_findByTheSameBulkChangeId() {
+    // given
+    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
+    repository.save(changeRequest);
+
+    // when
+    Optional<ChangeRequest> result = repository.findByBulkChangeId(bulkChangeId);
 
     // then
     assertThat(result).isNotEmpty();
     assertThat(result.get()).isEqualTo(changeRequest);
+  }
+
+  private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {
+    return new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT);
+  }
+
+  private static ChangeRequest makeApprovedChangeRequest(UUID bulkChangeId) {
+    return makeChangeRequestWithState(bulkChangeId, APPROVED.name());
+  }
+
+  private static ChangeRequest makeRejectedChangeRequest(UUID bulkChangeId) {
+    return makeChangeRequestWithState(bulkChangeId, REJECTED.name());
+  }
+
+  private static ChangeRequest makeChangeRequestWithState(UUID bulkChangeId, String state) {
+    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT);
+    changeRequest.setState(state);
+
+    return changeRequest;
   }
 }

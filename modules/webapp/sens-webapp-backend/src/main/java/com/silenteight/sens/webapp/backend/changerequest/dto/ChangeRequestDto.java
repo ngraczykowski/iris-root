@@ -1,8 +1,9 @@
-package com.silenteight.sens.webapp.backend.changerequest.rest.dto;
+package com.silenteight.sens.webapp.backend.changerequest.dto;
 
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -10,17 +11,13 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 public class ChangeRequestDto {
 
+  private long id;
   @NonNull
-  private Long id;
+  private UUID bulkChangeId;
   @NonNull
   private String createdBy;
   @NonNull
   private OffsetDateTime createdAt;
-  private Integer affectedBranchesCount;
-  @NonNull
-  private BranchAiSolutionDto branchAiSolution;
-  @NonNull
-  private BranchStatusDto branchStatus;
   @NonNull
   private String comment;
 }

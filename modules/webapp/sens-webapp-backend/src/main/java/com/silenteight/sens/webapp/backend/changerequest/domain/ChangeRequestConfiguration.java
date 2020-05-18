@@ -13,6 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 class ChangeRequestConfiguration {
 
   @Bean
+  ChangeRequestQuery changeRequestQuery(ChangeRequestRepository repository) {
+    return new ChangeRequestQuery(repository);
+  }
+
+  @Bean
   ChangeRequestService changeRequestService(
       ChangeRequestRepository repository, AuditTracer auditTracer) {
 
