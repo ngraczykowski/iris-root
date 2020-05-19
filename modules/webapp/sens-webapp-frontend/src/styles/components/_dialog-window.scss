@@ -1,0 +1,25 @@
+@import 'src/styles/abstracts/8-pt-grid';
+
+.dialog-window {
+  &__header {
+    display: flex;
+    margin-bottom: calculate-8-pt-grid(2);
+
+    & > * {
+      line-height: calculate-8-pt-grid(4);
+    }
+
+    .mat-dialog-title {
+      margin-bottom: 0;
+    }
+  }
+
+  &__icon {
+    margin-right: calculate-8-pt-grid(2);
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

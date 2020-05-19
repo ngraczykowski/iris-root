@@ -7,10 +7,7 @@
     $navigationBorderRadius: calculate-8-pt-grid(1);
     border-bottom-right-radius: $navigationBorderRadius;
     border-top-right-radius: $navigationBorderRadius;
-  }
-
-  .nav-element__icon {
-    opacity: .6;
+    overflow: hidden;
   }
 
   .nav-element__label {

@@ -1,4 +1,13 @@
 {
+  "aiSolutions": {
+    "falsePositive": "False Positive",
+    "potentialTruePositive": "Potential True Positive",
+    "noDecision": "No Decision"
+  },
+  "aiStatus": {
+    "disabled": "Disabled",
+    "active": "Active"
+  },
   "appBar": {
     "userMenu": {
       "navigation": {
@@ -6,17 +15,111 @@
       }
     }
   },
-  "reasoningBranches": {
-    "title": "Reasoning Branches",
-    "changeRequest": {
-      "title": "Change Request"
+  "sideNav": {
+    "sections": {
+      "reasoningBranches": "Reasoning Branches",
+      "reports": "Reports",
+      "users": "Users"
     }
   },
-  "users": {
-    "title": "Users",
-    "usersList": {
-      "title": "Users List"
+  "changeRequest": {
+    "title": "Change Request",
+    "steps": {
+      "select": "Select Reasoning Branches",
+      "configure": "Configure Change Request",
+      "confirmation": "Confirmation"
+    },
+    "select": {
+      "decisionTree": {
+        "label": "Decision Tree ID",
+        "hint": "Decision Tree ID should be presented as a number e.g. 5",
+        "errorEmpty": "Decision Tree ID is required to create change request",
+        "errorValue": "Wrong Decision Tree ID format. DT ID should be presented as a number e.g. 5"
+      },
+      "rbIdType": {
+        "rbID": "Reasoning Branch ID",
+        "rbSignature": "Reasoning Branch Signature"
+      },
+      "rbId": {
+        "label": "Reasoning Branch ID(s)",
+        "hint": "Entered 943/1000 characters",
+        "errorEmpty": "Reasoning Branch ID is required to create change request",
+        "errorCharacterLimit": "Sorry, but you reached the limit. You entered 1234 characters where the threshold is 1000 characters. Please reduce the number of characters. ",
+        "errorVerificationFail": "Some of the given reasoning branches do not exist"
+      },
+      "rbSignature": {
+        "label": "Reasoning Branch Signature(s)",
+        "hint": "Entered 943/1000 characters",
+        "errorEmpty": "Reasoning Branch Signature is required to create change request",
+        "errorCharacterLimit": "Sorry, but you reached the limit. You entered 1234 characters where the threshold is 1000 characters. Please reduce the number of characters. ",
+        "errorVerificationFail": "Some of the given reasoning branches do not exist"
+      },
+      "verifying": {
+        "title": "Verifying",
+        "description": "We are checking all provided reasoning branches"
+      },
+      "dialogVerificationError" : {
+        "title": "Verification failed",
+        "description": "Some of the entered Reasoning Branches do not exist. The list of not existing reasoning branch is available on the top of the form.",
+        "cta": "Close"
+      },
+      "verificationError": {
+        "title": "Reasoning branches that do not exist ",
+        "description": "Below is a list of provided Reasoning branches that do not exist."
+      },
+      "footer": {
+        "reset": "Reset",
+        "cta": "Next"
+      }
+    },
+    "configureForm": {
+      "aiSolution": {
+        "label": "AI Solution",
+        "hint": "Set AI Solution for the selected Reasoning Branch(s)",
+        "errorEmpty": "You cannot submit change request without any changes",
+        "options": {
+          "unchanged": "Leave unchanged"
+        }
+      },
+      "aiStatus": {
+        "label": "AI Status",
+        "hint": "Set AI Status for the selected Reasoning Branch(s)",
+        "errorEmpty": "You cannot submit change request without any changes",
+        "options": {
+          "unchanged": "Leave unchanged"
+        }
+      },
+      "reason": {
+        "title": "",
+        "comment": {
+          "label": "Change Request comment",
+          "hint": "Describe in few words the Change Request reason",
+          "errorEmpty": "Short description about changes is required for Approval"
+        }
+      },
+      "confirmDialog": {
+        "title": "Submit Change Request?",
+        "description": "Change Request will be sent to approval queue and when it will be approved it will be applied to the selected 14 Reasoning Branches.",
+        "buttonCancel": "Cancel",
+        "buttonCta": "Submit Change Request"
+      },
+      "footer": {
+        "back": "Previous step",
+        "reset": "Reset",
+        "cta": "Submit Change Request"
+      }
+    },
+    "confirmation": {
+      "title": "Congratulations!",
+      "description": "Your change request CR-456 has been added to the approval queue.",
+      "buttonNewRequest": "New Change Request"
     }
+  },
+  "reasoningBranchBrowser": {
+    "title": "Browser"
+  },
+  "usersList": {
+      "title": "Users List"
   },
   "reports": {
     "title": "Reports"
@@ -85,7 +188,7 @@
         "headline": {
           "add": "Add New SENS User",
           "edit": "Edit User Profile",
-          "resetPassword":"Reset password"
+          "resetPassword": "Reset password"
         }
       },
       "content": {
@@ -96,7 +199,7 @@
           },
           "validation": {
             "unique": "The username is unique",
-            "length":"The username length is between 3 - 30 characters",
+            "length": "The username length is between 3 - 30 characters",
             "characters": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
           }
         },
@@ -106,7 +209,7 @@
             "placeholder": "John Doe"
           },
           "validation": {
-            "length":"The display name length is between 3 - 50 characters"
+            "length": "The display name length is between 3 - 50 characters"
           }
         },
         "password": {

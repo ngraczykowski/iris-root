@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { ReasoningBranchManagementPageComponent } from './reasoning-branch-management/containers/reasoning-branch-management-page/reasoning-branch-management-page.component';
 import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
+import { ChangeRequestComponent } from '@app/change-request/containers/change-request/change-request.component';
 import { SecurityMatrixComponent } from './templates/audit-trail/audit-trail.component';
 
 export const routes: Routes = [
@@ -39,6 +40,15 @@ export const routes: Routes = [
     path: 'reasoning-branch',
     pathMatch: 'full',
     component: ReasoningBranchManagementPageComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator']
+    }
+  },
+  {
+    path: 'reasoning-branches/change-request',
+    pathMatch: 'full',
+    component: ChangeRequestComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Business Operator']

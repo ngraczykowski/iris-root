@@ -1,0 +1,13 @@
+<app-selected-reasoning-branches></app-selected-reasoning-branches>
+<app-change-request-form></app-change-request-form>
+<app-change-request-reason></app-change-request-reason>
+<div class="form__footer">
+  <button mat-stroked-button color="primary"><span [translate]="translatePrefix + 'footer.back'"></span></button>
+  <div class="empty-space--flex"></div>
+  <button mat-button color="primary"><span [translate]="translatePrefix + 'footer.reset'"></span></button>
+  <button mat-flat-button
+          matStepperNext
+          color="primary"
+          (click)="openDialog()"><span [translate]="translatePrefix + 'footer.cta'"></span>
+  </button>
+</div>

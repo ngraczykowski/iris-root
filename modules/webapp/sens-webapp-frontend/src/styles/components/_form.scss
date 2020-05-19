@@ -1,9 +1,11 @@
 .form {
-  &__content {
+  &__section {
     margin-bottom: calculate-8-pt-grid(4);
+  }
 
+  &__content {
     & > * {
-      margin-bottom: calculate-8-pt-grid(2);
+      margin-bottom: calculate-8-pt-grid(3);
 
       &:last-child {
         margin-bottom: 0;
@@ -14,5 +16,13 @@
   &__footer {
     display: flex;
     justify-content: flex-end;
+
+    & > button {
+      margin-left: calculate-8-pt-grid(2);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
   }
 }
