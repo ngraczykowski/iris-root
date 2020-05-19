@@ -50,6 +50,16 @@ subprojects { Project project ->
     }
 }
 
+tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
+  dependsOn tasks.named("deleteWebappPlugins")
+}
+
+tasks.register("deleteWebappPlugins", Delete).configure {
+  delete fileTree("${rootProject.projectDir}/plugin/webapp") {
+    include "*.jar"
+  }
+}
+
 configure(subprojects) { Project subproject ->
   subproject.pluginManager.withPlugin("java") {
     subproject.dependencies {
