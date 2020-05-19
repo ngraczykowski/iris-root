@@ -10,13 +10,10 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_RE
 @NoArgsConstructor
 public class ApproveChangeRequestUseCase {
 
-  public long apply(@NonNull ApproveChangeRequestCommand command) {
+  public void apply(@NonNull ApproveChangeRequestCommand command) {
     log.debug(CHANGE_REQUEST, "Approving Change Request, command={}", command);
 
-    //TODO: Business logic of approve action
-    long approvalId = 123;
-
-    log.debug(CHANGE_REQUEST, "Approved Change Request, approvalId={}", approvalId);
-    return approvalId;
+    log.debug(CHANGE_REQUEST,
+        "Approved Change Request, changeRequestId={}", command.getChangeRequestId());
   }
 }

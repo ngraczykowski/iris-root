@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
 import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestUseCase;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
@@ -36,6 +39,9 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private ApproveChangeRequestUseCase approveChangeRequestUseCase;
+
+  @MockBean
+  private RejectChangeRequestUseCase rejectChangeRequestUseCase;
 
   @Nested
   class ListChangeRequests {
@@ -98,6 +104,56 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
           .createdAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
           .comment("Disable redundant RBs based on analyses from 2020.04.02")
           .build();
+    }
+  }
+
+  @Nested
+  class ApproveChangeRequest {
+
+    private static final String USERNAME = "username";
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void its200_whenApproverCallsEndpoint() {
+      long changeRequestId = 2L;
+
+      patch(mappingForApproval(changeRequestId)).statusCode(OK.value());
+    }
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      long changeRequestId = 2L;
+
+      patch(mappingForApproval(changeRequestId)).statusCode(FORBIDDEN.value());
+    }
+
+    private String mappingForApproval(long id) {
+      return "/change-request/" + id + "/approve";
+    }
+  }
+
+  @Nested
+  class RejectChangeRequest {
+
+    private static final String USERNAME = "username";
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void its200_whenApproverCallsEndpoint() {
+      long changeRequestId = 2L;
+
+      patch(mappingForRejection(changeRequestId)).statusCode(OK.value());
+    }
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      long changeRequestId = 2L;
+
+      patch(mappingForRejection(changeRequestId)).statusCode(FORBIDDEN.value());
+    }
+
+    private String mappingForRejection(long id) {
+      return "/change-request/" + id + "/reject";
     }
   }
 }

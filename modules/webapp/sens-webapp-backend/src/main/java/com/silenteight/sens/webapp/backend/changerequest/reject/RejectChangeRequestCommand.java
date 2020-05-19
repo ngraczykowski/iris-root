@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.approve;
+package com.silenteight.sens.webapp.backend.changerequest.reject;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -6,7 +6,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ApproveChangeRequestCommand {
+public class RejectChangeRequestCommand {
 
   private long changeRequestId;
 
