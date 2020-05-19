@@ -1,11 +1,13 @@
 package com.silenteight.sens.webapp.backend.changerequest.domain;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
@@ -14,8 +16,25 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_RE
 @RequiredArgsConstructor
 public class ChangeRequestService {
 
+  @NonNull
   private final ChangeRequestRepository repository;
+  @NonNull
   private final AuditTracer auditTracer;
+
+  public void create(
+      UUID bulkChangeId, String username, String comment, OffsetDateTime creationDate) {
+    log.info(CHANGE_REQUEST, "Creating Change Request. bulkChangeId={}, username={}, comment={}",
+        bulkChangeId, username, comment);
+
+    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, username, comment, creationDate);
+    repository.save(changeRequest);
+
+    auditTracer.save(
+        new ChangeRequestCreatedEvent(
+            bulkChangeId.toString(),
+            ChangeRequest.class.getName(),
+            changeRequest));
+  }
 
   public void approve(UUID bulkChangeId, String username) {
     log.info(CHANGE_REQUEST,

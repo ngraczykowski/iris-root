@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +31,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   void changeRequestSavedToDatabase() {
     // given
     UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
+    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
+        OffsetDateTime.now());
 
     // when
     repository.save(changeRequest);
@@ -57,7 +59,7 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     repository.save(rejectedChangeRequest);
 
     // when
-    List<ChangeRequest> result = repository.findAllByState(PENDING.name());
+    List<ChangeRequest> result = repository.findAllByState(PENDING);
 
     // then
     assertThat(result.size()).isEqualTo(1);
@@ -68,7 +70,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   void givenChangeRequests_notFindByDifferentBulkChangeId() {
     // given
     UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
+    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
+        OffsetDateTime.now());
     UUID differentBulkChangeId = fromString("30131be0-7405-41f1-b79e-fe109a5d2a41");
 
     // when
@@ -98,7 +101,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   void givenChangeRequest_findByTheSameBulkChangeId() {
     // given
     UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
+    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
+        OffsetDateTime.now());
     repository.save(changeRequest);
 
     // when
@@ -110,19 +114,21 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   }
 
   private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {
-    return new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT);
+    return new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, OffsetDateTime.now());
   }
 
   private static ChangeRequest makeApprovedChangeRequest(UUID bulkChangeId) {
-    return makeChangeRequestWithState(bulkChangeId, APPROVED.name());
+    return makeChangeRequestWithState(bulkChangeId, APPROVED);
   }
 
   private static ChangeRequest makeRejectedChangeRequest(UUID bulkChangeId) {
-    return makeChangeRequestWithState(bulkChangeId, REJECTED.name());
+    return makeChangeRequestWithState(bulkChangeId, REJECTED);
   }
 
-  private static ChangeRequest makeChangeRequestWithState(UUID bulkChangeId, String state) {
-    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT);
+  private static ChangeRequest makeChangeRequestWithState(
+      UUID bulkChangeId, ChangeRequestState state) {
+    ChangeRequest changeRequest =
+        new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, OffsetDateTime.now());
     changeRequest.setState(state);
 
     return changeRequest;

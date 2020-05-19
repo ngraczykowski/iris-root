@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.domain;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,12 +16,13 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class ChangeRequestQuery {
 
+  @NonNull
   private final ChangeRequestRepository repository;
 
   public List<ChangeRequestDto> listPending() {
     log.info(CHANGE_REQUEST, "Listing pending Change Requests.");
 
-    List<ChangeRequest> changeRequests = repository.findAllByState(PENDING.name());
+    List<ChangeRequest> changeRequests = repository.findAllByState(PENDING);
 
     log.info(
         CHANGE_REQUEST, "Found {} pending Change Requests", changeRequests.size());

@@ -5,6 +5,7 @@ import com.silenteight.sens.webapp.backend.changerequest.domain.exception.Change
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
@@ -19,25 +20,28 @@ class ChangeRequestTest {
   private static final String MAKER_USERNAME = "maker";
   private static final String MAKER_COMMENT = "This is comment from Maker";
   private static final String APPROVER_USERNAME = "approver";
+  private static final OffsetDateTime CREATED_AT = OffsetDateTime.now();
 
   @Test
   void changeRequestApproved_stateIsChangedToApproved() {
     // give
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
+        CREATED_AT);
 
     // when
     changeRequest.approve(APPROVER_USERNAME);
 
     // then
-    assertThat(changeRequest.getState()).isEqualTo(APPROVED.toString());
+    assertThat(changeRequest.getState()).isEqualTo(APPROVED);
     assertThat(changeRequest.getApproverUsername()).isEqualTo(APPROVER_USERNAME);
   }
 
   @Test
   void changeRequestInApprovedState_approveThrowsChangeRequestNotInPendingStateException() {
     // give
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
-    changeRequest.setState(APPROVED.name());
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
+        CREATED_AT);
+    changeRequest.setState(APPROVED);
 
     // when
     Executable when = () -> changeRequest.approve(APPROVER_USERNAME);
@@ -49,21 +53,23 @@ class ChangeRequestTest {
   @Test
   void changeRequestRejected_stateIsChangedToRejected() {
     // give
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
+        CREATED_AT);
 
     // when
     changeRequest.reject(APPROVER_USERNAME);
 
     // then
-    assertThat(changeRequest.getState()).isEqualTo(REJECTED.toString());
+    assertThat(changeRequest.getState()).isEqualTo(REJECTED);
     assertThat(changeRequest.getApproverUsername()).isEqualTo(APPROVER_USERNAME);
   }
 
   @Test
   void changeRequestInRejectedState_rejectThrowsChangeRequestNotInPendingStateException() {
     // give
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT);
-    changeRequest.setState(REJECTED.name());
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
+        CREATED_AT);
+    changeRequest.setState(REJECTED);
 
     // when
     Executable when = () -> changeRequest.reject(APPROVER_USERNAME);

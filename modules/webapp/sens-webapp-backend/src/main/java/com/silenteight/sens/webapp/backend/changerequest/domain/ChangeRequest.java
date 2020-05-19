@@ -4,7 +4,6 @@ import lombok.*;
 
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
@@ -34,8 +33,9 @@ class ChangeRequest {
   private UUID bulkChangeId;
 
   @ToString.Include
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private String state = PENDING.name();
+  private ChangeRequestState state = PENDING;
 
   @ToString.Include
   @Column(updatable = false, nullable = false)
@@ -50,8 +50,7 @@ class ChangeRequest {
 
   @Column(updatable = false, nullable = false)
   @Access(AccessType.FIELD)
-  @CreationTimestamp
-  private OffsetDateTime createdAt = OffsetDateTime.now();
+  private OffsetDateTime createdAt;
 
   @Setter(AccessLevel.PACKAGE)
   @Column(insertable = false)
@@ -65,23 +64,25 @@ class ChangeRequest {
   @Access(AccessType.FIELD)
   private Integer version;
 
-  ChangeRequest(UUID bulkChangeId, String makerUsername, String makerComment) {
+  ChangeRequest(
+      UUID bulkChangeId, String makerUsername, String makerComment, OffsetDateTime createdAt) {
     this.bulkChangeId = bulkChangeId;
     this.makerUsername = makerUsername;
     this.makerComment = makerComment;
+    this.createdAt = createdAt;
   }
 
   void approve(String username) {
     validatePendingState();
 
-    state = APPROVED.name();
+    state = APPROVED;
     approverUsername = username;
   }
 
   void reject(String username) {
     validatePendingState();
 
-    state = REJECTED.name();
+    state = REJECTED;
     approverUsername = username;
   }
 
@@ -91,6 +92,6 @@ class ChangeRequest {
   }
 
   private boolean isNotInPendingState() {
-    return !state.equals(PENDING.name());
+    return state != PENDING;
   }
 }

@@ -10,7 +10,7 @@ interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
 
   ChangeRequest save(ChangeRequest changeRequest);
 
-  List<ChangeRequest> findAllByState(String state);
+  List<ChangeRequest> findAllByState(ChangeRequestState state);
 
   Optional<ChangeRequest> findByBulkChangeId(UUID bulkChangeId);
 }
