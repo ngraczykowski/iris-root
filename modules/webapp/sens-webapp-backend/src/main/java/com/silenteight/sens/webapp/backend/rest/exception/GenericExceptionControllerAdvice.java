@@ -8,12 +8,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
 
 @ControllerAdvice
@@ -28,9 +31,23 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorDto> handle(MethodArgumentNotValidException e) {
     Map<String, Object> extras = new HashMap<>();
-    extras.put("errors", e.getBindingResult().getAllErrors());
-
+    extras.put("errors", errorDescriptionsOf(e));
     return handle(e, "InvalidMethodArguments", HttpStatus.BAD_REQUEST, extras);
+  }
+
+  private Stream<String> errorDescriptionsOf(MethodArgumentNotValidException e) {
+    BindingResult bindingResult = e.getBindingResult();
+    Stream<String> globalErrors = bindingResult
+        .getGlobalErrors()
+        .stream()
+        .map(ObjectError::getDefaultMessage);
+
+    Stream<String> fieldErrors =
+        bindingResult.getFieldErrors()
+            .stream()
+            .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage());
+
+    return Stream.concat(globalErrors, fieldErrors);
   }
 
   @ExceptionHandler(MissingServletRequestParameterException.class)

@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.rest;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.FeatureVectorSignaturesNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
@@ -23,10 +24,17 @@ class ReasoningBranchRestControllerAdvice extends AbstractErrorControllerAdvice 
     return handle(e, "AI Solution not supported", HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(BranchesNotFoundException.class)
-  public ResponseEntity<ErrorDto> handle(BranchesNotFoundException e) {
+  @ExceptionHandler(BranchIdsNotFoundException.class)
+  public ResponseEntity<ErrorDto> handle(BranchIdsNotFoundException e) {
     return handle(
         e, "Branch(es) not found", HttpStatus.BAD_REQUEST,
         Map.of("branchIds", e.getNonExistingBranchIds()));
+  }
+
+  @ExceptionHandler(FeatureVectorSignaturesNotFoundException.class)
+  public ResponseEntity<ErrorDto> handle(FeatureVectorSignaturesNotFoundException e) {
+    return handle(
+        e, "Branch(es) not found", HttpStatus.BAD_REQUEST,
+        Map.of("featureVectorSignatures", e.getNonExistingFeatureVectorSignatures()));
   }
 }

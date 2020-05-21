@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface ReasoningBranchesQuery {
 
-  List<BranchDto> findByTreeIdAndBranchIds(long treeId, List<Long> branchIds);
+  List<BranchDto> findBranchByTreeIdAndBranchIds(long treeId, List<Long> branchIds);
 }

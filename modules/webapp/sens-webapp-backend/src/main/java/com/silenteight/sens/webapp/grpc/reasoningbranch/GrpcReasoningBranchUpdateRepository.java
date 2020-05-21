@@ -11,7 +11,7 @@ import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.ChangeRequestRepository;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
@@ -49,7 +49,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
         .flatMapTry(request -> Try.run(() -> governanceBlockingStub.changeBranches(request)));
 
     return mapStatusExceptionsToCommunicationException(tryUpdate)
-        .mapFailure(Case($(codeIs(NOT_FOUND)), BranchesNotFoundException::new))
+        .mapFailure(Case($(codeIs(NOT_FOUND)), BranchIdsNotFoundException::new))
         .onSuccess(ignored -> log.info(REASONING_BRANCH, "Saved updated Branch"))
         .onFailure(reason -> log.error(REASONING_BRANCH, "Could not save updated Branch", reason));
   }

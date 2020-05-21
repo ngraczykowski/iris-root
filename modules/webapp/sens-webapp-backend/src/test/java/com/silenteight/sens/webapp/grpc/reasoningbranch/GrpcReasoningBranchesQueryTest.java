@@ -8,8 +8,10 @@ import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary.Builder;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.BranchWithFeaturesDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.BranchIdAndSignatureDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
+import com.google.protobuf.ByteString;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +24,11 @@ import java.util.List;
 
 import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_FALSE_POSITIVE;
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
+import static com.silenteight.sens.webapp.common.support.encoding.ByteStringUtils.toBase64String;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.NOT_FOUND_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchesQueryTestFixtures.*;
+import static com.silenteight.sens.webapp.grpc.util.ByteStringTestUtils.randomSignature;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
@@ -50,7 +54,7 @@ class GrpcReasoningBranchesQueryTest {
     given(branchStub.listReasoningBranches(any())).willThrow(NOT_FOUND_RUNTIME_EXCEPTION);
 
     List<BranchDto> actual =
-        underTest.findByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
+        underTest.findBranchByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
 
     assertThat(actual).isEmpty();
   }
@@ -60,7 +64,7 @@ class GrpcReasoningBranchesQueryTest {
     given(branchStub.listReasoningBranches(any())).willThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
 
     ThrowingCallable when = () ->
-        underTest.findByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
+        underTest.findBranchByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
 
     assertThatThrownBy(when).isInstanceOf(GrpcCommunicationException.class);
   }
@@ -71,7 +75,7 @@ class GrpcReasoningBranchesQueryTest {
         LIST_REASONING_BRANCHES_RESPONSE);
 
     List<BranchDto> actual =
-        underTest.findByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
+        underTest.findBranchByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
 
     assertThat(actual).hasSize(1);
     assertThat(actual)
@@ -129,10 +133,68 @@ class GrpcReasoningBranchesQueryTest {
         .isInstanceOf(GrpcCommunicationException.class);
   }
 
-  private ListReasoningBranchesResponse reasoningBranchesResponseWithTwoBranches() {
-    return reasoningBranchesResponseWith(
-        ReasoningBranchSummary.newBuilder(),
-        ReasoningBranchSummary.newBuilder());
+  @Test
+  void returnsListOfBranchIds_whenRequestingByTreeIdAndBranchIds() {
+    long decisionTreeId = 4L;
+    long reasoningBranchId = 5L;
+    ByteString featureVectorSignature = randomSignature();
+
+    given(branchStub.listReasoningBranches(
+        argThat(request -> request.getDecisionTreeId() == decisionTreeId)))
+        .willReturn(
+            reasoningBranchesResponseWith(
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(reasoningBranchId))
+                    .setFeatureVectorSignature(featureVectorSignature),
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(1L))
+                    .setFeatureVectorSignature(randomSignature())
+            ));
+
+    String encodedFeatureVectorSignatureSignature = toBase64String(featureVectorSignature);
+
+    List<BranchIdAndSignatureDto> branchIdAndSignatures =
+        underTest.findIdsByTreeIdAndBranchIds(
+            decisionTreeId, List.of(reasoningBranchId));
+
+    assertThat(branchIdAndSignatures).hasSize(1);
+    assertThat(branchIdAndSignatures.get(0).getReasoningBranchId()).isEqualTo(reasoningBranchId);
+    assertThat(branchIdAndSignatures.get(0).getFeatureVectorSignature()).isEqualTo(
+        encodedFeatureVectorSignatureSignature);
+  }
+
+  @Test
+  void returnsListOfBranchIds_whenRequestingByTreeIdAndSignature() {
+    long decisionTreeId = 4L;
+    long reasoningBranchId = 5L;
+    ByteString featureVectorSignature = randomSignature();
+
+    given(branchStub.listReasoningBranches(
+        argThat(request -> request.getDecisionTreeId() == decisionTreeId)))
+        .willReturn(
+            reasoningBranchesResponseWith(
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(reasoningBranchId))
+                    .setFeatureVectorSignature(featureVectorSignature),
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(1L))
+                    .setFeatureVectorSignature(randomSignature())
+            ));
+
+    String encodedFeatureVectorSignatureSignature = toBase64String(featureVectorSignature);
+
+    List<BranchIdAndSignatureDto> branchIdAndSignatures =
+        underTest.findIdsByTreeIdAndFeatureVectorSignatures(
+            decisionTreeId, List.of(encodedFeatureVectorSignatureSignature));
+
+    assertThat(branchIdAndSignatures).hasSize(1);
+    assertThat(branchIdAndSignatures.get(0).getReasoningBranchId()).isEqualTo(reasoningBranchId);
+    assertThat(branchIdAndSignatures.get(0).getFeatureVectorSignature()).isEqualTo(
+        encodedFeatureVectorSignatureSignature);
   }
 
   private static ListReasoningBranchesResponse reasoningBranchesResponseWith(

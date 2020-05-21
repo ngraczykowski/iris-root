@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
 
 import io.vavr.control.Try;
 
@@ -29,7 +30,7 @@ public class UpdateReasoningBranchesUseCase {
       return NO_CHANGES;
     }
 
-    reasoningBranchValidator.validate(updateCommand.getTreeId(), updateCommand.getBranchIds());
+    reasoningBranchValidator.validateIds(updateCommand.getTreeId(), updateCommand.getBranchIds());
 
     auditTracer.save(new ReasoningBranchUpdateRequestedEvent(updateCommand));
 

@@ -3,17 +3,17 @@ package com.silenteight.sens.webapp.backend.reasoningbranch;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class BranchesNotFoundException extends RuntimeException {
+public class BranchIdsNotFoundException extends RuntimeException {
 
   private static final long serialVersionUID = -7221490231830576151L;
 
   private final Collection<Long> nonExistingBranchIds = new LinkedList<>();
 
-  public BranchesNotFoundException(Throwable cause) {
+  public BranchIdsNotFoundException(Throwable cause) {
     super(cause);
   }
 
-  public BranchesNotFoundException(Collection<Long> nonExistingBranchIds) {
+  public BranchIdsNotFoundException(Collection<Long> nonExistingBranchIds) {
     this.nonExistingBranchIds.addAll(nonExistingBranchIds);
   }
 

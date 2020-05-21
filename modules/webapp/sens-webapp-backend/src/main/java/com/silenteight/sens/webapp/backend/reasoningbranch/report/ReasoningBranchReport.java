@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.report.Report;
 
 @Value
 class ReasoningBranchReport implements Report {
+
   String reportFileName;
 
   LinesSupplier reportContent;

@@ -11,6 +11,8 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.report.ReasoningBranc
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchesQuery;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.BranchIdAndSignatureDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchesValidateQuery;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import io.vavr.control.Try;
@@ -21,6 +23,7 @@ import java.util.function.Predicate;
 
 import static com.google.rpc.Code.NOT_FOUND;
 import static com.silenteight.protocol.utils.MoreTimestamps.toInstant;
+import static com.silenteight.sens.webapp.common.support.encoding.ByteStringUtils.toBase64String;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
@@ -35,21 +38,51 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBranchesReportQuery {
+class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBranchesReportQuery,
+    ReasoningBranchesValidateQuery {
 
   private final BranchSolutionMapper branchSolutionMapper;
   private final BranchGovernanceBlockingStub branchesStub;
 
   @Override
-  public List<BranchDto> findByTreeIdAndBranchIds(
+  public List<BranchDto> findBranchByTreeIdAndBranchIds(
       long treeId, List<Long> branchIds) {
+    return findByTreeAndBranchIds(treeId, branchIds, this::mapToBranchDto);
+  }
+
+  @Override
+  public List<BranchIdAndSignatureDto> findIdsByTreeIdAndBranchIds(
+      long treeId, List<Long> branchIds) {
+    return findByTreeAndBranchIds(treeId, branchIds, this::mapToBranchIdAndSignatureDto);
+  }
+
+  private <T> List<T> findByTreeAndBranchIds(
+      long treeId, List<Long> branchIds, Function<ReasoningBranchSummary, T> mapper) {
     log.info(REASONING_BRANCH,
         "Listing Reasoning Branches using gRPC BranchGovernance. treeId={}, branchIds={}",
         treeId, branchIds);
 
-    Try<List<BranchDto>> reasoningBranches = reasoningBranchesOf(
-        treeId, rb -> isOneOf(rb, branchIds), this::mapToBranchDto);
+    Try<List<T>> reasoningBranches = reasoningBranchesOf(
+        treeId, rb -> containsOneOfIds(rb, branchIds), mapper);
 
+    return responseFrom(reasoningBranches);
+  }
+
+  @Override
+  public List<BranchIdAndSignatureDto> findIdsByTreeIdAndFeatureVectorSignatures(
+      long treeId, List<String> featureVectorSignatures) {
+    log.info(REASONING_BRANCH,
+        "Listing Reasoning Branches using gRPC BranchGovernance. treeId={}, signatures={}",
+        treeId, featureVectorSignatures);
+
+    Try<List<BranchIdAndSignatureDto>> branchIds =
+        reasoningBranchesOf(treeId, rb -> containsOneOfSignatures(rb, featureVectorSignatures),
+            this::mapToBranchIdAndSignatureDto);
+
+    return responseFrom(branchIds);
+  }
+
+  private <T> List<T> responseFrom(Try<List<T>> reasoningBranches) {
     return mapStatusExceptionsToCommunicationException(reasoningBranches)
         .recoverWith(
             GrpcCommunicationException.class,
@@ -97,9 +130,17 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
         .build();
   }
 
-  private static boolean isOneOf(ReasoningBranchSummary reasoningBranch, List<Long> branchIds) {
+  private static boolean containsOneOfIds(
+      ReasoningBranchSummary reasoningBranch, List<Long> branchIds) {
 
     return branchIds.contains(reasoningBranch.getReasoningBranchId().getFeatureVectorId());
+  }
+
+  private static boolean containsOneOfSignatures(
+      ReasoningBranchSummary reasoningBranch, List<String> signatures) {
+
+    return signatures.contains(
+        toBase64String(reasoningBranch.getFeatureVectorSignature()));
   }
 
   private BranchDto mapToBranchDto(ReasoningBranchSummary reasoningBranch) {
@@ -109,6 +150,14 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
         .isActive(reasoningBranch.getEnabled())
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
         .build();
+  }
+
+  private BranchIdAndSignatureDto mapToBranchIdAndSignatureDto(
+      ReasoningBranchSummary reasoningBranch) {
+
+    return new BranchIdAndSignatureDto(
+        reasoningBranch.getReasoningBranchId().getFeatureVectorId(),
+        toBase64String(reasoningBranch.getFeatureVectorSignature()));
   }
 
   private BranchWithFeaturesDto mapToBranchDtoForReport(ReasoningBranchSummary reasoningBranch) {

@@ -4,7 +4,7 @@ import com.silenteight.proto.serp.v1.api.BranchChange;
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 
 import io.grpc.Status;
@@ -60,7 +60,7 @@ class GrpcReasoningBranchUpdateRepositoryTest {
 
     Try<Void> actual = underTest.save(NON_EXISTING_BRANCH);
 
-    assertThat(actual.getCause()).isInstanceOf(BranchesNotFoundException.class);
+    assertThat(actual.getCause()).isInstanceOf(BranchIdsNotFoundException.class);
   }
 
   @Test

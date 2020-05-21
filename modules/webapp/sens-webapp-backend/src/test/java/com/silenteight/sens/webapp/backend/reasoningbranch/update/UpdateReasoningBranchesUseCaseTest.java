@@ -3,7 +3,8 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchesNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
 
 import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,8 @@ import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateR
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.NO_CHANGES_COMMAND;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.SOLUTION_CHANGE_COMMAND;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCaseTest.ReasoningBranchesUpdateServiceFixtures.STATUS_CHANGE_COMMAND;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.apache.commons.collections4.CollectionUtils.emptyCollection;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -102,25 +103,25 @@ class UpdateReasoningBranchesUseCaseTest {
 
     underTest.apply(command);
 
-    verify(reasoningBranchValidator).validate(command.getTreeId(), command.getBranchIds());
+    verify(reasoningBranchValidator).validateIds(command.getTreeId(), command.getBranchIds());
   }
 
   @Test
   void throwsExceptionIfValidatorThrowsException() {
-    BranchesNotFoundException exception = new BranchesNotFoundException(emptyList());
-    doThrow(exception).when(reasoningBranchValidator).validate(anyLong(), anyList());
+    BranchIdsNotFoundException exception = new BranchIdsNotFoundException(emptyCollection());
+    doThrow(exception).when(reasoningBranchValidator).validateIds(anyLong(), anyList());
 
     assertThatThrownBy(() -> underTest.apply(STATUS_CHANGE_COMMAND)).isEqualTo(exception);
   }
 
   @Test
   void doesNotSaveIfValidationExceptionThrown() {
-    doThrow(new BranchesNotFoundException(emptyList()))
-        .when(reasoningBranchValidator).validate(anyLong(), anyList());
+    doThrow(new BranchIdsNotFoundException(emptyCollection()))
+        .when(reasoningBranchValidator).validateIds(anyLong(), anyList());
 
     try {
       underTest.apply(STATUS_CHANGE_COMMAND);
-    } catch (BranchesNotFoundException e) {
+    } catch (BranchIdsNotFoundException e) {
       //do nothing
     }
 
@@ -129,12 +130,12 @@ class UpdateReasoningBranchesUseCaseTest {
 
   @Test
   void doesNotAuditIfValidationExceptionThrown() {
-    doThrow(new BranchesNotFoundException(emptyList()))
-        .when(reasoningBranchValidator).validate(anyLong(), anyList());
+    doThrow(new BranchIdsNotFoundException(emptyCollection()))
+        .when(reasoningBranchValidator).validateIds(anyLong(), anyList());
 
     try {
       underTest.apply(STATUS_CHANGE_COMMAND);
-    } catch (BranchesNotFoundException e) {
+    } catch (BranchIdsNotFoundException e) {
       //do nothing
     }
 

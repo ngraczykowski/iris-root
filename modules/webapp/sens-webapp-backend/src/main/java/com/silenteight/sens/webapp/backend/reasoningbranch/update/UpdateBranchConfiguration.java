@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.update;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchesQuery;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +12,10 @@ class UpdateBranchConfiguration {
   @Bean
   UpdateReasoningBranchesUseCase updateReasoningBranchesUseCase(
       ChangeRequestRepository changeRequestRepository,
-      ReasoningBranchesQuery reasoningBranchesQuery,
+      ReasoningBranchValidator reasoningBranchValidator,
       AuditTracer auditTracer) {
 
     return new UpdateReasoningBranchesUseCase(
-        changeRequestRepository, new ReasoningBranchValidator(reasoningBranchesQuery), auditTracer);
+        changeRequestRepository, reasoningBranchValidator, auditTracer);
   }
 }
