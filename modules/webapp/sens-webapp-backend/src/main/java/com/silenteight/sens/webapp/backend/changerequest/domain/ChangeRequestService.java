@@ -23,6 +23,7 @@ public class ChangeRequestService {
 
   public void create(
       UUID bulkChangeId, String username, String comment, OffsetDateTime creationDate) {
+
     log.info(CHANGE_REQUEST, "Creating Change Request. bulkChangeId={}, username={}, comment={}",
         bulkChangeId, username, comment);
 
@@ -36,14 +37,14 @@ public class ChangeRequestService {
             changeRequest));
   }
 
-  public void approve(UUID bulkChangeId, String username) {
+  public void approve(long id, @NonNull String username) {
     log.info(CHANGE_REQUEST,
-        "Approving Change Request. bulkChangeId={}, username={}", bulkChangeId, username);
+        "Approving Change Request. changeRequestId={}, username={}", id, username);
 
     repository
-        .findByBulkChangeId(bulkChangeId)
+        .findById(id)
         .ifPresentOrElse(cr -> this.approve(cr, username), () -> {
-          throw new ChangeRequestNotFoundException(bulkChangeId);
+          throw new ChangeRequestNotFoundException(id);
         });
   }
 
@@ -55,19 +56,19 @@ public class ChangeRequestService {
 
     auditTracer.save(
         new ChangeRequestApprovedEvent(
-            changeRequest.getBulkChangeId().toString(),
-            ChangeRequest.class.getName(),
+            changeRequest.getId().toString(),
+            "webapp_change_request",
             changeRequest));
   }
 
-  public void reject(UUID bulkChangeId, String username) {
+  public void reject(long id, @NonNull String username) {
     log.info(CHANGE_REQUEST,
-        "Rejecting Change Request. bulkChangeId={}, username={}", bulkChangeId, username);
+        "Rejecting Change Request. changeRequestId={}, username={}", id, username);
 
     repository
-        .findByBulkChangeId(bulkChangeId)
+        .findById(id)
         .ifPresentOrElse(cr -> this.reject(cr, username), () -> {
-          throw new ChangeRequestNotFoundException(bulkChangeId);
+          throw new ChangeRequestNotFoundException(id);
         });
   }
 
@@ -79,8 +80,8 @@ public class ChangeRequestService {
 
     auditTracer.save(
         new ChangeRequestRejectedEvent(
-            changeRequest.getBulkChangeId().toString(),
-            ChangeRequest.class.getName(),
+            changeRequest.getId().toString(),
+            "webapp_change_request",
             changeRequest));
   }
 }

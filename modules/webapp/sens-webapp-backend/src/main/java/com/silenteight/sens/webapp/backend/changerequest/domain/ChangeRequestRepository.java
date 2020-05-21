@@ -4,7 +4,6 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
 
@@ -12,5 +11,5 @@ interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
 
   List<ChangeRequest> findAllByState(ChangeRequestState state);
 
-  Optional<ChangeRequest> findByBulkChangeId(UUID bulkChangeId);
+  Optional<ChangeRequest> findById(long id);
 }

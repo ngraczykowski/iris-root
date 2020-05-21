@@ -32,6 +32,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ChangeRequestServiceTest {
 
+  private static final long CHANGE_REQUEST_ID = 1L;
   private static final UUID BULK_CHANGE_ID = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
   private static final String MAKER_USERNAME = "maker";
   private static final String MAKER_COMMENT = "This is comment from Maker";
@@ -49,7 +50,6 @@ class ChangeRequestServiceTest {
 
   @Test
   void invokesRepositoryToSaveNewChangeRequestOnCreate() {
-
     underTest.create(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT, CREATION_DATE);
 
     ArgumentCaptor<ChangeRequest> changeRequestCaptor =
@@ -90,10 +90,10 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestNotFoundWhenApproving_throwChangeRequestNotFoundException() {
     // given
-    given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(empty());
+    given(repository.findById(CHANGE_REQUEST_ID)).willReturn(empty());
 
     // when
-    Executable when = () -> underTest.approve(BULK_CHANGE_ID, APPROVER_USERNAME);
+    Executable when = () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME);
 
     // then
     assertThrows(ChangeRequestNotFoundException.class, when);
@@ -102,12 +102,11 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestFound_approveChangeRequest() {
     // given
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
-        CREATION_DATE);
-    given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(of(changeRequest));
+    ChangeRequest changeRequest = makeChangeRequest();
+    given(repository.findById(CHANGE_REQUEST_ID)).willReturn(of(changeRequest));
 
     // when
-    underTest.approve(BULK_CHANGE_ID, APPROVER_USERNAME);
+    underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME);
 
     // then
     verifyChangeRequest(APPROVED, APPROVER_USERNAME);
@@ -117,10 +116,10 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestNotFoundWhenRejecting_throwChangeRequestNotFoundException() {
     // given
-    given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(empty());
+    given(repository.findById(CHANGE_REQUEST_ID)).willReturn(empty());
 
     // when
-    Executable when = () -> underTest.reject(BULK_CHANGE_ID, APPROVER_USERNAME);
+    Executable when = () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME);
 
     // then
     assertThrows(ChangeRequestNotFoundException.class, when);
@@ -129,20 +128,26 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestFound_rejectChangeRequest() {
     // given
-    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
-        CREATION_DATE);
-    given(repository.findByBulkChangeId(BULK_CHANGE_ID)).willReturn(of(changeRequest));
+    ChangeRequest changeRequest = makeChangeRequest();
+    given(repository.findById(CHANGE_REQUEST_ID)).willReturn(of(changeRequest));
 
     // when
-    underTest.reject(BULK_CHANGE_ID, APPROVER_USERNAME);
+    underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME);
 
     // then
     verifyChangeRequest(REJECTED, APPROVER_USERNAME);
     verifyAuditLog("ChangeRequestRejected", changeRequest);
   }
 
-  private void verifyChangeRequest(
-      ChangeRequestState expectedState, String approverUsername) {
+  private static ChangeRequest makeChangeRequest() {
+    ChangeRequest changeRequest = new ChangeRequest(
+        BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT, CREATION_DATE);
+    changeRequest.setId(CHANGE_REQUEST_ID);
+
+    return changeRequest;
+  }
+
+  private void verifyChangeRequest(ChangeRequestState expectedState, String approverUsername) {
     ArgumentCaptor<ChangeRequest> changeRequestCaptor =
         ArgumentCaptor.forClass(ChangeRequest.class);
     verify(repository).save(changeRequestCaptor.capture());

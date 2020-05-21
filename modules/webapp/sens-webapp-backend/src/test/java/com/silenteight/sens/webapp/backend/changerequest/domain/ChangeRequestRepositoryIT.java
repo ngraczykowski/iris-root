@@ -67,50 +67,33 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   }
 
   @Test
-  void givenChangeRequests_notFindByDifferentBulkChangeId() {
+  void givenChangeRequests_notFindByDifferentChangeRequestId() {
     // given
-    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
-        OffsetDateTime.now());
-    UUID differentBulkChangeId = fromString("30131be0-7405-41f1-b79e-fe109a5d2a41");
+    ChangeRequest changeRequest = makePendingChangeRequest(
+        fromString("de1afe98-0b58-4941-9791-4e081f9b8139"));
+    ChangeRequest savedChangeRequest = repository.save(changeRequest);
+    long differentChangeRequestId = savedChangeRequest.getId() + 1L;
 
     // when
-    repository.save(changeRequest);
-
-    // then
-    Optional<ChangeRequest> result = repository.findByBulkChangeId(differentBulkChangeId);
-    assertThat(result).isEmpty();
-  }
-
-  @Test
-  void givenChangeRequest_notFindByDifferentBulkChangeId() {
-    // given
-    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = makePendingChangeRequest(bulkChangeId);
-    UUID differentBulkChangeId = fromString("30131be0-7405-41f1-b79e-fe109a5d2a41");
-    repository.save(changeRequest);
-
-    // when
-    Optional<ChangeRequest> result = repository.findByBulkChangeId(differentBulkChangeId);
+    Optional<ChangeRequest> result = repository.findById(differentChangeRequestId);
 
     // then
     assertThat(result).isEmpty();
   }
 
   @Test
-  void givenChangeRequest_findByTheSameBulkChangeId() {
+  void givenChangeRequest_findByTheSameChangeRequestId() {
     // given
-    UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
-        OffsetDateTime.now());
-    repository.save(changeRequest);
+    ChangeRequest changeRequest = makePendingChangeRequest(
+        fromString("de1afe98-0b58-4941-9791-4e081f9b8139"));
+    ChangeRequest savedChangeRequest = repository.save(changeRequest);
 
     // when
-    Optional<ChangeRequest> result = repository.findByBulkChangeId(bulkChangeId);
+    Optional<ChangeRequest> result = repository.findById(savedChangeRequest.getId());
 
     // then
     assertThat(result).isNotEmpty();
-    assertThat(result.get()).isEqualTo(changeRequest);
+    assertThat(result.get()).isEqualTo(savedChangeRequest);
   }
 
   private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {
