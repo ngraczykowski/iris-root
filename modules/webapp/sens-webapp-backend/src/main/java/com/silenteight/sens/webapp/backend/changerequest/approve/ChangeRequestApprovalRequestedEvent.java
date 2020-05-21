@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.domain;
+package com.silenteight.sens.webapp.backend.changerequest.approve;
 
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 
