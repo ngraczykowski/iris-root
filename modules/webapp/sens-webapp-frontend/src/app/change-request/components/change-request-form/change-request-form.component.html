@@ -1,0 +1,31 @@
+<div class="form__section">
+  <h2 class="mat-title">Reasonign Branch settings</h2>
+  <div class="form__content">
+    <mat-form-field class="mat-form-field--full-width" appearance="outline">
+      <mat-label [translate]="translatePrefix + 'aiSolution.label'"></mat-label>
+      <mat-select>
+        <mat-option><span [translate]="translatePrefix + 'aiSolution.options.unchanged'"></span>
+        </mat-option>
+        <mat-option><span [translate]="'aiSolutions.falsePositive'"></span>
+        </mat-option>
+        <mat-option><span [translate]="'aiSolutions.potentialTruePositive'"></span></mat-option>
+        <mat-option><span [translate]="'aiSolutions.noDecision'"></span>
+        </mat-option>
+      </mat-select>
+      <mat-hint [translate]="translatePrefix + 'aiSolution.hint'"></mat-hint>
+      <mat-error [translate]="translatePrefix + 'aiStatus.errorEmpty'"></mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mat-form-field--full-width" appearance="outline">
+      <mat-label [translate]="translatePrefix + 'aiStatus.label'"></mat-label>
+      <mat-select>
+        <mat-option><span [translate]="translatePrefix + 'aiStatus.options.unchanged'"></span>
+        </mat-option>
+        <mat-option><span [translate]="'aiStatus.disabled'"></span></mat-option>
+        <mat-option><span [translate]="'aiStatus.active'"></span></mat-option>
+      </mat-select>
+      <mat-hint [translate]="translatePrefix + 'aiStatus.hint'"></mat-hint>
+      <mat-error [translate]="translatePrefix + 'aiStatus.errorEmpty'"></mat-error>
+    </mat-form-field>
+  </div>
+</div>

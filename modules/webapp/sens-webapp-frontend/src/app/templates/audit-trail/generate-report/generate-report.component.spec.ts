@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { WINDOW } from '../../../shared/window.service';
 import { TestModule } from '../../../test/test.module';
-import { AuditTrailModule } from '../audit-trail.module';
+import { SecurityMatrixModule } from '../audit-trail.module';
 
 import { GenerateReportComponent } from './generate-report.component';
 
@@ -18,7 +18,7 @@ describe('GenerateReportComponent', () => {
   beforeEach(async(() => {
     TestBed
         .configureTestingModule({
-          imports: [TestModule, AuditTrailModule],
+          imports: [TestModule, SecurityMatrixModule],
           providers: [
             {
               provide: WINDOW, useValue: MockWindow

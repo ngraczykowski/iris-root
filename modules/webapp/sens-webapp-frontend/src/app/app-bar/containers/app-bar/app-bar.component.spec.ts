@@ -10,6 +10,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { UserMenuComponent } from '@app/app-bar/components/user-menu/user-menu.component';
 import { BrandHeroComponent } from '@app/app-bar/components/brand-hero/brand-hero.component';
 import { TestModule } from '@app/test/test.module';
+import { of } from 'rxjs';
 
 describe('AppBarComponent', () => {
   let component: AppBarComponent;
@@ -37,6 +38,10 @@ describe('AppBarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AppBarComponent);
     component = fixture.componentInstance;
+    component.userDetails = of({
+      firstName: 'Test',
+      lastName: 'Test'
+    });
     fixture.detectChanges();
   });
 

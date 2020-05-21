@@ -4,7 +4,9 @@ import { RouterModule } from '@angular/router';
 import { AppBarModule } from '@app/app-bar/app-bar.module';
 import { rolesByRedirect, routes } from '@app/app-routes';
 import { AppComponent } from '@app/app.component';
+import { AuditTrailModule } from '@app/audit-trail/audit-trail.module';
 import { BasicRoleDefaultPageMappings } from '@app/basic-default-paegs-mappings';
+import { ChangeRequestModule } from '@app/change-request/change-request.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
 import { ExternalComponent } from '@app/layout/external/external.component';
@@ -20,6 +22,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { WINDOW_PROVIDERS } from '@app/shared/window.service';
 import { SidenavModule } from '@app/sidenav/sidenav.module';
 import { AnalystHomeModule } from '@app/templates/analyst-home/analyst-home.module';
+import { SecurityMatrixModule } from '@app/templates/audit-trail/audit-trail.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -29,7 +32,6 @@ import { ReasoningBranchManagementModule } from './reasoning-branch-management/r
 import { reducers } from './reducers';
 import { UserManagementModule } from './user-management/user-management.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuditTrailModule } from './templates/audit-trail/audit-trail.module';
 
 
 @NgModule({
@@ -63,6 +65,8 @@ import { AuditTrailModule } from './templates/audit-trail/audit-trail.module';
     AppBarModule,
     SidenavModule,
     MatSidenavModule,
+    ChangeRequestModule,
+    SecurityMatrixModule
   ],
   providers: [
     WINDOW_PROVIDERS,

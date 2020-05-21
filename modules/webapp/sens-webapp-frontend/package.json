@@ -38,6 +38,7 @@
     "jasmine-marbles": "^0.6.0",
     "keycloak-angular": "^7.0.1",
     "keycloak-js": "^8.0.1",
+    "moment": "^2.25.3",
     "ng-inline-svg": "^8.2.1",
     "ngx-cookie-service": "^2.0.2",
     "ngx-perfect-scrollbar": "~7.1.0",
@@ -46,6 +47,7 @@
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.3.3",
     "test": "^0.6.0",
+    "web-animations-js": "^2.3.2",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {

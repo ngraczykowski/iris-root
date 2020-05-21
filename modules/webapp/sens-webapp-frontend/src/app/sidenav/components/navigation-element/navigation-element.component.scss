@@ -1,5 +1,5 @@
-@import "src/styles/theme/theme_variables";
-@import 'src/styles/abstracts/8-pt-grid';
+@import "theme/theme_variables";
+@import "abstracts/8-pt-grid";
 
 .nav-element {
   &.mat-list-item {
@@ -7,10 +7,7 @@
     $navigationBorderRadius: calculate-8-pt-grid(1);
     border-bottom-right-radius: $navigationBorderRadius;
     border-top-right-radius: $navigationBorderRadius;
-  }
-
-  .nav-element__icon {
-    opacity: .6;
+    overflow: hidden;
   }
 
   .nav-element__label {

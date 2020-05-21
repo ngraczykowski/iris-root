@@ -8,37 +8,49 @@ import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user
 })
 export class SidenavComponent implements OnInit {
 
+  sectionsPrefix = 'sideNav.sections.';
+
   showNav = false;
   mainNav = [
     {
-      name: 'reasoningBranches.title',
+      name: this.sectionsPrefix + 'reasoningBranches',
       visible: false,
       links: [
         {
-          label: 'reasoningBranches.changeRequest.title',
+          label: 'reasoningBranchBrowser.title',
           url: '/reasoning-branch',
           icon: 'visibility'
+        },
+        {
+          label: 'changeRequest.title',
+          url: 'reasoning-branches/change-request',
+          icon: 'add_circle'
         }
       ]
     },
     {
-      name: 'users.title',
+      name: this.sectionsPrefix + 'users',
       visible: false,
       links: [
         {
-          label: 'users.usersList.title',
+          label: 'usersList.title',
           url: '/user-management',
           icon: 'people'
         }
       ]
     },
     {
-      name: 'reports.title',
+      name: this.sectionsPrefix + 'reports',
       visible: false,
       links: [
         {
           label: 'auditTrail.title',
-          url: '/reports',
+          url: '/reports/audit-trail',
+          icon: 'announcement'
+        },
+        {
+          label: 'securityMatrix.title',
+          url: '/security-matrix',
           icon: 'lock'
         }
       ]

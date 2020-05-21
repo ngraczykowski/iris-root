@@ -1,0 +1,15 @@
+.mat-list-item {
+  &--divided {
+    .mat-list-item-content {
+      display: flex;
+    }
+  }
+
+  &__column {
+    flex: 1;
+
+    &--align-right {
+      text-align: right;
+    }
+  }
+}

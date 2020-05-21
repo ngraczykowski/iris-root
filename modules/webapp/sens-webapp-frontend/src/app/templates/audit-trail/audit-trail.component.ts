@@ -11,7 +11,7 @@ interface AuditTrailReport {
   templateUrl: './audit-trail.component.html',
   styleUrls: ['./audit-trail.component.scss']
 })
-export class AuditTrailComponent implements OnInit {
+export class SecurityMatrixComponent implements OnInit {
 
   readonly reports: AuditTrailReport[] = [
     /* {

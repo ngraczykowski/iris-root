@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { AuditTrailComponent } from './audit-trail.component';
+import { SecurityMatrixComponent } from './audit-trail.component';
 import { GenerateReportComponent } from './generate-report/generate-report.component';
 
 @NgModule({
@@ -9,10 +9,10 @@ import { GenerateReportComponent } from './generate-report/generate-report.compo
   ],
   declarations: [
     GenerateReportComponent,
-    AuditTrailComponent
+    SecurityMatrixComponent
   ],
   exports: [
-    AuditTrailComponent
+    SecurityMatrixComponent
   ]
 })
-export class AuditTrailModule {}
+export class SecurityMatrixModule {}

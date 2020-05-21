@@ -1,0 +1,13 @@
+@import 'abstracts/8-pt-grid';
+
+:host ::ng-deep .audit-trail {
+  &__content {
+    margin: auto;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+:host ::ng-deep.mat-vertical-stepper-header {
+  pointer-events: none !important;
+}

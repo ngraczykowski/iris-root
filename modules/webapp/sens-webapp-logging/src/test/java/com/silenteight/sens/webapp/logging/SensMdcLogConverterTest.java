@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Collections.emptyMap;
-import static org.apache.groovy.util.Maps.of;
+import static java.util.Map.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 

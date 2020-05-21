@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavigationSectionComponent } from './navigation-section.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('NavigationSectionComponent', () => {
   let component: NavigationSectionComponent;
@@ -8,7 +9,8 @@ describe('NavigationSectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavigationSectionComponent ]
+      declarations: [ NavigationSectionComponent ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));
@@ -16,6 +18,11 @@ describe('NavigationSectionComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NavigationSectionComponent);
     component = fixture.componentInstance;
+
+    component.sectionData = {
+      visible: true
+    };
+
     fixture.detectChanges();
   });
 

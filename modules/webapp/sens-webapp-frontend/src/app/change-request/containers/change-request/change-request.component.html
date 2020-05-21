@@ -1,0 +1,31 @@
+<div class="change-request layout-narrow">
+  <mat-vertical-stepper #stepper>
+    <mat-step>
+      <ng-template matStepLabel>
+        <span [translate]="stepsPrefix + 'select'"></span>
+      </ng-template>
+      <app-select-reasoning-branch-container></app-select-reasoning-branch-container>
+    </mat-step>
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>
+          <span [translate]="stepsPrefix + 'configure'"></span>
+        </ng-template>
+        <div class="form">
+          <app-change-request-properties-container></app-change-request-properties-container>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>
+        <span [translate]="stepsPrefix + 'confirmation'"></span>
+      </ng-template>
+      <div class="change-request__changes-confirmation">
+        <app-state [stateContent]="changesConfirmation"></app-state>
+        <button mat-stroked-button
+                color="primary"><span
+                [translate]="'changeRequest.confirmation.buttonNewRequest'"></span></button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>

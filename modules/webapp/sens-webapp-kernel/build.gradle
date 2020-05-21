@@ -6,5 +6,5 @@ plugins {
 description = "SENS WebApp Kernel"
 
 dependencies {
-    compile libraries.spring_security_config
+    implementation libraries.spring_security_config
 }

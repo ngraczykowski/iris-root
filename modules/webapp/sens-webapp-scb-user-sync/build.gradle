@@ -18,14 +18,14 @@ configurations {
 //If a new dependency is required then it has be added here and in the sens-webapp-backend/build.gradle
 //or it could be included in built shadow JAR by using pluginJar configuration.
 dependencies {
-  compile libraries.javax_validation_api
+  implementation libraries.javax_validation_api
 
-  compile libraries.spring_boot_autoconfigure
-  compile libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_autoconfigure
+  implementation libraries.spring_boot_starter_undertow
 
-  compile libraries.spring_security_web
-  compile libraries.spring_security_config
-  compile libraries.spring_security_cas
+  implementation libraries.spring_security_web
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_cas
 
   implementation project(":sens-webapp-audit")
   implementation project(":sens-webapp-backend")

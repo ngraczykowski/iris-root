@@ -40,7 +40,7 @@ class ReportRestControllerIT extends BaseRestControllerTest {
         .log().ifValidationFails()
         .statusCode(OK.value())
         .headers(Map.of("Content-Disposition", "attachment; filename=" + REPORT_NAME))
-        .content(
+        .body(
             containsString(
                 "Requested query parameters:\nparamA=paramValueABC\nparamB=paramValueEFG"));
   }

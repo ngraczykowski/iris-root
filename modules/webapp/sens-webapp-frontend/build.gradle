@@ -7,21 +7,49 @@ buildscript {
 plugins {
   id "base"
   id "maven-publish"
-  id "com.liferay.node" version "4.6.6"
+  id "com.liferay.node" version "7.0.5"
 }
 
 node {
-  nodeVersion = "10.15.3"
-  npmVersion = "6.9.0"
+  nodeVersion = "10.20.1"
+  npmVersion = "6.14.5"
   download = true
   nodeDir = "${project.projectDir}/node"
+}
+
+tasks.named("npmInstall").configure {
+  /* NOTE(tkleszcz):
+  Gradle Build Cache must be disabled for npm install task because node_modules directory contains symlinks.
+  Gradle Build Cache does not supports symlinks and stores actual files content in the cache.
+  NPM relies on the fact that node_modules contains symlinks.
+  When Gradle Build Cache provides files instead of symlinks the build fails.
+  https://github.com/srs/gradle-node-plugin/issues/225
+  https://guides.gradle.org/using-build-cache/#symbolic_links
+  https://github.com/gradle/gradle/issues/3525
+   */
+  outputs.cacheIf { false }
+  useNpmCI = true
+}
+
+tasks.named("downloadNode").configure {
+  // Node contains links as well and cannot be cached
+  outputs.cacheIf { false }
+}
+
+tasks.named("packageRunBuild").configure {
+  inputs.file("package.json").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.file("package-lock.json").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir("src").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir("node_modules").withPathSensitivity(PathSensitivity.RELATIVE)
+  outputs.dir("$buildDir/dist")
+  outputs.cacheIf { true }
 }
 
 tasks.register("compile").configure {
   group = BasePlugin.BUILD_GROUP
   description = "Compiles this project."
 
-  dependsOn tasks.named("npmRunBuild")
+  dependsOn tasks.named("packageRunBuild")
 }
 
 tasks.register("zip", Zip) {
@@ -36,14 +64,14 @@ tasks.register("test").configure {
   group = LifecycleBasePlugin.VERIFICATION_GROUP
   description = "Runs all tests."
 
-//  dependsOn tasks.named("npmRunTestHeadless") TODO(bgulowaty): WA-85
+//  dependsOn tasks.named("packageRunTestHeadless") TODO(bgulowaty): WA-85
 }
 
 tasks.register("lint").configure {
   group = LifecycleBasePlugin.VERIFICATION_GROUP
   description = "Runs TSLint on project."
 
-  dependsOn tasks.named("npmRunLint")
+  dependsOn tasks.named("packageRunLint")
 }
 
 tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {

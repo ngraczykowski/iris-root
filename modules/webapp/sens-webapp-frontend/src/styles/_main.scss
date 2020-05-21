@@ -1,4 +1,7 @@
-@import 'abstracts/_abstracts-dir';
-@import 'theme/_theme-dir';
-@import 'base/_base-dir';
-@import 'layout/_layout-dir';
+@import 'external/_main';
+@import 'abstracts/_main';
+@import 'theme/_mian';
+@import 'base/_main';
+@import 'layout/_main';
+@import 'components/_main';
+@import 'material-ui-adjustments/_main';

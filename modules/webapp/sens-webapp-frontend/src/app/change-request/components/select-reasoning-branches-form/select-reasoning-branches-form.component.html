@@ -1,0 +1,39 @@
+<div class="form">
+  <div class="form__content">
+    <mat-form-field appearance="outline" class="mat-form-field--full-width">
+      <mat-label [translate]="translatePrefix + 'decisionTree.label'"></mat-label>
+      <input matInput required>
+      <mat-hint [translate]="translatePrefix + 'decisionTree.hint'"></mat-hint>
+      <mat-error [translate]="translatePrefix + 'decisionTree.errorEmpty'"></mat-error>
+      <mat-error [translate]="translatePrefix + 'decisionTree.errorValue'"></mat-error>
+    </mat-form-field>
+
+    <mat-button-toggle-group name="rbInput" aria-label="RB Input">
+      <mat-button-toggle value="id">
+        <span [translate]="translatePrefix + 'rbIdType.rbID'"></span>
+      </mat-button-toggle>
+      <mat-button-toggle value="featureVector">
+        <span [translate]="translatePrefix + 'rbIdType.rbSignature'"></span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-form-field class="mat-form-field--full-width" appearance="outline">
+      <mat-label [translate]="translatePrefix + 'rbId.label'"></mat-label>
+      <textarea matInput required></textarea>
+      <mat-hint [translate]="translatePrefix + 'rbId.hint'"></mat-hint>
+      <mat-error [translate]="translatePrefix + 'rbId.errorCharacterLimit'"></mat-error>
+      <mat-error [translate]="translatePrefix + 'rbId.errorEmpty'"></mat-error>
+      <mat-error [translate]="translatePrefix + 'rbId.errorVerificationFail'"></mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mat-form-field--full-width" appearance="outline">
+      <mat-label [translate]="translatePrefix + 'rbSignature.label'"></mat-label>
+      <textarea matInput required></textarea>
+      <mat-hint [translate]="translatePrefix + 'rbSignature.hint'"></mat-hint>
+      <mat-error [translate]="translatePrefix + 'rbSignature.errorCharacterLimit'"></mat-error>
+      <mat-error [translate]="translatePrefix + 'rbSignature.errorEmpty'"></mat-error>
+      <mat-error [translate]="translatePrefix + 'rbSignature.errorVerificationFail'"></mat-error>
+    </mat-form-field>
+  </div>
+
+</div>

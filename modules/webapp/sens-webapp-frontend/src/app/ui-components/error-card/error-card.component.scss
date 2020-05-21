@@ -1,0 +1,41 @@
+@import 'src/styles/abstracts/8-pt-grid';
+@import 'src/styles/theme/theme_variables';
+
+.error-card {
+
+  &--margin {
+    margin-bottom: calculate-8-pt-grid(4);
+  }
+
+  &__header {
+    line-height: calculate-8-pt-grid(3);
+  }
+
+  &__title {
+    margin-left: calculate-8-pt-grid(2);
+  }
+
+  &__cta {
+    text-align: right;
+    display: block;
+  }
+
+  &__list {
+    display: block;
+    list-style-type: none;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-start: 0;
+    margin-top: calculate-8-pt-grid(4);
+  }
+
+  &__list-item {
+    &:last-child {
+      .mat-divider {
+        display: none;
+      }
+    }
+  }
+}

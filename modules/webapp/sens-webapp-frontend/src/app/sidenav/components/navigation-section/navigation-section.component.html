@@ -1,4 +1,4 @@
-<mat-nav-list *ngIf="sectionData.visible" class="vertical-rhythm--2">
+<mat-nav-list *ngIf="sectionData.visible" class="navigation-section">
   <h3 matSubheader [translate]="sectionData.name"></h3>
   <div *ngFor="let link of sectionData.links">
     <app-navigation-element [navElement]="link"></app-navigation-element>
