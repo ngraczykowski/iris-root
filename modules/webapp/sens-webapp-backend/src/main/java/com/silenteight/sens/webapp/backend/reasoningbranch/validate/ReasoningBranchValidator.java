@@ -23,11 +23,9 @@ public class ReasoningBranchValidator {
 
   public Map<Long, String> validate(
       long treeId, List<Long> branchIds, List<String> featureVectorSignatures) {
-    Map<Long, String> existingBranchIds =
-        isNotEmpty(branchIds) ?
-        validateIds(treeId, branchIds) :
-        validateSignatures(treeId, featureVectorSignatures);
-    return existingBranchIds;
+    return isNotEmpty(branchIds) ?
+       validateIds(treeId, branchIds) :
+       validateSignatures(treeId, featureVectorSignatures);
   }
 
   public Map<Long, String> validateIds(long treeId, List<Long> branchIds) {

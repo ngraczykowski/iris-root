@@ -62,7 +62,6 @@ dependencies {
   testImplementation libraries.rest_assured
   testImplementation libraries.rest_assured_spring_mock_mvc
   testImplementation libraries.spring_security_test
-  testImplementation libraries.test_jayway_json_path_assert
 }
 
 jar {

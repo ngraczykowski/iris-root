@@ -19,8 +19,6 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 import java.util.Map;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchRestControllerTest.ReasoningBranchRestControllerFixtures.*;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
@@ -135,7 +133,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           .willReturn(failure(new BranchIdsNotFoundException(List.of(123L, 456L))));
 
       patch(mappingForBranches(TREE_ID), BRANCHES_CHANGE_REQUEST)
-          .body(containsString("\"branchIds\":[123,456]"))
+          .body("extras.branchIds", hasItems(123, 456))
           .statusCode(BAD_REQUEST.value());
     }
 
@@ -185,10 +183,8 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
       put(
           mappingForValidation(TREE_ID), new BranchIdsAndSignaturesDto(branchIds, null))
           .statusCode(OK.value())
-          .body(isJson(allOf(
-              withJsonPath("$.branchIds[*].branchId", hasItems(345, 678)),
-              withJsonPath(
-                  "$.branchIds[*].featureVectorSignature", hasItems("SignatureA", "SignatureB")))));
+          .body("branchIds.branchId", hasItems(345, 678))
+          .body("branchIds.featureVectorSignature", hasItems("SignatureA", "SignatureB"));
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
@@ -201,10 +197,8 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           mappingForValidation(TREE_ID),
           new BranchIdsAndSignaturesDto(null, featureVectorSignatures))
           .statusCode(OK.value())
-          .body(isJson(allOf(
-              withJsonPath("$.branchIds[*].branchId", hasItems(346, 679)),
-              withJsonPath(
-                  "$.branchIds[*].featureVectorSignature", hasItems("SignatureA", "SignatureB")))));
+          .body("branchIds.branchId", hasItems(346, 679))
+          .body("branchIds.featureVectorSignature", hasItems("SignatureA", "SignatureB"));
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
@@ -224,7 +218,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           mappingForValidation(TREE_ID),
           new BranchIdsAndSignaturesDto(List.of(BRANCH_NO_1, BRANCH_NO_2), null))
           .statusCode(BAD_REQUEST.value())
-          .body(containsString("\"branchIds\":[123,456]"));
+          .body("extras.branchIds", hasItems(123, 456));
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
@@ -238,7 +232,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           mappingForValidation(TREE_ID),
           new BranchIdsAndSignaturesDto(null, signaturesToValidate))
           .statusCode(BAD_REQUEST.value())
-          .body(containsString("\"featureVectorSignatures\":[\"Signature12\",\"Signature34\"]"));
+          .body("extras.featureVectorSignatures", hasItems("Signature12", "Signature34"));
     }
   }
 
