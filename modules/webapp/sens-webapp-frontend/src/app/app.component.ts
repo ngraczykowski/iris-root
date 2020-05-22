@@ -11,6 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
 
+  showNavigation = false;
+
   constructor(
       private translate: TranslateService,
       private backgroundServicesManager: BackgroundServicesManager,
@@ -41,5 +43,10 @@ export class AppComponent {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  shouldShowNavigation(showNavigation) {
+    this.showNavigation = showNavigation;
+    console.log(showNavigation);
   }
 }

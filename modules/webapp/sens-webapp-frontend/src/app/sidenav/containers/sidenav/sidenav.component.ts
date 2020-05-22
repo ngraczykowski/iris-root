@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 
 @Component({
@@ -8,9 +8,10 @@ import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user
 })
 export class SidenavComponent implements OnInit {
 
+  @Output() showNavigation = new EventEmitter();
+
   sectionsPrefix = 'sideNav.sections.';
 
-  showNav = false;
   mainNav = [
     {
       name: this.sectionsPrefix + 'reasoningBranches',
@@ -23,7 +24,7 @@ export class SidenavComponent implements OnInit {
         },
         {
           label: 'changeRequest.title',
-          url: 'reasoning-branches/change-request',
+          url: '/reasoning-branches/change-request',
           icon: 'add_circle'
         }
       ]
@@ -34,7 +35,7 @@ export class SidenavComponent implements OnInit {
       links: [
         {
           label: 'usersList.title',
-          url: '/user-management',
+          url: '/users/user-management',
           icon: 'people'
         }
       ]
@@ -50,7 +51,7 @@ export class SidenavComponent implements OnInit {
         },
         {
           label: 'securityMatrix.title',
-          url: '/security-matrix',
+          url: '/reports/security-matrix',
           icon: 'lock'
         }
       ]
@@ -70,11 +71,11 @@ export class SidenavComponent implements OnInit {
       section.links.forEach((link, linkIndex) => {
         if (this.authenticatedUser.checkUrlAccess(link.url)) {
           section.visible = true;
+          this.showNavigation.emit(true);
         } else {
           section.links.splice(linkIndex, 1);
         }
       });
     });
-    this.showNav = true;
   }
 }

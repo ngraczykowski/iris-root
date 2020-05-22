@@ -3,8 +3,8 @@
 <app-brief-message></app-brief-message>
 
 <mat-sidenav-container class="app-container">
-  <mat-sidenav mode="side" disableClose opened class="app-container__navigation">
-    <app-sidenav></app-sidenav>
+  <mat-sidenav mode="side" disableClose opened class="app-container__navigation" [class.app-container__navigation--active]="showNavigation">
+    <app-sidenav (showNavigation)="shouldShowNavigation($event)"></app-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="app-container__content">
     <router-outlet (activate)="onActivate($event)"></router-outlet>

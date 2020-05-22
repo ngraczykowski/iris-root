@@ -24,7 +24,7 @@ export const routes: Routes = [
     redirectTo: '/reasoning-branch',
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator']
+      authorities: ['Admin', 'Business Operator']
     }
   },
   {
@@ -33,7 +33,7 @@ export const routes: Routes = [
     component: ReasoningBranchManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator']
+      authorities: ['Admin', 'Business Operator']
     }
   },
   {
@@ -42,7 +42,7 @@ export const routes: Routes = [
     component: ReasoningBranchManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator']
+      authorities: ['Admin', 'Business Operator']
     }
   },
   {
@@ -51,7 +51,7 @@ export const routes: Routes = [
     component: ChangeRequestComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator']
+      authorities: ['Admin', 'Business Operator']
     }
   },
   {
@@ -64,7 +64,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'user-management',
+    path: 'users/user-management',
     component: UserManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
@@ -72,7 +72,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'security-matrix',
+    path: 'reports/security-matrix',
     component: SecurityMatrixComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
@@ -125,8 +125,8 @@ export const routes: Routes = [
 ];
 
 export const rolesByRedirect: Map<string, string> = new Map([
-  ['Admin', '/user-management'],
+  ['Admin', 'users/user-management'],
   ['Business Operator', '/reasoning-branch'],
-  ['Auditor', '/reports'],
+  ['Auditor', 'reports/audit-trail'],
   ['Analyst', '/analyst'],
 ]);

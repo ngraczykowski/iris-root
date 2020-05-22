@@ -13,8 +13,8 @@ import { rolesByRedirect } from '@app/app-routes';
 export class AuthenticatedUserFacade {
 
   constructor(
-    private readonly store: Store<fromRoot.State>,
-    private readonly keycloak: KeycloakService,
+      private readonly store: Store<fromRoot.State>,
+      private readonly keycloak: KeycloakService,
   ) { }
 
   isLoggedIn(): Observable<boolean> {
@@ -31,7 +31,7 @@ export class AuthenticatedUserFacade {
 
   hasAuthorities(requiredAuthorities: string[]): Observable<boolean> {
     return this.store.pipe(
-      select(hasAllAuthorities(requiredAuthorities))
+        select(hasAllAuthorities(requiredAuthorities))
     );
   }
 
@@ -62,15 +62,18 @@ export class AuthenticatedUserFacade {
       return true;
     }
 
-    switch (url) {
-      case '/reasoning-branch':
-        return roles.includes('Business Operator');
+    if (url.includes('reasoning-branch')) {
+      return roles.includes('Business Operator');
+    } // TODO Remove with Reasoning-branch
 
-      case '/reports':
-        return roles.includes('Auditor');
-
-      default:
-        return false;
+    if (url.includes('reasoning-branches')) {
+      return roles.includes('Business Operator');
     }
+
+    if (url.includes('reports')) {
+      return roles.includes('Auditor');
+    }
+
+    return false;
   }
 }
