@@ -15,7 +15,7 @@ Queue -> Backend : ChangeRequest Reject Command
 note over Queue, Backend
     * Bulk Change Id
     * Username
-    * Creation At
+    * Rejected At
 end note
 
 activate Backend
@@ -24,8 +24,11 @@ Backend -> WebAppDB : Update ChangeRequest
 
 note over Backend, WebAppDB
     * Status = Rejected
-    * Approver Username
+    * Decided By
+    * Decided At
 end note
+
+Backend <-> WebAppDB : Fetch Bulk Change Id
 
 Backend -> Queue : Bulk Change Reject Command
 note over Queue, Backend

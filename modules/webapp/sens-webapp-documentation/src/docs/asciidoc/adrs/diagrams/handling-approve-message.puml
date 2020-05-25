@@ -13,9 +13,9 @@ end box
 Queue -> Backend : ChangeRequest Approve Command
 
 note over Queue, Backend
-    * Bulk Change Id
+    * Change Request Id
     * Username
-    * Creation At
+    * Approve At
 end note
 
 activate Backend
@@ -23,9 +23,12 @@ activate Backend
 Backend -> WebAppDB : Update ChangeRequest
 
 note over Backend, WebAppDB
-    * Status = Accepted
-    * Approver Username
+    * Status = Approved
+    * Decided By
+    * Decided At
 end note
+
+Backend <-> WebAppDB : Fetch Bulk Change Id
 
 Backend -> Queue : Bulk Change Apply Command
 note over Queue, Backend

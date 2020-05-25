@@ -20,30 +20,40 @@ box "RabbitMQ"
     queue Queue order 50
 end box
 
-Frontend ->> Backend : Fetch approver queue
+Frontend ->> Backend : Fetch Change Requests
 
 activate Backend
 Backend <-> WebAppDB : Fetch pending Change Requests
 note over Backend, WebAppDB
     * Change Request Id
-    * Bulk Change Id (UUID)
+    * Bulk Change Id
     * Username
     * Comment
     * Attachments URLs
     * Creation At
 end note
-Backend <-> Governance : Fetch BulkChange (Reasoning Branches details)
+Backend -->> Frontend : Change Requests list
+deactivate Backend
+
+
+Frontend ->> Backend : Fetch Bulk Changes
+activate Backend
+Backend <-> Governance : Fetch pending Bulk Changes
 note over Backend, Governance
+    * Bulk Change Id
     * List of RB Ids
     * AI Solution (possible 'no change')
     * Status (possible 'no change')
 end note
-note over Frontend, Governance
-    If we are not able to fetch BulkChange details we should hide the apply/reject button.
-end note
 
-Backend -->> Frontend : Change Requests list
+Backend -->> Frontend : Bulk Change list
 deactivate Backend
+
+Frontend -->> Frontend : Merge Bulk Change List and ChangeRequest List
+note over Frontend
+    If we are not able to fetch BulkChange details
+    we should hide the apply/reject button.
+end note
 
 Frontend -->> Approver : Present list of Pending Change Requests
 
@@ -55,9 +65,9 @@ Frontend ->> Backend : Change Request Approve request
 
 Backend -> Queue : Send ChangeRequest Approve Command
 note over Backend, Queue
-    * Bulk Change Id (UUID)
+    * ChangeRequest Id
     * Approver Username
-    * Created At
+    * Approved At
 end note
 
 Backend -->> Frontend : Approval success result
@@ -72,9 +82,9 @@ Frontend ->> Backend : Change Request reject request
 
 Backend -> Queue : Send ChangeRequest Reject Command
 note over Backend, Queue
-    * Bulk Change Id (UUID)
+    * ChangeRequest Id
     * Approver Username
-    * Created At
+    * Rejected At
 end note
 
 Backend -->> Frontend : Approval reject result

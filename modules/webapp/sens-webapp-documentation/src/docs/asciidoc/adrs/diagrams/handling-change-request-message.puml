@@ -24,10 +24,10 @@ Queue -> Backend : ChangeRequest Command
 Backend -> WebAppDB : Persist new Change Request
     note over Backend, WebAppDB
         * Bulk Change Id (UUID)
-        * Username
+        * Created By
+        * Created At
         * Comment
         * Attachments Urls
-        * Creation At
     end note
 
 deactivate Backend
