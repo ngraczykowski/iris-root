@@ -1,0 +1,44 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+serp.rabbitmq.host: localhost
+serp.rabbitmq.port: 24021
+serp.rabbitmq.user: serp
+serp.rabbitmq.password: serp
+#serp.rabbitmq.addresses: ${serp.rabbitmq.host}:${serp.rabbitmq.port}
+serp.messaging.concurrency: 4
+serp.messaging.prefetch: 25
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+spring:
+  rabbitmq:
+    # virtual-host:
+    # addresses: ${serp.rabbitmq.addresses}
+    host: ${serp.rabbitmq.host}
+    port: ${serp.rabbitmq.port}
+    username: ${serp.rabbitmq.user}
+    password: ${serp.rabbitmq.password}
+    ssl:
+      enabled: true
+      key-store: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+      key-store-password: ${serp.keystore.password}
+      trust-store: file:${serp.home}/cert/truststore.p12
+      trust-store-password: ${serp.truststore.password}
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+
+# Spring Integration
+integration:
+  start-delay-seconds: 15
+  poll-period-millis: 1000

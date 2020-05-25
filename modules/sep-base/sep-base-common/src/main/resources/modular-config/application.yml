@@ -1,0 +1,182 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+serp.web.threads.io: 4
+serp.web.threads.worker: 16
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+serp.execution.threads: 8
+serp.execution.threads.max: 16
+serp.execution.queue: 10000
+
+serp.scheduling.threads: 2
+
+# XXX(ahaczewski): Temporarily set to true, until we're sure customer correctly configured SERP.
+serp.show-env: true
+
+#---------------------------------------------------------------------------------------------------
+# SERVICE DISCOVERY
+#---------------------------------------------------------------------------------------------------
+serp.consul.discovery.enabled: ${serp.consul.enabled}
+
+#---------------------------------------------------------------------------------------------------
+# mTLS - enabled by default
+#---------------------------------------------------------------------------------------------------
+serp.consul.traefik.passTLSCert: true
+serp.consul.traefik.entryPoints: gateway
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+# Embedded server configuration
+server:
+  port: 0
+  use-forward-headers: true
+  undertow:
+    io-threads: ${serp.web.threads.io}
+    worker-threads: ${serp.web.threads.worker}
+
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+  ssl:
+    enabled: true
+    key-store: ${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+    key-store-password: ${serp.keystore.password}
+    key-alias: serp ${spring.application.name}
+    trust-store: ${serp.home}/cert/truststore.p12
+    trust-store-password: ${serp.truststore.password}
+    client-auth: need
+
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+# Management HTTP server
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+    # loggers endpoint is secured with mTLS
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+spring:
+  # AOP configuration - disabled due to AspectJ compile-time weaving use
+  aop:
+    auto: false
+
+  # Task execution and scheduling
+  task:
+    execution:
+      pool:
+        core-size: ${serp.execution.threads}
+        max-size: ${serp.execution.threads.max}
+        queue-capacity: ${serp.execution.queue}
+        keep-alive: 10s
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool.size: ${serp.scheduling.threads}
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+
+  groovy:
+    template:
+      check-template-location: false
+
+  #---------------------------------------------------------------------------------------------------
+  # SERVICE DISCOVERY
+  #---------------------------------------------------------------------------------------------------
+  cloud:
+    service-registry:
+      enabled: ${serp.consul.enabled}
+
+      auto-registration:
+        enabled: ${serp.consul.enabled}
+
+    consul:
+      discovery:
+        enabled: ${serp.consul.discovery.enabled}
+        scheme: https
+        health-check-path: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
+        instance-id: ${serp.consul.instance}
+        prefer-ip-address: true
+        tags:
+          - "traefik.frontend.rule=PathPrefix: ${server.servlet.context-path}"
+          - "traefik.protocol=https"
+          - "traefik.frontend.entryPoints=${serp.consul.traefik.entryPoints}"
+          - "traefik.frontend.passTLSCert=${serp.consul.traefik.passTLSCert}"
+          - "prometheus.metrics.path=${server.servlet.context-path}${management.endpoints.web.base-path}/prometheus"
+
+        catalog-services-watch:
+          enabled:  ${serp.consul.discovery.enabled}
+
+        heartbeat:
+          enabled: ${serp.consul.discovery.enabled}
+
+consul:
+  grpc:
+    registration:
+      tags:
+        - "traefik.frontend.rule=Host: grpc-${spring.application.name}.service.consul"
+        - "traefik.protocol=https"
+        - "traefik.frontend.entryPoints=gateway"
+        - "traefik.frontend.passTLSCert=true"
+
+grpc:
+  server:
+    port: 0
+    security:
+      enabled: true
+      clientAuth: REQUIRE
+      certificateChain: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-chain.pem
+      privateKey: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-key-pkcs8.pem
+      trustCertCollection: file:${serp.home}/cert/chain.pem
+
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: TLS
+      security:
+        clientAuthEnabled: true
+        certificateChain: file:${serp.home}/cert/user/user-chain.pem
+        privateKey: file:${serp.home}/cert/user/user-key-pkcs8.pem
+        trustCertCollection: file:${serp.home}/cert/chain.pem
+
+    governance:
+      address: discovery:///grpc-governance
+
+    reco:
+      address: discovery:///grpc-reco
+
+    name-agent:
+      address: discovery:///grpc-name-agent

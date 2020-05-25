@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.serp.aspects.metrics.MetricAspectsAutoConfiguration,\
+  com.silenteight.serp.aspects.validation.ValidationAspectsAutoConfiguration

@@ -1,0 +1,96 @@
+### Various ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.DS_Store
+*.bak
+*.orig
+
+### jenv ###
+.java-version
+
+### IntelliJ IDEA ###
+/.idea/*/
+/.idea/*.xml
+out/
+*.iws
+*.iml
+*.ipr
+.attach_pid*
+
+### Excluded IntelliJ IDEA configuratiojn ###
+!/.idea/inspectionProfiles/
+!/.idea/runConfigurations/
+!/.idea/codeStyles/
+!/.idea/checkstyle-idea.xml
+!/.idea/sqldialects.xml
+!/.idea/misc.xml
+
+### Gradle ###
+build/
+.gradle/
+
+### Docker ###
+/.env
+
+### User configuration ###
+/conf/prometheus/prometheus.yml
+/conf/traefik/traefik.toml
+/conf/*.properties
+/conf/*.yml
+/conf/settings.toml
+/conf/settings.toml.*.backup
+/conf/consul/consul.hcl
+/conf/rabbitmq/rabbitmq.conf
+/conf/rabbitmq/rabbitmq-env.conf
+/conf/supervisor/supervisord.conf
+/conf/grafana/config.ini
+/conf/grafana/provisioning/datasources/prometheus.yml
+/conf/keycloak/standalone.xml
+/conf/keycloak/standalone_xml_history/
+/conf/keycloak/logging.properties
+/conf/keycloak/keycloak-add-user.json
+/conf/caddy/Caddyfile
+/conf/caddy/caddy.json
+/conf/agent/bootstrap.properties
+/conf/serp/bootstrap.properties
+/conf/sens/bootstrap.properties
+/conf/name-agent
+
+### Installation ###
+/tmp/
+/opt/
+/run/
+/data/
+/log/**/*.log
+/log/**/*.log.*
+/log/**/*.json
+/log/**/*.json.*
+/log/**/*.txt
+!/log/.keep
+/lib/
+/plugin/
+/.dependencies/
+/.serp-opt-installer.version
+/cert/
+/html/
+
+### SERP Auto Installer ###
+/scripts/serp-auto-installer/serp-auto-installer-settings.sh
+/scripts/serp-auto-installer/serp/
+/scripts/serp-auto-installer/*.run
+
+### Python ###
+__pycache__/
+*.egg-info/
+*.dist-info/
+.eggs/
+.pip-cache/
+.pytest_cache/
+venv/
+
+### Jupyter Notebooks ###
+.ipynb_checkpoints/

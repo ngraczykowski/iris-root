@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <property name="batch.type.text" value="TEXT" dbms="postgresql, mysql"/>
+  <property name="batch.type.text" value="CLOB" dbms="oracle"/>
+
+  <changeSet id="spring-batch-1" author="ahaczewski">
+    <!-- BATCH_JOB_INSTANCE -->
+    <createTable tableName="batch_job_instance">
+      <column name="job_instance_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="job_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="job_key" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="batch_job_instance"
+        indexName="ix_batch_job_instance_job_name_job_key"
+        unique="true">
+      <column name="job_name"/>
+      <column name="job_key"/>
+    </createIndex>
+
+    <!-- BATCH_JOB_EXECUTION -->
+    <createTable tableName="batch_job_execution">
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="job_instance_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="create_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="start_time" type="TIMESTAMP" defaultValue="NULL"/>
+      <column name="end_time" type="TIMESTAMP" defaultValue="NULL"/>
+      <column name="status" type="VARCHAR(10)"/>
+      <column name="exit_code" type="VARCHAR(2500)"/>
+      <column name="exit_message" type="VARCHAR(2500)"/>
+      <column name="last_updated" type="TIMESTAMP"/>
+      <column name="job_configuration_location" type="VARCHAR(2500)"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="batch_job_execution"
+        baseColumnNames="job_instance_id"
+        constraintName="fk_batch_job_execution_job_instance_id"
+        referencedTableName="batch_job_instance"
+        referencedColumnNames="job_instance_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createIndex
+        tableName="batch_job_execution"
+        indexName="ix_batch_job_execution_job_instance_id"
+        unique="false">
+      <column name="job_instance_id"/>
+    </createIndex>
+
+    <!-- BATCH_JOB_EXECUTION_PARAMS -->
+    <createTable tableName="batch_job_execution_params">
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type_cd" type="VARCHAR(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="key_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="string_val" type="VARCHAR(250)"/>
+      <column name="date_val" type="TIMESTAMP" defaultValue="NULL"/>
+      <column name="long_val" type="BIGINT"/>
+      <column name="double_val" type="DOUBLE PRECISION"/>
+      <column name="identifying" type="CHAR(1)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="batch_job_execution_params"
+        baseColumnNames="job_execution_id"
+        constraintName="fk_batch_job_execution_params_job_execution_id"
+        referencedTableName="batch_job_execution"
+        referencedColumnNames="job_execution_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createIndex
+        tableName="batch_job_execution_params"
+        indexName="ix_batch_job_execution_params_job_execution_id"
+        unique="false">
+      <column name="job_execution_id"/>
+    </createIndex>
+
+    <!-- BATCH_STEP_EXECUTION -->
+    <createTable tableName="batch_step_execution">
+      <column name="step_execution_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="version" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="start_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="end_time" type="TIMESTAMP"/>
+      <column name="status" type="VARCHAR(10)"/>
+      <column name="commit_count" type="BIGINT"/>
+      <column name="read_count" type="BIGINT"/>
+      <column name="filter_count" type="BIGINT"/>
+      <column name="write_count" type="BIGINT"/>
+      <column name="read_skip_count" type="BIGINT"/>
+      <column name="write_skip_count" type="BIGINT"/>
+      <column name="process_skip_count" type="BIGINT"/>
+      <column name="rollback_count" type="BIGINT"/>
+      <column name="exit_code" type="VARCHAR(2500)"/>
+      <column name="exit_message" type="VARCHAR(2500)"/>
+      <column name="last_updated" type="TIMESTAMP"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="batch_step_execution"
+        baseColumnNames="job_execution_id"
+        constraintName="fk_batch_step_execution_job_execution_id"
+        referencedTableName="batch_job_execution"
+        referencedColumnNames="job_execution_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createIndex
+        tableName="batch_step_execution"
+        indexName="ix_batch_step_execution_job_execution_id"
+        unique="false">
+      <column name="job_execution_id"/>
+    </createIndex>
+
+    <!-- BATCH_STEP_EXECUTION_CONTEXT -->
+    <createTable tableName="batch_step_execution_context">
+      <column name="step_execution_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="short_context" type="VARCHAR(2500)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="serialized_context" type="${batch.type.text}"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="batch_step_execution_context"
+        baseColumnNames="step_execution_id"
+        constraintName="fk_batch_step_execution_context_step_execution_id"
+        referencedTableName="batch_step_execution"
+        referencedColumnNames="step_execution_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createIndex
+        tableName="batch_step_execution_context"
+        indexName="ix_batch_step_execution_context_step_execution_id"
+        unique="false">
+      <column name="step_execution_id"/>
+    </createIndex>
+
+    <!-- BATCH_JOB_EXECUTION_CONTEXT -->
+    <createTable tableName="batch_job_execution_context">
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="short_context" type="VARCHAR(2500)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="serialized_context" type="${batch.type.text}"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="batch_job_execution_context"
+        baseColumnNames="job_execution_id"
+        constraintName="fk_batch_job_execution_context_job_execution_id"
+        referencedTableName="batch_job_execution"
+        referencedColumnNames="job_execution_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createIndex
+        tableName="batch_job_execution_context"
+        indexName="ix_batch_job_execution_context_job_execution_id"
+        unique="false">
+      <column name="job_execution_id"/>
+    </createIndex>
+
+    <!-- BATCH_STEP_EXECUTION_SEQ -->
+    <createSequence
+        sequenceName="batch_step_execution_seq"
+        maxValue="9223372036854775807"
+        cycle="false"/>
+
+    <!-- BATCH_JOB_EXECUTION_SEQ -->
+    <createSequence
+        sequenceName="batch_job_execution_seq"
+        maxValue="9223372036854775807"
+        cycle="false"/>
+
+    <!-- BATCH_JOB_SEQ -->
+    <createSequence
+        sequenceName="batch_job_seq"
+        maxValue="9223372036854775807"
+        cycle="false"/>
+  </changeSet>
+</databaseChangeLog>

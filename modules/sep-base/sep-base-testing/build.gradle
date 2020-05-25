@@ -1,0 +1,43 @@
+plugins { id "java-library" }
+
+description = "SERP Common Testing"
+
+dependencies {
+  api libraries.junit_jupiter_api
+  api libraries.spring_test
+  api libraries.spring_boot_test
+  api libraries.spring_boot_test_autoconfigure
+  api libraries.test_containers
+  api libraries.test_containers_spock
+  api libraries.grpc_testing
+  api libraries.reactor_test
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.spring_amqp
+  implementation libraries.spring_jdbc
+  implementation libraries.spring_tx
+
+  implementation libraries.spring_boot
+  implementation libraries.spring_boot_autoconfigure
+
+  implementation libraries.spring_aspects
+
+  implementation libraries.test_containers_elasticsearch
+  implementation libraries.test_containers_junit_jupiter
+  implementation libraries.test_containers_oracle_xe
+  implementation libraries.test_containers_postgresql
+
+  implementation libraries.grpc_stub
+
+  implementation libraries.protobuf_java_util
+
+  implementation libraries.bouncycastle_bcprov
+
+  // NOTE(ahaczewski): There seems like there is a dependency cycle between sep-base-common
+  //  and sep-base-testing, as both depend on each other, but it is not true, as sep-base-common
+  //  depends on sep-base-testing in testImplementation configuration (i.e. is added
+  //  to the testing classpath), while sep-base-testing depends non-transitively
+  //  on sep-base-common in implementation configuration.
+  implementation project(":sep-base-common")
+}

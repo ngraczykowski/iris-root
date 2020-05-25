@@ -1,0 +1,77 @@
+plugins {
+  id "java-library"
+}
+
+description = "SEP Base Common"
+
+java {
+  registerFeature("database") {
+    usingSourceSet(sourceSets.main)
+    capability("com.silenteight.sep.base", "sep-base-common-database", "1.0")
+  }
+  registerFeature("messaging") {
+    usingSourceSet(sourceSets.main)
+    capability("com.silenteight.sep.base", "sep-base-common-messaging", "1.0")
+  }
+}
+
+configurations {
+  testImplementation.extendsFrom databaseImplementation, messagingImplementation
+}
+
+dependencies {
+  // API dependencies
+  api libraries.jackson_annotations
+  api libraries.jackson_databind
+  api libraries.protobuf_java
+  api libraries.silenteight_commons_app
+  api libraries.spring_beans
+  api libraries.spring_boot_autoconfigure
+  api libraries.spring_core
+  api libraries.spring_tx
+  api libraries.spring_web
+
+  // General dependencies
+  implementation libraries.classgraph
+  implementation libraries.commons_codec
+  implementation libraries.commons_lang3
+  implementation libraries.guava
+  implementation libraries.jakarta_servlet_api
+  implementation libraries.micrometer_core
+  implementation libraries.protobuf_java_util
+  implementation libraries.grpc_protobuf
+  implementation libraries.silenteight_commons_core
+  implementation libraries.spring_boot_actuator
+  implementation libraries.spring_context
+  implementation libraries.spring_data_commons
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_cloud_starter_sleuth
+
+  implementation libraries.byte_buddy_agent
+  implementation libraries.bouncycastle_bcprov
+  implementation libraries.logback_classic
+
+  runtimeOnly libraries.logback_ecs_encoder
+  runtimeOnly libraries.logstash_logback_encoder
+
+  // Messaging-related dependencies
+  messagingImplementation libraries.amqp_client
+  messagingImplementation libraries.lz4_java
+  messagingImplementation libraries.spring_amqp
+  messagingImplementation libraries.spring_amqp_rabbit
+  messagingImplementation libraries.spring_integration_amqp
+
+  // Database-related dependencies
+  databaseImplementation libraries.hibernate_core
+  databaseImplementation libraries.hibernate_envers
+  databaseImplementation libraries.jakarta_persistence_api
+  databaseImplementation libraries.spring_orm
+
+  // Support for Spring Batch
+  compileOnly libraries.spring_batch_core
+
+  // Support for gRPC
+  compileOnly libraries.grpc_server_spring_boot_starter
+
+  testImplementation project(":sep-base-testing")
+}

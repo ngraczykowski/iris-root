@@ -1,0 +1,3 @@
+# Setup Spring environment with testing configuration
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.silenteight.serp.common.testing.TestingConfigLocationEnvironmentPostProcessor
