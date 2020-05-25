@@ -1,5 +1,5 @@
 @import '~@angular/material/theming';
-@import "theme_variables.scss";
+@import "../abstracts/colors";
 
 @include mat-core();
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);

@@ -4,8 +4,7 @@ import { ConfirmChangeRequestDialogComponent } from '@app/change-request/compone
 
 @Component({
   selector: 'app-change-request-properties-container',
-  templateUrl: './change-request-properties-container.component.html',
-  styleUrls: ['./change-request-properties-container.component.scss']
+  templateUrl: './change-request-properties-container.component.html'
 })
 export class ChangeRequestPropertiesContainerComponent implements OnInit {
 

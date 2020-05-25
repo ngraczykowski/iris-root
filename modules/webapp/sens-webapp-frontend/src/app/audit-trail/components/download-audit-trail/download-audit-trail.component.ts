@@ -2,8 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-download-audit-trail',
-  templateUrl: './download-audit-trail.component.html',
-  styleUrls: ['./download-audit-trail.component.scss']
+  templateUrl: './download-audit-trail.component.html'
 })
 export class DownloadAuditTrailComponent implements OnInit {
   @Output() resetClicked = new EventEmitter();

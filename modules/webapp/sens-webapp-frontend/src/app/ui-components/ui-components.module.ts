@@ -8,11 +8,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { StateComponent } from './state/state.component';
 import { ErrorCardComponent } from './error-card/error-card.component';
+import { ValuesListComponent } from './values-list/values-list.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     StateComponent,
-    ErrorCardComponent
+    ErrorCardComponent,
+    ValuesListComponent,
+    HeaderComponent,
   ],
   imports: [
     CommonModule,
@@ -21,11 +25,13 @@ import { ErrorCardComponent } from './error-card/error-card.component';
     MatCardModule,
     MatIconModule,
     MatListModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   exports: [
     StateComponent,
-    ErrorCardComponent
+    ErrorCardComponent,
+    ValuesListComponent,
+    HeaderComponent
   ]
 })
 export class UiComponentsModule {}

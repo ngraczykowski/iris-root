@@ -1,0 +1,11 @@
+.mat-table {
+  margin-top: calculate-8-pt-grid(3);
+
+  &--full-width {
+    width: 100%;
+  }
+}
+
+.mat-header-cell {
+  font-size: 14px;
+}

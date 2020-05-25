@@ -6,6 +6,7 @@ import { rolesByRedirect, routes } from '@app/app-routes';
 import { AppComponent } from '@app/app.component';
 import { AuditTrailModule } from '@app/audit-trail/audit-trail.module';
 import { BasicRoleDefaultPageMappings } from '@app/basic-default-paegs-mappings';
+import { ChangeRequestsListModule } from '@app/change-requests-list/change-requests-list.module';
 import { ChangeRequestModule } from '@app/change-request/change-request.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
@@ -66,7 +67,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SidenavModule,
     MatSidenavModule,
     ChangeRequestModule,
-    SecurityMatrixModule
+    SecurityMatrixModule,
+    ChangeRequestsListModule,
+    ChangeRequestModule,
   ],
   providers: [
     WINDOW_PROVIDERS,

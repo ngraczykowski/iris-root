@@ -1,0 +1,7 @@
+@mixin secondary-text {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.secondary-text {
+  @include secondary-text;
+}

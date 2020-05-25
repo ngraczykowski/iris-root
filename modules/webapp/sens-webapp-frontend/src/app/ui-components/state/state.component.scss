@@ -1,10 +1,17 @@
 @import 'abstracts/8-pt-grid';
 
 .state {
-  text-align: center;
-  max-width: 400px;
   margin: auto;
   margin-bottom: calculate-8-pt-grid(4);
+  max-width: 400px;
+  text-align: center;
+
+  &--centered {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%);
+  }
 
   &__image {
     margin-bottom: calculate-8-pt-grid(4);

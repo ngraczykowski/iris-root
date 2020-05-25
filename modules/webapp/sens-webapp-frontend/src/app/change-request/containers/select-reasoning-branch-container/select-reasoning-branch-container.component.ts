@@ -5,8 +5,7 @@ import { StateContent } from '@app/ui-components/state/state';
 
 @Component({
   selector: 'app-select-reasoning-branch-container',
-  templateUrl: './select-reasoning-branch-container.component.html',
-  styleUrls: ['./select-reasoning-branch-container.component.scss']
+  templateUrl: './select-reasoning-branch-container.component.html'
 })
 export class SelectReasoningBranchContainerComponent implements OnInit {
 
@@ -22,6 +21,7 @@ export class SelectReasoningBranchContainerComponent implements OnInit {
   };
 
   rbVerification: StateContent = {
+    centered: false,
     inProgress: true,
     image: null,
     title: this.translatePrefix + 'verifying.title',

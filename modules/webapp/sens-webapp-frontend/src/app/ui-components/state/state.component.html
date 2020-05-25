@@ -1,4 +1,4 @@
-<div class="state" *ngIf="stateContent.title">
+<div class="state" [class.state--centered]="stateContent.centered">
   <div class="state__image">
     <mat-spinner *ngIf="stateContent.inProgress"></mat-spinner>
     <img *ngIf="stateContent.image" src="{{stateContent.image}}">

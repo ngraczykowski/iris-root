@@ -1,0 +1,25 @@
+<app-state [stateContent]="previewEmptyState"></app-state>
+<ng-container>
+  <div class="change-request-details">
+    <app-change-request-preview
+            [changeRequestData]="changeRequestData"
+            [changeRequestID]="changeRequestID"
+    ></app-change-request-preview>
+    <mat-list class="change-request-preview__section">
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>
+        <span [translate]="translatePrefixDecision + 'title'"></span>
+      </h3>
+      <mat-list-item>
+        <div class="change-request-details__decision">
+          <button mat-stroked-button color="warn" (click)="openRejectDialog()">
+            <span [translate]="translatePrefixDecision + 'buttons.reject'"></span>
+          </button>
+          <button mat-stroked-button color="positive" (click)="openApproveDialog()">
+            <span [translate]="translatePrefixDecision + 'buttons.approve'"></span>
+          </button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</ng-container>

@@ -1,0 +1,26 @@
+.mat-button,
+.mat-stroked-button {
+  &.mat-positive {
+    color: $positive;
+
+    &:hover {
+      background-color: #f0fff3;
+    }
+  }
+}
+
+.mat-raised-button,
+.mat-flat-button,
+.mat-fab,
+.mat-mini-fab {
+  &.mat-positive {
+    background-color: $positive;
+    color: #f0fff3;
+  }
+}
+
+.mat-icon-button {
+  &.mat-positive {
+    color: $positive;
+  }
+}

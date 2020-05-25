@@ -1,0 +1,17 @@
+<ng-container *ngIf="changeRequestData && changeRequestID">
+  <app-header [headerData]="changeRequestID"></app-header>
+  <app-values-list [valuesList]="changeRequestData.details"
+                   class="change-request-details__section"></app-values-list>
+  <mat-divider></mat-divider>
+  <app-values-list [valuesList]="changeRequestData.changes"
+                   class="change-request-details__section"></app-values-list>
+  <mat-list class="change-request-details__section">
+    <mat-divider></mat-divider>
+    <h3 mat-subheader>
+      <span [translate]="translatePrefix + 'comment.title'"></span>
+    </h3>
+    <mat-list-item class="change-request-details__comment">
+      <p class="mat-body">{{ changeRequestData.comment }}</p>
+    </mat-list-item>
+  </mat-list>
+</ng-container>

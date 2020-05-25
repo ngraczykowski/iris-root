@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-change-request-form',
-  templateUrl: './change-request-form.component.html',
-  styleUrls: ['./change-request-form.component.scss']
+  templateUrl: './change-request-form.component.html'
 })
 export class ChangeRequestFormComponent implements OnInit {
 

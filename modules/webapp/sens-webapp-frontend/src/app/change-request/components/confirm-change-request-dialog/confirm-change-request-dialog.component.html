@@ -1,13 +1,10 @@
-<div class="dialog-window">
-  <div class="dialog-window__header">
-    <mat-icon color="primary" class="dialog-window__icon">help</mat-icon>
-    <h1 class="mat-dialog-title">{{ data.title | translate }}</h1>
-  </div>
-  <div mat-dialog-content>
-    <p class="mat-body">{{data.description | translate }}</p>
-  </div>
-  <div mat-dialog-actions class="dialog-window__footer">
-    <button mat-button color="primary" (click)="onSubmitClick()">{{data.buttonCta | translate }}</button>
-    <button mat-flat-button color="primary" (click)="onCancelClick()">{{data.buttonCancel | translate }}</button>
-  </div>
+<h1 class="mat-dialog-title">{{ data.title | translate }}</h1>
+<div mat-dialog-content>
+  <p class="mat-body">{{data.description | translate }}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary"
+          (click)="onSubmitClick()">{{data.buttonCta | translate }}</button>
+  <button mat-flat-button color="primary"
+          (click)="onCancelClick()">{{data.buttonCancel | translate }}</button>
 </div>

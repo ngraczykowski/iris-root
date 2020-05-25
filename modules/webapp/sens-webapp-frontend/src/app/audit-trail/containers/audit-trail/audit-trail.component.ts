@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { GenerateReportPayload } from '@app/audit-trail/models/generate-report-payload';
 import { AuditTrailService } from '@app/audit-trail/services/audit-trail.service';
 import { MatStepper } from '@angular/material/stepper';
+import { Header } from '@app/ui-components/header/header';
 import { Subscription } from 'rxjs';
 import * as FileSaver from 'file-saver';
 
@@ -17,6 +18,10 @@ export class AuditTrailComponent implements OnInit, OnDestroy {
   error = false;
 
   generateReportSubscription: Subscription;
+
+  header: Header = {
+    title: 'auditTrail.title',
+  };
 
   constructor(
     private auditTrailService: AuditTrailService

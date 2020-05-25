@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/audit-trail.component';
+import { ChangeRequestsListComponent } from '@app/change-requests-list/containers/change-requests-list/change-requests-list.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
@@ -61,6 +62,15 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Admin', 'Auditor']
+    }
+  },
+  {
+    path: 'approver/queue',
+    pathMatch: 'full',
+    component: ChangeRequestsListComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Admin']
     }
   },
   {

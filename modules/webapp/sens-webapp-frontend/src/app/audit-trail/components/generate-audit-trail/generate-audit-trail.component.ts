@@ -2,8 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-generate-audit-trail',
-  templateUrl: './generate-audit-trail.component.html',
-  styleUrls: ['./generate-audit-trail.component.scss']
+  templateUrl: './generate-audit-trail.component.html'
 })
 export class GenerateAuditTrailComponent implements OnInit {
   @Input() inProgress = true;

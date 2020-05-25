@@ -1,3 +1,5 @@
 .mat-vertical-stepper-content {
-  padding: calculate-8-pt-grid(2) 0;
+  .mat-vertical-content {
+    padding: calculate-8-pt-grid(5) calculate-8-pt-grid(3);
+  }
 }

@@ -47,6 +47,5 @@ export class AppComponent {
 
   shouldShowNavigation(showNavigation) {
     this.showNavigation = showNavigation;
-    console.log(showNavigation);
   }
 }

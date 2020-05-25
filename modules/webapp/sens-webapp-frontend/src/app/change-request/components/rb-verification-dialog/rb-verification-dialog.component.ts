@@ -3,8 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-rb-verification-dialog',
-  templateUrl: './rb-verification-dialog.component.html',
-  styleUrls: ['./rb-verification-dialog.component.scss']
+  templateUrl: './rb-verification-dialog.component.html'
 })
 export class RbVerificationDialogComponent {
 

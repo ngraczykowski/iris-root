@@ -1,12 +1,7 @@
-<div class="dialog-window">
-  <div class="dialog-window__header">
-    <mat-icon color="warn" class="dialog-window__icon">error</mat-icon>
-    <h1 class="mat-dialog-title">{{ data.title | translate }}</h1>
-  </div>
-  <div mat-dialog-content>
-    <p class="mat-body">{{data.description | translate }}</p>
-  </div>
-  <div mat-dialog-actions class="dialog-window__footer">
-    <button mat-button color="primary" (click)="onCloseClick()">{{data.cta | translate }}</button>
-  </div>
+<h1 class="mat-dialog-title">{{ data.title | translate }}</h1>
+<div mat-dialog-content>
+  <p class="mat-body">{{data.description | translate }}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary" (click)="onCloseClick()">{{data.cta | translate }}</button>
 </div>

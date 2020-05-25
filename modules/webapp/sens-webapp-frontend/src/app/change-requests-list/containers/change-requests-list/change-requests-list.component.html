@@ -1,0 +1,14 @@
+<mat-sidenav-container style="height: 100%">
+  <mat-sidenav opened mode="side" disableClose position="end" class="sidebar">
+    <div class="content-internal-margin--vertical">
+      <app-change-request-preview-container></app-change-request-preview-container>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content
+          class="content-internal-margin--vertical content-internal-margin--horizontal">
+    <app-header [headerData]="header"></app-header>
+    <app-change-requests-table></app-change-requests-table>
+    <app-state [stateContent]="listEmptyState"></app-state>
+    <app-state [stateContent]="listLoading"></app-state>
+  </mat-sidenav-content>
+</mat-sidenav-container>

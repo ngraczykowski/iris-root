@@ -7,10 +7,7 @@ $contentHeight: calc(100% - 65px);
   height: $contentHeight;
 
   &__navigation {
-    border-right-color: transparent;
     display: none;
-    padding-bottom: calculate-8-pt-grid(2);
-    padding-top: calculate-8-pt-grid(2);
     width: 256px;
 
     &--active {
@@ -19,8 +16,6 @@ $contentHeight: calc(100% - 65px);
   }
 
   &__content {
-    height: $contentHeight;
-    padding: calculate-8-pt-grid(4) calculate-8-pt-grid(2);
     z-index: 10; // NOTE fix for the old overlay - TODO Remove with old styles
   }
 }

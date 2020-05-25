@@ -4,8 +4,7 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-configure-audit-trail',
-  templateUrl: './configure-audit-trail.component.html',
-  styleUrls: ['./configure-audit-trail.component.scss']
+  templateUrl: './configure-audit-trail.component.html'
 })
 export class ConfigureAuditTrailComponent {
   @Output() formSubmit = new EventEmitter();

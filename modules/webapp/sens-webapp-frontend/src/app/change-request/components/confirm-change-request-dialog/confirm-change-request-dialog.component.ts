@@ -3,8 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-change-request-dialog',
-  templateUrl: './confirm-change-request-dialog.component.html',
-  styleUrls: ['./confirm-change-request-dialog.component.scss']
+  templateUrl: './confirm-change-request-dialog.component.html'
 })
 export class ConfirmChangeRequestDialogComponent {
 

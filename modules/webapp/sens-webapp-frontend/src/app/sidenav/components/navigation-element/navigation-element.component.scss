@@ -1,12 +1,9 @@
-@import "theme/theme_variables";
+@import "abstracts/colors";
 @import "abstracts/8-pt-grid";
 
 .nav-element {
   &.mat-list-item {
     height: calculate-8-pt-grid(5);
-    $navigationBorderRadius: calculate-8-pt-grid(1);
-    border-bottom-right-radius: $navigationBorderRadius;
-    border-top-right-radius: $navigationBorderRadius;
     overflow: hidden;
   }
 

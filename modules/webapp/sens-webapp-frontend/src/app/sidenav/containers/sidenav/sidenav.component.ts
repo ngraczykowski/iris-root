@@ -3,8 +3,7 @@ import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user
 
 @Component({
   selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss']
+  templateUrl: './sidenav.component.html'
 })
 export class SidenavComponent implements OnInit {
 
@@ -37,6 +36,17 @@ export class SidenavComponent implements OnInit {
           label: 'usersList.title',
           url: '/users/user-management',
           icon: 'people'
+        }
+      ]
+    },
+    {
+      name: this.sectionsPrefix + 'approver',
+      visible: false,
+      links: [
+        {
+          label: 'approvalQueue.title',
+          url: '/approver/queue',
+          icon: 'view_list'
         }
       ]
     },

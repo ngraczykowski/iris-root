@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as fromRoot from '@app/reducers';
-import { Principal } from '@app/shared/security/principal.model';
 import { Logout, TryLogin } from '@app/shared/security/store/security.actions';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, from } from 'rxjs';
 import { getLoggedInPrincipal, hasAllAuthorities, isLoggedIn } from './store/security.selectors';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
-import { rolesByRedirect } from '@app/app-routes';
 
 @Injectable()
 export class AuthenticatedUserFacade {

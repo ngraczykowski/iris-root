@@ -1,0 +1,14 @@
+@import 'abstracts/8-pt-grid';
+
+.values-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: calculate-8-pt-grid(2);
+  width: 100%;
+
+  &__value {
+    &--right {
+      text-align: right;
+    }
+  }
+}
