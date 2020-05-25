@@ -3,8 +3,13 @@
 
 = Release {release_version}
 
-- STATUS: *PENDING*
-- Release date: *NA*
+- STATUS: *RELEASED*
+- Release date: *18.05.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+- https://repo.silenteight.com/ui/repos/tree/General/libs-release-local%2Fcom%2Fsilenteight%2Fsens%2Fwebapp%2Fsens-webapp-backend%2F{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/bdcf2071406ba9d48db6c7daf7172008ccec3641[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/merge_requests/1389[SERP master MR]
+
 
 :leveloffset: +1
 
@@ -15,5 +20,10 @@ include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-593[WA-593]
 |Add Keycloak config migration feature, which allows updating configuration on every startup of Webapp and simplifies maintenance of occurring changes.
+|{issue_url}WA-584[WA-584]
+|Add error messages to sync analysts service response, describing why users were not added
+|{issue_url}WA-644[WA-644]
+|Return user names when contain illegal characters during sync process
+
 
 include::./templates/changelog-table-footer.adoc[]
