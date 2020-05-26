@@ -17,8 +17,11 @@ import static com.silenteight.auditing.bs.AuditTableColumns.*;
 @RequiredArgsConstructor
 public class AuditingFinder {
 
+  private static final String SORTING_ORDER = "ASC";
+
   private static final String SELECT_LOGS_QUERY = "SELECT * FROM audit"
-      + " WHERE " + TIMESTAMP + " >= :from AND " + TIMESTAMP + " <= :to";
+      + " WHERE " + TIMESTAMP + " >= :from AND " + TIMESTAMP + " <= :to"
+      + " ORDER BY " + TIMESTAMP + " " + SORTING_ORDER;
 
   @NonNull
   private final NamedParameterJdbcTemplate jdbcTemplate;

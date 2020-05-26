@@ -22,6 +22,9 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.sql.DataSource;
 
+import static java.time.OffsetDateTime.MAX;
+import static java.time.OffsetDateTime.MIN;
+import static java.time.OffsetDateTime.parse;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
@@ -49,7 +52,7 @@ class AuditingBsRepositoryIT {
   private TestEntityManager entityManager;
 
   @Test
-  public void shouldSaveAuditInfo() {
+  void shouldSaveAuditInfo() {
     //given
     AuditDataDto auditLog = AuditDataDto.builder()
         .correlationId(new UUID(0, 0))
@@ -73,7 +76,7 @@ class AuditingBsRepositoryIT {
   }
 
   @Test
-  public void shouldFindAuditInfo() {
+  void shouldFindAuditInfo() {
     //given
     UUID insideBoundsEventId1 = UUID.fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
     UUID insideBoundsEventId2 = UUID.fromString("30131be0-7405-41f1-b79e-fe109a5d2a41");
@@ -83,8 +86,8 @@ class AuditingBsRepositoryIT {
     insertAuditData(insideBoundsEventId2, Timestamp.valueOf("2020-04-17 21:56:18.971"));
     insertAuditData(beforeLowerBoundEventId, Timestamp.valueOf("2020-04-05 11:32:45.123"));
     insertAuditData(afterUpperBoundEventId, Timestamp.valueOf("2020-04-25 08:11:21.748"));
-    OffsetDateTime from = OffsetDateTime.parse("2020-04-10T12:00:00Z");
-    OffsetDateTime to = OffsetDateTime.parse("2020-04-20T12:00:00Z");
+    OffsetDateTime from = parse("2020-04-10T12:00:00Z");
+    OffsetDateTime to = parse("2020-04-20T12:00:00Z");
 
     //when
     Collection<AuditDataDto> result = finder.find(from, to);
@@ -93,6 +96,34 @@ class AuditingBsRepositoryIT {
     assertThat(result.size()).isEqualTo(2);
     assertThat(result).extracting(AuditDataDto::getEventId)
         .containsExactly(insideBoundsEventId1, insideBoundsEventId2);
+  }
+
+  @Test
+  void shouldReturnResultsInAscendingOrder() {
+    //given
+    AuditDataDto auditLogOne = createMinimalAuditDto(3);
+    AuditDataDto auditLogTwo = createMinimalAuditDto(4);
+    AuditDataDto auditLogThree = createMinimalAuditDto(2);
+    AuditDataDto auditLogFour = createMinimalAuditDto(1);
+
+    //when
+    logger.log(auditLogOne);
+    logger.log(auditLogTwo);
+    logger.log(auditLogThree);
+    logger.log(auditLogFour);
+
+    //then
+    Collection<AuditDataDto> result = finder.find(MIN, MAX);
+    assertThat(result).containsSequence(auditLogFour, auditLogThree, auditLogOne, auditLogTwo);
+  }
+
+  private AuditDataDto createMinimalAuditDto(int miliseconds) {
+    return AuditDataDto.builder()
+        .correlationId(randomUUID())
+        .eventId(randomUUID())
+        .timestamp(new Timestamp(miliseconds))
+        .type("SomeRandomAudit")
+        .build();
   }
 
   private void insertAuditData(UUID eventId, Timestamp timestamp) {
