@@ -13,6 +13,8 @@ import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
 import com.silenteight.sens.webapp.user.update.UpdatedUser.UpdatedUserBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.control.Option;
 
 import java.util.Optional;
@@ -75,18 +77,23 @@ public class UpdateUserUseCase {
     private String username;
 
     @Nullable
+    @JsonProperty
     private String displayName;
 
     @Nullable
+    @JsonProperty
     private Set<String> roles;
 
     @Default
+    @JsonIgnore
     private TimeSource timeSource = DefaultTimeSource.INSTANCE;
 
+    @JsonIgnore
     Optional<String> getDisplayName() {
       return ofNullable(displayName);
     }
 
+    @JsonIgnore
     Optional<Set<String>> getRoles() {
       return ofNullable(roles);
     }
