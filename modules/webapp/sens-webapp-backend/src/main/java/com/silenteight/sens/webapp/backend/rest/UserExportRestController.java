@@ -21,6 +21,7 @@ import static java.util.stream.Stream.empty;
 @RestController
 @RequestMapping(RestConstants.ROOT)
 @PreAuthorize("hasAnyAuthority('AUDIT_GENERATE_REPORT')")
+//TODO to be decided if we still need it or should be removed
 public class UserExportRestController {
 
   private static final String USERS_FILENAME = "users.csv";

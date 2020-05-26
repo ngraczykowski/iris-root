@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.rest.exception;
+package com.silenteight.sens.webapp.backend.config.exception;
 
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;

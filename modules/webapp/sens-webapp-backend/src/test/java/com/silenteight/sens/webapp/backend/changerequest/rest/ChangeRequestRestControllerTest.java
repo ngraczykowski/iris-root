@@ -3,39 +3,53 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
+import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestCommand;
+import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
 import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.dto.CreateChangeRequestDto;
 import com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestUseCase;
+import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static java.time.OffsetDateTime.now;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.emptyList;
 import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
-@Import({ ChangeRequestRestController.class })
+@Import({ ChangeRequestRestController.class, GenericExceptionControllerAdvice.class })
 class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private ChangeRequestQuery changeRequestsQuery;
+
+  @MockBean
+  private CreateChangeRequestUseCase createChangeRequestUseCase;
 
   @MockBean
   private ApproveChangeRequestUseCase approveChangeRequestUseCase;
@@ -104,6 +118,53 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
           .createdAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
           .comment("Disable redundant RBs based on analyses from 2020.04.02")
           .build();
+    }
+  }
+
+  @Nested
+  class CreateChangeRequest {
+
+    private static final String USERNAME = "usernameABC";
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void its200_whenBusinessOperatorCallsEndpoint() {
+      post(mappingForChangeRequests(), changeRequestWithDefaults()).statusCode(OK.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void callsCreateUseCase() {
+      UUID bulkChangeId = randomUUID();
+      String comment = "comment ABC";
+      OffsetDateTime createdAt = now();
+
+      post(
+          mappingForChangeRequests(),
+          new CreateChangeRequestDto(bulkChangeId, createdAt, comment));
+
+      ArgumentCaptor<CreateChangeRequestCommand> commandCaptor =
+          ArgumentCaptor.forClass(CreateChangeRequestCommand.class);
+      verify(createChangeRequestUseCase).apply(commandCaptor.capture());
+
+      CreateChangeRequestCommand command = commandCaptor.getValue();
+      assertThat(command.getBulkChangeId()).isEqualTo(bulkChangeId);
+      assertThat(command.getMakerComment()).isEqualTo(comment);
+      assertThat(command.getMakerUsername()).isEqualTo(USERNAME);
+      assertThat(command.getCreatedAt()).isEqualTo(createdAt);
+    }
+
+    @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      post(mappingForChangeRequests(), changeRequestWithDefaults()).statusCode(FORBIDDEN.value());
+    }
+
+    private CreateChangeRequestDto changeRequestWithDefaults() {
+      return new CreateChangeRequestDto(randomUUID(), now(), null);
+    }
+
+    private String mappingForChangeRequests() {
+      return "/change-requests";
     }
   }
 

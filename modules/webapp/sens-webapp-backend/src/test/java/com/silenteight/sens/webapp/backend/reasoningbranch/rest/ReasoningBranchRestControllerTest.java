@@ -1,13 +1,13 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.rest;
 
+import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
+import com.silenteight.sens.webapp.backend.config.exception.UnknownExceptionControllerAdvice;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.FeatureVectorSignaturesNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateBranchesCommand;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdateReasoningBranchesUseCase;
 import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
-import com.silenteight.sens.webapp.backend.rest.exception.GenericExceptionControllerAdvice;
-import com.silenteight.sens.webapp.backend.rest.exception.UnknownExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 

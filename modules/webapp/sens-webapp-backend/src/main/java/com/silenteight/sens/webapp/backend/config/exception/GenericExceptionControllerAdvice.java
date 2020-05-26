@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.rest.exception;
+package com.silenteight.sens.webapp.backend.config.exception;
 
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.common.rest.exception.dto.ErrorDto;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -32,7 +33,14 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
   public ResponseEntity<ErrorDto> handle(MethodArgumentNotValidException e) {
     Map<String, Object> extras = new HashMap<>();
     extras.put("errors", errorDescriptionsOf(e));
-    return handle(e, "InvalidMethodArguments", HttpStatus.BAD_REQUEST, extras);
+    return handle(e, "Invalid request", HttpStatus.BAD_REQUEST, extras);
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorDto> handle(HttpMessageNotReadableException e) {
+    Map<String, Object> extras = new HashMap<>();
+    extras.put("errors", e.getMessage());
+    return handle(e, "Invalid request", HttpStatus.BAD_REQUEST, extras);
   }
 
   private Stream<String> errorDescriptionsOf(MethodArgumentNotValidException e) {

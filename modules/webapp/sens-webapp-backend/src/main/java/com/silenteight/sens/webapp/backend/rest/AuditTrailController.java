@@ -21,6 +21,7 @@ import static java.util.stream.Stream.empty;
 @RestController
 @RequestMapping(RestConstants.ROOT)
 @PreAuthorize("hasAuthority('AUDIT_GENERATE_REPORT')")
+//TODO to be decided if we still need it or should be removed
 public class AuditTrailController {
 
   private static final String AUDIT_MODEL_FILENAME = "model-audit.csv";
