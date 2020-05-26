@@ -1,5 +1,6 @@
 package com.silenteight.serp.common.protocol;
 
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import com.google.common.io.BaseEncoding;
@@ -7,6 +8,9 @@ import com.google.protobuf.ByteString;
 
 import javax.annotation.Nonnull;
 
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public final class ByteStringUtils {
 
   @Nonnull
@@ -18,8 +22,5 @@ public final class ByteStringUtils {
   public static ByteString fromBase64String(@NonNull String string) {
     byte[] decodedBytes = BaseEncoding.base64().decode(string);
     return ByteString.copyFrom(decodedBytes);
-  }
-
-  private ByteStringUtils() {
   }
 }

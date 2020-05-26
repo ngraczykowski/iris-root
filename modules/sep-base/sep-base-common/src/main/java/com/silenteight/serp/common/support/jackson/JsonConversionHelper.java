@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public enum JsonConversionHelper {
+
   INSTANCE;
 
   private final ObjectMapper objectMapper;
@@ -49,8 +50,9 @@ public enum JsonConversionHelper {
 
   public <T> ArrayNode serializeStream(Stream<T> stream) {
     ArrayNode arrayNode = objectMapper.createArrayNode();
-    stream.map(element -> objectMapper.convertValue(element, JsonNode.class))
-          .forEach(arrayNode::add);
+    stream
+        .map(element -> objectMapper.convertValue(element, JsonNode.class))
+        .forEach(arrayNode::add);
     return arrayNode;
   }
 
@@ -99,6 +101,14 @@ public enum JsonConversionHelper {
     }
   }
 
+  public String serializeToString(Object object) {
+    try {
+      return objectMapper.writeValueAsString(object);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException("Failed to serialize object to string.", e);
+    }
+  }
+
   public <T extends TreeNode> T deserializeFromString(String jsonString, JavaType type) {
     try {
       return objectMapper.readValue(jsonString, type);
@@ -129,13 +139,12 @@ public enum JsonConversionHelper {
 
   public static final class FailedToGenerateJsonException extends RuntimeException {
 
-    private static final long serialVersionUID = -4833340126563349424L;
+    private static final long serialVersionUID = -5469532072591567562L;
 
     public FailedToGenerateJsonException(Object value, Throwable cause) {
       super("Failed to generate json while serializing object " + value, cause);
     }
   }
-
 
   public static final class FailedToParseJsonException extends IllegalArgumentException {
 
