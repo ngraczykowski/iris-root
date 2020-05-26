@@ -1,7 +1,5 @@
 package com.silenteight.serp.common.support.jackson;
 
-import com.silenteight.commons.collections.SetBuilder;
-
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,7 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 final class JacksonModuleFinder {
 
-  private static final Set<String> DEFAULT_ALLOWED_MODULES = SetBuilder.of(
+  private static final Set<String> DEFAULT_ALLOWED_MODULES = Set.of(
       "com.fasterxml.jackson.datatype.jsr310.JavaTimeModule",
       "com.fasterxml.jackson.datatype.jdk8.Jdk8Module",
       "com.fasterxml.jackson.module.paramnames.ParameterNamesModule");

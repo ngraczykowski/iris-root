@@ -11,7 +11,6 @@ ext {
 
 // Silent Eight
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
-libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 
 // Spring
@@ -21,8 +20,7 @@ libraries.spring_beans = [group: 'org.springframework', name: 'spring-beans']
 libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
 libraries.spring_context_support = [group: 'org.springframework', name: 'spring-context-support']
 libraries.spring_core = [group: 'org.springframework', name: 'spring-core']
-libraries.spring_expression = [group: 'org.springframework', name: 'spring-expression']
-libraries.spring_instrument = [group: 'org.springframework', name: 'spring-instrument']
+libraries.spring_jcl = [group: 'org.springframework', name: 'spring-jcl']
 libraries.spring_jdbc = [group: 'org.springframework', name: 'spring-jdbc']
 libraries.spring_messaging = [group: 'org.springframework', name: 'spring-messaging']
 libraries.spring_orm = [group: 'org.springframework', name: 'spring-orm']
@@ -30,6 +28,7 @@ libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retr
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test']
 libraries.spring_tx = [group: 'org.springframework', name: 'spring-tx']
 libraries.spring_web = [group: 'org.springframework', name: 'spring-web']
+libraries.spring_webmvc = [group: 'org.springframework', name: 'spring-webmvc']
 
 libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp']
 libraries.spring_amqp_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit']
@@ -37,20 +36,8 @@ libraries.spring_amqp_rabbit_test = [group: 'org.springframework.amqp', name: 's
 libraries.spring_amqp_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit']
 
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot']
-libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-actuator']
 libraries.spring_boot_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure']
-libraries.spring_boot_autoconfigure_processor = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor']
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor']
-libraries.spring_boot_starter_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator']
-libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp']
-libraries.spring_boot_starter_elasticsearch = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch']
-libraries.spring_boot_starter_integration = [group: 'org.springframework.boot', name: 'spring-boot-starter-integration']
-libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
-libraries.spring_boot_starter_mail = [group: 'org.springframework.boot', name: 'spring-boot-starter-mail']
-libraries.spring_boot_starter_quartz = [group: 'org.springframework.boot', name: 'spring-boot-starter-quartz']
-libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
-libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
-libraries.spring_boot_starter_webflux = [group: 'org.springframework.boot', name: 'spring-boot-starter-webflux']
 libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
 
@@ -58,15 +45,8 @@ libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring
 libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', name: 'spring-batch-infrastructure']
 libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
 
-libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
-libraries.spring_cloud_starter_consul = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul']
-libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
-libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
-libraries.spring_cloud_test_support = [group: 'org.springframework.cloud', name: 'spring-cloud-test-support']
-
 libraries.spring_data_commons = [group: 'org.springframework.data', name: 'spring-data-commons']
 libraries.spring_data_jpa = [group: 'org.springframework.data', name: 'spring-data-jpa']
-libraries.spring_data_elasticsearch = [group: 'org.springframework.data', name: 'spring-data-elasticsearch']
 
 libraries.spring_integration_amqp = [group: 'org.springframework.integration', name: 'spring-integration-amqp']
 libraries.spring_integration_core = [group: 'org.springframework.integration', name: 'spring-integration-core']
@@ -95,29 +75,18 @@ libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api']
 
 // Others
 libraries.amqp_client = [group: 'com.rabbitmq', name: 'amqp-client']
-libraries.antlr4 = [group: 'org.antlr', name: 'antlr4']
-libraries.antlr4_runtime = [group: 'org.antlr', name: 'antlr4-runtime']
 libraries.aspectjrt = [group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5']
 libraries.aspectjtools = [group: 'org.aspectj', name: 'aspectjtools', version: libraries.aspectjrt.version]
 libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver']
-libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
-libraries.bouncycastle_bcmail = [group: 'org.bouncycastle', name: 'bcmail-jdk15on']
-libraries.bouncycastle_bcpg = [group: 'org.bouncycastle', name: 'bcpg-jdk15on']
-libraries.bouncycastle_bcpkix = [group: 'org.bouncycastle', name: 'bcpkix-jdk15on']
 libraries.bouncycastle_bcprov = [group: 'org.bouncycastle', name: 'bcprov-jdk15on']
 libraries.bouncycastle_bcprov_ext = [group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on']
-libraries.brave_instrumentation_grpc = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc']
 libraries.byte_buddy = [group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.7']
 libraries.byte_buddy_agent = [group: 'net.bytebuddy', name: 'byte-buddy-agent', version: libraries.byte_buddy.version]
 libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
 libraries.caffeine_jcache = [group: 'com.github.ben-manes.caffeine', name: 'jcache']
 libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph']
-libraries.commons_codec = [group: 'commons-codec', name: 'commons-codec']
+libraries.commons_collections4 = [group: 'org.apache.commons', name: 'commons-collections4', version: '4.4']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3']
-libraries.commons_text = [group: 'org.apache.commons', name: 'commons-text']
-libraries.consul_client = [group: "com.orbitz.consul", name: "consul-client"]
-libraries.fastutil = [group: 'it.unimi.dsi', name: 'fastutil']
-libraries.freemarker = [group: 'org.freemarker', name: 'freemarker']
 libraries.grpc_api = [group: 'io.grpc', name: 'grpc-api']
 libraries.grpc_auth = [group: 'io.grpc', name: 'grpc-auth']
 libraries.grpc_context = [group: 'io.grpc', name: 'grpc-context']
@@ -137,6 +106,7 @@ libraries.hibernate_jcache = [group: 'org.hibernate', name: 'hibernate-jcache']
 libraries.hibernate_validator = [group: 'org.hibernate.validator', name: 'hibernate-validator']
 libraries.hikari_cp = [group: 'com.zaxxer', name: 'HikariCP']
 libraries.jackson_annotations = [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations']
+libraries.jackson_core = [group: 'com.fasterxml.jackson.core', name: 'jackson-core']
 libraries.jackson_databind = [group: 'com.fasterxml.jackson.core', name: 'jackson-databind']
 libraries.jackson_dataformat_xml = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml']
 libraries.jackson_datatype_jdk8 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8']
@@ -154,14 +124,12 @@ libraries.jakarta_transaction_api = [group: 'jakarta.transaction', name: 'jakart
 libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.validation-api']
 libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
 libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
-libraries.kryo_shaded = [group: 'com.esotericsoftware', name: 'kryo-shaded']
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core']
 libraries.logback_classic = [group: 'ch.qos.logback', name: 'logback-classic']
 libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder']
 libraries.logstash_logback_encoder = [group: 'net.logstash.logback', name: 'logstash-logback-encoder']
 libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java']
 libraries.micrometer_core = [group: 'io.micrometer', name: 'micrometer-core']
-libraries.micrometer_influx = [group: 'io.micrometer', name: 'micrometer-registry-influx']
 libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus']
 libraries.oracle = [group: 'com.oracle', name: 'ojdbc8']
 libraries.paranamer = [group: 'com.thoughtworks.paranamer', name: 'paranamer']
@@ -190,17 +158,12 @@ libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'j
 libraries.test_containers_oracle_xe = [group: 'org.testcontainers', name: 'oracle-xe']
 libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
 libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
+libraries.test_containers_rabbitmq = [group: 'com.playtika.testcontainers', name: 'embedded-rabbitmq', version: '1.67']
 
 // @formatter:on
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
-  exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-
-  // Exclude outdated javax APIs from JBoss (newer version are already included)
-  exclude group: 'org.jboss.spec.javax.annotation', module: 'jboss-annotations-api_1.2_spec'
-  exclude group: 'org.jboss.spec.javax.servlet', module: 'jboss-servlet-api_4.0_spec'
-  exclude group: 'org.jboss.spec.javax.transaction', module: 'jboss-transaction-api_1.2_spec'
 
   resolutionStrategy {
     failOnVersionConflict()
@@ -208,7 +171,6 @@ configurations.all {
 
     force libraries.byte_buddy
     force libraries.byte_buddy_agent
-    //force libraries.guava
     force libraries.aspectjrt
     force libraries.aspectjtools
 

@@ -3,7 +3,7 @@ subprojects {
 }
 
 dependencies {
-  resolutionRules "com.silenteight.sep.gradle:platform-resolution-rules:1.0.0"
+  resolutionRules "com.silenteight.sep.gradle:platform-resolution-rules:1.2.0"
   resolutionRules "com.netflix.nebula:gradle-resolution-rules:0.62.0"
 }
 
@@ -16,7 +16,10 @@ nebulaResolutionRules {
       'align-okhttp3',
       'align-protobuf',
       'align-retrofit',
-      'deny-apache-commons.json',
-      'replace-commons-lang.json',
+      'deny-apache-commons',
+      'replace-all-javax',
+      'replace-commons-lang',
+      'replace-javax',
+      'replace-jboss-spec',
   ]
 }
