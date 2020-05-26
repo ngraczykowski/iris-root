@@ -37,9 +37,9 @@ public class ChangeRequestQuery {
     return ChangeRequestDto.builder()
         .id(changeRequest.getId())
         .bulkChangeId(changeRequest.getBulkChangeId())
-        .createdBy(changeRequest.getMakerUsername())
+        .createdBy(changeRequest.getCreatedBy())
         .createdAt(changeRequest.getCreatedAt())
-        .comment(changeRequest.getMakerComment())
+        .comment(changeRequest.getCreatorComment())
         .build();
   }
 }

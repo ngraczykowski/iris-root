@@ -9,6 +9,6 @@ final class RejectChangeRequestUseCaseFixtures {
   static final RejectChangeRequestCommand REJECT_COMMAND =
       RejectChangeRequestCommand.builder()
       .changeRequestId(5L)
-      .approverUsername("approver")
+      .rejectorUsername("rejector")
       .build();
 }

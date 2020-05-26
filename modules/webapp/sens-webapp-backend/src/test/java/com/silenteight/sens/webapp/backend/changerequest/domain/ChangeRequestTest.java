@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
+import static java.time.OffsetDateTime.parse;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,26 +26,29 @@ class ChangeRequestTest {
   @Test
   void changeRequestApproved_stateIsChangedToApproved() {
     // give
+    OffsetDateTime approvedAt = parse("2020-05-20T10:15:30+01:00");
     ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
         CREATED_AT);
 
     // when
-    changeRequest.approve(APPROVER_USERNAME);
+    changeRequest.approve(APPROVER_USERNAME, approvedAt);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(APPROVED);
-    assertThat(changeRequest.getApproverUsername()).isEqualTo(APPROVER_USERNAME);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+    assertThat(changeRequest.getDecidedAt()).isEqualTo(approvedAt);
   }
 
   @Test
   void changeRequestInApprovedState_approveThrowsChangeRequestNotInPendingStateException() {
     // give
+    OffsetDateTime approvedAt = parse("2020-05-20T10:15:30+01:00");
     ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
         CREATED_AT);
     changeRequest.setState(APPROVED);
 
     // when
-    Executable when = () -> changeRequest.approve(APPROVER_USERNAME);
+    Executable when = () -> changeRequest.approve(APPROVER_USERNAME, approvedAt);
 
     // then
     assertThrows(ChangeRequestNotInPendingStateException.class, when);
@@ -53,26 +57,28 @@ class ChangeRequestTest {
   @Test
   void changeRequestRejected_stateIsChangedToRejected() {
     // give
+    OffsetDateTime rejectedAt = parse("2020-05-20T10:15:30+01:00");
     ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
         CREATED_AT);
 
     // when
-    changeRequest.reject(APPROVER_USERNAME);
+    changeRequest.reject(APPROVER_USERNAME, rejectedAt);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(REJECTED);
-    assertThat(changeRequest.getApproverUsername()).isEqualTo(APPROVER_USERNAME);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
   }
 
   @Test
   void changeRequestInRejectedState_rejectThrowsChangeRequestNotInPendingStateException() {
     // give
+    OffsetDateTime rejectedAt = parse("2020-05-20T10:15:30+01:00");
     ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
         CREATED_AT);
     changeRequest.setState(REJECTED);
 
     // when
-    Executable when = () -> changeRequest.reject(APPROVER_USERNAME);
+    Executable when = () -> changeRequest.reject(APPROVER_USERNAME, rejectedAt);
 
     // then
     assertThrows(ChangeRequestNotInPendingStateException.class, when);

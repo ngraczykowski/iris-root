@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.backend.changerequest.approve;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.backend.changerequest.messaging.ApproveChangeRequestMessageSender;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,8 @@ class ApproveChangeRequestUseCaseTest {
 
   @Mock
   private AuditTracer auditTracer;
+  @Mock
+  private ApproveChangeRequestMessageSender messageSender;
 
   @Test
   void approveChangeRequestCommand_approveChangeRequest() {
@@ -48,5 +51,8 @@ class ApproveChangeRequestUseCaseTest {
         (ApproveChangeRequestCommand) auditEvent.getDetails();
     assertThat(command.getChangeRequestId()).isEqualTo(APPROVE_COMMAND.getChangeRequestId());
     assertThat(command.getApproverUsername()).isEqualTo(APPROVE_COMMAND.getApproverUsername());
+
+    verify(messageSender).send(
+        any(com.silenteight.proto.serp.v1.changerequest.ApproveChangeRequestCommand.class));
   }
 }

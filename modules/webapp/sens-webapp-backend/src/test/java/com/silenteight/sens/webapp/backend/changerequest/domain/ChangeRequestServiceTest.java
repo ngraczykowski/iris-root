@@ -21,6 +21,7 @@ import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UP
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
+import static java.time.OffsetDateTime.parse;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.fromString;
@@ -59,8 +60,8 @@ class ChangeRequestServiceTest {
 
     ChangeRequest changeRequest = changeRequestCaptor.getValue();
     assertThat(changeRequest.getBulkChangeId()).isEqualTo(BULK_CHANGE_ID);
-    assertThat(changeRequest.getMakerUsername()).isEqualTo(MAKER_USERNAME);
-    assertThat(changeRequest.getMakerComment()).isEqualTo(MAKER_COMMENT);
+    assertThat(changeRequest.getCreatedBy()).isEqualTo(MAKER_USERNAME);
+    assertThat(changeRequest.getCreatorComment()).isEqualTo(MAKER_COMMENT);
     assertThat(changeRequest.getCreatedAt()).isEqualTo(CREATION_DATE);
     assertThat(changeRequest.getState()).isEqualTo(PENDING);
   }
@@ -81,8 +82,8 @@ class ChangeRequestServiceTest {
     assertThat(auditEvent.getDetails()).isInstanceOf(ChangeRequest.class);
     ChangeRequest auditDetails = (ChangeRequest) auditEvent.getDetails();
     assertThat(auditDetails.getBulkChangeId()).isEqualTo(BULK_CHANGE_ID);
-    assertThat(auditDetails.getMakerUsername()).isEqualTo(MAKER_USERNAME);
-    assertThat(auditDetails.getMakerComment()).isEqualTo(MAKER_COMMENT);
+    assertThat(auditDetails.getCreatedBy()).isEqualTo(MAKER_USERNAME);
+    assertThat(auditDetails.getCreatorComment()).isEqualTo(MAKER_COMMENT);
     assertThat(auditDetails.getCreatedAt()).isEqualTo(CREATION_DATE);
     assertThat(auditDetails.getState()).isEqualTo(PENDING);
   }
@@ -90,10 +91,11 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestNotFoundWhenApproving_throwChangeRequestNotFoundException() {
     // given
+    OffsetDateTime approvedAt = parse("2020-05-20T10:15:30+01:00");
     given(repository.findById(CHANGE_REQUEST_ID)).willReturn(empty());
 
     // when
-    Executable when = () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME);
+    Executable when = () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, approvedAt);
 
     // then
     assertThrows(ChangeRequestNotFoundException.class, when);
@@ -102,24 +104,26 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestFound_approveChangeRequest() {
     // given
+    OffsetDateTime approvedAt = parse("2020-05-20T10:15:30+01:00");
     ChangeRequest changeRequest = makeChangeRequest();
     given(repository.findById(CHANGE_REQUEST_ID)).willReturn(of(changeRequest));
 
     // when
-    underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME);
+    underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, approvedAt);
 
     // then
-    verifyChangeRequest(APPROVED, APPROVER_USERNAME);
+    verifyChangeRequest(APPROVED, APPROVER_USERNAME, approvedAt);
     verifyAuditLog("ChangeRequestApproved", changeRequest);
   }
 
   @Test
   void changeRequestNotFoundWhenRejecting_throwChangeRequestNotFoundException() {
     // given
+    OffsetDateTime rejectedAt = parse("2020-05-20T10:15:30+01:00");
     given(repository.findById(CHANGE_REQUEST_ID)).willReturn(empty());
 
     // when
-    Executable when = () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME);
+    Executable when = () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, rejectedAt);
 
     // then
     assertThrows(ChangeRequestNotFoundException.class, when);
@@ -128,14 +132,15 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestFound_rejectChangeRequest() {
     // given
+    OffsetDateTime rejectedAt = parse("2020-05-20T10:15:30+01:00");
     ChangeRequest changeRequest = makeChangeRequest();
     given(repository.findById(CHANGE_REQUEST_ID)).willReturn(of(changeRequest));
 
     // when
-    underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME);
+    underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, rejectedAt);
 
     // then
-    verifyChangeRequest(REJECTED, APPROVER_USERNAME);
+    verifyChangeRequest(REJECTED, APPROVER_USERNAME, rejectedAt);
     verifyAuditLog("ChangeRequestRejected", changeRequest);
   }
 
@@ -147,13 +152,16 @@ class ChangeRequestServiceTest {
     return changeRequest;
   }
 
-  private void verifyChangeRequest(ChangeRequestState expectedState, String approverUsername) {
+  private void verifyChangeRequest(
+      ChangeRequestState expectedState, String approverUsername, OffsetDateTime updatedAt) {
+
     ArgumentCaptor<ChangeRequest> changeRequestCaptor =
         ArgumentCaptor.forClass(ChangeRequest.class);
     verify(repository).save(changeRequestCaptor.capture());
     ChangeRequest changeRequest = changeRequestCaptor.getValue();
     assertThat(changeRequest.getState()).isEqualTo(expectedState);
-    assertThat(changeRequest.getApproverUsername()).isEqualTo(approverUsername);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(approverUsername);
+    assertThat(changeRequest.getDecidedAt()).isEqualTo(updatedAt);
   }
 
   private void verifyAuditLog(String type, ChangeRequest details) {

@@ -76,7 +76,7 @@ class ChangeRequestRestController {
 
     RejectChangeRequestCommand command = RejectChangeRequestCommand.builder()
         .changeRequestId(id)
-        .approverUsername(authentication.getName())
+        .rejectorUsername(authentication.getName())
         .build();
     rejectChangeRequestUseCase.apply(command);
 

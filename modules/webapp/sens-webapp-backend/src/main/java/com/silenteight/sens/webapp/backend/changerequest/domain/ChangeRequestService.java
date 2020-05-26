@@ -37,19 +37,20 @@ public class ChangeRequestService {
             changeRequest));
   }
 
-  public void approve(long id, @NonNull String username) {
+  public void approve(long id, @NonNull String username, @NonNull OffsetDateTime approvedAt) {
     log.info(CHANGE_REQUEST,
-        "Approving Change Request. changeRequestId={}, username={}", id, username);
+        "Approving Change Request. changeRequestId={}, username={}, approvedAt={}",
+        id, username, approvedAt);
 
     repository
         .findById(id)
-        .ifPresentOrElse(cr -> this.approve(cr, username), () -> {
+        .ifPresentOrElse(cr -> this.approve(cr, username, approvedAt), () -> {
           throw new ChangeRequestNotFoundException(id);
         });
   }
 
-  private void approve(ChangeRequest changeRequest, String username) {
-    changeRequest.approve(username);
+  private void approve(ChangeRequest changeRequest, String username, OffsetDateTime approvedAt) {
+    changeRequest.approve(username, approvedAt);
     repository.save(changeRequest);
 
     log.info(CHANGE_REQUEST, "Change Request approved. changeRequest={}", changeRequest);
@@ -61,19 +62,20 @@ public class ChangeRequestService {
             changeRequest));
   }
 
-  public void reject(long id, @NonNull String username) {
+  public void reject(long id, @NonNull String username, @NonNull OffsetDateTime rejectedAt) {
     log.info(CHANGE_REQUEST,
-        "Rejecting Change Request. changeRequestId={}, username={}", id, username);
+        "Rejecting Change Request. changeRequestId={}, username={}, rejectedAt={}",
+        id, username, rejectedAt);
 
     repository
         .findById(id)
-        .ifPresentOrElse(cr -> this.reject(cr, username), () -> {
+        .ifPresentOrElse(cr -> this.reject(cr, username, rejectedAt), () -> {
           throw new ChangeRequestNotFoundException(id);
         });
   }
 
-  private void reject(ChangeRequest changeRequest, String username) {
-    changeRequest.reject(username);
+  private void reject(ChangeRequest changeRequest, String username, OffsetDateTime rejectedAt) {
+    changeRequest.reject(username, rejectedAt);
     repository.save(changeRequest);
 
     log.info(CHANGE_REQUEST, "Change Request rejected. changeRequest={}", changeRequest);

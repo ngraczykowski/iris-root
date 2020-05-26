@@ -11,5 +11,5 @@ public class RejectChangeRequestCommand {
   private long changeRequestId;
 
   @NonNull
-  private String approverUsername;
+  private String rejectorUsername;
 }

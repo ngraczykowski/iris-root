@@ -44,4 +44,26 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="change-request-1.16.0-2" author="mastylom">
+    <renameColumn
+        tableName="webapp_change_request"
+        oldColumnName="maker_username"
+        newColumnName="created_by"/>
+
+    <renameColumn
+        tableName="webapp_change_request"
+        oldColumnName="maker_comment"
+        newColumnName="creator_comment"/>
+
+    <renameColumn
+        tableName="webapp_change_request"
+        oldColumnName="approver_username"
+        newColumnName="decided_by"/>
+
+    <renameColumn
+        tableName="webapp_change_request"
+        oldColumnName="updated_at"
+        newColumnName="decided_at"/>
+  </changeSet>
+
 </databaseChangeLog>

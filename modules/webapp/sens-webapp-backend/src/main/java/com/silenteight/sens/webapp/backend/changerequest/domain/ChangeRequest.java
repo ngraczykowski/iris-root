@@ -4,8 +4,6 @@ import lombok.*;
 
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
 
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
@@ -39,14 +37,14 @@ class ChangeRequest {
 
   @ToString.Include
   @Column(updatable = false, nullable = false)
-  private String makerUsername;
+  private String createdBy;
 
   @ToString.Include
   @Column(updatable = false, nullable = false)
-  private String makerComment;
+  private String creatorComment;
 
   @ToString.Include
-  private String approverUsername;
+  private String decidedBy;
 
   @Column(updatable = false, nullable = false)
   @Access(AccessType.FIELD)
@@ -55,8 +53,7 @@ class ChangeRequest {
   @Setter(AccessLevel.PACKAGE)
   @Column(insertable = false)
   @Access(AccessType.FIELD)
-  @UpdateTimestamp
-  private OffsetDateTime updatedAt;
+  private OffsetDateTime decidedAt;
 
   @Getter(AccessLevel.NONE)
   @Version
@@ -65,25 +62,28 @@ class ChangeRequest {
   private Integer version;
 
   ChangeRequest(
-      UUID bulkChangeId, String makerUsername, String makerComment, OffsetDateTime createdAt) {
+      UUID bulkChangeId, String createdBy, String creatorComment, OffsetDateTime createdAt) {
+
     this.bulkChangeId = bulkChangeId;
-    this.makerUsername = makerUsername;
-    this.makerComment = makerComment;
+    this.createdBy = createdBy;
+    this.creatorComment = creatorComment;
     this.createdAt = createdAt;
   }
 
-  void approve(String username) {
+  void approve(String username, OffsetDateTime approvedAt) {
     validatePendingState();
 
     state = APPROVED;
-    approverUsername = username;
+    decidedBy = username;
+    decidedAt = approvedAt;
   }
 
-  void reject(String username) {
+  void reject(String username, OffsetDateTime rejectedAt) {
     validatePendingState();
 
     state = REJECTED;
-    approverUsername = username;
+    decidedBy = username;
+    decidedAt = rejectedAt;
   }
 
   private void validatePendingState() {
