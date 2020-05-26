@@ -3,12 +3,12 @@ import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
 
 @Component({
-  selector: 'app-change-requests-list',
-  templateUrl: './change-requests-list.component.html'
+  selector: 'app-pending-changes',
+  templateUrl: './pending-changes.component.html'
 })
-export class ChangeRequestsListComponent implements OnInit {
+export class PendingChangesComponent implements OnInit {
 
-  translatePrefix = 'changeRequestsList.';
+  translatePrefix = 'pendingChanges.';
 
   listEmptyState: StateContent = {
     centered: true,
@@ -27,7 +27,7 @@ export class ChangeRequestsListComponent implements OnInit {
   };
 
   header: Header = {
-    title: 'approvalQueue.title',
+    title: this.translatePrefix + 'title',
     parameter: '14'
   };
 

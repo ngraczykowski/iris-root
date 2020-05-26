@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/audit-trail.component';
-import { ChangeRequestsListComponent } from '@app/change-requests-list/containers/change-requests-list/change-requests-list.component';
+import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
@@ -65,12 +65,12 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'approver/queue',
+    path: 'reasoning-branches/pending-changes',
     pathMatch: 'full',
-    component: ChangeRequestsListComponent,
+    component: PendingChangesComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin']
+      authorities: ['Business Operator', 'Approver']
     }
   },
   {
@@ -139,4 +139,5 @@ export const rolesByRedirect: Map<string, string> = new Map([
   ['Business Operator', '/reasoning-branch'],
   ['Auditor', 'reports/audit-trail'],
   ['Analyst', '/analyst'],
+  ['Approver', '/reasoning-branches/pending-changes']
 ]);

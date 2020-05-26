@@ -49,15 +49,15 @@ const DATA: ChangeRequest[] = [
 ];
 
 @Component({
-  selector: 'app-change-requests-table',
-  templateUrl: './change-requests-table.component.html'
+  selector: 'app-pending-changes-table',
+  templateUrl: './pending-changes-table.component.html'
 })
-export class ChangeRequestsTableComponent implements OnInit {
+export class PendingChangesTableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'aiSolution', 'aiStatus', 'requestDate', 'author'];
   dataSource = new MatTableDataSource(DATA);
 
-  translatePrefix = 'changeRequestsList.';
+  translatePrefix = 'pendingChanges.';
   translateTablePrefix = this.translatePrefix + 'dataLabels.';
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;

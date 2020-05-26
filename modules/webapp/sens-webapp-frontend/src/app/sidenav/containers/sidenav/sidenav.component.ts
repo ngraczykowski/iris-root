@@ -25,6 +25,11 @@ export class SidenavComponent implements OnInit {
           label: 'changeRequest.title',
           url: '/reasoning-branches/change-request',
           icon: 'add_circle'
+        },
+        {
+          label: 'pendingChanges.title',
+          url: '/reasoning-branches/pending-changes',
+          icon: 'view_list'
         }
       ]
     },
@@ -36,17 +41,6 @@ export class SidenavComponent implements OnInit {
           label: 'usersList.title',
           url: '/users/user-management',
           icon: 'people'
-        }
-      ]
-    },
-    {
-      name: this.sectionsPrefix + 'approver',
-      visible: false,
-      links: [
-        {
-          label: 'approvalQueue.title',
-          url: '/approver/queue',
-          icon: 'view_list'
         }
       ]
     },

@@ -10,7 +10,7 @@ export class ChangeRequestPreviewComponent implements OnInit {
   @Input() changeRequestData;
   @Input() changeRequestID;
 
-  translatePrefix = 'changeRequestsList.changeRequestDetails.';
+  translatePrefix = 'pendingChanges.changeRequestDetails.';
 
   constructor() { }
 

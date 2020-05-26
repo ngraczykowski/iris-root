@@ -19,8 +19,7 @@
     "sections": {
       "reasoningBranches": "Reasoning Branches",
       "reports": "Reports",
-      "users": "Users",
-      "approver": "Approver"
+      "users": "Users"
     }
   },
   "changeRequest": {
@@ -125,10 +124,8 @@
   "reports": {
     "title": "Reports"
   },
-  "approvalQueue": {
-    "title": "Queue ({{value}})"
-  },
-  "changeRequestsList": {
+  "pendingChanges": {
+    "title": "Pending Changes ({{value}})",
     "dataLabels": {
       "id": "ID",
       "aiSolution": "AI Solution",

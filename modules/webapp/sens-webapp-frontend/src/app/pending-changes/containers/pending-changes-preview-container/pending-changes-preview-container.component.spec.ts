@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChangeRequestPreviewContainerComponent } from './change-request-preview-container.component';
+import { PendingChangesPreviewContainerComponent } from './pending-changes-preview-container.component';
 
 describe('ChangeRequestPreviewContainerComponent', () => {
-  let component: ChangeRequestPreviewContainerComponent;
-  let fixture: ComponentFixture<ChangeRequestPreviewContainerComponent>;
+  let component: PendingChangesPreviewContainerComponent;
+  let fixture: ComponentFixture<PendingChangesPreviewContainerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChangeRequestPreviewContainerComponent ]
+      declarations: [ PendingChangesPreviewContainerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChangeRequestPreviewContainerComponent);
+    fixture = TestBed.createComponent(PendingChangesPreviewContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

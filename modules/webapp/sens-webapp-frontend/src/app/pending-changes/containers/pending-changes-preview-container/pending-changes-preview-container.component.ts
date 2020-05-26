@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeRequestDecisionDialogComponent } from '@app/change-requests-list/components/change-request-decision-dialog/change-request-decision-dialog.component';
+import { ChangeRequestDecisionDialogComponent } from '@app/pending-changes/components/change-request-decision-dialog/change-request-decision-dialog.component';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
 
 @Component({
   selector: 'app-change-request-preview-container',
-  templateUrl: './change-request-preview-container.component.html',
-  styleUrls: ['./change-request-preview-container.component.scss']
+  templateUrl: './pending-changes-preview-container.component.html',
+  styleUrls: ['./pending-changes-preview-container.component.scss']
 })
-export class ChangeRequestPreviewContainerComponent implements OnInit {
+export class PendingChangesPreviewContainerComponent implements OnInit {
 
-  translatePrefix = 'changeRequestsList.changeRequestDetails.';
+  translatePrefix = 'pendingChanges.changeRequestDetails.';
   translatePrefixDialogReject = this.translatePrefix + 'dialogReject.';
   translatePrefixDialogApprove = this.translatePrefix + 'dialogApprove.';
   translatePrefixDecision = this.translatePrefix + 'decision.';
@@ -32,29 +32,29 @@ export class ChangeRequestPreviewContainerComponent implements OnInit {
   changeRequestData = {
     details: [
       {
-        label: 'changeRequestsList.changeRequestDetails.details.labels.changeRequestID',
+        label: 'pendingChanges.changeRequestDetails.details.labels.changeRequestID',
         value: 'CR-2032'
       },
       {
-        label: 'changeRequestsList.changeRequestDetails.details.labels.reasoningBranchesCount',
+        label: 'pendingChanges.changeRequestDetails.details.labels.reasoningBranchesCount',
         value: 3456
       },
       {
-        label: 'changeRequestsList.changeRequestDetails.details.labels.requestDate',
+        label: 'pendingChanges.changeRequestDetails.details.labels.requestDate',
         value: '2020-04-12 16:34'
       },
       {
-        label: 'changeRequestsList.changeRequestDetails.details.labels.author',
+        label: 'pendingChanges.changeRequestDetails.details.labels.author',
         value: 'Patryk Górski'
       },
     ],
     changes: [
       {
-        label: 'changeRequestsList.changeRequestDetails.changes.labels.solution',
+        label: 'pendingChanges.changeRequestDetails.changes.labels.solution',
         value: 'Potential True Positive'
       },
       {
-        label: 'changeRequestsList.changeRequestDetails.changes.labels.status',
+        label: 'pendingChanges.changeRequestDetails.changes.labels.status',
         value: 'Disabled'
       },
     ],

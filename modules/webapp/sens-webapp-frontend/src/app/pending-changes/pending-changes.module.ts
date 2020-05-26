@@ -10,18 +10,18 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { ChangeRequestsListComponent } from './containers/change-requests-list/change-requests-list.component';
-import { ChangeRequestsTableComponent } from './components/change-requests-table/change-requests-table.component';
+import { PendingChangesComponent } from './containers/pending-changes/pending-changes.component';
+import { PendingChangesTableComponent } from './components/pending-changes-table/pending-changes-table.component';
 import { ChangeRequestDecisionDialogComponent } from './components/change-request-decision-dialog/change-request-decision-dialog.component';
-import { ChangeRequestPreviewContainerComponent } from './containers/change-request-preview-container/change-request-preview-container.component';
+import { PendingChangesPreviewContainerComponent } from './containers/pending-changes-preview-container/pending-changes-preview-container.component';
 import { ChangeRequestPreviewComponent } from './components/change-request-preview/change-request-preview.component';
 
 @NgModule({
   declarations: [
-    ChangeRequestsListComponent,
-    ChangeRequestsTableComponent,
+    PendingChangesComponent,
+    PendingChangesTableComponent,
     ChangeRequestDecisionDialogComponent,
-    ChangeRequestPreviewContainerComponent,
+    PendingChangesPreviewContainerComponent,
     ChangeRequestPreviewComponent],
   imports: [
     CommonModule,
@@ -41,4 +41,4 @@ import { ChangeRequestPreviewComponent } from './components/change-request-previ
     ChangeRequestDecisionDialogComponent
   ]
 })
-export class ChangeRequestsListModule {}
+export class PendingChangesModule {}
