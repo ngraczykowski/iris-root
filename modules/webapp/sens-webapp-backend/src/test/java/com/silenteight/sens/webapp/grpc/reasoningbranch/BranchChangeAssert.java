@@ -5,6 +5,7 @@ import com.silenteight.proto.serp.v1.api.BranchSolutionChange;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 
 import org.assertj.core.api.AbstractAssert;
 

@@ -6,6 +6,7 @@ import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;

@@ -15,6 +15,7 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundExce
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.ChangeRequestRepository;
 import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;

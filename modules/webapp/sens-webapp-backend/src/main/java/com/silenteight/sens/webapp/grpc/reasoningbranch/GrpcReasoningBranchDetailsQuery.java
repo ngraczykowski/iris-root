@@ -10,6 +10,7 @@ import com.silenteight.proto.serp.v1.api.ReasoningBranchResponse;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDetailsDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchDetailsQuery;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import io.vavr.control.Try;

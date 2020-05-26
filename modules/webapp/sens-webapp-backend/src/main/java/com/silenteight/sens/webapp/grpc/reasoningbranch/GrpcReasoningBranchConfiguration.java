@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 
 import io.grpc.Channel;
 import org.springframework.beans.factory.annotation.Qualifier;

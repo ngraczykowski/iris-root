@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDetailsDto;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 import com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchDetailsQueryFixtures.ReasoningBranch;
 

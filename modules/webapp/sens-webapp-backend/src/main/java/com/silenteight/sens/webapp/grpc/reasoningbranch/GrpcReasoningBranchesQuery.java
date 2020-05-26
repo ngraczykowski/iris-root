@@ -13,6 +13,7 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchesQuery;
 import com.silenteight.sens.webapp.backend.reasoningbranch.validate.BranchIdAndSignatureDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchesValidateQuery;
+import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import io.vavr.control.Try;
