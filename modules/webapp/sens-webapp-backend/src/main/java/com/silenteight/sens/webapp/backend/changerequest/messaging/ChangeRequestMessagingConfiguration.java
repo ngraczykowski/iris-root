@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.backend.changerequest.messaging;
 
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestMessageHandler;
+import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestMessageHandler;
 import com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestMessageHandler;
 
 import org.springframework.context.annotation.Bean;
@@ -10,16 +11,23 @@ import org.springframework.context.annotation.Configuration;
 class ChangeRequestMessagingConfiguration {
 
   @Bean
-  ApproveChangeRequestMessageSender approveChangeRequestMessageSender(
-      ApproveChangeRequestMessageHandler handler) {
-    
-    return new DummyApproveChangeRequestMessageSender(handler);
+  CreateChangeRequestMessageGateway createChangeRequestMessageGateway(
+      CreateChangeRequestMessageHandler createChangeRequestMessageHandler) {
+
+    return new DummyCreateChangeRequestMessageGateway(createChangeRequestMessageHandler);
   }
 
   @Bean
-  RejectChangeRequestMessageSender rejectChangeRequestMessageSender(
+  ApproveChangeRequestMessageGateway approveChangeRequestMessageGateway(
+      ApproveChangeRequestMessageHandler handler) {
+
+    return new DummyApproveChangeRequestMessageGateway(handler);
+  }
+
+  @Bean
+  RejectChangeRequestMessageGateway rejectChangeRequestMessageGateway(
       RejectChangeRequestMessageHandler handler) {
 
-    return new DummyRejectChangeRequestMessageSender(handler);
+    return new DummyRejectChangeRequestMessageGateway(handler);
   }
 }

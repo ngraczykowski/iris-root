@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.backend.changerequest.reject;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageSender;
+import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageGateway;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ class RejectChangeRequestUseCaseTest {
   @Mock
   private AuditTracer auditTracer;
   @Mock
-  private RejectChangeRequestMessageSender messageSender;
+  private RejectChangeRequestMessageGateway messageGateway;
 
   @Test
   void rejectChangeRequestCommand_rejectChangeRequest() {
@@ -52,7 +52,7 @@ class RejectChangeRequestUseCaseTest {
     assertThat(command.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
     assertThat(command.getRejectorUsername()).isEqualTo(REJECT_COMMAND.getRejectorUsername());
 
-    verify(messageSender).send(
+    verify(messageGateway).send(
         any(com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand.class));
   }
 }

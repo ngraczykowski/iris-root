@@ -6,7 +6,6 @@ import lombok.Value;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import javax.annotation.Nullable;
 
 @Value
 @Builder
@@ -18,7 +17,7 @@ public class CreateChangeRequestCommand {
   @NonNull
   private String makerUsername;
 
-  @Nullable
+  @NonNull
   private String makerComment;
 
   @NonNull

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageSender;
+import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageGateway;
 
 import java.time.Instant;
 
@@ -22,7 +22,7 @@ public class RejectChangeRequestUseCase {
   @NonNull
   private final AuditTracer auditTracer;
   @NonNull
-  private final RejectChangeRequestMessageSender messageSender;
+  private final RejectChangeRequestMessageGateway messageGateway;
 
   public void apply(@NonNull RejectChangeRequestCommand command) {
     log.debug(CHANGE_REQUEST, "Rejecting Change Request, command={}", command);
@@ -33,7 +33,7 @@ public class RejectChangeRequestUseCase {
             "webapp_change_request",
             command));
 
-    messageSender.send(toMessage(command));
+    messageGateway.send(toMessage(command));
 
     log.debug(CHANGE_REQUEST,
         "Rejected Change Request, changeRequestId={}", command.getChangeRequestId());

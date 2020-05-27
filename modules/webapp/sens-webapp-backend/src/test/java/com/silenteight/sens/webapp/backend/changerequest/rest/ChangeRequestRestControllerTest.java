@@ -160,7 +160,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
     }
 
     private CreateChangeRequestDto changeRequestWithDefaults() {
-      return new CreateChangeRequestDto(randomUUID(), now(), null);
+      return new CreateChangeRequestDto(randomUUID(), now(), "Comment ABC");
     }
 
     private String mappingForChangeRequests() {

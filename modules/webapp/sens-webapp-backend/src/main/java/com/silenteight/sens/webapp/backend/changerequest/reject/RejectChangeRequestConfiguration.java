@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.changerequest.reject;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
-import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageSender;
+import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageGateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +12,9 @@ class RejectChangeRequestConfiguration {
 
   @Bean
   RejectChangeRequestUseCase rejectChangeRequestUseCase(
-      AuditTracer auditTracer, RejectChangeRequestMessageSender messageSender) {
+      AuditTracer auditTracer, RejectChangeRequestMessageGateway messageGateway) {
 
-    return new RejectChangeRequestUseCase(auditTracer, messageSender);
+    return new RejectChangeRequestUseCase(auditTracer, messageGateway);
   }
 
   @Bean

@@ -7,7 +7,7 @@ import com.silenteight.proto.serp.v1.changerequest.ApproveChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestMessageHandler;
 
 @RequiredArgsConstructor
-class DummyApproveChangeRequestMessageSender implements ApproveChangeRequestMessageSender {
+class DummyApproveChangeRequestMessageGateway implements ApproveChangeRequestMessageGateway {
 
   @NonNull
   private final ApproveChangeRequestMessageHandler handler;
