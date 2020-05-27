@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.backend.bulkchange;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
@@ -15,9 +16,11 @@ import static java.lang.Boolean.TRUE;
 import static java.time.OffsetDateTime.now;
 import static java.util.Collections.emptyList;
 import static java.util.UUID.randomUUID;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -28,6 +31,9 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private BulkChangeQuery bulkChangeQuery;
+
+  @MockBean
+  private CreateBulkChangeUseCase createBulkChangeUseCase;
 
   @TestWithRole(role = APPROVER)
   void its200WithEmptyListWhenNoPendingBulkChanges() {
@@ -73,5 +79,44 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
   @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(BULK_CHANGES_URL).statusCode(FORBIDDEN.value());
+  }
+
+  @TestWithRole(role = BUSINESS_OPERATOR)
+  void its200_onCreate() {
+    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults())
+        .contentType(anything())
+        .statusCode(OK.value());
+  }
+
+  @TestWithRole(role = BUSINESS_OPERATOR)
+  void appliesCreateBulkChangeCommandOnUseCase() {
+    UUID id = randomUUID();
+    List<ReasoningBranchIdDto> reasoningBranchIds = List.of(new ReasoningBranchIdDto(1L, 2L));
+    String solution = "FALSE_POSITIVE";
+    Boolean active = TRUE;
+    post(BULK_CHANGES_URL, new BulkChangeDto(id, reasoningBranchIds, solution, active, now()));
+
+    ArgumentCaptor<CreateBulkChangeCommand> commandCaptor =
+        ArgumentCaptor.forClass(CreateBulkChangeCommand.class);
+
+    verify(createBulkChangeUseCase).apply(commandCaptor.capture());
+
+    CreateBulkChangeCommand command = commandCaptor.getValue();
+    assertThat(command.getBulkChangeId()).isEqualTo(id);
+    assertThat(command.getAiSolution()).isEqualTo(solution);
+    assertThat(command.getReasoningBranchIds()).isEqualTo(reasoningBranchIds);
+    assertThat(command.getActive()).isEqualTo(active);
+  }
+
+  @TestWithRole(role = APPROVER)
+  void its403_onCreate_whenNotPermittedRole() {
+    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults())
+        .contentType(anything())
+        .statusCode(FORBIDDEN.value());
+  }
+
+  private BulkChangeDto bulkChangeDtoWithDefaults() {
+    return new BulkChangeDto(
+        randomUUID(), List.of(new ReasoningBranchIdDto(1L, 2L)), null, null, now());
   }
 }
