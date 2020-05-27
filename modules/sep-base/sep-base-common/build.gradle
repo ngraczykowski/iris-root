@@ -5,19 +5,8 @@ plugins {
 
 description = "SEP Base Common"
 
-java {
-  registerFeature("database") {
-    usingSourceSet(sourceSets.main)
-    capability("com.silenteight.sep.base", "sep-base-common-database", "1.0")
-  }
-  registerFeature("messaging") {
-    usingSourceSet(sourceSets.main)
-    capability("com.silenteight.sep.base", "sep-base-common-messaging", "1.0")
-  }
-}
-
 configurations {
-  testImplementation.extendsFrom compileOnly, databaseImplementation, messagingImplementation
+  testImplementation.extendsFrom compileOnly
 }
 
 dependencies {
@@ -62,15 +51,15 @@ dependencies {
   api libraries.spring_amqp
   api libraries.spring_amqp_rabbit
   api libraries.spring_integration_amqp
-  messagingImplementation libraries.amqp_client
-  messagingImplementation libraries.lz4_java
-  messagingImplementation libraries.spring_messaging
+  implementation libraries.amqp_client
+  implementation libraries.lz4_java
+  implementation libraries.spring_messaging
 
   // Database-related dependencies
   api libraries.hibernate_core
   api libraries.hibernate_envers
   api libraries.jakarta_persistence_api
-  databaseImplementation libraries.spring_orm
+  implementation libraries.spring_orm
 
   testImplementation project(":sep-base-testing")
   testImplementation libraries.commons_collections4

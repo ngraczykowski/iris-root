@@ -4,14 +4,10 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.silenteight.serp.common.support.hibernate.SilentEightNamingConventionConfiguration,\
   com.silenteight.serp.common.messaging.MessagingConfiguration,\
   com.silenteight.serp.common.messaging.metrics.MessagingMetricsConfiguration,\
-  com.silenteight.serp.common.rest.error.RestExceptionHandler,\
   com.silenteight.serp.common.database.TransactionManagerAutoConfiguration,\
   com.silenteight.serp.common.grpc.GrpcInterceptorConfiguration,\
   com.silenteight.serp.common.grpc.GlobalExceptionHandlingServerInterceptor,\
   com.silenteight.serp.common.messaging.IntegrationConfiguration
-
-org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.silenteight.serp.common.support.spring.ModularConfigLocationEnvironmentPostProcessor
 
 org.springframework.context.ApplicationListener=\
   com.silenteight.serp.common.support.spring.EnvironmentLoggingApplicationListener

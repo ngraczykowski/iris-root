@@ -8,7 +8,6 @@ import org.springframework.amqp.core.MessageBuilderSupport;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.messaging.MessageHeaders;
 
-import static com.silenteight.serp.common.messaging.MessagingConstants.HEADER_PRIORITY;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.springframework.amqp.core.MessageProperties.DEFAULT_PRIORITY;
 import static org.springframework.amqp.support.AmqpHeaders.CORRELATION_ID;
@@ -21,6 +20,8 @@ import static org.springframework.amqp.support.AmqpHeaders.REPLY_TO;
 @RequiredArgsConstructor
 public final class CorrelatedMessagePropertiesProvider
     implements CustomizableMessagePropertiesProvider {
+
+  static final String HEADER_PRIORITY = "priority";
 
   private static final String EMPTY_VALUE = "";
 

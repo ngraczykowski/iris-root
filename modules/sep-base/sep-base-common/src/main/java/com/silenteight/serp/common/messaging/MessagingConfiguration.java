@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
@@ -30,10 +29,6 @@ import static java.util.stream.Collectors.toList;
 @ConditionalOnClass(name = "com.rabbitmq.client.ConnectionFactory")
 @EnableRabbit
 @EnableConfigurationProperties(MessagingProperties.class)
-@Import({
-    ExchangeConfiguration.class,
-    BrokerConfiguration.class
-})
 public class MessagingConfiguration implements RabbitListenerConfigurer {
 
   private final BeanFactory beanFactory;

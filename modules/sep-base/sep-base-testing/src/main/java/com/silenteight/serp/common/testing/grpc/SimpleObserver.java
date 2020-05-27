@@ -1,4 +1,4 @@
-package com.silenteight.serp.common.testing;
+package com.silenteight.serp.common.testing.grpc;
 
 import lombok.Getter;
 

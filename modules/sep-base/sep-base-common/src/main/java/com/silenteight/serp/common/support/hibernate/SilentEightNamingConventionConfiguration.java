@@ -3,6 +3,7 @@ package com.silenteight.serp.common.support.hibernate;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +13,10 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.containsAny;
 
 @RequiredArgsConstructor
-@ConditionalOnClass(name = "org.hibernate.SessionFactory")
 @Configuration
+@ConditionalOnClass(name = "org.hibernate.SessionFactory")
+@AutoConfigureBefore(
+    name = "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration")
 public class SilentEightNamingConventionConfiguration {
 
   private final Environment environment;
@@ -25,6 +28,12 @@ public class SilentEightNamingConventionConfiguration {
     return new SilentEightImplicitNamingStrategy(tablePrefix);
   }
 
+  @Bean
+  SilentEightPhysicalNamingStrategy silentEightPhysicalNamingStrategy() {
+    String appName = getApplicationName();
+    return new SilentEightPhysicalNamingStrategy(appName);
+  }
+
   private String getApplicationName() {
     String springApplicationName = environment.getRequiredProperty("spring.application.name");
 
@@ -32,11 +41,5 @@ public class SilentEightNamingConventionConfiguration {
       throw new BeanCreationException("Application name contains invalid characters");
 
     return springApplicationName.toLowerCase();
-  }
-
-  @Bean
-  SilentEightPhysicalNamingStrategy silentEightPhysicalNamingStrategy() {
-    String appName = getApplicationName();
-    return new SilentEightPhysicalNamingStrategy(appName);
   }
 }

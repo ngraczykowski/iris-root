@@ -11,7 +11,7 @@ import org.springframework.messaging.MessageHeaders;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.silenteight.serp.common.messaging.MessagingConstants.HEADER_PRIORITY;
+import static com.silenteight.serp.common.messaging.properties.CorrelatedMessagePropertiesProvider.HEADER_PRIORITY;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.amqp.support.AmqpHeaders.CORRELATION_ID;
 import static org.springframework.amqp.support.AmqpHeaders.MESSAGE_ID;

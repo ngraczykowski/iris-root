@@ -20,6 +20,7 @@ public class HibernateCacheAutoConfiguration {
   @AutoConfigureBefore(
       name = "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration")
   public static class CaffeineJCache {
+
     @Bean
     HibernatePropertiesCustomizer caffeineSecondLevelCacheHibernateCustomizer() {
       return hibernateProperties -> {
