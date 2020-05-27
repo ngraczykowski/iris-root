@@ -25,7 +25,7 @@ export const routes: Routes = [
     redirectTo: '/reasoning-branch',
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin', 'Business Operator']
+      authorities: ['Business Operator']
     }
   },
   {
@@ -34,7 +34,7 @@ export const routes: Routes = [
     component: ReasoningBranchManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin', 'Business Operator']
+      authorities: ['Business Operator']
     }
   },
   {
@@ -43,7 +43,7 @@ export const routes: Routes = [
     component: ReasoningBranchManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin', 'Business Operator']
+      authorities: ['Business Operator']
     }
   },
   {
@@ -52,7 +52,7 @@ export const routes: Routes = [
     component: ChangeRequestComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin', 'Business Operator']
+      authorities: ['Business Operator']
     }
   },
   {
@@ -61,7 +61,7 @@ export const routes: Routes = [
     component: AuditTrailComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin', 'Auditor']
+      authorities: ['Auditor']
     }
   },
   {
@@ -86,7 +86,7 @@ export const routes: Routes = [
     component: SecurityMatrixComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin', 'Auditor']
+      authorities: ['Auditor']
     }
   },
   {
