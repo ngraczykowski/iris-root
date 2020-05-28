@@ -7,11 +7,11 @@ import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
+import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.keycloak.KeycloakModule;
 import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.user.UserModule;
-import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -38,6 +38,6 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
 public class WebApplication {
 
   public static void main(String[] args) {
-    new SerpApplicationTemplate("webapp", args, WebApplication.class).run();
+    new SensWebAppApplicationTemplate("webapp", args, WebApplication.class).run();
   }
 }
