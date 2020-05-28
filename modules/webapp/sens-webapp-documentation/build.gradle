@@ -1,12 +1,7 @@
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.text.SimpleDateFormat
-import java.util.regex.Pattern
-
 plugins {
   id "base"
   id "maven-publish"
-  id "org.asciidoctor.jvm.convert" version "2.3.0"
+  id 'com.silenteight.gradle.asciidoctor' version '1.4.0'
 }
 
 ext {
@@ -16,136 +11,13 @@ ext {
 
 description = "Sens WebApp Documentation"
 
-def buildDate() {
-  def df = new SimpleDateFormat("yyyy-MM-dd HH:mm")
-  df.setTimeZone(TimeZone.getTimeZone("UTC"))
-  return df.format(new Date())
-}
-
-asciidoctorj {
-  version "2.1.0"
-  modules {
-    diagram.version "1.5.18"
-    pdf.version "1.5.0-beta.5"
-  }
-  options doctype: "book", eruby: "erubis"
-  // NOTE(ahaczewski): Keep the list of attributes ordered alphabetically.
-  attributes = [
-      "chapter-label"             : "",
-      "coderay-linenums-mode"     : "inline",
-      "docinfo"                   : "shared",
-      "encoding"                  : "utf-8",
-      "icons"                     : "font",
-      "icon-set"                  : "fas",
-      "idprefix"                  : "",
-      "idseparator"               : "-",
-      "lang"                      : "en",
-      "layout"                    : "docs",
-      "pdf-fontsdir"              : "./styles/fonts",
-      "pdf-stylesdir"             : "./styles",
-      "pdf-style"                 : "style.yml",
-      "revnumber"                 : "${project.version}\nRevision number: ${System.getenv('BUILD_NUMBER') ?: 'DEV'}\nRevision date: ${buildDate()}",
-      "sectanchors"               : "",
-      "sectnumlevels"             : 6,
-      "sectnums"                  : "",
-      "serp-opt-installer-version": serpOptInstallerVersion,
-      "source-highlighter"        : "coderay",
-      "stylesdir"                 : "./styles",
-      "title-logo-image"          :
-          "image:styles/images/silent-eight-logo.svg[top=0%, align=left, pdfwidth=2in]",
-      "toc"                       : "",
-      "toclevels"                 : 6,
-      "version"                   : project.version,
-  ]
-}
-
-tasks.named("asciidoctor").configure {
-  sourceDir "$projectDir/src/docs/asciidoc"
-  sources {
+asciidoctorConfig {
+  includeSources = {
     include "release-notes.adoc"
     include "webapp-guide.adoc"
     include "test-cases.adoc"
     include "adrs/*.adoc"
   }
-  resources {
-    from(sourceDir) {
-      include "**/images/*", "styles/**"
-    }
-  }
-  baseDirFollowsSourceDir()
-  logDocuments = true
-  outputOptions {
-    backends = ["html5", "pdf", "docbook"]
-  }
-}
-
-tasks.register("docx") {
-  doFirst {
-    project.file("$buildDir/docs/asciidoc/docx").mkdirs()
-    FileTree docbooks = fileTree(dir: "$buildDir/docs/asciidoc/docbook", include: "*.xml")
-    docbooks.each {docbook ->
-      String docxOutputName = docbook.name.take(docbook.name.lastIndexOf('.')) + ".docx"
-      exec {
-        executable = "pandoc"
-        workingDir "$buildDir"
-        args = ['--from', 'docbook',
-                '--to', 'docx',
-                '--reference-doc', "$projectDir/template.docx",
-                '--output', "$buildDir/docs/asciidoc/docx/${docxOutputName}",
-                // replace author displayed in final docx with version number
-                // which otherwise would be missing
-                "--metadata=author:v$project.version",
-                "${docbook.absolutePath}"]
-      }
-    }
-  }
-
-  dependsOn tasks.named("asciidoctor")
-}
-
-tasks.register("docs", Zip) {
-  from("$asciidoctor.outputDir/pdf") {
-    include "**/*.pdf"
-    into "docs/pdf"
-  }
-
-  from("$asciidoctor.outputDir/html5") {
-    into "docs/html"
-  }
-
-  dependsOn tasks.named("asciidoctor")
-
-  if (commandExists("pandoc")) {
-    from("$asciidoctor.outputDir/docx") {
-      into "docs/docx"
-    }
-
-    dependsOn tasks.named("docx")
-  } else {
-    logger.warn("Docx documentation generation is skipped because pandoc executable was not found.")
-  }
-}
-
-private static boolean commandExists(String command) {
-  String[] pathArray = System.getenv("PATH").split(Pattern.quote(File.pathSeparator))
-
-  pathArray.stream()
-      .map(Paths.&get)
-      .anyMatch {path -> Files.exists(path.resolve(command))}
-}
-
-tasks.named("publish").configure {
-  dependsOn tasks.named("docs")
-}
-
-tasks.named("publishToMavenLocal").configure {
-  dependsOn tasks.named("docs")
-}
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      artifact docs
-    }
-  }
+  publishAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
+  additionalAsciidoctorjAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
 }
