@@ -1,13 +1,14 @@
 package com.silenteight.sep.base.testing.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import com.google.protobuf.ByteString;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
-public class ByteStringTestUtils {
-
-  private ByteStringTestUtils() {
-  }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ByteStringTestUtils {
 
   public static ByteString randomSignature() {
     return createSignature(randomString());
@@ -20,5 +21,4 @@ public class ByteStringTestUtils {
   private static String randomString() {
     return randomAlphabetic(5);
   }
-
 }

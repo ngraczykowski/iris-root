@@ -1,12 +1,13 @@
 package com.silenteight.sep.base.common.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {
-
-  private ReflectionUtils() {
-  }
 
   public static Optional<Object> invokeStaticGetter(Class<?> type, String methodName) {
     Method getterMethod = org.springframework.util.ReflectionUtils.findMethod(type, methodName);
