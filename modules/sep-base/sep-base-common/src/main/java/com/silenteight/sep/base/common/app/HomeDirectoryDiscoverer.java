@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
 
-class HomeDirectoryDiscoverer {
+public class HomeDirectoryDiscoverer {
 
   private static final Pattern JAR_FILE_PATTERN =
       Pattern.compile("(file:)?(?<path>[^!]*)(!.*)?");

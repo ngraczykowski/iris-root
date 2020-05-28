@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-class ApplicationBootstrapper {
+public class ApplicationBootstrapper {
 
   private final String appName;
   private final String homeProperty;
