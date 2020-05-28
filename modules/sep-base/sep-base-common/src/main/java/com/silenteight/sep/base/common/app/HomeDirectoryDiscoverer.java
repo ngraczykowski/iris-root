@@ -25,7 +25,7 @@ public class HomeDirectoryDiscoverer {
 
   private List<PathSupplier> pathSuppliers;
 
-  HomeDirectoryDiscoverer(String homeEnvVariable) {
+  public HomeDirectoryDiscoverer(String homeEnvVariable) {
     this.homeEnvVariable = homeEnvVariable;
 
     pathSuppliers = asList(
