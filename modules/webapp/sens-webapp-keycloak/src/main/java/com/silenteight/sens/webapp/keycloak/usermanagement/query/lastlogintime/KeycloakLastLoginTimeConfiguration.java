@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime;
 
-import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
 
 import org.keycloak.admin.client.resource.RealmResource;
 import org.springframework.context.annotation.Bean;

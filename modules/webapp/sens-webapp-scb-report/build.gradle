@@ -50,6 +50,7 @@ dependencies {
   implementation libraries.vavr
 
   testImplementation project(":sens-webapp-db-changelog")
+  testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.rest_assured
   testImplementation libraries.rest_assured_spring_mock_mvc
 }

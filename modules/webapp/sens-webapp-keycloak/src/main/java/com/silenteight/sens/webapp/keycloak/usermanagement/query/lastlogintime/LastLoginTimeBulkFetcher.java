@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sens.webapp.common.time.TimeConverter;
+import com.silenteight.sep.base.common.time.TimeConverter;
 
 import one.util.streamex.EntryStream;
 import org.keycloak.admin.client.resource.RealmResource;

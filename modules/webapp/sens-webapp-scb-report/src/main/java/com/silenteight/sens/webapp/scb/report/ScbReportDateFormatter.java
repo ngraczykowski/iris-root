@@ -1,12 +1,12 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sens.webapp.common.time.DateFormatter;
+import com.silenteight.sep.base.common.time.DateFormatter;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
-import static com.silenteight.sens.webapp.common.time.ApplicationTimeZone.TIME_ZONE;
+import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
 
 class ScbReportDateFormatter implements DateFormatter {
 

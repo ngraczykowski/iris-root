@@ -22,7 +22,6 @@ import static java.util.Optional.ofNullable;
 @Builder
 public class TestUpdatedBranches implements UpdatedBranches {
 
-  @NonNull
   private final long treeId;
 
   @NonNull

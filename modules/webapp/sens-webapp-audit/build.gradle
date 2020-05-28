@@ -1,5 +1,5 @@
 plugins {
-  id "java"
+  id "java-library"
   id "maven-publish"
 }
 
@@ -11,7 +11,7 @@ dependencies {
 
   implementation libraries.silenteight_audit_bs
 
-  implementation libraries.javax_servlet_api
+  implementation libraries.jakarta_servlet_api
 
-  compile libraries.spring_security_core
+  api libraries.spring_security_core
 }

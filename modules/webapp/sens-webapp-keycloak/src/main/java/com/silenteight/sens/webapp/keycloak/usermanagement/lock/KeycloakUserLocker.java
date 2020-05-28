@@ -4,9 +4,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.keycloak.usermanagement.retrieval.KeycloakUserRetriever;
 import com.silenteight.sens.webapp.user.lock.UserLocker;
+import com.silenteight.sep.base.common.time.TimeSource;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;

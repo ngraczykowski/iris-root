@@ -25,11 +25,11 @@ import java.util.List;
 
 import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_FALSE_POSITIVE;
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.sens.webapp.common.support.encoding.ByteStringUtils.toBase64String;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.NOT_FOUND_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchesQueryTestFixtures.*;
 import static com.silenteight.sens.webapp.grpc.util.ByteStringTestUtils.randomSignature;
+import static com.silenteight.sep.base.common.protocol.ByteStringUtils.toBase64String;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;

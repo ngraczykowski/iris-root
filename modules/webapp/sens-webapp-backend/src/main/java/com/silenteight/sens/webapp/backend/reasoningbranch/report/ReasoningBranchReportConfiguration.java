@@ -2,9 +2,9 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.report;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
-import com.silenteight.sens.webapp.common.time.DigitsOnlyDateFormatter;
-import com.silenteight.sens.webapp.common.time.IsoOffsetDateFormatter;
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
+import com.silenteight.sep.base.common.time.IsoOffsetDateFormatter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -66,7 +66,7 @@ spring:
 
   # Spring Data JPA
   jpa:
-    database-platform: com.silenteight.sens.webapp.common.support.hibernate.FixedPostgreSql95Dialect
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
     database: POSTGRESQL
     show-sql: false
     open-in-view: false

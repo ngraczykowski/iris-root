@@ -1,9 +1,9 @@
 package com.silenteight.sens.webapp.audit.report;
 
 import com.silenteight.auditing.bs.AuditingFinder;
-import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
+import com.silenteight.sep.base.testing.time.MockTimeSource;
 
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;

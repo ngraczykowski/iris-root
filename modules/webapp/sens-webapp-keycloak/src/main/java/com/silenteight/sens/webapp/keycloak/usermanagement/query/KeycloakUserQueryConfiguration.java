@@ -1,9 +1,9 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 
-import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.InternalRoleFilter;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
 
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;

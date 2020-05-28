@@ -3,13 +3,13 @@ package com.silenteight.sens.webapp.user.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.domain.validator.*;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
 import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
+import com.silenteight.sep.base.common.time.TimeSource;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;

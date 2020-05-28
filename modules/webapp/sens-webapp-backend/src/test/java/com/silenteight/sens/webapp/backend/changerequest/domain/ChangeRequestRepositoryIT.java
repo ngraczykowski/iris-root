@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.domain;
 
-import com.silenteight.sens.webapp.common.testing.BaseDataJpaTest;
+import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

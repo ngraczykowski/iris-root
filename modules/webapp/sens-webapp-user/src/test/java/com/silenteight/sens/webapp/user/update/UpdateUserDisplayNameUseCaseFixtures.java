@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.user.update;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase.UpdateUserDisplayNameCommand;
+import com.silenteight.sep.base.testing.time.MockTimeSource;
 
 import java.time.OffsetDateTime;
 

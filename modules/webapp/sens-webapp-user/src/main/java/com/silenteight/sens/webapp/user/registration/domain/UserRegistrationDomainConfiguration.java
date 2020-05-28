@@ -4,12 +4,11 @@ import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
 import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator;
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import static com.silenteight.sens.webapp.common.time.DefaultTimeSource.INSTANCE;
 
 @Configuration
 class UserRegistrationDomainConfiguration {
@@ -24,7 +23,7 @@ class UserRegistrationDomainConfiguration {
       @Qualifier("passwordCharsValidator") RegexValidator passwordCharsValidator) {
 
     return new UserRegisteringDomainService(
-        INSTANCE,
+        DefaultTimeSource.INSTANCE,
         usernameLengthValidator,
         usernameCharsValidator,
         displayNameLengthValidator,

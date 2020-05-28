@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.support;
 
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.common.support.jackson.JsonConversionHelper;
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

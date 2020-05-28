@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
-import com.silenteight.sens.webapp.common.time.DateFormatter;
-import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.ReportGenerator;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
+import com.silenteight.sep.base.common.time.DateFormatter;
+import com.silenteight.sep.base.common.time.TimeSource;
 
 import java.util.List;
 import java.util.Map;

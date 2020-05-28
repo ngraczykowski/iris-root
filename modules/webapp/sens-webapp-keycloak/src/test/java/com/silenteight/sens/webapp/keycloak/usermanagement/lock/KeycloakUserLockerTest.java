@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.keycloak.usermanagement.lock;
 
-import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
 import com.silenteight.sens.webapp.keycloak.usermanagement.retrieval.KeycloakUserRetriever;
+import com.silenteight.sep.base.testing.time.MockTimeSource;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

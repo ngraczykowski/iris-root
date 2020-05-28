@@ -1,11 +1,11 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.report;
 
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
-import com.silenteight.sens.webapp.common.testing.time.MockTimeSource;
-import com.silenteight.sens.webapp.common.time.DigitsOnlyDateFormatter;
-import com.silenteight.sens.webapp.common.time.IsoOffsetDateFormatter;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
+import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
+import com.silenteight.sep.base.common.time.IsoOffsetDateFormatter;
+import com.silenteight.sep.base.testing.time.MockTimeSource;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;

@@ -24,10 +24,10 @@ import java.util.function.Predicate;
 
 import static com.google.rpc.Code.NOT_FOUND;
 import static com.silenteight.protocol.utils.MoreTimestamps.toInstant;
-import static com.silenteight.sens.webapp.common.support.encoding.ByteStringUtils.toBase64String;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
+import static com.silenteight.sep.base.common.protocol.ByteStringUtils.toBase64String;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;

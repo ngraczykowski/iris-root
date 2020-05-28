@@ -3,12 +3,12 @@ package com.silenteight.sens.webapp.keycloak.usermanagement.query;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.common.time.TimeConverter;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sens.webapp.keycloak.usermanagement.query.role.RolesProvider;
 import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
 import com.silenteight.sens.webapp.user.dto.UserDto;
+import com.silenteight.sep.base.common.time.TimeConverter;
 
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;

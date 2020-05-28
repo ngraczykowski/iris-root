@@ -5,58 +5,16 @@ plugins {
 
 description = "SENS WebApp Common"
 
-java {
-  registerFeature("database") {
-    usingSourceSet(sourceSets.main)
-    capability("com.silenteight.sens.webapp", "sens-webapp-common-database", "1.0")
-  }
-}
-
-configurations {
-  implementation.extendsFrom starterJackson
-
-  testImplementation.extendsFrom databaseImplementation
-}
-
 dependencies {
   // API dependencies
-  api libraries.jackson_annotations
-  api libraries.jackson_databind
-  api libraries.protobuf_java
-  api libraries.silenteight_commons_app
+  api libraries.jakarta_validation_api
+  api libraries.silenteight_sep_base_common
   api libraries.silenteight_serp_protocol
-  api libraries.spring_beans
-  api libraries.spring_boot_autoconfigure
-  api libraries.spring_core
-  api libraries.spring_tx
-  api libraries.spring_web
 
   // General dependencies
-  implementation libraries.classgraph
-  implementation libraries.commons_codec
-  implementation libraries.commons_lang3
-  implementation libraries.guava
-  implementation libraries.vavr
-  implementation libraries.javax_servlet_api
-  implementation libraries.protobuf_java_util
-  implementation libraries.grpc_protobuf
   implementation libraries.silenteight_commons_core
+  implementation libraries.vavr
   implementation libraries.spring_boot_actuator
-  implementation libraries.spring_context
-  implementation libraries.spring_data_commons
   implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_security_config
-
-  implementation libraries.byte_buddy_agent
-  implementation libraries.bouncycastle_bcprov
-  implementation libraries.logback_classic
-
-  runtimeOnly libraries.logback_ecs_encoder
-  runtimeOnly libraries.logstash_logback_encoder
-
-  // Database-related dependencies
-  databaseImplementation libraries.hibernate_core
-  databaseImplementation libraries.hibernate_envers
-  databaseImplementation libraries.javax_persistence_api
-  databaseImplementation libraries.spring_orm
 }

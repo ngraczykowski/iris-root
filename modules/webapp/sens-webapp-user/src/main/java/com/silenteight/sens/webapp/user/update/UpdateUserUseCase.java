@@ -5,13 +5,13 @@ import lombok.Builder.Default;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.common.time.DefaultTimeSource;
-import com.silenteight.sens.webapp.common.time.TimeSource;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
 import com.silenteight.sens.webapp.user.update.UpdatedUser.UpdatedUserBuilder;
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.base.common.time.TimeSource;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

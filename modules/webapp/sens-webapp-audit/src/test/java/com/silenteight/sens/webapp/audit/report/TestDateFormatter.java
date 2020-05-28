@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.audit.report;
 
-import com.silenteight.sens.webapp.common.time.DateFormatter;
+import com.silenteight.sep.base.common.time.DateFormatter;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;

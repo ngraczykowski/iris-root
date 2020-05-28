@@ -92,7 +92,7 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
 
   @ExceptionHandler({
       EntityNotFoundException.class,
-      com.silenteight.sens.webapp.common.exception.EntityNotFoundException.class
+      com.silenteight.sep.base.common.exception.EntityNotFoundException.class
   })
   public ResponseEntity<ErrorDto> handle(Exception e) {
     return handle(e, "EntityNotFoundException", HttpStatus.NOT_FOUND);
