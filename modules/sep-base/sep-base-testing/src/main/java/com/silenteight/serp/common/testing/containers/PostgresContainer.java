@@ -1,5 +1,8 @@
 package com.silenteight.serp.common.testing.containers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -10,13 +13,14 @@ import java.util.Map;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PostgresContainer {
 
   private static final PostgreSQLContainer<?> CONTAINER;
 
   static {
     CONTAINER = new PostgreSQLContainer<>("postgres:10")
-        .withDatabaseName("serp_test_" + randomAlphabetic(6))
+        .withDatabaseName("test_db_" + randomAlphabetic(6))
         .withUsername("user_" + randomAlphabetic(6))
         .withPassword(randomAlphanumeric(12))
         .withTmpFs(Map.of("/var/lib/postgresql/data", "rw"));
@@ -36,7 +40,8 @@ public final class PostgresContainer {
     return CONTAINER.getPassword();
   }
 
-  private PostgresContainer() {
+  public static String getDriverClassName() {
+    return CONTAINER.getDriverClassName();
   }
 
   public static class PostgresTestInitializer
@@ -45,11 +50,12 @@ public final class PostgresContainer {
     @Override
     public void initialize(ConfigurableApplicationContext context) {
       TestPropertyValues propertyValues = TestPropertyValues.of(
-          "spring.datasource.url=" + CONTAINER.getJdbcUrl(),
-          "spring.datasource.username=" + CONTAINER.getUsername(),
-          "spring.datasource.password=" + CONTAINER.getPassword()
+          "spring.datasource.url=" + getJdbcUrl(),
+          "spring.datasource.username=" + getUsername(),
+          "spring.datasource.password=" + getPassword(),
+          "spring.datasource.driver-class-name=" + getDriverClassName(),
+          "spring.test.database.replace=none"
       );
-
       propertyValues.applyTo(context.getEnvironment());
     }
   }

@@ -1,5 +1,8 @@
 package com.silenteight.serp.common.testing.containers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -10,6 +13,7 @@ import java.util.Map;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ElasticContainer {
 
   private static final String CLUSTER_NAME;
@@ -25,7 +29,17 @@ public final class ElasticContainer {
     CONTAINER.start();
   }
 
-  private ElasticContainer() {
+  public static String getClusterName() {
+    return CLUSTER_NAME;
+  }
+
+  public static String getTransportAddress() {
+    InetSocketAddress host = CONTAINER.getTcpHost();
+    return host.getHostName() + ":" + host.getPort();
+  }
+
+  public static String getRestApiAddress() {
+    return CONTAINER.getHttpHostAddress();
   }
 
   public static class ElasticContainerInitializer
@@ -34,21 +48,12 @@ public final class ElasticContainer {
     @Override
     public void initialize(ConfigurableApplicationContext context) {
       TestPropertyValues propertyValues = TestPropertyValues.of(
-          "spring.data.elasticsearch.cluster-name=" + CLUSTER_NAME,
+          "spring.data.elasticsearch.cluster-name=" + getClusterName(),
           "spring.data.elasticsearch.cluster-nodes=" + getTransportAddress(),
           "spring.elasticsearch.rest.uris=" + getRestApiAddress()
       );
 
       propertyValues.applyTo(context.getEnvironment());
-    }
-
-    private static String getTransportAddress() {
-      InetSocketAddress host = CONTAINER.getTcpHost();
-      return host.getHostName() + ":" + host.getPort();
-    }
-
-    private static String getRestApiAddress() {
-      return CONTAINER.getHttpHostAddress();
     }
   }
 }

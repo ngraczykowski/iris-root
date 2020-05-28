@@ -1,5 +1,8 @@
 package com.silenteight.serp.common.testing.containers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -14,6 +17,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RabbitContainer {
 
   private static final GenericContainer<?> CONTAINER;
@@ -57,19 +61,16 @@ public final class RabbitContainer {
     return PASSWORD;
   }
 
-  private RabbitContainer() {
-  }
-
   public static class RabbitTestInitializer
       implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
     public void initialize(ConfigurableApplicationContext context) {
       TestPropertyValues propertyValues = TestPropertyValues.of(
-          "spring.rabbitmq.host=" + CONTAINER.getContainerIpAddress(),
-          "spring.rabbitmq.port=" + CONTAINER.getMappedPort(AMQP_PORT),
-          "spring.rabbitmq.username=" + USERNAME,
-          "spring.rabbitmq.password=" + PASSWORD
+          "spring.rabbitmq.host=" + getHost(),
+          "spring.rabbitmq.port=" + getPort(),
+          "spring.rabbitmq.username=" + getUsername(),
+          "spring.rabbitmq.password=" + getPassword()
       );
 
       propertyValues.applyTo(context.getEnvironment());
