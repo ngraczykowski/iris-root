@@ -1,13 +1,13 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.silenteight.serp.common.database.DataSourceAutoConfiguration,\
-  com.silenteight.serp.common.database.HibernateCacheAutoConfiguration,\
-  com.silenteight.serp.common.support.hibernate.SilentEightNamingConventionConfiguration,\
-  com.silenteight.serp.common.messaging.MessagingConfiguration,\
-  com.silenteight.serp.common.messaging.metrics.MessagingMetricsConfiguration,\
-  com.silenteight.serp.common.database.TransactionManagerAutoConfiguration,\
-  com.silenteight.serp.common.grpc.GrpcInterceptorConfiguration,\
-  com.silenteight.serp.common.grpc.GlobalExceptionHandlingServerInterceptor,\
-  com.silenteight.serp.common.messaging.IntegrationConfiguration
+  com.silenteight.sep.base.common.database.DataSourceAutoConfiguration,\
+  com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration,\
+  com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration,\
+  com.silenteight.sep.base.common.messaging.MessagingConfiguration,\
+  com.silenteight.sep.base.common.messaging.metrics.MessagingMetricsConfiguration,\
+  com.silenteight.sep.base.common.database.TransactionManagerAutoConfiguration,\
+  com.silenteight.sep.base.common.grpc.GrpcInterceptorConfiguration,\
+  com.silenteight.sep.base.common.grpc.GlobalExceptionHandlingServerInterceptor,\
+  com.silenteight.sep.base.common.messaging.IntegrationConfiguration
 
 org.springframework.context.ApplicationListener=\
-  com.silenteight.serp.common.support.spring.EnvironmentLoggingApplicationListener
+  com.silenteight.sep.base.common.support.spring.EnvironmentLoggingApplicationListener

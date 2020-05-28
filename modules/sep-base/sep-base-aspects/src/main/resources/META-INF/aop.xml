@@ -2,9 +2,9 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "https://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
   <aspects>
-    <aspect name="com.silenteight.serp.aspects.logging.LogContextAspect"/>
-    <aspect name="com.silenteight.serp.aspects.metrics.TimedMethodAspect"/>
-    <aspect name="com.silenteight.serp.aspects.validation.ValidationAspect"/>
+    <aspect name="com.silenteight.sep.base.aspects.logging.LogContextAspect"/>
+    <aspect name="com.silenteight.sep.base.aspects.metrics.TimedMethodAspect"/>
+    <aspect name="com.silenteight.sep.base.aspects.validation.ValidationAspect"/>
 
     <!-- Unusable Micrometer aspect to time method execution time. -->
     <exclude within="io.micrometer..*"/>
