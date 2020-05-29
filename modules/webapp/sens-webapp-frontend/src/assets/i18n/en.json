@@ -42,16 +42,16 @@
       },
       "rbId": {
         "label": "Reasoning Branch ID(s)",
-        "hint": "Entered 943/1000 characters",
+        "hint": "Entered {{length}}/1000 characters",
         "errorEmpty": "Reasoning Branch ID is required to create change request",
-        "errorCharacterLimit": "Sorry, but you reached the limit. You entered 1234 characters where the threshold is 1000 characters. Please reduce the number of characters. ",
+        "errorCharacterLimit": "Sorry, but you reached the limit. You entered {{length}} characters where the threshold is 1000 characters. Please reduce the number of characters. ",
         "errorVerificationFail": "Some of the given reasoning branches do not exist"
       },
       "rbSignature": {
         "label": "Reasoning Branch Signature(s)",
-        "hint": "Entered 943/1000 characters",
+        "hint": "Entered {{length}}/1000 characters",
         "errorEmpty": "Reasoning Branch Signature is required to create change request",
-        "errorCharacterLimit": "Sorry, but you reached the limit. You entered 1234 characters where the threshold is 1000 characters. Please reduce the number of characters. ",
+        "errorCharacterLimit": "Sorry, but you reached the limit. You entered {{length}} characters where the threshold is 1000 characters. Please reduce the number of characters. ",
         "errorVerificationFail": "Some of the given reasoning branches do not exist"
       },
       "verifying": {
@@ -111,7 +111,7 @@
     },
     "confirmation": {
       "title": "Congratulations!",
-      "description": "Your change request CR-456 has been added to the approval queue.",
+      "description": "Your change request has been added to the approval queue.",
       "buttonNewRequest": "New Change Request"
     }
   },

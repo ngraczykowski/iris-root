@@ -47,6 +47,15 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'reasoning-branches/change-request/:decisionTreeId/:reasoningBranchId',
+    pathMatch: 'full',
+    component: ChangeRequestComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator']
+    }
+  },
+  {
     path: 'reasoning-branches/change-request',
     pathMatch: 'full',
     component: ChangeRequestComponent,

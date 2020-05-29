@@ -1,31 +1,72 @@
-<div class="form__section">
-  <h2 class="mat-title">Reasonign Branch settings</h2>
-  <div class="form__content">
-    <mat-form-field class="mat-form-field--full-width" appearance="outline">
-      <mat-label [translate]="translatePrefix + 'aiSolution.label'"></mat-label>
-      <mat-select>
-        <mat-option><span [translate]="translatePrefix + 'aiSolution.options.unchanged'"></span>
-        </mat-option>
-        <mat-option><span [translate]="'aiSolutions.falsePositive'"></span>
-        </mat-option>
-        <mat-option><span [translate]="'aiSolutions.potentialTruePositive'"></span></mat-option>
-        <mat-option><span [translate]="'aiSolutions.noDecision'"></span>
-        </mat-option>
-      </mat-select>
-      <mat-hint [translate]="translatePrefix + 'aiSolution.hint'"></mat-hint>
-      <mat-error [translate]="translatePrefix + 'aiStatus.errorEmpty'"></mat-error>
-    </mat-form-field>
+<form [formGroup]="form" #formDir="ngForm" (ngSubmit)="onFormSubmit($event)">
+  <div class="form__section">
+    <h2 class="mat-title">Reasonign Branch settings</h2>
+    <div class="form__content">
+      <mat-form-field class="mat-form-field--full-width" appearance="outline">
+        <mat-label [translate]="translatePrefix + 'aiSolution.label'"></mat-label>
+        <mat-select formControlName="aiSolution" (selectionChange)="selectionChange()">
+          <mat-option [value]="'Leave unchanged'">
+            <span [translate]="'changeRequest.configureForm.aiSolution.options.unchanged'"></span>
+          </mat-option>
+          <mat-option [value]="'FALSE_POSITIVE'">
+            <span [translate]="'aiSolutions.falsePositive'"></span>
+          </mat-option>
+          <mat-option [value]="'POTENTIAL_TRUE_POSITIVE'">
+            <span [translate]="'aiSolutions.potentialTruePositive'"></span>
+          </mat-option>
+          <mat-option [value]="'NO_DECISION'">
+            <span [translate]="'aiSolutions.noDecision'"></span>
+          </mat-option>
+        </mat-select>
+        <mat-hint [translate]="translatePrefix + 'aiSolution.hint'"></mat-hint>
+        <mat-error 
+          *ngIf="form.controls.aiSolution.hasError('needsChange')"
+          [translate]="translatePrefix + 'aiStatus.errorEmpty'"
+        ></mat-error>
+      </mat-form-field>
 
-    <mat-form-field class="mat-form-field--full-width" appearance="outline">
-      <mat-label [translate]="translatePrefix + 'aiStatus.label'"></mat-label>
-      <mat-select>
-        <mat-option><span [translate]="translatePrefix + 'aiStatus.options.unchanged'"></span>
-        </mat-option>
-        <mat-option><span [translate]="'aiStatus.disabled'"></span></mat-option>
-        <mat-option><span [translate]="'aiStatus.active'"></span></mat-option>
-      </mat-select>
-      <mat-hint [translate]="translatePrefix + 'aiStatus.hint'"></mat-hint>
-      <mat-error [translate]="translatePrefix + 'aiStatus.errorEmpty'"></mat-error>
-    </mat-form-field>
+      <mat-form-field class="mat-form-field--full-width" appearance="outline">
+        <mat-label [translate]="translatePrefix + 'aiStatus.label'"></mat-label>
+        <mat-select formControlName="aiStatus" (selectionChange)="selectionChange()">
+          <mat-option [value]="'Leave unchanged'">
+            <span [translate]="'changeRequest.configureForm.aiStatus.options.unchanged'"></span>
+          </mat-option>
+          <mat-option [value]="false">
+            <span [translate]="'aiStatus.disabled'"></span>
+          </mat-option>
+          <mat-option [value]="true">
+            <span [translate]="'aiStatus.active'"></span>
+          </mat-option>
+        </mat-select>
+        <mat-hint [translate]="translatePrefix + 'aiStatus.hint'"></mat-hint>
+        <mat-error 
+          *ngIf="form.controls.aiStatus.hasError('needsChange')"
+          [translate]="translatePrefix + 'aiStatus.errorEmpty'"
+        ></mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="mat-form-field--full-width" appearance="outline">
+        <mat-label [translate]="translatePrefix + 'reason.comment.label'"></mat-label>
+        <textarea formControlName="comment" matInput required></textarea>
+        <mat-hint [translate]="translatePrefix + 'reason.comment.hint'"></mat-hint>
+        <mat-error 
+          *ngIf="form.controls.comment.hasError('required')"
+          [translate]="translatePrefix + 'aiStatus.errorEmpty'"
+        ></mat-error>
+      </mat-form-field>
+    </div>
   </div>
-</div>
+  <div class="form__footer">
+    <a (click)="previousStep()" mat-stroked-button color="primary">
+      <span [translate]="translatePrefix + 'footer.back'"></span>
+    </a>
+    <div class="empty-space--flex"></div>
+    <a (click)="resetForm(formDir)" mat-button color="primary">
+      <span [translate]="translatePrefix + 'footer.reset'"></span>
+    </a>
+    <button mat-flat-button
+            color="primary">
+            <span [translate]="translatePrefix + 'footer.cta'"></span>
+    </button>
+  </div>
+</form>

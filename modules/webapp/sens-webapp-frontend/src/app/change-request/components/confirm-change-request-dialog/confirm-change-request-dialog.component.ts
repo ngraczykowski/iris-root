@@ -12,10 +12,10 @@ export class ConfirmChangeRequestDialogComponent {
       @Inject(MAT_DIALOG_DATA) public data) {}
 
   onCancelClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('cancel');
   }
 
   onSubmitClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('submit');
   }
 }

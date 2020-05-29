@@ -5,3 +5,7 @@
     text-align: center;
   }
 }
+
+:host ::ng-deep.mat-vertical-stepper-header {
+  pointer-events: none !important;
+}

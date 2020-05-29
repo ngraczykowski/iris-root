@@ -47,6 +47,7 @@
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.3.3",
     "test": "^0.6.0",
+    "uuid": "^8.1.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "^0.9.1"
   },

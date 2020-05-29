@@ -19,7 +19,6 @@ import {
   SelectReasoningBranchesFormComponent
 } from './components/select-reasoning-branches-form/select-reasoning-branches-form.component';
 import { SelectedReasoningBranchesComponent } from './components/selected-reasoning-branches/selected-reasoning-branches.component';
-import { ChangeRequestReasonComponent } from './components/change-request-reason/change-request-reason.component';
 import {
   SelectReasoningBranchContainerComponent
 } from './containers/select-reasoning-branch-container/select-reasoning-branch-container.component';
@@ -28,6 +27,7 @@ import {
 } from './containers/change-request-properties-container/change-request-properties-container.component';
 import { RbVerificationDialogComponent } from './components/rb-verification-dialog/rb-verification-dialog.component';
 import { ConfirmChangeRequestDialogComponent } from './components/confirm-change-request-dialog/confirm-change-request-dialog.component';
+import { SharedModule } from '@app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,6 @@ import { ConfirmChangeRequestDialogComponent } from './components/confirm-change
     ChangeRequestFormComponent,
     SelectReasoningBranchesFormComponent,
     SelectedReasoningBranchesComponent,
-    ChangeRequestReasonComponent,
     SelectReasoningBranchContainerComponent,
     ChangeRequestPropertiesContainerComponent,
     RbVerificationDialogComponent,
@@ -55,6 +54,7 @@ import { ConfirmChangeRequestDialogComponent } from './components/confirm-change
     MatSelectModule,
     MatTooltipModule,
     MatDialogModule,
+    SharedModule
   ],
   entryComponents: [
     RbVerificationDialogComponent,

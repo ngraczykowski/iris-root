@@ -121,6 +121,7 @@ app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res)
   }
 });
 
+
 app.get('/rest/webapp/management/info', (req, res) => {
   let dataFile;
   try {
@@ -168,6 +169,69 @@ app.get('/rest/webapp/api/report/audit-report', (req, res) => {
     fs.createReadStream(filePath).pipe(res);
   }, 5000);
 });
+
+app.put('/rest/webapp/api/decision-trees/:treeId/branches/validate', (req, res) => {
+  const { featureVectorSignatures = [], branchIds = [] } = req.body;
+
+  if (typeof branchIds !== 'undefined' && branchIds.indexOf(666) != -1 || branchIds.indexOf(999) != -1) {
+    res.status(400).send(JSON.stringify({
+      "key": "Branch(es) not found",
+      "date": 1590049124.408017,
+      "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException",
+      "extras": {
+          "branchIds": [
+            123,
+            456
+          ]
+      }
+    }))
+  } else if (typeof featureVectorSignatures !== 'undefined' && featureVectorSignatures.indexOf('G7stUa5Fyy3oOJZDpeZa+cHQ+Gg=') != -1) {
+    res.status(400).send(JSON.stringify({
+      "key": "Branch(es) not found",
+      "date": 1590049200.271666,
+      "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.FeatureVectorSignaturesNotFoundException",
+      "extras": {
+        "featureVectorSignatures": [
+          "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
+        ]
+      }
+    }))
+  } else if (branchIds) {
+    res.status(200).send(JSON.stringify({
+      "branchIds": [
+        {
+          "branchId": 1,
+          "featureVectorSignature": "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
+        },
+        {
+          "branchId": 2,
+          "featureVectorSignature": "Nvr8IkZNgs8cFG3IDXMzhIw0sD4"
+        }
+      ]
+    }))
+  } else if (featureVectorSignatures) {
+    res.status(200).send(JSON.stringify({
+      "branchIds": [
+        {
+          "branchId": 1,
+          "featureVectorSignature": "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
+        },
+        {
+          "branchId": 2,
+          "featureVectorSignature": "Nvr8IkZNgs8cFG3IDXMzhIw0sD4"
+        }
+      ]
+    }))
+  }
+});
+
+app.post('/rest/webapp/api/bulk-changes', (req, res) => {
+  res.status(200).send();
+});
+
+app.post('/rest/webapp/api/change-requests', (req, res) => {
+  res.status(200).send();
+})
 
 function isUserNameUnique(userName, currentUsersList) {
   const isUnique = currentUsersList.filter((user) => {

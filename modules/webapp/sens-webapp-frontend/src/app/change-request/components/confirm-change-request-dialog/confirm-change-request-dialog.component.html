@@ -1,10 +1,8 @@
 <h1 class="mat-dialog-title">{{ data.title | translate }}</h1>
 <div mat-dialog-content>
-  <p class="mat-body">{{data.description | translate }}</p>
+  <p class="mat-body">{{data.description | translate:{count: data.branchesCount} }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button color="primary"
-          (click)="onSubmitClick()">{{data.buttonCta | translate }}</button>
-  <button mat-flat-button color="primary"
-          (click)="onCancelClick()">{{data.buttonCancel | translate }}</button>
+  <button mat-button color="primary" (click)="onCancelClick()">{{data.buttonCancel | translate }}</button>
+  <button mat-flat-button color="primary" (click)="onSubmitClick()">{{data.buttonCta | translate }}</button>
 </div>

@@ -1,7 +1,13 @@
-<app-state [stateContent]="rbVerification"></app-state>
-<app-error-card [errorContent]="verificationError"></app-error-card>
-<app-select-reasoning-branches></app-select-reasoning-branches>
-<div class="form__footer">
-  <button mat-button color="primary"><span [translate]="translatePrefix + 'footer.reset'"></span></button>
-  <button mat-flat-button matStepperNext color="primary"><span [translate]="translatePrefix + 'footer.cta'"></span></button>
-</div>
+<app-state
+  *ngIf="verifingInProgress"
+  [stateContent]="rbVerification"
+></app-state>
+<app-error-card 
+  *ngIf="verifingError"
+  [errorContent]="verificationError"
+></app-error-card>
+<app-select-reasoning-branches
+  [hidden]="verifingInProgress"
+  (formReset)="formReset()"
+  (formSubmitted)="validate($event)"
+></app-select-reasoning-branches>

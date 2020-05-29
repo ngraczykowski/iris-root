@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-change-request',
@@ -8,6 +9,7 @@ import { StateContent } from '@app/ui-components/state/state';
   styleUrls: ['./change-request.component.scss']
 })
 export class ChangeRequestComponent implements OnInit {
+  @ViewChild(MatStepper, { static: true }) stepper: MatStepper;
 
   header: Header = {
     title: 'changeRequest.title',
@@ -26,6 +28,18 @@ export class ChangeRequestComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  showNextStep() {
+    this.stepper.next();
+  }
+
+  showPreviousStep() {
+    this.stepper.previous();
+  }
+
+  newChangeRequest() {
+    window.location.reload();
   }
 
 }
