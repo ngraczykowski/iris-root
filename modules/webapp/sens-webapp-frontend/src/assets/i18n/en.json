@@ -193,8 +193,8 @@
         "buttonCta": "Approve Changes"
       },
       "feedback": {
-        "approved": "Change Request CR-{{changeRequestID}} was approved",
-        "rejected": "Change Request CR-{{changeRequestID}} was removed"
+        "approve": "Change Request CR-{{changeRequestID}} was approved",
+        "reject": "Change Request CR-{{changeRequestID}} was removed"
       }
     }
   },

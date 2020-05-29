@@ -175,11 +175,11 @@ app.get('/rest/webapp/api/bulk-changes', (req, res) => {
   }
 });
 
-app.patch('/rest/webapp/api/users/:change-request-id/approve', (req, res) => {
+app.patch('/rest/webapp/api/change-request/:changeRequestId/approve', (req, res) => {
   res.status(200).send();
 });
 
-app.patch('/rest/webapp/api/users/:change-request-id/reject', (req, res) => {
+app.patch('/rest/webapp/api/change-request/:changeRequestId/reject', (req, res) => {
   res.status(200).send();
 });
 

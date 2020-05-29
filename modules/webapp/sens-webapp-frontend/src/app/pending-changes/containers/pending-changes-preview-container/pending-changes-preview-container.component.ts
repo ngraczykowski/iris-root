@@ -53,12 +53,7 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
       }
     });
     const sub = dialogRef.componentInstance.decision.subscribe(() => {
-      this.refreshList.emit();
-      this.pendingChangesService.changeRequestDecision(
-          this.changeRequestDetails.id.toString(),
-          'approve'
-      );
-      this.feedbackMessage('approved');
+      this.sendDecision('approve');
     });
   }
 
@@ -73,12 +68,17 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
       }
     });
     const sub = dialogRef.componentInstance.decision.subscribe(() => {
+      this.sendDecision('reject');
+    });
+  }
+
+  sendDecision(decision) {
+    this.pendingChangesService.changeRequestDecision(
+        this.changeRequestDetails.id.toString(),
+        decision
+    ).subscribe((res: any) => {
       this.refreshList.emit();
-      this.pendingChangesService.changeRequestDecision(
-          this.changeRequestDetails.id.toString(),
-          'reject'
-      );
-      this.feedbackMessage('rejected');
+      this.feedbackMessage(decision);
     });
   }
 
