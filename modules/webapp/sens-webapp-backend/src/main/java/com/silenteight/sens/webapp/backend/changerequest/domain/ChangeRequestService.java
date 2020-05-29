@@ -16,6 +16,8 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_RE
 @RequiredArgsConstructor
 public class ChangeRequestService {
 
+  private static final String CHANGE_REQUEST_ENTITY_NAME = "webapp_change_request";
+
   @NonNull
   private final ChangeRequestRepository repository;
   @NonNull
@@ -32,8 +34,8 @@ public class ChangeRequestService {
 
     auditTracer.save(
         new ChangeRequestCreatedEvent(
-            bulkChangeId.toString(),
-            ChangeRequest.class.getName(),
+            changeRequest.getId().toString(),
+            CHANGE_REQUEST_ENTITY_NAME,
             changeRequest));
   }
 
@@ -58,7 +60,7 @@ public class ChangeRequestService {
     auditTracer.save(
         new ChangeRequestApprovedEvent(
             changeRequest.getId().toString(),
-            "webapp_change_request",
+            CHANGE_REQUEST_ENTITY_NAME,
             changeRequest));
   }
 
@@ -83,7 +85,7 @@ public class ChangeRequestService {
     auditTracer.save(
         new ChangeRequestRejectedEvent(
             changeRequest.getId().toString(),
-            "webapp_change_request",
+            CHANGE_REQUEST_ENTITY_NAME,
             changeRequest));
   }
 }

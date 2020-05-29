@@ -18,6 +18,6 @@ class CreateBulkChangeUseCase {
     log.debug(CHANGE_REQUEST, "Creating Bulk Change requested, command={}", command);
 
     auditTracer.save(
-        new BulkChangeCreationRequestedEvent(String.valueOf(command.getBulkChangeId()), command));
+        new BulkChangeCreationRequestedEvent(command));
   }
 }

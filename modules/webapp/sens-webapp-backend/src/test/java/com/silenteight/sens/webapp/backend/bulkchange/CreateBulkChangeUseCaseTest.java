@@ -33,11 +33,8 @@ class CreateBulkChangeUseCaseTest {
 
     verify(auditTracer).save(
         argThat(e -> {
-          assertThat(e.getType()).isEqualTo("ChangeRequestApprovalRequested");
-          assertThat(e.getEntityId()).isEqualTo(bulkChangeId.toString());
+          assertThat(e.getType()).isEqualTo("BulkChangeCreationRequested");
           assertThat(e.getDetails()).isEqualTo(command);
-          assertThat(e.getEntityClass()).isEqualTo("bulk_change");
-          assertThat(e.getEntityAction()).isEqualTo("CREATE");
           return true;
         })
     );

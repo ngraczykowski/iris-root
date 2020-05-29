@@ -43,6 +43,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -134,9 +135,9 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @Test
     @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
-    void its200_whenBusinessOperatorCallsEndpoint() {
+    void its202_whenBusinessOperatorCallsEndpoint() {
       post(mappingForChangeRequests(), changeRequestWithDefaults(), defaultHeaders())
-          .statusCode(OK.value());
+          .statusCode(ACCEPTED.value());
     }
 
     @Test
@@ -207,10 +208,10 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @Test
     @WithMockUser(username = USERNAME, roles = APPROVER)
-    void its200_whenApproverCallsEndpoint() {
+    void its202_whenApproverCallsEndpoint() {
       long changeRequestId = 2L;
 
-      patch(mappingForApproval(changeRequestId), defaultHeaders()).statusCode(OK.value());
+      patch(mappingForApproval(changeRequestId), defaultHeaders()).statusCode(ACCEPTED.value());
     }
 
     @Test
@@ -270,10 +271,10 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @Test
     @WithMockUser(username = USERNAME, roles = APPROVER)
-    void its200_whenApproverCallsEndpoint() {
+    void its202_whenApproverCallsEndpoint() {
       long changeRequestId = 2L;
 
-      patch(mappingForRejection(changeRequestId), defaultHeaders()).statusCode(OK.value());
+      patch(mappingForRejection(changeRequestId), defaultHeaders()).statusCode(ACCEPTED.value());
     }
 
     @Test

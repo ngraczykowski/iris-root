@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -90,10 +91,10 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
   }
 
   @TestWithRole(role = BUSINESS_OPERATOR)
-  void its200_onCreate() {
+  void its202_onCreate() {
     post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults(), defaultHeaders())
         .contentType(anything())
-        .statusCode(OK.value());
+        .statusCode(ACCEPTED.value());
   }
 
   @TestWithRole(role = BUSINESS_OPERATOR)

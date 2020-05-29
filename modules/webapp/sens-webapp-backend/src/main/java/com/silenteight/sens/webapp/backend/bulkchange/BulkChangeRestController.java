@@ -19,6 +19,7 @@ import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATO
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
+import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -56,6 +57,6 @@ class BulkChangeRestController {
             .build());
 
     log.debug(CHANGE_REQUEST, "Requested to create Bulk Change accepted, id={}", dto.getId());
-    return ok().build();
+    return accepted().build();
   }
 }

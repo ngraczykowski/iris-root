@@ -29,6 +29,7 @@ import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATO
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
+import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
@@ -80,7 +81,7 @@ class ChangeRequestRestController {
     createChangeRequestUseCase.apply(command);
 
     log.debug(CHANGE_REQUEST, "Change Request create command accepted");
-    return ok().build();
+    return accepted().build();
   }
 
   @PatchMapping("/change-request/{id}/approve")
@@ -102,7 +103,7 @@ class ChangeRequestRestController {
     approveChangeRequestUseCase.apply(command);
 
     log.debug(CHANGE_REQUEST, "Change Request approved. changeRequestId={}", id);
-    return ok().build();
+    return accepted().build();
   }
 
   @PatchMapping("/change-request/{id}/reject")
@@ -124,6 +125,6 @@ class ChangeRequestRestController {
     rejectChangeRequestUseCase.apply(command);
 
     log.debug(CHANGE_REQUEST, "Change Request rejected. changeRequestId={}", id);
-    return ok().build();
+    return accepted().build();
   }
 }
