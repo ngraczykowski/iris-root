@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.reject;
+package com.silenteight.sens.webapp.backend.changerequest.create;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
@@ -11,29 +11,30 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
 import static com.silenteight.protocol.utils.Uuids.toJavaUuid;
-import static com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestMessageHandlerFixtures.REJECT_MESSAGE;
+import static com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestMessageHandlerFixtures.CREATE_MESSAGE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RejectChangeRequestMessageHandlerTest {
+class CreateChangeRequestMessageHandlerTest {
 
   @InjectMocks
-  private RejectChangeRequestMessageHandler underTest;
+  private CreateChangeRequestMessageHandler underTest;
 
   @Mock
   private ChangeRequestService changeRequestService;
 
   @Test
-  void handleRejectMessage_changeRequestRejected() {
+  void handleApproveMessage_changeRequestApproved() {
     // when
-    underTest.handle(REJECT_MESSAGE);
+    underTest.handle(CREATE_MESSAGE);
 
     // then
-    assertThat(RequestCorrelation.id()).isEqualTo(toJavaUuid(REJECT_MESSAGE.getCorrelationId()));
-    verify(changeRequestService).reject(
-        REJECT_MESSAGE.getChangeRequestId(),
-        REJECT_MESSAGE.getRejectorUsername(),
-        toOffsetDateTime(REJECT_MESSAGE.getRejectedAt()));
+    assertThat(RequestCorrelation.id()).isEqualTo(toJavaUuid(CREATE_MESSAGE.getCorrelationId()));
+    verify(changeRequestService).create(
+        toJavaUuid(CREATE_MESSAGE.getBulkChangeId()),
+        CREATE_MESSAGE.getMakerUsername(),
+        CREATE_MESSAGE.getMakerComment(),
+        toOffsetDateTime(CREATE_MESSAGE.getCreatedAt()));
   }
 }

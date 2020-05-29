@@ -13,7 +13,7 @@ class DummyRejectChangeRequestMessageGateway implements RejectChangeRequestMessa
   private final RejectChangeRequestMessageHandler handler;
 
   @Override
-  public void send(RejectChangeRequestCommand message) {
-    handler.handle(message);
+  public void send(RejectChangeRequestCommand command) {
+    handler.handle(command);
   }
 }

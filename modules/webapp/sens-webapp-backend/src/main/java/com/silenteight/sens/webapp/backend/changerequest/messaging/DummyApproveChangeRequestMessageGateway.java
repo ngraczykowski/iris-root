@@ -13,7 +13,7 @@ class DummyApproveChangeRequestMessageGateway implements ApproveChangeRequestMes
   private final ApproveChangeRequestMessageHandler handler;
 
   @Override
-  public void send(ApproveChangeRequestCommand message) {
-    handler.handle(message);
+  public void send(ApproveChangeRequestCommand command) {
+    handler.handle(command);
   }
 }

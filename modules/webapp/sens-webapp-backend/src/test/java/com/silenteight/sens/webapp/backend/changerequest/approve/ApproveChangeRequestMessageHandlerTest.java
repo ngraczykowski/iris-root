@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.approve;
 
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
 
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
+import static com.silenteight.protocol.utils.Uuids.toJavaUuid;
 import static com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestMessageHandlerFixtures.APPROVE_MESSAGE;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +30,7 @@ class ApproveChangeRequestMessageHandlerTest {
     underTest.handle(APPROVE_MESSAGE);
 
     // then
+    assertThat(RequestCorrelation.id()).isEqualTo(toJavaUuid(APPROVE_MESSAGE.getCorrelationId()));
     verify(changeRequestService).approve(
         APPROVE_MESSAGE.getChangeRequestId(),
         APPROVE_MESSAGE.getApproverUsername(),
