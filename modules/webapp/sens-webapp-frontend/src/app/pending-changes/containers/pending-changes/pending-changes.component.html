@@ -1,14 +1,26 @@
 <mat-sidenav-container style="height: 100%">
   <mat-sidenav opened mode="side" disableClose position="end" class="sidebar">
     <div class="content-internal-margin--vertical">
-      <app-change-request-preview-container></app-change-request-preview-container>
+      <app-change-request-preview-container
+              [changeRequestDetails]="changeRequestDetails"
+              (refreshList)="loadPendingChanges()"></app-change-request-preview-container>
     </div>
   </mat-sidenav>
   <mat-sidenav-content
           class="content-internal-margin--vertical content-internal-margin--horizontal">
-    <app-header [headerData]="header"></app-header>
-    <app-pending-changes-table></app-pending-changes-table>
-    <app-state [stateContent]="listEmptyState"></app-state>
-    <app-state [stateContent]="listLoading"></app-state>
+    <app-header *ngIf="header"
+                [headerData]="header"></app-header>
+    <app-pending-changes-table
+            *ngIf="pendingChangesTable"
+            [pendingChangesList]="pendingChangesData"
+            (selectedCR)="loadChangeRequestDetails($event)"
+    ></app-pending-changes-table>
+    <app-state *ngIf="pendingChangesEmptyState"
+               [stateContent]="listEmptyState"></app-state>
+    <app-state *ngIf="pendingChangesLoading"
+               [stateContent]="listLoading"></app-state>
+    <app-state *ngIf="pendingChangesError"
+               [stateContent]="listError"
+                (submit)="loadPendingChanges()"></app-state>
   </mat-sidenav-content>
 </mat-sidenav-container>

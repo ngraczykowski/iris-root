@@ -2,11 +2,13 @@
   "aiSolutions": {
     "falsePositive": "False Positive",
     "potentialTruePositive": "Potential True Positive",
-    "noDecision": "No Decision"
+    "noDecision": "No Decision",
+    "unchanged": "Leave Unchanged"
   },
   "aiStatus": {
     "disabled": "Disabled",
-    "active": "Active"
+    "active": "Active",
+    "unchanged": "Leave Unchanged"
   },
   "appBar": {
     "userMenu": {
@@ -73,6 +75,10 @@
       }
     },
     "configureForm": {
+      "selectedBranches": {
+        "decisionTree": "Decision Tree ID",
+        "reasoningBranchesCount": "Reasoning Branches (count)"
+      },
       "aiSolution": {
         "label": "AI Solution",
         "hint": "Set AI Solution for the selected Reasoning Branch(s)",
@@ -125,19 +131,25 @@
     "title": "Reports"
   },
   "pendingChanges": {
-    "title": "Pending Changes ({{value}})",
+    "prefix": "CR-{{value}}",
+    "title": "Pending Changes",
     "dataLabels": {
       "id": "ID",
-      "aiSolution": "AI Solution",
-      "aiStatus": "AI Status",
+      "solution": "AI Solution",
+      "status": "AI Status",
       "requestDate": "Request Date",
       "author": "Author"
     },
     "emptyState": {
-      "title": "No Change Request is pending verification"
+      "title": "You don't have any Change Request to verify yet."
     },
     "updatingList": {
-      "title": "Updating list"
+      "title": "Updating Change Requests list"
+    },
+    "errorState": {
+      "title": "Failed to download the list of changes.",
+      "description": "Please try to fetch a list of changes if the problem will persist, contact the administrator.",
+      "button": "Fetch the Pending Changes list"
     },
     "changeRequestDetails": {
       "title": "{{value}}",
@@ -179,6 +191,10 @@
         "description": "Proposed changes will be applied to the selected Reasoning Branches. This will cause a change in AI Decisions for alerts assigned to the chosen Reasoning Branches.",
         "buttonCancel": "Cancel",
         "buttonCta": "Approve Changes"
+      },
+      "feedback": {
+        "approved": "Change Request CR-{{changeRequestID}} was approved",
+        "rejected": "Change Request CR-{{changeRequestID}} was removed"
       }
     }
   },

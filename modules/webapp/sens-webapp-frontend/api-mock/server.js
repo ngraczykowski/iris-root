@@ -151,6 +151,38 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches', (req, res) => {
   }
 });
 
+app.get('/rest/webapp/api/change-requests', (req, res) => {
+  let dataFile;
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/pending-changes.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+});
+
+app.get('/rest/webapp/api/bulk-changes', (req, res) => {
+  let dataFile;
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/bulk-changes.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+});
+
+app.patch('/rest/webapp/api/users/:change-request-id/approve', (req, res) => {
+  res.status(200).send();
+});
+
+app.patch('/rest/webapp/api/users/:change-request-id/reject', (req, res) => {
+  res.status(200).send();
+});
+
 app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
   res.sendFile(__dirname + '/data/security-matrix-report.csv');

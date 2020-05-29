@@ -8,7 +8,7 @@ export class SelectedReasoningBranchesComponent implements OnInit {
   @Input() decisionTreeId: number;
   @Input() reasoningBranchesCount: number;
 
-  stepsPrefix = 'changeRequest.selectedBranches.';
+  translatePrefix = 'changeRequest.configureForm.selectedBranches.';
 
   constructor() { }
 

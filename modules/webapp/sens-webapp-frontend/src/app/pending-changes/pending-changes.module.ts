@@ -15,6 +15,7 @@ import { PendingChangesTableComponent } from './components/pending-changes-table
 import { ChangeRequestDecisionDialogComponent } from './components/change-request-decision-dialog/change-request-decision-dialog.component';
 import { PendingChangesPreviewContainerComponent } from './containers/pending-changes-preview-container/pending-changes-preview-container.component';
 import { ChangeRequestPreviewComponent } from './components/change-request-preview/change-request-preview.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ChangeRequestPreviewComponent } from './components/change-request-previ
     MatIconModule,
     MatDialogModule,
     TranslateModule,
-    UiComponentsModule
+    UiComponentsModule,
+    MatSnackBarModule,
   ],
   entryComponents: [
     ChangeRequestDecisionDialogComponent

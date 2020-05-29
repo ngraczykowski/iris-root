@@ -3,8 +3,10 @@
   <p class="mat-body">{{data.description | translate }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button color="primary"
-          (click)="onSubmitClick()">{{data.buttonCta | translate }}</button>
-  <button mat-flat-button color="primary" (click)="onCancelClick()"
+  <button mat-button
+          color="primary"
           mat-dialog-close>{{data.buttonCancel | translate }}</button>
+  <button mat-flat-button
+          color="primary"
+          (click)="onSubmitClick()" cdkFocusInitial>{{data.buttonCta | translate }}</button>
 </div>

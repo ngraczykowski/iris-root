@@ -2,20 +2,16 @@
   <h2 class="mat-title">Selected Reasoning Branche(s)</h2>
   <div class="form__content">
     <mat-list>
-      <mat-list-item class="mat-list-item--divided">
-        <div class="mat-list-item__column">
-          Decision Tree ID
-        </div>
-        <div class="mat-list-item__column mat-list-item__column--align-right">
-          {{ decisionTreeId }}
+      <mat-list-item>
+        <div class="values-list">
+          <p class="mat-body" [translate]="translatePrefix + 'decisionTree'"></p>
+          <p class="mat-body values-list__value--right">{{ decisionTreeId }}</p>
         </div>
       </mat-list-item>
-      <mat-list-item class="mat-list-item--divided">
-        <div class="mat-list-item__column">
-          Reasoning Branches (count)
-        </div>
-        <div class="mat-list-item__column mat-list-item__column--align-right">
-          {{ reasoningBranchesCount }}
+      <mat-list-item class="values-list">
+        <div class="values-list">
+          <p class="mat-body" [translate]="translatePrefix + 'reasoningBranchesCount'"></p>
+          <p class="mat-body values-list__value--right">{{ reasoningBranchesCount }}</p>
         </div>
       </mat-list-item>
     </mat-list>

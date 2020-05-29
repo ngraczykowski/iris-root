@@ -1,4 +1,4 @@
-import { Component, Inject} from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -7,15 +7,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class ChangeRequestDecisionDialogComponent {
 
+  @Output() decision = new EventEmitter();
+
   constructor(
       public dialogRef: MatDialogRef<ChangeRequestDecisionDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data) {}
 
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
-
-  onSubmitClick(): void {
+  onSubmitClick() {
+    this.decision.emit();
     this.dialogRef.close();
   }
 }

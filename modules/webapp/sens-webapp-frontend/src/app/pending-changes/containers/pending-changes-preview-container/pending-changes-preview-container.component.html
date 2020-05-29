@@ -1,11 +1,13 @@
-<app-state [stateContent]="previewEmptyState"></app-state>
-<ng-container>
+<app-state *ngIf="!changeRequestDetails"
+           [stateContent]="previewEmptyState"></app-state>
+
+<ng-container *ngIf="changeRequestDetails">
   <div class="change-request-details">
     <app-change-request-preview
-            [changeRequestData]="changeRequestData"
-            [changeRequestID]="changeRequestID"
+            [changeRequestData]="generateChangeRequestContent()"
+            [changeRequestID]="generateChangeRequestHeader()"
     ></app-change-request-preview>
-    <mat-list class="change-request-preview__section">
+    <mat-list class="change-request-preview__section" *ngIf="hasPermissionsToApproveReject()">
       <mat-divider></mat-divider>
       <h3 mat-subheader>
         <span [translate]="translatePrefixDecision + 'title'"></span>

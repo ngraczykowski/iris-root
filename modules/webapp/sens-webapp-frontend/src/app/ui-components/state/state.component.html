@@ -5,4 +5,11 @@
   </div>
   <p class="mat-title" *ngIf="stateContent.title" [translate]="stateContent.title"></p>
   <p class="mat-body" *ngIf="stateContent.description" [translate]="stateContent.description"></p>
+  <button *ngIf="stateContent.button"
+          mat-stroked-button
+          color="primary"
+          class="state__button"
+          (click)="onSubmitClick()">
+    <span [translate]="stateContent.button"></span>
+  </button>
 </div>

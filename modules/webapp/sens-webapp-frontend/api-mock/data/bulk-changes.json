@@ -1,0 +1,72 @@
+[
+  {
+    "id": "e019f308-9f29-11ea-bb37-0242ac130001",
+    "reasoningBranchIds": [
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 1
+      },
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 2
+      }
+    ],
+    "aiSolution": "FALSE_POSITIVE",
+    "active": true,
+    "createdAt": "2020-05-26T08:16:48Z"
+  },
+  {
+    "id": "e019f308-9f29-11ea-bb37-0242ac130003",
+    "reasoningBranchIds": [
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 1
+      },
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 2
+      }
+    ],
+    "aiSolution": "NO_DECISION",
+    "active": false,
+    "createdAt": "2020-05-26T08:16:48Z"
+  },
+  {
+    "id": "e019f308-9f29-11ea-bb37-0242ac130004",
+    "reasoningBranchIds": [
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 1
+      },
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 2
+      },
+      {
+        "decisionTreeId": 3,
+        "featureVectorId": 3
+      },
+      {
+        "decisionTreeId": 4,
+        "featureVectorId": 4
+      }
+    ],
+    "active": true,
+    "createdAt": "2020-05-26T08:16:48Z"
+  },
+  {
+    "id": "e019f308-9f29-11ea-bb37-0242ac130002",
+    "reasoningBranchIds": [
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 1
+      },
+      {
+        "decisionTreeId": 2,
+        "featureVectorId": 2
+      }
+    ],
+    "aiSolution": "POTENTIAL_TRUE_POSITIVE",
+    "createdAt": "2020-05-26T08:16:48Z"
+  }
+]

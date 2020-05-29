@@ -10,7 +10,7 @@
     left: 50%;
     position: absolute;
     top: 50%;
-    transform: translate(-50%);
+    transform: translate(-50%, -50%);
   }
 
   &__image {
@@ -19,5 +19,9 @@
     * {
       margin: auto;
     }
+  }
+
+  &__button {
+    margin-top: calculate-8-pt-grid(3);
   }
 }

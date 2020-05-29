@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,15 +9,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { StateComponent } from './state/state.component';
 import { ErrorCardComponent } from './error-card/error-card.component';
-import { ValuesListComponent } from './values-list/values-list.component';
 import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     StateComponent,
     ErrorCardComponent,
-    ValuesListComponent,
-    HeaderComponent,
+    HeaderComponent
   ],
   imports: [
     CommonModule,
@@ -26,11 +25,11 @@ import { HeaderComponent } from './header/header.component';
     MatIconModule,
     MatListModule,
     MatExpansionModule,
+    MatButtonModule,
   ],
   exports: [
     StateComponent,
     ErrorCardComponent,
-    ValuesListComponent,
     HeaderComponent
   ]
 })
