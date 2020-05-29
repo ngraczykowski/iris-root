@@ -3,12 +3,14 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
 import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
 import com.silenteight.sens.webapp.backend.changerequest.dto.CreateChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
@@ -146,7 +148,8 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
       post(
           mappingForChangeRequests(),
-          new CreateChangeRequestDto(bulkChangeId, createdAt, comment), defaultHeaders());
+          new CreateChangeRequestDto(bulkChangeId, createdAt, comment),
+          defaultHeaders());
 
       ArgumentCaptor<CreateChangeRequestCommand> commandCaptor =
           ArgumentCaptor.forClass(CreateChangeRequestCommand.class);
@@ -179,7 +182,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @Test
     @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
-    void its400_IfNoCorrelationIdProvidedInHeader() {
+    void its400_ifNoCorrelationIdProvidedInHeader() {
       post(
           mappingForChangeRequests(),
           changeRequestWithDefaults())
@@ -207,14 +210,52 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
     void its200_whenApproverCallsEndpoint() {
       long changeRequestId = 2L;
 
-      patch(mappingForApproval(changeRequestId)).statusCode(OK.value());
+      patch(mappingForApproval(changeRequestId), defaultHeaders()).statusCode(OK.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void callsApproveUseCase() {
+      long changeRequestId = 2L;
+
+      patch(mappingForApproval(changeRequestId), defaultHeaders());
+
+      ArgumentCaptor<ApproveChangeRequestCommand> commandCaptor =
+          ArgumentCaptor.forClass(ApproveChangeRequestCommand.class);
+      verify(approveChangeRequestUseCase).apply(commandCaptor.capture());
+
+      ApproveChangeRequestCommand command = commandCaptor.getValue();
+      assertThat(command.getChangeRequestId()).isEqualTo(changeRequestId);
+      assertThat(command.getApproverUsername()).isEqualTo(USERNAME);
     }
 
     @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       long changeRequestId = 2L;
 
-      patch(mappingForApproval(changeRequestId)).statusCode(FORBIDDEN.value());
+      patch(mappingForApproval(changeRequestId), defaultHeaders()).statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void setsCorrelationIdInThreadLocal() {
+      long changeRequestId = 2L;
+      UUID correlationId = randomUUID();
+
+      patch(mappingForApproval(changeRequestId), Map.of(CORRELATION_ID_HEADER, correlationId));
+
+      assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void its400_ifNoCorrelationIdProvidedInHeader() {
+      long changeRequestId = 2L;
+
+      patch(mappingForApproval(changeRequestId))
+          .statusCode(BAD_REQUEST.value())
+          .body("key", equalTo("Missing request header"))
+          .body("extras.headerName", equalTo("CorrelationId"));
     }
 
     private String mappingForApproval(long id) {
@@ -232,14 +273,52 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
     void its200_whenApproverCallsEndpoint() {
       long changeRequestId = 2L;
 
-      patch(mappingForRejection(changeRequestId)).statusCode(OK.value());
+      patch(mappingForRejection(changeRequestId), defaultHeaders()).statusCode(OK.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void callsApproveUseCase() {
+      long changeRequestId = 2L;
+
+      patch(mappingForRejection(changeRequestId), defaultHeaders());
+
+      ArgumentCaptor<RejectChangeRequestCommand> commandCaptor =
+          ArgumentCaptor.forClass(RejectChangeRequestCommand.class);
+      verify(rejectChangeRequestUseCase).apply(commandCaptor.capture());
+
+      RejectChangeRequestCommand command = commandCaptor.getValue();
+      assertThat(command.getChangeRequestId()).isEqualTo(changeRequestId);
+      assertThat(command.getRejectorUsername()).isEqualTo(USERNAME);
     }
 
     @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       long changeRequestId = 2L;
 
-      patch(mappingForRejection(changeRequestId)).statusCode(FORBIDDEN.value());
+      patch(mappingForRejection(changeRequestId), defaultHeaders()).statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void setsCorrelationIdInThreadLocal() {
+      long changeRequestId = 2L;
+      UUID correlationId = randomUUID();
+
+      patch(mappingForRejection(changeRequestId), Map.of(CORRELATION_ID_HEADER, correlationId));
+
+      assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void its400_ifNoCorrelationIdProvidedInHeader() {
+      long changeRequestId = 2L;
+
+      patch(mappingForRejection(changeRequestId))
+          .statusCode(BAD_REQUEST.value())
+          .body("key", equalTo("Missing request header"))
+          .body("extras.headerName", equalTo("CorrelationId"));
     }
 
     private String mappingForRejection(long id) {

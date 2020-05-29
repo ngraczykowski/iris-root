@@ -61,6 +61,13 @@ public abstract class BaseRestControllerTest {
         .when();
   }
 
+  private static MockMvcRequestAsyncSender asyncSender(Map<String, ?> headers) {
+    return given()
+        .accept(JSON)
+        .headers(headers)
+        .when();
+  }
+
   private static ValidatableMockMvcResponse toValidatableResponse(MockMvcResponse response) {
     return response
         .then()
@@ -92,6 +99,10 @@ public abstract class BaseRestControllerTest {
 
   public static ValidatableMockMvcResponse patch(String mapping) {
     return toValidatableResponse(asyncSender().patch(withRoot(mapping)));
+  }
+
+  public static ValidatableMockMvcResponse patch(String mapping, Map<String, ?> headers) {
+    return toValidatableResponse(asyncSender(headers).patch(withRoot(mapping)));
   }
 
   private static <T> MockMvcRequestAsyncSender asyncSender(T body) {

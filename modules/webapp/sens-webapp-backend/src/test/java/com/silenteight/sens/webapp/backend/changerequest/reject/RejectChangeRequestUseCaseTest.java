@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestUseCaseFixtures.REJECT_COMMAND;
 import static org.assertj.core.api.Assertions.*;
@@ -52,7 +53,14 @@ class RejectChangeRequestUseCaseTest {
     assertThat(command.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
     assertThat(command.getRejectorUsername()).isEqualTo(REJECT_COMMAND.getRejectorUsername());
 
-    verify(messageGateway).send(
-        any(com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand.class));
+    var messageCaptor = ArgumentCaptor.forClass(
+        com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand.class);
+
+    verify(messageGateway).send(messageCaptor.capture());
+
+    var message = messageCaptor.getValue();
+    assertThat(message.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
+    assertThat(message.getRejectorUsername()).isEqualTo(REJECT_COMMAND.getRejectorUsername());
+    assertThat(message.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
   }
 }

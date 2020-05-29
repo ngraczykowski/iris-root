@@ -67,6 +67,7 @@ class ChangeRequestRestController {
       @RequestBody @Valid CreateChangeRequestDto dto,
       @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
       Authentication authentication) {
+
     log.debug(CHANGE_REQUEST, "Requested to create Change Request.");
 
     RequestCorrelation.set(correlationId);
@@ -84,11 +85,16 @@ class ChangeRequestRestController {
 
   @PatchMapping("/change-request/{id}/approve")
   @PreAuthorize(APPROVER)
-  public ResponseEntity<Void> approve(@PathVariable long id, Authentication authentication) {
+  public ResponseEntity<Void> approve(
+      @PathVariable long id,
+      @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
+      Authentication authentication) {
+
     log.debug(
         CHANGE_REQUEST, "Requested to approve Change Request. changeRequestId={}, username={}",
         id, authentication.getName());
 
+    RequestCorrelation.set(correlationId);
     ApproveChangeRequestCommand command = ApproveChangeRequestCommand.builder()
         .changeRequestId(id)
         .approverUsername(authentication.getName())
@@ -101,11 +107,16 @@ class ChangeRequestRestController {
 
   @PatchMapping("/change-request/{id}/reject")
   @PreAuthorize(APPROVER)
-  public ResponseEntity<Void> reject(@PathVariable long id, Authentication authentication) {
+  public ResponseEntity<Void> reject(
+      @PathVariable long id,
+      @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
+      Authentication authentication) {
+
     log.debug(
         CHANGE_REQUEST, "Requested to reject Change Request. changeRequestId={}, username={}",
         id, authentication.getName());
 
+    RequestCorrelation.set(correlationId);
     RejectChangeRequestCommand command = RejectChangeRequestCommand.builder()
         .changeRequestId(id)
         .rejectorUsername(authentication.getName())
