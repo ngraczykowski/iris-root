@@ -1,6 +1,7 @@
 package com.silenteight.sep.base.common.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.grpc.GrpcExceptionHandler.Callback;
 
@@ -10,6 +11,7 @@ import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Slf4j
 @RequiredArgsConstructor
 @GrpcGlobalServerInterceptor
 public class GlobalExceptionHandlingServerInterceptor implements ServerInterceptor {
@@ -70,6 +72,8 @@ public class GlobalExceptionHandlingServerInterceptor implements ServerIntercept
       }
 
       private void handleException(RuntimeException exception) {
+        log.warn("Exception occurred while processing gRPC request.", exception);
+
         var closed = new AtomicBoolean(false);
 
         Callback callback = (status, trailers) -> {
@@ -90,8 +94,13 @@ public class GlobalExceptionHandlingServerInterceptor implements ServerIntercept
             break;
         }
 
-        if (!closed.get())
-          callback.closeWithStatus(Status.UNKNOWN, metadata);
+        if (!closed.get()) {
+          var status = Status.UNKNOWN
+              .withDescription(exception.getLocalizedMessage())
+              .withCause(exception);
+
+          callback.closeWithStatus(status, metadata);
+        }
       }
     };
   }

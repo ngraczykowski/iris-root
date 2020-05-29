@@ -13,7 +13,11 @@ public class EntityNotFoundGrpcExceptionHandler implements GrpcExceptionHandler 
       RuntimeException exception, @Nullable Metadata metadata, Callback callback) {
 
     if (exception instanceof EntityNotFoundException) {
-      callback.closeWithStatus(Status.NOT_FOUND.withCause(exception), null);
+      var status = Status.NOT_FOUND
+          .withDescription(exception.getLocalizedMessage())
+          .withCause(exception);
+
+      callback.closeWithStatus(status, null);
     }
   }
 }
