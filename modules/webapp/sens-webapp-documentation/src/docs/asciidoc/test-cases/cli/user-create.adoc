@@ -15,7 +15,7 @@ include::../templates/test-cases-table-header.adoc[]
 
 * user name (length min 3 and max 30 characters)
 * display name (length min 3 and max 50 characters)
-* role (one of: `Admin`,  `Auditor`, `Analyst`, `Business Operator`)
+* role (one of: `Admin`, `Auditor`, `Analyst`, `Approver`, `Business Operator`)
 
 |You will be asked to provide a password and confirm it.
 Verify that the user was created successfully in the WebApp.
@@ -24,7 +24,7 @@ Verify that the user was created successfully in the WebApp.
 
 * user name (length min 3 and max 30 characters)
 * display name (length min 3 and max 50 characters)
-* role (one of: `Admin`,  `Auditor`, `Analyst`, `Business Operator`)
+* role (one of: `Admin`,  `Auditor`, `Analyst`, `Approver`, `Business Operator`)
 * add --password <password> to the command line |No prompt for the password.
 Verify that the user was created successfully in the WebApp.
 

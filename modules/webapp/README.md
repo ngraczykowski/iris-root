@@ -92,9 +92,10 @@ to examples [here](https://github.com/adorsys/keycloak-config-cli/tree/master/sr
 ##### Users and roles
 Currently we support following roles:
 - Analyst
+- Approver
 - Auditor
 - Business Operator
-- Admin (composes of Analyst, Auditor, Business Operator)
+- Admin (composes of Analyst, Approver, Auditor, Business Operator)
 
 Users for development purposes are as follows:
 
