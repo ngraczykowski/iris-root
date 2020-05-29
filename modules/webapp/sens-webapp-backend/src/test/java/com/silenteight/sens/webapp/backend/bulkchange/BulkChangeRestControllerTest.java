@@ -1,15 +1,21 @@
 package com.silenteight.sens.webapp.backend.bulkchange;
 
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -18,13 +24,15 @@ import static java.util.Collections.emptyList;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ BulkChangeRestController.class })
+@Import({ BulkChangeRestController.class, GenericExceptionControllerAdvice.class })
 class BulkChangeRestControllerTest extends BaseRestControllerTest {
 
   private static final String BULK_CHANGES_URL = "/bulk-changes";
@@ -83,7 +91,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(role = BUSINESS_OPERATOR)
   void its200_onCreate() {
-    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults())
+    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults(), defaultHeaders())
         .contentType(anything())
         .statusCode(OK.value());
   }
@@ -94,7 +102,10 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
     List<ReasoningBranchIdDto> reasoningBranchIds = List.of(new ReasoningBranchIdDto(1L, 2L));
     String solution = "FALSE_POSITIVE";
     Boolean active = TRUE;
-    post(BULK_CHANGES_URL, new BulkChangeDto(id, reasoningBranchIds, solution, active, now()));
+    post(
+        BULK_CHANGES_URL,
+        new BulkChangeDto(id, reasoningBranchIds, solution, active, now()),
+        defaultHeaders());
 
     ArgumentCaptor<CreateBulkChangeCommand> commandCaptor =
         ArgumentCaptor.forClass(CreateBulkChangeCommand.class);
@@ -108,9 +119,30 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getActive()).isEqualTo(active);
   }
 
+  @Test
+  @WithMockUser(roles = BUSINESS_OPERATOR)
+  void setsCorrelationIdInThreadLocal() {
+    UUID correlationId = randomUUID();
+    post(
+        BULK_CHANGES_URL,
+        bulkChangeDtoWithDefaults(),
+        Map.of(CORRELATION_ID_HEADER, correlationId));
+
+    assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
+  }
+
+  @Test
+  @WithMockUser(roles = BUSINESS_OPERATOR)
+  void its400_IfNoCorrelationIdProvidedInHeader() {
+    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults())
+        .statusCode(BAD_REQUEST.value())
+        .body("key", equalTo("Missing request header"))
+        .body("extras.headerName", equalTo("CorrelationId"));
+  }
+
   @TestWithRole(role = APPROVER)
   void its403_onCreate_whenNotPermittedRole() {
-    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults())
+    post(BULK_CHANGES_URL, bulkChangeDtoWithDefaults(), defaultHeaders())
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
   }
@@ -118,5 +150,9 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
   private BulkChangeDto bulkChangeDtoWithDefaults() {
     return new BulkChangeDto(
         randomUUID(), List.of(new ReasoningBranchIdDto(1L, 2L)), null, null, now());
+  }
+
+  private static Map<String, UUID> defaultHeaders() {
+    return Map.of(CORRELATION_ID_HEADER, randomUUID());
   }
 }

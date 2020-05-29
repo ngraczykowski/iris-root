@@ -13,6 +13,10 @@ public class RequestCorrelation {
     return ID.get();
   }
 
+  public static void set(UUID id) {
+    ID.set(id);
+  }
+
   public static void remove() {
     ID.remove();
   }

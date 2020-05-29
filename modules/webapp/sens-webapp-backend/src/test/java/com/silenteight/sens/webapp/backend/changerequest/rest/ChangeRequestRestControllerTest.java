@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.backend.changerequest.rest;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestUseCase;
@@ -22,8 +23,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.time.OffsetDateTime.now;
 import static java.time.OffsetDateTime.parse;
@@ -38,6 +41,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -129,7 +133,8 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
     @Test
     @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
     void its200_whenBusinessOperatorCallsEndpoint() {
-      post(mappingForChangeRequests(), changeRequestWithDefaults()).statusCode(OK.value());
+      post(mappingForChangeRequests(), changeRequestWithDefaults(), defaultHeaders())
+          .statusCode(OK.value());
     }
 
     @Test
@@ -141,7 +146,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
       post(
           mappingForChangeRequests(),
-          new CreateChangeRequestDto(bulkChangeId, createdAt, comment));
+          new CreateChangeRequestDto(bulkChangeId, createdAt, comment), defaultHeaders());
 
       ArgumentCaptor<CreateChangeRequestCommand> commandCaptor =
           ArgumentCaptor.forClass(CreateChangeRequestCommand.class);
@@ -154,9 +159,33 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
       assertThat(command.getCreatedAt()).isEqualTo(createdAt);
     }
 
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void setsCorrelationIdInThreadLocal() {
+      UUID correlationId = randomUUID();
+      post(
+          mappingForChangeRequests(),
+          changeRequestWithDefaults(),
+          Map.of(CORRELATION_ID_HEADER, correlationId));
+
+      assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
+    }
+
     @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
-      post(mappingForChangeRequests(), changeRequestWithDefaults()).statusCode(FORBIDDEN.value());
+      post(mappingForChangeRequests(), changeRequestWithDefaults(), defaultHeaders())
+          .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void its400_IfNoCorrelationIdProvidedInHeader() {
+      post(
+          mappingForChangeRequests(),
+          changeRequestWithDefaults())
+          .statusCode(BAD_REQUEST.value())
+          .body("key", equalTo("Missing request header"))
+          .body("extras.headerName", equalTo("CorrelationId"));
     }
 
     private CreateChangeRequestDto changeRequestWithDefaults() {
@@ -216,5 +245,9 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
     private String mappingForRejection(long id) {
       return "/change-request/" + id + "/reject";
     }
+  }
+
+  private static Map<String, UUID> defaultHeaders() {
+    return Map.of(CORRELATION_ID_HEADER, randomUUID());
   }
 }

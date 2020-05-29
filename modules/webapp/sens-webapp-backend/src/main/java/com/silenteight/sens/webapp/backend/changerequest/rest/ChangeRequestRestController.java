@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestCommand;
@@ -20,10 +21,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER;
 import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
 import static org.springframework.http.ResponseEntity.ok;
@@ -61,9 +64,12 @@ class ChangeRequestRestController {
   @PostMapping("/change-requests")
   @PreAuthorize(BUSINESS_OPERATOR)
   public ResponseEntity<Void> create(
-      @RequestBody @Valid CreateChangeRequestDto dto, Authentication authentication) {
+      @RequestBody @Valid CreateChangeRequestDto dto,
+      @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
+      Authentication authentication) {
     log.debug(CHANGE_REQUEST, "Requested to create Change Request.");
 
+    RequestCorrelation.set(correlationId);
     CreateChangeRequestCommand command = CreateChangeRequestCommand.builder()
         .bulkChangeId(dto.getBulkChangeId())
         .makerComment(dto.getComment())

@@ -14,6 +14,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +84,23 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
     extras.put("variableName", e.getVariableName());
 
     return handle(e, "MissingPathVariable", HttpStatus.BAD_REQUEST, extras);
+  }
+
+  @ExceptionHandler(MissingRequestHeaderException.class)
+  public ResponseEntity<ErrorDto> handle(MissingRequestHeaderException e) {
+    Map<String, Object> extras = new HashMap<>();
+    extras.put("headerName", e.getHeaderName());
+
+    return handle(e, "Missing request header", HttpStatus.BAD_REQUEST, extras);
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ErrorDto> handle(MethodArgumentTypeMismatchException e) {
+    Map<String, Object> extras = new HashMap<>();
+    extras.put("parameterName", e.getName());
+    extras.put("expectedParameterType", e.getParameter().getParameterType());
+
+    return handle(e, "Parameter type mismatch", HttpStatus.BAD_REQUEST, extras);
   }
 
   @ExceptionHandler(ServletRequestBindingException.class)

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.create;
 
+import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.backend.changerequest.messaging.CreateChangeRequestMessageGateway;
 
@@ -38,7 +39,7 @@ class CreateChangeRequestUseCaseTest {
     String makerComment = "commentABC";
     String makerUsername = "userNameABC";
     OffsetDateTime createdAt = now();
-
+    UUID correlationId = RequestCorrelation.id();
     useCase.apply(CreateChangeRequestCommand.builder()
         .bulkChangeId(bulkChangeId)
         .makerComment(makerComment)
@@ -56,10 +57,12 @@ class CreateChangeRequestUseCaseTest {
     assertThat(message.getMakerComment()).isEqualTo(makerComment);
     assertThat(message.getMakerUsername()).isEqualTo(makerUsername);
     assertThat(message.getCreatedAt()).isEqualTo(toTimestamp(createdAt));
+    assertThat(message.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
   }
 
   @Test
   void savesAuditLogEvent() {
+    UUID correlationId = RequestCorrelation.id();
     CreateChangeRequestCommand command =
         new CreateChangeRequestCommand(randomUUID(), "usr1", "comment", now());
 
@@ -72,6 +75,7 @@ class CreateChangeRequestUseCaseTest {
           assertThat(e.getEntityClass()).isNull();
           assertThat(e.getEntityAction()).isNull();
           assertThat(e.getEntityId()).isNull();
+          assertThat(e.getCorrelationId()).isEqualTo(correlationId);
           return true;
         })
     );
