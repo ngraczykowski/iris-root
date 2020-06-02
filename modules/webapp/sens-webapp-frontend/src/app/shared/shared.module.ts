@@ -17,7 +17,6 @@ import {
   BackgroundServiceToken
 } from '@app/shared/background-services-manager';
 import { DefaultErrorHandler } from '@app/shared/default-error-handler';
-import { NotImplementedDirective } from '@app/shared/directives/not-implemented/not-implemented.directive';
 import { EventModule } from '@app/shared/event/event.module';
 import { FrontendSettingsService } from '@app/shared/frontend-settings/frontend-settings.service';
 import { httpInterceptorProviders } from '@app/shared/interceptors';
@@ -30,6 +29,7 @@ import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ng
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { NumbersOnlyDirective } from './directives/numbers-only/numbers-only.directive';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -67,8 +67,8 @@ export function createTranslateLoader(http: HttpClient) {
     CommunicationErrorComponent,
     OverlayComponent,
     FeedbackMessageComponent,
-    NotImplementedDirective,
     IconComponent,
+    NumbersOnlyDirective,
   ],
   providers: [
     {
@@ -101,8 +101,8 @@ export function createTranslateLoader(http: HttpClient) {
     CommunicationErrorComponent,
     OverlayComponent,
     FeedbackMessageComponent,
-    NotImplementedDirective,
     IconComponent,
+    NumbersOnlyDirective
   ]
 })
 export class SharedModule {}
