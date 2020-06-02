@@ -39,8 +39,6 @@ import static java.util.stream.Collectors.toList;
 class GrpcBulkChangeQuery implements BulkChangeQuery {
 
   @NonNull
-  private final BranchSolutionMapper branchSolutionMapper;
-  @NonNull
   private final BulkBranchChangeGovernanceBlockingStub bulkBranchChangeStub;
 
   @Override
@@ -97,7 +95,7 @@ class GrpcBulkChangeQuery implements BulkChangeQuery {
 
   private String solutionChangeOf(BulkBranchChangeView bulkBranchChangeView) {
     return bulkBranchChangeView.hasSolutionChange() ?
-           branchSolutionMapper.map(bulkBranchChangeView.getSolutionChange().getSolution()) :
+           BranchSolutionMapper.map(bulkBranchChangeView.getSolutionChange().getSolution()) :
            null;
   }
 

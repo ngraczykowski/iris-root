@@ -6,22 +6,33 @@ import lombok.Value;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
+
+import static java.util.Optional.ofNullable;
 
 @Value
 @Builder
 public class CreateBulkChangeCommand {
 
   @NonNull
-  private UUID bulkChangeId;
+  UUID bulkChangeId;
   @NonNull
-  private List<ReasoningBranchIdDto> reasoningBranchIds;
+  List<ReasoningBranchIdDto> reasoningBranchIds;
   @Nullable
-  private String aiSolution;
+  String aiSolution;
   @Nullable
-  private Boolean active;
+  Boolean active;
   @NotNull
-  private OffsetDateTime cratedAt;
+  OffsetDateTime cratedAt;
+
+  Optional<Boolean> getEnablement() {
+    return ofNullable(active);
+  }
+
+  Optional<String> getSolution() {
+    return ofNullable(aiSolution);
+  }
 }

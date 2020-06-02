@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.messaging.RejectChangeRequestMessageGateway;
 
 import java.time.Instant;
 

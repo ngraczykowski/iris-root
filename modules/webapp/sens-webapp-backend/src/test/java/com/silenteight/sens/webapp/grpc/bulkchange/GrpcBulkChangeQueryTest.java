@@ -13,7 +13,6 @@ import com.silenteight.proto.serp.v1.governance.ReasoningBranchId.Builder;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
 import com.silenteight.sens.webapp.backend.bulkchange.ReasoningBranchIdDto;
-import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -49,7 +48,7 @@ class GrpcBulkChangeQueryTest {
 
   @BeforeEach
   void setUp() {
-    bulkChangeQuery = new GrpcBulkChangeQuery(new BranchSolutionMapper(), bulkBranchChangeStub);
+    bulkChangeQuery = new GrpcBulkChangeQuery(bulkBranchChangeStub);
   }
 
   @Test

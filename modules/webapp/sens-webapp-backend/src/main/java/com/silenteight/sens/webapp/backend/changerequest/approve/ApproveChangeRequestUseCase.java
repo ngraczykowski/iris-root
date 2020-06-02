@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.messaging.ApproveChangeRequestMessageGateway;
 
 import java.time.Instant;
 
@@ -27,13 +26,13 @@ public class ApproveChangeRequestUseCase {
   public void apply(@NonNull ApproveChangeRequestCommand command) {
     log.debug(CHANGE_REQUEST, "Approving Change Request, command={}", command);
 
+    messageGateway.send(toMessage(command));
+
     auditTracer.save(
         new ChangeRequestApprovalRequestedEvent(
             valueOf(command.getChangeRequestId()),
             "webapp_change_request",
             command));
-
-    messageGateway.send(toMessage(command));
 
     log.debug(CHANGE_REQUEST,
         "Approved Change Request, changeRequestId={}", command.getChangeRequestId());

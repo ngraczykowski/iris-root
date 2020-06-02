@@ -13,8 +13,6 @@ import static org.assertj.core.api.Assertions.*;
 
 public class BranchChangeAssert extends AbstractAssert<BranchChangeAssert, BranchChange> {
 
-  private BranchSolutionMapper branchSolutionMapper = new BranchSolutionMapper();
-
   private BranchChangeAssert(BranchChange branchChange) {
     super(branchChange, BranchChangeAssert.class);
   }
@@ -32,7 +30,7 @@ public class BranchChangeAssert extends AbstractAssert<BranchChangeAssert, Branc
   }
 
   BranchChangeAssert hasAiSolutionChange(String solutionText) {
-    return hasAiSolutionChange(branchSolutionMapper.map(solutionText));
+    return hasAiSolutionChange(BranchSolutionMapper.map(solutionText));
   }
 
   BranchChangeAssert hasAiSolutionChange(BranchSolution branchSolution) {

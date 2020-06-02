@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.messaging.CreateChangeRequestMessageGateway;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;

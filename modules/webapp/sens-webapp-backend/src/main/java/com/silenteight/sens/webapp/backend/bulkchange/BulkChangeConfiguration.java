@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 class BulkChangeConfiguration {
 
   @Bean
-  CreateBulkChangeUseCase createBulkChangeUseCase(AuditTracer auditTracer) {
-    return new CreateBulkChangeUseCase(auditTracer);
+  CreateBulkChangeUseCase createBulkChangeUseCase(
+      AuditTracer auditTracer, CreateBulkChangeMessageGateway createBulkChangeMessageGateway) {
+    return new CreateBulkChangeUseCase(createBulkChangeMessageGateway, auditTracer);
   }
 }

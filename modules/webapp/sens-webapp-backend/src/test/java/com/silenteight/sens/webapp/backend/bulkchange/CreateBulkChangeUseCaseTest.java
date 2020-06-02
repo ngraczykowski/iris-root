@@ -21,6 +21,9 @@ class CreateBulkChangeUseCaseTest {
   @Mock
   private AuditTracer auditTracer;
 
+  @Mock
+  CreateBulkChangeMessageGateway gateway;
+
   @InjectMocks
   private CreateBulkChangeUseCase useCase;
 

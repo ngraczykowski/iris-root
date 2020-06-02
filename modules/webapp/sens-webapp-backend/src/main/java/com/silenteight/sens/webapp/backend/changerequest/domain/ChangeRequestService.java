@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -39,19 +38,12 @@ public class ChangeRequestService {
             changeRequest));
   }
 
-  public void approve(long id, @NonNull String username, @NonNull OffsetDateTime approvedAt) {
+  public UUID approve(long id, @NonNull String username, @NonNull OffsetDateTime approvedAt) {
     log.info(CHANGE_REQUEST,
         "Approving Change Request. changeRequestId={}, username={}, approvedAt={}",
         id, username, approvedAt);
 
-    repository
-        .findById(id)
-        .ifPresentOrElse(cr -> this.approve(cr, username, approvedAt), () -> {
-          throw new ChangeRequestNotFoundException(id);
-        });
-  }
-
-  private void approve(ChangeRequest changeRequest, String username, OffsetDateTime approvedAt) {
+    ChangeRequest changeRequest = repository.getById(id);
     changeRequest.approve(username, approvedAt);
     repository.save(changeRequest);
 
@@ -62,21 +54,16 @@ public class ChangeRequestService {
             changeRequest.getId().toString(),
             CHANGE_REQUEST_ENTITY_NAME,
             changeRequest));
+
+    return changeRequest.getBulkChangeId();
   }
 
-  public void reject(long id, @NonNull String username, @NonNull OffsetDateTime rejectedAt) {
+  public UUID reject(long id, @NonNull String username, @NonNull OffsetDateTime rejectedAt) {
     log.info(CHANGE_REQUEST,
         "Rejecting Change Request. changeRequestId={}, username={}, rejectedAt={}",
         id, username, rejectedAt);
 
-    repository
-        .findById(id)
-        .ifPresentOrElse(cr -> this.reject(cr, username, rejectedAt), () -> {
-          throw new ChangeRequestNotFoundException(id);
-        });
-  }
-
-  private void reject(ChangeRequest changeRequest, String username, OffsetDateTime rejectedAt) {
+    ChangeRequest changeRequest = repository.getById(id);
     changeRequest.reject(username, rejectedAt);
     repository.save(changeRequest);
 
@@ -87,5 +74,7 @@ public class ChangeRequestService {
             changeRequest.getId().toString(),
             CHANGE_REQUEST_ENTITY_NAME,
             changeRequest));
+
+    return changeRequest.getBulkChangeId();
   }
 }

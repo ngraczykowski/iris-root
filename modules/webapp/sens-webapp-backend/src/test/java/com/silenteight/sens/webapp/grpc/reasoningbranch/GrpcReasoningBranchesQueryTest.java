@@ -9,7 +9,6 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.report.BranchWithFeat
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.validate.BranchIdAndSignatureDto;
-import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import com.google.protobuf.ByteString;
@@ -47,7 +46,7 @@ class GrpcReasoningBranchesQueryTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new GrpcReasoningBranchesQuery(new BranchSolutionMapper(), branchStub);
+    underTest = new GrpcReasoningBranchesQuery(branchStub);
   }
 
   @Test

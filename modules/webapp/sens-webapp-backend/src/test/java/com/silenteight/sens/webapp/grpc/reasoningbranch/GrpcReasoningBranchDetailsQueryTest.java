@@ -31,12 +31,10 @@ class GrpcReasoningBranchDetailsQueryTest {
   private BranchGovernanceBlockingStub stub;
 
   private GrpcReasoningBranchDetailsQuery underTest;
-  private BranchSolutionMapper mapper;
 
   @BeforeEach
   void setUp() {
-    mapper = new BranchSolutionMapper();
-    underTest = new GrpcReasoningBranchDetailsQuery(mapper, stub);
+    underTest = new GrpcReasoningBranchDetailsQuery(stub);
   }
 
   @Test
@@ -74,7 +72,7 @@ class GrpcReasoningBranchDetailsQueryTest {
   private void assertEquals(BranchDetailsDto actual, ReasoningBranch expected) {
     assertThatDetails(actual)
         .hasBranchId(expected.getBranchId())
-        .hasAiSolution(mapper.map(expected.getSolution()))
+        .hasAiSolution(BranchSolutionMapper.map(expected.getSolution()))
         .hasEnabledSetTo(expected.isEnabled());
   }
 

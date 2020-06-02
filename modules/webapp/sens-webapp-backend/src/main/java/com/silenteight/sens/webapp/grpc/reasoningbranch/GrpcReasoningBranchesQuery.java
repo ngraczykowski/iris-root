@@ -42,7 +42,6 @@ import static java.util.stream.Collectors.toList;
 class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBranchesReportQuery,
     ReasoningBranchesValidateQuery {
 
-  private final BranchSolutionMapper branchSolutionMapper;
   private final BranchGovernanceBlockingStub branchesStub;
 
   @Override
@@ -147,7 +146,7 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
   private BranchDto mapToBranchDto(ReasoningBranchSummary reasoningBranch) {
     return BranchDto
         .builder()
-        .aiSolution(branchSolutionMapper.map(reasoningBranch.getSolution()))
+        .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
         .isActive(reasoningBranch.getEnabled())
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
         .build();
@@ -165,7 +164,7 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
     return BranchWithFeaturesDto.builder()
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
         .updatedAt(toInstant(reasoningBranch.getUpdatedAt()))
-        .aiSolution(branchSolutionMapper.map(reasoningBranch.getSolution()))
+        .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
         .isActive(reasoningBranch.getEnabled())
         .featureValues(reasoningBranch.getFeatureValueList())
         .build();

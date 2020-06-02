@@ -16,7 +16,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.time.OffsetDateTime.now;
@@ -85,7 +88,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
         .body("[1].active", is(FALSE));
   }
 
-  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(BULK_CHANGES_URL).statusCode(FORBIDDEN.value());
   }

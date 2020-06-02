@@ -8,7 +8,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
@@ -74,11 +73,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     ChangeRequest savedChangeRequest = repository.save(changeRequest);
     long differentChangeRequestId = savedChangeRequest.getId() + 1L;
 
-    // when
-    Optional<ChangeRequest> result = repository.findById(differentChangeRequestId);
-
-    // then
-    assertThat(result).isEmpty();
+    // when, then
+    assertThat(repository.getById(differentChangeRequestId)).isNull();
   }
 
   @Test
@@ -89,11 +85,10 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     ChangeRequest savedChangeRequest = repository.save(changeRequest);
 
     // when
-    Optional<ChangeRequest> result = repository.findById(savedChangeRequest.getId());
+    ChangeRequest result = repository.getById(savedChangeRequest.getId());
 
-    // then
-    assertThat(result).isNotEmpty();
-    assertThat(result.get()).isEqualTo(savedChangeRequest);
+    // thens
+    assertThat(result).isEqualTo(savedChangeRequest);
   }
 
   private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {

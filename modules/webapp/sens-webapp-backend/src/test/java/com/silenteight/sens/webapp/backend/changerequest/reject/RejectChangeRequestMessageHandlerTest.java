@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
 import static com.silenteight.protocol.utils.Uuids.toJavaUuid;
 import static com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestMessageHandlerFixtures.REJECT_MESSAGE;
@@ -26,6 +28,12 @@ class RejectChangeRequestMessageHandlerTest {
 
   @Test
   void handleRejectMessage_changeRequestRejected() {
+    // given
+    when(changeRequestService.reject(
+        REJECT_MESSAGE.getChangeRequestId(),
+        REJECT_MESSAGE.getRejectorUsername(),
+        toOffsetDateTime(REJECT_MESSAGE.getRejectedAt()))).thenReturn(UUID.randomUUID());
+
     // when
     underTest.handle(REJECT_MESSAGE);
 

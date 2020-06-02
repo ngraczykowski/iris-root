@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
@@ -98,7 +96,7 @@ class ChangeRequestServiceTest {
     Executable when = () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, approvedAt);
 
     // then
-    assertThrows(ChangeRequestNotFoundException.class, when);
+    assertThrows(NullPointerException.class, when);
   }
 
   @Test
@@ -125,7 +123,7 @@ class ChangeRequestServiceTest {
     Executable when = () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, rejectedAt);
 
     // then
-    assertThrows(ChangeRequestNotFoundException.class, when);
+    assertThrows(NullPointerException.class, when);
   }
 
   @Test
@@ -157,9 +155,8 @@ class ChangeRequestServiceTest {
       String approverUsername,
       OffsetDateTime updatedAt) {
 
-    Optional<ChangeRequest> repositoryValue = repository.findById(changeRequestId);
-    assertThat(repositoryValue).isNotEmpty();
-    ChangeRequest changeRequest = repositoryValue.get();
+    ChangeRequest repositoryValue = repository.getById(changeRequestId);
+    ChangeRequest changeRequest = repositoryValue;
     assertThat(changeRequest.getState()).isEqualTo(expectedState);
     assertThat(changeRequest.getDecidedBy()).isEqualTo(approverUsername);
     assertThat(changeRequest.getDecidedAt()).isEqualTo(updatedAt);

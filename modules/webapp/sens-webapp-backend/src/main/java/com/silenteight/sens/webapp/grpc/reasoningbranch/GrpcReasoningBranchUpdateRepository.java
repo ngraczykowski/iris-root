@@ -37,7 +37,6 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
 
-  private final BranchSolutionMapper branchSolutionMapper;
   private final BranchGovernanceBlockingStub governanceBlockingStub;
 
   @Override
@@ -109,7 +108,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
 
   private BranchSolutionChange buildSolutionChange(String newSolution) {
     return BranchSolutionChange.newBuilder()
-        .setSolution(branchSolutionMapper.map(newSolution))
+        .setSolution(BranchSolutionMapper.map(newSolution))
         .build();
   }
 }

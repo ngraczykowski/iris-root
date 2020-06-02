@@ -2,8 +2,6 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
-
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
@@ -71,7 +69,8 @@ class ChangeRequest {
   }
 
   void approve(String username, OffsetDateTime approvedAt) {
-    validatePendingState();
+    if (isNotInPendingState())
+      return;
 
     state = APPROVED;
     decidedBy = username;
@@ -79,16 +78,12 @@ class ChangeRequest {
   }
 
   void reject(String username, OffsetDateTime rejectedAt) {
-    validatePendingState();
+    if (isNotInPendingState())
+      return;
 
     state = REJECTED;
     decidedBy = username;
     decidedAt = rejectedAt;
-  }
-
-  private void validatePendingState() {
-    if (isNotInPendingState())
-      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
   }
 
   private boolean isNotInPendingState() {

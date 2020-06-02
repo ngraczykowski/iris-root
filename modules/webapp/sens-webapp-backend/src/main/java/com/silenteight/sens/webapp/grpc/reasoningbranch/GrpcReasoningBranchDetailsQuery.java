@@ -33,7 +33,6 @@ import static java.util.Optional.empty;
 @Slf4j
 class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
 
-  private final BranchSolutionMapper mapper;
   private final BranchGovernanceBlockingStub branches;
 
   @Override
@@ -71,7 +70,7 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
     ReasoningBranchSummary reasoningBranch = grpcResponse.getReasoningBranch();
 
     return BranchDetailsDto.builder()
-        .aiSolution(mapper.map(reasoningBranch.getSolution()))
+        .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
         .isActive(reasoningBranch.getEnabled())
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
         .build();

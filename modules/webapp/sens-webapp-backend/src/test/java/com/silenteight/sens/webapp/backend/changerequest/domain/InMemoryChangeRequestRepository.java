@@ -2,7 +2,6 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,6 +12,11 @@ class InMemoryChangeRequestRepository implements ChangeRequestRepository {
 
   private final AtomicLong nextId = new AtomicLong(1);
   private final Map<Long, ChangeRequest> store = new ConcurrentHashMap<>();
+
+  @Override
+  public ChangeRequest getById(long id) {
+    return store.get(id);
+  }
 
   @Override
   public ChangeRequest save(ChangeRequest changeRequest) {
@@ -29,11 +33,6 @@ class InMemoryChangeRequestRepository implements ChangeRequestRepository {
         .stream()
         .filter(changeRequest -> changeRequest.getState().equals(state))
         .collect(toList());
-  }
-
-  @Override
-  public Optional<ChangeRequest> findById(long id) {
-    return Optional.ofNullable(store.get(id));
   }
 
   ChangeRequest getByBulkChangeId(UUID bulkChangeId) {

@@ -24,6 +24,14 @@ sens.chrome-extension.log-level: debug
 sens.chrome-extension.comment-length-threshold: 1024
 sens.chrome-extension.refresh-interval-in-ms: 1000
 
+sens.webapp.rabbitmq.host: localhost
+sens.webapp.rabbitmq.port: 24021
+sens.webapp.rabbitmq.user: serp
+sens.webapp.rabbitmq.password: serp
+
+sens.webapp.messaging.concurrency: 4
+sens.webapp.messaging.prefetch: 25
+
 ####################################################################################################
 info:
   component: "SENS Web App REST API"
@@ -84,6 +92,33 @@ spring:
       hibernate.temp.use_jdbc_metadata_defaults: false
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
+
+  rabbitmq:
+    # virtual-host:
+    # addresses: ${serp.rabbitmq.addresses}
+    host: ${sens.webapp.rabbitmq.host}
+    port: ${sens.webapp.rabbitmq.port}
+    username: ${sens.webapp.rabbitmq.user}
+    password: ${sens.webapp.rabbitmq.password}
+    ssl:
+      enabled: true
+      key-store: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+      key-store-password: ${sens.webapp.keystore.password}
+      trust-store: file:${serp.home}/cert/truststore.p12
+      trust-store-password: ${sens.webapp.truststore.password}
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${sens.webapp.messaging.concurrency}
+        prefetch: ${sens.webapp.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${sens.webapp.messaging.concurrency}
+        prefetch: ${sens.webapp.messaging.prefetch}
+  # Spring Integration
+  integration:
+    start-delay-seconds: 15
+    poll-period-millis: 1000
 
 grpc:
   client:
