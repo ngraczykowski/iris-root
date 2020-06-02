@@ -69,7 +69,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     private final Fixtures fixtures = new Fixtures();
 
-    @TestWithRole(role = APPROVER)
+    @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
     void its200_whenNoPendingChangeRequest() {
       given(changeRequestsQuery.listPending()).willReturn(emptyList());
 
@@ -79,7 +79,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
           .body("size()", is(0));
     }
 
-    @TestWithRole(role = APPROVER)
+    @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
     void its200WithCorrectBody_whenFound() {
       given(changeRequestsQuery.listPending()).willReturn(
           List.of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
@@ -99,7 +99,7 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
           .body("[1].comment", equalTo("Disable redundant RBs based on analyses from 2020.04.02"));
     }
 
-    @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(mappingForList()).statusCode(FORBIDDEN.value());
     }

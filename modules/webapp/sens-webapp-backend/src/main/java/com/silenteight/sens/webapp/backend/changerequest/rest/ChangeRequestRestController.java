@@ -25,6 +25,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER;
+import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER_OR_BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
@@ -51,7 +52,7 @@ class ChangeRequestRestController {
   private final RejectChangeRequestUseCase rejectChangeRequestUseCase;
 
   @GetMapping("/change-requests")
-  @PreAuthorize(APPROVER)
+  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<ChangeRequestDto>> pending() {
     log.debug(CHANGE_REQUEST, "Listing pending Change Requests");
 

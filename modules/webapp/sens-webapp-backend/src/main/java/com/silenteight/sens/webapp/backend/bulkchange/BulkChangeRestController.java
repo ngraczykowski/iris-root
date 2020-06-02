@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 
-import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER;
+import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER_OR_BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
@@ -29,12 +29,12 @@ import static org.springframework.http.ResponseEntity.ok;
 class BulkChangeRestController {
 
   @NonNull
-  private BulkChangeQuery bulkChangeQuery;
+  private final BulkChangeQuery bulkChangeQuery;
   @NonNull
-  private CreateBulkChangeUseCase createBulkChangeUseCase;
+  private final CreateBulkChangeUseCase createBulkChangeUseCase;
 
   @GetMapping("/bulk-changes")
-  @PreAuthorize(APPROVER)
+  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<BulkChangeDto>> pendingBulkChanges() {
     return ok(bulkChangeQuery.listPending());
   }

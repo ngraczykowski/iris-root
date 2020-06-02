@@ -44,7 +44,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private CreateBulkChangeUseCase createBulkChangeUseCase;
 
-  @TestWithRole(role = APPROVER)
+  @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
   void its200WithEmptyListWhenNoPendingBulkChanges() {
     given(bulkChangeQuery.listPending()).willReturn(emptyList());
 
@@ -54,7 +54,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
         .body("size()", is(0));
   }
 
-  @TestWithRole(role = APPROVER)
+  @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
   void its200WithCorrectBody_whenFound() {
     UUID id1 = randomUUID();
     UUID id2 = randomUUID();
@@ -85,7 +85,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
         .body("[1].active", is(FALSE));
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(BULK_CHANGES_URL).statusCode(FORBIDDEN.value());
   }

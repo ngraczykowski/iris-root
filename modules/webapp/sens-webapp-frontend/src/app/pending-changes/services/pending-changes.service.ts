@@ -5,8 +5,9 @@ import {
   PendingChangeResponse
 } from '@app/pending-changes/models/pending-changes';
 import { environment } from '@env/environment';
-import { forkJoin, Observable, throwError } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -33,18 +34,27 @@ export class PendingChangesService {
         }
     ).pipe(
         map(data => {
-          return data.bulkChanges.map(bulkChanges => {
-            return {
-              ...bulkChanges, ...data.pendingChanges.filter(
-                  pendingChanges => pendingChanges.bulkChangeId === bulkChanges.id
-              )[0]
-            };
-          });
+          return data.bulkChanges
+              .filter(bulkChange =>
+                  data.pendingChanges.filter(
+                      pendingChange => pendingChange.bulkChangeId === bulkChange.id).length > 0)
+              .map(bulkChanges => {
+                return {
+                  ...bulkChanges, ...data.pendingChanges.filter(
+                      pendingChanges => pendingChanges.bulkChangeId === bulkChanges.id
+                  )[0]
+                };
+              });
         })
     );
   }
 
   changeRequestDecision(changeRequestID: string, decision: string) {
-    return this.http.patch(`${environment.serverApiUrl}/change-request/${changeRequestID}/${decision}`, null);
+    return this.http.patch(
+        `${environment.serverApiUrl}/change-request/${changeRequestID}/${decision}`,
+        null,
+        {
+          headers: {...({CorrelationId: uuidv4()})}
+        });
   }
 }

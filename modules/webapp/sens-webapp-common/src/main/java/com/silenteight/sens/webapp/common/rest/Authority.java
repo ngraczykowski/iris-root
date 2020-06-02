@@ -11,4 +11,7 @@ public class Authority {
   public static final String AUDITOR = "hasRole('AUDITOR')";
   public static final String BUSINESS_OPERATOR = "hasRole('BUSINESS_OPERATOR')";
   public static final String APPROVER = "hasRole('APPROVER')";
+
+  // COMBINED_AUTHORITIES
+  public static final String APPROVER_OR_BUSINESS_OPERATOR = APPROVER + " || " + BUSINESS_OPERATOR;
 }
