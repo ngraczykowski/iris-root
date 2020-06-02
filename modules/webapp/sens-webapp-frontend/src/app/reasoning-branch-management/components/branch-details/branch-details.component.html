@@ -5,55 +5,25 @@
          [translate]="'branch.details.sections.branchId.label'"></p>
       <div class="branch-content-details-row-content">
         <p class="branch-content-details-row-content-data">{{fullId}}</p>
-        <p class="branch-content-details-row-content-hint"
-           [translate]="'branch.details.sections.branchId.hint'"></p>
       </div>
     </div>
     <div class="branch-content-details-row">
       <p class="branch-content-details-row-label"
          [translate]="'branch.details.sections.aiSolution.label'"></p>
       <div class="branch-content-details-row-content">
-        <div class="select-dropdown branch-content-details-row-content-data">
-          <app-icon [name]="'arrow'"></app-icon>
-          <select class="input-field" formControlName="aiSolution">
-            <option *ngFor="let aiSolution of aiSolutions"
-                    [value]="aiSolution.key">
-              {{ aiSolution.label }}
-            </option>
-          </select>
-        </div>
-        <p class="branch-content-details-row-content-hint"
-           [translate]="'branch.details.sections.aiSolution.hint'"></p>
+        <p class="branch-content-details-row-content-data">
+          {{ convertSolution(branchDetails.aiSolution) }}
+        </p>
       </div>
     </div>
     <div class="branch-content-details-row">
       <p class="branch-content-details-row-label"
          [translate]="'branch.details.sections.status.label'"></p>
       <div class="branch-content-details-row-content">
-        <div class="select-dropdown branch-content-details-row-content-data">
-          <app-icon [name]="'arrow'"></app-icon>
-          <select class="input-field" formControlName="active">
-            <option [ngValue]="true" [selected]="branchDetails.active === true">Active</option>
-            <option [ngValue]="false" [selected]="branchDetails.active === false">Disabled</option>
-          </select>
-        </div>
-        <p class="branch-content-details-row-content-hint"
-           [translate]="'branch.details.sections.status.hint'"></p>
-      </div>
-    </div>
-    <div class="branch-content-details-footer">
-      <div class="empty-space"></div>
-      <button class="button-flat" (click)="reset()"
-              [translate]="'branch.details.footer.buttonReset'"></button>
-
-      <div class="tooltip save-changes-button">
-      <span class="tooltip-bottom one-line"
-            *ngIf="branchForm.invalid || branchForm.pristine">
-        <p [translate]="'branch.details.footer.buttonApply.tooltip'"></p>
-      </span>
-        <button class="button-action" (click)="submit()"
-                [disabled]="branchForm.invalid || branchForm.pristine || isOriginalValue"
-                [translate]="'branch.details.footer.buttonApply.label'"></button>
+        <p class="branch-content-details-row-content-data">
+          <span *ngIf = "branchDetails.active">Active</span>
+          <span *ngIf = "!branchDetails.active">Disabled</span>
+        </p>
       </div>
     </div>
   </div>
