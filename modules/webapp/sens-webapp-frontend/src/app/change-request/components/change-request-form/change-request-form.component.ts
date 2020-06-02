@@ -39,30 +39,21 @@ export class ChangeRequestFormComponent implements OnInit {
 
   onFormSubmit(event) {
     event.preventDefault();
-    if (
-      this.form.controls.aiSolution.value === this.defaultAiValue &&
-      this.form.controls.aiStatus.value === this.defaultAiValue ) {
-        this.form.controls.aiSolution.setErrors({
-          needsChange: true
-        });
-        this.form.controls.aiStatus.setErrors({
-          needsChange: true
-        });
+    if (this.isWithDefaultValues() &&
+        !this.form.controls.comment.value) {
+      this.setErrorState(true, true, true);
+    } else if (this.isWithDefaultValues()) {
+      this.setErrorState(true, true, false);
+    } else if (!this.form.controls.comment.value) {
+      this.setErrorState(false, false, true);
     } else {
       this.formSubmitted.emit(this.form.value);
     }
   }
 
   selectionChange() {
-    if (
-      this.form.controls.aiSolution.value === this.defaultAiValue &&
-      this.form.controls.aiStatus.value === this.defaultAiValue ) {
-        this.form.controls.aiSolution.setErrors({
-          needsChange: true
-        });
-        this.form.controls.aiStatus.setErrors({
-          needsChange: true
-        });
+    if (this.isWithDefaultValues()) {
+      this.setErrorState(true, true, false);
     } else {
       this.form.controls.aiSolution.setErrors(null);
       this.form.controls.aiStatus.setErrors(null);
@@ -73,4 +64,28 @@ export class ChangeRequestFormComponent implements OnInit {
     this.previousStepClicked.emit();
   }
 
+  setErrorState(aiSolution: boolean, aiStatus: boolean, comment: boolean) {
+    if (aiSolution) {
+      this.form.controls.aiSolution.setErrors({
+        needsChange: true
+      });
+    }
+
+    if (aiStatus) {
+      this.form.controls.aiStatus.setErrors({
+        needsChange: true
+      });
+    }
+
+    if (comment) {
+      this.form.controls.comment.setErrors({
+        needsChange: true
+      });
+    }
+  }
+
+  isWithDefaultValues() {
+    return this.form.controls.aiSolution.value === this.defaultAiValue &&
+        this.form.controls.aiStatus.value === this.defaultAiValue;
+  }
 }

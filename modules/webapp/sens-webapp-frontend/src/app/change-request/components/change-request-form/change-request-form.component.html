@@ -19,9 +19,9 @@
           </mat-option>
         </mat-select>
         <mat-hint [translate]="translatePrefix + 'aiSolution.hint'"></mat-hint>
-        <mat-error 
-          *ngIf="form.controls.aiSolution.hasError('needsChange')"
-          [translate]="translatePrefix + 'aiStatus.errorEmpty'"
+        <mat-error
+                *ngIf="form.controls.aiSolution.hasError('needsChange')"
+                [translate]="translatePrefix + 'aiStatus.errorEmpty'"
         ></mat-error>
       </mat-form-field>
 
@@ -39,9 +39,9 @@
           </mat-option>
         </mat-select>
         <mat-hint [translate]="translatePrefix + 'aiStatus.hint'"></mat-hint>
-        <mat-error 
-          *ngIf="form.controls.aiStatus.hasError('needsChange')"
-          [translate]="translatePrefix + 'aiStatus.errorEmpty'"
+        <mat-error
+                *ngIf="form.controls.aiStatus.hasError('needsChange')"
+                [translate]="translatePrefix + 'aiStatus.errorEmpty'"
         ></mat-error>
       </mat-form-field>
 
@@ -49,9 +49,9 @@
         <mat-label [translate]="translatePrefix + 'reason.comment.label'"></mat-label>
         <textarea formControlName="comment" matInput required></textarea>
         <mat-hint [translate]="translatePrefix + 'reason.comment.hint'"></mat-hint>
-        <mat-error 
-          *ngIf="form.controls.comment.hasError('required')"
-          [translate]="translatePrefix + 'aiStatus.errorEmpty'"
+        <mat-error
+                *ngIf="form.controls.comment.hasError('needsChange')"
+                [translate]="translatePrefix + 'reason.comment.errorEmpty'"
         ></mat-error>
       </mat-form-field>
     </div>
@@ -66,7 +66,7 @@
     </a>
     <button mat-flat-button
             color="primary">
-            <span [translate]="translatePrefix + 'footer.cta'"></span>
+      <span [translate]="translatePrefix + 'footer.cta'"></span>
     </button>
   </div>
 </form>
