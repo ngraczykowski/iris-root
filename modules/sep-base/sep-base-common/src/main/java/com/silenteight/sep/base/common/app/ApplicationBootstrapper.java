@@ -33,7 +33,7 @@ public class ApplicationBootstrapper {
 
   private String homeDirectory;
 
-  void bootstrapApplication() {
+  public void bootstrapApplication() {
     setupInstrumentation();
     setupHomeDirectory();
     setupPlugins();
