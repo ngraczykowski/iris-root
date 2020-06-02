@@ -27,8 +27,10 @@ export class ChangeRequestService {
     CorrelationId: uuidv4()
   };
 
+  whiteChar = '\n';
+
   constructor(
-    private http: HttpClient
+      private http: HttpClient
   ) { }
 
   validateBranches(payload: ValidateBranchIdsPayload): Observable<ValidateBranchIdsResponse> {
@@ -36,8 +38,8 @@ export class ChangeRequestService {
     this.reasoningBranchesCount$.next(payload.branchIds.length);
 
     return this.http.put<ValidateBranchIdsResponse>(
-      `${environment.serverApiUrl}/decision-trees/${payload.decisionTreeId}/branches/validate`,
-      payload
+        `${environment.serverApiUrl}/decision-trees/${payload.decisionTreeId}/branches/validate`,
+        payload
     );
   }
 
@@ -46,15 +48,18 @@ export class ChangeRequestService {
     this.reasoningBranchesCount$.next(payload.featureVectorSignatures.length);
 
     return this.http.put<FeatureVectorSignaturesResponse>(
-      `${environment.serverApiUrl}/decision-trees/${payload.decisionTreeId}/branches/validate`,
-      payload
+        `${environment.serverApiUrl}/decision-trees/${payload.decisionTreeId}/branches/validate`,
+        payload
     );
   }
 
   setReasoningBranchIdsData({branchIds}: ValidateBranchIdsResponse) {
     this.changeRequestData$.next({
       ...this.changeRequestData$.getValue(),
-      reasoningBranchIds: branchIds.map(value => ({decisionTreeId: this.decisionTreeId$.getValue(), featureVectorId: value.branchId}))
+      reasoningBranchIds: branchIds.map(value => ({
+        decisionTreeId: this.decisionTreeId$.getValue(),
+        featureVectorId: value.branchId
+      }))
     });
   }
 
@@ -102,8 +107,8 @@ export class ChangeRequestService {
   registerChangeRequest() {
     this.setCreatedAtDate();
     return forkJoin(
-      this.bulkChanges(this.changeRequestData$.getValue()),
-      this.changeRequests(this.changeRequestData$.getValue())
+        this.bulkChanges(this.changeRequestData$.getValue()),
+        this.changeRequests(this.changeRequestData$.getValue())
     );
   }
 
@@ -124,10 +129,18 @@ export class ChangeRequestService {
   }
 
   parseBranchIds(payload: string) {
-    return payload.split(`\n`).map(id => parseInt(id, 0));
+    return this.removeEmptyElements(
+        payload.split(this.whiteChar).map(id => parseInt(id, 0))
+    );
   }
 
   parseFeatureVectorSignatures(payload: string) {
-    return payload.split(`\n`);
+    return this.removeEmptyElements(
+        payload.split(this.whiteChar)
+    );
+  }
+
+  removeEmptyElements(array) {
+    return array.filter(Boolean);
   }
 }
