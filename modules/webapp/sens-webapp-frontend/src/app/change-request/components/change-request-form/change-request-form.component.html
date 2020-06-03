@@ -1,6 +1,6 @@
 <form [formGroup]="form" #formDir="ngForm" (ngSubmit)="onFormSubmit($event)">
   <div class="form__section">
-    <h2 class="mat-title">Reasonign Branch settings</h2>
+    <h2 class="mat-title" [translate]="translatePrefix + 'title'"></h2>
     <div class="form__content">
       <mat-form-field class="mat-form-field--full-width" appearance="outline">
         <mat-label [translate]="translatePrefix + 'aiSolution.label'"></mat-label>

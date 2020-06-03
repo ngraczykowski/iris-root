@@ -43,14 +43,14 @@
         "rbSignature": "Reasoning Branch Signature"
       },
       "rbId": {
-        "label": "Reasoning Branch ID(s)",
+        "label": "Reasoning Branch IDs",
         "hint": "Entered {{length}}/1000 characters",
         "errorEmpty": "Reasoning Branch ID is required to create change request",
         "errorCharacterLimit": "Sorry, but you reached the limit. You entered {{length}} characters where the threshold is 1000 characters. Please reduce the number of characters. ",
         "errorVerificationFail": "Some of the given reasoning branches do not exist"
       },
       "rbSignature": {
-        "label": "Reasoning Branch Signature(s)",
+        "label": "Reasoning Branch Signatures",
         "hint": "Entered {{length}}/1000 characters",
         "errorEmpty": "Reasoning Branch Signature is required to create change request",
         "errorCharacterLimit": "Sorry, but you reached the limit. You entered {{length}} characters where the threshold is 1000 characters. Please reduce the number of characters. ",
@@ -75,13 +75,15 @@
       }
     },
     "configureForm": {
+      "title": "Change Request Settings",
       "selectedBranches": {
+        "title": "Selected Reasoning Branches",
         "decisionTree": "Decision Tree ID",
         "reasoningBranchesCount": "Reasoning Branches (count)"
       },
       "aiSolution": {
         "label": "AI Solution",
-        "hint": "Set AI Solution for the selected Reasoning Branch(s)",
+        "hint": "Set AI Solution for the selected Reasoning Branches",
         "errorEmpty": "You cannot submit change request without any changes",
         "options": {
           "unchanged": "Leave unchanged"
@@ -89,7 +91,7 @@
       },
       "aiStatus": {
         "label": "AI Status",
-        "hint": "Set AI Status for the selected Reasoning Branch(s)",
+        "hint": "Set AI Status for the selected Reasoning Branches",
         "errorEmpty": "You cannot submit change request without any changes",
         "options": {
           "unchanged": "Leave unchanged"
