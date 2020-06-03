@@ -27,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
+import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
 import static com.silenteight.sens.webapp.user.registration.ResultAssert.assertThatResult;
 import static com.silenteight.sens.webapp.user.registration.UserRegistrationUseCaseFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -237,7 +238,7 @@ class RegisterInternalUserUseCaseTest {
     void whenNoRoles_doesNotSaveToRepo() {
       underTest.apply(NO_ROLES_REGISTRATION_REQUEST);
 
-      verifyZeroInteractions(registeredUserRepository);
+      verifyNoMoreInteractions(registeredUserRepository);
       verifyAuditLog(NO_ROLES_REGISTRATION_REQUEST);
     }
   }
@@ -317,6 +318,17 @@ class RegisterInternalUserUseCaseTest {
     assertThat(auditEvent.getType()).isEqualTo("InternalUserCreationRequested");
     assertThat(auditEvent.getEntityAction()).isEqualTo(CREATE.toString());
     assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
-    assertThat(auditEvent.getDetails()).isEqualTo(details);
+    assertThat(auditEvent.getDetails()).isEqualTo(obfuscatePasswordFieldForTest(details));
+  }
+
+  private RegisterInternalUserCommand obfuscatePasswordFieldForTest(
+      RegisterInternalUserCommand command) {
+    return RegisterInternalUserUseCase.RegisterInternalUserCommand
+        .builder()
+        .displayName(command.getDisplayName())
+        .password(OBFUSCATED_STRING)
+        .roles(command.getRoles())
+        .username(command.getUsername())
+        .build();
   }
 }

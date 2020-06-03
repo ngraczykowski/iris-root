@@ -37,7 +37,7 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
         new UserCreatedEvent(
             userRegistration.getUsername(),
             CompletedUserRegistration.class.getName(),
-            userRegistration));
+            userRegistration.toCompletedUserRegistrationEvent()));
 
     roleAssigner.assignRoles(newlyCreatedUserId, userRegistration.getRoles());
 

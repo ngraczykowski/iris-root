@@ -18,6 +18,7 @@ import io.vavr.control.Either;
 import java.util.Set;
 import javax.annotation.Nullable;
 
+import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptySet;
@@ -43,7 +44,8 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
 
     auditTracer.save(
         new InternalUserCreationRequestedEvent(
-            command.getUsername(), RegisterInternalUserCommand.class.getName(), command));
+            command.getUsername(), RegisterInternalUserCommand.class.getName(),
+            command.toEventCommand()));
 
     return register(command.toUserRegistration());
   }
@@ -67,6 +69,10 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
       return new NewUserRegistration(
           new NewUserDetails(username, displayName, of(new Credentials(password)), roles),
           SENS_ORIGIN);
+    }
+
+    RegisterInternalUserCommand toEventCommand() {
+      return new RegisterInternalUserCommand(username, OBFUSCATED_STRING, displayName, roles);
     }
   }
 }

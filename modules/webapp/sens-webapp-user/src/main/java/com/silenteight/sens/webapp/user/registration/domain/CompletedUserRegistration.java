@@ -11,6 +11,8 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
+
 @Value
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class CompletedUserRegistration {
@@ -36,5 +38,14 @@ public class CompletedUserRegistration {
 
   public Optional<Credentials> getCredentials() {
     return userDetails.getCredentials();
+  }
+
+  public CompletedUserRegistration toCompletedUserRegistrationEvent() {
+    NewUserDetails userDetailsForEvent = new NewUserDetails(
+        this.userDetails.getUsername(),
+        this.userDetails.getDisplayName(),
+        Optional.of(new NewUserDetails.Credentials(OBFUSCATED_STRING)),
+        this.userDetails.getRoles());
+    return new CompletedUserRegistration(userDetailsForEvent, this.origin, this.registrationDate);
   }
 }
