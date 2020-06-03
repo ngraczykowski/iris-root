@@ -137,6 +137,25 @@ grpc:
     reco:
       address: discovery:///grpc-reco
 
+messaging:
+  exchange:
+    bulk-change: bulk-change
+    change-request: change-request
+  route:
+    bulk-change:
+      create: bulk-change.create
+      apply: bulk-change.apply
+      reject: bulk-change.reject
+    change-request:
+      create: change-request.create
+      approve: change-request.approve
+      reject: change-request.reject
+  queue:
+    change-request:
+      create: webapp.change-request.create
+      approve: webapp.change-request.approve
+      reject: webapp.change-request.reject
+
 sens.grpc:
   timeout: ${sens.webapp.grpc.timeout}
 

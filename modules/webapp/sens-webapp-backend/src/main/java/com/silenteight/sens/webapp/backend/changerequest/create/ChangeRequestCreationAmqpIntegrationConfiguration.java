@@ -6,6 +6,7 @@ import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
@@ -16,8 +17,6 @@ import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 import static com.silenteight.sens.webapp.backend.changerequest.create.ChangeRequestCreationIntegrationChannels.CREATED_CHANGE_REQUEST_OUTBOUND_CHANNEL;
 import static com.silenteight.sens.webapp.backend.changerequest.create.ChangeRequestCreationIntegrationChannels.CREATE_CHANGE_REQUEST_INBOUND_CHANNEL;
 import static com.silenteight.sens.webapp.backend.changerequest.create.ChangeRequestCreationIntegrationChannels.CREATE_CHANGE_REQUEST_OUTBOUND_CHANNEL;
-import static com.silenteight.sens.webapp.backend.changerequest.message.ChangeRequestAmqpDefaults.EXCHANGE_CHANGE_REQUEST;
-import static com.silenteight.sens.webapp.backend.changerequest.message.ChangeRequestAmqpDefaults.ROUTE_CHANGE_REQUEST_CREATE;
 
 @RequiredArgsConstructor
 @Configuration
@@ -36,14 +35,15 @@ class ChangeRequestCreationAmqpIntegrationConfiguration {
   }
 
   @Bean
-  IntegrationFlow sendCreateChangeRequestIntegrationFlow() {
+  IntegrationFlow sendCreateChangeRequestIntegrationFlow(
+      @Value("${messaging.exchange.change-request}") String changeRequestExchangeName,
+      @Value("${messaging.route.change-request.create}") String routeChangeRequestCreate) {
     return flow -> flow
         .channel(CREATE_CHANGE_REQUEST_OUTBOUND_CHANNEL)
         .handle(outboundFactory
             .outboundAdapter()
-            .exchangeName(EXCHANGE_CHANGE_REQUEST)
-            .routingKey(ROUTE_CHANGE_REQUEST_CREATE)
-        );
+            .exchangeName(changeRequestExchangeName)
+            .routingKey(routeChangeRequestCreate));
   }
 
   @Bean

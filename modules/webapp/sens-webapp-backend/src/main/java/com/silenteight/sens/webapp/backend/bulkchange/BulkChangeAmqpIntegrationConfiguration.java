@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
@@ -18,11 +19,6 @@ import static com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIntegrati
 @Configuration
 class BulkChangeAmqpIntegrationConfiguration {
 
-  private static final String EXCHANGE_BULK_CHANGE = "bulk-change";
-  private static final String ROUTE_BULK_CHANGE_CREATE = "bulk-change.create";
-  private static final String ROUTE_BULK_CHANGE_APPLY = "bulk-change.apply";
-  private static final String ROUTE_BULK_CHANGE_REJECT = "bulk-change.reject";
-
   private final AmqpOutboundFactory outboundFactory;
 
   @Bean
@@ -35,35 +31,41 @@ class BulkChangeAmqpIntegrationConfiguration {
   }
 
   @Bean
-  IntegrationFlow sendCreateBulkChangeIntegrationFlow() {
+  IntegrationFlow sendCreateBulkChangeIntegrationFlow(
+      @Value("${messaging.exchange.bulk-change}") String bulkChangeExchange,
+      @Value("${messaging.route.bulk-change.create}") String bulkChangeExchangeCreateRoute) {
     return flow -> flow
         .channel(CREATE_BULK_CHANGE_OUTBOUND_CHANNEL)
         .handle(outboundFactory
             .outboundAdapter()
-            .exchangeName(EXCHANGE_BULK_CHANGE)
-            .routingKey(ROUTE_BULK_CHANGE_CREATE)
+            .exchangeName(bulkChangeExchange)
+            .routingKey(bulkChangeExchangeCreateRoute)
         );
   }
 
   @Bean
-  IntegrationFlow sendApplyBulkChangeIntegrationFlow() {
+  IntegrationFlow sendApplyBulkChangeIntegrationFlow(
+      @Value("${messaging.exchange.bulk-change}") String bulkChangeExchange,
+      @Value("${messaging.route.bulk-change.create}") String bulkChangeExchangeApplyRoute) {
     return flow -> flow
         .channel(APPLY_BULK_CHANGE_OUTBOUND_CHANNEL)
         .handle(outboundFactory
             .outboundAdapter()
-            .exchangeName(EXCHANGE_BULK_CHANGE)
-            .routingKey(ROUTE_BULK_CHANGE_APPLY)
+            .exchangeName(bulkChangeExchange)
+            .routingKey(bulkChangeExchangeApplyRoute)
         );
   }
 
   @Bean
-  IntegrationFlow sendRejectBulkChangeIntegrationFlow() {
+  IntegrationFlow sendRejectBulkChangeIntegrationFlow(
+      @Value("${messaging.exchange.bulk-change}") String bulkChangeExchange,
+      @Value("${messaging.route.bulk-change.reject}") String bulkChangeExchangeRejectRoute) {
     return flow -> flow
         .channel(REJECT_BULK_CHANGE_OUTBOUND_CHANNEL)
         .handle(outboundFactory
             .outboundAdapter()
-            .exchangeName(EXCHANGE_BULK_CHANGE)
-            .routingKey(ROUTE_BULK_CHANGE_REJECT)
+            .exchangeName(bulkChangeExchange)
+            .routingKey(bulkChangeExchangeRejectRoute)
         );
   }
 }

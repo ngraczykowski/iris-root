@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.backend.changerequest.message;
 
 import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,57 +9,70 @@ import org.springframework.context.annotation.Configuration;
 class ChangeRequestAmqpConfiguration {
 
   @Bean
-  TopicExchange changeRequestExchange() {
+  TopicExchange changeRequestExchange(
+      @Value("${messaging.exchange.change-request}") String changeRequestExchangeName) {
     return ExchangeBuilder
-        .topicExchange(ChangeRequestAmqpDefaults.EXCHANGE_CHANGE_REQUEST)
+        .topicExchange(changeRequestExchangeName)
         .build();
   }
 
   @Bean
-  Binding changeRequestCreateBinding(Exchange changeRequestExchange) {
+  Binding changeRequestCreateBinding(
+      Exchange changeRequestExchange,
+      Queue changeRequestCreateQueue,
+      @Value("${messaging.route.change-request.create}") String routeChangeRequestCreate) {
     return BindingBuilder
-        .bind(changeRequestCreateQueue())
+        .bind(changeRequestCreateQueue)
         .to(changeRequestExchange)
-        .with(ChangeRequestAmqpDefaults.ROUTE_CHANGE_REQUEST_CREATE)
+        .with(routeChangeRequestCreate)
         .noargs();
   }
 
   @Bean
-  Queue changeRequestCreateQueue() {
+  Queue changeRequestCreateQueue(
+      @Value("${messaging.queue.change-request.create}") String changeRequestCreateQueueName) {
     return QueueBuilder
-        .durable(ChangeRequestAmqpDefaults.CHANGE_REQUEST_CREATE_QUEUE)
+        .durable(changeRequestCreateQueueName)
         .build();
   }
 
   @Bean
-  Binding changeRequestApproveBinding(Exchange changeRequestExchange) {
+  Binding changeRequestApproveBinding(
+      Exchange changeRequestExchange,
+      Queue changeRequestApproveQueue,
+      @Value("${messaging.route.change-request.approve}") String routeChangeRequestApprove) {
     return BindingBuilder
-        .bind(changeRequestApproveQueue())
+        .bind(changeRequestApproveQueue)
         .to(changeRequestExchange)
-        .with(ChangeRequestAmqpDefaults.ROUTE_CHANGE_REQUEST_APPROVE)
+        .with(routeChangeRequestApprove)
         .noargs();
   }
 
   @Bean
-  Queue changeRequestApproveQueue() {
+  Queue changeRequestApproveQueue(
+      @Value("${messaging.queue.change-request.approve}") String changeRequestApproveQueueName) {
     return QueueBuilder
-        .durable(ChangeRequestAmqpDefaults.CHANGE_REQUEST_APPROVE_QUEUE)
+        .durable(changeRequestApproveQueueName)
         .build();
   }
 
   @Bean
-  Binding changeRequestRejectBinding(Exchange changeRequestExchange) {
+  Binding changeRequestRejectBinding(
+      Exchange changeRequestExchange,
+      Queue changeRequestRejectQueue,
+      @Value("${messaging.route.change-request.reject}") String routeChangeRequestReject) {
     return BindingBuilder
-        .bind(changeRequestRejectQueue())
+        .bind(changeRequestRejectQueue)
         .to(changeRequestExchange)
-        .with(ChangeRequestAmqpDefaults.ROUTE_CHANGE_REQUEST_REJECT)
+        .with(routeChangeRequestReject)
         .noargs();
   }
 
   @Bean
-  Queue changeRequestRejectQueue() {
+  Queue changeRequestRejectQueue(
+      @Value("${messaging.queue.change-request.reject}") String changeRequestRejectQueueName) {
     return QueueBuilder
-        .durable(ChangeRequestAmqpDefaults.CHANGE_REQUEST_REJECT_QUEUE)
+        .durable(changeRequestRejectQueueName)
         .build();
   }
 }

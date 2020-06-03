@@ -6,6 +6,7 @@ import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
@@ -13,8 +14,6 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 
-import static com.silenteight.sens.webapp.backend.changerequest.message.ChangeRequestAmqpDefaults.EXCHANGE_CHANGE_REQUEST;
-import static com.silenteight.sens.webapp.backend.changerequest.message.ChangeRequestAmqpDefaults.ROUTE_CHANGE_REQUEST_REJECT;
 import static com.silenteight.sens.webapp.backend.changerequest.reject.ChangeRequestRejectionIntegrationChannels.REJECT_CHANGE_REQUEST_INBOUND_CHANNEL;
 import static com.silenteight.sens.webapp.backend.changerequest.reject.ChangeRequestRejectionIntegrationChannels.REJECT_CHANGE_REQUEST_OUTBOUND_CHANNEL;
 
@@ -35,13 +34,15 @@ class ChangeRequestRejectionAmqpIntegrationConfiguration {
   }
 
   @Bean
-  IntegrationFlow sendRejectChangeRequestIntegrationFlow() {
+  IntegrationFlow sendRejectChangeRequestIntegrationFlow(
+      @Value("${messaging.exchange.change-request}") String changeRequestExchangeName,
+      @Value("${messaging.route.change-request.reject}") String routeChangeRequestReject) {
     return flow -> flow
         .channel(REJECT_CHANGE_REQUEST_OUTBOUND_CHANNEL)
         .handle(outboundFactory
             .outboundAdapter()
-            .exchangeName(EXCHANGE_CHANGE_REQUEST)
-            .routingKey(ROUTE_CHANGE_REQUEST_REJECT)
+            .exchangeName(changeRequestExchangeName)
+            .routingKey(routeChangeRequestReject)
         );
   }
 
