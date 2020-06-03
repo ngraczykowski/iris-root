@@ -10,7 +10,7 @@
       <column name="change_request_id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="bulk_change_id" type="${uuid.type}">
+      <column name="bulk_change_id" type="${type.uuid}">
         <constraints nullable="false"/>
       </column>
       <column name="state" type="VARCHAR(16)">

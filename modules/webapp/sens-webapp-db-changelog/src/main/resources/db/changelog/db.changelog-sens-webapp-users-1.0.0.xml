@@ -14,7 +14,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="hashed_password" type="VARCHAR(64)"/>
-      <column name="roles" type="${json.type}">
+      <column name="roles" type="${type.json}">
         <constraints nullable="false"/>
       </column>
       <column name="active" type="BOOLEAN" defaultValue="false" />
