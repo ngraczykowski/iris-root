@@ -46,7 +46,7 @@ class BulkChangeAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow sendApplyBulkChangeIntegrationFlow(
       @Value("${messaging.exchange.bulk-change}") String bulkChangeExchange,
-      @Value("${messaging.route.bulk-change.create}") String bulkChangeExchangeApplyRoute) {
+      @Value("${messaging.route.bulk-change.apply}") String bulkChangeExchangeApplyRoute) {
     return flow -> flow
         .channel(APPLY_BULK_CHANGE_OUTBOUND_CHANNEL)
         .handle(outboundFactory
