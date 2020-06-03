@@ -10,6 +10,8 @@ import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import java.sql.Timestamp;
 
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
+
 @Slf4j
 @RequiredArgsConstructor
 class DatabaseAuditTracer implements AuditTracer {
@@ -45,11 +47,15 @@ class DatabaseAuditTracer implements AuditTracer {
       return EMPTY_DETAILS;
     } else {
       try {
+        JSON_CONVERTER.objectMapper()
+            .disable(WRITE_DATES_AS_TIMESTAMPS);
         return JSON_CONVERTER.serializeToString(details);
       } catch (Exception e) {
         log.error(e.getMessage(), e);
-
         return EMPTY_DETAILS;
+      } finally {
+        JSON_CONVERTER.objectMapper()
+            .enable(WRITE_DATES_AS_TIMESTAMPS);
       }
     }
   }
