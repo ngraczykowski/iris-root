@@ -2,11 +2,12 @@ package com.silenteight.sens.webapp.backend.changerequest.create;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sens.webapp.backend.changerequest.message.ChangeRequestMessagingProperties;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
@@ -20,6 +21,7 @@ import static com.silenteight.sens.webapp.backend.changerequest.create.ChangeReq
 
 @RequiredArgsConstructor
 @Configuration
+@EnableConfigurationProperties(ChangeRequestMessagingProperties.class)
 class ChangeRequestCreationAmqpIntegrationConfiguration {
 
   private final AmqpInboundFactory inboundFactory;
@@ -36,14 +38,13 @@ class ChangeRequestCreationAmqpIntegrationConfiguration {
 
   @Bean
   IntegrationFlow sendCreateChangeRequestIntegrationFlow(
-      @Value("${messaging.exchange.change-request}") String changeRequestExchangeName,
-      @Value("${messaging.route.change-request.create}") String routeChangeRequestCreate) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return flow -> flow
         .channel(CREATE_CHANGE_REQUEST_OUTBOUND_CHANNEL)
         .handle(outboundFactory
             .outboundAdapter()
-            .exchangeName(changeRequestExchangeName)
-            .routingKey(routeChangeRequestCreate));
+            .exchangeName(changeRequestMessagingProperties.exchange())
+            .routingKey(changeRequestMessagingProperties.routeCreate()));
   }
 
   @Bean

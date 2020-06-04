@@ -1,18 +1,19 @@
 package com.silenteight.sens.webapp.backend.changerequest.message;
 
 import org.springframework.amqp.core.*;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableConfigurationProperties(ChangeRequestMessagingProperties.class)
 class ChangeRequestAmqpConfiguration {
 
   @Bean
   TopicExchange changeRequestExchange(
-      @Value("${messaging.exchange.change-request}") String changeRequestExchangeName) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return ExchangeBuilder
-        .topicExchange(changeRequestExchangeName)
+        .topicExchange(changeRequestMessagingProperties.exchange())
         .build();
   }
 
@@ -20,19 +21,19 @@ class ChangeRequestAmqpConfiguration {
   Binding changeRequestCreateBinding(
       Exchange changeRequestExchange,
       Queue changeRequestCreateQueue,
-      @Value("${messaging.route.change-request.create}") String routeChangeRequestCreate) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return BindingBuilder
         .bind(changeRequestCreateQueue)
         .to(changeRequestExchange)
-        .with(routeChangeRequestCreate)
+        .with(changeRequestMessagingProperties.queueCreate())
         .noargs();
   }
 
   @Bean
   Queue changeRequestCreateQueue(
-      @Value("${messaging.queue.change-request.create}") String changeRequestCreateQueueName) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return QueueBuilder
-        .durable(changeRequestCreateQueueName)
+        .durable(changeRequestMessagingProperties.queueCreate())
         .build();
   }
 
@@ -40,19 +41,19 @@ class ChangeRequestAmqpConfiguration {
   Binding changeRequestApproveBinding(
       Exchange changeRequestExchange,
       Queue changeRequestApproveQueue,
-      @Value("${messaging.route.change-request.approve}") String routeChangeRequestApprove) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return BindingBuilder
         .bind(changeRequestApproveQueue)
         .to(changeRequestExchange)
-        .with(routeChangeRequestApprove)
+        .with(changeRequestMessagingProperties.routeApprove())
         .noargs();
   }
 
   @Bean
   Queue changeRequestApproveQueue(
-      @Value("${messaging.queue.change-request.approve}") String changeRequestApproveQueueName) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return QueueBuilder
-        .durable(changeRequestApproveQueueName)
+        .durable(changeRequestMessagingProperties.queueApprove())
         .build();
   }
 
@@ -60,19 +61,19 @@ class ChangeRequestAmqpConfiguration {
   Binding changeRequestRejectBinding(
       Exchange changeRequestExchange,
       Queue changeRequestRejectQueue,
-      @Value("${messaging.route.change-request.reject}") String routeChangeRequestReject) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return BindingBuilder
         .bind(changeRequestRejectQueue)
         .to(changeRequestExchange)
-        .with(routeChangeRequestReject)
+        .with(changeRequestMessagingProperties.routeReject())
         .noargs();
   }
 
   @Bean
   Queue changeRequestRejectQueue(
-      @Value("${messaging.queue.change-request.reject}") String changeRequestRejectQueueName) {
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
     return QueueBuilder
-        .durable(changeRequestRejectQueueName)
+        .durable(changeRequestMessagingProperties.queueReject())
         .build();
   }
 }
