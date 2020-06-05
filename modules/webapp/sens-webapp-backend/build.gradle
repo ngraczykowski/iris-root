@@ -19,8 +19,6 @@ configurations {
 }
 
 dependencies {
-  implementation project(":sens-webapp-kernel")
-
   implementation libraries.bouncycastle_bcprov
   implementation libraries.commons_lang3
   implementation libraries.jjwt
