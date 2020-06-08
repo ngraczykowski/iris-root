@@ -1,0 +1,19 @@
+= ADR#6
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-619[WA-619]*
+- Reason: As a Business Operator, I want to cancel pending Change Request
+
+
+== Business Operator flow
+
+[plantuml,business-operator-cancels-change-request-queue,svg]
+....
+include::diagrams/business-operator-cancels-change-request-queue.puml[leveloffset=+1]
+....
+
+== Handling Cancel Message
+
+[plantuml,handling-cancel-message,svg]
+....
+include::diagrams/handling-cancel-message.puml[leveloffset=+1]
+....
