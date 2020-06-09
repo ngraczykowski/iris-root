@@ -6,7 +6,9 @@
         <ng-template matStepLabel>
           <span [translate]="stepsPrefix + 'select'"></span>
         </ng-template>
-        <app-select-reasoning-branch-container (goNextStep)="showNextStep()"></app-select-reasoning-branch-container>
+        <app-select-reasoning-branch-container
+                *ngIf="showForm"
+                (goNextStep)="showNextStep()"></app-select-reasoning-branch-container>
       </mat-step>
       <mat-step>
         <form>
@@ -14,8 +16,10 @@
             <span [translate]="stepsPrefix + 'configure'"></span>
           </ng-template>
           <div class="form">
-            <app-change-request-properties-container (goPreviousStep)="showPreviousStep()"
-              (createChangeRequestSuccess)="showNextStep()"></app-change-request-properties-container>
+            <app-change-request-properties-container
+                    *ngIf="showForm"
+                    (goPreviousStep)="showPreviousStep()"
+                    (createChangeRequestSuccess)="showNextStep()"></app-change-request-properties-container>
           </div>
         </form>
       </mat-step>

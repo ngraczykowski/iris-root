@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
 import { MatStepper } from '@angular/material/stepper';
@@ -25,7 +25,11 @@ export class ChangeRequestComponent implements OnInit {
     description: 'changeRequest.confirmation.description'
   };
 
-  constructor() { }
+  showForm = true;
+
+  constructor(
+      private changeDetector: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
   }
@@ -39,7 +43,9 @@ export class ChangeRequestComponent implements OnInit {
   }
 
   newChangeRequest() {
-    window.location.reload();
+    this.showForm = false;
+    this.changeDetector.detectChanges();
+    this.showForm = true;
+    this.stepper.reset();
   }
-
 }
