@@ -33,7 +33,9 @@ services:
     depends_on:
       - webapp-db
     command:
-      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled"
+      - >-
+        -b 0.0.0.0
+        -Dkeycloak.profile.feature.upload_scripts=enabled
     ports:
       - "${KEYCLOAK_PORT:-8081}:8080"
     networks:
@@ -48,7 +50,13 @@ services:
       KEYCLOAK_USER: "${EXTERNAL_SAML_ADMIN_USERNAME:-scb}"
       KEYCLOAK_PASSWORD: "${EXTERNAL_SAML_ADMIN_PASSWORD:-scb}"
     command:
-      - "-b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/config/saml-realm-realm.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+      - >-
+        -b 0.0.0.0
+        -Dkeycloak.profile.feature.upload_scripts=enabled
+        -Dkeycloak.migration.action=import
+        -Dkeycloak.migration.provider=singleFile
+        -Dkeycloak.migration.file=/config/saml-realm-realm.json
+        -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
     ports:
       - "${EXTERNAL_SAML_PORT:-8095}:8080"
     networks:
