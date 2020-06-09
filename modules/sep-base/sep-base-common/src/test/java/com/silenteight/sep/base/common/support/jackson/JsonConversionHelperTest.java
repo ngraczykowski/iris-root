@@ -74,7 +74,7 @@ public class JsonConversionHelperTest {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  private class SimpleObject {
+  private static class SimpleObject {
 
     private String title;
     private String subtitle;

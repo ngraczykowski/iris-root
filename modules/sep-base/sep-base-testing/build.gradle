@@ -7,9 +7,11 @@ description = "SERP Common Testing"
 
 dependencies {
   api libraries.junit_jupiter_api
+  api libraries.spring_amqp_rabbit_test
   api libraries.spring_test
   api libraries.spring_boot_test
   api libraries.spring_boot_test_autoconfigure
+  api libraries.spring_integration_test
   api libraries.test_containers
   api libraries.test_containers_spock
   api libraries.grpc_testing
@@ -17,14 +19,13 @@ dependencies {
 
   implementation libraries.commons_lang3
 
+  implementation libraries.spring_aspects
   implementation libraries.spring_amqp
   implementation libraries.spring_jdbc
   implementation libraries.spring_tx
-
   implementation libraries.spring_boot
   implementation libraries.spring_boot_autoconfigure
 
-  implementation libraries.spring_aspects
 
   implementation libraries.test_containers_elasticsearch
   implementation libraries.test_containers_junit_jupiter

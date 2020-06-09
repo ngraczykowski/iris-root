@@ -13,6 +13,8 @@ import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterDMLCSpe
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.util.ErrorHandler;
 
+import static com.silenteight.sep.base.common.messaging.MessagingErrorConfiguration.ERROR_CHANNEL_NAME;
+
 @RequiredArgsConstructor
 // NOTE(ahaczewski): Experimental API to wrap the creation of AMQP endpoints in Spring Integration
 //  with our message converting and error handling logic.
@@ -33,7 +35,8 @@ public class AmqpInboundFactory {
     return Amqp
         .inboundAdapter(simpleMessageListenerContainerFactory.createListenerContainer())
         .messageConverter(messageConverter)
-        .configureContainer(this::configureContainer);
+        .configureContainer(this::configureContainer)
+        .errorChannel(ERROR_CHANNEL_NAME);
   }
 
   public AmqpInboundChannelAdapterDMLCSpec directAdapter() {
@@ -42,7 +45,8 @@ public class AmqpInboundFactory {
     return Amqp
         .inboundAdapter(directMessageListenerContainerFactory.createListenerContainer())
         .messageConverter(messageConverter)
-        .configureContainer(this::configureContainer);
+        .configureContainer(this::configureContainer)
+        .errorChannel(ERROR_CHANNEL_NAME);
   }
 
   private void configureContainer(

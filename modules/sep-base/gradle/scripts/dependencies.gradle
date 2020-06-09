@@ -143,7 +143,9 @@ libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
 
 // Testing
+libraries.assertj = [group: 'org.assertj', name: 'assertj-core']
 libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']
+libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all']
 libraries.hamcrest = [group: 'org.hamcrest', name: 'hamcrest']
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']

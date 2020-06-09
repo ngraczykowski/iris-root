@@ -63,4 +63,8 @@ dependencies {
 
   testImplementation project(":sep-base-testing")
   testImplementation libraries.commons_collections4
+  testImplementation libraries.spring_integration_test
+  testImplementation libraries.hibernate_validator
+  testImplementation libraries.awaitility
+  testImplementation libraries.assertj
 }
