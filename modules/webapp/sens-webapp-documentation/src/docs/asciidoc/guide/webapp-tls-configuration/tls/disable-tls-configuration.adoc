@@ -31,8 +31,8 @@ To change the value, you must remove leading `#` character.
 [listing,indent=0]
 [subs=+quotes]
 ----
-    webapp.url="http://_<hostname or server-ip>_:7070/"
-    webapp.auth_url="http://_<hostname or server-ip>_:8081/auth/realms/sens-webapp/protocol/openid-connect/token"
+    webapp.url="http://_<hostname or server-ip>_:24410/"
+    webapp.auth_url="http://_<hostname or server-ip>_:24491/auth/realms/sens-webapp/protocol/openid-connect/token"
 ----
 
 - Save configuration file.

@@ -3,7 +3,7 @@
 ####################################################################################################
 
 sens.webapp.db.host: localhost
-sens.webapp.db.port: ${POSTGRES_PORT:5432}
+sens.webapp.db.port: ${POSTGRES_PORT:24480}
 sens.webapp.db.schema: public
 sens.webapp.db.name: ${POSTGRES_DB:sens}
 sens.webapp.db.user: ${POSTGRES_USER:sens}
@@ -25,7 +25,7 @@ sens.chrome-extension.comment-length-threshold: 1024
 sens.chrome-extension.refresh-interval-in-ms: 1000
 
 sens.webapp.rabbitmq.host: localhost
-sens.webapp.rabbitmq.port: 24021
+sens.webapp.rabbitmq.port: 24130
 sens.webapp.rabbitmq.user: serp
 sens.webapp.rabbitmq.password: serp
 
@@ -159,7 +159,7 @@ sens.grpc:
   timeout: ${sens.webapp.grpc.timeout}
 
 server:
-  port: 7070
+  port: 24410
   servlet:
     context-path: /rest/${spring.application.name}
 

@@ -19,7 +19,7 @@
         "tls.client.certificate.bound.access.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
-      "baseUrl": "http://localhost:4200",
+      "baseUrl": "http://localhost:24400",
       "bearerOnly": false,
       "clientAuthenticatorType": "client-secret",
       "clientId": "chrome-extension",
@@ -47,7 +47,7 @@
       "protocol": "openid-connect",
       "publicClient": true,
       "redirectUris": ["*"],
-      "rootUrl": "http://localhost:4200",
+      "rootUrl": "http://localhost:24400",
       "serviceAccountsEnabled": false,
       "standardFlowEnabled": true,
       "surrogateAuthRequired": false,

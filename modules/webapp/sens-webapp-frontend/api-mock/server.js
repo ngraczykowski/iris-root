@@ -292,5 +292,5 @@ function getUserObjectByUserName(userName, userList) {
   return userObject;
 }
 
-app.listen(7070, () => console.log('REST API mock server started at http://localhost:7070/'));
+app.listen(24410, () => console.log('REST API mock server started at http://localhost:24410/'));
 module.exports = app;

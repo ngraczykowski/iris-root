@@ -6,7 +6,7 @@ sens.webapp.consul.enabled: true
 sens.webapp.consul.config.enabled: ${sens.webapp.consul.enabled}
 sens.webapp.consul.discovery.enabled: ${sens.webapp.consul.enabled}
 sens.webapp.consul.host: localhost
-sens.webapp.consul.port: 24999
+sens.webapp.consul.port: 24120
 sens.webapp.consul.instance: ${spring.application.name}-${HOSTNAME:localhost}
 
 sens.webapp.consul.traefik.passTLSCert: false

@@ -79,7 +79,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sens:build"
+            "browserTarget": "sens:build",
+            "port": 24400
           },
           "configurations": {
             "production": {

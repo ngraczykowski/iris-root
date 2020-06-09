@@ -1080,7 +1080,7 @@
         "tls.client.certificate.bound.access.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
-      "baseUrl": "http://localhost:4200",
+      "baseUrl": "http://localhost:24400",
       "bearerOnly": false,
       "clientAuthenticatorType": "client-secret",
       "clientId": "frontend",
@@ -1108,10 +1108,10 @@
       "protocol": "openid-connect",
       "publicClient": true,
       "redirectUris": [
-        "http://localhost:4200/*",
-        "http://localhost:7070/*"
+        "http://localhost:24400/*",
+        "http://localhost:24410/*"
       ],
-      "rootUrl": "http://localhost:4200",
+      "rootUrl": "http://localhost:24400",
       "secret": "107c0976-5f92-4b95-88a7-009836e6e04d",
       "serviceAccountsEnabled": false,
       "standardFlowEnabled": true,
@@ -1846,8 +1846,8 @@
         "samlXmlKeyNameTranformer": "KEY_ID",
         "signatureAlgorithm": "RSA_SHA256",
         "signingCertificate": "MIICozCCAYsCBgFwYn3y3jANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApzYW1sLXJlYWxtMB4XDTIwMDIyMDEyMDQ0NloXDTMwMDIyMDEyMDYyNlowFTETMBEGA1UEAwwKc2FtbC1yZWFsbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIm8p6v51rMo5ic4v25Su//ShZn0ot+HYHH8JtA2qntO9nMLiDzFHKUsdwSV4xGi8FXT545HnUwGppWPSNgNgu/Q23SkFn3MjMy57J8RidUupbbMWynpUuXGM9lRmK1AK4ch1YYNoV2V9Pgm0iRARyQ3RuQC3o0X9tv1ocvFSasA7W2N9vI5IZjmVfJB5daOIvfSYhZ01uGu09y/gPcZ//TPlfMkqeKU5XamlzqP72n7MOdVbvBPwQmfee29TsUEoeoydEBufNsPJQcQlj3EQUTaxs7NF4pmfxWhhxDqwfIZwRTXtxZCGR1LAGwPGORe9TBffJx+KNjUql39kbKXp8cCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAGHzQlPUEBUW17mo2fpbm46BaJk2TkveFsZfE8aWE7CO0QkXCgfCnoNp395nMVvQC93J0HeVU1sqNSguDnPDB+WClMZp9KLNzPAs9RAiwWhRa40SQKF6LQncuQebScPnWzR4XAvPEi0tsXVeWAXRtbWpuLMGok9qYf7cA5zJ24ycR5I4CRdpxP4VOni2snVO8Flqrj8YjbdR9GCwSUMHntSCcZ0K3Az7HLo+2LRSQ5WCX8cNvQpHxDdmbalFn3cU5CUic/rrkRz5at150HA0gpQRWcUCegw2wxG9DRveswO5ujyesx+umHZplTLFzrCYOA7PSfpL12xA9GztC8lFVEQ==",
-        "singleLogoutServiceUrl": "http://localhost:8095/auth/realms/saml-realm/protocol/saml",
-        "singleSignOnServiceUrl": "http://localhost:8095/auth/realms/saml-realm/protocol/saml",
+        "singleLogoutServiceUrl": "http://localhost:24494/auth/realms/saml-realm/protocol/saml",
+        "singleSignOnServiceUrl": "http://localhost:24494/auth/realms/saml-realm/protocol/saml",
         "useJwksUrl": "true",
         "validateSignature": "true",
         "wantAssertionsEncrypted": "",

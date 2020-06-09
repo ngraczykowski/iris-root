@@ -1,11 +1,11 @@
 {
   "/rest": {
-    "target": "http://localhost:7070",
+    "target": "http://localhost:24410",
     "secure": false,
     "logLevel": "debug"
   },
   "/auth": {
-    "target": "http://localhost:8081",
+    "target": "http://localhost:24491",
     "secure": false,
     "logLevel": "debug"
   }

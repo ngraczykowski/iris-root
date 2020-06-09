@@ -4,14 +4,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-- Run `./npm start` for a dev server. This starts development server that will proxy API requests to `http://localhost:7070/api`.
-- Navigate to [http://localhost:4200/]. 
+- Run `./npm start` for a dev server. This starts development server that will proxy API requests to `http://localhost:24410/api`.
+- Navigate to [http://localhost:24400/].
 - The app will automatically reload if you change any of the source files.
 
 ## Development server with mock API
-- Run `./npm start` for a dev server. This starts development server that will proxy API requests to `http://localhost:7070/api`.
+- Run `./npm start` for a dev server. This starts development server that will proxy API requests to `http://localhost:24410/api`.
 - Go to `api-mock` directory.
-- Run `node server.js`, this will run local mock REST API on `7070` port.
+- Run `node server.js`, this will run local mock REST API on `24410` port.
 
 ## Code scaffolding
 

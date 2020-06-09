@@ -32,7 +32,7 @@
         
         docker-compose up
 
-2. Log into [Keycloak admin console](http://localhost:8081/auth/admin/) using `sens:sens` credentials, 
+2. Log into [Keycloak admin console](http://localhost:24491/auth/admin/) using `sens:sens` credentials,
 go to `Import` and import users file located in [conf/keycloak dir](conf/keycloak), with `Overwrite` setting.
 
 #### SERP
@@ -49,9 +49,9 @@ go to `Import` and import users file located in [conf/keycloak dir](conf/keycloa
 
    Successfully started application displays below message on a console:
    
-        ** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **
+        ** Angular Live Development Server is listening on localhost:24400, open your browser on http://localhost:24400/ **
 
-2. Open `http://localhost:4200/` URL in a browser.  
+2. Open `http://localhost:24400/` URL in a browser.
 
 #### Web App API
 
@@ -60,7 +60,7 @@ Also make sure that the project was built (`gw build`) before starting the API a
    
 | Profile | Behaviour                                                                                                                                                                                                                                                                                                                                       |
 |---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:7070/rest/webapp/openapi).|
+| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:24410/rest/webapp/openapi).|
 | `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak config stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates).                                   |
     
 1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
@@ -79,8 +79,8 @@ In Spring Boot Run Configuration add following program arguments:
 #### Keycloak
 Whole Keycloak development configuration is stored in [conf/keycloak](conf/keycloak) (or [conf/keycloak-saml-idp](conf/keycloak-saml-idp) for SAML idP).
 Everything can be configured using GUI available at:
-- [localhost:8081](http://localhost:8081) for main Keycloak instance
-- [localhost:8095](http://localhost:8095) for SAML idP Keycloak instance
+- [localhost:24491](http://localhost:24491) for main Keycloak instance
+- [localhost:24494](http://localhost:24494) for SAML idP Keycloak instance
 
 ##### Migrations
 Application loads ordered Keycloak migration files. 
@@ -128,7 +128,7 @@ It operates on database started by docker-compose command, but can be customized
 Example configuration:
 
     sens.webapp.db.host: localhost
-    sens.webapp.db.port: 5432
+    sens.webapp.db.port: 24480
     sens.webapp.db.schema: public
     sens.webapp.db.name: sens_webapp_db
     sens.webapp.db.user: sens_webapp
@@ -173,7 +173,7 @@ New snapshot/release version will start using newly released Web App release.
 
 ## Using Swagger UI
 To use Swagger UI you need to run WebApp in `dev` profile 
-and go to [/openapi/](localhost:7070/rest/webapp/openapi). 
+and go to [/openapi/](localhost:24410/rest/webapp/openapi).
 
 In order to make authenticated requests 
 click the key lock icon, type in desired client id (normally this would be `frontend`) 

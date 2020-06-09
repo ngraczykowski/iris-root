@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json --disable-host-check",
+    "start": "ng serve --proxy-config proxy.conf.json --disable-host-check --port 24400",
     "build": "ng build --prod --output-path=build/dist",
     "test": "ng test",
     "testHeadless": "ng test -- --karma-config karma.headless.conf.js",
