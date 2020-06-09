@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.grpc;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import io.grpc.*;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -14,13 +13,16 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(GrpcConfigurationProperties.class)
 class GrpcConfiguration {
 
-  @Setter(onMethod_ = @GrpcClient("governance"))
-  private Channel channel;
-
   @Bean("governance")
   @GrpcClient("governance")
-  Channel governanceChannel(Channel channel) {
-    return channel;
+  Channel governanceChannel(Channel governanceChannel) {
+    return governanceChannel;
+  }
+
+  @Bean("circuit-breaker")
+  @GrpcClient("circuit-breaker")
+  Channel circuitBreakerChannel(Channel circuitBreakerChannel) {
+    return circuitBreakerChannel;
   }
 
   @SuppressWarnings({ "unused", "squid:S3985" })

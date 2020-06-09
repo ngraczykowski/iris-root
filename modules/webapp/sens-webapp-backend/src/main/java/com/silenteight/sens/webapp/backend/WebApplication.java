@@ -4,6 +4,7 @@ import com.silenteight.sens.webapp.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeModule;
 import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
+import com.silenteight.sens.webapp.backend.circuitbreaker.CircuitBreakerModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ApplicationLoggingModule.class,
         AuditModule.class,
         BulkChangeModule.class,
+        CircuitBreakerModule.class,
         ChangeRequestModule.class,
         GrpcModule.class,
         ChangeRequestModule.class,

@@ -137,6 +137,9 @@ grpc:
     reco:
       address: discovery:///grpc-reco
 
+    circuit-breaker:
+      address: discovery:///grpc-circuit-breaker
+
 sens.webapp.messaging:
   bulk-change:
     exchange: bulk-change
