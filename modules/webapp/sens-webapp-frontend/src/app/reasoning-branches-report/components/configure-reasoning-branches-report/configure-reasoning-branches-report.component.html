@@ -1,0 +1,27 @@
+<div class="form">
+  <form [formGroup]="form" #formDir="ngForm" class="form__content" (ngSubmit)="onFormSubmit()">
+    <mat-form-field appearance="outline" class="mat-form-field--full-width">
+      <mat-label [translate]="decisionTreeIDTranslatePrefix + 'label'"></mat-label>
+      <input formControlName="decisionTreeId"
+             matInput
+             required
+             type="number"
+             appNumbersOnly>
+      <mat-hint [translate]="decisionTreeIDTranslatePrefix + 'hint'"></mat-hint>
+      <mat-error [translate]="decisionTreeIDTranslatePrefix + 'errorEmpty'"></mat-error>
+    </mat-form-field>
+    <div class="form__footer">
+      <a (click)="resetForm(formDir)"
+         mat-button
+         color="primary">
+        <span [translate]="footerTranslatePrefix + 'reset'"></span>
+      </a>
+      <button type="submit"
+              matStepperNext
+              mat-flat-button
+              color="primary">
+        <span [translate]="footerTranslatePrefix + 'cta'"></span>
+      </button>
+    </div>
+  </form>
+</div>

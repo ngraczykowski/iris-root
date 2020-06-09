@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/audit-trail.component';
 import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
+import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report/containers/reasoning-branches-report/reasoning-branches-report.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
 import { ExternalComponent } from './layout/external/external.component';
@@ -71,6 +72,15 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Auditor']
+    }
+  },
+  {
+    path: 'reports/reasoning-branches-report',
+    pathMatch: 'full',
+    component: ReasoningBranchesReportComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator', 'Auditor']
     }
   },
   {

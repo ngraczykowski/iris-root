@@ -200,10 +200,46 @@
       }
     }
   },
+  "reasoningBranchesReport": {
+    "title": "Reasoning Branches",
+    "steps": {
+      "configure": "Configure",
+      "generate": "Generate",
+      "download": "Download"
+    },
+    "configure": {
+      "form": {
+        "decisionTreeId": {
+          "label": "Decision Tree ID",
+          "hint": "Decision Tree ID should be presented as a number e.g. 5",
+          "errorEmpty": "Decision Tree ID is required to create change request"
+        },
+        "footer": {
+          "reset": "Reset",
+          "cta": "Generate Report"
+        }
+      },
+      "verificationFailedDialog": {
+        "title": "Decision Tree does not exist",
+        "description": "Please check if the Decision Tree ID is correct. If the problem persists, contact the Administrator.",
+        "buttonClose": "Close"
+      }
+    },
+    "generate": {
+      "title": "Generating a report",
+      "description": "Please do not turn off the browser window and wait until the report is ready for download.",
+      "button": "Abort report generation"
+    },
+    "download": {
+      "title": "Your report is ready!",
+      "description": "The report will download automatically.",
+      "button": "Generate new report"
+    }
+  },
   "auditTrail": {
     "title": "Audit Trail",
     "steps": {
-      "configure": "Configure Audit Trail Report",
+      "configure": "Configure",
       "generate": "Generate",
       "download": "Download"
     },

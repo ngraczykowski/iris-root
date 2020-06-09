@@ -54,6 +54,11 @@ export class SidenavComponent implements OnInit {
           icon: 'announcement'
         },
         {
+          label: 'reasoningBranchesReport.title',
+          url: '/reports/reasoning-branches-report',
+          icon: 'announcement'
+        },
+        {
           label: 'securityMatrix.title',
           url: '/reports/security-matrix',
           icon: 'lock'

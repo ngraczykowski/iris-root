@@ -10,11 +10,11 @@ import { StateContent } from '@app/ui-components/state/state';
 export class StateComponent {
 
   @Input() stateContent: StateContent;
-  @Output() submit = new EventEmitter();
+  @Output() buttonClick = new EventEmitter();
 
   constructor() { }
 
-  onSubmitClick() {
-    this.submit.emit();
+  onButtonClick() {
+    this.buttonClick.emit();
   }
 }

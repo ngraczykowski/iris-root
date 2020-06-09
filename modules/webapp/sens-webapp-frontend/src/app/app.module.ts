@@ -17,6 +17,7 @@ import { InternalServerErrorComponent } from '@app/pages/internal-server-error/i
 import { MaintenanceComponent } from '@app/pages/maintenance/maintenance.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { PageNotFoundComponent } from '@app/pages/page-not-found/page-not-found.component';
+import { ReasoningBranchesReportModule } from '@app/reasoning-branches-report/reasoning-branches-report.module';
 import { KeycloakInitializer } from '@app/shared/security/bootstrap/keycloak-initializer';
 import { ROLES_REDIRECT_CONFIG } from '@app/shared/security/role-default-page-mappings';
 import { SharedModule } from '@app/shared/shared.module';
@@ -69,6 +70,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SecurityMatrixModule,
     PendingChangesModule,
     ChangeRequestModule,
+    ReasoningBranchesReportModule
   ],
   providers: [
     WINDOW_PROVIDERS,
