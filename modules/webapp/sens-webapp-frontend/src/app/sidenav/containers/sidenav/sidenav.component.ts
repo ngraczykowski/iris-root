@@ -13,6 +13,17 @@ export class SidenavComponent implements OnInit {
 
   mainNav = [
     {
+      name: this.sectionsPrefix + 'adminPanel',
+      visible: false,
+      links: [
+        {
+          label: 'usersList.title',
+          url: '/users/user-management',
+          icon: 'people'
+        }
+      ]
+    },
+    {
       name: this.sectionsPrefix + 'reasoningBranches',
       visible: false,
       links: [
@@ -30,17 +41,6 @@ export class SidenavComponent implements OnInit {
           label: 'pendingChanges.title',
           url: '/reasoning-branches/pending-changes',
           icon: 'view_list'
-        }
-      ]
-    },
-    {
-      name: this.sectionsPrefix + 'users',
-      visible: false,
-      links: [
-        {
-          label: 'usersList.title',
-          url: '/users/user-management',
-          icon: 'people'
         }
       ]
     },

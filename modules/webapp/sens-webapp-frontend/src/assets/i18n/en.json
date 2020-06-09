@@ -21,7 +21,7 @@
     "sections": {
       "reasoningBranches": "Reasoning Branches",
       "reports": "Reports",
-      "users": "Users"
+      "adminPanel": "Admin Panel"
     }
   },
   "changeRequest": {
