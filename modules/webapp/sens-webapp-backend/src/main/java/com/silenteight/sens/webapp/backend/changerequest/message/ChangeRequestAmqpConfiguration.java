@@ -25,7 +25,7 @@ class ChangeRequestAmqpConfiguration {
     return BindingBuilder
         .bind(changeRequestCreateQueue)
         .to(changeRequestExchange)
-        .with(changeRequestMessagingProperties.queueCreate())
+        .with(changeRequestMessagingProperties.routeCreate())
         .noargs();
   }
 
