@@ -188,6 +188,24 @@ app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
   res.sendFile(__dirname + '/data/security-matrix-report.csv');
 });
 
+app.get('/rest/webapp/api/report/reasoning-branch-report', (req, res) => {
+  let filePath = path.join(__dirname, 'data/security-matrix-report.csv');
+  let stat = fs.statSync(filePath);
+
+  if (req.query.decisionTreeId === '1') {
+    setTimeout(() => {
+      res.writeHead(200, {
+        "Content-Type": "text/csv",
+        "Content-Disposition": "attachment; filename=report.csv",
+        'Content-Length': stat.size
+      });
+      fs.createReadStream(filePath).pipe(res);
+    }, 5000);
+  } else {
+    res.status(400).send();
+  }
+});
+
 app.get('/rest/webapp/api/report/audit-report', (req, res) => {
   let filePath = path.join(__dirname, 'data/security-matrix-report.csv');
   let stat = fs.statSync(filePath);

@@ -6,7 +6,9 @@
         <ng-template matStepLabel>
           <span>Configure</span>
         </ng-template>
-        <app-configure-reasoning-branch-report-container></app-configure-reasoning-branch-report-container>
+        <app-configure-reasoning-branches-report
+                *ngIf="showForm"
+                (formSubmit)="generateReport($event)"></app-configure-reasoning-branches-report>
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>
@@ -14,7 +16,7 @@
         </ng-template>
         <div class="form">
           <app-state [stateContent]="stateInProgress"
-                     (buttonClick)="showPreviousStep()"></app-state>
+                     (buttonClick)="abortGenerateReport()"></app-state>
         </div>
       </mat-step>
       <mat-step>
@@ -22,7 +24,8 @@
           <span>Download</span>
         </ng-template>
         <div class="form">
-          <app-state [stateContent]="stateDownload" (buttonClick)="newReasoningBranchReport()"></app-state>
+          <app-state [stateContent]="stateDownload"
+                     (buttonClick)="newReasoningBranchReport()"></app-state>
         </div>
       </mat-step>
     </mat-vertical-stepper>

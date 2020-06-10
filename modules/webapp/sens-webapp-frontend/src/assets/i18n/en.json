@@ -212,7 +212,8 @@
         "decisionTreeId": {
           "label": "Decision Tree ID",
           "hint": "Decision Tree ID should be presented as a number e.g. 5",
-          "errorEmpty": "Decision Tree ID is required to create change request"
+          "errorEmpty": "Decision Tree ID is required to generate the Reasoning Branch Report",
+          "errorWrongId": "Decision Tree does not exist"
         },
         "footer": {
           "reset": "Reset",

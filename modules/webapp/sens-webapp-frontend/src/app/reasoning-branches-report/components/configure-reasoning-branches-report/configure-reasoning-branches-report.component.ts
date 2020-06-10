@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 
 @Component({
@@ -7,15 +7,16 @@ import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular
 })
 export class ConfigureReasoningBranchesReportComponent implements OnInit {
 
-  @Output() formSubmitted = new EventEmitter();
+  @Output() formSubmit = new EventEmitter();
 
   translatePrefix = 'reasoningBranchesReport.configure.form.';
-  decisionTreeIDTranslatePrefix = this.translatePrefix + 'decisionTreeId.';
+  decisionTreeIdTranslatePrefix = this.translatePrefix + 'decisionTreeId.';
   footerTranslatePrefix = this.translatePrefix + 'footer.';
 
   form = new FormGroup({
     decisionTreeId: new FormControl('', Validators.required)
   });
+  private formDir: FormGroupDirective;
 
   constructor() { }
 
@@ -31,13 +32,20 @@ export class ConfigureReasoningBranchesReportComponent implements OnInit {
       this.form.get(key).setValue('');
     });
     this.form.setErrors(null);
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   onFormSubmit(): void {
     if (this.form.valid) {
-      this.formSubmitted.emit(this.form.value);
+      this.formSubmit.emit(this.form.value.decisionTreeId);
     } else {
       this.form.updateValueAndValidity();
     }
+  }
+
+  invalidDecisionTreeID() {
+    this.form.controls.decisionTreeId.setErrors({'wrongId': true});
+    this.form.controls.decisionTreeId.markAsTouched();
   }
 }

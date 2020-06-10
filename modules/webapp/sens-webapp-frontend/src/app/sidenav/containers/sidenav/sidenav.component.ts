@@ -40,7 +40,7 @@ export class SidenavComponent implements OnInit {
         {
           label: 'pendingChanges.title',
           url: '/reasoning-branches/pending-changes',
-          icon: 'view_list'
+          icon: 'library_add_check'
         }
       ]
     },
@@ -51,12 +51,12 @@ export class SidenavComponent implements OnInit {
         {
           label: 'auditTrail.title',
           url: '/reports/audit-trail',
-          icon: 'announcement'
+          icon: 'description'
         },
         {
           label: 'reasoningBranchesReport.title',
           url: '/reports/reasoning-branches-report',
-          icon: 'announcement'
+          icon: 'description'
         },
         {
           label: 'securityMatrix.title',

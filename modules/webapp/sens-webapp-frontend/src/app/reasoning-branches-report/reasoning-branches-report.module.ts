@@ -10,13 +10,11 @@ import { SharedModule } from '@app/shared/shared.module';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { ReasoningBranchesReportComponent } from './containers/reasoning-branches-report/reasoning-branches-report.component';
 import { ConfigureReasoningBranchesReportComponent } from './components/configure-reasoning-branches-report/configure-reasoning-branches-report.component';
-import { ConfigureReasoningBranchReportContainerComponent } from './containers/configure-reasoning-branch-report-container/configure-reasoning-branch-report-container.component';
 
 @NgModule({
   declarations: [
     ReasoningBranchesReportComponent,
-    ConfigureReasoningBranchesReportComponent,
-    ConfigureReasoningBranchReportContainerComponent
+    ConfigureReasoningBranchesReportComponent
   ],
   imports: [
     CommonModule,

@@ -1,14 +1,20 @@
 <div class="form">
-  <form [formGroup]="form" #formDir="ngForm" class="form__content" (ngSubmit)="onFormSubmit()">
+  <form [formGroup]="form"
+        #formDir="ngForm"
+        class="form__content"
+        (ngSubmit)="onFormSubmit()">
     <mat-form-field appearance="outline" class="mat-form-field--full-width">
-      <mat-label [translate]="decisionTreeIDTranslatePrefix + 'label'"></mat-label>
+      <mat-label [translate]="decisionTreeIdTranslatePrefix + 'label'"></mat-label>
       <input formControlName="decisionTreeId"
              matInput
              required
              type="number"
              appNumbersOnly>
-      <mat-hint [translate]="decisionTreeIDTranslatePrefix + 'hint'"></mat-hint>
-      <mat-error [translate]="decisionTreeIDTranslatePrefix + 'errorEmpty'"></mat-error>
+      <mat-hint [translate]="decisionTreeIdTranslatePrefix + 'hint'"></mat-hint>
+      <mat-error *ngIf="form.controls.decisionTreeId.hasError('required')"
+                 [translate]="decisionTreeIdTranslatePrefix + 'errorEmpty'"></mat-error>
+      <mat-error *ngIf="form.controls.decisionTreeId.hasError('wrongId')"
+                 [translate]="decisionTreeIdTranslatePrefix + 'errorWrongId'"></mat-error>
     </mat-form-field>
     <div class="form__footer">
       <a (click)="resetForm(formDir)"
