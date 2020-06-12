@@ -1,0 +1,9 @@
+= ADR#7
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-831[WA-831]*
+- Reason: As a Business Operator I want to be able to list all Reasoning Branches
+
+[plantuml,bo-gets-list-of-reasoning-branches,svg]
+----
+include::diagrams/bo-gets-list-of-reasoning-branches.puml[leveloffset=+1]
+----

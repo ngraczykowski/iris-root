@@ -1,0 +1,80 @@
+@startuml
+header List Reasoning Branches
+
+actor BO as "Business Operator"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "RB Browser"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+    database WebAppDB as "WebApp Database"
+end box
+
+box "Governance" #LightBlue
+    participant G as "Governance"
+end box
+
+BO -> Frontend : Select RB Browser
+activate Frontend
+
+Frontend -> Backend : Fetch Reasoning Branches Page
+note over Frontend, Backend
+    * Filters (AI Solution, Active)
+    * Paging
+end note
+
+activate Backend
+Backend <-> G : Fetch Reasoning Branches Page
+note over Backend, G
+    * Reasoning Branch ID (DT ID + FV ID)
+    * Solution
+    * Active
+    * Last Update
+
+    * Total
+end note
+
+Backend -> Frontend : Reasoning Branches Page
+deactivate Backend
+
+Frontend -> Backend : Fetch Bulk Change IDs
+activate Backend
+note over Frontend, Backend
+    * Feature Vector IDs
+end note
+
+Backend <-> G : Fetch Bulk Change IDs
+note over Backend, G
+    * Bulk Change ID
+end note
+
+Backend -> Frontend : Bulk Change IDs
+deactivate Backend
+
+Frontend -> Backend : Fetch Change Request IDs
+activate Backend
+note over Frontend, Backend
+    * Bulk Change IDs
+end note
+
+Backend <-> WebAppDB : Fetch Change Request IDs
+note over Backend, WebAppDB
+    * Change Request ID
+end note
+
+Backend -> Frontend : Change Request IDs
+deactivate Backend
+
+Frontend -> BO: Reasoning Branches list
+deactivate Frontend
+note over Frontend, BO
+    * Reasoning Branch ID
+    * Solution
+    * Status
+    * Change Request ID
+    * Last update
+end note
+
+@enduml
