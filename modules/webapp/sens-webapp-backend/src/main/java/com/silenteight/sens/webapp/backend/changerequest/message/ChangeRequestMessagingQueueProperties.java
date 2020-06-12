@@ -16,4 +16,6 @@ public class ChangeRequestMessagingQueueProperties {
   private final String approve;
   @NotBlank
   private final String reject;
+  @NotBlank
+  private final String cancel;
 }

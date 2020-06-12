@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
+import com.silenteight.sens.webapp.backend.changerequest.cancel.CancelChangeRequestCommand;
+import com.silenteight.sens.webapp.backend.changerequest.cancel.CancelChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
@@ -63,6 +65,9 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private RejectChangeRequestUseCase rejectChangeRequestUseCase;
+
+  @MockBean
+  private CancelChangeRequestUseCase cancelChangeRequestUseCase;
 
   @Nested
   class ListChangeRequests {
@@ -324,6 +329,71 @@ class ChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     private String mappingForRejection(long id) {
       return "/change-request/" + id + "/reject";
+    }
+  }
+
+  @Nested
+  class CancelChangeRequest {
+
+    private static final String USERNAME = "username";
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void its202_whenBusinessOperatorCallsEndpoint() {
+      long changeRequestId = 2L;
+
+      patch(mappingForCancellation(changeRequestId), defaultHeaders()).statusCode(ACCEPTED.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void callsCancelUseCase() {
+      long changeRequestId = 2L;
+
+      patch(mappingForCancellation(changeRequestId), defaultHeaders());
+
+      ArgumentCaptor<CancelChangeRequestCommand> commandCaptor =
+          ArgumentCaptor.forClass(CancelChangeRequestCommand.class);
+      verify(cancelChangeRequestUseCase).apply(commandCaptor.capture());
+
+      CancelChangeRequestCommand command = commandCaptor.getValue();
+      assertThat(command.getChangeRequestId()).isEqualTo(changeRequestId);
+      assertThat(command.getCancellerUsername()).isEqualTo(USERNAME);
+    }
+
+    @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      long changeRequestId = 2L;
+
+      patch(mappingForCancellation(changeRequestId),
+          defaultHeaders()).statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+    void setsCorrelationIdInThreadLocal() {
+      long changeRequestId = 2L;
+      UUID correlationId = randomUUID();
+
+      patch(mappingForCancellation(changeRequestId),
+          Map.of(CORRELATION_ID_HEADER, correlationId));
+
+      assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME, roles = APPROVER)
+    void its400_ifNoCorrelationIdProvidedInHeader() {
+      long changeRequestId = 2L;
+
+      patch(mappingForCancellation(changeRequestId))
+          .statusCode(BAD_REQUEST.value())
+          .body("key", equalTo("Missing request header"))
+          .body("extras.headerName", equalTo("CorrelationId"));
+    }
+
+    private String mappingForCancellation(long id) {
+      return "/change-request/" + id + "/cancel";
     }
   }
 

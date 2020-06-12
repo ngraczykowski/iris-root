@@ -30,7 +30,7 @@ end note
 
 Backend <-> WebAppDB : Fetch Bulk Change Id
 
-Backend -> Queue : Bulk Change Cancel Command
+Backend -> Queue : Bulk Change Reject Command
 note over Queue, Backend
     * Bulk Change Id
 end note

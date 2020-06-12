@@ -77,4 +77,24 @@ public class ChangeRequestService {
 
     return changeRequest.getBulkChangeId();
   }
+
+  public UUID cancel(long id, @NonNull String username, @NonNull OffsetDateTime cancelledAt) {
+    log.info(CHANGE_REQUEST,
+        "Cancelling Change Request. changeRequestId={}, username={}, rejectedAt={}",
+        id, username, cancelledAt);
+
+    ChangeRequest changeRequest = repository.getById(id);
+    changeRequest.cancel(username, cancelledAt);
+    repository.save(changeRequest);
+
+    log.info(CHANGE_REQUEST, "Change Request cancelled. changeRequest={}", changeRequest);
+
+    auditTracer.save(
+        new ChangeRequestCancelledEvent(
+            changeRequest.getId().toString(),
+            CHANGE_REQUEST_ENTITY_NAME,
+            changeRequest));
+
+    return changeRequest.getBulkChangeId();
+  }
 }

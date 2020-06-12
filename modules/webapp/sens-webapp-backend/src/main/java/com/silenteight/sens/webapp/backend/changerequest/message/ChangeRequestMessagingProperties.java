@@ -52,4 +52,12 @@ public class ChangeRequestMessagingProperties {
   public String queueReject() {
     return queue.getReject();
   }
+
+  public String routeCancel() {
+    return route.getCancel();
+  }
+
+  public String queueCancel() {
+    return queue.getCancel();
+  }
 }

@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.approve.ApproveChangeRequestUseCase;
+import com.silenteight.sens.webapp.backend.changerequest.cancel.CancelChangeRequestCommand;
+import com.silenteight.sens.webapp.backend.changerequest.cancel.CancelChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestCommand;
 import com.silenteight.sens.webapp.backend.changerequest.create.CreateChangeRequestUseCase;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestQuery;
@@ -50,6 +52,9 @@ class ChangeRequestRestController {
 
   @NonNull
   private final RejectChangeRequestUseCase rejectChangeRequestUseCase;
+
+  @NonNull
+  private final CancelChangeRequestUseCase cancelChangeRequestUseCase;
 
   @GetMapping("/change-requests")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
@@ -126,6 +131,28 @@ class ChangeRequestRestController {
     rejectChangeRequestUseCase.apply(command);
 
     log.debug(CHANGE_REQUEST, "Change Request rejected. changeRequestId={}", id);
+    return accepted().build();
+  }
+
+  @PatchMapping("/change-request/{id}/cancel")
+  @PreAuthorize(BUSINESS_OPERATOR)
+  public ResponseEntity<Void> cancel(
+      @PathVariable long id,
+      @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
+      Authentication authentication) {
+
+    log.debug(
+        CHANGE_REQUEST, "Requested to cancel Change Request. changeRequestId={}, username={}",
+        id, authentication.getName());
+
+    RequestCorrelation.set(correlationId);
+    CancelChangeRequestCommand command = CancelChangeRequestCommand.builder()
+        .changeRequestId(id)
+        .cancellerUsername(authentication.getName())
+        .build();
+    cancelChangeRequestUseCase.apply(command);
+
+    log.debug(CHANGE_REQUEST, "Change Request cancelled. changeRequestId={}", id);
     return accepted().build();
   }
 }

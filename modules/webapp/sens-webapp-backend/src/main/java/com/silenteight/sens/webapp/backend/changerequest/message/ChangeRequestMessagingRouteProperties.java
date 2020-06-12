@@ -16,4 +16,6 @@ public class ChangeRequestMessagingRouteProperties {
   private final String approve;
   @NotBlank
   private final String reject;
+  @NotBlank
+  private final String cancel;
 }

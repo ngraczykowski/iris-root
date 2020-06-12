@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 
@@ -84,6 +85,15 @@ class ChangeRequest {
     state = REJECTED;
     decidedBy = username;
     decidedAt = rejectedAt;
+  }
+
+  void cancel(String username, OffsetDateTime cancelledAt) {
+    if (isNotInPendingState())
+      return;
+
+    state = CANCELLED;
+    decidedBy = username;
+    decidedAt = cancelledAt;
   }
 
   private boolean isNotInPendingState() {

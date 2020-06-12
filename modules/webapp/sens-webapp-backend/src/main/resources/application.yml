@@ -153,10 +153,12 @@ sens.webapp.messaging:
       create: change-request.create
       approve: change-request.approve
       reject: change-request.reject
+      cancel: change-request.cancel
     queue:
       create: webapp.change-request.create
       approve: webapp.change-request.approve
       reject: webapp.change-request.reject
+      cancel: webapp.change-request.cancel
 
 sens.grpc:
   timeout: ${sens.webapp.grpc.timeout}

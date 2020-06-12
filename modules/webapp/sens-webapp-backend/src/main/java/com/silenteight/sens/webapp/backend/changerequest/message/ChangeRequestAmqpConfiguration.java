@@ -76,4 +76,24 @@ class ChangeRequestAmqpConfiguration {
         .durable(changeRequestMessagingProperties.queueReject())
         .build();
   }
+
+  @Bean
+  Binding changeRequestCancelBinding(
+      Exchange changeRequestExchange,
+      Queue changeRequestCancelQueue,
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
+    return BindingBuilder
+        .bind(changeRequestCancelQueue)
+        .to(changeRequestExchange)
+        .with(changeRequestMessagingProperties.routeCancel())
+        .noargs();
+  }
+
+  @Bean
+  Queue changeRequestCancelQueue(
+      ChangeRequestMessagingProperties changeRequestMessagingProperties) {
+    return QueueBuilder
+        .durable(changeRequestMessagingProperties.queueCancel())
+        .build();
+  }
 }

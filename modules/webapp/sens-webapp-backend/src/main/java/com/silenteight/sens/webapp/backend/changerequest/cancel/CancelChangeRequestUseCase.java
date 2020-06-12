@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.reject;
+package com.silenteight.sens.webapp.backend.changerequest.cancel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,36 +16,36 @@ import static java.lang.String.valueOf;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RejectChangeRequestUseCase {
+public class CancelChangeRequestUseCase {
 
   @NonNull
   private final AuditTracer auditTracer;
   @NonNull
-  private final RejectChangeRequestMessageGateway messageGateway;
+  private final CancelChangeRequestMessageGateway messageGateway;
 
-  public void apply(@NonNull RejectChangeRequestCommand command) {
-    log.debug(CHANGE_REQUEST, "Rejecting Change Request, command={}", command);
+  public void apply(@NonNull CancelChangeRequestCommand command) {
+    log.debug(CHANGE_REQUEST, "Cancelling Change Request, command={}", command);
 
     messageGateway.send(toMessage(command));
 
     auditTracer.save(
-        new ChangeRequestRejectionRequestedEvent(
+        new ChangeRequestCancellationRequestedEvent(
             valueOf(command.getChangeRequestId()),
             "webapp_change_request",
             command));
 
     log.debug(CHANGE_REQUEST,
-        "Rejected Change Request, changeRequestId={}", command.getChangeRequestId());
+        "Cancelled Change Request, changeRequestId={}", command.getChangeRequestId());
   }
 
-  private static com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand toMessage(
-      RejectChangeRequestCommand command) {
+  private static com.silenteight.proto.serp.v1.changerequest.CancelChangeRequestCommand toMessage(
+      CancelChangeRequestCommand command) {
 
-    return com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand.newBuilder()
+    return com.silenteight.proto.serp.v1.changerequest.CancelChangeRequestCommand.newBuilder()
         .setChangeRequestId(command.getChangeRequestId())
         .setCorrelationId(fromJavaUuid(RequestCorrelation.id()))
-        .setRejectorUsername(command.getRejectorUsername())
-        .setRejectedAt(toTimestamp(Instant.now()))
+        .setCancellerUsername(command.getCancellerUsername())
+        .setCancelledAt(toTimestamp(Instant.now()))
         .build();
   }
 }
