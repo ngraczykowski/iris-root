@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.proto.serp.v1.api.FeatureGovernanceGrpc.FeatureGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.GetBranchFeatureCollectionRequest;
 import com.silenteight.proto.serp.v1.model.Feature;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.FeatureQuery;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.FeatureQuery;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import io.vavr.control.Try;

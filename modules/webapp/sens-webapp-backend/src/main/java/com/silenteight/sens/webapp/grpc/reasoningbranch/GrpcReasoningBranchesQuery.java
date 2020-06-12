@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.BranchWithFeaturesDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.ReasoningBranchesReportQuery;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchesQuery;
-import com.silenteight.sens.webapp.backend.reasoningbranch.validate.BranchIdAndSignatureDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchesValidateQuery;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.BranchWithFeaturesDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.ReasoningBranchesReportQuery;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.exception.DecisionTreeNotFoundException;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.ReasoningBranchesQuery;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.BranchIdAndSignatureDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.ReasoningBranchesValidateQuery;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
@@ -45,8 +45,7 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
   private final BranchGovernanceBlockingStub branchesStub;
 
   @Override
-  public List<BranchDto> findBranchByTreeIdAndBranchIds(
-      long treeId, List<Long> branchIds) {
+  public List<BranchDto> findBranchByTreeIdAndBranchIds(long treeId, List<Long> branchIds) {
     return findByTreeAndBranchIds(treeId, branchIds, this::mapToBranchDto);
   }
 

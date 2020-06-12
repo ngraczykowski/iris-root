@@ -10,7 +10,7 @@ import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.UpdatedBranches;
 
 import java.util.List;
 import java.util.Optional;

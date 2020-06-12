@@ -11,10 +11,10 @@ import com.silenteight.proto.serp.v1.api.ChangeBranchesRequest;
 import com.silenteight.proto.serp.v1.api.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.AiSolutionNotSupportedException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.ChangeRequestRepository;
-import com.silenteight.sens.webapp.backend.reasoningbranch.update.UpdatedBranches;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.BranchIdsNotFoundException;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.AiSolutionNotSupportedException;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.ChangeRequestRepository;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.UpdatedBranches;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 
 import io.vavr.control.Try;

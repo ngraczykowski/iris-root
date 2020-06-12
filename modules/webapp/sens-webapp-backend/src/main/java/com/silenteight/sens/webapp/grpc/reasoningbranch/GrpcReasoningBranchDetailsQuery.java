@@ -8,8 +8,8 @@ import com.silenteight.proto.serp.v1.api.GetReasoningBranchRequest;
 import com.silenteight.proto.serp.v1.api.GetReasoningBranchRequest.Builder;
 import com.silenteight.proto.serp.v1.api.ReasoningBranchResponse;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDetailsDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchDetailsQuery;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDetailsDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.ReasoningBranchDetailsQuery;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 

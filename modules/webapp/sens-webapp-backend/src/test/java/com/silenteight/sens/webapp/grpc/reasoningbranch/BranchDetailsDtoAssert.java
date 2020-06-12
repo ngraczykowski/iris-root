@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDetailsDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDetailsDto;
 
 import org.assertj.core.api.AbstractAssert;
 

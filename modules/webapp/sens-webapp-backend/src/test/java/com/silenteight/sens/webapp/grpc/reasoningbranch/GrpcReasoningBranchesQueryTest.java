@@ -5,10 +5,10 @@ import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary.Builder;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.BranchWithFeaturesDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
-import com.silenteight.sens.webapp.backend.reasoningbranch.rest.BranchDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.validate.BranchIdAndSignatureDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.BranchWithFeaturesDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.exception.DecisionTreeNotFoundException;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
+import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.BranchIdAndSignatureDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import com.google.protobuf.ByteString;
