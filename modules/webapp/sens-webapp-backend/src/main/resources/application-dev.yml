@@ -31,10 +31,7 @@ logging:
     org.springframework: INFO
 
 springdoc:
-  show-actuator: true
   api-docs:
-    enabled: true
-    path: /openapi/api-docs
+    enabled: false
   swagger-ui:
-    path: /openapi/
-    url: ${server.servlet.context-path}/openapi/api-docs/
+    enabled: false

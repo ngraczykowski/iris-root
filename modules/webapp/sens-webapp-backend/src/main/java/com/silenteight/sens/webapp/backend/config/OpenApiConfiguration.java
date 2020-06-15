@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Profile;
     )
 )
 @Configuration
-@Profile("dev")
+@Profile("swagger")
 class OpenApiConfiguration {
 
   static final String WEBAPP_OPENID_SECURITY_SCHEMA = "oauth2-webapp";

@@ -172,8 +172,8 @@ Gradle script to the released Web App version.
 New snapshot/release version will start using newly released Web App release.
 
 ## Using Swagger UI
-To use Swagger UI you need to run WebApp in `dev` profile 
-and go to [/openapi/](localhost:24410/rest/webapp/openapi).
+To use Swagger UI you need apply `swagger` profile to your app, along with a main profile, e.g. --spring.profiles.active=dev,swagger
+and go to [http://localhost:24410/rest/webapp/openapi/swagger-ui/index.html?configUrl=/rest/webapp/openapi/api-docs/swagger-config](http://localhost:24410/rest/webapp/openapi/swagger-ui/index.html?configUrl=/rest/webapp/openapi/api-docs/swagger-config).
 
 In order to make authenticated requests 
 click the key lock icon, type in desired client id (normally this would be `frontend`) 
