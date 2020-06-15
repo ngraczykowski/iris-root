@@ -1,16 +1,12 @@
 @import 'abstracts/8-pt-grid';
 
 .change-request-details {
-  &__headline {
-
-  }
-
   &__section {
     margin-bottom: calculate-8-pt-grid(1);
   }
 
   &__comment {
-    height: unset;
+    height: unset !important; //!Important used only to overwrite MUI style
   }
 }
 

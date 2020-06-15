@@ -7,13 +7,14 @@
             [changeRequestData]="generateChangeRequestContent()"
             [changeRequestID]="generateChangeRequestHeader()"
     ></app-change-request-preview>
-    <mat-list class="change-request-preview__section" *ngIf="hasPermissionsToApproveReject()">
+    <mat-list class="change-request-preview__section">
       <mat-divider></mat-divider>
       <h3 mat-subheader>
         <span [translate]="translatePrefixDecision + 'title'"></span>
       </h3>
       <mat-list-item>
-        <div class="change-request-details__decision">
+        <div class="change-request-details__decision"
+             *ngIf="canApproveOrReject()">
           <button mat-stroked-button color="warn" (click)="openRejectDialog()">
             <span [translate]="translatePrefixDecision + 'buttons.reject'"></span>
           </button>
@@ -21,6 +22,13 @@
             <span [translate]="translatePrefixDecision + 'buttons.approve'"></span>
           </button>
         </div>
+        <button *ngIf="canCancel() && !canApproveOrReject()"
+                mat-stroked-button
+                color="warn"
+                class="mat-button-base--full-width"
+                (click)="openCancelDialog()">
+          <span [translate]="translatePrefixDecision + 'buttons.cancel'"></span>
+        </button>
       </mat-list-item>
     </mat-list>
   </div>

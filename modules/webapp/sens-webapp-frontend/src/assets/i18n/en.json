@@ -176,7 +176,8 @@
         "title": "Decision",
         "buttons": {
           "reject": "Reject",
-          "approve": "Approve"
+          "approve": "Approve",
+          "cancel": "Cancel"
         }
       },
       "emptyState": {
@@ -185,18 +186,25 @@
       "dialogReject": {
         "title": "Reject Change Request?",
         "description": "Change Request will be deleted and leave selected Reasoning Branches unchanged.",
-        "buttonCancel": "Cancel",
+        "buttonClose": "Close",
         "buttonCta": "Reject Change request"
       },
       "dialogApprove": {
         "title": "Approve changes?",
         "description": "Proposed changes will be applied to the selected Reasoning Branches. This will cause a change in AI Decisions for alerts assigned to the chosen Reasoning Branches.",
-        "buttonCancel": "Cancel",
+        "buttonClose": "Close",
         "buttonCta": "Approve Changes"
+      },
+      "dialogCancel": {
+        "title": "Cancel Change Request?",
+        "description": "Delete Change Request and leave selected Reasoning Branches unchanged.",
+        "buttonClose": "Close",
+        "buttonCta": "Cancel Change request"
       },
       "feedback": {
         "approve": "Change Request CR-{{changeRequestID}} was approved",
-        "reject": "Change Request CR-{{changeRequestID}} was removed"
+        "reject": "Change Request CR-{{changeRequestID}} was rejected",
+        "cancel": "Change Request CR-{{changeRequestID}} was cancelled"
       }
     }
   },

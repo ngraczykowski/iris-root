@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ChangeRequestDecisionDialogComponent } from '@app/pending-changes/components/change-request-decision-dialog/change-request-decision-dialog.component';
 import { PendingChange } from '@app/pending-changes/models/pending-changes';
 import { PendingChangesService } from '@app/pending-changes/services/pending-changes.service';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { DialogComponent } from '@app/ui-components/dialog/dialog.component';
 import { StateContent } from '@app/ui-components/state/state';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -21,6 +21,7 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
   translatePrefix = 'pendingChanges.changeRequestDetails.';
   translatePrefixDialogReject = this.translatePrefix + 'dialogReject.';
   translatePrefixDialogApprove = this.translatePrefix + 'dialogApprove.';
+  translatePrefixDialogCancel = this.translatePrefix + 'dialogCancel.';
   translatePrefixDecision = this.translatePrefix + 'decision.';
   translatePrefixFeedback = this.translatePrefix + 'feedback.';
 
@@ -43,32 +44,53 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
   }
 
   openApproveDialog(): void {
-    const dialogRef = this.dialog.open(ChangeRequestDecisionDialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '440px',
       data: {
         title: this.translatePrefixDialogApprove + 'title',
         description: this.translatePrefixDialogApprove + 'description',
         buttonCta: this.translatePrefixDialogApprove + 'buttonCta',
-        buttonCancel: this.translatePrefixDialogApprove + 'buttonCancel'
+        buttonClose: this.translatePrefixDialogApprove + 'buttonClose'
       }
     });
-    const sub = dialogRef.componentInstance.decision.subscribe(() => {
-      this.sendDecision('approve');
+    const sub = dialogRef.afterClosed().subscribe((action) => {
+      if (action === 'submit') {
+        this.sendDecision('approve');
+      }
     });
   }
 
   openRejectDialog(): void {
-    const dialogRef = this.dialog.open(ChangeRequestDecisionDialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '440px',
       data: {
         title: this.translatePrefixDialogReject + 'title',
         description: this.translatePrefixDialogReject + 'description',
         buttonCta: this.translatePrefixDialogReject + 'buttonCta',
-        buttonCancel: this.translatePrefixDialogReject + 'buttonCancel'
+        buttonClose: this.translatePrefixDialogReject + 'buttonClose'
       }
     });
-    const sub = dialogRef.componentInstance.decision.subscribe(() => {
-      this.sendDecision('reject');
+    const sub = dialogRef.afterClosed().subscribe((action) => {
+      if (action === 'submit') {
+        this.sendDecision('reject');
+      }
+    });
+  }
+
+  openCancelDialog(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '440px',
+      data: {
+        title: this.translatePrefixDialogCancel + 'title',
+        description: this.translatePrefixDialogCancel + 'description',
+        buttonCta: this.translatePrefixDialogCancel + 'buttonCta',
+        buttonClose: this.translatePrefixDialogCancel + 'buttonClose'
+      }
+    });
+    const sub = dialogRef.afterClosed().subscribe((action) => {
+      if (action === 'submit') {
+        this.sendDecision('cancel');
+      }
     });
   }
 
@@ -134,9 +156,17 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
     };
   }
 
-  hasPermissionsToApproveReject(): boolean {
+  hasProperRoleToDecide(requiredRole) {
     const roles = this.authenticatedUserFacade.getUserRoles();
 
-    return roles.includes('Approver');
+    return roles.includes(requiredRole);
+  }
+
+  canCancel() {
+    return this.hasProperRoleToDecide('Business Operator');
+  }
+
+  canApproveOrReject() {
+    return this.hasProperRoleToDecide('Approver');
   }
 }

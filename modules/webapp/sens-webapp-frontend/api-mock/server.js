@@ -177,10 +177,17 @@ app.get('/rest/webapp/api/bulk-changes', (req, res) => {
 
 app.patch('/rest/webapp/api/change-request/:changeRequestId/approve', (req, res) => {
   res.status(200).send();
+  console.log(`CR-${req.params.changeRequestId} - Approved`);
 });
 
 app.patch('/rest/webapp/api/change-request/:changeRequestId/reject', (req, res) => {
   res.status(200).send();
+  console.log(`CR-${req.params.changeRequestId} - Rejected`);
+});
+
+app.patch('/rest/webapp/api/change-request/:changeRequestId/cancel', (req, res) => {
+  res.status(200).send();
+  console.log(`CR-${req.params.changeRequestId} - Cancelled`);
 });
 
 app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {

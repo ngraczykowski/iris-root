@@ -13,10 +13,6 @@
     }
   }
 
-  &__comment {
-    height: unset;
-  }
-
   &__decision {
     display: grid;
     grid-column-gap: calculate-8-pt-grid(2);
