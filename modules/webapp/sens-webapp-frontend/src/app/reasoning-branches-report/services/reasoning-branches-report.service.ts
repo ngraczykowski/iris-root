@@ -12,7 +12,7 @@ export class ReasoningBranchesReportService {
       private http: HttpClient
   ) { }
 
-  getReport(decisionTreeID: number) {
+  getReport(decisionTreeID: string) {
     return this.http.get(
         `${environment.serverApiUrl}/report/reasoning-branch-report?decisionTreeId=${decisionTreeID}`,
         {
