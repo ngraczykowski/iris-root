@@ -6,6 +6,7 @@ import { rolesByRedirect, routes } from '@app/app-routes';
 import { AppComponent } from '@app/app.component';
 import { AuditTrailModule } from '@app/audit-trail/audit-trail.module';
 import { BasicRoleDefaultPageMappings } from '@app/basic-default-paegs-mappings';
+import { CircuitBreakerDashboardModule } from '@app/circuit-breaker-dashboard/circuit-breaker-dashboard.module';
 import { PendingChangesModule } from '@app/pending-changes/pending-changes.module';
 import { ChangeRequestModule } from '@app/change-request/change-request.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
@@ -70,6 +71,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SecurityMatrixModule,
     PendingChangesModule,
     ChangeRequestModule,
+    CircuitBreakerDashboardModule,
     ReasoningBranchesReportModule
   ],
   providers: [

@@ -41,6 +41,11 @@ export class SidenavComponent implements OnInit {
           label: 'pendingChanges.title',
           url: '/reasoning-branches/pending-changes',
           icon: 'library_add_check'
+        },
+        {
+          label: 'circuitBreakerDashboard.title',
+          url: '/reasoning-branches/circuit-breaker-dashboard',
+          icon: 'report_problem'
         }
       ]
     },

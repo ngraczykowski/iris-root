@@ -1,11 +1,27 @@
 .mat-table {
-  margin-top: calculate-8-pt-grid(3);
+  &--main-content {
+    margin-top: calculate-8-pt-grid(3);
+  }
 
   &--full-width {
     width: 100%;
   }
+
+  .mat-row {
+    height: auto;
+  }
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: calculate-8-pt-grid(2) calculate-8-pt-grid(2);
+  }
+
+  .mat-header-cell {
+    font-size: 14px;
+    @media screen and (min-width: 1300px) {
+      white-space: nowrap;
+    }
+  }
 }
 
-.mat-header-cell {
-  font-size: 14px;
-}
+

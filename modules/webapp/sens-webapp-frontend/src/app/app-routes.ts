@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/audit-trail.component';
+import { CircuitBreakerDashboardComponent } from '@app/circuit-breaker-dashboard/containers/circuit-breaker-dashboard/circuit-breaker-dashboard.component';
 import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report/containers/reasoning-branches-report/reasoning-branches-report.component';
@@ -60,6 +61,15 @@ export const routes: Routes = [
     path: 'reasoning-branches/change-request',
     pathMatch: 'full',
     component: ChangeRequestComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Business Operator']
+    }
+  },
+  {
+    path: 'reasoning-branches/circuit-breaker-dashboard',
+    pathMatch: 'full',
+    component: CircuitBreakerDashboardComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Business Operator']

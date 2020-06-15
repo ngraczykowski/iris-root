@@ -1,0 +1,34 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let circuitBreakerElement of circuitBreakerList"
+                       [attr.id]="'Location' + circuitBreakerElement.id"
+                       (opened)="circuitBreakerElement.active = true"
+                       (closed)="circuitBreakerElement.active = false"
+                       class="mat-expansion-panel--flat mat-elevation-z0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ translatePrefix + 'header.id' | translate:{
+        decisionTreeId: circuitBreakerElement.discrepantBranchId.decisionTreeId,
+        reasoningBranchId: circuitBreakerElement.discrepantBranchId.featureVectorId
+      } }}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{ translatePrefix + 'header.disabled' | translate:{
+        date: circuitBreakerElement.detectedAt | date:'yyyy-mm-dd hh:mm:ss'
+      } }}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ng-container *ngIf="circuitBreakerElement.active">
+      <app-state *ngIf="loadingDetails"
+                 [stateContent]="stateLoading"></app-state>
+      <ng-container *ngIf="showDetails">
+        <app-circuit-breaker-alerts-table></app-circuit-breaker-alerts-table>
+        <mat-action-row>
+          <button mat-flat-button
+                  color="primary">
+            <span [translate]="translatePrefix + 'footer.buttonChangeRequest'"></span>
+          </button>
+        </mat-action-row>
+      </ng-container>
+    </ng-container>
+  </mat-expansion-panel>
+</mat-accordion>

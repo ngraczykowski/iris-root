@@ -488,6 +488,38 @@
       }
     }
   },
+  "circuitBreakerDashboard": {
+    "title": "Circuit Breaker Dashboard",
+    "tabs": {
+      "current": "Current",
+      "archive": "Archive"
+    },
+    "stateLoading": {
+      "title": "Updating Circuit Breaker list"
+    },
+    "emptyState": {
+      "title": "You don't have any disabled Reasoning Branches to verify"
+    },
+    "element": {
+      "header": {
+        "id": "{{decisionTreeId}}-{{reasoningBranchId}}",
+        "disabled": "Discrepancy detected by Circuit Breaker: {{ date }}"
+      },
+      "loading": {
+        "title": "Loading list of alerts"
+      },
+      "dataLabels": {
+        "alertId": "Alert ID",
+        "aiComment": "AI Comment (related to relevant hits only)",
+        "aiCommentDate": "AI Comment Date",
+        "analystComment": "Analyst Comment",
+        "analystCommentDate": "Analyst Comment Date"
+      },
+      "footer": {
+        "buttonChangeRequest": "Create Change Request"
+      }
+    }
+  },
   "userProfile": {
     "label": "Logged in as",
     "userMenu": {

@@ -1,0 +1,11 @@
+<div class="content-internal-margin--vertical content-internal-margin--horizontal">
+  <app-header [headerData]="header"></app-header>
+  <app-state *ngIf="circuitBreakerLoading"
+             [stateContent]="stateLoading"></app-state>
+  <app-state *ngIf="circuitBreakerEmptyState"
+             [stateContent]="stateEmptyList"></app-state>
+
+  <app-circuit-breaker-list
+          *ngIf="circuitBreakerList"
+          [circuitBreakerList]="circuitBreakerCurrentList"></app-circuit-breaker-list>
+</div>
