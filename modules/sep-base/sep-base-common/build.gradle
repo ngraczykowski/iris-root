@@ -35,6 +35,11 @@ dependencies {
   implementation libraries.spring_jcl
   implementation libraries.spring_webmvc
 
+  implementation libraries.querydsl_jpa
+  annotationProcessor libraries.querydsl_apt_jpa
+  annotationProcessor libraries.jakarta_persistence_api
+  annotationProcessor libraries.jakarta_annotation_api
+
   // Support for gRPC
   compileOnly libraries.grpc_api
   compileOnly libraries.grpc_server_spring_boot_starter
