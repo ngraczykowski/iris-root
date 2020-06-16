@@ -14,14 +14,14 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.List;
-import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -34,18 +34,19 @@ public class ApplicationBootstrapper {
   private String homeDirectory;
 
   public void bootstrapApplication() {
-    setupInstrumentation();
-    setupHomeDirectory();
-    setupPlugins();
-    setupSystemProperties();
+    setUpInstrumentation();
+    setUpSecuritySystemProperties();
+    setUpHomeDirectory();
+    setUpPlugins();
+    setUpSystemProperties();
     createLogDirectory();
   }
 
-  private static void setupInstrumentation() {
+  private static void setUpInstrumentation() {
     ByteBuddyAgent.install();
   }
 
-  private void setupHomeDirectory() {
+  private void setUpHomeDirectory() {
     homeDiscoverer
         .discover()
         .map(Path::toString)
@@ -53,21 +54,21 @@ public class ApplicationBootstrapper {
   }
 
   private void homeNotSet() {
-    String userDir = System.getProperty("user.dir", ".");
+    var userDir = getProperty("user.dir", ".");
     log.warn("Home directory not found! Setting to: {}", userDir);
     setHomeDirectory(userDir);
   }
 
   private void setHomeDirectory(String homeDirectory) {
-    String serpHome = System.getProperty(homeProperty);
+    var serpHome = getProperty(homeProperty);
     if (serpHome == null)
-      System.setProperty(homeProperty, homeDirectory);
+      setProperty(homeProperty, homeDirectory);
 
     this.homeDirectory = homeDirectory;
   }
 
-  private void setupPlugins() {
-    URI[] plugins = discoverPlugins();
+  private void setUpPlugins() {
+    var plugins = discoverPlugins();
     if (plugins.length > 0) {
       appendPluginsToClassLoader(plugins);
       extendSystemClassPathProperty(plugins);
@@ -77,10 +78,10 @@ public class ApplicationBootstrapper {
 
   @NotNull
   private URI[] discoverPlugins() {
-    Path pluginsDirectory = Paths.get(homeDirectory, "plugin", appName);
+    var pluginsDirectory = Paths.get(homeDirectory, "plugin", appName);
 
-    try (Stream<Path> entries = Files.list(pluginsDirectory)) {
-      List<URI> urls = entries
+    try (var entries = Files.list(pluginsDirectory)) {
+      var urls = entries
           .filter(ApplicationBootstrapper::isJarFile)
           .map(Path::toUri)
           .collect(toList());
@@ -100,8 +101,7 @@ public class ApplicationBootstrapper {
   }
 
   private static boolean isJarFile(Path path) {
-    Path fileName = path.getFileName();
-    return Files.isRegularFile(path) && fileName.toString().endsWith(".jar");
+    return Files.isRegularFile(path) && path.getFileName().toString().endsWith(".jar");
   }
 
   private static void appendPluginsToClassLoader(URI[] plugins) {
@@ -109,7 +109,7 @@ public class ApplicationBootstrapper {
 
     for (URI url : plugins) {
       try {
-        JarFile jarFile = new JarFile(new File(url));
+        var jarFile = new JarFile(new File(url));
         Installer.getInstrumentation().appendToSystemClassLoaderSearch(jarFile);
       } catch (IOException e) {
         log.warn("Failed to load plugin: file={}", url, e);
@@ -118,10 +118,10 @@ public class ApplicationBootstrapper {
   }
 
   private static void extendSystemClassPathProperty(URI[] plugins) {
-    String currentSystemClassPath = System.getProperty("java.class.path", "");
-    String[] pluginPaths = Stream.of(plugins).map(URI::toString).toArray(String[]::new);
-    String additionalClassPath = String.join(":", pluginPaths);
-    System.setProperty(
+    var currentSystemClassPath = getProperty("java.class.path", "");
+    var pluginPaths = Stream.of(plugins).map(URI::toString).toArray(String[]::new);
+    var additionalClassPath = String.join(":", pluginPaths);
+    setProperty(
         "java.class.path", String.join(":", currentSystemClassPath, additionalClassPath));
   }
 
@@ -130,14 +130,14 @@ public class ApplicationBootstrapper {
     PluginLoader.INSTANCE.loadPlugins();
   }
 
-  private static void setupSystemProperties() {
+  private static void setUpSystemProperties() {
     // NOTE(ahaczewski): Force use of fast random source.
-    System.setProperty("java.security.egd", "file:/dev/./urandom");
+    setProperty("java.security.egd", "file:/dev/./urandom");
   }
 
   private void createLogDirectory() {
     try {
-      Set<PosixFilePermission> filePermissions = PosixFilePermissions.fromString("rwxr-x---");
+      var filePermissions = PosixFilePermissions.fromString("rwxr-x---");
 
       Files.createDirectories(
           Paths.get(homeDirectory, "log", appName),
@@ -145,5 +145,20 @@ public class ApplicationBootstrapper {
     } catch (IOException ignore) {
       // Intentionally left blank.
     }
+  }
+
+  private static void setUpSecuritySystemProperties() {
+    setSystemPropertiesFromEnvironmentVariable("javax.net.ssl.trustStore",
+        "TRUSTSTORE_PATH");
+    setSystemPropertiesFromEnvironmentVariable("javax.net.ssl.trustStorePassword",
+        "TRUSTSTORE_PASSWORD");
+  }
+
+  private static void setSystemPropertiesFromEnvironmentVariable(String property,
+                                                                 String environmentVariable) {
+    var environmentVariableValue = System.getenv(environmentVariable);
+
+    if (getProperty(property) == null && isNotBlank(environmentVariableValue))
+      setProperty(property, environmentVariableValue);
   }
 }
