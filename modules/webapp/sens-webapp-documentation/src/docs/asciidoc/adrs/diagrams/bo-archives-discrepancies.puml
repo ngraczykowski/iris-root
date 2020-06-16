@@ -1,0 +1,36 @@
+@startuml
+header Archive selected discrepancies
+
+actor "Business Operator"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "CB Dashboard GUI"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+end box
+
+box "RabbitMQ"
+    queue Queue
+end box
+
+"Business Operator" -> Frontend : Archive selected Discrepancies
+
+Frontend -> Backend : Archive Discrepancies by Discrepancy IDs
+note over Frontend, Backend
+    * list of Discrepancy IDs
+end note
+
+activate Backend
+Backend -> Queue : Archive Discrepancies command
+note over Backend, Queue
+     * list of Discrepancy IDs
+end note
+
+Backend -> Frontend : Command Accepted response
+deactivate Backend
+Frontend->"Business Operator": Inform that request has been accepted
+
+
+@enduml
