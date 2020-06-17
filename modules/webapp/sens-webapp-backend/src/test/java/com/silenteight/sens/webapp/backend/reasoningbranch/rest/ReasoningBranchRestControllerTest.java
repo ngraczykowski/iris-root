@@ -29,8 +29,13 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ReasoningBranchesQuery reasoningBranchesQuery;
 
-  private static String mappingForReasoningBranches() {
-    return format("/reasoning-branches");
+  private static String mappingForReasoningBranches(ListReasoningBranchesRequestDto request) {
+    return format(
+        "/reasoning-branches?aiSolution=%s&active=%s&offset=%d&limit=%d",
+        request.getAiSolution(),
+        request.getActive(),
+        request.getOffset(),
+        request.getLimit());
   }
 
   @Nested
@@ -44,7 +49,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           .willReturn(
               new ReasoningBranchesPageDto(asList(REASONING_BRANCH_1, REASONING_BRANCH_2), 2));
 
-      post(mappingForReasoningBranches(), LIST_BRANCHES_REQUEST_NO_FILTER)
+      get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST_NO_FILTER))
           .statusCode(OK.value())
           .body("total", is(2))
           .body("branches[0].reasoningBranchId.decisionTreeId", equalTo((int) TREE_ID))
@@ -63,7 +68,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })
     void its403_whenNotPermittedRole() {
-      post(mappingForReasoningBranches(), LIST_BRANCHES_REQUEST_NO_FILTER)
+      get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST_NO_FILTER))
           .statusCode(FORBIDDEN.value());
     }
   }

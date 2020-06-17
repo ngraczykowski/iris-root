@@ -12,10 +12,11 @@ import com.silenteight.sens.webapp.backend.support.Paging;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
@@ -31,10 +32,10 @@ class ReasoningBranchRestController {
   @NonNull
   private final ReasoningBranchesQuery reasoningBranchesQuery;
 
-  @PostMapping("/reasoning-branches")
+  @GetMapping("/reasoning-branches")
   @PreAuthorize(BUSINESS_OPERATOR)
   public ResponseEntity<ReasoningBranchesPageDto> list(
-      @RequestBody ListReasoningBranchesRequestDto request) {
+      @Valid ListReasoningBranchesRequestDto request) {
 
     log.info(REASONING_BRANCH, "Listing Reasoning Branches. request={}", request);
 
