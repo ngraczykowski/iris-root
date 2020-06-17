@@ -22,7 +22,6 @@ import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptySet;
-import static java.util.Optional.of;
 
 @Slf4j
 public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
@@ -67,7 +66,7 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
 
     NewUserRegistration toUserRegistration() {
       return new NewUserRegistration(
-          new NewUserDetails(username, displayName, of(new Credentials(password)), roles),
+          new NewUserDetails(username, displayName, new Credentials(password), roles),
           SENS_ORIGIN);
     }
 

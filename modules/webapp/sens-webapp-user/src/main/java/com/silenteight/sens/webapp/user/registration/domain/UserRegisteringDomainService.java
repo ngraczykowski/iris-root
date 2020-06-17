@@ -14,8 +14,6 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
-import java.util.Optional;
-
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -64,9 +62,8 @@ public class UserRegisteringDomainService {
         return left(rolesDontExistError.get());
     }
 
-    Optional<Credentials> credentialsOpt = registration.getCredentials();
-    if (credentialsOpt.isPresent()) {
-      Credentials credentials = credentialsOpt.get();
+    Credentials credentials = registration.getCredentials();
+    if (credentials != null) {
       Option<RegexError> passwordConstraintRestrictedCharsError =
           passwordCharsValidator.validate(credentials.getPassword());
 

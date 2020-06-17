@@ -56,10 +56,10 @@ class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
     userRepresentation.setFirstName(registration.getDisplayName());
     userRepresentation.singleAttribute(USER_ORIGIN, registration.getOrigin());
 
-    registration
-        .getCredentials()
-        .ifPresent(it -> userRepresentation.setCredentials(
-            singletonList(createPasswordCredential(it))));
+    if (registration.getCredentials() != null) {
+      userRepresentation.setCredentials(
+          singletonList(createPasswordCredential(registration.getCredentials())));
+    }
 
     return userRepresentation;
   }

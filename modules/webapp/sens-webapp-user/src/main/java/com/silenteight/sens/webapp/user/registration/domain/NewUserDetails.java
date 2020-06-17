@@ -6,7 +6,6 @@ import lombok.Value;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Value
@@ -16,8 +15,24 @@ public class NewUserDetails {
   String displayName;
   @ToString.Exclude
   @JsonIgnore
-  Optional<Credentials> credentials;
+  Credentials credentials;
   Set<String> roles;
+
+  public NewUserDetails(String username, String displayName, Set<String> roles) {
+    this.username = username;
+    this.displayName = displayName;
+    this.roles = roles;
+    this.credentials = null;
+  }
+
+  public NewUserDetails(
+      String username, String displayName,
+      Credentials credentials, Set<String> roles) {
+    this.username = username;
+    this.displayName = displayName;
+    this.credentials = credentials;
+    this.roles = roles;
+  }
 
   @Value
   public static class Credentials {

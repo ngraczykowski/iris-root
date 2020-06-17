@@ -5,7 +5,6 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.Nullable;
 
 import static java.util.Collections.emptyList;
@@ -19,10 +18,6 @@ public class KeycloakMigrations {
 
   @NonNull
   List<PartialMigration> partialMigrations;
-
-  public Optional<Migration> baseMigration() {
-    return Optional.ofNullable(baseMigration);
-  }
 
   public static KeycloakMigrations empty() {
     return new KeycloakMigrations(null, emptyList());

@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static java.util.Collections.emptySet;
-import static java.util.Optional.empty;
 
 @Slf4j
 public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
@@ -61,7 +60,7 @@ public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
 
     NewUserRegistration toUserRegistration() {
       return new NewUserRegistration(
-          new NewUserDetails(username, displayName, empty(), roles),
+          new NewUserDetails(username, displayName, roles),
           origin);
     }
   }

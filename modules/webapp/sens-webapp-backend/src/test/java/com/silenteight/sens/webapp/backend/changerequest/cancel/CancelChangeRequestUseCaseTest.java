@@ -16,7 +16,7 @@ import java.util.UUID;
 import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.backend.changerequest.cancel.CancelChangeRequestUseCaseFixtures.CANCEL_COMMAND;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

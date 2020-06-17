@@ -5,7 +5,6 @@ import lombok.Value;
 
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Value
@@ -24,7 +23,7 @@ public class NewUserRegistration {
     return getUserDetails().getDisplayName();
   }
 
-  public Optional<Credentials> getCredentials() {
+  public Credentials getCredentials() {
     return getUserDetails().getCredentials();
   }
 

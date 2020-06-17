@@ -8,7 +8,6 @@ import lombok.Value;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
@@ -36,7 +35,7 @@ public class CompletedUserRegistration {
     return userDetails.getUsername();
   }
 
-  public Optional<Credentials> getCredentials() {
+  public Credentials getCredentials() {
     return userDetails.getCredentials();
   }
 
@@ -44,7 +43,7 @@ public class CompletedUserRegistration {
     NewUserDetails userDetailsForEvent = new NewUserDetails(
         this.userDetails.getUsername(),
         this.userDetails.getDisplayName(),
-        Optional.of(new NewUserDetails.Credentials(OBFUSCATED_STRING)),
+        new NewUserDetails.Credentials(OBFUSCATED_STRING),
         this.userDetails.getRoles());
     return new CompletedUserRegistration(userDetailsForEvent, this.origin, this.registrationDate);
   }

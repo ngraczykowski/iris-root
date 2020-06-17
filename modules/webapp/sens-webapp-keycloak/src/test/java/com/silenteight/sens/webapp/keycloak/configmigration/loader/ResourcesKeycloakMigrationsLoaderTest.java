@@ -68,9 +68,9 @@ class ResourcesKeycloakMigrationsLoaderTest {
     KeycloakMigrations actual = underTest.load();
 
     assertThat(actual.partialMigrations()).isEmpty();
-    Optional<Migration> actualBaseMigration = actual.baseMigration();
-    assertThat(actualBaseMigration).isNotEmpty();
-    assertThatMigration(actualBaseMigration.get())
+    Migration actualBaseMigration = actual.baseMigration();
+    assertThat(actualBaseMigration).isNotNull();
+    assertThatMigration(actualBaseMigration)
         .hasJson(readTestFile("just-base-migration", "0-migration.json"))
         .hasName("0-migration.json");
   }
@@ -84,9 +84,9 @@ class ResourcesKeycloakMigrationsLoaderTest {
     KeycloakMigrations actual = underTest.load();
 
     assertThat(actual.partialMigrations()).isEmpty();
-    Optional<Migration> actualBaseMigration = actual.baseMigration();
-    assertThat(actualBaseMigration).isNotEmpty();
-    assertThatMigration(actualBaseMigration.get())
+    Migration actualBaseMigration = actual.baseMigration();
+    assertThat(actualBaseMigration).isNotNull();
+    assertThatMigration(actualBaseMigration)
         .hasJson(expectedJson)
         .hasName("0-migration.json.ftl");
     then(simpleTemplateParser).should().parse(expectedJson, emptyTemplateProperties);
@@ -98,7 +98,7 @@ class ResourcesKeycloakMigrationsLoaderTest {
 
     KeycloakMigrations actual = underTest.load();
 
-    assertThat(actual.baseMigration()).isEmpty();
+    assertThat(actual.baseMigration()).isNull();
     assertThat(actual.partialMigrations()).isEmpty();
   }
 
@@ -123,9 +123,9 @@ class ResourcesKeycloakMigrationsLoaderTest {
             .hasPolicy(ON_FIRST_RUN)
             .hasOrdinal(2)
             .hasName("2-onFirstRun-secondPartial.json.ftl"));
-    Optional<Migration> actualBaseMigration = actual.baseMigration();
-    assertThat(actualBaseMigration).isNotEmpty();
-    assertThatMigration(actual.baseMigration().get())
+    Migration actualBaseMigration = actual.baseMigration();
+    assertThat(actualBaseMigration).isNotNull();
+    assertThatMigration(actual.baseMigration())
         .hasJson(baseJson)
         .hasName("0-base.json.ftl");
     then(simpleTemplateParser).should().parse(baseJson, emptyTemplateProperties);

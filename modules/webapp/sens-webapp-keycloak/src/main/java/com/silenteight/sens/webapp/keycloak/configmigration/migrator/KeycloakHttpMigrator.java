@@ -60,8 +60,9 @@ class KeycloakHttpMigrator implements KeycloakMigrator {
   }
 
   private static Migration getBaseMigration(KeycloakMigrations migrations) {
-    return migrations
-        .baseMigration()
-        .orElseThrow(() -> new CouldNotPerformMigrationException("No base migration is provided"));
+    if (migrations.baseMigration() == null)
+      throw new CouldNotPerformMigrationException("No base migration is provided");
+
+    return migrations.baseMigration();
   }
 }
