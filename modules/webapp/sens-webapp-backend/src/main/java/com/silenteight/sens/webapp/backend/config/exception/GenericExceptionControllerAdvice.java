@@ -20,10 +20,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 @Order(ControllerAdviceOrder.GLOBAL)
 public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdvice {
+
+  private static final String ERRORS = "errors";
+  private static final String INVALID_REQUEST = "Invalid request";
 
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ErrorDto> handle(AccessDeniedException e) {
@@ -32,16 +36,13 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorDto> handle(MethodArgumentNotValidException e) {
-    Map<String, Object> extras = new HashMap<>();
-    extras.put("errors", errorDescriptionsOf(e));
-    return handle(e, "Invalid request", HttpStatus.BAD_REQUEST, extras);
+    return handle(
+        e, INVALID_REQUEST, HttpStatus.BAD_REQUEST, Map.of(ERRORS, errorDescriptionsOf(e)));
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ErrorDto> handle(HttpMessageNotReadableException e) {
-    Map<String, Object> extras = new HashMap<>();
-    extras.put("errors", e.getMessage());
-    return handle(e, "Invalid request", HttpStatus.BAD_REQUEST, extras);
+    return handle(e, INVALID_REQUEST, HttpStatus.BAD_REQUEST, Map.of(ERRORS, e.getMessage()));
   }
 
   private Stream<String> errorDescriptionsOf(MethodArgumentNotValidException e) {
@@ -65,7 +66,7 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
     extras.put("parameterName", e.getParameterName());
     extras.put("parameterType", e.getParameterType());
 
-    return handle(e, "MissingRequestParameter", HttpStatus.BAD_REQUEST, extras);
+    return handle(e, "Missing request parameter", HttpStatus.BAD_REQUEST, extras);
   }
 
   @ExceptionHandler(UnsatisfiedServletRequestParameterException.class)
@@ -88,10 +89,9 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
 
   @ExceptionHandler(MissingRequestHeaderException.class)
   public ResponseEntity<ErrorDto> handle(MissingRequestHeaderException e) {
-    Map<String, Object> extras = new HashMap<>();
-    extras.put("headerName", e.getHeaderName());
-
-    return handle(e, "Missing request header", HttpStatus.BAD_REQUEST, extras);
+    return handle(
+        e, "Missing request header", HttpStatus.BAD_REQUEST,
+        Map.of("headerName", e.getHeaderName()));
   }
 
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -106,6 +106,11 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
   @ExceptionHandler(ServletRequestBindingException.class)
   public ResponseEntity<ErrorDto> handle(ServletRequestBindingException e) {
     return handle(e, "RequestBindingException", HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ErrorDto> handle(ConstraintViolationException e) {
+    return handle(e, INVALID_REQUEST, HttpStatus.BAD_REQUEST, Map.of(ERRORS, e.getMessage()));
   }
 
   @ExceptionHandler({

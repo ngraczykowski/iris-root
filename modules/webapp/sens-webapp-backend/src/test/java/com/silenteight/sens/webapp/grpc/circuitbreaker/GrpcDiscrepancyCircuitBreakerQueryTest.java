@@ -1,9 +1,7 @@
 package com.silenteight.sens.webapp.grpc.circuitbreaker;
 
+import com.silenteight.proto.serp.v1.api.*;
 import com.silenteight.proto.serp.v1.api.DiscrepancyCircuitBreakerGrpc.DiscrepancyCircuitBreakerBlockingStub;
-import com.silenteight.proto.serp.v1.api.DiscrepantBranch;
-import com.silenteight.proto.serp.v1.api.DiscrepantBranchId;
-import com.silenteight.proto.serp.v1.api.ListDiscrepantBranchesResponse;
 import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepantBranchDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
@@ -11,6 +9,7 @@ import com.google.protobuf.Empty;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
+import static java.time.Instant.now;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -37,10 +37,10 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
   void returnsListOfDiscrepantBranches() {
     long decisionTreeId1 = 1L;
     long featureVectorId1 = 12L;
-    Instant detectedAt1 = Instant.now().minusMillis(1000);
+    Instant detectedAt1 = now().minusMillis(1000);
     long decisionTreeId2 = 2L;
     long featureVectorId2 = 13L;
-    Instant detectedAt2 = Instant.now();
+    Instant detectedAt2 = now();
 
     when(discrepancyBlockingStub.listDiscrepantBranches(any(Empty.class)))
         .thenReturn(
@@ -73,6 +73,54 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
     ThrowingCallable featureNamesCall = () -> query.listDiscrepantBranches();
 
     assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
+  }
+
+  @Test
+  void listDiscrepanciesThrowsGrpcException_whenGrpcThrowsException() {
+    List<Long> discrepancyIds = List.of(1L);
+
+    when(discrepancyBlockingStub.listDiscrepancies(argThat(requestContains(discrepancyIds))))
+        .thenThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
+
+    ThrowingCallable listDiscrepanciesCall = () -> query.listDiscrepanciesByIds(discrepancyIds);
+
+    assertThatThrownBy(listDiscrepanciesCall).isInstanceOf(GrpcCommunicationException.class);
+  }
+
+  private ListDiscrepanciesResponse listDiscrepanciesResponseWith(List<Discrepancy> discrepancyL) {
+    return ListDiscrepanciesResponse.newBuilder()
+        .addAllDiscrepancies(discrepancyL)
+        .build();
+  }
+
+  private Discrepancy discrepancyOf(
+      long id1, String alertId,
+      String aiComment, Instant aiCommentDate,
+      String analystComment, Instant analystCommentDate) {
+    return Discrepancy.newBuilder()
+        .setId(id1)
+        .setAlertId(alertId)
+        .setAiComment(Comment
+            .newBuilder()
+            .setText(aiComment)
+            .setDate(toTimestamp(aiCommentDate)))
+        .setAnalystComment(Comment
+            .newBuilder()
+            .setText(analystComment)
+            .setDate(toTimestamp(analystCommentDate)))
+        .build();
+  }
+
+  private ArgumentMatcher<ListDiscrepanciesRequest> requestContains(List<Long> discrepancyIds) {
+    return r -> r.getDiscrepancyIds().getDiscrepancyIdsList().equals(discrepancyIds);
+  }
+
+  private ListDiscrepancyIdsResponse listDiscrepancyIdsResponseWith(List<Long> discrepancyIds) {
+    return ListDiscrepancyIdsResponse
+        .newBuilder()
+        .setDiscrepancyIds(
+            DiscrepancyIds.newBuilder().addAllDiscrepancyIds(discrepancyIds))
+        .build();
   }
 
   private ListDiscrepantBranchesResponse discrepantBranchesResponseWith(

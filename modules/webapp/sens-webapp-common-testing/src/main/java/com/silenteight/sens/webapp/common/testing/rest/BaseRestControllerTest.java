@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -135,6 +137,14 @@ public abstract class BaseRestControllerTest {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
       http.csrf().disable();
+    }
+
+    //TODO: investigate why this is needed for the method validation to happen in controller tests.
+    // Normally it's getting created automatically by Spring Boot
+    // Looks like the default Spring Boot config is not used here at all
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+      return new MethodValidationPostProcessor();
     }
   }
 }

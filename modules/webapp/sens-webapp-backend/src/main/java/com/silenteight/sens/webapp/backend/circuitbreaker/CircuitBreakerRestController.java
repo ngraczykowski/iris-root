@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,4 +31,13 @@ class CircuitBreakerRestController {
   public ResponseEntity<List<DiscrepantBranchDto>> listDiscrepantBranches() {
     return ok(query.listDiscrepantBranches());
   }
+
+  @GetMapping("/discrepancies")
+  @PreAuthorize(BUSINESS_OPERATOR)
+  public ResponseEntity<List<DiscrepancyDto>> listDiscrepancies(
+      @RequestParam("id") List<Long> ids) {
+    return ok(query.listDiscrepanciesByIds(ids));
+  }
 }
+
+

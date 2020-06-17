@@ -3,10 +3,10 @@ package com.silenteight.sens.webapp.grpc.circuitbreaker;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.proto.serp.v1.api.*;
 import com.silenteight.proto.serp.v1.api.DiscrepancyCircuitBreakerGrpc.DiscrepancyCircuitBreakerBlockingStub;
-import com.silenteight.proto.serp.v1.api.DiscrepantBranch;
-import com.silenteight.proto.serp.v1.api.DiscrepantBranchId;
 import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepancyCircuitBreakerQuery;
+import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepancyDto;
 import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepantBranchDto;
 import com.silenteight.sens.webapp.backend.circuitbreaker.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
@@ -38,7 +38,7 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
             .listDiscrepantBranches(Empty.newBuilder().build())
             .getDiscrepantBranchesList()
             .stream()
-            .map(this::toDto)
+            .map(GrpcDiscrepancyCircuitBreakerQuery::toDto)
             .collect(toList()));
 
     return mapStatusExceptionsToCommunicationException(discrepantBranches)
@@ -49,14 +49,50 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
         .get();
   }
 
-  private DiscrepantBranchDto toDto(DiscrepantBranch discrepantBranch) {
+  @Override
+  public List<DiscrepancyDto> listDiscrepanciesByIds(List<Long> discrepancyIds) {
+    Try<List<DiscrepancyDto>> discrepancies =
+        of(() -> discrepancyBlockingStub
+            .listDiscrepancies(listDiscrepanciesRequestOf(discrepancyIds))
+            .getDiscrepanciesList()
+            .stream()
+            .map(GrpcDiscrepancyCircuitBreakerQuery::toDto)
+            .collect(toList()));
+
+    return mapStatusExceptionsToCommunicationException(discrepancies)
+        .recoverWith(
+            GrpcCommunicationException.class,
+            exception -> Match(exception).of(
+                Case($(), () -> failure(exception))))
+        .get();
+  }
+
+  private static ListDiscrepanciesRequest listDiscrepanciesRequestOf(List<Long> discrepancyIds) {
+    return ListDiscrepanciesRequest
+        .newBuilder()
+        .setDiscrepancyIds(DiscrepancyIds.newBuilder().addAllDiscrepancyIds(discrepancyIds))
+        .build();
+  }
+
+  private static DiscrepantBranchDto toDto(DiscrepantBranch discrepantBranch) {
     DiscrepantBranchId branchId = discrepantBranch.getDiscrepantBranchId();
     return new DiscrepantBranchDto(
         toBranchIdDto(branchId),
         toInstant(discrepantBranch.getDetectedAt()));
   }
 
-  private ReasoningBranchIdDto toBranchIdDto(DiscrepantBranchId branchId) {
+  private static DiscrepancyDto toDto(Discrepancy discrepantBranch) {
+    return DiscrepancyDto.builder()
+        .id(discrepantBranch.getId())
+        .alertId(discrepantBranch.getAlertId())
+        .aiComment(discrepantBranch.getAiComment().getText())
+        .aiCommentDate(toInstant(discrepantBranch.getAiComment().getDate()))
+        .analystComment(discrepantBranch.getAnalystComment().getText())
+        .analystCommentDate(toInstant(discrepantBranch.getAnalystComment().getDate()))
+        .build();
+  }
+
+  private static ReasoningBranchIdDto toBranchIdDto(DiscrepantBranchId branchId) {
     return new ReasoningBranchIdDto(branchId.getDecisionTreeId(), branchId.getFeatureVectorId());
   }
 }
