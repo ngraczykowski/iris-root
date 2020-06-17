@@ -17,14 +17,21 @@ box "Governance" #LightBlue
 end box
 
 BO -> Frontend : Select RB Browser
-activate Frontend
 
+note over Frontend
+Two simultaneous connections:
+* Reasoning Branches and Bulk Changes
+* Pending Changes
+end note
+
+activate Frontend
 Frontend -> Backend : Fetch Reasoning Branches Page
 note over Frontend, Backend
     * Filters (AI Solution, Active)
     * Paging
 end note
 
+activate Frontend #LightGray
 activate Backend
 Backend <-> G : Fetch Reasoning Branches Page
 note over Backend, G
@@ -52,20 +59,21 @@ end note
 
 Backend -> Frontend : Bulk Change IDs
 deactivate Backend
+deactivate Frontend
 
-Frontend -> Backend : Fetch Change Request IDs
+
+Frontend -> Backend : Fetch Pending Change Requests
 activate Backend
-note over Frontend, Backend
-    * Bulk Change IDs
-end note
-
-Backend <-> WebAppDB : Fetch Change Request IDs
+activate Frontend#LightGray
+Backend <-> WebAppDB : Fetch Pending Change Requests
 note over Backend, WebAppDB
     * Change Request ID
+    * Bulk Change ID
 end note
 
-Backend -> Frontend : Change Request IDs
+Backend -> Frontend : Pending Change Requests
 deactivate Backend
+deactivate Frontend
 
 Frontend -> BO: Reasoning Branches list
 deactivate Frontend
