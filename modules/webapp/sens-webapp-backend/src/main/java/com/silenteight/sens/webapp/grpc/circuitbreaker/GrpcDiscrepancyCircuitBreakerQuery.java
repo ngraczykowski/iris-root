@@ -50,6 +50,35 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
   }
 
   @Override
+  public List<Long> listDiscrepancyIds(ReasoningBranchIdDto branchId) {
+    Try<List<Long>> discrepancyIds =
+        of(() -> discrepancyBlockingStub
+            .listDiscrepancyIds(listDiscrepancyIdsRequestOf(
+                branchId.getDecisionTreeId(), branchId.getFeatureVectorId()))
+            .getDiscrepancyIds()
+            .getDiscrepancyIdsList());
+
+    return mapStatusExceptionsToCommunicationException(discrepancyIds)
+        .recoverWith(
+            GrpcCommunicationException.class,
+            exception -> Match(exception).of(
+                Case($(), () -> failure(exception))))
+        .get();
+  }
+
+  private ListDiscrepancyIdsRequest listDiscrepancyIdsRequestOf(
+      long decisionTreeId, long featureVectorId) {
+    return ListDiscrepancyIdsRequest.newBuilder()
+        .setDiscrepantBranchId(
+            DiscrepantBranchId
+                .newBuilder()
+                .setDecisionTreeId(decisionTreeId)
+                .setFeatureVectorId(featureVectorId)
+        ).build();
+  }
+
+
+  @Override
   public List<DiscrepancyDto> listDiscrepanciesByIds(List<Long> discrepancyIds) {
     Try<List<DiscrepancyDto>> discrepancies =
         of(() -> discrepancyBlockingStub

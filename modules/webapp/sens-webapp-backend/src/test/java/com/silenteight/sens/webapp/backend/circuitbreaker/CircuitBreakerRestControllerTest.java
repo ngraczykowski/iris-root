@@ -13,6 +13,7 @@ import java.util.List;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
+import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static java.util.Collections.emptyList;
@@ -21,14 +22,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     CircuitBreakerRestController.class,
-    GenericExceptionControllerAdvice.class })
+    GenericExceptionControllerAdvice.class,
+    CircuitBreakerRestControllerAdvice.class })
 class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
 
   private static final String DISCREPANT_BRANCHES_URL = "/discrepant-branches";
+  private static final String DISCREPANCY_IDS_URL = "/discrepant-branches/%s/discrepancy-ids";
   private static final String DISCREPANCIES_URL = "/discrepancies";
 
   @MockBean
@@ -73,6 +77,63 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
       get(DISCREPANT_BRANCHES_URL).statusCode(FORBIDDEN.value());
     }
   }
+
+  @Nested
+  class DiscrepancyIdsList {
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    void its200WithEmptyListWhenNoDiscrepancyIds() {
+      long decisionTreeId = 1L;
+      long featureVectorId = 2L;
+      given(query.listDiscrepancyIds(
+          new ReasoningBranchIdDto(decisionTreeId, featureVectorId))).willReturn(emptyList());
+
+      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId))
+          .contentType(anything())
+          .statusCode(OK.value())
+          .body("size()", is(0));
+    }
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    void its200WithCorrectBody_whenFound() {
+      long decisionTreeId = 2L;
+      long featureVectorId = 3L;
+      given(query.listDiscrepancyIds(
+          new ReasoningBranchIdDto(decisionTreeId, featureVectorId))).willReturn(List.of(22L, 33L));
+
+      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId))
+          .contentType(anything())
+          .statusCode(OK.value())
+          .body("size()", is(2))
+          .body("[0]", is(22))
+          .body("[1]", is(33));
+    }
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    void its404_whenBranchIdIncorrect() {
+      get(discrepancyIdsUrlWith("abc"))
+          .contentType(anything())
+          .statusCode(NOT_FOUND.value());
+
+      get(discrepancyIdsUrlWith("abc-bcd"))
+          .contentType(anything())
+          .statusCode(NOT_FOUND.value());
+    }
+
+    @TestWithRole(roles = { ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      get(discrepancyIdsUrlWith(1L, 1L)).statusCode(FORBIDDEN.value());
+    }
+
+    private String discrepancyIdsUrlWith(long decisionTreeId, long featureVectorId) {
+      return format(DISCREPANCY_IDS_URL, format("%d-%d", decisionTreeId, featureVectorId));
+    }
+
+    private String discrepancyIdsUrlWith(String branchId) {
+      return format(DISCREPANCY_IDS_URL, branchId);
+    }
+  }
+
 
   @Nested
   class DiscrepancyList {
