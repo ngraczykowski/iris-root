@@ -49,7 +49,7 @@ deactivate Backend
 Frontend -> Backend : Fetch Bulk Change IDs
 activate Backend
 note over Frontend, Backend
-    * Feature Vector IDs
+    * Reasoning Branch IDs
 end note
 
 Backend <-> G : Fetch Bulk Change IDs
