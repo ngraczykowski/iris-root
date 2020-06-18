@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.domain;
 
-import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.domain.dto.ChangeRequestDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

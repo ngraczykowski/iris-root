@@ -4,7 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.backend.changerequest.dto.ChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.domain.dto.ChangeRequestDto;
+import com.silenteight.sens.webapp.backend.changerequest.pending.PendingChangeRequestQuery;
 
 import java.util.List;
 
@@ -14,11 +15,12 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ChangeRequestQuery {
+class ChangeRequestQuery implements PendingChangeRequestQuery {
 
   @NonNull
   private final ChangeRequestRepository repository;
 
+  @Override
   public List<ChangeRequestDto> listPending() {
     log.info(CHANGE_REQUEST, "Listing pending Change Requests.");
 

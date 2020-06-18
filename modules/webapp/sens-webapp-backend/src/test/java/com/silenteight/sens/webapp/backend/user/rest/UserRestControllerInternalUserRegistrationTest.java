@@ -5,7 +5,6 @@ import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole
 import io.vavr.control.Either;
 import org.hamcrest.Matchers;
 
-import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME_NOT_UNIQUE;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_DOMAIN_ERROR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_SUCCESS;
@@ -49,7 +48,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
 
     post("/users", VALID_REQUEST)
         .statusCode(CREATED.value())
-        .header("Location", Matchers.endsWith("/users/" + USERNAME));
+        .header("Location", Matchers.endsWith("/users/" + UserRestControllerFixtures.USERNAME));
   }
 
   @TestWithRole(roles = { ANALYST, AUDITOR, BUSINESS_OPERATOR })

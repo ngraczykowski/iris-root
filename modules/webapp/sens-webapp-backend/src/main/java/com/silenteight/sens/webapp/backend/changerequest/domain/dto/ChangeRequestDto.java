@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.dto;
+package com.silenteight.sens.webapp.backend.changerequest.domain.dto;
 
 import lombok.*;
 

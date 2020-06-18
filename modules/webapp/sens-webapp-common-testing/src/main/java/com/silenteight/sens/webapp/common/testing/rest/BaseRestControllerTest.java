@@ -43,6 +43,8 @@ public abstract class BaseRestControllerTest {
   @Autowired
   private WebApplicationContext context;
 
+  protected static final String USERNAME = "username";
+
   @RegisterExtension
   public static TestWithRoleExtension testWithRoleExtension =
       new TestWithRoleExtension(new NewContextRoleSetter());
