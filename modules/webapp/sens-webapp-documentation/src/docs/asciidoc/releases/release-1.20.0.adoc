@@ -1,0 +1,27 @@
+:release_version: 1.20.0
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *RELEASED*
+- Release date: *15.06.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+- https://repo.silenteight.com/ui/repos/tree/General/libs-release-local%2Fcom%2Fsilenteight%2Fsens%2Fwebapp%2Fsens-webapp-backend%2F{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/-/commit/eb543860393435c5a4d29b71ec04878ee556e96b[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/-/merge_requests/1516[SERP master MR]
+
+:leveloffset: +1
+
+// --------------------------------------------------------------------
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-645[WA-645]
+|Business Operator can download a CSV report from the Web App presenting the list of reasoning branches.
+|{issue_url}WA-619[WA-619]
+|Business Operator can cancel any Pending Change Request.
+|{issue_url}WA-861[WA-861]
+|Front-end developers can use Swagger from serp-master.
+
+include::./templates/changelog-table-footer.adoc[]
