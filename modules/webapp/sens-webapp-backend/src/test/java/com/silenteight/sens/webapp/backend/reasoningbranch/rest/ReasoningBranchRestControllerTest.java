@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Import;
 import static com.silenteight.sens.webapp.backend.reasoningbranch.rest.ReasoningBranchRestControllerTest.ReasoningBranchRestControllerFixtures.*;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.lang.String.format;
-import static java.time.OffsetDateTime.parse;
-import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+import static java.time.Instant.parse;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -92,7 +91,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
             .reasoningBranchId(new ReasoningBranchIdDto(TREE_ID, FEATURE_VECTOR_ID_1))
             .aiSolution(AI_SOLUTION)
             .active(IS_ACTIVE)
-            .updatedAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
+            .updatedAt(parse("2020-05-03T10:15:30Z"))
             .build();
 
     static final ReasoningBranchDto REASONING_BRANCH_2 =
@@ -101,7 +100,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
             .reasoningBranchId(new ReasoningBranchIdDto(TREE_ID, FEATURE_VECTOR_ID_2))
             .aiSolution(AI_SOLUTION)
             .active(IS_ACTIVE)
-            .updatedAt(parse("2020-05-23T12:40:15+01:00", ISO_OFFSET_DATE_TIME))
+            .updatedAt(parse("2020-06-12T09:25:45Z"))
             .build();
   }
 }

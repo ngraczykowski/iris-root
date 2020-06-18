@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -16,5 +16,5 @@ public class ReasoningBranchDto {
   private final String aiSolution;
   private final boolean active;
   @NonNull
-  private final OffsetDateTime updatedAt;
+  private final Instant updatedAt;
 }

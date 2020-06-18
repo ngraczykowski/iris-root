@@ -44,7 +44,7 @@ class ReasoningBranchRestController {
             new ReasoningBranchFilterDto(request.getAiSolution(), request.getActive()),
             new Paging(request.getOffset(), request.getLimit()));
 
-    log.info(REASONING_BRANCH, "Found page of Reasoning Branches. total={}", page.getTotal());
+    log.info(REASONING_BRANCH, "Found a page of Reasoning Branches. total={}", page.getTotal());
 
     return ok(page);
   }

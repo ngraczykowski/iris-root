@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.grpc.reasoningbranch;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
+import com.silenteight.proto.serp.v1.common.Page;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary.Builder;
@@ -9,6 +10,11 @@ import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.Bra
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.BranchIdAndSignatureDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchFilterDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchesPageDto;
+import com.silenteight.sens.webapp.backend.support.Paging;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import com.google.protobuf.ByteString;
@@ -98,7 +104,7 @@ class GrpcReasoningBranchesQueryTest {
             reasoningBranchesResponseWith(
                 ReasoningBranchSummary
                     .newBuilder()
-                    .setReasoningBranchId(reasoningBranchId(reasoningBranchId))
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId, reasoningBranchId))
                     .setUpdatedAt(toTimestamp(updatedAt))
                     .setSolution(BRANCH_FALSE_POSITIVE)
                     .setEnabled(true)
@@ -147,11 +153,11 @@ class GrpcReasoningBranchesQueryTest {
             reasoningBranchesResponseWith(
                 ReasoningBranchSummary
                     .newBuilder()
-                    .setReasoningBranchId(reasoningBranchId(reasoningBranchId))
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId, reasoningBranchId))
                     .setFeatureVectorSignature(featureVectorSignature),
                 ReasoningBranchSummary
                     .newBuilder()
-                    .setReasoningBranchId(reasoningBranchId(1L))
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId, 1L))
                     .setFeatureVectorSignature(randomSignature())
             ));
 
@@ -180,11 +186,11 @@ class GrpcReasoningBranchesQueryTest {
             reasoningBranchesResponseWith(
                 ReasoningBranchSummary
                     .newBuilder()
-                    .setReasoningBranchId(reasoningBranchId(reasoningBranchId))
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId, reasoningBranchId))
                     .setFeatureVectorSignature(featureVectorSignature),
                 ReasoningBranchSummary
                     .newBuilder()
-                    .setReasoningBranchId(reasoningBranchId(1L))
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId, 1L))
                     .setFeatureVectorSignature(randomSignature())
             ));
 
@@ -205,13 +211,50 @@ class GrpcReasoningBranchesQueryTest {
     return ListReasoningBranchesResponse
         .newBuilder()
         .addAllReasoningBranch(stream(reasoningBranches).map(Builder::build).collect(toList()))
+        .setPage(Page.newBuilder().setTotalElements(reasoningBranches.length).build())
         .build();
   }
 
-  private static ReasoningBranchId reasoningBranchId(long featureVector) {
+  private static ReasoningBranchId reasoningBranchId(long decisionTreeId, long featureVector) {
     return ReasoningBranchId
         .newBuilder()
+        .setDecisionTreeId(decisionTreeId)
         .setFeatureVectorId(featureVector)
         .build();
+  }
+
+  @Test
+  void returnsPageOfReasoningBranches_whenRequestingByFilterAndPaging() {
+    int pageSize = 20;
+    long decisionTreeId1 = 4L;
+    long featureVectorId1 = 5L;
+    long decisionTreeId2 = 8L;
+    long featureVectorId2 = 9L;
+    ByteString featureVectorSignature = randomSignature();
+
+    given(branchStub.listReasoningBranches(
+        argThat(
+            request -> request.getPagination().getPageSize() == pageSize)))
+        .willReturn(
+            reasoningBranchesResponseWith(
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId1, featureVectorId1))
+                    .setFeatureVectorSignature(featureVectorSignature),
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId2, featureVectorId2))
+                    .setFeatureVectorSignature(randomSignature())
+            ));
+
+    ReasoningBranchesPageDto page =
+        underTest.list(new ReasoningBranchFilterDto(null, null), new Paging(0, pageSize));
+
+    assertThat(page.getTotal()).isEqualTo(2);
+    assertThat(page.getBranches())
+        .extracting(ReasoningBranchDto::getReasoningBranchId)
+        .containsExactly(
+            new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1),
+            new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2));
   }
 }

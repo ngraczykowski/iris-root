@@ -13,4 +13,12 @@ public class ReasoningBranchFilterDto {
   private final String aiSolution;
   @Nullable
   private final Boolean active;
+
+  public boolean hasAiSolution() {
+    return aiSolution != null;
+  }
+
+  public boolean hasEnablement() {
+    return active != null;
+  }
 }

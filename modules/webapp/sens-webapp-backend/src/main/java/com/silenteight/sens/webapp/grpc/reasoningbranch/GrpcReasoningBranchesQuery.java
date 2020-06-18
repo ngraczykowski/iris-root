@@ -5,15 +5,25 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest;
+import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest.BranchSolutionFilter;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest.DecisionTreeFilter;
+import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest.EnablementFilter;
+import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
+import com.silenteight.proto.serp.v1.common.Pagination;
+import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.BranchWithFeaturesDto;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.ReasoningBranchesReportQuery;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.ReasoningBranchesQuery;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.BranchIdAndSignatureDto;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.ReasoningBranchesValidateQuery;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchFilterDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchesPageDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.ReasoningBranchesQuery;
+import com.silenteight.sens.webapp.backend.support.Paging;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
@@ -24,6 +34,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.google.rpc.Code.NOT_FOUND;
+import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.valueOf;
 import static com.silenteight.protocol.utils.MoreTimestamps.toInstant;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
@@ -40,8 +51,11 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBranchesReportQuery,
-    ReasoningBranchesValidateQuery {
+class GrpcReasoningBranchesQuery implements
+    ReasoningBranchesQuery,
+    ReasoningBranchesReportQuery,
+    ReasoningBranchesValidateQuery,
+    com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.ReasoningBranchesQuery {
 
   private final BranchGovernanceBlockingStub branchesStub;
 
@@ -182,5 +196,98 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
 
   private static void logListingFailure(Throwable throwable) {
     log.error(REASONING_BRANCH, "Could not list Reasoning Branches", throwable);
+  }
+
+  @Override
+  public ReasoningBranchesPageDto list(ReasoningBranchFilterDto filter, Paging paging) {
+    log.info(REASONING_BRANCH,
+        "Listing Reasoning Branches using gRPC BranchGovernance. filter={}, paging={}",
+        filter, paging);
+
+    return mapStatusExceptionsToCommunicationException(
+        getReasoningBranchesPage(filter, paging))
+        .recoverWith(
+            GrpcCommunicationException.class,
+            exception -> Match(exception).of(
+                Case($(), () -> failure(exception))))
+        .onSuccess(GrpcReasoningBranchesQuery::logListingSuccess)
+        .onFailure(GrpcReasoningBranchesQuery::logListingFailure)
+        .get();
+  }
+
+  private Try<ReasoningBranchesPageDto> getReasoningBranchesPage(
+      ReasoningBranchFilterDto filter, Paging paging) {
+
+    return of(() -> branchesStub
+        .listReasoningBranches(buildRequest(filter, paging)))
+        .map(r -> new ReasoningBranchesPageDto(
+            mapToReasoningBranchDtos(r), mapToPageTotalElements(r)));
+  }
+
+  private static List<ReasoningBranchDto> mapToReasoningBranchDtos(
+      ListReasoningBranchesResponse response) {
+    
+    return response
+        .getReasoningBranchList()
+        .stream()
+        .map(GrpcReasoningBranchesQuery::mapToReasoningBranchDto)
+        .collect(toList());
+  }
+
+  private static ReasoningBranchDto mapToReasoningBranchDto(
+      ReasoningBranchSummary reasoningBranch) {
+    
+    return ReasoningBranchDto.builder()
+        .reasoningBranchId(mapToReasoningBranchId(reasoningBranch.getReasoningBranchId()))
+        .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
+        .active(reasoningBranch.getEnabled())
+        .updatedAt(toInstant(reasoningBranch.getUpdatedAt()))
+        .build();
+  }
+
+  private static ReasoningBranchIdDto mapToReasoningBranchId(ReasoningBranchId id) {
+    return new ReasoningBranchIdDto(id.getDecisionTreeId(), id.getFeatureVectorId());
+  }
+
+  private static long mapToPageTotalElements(ListReasoningBranchesResponse response) {
+    return response.getPage().getTotalElements();
+  }
+
+  private static ListReasoningBranchesRequest buildRequest(
+      ReasoningBranchFilterDto filter, Paging paging) {
+
+    ListReasoningBranchesRequest.Builder builder = ListReasoningBranchesRequest.newBuilder()
+        .setPagination(buildPagination(paging));
+
+    if (filter.hasAiSolution())
+      builder.setBranchSolutionFilter(buildBranchSolutionFilter(filter.getAiSolution()));
+
+    if (filter.hasEnablement())
+      builder.setEnablementFilter(buildEnablementFilter(filter.getActive()));
+
+    return builder.build();
+  }
+
+  private static Pagination buildPagination(Paging paging) {
+    return Pagination.newBuilder()
+        .setPageSize(paging.getLimit())
+        .setPageIndex(paging.getOffset() % paging.getLimit())
+        .build();
+  }
+
+  private static BranchSolutionFilter buildBranchSolutionFilter(String solution) {
+    return BranchSolutionFilter.newBuilder()
+        .addSolutions(valueOf(solution))
+        .build();
+  }
+
+  private static EnablementFilter buildEnablementFilter(boolean active) {
+    return EnablementFilter.newBuilder()
+        .setEnabled(active)
+        .build();
+  }
+
+  private static void logListingSuccess(ReasoningBranchesPageDto page) {
+    log.info(REASONING_BRANCH, "Found {} Reasoning Branches.", page.pageSize());
   }
 }

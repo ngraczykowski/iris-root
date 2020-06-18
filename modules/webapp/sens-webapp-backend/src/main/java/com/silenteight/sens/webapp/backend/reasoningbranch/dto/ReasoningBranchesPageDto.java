@@ -13,4 +13,8 @@ public class ReasoningBranchesPageDto {
   @NonNull
   private final List<ReasoningBranchDto> branches;
   private final long total;
+
+  public int pageSize() {
+    return branches.size();
+  }
 }
