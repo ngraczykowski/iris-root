@@ -92,7 +92,8 @@ class GrpcReasoningBranchesQueryTest {
     String featureValue2 = "featureValue2";
 
     given(branchStub.listReasoningBranches(
-        argThat(request -> request.getDecisionTreeId() == decisionTreeId)))
+        argThat(
+            request -> request.getDecisionTreeFilter().getDecisionTreeIds(0) == decisionTreeId)))
         .willReturn(
             reasoningBranchesResponseWith(
                 ReasoningBranchSummary
@@ -140,7 +141,8 @@ class GrpcReasoningBranchesQueryTest {
     ByteString featureVectorSignature = randomSignature();
 
     given(branchStub.listReasoningBranches(
-        argThat(request -> request.getDecisionTreeId() == decisionTreeId)))
+        argThat(
+            request -> request.getDecisionTreeFilter().getDecisionTreeIds(0) == decisionTreeId)))
         .willReturn(
             reasoningBranchesResponseWith(
                 ReasoningBranchSummary
@@ -172,7 +174,8 @@ class GrpcReasoningBranchesQueryTest {
     ByteString featureVectorSignature = randomSignature();
 
     given(branchStub.listReasoningBranches(
-        argThat(request -> request.getDecisionTreeId() == decisionTreeId)))
+        argThat(
+            request -> request.getDecisionTreeFilter().getDecisionTreeIds(0) == decisionTreeId)))
         .willReturn(
             reasoningBranchesResponseWith(
                 ReasoningBranchSummary

@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.backend.changerequest.approve;
 
-import lombok.extern.slf4j.Slf4j;
-
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
@@ -27,7 +25,6 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@Slf4j
 @Import({ ApproveChangeRequestRestController.class, GenericExceptionControllerAdvice.class })
 class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
 
@@ -92,5 +89,4 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   private String mappingForApproval(long id) {
     return "/change-request/" + id + "/approve";
   }
-
 }

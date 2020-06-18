@@ -12,7 +12,8 @@ import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId.Builder;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
-import com.silenteight.sens.webapp.backend.bulkchange.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningBranchDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -125,6 +127,68 @@ class GrpcBulkChangeQueryTest {
     assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
   }
 
+  @Test
+  void returnsBulkChangeIds() {
+    UUID bulkChangeId1 = randomUUID();
+    UUID bulkChangeId2 = randomUUID();
+    UUID bulkChangeId3 = randomUUID();
+    long decisionTreeId1 = 1L;
+    long decisionTreeId2 = 2L;
+    long featureVectorId1 = 12L;
+    long featureVectorId2 = 15L;
+    long featureVectorId3 = 13L;
+    long featureVectorId4 = 25L;
+    ReasoningBranchId reasoningBranchId1 =
+        reasoningBranchIdOf(decisionTreeId1, featureVectorId1).build();
+    ReasoningBranchId reasoningBranchId2 =
+        reasoningBranchIdOf(decisionTreeId2, featureVectorId2).build();
+
+    when(bulkBranchChangeStub.listBulkBranchChanges(
+        withStateAndReasoningBranchIds(
+            STATE_CREATED,
+            List.of(reasoningBranchId1, reasoningBranchId2))))
+        .thenReturn(
+            listBulkBranchChangesResponseWith(
+                bulkBranchChangeViewWith(
+                    bulkChangeId1, true, BRANCH_FALSE_POSITIVE,
+                    reasoningBranchIdOf(decisionTreeId1, featureVectorId1),
+                    reasoningBranchIdOf(decisionTreeId1, featureVectorId3)),
+                bulkBranchChangeViewWith(
+                    bulkChangeId2, true, BRANCH_FALSE_POSITIVE,
+                    reasoningBranchIdOf(decisionTreeId1, featureVectorId1),
+                    reasoningBranchIdOf(decisionTreeId2, featureVectorId2)),
+                bulkBranchChangeViewWith(
+                    bulkChangeId3, false, BRANCH_POTENTIAL_TRUE_POSITIVE,
+                    reasoningBranchIdOf(decisionTreeId2, featureVectorId2),
+                    reasoningBranchIdOf(decisionTreeId2, featureVectorId4))));
+
+    List<BulkChangeIdsForReasoningBranchDto> bulkChangeIds =
+        bulkChangeQuery.getIds(
+            List.of(
+                new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1),
+                new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2)));
+
+    assertThat(bulkChangeIds).hasSize(2);
+    assertThat(bulkChangeIds).containsExactly(
+        new BulkChangeIdsForReasoningBranchDto(
+            new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1),
+            List.of(bulkChangeId1, bulkChangeId2)),
+        new BulkChangeIdsForReasoningBranchDto(
+            new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2),
+            List.of(bulkChangeId2, bulkChangeId3)));
+  }
+
+  @Test
+  void throwsGrpcException_whenGrpcThrowsNotFoundStatusException_requestingBulkChangeIds() {
+    List<ReasoningBranchIdDto> reasoningBranchIds = List.of(new ReasoningBranchIdDto(1L, 20L));
+    when(bulkBranchChangeStub.listBulkBranchChanges(any())).thenThrow(
+        OTHER_STATUS_RUNTIME_EXCEPTION);
+
+    ThrowingCallable featureNamesCall = () -> bulkChangeQuery.getIds(reasoningBranchIds);
+
+    assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
+  }
+
   private ListBulkBranchChangesResponse listBulkBranchChangesResponseWith(
       BulkBranchChangeView.Builder... bulkChanges) {
     ListBulkBranchChangesResponse.Builder responseBuilder = ListBulkBranchChangesResponse
@@ -169,5 +233,16 @@ class GrpcBulkChangeQueryTest {
     return argThat(r ->
         r.getStateFilter().getStatesList().size() == 1 &&
             r.getStateFilter().getStatesList().contains(state));
+  }
+
+  private ListBulkBranchChangesRequest withStateAndReasoningBranchIds(
+      State state, Collection<ReasoningBranchId> reasoningBranchIds) {
+
+    return argThat(r ->
+        r.getStateFilter().getStatesList().size() == 1
+            && r.getStateFilter().getStatesList().contains(state)
+            && r.getReasoningBranchFilter().getReasoningBranchIdsList().size() == 2
+            && r.getReasoningBranchFilter().getReasoningBranchIdsList()
+            .containsAll(reasoningBranchIds));
   }
 }

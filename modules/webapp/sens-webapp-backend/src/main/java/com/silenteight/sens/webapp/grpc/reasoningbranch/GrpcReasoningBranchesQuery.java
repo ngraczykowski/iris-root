@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.v1.api.BranchGovernanceGrpc.BranchGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest;
+import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest.DecisionTreeFilter;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.BranchWithFeaturesDto;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.ReasoningBranchesReportQuery;
@@ -125,7 +126,13 @@ class GrpcReasoningBranchesQuery implements ReasoningBranchesQuery, ReasoningBra
 
   private static ListReasoningBranchesRequest buildRequest(long treeId) {
     return ListReasoningBranchesRequest.newBuilder()
-        .setDecisionTreeId(treeId)
+        .setDecisionTreeFilter(buildDecisionTreeFilter(treeId))
+        .build();
+  }
+
+  private static DecisionTreeFilter buildDecisionTreeFilter(long treeId) {
+    return DecisionTreeFilter.newBuilder()
+        .addDecisionTreeIds(treeId)
         .build();
   }
 

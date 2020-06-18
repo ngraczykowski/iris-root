@@ -89,12 +89,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     static final ReasoningBranchDto REASONING_BRANCH_1 =
         ReasoningBranchDto
             .builder()
-            .reasoningBranchId(
-                ReasoningBranchIdDto
-                    .builder()
-                    .decisionTreeId(TREE_ID)
-                    .featureVectorId(FEATURE_VECTOR_ID_1)
-                    .build())
+            .reasoningBranchId(new ReasoningBranchIdDto(TREE_ID, FEATURE_VECTOR_ID_1))
             .aiSolution(AI_SOLUTION)
             .active(IS_ACTIVE)
             .updatedAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
@@ -103,12 +98,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     static final ReasoningBranchDto REASONING_BRANCH_2 =
         ReasoningBranchDto
             .builder()
-            .reasoningBranchId(
-                ReasoningBranchIdDto
-                    .builder()
-                    .decisionTreeId(TREE_ID)
-                    .featureVectorId(FEATURE_VECTOR_ID_2)
-                    .build())
+            .reasoningBranchId(new ReasoningBranchIdDto(TREE_ID, FEATURE_VECTOR_ID_2))
             .aiSolution(AI_SOLUTION)
             .active(IS_ACTIVE)
             .updatedAt(parse("2020-05-23T12:40:15+01:00", ISO_OFFSET_DATE_TIME))

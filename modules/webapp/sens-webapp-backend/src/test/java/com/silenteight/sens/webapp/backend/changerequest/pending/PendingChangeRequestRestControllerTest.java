@@ -1,7 +1,5 @@
 package com.silenteight.sens.webapp.backend.changerequest.pending;
 
-import lombok.extern.slf4j.Slf4j;
-
 import com.silenteight.sens.webapp.backend.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
@@ -26,7 +24,6 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Slf4j
 @Import({ PendingChangeRequestRestController.class, GenericExceptionControllerAdvice.class })
 class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 

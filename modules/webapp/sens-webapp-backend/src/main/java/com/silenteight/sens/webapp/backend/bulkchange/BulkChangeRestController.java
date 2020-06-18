@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,7 @@ import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATO
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -36,7 +38,13 @@ class BulkChangeRestController {
   @GetMapping("/bulk-changes")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<BulkChangeDto>> pendingBulkChanges() {
-    return ok(bulkChangeQuery.listPending());
+    log.debug(CHANGE_REQUEST, "Listing pending Bulk Changes");
+
+    List<BulkChangeDto> bulkChanges = bulkChangeQuery.listPending();
+
+    log.debug(CHANGE_REQUEST, "Found {} pending Bulk Changes", bulkChanges.size());
+
+    return ok(bulkChanges);
   }
 
   @PostMapping("/bulk-changes")
@@ -44,7 +52,7 @@ class BulkChangeRestController {
   public ResponseEntity<Void> create(
       @RequestBody @Valid BulkChangeDto dto,
       @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId) {
-    log.debug(CHANGE_REQUEST, "Requested to create Bulk Change, id={}", dto.getId());
+    log.debug(CHANGE_REQUEST, "Requested to create Bulk Change. id={}", dto.getId());
 
     RequestCorrelation.set(correlationId);
     createBulkChangeUseCase.apply(
@@ -56,7 +64,28 @@ class BulkChangeRestController {
             .cratedAt(dto.getCreatedAt())
             .build());
 
-    log.debug(CHANGE_REQUEST, "Requested to create Bulk Change accepted, id={}", dto.getId());
+    log.debug(CHANGE_REQUEST, "Requested to create Bulk Change accepted. id={}", dto.getId());
     return accepted().build();
+  }
+
+  @GetMapping("/bulk-changes/ids")
+  @PreAuthorize(BUSINESS_OPERATOR)
+  public ResponseEntity<List<BulkChangeIdsForReasoningBranchDto>> getIds(
+      @RequestParam List<String> reasoningBranchId) {
+    log.debug(CHANGE_REQUEST, "Requested to get Bulk Change IDs, reasoningBranchId={}",
+        reasoningBranchId);
+
+    List<BulkChangeIdsForReasoningBranchDto> bulkChangeIds =
+        bulkChangeQuery.getIds(toReasoningBranchIds(reasoningBranchId));
+
+    log.debug(CHANGE_REQUEST, "Found {} Bulk Change IDs", bulkChangeIds.size());
+    return ok(bulkChangeIds);
+  }
+
+  private static List<ReasoningBranchIdDto> toReasoningBranchIds(List<String> ids) {
+    return ids
+        .stream()
+        .map(ReasoningBranchIdDto::valueOf)
+        .collect(toList());
   }
 }

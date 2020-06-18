@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest;
+import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest.DecisionTreeFilter;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
@@ -22,10 +23,15 @@ final class GrpcReasoningBranchesQueryTestFixtures {
   static final List<Long> REASONING_BRANCH_IDS =
       asList(EXISTING_REASONING_BRANCH_ID, NOT_EXISTING_REASONING_BRANCH_ID);
 
+  private static final DecisionTreeFilter DECISION_TREE_FILTER = DecisionTreeFilter
+      .newBuilder()
+      .addDecisionTreeIds(DECISION_TREE_ID)
+      .build();
+
   static final ListReasoningBranchesRequest LIST_REASONING_BRANCHES_REQUEST =
       ListReasoningBranchesRequest
           .newBuilder()
-          .setDecisionTreeId(DECISION_TREE_ID)
+          .setDecisionTreeFilter(DECISION_TREE_FILTER)
           .build();
 
   private static final ReasoningBranchId SEARCHED_REASONING_BRANCH_ID =
