@@ -1,5 +1,8 @@
 package com.silenteight.sens.webapp.backend.config;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -29,6 +32,7 @@ import org.springframework.context.annotation.Profile;
 )
 @Configuration
 @Profile("swagger")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OpenApiConfiguration {
 
   static final String WEBAPP_OPENID_SECURITY_SCHEMA = "oauth2-webapp";

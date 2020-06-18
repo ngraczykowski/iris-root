@@ -61,7 +61,7 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
     try {
       return parseLong(decisionTreeId);
     } catch (NumberFormatException e) {
-      throw new IllegalParameterException(DECISION_TREE_ID_PARAM + " must be numeric");
+      throw new IllegalParameterException(DECISION_TREE_ID_PARAM + " must be numeric", e);
     }
   }
 
@@ -78,7 +78,7 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
     try {
       return reasoningBranchesByTreeQuery.findByTreeId(decisionTreeId);
     } catch (DecisionTreeNotFoundException e) {
-      throw new IllegalParameterException(DECISION_TREE_ID_PARAM + " unknown");
+      throw new IllegalParameterException(DECISION_TREE_ID_PARAM + " unknown", e);
     }
   }
 

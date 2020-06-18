@@ -85,7 +85,7 @@ class AuditReportGenerator implements ReportGenerator {
     try {
       return parse(bound);
     } catch (Exception e) {
-      throw new IllegalParameterException(parameterName + " must be datetime");
+      throw new IllegalParameterException(parameterName + " must be datetime", e);
     }
   }
 
