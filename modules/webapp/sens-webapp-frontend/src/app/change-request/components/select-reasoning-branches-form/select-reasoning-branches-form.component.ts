@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 export class SelectReasoningBranchesFormComponent implements OnInit {
   @Output() formSubmitted = new EventEmitter();
   @Output() formReset = new EventEmitter();
-  @ViewChild('toggleGroup', { static: true }) toggleGroup: MatButtonToggleGroup;
+  @ViewChild('toggleGroup', {static: true}) toggleGroup: MatButtonToggleGroup;
 
   reasoningBranchIdsControl = new FormControl('', [Validators.required, Validators.maxLength(1000)]);
   reasoningBranchSignatureControl = new FormControl('', [Validators.required, Validators.maxLength(1000)]);
@@ -23,19 +23,23 @@ export class SelectReasoningBranchesFormComponent implements OnInit {
   translatePrefix = 'changeRequest.select.';
 
   constructor(
-    private activatedRoute: ActivatedRoute
-  ) {}
+      private activatedRoute: ActivatedRoute
+  ) {
+    this.activatedRoute.queryParams.subscribe(par => {
+      this.loadReasoningBranchFromUrl(par['dt_id'], par['fv_ids']);
+    });
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe(data => {
-      if (data.get('decisionTreeId') && data.get('reasoningBranchId')) {
-        this.form.controls.decisionTreeId.setValue(data.get('decisionTreeId'));
-        this.form.controls.reasoningBranchIds.setValue(data.get('reasoningBranchId'));
-      }
-    });
-
     this.registerToggleGroupListener();
     this.toggleGroup.writeValue('id');
+  }
+
+  loadReasoningBranchFromUrl(decisionTreeId, reasoningBranchId) {
+    if (decisionTreeId && reasoningBranchId) {
+      this.form.controls.decisionTreeId.setValue(decisionTreeId);
+      this.form.controls.reasoningBranchIds.setValue(reasoningBranchId.replace(/,/g, '\n'));
+    }
   }
 
   onFormSubmit(): void {
@@ -69,5 +73,4 @@ export class SelectReasoningBranchesFormComponent implements OnInit {
     this.form.setErrors(null);
     this.formReset.emit();
   }
-
 }

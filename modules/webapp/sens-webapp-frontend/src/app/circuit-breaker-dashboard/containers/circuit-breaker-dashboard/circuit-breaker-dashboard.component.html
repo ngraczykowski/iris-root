@@ -4,6 +4,8 @@
              [stateContent]="stateLoading"></app-state>
   <app-state *ngIf="circuitBreakerEmptyState"
              [stateContent]="stateEmptyList"></app-state>
+  <app-state *ngIf="circuitBreakerError"
+             [stateContent]="stateError"></app-state>
 
   <app-circuit-breaker-list
           *ngIf="circuitBreakerList"

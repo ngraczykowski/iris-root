@@ -1,0 +1,16 @@
+[
+  {
+    "discrepantBranchId": {
+      "decisionTreeId": 1,
+      "featureVectorId": 1
+    },
+    "detectedAt": "2020-03-23T12:24:00Z"
+  },
+  {
+    "discrepantBranchId": {
+      "decisionTreeId": 1,
+      "featureVectorId": 2
+    },
+    "detectedAt": "2022-03-03T18:45:00Z"
+  }
+]

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
@@ -25,7 +26,8 @@ import { CircuitBreakerAlertsTableComponent } from './components/circuit-breaker
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
-    TranslateModule
+    TranslateModule,
+    MatSortModule
   ]
 })
 export class CircuitBreakerDashboardModule {}

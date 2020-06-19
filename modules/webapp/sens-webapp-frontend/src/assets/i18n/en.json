@@ -500,6 +500,11 @@
     "emptyState": {
       "title": "You don't have any disabled Reasoning Branches to verify"
     },
+    "errorState": {
+      "title": "Failed to download disabled Reasoning Branches list",
+      "description": "Please try to fetch disabled Reasoning Branches list if the problem will persist, contact the administrator.",
+      "button": "Fetch the disabled Reasoning Branches list"
+    },
     "element": {
       "header": {
         "id": "{{decisionTreeId}}-{{reasoningBranchId}}",
@@ -507,6 +512,11 @@
       },
       "loading": {
         "title": "Loading list of alerts"
+      },
+      "errorState": {
+        "title": "Failed to download discrepancies list",
+        "description": "Please try to fetch discrepancies list if the problem will persist, contact the administrator.",
+        "button": "Fetch the discrepancies list"
       },
       "dataLabels": {
         "alertId": "Alert ID",

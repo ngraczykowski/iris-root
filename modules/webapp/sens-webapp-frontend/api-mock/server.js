@@ -163,6 +163,44 @@ app.get('/rest/webapp/api/change-requests', (req, res) => {
   }
 });
 
+app.get('/rest/webapp/api/discrepant-branches', (req, res) => {
+  let dataFile;
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/list-discrepant-branches.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+});
+
+app.get('/rest/webapp/api/discrepant-branches/:id/discrepancy-ids', (req, res) => {
+  let dataFile;
+  const rbId = req.params.id;
+
+  try {
+    dataFile = fs.readFileSync(`${dataFolder}/list-discrepancy-ids-${rbId}.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+});
+
+app.get('/rest/webapp/api/discrepancies', (req, res) => {
+  dataFile = fs.readFileSync(`${dataFolder}/list-discrepancies-by-ids.json`);
+  let discrepancies = JSON.parse(dataFile);
+  const ids = req.query.id;
+
+  if (ids !== null) {
+    res.status(200).send(getDiscrepancies(ids, discrepancies));
+  } else {
+    res.status(404).send();
+  }
+});
+
 app.get('/rest/webapp/api/bulk-changes', (req, res) => {
   let dataFile;
   try {
@@ -315,6 +353,22 @@ function getUserObjectByUserName(userName, userList) {
   });
 
   return userObject;
+}
+
+function getDiscrepancies(ids, discrepancies) {
+  ids = ids.split(',').map(Number);
+
+  let discrepanciesList = [];
+
+  ids.forEach(id => {
+    discrepancies.filter((element) => {
+      if (element.id === id) {
+        discrepanciesList.push(element);
+      }
+    })
+  })
+
+  return discrepanciesList;
 }
 
 app.listen(24410, () => console.log('REST API mock server started at http://localhost:24410/'));

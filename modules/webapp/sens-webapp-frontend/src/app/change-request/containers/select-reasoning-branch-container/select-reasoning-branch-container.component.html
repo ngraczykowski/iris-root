@@ -1,13 +1,13 @@
 <app-state
-  *ngIf="verifingInProgress"
-  [stateContent]="rbVerification"
+        *ngIf="verifingInProgress"
+        [stateContent]="rbVerification"
 ></app-state>
-<app-error-card 
-  *ngIf="verifingError"
-  [errorContent]="verificationError"
+<app-error-card
+        *ngIf="verifingError"
+        [errorContent]="verificationError"
 ></app-error-card>
 <app-select-reasoning-branches
-  [hidden]="verifingInProgress"
-  (formReset)="formReset()"
-  (formSubmitted)="validate($event)"
+        [hidden]="verifingInProgress"
+        (formReset)="formReset()"
+        (formSubmitted)="validate($event)"
 ></app-select-reasoning-branches>

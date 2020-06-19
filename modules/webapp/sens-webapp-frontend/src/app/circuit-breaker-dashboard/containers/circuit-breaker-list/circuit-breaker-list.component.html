@@ -1,8 +1,10 @@
 <mat-accordion>
   <mat-expansion-panel *ngFor="let circuitBreakerElement of circuitBreakerList"
                        [attr.id]="'Location' + circuitBreakerElement.id"
-                       (opened)="circuitBreakerElement.active = true"
-                       (closed)="circuitBreakerElement.active = false"
+                       (opened)="loadDiscrepancies(
+                       circuitBreakerElement.discrepantBranchId.decisionTreeId,
+                       circuitBreakerElement.discrepantBranchId.featureVectorId
+                       )"
                        class="mat-expansion-panel--flat mat-elevation-z0">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -17,18 +19,22 @@
       } }}
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <ng-container *ngIf="circuitBreakerElement.active">
-      <app-state *ngIf="loadingDetails"
-                 [stateContent]="stateLoading"></app-state>
-      <ng-container *ngIf="showDetails">
-        <app-circuit-breaker-alerts-table></app-circuit-breaker-alerts-table>
-        <mat-action-row>
-          <button mat-flat-button
-                  color="primary">
-            <span [translate]="translatePrefix + 'footer.buttonChangeRequest'"></span>
-          </button>
-        </mat-action-row>
-      </ng-container>
+    <app-state *ngIf="loadingDetails"
+               [stateContent]="stateLoading"></app-state>
+    <app-state *ngIf="showError"
+               [stateContent]="stateError"></app-state>
+    <ng-container *ngIf="showDetails">
+      <app-circuit-breaker-alerts-table [discrepanciesList] = discrepanciesList></app-circuit-breaker-alerts-table>
+      <mat-action-row>
+        <button mat-flat-button
+                color="primary"
+                (click)="createChangeRequest(
+                circuitBreakerElement.discrepantBranchId.decisionTreeId,
+                circuitBreakerElement.discrepantBranchId.featureVectorId
+                )">
+          <span [translate]="translatePrefix + 'footer.buttonChangeRequest'"></span>
+        </button>
+      </mat-action-row>
     </ng-container>
   </mat-expansion-panel>
 </mat-accordion>

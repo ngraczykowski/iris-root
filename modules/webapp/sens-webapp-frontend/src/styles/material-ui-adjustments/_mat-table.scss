@@ -7,6 +7,16 @@
     width: 100%;
   }
 
+  &--last-row-without-border {
+    tr {
+      &:last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+
   .mat-row {
     height: auto;
   }

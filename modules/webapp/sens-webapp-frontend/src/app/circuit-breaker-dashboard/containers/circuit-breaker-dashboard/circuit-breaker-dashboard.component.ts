@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CircuitBreakerService } from '@app/circuit-breaker-dashboard/services/circuit-breaker.service';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
 
@@ -12,8 +13,11 @@ export class CircuitBreakerDashboardComponent implements OnInit {
   translatePrefix = 'circuitBreakerDashboard.';
   loadingTranslatePrefix = this.translatePrefix + 'stateLoading.';
   emptyStateTranslatePrefix = this.translatePrefix + 'emptyState.';
+  errorTranslatePrefix = this.translatePrefix + 'errorState.';
 
-  header: Header;
+  header: Header = {
+    title: this.translatePrefix + 'title'
+  };
 
   stateLoading: StateContent = {
     title: this.loadingTranslatePrefix + 'title',
@@ -26,38 +30,25 @@ export class CircuitBreakerDashboardComponent implements OnInit {
     centered: true
   };
 
+  stateError: StateContent = {
+    title: this.errorTranslatePrefix + 'title',
+    description: this.errorTranslatePrefix + 'description',
+    button: this.errorTranslatePrefix + 'button'
+  };
+
   circuitBreakerLoading = true;
-  circuitBreakerEmptyState = true;
-  circuitBreakerList = true;
+  circuitBreakerEmptyState = false;
+  circuitBreakerList = false;
+  circuitBreakerError = false;
 
-  circuitBreakerCurrentList = [
-    {
-      'discrepantBranchId': {
-        'decisionTreeId': 1,
-        'featureVectorId': 1
-      },
-      'detectedAt': '2020-03-03T00:00:00Z'
-    },
-    {
-      'discrepantBranchId': {
-        'decisionTreeId': 1,
-        'featureVectorId': 2
-      },
-      'detectedAt': '2020-03-03T00:00:00Z'
-    },
-    {
-      'discrepantBranchId': {
-        'decisionTreeId': 1,
-        'featureVectorId': 2
-      },
-      'detectedAt': '2020-03-03T00:00:00Z'
-    }
-  ];
+  circuitBreakerCurrentList = [];
 
-  constructor() { }
+  constructor(
+      private circuitBreakerService: CircuitBreakerService
+  ) { }
 
   ngOnInit() {
-    this.generateHeader();
+    this.loadDiscrepantBranches();
   }
 
   generateHeader() {
@@ -66,10 +57,31 @@ export class CircuitBreakerDashboardComponent implements OnInit {
         title: this.translatePrefix + 'title',
         count: this.circuitBreakerCurrentList.length.toString(),
       };
-    } else {
-      this.header = {
-        title: this.translatePrefix + 'title',
-      };
     }
+  }
+
+  resetView() {
+    this.circuitBreakerLoading = false;
+    this.circuitBreakerEmptyState = false;
+    this.circuitBreakerList = false;
+  }
+
+  loadDiscrepantBranches() {
+    this.resetView();
+    this.circuitBreakerLoading = true;
+    this.circuitBreakerService.getDiscrepantBranches()
+        .subscribe(data => {
+          this.circuitBreakerCurrentList = data;
+          this.resetView();
+          if (data.length > 0) {
+            this.circuitBreakerList = true;
+          } else {
+            this.circuitBreakerEmptyState = true;
+          }
+          this.generateHeader();
+        }, error => {
+          this.resetView();
+          this.circuitBreakerError = true;
+        });
   }
 }

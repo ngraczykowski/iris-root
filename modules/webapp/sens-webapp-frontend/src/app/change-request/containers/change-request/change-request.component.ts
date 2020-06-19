@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
 import { MatStepper } from '@angular/material/stepper';
@@ -9,7 +10,7 @@ import { MatStepper } from '@angular/material/stepper';
   styleUrls: ['./change-request.component.scss']
 })
 export class ChangeRequestComponent implements OnInit {
-  @ViewChild(MatStepper, { static: true }) stepper: MatStepper;
+  @ViewChild(MatStepper, {static: true}) stepper: MatStepper;
 
   header: Header = {
     title: 'changeRequest.title',
