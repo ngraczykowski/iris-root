@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -22,6 +23,9 @@ class CircuitBreakerRestController {
 
   @NonNull
   private final DiscrepancyCircuitBreakerQuery query;
+
+  @NonNull
+  private final ArchiveDiscrepanciesUseCase archiveUseCase;
 
   @GetMapping("/discrepant-branches")
   @PreAuthorize(BUSINESS_OPERATOR)
@@ -40,5 +44,13 @@ class CircuitBreakerRestController {
   public ResponseEntity<List<DiscrepancyDto>> listDiscrepancies(
       @RequestParam("id") List<Long> ids) {
     return ok(query.listDiscrepanciesByIds(ids));
+  }
+
+  @PatchMapping("/discrepancies/archive")
+  @PreAuthorize(BUSINESS_OPERATOR)
+  public ResponseEntity<Void> archiveDiscrepancies(@RequestBody List<Long> ids) {
+    archiveUseCase.apply(new ArchiveCircuitBreakerDiscrepanciesCommand(ids));
+
+    return accepted().build();
   }
 }

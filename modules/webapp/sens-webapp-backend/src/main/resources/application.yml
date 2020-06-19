@@ -159,6 +159,10 @@ sens.webapp.messaging:
       approve: webapp.change-request.approve
       reject: webapp.change-request.reject
       cancel: webapp.change-request.cancel
+  circuit-breaker.discrepancy:
+    exchange: discrepancy
+    route:
+      archive: discrepancy.archive
 
 sens.grpc:
   timeout: ${sens.webapp.grpc.timeout}

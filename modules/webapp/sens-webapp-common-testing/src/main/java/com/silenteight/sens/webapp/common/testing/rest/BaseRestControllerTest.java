@@ -109,6 +109,11 @@ public abstract class BaseRestControllerTest {
     return toValidatableResponse(asyncSender(headers).patch(withRoot(mapping)));
   }
 
+  public static <T> ValidatableMockMvcResponse patch(
+      String mapping, T body, Map<String, ?> headers) {
+    return toValidatableResponse(asyncSender(body, headers).patch(withRoot(mapping)));
+  }
+
   private static <T> MockMvcRequestAsyncSender asyncSender(T body) {
     return given()
         .accept(JSON)

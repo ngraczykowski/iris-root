@@ -4,7 +4,9 @@ import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionCont
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
@@ -17,13 +19,12 @@ import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.*;
 
 @Import({
     CircuitBreakerRestController.class,
@@ -34,9 +35,13 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
   private static final String DISCREPANT_BRANCHES_URL = "/discrepant-branches";
   private static final String DISCREPANCY_IDS_URL = "/discrepant-branches/%s/discrepancy-ids";
   private static final String DISCREPANCIES_URL = "/discrepancies";
+  private static final String DISCREPANCIES_ARCHIVE_URL = "/discrepancies/archive";
 
   @MockBean
   private DiscrepancyCircuitBreakerQuery query;
+
+  @MockBean
+  private ArchiveDiscrepanciesUseCase archiveUseCase;
 
   @Nested
   class DiscrepantBranchesList {
@@ -134,7 +139,6 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
     }
   }
 
-
   @Nested
   class DiscrepancyList {
 
@@ -209,6 +213,36 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
           .statusCode(BAD_REQUEST.value())
           .body("key", is("Parameter type mismatch"))
           .body("extras.parameterName", is("id"));
+    }
+  }
+
+  @Nested
+  class ArchiveDiscrepancies {
+
+    @BeforeEach
+    void setUp() {
+      //needed because of https://github.com/spring-projects/spring-boot/issues/12470
+      reset(archiveUseCase);
+    }
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void its202_onArchive() {
+      patch(DISCREPANCIES_ARCHIVE_URL, List.of(1L))
+          .contentType(anything())
+          .statusCode(ACCEPTED.value());
+    }
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void appliesArchiveCommandOnUseCase() {
+      List<Long> discrepancyIds = List.of(4L, 5L);
+      patch(DISCREPANCIES_ARCHIVE_URL, discrepancyIds);
+
+      ArgumentCaptor<ArchiveCircuitBreakerDiscrepanciesCommand> commandCaptor =
+          ArgumentCaptor.forClass(ArchiveCircuitBreakerDiscrepanciesCommand.class);
+
+      verify(archiveUseCase).apply(commandCaptor.capture());
+
+      assertThat(commandCaptor.getValue().getIds()).isEqualTo(discrepancyIds);
     }
   }
 }
