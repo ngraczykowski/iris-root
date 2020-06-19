@@ -45,6 +45,7 @@ public class ApproveChangeRequestUseCase {
         .setChangeRequestId(command.getChangeRequestId())
         .setCorrelationId(fromJavaUuid(RequestCorrelation.id()))
         .setApproverUsername(command.getApproverUsername())
+        .setApproverComment(command.getApproverComment())
         .setApprovedAt(toTimestamp(Instant.now()))
         .build();
   }

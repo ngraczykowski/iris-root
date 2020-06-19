@@ -8,7 +8,8 @@ final class ApproveChangeRequestUseCaseFixtures {
 
   static final ApproveChangeRequestCommand APPROVE_COMMAND =
       ApproveChangeRequestCommand.builder()
-      .changeRequestId(5L)
-      .approverUsername("approver")
-      .build();
+          .changeRequestId(5L)
+          .approverUsername("approver")
+          .approverComment("comment ABC")
+          .build();
 }

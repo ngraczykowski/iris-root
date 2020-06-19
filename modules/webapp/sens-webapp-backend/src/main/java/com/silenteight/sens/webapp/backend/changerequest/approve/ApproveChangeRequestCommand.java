@@ -12,4 +12,7 @@ public class ApproveChangeRequestCommand {
 
   @NonNull
   private String approverUsername;
+
+  @NonNull
+  private String approverComment;
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
@@ -33,6 +34,7 @@ class ApproveChangeRequestRestController {
   public ResponseEntity<Void> approve(
       @PathVariable long id,
       @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
+      @Valid @RequestBody ApproveChangeRequestDto request,
       Authentication authentication) {
 
     log.debug(
@@ -43,6 +45,7 @@ class ApproveChangeRequestRestController {
     ApproveChangeRequestCommand command = ApproveChangeRequestCommand.builder()
         .changeRequestId(id)
         .approverUsername(authentication.getName())
+        .approverComment(request.getApproverComment())
         .build();
     approveChangeRequestUseCase.apply(command);
 

@@ -28,6 +28,7 @@ class ApproveChangeRequestMessageHandler {
     UUID bulkChangeId = changeRequestService.approve(
         command.getChangeRequestId(),
         command.getApproverUsername(),
+        command.getApproverComment(),
         toOffsetDateTime(command.getApprovedAt()));
 
     return ApplyBulkBranchChangeCommand

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +13,7 @@ import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeReq
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.math.BigInteger.valueOf;
+import static java.time.OffsetDateTime.now;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,7 +31,7 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     // given
     UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
     ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
-        OffsetDateTime.now());
+        now());
 
     // when
     repository.save(changeRequest);
@@ -88,11 +88,34 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     ChangeRequest result = repository.getById(savedChangeRequest.getId());
 
     // thens
+    //TODO: this does not test persisting any fields besides id (they are not added into equals)
+    //e.g.: the test is passing even if we do that:
+    savedChangeRequest.setCreatorComment("changed");
+
     assertThat(result).isEqualTo(savedChangeRequest);
   }
 
+  @Test
+  void saveApprovedChangeRequest() {
+    // given
+    ChangeRequest changeRequest = makePendingChangeRequest(
+        fromString("de1afe98-0b58-4941-9791-4e081f9b8140"));
+    ChangeRequest savedChangeRequest = repository.save(changeRequest);
+    String approverComment = "approver comment";
+    String approverUsername = "approver1";
+    changeRequest.approve(approverUsername, approverComment, now());
+    repository.save(savedChangeRequest);
+
+    // when
+    ChangeRequest result = repository.getById(savedChangeRequest.getId());
+
+    // then
+    assertThat(result.getDeciderComment()).isEqualTo(approverComment);
+    assertThat(result.getDecidedBy()).isEqualTo(approverUsername);
+  }
+
   private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {
-    return new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, OffsetDateTime.now());
+    return new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, now());
   }
 
   private static ChangeRequest makeApprovedChangeRequest(UUID bulkChangeId) {
@@ -106,7 +129,7 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   private static ChangeRequest makeChangeRequestWithState(
       UUID bulkChangeId, ChangeRequestState state) {
     ChangeRequest changeRequest =
-        new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, OffsetDateTime.now());
+        new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, now());
     changeRequest.setState(state);
 
     return changeRequest;

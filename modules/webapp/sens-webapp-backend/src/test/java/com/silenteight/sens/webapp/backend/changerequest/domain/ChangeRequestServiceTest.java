@@ -35,6 +35,7 @@ class ChangeRequestServiceTest {
   private static final String MAKER_USERNAME = "maker";
   private static final String MAKER_COMMENT = "This is comment from Maker";
   private static final String APPROVER_USERNAME = "approver";
+  private static final String APPROVER_COMMENT = "approver comment";
   private static final OffsetDateTime CREATION_DATE = OffsetDateTime.now();
 
   private ChangeRequestService underTest;
@@ -93,7 +94,8 @@ class ChangeRequestServiceTest {
     OffsetDateTime approvedAt = parse("2020-05-20T10:15:30+01:00");
 
     // when
-    Executable when = () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, approvedAt);
+    Executable when =
+        () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, approvedAt);
 
     // then
     assertThrows(NullPointerException.class, when);
@@ -107,10 +109,15 @@ class ChangeRequestServiceTest {
     repository.save(changeRequest);
 
     // when
-    underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, approvedAt);
+    underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, approvedAt);
 
     // then
-    verifyChangeRequest(CHANGE_REQUEST_ID, APPROVED, APPROVER_USERNAME, approvedAt);
+    ChangeRequest repositoryValue = repository.getById(CHANGE_REQUEST_ID);
+
+    assertThat(repositoryValue.getState()).isEqualTo(APPROVED);
+    assertThat(repositoryValue.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+    assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+    assertThat(repositoryValue.getDecidedAt()).isEqualTo(approvedAt);
     verifyAuditLog("ChangeRequestApproved", changeRequest);
   }
 
@@ -168,7 +175,7 @@ class ChangeRequestServiceTest {
     ArgumentCaptor<AuditEvent> eventCaptor = ArgumentCaptor.forClass(AuditEvent.class);
     verify(auditTracer).save(eventCaptor.capture());
     AuditEvent auditEvent = eventCaptor.getValue();
-    
+
     assertThat(auditEvent.getType()).isEqualTo(type);
     assertThat(auditEvent.getEntityAction()).isEqualTo(UPDATE.toString());
     assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);

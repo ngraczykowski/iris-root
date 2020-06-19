@@ -17,6 +17,7 @@ class ChangeRequestTest {
   private static final String MAKER_USERNAME = "maker";
   private static final String MAKER_COMMENT = "This is comment from Maker";
   private static final String APPROVER_USERNAME = "approver";
+  private static final String APPROVER_COMMENT = "approver comment 1234";
   private static final OffsetDateTime CREATED_AT = OffsetDateTime.now();
 
   @Test
@@ -27,7 +28,7 @@ class ChangeRequestTest {
         CREATED_AT);
 
     // when
-    changeRequest.approve(APPROVER_USERNAME, approvedAt);
+    changeRequest.approve(APPROVER_USERNAME, APPROVER_COMMENT, approvedAt);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(APPROVED);

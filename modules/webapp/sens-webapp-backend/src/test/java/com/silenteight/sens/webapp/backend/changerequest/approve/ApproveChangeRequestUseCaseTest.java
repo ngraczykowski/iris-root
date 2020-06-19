@@ -51,6 +51,7 @@ class ApproveChangeRequestUseCaseTest {
         (ApproveChangeRequestCommand) auditEvent.getDetails();
     assertThat(command.getChangeRequestId()).isEqualTo(APPROVE_COMMAND.getChangeRequestId());
     assertThat(command.getApproverUsername()).isEqualTo(APPROVE_COMMAND.getApproverUsername());
+    assertThat(command.getApproverComment()).isEqualTo(APPROVE_COMMAND.getApproverComment());
 
     var messageCaptor = ArgumentCaptor.forClass(
         com.silenteight.proto.serp.v1.changerequest.ApproveChangeRequestCommand.class);
@@ -60,6 +61,7 @@ class ApproveChangeRequestUseCaseTest {
     var message = messageCaptor.getValue();
     assertThat(message.getChangeRequestId()).isEqualTo(APPROVE_COMMAND.getChangeRequestId());
     assertThat(message.getApproverUsername()).isEqualTo(APPROVE_COMMAND.getApproverUsername());
+    assertThat(message.getApproverComment()).isEqualTo(APPROVE_COMMAND.getApproverComment());
     assertThat(message.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
   }
 }

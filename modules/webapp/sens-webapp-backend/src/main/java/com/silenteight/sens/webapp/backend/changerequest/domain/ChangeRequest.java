@@ -45,6 +45,9 @@ class ChangeRequest {
   @ToString.Include
   private String decidedBy;
 
+  @ToString.Include
+  private String deciderComment;
+
   @Column(updatable = false, nullable = false)
   @Access(AccessType.FIELD)
   private OffsetDateTime createdAt;
@@ -69,12 +72,13 @@ class ChangeRequest {
     this.createdAt = createdAt;
   }
 
-  void approve(String username, OffsetDateTime approvedAt) {
+  void approve(String username, String comment, OffsetDateTime approvedAt) {
     if (isNotInPendingState())
       return;
 
     state = APPROVED;
     decidedBy = username;
+    deciderComment = comment;
     decidedAt = approvedAt;
   }
 

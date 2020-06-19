@@ -38,13 +38,17 @@ public class ChangeRequestService {
             changeRequest));
   }
 
-  public UUID approve(long id, @NonNull String username, @NonNull OffsetDateTime approvedAt) {
+  public UUID approve(
+      long id,
+      @NonNull String username,
+      @NonNull String comment,
+      @NonNull OffsetDateTime approvedAt) {
     log.info(CHANGE_REQUEST,
-        "Approving Change Request. changeRequestId={}, username={}, approvedAt={}",
-        id, username, approvedAt);
+        "Approving Change Request. changeRequestId={}, username={}, comment={}, approvedAt={}",
+        id, username, comment, approvedAt);
 
     ChangeRequest changeRequest = repository.getById(id);
-    changeRequest.approve(username, approvedAt);
+    changeRequest.approve(username, comment, approvedAt);
     repository.save(changeRequest);
 
     log.info(CHANGE_REQUEST, "Change Request approved. changeRequest={}", changeRequest);
