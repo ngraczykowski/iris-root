@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.ReasoningBranchValidator;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

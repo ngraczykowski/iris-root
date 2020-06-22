@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 
 import java.util.List;
 import java.util.UUID;

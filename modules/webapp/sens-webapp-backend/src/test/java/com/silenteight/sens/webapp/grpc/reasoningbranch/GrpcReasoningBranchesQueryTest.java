@@ -6,14 +6,14 @@ import com.silenteight.proto.serp.v1.common.Page;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary.Builder;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.BranchWithFeaturesDto;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.BranchIdAndSignatureDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchFilterDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchesPageDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchFilterDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchesPageDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.report.BranchWithFeaturesDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.dto.BranchIdAndSignatureDto;
 import com.silenteight.sens.webapp.backend.support.Paging;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
@@ -168,7 +168,7 @@ class GrpcReasoningBranchesQueryTest {
             decisionTreeId, List.of(reasoningBranchId));
 
     assertThat(branchIdAndSignatures).hasSize(1);
-    assertThat(branchIdAndSignatures.get(0).getReasoningBranchId()).isEqualTo(reasoningBranchId);
+    assertThat(branchIdAndSignatures.get(0).getBranchId()).isEqualTo(reasoningBranchId);
     assertThat(branchIdAndSignatures.get(0).getFeatureVectorSignature()).isEqualTo(
         encodedFeatureVectorSignatureSignature);
   }
@@ -201,7 +201,7 @@ class GrpcReasoningBranchesQueryTest {
             decisionTreeId, List.of(encodedFeatureVectorSignatureSignature));
 
     assertThat(branchIdAndSignatures).hasSize(1);
-    assertThat(branchIdAndSignatures.get(0).getReasoningBranchId()).isEqualTo(reasoningBranchId);
+    assertThat(branchIdAndSignatures.get(0).getBranchId()).isEqualTo(reasoningBranchId);
     assertThat(branchIdAndSignatures.get(0).getFeatureVectorSignature()).isEqualTo(
         encodedFeatureVectorSignatureSignature);
   }

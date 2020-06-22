@@ -15,7 +15,7 @@ import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningBranchDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeQuery;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 

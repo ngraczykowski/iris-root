@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.bulkchange;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

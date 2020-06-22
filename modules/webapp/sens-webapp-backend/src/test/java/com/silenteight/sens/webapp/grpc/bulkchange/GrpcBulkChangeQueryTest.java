@@ -13,7 +13,7 @@ import com.silenteight.proto.serp.v1.governance.ReasoningBranchId.Builder;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningBranchDto;
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;

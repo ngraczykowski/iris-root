@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.bulkchange;
 
-import com.silenteight.sens.webapp.backend.reasoningbranch.dto.ReasoningBranchIdDto;
+import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 
 import java.util.List;
 

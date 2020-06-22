@@ -4,7 +4,7 @@ import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.BranchIdsNotFoundException;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.ReasoningBranchValidator;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
 
 import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;

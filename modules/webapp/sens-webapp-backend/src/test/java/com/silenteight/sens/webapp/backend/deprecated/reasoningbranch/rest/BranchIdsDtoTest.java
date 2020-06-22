@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest;
 
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.dto.BranchIdsAndSignaturesDto;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

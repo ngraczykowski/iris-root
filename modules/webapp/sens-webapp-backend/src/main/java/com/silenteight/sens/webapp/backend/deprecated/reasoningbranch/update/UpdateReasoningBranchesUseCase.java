@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.validate.ReasoningBranchValidator;
+import com.silenteight.sens.webapp.backend.reasoningbranch.validate.ReasoningBranchValidator;
 
 import io.vavr.control.Try;
 
