@@ -8,8 +8,6 @@ public final class ControllerAdviceOrder {
 
   public static final int DECISION_TREE = 0;
   public static final int BRANCH = 1;
-  public static final int USERS = 2;
-  public static final int WORKFLOW = 3;
   public static final int RESTRICTION = 4;
   public static final int REPORT = 5;
   public static final int SYNC_ANALYST = 6;
