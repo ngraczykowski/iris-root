@@ -1,5 +1,5 @@
 export interface DiscrepantBranchesResponse {
-  discrepantBranchId: DiscrepantBranchDetails;
+  branchId: DiscrepantBranchDetails;
   detectedAt: string;
 }
 

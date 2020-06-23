@@ -1,13 +1,13 @@
 [
   {
-    "discrepantBranchId": {
+    "branchId": {
       "decisionTreeId": 1,
       "featureVectorId": 1
     },
     "detectedAt": "2020-03-23T12:24:00Z"
   },
   {
-    "discrepantBranchId": {
+    "branchId": {
       "decisionTreeId": 1,
       "featureVectorId": 2
     },

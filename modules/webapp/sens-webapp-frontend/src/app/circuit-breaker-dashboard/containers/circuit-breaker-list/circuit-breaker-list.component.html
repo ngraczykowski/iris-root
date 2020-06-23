@@ -2,16 +2,16 @@
   <mat-expansion-panel *ngFor="let circuitBreakerElement of circuitBreakerList"
                        [attr.id]="'Location' + circuitBreakerElement.id"
                        (opened)="initDiscrepanciesTable(
-                       circuitBreakerElement.discrepantBranchId.decisionTreeId,
-                       circuitBreakerElement.discrepantBranchId.featureVectorId
+                       circuitBreakerElement.branchId.decisionTreeId,
+                       circuitBreakerElement.branchId.featureVectorId
                        )"
                        (closed)="resetDiscrepanciesTable()"
                        class="mat-expansion-panel--flat mat-elevation-z0">
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{ translatePrefix + 'header.id' | translate:{
-        decisionTreeId: circuitBreakerElement.discrepantBranchId.decisionTreeId,
-        reasoningBranchId: circuitBreakerElement.discrepantBranchId.featureVectorId
+        decisionTreeId: circuitBreakerElement.branchId.decisionTreeId,
+        reasoningBranchId: circuitBreakerElement.branchId.featureVectorId
       } }}
       </mat-panel-title>
       <mat-panel-description>
@@ -41,8 +41,8 @@
         <button mat-flat-button
                 color="primary"
                 (click)="createChangeRequest(
-                circuitBreakerElement.discrepantBranchId.decisionTreeId,
-                circuitBreakerElement.discrepantBranchId.featureVectorId
+                circuitBreakerElement.branchId.decisionTreeId,
+                circuitBreakerElement.branchId.featureVectorId
                 )">
           <span [translate]="translatePrefix + 'footer.buttonChangeRequest'"></span>
         </button>
