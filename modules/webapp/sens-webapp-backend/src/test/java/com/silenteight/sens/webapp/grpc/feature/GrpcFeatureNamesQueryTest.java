@@ -25,13 +25,13 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class GrpcFeatureQueryTest {
+class GrpcFeatureNamesQueryTest {
 
   @Mock
   private FeatureGovernanceBlockingStub featureStub;
 
   @InjectMocks
-  private GrpcFeatureQuery underTest;
+  private GrpcFeatureNamesQuery underTest;
 
   @Test
   void returnsFeatureNames() {
@@ -40,21 +40,21 @@ class GrpcFeatureQueryTest {
         argThat(r -> r.getFeatureVectorId() == featureVectorId)))
         .willReturn(featureCollectionResponseWithFeaturesOf("featA", "featB"));
 
-    assertThat(underTest.findFeaturesNames(featureVectorId)).containsExactly("featA", "featB");
+    assertThat(underTest.findFeatureNames(featureVectorId)).containsExactly("featA", "featB");
   }
 
   @Test
   void returnsEmptyList_whenGrpcThrowsNotFoundStatusException_requestingFeatureNames() {
     given(featureStub.getBranchFeatureCollection(any())).willThrow(NOT_FOUND_RUNTIME_EXCEPTION);
 
-    assertThat(underTest.findFeaturesNames(1)).isEmpty();
+    assertThat(underTest.findFeatureNames(1)).isEmpty();
   }
 
   @Test
   void throwsGrpcException_whenGrpcThrowsNotFoundStatusException_requestingFeatureNames() {
     given(featureStub.getBranchFeatureCollection(any())).willThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
 
-    ThrowingCallable featureNamesCall = () -> underTest.findFeaturesNames(1);
+    ThrowingCallable featureNamesCall = () -> underTest.findFeatureNames(1);
 
     assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
   }

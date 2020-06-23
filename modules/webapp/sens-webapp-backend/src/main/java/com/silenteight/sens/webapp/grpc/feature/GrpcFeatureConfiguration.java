@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 class GrpcFeatureConfiguration {
 
   @Bean
-  GrpcFeatureQuery grpcFeatureQuery(
+  GrpcFeatureNamesQuery grpcFeatureNamesQuery(
       @Qualifier("governance") Channel channel) {
-    return new GrpcFeatureQuery(
+    return new GrpcFeatureNamesQuery(
         FeatureGovernanceGrpc
             .newBlockingStub(channel)
             .withWaitForReady());

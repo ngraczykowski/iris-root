@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.reasoningbranch.report;
 
+import com.silenteight.sens.webapp.backend.reasoningbranch.feature.name.FeatureNamesQuery;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
@@ -32,7 +33,7 @@ class ReasoningBranchReportGeneratorTest {
   private ReasoningBranchesReportQuery reasoningBranchesReportQuery;
 
   @Mock
-  private FeatureQuery featureQuery;
+  private FeatureNamesQuery featureNamesQuery;
 
   @Test
   void reportNameContainsTimestamp() {
@@ -59,7 +60,7 @@ class ReasoningBranchReportGeneratorTest {
 
     int treeId = 9;
     int reasoningBranchId = 5;
-    when(featureQuery.findFeaturesNames(reasoningBranchId)).thenReturn(
+    when(featureNamesQuery.findFeatureNames(reasoningBranchId)).thenReturn(
         List.of("Feature A", "Feature B"));
 
     when(reasoningBranchesReportQuery.findByTreeId(treeId)).thenReturn(
@@ -88,7 +89,7 @@ class ReasoningBranchReportGeneratorTest {
 
     int treeId = 15;
     int firstReasoningBranchId = 7;
-    when(featureQuery.findFeaturesNames(anyLong())).thenReturn(
+    when(featureNamesQuery.findFeatureNames(anyLong())).thenReturn(
         List.of("Feat A", "Feat B", "Feat C"));
     when(reasoningBranchesReportQuery.findByTreeId(anyLong())).thenReturn(
         List.of(
@@ -169,7 +170,7 @@ class ReasoningBranchReportGeneratorTest {
 
   private ReasoningBranchReportGenerator reportGeneratorWithTimeSourceOf(String dateTime) {
     return new ReasoningBranchReportGenerator(
-        reasoningBranchesReportQuery, featureQuery,
+        reasoningBranchesReportQuery, featureNamesQuery,
         new MockTimeSource(parse(dateTime)),
         DigitsOnlyDateFormatter.INSTANCE,
         IsoOffsetDateFormatter.INSTANCE);

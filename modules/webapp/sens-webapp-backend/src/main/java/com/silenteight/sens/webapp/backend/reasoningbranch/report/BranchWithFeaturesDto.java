@@ -23,5 +23,4 @@ public class BranchWithFeaturesDto {
   public String featureValue(int index) {
     return featureValues.get(index);
   }
-
 }

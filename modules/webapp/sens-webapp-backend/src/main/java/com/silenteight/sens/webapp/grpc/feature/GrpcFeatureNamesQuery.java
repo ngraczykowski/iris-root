@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.proto.serp.v1.api.FeatureGovernanceGrpc.FeatureGovernanceBlockingStub;
 import com.silenteight.proto.serp.v1.api.GetBranchFeatureCollectionRequest;
 import com.silenteight.proto.serp.v1.model.Feature;
-import com.silenteight.sens.webapp.backend.reasoningbranch.report.FeatureQuery;
+import com.silenteight.sens.webapp.backend.reasoningbranch.feature.name.FeatureNamesQuery;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import io.vavr.control.Try;
@@ -25,12 +25,12 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class GrpcFeatureQuery implements FeatureQuery {
+class GrpcFeatureNamesQuery implements FeatureNamesQuery {
 
   private final FeatureGovernanceBlockingStub featuresStub;
 
   @Override
-  public List<String> findFeaturesNames(long reasoningBranchId) {
+  public List<String> findFeatureNames(long reasoningBranchId) {
     GetBranchFeatureCollectionRequest request = GetBranchFeatureCollectionRequest
         .newBuilder()
         .setFeatureVectorId(reasoningBranchId)

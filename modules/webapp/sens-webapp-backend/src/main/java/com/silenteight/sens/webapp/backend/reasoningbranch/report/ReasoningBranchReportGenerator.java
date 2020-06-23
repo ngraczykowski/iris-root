@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.backend.reasoningbranch.report;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sens.webapp.backend.reasoningbranch.feature.name.FeatureNamesQuery;
 import com.silenteight.sens.webapp.backend.reasoningbranch.report.exception.DecisionTreeNotFoundException;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
@@ -36,7 +37,7 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
   @NonNull
   private final ReasoningBranchesReportQuery reasoningBranchesByTreeQuery;
   @NonNull
-  private final FeatureQuery featureQuery;
+  private final FeatureNamesQuery featureNamesQuery;
   @NonNull
   private final TimeSource timeSource;
   @NonNull
@@ -112,7 +113,7 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
   private List<String> featureNamesOf(List<BranchWithFeaturesDto> branches) {
     return branches.isEmpty() ?
            emptyList() :
-           featureQuery.findFeaturesNames(branches.get(0).getReasoningBranchId());
+           featureNamesQuery.findFeatureNames(branches.get(0).getReasoningBranchId());
   }
 
   private static String fullReasoningBranchId(long decisionTreeId, long reasoningBranchId) {
