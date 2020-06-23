@@ -33,4 +33,10 @@ class GrpcReasoningBranchConfiguration {
     return new GrpcReasoningBranchUpdateRepository(
         BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady());
   }
+
+  @Bean
+  GrpcFeatureValuesQuery grpcFeatureValuesQuery(@Qualifier("governance") Channel channel) {
+    return new GrpcFeatureValuesQuery(
+        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady());
+  }
 }

@@ -27,15 +27,6 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ReasoningBranchesQuery reasoningBranchesQuery;
 
-  private static String mappingForReasoningBranches(ListReasoningBranchesRequestDto request) {
-    return format(
-        "/reasoning-branches?aiSolution=%s&active=%s&offset=%d&limit=%d",
-        request.getAiSolution(),
-        request.getActive(),
-        request.getOffset(),
-        request.getLimit());
-  }
-
   @Nested
   class BranchList {
 
@@ -68,6 +59,15 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     void its403_whenNotPermittedRole() {
       get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST_NO_FILTER))
           .statusCode(FORBIDDEN.value());
+    }
+
+    private String mappingForReasoningBranches(ListReasoningBranchesRequestDto request) {
+      return format(
+          "/reasoning-branches?aiSolution=%s&active=%s&offset=%d&limit=%d",
+          request.getAiSolution(),
+          request.getActive(),
+          request.getOffset(),
+          request.getLimit());
     }
   }
 
