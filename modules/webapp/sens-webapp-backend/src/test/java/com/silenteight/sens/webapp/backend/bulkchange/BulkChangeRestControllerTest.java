@@ -35,12 +35,12 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.ACCEPTED;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
-@Import({ BulkChangeRestController.class, GenericExceptionControllerAdvice.class })
+@Import({
+    BulkChangeRestController.class,
+    BulkChangeRestControllerAdvice.class,
+    GenericExceptionControllerAdvice.class })
 class BulkChangeRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
@@ -207,13 +207,26 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
           .statusCode(FORBIDDEN.value());
     }
 
+    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    void its404_whenBranchIdIncorrect() {
+      get(mappingForIds("abc"))
+          .statusCode(NOT_FOUND.value());
+
+      get(mappingForIds("abc-bcd"))
+          .statusCode(NOT_FOUND.value());
+    }
+
     private String mappingForIds(Collection<ReasoningBranchIdDto> reasoningBranchIds) {
       String reasoningBranchIdsParam = reasoningBranchIds
           .stream()
           .map(id -> id.getDecisionTreeId() + "-" + id.getFeatureVectorId())
           .collect(joining(","));
 
-      return format("/bulk-changes/ids?reasoningBranchId=%s", reasoningBranchIdsParam);
+      return mappingForIds(reasoningBranchIdsParam);
+    }
+
+    private String mappingForIds(String reasoningBranchIds) {
+      return format("/bulk-changes/ids?reasoningBranchId=%s", reasoningBranchIds);
     }
 
     private class Fixtures {
