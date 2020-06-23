@@ -1,7 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { CircuitBreakerAlertsTableComponent } from '@app/circuit-breaker-dashboard/components/circuit-breaker-alerts-table/circuit-breaker-alerts-table.component';
 import { CircuitBreakerService } from '@app/circuit-breaker-dashboard/services/circuit-breaker.service';
 import { StateContent } from '@app/ui-components/state/state';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-circuit-breaker-list',
@@ -15,6 +18,7 @@ export class CircuitBreakerListComponent implements OnInit {
   errorTranslatePrefix = this.translatePrefix + 'errorState.';
 
   @Input() circuitBreakerList;
+  @ViewChild(CircuitBreakerAlertsTableComponent, {static: false}) circuitBreakerAlertsTableComponent: CircuitBreakerAlertsTableComponent;
 
   discrepanciesList = [];
 
@@ -30,8 +34,14 @@ export class CircuitBreakerListComponent implements OnInit {
   };
 
   loadingDetails = true;
+  loadingTableContent = false;
   showDetails = false;
   showError = false;
+
+  discrepanciesIds = [];
+  numberOfRows: number;
+
+  tableInit = environment.tablePagination;
 
   constructor(
       private circuitBreakerService: CircuitBreakerService,
@@ -41,29 +51,51 @@ export class CircuitBreakerListComponent implements OnInit {
   ngOnInit() {
   }
 
-  loadDiscrepancies(decisionTreeId, reasoningBranchId) {
+  initDiscrepanciesTable(decisionTreeId, reasoningBranchId) {
+    this.loadDiscrepanciesIds(decisionTreeId, reasoningBranchId).subscribe(ids => {
+          this.discrepanciesIds = this.sortDiscrepanciesIds(ids);
+          this.numberOfRows = ids.length;
+          this.loadDiscrepanciesList(this.generateIdsList(
+              this.tableInit.firstPage,
+              this.tableInit.defaultPageSize
+          ));
+        },
+        error => {
+          this.setErrorState();
+        });
+  }
+
+  sortDiscrepanciesIds(ids) {
+    return ids.sort((a, b) => a - b);
+  }
+
+  resetDiscrepanciesTable() {
+    this.discrepanciesIds = [];
+  }
+
+  loadDiscrepanciesIds(decisionTreeId, reasoningBranchId) {
     const discrepancyId = `${decisionTreeId}-${reasoningBranchId}`;
     this.resetView();
     this.loadingDetails = true;
 
-    this.circuitBreakerService.getDiscrepanciesIds(discrepancyId)
-        .subscribe(list => {
-          this.circuitBreakerService.getDiscrepanciesList(list).subscribe(discrepancies => {
-            this.discrepanciesList = discrepancies;
-            this.resetView();
-            this.showDetails = true;
-          }, error => {
-            this.setErrorState();
-          });
-        }, error => {
-          this.setErrorState();
-        });
+    return this.circuitBreakerService.getDiscrepanciesIds(discrepancyId);
+  }
+
+  loadDiscrepanciesList(ids) {
+    this.circuitBreakerService.getDiscrepanciesList(ids).subscribe(discrepancies => {
+      this.discrepanciesList = discrepancies;
+      this.resetView();
+      this.showDetails = true;
+    }, error => {
+      this.setErrorState();
+    });
   }
 
   resetView() {
     this.loadingDetails = false;
     this.showDetails = false;
     this.showError = false;
+    this.loadingTableContent = false;
   }
 
   setErrorState() {
@@ -80,5 +112,16 @@ export class CircuitBreakerListComponent implements OnInit {
             fv_ids: featureVectorId
           }
         });
+  }
+
+  reloadTableContent($event: PageEvent) {
+    this.loadingTableContent = true;
+    this.loadDiscrepanciesList(this.generateIdsList($event.pageIndex, $event.pageSize));
+  }
+
+  generateIdsList(page, pageSize) {
+    const from = page * pageSize;
+    const to = from + pageSize;
+    return this.discrepanciesIds.slice(from, to);
   }
 }

@@ -1,10 +1,11 @@
 <mat-accordion>
   <mat-expansion-panel *ngFor="let circuitBreakerElement of circuitBreakerList"
                        [attr.id]="'Location' + circuitBreakerElement.id"
-                       (opened)="loadDiscrepancies(
+                       (opened)="initDiscrepanciesTable(
                        circuitBreakerElement.discrepantBranchId.decisionTreeId,
                        circuitBreakerElement.discrepantBranchId.featureVectorId
                        )"
+                       (closed)="resetDiscrepanciesTable()"
                        class="mat-expansion-panel--flat mat-elevation-z0">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -24,7 +25,18 @@
     <app-state *ngIf="showError"
                [stateContent]="stateError"></app-state>
     <ng-container *ngIf="showDetails">
-      <app-circuit-breaker-alerts-table [discrepanciesList] = discrepanciesList></app-circuit-breaker-alerts-table>
+      <div class="dynamic-table" [class.dynamic-table--loading]="loadingTableContent">
+        <div class="dynamic-table__spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
+        <app-circuit-breaker-alerts-table
+                [discrepanciesList]="discrepanciesList"
+                (page)="reloadTableContent($event)"></app-circuit-breaker-alerts-table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]"
+                     showFirstLastButtons
+                     [length]="numberOfRows"
+                     (page)="reloadTableContent($event)"></mat-paginator>
       <mat-action-row>
         <button mat-flat-button
                 color="primary"

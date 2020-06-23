@@ -90,5 +90,10 @@ export const environment = {
   ],
 
   decimal: 10,
+
+  tablePagination: {
+    firstPage: 0,
+    defaultPageSize: 10
+  }
 };
 

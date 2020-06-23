@@ -1,0 +1,28 @@
+.dynamic-table {
+  $parentClass: &;
+
+  position: relative;
+
+  &--loading {
+    .mat-table {
+      opacity: .4;
+    }
+
+    #{$parentClass}__spinner-container {
+      display: block;
+    }
+  }
+
+  &__spinner-container {
+    display: none;
+    left: 50%;
+    margin: 0;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+}
+
+

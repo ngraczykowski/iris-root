@@ -1,8 +1,7 @@
 <table mat-table
        matSort
        [dataSource]="dataSource"
-       class="mat-table--full-width"
-       [class.mat-table--last-row-without-border]="!shouldShowPagination()">
+       class="mat-table--full-width">
 
   <ng-container matColumnDef="alertId">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -44,7 +43,3 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-
-<mat-paginator *ngIf="shouldShowPagination()"
-               [pageSizeOptions]="[10, 20, 50]"
-               showFirstLastButtons></mat-paginator>

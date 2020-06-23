@@ -1,5 +1,12 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import {
+  Component,
+  Input,
+  Output,
+  ViewChild,
+  EventEmitter,
+  SimpleChanges, OnChanges
+} from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DiscrepanciesList } from '@app/circuit-breaker-dashboard/models/circuit-breaker';
@@ -8,9 +15,11 @@ import { DiscrepanciesList } from '@app/circuit-breaker-dashboard/models/circuit
   selector: 'app-circuit-breaker-alerts-table',
   templateUrl: './circuit-breaker-alerts-table.component.html'
 })
-export class CircuitBreakerAlertsTableComponent implements OnInit {
+export class CircuitBreakerAlertsTableComponent implements OnChanges {
 
   @Input() discrepanciesList: DiscrepanciesList[] = [];
+
+  @Output() page: EventEmitter<PageEvent> = new EventEmitter();
 
   displayedColumns: string[] = [
     'alertId',
@@ -28,13 +37,9 @@ export class CircuitBreakerAlertsTableComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
     this.dataSource = new MatTableDataSource(this.discrepanciesList);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
-
-  shouldShowPagination() {
-    return this.discrepanciesList.length > 10;
   }
 }
