@@ -82,7 +82,9 @@ export const environment = {
       urlRegex: /^rest\/webapp\/api(\/decision-tree\/[0-9]+)?(\/branch\/[0-9]+)?\/alert\/.+$/,
       httpMethods: ['GET']
     }
-  ]
+  ],
+
+  decimal: 10,
 };
 
 

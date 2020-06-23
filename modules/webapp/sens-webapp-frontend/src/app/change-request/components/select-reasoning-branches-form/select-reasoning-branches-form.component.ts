@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angu
 import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-select-reasoning-branches',
@@ -36,9 +37,13 @@ export class SelectReasoningBranchesFormComponent implements OnInit {
   }
 
   loadReasoningBranchFromUrl(decisionTreeId, reasoningBranchId) {
-    if (decisionTreeId && reasoningBranchId) {
-      this.form.controls.decisionTreeId.setValue(decisionTreeId);
-      this.form.controls.reasoningBranchIds.setValue(reasoningBranchId.replace(/,/g, '\n'));
+    const dtId = parseInt(decisionTreeId, environment.decimal);
+    const rbIds = reasoningBranchId.split(',').map(Number);
+
+    if (!isNaN(dtId) && !rbIds.some(isNaN)) {
+      this.form.controls.decisionTreeId.setValue(dtId);
+      this.form.controls.reasoningBranchIds.setValue(
+          rbIds.join('\n'));
     }
   }
 
