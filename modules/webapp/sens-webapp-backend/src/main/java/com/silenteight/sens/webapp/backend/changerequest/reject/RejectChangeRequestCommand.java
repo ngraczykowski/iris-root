@@ -12,4 +12,7 @@ public class RejectChangeRequestCommand {
 
   @NonNull
   private String rejectorUsername;
+
+  @NonNull
+  private String rejectorComment;
 }

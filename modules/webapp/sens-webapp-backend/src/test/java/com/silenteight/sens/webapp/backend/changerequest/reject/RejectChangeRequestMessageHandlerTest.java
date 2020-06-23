@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.reject;
 
+import com.silenteight.proto.serp.v1.governance.RejectBulkBranchChangeCommand;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
 
@@ -12,8 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
+import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static com.silenteight.protocol.utils.Uuids.toJavaUuid;
 import static com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestMessageHandlerFixtures.REJECT_MESSAGE;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -27,21 +30,45 @@ class RejectChangeRequestMessageHandlerTest {
   private ChangeRequestService changeRequestService;
 
   @Test
-  void handleRejectMessage_changeRequestRejected() {
-    // given
-    when(changeRequestService.reject(
+  void invokesServicePassingCommandAttributes() {
+    when(changeRequestService.reject(anyLong(), anyString(), anyString(), any()))
+        .thenReturn(randomUUID());
+
+    // when
+    underTest.handle(REJECT_MESSAGE);
+
+    // then
+    verify(changeRequestService).reject(
         REJECT_MESSAGE.getChangeRequestId(),
         REJECT_MESSAGE.getRejectorUsername(),
-        toOffsetDateTime(REJECT_MESSAGE.getRejectedAt()))).thenReturn(UUID.randomUUID());
+        REJECT_MESSAGE.getRejectorComment(),
+        toOffsetDateTime(REJECT_MESSAGE.getRejectedAt()));
+  }
+
+  @Test
+  void returnsRejectBulkBranchChangeCommand() {
+    // given
+    UUID bulkChangeId = randomUUID();
+    when(changeRequestService.reject(anyLong(), anyString(), anyString(), any()))
+        .thenReturn(bulkChangeId);
+
+    // when
+    RejectBulkBranchChangeCommand command = underTest.handle(REJECT_MESSAGE);
+
+    // then
+    assertThat(command.getId()).isEqualTo(fromJavaUuid(bulkChangeId));
+    assertThat(command.getCorrelationId()).isEqualTo(REJECT_MESSAGE.getCorrelationId());
+  }
+
+  @Test
+  void storesCorrelationIdInThreadLocal() {
+    when(changeRequestService.reject(anyLong(), anyString(), anyString(), any()))
+        .thenReturn(randomUUID());
 
     // when
     underTest.handle(REJECT_MESSAGE);
 
     // then
     assertThat(RequestCorrelation.id()).isEqualTo(toJavaUuid(REJECT_MESSAGE.getCorrelationId()));
-    verify(changeRequestService).reject(
-        REJECT_MESSAGE.getChangeRequestId(),
-        REJECT_MESSAGE.getRejectorUsername(),
-        toOffsetDateTime(REJECT_MESSAGE.getRejectedAt()));
   }
 }

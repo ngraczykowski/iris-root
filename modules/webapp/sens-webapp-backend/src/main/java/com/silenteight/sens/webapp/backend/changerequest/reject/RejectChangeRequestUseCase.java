@@ -45,6 +45,7 @@ public class RejectChangeRequestUseCase {
         .setChangeRequestId(command.getChangeRequestId())
         .setCorrelationId(fromJavaUuid(RequestCorrelation.id()))
         .setRejectorUsername(command.getRejectorUsername())
+        .setRejectorComment(command.getRejectorComment())
         .setRejectedAt(toTimestamp(Instant.now()))
         .build();
   }

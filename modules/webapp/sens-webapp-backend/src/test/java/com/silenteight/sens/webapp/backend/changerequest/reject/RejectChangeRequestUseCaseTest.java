@@ -30,8 +30,30 @@ class RejectChangeRequestUseCaseTest {
   @Mock
   private RejectChangeRequestMessageGateway messageGateway;
 
+
   @Test
-  void rejectChangeRequestCommand_rejectChangeRequest() {
+  void sendsMessageOverGateway() {
+    // given
+    UUID correlationId = RequestCorrelation.id();
+
+    // when
+    underTest.apply(REJECT_COMMAND);
+
+    // then
+    var messageCaptor = ArgumentCaptor.forClass(
+        com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand.class);
+
+    verify(messageGateway).send(messageCaptor.capture());
+
+    var message = messageCaptor.getValue();
+    assertThat(message.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
+    assertThat(message.getRejectorUsername()).isEqualTo(REJECT_COMMAND.getRejectorUsername());
+    assertThat(message.getRejectorComment()).isEqualTo(REJECT_COMMAND.getRejectorComment());
+    assertThat(message.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
+  }
+
+  @Test
+  void savesAuditEvent() {
     // given
     UUID correlationId = RequestCorrelation.id();
 
@@ -47,19 +69,11 @@ class RejectChangeRequestUseCaseTest {
     assertThat(auditEvent.getEntityAction()).isEqualTo(UPDATE.toString());
     assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
     assertThat(auditEvent.getDetails()).isInstanceOf(RejectChangeRequestCommand.class);
-    RejectChangeRequestCommand command =
+    RejectChangeRequestCommand auditedCommand =
         (RejectChangeRequestCommand) auditEvent.getDetails();
-    assertThat(command.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
-    assertThat(command.getRejectorUsername()).isEqualTo(REJECT_COMMAND.getRejectorUsername());
-
-    var messageCaptor = ArgumentCaptor.forClass(
-        com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand.class);
-
-    verify(messageGateway).send(messageCaptor.capture());
-
-    var message = messageCaptor.getValue();
-    assertThat(message.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
-    assertThat(message.getRejectorUsername()).isEqualTo(REJECT_COMMAND.getRejectorUsername());
-    assertThat(message.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
+    assertThat(auditedCommand.getChangeRequestId()).isEqualTo(REJECT_COMMAND.getChangeRequestId());
+    assertThat(auditedCommand.getRejectorUsername()).isEqualTo(
+        REJECT_COMMAND.getRejectorUsername());
+    assertThat(auditedCommand.getRejectorComment()).isEqualTo(REJECT_COMMAND.getRejectorComment());
   }
 }

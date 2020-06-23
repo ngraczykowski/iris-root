@@ -28,6 +28,7 @@ class RejectChangeRequestMessageHandler {
     UUID bulkChangeId = changeRequestService.reject(
         command.getChangeRequestId(),
         command.getRejectorUsername(),
+        command.getRejectorComment(),
         toOffsetDateTime(command.getRejectedAt()));
 
     return RejectBulkBranchChangeCommand

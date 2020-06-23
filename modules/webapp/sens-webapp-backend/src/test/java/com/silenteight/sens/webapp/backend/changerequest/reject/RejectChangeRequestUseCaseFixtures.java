@@ -8,7 +8,8 @@ final class RejectChangeRequestUseCaseFixtures {
 
   static final RejectChangeRequestCommand REJECT_COMMAND =
       RejectChangeRequestCommand.builder()
-      .changeRequestId(5L)
-      .rejectorUsername("rejector")
-      .build();
+          .changeRequestId(5L)
+          .rejectorUsername("rejector")
+          .rejectorComment("rejector comment")
+          .build();
 }

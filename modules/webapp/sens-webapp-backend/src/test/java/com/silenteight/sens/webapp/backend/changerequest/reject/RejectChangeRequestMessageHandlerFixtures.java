@@ -18,6 +18,7 @@ final class RejectChangeRequestMessageHandlerFixtures {
           .setChangeRequestId(5L)
           .setCorrelationId(fromJavaUuid(fromString("05bf9714-b1ee-4778-a733-6151df70fca3")))
           .setRejectorUsername("rejector")
+          .setRejectorComment("rejector comment ABC")
           .setRejectedAt(toTimestamp(parse("2020-05-20T10:15:30+01:00")))
           .build();
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
@@ -33,6 +34,7 @@ class RejectChangeRequestRestController {
   public ResponseEntity<Void> reject(
       @PathVariable long id,
       @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
+      @Valid @RequestBody RejectChangeRequestRequestDto request,
       Authentication authentication) {
 
     log.debug(
@@ -43,6 +45,7 @@ class RejectChangeRequestRestController {
     RejectChangeRequestCommand command = RejectChangeRequestCommand.builder()
         .changeRequestId(id)
         .rejectorUsername(authentication.getName())
+        .rejectorComment(request.getRejectorComment())
         .build();
     rejectChangeRequestUseCase.apply(command);
 

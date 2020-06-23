@@ -82,12 +82,13 @@ class ChangeRequest {
     decidedAt = approvedAt;
   }
 
-  void reject(String username, OffsetDateTime rejectedAt) {
+  void reject(String username, String comment, OffsetDateTime rejectedAt) {
     if (isNotInPendingState())
       return;
 
     state = REJECTED;
     decidedBy = username;
+    deciderComment = comment;
     decidedAt = rejectedAt;
   }
 

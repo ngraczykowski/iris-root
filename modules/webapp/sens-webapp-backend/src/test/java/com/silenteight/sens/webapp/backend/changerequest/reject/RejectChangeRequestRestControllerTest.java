@@ -20,6 +20,7 @@ import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -36,15 +37,20 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
   void its202_whenApproverCallsEndpoint() {
     long changeRequestId = 2L;
 
-    patch(mappingForRejection(changeRequestId), defaultHeaders()).statusCode(ACCEPTED.value());
+    patch(mappingForRejection(changeRequestId), defaultRequest(), defaultHeaders())
+        .statusCode(ACCEPTED.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, roles = APPROVER)
   void callsApproveUseCase() {
     long changeRequestId = 2L;
+    String rejectorComment = "abcdef";
 
-    patch(mappingForRejection(changeRequestId), defaultHeaders());
+    patch(
+        mappingForRejection(changeRequestId),
+        new RejectChangeRequestRequestDto(rejectorComment),
+        defaultHeaders());
 
     ArgumentCaptor<RejectChangeRequestCommand> commandCaptor =
         ArgumentCaptor.forClass(RejectChangeRequestCommand.class);
@@ -53,13 +59,15 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
     RejectChangeRequestCommand command = commandCaptor.getValue();
     assertThat(command.getChangeRequestId()).isEqualTo(changeRequestId);
     assertThat(command.getRejectorUsername()).isEqualTo(USERNAME);
+    assertThat(command.getRejectorComment()).isEqualTo(rejectorComment);
   }
 
   @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     long changeRequestId = 2L;
 
-    patch(mappingForRejection(changeRequestId), defaultHeaders()).statusCode(FORBIDDEN.value());
+    patch(mappingForRejection(changeRequestId), defaultRequest(), defaultHeaders()).statusCode(
+        FORBIDDEN.value());
   }
 
   @Test
@@ -68,7 +76,9 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
     long changeRequestId = 2L;
     UUID correlationId = randomUUID();
 
-    patch(mappingForRejection(changeRequestId), Map.of(CORRELATION_ID_HEADER, correlationId));
+    patch(
+        mappingForRejection(changeRequestId), defaultRequest(),
+        Map.of(CORRELATION_ID_HEADER, correlationId));
 
     assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
   }
@@ -78,10 +88,24 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
   void its400_ifNoCorrelationIdProvidedInHeader() {
     long changeRequestId = 2L;
 
-    patch(mappingForRejection(changeRequestId))
+    patch(mappingForRejection(changeRequestId), defaultRequest())
         .statusCode(BAD_REQUEST.value())
         .body("key", equalTo("Missing request header"))
         .body("extras.headerName", equalTo("CorrelationId"));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, roles = APPROVER)
+  void its400_ifNoRejectorCommentInRequestBody() {
+    patch(
+        mappingForRejection(1L), new RejectChangeRequestRequestDto(null),
+        defaultHeaders())
+        .statusCode(BAD_REQUEST.value())
+        .body("extras.errors", hasItem("rejectorComment must not be blank"));
+  }
+
+  private static RejectChangeRequestRequestDto defaultRequest() {
+    return new RejectChangeRequestRequestDto("abcd");
   }
 
   private String mappingForRejection(long id) {

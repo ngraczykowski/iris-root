@@ -62,13 +62,17 @@ public class ChangeRequestService {
     return changeRequest.getBulkChangeId();
   }
 
-  public UUID reject(long id, @NonNull String username, @NonNull OffsetDateTime rejectedAt) {
+  public UUID reject(
+      long id,
+      @NonNull String username,
+      @NonNull String comment,
+      @NonNull OffsetDateTime rejectedAt) {
     log.info(CHANGE_REQUEST,
-        "Rejecting Change Request. changeRequestId={}, username={}, rejectedAt={}",
-        id, username, rejectedAt);
+        "Rejecting Change Request. changeRequestId={}, username={}, comment={}, rejectedAt={}",
+        id, username, comment, rejectedAt);
 
     ChangeRequest changeRequest = repository.getById(id);
-    changeRequest.reject(username, rejectedAt);
+    changeRequest.reject(username, comment, rejectedAt);
     repository.save(changeRequest);
 
     log.info(CHANGE_REQUEST, "Change Request rejected. changeRequest={}", changeRequest);

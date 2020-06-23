@@ -44,10 +44,11 @@ class ChangeRequestTest {
         CREATED_AT);
 
     // when
-    changeRequest.reject(APPROVER_USERNAME, rejectedAt);
+    changeRequest.reject(APPROVER_USERNAME, APPROVER_COMMENT, rejectedAt);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(REJECTED);
     assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
   }
 }

@@ -127,7 +127,8 @@ class ChangeRequestServiceTest {
     OffsetDateTime rejectedAt = parse("2020-05-20T10:15:30+01:00");
 
     // when
-    Executable when = () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, rejectedAt);
+    Executable when =
+        () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, rejectedAt);
 
     // then
     assertThrows(NullPointerException.class, when);
@@ -141,10 +142,14 @@ class ChangeRequestServiceTest {
     repository.save(changeRequest);
 
     // when
-    underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, rejectedAt);
+    underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, rejectedAt);
 
     // then
-    verifyChangeRequest(CHANGE_REQUEST_ID, REJECTED, APPROVER_USERNAME, rejectedAt);
+    ChangeRequest repositoryValue = repository.getById(CHANGE_REQUEST_ID);
+    assertThat(repositoryValue.getState()).isEqualTo(REJECTED);
+    assertThat(repositoryValue.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+    assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+    assertThat(repositoryValue.getDecidedAt()).isEqualTo(rejectedAt);
     verifyAuditLog("ChangeRequestRejected", changeRequest);
   }
 
