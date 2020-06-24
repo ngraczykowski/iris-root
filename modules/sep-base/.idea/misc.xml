@@ -12,4 +12,7 @@
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="TaskProjectConfiguration">
+    <server type="YouTrack" url="https://youtrack.silenteight.com" />
+  </component>
 </project>

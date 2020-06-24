@@ -14,6 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
+import static com.google.common.base.Strings.emptyToNull;
+import static java.lang.System.getProperty;
 import static java.util.Arrays.asList;
 
 public class HomeDirectoryDiscoverer {
@@ -22,14 +24,17 @@ public class HomeDirectoryDiscoverer {
       Pattern.compile("(file:)?(?<path>[^!]*)(!.*)?");
 
   private final String homeEnvVariable;
+  private final String homeProperty;
 
   private List<PathSupplier> pathSuppliers;
 
-  public HomeDirectoryDiscoverer(String homeEnvVariable) {
+  public HomeDirectoryDiscoverer(String homeEnvVariable, String homeProperty) {
     this.homeEnvVariable = homeEnvVariable;
+    this.homeProperty = homeProperty;
 
     pathSuppliers = asList(
         this::getHomeFromEnvironment,
+        this::getHomeFromProperties,
         HomeDirectoryDiscoverer::discoverHomeFromUserWorkingDirectory,
         HomeDirectoryDiscoverer::discoverHomeFromJarFile
     );
@@ -50,6 +55,10 @@ public class HomeDirectoryDiscoverer {
     } catch (InvalidPathException ignored) {
       return Optional.empty();
     }
+  }
+
+  private Optional<Path> getHomeFromProperties() {
+    return Optional.ofNullable(emptyToNull(getProperty(homeProperty))).map(Paths::get);
   }
 
   private static Optional<Path> discoverHomeFromUserWorkingDirectory() {

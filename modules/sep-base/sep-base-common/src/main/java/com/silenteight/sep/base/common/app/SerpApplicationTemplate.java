@@ -17,7 +17,7 @@ public class SerpApplicationTemplate extends SpringApplicationTemplate {
 
     super(args, sources);
 
-    new ApplicationBootstrapper(appName, "serp.home", new HomeDirectoryDiscoverer("SERP_HOME"))
+    new ApplicationBootstrapper(appName, new HomeDirectoryDiscoverer("SERP_HOME", "serp.home"))
         .bootstrapApplication();
 
     this.appName = appName;

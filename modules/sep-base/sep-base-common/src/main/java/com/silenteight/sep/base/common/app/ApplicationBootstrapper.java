@@ -1,6 +1,7 @@
 package com.silenteight.sep.base.common.app;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
@@ -28,9 +29,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class ApplicationBootstrapper {
 
   private final String appName;
-  private final String homeProperty;
   private final HomeDirectoryDiscoverer homeDiscoverer;
 
+  @Setter
   private String homeDirectory;
 
   public void bootstrapApplication() {
@@ -59,14 +60,6 @@ public class ApplicationBootstrapper {
     setHomeDirectory(userDir);
   }
 
-  private void setHomeDirectory(String homeDirectory) {
-    var serpHome = getProperty(homeProperty);
-    if (serpHome == null)
-      setProperty(homeProperty, homeDirectory);
-
-    this.homeDirectory = homeDirectory;
-  }
-
   private void setUpPlugins() {
     var plugins = discoverPlugins();
     if (plugins.length > 0) {
@@ -92,7 +85,7 @@ public class ApplicationBootstrapper {
       return urls.toArray(URI[]::new);
     } catch (NoSuchFileException ignored) {
       log.debug("Plugin directory or plugin file does not exist, will not load plugins:"
-                    + " directory={}", pluginsDirectory);
+          + " directory={}", pluginsDirectory);
       return new URI[0];
     } catch (IOException e) {
       log.warn("Unable to discover plugins: directory={}", pluginsDirectory, e);
@@ -135,6 +128,21 @@ public class ApplicationBootstrapper {
     setProperty("java.security.egd", "file:/dev/./urandom");
   }
 
+  private static void setUpSecuritySystemProperties() {
+    setPropertyFromEnvironment("javax.net.ssl.trustStore", "TRUSTSTORE_PATH");
+    setPropertyFromEnvironment("javax.net.ssl.trustStorePassword", "TRUSTSTORE_PASSWORD");
+  }
+
+  private static void setPropertyFromEnvironment(
+      String property,
+      String environmentVariable) {
+
+    var environmentVariableValue = System.getenv(environmentVariable);
+
+    if (getProperty(property) == null && isNotBlank(environmentVariableValue))
+      setProperty(property, environmentVariableValue);
+  }
+
   private void createLogDirectory() {
     try {
       var filePermissions = PosixFilePermissions.fromString("rwxr-x---");
@@ -145,20 +153,5 @@ public class ApplicationBootstrapper {
     } catch (IOException ignore) {
       // Intentionally left blank.
     }
-  }
-
-  private static void setUpSecuritySystemProperties() {
-    setSystemPropertiesFromEnvironmentVariable("javax.net.ssl.trustStore",
-        "TRUSTSTORE_PATH");
-    setSystemPropertiesFromEnvironmentVariable("javax.net.ssl.trustStorePassword",
-        "TRUSTSTORE_PASSWORD");
-  }
-
-  private static void setSystemPropertiesFromEnvironmentVariable(String property,
-                                                                 String environmentVariable) {
-    var environmentVariableValue = System.getenv(environmentVariable);
-
-    if (getProperty(property) == null && isNotBlank(environmentVariableValue))
-      setProperty(property, environmentVariableValue);
   }
 }
