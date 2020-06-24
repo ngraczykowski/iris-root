@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.time.OffsetDateTime.parse;
 import static java.util.UUID.fromString;
@@ -48,6 +49,22 @@ class ChangeRequestTest {
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(REJECTED);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+  }
+
+  @Test
+  void changeRequestRejected_stateIsChangedToCancelled() {
+    // give
+    OffsetDateTime rejectedAt = parse("2020-05-23T10:15:30+01:00");
+    ChangeRequest changeRequest = new ChangeRequest(BULK_CHANGE_ID, MAKER_USERNAME, MAKER_COMMENT,
+        CREATED_AT);
+
+    // when
+    changeRequest.cancel(APPROVER_USERNAME, APPROVER_COMMENT, rejectedAt);
+
+    // then
+    assertThat(changeRequest.getState()).isEqualTo(CANCELLED);
     assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
     assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
   }

@@ -86,13 +86,17 @@ public class ChangeRequestService {
     return changeRequest.getBulkChangeId();
   }
 
-  public UUID cancel(long id, @NonNull String username, @NonNull OffsetDateTime cancelledAt) {
+  public UUID cancel(
+      long id,
+      @NonNull String username,
+      @NonNull String comment,
+      @NonNull OffsetDateTime cancelledAt) {
     log.info(CHANGE_REQUEST,
-        "Cancelling Change Request. changeRequestId={}, username={}, rejectedAt={}",
-        id, username, cancelledAt);
+        "Cancelling Change Request. changeRequestId={}, username={}, comment={}, rejectedAt={}",
+        id, username, comment, cancelledAt);
 
     ChangeRequest changeRequest = repository.getById(id);
-    changeRequest.cancel(username, cancelledAt);
+    changeRequest.cancel(username, comment, cancelledAt);
     repository.save(changeRequest);
 
     log.info(CHANGE_REQUEST, "Change Request cancelled. changeRequest={}", changeRequest);

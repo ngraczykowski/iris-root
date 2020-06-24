@@ -51,6 +51,7 @@ class CancelChangeRequestUseCaseTest {
         (CancelChangeRequestCommand) auditEvent.getDetails();
     assertThat(command.getChangeRequestId()).isEqualTo(CANCEL_COMMAND.getChangeRequestId());
     assertThat(command.getCancellerUsername()).isEqualTo(CANCEL_COMMAND.getCancellerUsername());
+    assertThat(command.getCancellerComment()).isEqualTo(CANCEL_COMMAND.getCancellerComment());
 
     var messageCaptor = ArgumentCaptor.forClass(
         com.silenteight.proto.serp.v1.changerequest.CancelChangeRequestCommand.class);
@@ -60,6 +61,7 @@ class CancelChangeRequestUseCaseTest {
     var message = messageCaptor.getValue();
     assertThat(message.getChangeRequestId()).isEqualTo(CANCEL_COMMAND.getChangeRequestId());
     assertThat(message.getCancellerUsername()).isEqualTo(CANCEL_COMMAND.getCancellerUsername());
+    assertThat(message.getCancellerComment()).isEqualTo(CANCEL_COMMAND.getCancellerComment());
     assertThat(message.getCorrelationId()).isEqualTo(fromJavaUuid(correlationId));
   }
 }

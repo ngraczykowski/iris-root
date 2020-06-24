@@ -92,12 +92,13 @@ class ChangeRequest {
     decidedAt = rejectedAt;
   }
 
-  void cancel(String username, OffsetDateTime cancelledAt) {
+  void cancel(String username, String comment, OffsetDateTime cancelledAt) {
     if (isNotInPendingState())
       return;
 
     state = CANCELLED;
     decidedBy = username;
+    deciderComment = comment;
     decidedAt = cancelledAt;
   }
 

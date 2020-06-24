@@ -10,5 +10,6 @@ final class CancelChangeRequestUseCaseFixtures {
       CancelChangeRequestCommand.builder()
           .changeRequestId(5L)
           .cancellerUsername("canceller")
+          .cancellerComment("I cancel!")
           .build();
 }

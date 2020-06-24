@@ -19,6 +19,7 @@ import java.util.UUID;
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.time.OffsetDateTime.parse;
@@ -151,6 +152,25 @@ class ChangeRequestServiceTest {
     assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
     assertThat(repositoryValue.getDecidedAt()).isEqualTo(rejectedAt);
     verifyAuditLog("ChangeRequestRejected", changeRequest);
+  }
+
+  @Test
+  void changeRequestFound_cancelChangeRequest() {
+    // given
+    OffsetDateTime cancelledAt = parse("2020-05-21T10:15:30+01:00");
+    ChangeRequest changeRequest = makeChangeRequest();
+    repository.save(changeRequest);
+
+    // when
+    underTest.cancel(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, cancelledAt);
+
+    // then
+    ChangeRequest repositoryValue = repository.getById(CHANGE_REQUEST_ID);
+    assertThat(repositoryValue.getState()).isEqualTo(CANCELLED);
+    assertThat(repositoryValue.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+    assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+    assertThat(repositoryValue.getDecidedAt()).isEqualTo(cancelledAt);
+    verifyAuditLog("ChangeRequestCancelled", changeRequest);
   }
 
   private static ChangeRequest makeChangeRequest() {

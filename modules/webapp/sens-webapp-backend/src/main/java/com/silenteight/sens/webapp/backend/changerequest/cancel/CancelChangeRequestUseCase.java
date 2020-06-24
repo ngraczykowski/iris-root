@@ -45,6 +45,7 @@ public class CancelChangeRequestUseCase {
         .setChangeRequestId(command.getChangeRequestId())
         .setCorrelationId(fromJavaUuid(RequestCorrelation.id()))
         .setCancellerUsername(command.getCancellerUsername())
+        .setCancellerComment(command.getCancellerComment())
         .setCancelledAt(toTimestamp(Instant.now()))
         .build();
   }

@@ -12,4 +12,7 @@ public class CancelChangeRequestCommand {
 
   @NonNull
   private String cancellerUsername;
+
+  @NonNull
+  private String cancellerComment;
 }

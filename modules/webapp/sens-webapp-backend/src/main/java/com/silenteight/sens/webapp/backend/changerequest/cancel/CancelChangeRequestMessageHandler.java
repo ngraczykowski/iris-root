@@ -28,6 +28,7 @@ class CancelChangeRequestMessageHandler {
     UUID bulkChangeId = changeRequestService.cancel(
         command.getChangeRequestId(),
         command.getCancellerUsername(),
+        command.getCancellerComment(),
         toOffsetDateTime(command.getCancelledAt()));
 
     return RejectBulkBranchChangeCommand

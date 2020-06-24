@@ -20,6 +20,7 @@ import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -38,7 +39,8 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   void its202_whenBusinessOperatorCallsEndpoint() {
     long changeRequestId = 2L;
 
-    patch(mappingForCancellation(changeRequestId), defaultHeaders()).statusCode(ACCEPTED.value());
+    patch(mappingForCancellation(changeRequestId), defaultBody(), defaultHeaders())
+        .statusCode(ACCEPTED.value());
   }
 
   @Test
@@ -46,7 +48,10 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   void callsCancelUseCase() {
     long changeRequestId = 2L;
 
-    patch(mappingForCancellation(changeRequestId), defaultHeaders());
+    String cancellerComment = "comment ABCD";
+    patch(
+        mappingForCancellation(changeRequestId), new CancelChangeRequestDto(cancellerComment),
+        defaultHeaders());
 
     ArgumentCaptor<CancelChangeRequestCommand> commandCaptor =
         ArgumentCaptor.forClass(CancelChangeRequestCommand.class);
@@ -55,6 +60,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
     CancelChangeRequestCommand command = commandCaptor.getValue();
     assertThat(command.getChangeRequestId()).isEqualTo(changeRequestId);
     assertThat(command.getCancellerUsername()).isEqualTo(USERNAME);
+    assertThat(command.getCancellerComment()).isEqualTo(cancellerComment);
   }
 
   @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
@@ -62,8 +68,8 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
     long changeRequestId = 2L;
 
     patch(
-        mappingForCancellation(changeRequestId),
-        defaultHeaders()).statusCode(FORBIDDEN.value());
+        mappingForCancellation(changeRequestId), defaultBody(), defaultHeaders())
+        .statusCode(FORBIDDEN.value());
   }
 
   @Test
@@ -73,24 +79,37 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
     UUID correlationId = randomUUID();
 
     patch(
-        mappingForCancellation(changeRequestId),
+        mappingForCancellation(changeRequestId), defaultBody(),
         Map.of(CORRELATION_ID_HEADER, correlationId));
 
     assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
   void its400_ifNoCorrelationIdProvidedInHeader() {
     long changeRequestId = 2L;
 
-    patch(mappingForCancellation(changeRequestId))
+    patch(mappingForCancellation(changeRequestId), defaultBody())
         .statusCode(BAD_REQUEST.value())
         .body("key", equalTo("Missing request header"))
         .body("extras.headerName", equalTo("CorrelationId"));
   }
 
+  @Test
+  @WithMockUser(username = USERNAME, roles = APPROVER)
+  void its400_ifNoApproverCommentInRequestBody() {
+    patch(
+        mappingForCancellation(1L), new CancelChangeRequestDto(null), defaultHeaders())
+        .statusCode(BAD_REQUEST.value())
+        .body("extras.errors", hasItem("cancellerComment must not be blank"));
+  }
+
   private String mappingForCancellation(long id) {
     return "/change-request/" + id + "/cancel";
+  }
+
+  private static CancelChangeRequestDto defaultBody() {
+    return new CancelChangeRequestDto("not_used");
   }
 }
