@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ ReasoningBranchRestController.class, ReasoningBranchRestControllerAdvice.class })
+@Import({ ReasoningBranchRestController.class, ReasoningBranchListRestControllerAdvice.class })
 class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
   @MockBean

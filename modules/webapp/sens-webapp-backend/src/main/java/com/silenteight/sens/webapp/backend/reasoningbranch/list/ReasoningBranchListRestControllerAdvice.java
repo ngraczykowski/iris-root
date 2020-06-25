@@ -14,7 +14,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
 @Order(ControllerAdviceOrder.BRANCH)
-class ReasoningBranchRestControllerAdvice extends AbstractErrorControllerAdvice {
+class ReasoningBranchListRestControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(InvalidBranchSolutionException.class)
   public ResponseEntity<ErrorDto> handle(InvalidBranchSolutionException e) {
