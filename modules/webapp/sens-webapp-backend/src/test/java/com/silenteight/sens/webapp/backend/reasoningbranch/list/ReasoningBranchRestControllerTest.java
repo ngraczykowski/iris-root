@@ -4,7 +4,9 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.*;
 import com.silenteight.sens.webapp.backend.support.Paging;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.webapp.grpc.InvalidBranchSolutionException;
 
+import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse;
 import org.junit.jupiter.api.Nested;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -18,10 +20,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ ReasoningBranchRestController.class })
+@Import({ ReasoningBranchRestController.class, ReasoningBranchRestControllerAdvice.class })
 class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
@@ -31,14 +34,29 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
   class BranchList {
 
     @TestWithRole(role = BUSINESS_OPERATOR)
-    void its200WithCorrectBody_whenFound() {
+    void its200WithCorrectBodyWithFilter_whenFound() {
       given(
           reasoningBranchesQuery.list(
               new ReasoningBranchFilterDto(AI_SOLUTION, IS_ACTIVE), new Paging(0, PAGE_SIZE)))
           .willReturn(
               new ReasoningBranchesPageDto(asList(REASONING_BRANCH_1, REASONING_BRANCH_2), 2));
 
-      get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST_NO_FILTER))
+      validateResponse(get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST)));
+    }
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void its200WithCorrectBodyWithoutFilter_whenFound() {
+      given(
+          reasoningBranchesQuery.list(
+              new ReasoningBranchFilterDto(null, null), new Paging(0, PAGE_SIZE)))
+          .willReturn(
+              new ReasoningBranchesPageDto(asList(REASONING_BRANCH_1, REASONING_BRANCH_2), 2));
+
+      validateResponse(get(mappingForReasoningBranches(0, PAGE_SIZE)));
+    }
+
+    private void validateResponse(ValidatableMockMvcResponse response) {
+      response
           .statusCode(OK.value())
           .body("total", is(2))
           .body("branches[0].reasoningBranchId.decisionTreeId", equalTo((int) TREE_ID))
@@ -57,8 +75,20 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })
     void its403_whenNotPermittedRole() {
-      get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST_NO_FILTER))
+      get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST))
           .statusCode(FORBIDDEN.value());
+    }
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void its400_whenInvalidRequest() {
+      given(
+          reasoningBranchesQuery.list(
+              new ReasoningBranchFilterDto(INVALID_AI_SOLUTION, IS_ACTIVE),
+              new Paging(0, PAGE_SIZE)))
+          .willThrow(InvalidBranchSolutionException.class);
+
+      get(mappingForReasoningBranches(INVALID_LIST_BRANCHES_REQUEST))
+          .statusCode(BAD_REQUEST.value());
     }
 
     private String mappingForReasoningBranches(ListReasoningBranchesRequestDto request) {
@@ -69,6 +99,10 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           request.getOffset(),
           request.getLimit());
     }
+
+    private String mappingForReasoningBranches(int offset, int limit) {
+      return format("/reasoning-branches?offset=%d&limit=%d", offset, limit);
+    }
   }
 
   static class ReasoningBranchRestControllerFixtures {
@@ -77,12 +111,16 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     static final long FEATURE_VECTOR_ID_1 = 5;
     static final long FEATURE_VECTOR_ID_2 = 8;
     static final String AI_SOLUTION = "TRUE_POSITIVE";
+    static final String INVALID_AI_SOLUTION = "UNKNOWN";
     static final boolean IS_ACTIVE = true;
 
     static final int PAGE_SIZE = 20;
 
-    static final ListReasoningBranchesRequestDto LIST_BRANCHES_REQUEST_NO_FILTER =
+    static final ListReasoningBranchesRequestDto LIST_BRANCHES_REQUEST =
         new ListReasoningBranchesRequestDto(AI_SOLUTION, IS_ACTIVE, 0, PAGE_SIZE);
+
+    static final ListReasoningBranchesRequestDto INVALID_LIST_BRANCHES_REQUEST =
+        new ListReasoningBranchesRequestDto(INVALID_AI_SOLUTION, IS_ACTIVE, 0, PAGE_SIZE);
 
     static final ReasoningBranchDto REASONING_BRANCH_1 =
         ReasoningBranchDto

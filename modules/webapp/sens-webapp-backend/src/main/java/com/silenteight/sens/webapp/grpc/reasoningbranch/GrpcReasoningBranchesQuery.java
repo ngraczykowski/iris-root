@@ -34,7 +34,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.google.rpc.Code.NOT_FOUND;
-import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.valueOf;
 import static com.silenteight.protocol.utils.MoreTimestamps.toInstant;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
@@ -277,7 +276,7 @@ class GrpcReasoningBranchesQuery implements
 
   private static BranchSolutionFilter buildBranchSolutionFilter(String solution) {
     return BranchSolutionFilter.newBuilder()
-        .addSolutions(valueOf(solution))
+        .addSolutions(BranchSolutionMapper.map(solution))
         .build();
   }
 

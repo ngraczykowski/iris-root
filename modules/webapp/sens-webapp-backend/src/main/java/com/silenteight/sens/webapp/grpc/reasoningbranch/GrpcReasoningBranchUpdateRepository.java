@@ -16,6 +16,7 @@ import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.AiS
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.ChangeRequestRepository;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.update.UpdatedBranches;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
+import com.silenteight.sens.webapp.grpc.InvalidBranchSolutionException;
 
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,8 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
     log.info(REASONING_BRANCH, "Saving updated Branches using gRPC BranchGovernance");
     Try<Void> tryUpdate = Try.of(() -> createRequest(updatedBranches))
         .mapFailure(Case(
-            $(instanceOf(IllegalArgumentException.class)), AiSolutionNotSupportedException::new))
+            $(instanceOf(InvalidBranchSolutionException.class)),
+            AiSolutionNotSupportedException::new))
         .flatMapTry(request -> Try.run(() -> governanceBlockingStub.changeBranches(request)));
 
     return mapStatusExceptionsToCommunicationException(tryUpdate)

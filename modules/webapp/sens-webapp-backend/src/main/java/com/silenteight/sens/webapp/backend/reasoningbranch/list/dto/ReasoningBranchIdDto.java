@@ -18,10 +18,10 @@ public class ReasoningBranchIdDto {
   private long decisionTreeId;
   private long featureVectorId;
 
-  public static ReasoningBranchIdDto valueOf(String id) {
-    String[] branchIdParts = id.split(BRANCH_ID_DELIMITER);
+  public static ReasoningBranchIdDto valueOf(String branchId) {
+    String[] branchIdParts = branchId.split(BRANCH_ID_DELIMITER);
     if (branchIdParts.length != 2) {
-      throw new InvalidBranchIdException();
+      throw new InvalidBranchIdException(branchId);
     }
 
     try {
@@ -30,7 +30,7 @@ public class ReasoningBranchIdDto {
 
       return new ReasoningBranchIdDto(decisionTreeId, featureVectorId);
     } catch (NumberFormatException e) {
-      throw new InvalidBranchIdException();
+      throw new InvalidBranchIdException(branchId, e);
     }
   }
 }

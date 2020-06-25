@@ -24,12 +24,15 @@ import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     CircuitBreakerRestController.class,
-    GenericExceptionControllerAdvice.class,
-    CircuitBreakerRestControllerAdvice.class })
+    CircuitBreakerRestControllerAdvice.class,
+    GenericExceptionControllerAdvice.class })
 class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
 
   private static final String DISCREPANT_BRANCHES_URL = "/discrepant-branches";
@@ -115,14 +118,14 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
     }
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })
-    void its404_whenBranchIdIncorrect() {
+    void its400_whenBranchIdIncorrect() {
       get(discrepancyIdsUrlWith("abc"))
           .contentType(anything())
-          .statusCode(NOT_FOUND.value());
+          .statusCode(BAD_REQUEST.value());
 
       get(discrepancyIdsUrlWith("abc-bcd"))
           .contentType(anything())
-          .statusCode(NOT_FOUND.value());
+          .statusCode(BAD_REQUEST.value());
     }
 
     @TestWithRole(roles = { ANALYST, AUDITOR })

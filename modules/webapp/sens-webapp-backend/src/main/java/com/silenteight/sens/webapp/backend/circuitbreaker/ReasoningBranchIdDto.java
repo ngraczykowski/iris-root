@@ -21,14 +21,15 @@ public class ReasoningBranchIdDto {
   static ReasoningBranchIdDto valueOf(String branchId) {
     String[] branchIdParts = BRANCH_ID_DELIMITER_PATTERN.split(branchId);
     if (branchIdParts.length != 2) {
-      throw new InvalidBranchIdException();
+      throw new InvalidBranchIdException(branchId);
     }
+
     try {
       long decisionTreeId = parseLong(branchIdParts[0]);
       long featureVectorId = parseLong(branchIdParts[1]);
       return new ReasoningBranchIdDto(decisionTreeId, featureVectorId);
     } catch (NumberFormatException e) {
-      throw new InvalidBranchIdException(e);
+      throw new InvalidBranchIdException(branchId, e);
     }
   }
 }

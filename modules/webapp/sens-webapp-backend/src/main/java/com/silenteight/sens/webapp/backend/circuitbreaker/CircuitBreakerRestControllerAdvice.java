@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
 class CircuitBreakerRestControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(InvalidBranchIdException.class)
   public ResponseEntity<ErrorDto> handle(InvalidBranchIdException e) {
-    return handle(e, "Branch not found", NOT_FOUND);
+    return handle(e, "Invalid Branch ID. branchId=" + e.getBranchId(), BAD_REQUEST);
   }
 }

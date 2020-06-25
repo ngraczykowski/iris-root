@@ -8,13 +8,17 @@ import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 import java.util.regex.Pattern;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BranchSolutionMapper {
+public final class BranchSolutionMapper {
 
   private static final String SOLUTION_PREFIX = "BRANCH_";
   private static final Pattern SOLUTION_PREFIX_PATTERN = Pattern.compile(SOLUTION_PREFIX);
 
   public static BranchSolution map(String solution) {
-    return BranchSolution.valueOf(addBranchPrefix(solution));
+    try {
+      return BranchSolution.valueOf(addBranchPrefix(solution));
+    } catch (IllegalArgumentException e) {
+      throw new InvalidBranchSolutionException(solution, e);
+    }
   }
 
   private static String addBranchPrefix(String newSolution) {

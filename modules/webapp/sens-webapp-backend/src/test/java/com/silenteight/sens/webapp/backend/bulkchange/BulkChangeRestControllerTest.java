@@ -35,7 +35,10 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     BulkChangeRestController.class,
@@ -208,12 +211,12 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
     }
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })
-    void its404_whenBranchIdIncorrect() {
+    void its400_whenBranchIdIncorrect() {
       get(mappingForIds("abc"))
-          .statusCode(NOT_FOUND.value());
+          .statusCode(BAD_REQUEST.value());
 
       get(mappingForIds("abc-bcd"))
-          .statusCode(NOT_FOUND.value());
+          .statusCode(BAD_REQUEST.value());
     }
 
     private String mappingForIds(Collection<ReasoningBranchIdDto> reasoningBranchIds) {
