@@ -5,7 +5,8 @@
   }
 
   &--horizontal {
-    padding-left: calculate-8-pt-grid(3);
-    padding-right: calculate-8-pt-grid(3);
+    $horizontal-content-margin: calculate-8-pt-grid(3);
+    padding-left: $horizontal-content-margin;
+    padding-right: $horizontal-content-margin;
   }
 }

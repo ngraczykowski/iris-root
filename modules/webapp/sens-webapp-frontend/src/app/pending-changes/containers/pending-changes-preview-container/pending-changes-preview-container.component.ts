@@ -117,7 +117,7 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
 
   generateChangeRequestHeader() {
     return {
-      title: 'pendingChanges.prefix',
+      title: 'pendingChanges.changeRequestDetails.title',
       parameter: this.changeRequestDetails.id.toString(),
     };
   }

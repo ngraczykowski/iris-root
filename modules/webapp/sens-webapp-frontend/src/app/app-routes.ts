@@ -3,6 +3,7 @@ import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/aud
 import { CircuitBreakerDashboardComponent } from '@app/circuit-breaker-dashboard/containers/circuit-breaker-dashboard/circuit-breaker-dashboard.component';
 import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
+import { ReasoningBranchBrowserComponent } from '@app/reasoning-branch-browser/containers/reasoning-branch-browser/reasoning-branch-browser.component';
 import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report/containers/reasoning-branches-report/reasoning-branches-report.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
@@ -14,7 +15,6 @@ import { InternalServerErrorComponent } from './pages/internal-server-error/inte
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
 
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { ReasoningBranchManagementPageComponent } from './reasoning-branch-management/containers/reasoning-branch-management-page/reasoning-branch-management-page.component';
 import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
 import { ChangeRequestComponent } from '@app/change-request/containers/change-request/change-request.component';
@@ -24,25 +24,16 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/reasoning-branch',
+    redirectTo: 'reasoning-branch/browser',
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Business Operator']
     }
   },
   {
-    path: 'reasoning-branch/:id',
+    path: 'reasoning-branch/browser',
     pathMatch: 'full',
-    component: ReasoningBranchManagementPageComponent,
-    canActivate: [AuthenticationGuard, AuthorityGuard],
-    data: {
-      authorities: ['Business Operator']
-    }
-  },
-  {
-    path: 'reasoning-branch',
-    pathMatch: 'full',
-    component: ReasoningBranchManagementPageComponent,
+    component: ReasoningBranchBrowserComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Business Operator']

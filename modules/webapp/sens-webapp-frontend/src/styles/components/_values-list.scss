@@ -1,8 +1,31 @@
 .values-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   grid-column-gap: calculate-8-pt-grid(2);
   width: 100%;
+
+  &--horizontal {
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: calculate-8-pt-grid(2);
+  }
+
+  &--vertical {
+    margin-bottom: calculate-8-pt-grid(2);
+
+    & > p {
+      &:first-child {
+        margin-bottom: calculate-8-pt-grid(1);
+      }
+    }
+  }
+
+  & > p {
+    margin: 0;
+
+    &:first-child {
+      color: rgba(0, 0, 0, 0.54);
+      font-weight: 500;
+    }
+  }
 
   &__value {
     &--right {

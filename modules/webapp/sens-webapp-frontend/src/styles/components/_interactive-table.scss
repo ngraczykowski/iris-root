@@ -3,16 +3,19 @@
     cursor: pointer;
 
     &:hover {
-      background-color: rgba($gray, .1);
+      background-color: rgba($primary, .04);
     }
 
     &--active {
-      background-color: rgba($primary, .1);
+      &,
+      &:hover {
+        background-color: rgba($primary, .1);
 
-      .mat-cell {
-        &,
-        & * {
-          color: $primary;
+        .mat-cell {
+          &,
+          & * {
+            color: $primary;
+          }
         }
       }
     }

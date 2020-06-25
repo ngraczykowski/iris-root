@@ -1,0 +1,7 @@
+@import 'src/styles/abstracts/8-pt-grid';
+
+.create-change-request {
+  &__icon {
+    margin-right: calculate-8-pt-grid(2);
+  }
+}

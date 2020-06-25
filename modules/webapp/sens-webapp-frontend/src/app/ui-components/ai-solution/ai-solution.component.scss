@@ -1,0 +1,38 @@
+@import 'src/styles/abstracts/8-pt-grid';
+@import 'src/styles/abstracts/colors';
+
+@mixin ai-solution($color) {
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+  color: $color;
+
+  &:after {
+    border-radius: 4px;
+    content: "";
+    height: 100%;
+    left: 50%;
+    opacity: .15;
+    padding: calculate-8-pt-grid(1)/2 calculate-8-pt-grid(1);
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    background: $color;
+    z-index: -1;
+  }
+}
+
+.ai-solution {
+  &--false-positive {
+    @include ai-solution($positive);
+  }
+
+  &--potential-true-positive {
+    @include ai-solution($warn);
+  }
+
+  &--no-decision {
+    @include ai-solution($disabled);
+  }
+}

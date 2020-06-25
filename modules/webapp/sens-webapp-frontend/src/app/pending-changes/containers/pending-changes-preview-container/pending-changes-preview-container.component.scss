@@ -1,18 +1,6 @@
 @import 'abstracts/8-pt-grid';
 
 .change-request-details {
-  &__headline {
-    padding: calculate-8-pt-grid(2) calculate-8-pt-grid(2) 0;
-  }
-
-  &__section {
-    margin-bottom: calculate-8-pt-grid(1);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
   &__decision {
     display: grid;
     grid-column-gap: calculate-8-pt-grid(2);

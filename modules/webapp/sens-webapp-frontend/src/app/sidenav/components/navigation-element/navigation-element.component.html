@@ -1,6 +1,6 @@
 <a routerLink="{{navElement.url}}">
   <mat-list-item class="nav-element" routerLinkActive="nav-element--active">
-    <mat-icon mat-list-icon class="nav-element__icon">{{navElement.icon}}</mat-icon>
+    <mat-icon appearance="outline" mat-list-icon class="nav-element__icon mat-icon--action">{{navElement.icon}}</mat-icon>
     <p class="nav-element__label" mat-line [translate]="navElement.label"></p>
   </mat-list-item>
 </a>

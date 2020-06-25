@@ -124,7 +124,30 @@
     }
   },
   "reasoningBranchBrowser": {
-    "title": "Browser"
+    "title": "Browser",
+    "filtering": {
+      "aiSolutions": {
+      }
+    },
+    "loading": {
+      "title": "Loading Reasoning Branches list"
+    },
+    "error": {
+      "title": "Failed to get the list of Reasoning Branches",
+      "description": "Please try to fetch a list of Reasoning Branches manually if the problem will persist, contact the administrator.",
+      "button": "Fetch the Reasoning Branches list"
+    },
+    "labels": {
+      "id": "ID",
+      "aiSolution": "AI Solution",
+      "aiStatus": "AI Status",
+      "changeRequest": "Change Request",
+      "lastUpdate": "Last update"
+    },
+    "details": {
+      "title": "RB {{value}} Details"
+    },
+    "createChangeRequest": "Create Change Request for {{ counter }} selected Reasoning Branches"
   },
   "usersList": {
     "title": "Users List"
@@ -154,7 +177,7 @@
       "button": "Fetch the Pending Changes list"
     },
     "changeRequestDetails": {
-      "title": "{{value}}",
+      "title": "CR-{{value}} Details",
       "details": {
         "labels": {
           "changeRequestID": "Change Request ID",

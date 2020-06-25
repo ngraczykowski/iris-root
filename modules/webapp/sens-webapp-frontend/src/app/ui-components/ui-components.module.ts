@@ -12,13 +12,15 @@ import { StateComponent } from './state/state.component';
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { HeaderComponent } from './header/header.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { AiSolutionComponent } from './ai-solution/ai-solution.component';
 
 @NgModule({
   declarations: [
     StateComponent,
     ErrorCardComponent,
     HeaderComponent,
-    DialogComponent
+    DialogComponent,
+    AiSolutionComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,8 @@ import { DialogComponent } from './dialog/dialog.component';
     StateComponent,
     ErrorCardComponent,
     HeaderComponent,
-    DialogComponent
+    DialogComponent,
+    AiSolutionComponent
   ],
   entryComponents: [
     DialogComponent

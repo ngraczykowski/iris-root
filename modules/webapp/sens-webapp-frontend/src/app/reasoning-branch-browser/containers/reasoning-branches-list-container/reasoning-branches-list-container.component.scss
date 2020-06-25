@@ -1,0 +1,11 @@
+@import 'src/styles/abstracts/8-pt-grid';
+
+.rb-list {
+  &__options {
+    display: flex;
+
+    & > * {
+      margin-right: calculate-8-pt-grid(2);
+    }
+  }
+}

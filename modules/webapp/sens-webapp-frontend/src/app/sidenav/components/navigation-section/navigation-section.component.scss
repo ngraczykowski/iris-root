@@ -1,9 +1,13 @@
 @import 'abstracts/8-pt-grid';
 
 .navigation-section {
-  margin-bottom: calculate-8-pt-grid(3);
+  margin-bottom: calculate-8-pt-grid(5);
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  .mat-subheader {
+    padding: calculate-8-pt-grid(2) calculate-8-pt-grid(1);
   }
 }

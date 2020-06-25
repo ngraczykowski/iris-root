@@ -19,7 +19,7 @@ export class SidenavComponent implements OnInit {
         {
           label: 'usersList.title',
           url: '/users/user-management',
-          icon: 'people'
+          icon: 'people_outline'
         }
       ]
     },
@@ -29,13 +29,13 @@ export class SidenavComponent implements OnInit {
       links: [
         {
           label: 'reasoningBranchBrowser.title',
-          url: '/reasoning-branch',
-          icon: 'visibility'
+          url: '/reasoning-branch/browser',
+          icon: 'visibility_outline'
         },
         {
           label: 'changeRequest.title',
           url: '/reasoning-branches/change-request',
-          icon: 'add_circle'
+          icon: 'add_circle_outline'
         },
         {
           label: 'pendingChanges.title',
@@ -45,7 +45,7 @@ export class SidenavComponent implements OnInit {
         {
           label: 'circuitBreakerDashboard.title',
           url: '/reasoning-branches/circuit-breaker-dashboard',
-          icon: 'report_problem'
+          icon: 'error_outline'
         }
       ]
     },

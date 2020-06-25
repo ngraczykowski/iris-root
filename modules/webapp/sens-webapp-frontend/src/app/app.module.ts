@@ -18,6 +18,7 @@ import { InternalServerErrorComponent } from '@app/pages/internal-server-error/i
 import { MaintenanceComponent } from '@app/pages/maintenance/maintenance.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { PageNotFoundComponent } from '@app/pages/page-not-found/page-not-found.component';
+import { ReasoningBranchBrowserModule } from '@app/reasoning-branch-browser/reasoning-branch-browser.module';
 import { ReasoningBranchesReportModule } from '@app/reasoning-branches-report/reasoning-branches-report.module';
 import { KeycloakInitializer } from '@app/shared/security/bootstrap/keycloak-initializer';
 import { ROLES_REDIRECT_CONFIG } from '@app/shared/security/role-default-page-mappings';
@@ -31,7 +32,6 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { concat, Observable } from 'rxjs';
-import { ReasoningBranchManagementModule } from './reasoning-branch-management/reasoning-branch-management.module';
 import { reducers } from './reducers';
 import { UserManagementModule } from './user-management/user-management.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -60,7 +60,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       maxAge: 10
     }),
     KeycloakAngularModule,
-    ReasoningBranchManagementModule,
     AuditTrailModule,
     UserManagementModule,
     BrowserAnimationsModule,
@@ -72,7 +71,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PendingChangesModule,
     ChangeRequestModule,
     CircuitBreakerDashboardModule,
-    ReasoningBranchesReportModule
+    ReasoningBranchesReportModule,
+    ReasoningBranchBrowserModule
   ],
   providers: [
     WINDOW_PROVIDERS,

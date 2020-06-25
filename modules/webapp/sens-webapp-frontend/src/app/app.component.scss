@@ -8,7 +8,8 @@ $contentHeight: calc(100% - 65px);
 
   &__navigation {
     display: none;
-    width: 256px;
+    width: 264px;
+    padding: 0 calculate-8-pt-grid(2);
 
     &--active {
       display: block;

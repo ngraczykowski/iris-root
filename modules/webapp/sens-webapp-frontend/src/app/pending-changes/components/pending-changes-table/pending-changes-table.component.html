@@ -1,65 +1,65 @@
-<table mat-table [dataSource]="dataSource" matSort
-       class="interactive-table mat-table--full-width mat-table--main-content">
+<mat-table [dataSource]="dataSource" matSort
+           class="interactive-table mat-table--main-content">
   <!-- ID Column -->
   <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
       <span [translate]="translateTablePrefix + 'id'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element">
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
       {{ translatePrefix + 'prefix' | translate:{value: element.id} }}
-    </td>
+    </mat-cell>
   </ng-container>
 
   <!-- AI Solution Column -->
   <ng-container matColumnDef="aiSolution">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
       <span [translate]="translateTablePrefix + 'solution'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element">
-      <span [class.secondary-text]="element.aiSolution == 'Leave unchanged'">
-        <span *ngIf="element.aiSolution">{{element.aiSolution}}</span>
-        <span *ngIf="!element.aiSolution"
-              class="secondary-text"
-              [translate]="'aiSolutions.unchanged'"></span>
-    </span></td>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <app-ai-solution *ngIf="element.aiSolution"
+                       [aiSolution]="element.aiSolution"></app-ai-solution>
+      <span *ngIf="!element.aiSolution"
+            class="secondary-text"
+            [translate]="'aiSolutions.unchanged'"></span>
+    </mat-cell>
   </ng-container>
 
   <!-- AI Status Column -->
   <ng-container matColumnDef="active">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
       <span [translate]="translateTablePrefix + 'status'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element">
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
       <span *ngIf="element.active">{{element.active}}</span>
       <span *ngIf="!element.active"
             class="secondary-text"
             [translate]="'aiStatus.unchanged'"></span>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <!-- Request Date Column -->
   <ng-container matColumnDef="createdAt">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
       <span [translate]="translateTablePrefix + 'requestDate'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element">
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
       {{ element.createdAt | date:dateFormatting }}
-    </td>
+    </mat-cell>
   </ng-container>
 
   <!-- Author Column -->
   <ng-container matColumnDef="createdBy">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
       <span [translate]="translateTablePrefix + 'author'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element"> {{element.createdBy}} </td>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.createdBy}} </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row
-      *matRowDef="let row;
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+          *matRowDef="let row;
       columns: displayedColumns;"
-      class="interactive-table__row"
-      [class.interactive-table__row--active]="highlightRow == row.id"
-      (click)="selectRow(row)"></tr>
-</table>
+          class="interactive-table__row"
+          [class.interactive-table__row--active]="highlightRow == row.id"
+          (click)="selectRow(row)"></mat-row>
+</mat-table>

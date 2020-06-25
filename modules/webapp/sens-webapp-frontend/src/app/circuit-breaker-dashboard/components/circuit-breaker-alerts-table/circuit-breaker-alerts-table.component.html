@@ -1,44 +1,43 @@
-<table mat-table
-       [dataSource]="dataSource"
-       class="mat-table--full-width">
+<mat-table
+        [dataSource]="dataSource">
 
   <ng-container matColumnDef="alertId">
-    <th mat-header-cell *matHeaderCellDef>
+    <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'alertId'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element"> {{element.alertId}} </td>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.alertId}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="aiComment">
-    <th mat-header-cell *matHeaderCellDef>
+    <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'aiComment'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element"> {{element.aiComment}} </td>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.aiComment}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="aiCommentDate">
-    <th mat-header-cell *matHeaderCellDef>
+    <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'aiCommentDate'"></span>
-    </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.aiCommentDate | date:dateFormatting}} </td>
+    </mat-header-cell>
+    <mat-cell
+            *matCellDef="let element"> {{element.aiCommentDate | date:dateFormatting}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="analystComment">
-    <th mat-header-cell *matHeaderCellDef>
+    <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'analystComment'"></span>
-    </th>
-    <td mat-cell *matCellDef="let element"> {{element.analystComment}} </td>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.analystComment}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="analystCommentDate">
-    <th mat-header-cell *matHeaderCellDef>
+    <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'analystCommentDate'"></span>
-    </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.analystCommentDate | date:dateFormatting}} </td>
+    </mat-header-cell>
+    <mat-cell
+        *matCellDef="let element"> {{element.analystCommentDate | date:dateFormatting}} </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

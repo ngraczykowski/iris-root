@@ -1,0 +1,29 @@
+<div class="content-internal-margin--vertical content-internal-margin--horizontal rb-list">
+  <app-header [headerData]="header"></app-header>
+  <div class="rb-list__options">
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>AI Solution</mat-label>
+        <mat-select>
+          <mat-option>All</mat-option>
+          <mat-option>False Positive</mat-option>
+          <mat-option>Potential True Positive</mat-option>
+          <mat-option>No Decision</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>AI Status</mat-label>
+        <mat-select>
+          <mat-option>All</mat-option>
+          <mat-option>Active</mat-option>
+          <mat-option>Disabled</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <app-state [stateContent]="stateLoading"></app-state>
+  <app-state [stateContent]="stateError"></app-state>
+  <app-reasoning-branches-table></app-reasoning-branches-table>
+</div>
