@@ -1,5 +1,7 @@
 package com.silenteight.sep.base.common.app;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.net.URL;
 import java.nio.file.InvalidPathException;
@@ -16,8 +18,10 @@ import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
 import static java.util.Arrays.asList;
 
+@Slf4j
 public class HomeDirectoryDiscoverer {
 
   private static final Pattern JAR_FILE_PATTERN =
@@ -40,13 +44,35 @@ public class HomeDirectoryDiscoverer {
     );
   }
 
-  Optional<Path> discover() {
+  Path configureHomeDirectory() {
+    var homeDirectory = discoverOrFallBack();
+    setHomeDirectory(homeDirectory);
+    return homeDirectory;
+  }
+
+  private Path discoverOrFallBack() {
+    return discover().orElseGet(() -> {
+      Path userDir = getUserDir();
+      log.warn("Home directory not found! Falling back to: {}", userDir);
+      return userDir;
+    });
+  }
+
+  private Optional<Path> discover() {
     for (PathSupplier supplier : pathSuppliers) {
       Optional<Path> path = supplier.get();
       if (path.isPresent())
         return path;
     }
     return Optional.empty();
+  }
+
+  private static Path getUserDir() {
+    return Paths.get(getProperty("user.dir", "."));
+  }
+
+  private void setHomeDirectory(Path homePath) {
+    setProperty(homeProperty, homePath.toString());
   }
 
   private Optional<Path> getHomeFromEnvironment() {

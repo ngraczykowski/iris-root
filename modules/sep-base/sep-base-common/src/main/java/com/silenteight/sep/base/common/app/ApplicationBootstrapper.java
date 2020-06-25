@@ -1,7 +1,6 @@
 package com.silenteight.sep.base.common.app;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
@@ -31,7 +30,6 @@ public class ApplicationBootstrapper {
   private final String appName;
   private final HomeDirectoryDiscoverer homeDiscoverer;
 
-  @Setter
   private String homeDirectory;
 
   public void bootstrapApplication() {
@@ -48,16 +46,7 @@ public class ApplicationBootstrapper {
   }
 
   private void setUpHomeDirectory() {
-    homeDiscoverer
-        .discover()
-        .map(Path::toString)
-        .ifPresentOrElse(this::setHomeDirectory, this::homeNotSet);
-  }
-
-  private void homeNotSet() {
-    var userDir = getProperty("user.dir", ".");
-    log.warn("Home directory not found! Setting to: {}", userDir);
-    setHomeDirectory(userDir);
+    homeDirectory = homeDiscoverer.configureHomeDirectory().toString();
   }
 
   private void setUpPlugins() {
@@ -133,10 +122,7 @@ public class ApplicationBootstrapper {
     setPropertyFromEnvironment("javax.net.ssl.trustStorePassword", "TRUSTSTORE_PASSWORD");
   }
 
-  private static void setPropertyFromEnvironment(
-      String property,
-      String environmentVariable) {
-
+  private static void setPropertyFromEnvironment(String property, String environmentVariable) {
     var environmentVariableValue = System.getenv(environmentVariable);
 
     if (getProperty(property) == null && isNotBlank(environmentVariableValue))
