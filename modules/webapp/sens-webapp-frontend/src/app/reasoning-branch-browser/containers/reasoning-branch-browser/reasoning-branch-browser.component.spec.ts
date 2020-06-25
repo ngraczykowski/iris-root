@@ -8,9 +8,9 @@ describe('ReasoningBranchBrowserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReasoningBranchBrowserComponent ]
+      declarations: [ReasoningBranchBrowserComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

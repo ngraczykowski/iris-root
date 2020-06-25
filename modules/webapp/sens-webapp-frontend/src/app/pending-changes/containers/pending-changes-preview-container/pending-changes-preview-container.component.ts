@@ -1,9 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChangeRequestPreviewComponent } from '@app/pending-changes/components/change-request-preview/change-request-preview.component';
+import { ChangeRequestDecisionRequestBody } from '@app/pending-changes/models/change-request-decision-request-body';
+import { ChangeRequestDecision } from '@app/pending-changes/models/change-request-decision.enum';
 import { PendingChange } from '@app/pending-changes/models/pending-changes';
 import { PendingChangesService } from '@app/pending-changes/services/pending-changes.service';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
+import { AuthRole } from '@app/shared/security/model/auth-role.enum';
 import { DialogComponent } from '@app/ui-components/dialog/dialog.component';
 import { StateContent } from '@app/ui-components/state/state';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,10 +17,12 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './pending-changes-preview-container.component.html',
   styleUrls: ['./pending-changes-preview-container.component.scss']
 })
-export class PendingChangesPreviewContainerComponent implements OnInit {
+export class PendingChangesPreviewContainerComponent {
 
   @Input() changeRequestDetails: PendingChange;
   @Output() refreshList = new EventEmitter();
+
+  @ViewChild('previewComponent', {static: false}) previewComponent: ChangeRequestPreviewComponent;
 
   translatePrefix = 'pendingChanges.changeRequestDetails.';
   translatePrefixDialogReject = this.translatePrefix + 'dialogReject.';
@@ -24,6 +30,9 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
   translatePrefixDialogCancel = this.translatePrefix + 'dialogCancel.';
   translatePrefixDecision = this.translatePrefix + 'decision.';
   translatePrefixFeedback = this.translatePrefix + 'feedback.';
+
+  canCancel: boolean = this.authenticatedUserFacade.hasRole(AuthRole.BUSINESS_OPERATOR);
+  canApproveOrReject: boolean = this.authenticatedUserFacade.hasRole(AuthRole.APPROVER);
 
   previewEmptyState: StateContent = {
     centered: true,
@@ -38,66 +47,69 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
       private readonly authenticatedUserFacade: AuthenticatedUserFacade,
       private pendingChangesService: PendingChangesService,
       private _snackBar: MatSnackBar,
-      private translate: TranslateService) { }
-
-  ngOnInit() {
+      private translate: TranslateService) {
   }
 
-  openApproveDialog(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '440px',
+  approve() {
+    this.submit(ChangeRequestDecision.APPROVE, {
+      autoFocus: false,
       data: {
         title: this.translatePrefixDialogApprove + 'title',
         description: this.translatePrefixDialogApprove + 'description',
         buttonCta: this.translatePrefixDialogApprove + 'buttonCta',
         buttonClose: this.translatePrefixDialogApprove + 'buttonClose'
       }
-    });
-    const sub = dialogRef.afterClosed().subscribe((action) => {
-      if (action === 'submit') {
-        this.sendDecision('approve');
-      }
+    }, {
+      approverComment: this.previewComponent.comment
     });
   }
 
-  openRejectDialog(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '440px',
+  reject() {
+    this.submit(ChangeRequestDecision.REJECT, {
+      autoFocus: false,
       data: {
         title: this.translatePrefixDialogReject + 'title',
         description: this.translatePrefixDialogReject + 'description',
         buttonCta: this.translatePrefixDialogReject + 'buttonCta',
         buttonClose: this.translatePrefixDialogReject + 'buttonClose'
       }
-    });
-    const sub = dialogRef.afterClosed().subscribe((action) => {
-      if (action === 'submit') {
-        this.sendDecision('reject');
-      }
+    }, {
+      rejectorComment: this.previewComponent.comment
     });
   }
 
-  openCancelDialog(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '440px',
+  cancel() {
+    this.submit(ChangeRequestDecision.CANCEL, {
+      autoFocus: false,
       data: {
         title: this.translatePrefixDialogCancel + 'title',
         description: this.translatePrefixDialogCancel + 'description',
         buttonCta: this.translatePrefixDialogCancel + 'buttonCta',
         buttonClose: this.translatePrefixDialogCancel + 'buttonClose'
       }
-    });
-    const sub = dialogRef.afterClosed().subscribe((action) => {
-      if (action === 'submit') {
-        this.sendDecision('cancel');
-      }
+    }, {
+      cancellerComment: this.previewComponent.comment
     });
   }
 
-  sendDecision(decision) {
+  submit(decision: ChangeRequestDecision, dialogConfig: MatDialogConfig, params: ChangeRequestDecisionRequestBody): void {
+    if (this.previewComponent.checkValidity()) {
+      this.dialog.open(DialogComponent, {
+        ...dialogConfig,
+        width: '440px',
+      }).afterClosed().subscribe((result: any) => {
+        if (result === 'submit') {
+          this.sendDecision(decision, params);
+        }
+      });
+    }
+  }
+
+  sendDecision(decision: ChangeRequestDecision, body: ChangeRequestDecisionRequestBody) {
     this.pendingChangesService.changeRequestDecision(
         this.changeRequestDetails.id.toString(),
-        decision
+        decision,
+        body
     ).subscribe((res: any) => {
       this.refreshList.emit();
       this.feedbackMessage(decision);
@@ -115,58 +127,4 @@ export class PendingChangesPreviewContainerComponent implements OnInit {
     });
   }
 
-  generateChangeRequestHeader() {
-    return {
-      title: 'pendingChanges.changeRequestDetails.title',
-      parameter: this.changeRequestDetails.id.toString(),
-    };
-  }
-
-  generateChangeRequestContent() {
-    return {
-      details: {
-        id: {
-          label: 'pendingChanges.changeRequestDetails.details.labels.changeRequestID',
-          value: this.changeRequestDetails.id.toString(),
-        },
-        branches: {
-          label: 'pendingChanges.changeRequestDetails.details.labels.reasoningBranchesCount',
-          value: this.changeRequestDetails.reasoningBranchIds.length.toString(),
-        },
-        createdAt: {
-          label: 'pendingChanges.changeRequestDetails.details.labels.requestDate',
-          value: this.changeRequestDetails.createdAt,
-        },
-        createdBy: {
-          label: 'pendingChanges.changeRequestDetails.details.labels.author',
-          value: this.changeRequestDetails.createdBy,
-        },
-      },
-      changes: {
-        aiSolution: {
-          label: 'pendingChanges.changeRequestDetails.changes.labels.solution',
-          value: this.changeRequestDetails.aiSolution,
-        },
-        active: {
-          label: 'pendingChanges.changeRequestDetails.changes.labels.status',
-          value: this.changeRequestDetails.active,
-        },
-      },
-      comment: this.changeRequestDetails.comment,
-    };
-  }
-
-  hasProperRoleToDecide(requiredRole) {
-    const roles = this.authenticatedUserFacade.getUserRoles();
-
-    return roles.includes(requiredRole);
-  }
-
-  canCancel() {
-    return this.hasProperRoleToDecide('Business Operator');
-  }
-
-  canApproveOrReject() {
-    return this.hasProperRoleToDecide('Approver');
-  }
 }

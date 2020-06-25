@@ -192,11 +192,21 @@
           "status": "AI Status"
         }
       },
-      "comment": {
-        "title": "Comment"
+      "reason": {
+        "title": "Reason"
       },
       "decision": {
         "title": "Decision",
+        "form": {
+          "comment": {
+            "label": "Comment",
+            "hint": "Describe your decision in a few words",
+            "validation": {
+              "requiredToApproveOrReject": "Comment is required to reject or approve the Change Request",
+              "requiredToCancel": "Comment is required to cancel the Change Request"
+            }
+          }
+        },
         "buttons": {
           "reject": "Reject",
           "approve": "Approve",

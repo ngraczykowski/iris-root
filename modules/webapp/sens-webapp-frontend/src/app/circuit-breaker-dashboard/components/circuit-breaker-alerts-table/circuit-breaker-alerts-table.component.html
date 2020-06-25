@@ -5,14 +5,14 @@
     <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'alertId'"></span>
     </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.alertId}} </mat-cell>
+    <mat-cell *matCellDef="let element"> {{element.alertId}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="aiComment">
     <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'aiComment'"></span>
     </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.aiComment}} </mat-cell>
+    <mat-cell *matCellDef="let element"> {{element.aiComment}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="aiCommentDate">
@@ -20,14 +20,15 @@
       <span [translate]="translatePrefix + 'aiCommentDate'"></span>
     </mat-header-cell>
     <mat-cell
-            *matCellDef="let element"> {{element.aiCommentDate | date:dateFormatting}} </mat-cell>
+            *matCellDef="let element"> {{element.aiCommentDate | date:dateFormatting}}
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="analystComment">
     <mat-header-cell *matHeaderCellDef>
       <span [translate]="translatePrefix + 'analystComment'"></span>
     </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.analystComment}} </mat-cell>
+    <mat-cell *matCellDef="let element"> {{element.analystComment}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="analystCommentDate">
@@ -35,7 +36,8 @@
       <span [translate]="translatePrefix + 'analystCommentDate'"></span>
     </mat-header-cell>
     <mat-cell
-        *matCellDef="let element"> {{element.analystCommentDate | date:dateFormatting}} </mat-cell>
+            *matCellDef="let element"> {{element.analystCommentDate | date:dateFormatting}}
+    </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

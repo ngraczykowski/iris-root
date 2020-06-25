@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ChangeRequestDecisionRequestBody } from '@app/pending-changes/models/change-request-decision-request-body';
+import { ChangeRequestDecision } from '@app/pending-changes/models/change-request-decision.enum';
 import {
   BulkChangeResponse,
   PendingChangeResponse
@@ -49,10 +51,10 @@ export class PendingChangesService {
     );
   }
 
-  changeRequestDecision(changeRequestID: string, decision: string) {
+  changeRequestDecision(changeRequestID: string, decision: ChangeRequestDecision, body: ChangeRequestDecisionRequestBody) {
     return this.http.patch(
         `${environment.serverApiUrl}/change-request/${changeRequestID}/${decision}`,
-        null,
+        body,
         {
           headers: {...({CorrelationId: uuidv4()})}
         });

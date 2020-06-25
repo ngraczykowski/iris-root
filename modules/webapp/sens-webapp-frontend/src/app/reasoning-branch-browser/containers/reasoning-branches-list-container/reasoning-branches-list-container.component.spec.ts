@@ -8,9 +8,9 @@ describe('ReasoningBranchesListContainerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReasoningBranchesListContainerComponent ]
+      declarations: [ReasoningBranchesListContainerComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

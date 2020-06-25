@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-ai-solution',
@@ -11,7 +11,7 @@ export class AiSolutionComponent {
 
   constructor() { }
 
-  generateAiSolutionStyle (aiSolution) {
+  generateAiSolutionStyle(aiSolution) {
     const solutionStyle = aiSolution.toLowerCase().split(' ').join('-');
     return `ai-solution--${solutionStyle}`;
   }

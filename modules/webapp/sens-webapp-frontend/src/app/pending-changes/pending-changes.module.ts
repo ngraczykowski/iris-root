@@ -1,5 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatButtonToggleModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatLabel, MatSelectModule,
+  MatStepperModule, MatTooltipModule
+} from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -8,6 +16,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { SharedModule } from '@app/shared/shared.module';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { PendingChangesComponent } from './containers/pending-changes/pending-changes.component';
@@ -24,6 +33,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ChangeRequestPreviewComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     MatTableModule,
     TranslateModule,
@@ -33,9 +44,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    TranslateModule,
     UiComponentsModule,
     MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    SharedModule
   ]
 })
 export class PendingChangesModule {}

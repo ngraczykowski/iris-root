@@ -1,48 +1,54 @@
-<ng-container *ngIf="changeRequestData && changeRequestID">
-  <app-header [headerData]="changeRequestID"></app-header>
+<ng-container *ngIf="pendingChange">
+  <app-header [headerData]="pendingChangeHeader"></app-header>
 
   <div class="sidebar-details__section">
     <div class="values-list values-list--horizontal">
-      <p class="mat-body" [translate]="changeRequestData.details.id.label"></p>
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.changeRequestID"></p>
       <p class="mat-body">
-        {{ 'pendingChanges.prefix' | translate:{value: changeRequestData.details.id.value} }}
+        {{ 'pendingChanges.prefix' | translate: {value: pendingChange.id} }}
       </p>
     </div>
     <div class="values-list values-list--horizontal">
-      <p class="mat-body" [translate]="changeRequestData.details.branches.label"></p>
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.reasoningBranchesCount"></p>
       <p class="mat-body">
-        {{ changeRequestData.details.branches.value }}
+        {{ pendingChange.reasoningBranchIds.length }}
       </p>
     </div>
     <div class="values-list values-list--horizontal">
-      <p class="mat-body" [translate]="changeRequestData.details.createdAt.label"></p>
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.requestDate"></p>
       <p class="mat-body">
-        {{ changeRequestData.details.createdAt.value | date:dateFormatting }}
+        {{ pendingChange.createdAt | date:dateFormatting }}
       </p>
     </div>
     <div class="values-list values-list--horizontal">
-      <p class="mat-body" [translate]="changeRequestData.details.createdBy.label"></p>
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.author"></p>
       <p class="mat-body">
-        {{ changeRequestData.details.createdBy.value }}
+        {{ pendingChange.createdBy }}
       </p>
     </div>
   </div>
   <mat-divider></mat-divider>
   <div class="sidebar-details__section">
     <div class="values-list values-list--horizontal">
-      <p class="mat-body" [translate]="changeRequestData.changes.aiSolution.label"></p>
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.changes.labels.solution"></p>
       <p class="mat-body">
-        <span *ngIf="changeRequestData.changes.aiSolution.value">{{changeRequestData.changes.aiSolution.value}}</span>
-        <span *ngIf="!changeRequestData.changes.aiSolution.value"
+        <span *ngIf="pendingChange.aiSolution">{{pendingChange.aiSolution}}</span>
+        <span *ngIf="!pendingChange.aiSolution"
               class="secondary-text"
               [translate]="'aiSolutions.unchanged'"></span>
       </p>
     </div>
     <div class="values-list values-list--horizontal">
-      <p class="mat-body" [translate]="changeRequestData.changes.active.label"></p>
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.changes.labels.status"></p>
       <p class="mat-body">
-        <span *ngIf="changeRequestData.changes.active.value">{{changeRequestData.changes.active.value}}</span>
-        <span *ngIf="!changeRequestData.changes.active.value"
+        <span *ngIf="pendingChange.active">{{pendingChange.active}}</span>
+        <span *ngIf="!pendingChange.active"
               class="secondary-text"
               [translate]="'aiStatus.unchanged'"></span>
       </p>
@@ -51,10 +57,35 @@
   <mat-divider></mat-divider>
   <div class="sidebar-details__section">
     <div class="values-list values-list--vertical">
-      <p class="mat-body" [translate]="translatePrefix + 'comment.title'"></p>
+      <p class="mat-body" [translate]="translatePrefix + 'reason.title'"></p>
       <p class="mat-body">
-        {{ changeRequestData.comment }}
+        {{ pendingChange.comment }}
       </p>
     </div>
   </div>
+
+  <form [formGroup]="form">
+    <mat-divider></mat-divider>
+    <div class="sidebar-details__section change-request-details-comment">
+      <div class="values-list values-list--vertical">
+        <p class="mat-body" [translate]="translatePrefix + 'decision.title'"></p>
+        <div class="change-request-details__comment">
+          <mat-form-field class="mat-form-field--full-width" appearance="outline">
+            <mat-label [translate]="translatePrefix + 'decision.form.comment.label'"></mat-label>
+            <textarea matInput
+                      formControlName="comment"
+                      cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="3"
+                      cdkAutosizeMaxRows="8"></textarea>
+            <mat-hint [translate]="translatePrefix + 'decision.form.comment.hint'"></mat-hint>
+            <mat-error *ngIf="form.controls.comment.hasError('required')"
+                       [translate]="translatePrefix + requiredCommentValidationMessage">
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+
 </ng-container>

@@ -9,7 +9,6 @@ import { Header } from '@app/ui-components/header/header';
 export class ReasoningBranchBrowserComponent implements OnInit {
 
 
-
   constructor() { }
 
   ngOnInit() {

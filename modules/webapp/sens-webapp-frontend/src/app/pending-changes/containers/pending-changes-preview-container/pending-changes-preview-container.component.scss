@@ -1,11 +1,9 @@
 @import 'abstracts/8-pt-grid';
 
-.change-request-details {
-  &__decision {
-    display: grid;
-    grid-column-gap: calculate-8-pt-grid(2);
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-  }
+.change-request-details__decision {
+  display: grid;
+  grid-column-gap: calculate-8-pt-grid(2);
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
 }
 

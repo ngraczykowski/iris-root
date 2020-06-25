@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json --disable-host-check --port 24400",
     "build": "ng build --prod --output-path=build/dist",
+    "mock": "cd api-mock && nodemon server.js",
     "test": "ng test",
     "testHeadless": "ng test -- --karma-config karma.headless.conf.js",
     "tsc": "tsc --noEmit",

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as fromRoot from '@app/reducers';
+import { AuthRole } from '@app/shared/security/model/auth-role.enum';
 import { Logout, TryLogin } from '@app/shared/security/store/security.actions';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, from } from 'rxjs';
@@ -33,6 +34,11 @@ export class AuthenticatedUserFacade {
     );
   }
 
+  hasRole(authRole: AuthRole): boolean {
+    const roles: string[] = this.getUserRoles();
+    return roles && roles.length ? roles.includes(authRole) : false;
+  }
+
   hasAuthority(authority: string): Observable<boolean> {
     return this.hasAuthorities([authority]);
   }
@@ -56,20 +62,20 @@ export class AuthenticatedUserFacade {
   checkUrlAccess(url: string): boolean {
     const roles = this.getUserRoles();
 
-    if (roles.includes('Admin')) {
+    if (roles.includes(AuthRole.ADMIN)) {
       return true;
     }
 
     if (url.includes('reasoning-branch')) {
-      return roles.includes('Business Operator');
+      return roles.includes(AuthRole.BUSINESS_OPERATOR);
     } // TODO Remove with Reasoning-branch
 
-    if (url.includes('reasoning-branches')) {
-      return roles.includes('Business Operator');
+    if (url.includes('reasoning-branch')) {
+      return roles.includes(AuthRole.BUSINESS_OPERATOR);
     }
 
     if (url.includes('reports')) {
-      return roles.includes('Auditor');
+      return roles.includes(AuthRole.AUDITOR);
     }
 
     return false;

@@ -32,7 +32,8 @@ app.post('/rest/webapp/api/users', (req, res) => {
     dataFile = fs.readFileSync(`${dataFolder}/users.json`);
     let json = JSON.parse(dataFile);
 
-    if (isUserNameUnique(req.body.userName, json.content) && !hasForbiddenCharacters(req.body.userName)) {
+    if (isUserNameUnique(req.body.userName, json.content)
+        && !hasForbiddenCharacters(req.body.userName)) {
       json.content.push({
         userName: req.body.userName,
         displayName: req.body.displayName,
@@ -44,7 +45,7 @@ app.post('/rest/webapp/api/users', (req, res) => {
 
       fs.writeFileSync(`${dataFolder}/users.json`, JSON.stringify(json));
       res.status(200).send(JSON.parse(dataFile));
-    } else if(hasForbiddenCharacters(req.body.userName)) {
+    } else if (hasForbiddenCharacters(req.body.userName)) {
       res.status(422).send();
     } else {
       res.status(409).send();
@@ -99,28 +100,28 @@ app.patch('/rest/webapp/api/users/:userName/password/reset', (req, res) => {
 
   if (userObject.index !== null && userObject.user !== null) {
     res.status(200).send(JSON.stringify(
-      {
-        "temporaryPassword": "Q2fqvnHW"
-      }
+        {
+          "temporaryPassword": "Q2fqvnHW"
+        }
     ));
   } else {
     res.status(404).send();
   }
 });
 
-app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId', (req, res) => {
-  let dataFile;
-  const id = req.params.branchId;
-  try {
-    dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
-    res.status(200).send(JSON.parse(dataFile));
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      res.status(404).send()
-    }
-  }
-});
-
+app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId',
+    (req, res) => {
+      let dataFile;
+      const id = req.params.branchId;
+      try {
+        dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
+        res.status(200).send(JSON.parse(dataFile));
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+          res.status(404).send()
+        }
+      }
+    });
 
 app.get('/rest/webapp/management/info', (req, res) => {
   let dataFile;
@@ -142,7 +143,8 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches', (req, res) => {
     let json = JSON.parse(dataFile);
     json.active = req.body.active;
     json.aiSolution = req.body.aiSolution;
-    fs.writeFileSync(`${dataFolder}/reasoning-branch/${id}.json`, JSON.stringify(json));
+    fs.writeFileSync(`${dataFolder}/reasoning-branch/${id}.json`,
+        JSON.stringify(json));
     res.status(200).send(JSON.parse(dataFile));
   } catch (err) {
     if (err.code === 'ENOENT') {
@@ -175,19 +177,21 @@ app.get('/rest/webapp/api/discrepant-branches', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/discrepant-branches/:id/discrepancy-ids', (req, res) => {
-  let dataFile;
-  const rbId = req.params.id;
+app.get('/rest/webapp/api/discrepant-branches/:id/discrepancy-ids',
+    (req, res) => {
+      let dataFile;
+      const rbId = req.params.id;
 
-  try {
-    dataFile = fs.readFileSync(`${dataFolder}/list-discrepancy-ids-${rbId}.json`);
-    res.status(200).send(JSON.parse(dataFile));
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      res.status(404).send()
-    }
-  }
-});
+      try {
+        dataFile = fs.readFileSync(
+            `${dataFolder}/list-discrepancy-ids-${rbId}.json`);
+        res.status(200).send(JSON.parse(dataFile));
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+          res.status(404).send()
+        }
+      }
+    });
 
 app.get('/rest/webapp/api/discrepancies', (req, res) => {
   dataFile = fs.readFileSync(`${dataFolder}/list-discrepancies-by-ids.json`);
@@ -213,20 +217,23 @@ app.get('/rest/webapp/api/bulk-changes', (req, res) => {
   }
 });
 
-app.patch('/rest/webapp/api/change-request/:changeRequestId/approve', (req, res) => {
-  res.status(200).send();
-  console.log(`CR-${req.params.changeRequestId} - Approved`);
-});
+app.patch('/rest/webapp/api/change-request/:changeRequestId/approve',
+    (req, res) => {
+      res.status(200).send();
+      console.log(`CR-${req.params.changeRequestId} - Approved`);
+    });
 
-app.patch('/rest/webapp/api/change-request/:changeRequestId/reject', (req, res) => {
-  res.status(200).send();
-  console.log(`CR-${req.params.changeRequestId} - Rejected`);
-});
+app.patch('/rest/webapp/api/change-request/:changeRequestId/reject',
+    (req, res) => {
+      res.status(200).send();
+      console.log(`CR-${req.params.changeRequestId} - Rejected`);
+    });
 
-app.patch('/rest/webapp/api/change-request/:changeRequestId/cancel', (req, res) => {
-  res.status(200).send();
-  console.log(`CR-${req.params.changeRequestId} - Cancelled`);
-});
+app.patch('/rest/webapp/api/change-request/:changeRequestId/cancel',
+    (req, res) => {
+      res.status(200).send();
+      console.log(`CR-${req.params.changeRequestId} - Cancelled`);
+    });
 
 app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
@@ -265,60 +272,64 @@ app.get('/rest/webapp/api/report/audit-report', (req, res) => {
   }, 5000);
 });
 
-app.put('/rest/webapp/api/decision-trees/:treeId/branches/validate', (req, res) => {
-  const { featureVectorSignatures = [], branchIds = [] } = req.body;
+app.put('/rest/webapp/api/decision-trees/:treeId/branches/validate',
+    (req, res) => {
+      const {featureVectorSignatures = [], branchIds = []} = req.body;
 
-  if (typeof branchIds !== 'undefined' && branchIds.indexOf(666) != -1 || branchIds.indexOf(999) != -1) {
-    res.status(400).send(JSON.stringify({
-      "key": "Branch(es) not found",
-      "date": 1590049124.408017,
-      "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException",
-      "extras": {
+      if (typeof branchIds !== 'undefined' && branchIds.indexOf(666) != -1
+          || branchIds.indexOf(999) != -1) {
+        res.status(400).send(JSON.stringify({
+          "key": "Branch(es) not found",
+          "date": 1590049124.408017,
+          "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException",
+          "extras": {
+            "branchIds": [
+              123,
+              456
+            ]
+          }
+        }))
+      } else if (typeof featureVectorSignatures !== 'undefined'
+          && featureVectorSignatures.indexOf('G7stUa5Fyy3oOJZDpeZa+cHQ+Gg=')
+          != -1) {
+        res.status(400).send(JSON.stringify({
+          "key": "Branch(es) not found",
+          "date": 1590049200.271666,
+          "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.FeatureVectorSignaturesNotFoundException",
+          "extras": {
+            "featureVectorSignatures": [
+              "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
+            ]
+          }
+        }))
+      } else if (branchIds) {
+        res.status(200).send(JSON.stringify({
           "branchIds": [
-            123,
-            456
+            {
+              "branchId": 1,
+              "featureVectorSignature": "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
+            },
+            {
+              "branchId": 2,
+              "featureVectorSignature": "Nvr8IkZNgs8cFG3IDXMzhIw0sD4"
+            }
           ]
+        }))
+      } else if (featureVectorSignatures) {
+        res.status(200).send(JSON.stringify({
+          "branchIds": [
+            {
+              "branchId": 1,
+              "featureVectorSignature": "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
+            },
+            {
+              "branchId": 2,
+              "featureVectorSignature": "Nvr8IkZNgs8cFG3IDXMzhIw0sD4"
+            }
+          ]
+        }))
       }
-    }))
-  } else if (typeof featureVectorSignatures !== 'undefined' && featureVectorSignatures.indexOf('G7stUa5Fyy3oOJZDpeZa+cHQ+Gg=') != -1) {
-    res.status(400).send(JSON.stringify({
-      "key": "Branch(es) not found",
-      "date": 1590049200.271666,
-      "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.FeatureVectorSignaturesNotFoundException",
-      "extras": {
-        "featureVectorSignatures": [
-          "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
-        ]
-      }
-    }))
-  } else if (branchIds) {
-    res.status(200).send(JSON.stringify({
-      "branchIds": [
-        {
-          "branchId": 1,
-          "featureVectorSignature": "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
-        },
-        {
-          "branchId": 2,
-          "featureVectorSignature": "Nvr8IkZNgs8cFG3IDXMzhIw0sD4"
-        }
-      ]
-    }))
-  } else if (featureVectorSignatures) {
-    res.status(200).send(JSON.stringify({
-      "branchIds": [
-        {
-          "branchId": 1,
-          "featureVectorSignature": "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="
-        },
-        {
-          "branchId": 2,
-          "featureVectorSignature": "Nvr8IkZNgs8cFG3IDXMzhIw0sD4"
-        }
-      ]
-    }))
-  }
-});
+    });
 
 app.post('/rest/webapp/api/bulk-changes', (req, res) => {
   res.status(200).send();
@@ -371,5 +382,6 @@ function getDiscrepancies(ids, discrepancies) {
   return discrepanciesList;
 }
 
-app.listen(24410, () => console.log('REST API mock server started at http://localhost:24410/'));
+app.listen(24410, () => console.log(
+    'REST API mock server started at http://localhost:24410/'));
 module.exports = app;

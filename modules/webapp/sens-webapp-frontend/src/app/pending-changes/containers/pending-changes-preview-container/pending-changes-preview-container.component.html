@@ -4,30 +4,26 @@
 <ng-container *ngIf="changeRequestDetails">
   <div class="change-request-details">
     <app-change-request-preview
-            [changeRequestData]="generateChangeRequestContent()"
-            [changeRequestID]="generateChangeRequestHeader()"
+            #previewComponent
+            [pendingChange]="changeRequestDetails"
+            [requiredCommentValidationMessage]="canApproveOrReject ?
+            'decision.form.comment.validation.requiredToApproveOrReject' : 'decision.form.comment.validation.requiredToCancel'"
     ></app-change-request-preview>
-    <mat-divider></mat-divider>
-    <div class="sidebar-details__section">
-      <div class="values-list values-list--vertical">
-        <p class="mat-body" [translate]="translatePrefixDecision + 'title'"></p>
-        <div class="change-request-details__decision"
-             *ngIf="canApproveOrReject()">
-          <button mat-stroked-button color="warn" (click)="openRejectDialog()">
-            <span [translate]="translatePrefixDecision + 'buttons.reject'"></span>
-          </button>
-          <button mat-stroked-button color="positive" (click)="openApproveDialog()">
-            <span [translate]="translatePrefixDecision + 'buttons.approve'"></span>
-          </button>
-        </div>
-        <button *ngIf="canCancel() && !canApproveOrReject()"
-                mat-stroked-button
-                color="warn"
-                class="mat-button-base--full-width"
-                (click)="openCancelDialog()">
-          <span [translate]="translatePrefixDecision + 'buttons.cancel'"></span>
-        </button>
-      </div>
+    <div class="change-request-details__decision"
+         *ngIf="canApproveOrReject">
+      <button mat-stroked-button color="warn" (click)="reject()">
+        <span [translate]="translatePrefixDecision + 'buttons.reject'"></span>
+      </button>
+      <button mat-stroked-button color="positive" (click)="approve()">
+        <span [translate]="translatePrefixDecision + 'buttons.approve'"></span>
+      </button>
     </div>
+    <button *ngIf="canCancel && !canApproveOrReject"
+            mat-stroked-button
+            color="warn"
+            class="mat-button-base--full-width"
+            (click)="cancel()">
+      <span [translate]="translatePrefixDecision + 'buttons.cancel'"></span>
+    </button>
   </div>
 </ng-container>
