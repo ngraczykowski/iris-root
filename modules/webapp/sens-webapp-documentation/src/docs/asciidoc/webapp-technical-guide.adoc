@@ -15,3 +15,4 @@ This manual explains how to develop {productname}.
 
 
 include::technical-guide/rest.adoc[leveloffset=+1]
+include::technical-guide/backend.adoc[leveloffset=+1]
