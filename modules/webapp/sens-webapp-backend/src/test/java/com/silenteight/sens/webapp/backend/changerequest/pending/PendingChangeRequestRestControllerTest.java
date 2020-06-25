@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.backend.changerequest.pending;
 
-import com.silenteight.sens.webapp.backend.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
@@ -28,7 +27,7 @@ import static org.springframework.http.HttpStatus.OK;
 class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
-  private PendingChangeRequestQuery changeRequestsQuery;
+  private PendingChangeRequestQuery pendingChangeRequestsQuery;
 
   @Nested
   class ListChangeRequests {
@@ -37,9 +36,9 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
     void its200_whenNoPendingChangeRequest() {
-      given(changeRequestsQuery.listPending()).willReturn(emptyList());
+      given(pendingChangeRequestsQuery.listPending()).willReturn(emptyList());
 
-      get(mappingForList())
+      get(pendingChangeRequestsPath())
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(0));
@@ -47,10 +46,10 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
     void its200WithCorrectBody_whenFound() {
-      given(changeRequestsQuery.listPending()).willReturn(
+      given(pendingChangeRequestsQuery.listPending()).willReturn(
           List.of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
 
-      get(mappingForList())
+      get(pendingChangeRequestsPath())
           .statusCode(OK.value())
           .body("size()", is(2))
           .body("[0].id", equalTo(1))
@@ -67,16 +66,16 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
-      get(mappingForList()).statusCode(FORBIDDEN.value());
+      get(pendingChangeRequestsPath()).statusCode(FORBIDDEN.value());
     }
 
-    private String mappingForList() {
-      return "/change-requests";
+    private String pendingChangeRequestsPath() {
+      return "/change-requests/pending";
     }
 
     private class Fixtures {
 
-      ChangeRequestDto firstChangeRequest = ChangeRequestDto.builder()
+      PendingChangeRequestDto firstChangeRequest = PendingChangeRequestDto.builder()
           .id(1L)
           .bulkChangeId(fromString("05bf9714-b1ee-4778-a733-6151df70fca3"))
           .createdBy("Business Operator #1")
@@ -84,7 +83,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
           .comment("Increase efficiency by 20% on Asia markets")
           .build();
 
-      ChangeRequestDto secondChangeRequest = ChangeRequestDto.builder()
+      PendingChangeRequestDto secondChangeRequest = PendingChangeRequestDto.builder()
           .id(2L)
           .bulkChangeId(fromString("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
           .createdBy("Business Operator #2")

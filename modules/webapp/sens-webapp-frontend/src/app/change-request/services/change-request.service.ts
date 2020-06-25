@@ -121,7 +121,7 @@ export class ChangeRequestService {
   }
 
   changeRequests(payload: ChangeRequest) {
-    return this.http.post(`${environment.serverApiUrl}/change-requests`, payload, {
+    return this.http.post(`${environment.serverApiUrl}/change-requests/pending`, payload, {
       headers: {
         ...this.correlationIdHeader
       }

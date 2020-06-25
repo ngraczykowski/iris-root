@@ -1,7 +1,10 @@
 package com.silenteight.sens.webapp.backend.changerequest.domain;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -32,6 +35,16 @@ class InMemoryChangeRequestRepository implements ChangeRequestRepository {
         .values()
         .stream()
         .filter(changeRequest -> changeRequest.getState().equals(state))
+        .collect(toList());
+  }
+
+  @Override
+  public List<ChangeRequest> findAllByStateIn(
+      Set<ChangeRequestState> states, Pageable pageable) {
+    return store
+        .values()
+        .stream()
+        .filter(changeRequest -> states.contains(changeRequest.getState()))
         .collect(toList());
   }
 

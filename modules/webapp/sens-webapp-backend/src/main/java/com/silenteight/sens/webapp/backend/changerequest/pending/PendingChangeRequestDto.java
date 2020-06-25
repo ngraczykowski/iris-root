@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.domain.dto;
+package com.silenteight.sens.webapp.backend.changerequest.pending;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeRequestDto {
+public class PendingChangeRequestDto {
 
   private long id;
   @NonNull

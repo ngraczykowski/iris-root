@@ -164,6 +164,8 @@ sens.webapp.messaging:
     route:
       archive: discrepancy.archive
 
+sens.webapp.change-request.max-closed: 30
+
 sens.grpc:
   timeout: ${sens.webapp.grpc.timeout}
 

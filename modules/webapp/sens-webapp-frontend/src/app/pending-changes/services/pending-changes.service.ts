@@ -19,7 +19,7 @@ export class PendingChangesService {
   ) { }
 
   getPendingChanges(): Observable<Array<PendingChangeResponse>> {
-    return this.http.get<Array<PendingChangeResponse>>(`${environment.serverApiUrl}/change-requests`);
+    return this.http.get<Array<PendingChangeResponse>>(`${environment.serverApiUrl}/change-requests/pending`);
   }
 
   getBulkChanges(): Observable<Array<BulkChangeResponse>> {

@@ -4,18 +4,24 @@ import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.math.BigInteger.valueOf;
 import static java.time.OffsetDateTime.now;
 import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @TestPropertySource("classpath:data-test.properties")
 class ChangeRequestRepositoryIT extends BaseDataJpaTest {
@@ -63,6 +69,30 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     // then
     assertThat(result.size()).isEqualTo(1);
     assertThat(result).containsExactly(pendingChangeRequest);
+  }
+
+
+  @Test
+  void givenChangeRequestsInDifferentStates_listTwoLastClosed() {
+    // given
+    OffsetDateTime now = now();
+    ChangeRequest pendingChangeRequest = makeChangeRequestWithState(now, PENDING);
+    ChangeRequest approvedChangeRequest = makeChangeRequestWithState(now.minusSeconds(1), APPROVED);
+    ChangeRequest rejectedChangeRequest = makeChangeRequestWithState(now, REJECTED);
+    ChangeRequest cancelledChangeRequest =
+        makeChangeRequestWithState(now.minusSeconds(2), CANCELLED);
+    repository.save(pendingChangeRequest);
+    repository.save(approvedChangeRequest);
+    repository.save(rejectedChangeRequest);
+    repository.save(cancelledChangeRequest);
+
+    // when
+    List<ChangeRequest> result = repository.findAllByStateIn(
+        Set.of(APPROVED, REJECTED), PageRequest.of(0, 2, DESC, "createdAt"));
+
+    // then
+    assertThat(result.size()).isEqualTo(2);
+    assertThat(result).containsExactly(rejectedChangeRequest, approvedChangeRequest);
   }
 
   @Test
@@ -130,6 +160,15 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
       UUID bulkChangeId, ChangeRequestState state) {
     ChangeRequest changeRequest =
         new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, now());
+    changeRequest.setState(state);
+
+    return changeRequest;
+  }
+
+  private static ChangeRequest makeChangeRequestWithState(
+      OffsetDateTime createdAt, ChangeRequestState state) {
+    ChangeRequest changeRequest =
+        new ChangeRequest(randomUUID(), MAKER_USERNAME, MAKER_COMMENT, createdAt);
     changeRequest.setState(state);
 
     return changeRequest;

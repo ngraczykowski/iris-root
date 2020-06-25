@@ -151,7 +151,7 @@ app.patch('/rest/webapp/api/decision-trees/:treeId/branches', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/change-requests', (req, res) => {
+app.get('/rest/webapp/api/change-requests/pending', (req, res) => {
   let dataFile;
   try {
     dataFile = fs.readFileSync(`${dataFolder}/pending-changes.json`);
@@ -324,7 +324,7 @@ app.post('/rest/webapp/api/bulk-changes', (req, res) => {
   res.status(200).send();
 });
 
-app.post('/rest/webapp/api/change-requests', (req, res) => {
+app.post('/rest/webapp/api/change-requests/pending', (req, res) => {
   res.status(200).send();
 })
 

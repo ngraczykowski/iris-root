@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.changerequest.pending;
+package com.silenteight.sens.webapp.backend.changerequest.closed;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +21,20 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
-class PendingChangeRequestRestController {
+class ClosedChangeRequestRestController {
 
   @NonNull
-  private final PendingChangeRequestQuery changeRequestQuery;
+  private final ClosedChangeRequestQuery changeRequestQuery;
 
-  @GetMapping("/change-requests/pending")
+  @GetMapping("/change-requests/closed")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
-  public ResponseEntity<List<PendingChangeRequestDto>> pending() {
-    log.debug(CHANGE_REQUEST, "Listing pending Change Requests");
+  public ResponseEntity<List<ClosedChangeRequestDto>> closed() {
+    log.debug(CHANGE_REQUEST, "Listing closed Change Requests");
 
-    List<PendingChangeRequestDto> changeRequests = changeRequestQuery.listPending();
+    List<ClosedChangeRequestDto> changeRequests = changeRequestQuery.listClosed();
 
     log.debug(
-        CHANGE_REQUEST, "Found {} pending Change Requests", changeRequests.size());
+        CHANGE_REQUEST, "Found {} closed Change Requests", changeRequests.size());
     return ok(changeRequests);
   }
 }
