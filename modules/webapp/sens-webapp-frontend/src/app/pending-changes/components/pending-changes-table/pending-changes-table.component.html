@@ -43,7 +43,7 @@
       <span [translate]="translateTablePrefix + 'requestDate'"></span>
     </th>
     <td mat-cell *matCellDef="let element">
-      {{ element.createdAt | date:'yyyy-mm-dd hh:mm:ss' }}
+      {{ element.createdAt | date:dateFormatting }}
     </td>
   </ng-container>
 

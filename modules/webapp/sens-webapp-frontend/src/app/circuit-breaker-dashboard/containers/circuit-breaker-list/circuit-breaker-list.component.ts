@@ -43,6 +43,8 @@ export class CircuitBreakerListComponent implements OnInit {
 
   tableInit = environment.tablePagination;
 
+  dateFormatting = environment.dateFormatting;
+
   constructor(
       private circuitBreakerService: CircuitBreakerService,
       private router: Router

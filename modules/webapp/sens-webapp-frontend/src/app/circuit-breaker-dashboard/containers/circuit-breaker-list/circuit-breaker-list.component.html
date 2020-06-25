@@ -16,7 +16,7 @@
       </mat-panel-title>
       <mat-panel-description>
         {{ translatePrefix + 'header.disabled' | translate:{
-        date: circuitBreakerElement.detectedAt | date:'yyyy-mm-dd hh:mm:ss'
+        date: circuitBreakerElement.detectedAt | date:dateFormatting
       } }}
       </mat-panel-description>
     </mat-expansion-panel-header>

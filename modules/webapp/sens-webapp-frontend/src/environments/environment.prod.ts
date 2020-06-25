@@ -89,7 +89,9 @@ export const environment = {
   tablePagination: {
     firstPage: 0,
     defaultPageSize: 10
-  }
+  },
+
+  dateFormatting: 'yyyy-MM-dd HH:mm:ss'
 };
 
 

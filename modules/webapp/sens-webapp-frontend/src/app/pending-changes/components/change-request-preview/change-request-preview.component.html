@@ -22,7 +22,7 @@
       <div class="values-list">
         <p class="mat-body label" [translate]="changeRequestData.details.createdAt.label"></p>
         <p class="mat-body">
-          {{ changeRequestData.details.createdAt.value | date:'yyyy-mm-dd hh:mm:ss' }}
+          {{ changeRequestData.details.createdAt.value | date:dateFormatting }}
         </p>
       </div>
     </mat-list-item>

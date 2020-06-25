@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-change-request-preview',
@@ -11,6 +12,8 @@ export class ChangeRequestPreviewComponent implements OnInit {
   @Input() changeRequestID;
 
   translatePrefix = 'pendingChanges.changeRequestDetails.';
+
+  dateFormatting = environment.dateFormatting;
 
   constructor() { }
 

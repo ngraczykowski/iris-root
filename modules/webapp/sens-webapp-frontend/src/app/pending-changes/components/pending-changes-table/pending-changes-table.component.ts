@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PendingChange } from '@app/pending-changes/models/pending-changes';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-pending-changes-table',
@@ -19,6 +20,8 @@ export class PendingChangesTableComponent implements OnInit {
 
   translatePrefix = 'pendingChanges.';
   translateTablePrefix = this.translatePrefix + 'dataLabels.';
+
+  dateFormatting = environment.dateFormatting;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 

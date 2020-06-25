@@ -10,6 +10,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DiscrepanciesList } from '@app/circuit-breaker-dashboard/models/circuit-breaker';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-circuit-breaker-alerts-table',
@@ -35,11 +36,11 @@ export class CircuitBreakerAlertsTableComponent implements OnChanges {
 
   translatePrefix = 'circuitBreakerDashboard.element.dataLabels.';
 
+  dateFormatting = environment.dateFormatting;
+
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
     this.dataSource = new MatTableDataSource(this.discrepanciesList);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 }
