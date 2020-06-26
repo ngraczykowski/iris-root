@@ -335,7 +335,7 @@ app.post('/rest/webapp/api/bulk-changes', (req, res) => {
   res.status(200).send();
 });
 
-app.post('/rest/webapp/api/change-requests/pending', (req, res) => {
+app.post('/rest/webapp/api/change-requests', (req, res) => {
   res.status(200).send();
 })
 
