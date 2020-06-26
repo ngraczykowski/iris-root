@@ -70,6 +70,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
               equalTo((int) FEATURE_VECTOR_ID_2))
           .body("branches[1].aiSolution", equalTo(AI_SOLUTION))
           .body("branches[1].active", equalTo(IS_ACTIVE))
+          .body("branches[1].createdAt", notNullValue())
           .body("branches[1].updatedAt", notNullValue());
     }
 
@@ -140,6 +141,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
             .reasoningBranchId(new ReasoningBranchIdDto(TREE_ID, FEATURE_VECTOR_ID_1))
             .aiSolution(AI_SOLUTION)
             .active(IS_ACTIVE)
+            .createdAt(parse("2020-04-12T11:25:30Z"))
             .updatedAt(parse("2020-05-03T10:15:30Z"))
             .build();
 
@@ -149,6 +151,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
             .reasoningBranchId(new ReasoningBranchIdDto(TREE_ID, FEATURE_VECTOR_ID_2))
             .aiSolution(AI_SOLUTION)
             .active(IS_ACTIVE)
+            .createdAt(parse("2020-04-12T11:25:30Z"))
             .updatedAt(parse("2020-06-12T09:25:45Z"))
             .build();
   }

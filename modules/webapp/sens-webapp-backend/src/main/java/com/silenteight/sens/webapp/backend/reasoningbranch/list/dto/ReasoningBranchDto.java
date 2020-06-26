@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.time.Instant;
+import javax.annotation.Nullable;
 
 @Data
 @Builder
@@ -16,5 +17,7 @@ public class ReasoningBranchDto {
   private final String aiSolution;
   private final boolean active;
   @NonNull
+  private final Instant createdAt;
+  @Nullable
   private final Instant updatedAt;
 }

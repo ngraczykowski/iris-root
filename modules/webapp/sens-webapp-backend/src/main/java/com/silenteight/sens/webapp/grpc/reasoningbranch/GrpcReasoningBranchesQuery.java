@@ -27,8 +27,10 @@ import com.silenteight.sens.webapp.backend.support.Paging;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
+import com.google.protobuf.Timestamp;
 import io.vavr.control.Try;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -242,12 +244,21 @@ class GrpcReasoningBranchesQuery implements
         .reasoningBranchId(mapToReasoningBranchId(reasoningBranch.getReasoningBranchId()))
         .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
         .active(reasoningBranch.getEnabled())
-        .updatedAt(toInstant(reasoningBranch.getUpdatedAt()))
+        .createdAt(toInstant(reasoningBranch.getCreatedAt()))
+        .updatedAt(mapToUpdatedAt(reasoningBranch.getUpdatedAt()))
         .build();
   }
 
   private static ReasoningBranchIdDto mapToReasoningBranchId(ReasoningBranchId id) {
     return new ReasoningBranchIdDto(id.getDecisionTreeId(), id.getFeatureVectorId());
+  }
+
+  private static Instant mapToUpdatedAt(Timestamp timestamp) {
+    return isEmptyTimestamp(timestamp) ? null : toInstant(timestamp);
+  }
+
+  private static boolean isEmptyTimestamp(Timestamp timestamp) {
+    return timestamp.getSeconds() == 0 && timestamp.getNanos() == 0;
   }
 
   private static long mapToPageTotalElements(ListReasoningBranchesResponse response) {
