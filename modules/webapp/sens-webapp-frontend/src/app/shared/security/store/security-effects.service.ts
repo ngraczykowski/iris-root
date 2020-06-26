@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
-    SecurityActionTypes,
-    LogoutSuccess,
-    LogoutFailed,
-    LoginFailed
+  LoginFailed,
+  LogoutFailed,
+  LogoutSuccess,
+  SecurityActionTypes
 } from '@app/shared/security/store/security.actions';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { KeycloakService } from 'keycloak-angular';
@@ -20,7 +20,7 @@ export class SecurityEffects {
   @Effect()
   logout$ = this.actions$.pipe(
     ofType(SecurityActionTypes.logout),
-    exhaustMap(() => this.keycloakService.logout()),
+    exhaustMap(() => this.keycloakService.logout('/')),
     map(() => new LogoutSuccess()),
     catchError(err => of(new LogoutFailed(err)))
   );
