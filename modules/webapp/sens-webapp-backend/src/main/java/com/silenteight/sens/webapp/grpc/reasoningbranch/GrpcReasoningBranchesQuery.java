@@ -140,6 +140,8 @@ class GrpcReasoningBranchesQuery implements
   private static ListReasoningBranchesRequest buildRequest(long treeId) {
     return ListReasoningBranchesRequest.newBuilder()
         .setDecisionTreeFilter(buildDecisionTreeFilter(treeId))
+        //FIXME: this is a quick fix. remove this after serp makes pagination optional
+        .setPagination(Pagination.newBuilder().setPageSize(Integer.MAX_VALUE).build())
         .build();
   }
 

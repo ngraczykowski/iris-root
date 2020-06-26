@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesRequest.DecisionTreeFilter;
 import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
+import com.silenteight.proto.serp.v1.common.Pagination;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 
@@ -32,6 +33,7 @@ final class GrpcReasoningBranchesQueryTestFixtures {
       ListReasoningBranchesRequest
           .newBuilder()
           .setDecisionTreeFilter(DECISION_TREE_FILTER)
+          .setPagination(Pagination.newBuilder().setPageSize(Integer.MAX_VALUE).build())
           .build();
 
   private static final ReasoningBranchId SEARCHED_REASONING_BRANCH_ID =
