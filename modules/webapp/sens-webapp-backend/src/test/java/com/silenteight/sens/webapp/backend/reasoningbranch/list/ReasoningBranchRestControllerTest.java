@@ -80,7 +80,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
-    void its400_whenInvalidRequest() {
+    void its400_whenInvalidSolution() {
       given(
           reasoningBranchesQuery.list(
               new ReasoningBranchFilterDto(INVALID_AI_SOLUTION, IS_ACTIVE),
@@ -88,6 +88,18 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           .willThrow(InvalidBranchSolutionException.class);
 
       get(mappingForReasoningBranches(INVALID_LIST_BRANCHES_REQUEST))
+          .statusCode(BAD_REQUEST.value());
+    }
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void its400_whenInvalidLimit() {
+      get(mappingForReasoningBranches(0, 0))
+          .statusCode(BAD_REQUEST.value());
+    }
+
+    @TestWithRole(role = BUSINESS_OPERATOR)
+    void its400_whenInvalidOffset() {
+      get(mappingForReasoningBranches(-10, 10))
           .statusCode(BAD_REQUEST.value());
     }
 
