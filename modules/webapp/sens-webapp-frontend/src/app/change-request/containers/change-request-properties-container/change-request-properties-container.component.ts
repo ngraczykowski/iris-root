@@ -41,6 +41,7 @@ export class ChangeRequestPropertiesContainerComponent implements OnInit {
         this.changeRequestService.setAiStatus(formData.aiStatus);
         this.changeRequestService.registerChangeRequest().
           subscribe(res => this.createChangeRequestSuccess.emit());
+        this.changeRequestService.resetService();
       }
     });
   }

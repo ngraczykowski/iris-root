@@ -143,4 +143,15 @@ export class ChangeRequestService {
   removeEmptyElements(array) {
     return array.filter(Boolean);
   }
+
+  resetService() {
+    this.decisionTreeId$.next(null);
+    this.reasoningBranchesCount$.next(0);
+    this.changeRequestData$.next({
+      id: null,
+      bulkChangeId: null,
+      comment: null,
+      createdAt: null
+    });
+  }
 }
