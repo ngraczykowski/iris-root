@@ -53,7 +53,7 @@ export class PendingChangesService {
 
   changeRequestDecision(changeRequestID: string, decision: ChangeRequestDecision, body: ChangeRequestDecisionRequestBody) {
     return this.http.patch(
-        `${environment.serverApiUrl}/change-request/${changeRequestID}/${decision}`,
+        `${environment.serverApiUrl}/change-requests/${changeRequestID}/${decision}`,
         body,
         {
           headers: {...({CorrelationId: uuidv4()})}

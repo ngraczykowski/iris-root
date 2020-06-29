@@ -111,6 +111,6 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   private String mappingForApproval(long id) {
-    return "/change-request/" + id + "/approve";
+    return "/change-requests/" + id + "/approve";
   }
 }

@@ -29,7 +29,7 @@ class RejectChangeRequestRestController {
   @NonNull
   private final RejectChangeRequestUseCase rejectChangeRequestUseCase;
 
-  @PatchMapping("/change-request/{id}/reject")
+  @PatchMapping("/change-requests/{id}/reject")
   @PreAuthorize(APPROVER)
   public ResponseEntity<Void> reject(
       @PathVariable long id,

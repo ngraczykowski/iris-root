@@ -109,6 +109,6 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   private String mappingForRejection(long id) {
-    return "/change-request/" + id + "/reject";
+    return "/change-requests/" + id + "/reject";
   }
 }

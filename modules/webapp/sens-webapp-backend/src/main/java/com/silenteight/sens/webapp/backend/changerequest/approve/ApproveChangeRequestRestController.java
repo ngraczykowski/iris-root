@@ -29,7 +29,7 @@ class ApproveChangeRequestRestController {
   @NonNull
   private final ApproveChangeRequestUseCase approveChangeRequestUseCase;
 
-  @PatchMapping("/change-request/{id}/approve")
+  @PatchMapping("/change-requests/{id}/approve")
   @PreAuthorize(APPROVER)
   public ResponseEntity<Void> approve(
       @PathVariable long id,

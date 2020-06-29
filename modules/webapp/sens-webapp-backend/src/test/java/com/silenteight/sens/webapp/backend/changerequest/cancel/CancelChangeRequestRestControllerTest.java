@@ -106,7 +106,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   private String mappingForCancellation(long id) {
-    return "/change-request/" + id + "/cancel";
+    return "/change-requests/" + id + "/cancel";
   }
 
   private static CancelChangeRequestDto defaultBody() {

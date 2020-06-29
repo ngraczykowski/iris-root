@@ -29,7 +29,7 @@ class CancelChangeRequestRestController {
   @NonNull
   private final CancelChangeRequestUseCase cancelChangeRequestUseCase;
 
-  @PatchMapping("/change-request/{id}/cancel")
+  @PatchMapping("/change-requests/{id}/cancel")
   @PreAuthorize(BUSINESS_OPERATOR)
   public ResponseEntity<Void> cancel(
       @PathVariable long id,
