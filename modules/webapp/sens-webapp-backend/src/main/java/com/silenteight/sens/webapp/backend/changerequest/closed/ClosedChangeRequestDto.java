@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 @Data
 @Builder
@@ -24,7 +25,7 @@ public class ClosedChangeRequestDto {
   private String decidedBy;
   @NonNull
   private OffsetDateTime decidedAt;
-  @NonNull
+  @Nullable
   private String deciderComment;
   @NonNull
   private String state;
