@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend.circuitbreaker;
 
+import com.silenteight.sens.webapp.backend.parser.exception.InvalidReasoningBranchIdException;
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.dto.ErrorDto;
 
@@ -12,8 +13,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @ControllerAdvice
 class CircuitBreakerRestControllerAdvice extends AbstractErrorControllerAdvice {
 
-  @ExceptionHandler(InvalidBranchIdException.class)
-  public ResponseEntity<ErrorDto> handle(InvalidBranchIdException e) {
-    return handle(e, "Invalid Branch ID. branchId=" + e.getBranchId(), BAD_REQUEST);
+  @ExceptionHandler(InvalidReasoningBranchIdException.class)
+  public ResponseEntity<ErrorDto> handle(InvalidReasoningBranchIdException e) {
+    return handle(e, "Invalid Reasoning Branch ID. branchId=" + e.getBranchId(), BAD_REQUEST);
   }
 }

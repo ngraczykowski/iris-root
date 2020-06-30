@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.backend.parser.ReasoningBranchIdParser;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 
 import org.springframework.http.ResponseEntity;
@@ -85,6 +86,7 @@ class BulkChangeRestController {
   private static List<ReasoningBranchIdDto> toReasoningBranchIds(List<String> ids) {
     return ids
         .stream()
+        .map(ReasoningBranchIdParser::parse)
         .map(ReasoningBranchIdDto::valueOf)
         .collect(toList());
   }

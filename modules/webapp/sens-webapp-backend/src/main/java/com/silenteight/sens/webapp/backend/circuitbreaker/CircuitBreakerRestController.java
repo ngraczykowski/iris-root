@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.silenteight.sens.webapp.backend.parser.ReasoningBranchIdParser.parse;
 import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.accepted;
@@ -36,7 +37,7 @@ class CircuitBreakerRestController {
   @GetMapping("/discrepant-branches/{branchId}/discrepancy-ids")
   @PreAuthorize(BUSINESS_OPERATOR)
   public ResponseEntity<List<Long>> listDiscrepancyIds(@PathVariable String branchId) {
-    return ok(query.listDiscrepancyIds(ReasoningBranchIdDto.valueOf(branchId)));
+    return ok(query.listDiscrepancyIds(toIdDto(branchId)));
   }
 
   @GetMapping("/discrepancies")
@@ -52,5 +53,9 @@ class CircuitBreakerRestController {
     archiveUseCase.apply(new ArchiveCircuitBreakerDiscrepanciesCommand(ids));
 
     return accepted().build();
+  }
+
+  private static ReasoningBranchIdDto toIdDto(String branchId) {
+    return ReasoningBranchIdDto.valueOf(parse(branchId));
   }
 }

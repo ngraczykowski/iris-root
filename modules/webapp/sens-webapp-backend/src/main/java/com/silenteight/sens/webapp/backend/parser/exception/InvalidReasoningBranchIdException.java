@@ -1,17 +1,17 @@
-package com.silenteight.sens.webapp.backend.circuitbreaker;
+package com.silenteight.sens.webapp.backend.parser.exception;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-class InvalidBranchIdException extends RuntimeException {
+public class InvalidReasoningBranchIdException extends RuntimeException {
 
   private static final long serialVersionUID = 2776652055950242546L;
 
   private final String branchId;
 
-  InvalidBranchIdException(String branchId, Throwable e) {
+  public InvalidReasoningBranchIdException(String branchId, Throwable e) {
     super(e);
     this.branchId = branchId;
   }
