@@ -5,7 +5,8 @@
   <app-state *ngIf="circuitBreakerEmptyState"
              [stateContent]="stateEmptyList"></app-state>
   <app-state *ngIf="circuitBreakerError"
-             [stateContent]="stateError"></app-state>
+             [stateContent]="stateError"
+             (buttonClick)="loadDiscrepantBranches()"></app-state>
 
   <app-circuit-breaker-list
           *ngIf="circuitBreakerList"
