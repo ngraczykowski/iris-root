@@ -18,10 +18,21 @@
 
 ### Git repositories
 
-* [sens-webapp](https://gitlab.silenteight.com/sens/sens-webapp): main project responsible for:
+* [sens-webapp](https://gitlab.silenteight.com/sens/sens-webapp): main project consisting of:
+  * [sens-webapp-audit](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-audit): Web App Module generating Audit Report
+  * [sens-webapp-backend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-backend): Web App REST API
+  * [sens-webapp-common](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-common): Web App Module with common tools
+  * [sens-webapp-common-testing](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-common-testing): Web App Module with common tools for tests
+  * [sens-webapp-db-changelog](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-db-changelog): Web App Module managing database schema
+  * [sens-webapp-documentation](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-documentation): Web App Module containing Documentation
   * [sens-webapp-frontend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-frontend): Web App User Interface
-  * [sens-webapp-backend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-backend): Web App REST API 
-* [scb-screening](https://gitlab.silenteight.com/scb/scb-screening): SENS application repository
+  * [sens-webapp-keycloak](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-keycloak): Web App Module for Keycloak integration
+  * [sens-webapp-logging](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-logging): Web App Logging Module
+  * [sens-webapp-report](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-report): Web App Module generating basic Reports
+  * [sens-webapp-scb-chrome-extension](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-chrome-extension): Web App Module for Chrome Extension integration
+  * [sens-webapp-scb-report](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-report): Web App Module generating SCB specific Reports
+  * [sens-webapp-scb-user-sync](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-user-sync): Web App Module for synchronizing SCB Analysts
+  * [sens-webapp-user](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-user): Web App Module managing User Management
 * [serp](https://gitlab.silenteight.com/sens/serp): Silent Eight Realtime Platform responsible for recommendations generation for given alerts
 
 ### Run services
@@ -30,10 +41,10 @@
 
 1. Definitions for all containers can be found in [docker-compose.yml](docker-compose.yml). Run Keycloak and PostgreSQL with:
         
-        docker-compose up
+        docker-compose up -d
 
 2. Log into [Keycloak admin console](http://localhost:24491/auth/admin/) using `sens:sens` credentials,
-go to `Import` and import users file located in [conf/keycloak dir](conf/keycloak), with `Overwrite` setting.
+to verify it is working properly.
 
 #### SERP
 
@@ -58,11 +69,12 @@ go to `Import` and import users file located in [conf/keycloak dir](conf/keycloa
 Prior to running API make sure you ran [UI](#web-app-ui), as it starts reverse proxy required by whole app to run correctly.
 Also make sure that the project was built (`gw build`) before starting the API and the plugins are present in the ./plugin/webapp folder as they are used by the Web Application.
    
-| Profile | Behaviour                                                                                                                                                                                                                                                                                                                                       |
-|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dev`   | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:24410/rest/webapp/openapi).|
-| `prod`  | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak config stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates).                                   |
-    
+| Profile    | Behaviour                                                                                                                                                                                                                                                                                            |
+|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `dev`      | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:24410/rest/webapp/openapi). |
+| `prod`     | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak config stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates).                                     |
+| `swagger`  | It enables Swagger UI for testing purposes                                                                                                                                                                                                                                                           |
+  
 1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
 
 In Spring Boot Run Configuration add following program arguments:
@@ -91,11 +103,11 @@ to examples [here](https://github.com/adorsys/keycloak-config-cli/tree/master/sr
 
 ##### Users and roles
 Currently we support following roles:
+- Administrator
 - Analyst
 - Approver
 - Auditor
 - Business Operator
-- Admin (composes of Analyst, Approver, Auditor, Business Operator)
 
 Users for development purposes are as follows:
 
@@ -122,7 +134,7 @@ environment variable or modify default timeout in [this](keycloak-scripts/intern
 #### Database
 
 Web App API is using PostgreSQL database to persist Web App specific data.  
-Database connection configuration is stored in file: `sens-webapp-backend/resources/sens-webapp.yml`.  
+Database connection configuration is stored in file: `sens-webapp-backend/resources/application.yml`.  
 It operates on database started by docker-compose command, but can be customized if needed.
 
 Example configuration:
