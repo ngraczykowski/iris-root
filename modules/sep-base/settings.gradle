@@ -1,5 +1,5 @@
 rootProject.name = 'sep-base'
-gradle.ext.sepDependenciesVersion = "1.7.0"
+gradle.ext.sepDependenciesVersion = "1.8.0"
 
 // NOTE(ahaczewski): Keep sorted alphabetically.
 include "sep-base-aspects"
