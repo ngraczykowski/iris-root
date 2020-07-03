@@ -20,7 +20,7 @@ export enum DecisionTreePermission {
   DECISION_TREE_CHANGE = 'DECISION_TREE_CHANGE'
 }
 
-export interface DecisionTree {
+export interface DecisionTreeModel {
   id: number;
   name: string;
   active: boolean;
@@ -40,7 +40,7 @@ export interface OutputPort {
   url: string;
 }
 
-export interface DecisionTreeDetails {
+export interface DecisionTreeDetailsModel {
   id: number;
   name: string;
   active: boolean;
@@ -56,7 +56,7 @@ export interface DecisionTreeDetails {
   permissions: DecisionTreePermission[];
 }
 
-export interface DecisionTreeFeatures {
+export interface DecisionTreeFeaturesModel {
   name: string;
   description: string;
 }

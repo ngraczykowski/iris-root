@@ -1,20 +1,30 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RbVerificationDialogComponent } from '@app/change-request/components/rb-verification-dialog/rb-verification-dialog.component';
-import { FeatureVectorSignaturesErrorResponse } from '@app/change-request/models/feature-vector-signatures';
+import { SelectReasoningBranchesFormComponent } from '@app/change-request/components/select-reasoning-branches-form/select-reasoning-branches-form.component';
 import { ErrorMapper } from '@app/shared/http/error-mapper';
 import { StateContent } from '@app/ui-components/state/state';
 import { ChangeRequestService } from '@app/change-request/services/change-request.service';
 import { MatStepper } from '@angular/material/stepper';
 import { ValidateBranchIdsErrorResponse } from '@app/change-request/models/validate-branch-ids';
+import { DecisionTreesService } from '@core/decision-trees/services/decision-trees.service';
+import {
+  DECISION_TREE_EXISTS_VALIDATOR_ERROR,
+} from '@core/decision-trees/validators/decision-tree-exists.validator';
+import { concat, Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-select-reasoning-branch-container',
   templateUrl: './select-reasoning-branch-container.component.html'
 })
-export class SelectReasoningBranchContainerComponent implements OnInit {
+export class SelectReasoningBranchContainerComponent {
   @ViewChild(MatStepper, {static: true}) stepper: MatStepper;
   @Output() goNextStep = new EventEmitter();
+
+  @ViewChild(SelectReasoningBranchesFormComponent, {static: true})
+  selectReasoningBranchesForm: SelectReasoningBranchesFormComponent;
 
   translatePrefix = 'changeRequest.select.';
 
@@ -37,82 +47,109 @@ export class SelectReasoningBranchContainerComponent implements OnInit {
   verifingError = false;
 
   constructor(
-    public dialog: MatDialog,
-    private changeRequestService: ChangeRequestService
-  ) { }
+      public dialog: MatDialog,
+      private changeRequestService: ChangeRequestService,
+      private decisionTreesService: DecisionTreesService
+  ) {}
 
-  ngOnInit() {
-  }
-
-  openDialog(): void {
+  openDialog(dialogConfigData: any): void {
     this.dialog.open(RbVerificationDialogComponent, {
       width: '450px',
-      data: {
-        title: this.translatePrefix + 'dialogVerificationError.title',
-        description: this.translatePrefix + 'dialogVerificationError.description',
-        cta: this.translatePrefix + 'dialogVerificationError.cta'
-      }
+      data: dialogConfigData
     });
   }
 
-  validate(formValue) {
+  submit(formValue) {
     this.verifingError = false;
     this.verifingInProgress = true;
-    if (formValue.reasoningBranchIds) {
-      this.validateBranchIds(formValue);
-    } else {
-      this.validateBranchSignature(formValue);
-    }
+
+    concat(
+        this.validateDecisionTree(formValue.decisionTreeId),
+        formValue.reasoningBranchIds ?
+            this.validateBranchIds(formValue) :
+            this.validateBranchSignature(formValue)
+    ).subscribe(() => {}, () => {}, () => {
+      this.save(formValue);
+    });
   }
 
-  validateBranchIds(formValue) {
-    this.changeRequestService.validateBranches(
+  validateDecisionTree(decisionTreeId: any): Observable<any> {
+    return this.decisionTreesService.getDecisionTree(decisionTreeId).pipe(
+        catchError(() => {
+          this.treeValidationFail();
+          return throwError(null);
+        })
+    );
+  }
+
+  validateBranchIds(formValue): Observable<any> {
+    return this.changeRequestService.validateBranches(
       {
         decisionTreeId: formValue.decisionTreeId,
         branchIds: this.changeRequestService.parseBranchIds(formValue.reasoningBranchIds)
       }
-    ).subscribe(
-      (response) => {
-        this.validationSuccess(response);
-      },
-      ({error}: ValidateBranchIdsErrorResponse) => {
-        if (ErrorMapper.hasErrorKey(error, 'BranchIdsNotFound')) {
-          this.verificationError.elements = error.extras.branchIds;
-          this.validationFail();
-        }
-        this.verifingInProgress = false;
-      }
+    ).pipe(
+        catchError((errorResponse: ValidateBranchIdsErrorResponse) => {
+          if (ErrorMapper.hasErrorKey(errorResponse.error, 'BranchIdsNotFound')) {
+            this.branchValidationFail(errorResponse.error.extras.branchIds);
+          } else {
+            this.validationFails();
+          }
+          return throwError(errorResponse);
+        })
     );
   }
 
-  validateBranchSignature(formValue) {
-    this.changeRequestService.validateFeatureVectorSignatures(
+  validateBranchSignature(formValue): Observable<any> {
+    return this.changeRequestService.validateFeatureVectorSignatures(
       {
         decisionTreeId: formValue.decisionTreeId,
-        featureVectorSignatures: this.changeRequestService.parseFeatureVectorSignatures(formValue.reasoningBranchSignature)
+        featureVectorSignatures: this.changeRequestService
+            .parseFeatureVectorSignatures(formValue.reasoningBranchSignature)
       }
-    ).subscribe(
-      (response) => {
-        this.validationSuccess(response);
-      },
-      ({error}: FeatureVectorSignaturesErrorResponse) => {
-        if (ErrorMapper.hasErrorKey(error, 'BranchIdsNotFound')) {
-          this.verificationError.elements = error.extras.featureVectorSignatures;
-          this.validationFail();
-        }
-        this.verifingInProgress = false;
-      }
+    ).pipe(
+        catchError((errorResponse: ValidateBranchIdsErrorResponse) => {
+          if (ErrorMapper.hasErrorKey(errorResponse.error, 'BranchIdsNotFound')) {
+            this.branchValidationFail(errorResponse.error.extras.featureVectorSignatures);
+          } else {
+            this.validationFails();
+          }
+          return throwError(errorResponse);
+        })
     );
   }
 
-  validationSuccess(response) {
-    this.changeRequestService.setReasoningBranchIdsData(response);
+  save(response) {
     this.goNextStep.emit();
+    this.verifingInProgress = false;
+    this.changeRequestService.setReasoningBranchIdsData(response);
   }
 
-  validationFail() {
-    this.openDialog();
+  treeValidationFail(): void {
+    this.selectReasoningBranchesForm.setErrors({
+      [DECISION_TREE_EXISTS_VALIDATOR_ERROR]: true
+    });
+    this.openDialog({
+      title: this.translatePrefix + 'treeVerificationError.title',
+      description: this.translatePrefix + 'treeVerificationError.description',
+      cta: this.translatePrefix + 'treeVerificationError.cta'
+    });
+    this.validationFails();
+  }
+
+  branchValidationFail(elements): void {
+    this.verificationError.elements = elements;
+    this.openDialog({
+      title: this.translatePrefix + 'dialogVerificationError.title',
+      description: this.translatePrefix + 'dialogVerificationError.description',
+      cta: this.translatePrefix + 'dialogVerificationError.cta'
+    });
     this.verifingError = true;
+    this.validationFails();
+  }
+
+  validationFails() {
+    this.verifingInProgress = false;
   }
 
   formReset() {

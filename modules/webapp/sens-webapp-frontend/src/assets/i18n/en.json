@@ -36,7 +36,8 @@
         "label": "Decision Tree ID",
         "hint": "Decision Tree ID should be presented as a number e.g. 5",
         "errorEmpty": "Decision Tree ID is required to create change request",
-        "errorValue": "Wrong Decision Tree ID format. DT ID should be presented as a number e.g. 5"
+        "errorValue": "Wrong Decision Tree ID format. DT ID should be presented as a number e.g. 5",
+        "errorDoesNotExist": "Decision Tree with given ID does not exist"
       },
       "rbIdType": {
         "rbID": "Reasoning Branch ID",
@@ -63,6 +64,11 @@
       "dialogVerificationError": {
         "title": "Verification failed",
         "description": "Some of the entered Reasoning Branches do not exist. The list of not existing reasoning branch is available on the top of the form.",
+        "cta": "Close"
+      },
+      "treeVerificationError": {
+        "title": "Verification failed",
+        "description": "Decision Tree with the given ID does not exist.",
         "cta": "Close"
       },
       "verificationError": {

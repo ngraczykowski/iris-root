@@ -109,9 +109,15 @@ app.patch('/rest/webapp/api/users/:userName/password/reset', (req, res) => {
   }
 });
 
+app.get('/rest/webapp/api/decision-trees/:treeId', (req, res) => res.status(
+    200).send({id: 1})
+)
+;
+
 app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId',
     (req, res) => {
-      let dataFile;
+
+  let dataFile;
       const id = req.params.branchId;
       try {
         dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);

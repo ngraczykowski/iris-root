@@ -9,11 +9,16 @@
         appNumbersOnly
       >
       <mat-hint [translate]="translatePrefix + 'decisionTree.hint'"></mat-hint>
-      <mat-error [translate]="translatePrefix + 'decisionTree.errorEmpty'"></mat-error>
-      <mat-error [translate]="translatePrefix + 'decisionTree.errorValue'"></mat-error>
+      <mat-error [translate]="translatePrefix + 'decisionTree.errorEmpty'"
+                 *ngIf="form.controls.decisionTreeId.hasError('required')"></mat-error>
+      <mat-error [translate]="translatePrefix + 'decisionTree.errorValue'"
+                 *ngIf="form.controls.decisionTreeId.hasError('pattern')"></mat-error>
+      <mat-error [translate]="translatePrefix + 'decisionTree.errorDoesNotExist'"
+                 *ngIf="form.controls.decisionTreeId.hasError(decisionTreeExistsErrorCode)"></mat-error>
+
     </mat-form-field>
 
-    <mat-button-toggle-group #toggleGroup="matButtonToggleGroup" name="rbInput" aria-label="RB Input">
+    <mat-button-toggle-group formControlName="group" name="rbInput" aria-label="RB Input">
       <mat-button-toggle value="id">
         <span [translate]="translatePrefix + 'rbIdType.rbID'"></span>
       </mat-button-toggle>
@@ -22,7 +27,8 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <mat-form-field *ngIf="toggleGroup.value === 'id'" class="mat-form-field--full-width" appearance="outline">
+    <mat-form-field *ngIf="form.controls.group.value === 'id'" class="mat-form-field--full-width"
+                    appearance="outline">
       <mat-label [translate]="translatePrefix + 'rbId.label'"></mat-label>
       <textarea
         formControlName="reasoningBranchIds"
@@ -48,7 +54,8 @@
       ></mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="toggleGroup.value === 'featureVector'" class="mat-form-field--full-width" appearance="outline">
+    <mat-form-field *ngIf="form.controls.group.value === 'featureVector'"
+                    class="mat-form-field--full-width" appearance="outline">
       <mat-label [translate]="translatePrefix + 'rbSignature.label'"></mat-label>
       <textarea
         formControlName="reasoningBranchSignature"
@@ -81,5 +88,6 @@
         <span [translate]="translatePrefix + 'footer.cta'"></span>
       </button>
     </div>
+
   </form>
 </div>

@@ -1,81 +1,62 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
-import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { FormGroupDirective, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { SelectReasoningBranchesFormService } from '@app/change-request/services/select-reasoning-branches-form.service';
+import { DECISION_TREE_EXISTS_VALIDATOR_ERROR } from '@core/decision-trees/validators/decision-tree-exists.validator';
 import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-select-reasoning-branches',
-  templateUrl: './select-reasoning-branches-form.component.html'
+  templateUrl: './select-reasoning-branches-form.component.html',
+  providers: [SelectReasoningBranchesFormService]
 })
-export class SelectReasoningBranchesFormComponent implements OnInit {
+export class SelectReasoningBranchesFormComponent {
   @Output() formSubmitted = new EventEmitter();
   @Output() formReset = new EventEmitter();
-  @ViewChild('toggleGroup', {static: true}) toggleGroup: MatButtonToggleGroup;
 
-  reasoningBranchIdsControl = new FormControl('', [Validators.required, Validators.maxLength(1000)]);
-  reasoningBranchSignatureControl = new FormControl('', [Validators.required, Validators.maxLength(1000)]);
+  decisionTreeExistsErrorCode: string = DECISION_TREE_EXISTS_VALIDATOR_ERROR;
 
-  form = new FormGroup({
-    decisionTreeId: new FormControl('', [Validators.required]),
-    reasoningBranchIds: this.reasoningBranchIdsControl
-  });
+  form = this.selectReasoningBranchesFormService.build();
 
   translatePrefix = 'changeRequest.select.';
 
   constructor(
-      private activatedRoute: ActivatedRoute
+      private activatedRoute: ActivatedRoute,
+      private selectReasoningBranchesFormService: SelectReasoningBranchesFormService
   ) {
     this.activatedRoute.queryParams.subscribe(par => {
       this.loadReasoningBranchFromUrl(par['dt_id'], par['fv_ids']);
     });
   }
 
-  ngOnInit(): void {
-    this.registerToggleGroupListener();
-    this.toggleGroup.writeValue('id');
+  public setErrors(errors: ValidationErrors): void {
+    this.selectReasoningBranchesFormService.setErrors(errors);
   }
 
   loadReasoningBranchFromUrl(decisionTreeId, reasoningBranchId) {
+    if (!(decisionTreeId && reasoningBranchId)) {
+      return;
+    }
     const dtId = parseInt(decisionTreeId, environment.decimal);
     const rbIds = reasoningBranchId.split(',').map(Number);
 
     if (!isNaN(dtId) && !rbIds.some(isNaN)) {
       this.form.controls.decisionTreeId.setValue(dtId);
-      this.form.controls.reasoningBranchIds.setValue(
-          rbIds.join('\n'));
+      this.form.controls.reasoningBranchIds.setValue(rbIds.join('\n'));
     }
   }
 
   onFormSubmit(): void {
     if (this.form.valid) {
-      this.formSubmitted.emit(this.form.value);
+      this.formSubmitted.emit(this.selectReasoningBranchesFormService.getFormValue());
     } else {
       this.form.updateValueAndValidity();
     }
   }
 
-  registerToggleGroupListener(): void {
-    this.toggleGroup.registerOnChange(value => {
-      if (value === 'id') {
-        this.form.addControl('reasoningBranchIds', this.reasoningBranchIdsControl);
-        this.form.removeControl('reasoningBranchSignature');
-      } else {
-        this.form.removeControl('reasoningBranchIds');
-        this.form.addControl('reasoningBranchSignature', this.reasoningBranchSignatureControl);
-      }
-    });
-  }
-
   resetForm(formDir: FormGroupDirective): void {
     formDir.resetForm();
-    this.form.reset();
-    this.form.markAsPristine();
-    Object.keys(this.form.controls).forEach(key => {
-      this.form.get(key).setErrors(null);
-      this.form.get(key).setValue('');
-    });
-    this.form.setErrors(null);
+    this.selectReasoningBranchesFormService.reset();
     this.formReset.emit();
   }
 }

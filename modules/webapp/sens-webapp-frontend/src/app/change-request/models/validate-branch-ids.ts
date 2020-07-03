@@ -10,7 +10,7 @@ export interface ValidateBranchIdsErrorResponse {
     exception: string;
     extras: {
       branchIds: number[];
-    };
+    } | any;
   };
 }
 

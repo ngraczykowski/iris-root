@@ -25,6 +25,12 @@
       ],
       "@model/*": [
         "app/templates/model/*"
+      ],
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@endpoint/*": [
+        "app/endpoint/*"
       ]
     }
   }
