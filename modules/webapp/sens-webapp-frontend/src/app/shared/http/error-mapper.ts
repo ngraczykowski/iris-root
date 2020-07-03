@@ -1,6 +1,14 @@
 export class ErrorMapper {
   constructor(private mapping, private prefix?) { }
 
+  public static hasExceptionCode(error: any, code: any): boolean {
+    return error && error.exception && error.exception === code;
+  }
+
+  public static hasErrorKey(error: any, key: any): boolean {
+    return error && error.key && error.key === key;
+  }
+
   get(error) {
     return (this.prefix || '') + this.getName(error);
   }

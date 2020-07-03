@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { MatDialog } from '@angular/material/dialog';
 import { RbVerificationDialogComponent } from '@app/change-request/components/rb-verification-dialog/rb-verification-dialog.component';
 import { FeatureVectorSignaturesErrorResponse } from '@app/change-request/models/feature-vector-signatures';
+import { ErrorMapper } from '@app/shared/http/error-mapper';
 import { StateContent } from '@app/ui-components/state/state';
 import { ChangeRequestService } from '@app/change-request/services/change-request.service';
 import { MatStepper } from '@angular/material/stepper';
@@ -75,8 +76,11 @@ export class SelectReasoningBranchContainerComponent implements OnInit {
         this.validationSuccess(response);
       },
       ({error}: ValidateBranchIdsErrorResponse) => {
-        this.verificationError.elements = error.extras.branchIds;
-        this.validationFail();
+        if (ErrorMapper.hasErrorKey(error, 'BranchIdsNotFound')) {
+          this.verificationError.elements = error.extras.branchIds;
+          this.validationFail();
+        }
+        this.verifingInProgress = false;
       }
     );
   }
@@ -92,8 +96,11 @@ export class SelectReasoningBranchContainerComponent implements OnInit {
         this.validationSuccess(response);
       },
       ({error}: FeatureVectorSignaturesErrorResponse) => {
-        this.verificationError.elements = error.extras.featureVectorSignatures;
-        this.validationFail();
+        if (ErrorMapper.hasErrorKey(error, 'BranchIdsNotFound')) {
+          this.verificationError.elements = error.extras.featureVectorSignatures;
+          this.validationFail();
+        }
+        this.verifingInProgress = false;
       }
     );
   }
@@ -101,12 +108,10 @@ export class SelectReasoningBranchContainerComponent implements OnInit {
   validationSuccess(response) {
     this.changeRequestService.setReasoningBranchIdsData(response);
     this.goNextStep.emit();
-    this.verifingInProgress = false;
   }
 
   validationFail() {
     this.openDialog();
-    this.verifingInProgress = false;
     this.verifingError = true;
   }
 
