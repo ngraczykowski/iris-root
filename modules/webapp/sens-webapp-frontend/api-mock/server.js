@@ -279,9 +279,8 @@ app.put('/rest/webapp/api/decision-trees/:treeId/branches/validate',
       if (typeof branchIds !== 'undefined' && branchIds.indexOf(666) != -1
           || branchIds.indexOf(999) != -1) {
         res.status(400).send(JSON.stringify({
-          "key": "Branch(es) not found",
+          "key": "BranchIdsNotFound",
           "date": 1590049124.408017,
-          "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.BranchIdsNotFoundException",
           "extras": {
             "branchIds": [
               123,
@@ -293,9 +292,8 @@ app.put('/rest/webapp/api/decision-trees/:treeId/branches/validate',
           && featureVectorSignatures.indexOf('G7stUa5Fyy3oOJZDpeZa+cHQ+Gg=')
           != -1) {
         res.status(400).send(JSON.stringify({
-          "key": "Branch(es) not found",
+          "key": "FeatureVectorSignaturesNotFound",
           "date": 1590049200.271666,
-          "exception": "com.silenteight.sens.webapp.backend.reasoningbranch.FeatureVectorSignaturesNotFoundException",
           "extras": {
             "featureVectorSignatures": [
               "G7stUa5Fyy3oOJZDpeZa+cHQ+Gg="

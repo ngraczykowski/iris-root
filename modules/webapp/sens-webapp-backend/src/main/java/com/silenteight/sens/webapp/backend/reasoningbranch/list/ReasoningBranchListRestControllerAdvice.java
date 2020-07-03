@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
@@ -18,6 +21,10 @@ class ReasoningBranchListRestControllerAdvice extends AbstractErrorControllerAdv
 
   @ExceptionHandler(InvalidBranchSolutionException.class)
   public ResponseEntity<ErrorDto> handle(InvalidBranchSolutionException e) {
-    return handle(e, "Invalid Branch Solution. solution=" + e.getSolution(), BAD_REQUEST);
+    return handle(
+        e,
+        "InvalidBranchSolution",
+        BAD_REQUEST,
+        Map.of("solution", defaultString(e.getSolution(), "null")));
   }
 }

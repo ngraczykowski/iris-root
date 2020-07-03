@@ -41,7 +41,8 @@ class DecisionTreeDetailsRestControllerTest extends BaseRestControllerTest {
 
     get("/decision-trees/" + OTHER_DECISION_TREE_ID)
         .statusCode(NOT_FOUND.value())
-        .body("key", equalTo("Decision tree not found (id=" + OTHER_DECISION_TREE_ID + ")."));
+        .body("key", equalTo("DecisionTreeNotFound"))
+        .body("extras.treeId", equalTo((int) OTHER_DECISION_TREE_ID));
   }
 
   @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })

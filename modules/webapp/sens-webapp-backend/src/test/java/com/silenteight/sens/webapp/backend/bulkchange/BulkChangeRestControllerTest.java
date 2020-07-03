@@ -156,7 +156,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
     void its400_IfNoCorrelationIdProvidedInHeader() {
       post(mappingForCreate(), bulkChangeDtoWithDefaults())
           .statusCode(BAD_REQUEST.value())
-          .body("key", equalTo("Missing request header"))
+          .body("key", equalTo("MissingRequestHeader"))
           .body("extras.headerName", equalTo("CorrelationId"));
     }
 

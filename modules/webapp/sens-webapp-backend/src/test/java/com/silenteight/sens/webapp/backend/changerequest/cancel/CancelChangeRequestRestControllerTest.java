@@ -92,7 +92,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     patch(mappingForCancellation(changeRequestId), defaultBody())
         .statusCode(BAD_REQUEST.value())
-        .body("key", equalTo("Missing request header"))
+        .body("key", equalTo("MissingRequestHeader"))
         .body("extras.headerName", equalTo("CorrelationId"));
   }
 
@@ -102,6 +102,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
     patch(
         mappingForCancellation(1L), new CancelChangeRequestDto(null), defaultHeaders())
         .statusCode(BAD_REQUEST.value())
+        .body("key", equalTo("MethodArgumentNotValid"))
         .body("extras.errors", hasItem("cancellerComment must not be blank"));
   }
 

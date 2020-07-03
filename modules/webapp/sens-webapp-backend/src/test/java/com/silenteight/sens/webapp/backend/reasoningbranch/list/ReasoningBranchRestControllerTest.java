@@ -89,7 +89,9 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           .willThrow(InvalidBranchSolutionException.class);
 
       get(mappingForReasoningBranches(INVALID_LIST_BRANCHES_REQUEST))
-          .statusCode(BAD_REQUEST.value());
+          .statusCode(BAD_REQUEST.value())
+          .body("key", equalTo("InvalidBranchSolution"))
+          .body("extras.solution", equalTo("null"));
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)

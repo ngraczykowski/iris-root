@@ -11,15 +11,9 @@ public class ErrorDto {
 
   private final String key;
   private final Instant date;
-  private final Class<? extends Exception> exception;
   private final Map<String, Object> extras;
 
-  public ErrorDto(
-      @NotNull Exception e,
-      @NotNull String key,
-      @NotNull Map<String, Object> extras) {
-
-    this.exception = e.getClass();
+  public ErrorDto(@NotNull String key, @NotNull Map<String, Object> extras) {
     this.key = key;
     this.date = Instant.now();
     this.extras = extras;

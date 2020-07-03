@@ -90,7 +90,7 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     patch(mappingForRejection(changeRequestId), defaultRequest())
         .statusCode(BAD_REQUEST.value())
-        .body("key", equalTo("Missing request header"))
+        .body("key", equalTo("MissingRequestHeader"))
         .body("extras.headerName", equalTo("CorrelationId"));
   }
 
@@ -101,6 +101,7 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
         mappingForRejection(1L), new RejectChangeRequestRequestDto(null),
         defaultHeaders())
         .statusCode(BAD_REQUEST.value())
+        .body("key", equalTo("MethodArgumentNotValid"))
         .body("extras.errors", hasItem("rejectorComment must not be blank"));
   }
 

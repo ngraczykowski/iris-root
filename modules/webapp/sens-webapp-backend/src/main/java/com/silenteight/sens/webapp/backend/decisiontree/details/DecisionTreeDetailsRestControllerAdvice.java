@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
+
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
@@ -17,6 +19,6 @@ class DecisionTreeDetailsRestControllerAdvice extends AbstractErrorControllerAdv
 
   @ExceptionHandler(DecisionTreeNotFound.class)
   public ResponseEntity<ErrorDto> handle(DecisionTreeNotFound e) {
-    return handle(e, "Decision tree not found (id=" + e.getTreeId() + ").", NOT_FOUND);
+    return handle(e, "DecisionTreeNotFound", NOT_FOUND, Map.of("treeId", e.getTreeId()));
   }
 }

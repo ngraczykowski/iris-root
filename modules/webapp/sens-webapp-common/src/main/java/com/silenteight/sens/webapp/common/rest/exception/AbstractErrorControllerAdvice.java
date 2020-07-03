@@ -18,10 +18,6 @@ public abstract class AbstractErrorControllerAdvice {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  protected ResponseEntity<ErrorDto> handle(@NonNull Exception e, @NonNull HttpStatus status) {
-    return handle(e, e.getClass().getSimpleName(), status);
-  }
-
   protected ResponseEntity<ErrorDto> handle(
       @NonNull Exception e, @NonNull String key, @NonNull HttpStatus status) {
 
@@ -35,7 +31,7 @@ public abstract class AbstractErrorControllerAdvice {
       @NotNull Map<String, Object> extras) {
 
     log(e);
-    ErrorDto error = new ErrorDto(e, key, extras);
+    ErrorDto error = new ErrorDto(key, extras);
 
     return new ResponseEntity<>(error, status);
   }

@@ -90,7 +90,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     patch(mappingForApproval(changeRequestId), defaultBody())
         .statusCode(BAD_REQUEST.value())
-        .body("key", equalTo("Missing request header"))
+        .body("key", equalTo("MissingRequestHeader"))
         .body("extras.headerName", equalTo("CorrelationId"));
   }
 

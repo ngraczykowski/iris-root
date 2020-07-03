@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
@@ -15,6 +17,6 @@ public class BulkChangeRestControllerAdvice extends AbstractErrorControllerAdvic
 
   @ExceptionHandler(InvalidReasoningBranchIdException.class)
   public ResponseEntity<ErrorDto> handle(InvalidReasoningBranchIdException e) {
-    return handle(e, "Invalid Reasoning Branch ID. branchId=" + e.getBranchId(), BAD_REQUEST);
+    return handle(e, "InvalidReasoningBranchId", BAD_REQUEST, Map.of("branchId", e.getBranchId()));
   }
 }

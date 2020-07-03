@@ -205,7 +205,7 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
       get(DISCREPANCIES_URL)
           .contentType(anything())
           .statusCode(BAD_REQUEST.value())
-          .body("key", is("Missing request parameter"))
+          .body("key", is("MissingServletRequestParameter"))
           .body("extras.parameterName", is("id"));
     }
 
@@ -214,7 +214,7 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
       get(DISCREPANCIES_URL + "?id=2aa,4")
           .contentType(anything())
           .statusCode(BAD_REQUEST.value())
-          .body("key", is("Parameter type mismatch"))
+          .body("key", is("MethodArgumentTypeMismatch"))
           .body("extras.parameterName", is("id"));
     }
   }
