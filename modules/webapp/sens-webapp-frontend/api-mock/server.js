@@ -109,10 +109,15 @@ app.patch('/rest/webapp/api/users/:userName/password/reset', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/decision-trees/:treeId', (req, res) => res.status(
-    200).send({id: 1})
-)
-;
+app.get('/rest/webapp/api/decision-trees/:treeId', (req, res) => {
+  setTimeout(() => {
+    if(req.params.treeId === '1') {
+      res.status(200).send({id: 1});
+    } else {
+      res.status(400).send();
+    }
+  }, 1000);
+});
 
 app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId',
     (req, res) => {

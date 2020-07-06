@@ -1,13 +1,22 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
+import { DECISION_TREE_EXISTS_VALIDATOR_ERROR } from '@core/decision-trees/validators/decision-tree-exists.validator';
 
 @Component({
   selector: 'app-configure-reasoning-branches-report',
   templateUrl: './configure-reasoning-branches-report.component.html'
 })
-export class ConfigureReasoningBranchesReportComponent implements OnInit {
+export class ConfigureReasoningBranchesReportComponent {
 
   @Output() formSubmit = new EventEmitter();
+
+  decisionTreeExistsErrorCode: string = DECISION_TREE_EXISTS_VALIDATOR_ERROR;
 
   translatePrefix = 'reasoningBranchesReport.configure.form.';
   decisionTreeIdTranslatePrefix = this.translatePrefix + 'decisionTreeId.';
@@ -20,7 +29,10 @@ export class ConfigureReasoningBranchesReportComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  public setErrors(errors: ValidationErrors): void {
+    if (errors[DECISION_TREE_EXISTS_VALIDATOR_ERROR]) {
+      this.form.get('decisionTreeId').setErrors(errors);
+    }
   }
 
   resetForm(formDir: FormGroupDirective): void {

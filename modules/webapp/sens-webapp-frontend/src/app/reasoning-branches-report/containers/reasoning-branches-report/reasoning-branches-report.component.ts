@@ -6,8 +6,11 @@ import { ReasoningBranchesReportService } from '@app/reasoning-branches-report/s
 import { DialogComponent } from '@app/ui-components/dialog/dialog.component';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
-import { Subscription } from 'rxjs';
+import { DecisionTreesService } from '@core/decision-trees/services/decision-trees.service';
+import { DECISION_TREE_EXISTS_VALIDATOR_ERROR } from '@core/decision-trees/validators/decision-tree-exists.validator';
+import { throwError } from 'rxjs';
 import * as FileSaver from 'file-saver';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reasoning-branches-report',
@@ -44,11 +47,10 @@ export class ReasoningBranchesReportComponent implements OnInit {
 
   showForm = true;
 
-  generateReportSubscription: Subscription;
-
   constructor(
       public dialog: MatDialog,
       private reasoningBranchesReportService: ReasoningBranchesReportService,
+      private decisionTreesService: DecisionTreesService,
       private changeDetector: ChangeDetectorRef
   ) { }
 
@@ -75,20 +77,28 @@ export class ReasoningBranchesReportComponent implements OnInit {
   }
 
   generateReport(decisionTreeID) {
-    this.generateReportSubscription =
-        this.reasoningBranchesReportService.getReport(decisionTreeID)
-            .subscribe(
-                (data: any) => {
-                  this.inProgress = false;
-                  this.showNextStep();
-                  this.downloadReport(data);
-                },
-                () => {
-                  this.showPreviousStep();
-                  this.openDialog();
-                  this.reportConfig.invalidDecisionTreeID();
-                }
-            );
+    this.showNextStep();
+    this.decisionTreesService.getDecisionTree(decisionTreeID).pipe(
+        catchError((error) => {
+          this.treeValidationFailure();
+          return throwError(error);
+        }),
+        switchMap(() => this.reasoningBranchesReportService.getReport(decisionTreeID))
+    ).subscribe((data: any) => {
+        this.inProgress = false;
+        this.showNextStep();
+        this.downloadReport(data);
+      }, () => {
+        this.showPreviousStep();
+      }
+    );
+  }
+
+  treeValidationFailure() {
+    this.reportConfig.setErrors({
+      [DECISION_TREE_EXISTS_VALIDATOR_ERROR]: true
+    });
+    this.openDialog();
   }
 
   openDialog(): void {
@@ -108,7 +118,6 @@ export class ReasoningBranchesReportComponent implements OnInit {
   }
 
   abortGenerateReport() {
-    this.generateReportSubscription.unsubscribe();
     this.inProgress = false;
     this.stepper.reset();
   }

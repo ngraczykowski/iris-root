@@ -12,7 +12,7 @@
       <mat-hint [translate]="decisionTreeIdTranslatePrefix + 'hint'"></mat-hint>
       <mat-error *ngIf="form.controls.decisionTreeId.hasError('required')"
                  [translate]="decisionTreeIdTranslatePrefix + 'errorEmpty'"></mat-error>
-      <mat-error *ngIf="form.controls.decisionTreeId.hasError('wrongId')"
+      <mat-error *ngIf="form.controls.decisionTreeId.hasError(decisionTreeExistsErrorCode)"
                  [translate]="decisionTreeIdTranslatePrefix + 'errorWrongId'"></mat-error>
     </mat-form-field>
     <div class="form__footer">
@@ -22,7 +22,6 @@
         <span [translate]="footerTranslatePrefix + 'reset'"></span>
       </a>
       <button type="submit"
-              matStepperNext
               mat-flat-button
               color="primary">
         <span [translate]="footerTranslatePrefix + 'cta'"></span>
