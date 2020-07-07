@@ -29,6 +29,7 @@
   <app-reasoning-branches-table
           *ngIf="showTable"
           [branchesTableData]="branchesList"
+          [showSelectionCheckbox]="canSelect"
           (selectedReasoningBranches)="updateSelectedBranchesList($event)"
           (branchDetailsToPreview)="showBranchDetails($event)"></app-reasoning-branches-table>
   <app-state [stateContent]="stateLoadMore" *ngIf="showLoadMore"

@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReasoningBranchesList } from '@app/reasoning-branches-browser/model/branches-list';
 import { environment } from '@env/environment';
@@ -9,9 +9,10 @@ import { environment } from '@env/environment';
   templateUrl: './reasoning-branches-table.component.html',
   styleUrls: ['./reasoning-branches-table.component.scss']
 })
-export class ReasoningBranchesTableComponent implements OnChanges {
+export class ReasoningBranchesTableComponent implements OnChanges, OnInit {
 
   @Input() branchesTableData: ReasoningBranchesList[] = [];
+  @Input() showSelectionCheckbox: boolean;
 
   @Output() branchDetailsToPreview = new EventEmitter<any>();
   @Output() selectedReasoningBranches = new EventEmitter<any>();
@@ -23,13 +24,13 @@ export class ReasoningBranchesTableComponent implements OnChanges {
   highlightRow: string;
 
   displayedColumns: string[] = [
-    'select',
     'id',
     'solution',
     'status',
     'pendingChanges',
     'lastUpdate'
   ];
+
   dataSource: MatTableDataSource<ReasoningBranchesList>;
   selection: SelectionModel<ReasoningBranchesList>;
   dateFormatting = environment.dateFormatting;
@@ -38,7 +39,17 @@ export class ReasoningBranchesTableComponent implements OnChanges {
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.branchesTableData);
+  }
+
+  ngOnInit() {
+    if (this.showSelectionCheckbox === true) {
+      this.addCheckbox();
+    }
+  }
+
+  addCheckbox() {
     this.selection = new SelectionModel<ReasoningBranchesList>(true, []);
+    this.displayedColumns.unshift('select');
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
