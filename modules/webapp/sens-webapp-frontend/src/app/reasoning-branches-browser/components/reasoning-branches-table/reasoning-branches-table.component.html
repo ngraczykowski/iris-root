@@ -1,0 +1,90 @@
+<mat-table [dataSource]="dataSource"
+           class="mat-table--main-content interactive-table">
+
+  <ng-container matColumnDef="select">
+    <mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? masterToggle() : null; sendSelectedBranchesList()"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()"
+                    color="primary">
+      </mat-checkbox>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null; sendSelectedBranchesList()"
+                    [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)"
+                    color="primary">
+      </mat-checkbox>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef>
+      <span [translate]="labelsTranslatePrefix + 'id'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ valuesTranslatePrefix + 'id' | translate:
+            {
+              decisionTreeID: element.reasoningBranchId.decisionTreeId,
+              featureVectorId: element.reasoningBranchId.featureVectorId
+            }
+      }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="solution">
+    <mat-header-cell *matHeaderCellDef>
+      <span [translate]="labelsTranslatePrefix + 'aiSolution'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <app-ai-solution [aiSolution]="element.aiSolution"></app-ai-solution>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef>
+      <span [translate]="labelsTranslatePrefix + 'aiStatus'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <app-element-status [elementStatus]="element.active"></app-element-status>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pendingChanges">
+    <mat-header-cell *matHeaderCellDef>
+      <span [translate]="labelsTranslatePrefix + 'pendingChanges'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span *ngIf="!element.pendingChanges"
+            class="secondary-text">
+        {{valuesTranslatePrefix + 'pendingChanges.emptyState' | translate}}
+      </span>
+      <span *ngIf="element.pendingChanges != null && element.pendingChanges.length == 1">
+     {{ valuesTranslatePrefix
+      + 'pendingChanges.id' | translate: {id: element.pendingChanges[0].id} }}
+      </span>
+      <span *ngIf="element.pendingChanges != null && element.pendingChanges.length > 1">
+        {{ valuesTranslatePrefix
+      + 'pendingChanges.multiple' | translate: {count: element.pendingChanges.length} }}
+      </span>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="lastUpdate">
+    <mat-header-cell *matHeaderCellDef>
+      <span [translate]="labelsTranslatePrefix + 'lastUpdate'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span *ngIf="element.updatedAt">{{element.updatedAt | date:dateFormatting }}</span>
+      <Span *ngIf="!element.updatedAt">{{element.createdAt | date:dateFormatting}}</Span>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row;
+  columns: displayedColumns;"
+           class="interactive-table__row"
+           [class.interactive-table__row--active]="highlightRow == row"
+           (click)="sendBranchDetailsToPreview(row)"></mat-row>
+</mat-table>

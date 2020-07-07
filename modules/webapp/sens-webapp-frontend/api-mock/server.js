@@ -348,6 +348,32 @@ app.post('/rest/webapp/api/change-requests', (req, res) => {
   res.status(200).send();
 })
 
+app.get('/rest/webapp/api/reasoning-branches', (req, res) => {
+  let dataFile;
+  try {
+    dataFile = fs.readFileSync(
+        `${dataFolder}/rb-browser/reasoning-branches.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+});
+
+app.get('/rest/webapp/api/bulk-changes/ids', (req, res) => {
+  let dataFile;
+  try {
+    dataFile = fs.readFileSync(
+        `${dataFolder}/rb-browser/bulk-changes-ids.json`);
+    res.status(200).send(JSON.parse(dataFile));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send()
+    }
+  }
+});
+
 function isUserNameUnique(userName, currentUsersList) {
   const isUnique = currentUsersList.filter((user) => {
     return user.userName == userName;

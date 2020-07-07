@@ -42,8 +42,7 @@ export class PendingChangesComponent implements OnInit {
   header: Header;
 
   constructor(
-      private pendingChangesService: PendingChangesService,
-      private translate: TranslateService
+      private pendingChangesService: PendingChangesService
   ) { }
 
   ngOnInit() {
@@ -55,7 +54,7 @@ export class PendingChangesComponent implements OnInit {
     this.resetView();
     this.pendingChangesLoading = true;
     this.pendingChangesService.getPendingChangesDetails().subscribe(data => {
-      this.pendingChangesData = this.convertData(data);
+      this.pendingChangesData = data;
       this.resetView();
       if (data.length > 0) {
         this.pendingChangesTable = true;
@@ -95,51 +94,5 @@ export class PendingChangesComponent implements OnInit {
 
   resetChangeRequestDetails() {
     this.changeRequestDetails = null;
-  }
-
-  convertData(data) {
-    data.forEach(
-        change => {
-          change.aiSolution = this.convertSolution(change.aiSolution);
-          change.active = this.convertStatus(change.active);
-        }
-    );
-
-    return data;
-  }
-
-  convertSolution(solution) {
-    const solutionTranslatePrefix = 'aiSolutions.';
-
-    switch (solution) {
-      case 'NO_DECISION': {
-        return this.translate.instant(solutionTranslatePrefix + 'noDecision');
-      }
-      case 'FALSE_POSITIVE': {
-        return this.translate.instant(solutionTranslatePrefix + 'falsePositive');
-      }
-      case 'POTENTIAL_TRUE_POSITIVE': {
-        return this.translate.instant(solutionTranslatePrefix + 'potentialTruePositive');
-      }
-      default: {
-        return solution;
-      }
-    }
-  }
-
-  convertStatus(status) {
-    const statusTranslatePrefix = 'aiStatus.';
-
-    switch (status) {
-      case true: {
-        return this.translate.instant(statusTranslatePrefix + 'active');
-      }
-      case false: {
-        return this.translate.instant(statusTranslatePrefix + 'disabled');
-      }
-      default: {
-        return status;
-      }
-    }
   }
 }

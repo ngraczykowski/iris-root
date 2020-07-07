@@ -30,7 +30,8 @@
       <span [translate]="translateTablePrefix + 'status'"></span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <span *ngIf="element.active">{{element.active}}</span>
+      <app-element-status *ngIf="element.active"
+                          [elementStatus]="element.active"></app-element-status>
       <span *ngIf="!element.active"
             class="secondary-text"
             [translate]="'aiStatus.unchanged'"></span>

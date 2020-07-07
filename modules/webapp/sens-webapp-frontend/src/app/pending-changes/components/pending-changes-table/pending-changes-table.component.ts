@@ -6,7 +6,8 @@ import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-pending-changes-table',
-  templateUrl: './pending-changes-table.component.html'
+  templateUrl: './pending-changes-table.component.html',
+  styleUrls: ['./pending-changes-table.component.scss'],
 })
 export class PendingChangesTableComponent implements OnInit {
 

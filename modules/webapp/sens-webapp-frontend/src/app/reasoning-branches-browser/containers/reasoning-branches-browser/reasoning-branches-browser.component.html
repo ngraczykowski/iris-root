@@ -9,9 +9,8 @@
       <app-reasoning-branch-details-container></app-reasoning-branch-details-container>
     </div>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <app-reasoning-branches-list-container
-            (click)="preview.open()">
-    </app-reasoning-branches-list-container>
+  <mat-sidenav-content (scroll)="onTableScroll($event)">
+    <app-reasoning-branches-list-container (unlockLazyLoader)="resetLazyLoader()"></app-reasoning-branches-list-container>
+    <app-change-request-panel-container></app-change-request-panel-container>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -91,7 +91,22 @@ export const environment = {
     defaultPageSize: 10
   },
 
-  dateFormatting: 'yyyy-MM-dd HH:mm:ss'
+  dateFormatting: 'yyyy-MM-dd HH:mm:ss',
+
+  aiSolutions: [
+    {
+      label: 'aiSolutions.falsePositive',
+      value: 'FALSE_POSITIVE'
+    },
+    {
+      label: 'aiSolutions.potentialTruePositive',
+      value: 'POTENTIAL_TRUE_POSITIVE'
+    },
+    {
+      label: 'aiSolutions.noDecision',
+      value: 'NO_DECISION'
+    }
+  ]
 };
 
 

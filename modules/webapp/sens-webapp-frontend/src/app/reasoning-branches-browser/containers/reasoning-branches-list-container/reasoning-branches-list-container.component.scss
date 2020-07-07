@@ -8,4 +8,9 @@
       margin-right: calculate-8-pt-grid(2);
     }
   }
+
+  &__load-more {
+    margin: calculate-8-pt-grid(4) 0;
+    display: block;
+  }
 }

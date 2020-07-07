@@ -23,7 +23,7 @@ export const environment = {
 
   auth: {
     authorityPageUrlMapping: {
-      '/decision-tree':  Authority.DECISION_TREE_LIST,
+      '/decision-tree': Authority.DECISION_TREE_LIST,
       '/inbox': Authority.INBOX_MANAGE,
       '/audit-trail': Authority.AUDIT_GENERATE_REPORT,
       '/user-management': Authority.USER_MANAGE,
@@ -96,6 +96,21 @@ export const environment = {
     defaultPageSize: 10
   },
 
-  dateFormatting: 'yyyy-MM-dd HH:mm:ss'
+  dateFormatting: 'yyyy-MM-dd HH:mm:ss',
+
+  aiSolutions: [
+    {
+      label: 'aiSolutions.falsePositive',
+      value: 'FALSE_POSITIVE'
+    },
+    {
+      label: 'aiSolutions.potentialTruePositive',
+      value: 'POTENTIAL_TRUE_POSITIVE'
+    },
+    {
+      label: 'aiSolutions.noDecision',
+      value: 'NO_DECISION'
+    }
+  ]
 };
 

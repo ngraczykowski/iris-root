@@ -129,7 +129,7 @@
       "buttonNewRequest": "New Change Request"
     }
   },
-  "reasoningBranchBrowser": {
+  "reasoningBranchesBrowser": {
     "title": "Browser",
     "filtering": {
       "aiSolutions": {
@@ -147,8 +147,16 @@
       "id": "ID",
       "aiSolution": "AI Solution",
       "aiStatus": "AI Status",
-      "changeRequest": "Change Request",
+      "pendingChanges": "Pending Changes",
       "lastUpdate": "Last update"
+    },
+    "values": {
+      "id": "{{decisionTreeID}}-{{featureVectorId}}",
+      "pendingChanges": {
+        "id": "Assigned to CR-{{id}}",
+        "emptyState": "No",
+        "multiple": "Assigned to {{ count }} Change Requests"
+      }
     },
     "details": {
       "title": "RB {{value}} Details"

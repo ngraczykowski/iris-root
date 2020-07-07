@@ -28,7 +28,7 @@ export class SidenavComponent implements OnInit {
       visible: false,
       links: [
         {
-          label: 'reasoningBranchBrowser.title',
+          label: 'reasoningBranchesBrowser.title',
           url: '/reasoning-branch/browser',
           icon: 'visibility_outline'
         },

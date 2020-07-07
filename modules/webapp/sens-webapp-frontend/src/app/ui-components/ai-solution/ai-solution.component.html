@@ -1,1 +1,5 @@
-<span class="{{generateAiSolutionStyle(aiSolution)}}">{{aiSolution}}</span>
+<ng-container *ngIf="aiSolution">
+  <div class="{{aiSolutionStyle}}">
+    {{aiSolutionLabel | translate}}
+  </div>
+</ng-container>

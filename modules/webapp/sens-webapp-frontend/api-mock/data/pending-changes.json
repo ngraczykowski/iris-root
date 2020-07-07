@@ -1,30 +1,23 @@
 [
   {
-    "bulkChangeId": "e019f308-9f29-11ea-bb37-0242ac130002",
-    "createdAt": "2020-05-29T09:26:40.744+02:00",
-    "comment": "123",
-    "id": 2,
-    "createdBy": "user_2"
-  },
-  {
-    "bulkChangeId": "e019f308-9f29-11ea-bb37-0242ac130003",
-    "createdAt": "2020-05-26T08:16:48Z",
-    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "id": 3,
-    "createdBy": "user_3"
-  },
-  {
-    "bulkChangeId": "e019f308-9f29-11ea-bb37-0242ac130001",
-    "createdAt": "2020-05-26T10:16:48+02:00",
-    "comment": "abcdef",
     "id": 1,
-    "createdBy": "user_1"
+    "bulkChangeId": "29c06650-5171-40ed-bf65-191ad993945e",
+    "createdBy": "admin",
+    "createdAt": "2020-06-26T10:42:00.576+02:00",
+    "comment": "Disable"
   },
   {
-    "bulkChangeId": "e019f308-9f29-11ea-bb37-0242ac130004",
-    "createdAt": "2020-05-26T10:16:48+02:00",
-    "comment": "abcdef",
-    "id": 4,
-    "createdBy": "user_4"
+    "id": 2,
+    "bulkChangeId": "d11e50b7-400f-4a06-9545-8fac167b2b1c",
+    "createdBy": "admin",
+    "createdAt": "2020-06-26T10:42:16.824+02:00",
+    "comment": "PTP"
+  },
+  {
+    "id": 3,
+    "bulkChangeId": "b548b1f9-fdb0-4c20-8cba-eb8ddac12edb",
+    "createdBy": "admin",
+    "createdAt": "2020-06-26T10:42:52.93+02:00",
+    "comment": "FP"
   }
 ]

@@ -13,6 +13,7 @@ import { ErrorCardComponent } from './error-card/error-card.component';
 import { HeaderComponent } from './header/header.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { AiSolutionComponent } from './ai-solution/ai-solution.component';
+import { ElementStatusComponent } from './element-status/element-status.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AiSolutionComponent } from './ai-solution/ai-solution.component';
     ErrorCardComponent,
     HeaderComponent,
     DialogComponent,
-    AiSolutionComponent
+    AiSolutionComponent,
+    ElementStatusComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { AiSolutionComponent } from './ai-solution/ai-solution.component';
     ErrorCardComponent,
     HeaderComponent,
     DialogComponent,
-    AiSolutionComponent
+    AiSolutionComponent,
+    ElementStatusComponent
   ],
   entryComponents: [
     DialogComponent

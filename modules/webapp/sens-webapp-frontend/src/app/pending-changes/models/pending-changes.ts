@@ -27,5 +27,5 @@ export interface PendingChange {
   reasoningBranchIds: ReasoningBranchIds[];
   id: number;
   aiSolution: string;
-  active: string;
+  active: boolean;
 }

@@ -8,7 +8,7 @@ import { Header } from '@app/ui-components/header/header';
 })
 export class ReasoningBranchDetailsContainerComponent implements OnInit {
 
-  translatePrefix = 'reasoningBranchBrowser.';
+  translatePrefix = 'reasoningBranchesBrowser.';
   labelsTranslatePrefix = this.translatePrefix + 'labels.';
 
   header: Header = {

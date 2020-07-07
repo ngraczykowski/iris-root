@@ -3,7 +3,7 @@ import { AuditTrailComponent } from '@app/audit-trail/containers/audit-trail/aud
 import { CircuitBreakerDashboardComponent } from '@app/circuit-breaker-dashboard/containers/circuit-breaker-dashboard/circuit-breaker-dashboard.component';
 import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
-import { ReasoningBranchBrowserComponent } from '@app/reasoning-branch-browser/containers/reasoning-branch-browser/reasoning-branch-browser.component';
+import { ReasoningBranchesBrowserComponent } from '@app/reasoning-branches-browser/containers/reasoning-branches-browser/reasoning-branches-browser.component';
 import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report/containers/reasoning-branches-report/reasoning-branches-report.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
@@ -27,16 +27,16 @@ export const routes: Routes = [
     redirectTo: 'reasoning-branch/browser',
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator']
+      authorities: ['Business Operator', 'Approver']
     }
   },
   {
     path: 'reasoning-branch/browser',
     pathMatch: 'full',
-    component: ReasoningBranchBrowserComponent,
+    component: ReasoningBranchesBrowserComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator']
+      authorities: ['Business Operator', 'Approver']
     }
   },
   {
@@ -81,7 +81,7 @@ export const routes: Routes = [
     component: ReasoningBranchesReportComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Business Operator', 'Auditor']
+      authorities: ['Business Operator', 'Auditor', 'Approver']
     }
   },
   {

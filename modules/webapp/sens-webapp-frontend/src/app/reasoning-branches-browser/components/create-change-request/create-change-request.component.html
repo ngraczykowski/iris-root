@@ -1,8 +1,8 @@
 <div class="create-change-request">
   <mat-nav-list>
-    <a mat-list-item (click)="openLink($event)">
+    <a mat-list-item (click)="submitChangeRequest($event)">
       <mat-icon class="mat-icon--action create-change-request__icon">add_circle_outline</mat-icon>
-      {{ 'reasoningBranchBrowser.createChangeRequest' | translate:{ counter: rbCount } }}
+      {{ 'reasoningBranchesBrowser.createChangeRequest' | translate:{ counter: count } }}
     </a>
   </mat-nav-list>
 </div>
