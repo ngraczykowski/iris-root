@@ -15,6 +15,7 @@ configurations {
 
 // Use pluginJar configuration to define dependencies which should be included inside plugin JAR
 dependencies {
+  implementation libraries.hibernate_validator
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web

@@ -31,6 +31,7 @@ import java.util.Map;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static io.restassured.http.ContentType.JSON;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.config;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -61,12 +62,20 @@ public abstract class BaseRestControllerTest {
 
   private static MockMvcRequestAsyncSender asyncSender() {
     return given()
+        .config(config()
+            .encoderConfig(config()
+                .getEncoderConfig()
+                .appendDefaultContentCharsetToContentTypeIfUndefined(false)))
         .accept(JSON)
         .when();
   }
 
   private static MockMvcRequestAsyncSender asyncSender(Map<String, ?> headers) {
     return given()
+        .config(config()
+            .encoderConfig(config()
+                .getEncoderConfig()
+                .appendDefaultContentCharsetToContentTypeIfUndefined(false)))
         .accept(JSON)
         .headers(headers)
         .when();
@@ -116,6 +125,10 @@ public abstract class BaseRestControllerTest {
 
   private static <T> MockMvcRequestAsyncSender asyncSender(T body) {
     return given()
+        .config(config()
+            .encoderConfig(config()
+                .getEncoderConfig()
+                .appendDefaultContentCharsetToContentTypeIfUndefined(false)))
         .accept(JSON)
         .contentType(JSON)
         .body(body)
@@ -124,6 +137,10 @@ public abstract class BaseRestControllerTest {
 
   private static <T> MockMvcRequestAsyncSender asyncSender(T body, Map<String, ?> headers) {
     return given()
+        .config(config()
+            .encoderConfig(config()
+                .getEncoderConfig()
+                .appendDefaultContentCharsetToContentTypeIfUndefined(false)))
         .accept(JSON)
         .contentType(JSON)
         .body(body)

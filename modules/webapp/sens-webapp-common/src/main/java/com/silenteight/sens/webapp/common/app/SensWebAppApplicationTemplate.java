@@ -29,7 +29,7 @@ public class SensWebAppApplicationTemplate {
     this.args = args;
     this.source = source;
 
-    new ApplicationBootstrapper(appName, "sens.home", new HomeDirectoryDiscoverer("SENS_HOME"))
+    new ApplicationBootstrapper(appName, new HomeDirectoryDiscoverer("SENS_HOME", "serp.home"))
         .bootstrapApplication();
   }
 

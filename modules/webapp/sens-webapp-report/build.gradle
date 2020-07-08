@@ -10,6 +10,7 @@ dependencies {
 
   implementation libraries.commons_lang3
   implementation libraries.commons_io
+  implementation libraries.hibernate_validator
   implementation libraries.spring_security_web
   implementation libraries.jakarta_servlet_api
   implementation libraries.vavr
