@@ -63,6 +63,7 @@ export class CircuitBreakerDashboardComponent implements OnInit {
   resetView() {
     this.circuitBreakerLoading = false;
     this.circuitBreakerEmptyState = false;
+    this.circuitBreakerError = false;
     this.circuitBreakerList = false;
   }
 
