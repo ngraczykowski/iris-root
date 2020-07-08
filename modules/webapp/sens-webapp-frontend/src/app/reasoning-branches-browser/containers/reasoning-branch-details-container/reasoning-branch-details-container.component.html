@@ -1,41 +1,19 @@
-<app-header [headerData]="header"></app-header>
+<div *ngIf="branchDetails"
+     class="rb-details">
+  <app-header [headerData]="header"></app-header>
 
-<div class="sidebar-details__section">
-  <div class="values-list values-list--horizontal">
-    <p class="mat-body" [translate]="labelsTranslatePrefix + 'id'"></p>
-    <p class="mat-body">
-      Lorem
-    </p>
-  </div>
-  <div class="values-list values-list--horizontal">
-    <p class="mat-body" [translate]="labelsTranslatePrefix + 'aiSolution'"></p>
-    <p class="mat-body">
-      Lorem
-    </p>
-  </div>
-  <div class="values-list values-list--horizontal">
-    <p class="mat-body" [translate]="labelsTranslatePrefix + 'aiStatus'"></p>
-    <p class="mat-body">
-      Lorem
-    </p>
-  </div>
-  <div class="values-list values-list--horizontal">
-    <p class="mat-body" [translate]="labelsTranslatePrefix + 'pendingChanges'"></p>
-    <p class="mat-body">
-      Lorem
-    </p>
-  </div>
-  <div class="values-list values-list--horizontal">
-    <p class="mat-body" [translate]="labelsTranslatePrefix + 'lastUpdate'"></p>
-    <p class="mat-body">
-      Lorem
-    </p>
-  </div>
-</div>
-<mat-divider></mat-divider>
-<div class="sidebar-details__section">
-  <div class="values-list values-list--horizontal">
-    <p class="mat-body">Agent name</p>
-    <p class="mat-body">Value</p>
+  <app-reasoning-branch-details
+          [branchDetails]="branchDetails"
+          [rbId]="rbId"></app-reasoning-branch-details>
+  <mat-divider></mat-divider>
+  <div class="sidebar-details__section">
+    <app-state *ngIf="showFeaturesError"
+               [stateContent]="featuresErrorState"
+               (buttonClick)="populateFeatureList()"></app-state>
+    <app-state *ngIf="showFeaturesLoading"
+               [stateContent]="featuresLoadingState"></app-state>
+    <app-reasoning-branch-features *ngIf="showFeaturesList"
+                                   [featuresList]="featuresList"></app-reasoning-branch-features>
+
   </div>
 </div>

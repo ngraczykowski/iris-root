@@ -1,5 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ReasoningBranchesListContainerComponent } from '@app/reasoning-branches-browser/containers/reasoning-branches-list-container/reasoning-branches-list-container.component';
+import {
+  ReasoningBranchesList,
+  ReasoningBranchesListResponse
+} from '@app/reasoning-branches-browser/model/branches-list';
 
 @Component({
   selector: 'app-reasoning-branch-browser',
@@ -12,6 +16,8 @@ export class ReasoningBranchesBrowserComponent {
       ReasoningBranchesListContainerComponent;
 
   loadingMoreInProgress = false;
+
+  branchDetails: ReasoningBranchesList;
 
   constructor() { }
 
@@ -30,6 +36,10 @@ export class ReasoningBranchesBrowserComponent {
 
   resetLazyLoader() {
     this.loadingMoreInProgress = false;
+  }
+
+  provideBranchDetails(branchDetails) {
+    this.branchDetails = branchDetails;
   }
 
 }

@@ -6,9 +6,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
+import { PipeModule } from '@app/shared/pipes/pipe.module';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { ReasoningBranchesBrowserComponent } from './containers/reasoning-branches-browser/reasoning-branches-browser.component';
 import { ReasoningBranchesTableComponent } from './components/reasoning-branches-table/reasoning-branches-table.component';
@@ -17,6 +19,8 @@ import { ReasoningBranchDetailsContainerComponent } from './containers/reasoning
 import { TranslateModule } from '@ngx-translate/core';
 import { CreateChangeRequestComponent } from './components/create-change-request/create-change-request.component';
 import { ChangeRequestPanelContainerComponent } from './containers/change-request-panel-container/change-request-panel-container.component';
+import { ReasoningBranchDetailsComponent } from './components/reasoning-branch-details/reasoning-branch-details.component';
+import { ReasoningBranchFeaturesComponent } from './components/reasoning-branch-features/reasoning-branch-features.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,9 @@ import { ChangeRequestPanelContainerComponent } from './containers/change-reques
     ReasoningBranchesListContainerComponent,
     ReasoningBranchDetailsContainerComponent,
     CreateChangeRequestComponent,
-    ChangeRequestPanelContainerComponent
+    ChangeRequestPanelContainerComponent,
+    ReasoningBranchDetailsComponent,
+    ReasoningBranchFeaturesComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +45,9 @@ import { ChangeRequestPanelContainerComponent } from './containers/change-reques
     MatInputModule,
     MatListModule,
     MatBottomSheetModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule,
+    PipeModule
   ],
   entryComponents: [
     CreateChangeRequestComponent

@@ -20,6 +20,7 @@ import { environment } from '@env/environment';
 export class ReasoningBranchesListContainerComponent implements OnInit {
 
   @Output() unlockLazyLoader = new EventEmitter<any>();
+  @Output() branchDetails = new EventEmitter<any>();
 
   translatePrefix = 'reasoningBranchesBrowser.';
   loadingTranslatePrefix = this.translatePrefix + 'loading.';
@@ -117,7 +118,7 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   }
 
   showBranchDetails(branchDetails) {
-    // Placeholder - will be done in next CR
+    this.branchDetails.emit(branchDetails);
   }
 
   filterAiSolution($event: MatSelectChange) {

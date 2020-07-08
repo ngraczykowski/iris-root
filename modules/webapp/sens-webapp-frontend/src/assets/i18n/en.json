@@ -159,7 +159,12 @@
       }
     },
     "details": {
-      "title": "RB {{value}} Details"
+      "title": "RB {{value}} Details",
+      "featuresLoadingErrorState": {
+        "title": "Failed to get the details",
+        "description": "Please try to fetch a list of features manually if the problem will persist, contact the administrator.",
+        "button": "Reload data"
+      }
     },
     "createChangeRequest": "Create Change Request for {{ counter }} selected Reasoning Branches"
   },
@@ -464,74 +469,6 @@
       "jobDone": {
         "title": "Job Done!",
         "description": "Report was generated correctly"
-      }
-    }
-  },
-  "branch": {
-    "title": "Reasoning Branches",
-    "load": {
-      "input": {
-        "placeholder": "Enter Reasoning Branch ID number e.g. 1-546",
-        "tooltip": {
-          "incorrectValue": "Please enter Reasoning Branch ID in the following format (Decision Tree ID)-(Match Group ID), for example, 1-546"
-        }
-      },
-      "button": {
-        "label": "Load Reasoning Branch",
-        "tooltip": {
-          "emptyInput": "Enter Reasoning Branch ID to load details"
-        }
-      }
-    },
-    "emptyState": {
-      "default": {
-        "message": "You have not loaded any Reasoning Branch yet",
-        "description": "To load Reasoning Branch please enter Reasoning Branch ID and click on the “Load Reasoning Branch” button."
-      },
-      "noResults": {
-        "message": "Reasoning Branch with the given ID does not exist"
-      },
-      "timeOut": {
-        "message": "Could not load Reasoning Branch details because of a connection problem",
-        "description": "Please try again. If a problem persists, contact the administrator."
-      }
-    },
-    "details": {
-      "title": "Reasoning Branch Details",
-      "sections": {
-        "branchId": {
-          "label": "Branch ID",
-          "hint": "Unique Reasoning Branch ID"
-        },
-        "aiSolution": {
-          "label": "AI Solution",
-          "hint": "Set AI Solution for the selected Reasoning Branch"
-        },
-        "status": {
-          "label": "Status",
-          "hint": "Set status for the selected Reasoning Branch"
-        }
-      },
-      "footer": {
-        "buttonReset": "Reset",
-        "buttonApply": {
-          "label": "Apply Changes",
-          "tooltip": "This button will be enabled when the AI Solution or Status changes"
-        }
-      }
-    },
-    "confirm": {
-      "content": {
-        "header": "Apply changes to the Reasoning Branch {{ branchId }}?",
-        "description": "Changes in the Reasoning Branches will affect the AI Solutions that Analysts will get, for the alerts."
-      },
-      "footer": {
-        "buttonCancel": "No, Cancel",
-        "buttonConfirm": "Yes, Apply my Changes"
-      },
-      "feedback": {
-        "success": "Changes applied to the Reasoning Branch",
-        "failed": "Failed to apply changes. Please try again or contact with Administrator."
       }
     }
   },
