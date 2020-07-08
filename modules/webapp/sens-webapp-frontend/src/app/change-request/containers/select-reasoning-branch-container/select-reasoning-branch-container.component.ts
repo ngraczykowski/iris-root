@@ -13,7 +13,7 @@ import {
   DECISION_TREE_EXISTS_VALIDATOR_ERROR,
 } from '@core/decision-trees/validators/decision-tree-exists.validator';
 import { concat, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-select-reasoning-branch-container',
@@ -63,14 +63,12 @@ export class SelectReasoningBranchContainerComponent {
     this.verifingError = false;
     this.verifingInProgress = true;
 
-    concat(
-        this.validateDecisionTree(formValue.decisionTreeId),
-        formValue.reasoningBranchIds ?
+    this.validateDecisionTree(formValue.decisionTreeId).pipe(
+        switchMap(() => formValue.reasoningBranchIds ?
             this.validateBranchIds(formValue) :
-            this.validateBranchSignature(formValue)
-    ).subscribe(() => {}, () => {}, () => {
-      this.save(formValue);
-    });
+            this.validateBranchSignature(formValue)),
+        take(1)).subscribe((response) => this.save(response));
+
   }
 
   validateDecisionTree(decisionTreeId: any): Observable<any> {
