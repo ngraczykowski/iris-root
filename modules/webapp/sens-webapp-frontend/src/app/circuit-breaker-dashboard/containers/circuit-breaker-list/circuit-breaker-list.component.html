@@ -38,6 +38,12 @@
                      [length]="numberOfRows"
                      (page)="reloadTableContent($event)"></mat-paginator>
       <mat-action-row>
+        <button mat-button color="primary">
+          <span [translate]="translatePrefix + 'footer.buttonArchiveRequest'" (click)="archive(
+            circuitBreakerElement.branchId.decisionTreeId,
+            circuitBreakerElement.branchId.featureVectorId
+          )"></span>
+        </button>
         <button mat-flat-button
                 color="primary"
                 (click)="createChangeRequest(

@@ -216,6 +216,14 @@ app.get('/rest/webapp/api/discrepancies', (req, res) => {
   }
 });
 
+app.patch('/rest/webapp/api/discrepancies/archive', (req, res) => {
+  if (req.body.length === 2) {
+    res.status(202).send('');
+  } else {
+    res.status(400).send();
+  }
+});
+
 app.get('/rest/webapp/api/bulk-changes', (req, res) => {
   let dataFile;
   try {

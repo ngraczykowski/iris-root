@@ -27,4 +27,8 @@ export class CircuitBreakerService {
   getDiscrepanciesList(discrepanciesIds): Observable<Array<DiscrepanciesList>> {
     return this.http.get<Array<DiscrepanciesList>>(`${environment.serverApiUrl}/discrepancies?id=${discrepanciesIds}`);
   }
+
+  archiveDiscrepancies(discrepanciesIds: any[]): Observable<any> {
+    return this.http.patch(`${environment.serverApiUrl}/discrepancies/archive`, [...discrepanciesIds]);
+  }
 }

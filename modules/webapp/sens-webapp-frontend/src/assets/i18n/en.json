@@ -510,7 +510,22 @@
         "analystCommentDate": "Analyst Comment Date"
       },
       "footer": {
-        "buttonChangeRequest": "Create Change Request"
+        "buttonChangeRequest": "Create Change Request",
+        "buttonArchiveRequest": "Archive"
+      },
+      "archiveDialog": {
+        "title": "Archive discrepancies list?",
+        "description": "Discrepancies list will be moved to an archive, and the Reasoning Branch {{ descriptionValue }} will be reactivated without any changes.",
+        "confirmation": "Archive discrepancies list",
+        "cancellation": "Close"
+      },
+      "archiveFailureDialog": {
+        "title": "Failed to archive discrepancies list",
+        "description": "We were unable to archive the discrepancies list because of the communication problem. Please try again. If the problem will persist, contact the administrator.",
+        "confirmation": "Close"
+      },
+      "archiveSuccessSnackbar": {
+        "content": "Discrepancies list moved to the archive. Reasoning Branch {{ reasoningBranch }} was reactivated."
       }
     }
   },

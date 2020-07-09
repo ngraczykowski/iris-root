@@ -1,10 +1,15 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { CircuitBreakerAlertsTableComponent } from '@app/circuit-breaker-dashboard/components/circuit-breaker-alerts-table/circuit-breaker-alerts-table.component';
 import { CircuitBreakerService } from '@app/circuit-breaker-dashboard/services/circuit-breaker.service';
+import { DialogComponent } from '@app/ui-components/dialog/dialog.component';
 import { StateContent } from '@app/ui-components/state/state';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
+import { TranslateService } from '@ngx-translate/core';
+import { EMPTY } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-circuit-breaker-list',
@@ -48,6 +53,9 @@ export class CircuitBreakerListComponent implements OnInit {
 
   constructor(
       private circuitBreakerService: CircuitBreakerService,
+      private translate: TranslateService,
+      private snackbar: MatSnackBar,
+      private dialog: MatDialog,
       private router: Router
   ) { }
 
@@ -126,5 +134,49 @@ export class CircuitBreakerListComponent implements OnInit {
     const from = page * pageSize;
     const to = from + pageSize;
     return this.discrepanciesIds.slice(from, to);
+  }
+
+  archive(decisionTreeId, featureVectorId): void {
+    this.openArchiveDialog(decisionTreeId, featureVectorId).afterClosed().pipe(
+      switchMap((result) => result === 'submit' ?
+          this.circuitBreakerService.archiveDiscrepancies([...this.discrepanciesIds]) : EMPTY))
+    .subscribe(
+      () => this.archivisationSuccess(decisionTreeId, featureVectorId),
+        () => this.archivisationFailure()
+    );
+  }
+
+  private archivisationSuccess(decisionTreeId, featureVectorId): void {
+    const feedbackContent = this.translate.instant(
+      'circuitBreakerDashboard.element.archiveSuccessSnackbar.content', {
+        reasoningBranch: `${decisionTreeId}-${featureVectorId}`
+      });
+    this.snackbar.open(feedbackContent, null, {
+      duration: 2000
+    });
+  }
+
+  private archivisationFailure(): void {
+    this.dialog.open(DialogComponent, {
+      width: '450px',
+      data: {
+        title: 'circuitBreakerDashboard.element.archiveFailureDialog.title',
+        description: 'circuitBreakerDashboard.element.archiveFailureDialog.description',
+        buttonCta: 'circuitBreakerDashboard.element.archiveFailureDialog.confirmation'
+      }
+    });
+  }
+
+  private openArchiveDialog(decisionTreeId, featureVectorId): MatDialogRef<DialogComponent> {
+    return this.dialog.open(DialogComponent, {
+      width: '450px',
+      data: {
+        title: 'circuitBreakerDashboard.element.archiveDialog.title',
+        description: 'circuitBreakerDashboard.element.archiveDialog.description',
+        value: `${decisionTreeId}-${featureVectorId}`,
+        buttonClose: 'circuitBreakerDashboard.element.archiveDialog.cancellation',
+        buttonCta: 'circuitBreakerDashboard.element.archiveDialog.confirmation'
+      }
+    });
   }
 }
