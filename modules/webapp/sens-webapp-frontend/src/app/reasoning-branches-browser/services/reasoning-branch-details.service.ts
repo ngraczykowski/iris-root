@@ -14,19 +14,19 @@ export class ReasoningBranchDetailsService {
       private http: HttpClient
   ) { }
 
-  getFeaturesNames(dtId, fvId): Observable<Array<BranchFeaturesResponse>> {
-    return this.http.get<Array<BranchFeaturesResponse>>(`${environment.serverApiUrl}/reasoning-branches/features/${dtId}-${fvId}/names`);
+  getFeaturesNames(fvId): Observable<Array<BranchFeaturesResponse>> {
+    return this.http.get<Array<BranchFeaturesResponse>>(`${environment.serverApiUrl}/reasoning-branches/features/${fvId}/names`);
   }
 
-  getFeaturesValues(id): Observable<Array<BranchFeaturesResponse>> {
-    return this.http.get<Array<BranchFeaturesResponse>>(`${environment.serverApiUrl}/reasoning-branches/features/${id}/values`);
+  getFeaturesValues(dtId, fvId): Observable<Array<BranchFeaturesResponse>> {
+    return this.http.get<Array<BranchFeaturesResponse>>(`${environment.serverApiUrl}/reasoning-branches/features/${dtId}-${fvId}/values`);
   }
 
   getFeaturesList(dtId, fvId) {
     return forkJoin(
         {
-          names: this.getFeaturesNames(dtId, fvId),
-          values: this.getFeaturesValues(fvId)
+          names: this.getFeaturesNames(fvId),
+          values: this.getFeaturesValues(dtId, fvId)
         }
     ).pipe(
         map(data => {
