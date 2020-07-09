@@ -30,7 +30,8 @@ export class CircuitBreakerListComponent implements OnInit {
   stateError: StateContent = {
     title: this.errorTranslatePrefix + 'title',
     description: this.errorTranslatePrefix + 'description',
-    button: this.errorTranslatePrefix + 'button'
+    button: this.errorTranslatePrefix + 'button',
+    centered: true,
   };
 
   loadingDetails = true;
