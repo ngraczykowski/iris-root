@@ -78,26 +78,33 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   }
 
   loadReasoningBranchesList(request) {
-
     this.reasoningBranchesListService.getReasoningBranchesList(request)
         .subscribe((data: any) => {
-          this.branchesList = [...this.branchesList, ...data.branches];
-          this.cdr.detectChanges();
+          if (data.total > this.branchesList.length) {
+            this.branchesList = [...this.branchesList, ...data.branches];
+            this.cdr.detectChanges();
+            this.resetView();
+            this.showTable = true;
+            this.unlockLazyLoader.emit();
+            if (data.branches.length > 0) {
+              this.updateReasoningBranchRequest();
+            }
+          } else {
+            this.showLoadMore = false;
+          }
+        }, error => {
           this.resetView();
-          this.showTable = true;
-          this.unlockLazyLoader.emit();
+          this.showError = true;
         });
   }
 
   loadMoreReasoningBranches() {
     this.showLoadMore = true;
-    this.updateReasoningBranchRequest();
     this.loadReasoningBranchesList(this.reasoningBranchesRequest);
   }
 
   private updateReasoningBranchRequest() {
-    this.reasoningBranchesRequest.offset = this.reasoningBranchesRequest.limit;
-    this.reasoningBranchesRequest.limit = this.reasoningBranchesRequest.limit + this.rowsPerPage;
+    this.reasoningBranchesRequest.offset = this.reasoningBranchesRequest.offset + this.rowsPerPage;
   }
 
   reset() {

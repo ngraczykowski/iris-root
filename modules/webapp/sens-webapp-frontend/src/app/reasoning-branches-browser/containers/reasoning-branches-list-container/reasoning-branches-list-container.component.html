@@ -25,7 +25,9 @@
     </div>
   </div>
   <app-state [stateContent]="stateLoading" *ngIf="showLoading"></app-state>
-  <app-state [stateContent]="stateError" *ngIf="showError"></app-state>
+  <app-state [stateContent]="stateError"
+             *ngIf="showError"
+             (buttonClick)="loadReasoningBranchesList(reasoningBranchesRequest)"></app-state>
   <app-reasoning-branches-table
           *ngIf="showTable"
           [branchesTableData]="branchesList"
