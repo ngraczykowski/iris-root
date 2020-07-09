@@ -58,8 +58,8 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   rowsPerPage = 50;
 
   reasoningBranchesRequest: ReasoningBranchesListRequest = {
-    offset: 0,
-    limit: this.rowsPerPage
+    pageIndex: 0,
+    pageSize: this.rowsPerPage
   };
 
   aiSolutions = environment.aiSolutions;
@@ -104,12 +104,12 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   }
 
   private updateReasoningBranchRequest() {
-    this.reasoningBranchesRequest.offset = this.reasoningBranchesRequest.offset + this.rowsPerPage;
+    this.reasoningBranchesRequest.pageIndex++;
   }
 
   reset() {
-    this.reasoningBranchesRequest.limit = this.rowsPerPage;
-    this.reasoningBranchesRequest.offset = 0;
+    this.reasoningBranchesRequest.pageIndex = 0;
+    this.reasoningBranchesRequest.pageSize = this.rowsPerPage;
     this.branchesList = [];
   }
 

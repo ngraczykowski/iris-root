@@ -282,8 +282,8 @@ class GrpcReasoningBranchesQuery implements
 
   private static Pagination buildPagination(Paging paging) {
     return Pagination.newBuilder()
-        .setPageSize(paging.getLimit())
-        .setPageIndex(paging.getOffset() % paging.getLimit())
+        .setPageIndex(paging.getPageIndex())
+        .setPageSize(paging.getPageSize())
         .build();
   }
 

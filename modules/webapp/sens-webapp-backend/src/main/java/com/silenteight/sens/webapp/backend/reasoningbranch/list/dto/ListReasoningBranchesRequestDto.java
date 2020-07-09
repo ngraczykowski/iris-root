@@ -17,7 +17,7 @@ public class ListReasoningBranchesRequestDto {
   @Nullable
   private Boolean active;
   @Min(0)
-  private int offset;
+  private int pageIndex;
   @Min(1)
-  private int limit;
+  private int pageSize;
 }

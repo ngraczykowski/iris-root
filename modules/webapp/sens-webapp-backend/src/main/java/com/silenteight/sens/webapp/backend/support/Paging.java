@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 public class Paging {
 
   @Min(0)
-  private final int offset;
+  private final int pageIndex;
   @Min(1)
-  private final int limit;
+  private final int pageSize;
 }

@@ -95,28 +95,28 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
-    void its400_whenInvalidLimit() {
+    void its400_whenInvalidPageSize() {
       get(mappingForReasoningBranches(0, 0))
           .statusCode(BAD_REQUEST.value());
     }
 
     @TestWithRole(role = BUSINESS_OPERATOR)
-    void its400_whenInvalidOffset() {
-      get(mappingForReasoningBranches(-10, 10))
+    void its400_whenInvalidPageIndex() {
+      get(mappingForReasoningBranches(-1, 10))
           .statusCode(BAD_REQUEST.value());
     }
 
     private String mappingForReasoningBranches(ListReasoningBranchesRequestDto request) {
       return format(
-          "/reasoning-branches?aiSolution=%s&active=%s&offset=%d&limit=%d",
+          "/reasoning-branches?aiSolution=%s&active=%s&pageIndex=%d&pageSize=%d",
           request.getAiSolution(),
           request.getActive(),
-          request.getOffset(),
-          request.getLimit());
+          request.getPageIndex(),
+          request.getPageSize());
     }
 
-    private String mappingForReasoningBranches(int offset, int limit) {
-      return format("/reasoning-branches?offset=%d&limit=%d", offset, limit);
+    private String mappingForReasoningBranches(int pageIndex, int pageSize) {
+      return format("/reasoning-branches?pageIndex=%d&pageSize=%d", pageIndex, pageSize);
     }
   }
 

@@ -1,8 +1,8 @@
 export interface ReasoningBranchesListRequest {
   aiSolution?: string;
   active?: boolean;
-  offset: number;
-  limit: number;
+  pageIndex: number;
+  pageSize: number;
 }
 
 export interface ReasoningBranchesListResponse {
