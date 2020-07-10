@@ -1,0 +1,38 @@
+@startuml
+header Get Available Solutions
+
+actor BO as "Business Operator"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "Solution dropdown\nlist"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+end box
+
+box "Governance" #LightBlue
+    participant G as "Governance"
+end box
+
+BO -> Frontend : Expand Solution dropdown list
+
+activate Frontend
+Frontend -> Backend : Fetch available solutions
+
+activate Backend
+Backend <-> G : Fetch available solutions
+note over Backend, G
+    * Solution name
+end note
+
+Backend -> Frontend : Available solutions
+deactivate Backend
+
+Frontend -> BO: Available solutions
+deactivate Frontend
+note over Frontend, BO
+    * Solution name
+end note
+
+@enduml

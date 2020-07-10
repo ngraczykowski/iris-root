@@ -1,0 +1,9 @@
+= ADR#10
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-936[WA-936]*
+- Reason: As a Business Operator I want to be able to select a Hinted Solution if "hinted" feature is turned on in the Governance
+
+[plantuml,bo-selects-solution,svg]
+----
+include::diagrams/bo-selects-solution.puml[leveloffset=+1]
+----
