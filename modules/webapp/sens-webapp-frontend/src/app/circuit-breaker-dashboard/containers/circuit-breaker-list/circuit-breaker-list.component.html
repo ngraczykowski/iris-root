@@ -33,7 +33,7 @@
                 [discrepanciesList]="discrepanciesList"
                 (page)="reloadTableContent($event)"></app-circuit-breaker-alerts-table>
       </div>
-      <mat-paginator [pageSizeOptions]="[10, 20, 50]"
+      <mat-paginator [pageSizeOptions]="rowsPerPage"
                      showFirstLastButtons
                      [length]="numberOfRows"
                      (page)="reloadTableContent($event)"></mat-paginator>
