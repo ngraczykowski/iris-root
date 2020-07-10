@@ -20,14 +20,15 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.KEYCLOAK_
 @RequiredArgsConstructor
 class KeycloakRealmMigrationApiFacade implements KeycloakRealmMigrationApi {
 
-  private final Policy importPolicy;
+  private final Policy defaultImportPolicy;
   private final RealmsResource realmsResource;
 
   @Override
   public void partialImport(
       String realmName, PartialImportRepresentation partialImportRepresentation) {
-    partialImportRepresentation.setIfResourceExists(importPolicy.name());
-    log.debug(KEYCLOAK_MIGRATION, "Performing Keycloak partial import. policy={}", importPolicy);
+    setImportPolicyIfNull(partialImportRepresentation, defaultImportPolicy);
+    log.debug(KEYCLOAK_MIGRATION, "Performing Keycloak partial import. policy={}",
+        partialImportRepresentation.getPolicy());
     Response response = realmsResource.realm(realmName)
         .partialImport(partialImportRepresentation);
 
@@ -37,6 +38,12 @@ class KeycloakRealmMigrationApiFacade implements KeycloakRealmMigrationApi {
           response.getStatusInfo());
       throw new FailedToPerformMigration(response);
     }
+  }
+
+  private void setImportPolicyIfNull(
+      PartialImportRepresentation partialImportRepresentation, Policy importPolicy) {
+    if (partialImportRepresentation.getIfResourceExists() == null)
+      partialImportRepresentation.setIfResourceExists(importPolicy.name());
   }
 
   @Override

@@ -1,4 +1,5 @@
 {
+  "ifResourceExists": "SKIP",
   "enabled": true,
   "realm": "sens-webapp",
   "roles": {
