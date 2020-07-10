@@ -7,7 +7,7 @@ import {
 import { ReasoningBranchesListService } from '@app/reasoning-branches-browser/services/reasoning-branches-list.service';
 import { SelectedBranchesService } from '@app/reasoning-branches-browser/services/selected-branches.service';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
-import { AuthRole } from '@app/shared/security/model/auth-role.enum';
+import { Authority } from '@app/core/authorities/model/authority.enum';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
 import { environment } from '@env/environment';
@@ -31,7 +31,7 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   showError = false;
   showLoadMore = false;
 
-  canSelect: boolean = this.authenticatedUserFacade.hasRole(AuthRole.BUSINESS_OPERATOR);
+  canSelect: boolean = this.authenticatedUserFacade.hasRole(Authority.BUSINESS_OPERATOR);
 
   header: Header = {
     title: this.translatePrefix + 'title'

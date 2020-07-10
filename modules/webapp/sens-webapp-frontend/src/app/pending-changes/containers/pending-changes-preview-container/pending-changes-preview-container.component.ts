@@ -7,7 +7,7 @@ import { ChangeRequestDecision } from '@app/pending-changes/models/change-reques
 import { PendingChange } from '@app/pending-changes/models/pending-changes';
 import { PendingChangesService } from '@app/pending-changes/services/pending-changes.service';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
-import { AuthRole } from '@app/shared/security/model/auth-role.enum';
+import { Authority } from '@app/core/authorities/model/authority.enum';
 import { DialogComponent } from '@app/ui-components/dialog/dialog.component';
 import { StateContent } from '@app/ui-components/state/state';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,8 +31,8 @@ export class PendingChangesPreviewContainerComponent {
   translatePrefixDecision = this.translatePrefix + 'decision.';
   translatePrefixFeedback = this.translatePrefix + 'feedback.';
 
-  canCancel: boolean = this.authenticatedUserFacade.hasRole(AuthRole.BUSINESS_OPERATOR);
-  canApproveOrReject: boolean = this.authenticatedUserFacade.hasRole(AuthRole.APPROVER);
+  canCancel: boolean = this.authenticatedUserFacade.hasRole(Authority.BUSINESS_OPERATOR);
+  canApproveOrReject: boolean = this.authenticatedUserFacade.hasRole(Authority.APPROVER);
 
   previewEmptyState: StateContent = {
     centered: true,

@@ -1,6 +1,8 @@
-<mat-nav-list *ngIf="sectionData.visible" class="navigation-section">
-  <h3 matSubheader [translate]="sectionData.name"></h3>
-  <div *ngFor="let link of sectionData.links">
-    <app-navigation-element [navElement]="link"></app-navigation-element>
+<mat-nav-list class="navigation-section">
+  <h3 matSubheader>
+    {{ 'sideNav.sections.' + sectionData.name | translate }}
+  </h3>
+  <div *ngFor="let feature of sectionData.features">
+    <app-navigation-element [navElement]="feature"></app-navigation-element>
   </div>
 </mat-nav-list>

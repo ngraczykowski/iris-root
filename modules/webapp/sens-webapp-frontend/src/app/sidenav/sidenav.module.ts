@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
+import { AuthoritiesModule } from '@core/authorities/authorities.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
 import { NavigationElementComponent } from './components/navigation-element/navigation-element.component';
@@ -17,6 +18,7 @@ import { NavigationSectionComponent } from './components/navigation-section/navi
     SidenavComponent
   ],
   imports: [
+    AuthoritiesModule,
     CommonModule,
     MatSidenavModule,
     MatListModule,
