@@ -25,7 +25,7 @@ class ReasoningBranchFeatureValueRestControllerTest extends BaseRestControllerTe
   @MockBean
   private FeatureValuesQuery featureValuesQuery;
 
-  @TestWithRole(role = BUSINESS_OPERATOR)
+  @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
   void its200WithCorrectBody_whenFound() {
     given(featureValuesQuery.findFeatureValues(TREE_ID, FEATURE_VECTOR_ID))
         .willReturn(asList(FEATURE_VALUE_1, FEATURE_VALUE_2));
@@ -37,7 +37,7 @@ class ReasoningBranchFeatureValueRestControllerTest extends BaseRestControllerTe
         .body("[1]", equalTo(FEATURE_VALUE_2));
   }
 
-  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })
+  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(mappingForFeatureValues(TREE_ID, FEATURE_VECTOR_ID))
         .statusCode(FORBIDDEN.value());

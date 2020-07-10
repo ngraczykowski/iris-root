@@ -204,13 +204,13 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
           .body("[1].bulkChangeIds", hasItems(fixtures.bulkChangeId2.toString()));
     }
 
-    @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(mappingForIds(List.of(fixtures.reasoningBranchId1, fixtures.reasoningBranchId2)))
           .statusCode(FORBIDDEN.value());
     }
 
-    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
     void its400_whenBranchIdIncorrect() {
       get(mappingForIds("abc"))
           .statusCode(BAD_REQUEST.value());

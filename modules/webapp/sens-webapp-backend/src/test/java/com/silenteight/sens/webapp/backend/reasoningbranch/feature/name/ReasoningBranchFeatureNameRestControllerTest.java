@@ -22,7 +22,7 @@ class ReasoningBranchFeatureNameRestControllerTest extends BaseRestControllerTes
   @MockBean
   private FeatureNamesQuery featureNamesQuery;
 
-  @TestWithRole(role = BUSINESS_OPERATOR)
+  @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
   void its200WithCorrectBody_whenFound() {
     long featureVectorId = 5L;
     String featureName1 = "featureA";
@@ -37,7 +37,7 @@ class ReasoningBranchFeatureNameRestControllerTest extends BaseRestControllerTes
         .body("[1]", equalTo(featureName2));
   }
 
-  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })
+  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(mappingForFeatureNames(5L)).statusCode(FORBIDDEN.value());
   }

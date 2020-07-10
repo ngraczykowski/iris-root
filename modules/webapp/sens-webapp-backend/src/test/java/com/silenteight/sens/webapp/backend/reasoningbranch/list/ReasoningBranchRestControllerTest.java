@@ -33,8 +33,8 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
   @Nested
   class BranchList {
 
-    @TestWithRole(role = BUSINESS_OPERATOR)
-    void its200WithCorrectBodyWithFilter_whenFound() {
+    @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
+    void its200WithCorrectBodyWithFilter_whenFound_withBoRole() {
       given(
           reasoningBranchesQuery.list(
               new ReasoningBranchFilterDto(AI_SOLUTION, IS_ACTIVE), new Paging(0, PAGE_SIZE)))
@@ -74,7 +74,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           .body("branches[1].updatedAt", notNullValue());
     }
 
-    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })
+    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST))
           .statusCode(FORBIDDEN.value());

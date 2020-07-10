@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER_OR_BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
 import static org.springframework.http.ResponseEntity.ok;
@@ -28,7 +28,7 @@ class ReasoningBranchFeatureValueRestController {
   private final FeatureValuesQuery featureValuesQuery;
 
   @GetMapping("/reasoning-branches/features/{decisionTreeId}-{featureVectorId}/values")
-  @PreAuthorize(BUSINESS_OPERATOR)
+  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<String>> featureValues(
       @PathVariable long decisionTreeId, @PathVariable long featureVectorId) {
 

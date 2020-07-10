@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER_OR_BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.REASONING_BRANCH;
 import static org.springframework.http.ResponseEntity.ok;
@@ -32,7 +32,7 @@ class ReasoningBranchRestController {
   private final ReasoningBranchesQuery reasoningBranchesQuery;
 
   @GetMapping("/reasoning-branches")
-  @PreAuthorize(BUSINESS_OPERATOR)
+  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<ReasoningBranchesPageDto> list(
       @Valid ListReasoningBranchesRequestDto request) {
 

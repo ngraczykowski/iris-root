@@ -1,7 +1,7 @@
 @startuml
 header List Reasoning Branches
 
-actor BO as "Business Operator"
+actor BOA as "Business Operator or Approver"
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "RB Browser"
@@ -16,7 +16,7 @@ box "Governance" #LightBlue
     participant G as "Governance"
 end box
 
-BO -> Frontend : Select RB Browser
+BOA -> Frontend : Select RB Browser
 
 note over Frontend
 Two simultaneous connections:
@@ -75,9 +75,9 @@ Backend -> Frontend : Pending Change Requests
 deactivate Backend
 deactivate Frontend
 
-Frontend -> BO: Reasoning Branches list
+Frontend -> BOA: Reasoning Branches list
 deactivate Frontend
-note over Frontend, BO
+note over Frontend, BOA
     * Reasoning Branch ID
     * Solution
     * Status

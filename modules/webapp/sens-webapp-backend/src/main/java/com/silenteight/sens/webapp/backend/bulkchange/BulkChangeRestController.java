@@ -70,7 +70,7 @@ class BulkChangeRestController {
   }
 
   @GetMapping("/bulk-changes/ids")
-  @PreAuthorize(BUSINESS_OPERATOR)
+  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<BulkChangeIdsForReasoningBranchDto>> getIds(
       @RequestParam List<String> reasoningBranchId) {
     log.debug(CHANGE_REQUEST, "Requested to get Bulk Change IDs, reasoningBranchId={}",

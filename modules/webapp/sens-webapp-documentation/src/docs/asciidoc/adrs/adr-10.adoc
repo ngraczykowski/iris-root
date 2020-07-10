@@ -1,9 +1,9 @@
 = ADR#10
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-832[WA-832]*
-- Reason: As a Business Operator I want to be able to see the Reasoning Branch Details for the RB selected on a list
+- Reason: As a Business Operator or Approver I want to be able to see the Reasoning Branch Details for the RB selected on a list
 
-[plantuml,bo-gets-reasoning-branch-details,svg]
+[plantuml,bo-a-gets-reasoning-branch-details,svg]
 ----
-include::diagrams/bo-gets-reasoning-branch-details.puml[leveloffset=+1]
+include::diagrams/bo-a-gets-reasoning-branch-details.puml[leveloffset=+1]
 ----

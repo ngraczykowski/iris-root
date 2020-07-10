@@ -1,7 +1,7 @@
 @startuml
 header Get Reasoning Branch Details
 
-actor BO as "Business Operator"
+actor BOA as "Business Operator or Approver"
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "RB Browser"
@@ -15,7 +15,7 @@ box "Governance" #LightBlue
     participant G as "Governance"
 end box
 
-BO -> Frontend : Select Reasoning Branch
+BOA -> Frontend : Select Reasoning Branch
 
 activate Frontend
 Frontend -> Backend : Fetch Reasoning Branch Feature Values
@@ -46,9 +46,9 @@ end note
 Backend -> Frontend : Feature Names
 deactivate Backend
 
-Frontend -> BO: Reasoning Branch Details
+Frontend -> BOA: Reasoning Branch Details
 deactivate Frontend
-note over Frontend, BO
+note over Frontend, BOA
     * Reasoning Branch ID
     * Solution
     * Status
