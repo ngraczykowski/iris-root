@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.silenteight.sens.webapp.common.rest.Authority.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.rest.Authority.APPROVER_OR_BUSINESS_OPERATOR;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -23,7 +23,7 @@ public class DecisionTreeDetailsRestController {
   private final DecisionTreeQuery decisionTreeQuery;
 
   @GetMapping("/decision-trees/{treeId}")
-  @PreAuthorize(BUSINESS_OPERATOR)
+  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<DecisionTreeDto> getDecisionTree(@PathVariable long treeId) {
     return ok(decisionTreeQuery.getDecisionTree(treeId));
   }
