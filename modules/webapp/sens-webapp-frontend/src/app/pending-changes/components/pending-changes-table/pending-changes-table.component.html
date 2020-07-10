@@ -16,9 +16,9 @@
       <span [translate]="translateTablePrefix + 'solution'"></span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <app-ai-solution *ngIf="element.aiSolution"
+      <app-ai-solution *ngIf="element.aiSolution !== null"
                        [aiSolution]="element.aiSolution"></app-ai-solution>
-      <span *ngIf="!element.aiSolution"
+      <span *ngIf="element.aiSolution === null"
             class="secondary-text"
             [translate]="'aiSolutions.unchanged'"></span>
     </mat-cell>
@@ -30,9 +30,9 @@
       <span [translate]="translateTablePrefix + 'status'"></span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <app-element-status *ngIf="element.active"
+      <app-element-status *ngIf="element.active !== null"
                           [elementStatus]="element.active"></app-element-status>
-      <span *ngIf="!element.active"
+      <span *ngIf="element.active === null"
             class="secondary-text"
             [translate]="'aiStatus.unchanged'"></span>
     </mat-cell>

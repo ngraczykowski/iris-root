@@ -37,18 +37,23 @@
       <p class="mat-body"
          translate="pendingChanges.changeRequestDetails.changes.labels.solution"></p>
       <p class="mat-body">
-        <span *ngIf="pendingChange.aiSolution">{{pendingChange.aiSolution}}</span>
-        <span *ngIf="!pendingChange.aiSolution"
+        <app-ai-solution *ngIf="pendingChange.aiSolution !== null"
+                         [aiSolution]="pendingChange.aiSolution">
+        </app-ai-solution>
+        <span *ngIf="pendingChange.aiSolution === null"
               class="secondary-text"
-              [translate]="'aiSolutions.unchanged'"></span>
+              [translate]="'aiSolutions.unchanged'">
+        </span>
       </p>
     </div>
     <div class="values-list values-list--horizontal">
       <p class="mat-body"
          translate="pendingChanges.changeRequestDetails.changes.labels.status"></p>
       <p class="mat-body">
-        <span *ngIf="pendingChange.active">{{pendingChange.active}}</span>
-        <span *ngIf="!pendingChange.active"
+        <app-element-status *ngIf="pendingChange.active !== null"
+                            [elementStatus]="pendingChange.active">
+        </app-element-status>
+        <span *ngIf="pendingChange.active === null"
               class="secondary-text"
               [translate]="'aiStatus.unchanged'"></span>
       </p>
