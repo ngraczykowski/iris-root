@@ -25,11 +25,13 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   translatePrefix = 'reasoningBranchesBrowser.';
   loadingTranslatePrefix = this.translatePrefix + 'loading.';
   errorTranslatePrefix = this.translatePrefix + 'error.';
+  noResultsTranslatePrefix = this.translatePrefix + 'noResults.';
 
   showTable = false;
   showLoading = true;
   showError = false;
   showLoadMore = false;
+  showNoResults = false;
 
   canSelect: boolean = this.authenticatedUserFacade.hasRole(Authority.BUSINESS_OPERATOR);
 
@@ -48,6 +50,12 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
     title: this.errorTranslatePrefix + 'title',
     description: this.errorTranslatePrefix + 'description',
     button: this.errorTranslatePrefix + 'button'
+  };
+
+  stateNoResults: StateContent = {
+    centered: true,
+    title: this.noResultsTranslatePrefix + 'title',
+    description: this.noResultsTranslatePrefix + 'description'
   };
 
   stateLoadMore: StateContent = {
@@ -80,22 +88,31 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
   loadReasoningBranchesList(request) {
     this.reasoningBranchesListService.getReasoningBranchesList(request)
         .subscribe((data: any) => {
-          if (data.total > this.branchesList.length) {
-            this.branchesList = [...this.branchesList, ...data.branches];
-            this.cdr.detectChanges();
-            this.resetView();
-            this.showTable = true;
-            this.unlockLazyLoader.emit();
-            if (data.branches.length > 0) {
-              this.updateReasoningBranchRequest();
-            }
+          if (data.total > 0) {
+            this.updateBranchesList(data);
           } else {
-            this.showLoadMore = false;
+            this.resetView();
+            this.showNoResults = true;
           }
         }, error => {
           this.resetView();
           this.showError = true;
         });
+  }
+
+  private updateBranchesList(data: any) {
+    if (data.total > this.branchesList.length) {
+      this.branchesList = [...this.branchesList, ...data.branches];
+      this.cdr.detectChanges();
+      this.resetView();
+      this.showTable = true;
+      this.unlockLazyLoader.emit();
+      if (data.branches.length > 0) {
+        this.updateReasoningBranchRequest();
+      }
+    } else {
+      this.showLoadMore = false;
+    }
   }
 
   loadMoreReasoningBranches() {
@@ -118,6 +135,7 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
     this.showLoading = false;
     this.showError = false;
     this.showLoadMore = false;
+    this.showNoResults = false;
   }
 
   updateSelectedBranchesList($event: ReasoningBranchesList[]) {

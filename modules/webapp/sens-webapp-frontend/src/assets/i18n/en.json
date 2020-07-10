@@ -143,6 +143,10 @@
       "description": "Please try to fetch a list of Reasoning Branches manually if the problem will persist, contact the administrator.",
       "button": "Fetch the Reasoning Branches list"
     },
+    "noResults": {
+      "title": "No Reasoning Branches found",
+      "description": "Try to adjust your filtering options to find what you are looking for."
+    },
     "labels": {
       "id": "ID",
       "aiSolution": "AI Solution",
