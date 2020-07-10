@@ -17,7 +17,7 @@ export class AuditTrailService {
 
   getReport(payload: GenerateReportPayload): Observable<AuditTrailResponse> {
     return this.http.get(
-      `${environment.serverApiUrl}/report/audit-report?from=${payload.startDate}&to=${payload.endDate}`,
+      `${environment.serverApiUrl}/reports/audit-report?from=${payload.startDate}&to=${payload.endDate}`,
       {
         responseType: 'text',
         observe: 'response'

@@ -26,7 +26,7 @@ class ReportRestControllerIT extends BaseRestControllerTest {
   @TestWithRole(role = AUDITOR)
   @SuppressWarnings("squid:S2699")
   void notFoundResponseWhenNoReportNameFound() {
-    get("/report/WRONG_REPORT_NAME").statusCode(NOT_FOUND.value());
+    get("/reports/WRONG_REPORT_NAME").statusCode(NOT_FOUND.value());
   }
 
   @TestWithRole(role = AUDITOR)
@@ -35,7 +35,7 @@ class ReportRestControllerIT extends BaseRestControllerTest {
         .queryParam("paramA", "paramValueABC")
         .queryParam("paramB", "paramValueEFG")
         .accept("text/csv")
-        .when().get(RestConstants.ROOT + "/report/" + REPORT_NAME)
+        .when().get(RestConstants.ROOT + "/reports/" + REPORT_NAME)
         .then().contentType("text/csv")
         .log().ifValidationFails()
         .statusCode(OK.value())
@@ -47,11 +47,11 @@ class ReportRestControllerIT extends BaseRestControllerTest {
 
   @TestWithRole(role = AUDITOR)
   void badRequestResponseIfMandatoryParameterNotProvided() {
-    get("/report/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
+    get("/reports/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }
 
   @TestWithRole(roles = { ADMIN, ANALYST, BUSINESS_OPERATOR })
   void its403_whenNotPermittedRole() {
-    get("/report/WRONG_REPORT_NAME").statusCode(FORBIDDEN.value());
+    get("/reports/WRONG_REPORT_NAME").statusCode(FORBIDDEN.value());
   }
 }

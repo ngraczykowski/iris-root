@@ -254,12 +254,12 @@ app.patch('/rest/webapp/api/change-requests/:changeRequestId/cancel',
       console.log(`CR-${req.params.changeRequestId} - Cancelled`);
     });
 
-app.get('/rest/webapp/api/report/security-matrix-report', (req, res) => {
+app.get('/rest/webapp/api/reports/security-matrix-report', (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
   res.sendFile(__dirname + '/data/security-matrix-report.csv');
 });
 
-app.get('/rest/webapp/api/report/reasoning-branch-report', (req, res) => {
+app.get('/rest/webapp/api/reports/reasoning-branch-report', (req, res) => {
   let filePath = path.join(__dirname, 'data/security-matrix-report.csv');
   let stat = fs.statSync(filePath);
 
@@ -277,7 +277,7 @@ app.get('/rest/webapp/api/report/reasoning-branch-report', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/report/audit-report', (req, res) => {
+app.get('/rest/webapp/api/reports/audit-report', (req, res) => {
   let filePath = path.join(__dirname, 'data/security-matrix-report.csv');
   let stat = fs.statSync(filePath);
 

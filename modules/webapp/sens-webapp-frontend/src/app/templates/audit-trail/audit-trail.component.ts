@@ -42,7 +42,7 @@ export class SecurityMatrixComponent implements OnInit {
     {
       name: 'Security Matrix',
       description: 'security-matrix',
-      url: '/rest/webapp/api/report/security-matrix-report'
+      url: '/rest/webapp/api/reports/security-matrix-report'
     } /*,
     {
       name: 'Users List',

@@ -14,7 +14,7 @@ export class ReasoningBranchesReportService {
 
   getReport(decisionTreeID: string) {
     return this.http.get(
-        `${environment.serverApiUrl}/report/reasoning-branch-report?decisionTreeId=${decisionTreeID}`,
+        `${environment.serverApiUrl}/reports/reasoning-branch-report?decisionTreeId=${decisionTreeID}`,
         {
           responseType: 'text',
           observe: 'response'

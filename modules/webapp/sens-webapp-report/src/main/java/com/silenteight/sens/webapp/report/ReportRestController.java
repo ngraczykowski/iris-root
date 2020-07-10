@@ -27,7 +27,7 @@ class ReportRestController {
   @NonNull
   private final ReportProvider reportProvider;
 
-  @GetMapping("/report/{reportName}")
+  @GetMapping("/reports/{reportName}")
   @PreAuthorize(Authority.AUDITOR)
   public void getReport(
       HttpServletResponse response,
