@@ -159,17 +159,19 @@ export class CircuitBreakerListComponent implements OnInit {
 
   private archivisationFailure(): void {
     this.dialog.open(DialogComponent, {
+      autoFocus: false,
       width: '450px',
       data: {
         title: 'circuitBreakerDashboard.element.archiveFailureDialog.title',
         description: 'circuitBreakerDashboard.element.archiveFailureDialog.description',
-        buttonCta: 'circuitBreakerDashboard.element.archiveFailureDialog.confirmation'
+        buttonClose: 'circuitBreakerDashboard.element.archiveFailureDialog.confirmation'
       }
     });
   }
 
   private openArchiveDialog(decisionTreeId, featureVectorId): MatDialogRef<DialogComponent> {
     return this.dialog.open(DialogComponent, {
+      autoFocus: false,
       width: '450px',
       data: {
         title: 'circuitBreakerDashboard.element.archiveDialog.title',

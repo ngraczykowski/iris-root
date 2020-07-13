@@ -54,6 +54,7 @@ export class SelectReasoningBranchContainerComponent {
 
   openDialog(dialogConfigData: any): void {
     this.dialog.open(RbVerificationDialogComponent, {
+      autoFocus: false,
       width: '450px',
       data: dialogConfigData
     });
