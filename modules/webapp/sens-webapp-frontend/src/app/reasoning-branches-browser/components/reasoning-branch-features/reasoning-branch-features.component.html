@@ -1,5 +1,5 @@
-<div class="values-list values-list--horizontal"
+<div class="values-list values-list--horizontal features-list"
      *ngFor="let feature of featuresList">
-  <p class="mat-body">{{feature.name}}</p>
+  <p class="mat-body features-list__label">{{feature.name | splitCamelCaseIntoWords}}</p>
   <p class="mat-body">{{feature.value | replace : '_' : ' ' }}</p>
 </div>

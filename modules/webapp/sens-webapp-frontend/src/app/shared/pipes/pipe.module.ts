@@ -6,6 +6,7 @@ import { ReplacePipe } from '@app/shared/pipes/replace/replace.pipe';
 import { SortPipe } from '@app/shared/pipes/sort/sort.pipe';
 import { TranslateValuePipe } from '@app/shared/pipes/translateValue/translate-value.pipe';
 import { FilterMultipleValuesPipe } from './filterMultipleValues/filter-multiple-values.pipe';
+import { SplitCamelCaseIntoWordsPipe } from './splitCamelCaseIntoWords/split-camel-case-into-words.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FilterMultipleValuesPipe } from './filterMultipleValues/filter-multiple
     TranslateOrFriendlyValuePipe,
     TranslateValuePipe,
     SortPipe,
-    FilterMultipleValuesPipe
+    FilterMultipleValuesPipe,
+    SplitCamelCaseIntoWordsPipe
   ],
   exports: [
     FilterPipe,
@@ -24,7 +26,8 @@ import { FilterMultipleValuesPipe } from './filterMultipleValues/filter-multiple
     TranslateOrFriendlyValuePipe,
     TranslateValuePipe,
     SortPipe,
-    FilterMultipleValuesPipe
+    FilterMultipleValuesPipe,
+    SplitCamelCaseIntoWordsPipe
   ]
 })
 export class PipeModule { }
