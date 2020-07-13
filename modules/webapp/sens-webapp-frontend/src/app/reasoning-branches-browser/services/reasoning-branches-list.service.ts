@@ -44,7 +44,7 @@ export class ReasoningBranchesListService {
 
   getReasoningBranchesList(request: ReasoningBranchesListRequest): Observable<ReasoningBranchesListResponse> {
     return this.getBranchesList(request).pipe(
-        switchMap((response: ReasoningBranchesListResponse) => forkJoin({
+        switchMap((response: ReasoningBranchesListResponse) => response.branches.length ? forkJoin({
           branchesList: of(response),
           bulkChanges: this.getBulkChangesIds(response.branches),
           pendingChanges: this.getPendingChanges(),
@@ -73,7 +73,7 @@ export class ReasoningBranchesListService {
                   return result;
                 }
             )
-        ))
+        ) : of(response))
     );
   }
 
