@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { CircuitBreakerAlertsTableComponent } from '@app/circuit-breaker-dashboard/components/circuit-breaker-alerts-table/circuit-breaker-alerts-table.component';
@@ -24,6 +24,8 @@ export class CircuitBreakerListComponent implements OnInit {
 
   @Input() circuitBreakerList;
   @ViewChild(CircuitBreakerAlertsTableComponent, {static: false}) circuitBreakerAlertsTableComponent: CircuitBreakerAlertsTableComponent;
+
+  @Output() actionPerformed: EventEmitter<void> = new EventEmitter<void>();
 
   discrepanciesList = [];
 
@@ -155,6 +157,7 @@ export class CircuitBreakerListComponent implements OnInit {
     this.snackbar.open(feedbackContent, null, {
       duration: 2000
     });
+    this.actionPerformed.emit();
   }
 
   private archivisationFailure(): void {

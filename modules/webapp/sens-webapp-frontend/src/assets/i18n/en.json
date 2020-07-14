@@ -520,7 +520,7 @@
       "archiveDialog": {
         "title": "Archive discrepancies list?",
         "description": "Discrepancies list will be moved to an archive, and the Reasoning Branch {{ descriptionValue }} will be reactivated without any changes.",
-        "confirmation": "Archive discrepancies list",
+        "confirmation": "Archive Discrepancies List",
         "cancellation": "Close"
       },
       "archiveFailureDialog": {

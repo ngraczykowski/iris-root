@@ -10,5 +10,6 @@
 
   <app-circuit-breaker-list
           *ngIf="circuitBreakerList"
-          [circuitBreakerList]="circuitBreakerCurrentList"></app-circuit-breaker-list>
+          [circuitBreakerList]="circuitBreakerCurrentList"
+          (actionPerformed)="loadDiscrepantBranches()"></app-circuit-breaker-list>
 </div>
