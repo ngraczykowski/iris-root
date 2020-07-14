@@ -1,3 +1,9 @@
+= HLD #3
+
+- Reference ticket: https://youtrack.silenteight.com/issue/WA-593[WA-593]
+
+[plantuml,sequence-diagram,svg]
+-----
 @startuml
 header Keycloak migrations flow
 
@@ -40,3 +46,4 @@ WebApp -> Keycloak : Apply subsequent partial imports (migrations) taking policy
 Keycloak -->> WebApp
 == WebApp is running ==
 @enduml
+-----

@@ -1,3 +1,10 @@
+= HLD #10
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-832[WA-832]*
+- Reason: As a Business Operator or Approver I want to be able to see the Reasoning Branch Details for the RB selected on a list
+
+[plantuml,bo-a-gets-reasoning-branch-details,svg]
+-----
 @startuml
 header Get Reasoning Branch Details
 
@@ -57,3 +64,4 @@ note over Frontend, BOA
 end note
 
 @enduml
+-----

@@ -1,0 +1,387 @@
+= HLD #5
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-616[WA-616]*
+- Reason: As a Business Operator, I want to create Change Request to suggest changes into a multiple Reasoning Branches
+
+
+== Maker flow
+
+[plantuml,maker-creates-change-request-queue,svg]
+-----
+@startuml
+header Maker flow
+
+actor Maker order 10
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "Change Request UI" order 20
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp" order 30
+    database WebAppDB as "WebApp Database" order 40
+end box
+
+box "Governance" #LightBlue
+    participant Governance as "Governance" order 45
+end box
+
+box "RabbitMQ"
+    queue Queue order 50
+end box
+
+== STEP 1 (Configure) ==
+
+Maker -> Frontend : Input Decision Tree Id
+Maker -> Frontend : Input Feature Vector Id OR Feature Vector Signatures
+
+loop until comment and at least one of: AI Solution, Status provided
+   Maker -> Frontend : Input RB Solution OR Status change
+end
+
+Maker -> Frontend : Add attachments
+loop until comment provided
+   Maker -> Frontend : Input comment
+end
+
+Maker -> Frontend: Click "Next" button
+
+Frontend -> Backend: Validate
+                note over Frontend, Backend
+                    * Decision Tree Id
+                    * Feature Vector Ids OR Feature Vector Signatures
+                end note
+
+activate Backend
+activate Backend #DarkSalmon
+
+activate Governance
+activate Governance #DarkSalmon
+
+alt Validation DecisionTree Id + Feature Vector Ids
+    Backend -> Governance : Validate Feature Vector Ids
+else Validation DecisionTree Id + Feature Vector Signatures
+    Backend -> Governance : Validate DecisionTreeId and Feature Vector Signatures
+    Backend <-> Governance : Fetch Feature Vector Ids
+end
+
+alt Validation error
+        note over Backend
+            This validation can be removed after we stop
+            supporting strings in an RB Ids field.
+            Commands will be always successful.
+        end note
+    Governance --> Backend : Validation result Error
+    deactivate Governance
+    Backend --> Frontend: Validation failure
+    deactivate Backend
+    Frontend --> Maker : Inform about failure
+else Successful validation
+    deactivate Governance
+    Backend --> Frontend: Validation successful
+        note over Backend, Frontend
+            * List of (Feature Vector Id, Feature Vector Signatures)
+        end note
+    deactivate Backend
+    Frontend --> Maker : Inform about success
+end
+
+== STEP 2 (Confirm) ==
+
+Maker -> Frontend: Click "Submit Change Request" button
+
+Frontend -> Frontend : Generate Bulk Change Id (UUID)
+
+Frontend ->> Backend : Create Bulk Change Request
+activate Backend
+
+        note over Frontend, Backend
+            * Bulk Change Id (UUID)
+            * Decision Tree Id
+            * Feature Vector Ids
+            * AI solution (possible "no change")
+            * Status (possible "no change")
+        end note
+
+Backend -> Queue : Send Bulk Change Create Command
+        note over Backend, Queue
+            * Bulk Change Id
+            * Decision Tree Id
+            * Feature Vector Ids
+            * AI Solution (possible 'no change')
+            * Status (possible 'no change')
+            * Creation at (timestamp)
+        end note
+
+Backend -->> Frontend: Bulk Change successfully created
+deactivate Backend
+
+Frontend ->> Backend : Create Change Request Request
+activate Backend
+        note over Frontend, Backend
+            * Bulk Change Id (UUID)
+            * Username
+            * Comment
+            * Attachments URLs
+            * Creation at (timestamp)
+        end note
+
+Backend -> Queue : Send ChangeRequest Command
+
+        note over Backend, Queue
+            * Bulk Change Id (UUID)
+            * Username
+            * Comment
+            * Attachments URLs
+            * Creation at (timestamp)
+        end note
+
+Backend -->> Frontend: Change Request successfully \ncreated result
+
+deactivate Backend
+
+Frontend --> Maker : Inform about success
+
+@enduml
+-----
+
+== Handling ChangeRequest message
+
+[plantuml,handling-change-request-message,svg]
+-----
+@startuml
+header Maker flow
+
+box "RabbitMQ"
+    queue Queue order 10
+end box
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 20
+    database WebAppDB as "WebApp Database" order 30
+end box
+
+activate Backend
+
+Queue -> Backend : ChangeRequest Command
+    note over Queue, Backend
+        * Bulk Change Id (UUID)
+        * Username
+        * Comment
+        * Attachments Urls
+        * Creation At
+    end note
+
+Backend -> WebAppDB : Persist new Change Request
+    note over Backend, WebAppDB
+        * Bulk Change Id (UUID)
+        * Created By
+        * Created At
+        * Comment
+        * Attachments Urls
+    end note
+
+deactivate Backend
+
+@enduml
+-----
+
+== Approver flow
+
+[plantuml,approver-accept-or-reject-change-request-queue,svg]
+-----
+@startuml
+header Approver flow
+
+actor Approver
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "Approver Queue GUI"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+    database WebAppDB as "WebApp Database"
+end box
+
+box "Governance" #LightBlue
+    participant Governance as "Governance" order 45
+end box
+
+box "RabbitMQ"
+    queue Queue order 50
+end box
+
+Frontend ->> Backend : Fetch Change Requests
+
+activate Backend
+Backend <-> WebAppDB : Fetch pending Change Requests
+note over Backend, WebAppDB
+    * Change Request Id
+    * Bulk Change Id
+    * Username
+    * Comment
+    * Attachments URLs
+    * Creation At
+end note
+Backend -->> Frontend : Change Requests list
+deactivate Backend
+
+
+Frontend ->> Backend : Fetch Bulk Changes
+activate Backend
+Backend <-> Governance : Fetch pending Bulk Changes
+note over Backend, Governance
+    * Bulk Change Id
+    * List of RB Ids
+    * AI Solution (possible 'no change')
+    * Status (possible 'no change')
+end note
+
+Backend -->> Frontend : Bulk Change list
+deactivate Backend
+
+Frontend -->> Frontend : Merge Bulk Change List and ChangeRequest List
+note over Frontend
+    If we are not able to fetch BulkChange details
+    we should hide the apply/reject button.
+end note
+
+Frontend -->> Approver : Present list of Pending Change Requests
+
+
+==  Approve Change Request  ==
+
+Approver -> Frontend : Click "Approve"
+Frontend ->> Backend : Change Request Approve request
+
+Backend -> Queue : Send ChangeRequest Approve Command
+note over Backend, Queue
+    * ChangeRequest Id
+    * Approver Username
+    * Approved At
+end note
+
+Backend -->> Frontend : Approval success result
+
+Frontend -->> Approver : Inform about success
+
+
+==  Reject Change Request  ==
+
+Approver -> Frontend : Click "Reject"
+Frontend ->> Backend : Change Request reject request
+
+Backend -> Queue : Send ChangeRequest Reject Command
+note over Backend, Queue
+    * ChangeRequest Id
+    * Approver Username
+    * Rejected At
+end note
+
+Backend -->> Frontend : Approval reject result
+
+Frontend -->> Approver : Inform about success
+
+@enduml
+-----
+
+== Handling Approve Message
+
+[plantuml,handling-approve-message,svg]
+-----
+@startuml
+header Maker flow
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 20
+    database WebAppDB as "WebApp Database" order 30
+end box
+
+box "RabbitMQ"
+    queue Queue order 10
+end box
+
+Queue -> Backend : ChangeRequest Approve Command
+
+note over Queue, Backend
+    * Change Request Id
+    * Username
+    * Approve At
+end note
+
+activate Backend
+
+Backend -> WebAppDB : Update ChangeRequest
+
+note over Backend, WebAppDB
+    * Status = Approved
+    * Decided By
+    * Decided At
+end note
+
+Backend <-> WebAppDB : Fetch Bulk Change Id
+
+Backend -> Queue : Bulk Change Apply Command
+note over Queue, Backend
+    * Bulk Change Id
+end note
+
+
+deactivate Backend
+
+@enduml
+-----
+
+== Handling Reject Message
+
+[plantuml,handling-reject-message,svg]
+-----
+@startuml
+header Maker flow
+
+box "WebApp Backend"
+    participant Backend as "WebApp" order 20
+    database WebAppDB as "WebApp Database" order 30
+end box
+
+box "RabbitMQ"
+    queue Queue order 10
+end box
+
+Queue -> Backend : ChangeRequest Reject Command
+
+note over Queue, Backend
+    * Bulk Change Id
+    * Username
+    * Rejected At
+end note
+
+activate Backend
+
+Backend -> WebAppDB : Update ChangeRequest
+
+note over Backend, WebAppDB
+    * Status = Rejected
+    * Decided By
+    * Decided At
+end note
+
+Backend <-> WebAppDB : Fetch Bulk Change Id
+
+Backend -> Queue : Bulk Change Reject Command
+note over Queue, Backend
+    * Bulk Change Id
+end note
+
+
+deactivate Backend
+
+@enduml
+-----
+
+== Governance Commands and Events
+
+. Bulk Change Create Command
+. Bulk Change Apply Command
+. Bulk Change Reject Command

@@ -1,3 +1,10 @@
+= HLD #7
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-831[WA-831]*
+- Reason: As a Business Operator or Approver I want to be able to list all Reasoning Branches
+
+[plantuml,bo-a-gets-list-of-reasoning-branches,svg]
+-----
 @startuml
 header List Reasoning Branches
 
@@ -86,3 +93,4 @@ note over Frontend, BOA
 end note
 
 @enduml
+-----

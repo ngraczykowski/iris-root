@@ -1,3 +1,10 @@
+= HLD #10
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-936[WA-936]*
+- Reason: As a Business Operator I want to be able to select a Hinted Solution if "hinted" feature is turned on in the Governance
+
+[plantuml,bo-selects-solution,svg]
+-----
 @startuml
 header Get Available Solutions
 
@@ -36,3 +43,4 @@ note over Frontend, BO
 end note
 
 @enduml
+-----
