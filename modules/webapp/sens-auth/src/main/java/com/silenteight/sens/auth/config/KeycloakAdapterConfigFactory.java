@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.config;
+package com.silenteight.sens.auth.config;
 
 import org.keycloak.representations.adapters.config.AdapterConfig;
 

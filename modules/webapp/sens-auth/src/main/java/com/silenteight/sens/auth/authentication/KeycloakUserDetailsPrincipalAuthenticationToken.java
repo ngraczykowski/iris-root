@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.authentication;
+package com.silenteight.sens.auth.authentication;
 
 import lombok.EqualsAndHashCode;
 
@@ -24,7 +24,6 @@ class KeycloakUserDetailsPrincipalAuthenticationToken extends KeycloakAuthentica
         authToken.getAccount(),
         authToken.isInteractive(),
         userDetails.getAuthorities());
-
     this.userDetails = userDetails;
   }
 

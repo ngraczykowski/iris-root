@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.authorization;
+package com.silenteight.sens.auth.authorization;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +17,7 @@ class KeycloakPermissionEvaluator implements PermissionEvaluator {
   @Override
   public boolean hasPermission(
       Authentication authentication, Object targetDomainObject, Object permission) {
+
     boolean supports = authentication instanceof KeycloakAuthenticationToken
         && targetDomainObject instanceof Secured
         && permission instanceof String;

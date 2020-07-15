@@ -11,8 +11,8 @@ import java.time.Duration;
 
 import static java.time.Duration.ofMinutes;
 
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 class KeycloakLastLoginTimeConfiguration {
 
   static final String CACHE_UPDATE_INTERVAL = "PT15M";

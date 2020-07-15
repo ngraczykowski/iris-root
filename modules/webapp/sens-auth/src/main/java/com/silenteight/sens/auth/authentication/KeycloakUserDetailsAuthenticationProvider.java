@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.authentication;
+package com.silenteight.sens.auth.authentication;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

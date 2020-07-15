@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.backend;
 
+import com.silenteight.sens.auth.SensAuthModule;
 import com.silenteight.sens.webapp.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeModule;
@@ -36,7 +37,9 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ReportModule.class,
         UserModule.class,
         UserRestModule.class,
-        WebModule.class
+        WebModule.class,
+        SensAuthModule.class
+
     },
     exclude = {
         FreeMarkerAutoConfiguration.class

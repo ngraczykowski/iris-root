@@ -20,7 +20,6 @@ import static java.util.Optional.ofNullable;
 @Value
 @ConstructorBinding
 class KeycloakConfigurationProperties implements
-    KeycloakAdapterConfigFactory,
     KeycloakAdminClientFactory,
     KeycloakResourcesMigrationsLoaderProperties {
 

@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.authorization;
+package com.silenteight.sens.auth.authorization;
 
 interface NotSupportedAccessStrategy {
 

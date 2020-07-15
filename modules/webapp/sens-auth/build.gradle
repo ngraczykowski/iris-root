@@ -1,0 +1,45 @@
+plugins {
+  id "idea"
+  id "java-library"
+  id "maven-publish"
+  id "com.silenteight.gradle.wrapper" version "1.0.25"
+  id "com.silenteight.gradle.release" version "1.0.9"
+  id "com.silenteight.gradle.convention" version "1.14.0"
+}
+
+projectSetup {
+  javaVersion = JavaVersion.VERSION_11
+}
+
+ext {
+  libraries = [:]
+  springBootVersion = "2.3.1.RELEASE"
+}
+
+repositories {
+  mavenCentral()
+}
+
+libraries.platform_spring_boot = [group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: springBootVersion]
+libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
+libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
+libraries.spring_security_web = [group: 'org.springframework.security', name: 'spring-security-web']
+libraries.spring_security_config = [group: 'org.springframework.security', name: 'spring-security-config']
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
+
+// Keycloak
+libraries.keycloak_spring_boot = [group: 'org.keycloak', name: 'keycloak-spring-boot-starter', version: '8.0.1']
+libraries.keycloak_spring_security_adapter = [group: 'org.keycloak', name: 'keycloak-spring-security-adapter', version: libraries.keycloak_spring_boot.version]
+libraries.keycloak_admin_client = [group: 'org.keycloak', name: 'keycloak-admin-client', version: libraries.keycloak_spring_boot.version]
+libraries.keycloak_bom = [group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: libraries.keycloak_spring_boot.version]
+
+dependencies {
+  implementation platform(libraries.platform_spring_boot)
+  implementation libraries.spring_security_web
+  implementation libraries.spring_security_config
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.keycloak_spring_security_adapter
+  implementation libraries.keycloak_admin_client
+
+  api libraries.spring_context
+}

@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.authentication;
+package com.silenteight.sens.auth.authentication;
 
 import java.util.regex.Pattern;
 
