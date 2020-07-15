@@ -1,0 +1,7 @@
+<h1 class="mat-dialog-title">{{ data.header }}</h1>
+<div mat-dialog-content>
+  <p class="mat-body">{{ data.description }}</p>
+</div>
+<div mat-dialog-actions #buttonPanel>
+  <ng-container #buttonsOutlet [ngTemplateOutlet]="data.template"></ng-container>
+</div>

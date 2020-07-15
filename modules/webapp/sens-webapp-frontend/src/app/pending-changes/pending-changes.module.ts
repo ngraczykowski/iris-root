@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@app/shared/shared.module';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { DialogModule } from '@ui/dialog/dialog.module';
 import { PendingChangesComponent } from './containers/pending-changes/pending-changes.component';
 import { PendingChangesTableComponent } from './components/pending-changes-table/pending-changes-table.component';
 import { PendingChangesPreviewContainerComponent } from './containers/pending-changes-preview-container/pending-changes-preview-container.component';
@@ -48,7 +49,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
-    SharedModule
+    SharedModule,
+    DialogModule,
   ]
 })
 export class PendingChangesModule {}

@@ -39,10 +39,8 @@
                      (page)="reloadTableContent($event)"></mat-paginator>
       <mat-action-row>
         <button mat-button color="primary">
-          <span [translate]="translatePrefix + 'footer.buttonArchiveRequest'" (click)="archive(
-            circuitBreakerElement.branchId.decisionTreeId,
-            circuitBreakerElement.branchId.featureVectorId
-          )"></span>
+          <span [translate]="translatePrefix + 'footer.buttonArchiveRequest'"
+                (click)="archiveDialog.open()"></span>
         </button>
         <button mat-flat-button
                 color="primary"
@@ -54,5 +52,19 @@
         </button>
       </mat-action-row>
     </ng-container>
+
+    <app-dialog-instance #archiveDialog
+       [header]="'circuitBreakerDashboard.element.archiveDialog.title' | translate"
+       [description]="'circuitBreakerDashboard.element.archiveDialog.description' | translate :
+          { descriptionValue: circuitBreakerElement.branchId.decisionTreeId
+          + '-' +  circuitBreakerElement.branchId.featureVectorId}">
+      <button mat-button appDialogButton color="primary">
+        {{'circuitBreakerDashboard.element.archiveDialog.cancellation' | translate }}</button>
+      <button mat-flat-button appDialogButton color="primary"
+          (click)="archive(circuitBreakerElement.branchId.decisionTreeId,
+            circuitBreakerElement.branchId.featureVectorId)">
+        {{'circuitBreakerDashboard.element.archiveDialog.confirmation' | translate }}</button>
+    </app-dialog-instance>
+
   </mat-expansion-panel>
 </mat-accordion>

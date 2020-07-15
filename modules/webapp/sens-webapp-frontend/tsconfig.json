@@ -29,6 +29,9 @@
       "@core/*": [
         "app/core/*"
       ],
+      "@ui/*": [
+        "app/ui/*"
+      ],
       "@endpoint/*": [
         "app/endpoint/*"
       ]

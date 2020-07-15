@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { DialogModule } from '@ui/dialog/dialog.module';
 import { CircuitBreakerDashboardComponent } from './containers/circuit-breaker-dashboard/circuit-breaker-dashboard.component';
 import { CircuitBreakerListComponent } from './containers/circuit-breaker-list/circuit-breaker-list.component';
 import { CircuitBreakerAlertsTableComponent } from './components/circuit-breaker-alerts-table/circuit-breaker-alerts-table.component';
@@ -29,7 +30,8 @@ import { CircuitBreakerAlertsTableComponent } from './components/circuit-breaker
     MatPaginatorModule,
     TranslateModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DialogModule
   ]
 })
 export class CircuitBreakerDashboardModule {}

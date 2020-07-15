@@ -140,13 +140,11 @@ export class CircuitBreakerListComponent implements OnInit {
   }
 
   archive(decisionTreeId, featureVectorId): void {
-    this.openArchiveDialog(decisionTreeId, featureVectorId).afterClosed().pipe(
-      switchMap((result) => result === 'submit' ?
-          this.circuitBreakerService.archiveDiscrepancies([...this.discrepanciesIds]) : EMPTY))
-    .subscribe(
-      () => this.archivisationSuccess(decisionTreeId, featureVectorId),
-        () => this.archivisationFailure()
-    );
+    this.circuitBreakerService.archiveDiscrepancies([...this.discrepanciesIds])
+        .subscribe(
+            () => this.archivisationSuccess(decisionTreeId, featureVectorId),
+            () => this.archivisationFailure()
+        );
   }
 
   private archivisationSuccess(decisionTreeId, featureVectorId): void {
@@ -168,20 +166,6 @@ export class CircuitBreakerListComponent implements OnInit {
         title: 'circuitBreakerDashboard.element.archiveFailureDialog.title',
         description: 'circuitBreakerDashboard.element.archiveFailureDialog.description',
         buttonClose: 'circuitBreakerDashboard.element.archiveFailureDialog.confirmation'
-      }
-    });
-  }
-
-  private openArchiveDialog(decisionTreeId, featureVectorId): MatDialogRef<DialogComponent> {
-    return this.dialog.open(DialogComponent, {
-      autoFocus: false,
-      width: '450px',
-      data: {
-        title: 'circuitBreakerDashboard.element.archiveDialog.title',
-        description: 'circuitBreakerDashboard.element.archiveDialog.description',
-        value: `${decisionTreeId}-${featureVectorId}`,
-        buttonClose: 'circuitBreakerDashboard.element.archiveDialog.cancellation',
-        buttonCta: 'circuitBreakerDashboard.element.archiveDialog.confirmation'
       }
     });
   }
