@@ -71,7 +71,7 @@ class UserRestController {
   private final RolesQuery rolesQuery;
 
   @GetMapping
-  @PreAuthorize(Authority.ADMIN)
+  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public Page<UserDto> users(Pageable pageable) {
     log.info(USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
@@ -81,7 +81,7 @@ class UserRestController {
   }
 
   @PostMapping
-  @PreAuthorize(Authority.ADMIN)
+  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.info(USER_MANAGEMENT, "Creating new User. dto={}", dto);
 
@@ -101,7 +101,7 @@ class UserRestController {
   }
 
   @PatchMapping("/{username}")
-  @PreAuthorize(Authority.ADMIN)
+  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<Void> update(
       @PathVariable String username, @Valid @RequestBody UpdateUserDto dto) {
     log.info(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
@@ -127,7 +127,7 @@ class UserRestController {
   }
 
   @PatchMapping("/{username}/password/reset")
-  @PreAuthorize(Authority.ADMIN)
+  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<TemporaryPasswordDto> resetPassword(@PathVariable String username) {
     log.info(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
     Try<TemporaryPassword> result = Try.of(() -> resetPasswordUseCase.execute(username));

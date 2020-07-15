@@ -1,0 +1,55 @@
+{
+  "ifResourceExists": "SKIP",
+  "enabled": true,
+  "realm": "sens-webapp",
+  "roles": {
+    "realm": [
+      {
+        "attributes": {
+          "origin": [
+            "webapp"
+          ]
+        },
+        "clientRole": false,
+        "composite": false,
+        "name": "Administrator"
+      }
+    ]
+  },
+  "users": [
+    {
+      "attributes": {
+        "origin": [
+          "SENS"
+        ]
+      },
+      "clientRoles": {
+        "account": [
+          "manage-account"
+        ]
+      },
+      "createdTimestamp": 1583844544472,
+      "credentials": [
+        {
+          "createdDate": 1583844555320,
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}",
+          "secretData": "{\"value\":\"XyyKCpAg5i/qxVXXnVDYvjE3lO1zQwr2oSURgpK3fJuMoRpkuOfrUUTxD60DoiUzT6rg80sgcG8c1PD3f8+1FQ==\",\"salt\":\"tiYEAzYB2302FEgvvHgPJg==\"}",
+          "type": "password"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Admin First Name",
+      "groups": [],
+      "lastName": "Admin Surname",
+      "notBefore": 0,
+      "realmRoles": [
+        "Administrator"
+      ],
+      "requiredActions": [],
+      "totp": false,
+      "username": "admin"
+    }
+  ]
+}

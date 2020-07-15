@@ -423,6 +423,10 @@
               "label": "Admin",
               "hint": "Has access and rights to everything in the application and can manage users."
             },
+            "administrator": {
+              "label": "Administrator",
+              "hint": "Can manage users."
+            },
             "approver": {
               "label": "Approver",
               "hint": "Has Access to the Approval Queue and can reject or approve pending changes."
@@ -591,14 +595,6 @@
   "session.expireNotification": {
     "MESSAGE": "Your session will expire in {{ value }}",
     "button": "Extend my session"
-  },
-  "userSection": {
-    "accountType": {
-      "admin": "Admin"
-    },
-    "menu": {
-      "logOut": "Log Out"
-    }
   },
   "user-management": {
     "title": "User Management",

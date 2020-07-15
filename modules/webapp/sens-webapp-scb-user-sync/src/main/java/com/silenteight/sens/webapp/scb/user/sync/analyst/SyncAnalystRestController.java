@@ -28,7 +28,7 @@ class SyncAnalystRestController {
   private final SyncAnalystsUseCase syncAnalystsUseCase;
 
   @PostMapping("/users/sync/analysts")
-  @PreAuthorize(Authority.ADMIN)
+  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<SyncAnalystStatsDto> synchronize() {
     log.info(USER_MANAGEMENT, "Synchronizing Analysts");
     if (syncAnalystsUseCase == null)

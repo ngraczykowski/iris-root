@@ -1,6 +1,7 @@
 {
     "roles": [
         "Admin",
+        "Administrator",
         "Analyst",
         "Approver",
         "Business Operator",

@@ -98,7 +98,7 @@ export const routes: Routes = [
     component: UserManagementPageComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
-      authorities: ['Admin']
+      authorities: ['Admin', 'Administrator']
     }
   },
   {
@@ -156,6 +156,7 @@ export const routes: Routes = [
 
 export const rolesByRedirect: Map<string, string> = new Map([
   ['Admin', 'users/user-management'],
+  ['Administrator', 'users/user-management'],
   ['Business Operator', '/reasoning-branch'],
   ['Auditor', 'reports/audit-trail'],
   ['Analyst', '/analyst'],
