@@ -13,6 +13,7 @@ class GrpcReasoningBranchConfiguration {
   @Bean
   GrpcReasoningBranchDetailsQuery grpcReasoningBranchDetailsQuery(
       @Qualifier("governance") Channel channel) {
+
     return new GrpcReasoningBranchDetailsQuery(
         BranchGovernanceGrpc
             .newBlockingStub(channel)
@@ -31,12 +32,16 @@ class GrpcReasoningBranchConfiguration {
   GrpcReasoningBranchUpdateRepository grpcReasoningBranchUpdateRepository(
       @Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchUpdateRepository(
-        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady());
+        BranchGovernanceGrpc
+            .newBlockingStub(channel)
+            .withWaitForReady());
   }
 
   @Bean
   GrpcFeatureValuesQuery grpcFeatureValuesQuery(@Qualifier("governance") Channel channel) {
     return new GrpcFeatureValuesQuery(
-        BranchGovernanceGrpc.newBlockingStub(channel).withWaitForReady());
+        BranchGovernanceGrpc
+            .newBlockingStub(channel)
+            .withWaitForReady());
   }
 }

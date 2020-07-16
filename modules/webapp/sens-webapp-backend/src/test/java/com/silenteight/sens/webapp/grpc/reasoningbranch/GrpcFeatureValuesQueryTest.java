@@ -8,9 +8,9 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.feature.value.excepti
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -29,18 +29,14 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class GrpcFeatureValuesQueryTest {
 
+  @InjectMocks
+  private GrpcFeatureValuesQuery underTest;
+
   @Mock
   private BranchGovernanceBlockingStub branchStub;
 
-  private GrpcFeatureValuesQuery underTest;
-
-  @BeforeEach
-  void setUp() {
-    underTest = new GrpcFeatureValuesQuery(branchStub);
-  }
-
   @Test
-  void returnsEmptyList_whenGrpcThrowsNotFoundStatusException() {
+  void throwsReasoningBranchNotFoundException_whenGrpcThrowsNotFoundStatusException() {
     given(branchStub.getReasoningBranch(any())).willThrow(NOT_FOUND_RUNTIME_EXCEPTION);
 
     ThrowingCallable when = () -> underTest.findFeatureValues(1L, 5L);
