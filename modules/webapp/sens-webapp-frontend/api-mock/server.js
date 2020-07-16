@@ -176,7 +176,7 @@ app.get('/rest/webapp/api/change-requests/pending', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/discrepant-branches', (req, res) => {
+app.get('/rest/webapp/api/discrepant-branches?withArchivedDiscrepancies=false', (req, res) => {
   let dataFile;
   try {
     dataFile = fs.readFileSync(`${dataFolder}/list-discrepant-branches.json`);
@@ -186,6 +186,18 @@ app.get('/rest/webapp/api/discrepant-branches', (req, res) => {
       res.status(404).send()
     }
   }
+});
+
+app.get('/rest/webapp/api/discrepant-branches?withArchivedDiscrepancies=true', (req, res) => {
+  let dataFile;
+try {
+  dataFile = fs.readFileSync(`${dataFolder}/list-discrepant-branches.json`);
+  res.status(200).send(JSON.parse(dataFile));
+} catch (err) {
+  if (err.code === 'ENOENT') {
+    res.status(404).send()
+  }
+}
 });
 
 app.get('/rest/webapp/api/discrepant-branches/:id/discrepancy-ids',

@@ -35,7 +35,10 @@ import static org.springframework.http.HttpStatus.OK;
     GenericExceptionControllerAdvice.class })
 class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
 
-  private static final String DISCREPANT_BRANCHES_URL = "/discrepant-branches";
+  private static final String DISCREPANT_BRANCHES_URL =
+      "/discrepant-branches?withArchivedDiscrepancies=false";
+  private static final String DISCREPANT_BRANCHES_ARCHIVE_URL =
+      "/discrepant-branches?withArchivedDiscrepancies=true";
   private static final String DISCREPANCY_IDS_URL = "/discrepant-branches/%s/discrepancy-ids";
   private static final String DISCREPANCIES_URL = "/discrepancies";
   private static final String DISCREPANCIES_ARCHIVE_URL = "/discrepancies/archive";
@@ -50,8 +53,8 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
   class DiscrepantBranchesList {
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })
-    void its200WithEmptyListWhenNoDiscrepantBranches() {
-      given(query.listDiscrepantBranches()).willReturn(emptyList());
+    void its200WithEmptyListWhenNoBranchesWithDiscrepancies() {
+      given(query.listBranchesWithDiscrepancies()).willReturn(emptyList());
 
       get(DISCREPANT_BRANCHES_URL)
           .contentType(anything())
@@ -65,7 +68,7 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
       long featureVectorId1 = 12L;
       long decisionTreeId2 = 4L;
       long featureVectorId2 = 15L;
-      given(query.listDiscrepantBranches()).willReturn(List.of(
+      given(query.listBranchesWithDiscrepancies()).willReturn(List.of(
           new DiscrepantBranchDto(
               new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1), now()),
           new DiscrepantBranchDto(
@@ -83,6 +86,46 @@ class CircuitBreakerRestControllerTest extends BaseRestControllerTest {
     @TestWithRole(roles = { ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(DISCREPANT_BRANCHES_URL).statusCode(FORBIDDEN.value());
+    }
+  }
+
+  @Nested
+  class BranchListWithArchivedDiscrepancies {
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    void its200WithEmptyListWhenNoBranchesWithArchivedDiscrepancies() {
+      given(query.listBranchesWithArchivedDiscrepancies()).willReturn(emptyList());
+
+      get(DISCREPANT_BRANCHES_ARCHIVE_URL)
+          .contentType(anything())
+          .statusCode(OK.value())
+          .body("size()", is(0));
+    }
+
+    @TestWithRole(roles = { BUSINESS_OPERATOR })
+    void its200WithCorrectBody_whenFound() {
+      long decisionTreeId1 = 1L;
+      long featureVectorId1 = 12L;
+      long decisionTreeId2 = 4L;
+      long featureVectorId2 = 15L;
+      given(query.listBranchesWithArchivedDiscrepancies()).willReturn(List.of(
+          new DiscrepantBranchDto(
+              new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1), now()),
+          new DiscrepantBranchDto(
+              new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2), now())));
+
+      get(DISCREPANT_BRANCHES_ARCHIVE_URL)
+          .contentType(anything())
+          .statusCode(OK.value())
+          .body("[0].branchId.decisionTreeId", is((int) decisionTreeId1))
+          .body("[0].branchId.featureVectorId", is((int) featureVectorId1))
+          .body("[1].branchId.decisionTreeId", is((int) decisionTreeId2))
+          .body("[1].branchId.featureVectorId", is((int) featureVectorId2));
+    }
+
+    @TestWithRole(roles = { ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      get(DISCREPANT_BRANCHES_ARCHIVE_URL).statusCode(FORBIDDEN.value());
     }
   }
 

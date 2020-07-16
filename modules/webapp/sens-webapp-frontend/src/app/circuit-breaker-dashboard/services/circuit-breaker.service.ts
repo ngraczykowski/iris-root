@@ -16,8 +16,14 @@ export class CircuitBreakerService {
       private http: HttpClient
   ) { }
 
-  getDiscrepantBranches(): Observable<Array<DiscrepantBranchesResponse>> {
-    return this.http.get<Array<DiscrepantBranchesResponse>>(`${environment.serverApiUrl}/discrepant-branches`);
+  getBranchesWithDiscrepancies(): Observable<Array<DiscrepantBranchesResponse>> {
+    return this.http.get<Array<DiscrepantBranchesResponse>>(
+        `${environment.serverApiUrl}/discrepant-branches?withArchivedDiscrepancies=false`);
+  }
+
+  getBranchesWithArchivedDiscrepancies(): Observable<Array<DiscrepantBranchesResponse>> {
+    return this.http.get<Array<DiscrepantBranchesResponse>>(
+        `${environment.serverApiUrl}/discrepant-branches?withArchivedDiscrepancies=true`);
   }
 
   getDiscrepanciesIds(discrepancyId): Observable<Array<any>> {

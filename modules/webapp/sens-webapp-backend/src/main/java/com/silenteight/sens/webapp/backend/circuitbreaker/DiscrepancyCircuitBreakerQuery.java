@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface DiscrepancyCircuitBreakerQuery {
 
-  List<DiscrepantBranchDto> listDiscrepantBranches();
+  List<DiscrepantBranchDto> listBranchesWithDiscrepancies();
+
+  List<DiscrepantBranchDto> listBranchesWithArchivedDiscrepancies();
 
   List<Long> listDiscrepancyIds(ReasoningBranchIdDto branchId);
 

@@ -51,7 +51,39 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
                 discrepantBranchWith(
                     branchIdOf(decisionTreeId2, featureVectorId2), detectedAt2)));
 
-    List<DiscrepantBranchDto> discrepantBranches = query.listDiscrepantBranches();
+    List<DiscrepantBranchDto> discrepantBranches = query.listBranchesWithDiscrepancies();
+
+    assertThat(discrepantBranches).hasSize(2);
+
+    DiscrepantBranchDto discrepantBranch1 = discrepantBranches.get(0);
+    assertThat(discrepantBranch1.getBranchId().getDecisionTreeId())
+        .isEqualTo(decisionTreeId1);
+    assertThat(discrepantBranch1.getDetectedAt()).isEqualTo(detectedAt1);
+
+    DiscrepantBranchDto discrepantBranch2 = discrepantBranches.get(1);
+    assertThat(discrepantBranch2.getBranchId().getDecisionTreeId())
+        .isEqualTo(decisionTreeId2);
+    assertThat(discrepantBranch2.getDetectedAt()).isEqualTo(detectedAt2);
+  }
+
+  @Test
+  void returnsListOfDiscrepantBranchesWithArchivedDiscrepancies() {
+    long decisionTreeId1 = 1L;
+    long featureVectorId1 = 12L;
+    Instant detectedAt1 = now().minusMillis(1000);
+    long decisionTreeId2 = 2L;
+    long featureVectorId2 = 13L;
+    Instant detectedAt2 = now();
+
+    when(discrepancyBlockingStub.listBranchesWithArchivedDiscrepancies(any(Empty.class)))
+        .thenReturn(
+            discrepantBranchesResponseWith(
+                discrepantBranchWith(
+                    branchIdOf(decisionTreeId1, featureVectorId1), detectedAt1),
+                discrepantBranchWith(
+                    branchIdOf(decisionTreeId2, featureVectorId2), detectedAt2)));
+
+    List<DiscrepantBranchDto> discrepantBranches = query.listBranchesWithArchivedDiscrepancies();
 
     assertThat(discrepantBranches).hasSize(2);
 
@@ -71,7 +103,7 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
     when(discrepancyBlockingStub.listDiscrepantBranches(any(Empty.class)))
         .thenThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
 
-    ThrowingCallable featureNamesCall = () -> query.listDiscrepantBranches();
+    ThrowingCallable featureNamesCall = () -> query.listBranchesWithDiscrepancies();
 
     assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
   }

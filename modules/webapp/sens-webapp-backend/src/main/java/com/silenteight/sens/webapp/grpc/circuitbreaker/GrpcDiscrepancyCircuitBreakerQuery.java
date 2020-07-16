@@ -32,10 +32,28 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
   private final DiscrepancyCircuitBreakerBlockingStub discrepancyBlockingStub;
 
   @Override
-  public List<DiscrepantBranchDto> listDiscrepantBranches() {
+  public List<DiscrepantBranchDto> listBranchesWithDiscrepancies() {
     Try<List<DiscrepantBranchDto>> discrepantBranches =
         of(() -> discrepancyBlockingStub
             .listDiscrepantBranches(Empty.newBuilder().build())
+            .getDiscrepantBranchesList()
+            .stream()
+            .map(GrpcDiscrepancyCircuitBreakerQuery::toDto)
+            .collect(toList()));
+
+    return mapStatusExceptionsToCommunicationException(discrepantBranches)
+        .recoverWith(
+            GrpcCommunicationException.class,
+            exception -> Match(exception).of(
+                Case($(), () -> failure(exception))))
+        .get();
+  }
+
+  @Override
+  public List<DiscrepantBranchDto> listBranchesWithArchivedDiscrepancies() {
+    Try<List<DiscrepantBranchDto>> discrepantBranches =
+        of(() -> discrepancyBlockingStub
+            .listBranchesWithArchivedDiscrepancies(Empty.newBuilder().build())
             .getDiscrepantBranchesList()
             .stream()
             .map(GrpcDiscrepancyCircuitBreakerQuery::toDto)

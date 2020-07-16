@@ -70,7 +70,7 @@ export class CircuitBreakerDashboardComponent implements OnInit {
   loadDiscrepantBranches() {
     this.resetView();
     this.circuitBreakerLoading = true;
-    this.circuitBreakerService.getDiscrepantBranches()
+    this.circuitBreakerService.getBranchesWithDiscrepancies()
         .subscribe(data => {
           this.circuitBreakerCurrentList = data;
           this.resetView();

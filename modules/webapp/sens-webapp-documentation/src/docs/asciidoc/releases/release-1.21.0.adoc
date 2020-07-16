@@ -1,0 +1,23 @@
+:release_version: 1.21.0
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *PENDING*
+- Release date:
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+- https://repo.silenteight.com/ui/repos/tree/General/libs-release-local%2Fcom%2Fsilenteight%2Fsens%2Fwebapp%2Fsens-webapp-backend%2F{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/-/commit/eb543860393435c5a4d29b71ec04878ee556e96b[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/-/merge_requests/1516[SERP master MR]
+
+:leveloffset: +1
+
+// --------------------------------------------------------------------
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-826[WA-826]
+|Business Operator can view archived discrepancies in Circuit Breaker Dashboard.
+
+include::./templates/changelog-table-footer.adoc[]
