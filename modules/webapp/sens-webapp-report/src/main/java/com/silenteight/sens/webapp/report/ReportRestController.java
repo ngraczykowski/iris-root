@@ -28,7 +28,7 @@ class ReportRestController {
   private final ReportProvider reportProvider;
 
   @GetMapping("/reports/{reportName}")
-  @PreAuthorize(Authority.AUDITOR)
+  @PreAuthorize(Authority.ANY_ROLE_EXCEPT_ANALYST)
   public void getReport(
       HttpServletResponse response,
       @PathVariable String reportName,

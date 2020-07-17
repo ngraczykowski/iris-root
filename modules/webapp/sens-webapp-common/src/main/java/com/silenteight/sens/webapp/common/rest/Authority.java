@@ -15,7 +15,10 @@ public class Authority {
   public static final String BUSINESS_OPERATOR = "hasRole('BUSINESS_OPERATOR')";
   public static final String APPROVER = "hasRole('APPROVER')";
 
-  // COMBINED_AUTHORITIES
-  public static final String APPROVER_OR_BUSINESS_OPERATOR = APPROVER + " || " + BUSINESS_OPERATOR;
-  public static final String ADMIN_OR_ADMINISTRATOR = ADMIN + " || " + ADMINISTRATOR;
+  public static final String APPROVER_OR_BUSINESS_OPERATOR =
+      "hasAnyRole('APPROVER', 'BUSINESS_OPERATOR')";
+  public static final String ANY_ROLE_EXCEPT_ANALYST =
+      "hasAnyRole('ADMIN', 'AUDITOR', 'BUSINESS_OPERATOR', 'APPROVER', 'ADMINISTRATOR')";
+  public static final String ADMIN_OR_ADMINISTRATOR =
+      "hasAnyRole('ADMIN', 'ADMINISTRATOR')";
 }

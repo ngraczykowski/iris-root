@@ -8,10 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.report.rest.ReportTestFixtures.REPORT_NAME;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.StringContains.containsString;
@@ -45,12 +42,12 @@ class ReportRestControllerIT extends BaseRestControllerTest {
                 "Requested query parameters:\nparamA=paramValueABC\nparamB=paramValueEFG"));
   }
 
-  @TestWithRole(role = AUDITOR)
+  @TestWithRole(roles = { AUDITOR, ADMIN, BUSINESS_OPERATOR, APPROVER })
   void badRequestResponseIfMandatoryParameterNotProvided() {
     get("/reports/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }
 
-  @TestWithRole(roles = { ADMIN, ANALYST, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { ANALYST })
   void its403_whenNotPermittedRole() {
     get("/reports/WRONG_REPORT_NAME").statusCode(FORBIDDEN.value());
   }
