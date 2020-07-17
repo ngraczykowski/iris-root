@@ -249,3 +249,12 @@ sens.web:
     - key: "POTENTIAL_TRUE_POSITIVE"
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
+
+auth.paths:
+  - requestPath: "/api/change-requests/pending"
+    roles:
+      - "BUSINESS_OPERATOR"
+  - requestPath: "/api/reasoning-branches"
+    roles:
+      - "APPROVER"
+      - "BUSINESS_OPERATOR"
