@@ -15,11 +15,11 @@ import java.time.Instant;
 
 import static com.silenteight.sens.webapp.user.report.ReportAssert.assertThat;
 import static com.silenteight.sens.webapp.user.report.UserDtoFixtures.*;
-import static com.silenteight.sens.webapp.user.report.UserReportGenerator.*;
-import static com.silenteight.sens.webapp.user.report.UserReportGeneratorTest.UserReportGeneratorFixtures.CURRENT_TIME;
-import static com.silenteight.sens.webapp.user.report.UserReportGeneratorTest.UserReportGeneratorFixtures.EMPTY_VALUE;
-import static com.silenteight.sens.webapp.user.report.UserReportGeneratorTest.UserReportGeneratorFixtures.FILENAME_DATE_PREFIX;
-import static com.silenteight.sens.webapp.user.report.UserReportGeneratorTest.UserReportGeneratorFixtures.ROW_DATA_DATE_PREFIX;
+import static com.silenteight.sens.webapp.user.report.UsersReportGenerator.*;
+import static com.silenteight.sens.webapp.user.report.UsersReportGeneratorTest.UsersReportGeneratorFixtures.CURRENT_TIME;
+import static com.silenteight.sens.webapp.user.report.UsersReportGeneratorTest.UsersReportGeneratorFixtures.EMPTY_VALUE;
+import static com.silenteight.sens.webapp.user.report.UsersReportGeneratorTest.UsersReportGeneratorFixtures.FILENAME_DATE_PREFIX;
+import static com.silenteight.sens.webapp.user.report.UsersReportGeneratorTest.UsersReportGeneratorFixtures.ROW_DATA_DATE_PREFIX;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
@@ -27,21 +27,21 @@ import static java.util.List.of;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserReportGeneratorTest {
+class UsersReportGeneratorTest {
 
   @Mock
   private UserListQuery userListQuery;
 
   private TestDateFormatter filenameDateFormatter;
   private TestDateFormatter rowDateFormatter;
-  private UserReportGenerator underTest;
+  private UsersReportGenerator underTest;
 
   @BeforeEach
   void setUp() {
     filenameDateFormatter = new TestDateFormatter(FILENAME_DATE_PREFIX);
     rowDateFormatter = new TestDateFormatter(ROW_DATA_DATE_PREFIX);
 
-    underTest = new UserReportGenerator(
+    underTest = new UsersReportGenerator(
         new MockTimeSource(Instant.parse(CURRENT_TIME)),
         filenameDateFormatter,
         rowDateFormatter,
@@ -52,7 +52,7 @@ class UserReportGeneratorTest {
   void reportHasName() {
     String name = underTest.getName();
 
-    Assertions.assertThat(name).isEqualTo("user-report");
+    Assertions.assertThat(name).isEqualTo("users-report");
   }
 
   @Test
@@ -61,7 +61,7 @@ class UserReportGeneratorTest {
 
     Report report = underTest.generateReport(emptyMap());
 
-    String expectedName = "user-report-" + filenameDateFormatter.format(CURRENT_TIME) + ".csv";
+    String expectedName = "users-report-" + filenameDateFormatter.format(CURRENT_TIME) + ".csv";
     assertThat(report).hasName(expectedName);
   }
 
@@ -99,7 +99,7 @@ class UserReportGeneratorTest {
         EMPTY_VALUE, EMPTY_VALUE);
   }
 
-  static class UserReportGeneratorFixtures {
+  static class UsersReportGeneratorFixtures {
 
     static final String EMPTY_VALUE = "";
     static final String FILENAME_DATE_PREFIX = "FILENAME";

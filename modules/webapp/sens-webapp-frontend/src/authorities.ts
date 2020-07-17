@@ -10,6 +10,7 @@ export const authoritiesConfig: AuthoritiesConfiguration = {
     rb_cb_dashboard: [Authority.BUSINESS_OPERATOR],
     reports_audit_trail: [Authority.AUDITOR],
     reports_reasoning_branches: [Authority.BUSINESS_OPERATOR, Authority.APPROVER, Authority.AUDITOR],
-    reports_security_matrix: [Authority.AUDITOR]
+    reports_security_matrix: [Authority.AUDITOR],
+    reports_users: [Authority.AUDITOR],
   }
 };

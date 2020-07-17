@@ -1,0 +1,33 @@
+<div class="content-internal-margin--vertical content-internal-margin--horizontal">
+  <div class="audit-trail layout-narrow">
+    <app-header [headerData]="header"></app-header>
+    <mat-vertical-stepper linear #stepper>
+      <mat-step>
+        <ng-template matStepLabel>
+          <span [translate]="'usersReport.steps.configure'"></span>
+        </ng-template>
+        <app-configure-step
+                (formSubmit)="generateReport()">
+        </app-configure-step>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <span [translate]="'usersReport.steps.generate'"></span>
+        </ng-template>
+        <app-generate-step
+                [inProgress]="inProgress"
+                [error]="error"
+                (abort)="abortGenerateReport()">
+        </app-generate-step>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <span [translate]="'usersReport.steps.download'"></span>
+        </ng-template>
+        <app-download-step
+                (resetClicked)="resetStepper()">
+        </app-download-step>
+      </mat-step>
+    </mat-vertical-stepper>
+  </div>
+</div>

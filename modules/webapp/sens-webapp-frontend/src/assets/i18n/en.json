@@ -331,6 +331,32 @@
       "button": "Generate new report"
     }
   },
+  "usersReport": {
+    "title": "Users",
+    "steps": {
+      "configure": "Configure",
+      "generate": "Generate",
+      "download": "Download"
+    },
+    "form": {
+      "actionButton": "Generate Users Report"
+    },
+    "inProgress": {
+      "title": "Generating a report",
+      "description": "Please do not turn off the browser window and wait until the report is ready for download.",
+      "button": "Abort report generation"
+    },
+    "errorTimeout": {
+      "title": "Sorry but report generation failed!",
+      "description": "We cannot generate your report because of the technical limitations.",
+      "button": "Change report configuration"
+    },
+    "download": {
+      "title": "Your report is ready!",
+      "description": "The report will download automatically.",
+      "button": "Generate new report"
+    }
+  },
   "usersManagement": {
     "title": "Users",
     "usersList": {

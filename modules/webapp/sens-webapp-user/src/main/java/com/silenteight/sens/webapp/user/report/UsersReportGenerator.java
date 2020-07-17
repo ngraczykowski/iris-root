@@ -27,9 +27,9 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-class UserReportGenerator implements ReportGenerator {
+class UsersReportGenerator implements ReportGenerator {
 
-  private static final String REPORT_NAME = "user-report";
+  private static final String REPORT_NAME = "users-report";
   private static final String MUTLIVALUE_FILED_SEPARATOR = ",";
 
   static final String USERNAME_COLUMN_HEADER = "user_name";
@@ -80,7 +80,7 @@ class UserReportGenerator implements ReportGenerator {
         .cell(USERNAME_COLUMN_HEADER, UserDto::getUserName)
         .cell(DISPLAY_NAME_COLUMN_HEADER, UserDto::getDisplayName)
         .cell(TYPE_COLUMN_HEADER, UserDto::getOrigin)
-        .cell(ROLES_COLUMN_HEADER, UserReportGenerator::rolesFormatter)
+        .cell(ROLES_COLUMN_HEADER, UsersReportGenerator::rolesFormatter)
         .cell(LAST_LOGIN_AT_COLUMN_HEADER, dateFormatter(UserDto::getLastLoginAt))
         .cell(CREATED_AT_COLUMN_HEADER, dateFormatter(UserDto::getCreatedAt))
         .build()

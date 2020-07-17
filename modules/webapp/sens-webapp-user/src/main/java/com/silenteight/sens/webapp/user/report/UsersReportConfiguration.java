@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class UserReportConfiguration {
+class UsersReportConfiguration {
 
   @Bean
-  UserReportGenerator userReportGenerator(UserListQuery userListQuery) {
-    return new UserReportGenerator(
+  UsersReportGenerator usersReportGenerator(UserListQuery userListQuery) {
+    return new UsersReportGenerator(
         DefaultTimeSource.INSTANCE,
         DigitsOnlyDateFormatter.INSTANCE,
         IsoOffsetDateFormatter.INSTANCE,

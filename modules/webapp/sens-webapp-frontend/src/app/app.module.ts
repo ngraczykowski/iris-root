@@ -27,6 +27,7 @@ import { WINDOW_PROVIDERS } from '@app/shared/window.service';
 import { SidenavModule } from '@app/sidenav/sidenav.module';
 import { AnalystHomeModule } from '@app/templates/analyst-home/analyst-home.module';
 import { SecurityMatrixModule } from '@app/templates/audit-trail/audit-trail.module';
+import { UsersReportModule } from '@app/users-report/users-report.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -72,7 +73,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ChangeRequestModule,
     CircuitBreakerDashboardModule,
     ReasoningBranchesReportModule,
-    ReasoningBranchesBrowserModule
+    ReasoningBranchesBrowserModule,
+    UsersReportModule
   ],
   providers: [
     WINDOW_PROVIDERS,

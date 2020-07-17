@@ -7,6 +7,7 @@ import { ReasoningBranchesBrowserComponent } from '@app/reasoning-branches-brows
 import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report/containers/reasoning-branches-report/reasoning-branches-report.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
+import { UsersReportComponent } from '@app/users-report/containers/users-report/users-report.component';
 import { ExternalComponent } from './layout/external/external.component';
 
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
@@ -104,6 +105,15 @@ export const routes: Routes = [
   {
     path: 'reports/security-matrix',
     component: SecurityMatrixComponent,
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Auditor']
+    }
+  },
+  {
+    path: 'reports/users-report',
+    pathMatch: 'full',
+    component: UsersReportComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Auditor']

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
-import { Authority } from '@core/authorities/model/authority.enum';
 import { AuthoritiesService } from '@core/authorities/services/authorities.service';
 
 @Component({
@@ -49,6 +48,11 @@ export class SidenavComponent implements OnInit {
       label: 'securityMatrix.title',
       url: '/reports/security-matrix',
       icon: 'lock'
+    },
+    reports_users: {
+      label: 'usersReport.title',
+      url: '/reports/users-report',
+      icon: 'lock'
     }
   };
 
@@ -62,7 +66,9 @@ export class SidenavComponent implements OnInit {
     },
     {
       name: 'reports',
-      features: ['reports_audit_trail', 'reports_reasoning_branches', 'reports_security_matrix']
+      features: [
+        'reports_audit_trail', 'reports_reasoning_branches',
+        'reports_security_matrix', 'reports_users']
     }];
 
   @Output() showNavigation = new EventEmitter();
