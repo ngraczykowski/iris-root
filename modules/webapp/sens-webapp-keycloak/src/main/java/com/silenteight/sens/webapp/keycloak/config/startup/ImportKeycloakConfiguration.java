@@ -6,7 +6,7 @@ import com.silenteight.sens.webapp.keycloak.configmigration.KeycloakMigrator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-//@Configuration
+@Configuration
 public class ImportKeycloakConfiguration {
 
   public static final String IMPORT_KEYCLOAK_CONFIG_BEAN = "importKeycloakConfig";

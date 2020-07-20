@@ -23,6 +23,7 @@ class KeycloakConfigurationProperties implements
     KeycloakAdminClientFactory,
     KeycloakResourcesMigrationsLoaderProperties {
 
+
   @NotNull
   MigratorProperties migrator;
 

@@ -2,6 +2,7 @@ package com.silenteight.sens.auth.authorization;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -49,13 +50,17 @@ public class AuthorizationFilter extends GenericFilterBean {
   }
 
   private static List<String> getUserRoles() {
-    return SecurityContextHolder
-        .getContext()
-        .getAuthentication()
-        .getAuthorities()
-        .stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(toList());
+    Authentication authentication =
+        SecurityContextHolder
+            .getContext()
+            .getAuthentication();
+    return authentication != null
+           ? authentication
+               .getAuthorities()
+               .stream()
+               .map(GrantedAuthority::getAuthority)
+               .collect(toList())
+           : emptyList();
   }
 
   private List<String> getRolesAuthorizedForRequest(HttpServletRequest request) {
