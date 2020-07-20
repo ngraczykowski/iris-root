@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.authentication;
+package com.silenteight.sens.auth.authentication;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

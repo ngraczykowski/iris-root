@@ -33,6 +33,8 @@ libraries.keycloak_spring_security_adapter = [group: 'org.keycloak', name: 'keyc
 libraries.keycloak_admin_client = [group: 'org.keycloak', name: 'keycloak-admin-client', version: libraries.keycloak_spring_boot.version]
 libraries.keycloak_bom = [group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: libraries.keycloak_spring_boot.version]
 
+libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core', version: '3.16.1']
+
 dependencies {
   implementation platform(libraries.platform_spring_boot)
   implementation libraries.spring_security_web
@@ -40,6 +42,8 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.keycloak_spring_security_adapter
   implementation libraries.keycloak_admin_client
+
+  testImplementation libraries.assertj_core
 
   api libraries.spring_context
 }
