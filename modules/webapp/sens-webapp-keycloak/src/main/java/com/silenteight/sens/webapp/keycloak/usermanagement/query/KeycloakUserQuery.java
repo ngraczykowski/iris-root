@@ -37,7 +37,7 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
   private final UsersResource usersResource;
-  //private final LastLoginTimeProvider lastLoginTimeProvider;
+  private final LastLoginTimeProvider lastLoginTimeProvider;
   private final RolesProvider userRolesProvider;
   private final TimeConverter timeConverter;
 
@@ -83,9 +83,9 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
 
     String userId = userRepresentation.getId();
 
-/*    lastLoginTimeProvider
+    lastLoginTimeProvider
         .getForUserId(userId)
-        .ifPresent(userDto::setLastLoginAt);*/
+        .ifPresent(userDto::setLastLoginAt);
 
     userDto.setRoles(userRolesProvider.getForUserId(userId));
     userDto.setOrigin(getOrigin(userRepresentation));
