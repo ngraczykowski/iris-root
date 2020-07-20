@@ -40,10 +40,16 @@ class CircuitBreakerRestController {
     return ok(query.listBranchesWithArchivedDiscrepancies());
   }
 
-  @GetMapping("/discrepant-branches/{branchId}/discrepancy-ids")
+  @GetMapping(value = "/discrepant-branches/{branchId}/discrepancy-ids", params = "archived=false")
   @PreAuthorize(BUSINESS_OPERATOR)
   public ResponseEntity<List<Long>> listDiscrepancyIds(@PathVariable String branchId) {
     return ok(query.listDiscrepancyIds(toIdDto(branchId)));
+  }
+
+  @GetMapping(value = "/discrepant-branches/{branchId}/discrepancy-ids", params = "archived=true")
+  @PreAuthorize(BUSINESS_OPERATOR)
+  public ResponseEntity<List<Long>> listArchivedDiscrepancyIds(@PathVariable String branchId) {
+    return ok(query.listArchivedDiscrepancyIds(toIdDto(branchId)));
   }
 
   @GetMapping("/discrepancies")

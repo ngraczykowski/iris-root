@@ -123,12 +123,37 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
   }
 
   @Test
+  void returnsListOfBranchArchivedDiscrepancies() {
+    long decisionTreeId = 1L;
+    long featureVectorId = 2L;
+    List<Long> discrepancyIds = List.of(3L, 4L, 5L);
+    when(discrepancyBlockingStub.listArchivedDiscrepancyIds(argThat(r ->
+        r.getDiscrepantBranchId().getDecisionTreeId() == decisionTreeId &&
+            r.getDiscrepantBranchId().getFeatureVectorId() == featureVectorId)))
+        .thenReturn(listDiscrepancyIdsResponseWith(discrepancyIds));
+
+    ReasoningBranchIdDto branchId = new ReasoningBranchIdDto(decisionTreeId, featureVectorId);
+    assertThat(query.listArchivedDiscrepancyIds(branchId)).isEqualTo(discrepancyIds);
+  }
+
+  @Test
   void listOfBranchDiscrepanciesThrowsGrpcException_whenGrpcThrowsException() {
     when(discrepancyBlockingStub.listDiscrepancyIds(any())).thenThrow(
         OTHER_STATUS_RUNTIME_EXCEPTION);
 
     ThrowingCallable featureNamesCall =
         () -> query.listDiscrepancyIds(new ReasoningBranchIdDto(1L, 2L));
+
+    assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
+  }
+
+  @Test
+  void listOfBranchArchivedDiscrepanciesThrowsGrpcException_whenGrpcThrowsException() {
+    when(discrepancyBlockingStub.listArchivedDiscrepancyIds(any())).thenThrow(
+        OTHER_STATUS_RUNTIME_EXCEPTION);
+
+    ThrowingCallable featureNamesCall =
+        () -> query.listArchivedDiscrepancyIds(new ReasoningBranchIdDto(1L, 2L));
 
     assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
   }
@@ -143,12 +168,6 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
     ThrowingCallable listDiscrepanciesCall = () -> query.listDiscrepanciesByIds(discrepancyIds);
 
     assertThatThrownBy(listDiscrepanciesCall).isInstanceOf(GrpcCommunicationException.class);
-  }
-
-  private ListDiscrepanciesResponse listDiscrepanciesResponseWith(List<Discrepancy> discrepancyL) {
-    return ListDiscrepanciesResponse.newBuilder()
-        .addAllDiscrepancies(discrepancyL)
-        .build();
   }
 
   private ArgumentMatcher<ListDiscrepanciesRequest> requestContains(List<Long> discrepancyIds) {

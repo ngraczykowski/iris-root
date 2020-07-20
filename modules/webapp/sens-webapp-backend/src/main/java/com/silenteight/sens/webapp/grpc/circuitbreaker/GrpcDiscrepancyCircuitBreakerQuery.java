@@ -84,6 +84,23 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
         .get();
   }
 
+  @Override
+  public List<Long> listArchivedDiscrepancyIds(ReasoningBranchIdDto branchId) {
+    Try<List<Long>> discrepancyIds =
+        of(() -> discrepancyBlockingStub
+            .listArchivedDiscrepancyIds(listDiscrepancyIdsRequestOf(
+                branchId.getDecisionTreeId(), branchId.getFeatureVectorId()))
+            .getDiscrepancyIds()
+            .getDiscrepancyIdsList());
+
+    return mapStatusExceptionsToCommunicationException(discrepancyIds)
+        .recoverWith(
+            GrpcCommunicationException.class,
+            exception -> Match(exception).of(
+                Case($(), () -> failure(exception))))
+        .get();
+  }
+
   private ListDiscrepancyIdsRequest listDiscrepancyIdsRequestOf(
       long decisionTreeId, long featureVectorId) {
     return ListDiscrepancyIdsRequest.newBuilder()

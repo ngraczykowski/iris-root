@@ -10,5 +10,7 @@ public interface DiscrepancyCircuitBreakerQuery {
 
   List<Long> listDiscrepancyIds(ReasoningBranchIdDto branchId);
 
+  List<Long> listArchivedDiscrepancyIds(ReasoningBranchIdDto branchId);
+
   List<DiscrepancyDto> listDiscrepanciesByIds(List<Long> discrepancyIds);
 }
