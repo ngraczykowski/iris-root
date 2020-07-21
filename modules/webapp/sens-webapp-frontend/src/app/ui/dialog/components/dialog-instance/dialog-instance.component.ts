@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
+import { DialogButtonsTemplateType } from '@ui/dialog/model/dialog-config';
 import { DialogService } from '@ui/dialog/services/dialog.service';
 
 @Component({
@@ -14,6 +15,8 @@ export class DialogInstanceComponent {
 
   @Input() public autoFocus: boolean = true;
 
+  @Input() public buttonsContentType: DialogButtonsTemplateType = DialogButtonsTemplateType.CUSTOM;
+
   private dialogRef: MatDialogRef<any>;
 
   constructor(public dialogService: DialogService) {}
@@ -26,7 +29,8 @@ export class DialogInstanceComponent {
       data: {
         header: this.header,
         description: this.description,
-        template: this.dialogTemplate
+        buttonsTemplate: this.dialogTemplate,
+        buttonsTemplateType: this.buttonsContentType
       }
     });
   }

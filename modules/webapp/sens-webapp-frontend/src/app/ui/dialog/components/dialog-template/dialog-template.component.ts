@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
-  Component, ElementRef,
-  Inject, ViewChild,
-} from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+  Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { DialogButtonsTemplateType, DialogConfigData } from '@ui/dialog/model/dialog-config';
 
 @Component({
   selector: 'app-dialog-template',
@@ -12,8 +11,15 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 })
 export class DialogTemplateComponent {
 
-  @ViewChild('buttonPanel', {static: true}) private buttonPanel: ElementRef;
+  buttonsTemplateType: typeof DialogButtonsTemplateType = DialogButtonsTemplateType;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any ) {}
+  constructor(
+      @Inject(MAT_DIALOG_DATA) public data: DialogConfigData,
+      private dialogRef: MatDialogRef<any>) {
+  }
+
+  close(): void {
+    this.dialogRef.close();
+  }
 
 }

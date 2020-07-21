@@ -2,6 +2,11 @@
 <div mat-dialog-content>
   <p class="mat-body">{{ data.description }}</p>
 </div>
-<div mat-dialog-actions #buttonPanel>
-  <ng-container #buttonsOutlet [ngTemplateOutlet]="data.template"></ng-container>
-</div>
+<ng-container [ngSwitch]="data.buttonsTemplateType">
+  <div mat-dialog-actions *ngSwitchCase="buttonsTemplateType.CUSTOM">
+    <ng-container [ngTemplateOutlet]="data.buttonsTemplate"></ng-container>
+  </div>
+  <div mat-dialog-actions *ngSwitchCase="buttonsTemplateType.CONFIRMATION">
+    <button (click)="close()" mat-flat-button color="primary">OK</button>
+  </div>
+</ng-container>

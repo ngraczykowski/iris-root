@@ -578,6 +578,12 @@
     "description": "You can close this window.",
     "logoutButton": "Log out"
   },
+  "unexpected-error": {
+    "dialog": {
+      "title": "Something went wrong",
+      "description": "We are sorry. There are some issues with our servers communication. Please try again later or contact with administrator."
+    }
+  },
   "error-window": {
     "connection": {
       "description": "There is a communication problem between your computer and the Silent Eight server."

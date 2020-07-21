@@ -4,12 +4,12 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HttpResponse
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EventKey } from '@app/shared/event/event.service.model';
-import { LocalEventService } from '@app/shared/event/local-event.service';
+import { MatDialogRef } from '@angular/material';
 import { environment } from '@env/environment';
+import { TranslateService } from '@ngx-translate/core';
+import { DialogService } from '@ui/dialog/services/dialog.service';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, delay, flatMap, tap } from 'rxjs/operators';
 
@@ -19,9 +19,9 @@ import { catchError, delay, flatMap, tap } from 'rxjs/operators';
 @Injectable()
 export class HttpTimeoutErrorInterceptor implements HttpInterceptor {
 
-  private show: boolean;
+  private errorDialogRef: MatDialogRef<any>;
 
-  constructor(private eventService: LocalEventService) { }
+  constructor(private dialogService: DialogService, private translateSerivce: TranslateService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => this.handle(err, request, next)));
@@ -33,8 +33,6 @@ export class HttpTimeoutErrorInterceptor implements HttpInterceptor {
 
       if (response.status === 502 || response.status === 504) {
         return this.handleGatewayTimeout(response, request, next);
-      } else if (this.show) {
-        this.hideAction();
       }
     }
     return throwError(error);
@@ -44,29 +42,30 @@ export class HttpTimeoutErrorInterceptor implements HttpInterceptor {
     return of({})
       .pipe(
         tap(() => {
-          if (!this.show) {
-            this.showAction(error);
-          }
+          this.showAction(error);
         }),
         delay(environment.http.error.retryIntervalInMs),
         flatMap(() => next.handle(request.clone())),
-        tap((data) => {
-          if (data instanceof HttpResponse) {
-            this.hideAction();
-          }
-        }),
         catchError(err => this.handle(err, request, next))
       );
   }
 
   private showAction(response: HttpErrorResponse) {
-    this.show = true;
-    this.eventService.sendEvent({key: EventKey.SHOW_ERROR_WINDOW, data: response});
 
+    if (this.errorDialogRef) {
+      return;
+    }
+
+    this.errorDialogRef = this.dialogService.open({
+      data: {
+        header: this.translateSerivce.instant('unexpected-error.dialog.title'),
+        description: this.translateSerivce.instant('unexpected-error.dialog.description')
+      }
+    });
+
+    this.errorDialogRef.afterClosed().subscribe(() => {
+      this.errorDialogRef = null;
+    });
   }
 
-  private hideAction() {
-    this.show = false;
-    this.eventService.sendEvent({key: EventKey.HIDE_ERROR_WINDOW});
-  }
 }

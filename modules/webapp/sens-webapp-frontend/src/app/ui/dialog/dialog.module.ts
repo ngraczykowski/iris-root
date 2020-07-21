@@ -1,6 +1,6 @@
 import { NgModule, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatDialogModule } from '@angular/material';
 import { DialogInstanceComponent } from './components/dialog-instance/dialog-instance.component';
 import { DialogTemplateComponent } from './components/dialog-template/dialog-template.component';
 import { DialogButtonDirective } from './directives/dialog-button.directive';
@@ -12,7 +12,8 @@ const publicDeclarations: Type<any>[] = [DialogInstanceComponent, DialogButtonDi
   exports: [...publicDeclarations],
   imports: [
     CommonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule
   ],
   entryComponents: [DialogTemplateComponent]
 })
