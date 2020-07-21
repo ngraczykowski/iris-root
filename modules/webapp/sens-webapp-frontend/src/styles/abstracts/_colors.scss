@@ -8,11 +8,16 @@ $app-positive: mat-palette($mat-green);
 $app-gray: mat-palette($mat-gray);
 
 // Custom Sass colors vars (will be available in all the project)
+$primary-test: $dark-primary-text;
+$secondary-text: $dark-secondary-text;
+
 $primary: mat-color($app-primary);
-$accent: mat-color($app-accent);
 $warn: mat-color($app-warn);
 $positive: mat-color($app-positive);
-$disabled: mat-color($app-gray);
-$gray: mat-color($app-gray);
+$disabled: $dark-disabled-text;
 
-$border-light: rgba(0, 0, 0, 0.12);
+$solution-potential-true-positive: mat-color($app-warn);
+$solution-false-positive: mat-color($app-positive);
+$solution-no-decision: $dark-disabled-text;
+
+$dividers: $dark-dividers;

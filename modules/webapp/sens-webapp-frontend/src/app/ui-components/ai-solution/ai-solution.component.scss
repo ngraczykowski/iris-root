@@ -7,20 +7,20 @@
   font-weight: 500;
   color: $color !important; // Protects the component against color change
   padding: calculate-8-pt-grid(1)/2 calculate-8-pt-grid(1);
-  background: rgba($color, .15);
+  background: rgba($color, .10);
   border-radius: 4px;
 }
 
 .ai-solution {
   &--false-positive {
-    @include ai-solution($positive);
+    @include ai-solution($solution-false-positive);
   }
 
   &--potential-true-positive {
-    @include ai-solution($warn);
+    @include ai-solution($solution-potential-true-positive);
   }
 
   &--no-decision {
-    @include ai-solution($disabled);
+    @include ai-solution($solution-potential-true-positive);
   }
 }
