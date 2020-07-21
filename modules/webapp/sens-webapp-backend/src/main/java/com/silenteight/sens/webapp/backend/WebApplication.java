@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
     scanBasePackageClasses = {
         ApplicationLoggingModule.class,
         AuditModule.class,
+        AuthModule.class,
         BulkChangeModule.class,
         CircuitBreakerModule.class,
         ChangeRequestModule.class,
@@ -37,8 +38,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ReportModule.class,
         UserModule.class,
         UserRestModule.class,
-        WebModule.class,
-        AuthModule.class
+        WebModule.class
     },
     exclude = {
         FreeMarkerAutoConfiguration.class
