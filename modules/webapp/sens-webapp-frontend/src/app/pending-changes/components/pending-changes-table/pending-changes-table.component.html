@@ -13,7 +13,7 @@
   <!-- AI Solution Column -->
   <ng-container matColumnDef="aiSolution">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
-      <span [translate]="translateTablePrefix + 'solution'"></span>
+      <span [translate]="translateTablePrefix + 'aiSolution'"></span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       <app-ai-solution *ngIf="element.aiSolution !== null"
@@ -27,7 +27,7 @@
   <!-- AI Status Column -->
   <ng-container matColumnDef="active">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
-      <span [translate]="translateTablePrefix + 'status'"></span>
+      <span [translate]="translateTablePrefix + 'aiStatus'"></span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       <app-element-status *ngIf="element.active !== null"
@@ -38,22 +38,22 @@
     </mat-cell>
   </ng-container>
 
+  <!-- Author Column -->
+  <ng-container matColumnDef="createdBy">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <span [translate]="translateTablePrefix + 'createdBy'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.createdBy}}</mat-cell>
+  </ng-container>
+
   <!-- Request Date Column -->
   <ng-container matColumnDef="createdAt">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
-      <span [translate]="translateTablePrefix + 'requestDate'"></span>
+      <span [translate]="translateTablePrefix + 'createdAt'"></span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       {{ element.createdAt | date:dateFormatting }}
     </mat-cell>
-  </ng-container>
-
-  <!-- Author Column -->
-  <ng-container matColumnDef="createdBy">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>
-      <span [translate]="translateTablePrefix + 'author'"></span>
-    </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.createdBy}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

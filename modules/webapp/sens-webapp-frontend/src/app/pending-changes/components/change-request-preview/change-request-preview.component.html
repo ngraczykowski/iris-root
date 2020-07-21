@@ -18,24 +18,7 @@
     </div>
     <div class="values-list values-list--horizontal">
       <p class="mat-body"
-         translate="pendingChanges.changeRequestDetails.details.labels.requestDate"></p>
-      <p class="mat-body">
-        {{ pendingChange.createdAt | date:dateFormatting }}
-      </p>
-    </div>
-    <div class="values-list values-list--horizontal">
-      <p class="mat-body"
-         translate="pendingChanges.changeRequestDetails.details.labels.author"></p>
-      <p class="mat-body">
-        {{ pendingChange.createdBy }}
-      </p>
-    </div>
-  </div>
-  <mat-divider></mat-divider>
-  <div class="sidebar-details__section">
-    <div class="values-list values-list--horizontal">
-      <p class="mat-body"
-         translate="pendingChanges.changeRequestDetails.changes.labels.solution"></p>
+         translate="pendingChanges.changeRequestDetails.changes.labels.aiSolution"></p>
       <p class="mat-body">
         <app-ai-solution *ngIf="pendingChange.aiSolution !== null"
                          [aiSolution]="pendingChange.aiSolution">
@@ -43,12 +26,12 @@
         <span *ngIf="pendingChange.aiSolution === null"
               class="secondary-text"
               [translate]="'aiSolutions.unchanged'">
-        </span>
+      </span>
       </p>
     </div>
     <div class="values-list values-list--horizontal">
       <p class="mat-body"
-         translate="pendingChanges.changeRequestDetails.changes.labels.status"></p>
+         translate="pendingChanges.changeRequestDetails.changes.labels.aiStatus"></p>
       <p class="mat-body">
         <app-element-status *ngIf="pendingChange.active !== null"
                             [elementStatus]="pendingChange.active">
@@ -59,8 +42,24 @@
       </p>
     </div>
   </div>
+
   <mat-divider></mat-divider>
+
   <div class="sidebar-details__section">
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.createdBy"></p>
+      <p class="mat-body">
+        {{ pendingChange.createdBy }}
+      </p>
+    </div>
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.createdAt"></p>
+      <p class="mat-body">
+        {{ pendingChange.createdAt | date:dateFormatting }}
+      </p>
+    </div>
     <div class="values-list values-list--vertical">
       <p class="mat-body" [translate]="translatePrefix + 'reason.title'"></p>
       <p class="mat-body">
@@ -68,6 +67,8 @@
       </p>
     </div>
   </div>
+
+  <mat-divider></mat-divider>
 
   <form [formGroup]="form">
     <mat-divider></mat-divider>

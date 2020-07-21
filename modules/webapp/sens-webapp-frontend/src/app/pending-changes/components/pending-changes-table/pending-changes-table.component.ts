@@ -16,7 +16,7 @@ export class PendingChangesTableComponent implements OnInit {
 
   highlightRow: number;
 
-  displayedColumns: string[] = ['id', 'aiSolution', 'active', 'createdAt', 'createdBy'];
+  displayedColumns: string[] = ['id', 'aiSolution', 'active', 'createdBy', 'createdAt'];
   dataSource: MatTableDataSource<PendingChange>;
 
   translatePrefix = 'pendingChanges.';

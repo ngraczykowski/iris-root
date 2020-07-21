@@ -183,10 +183,10 @@
     "title": "Pending Changes",
     "dataLabels": {
       "id": "ID",
-      "solution": "AI Solution",
-      "status": "AI Status",
-      "requestDate": "Request Date",
-      "author": "Author"
+      "aiSolution": "AI Solution",
+      "aiStatus": "AI Status",
+      "createdAt": "Created at",
+      "createdBy": "Created by"
     },
     "emptyState": {
       "title": "You don't have any Change Request to verify yet."
@@ -203,16 +203,16 @@
       "title": "CR-{{value}} Details",
       "details": {
         "labels": {
-          "changeRequestID": "Change Request ID",
+          "changeRequestID": "ID",
           "reasoningBranchesCount": "Number of Branches",
-          "requestDate": "Request date",
-          "author": "Author"
+          "createdAt": "Created at",
+          "createdBy": "Created by"
         }
       },
       "changes": {
         "labels": {
-          "solution": "AI Solution",
-          "status": "AI Status"
+          "aiSolution": "AI Solution",
+          "aiStatus": "AI Status"
         }
       },
       "reason": {
