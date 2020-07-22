@@ -6,6 +6,7 @@ import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeModule;
 import com.silenteight.sens.webapp.backend.changerequest.ChangeRequestModule;
 import com.silenteight.sens.webapp.backend.circuitbreaker.CircuitBreakerModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
+import com.silenteight.sens.webapp.backend.configuration.ConfigurationModule;
 import com.silenteight.sens.webapp.backend.decisiontree.DecisionTreeModule;
 import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.DeprecatedReasoningBranchModule;
 import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule;
@@ -24,14 +25,13 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         ApplicationLoggingModule.class,
         AuditModule.class,
         BulkChangeModule.class,
-        CircuitBreakerModule.class,
         ChangeRequestModule.class,
+        CircuitBreakerModule.class,
+        ConfigurationModule.class,
+        DecisionTreeModule.class,
         DeprecatedReasoningBranchModule.class,
         GrpcModule.class,
-        ChangeRequestModule.class,
-        GrpcModule.class,
         KeycloakModule.class,
-        DecisionTreeModule.class,
         ReasoningBranchModule.class,
         ReportModule.class,
         UserModule.class,
