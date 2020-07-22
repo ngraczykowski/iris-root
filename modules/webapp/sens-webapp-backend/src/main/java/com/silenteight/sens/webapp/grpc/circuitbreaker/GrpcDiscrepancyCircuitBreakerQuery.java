@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.proto.serp.v1.api.*;
 import com.silenteight.proto.serp.v1.api.DiscrepancyCircuitBreakerGrpc.DiscrepancyCircuitBreakerBlockingStub;
+import com.silenteight.proto.serp.v1.api.ListDiscrepantBranchesRequest.Builder;
 import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepancyCircuitBreakerQuery;
 import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepancyDto;
 import com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepantBranchDto;
@@ -12,9 +13,11 @@ import com.silenteight.sens.webapp.backend.circuitbreaker.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import com.google.protobuf.Empty;
+import com.google.protobuf.Int32Value;
 import io.vavr.control.Try;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toInstant;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.mapStatusExceptionsToCommunicationException;
@@ -30,6 +33,9 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
 
   @NonNull
   private final DiscrepancyCircuitBreakerBlockingStub discrepancyBlockingStub;
+
+  @Nullable
+  private final Integer limitArchivedDiscrepantBranches;
 
   @Override
   public List<DiscrepantBranchDto> listBranchesWithDiscrepancies() {
@@ -53,7 +59,7 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
   public List<DiscrepantBranchDto> listBranchesWithArchivedDiscrepancies() {
     Try<List<DiscrepantBranchDto>> discrepantBranches =
         of(() -> discrepancyBlockingStub
-            .listBranchesWithArchivedDiscrepancies(Empty.newBuilder().build())
+            .listBranchesWithArchivedDiscrepancies(buildDiscrepantBranchesRequest())
             .getDiscrepantBranchesList()
             .stream()
             .map(GrpcDiscrepancyCircuitBreakerQuery::toDto)
@@ -101,18 +107,6 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
         .get();
   }
 
-  private ListDiscrepancyIdsRequest listDiscrepancyIdsRequestOf(
-      long decisionTreeId, long featureVectorId) {
-    return ListDiscrepancyIdsRequest.newBuilder()
-        .setDiscrepantBranchId(
-            DiscrepantBranchId
-                .newBuilder()
-                .setDecisionTreeId(decisionTreeId)
-                .setFeatureVectorId(featureVectorId)
-        ).build();
-  }
-
-
   @Override
   public List<DiscrepancyDto> listDiscrepanciesByIds(List<Long> discrepancyIds) {
     Try<List<DiscrepancyDto>> discrepancies =
@@ -129,6 +123,26 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
             exception -> Match(exception).of(
                 Case($(), () -> failure(exception))))
         .get();
+  }
+
+  private ListDiscrepancyIdsRequest listDiscrepancyIdsRequestOf(
+      long decisionTreeId, long featureVectorId) {
+    return ListDiscrepancyIdsRequest.newBuilder()
+        .setDiscrepantBranchId(
+            DiscrepantBranchId
+                .newBuilder()
+                .setDecisionTreeId(decisionTreeId)
+                .setFeatureVectorId(featureVectorId)
+        ).build();
+  }
+
+  private ListDiscrepantBranchesRequest buildDiscrepantBranchesRequest() {
+    Builder builder = ListDiscrepantBranchesRequest.newBuilder();
+
+    if (limitArchivedDiscrepantBranches != null)
+      builder.setLimit(Int32Value.of(limitArchivedDiscrepantBranches));
+
+    return builder.build();
   }
 
   private static ListDiscrepanciesRequest listDiscrepanciesRequestOf(List<Long> discrepancyIds) {
