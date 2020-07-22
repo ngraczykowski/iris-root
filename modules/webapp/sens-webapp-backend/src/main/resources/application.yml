@@ -250,11 +250,15 @@ sens.web:
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
 
-auth.paths:
+auth:
+  guardedUrlPrefix: "/api/"
+  paths:
   - requestPath: "/api/change-requests/pending"
+    requestMethod: "GET"
     roles:
       - "BUSINESS_OPERATOR"
   - requestPath: "/api/reasoning-branches"
+    requestMethod: "GET"
     roles:
       - "APPROVER"
       - "BUSINESS_OPERATOR"
