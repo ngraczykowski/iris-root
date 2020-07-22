@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
-import static com.silenteight.sens.webapp.backend.configuration.solution.ConfigurationSolutionControllerTest.ConfigurationSolutionControllerFixtures.*;
+import static com.silenteight.sens.webapp.backend.configuration.solution.ConfigurationSolutionRestControllerTest.ConfigurationSolutionRestControllerFixtures.*;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -17,8 +17,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ ConfigurationSolutionController.class })
-class ConfigurationSolutionControllerTest extends BaseRestControllerTest {
+@Import({ ConfigurationSolutionRestController.class })
+class ConfigurationSolutionRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private SolutionsQuery solutionsQuery;
@@ -53,7 +53,7 @@ class ConfigurationSolutionControllerTest extends BaseRestControllerTest {
     return format("/configuration/solutions");
   }
 
-  static class ConfigurationSolutionControllerFixtures {
+  static class ConfigurationSolutionRestControllerFixtures {
 
     static final String NO_DECISION_SOLUTION = "NO_DECISION";
     static final String FALSE_POSITIVE_SOLUTION = "FALSE_POSITIVE";

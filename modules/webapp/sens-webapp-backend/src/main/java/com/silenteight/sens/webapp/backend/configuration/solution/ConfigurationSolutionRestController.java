@@ -21,21 +21,20 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
 @Slf4j
-class ConfigurationSolutionController {
+class ConfigurationSolutionRestController {
 
   @NonNull
   private final SolutionsQuery solutionsQuery;
 
   @GetMapping("/configuration/solutions")
   @PreAuthorize(BUSINESS_OPERATOR)
-  public ResponseEntity<List<String>> listAvailableSolutions() {
+  public ResponseEntity<List<String>> listSolutions() {
     log.info(INTERNAL, "Listing solutions");
 
-    List<String> availableSolutions = solutionsQuery.list();
+    List<String> solutions = solutionsQuery.list();
 
-    log.info(INTERNAL, "Found solutions. total={}",
-        availableSolutions.size());
+    log.info(INTERNAL, "Found solutions. total={}", solutions.size());
 
-    return ok(availableSolutions);
+    return ok(solutions);
   }
 }
