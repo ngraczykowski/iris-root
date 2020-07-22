@@ -14,7 +14,6 @@ import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({ ConfigurationSolutionRestController.class })
@@ -23,7 +22,7 @@ class ConfigurationSolutionRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private SolutionsQuery solutionsQuery;
 
-  @TestWithRole(role = BUSINESS_OPERATOR)
+  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER, BUSINESS_OPERATOR })
   void its200WithCorrectBody_whenFound() {
     given(solutionsQuery.list())
         .willReturn(
@@ -42,11 +41,6 @@ class ConfigurationSolutionRestControllerTest extends BaseRestControllerTest {
         .body("[2]", equalTo(HINTED_FALSE_POSITIVE_SOLUTION))
         .body("[3]", equalTo(POTENTIAL_TRUE_POSITIVE_SOLUTION))
         .body("[4]", equalTo(HINTED_POTENTIAL_TRUE_POSITIVE_SOLUTION));
-  }
-
-  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR, APPROVER })
-  void its403_whenNotPermittedRole() {
-    get(mappingForSolutions()).statusCode(FORBIDDEN.value());
   }
 
   private String mappingForSolutions() {
