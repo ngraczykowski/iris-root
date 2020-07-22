@@ -255,10 +255,19 @@ auth:
   paths:
   - requestPath: "/api/change-requests/pending"
     requestMethod: "GET"
-    roles:
+    permissions:
       - "BUSINESS_OPERATOR"
   - requestPath: "/api/reasoning-branches"
     requestMethod: "GET"
-    roles:
+    permissions:
       - "APPROVER"
       - "BUSINESS_OPERATOR"
+
+permissions.role-permission-mappings:
+  - role: "APPROVER"
+    permissions:
+      - "VIEW_PENDING_CHANGES"
+      - "VIEW_REASONING_BEANCHES"
+  - role: "APPROVER"
+    permissions:
+      - "VIEW_REASONING_BEANCHES"
