@@ -28,28 +28,29 @@ class CircuitBreakerRestController {
   @NonNull
   private final ArchiveDiscrepanciesUseCase archiveUseCase;
 
-  @GetMapping(value = "/discrepant-branches", params = "withArchivedDiscrepancies=false")
+  @GetMapping("/discrepant-branches")
   @PreAuthorize(BUSINESS_OPERATOR)
-  public ResponseEntity<List<DiscrepantBranchDto>> listBranchesWithDiscrepancies() {
-    return ok(query.listBranchesWithDiscrepancies());
+  public ResponseEntity<List<DiscrepantBranchDto>> listBranchesWithDiscrepancies(
+      @RequestParam("discrepancyStatuses") List<DiscrepancyStatus> discrepancyStatuses) {
+
+    if (discrepancyStatuses.contains(DiscrepancyStatus.ACTIVE))
+      return ok(query.listBranchesWithDiscrepancies());
+    else {
+      return ok(query.listBranchesWithArchivedDiscrepancies());
+    }
   }
 
-  @GetMapping(value = "/discrepant-branches", params = "withArchivedDiscrepancies=true")
+  @GetMapping("/discrepant-branches/{branchId}/discrepancy-ids")
   @PreAuthorize(BUSINESS_OPERATOR)
-  public ResponseEntity<List<DiscrepantBranchDto>> listBranchesWithArchivedDiscrepancies() {
-    return ok(query.listBranchesWithArchivedDiscrepancies());
-  }
+  public ResponseEntity<List<Long>> listDiscrepancyIds(
+      @PathVariable String branchId,
+      @RequestParam("discrepancyStatuses") List<DiscrepancyStatus> discrepancyStatuses) {
 
-  @GetMapping(value = "/discrepant-branches/{branchId}/discrepancy-ids", params = "archived=false")
-  @PreAuthorize(BUSINESS_OPERATOR)
-  public ResponseEntity<List<Long>> listDiscrepancyIds(@PathVariable String branchId) {
-    return ok(query.listDiscrepancyIds(toIdDto(branchId)));
-  }
-
-  @GetMapping(value = "/discrepant-branches/{branchId}/discrepancy-ids", params = "archived=true")
-  @PreAuthorize(BUSINESS_OPERATOR)
-  public ResponseEntity<List<Long>> listArchivedDiscrepancyIds(@PathVariable String branchId) {
-    return ok(query.listArchivedDiscrepancyIds(toIdDto(branchId)));
+    if (discrepancyStatuses.contains(DiscrepancyStatus.ACTIVE))
+      return ok(query.listDiscrepancyIds(toIdDto(branchId)));
+    else {
+      return ok(query.listArchivedDiscrepancyIds(toIdDto(branchId)));
+    }
   }
 
   @GetMapping("/discrepancies")

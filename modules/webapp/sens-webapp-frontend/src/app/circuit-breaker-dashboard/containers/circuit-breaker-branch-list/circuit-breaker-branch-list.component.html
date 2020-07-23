@@ -1,0 +1,15 @@
+<mat-accordion>
+
+  <app-discrepant-branch *ngFor="let discrepantBranch of discrepantBranches"
+                         [discrepantBranch]="discrepantBranch"
+                         (refreshBranchList)="loadDiscrepantBranches(withArchivedDiscrepancies)">
+  </app-discrepant-branch>
+
+</mat-accordion>
+
+<app-state *ngIf="loadingDiscrepantBranches"
+           [stateContent]="constants.stateLoading"></app-state>
+<app-state *ngIf="!discrepantBranchesFailedToLoad && !discrepantBranches.length"
+           [stateContent]="constants.stateEmptyList"></app-state>
+<app-state *ngIf="discrepantBranchesFailedToLoad"
+           [stateContent]="constants.stateError"></app-state>

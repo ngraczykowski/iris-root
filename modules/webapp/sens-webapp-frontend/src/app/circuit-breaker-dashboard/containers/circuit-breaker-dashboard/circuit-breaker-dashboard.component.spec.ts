@@ -8,9 +8,9 @@ describe('CircuitBreakerDashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CircuitBreakerDashboardComponent ]
+      declarations: [CircuitBreakerDashboardComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

@@ -29,13 +29,13 @@ import static org.springframework.http.HttpStatus.OK;
 class CircuitBreakerRestControllerForDiscrepantBranchesTest extends BaseRestControllerTest {
 
   private static final String DISCREPANT_BRANCHES_URL_TEMPLATE =
-      "/discrepant-branches?withArchivedDiscrepancies=false";
+      "/discrepant-branches?discrepancyStatuses=ACTIVE";
   private static final String DISCREPANT_BRANCHES_ARCHIVE_URL_TEMPLATE =
-      "/discrepant-branches?withArchivedDiscrepancies=true";
+      "/discrepant-branches?discrepancyStatuses=ARCHIVED";
   private static final String DISCREPANT_BRANCHES_WITHOUT_PARAM_URL_TEMPLATE =
       "/discrepant-branches";
   private static final String DISCREPANT_BRANCHES_WITH_MALFORMED_PARAM_URL_TEMPLATE =
-      "/discrepant-branches?withArchivedDiscrepancies=undefined";
+      "/discrepant-branches?discrepancyStatuses=undefined";
 
   @MockBean
   private DiscrepancyCircuitBreakerQuery query;

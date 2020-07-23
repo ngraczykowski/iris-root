@@ -1,0 +1,21 @@
+<button mat-button color="primary" (click)="archiveDialog.open()">
+  <span [translate]="translatePrefix + 'footer.buttonArchiveRequest'"></span>
+</button>
+<button mat-flat-button
+        color="primary"
+        (click)="createChangeRequest(discrepantBranch)">
+  <span [translate]="translatePrefix + 'footer.buttonChangeRequest'"></span>
+</button>
+
+<app-dialog-instance #archiveDialog
+                     [header]="translatePrefix + 'archiveDialog.title' | translate"
+                     [description]="translatePrefix + 'archiveDialog.description' | translate :
+          { descriptionValue: discrepantBranch.branchId.decisionTreeId
+          + '-' +  discrepantBranch.branchId.featureVectorId}">
+  <button mat-button appDialogButton color="primary">
+    {{translatePrefix + 'archiveDialog.cancellation' | translate }}</button>
+  <button mat-flat-button appDialogButton color="primary"
+          (click)="archive(discrepantBranch.branchId.decisionTreeId,
+            discrepantBranch.branchId.featureVectorId)">
+    {{translatePrefix + 'archiveDialog.confirmation' | translate }}</button>
+</app-dialog-instance>

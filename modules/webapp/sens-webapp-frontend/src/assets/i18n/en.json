@@ -509,25 +509,47 @@
   "circuitBreakerDashboard": {
     "title": "Circuit Breaker Dashboard",
     "tabs": {
-      "current": "Current",
-      "archive": "Archive"
+      "active": "Active",
+      "archived": "Archived"
     },
-    "stateLoading": {
-      "title": "Updating Circuit Breaker list"
-    },
-    "emptyState": {
-      "title": "You don't have any disabled Reasoning Branches to verify"
-    },
-    "errorState": {
-      "title": "Failed to download disabled Reasoning Branches list",
-      "description": "Please try to fetch disabled Reasoning Branches list if the problem will persist, contact the administrator.",
-      "button": "Fetch the disabled Reasoning Branches list"
-    },
-    "element": {
+    "discrepantBranches" : {
+      "state": {
+        "loading": {
+          "title": "Updating Circuit Breaker list"
+        },
+        "empty": {
+          "title": "You don't have any disabled Reasoning Branches to verify"
+        },
+        "error": {
+          "title": "Failed to download disabled Reasoning Branches list",
+          "description": "Please try to fetch disabled Reasoning Branches list if the problem will persist, contact the administrator.",
+          "button": "Fetch the disabled Reasoning Branches list"
+        }
+      },
       "header": {
         "id": "{{decisionTreeId}}-{{reasoningBranchId}}",
         "disabled": "Discrepancy detected by Circuit Breaker: {{ date }}"
       },
+      "footer": {
+        "buttonChangeRequest": "Create Change Request",
+        "buttonArchiveRequest": "Archive"
+      },
+      "archiveDialog": {
+        "title": "Archive discrepancies list?",
+        "description": "Discrepancies list will be moved to an archive and the Reasoning Branch {{ descriptionValue }} will be reactivated without any changes.",
+        "confirmation": "Archive Discrepancies List",
+        "cancellation": "Close",
+        "failure": {
+          "title": "Failed to archive discrepancies list",
+          "description": "We were unable to archive the discrepancies list because of the communication problem. Please try again. If the problem will persist, contact the administrator.",
+          "confirmation": "Close"
+        },
+        "success": {
+          "content": "Discrepancies list moved to the archive. Reasoning Branch {{ reasoningBranch }} was reactivated."
+        }
+      }
+    },
+    "discrepancies": {
       "loading": {
         "title": "Loading list of alerts"
       },
@@ -542,24 +564,6 @@
         "aiCommentDate": "AI Comment Date",
         "analystComment": "Analyst Comment",
         "analystCommentDate": "Analyst Comment Date"
-      },
-      "footer": {
-        "buttonChangeRequest": "Create Change Request",
-        "buttonArchiveRequest": "Archive"
-      },
-      "archiveDialog": {
-        "title": "Archive discrepancies list?",
-        "description": "Discrepancies list will be moved to an archive, and the Reasoning Branch {{ descriptionValue }} will be reactivated without any changes.",
-        "confirmation": "Archive Discrepancies List",
-        "cancellation": "Close"
-      },
-      "archiveFailureDialog": {
-        "title": "Failed to archive discrepancies list",
-        "description": "We were unable to archive the discrepancies list because of the communication problem. Please try again. If the problem will persist, contact the administrator.",
-        "confirmation": "Close"
-      },
-      "archiveSuccessSnackbar": {
-        "content": "Discrepancies list moved to the archive. Reasoning Branch {{ reasoningBranch }} was reactivated."
       }
     }
   },

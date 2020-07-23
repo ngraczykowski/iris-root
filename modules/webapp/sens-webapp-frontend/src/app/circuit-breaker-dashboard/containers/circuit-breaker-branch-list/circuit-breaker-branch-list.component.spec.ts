@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CircuitBreakerListComponent } from './circuit-breaker-list.component';
+import { CircuitBreakerBranchListComponent } from './circuit-breaker-branch-list.component';
 
 describe('CircuitBreakerListComponent', () => {
-  let component: CircuitBreakerListComponent;
-  let fixture: ComponentFixture<CircuitBreakerListComponent>;
+  let component: CircuitBreakerBranchListComponent;
+  let fixture: ComponentFixture<CircuitBreakerBranchListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CircuitBreakerListComponent ]
+      declarations: [CircuitBreakerBranchListComponent]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CircuitBreakerListComponent);
+    fixture = TestBed.createComponent(CircuitBreakerBranchListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
