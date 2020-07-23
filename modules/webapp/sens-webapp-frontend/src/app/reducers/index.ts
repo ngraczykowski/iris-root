@@ -1,9 +1,10 @@
 import * as fromSecurity from '@app/shared/security/store/security.reducer';
+import { SecurityState } from '@app/shared/security/store/security.state';
 import { environment } from '@env/environment';
-import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
+import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 
 export interface State {
-  security: fromSecurity.State;
+  security: SecurityState;
 }
 
 export const reducers: ActionReducerMap<State> = {

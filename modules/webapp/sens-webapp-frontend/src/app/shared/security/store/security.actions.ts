@@ -1,5 +1,5 @@
 import { Principal } from '@app/shared/security/principal.model';
-import { createAction, props, Action } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
 export enum SecurityActionTypes {
     tryLogin = '[Auth] Try login',
@@ -8,7 +8,8 @@ export enum SecurityActionTypes {
     loginFailed = '[Auth] Login failed',
     logout =  '[Auth] Logout',
     logoutSuccess = '[Auth] Logout success',
-    logoutFailed = '[Auth] Logout failed'
+    logoutFailed = '[Auth] Logout failed',
+    setSessionExpireTime = '[Auth] Set session exp time'
 }
 
 export class TryLogin implements Action {
@@ -38,11 +39,15 @@ export class LogoutFailed implements Action {
 
     constructor(public payload: any) {}
 }
-
+export class SetSessionExpireTime implements Action {
+  readonly type = SecurityActionTypes.setSessionExpireTime;
+  constructor(public time: number) {}
+}
 export type SecurityActions = TryLogin
   | LoginSuccess
   | LoginFailed
   | Logout
   | LogoutSuccess
   | LogoutFailed
-  | SetPrincipal;
+  | SetPrincipal
+  | SetSessionExpireTime;

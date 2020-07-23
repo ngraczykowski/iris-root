@@ -588,6 +588,14 @@
       "description": "We are sorry. There are some issues with our servers communication. Please try again later or contact with administrator."
     }
   },
+  "session-expires-warning": {
+    "dialog": {
+      "title": "No activity detected",
+      "description": "Your session is about to end up. In {{min}}:{{sec}} you will be signed off. Are you still there?",
+      "extend-button": "Yes, extend",
+      "logout-button": "No, sign off"
+    }
+  },
   "error-window": {
     "connection": {
       "description": "There is a communication problem between your computer and the Silent Eight server."

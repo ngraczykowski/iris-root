@@ -1,4 +1,5 @@
 import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
+import { MatDialogModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { AppBarModule } from '@app/app-bar/app-bar.module';
@@ -67,6 +68,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppBarModule,
     SidenavModule,
     MatSidenavModule,
+    MatDialogModule,
     ChangeRequestModule,
     SecurityMatrixModule,
     PendingChangesModule,
