@@ -72,7 +72,7 @@ class UsersReportGeneratorTest {
     Report report = underTest.generateReport(emptyMap());
 
     assertThat(report).hasFields(USERNAME_COLUMN_HEADER, DISPLAY_NAME_COLUMN_HEADER,
-        TYPE_COLUMN_HEADER, ROLES_COLUMN_HEADER, LAST_LOGIN_AT_COLUMN_HEADER,
+        ORIGIN_COLUMN_HEADER, ROLES_COLUMN_HEADER, LAST_LOGIN_AT_COLUMN_HEADER,
         CREATED_AT_COLUMN_HEADER);
   }
 
