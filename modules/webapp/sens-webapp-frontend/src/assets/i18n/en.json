@@ -191,6 +191,7 @@
       "id": "ID",
       "aiSolution": "AI Solution",
       "aiStatus": "AI Status",
+      "crStatus": "CR Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
       "crStatus": "CR status"
@@ -220,8 +221,14 @@
       "changes": {
         "labels": {
           "aiSolution": "AI Solution",
-          "aiStatus": "AI Status"
+          "aiStatus": "AI Status",
+          "crStatus": "CR Status"
         }
+      },
+      "closed": {
+        "decidedBy": "Closed by",
+        "decidedAt": "Closed at",
+        "deciderComment": "Comment"
       },
       "reason": {
         "title": "Reason"

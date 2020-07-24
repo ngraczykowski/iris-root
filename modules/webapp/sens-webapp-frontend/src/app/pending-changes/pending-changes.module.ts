@@ -17,7 +17,8 @@ import { SharedModule } from '@app/shared/shared.module';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { DialogModule } from '@ui/dialog/dialog.module';
-import { ChangeRequestPreviewComponent } from './components/change-request-preview/change-request-preview.component';
+import { ClosedChangeRequestPreviewComponent } from './components/closed-change-request-preview/closed-change-request-preview.component';
+import { PendingChangeRequestPreviewComponent } from './components/pending-change-request-preview/pending-change-request-preview.component';
 import { PendingChangesTableComponent } from './components/pending-changes-table/pending-changes-table.component';
 import { PendingChangesPreviewContainerComponent } from './containers/pending-changes-preview-container/pending-changes-preview-container.component';
 import { PendingChangesComponent } from './containers/pending-changes/pending-changes.component';
@@ -28,7 +29,9 @@ import { PendingChangesComponent } from './containers/pending-changes/pending-ch
     PendingChangesComponent,
     PendingChangesTableComponent,
     PendingChangesPreviewContainerComponent,
-    ChangeRequestPreviewComponent],
+    PendingChangesPreviewContainerComponent,
+    PendingChangeRequestPreviewComponent,
+    ClosedChangeRequestPreviewComponent],
   imports: [
     CommonModule,
     FormsModule,

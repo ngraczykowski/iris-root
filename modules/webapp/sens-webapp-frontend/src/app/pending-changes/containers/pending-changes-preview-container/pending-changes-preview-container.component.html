@@ -3,14 +3,21 @@
 
 <ng-container *ngIf="changeRequestDetails">
   <div class="change-request-details">
-    <app-change-request-preview
+    <app-pending-change-request-preview
+            *ngIf="!isArchiveTab"
             #previewComponent
             [pendingChange]="changeRequestDetails"
             [requiredCommentValidationMessage]="canApproveOrReject ?
-            'decision.form.comment.validation.requiredToApproveOrReject' : 'decision.form.comment.validation.requiredToCancel'"
-    ></app-change-request-preview>
+            'decision.form.comment.validation.requiredToApproveOrReject' : 'decision.form.comment.validation.requiredToCancel'">
+    </app-pending-change-request-preview>
 
-    <ng-container *ngIf="canUpdateChanges">
+    <app-closed-change-request-preview
+            *ngIf="isArchiveTab"
+            #previewComponent
+            [pendingChange]="changeRequestDetails">
+    </app-closed-change-request-preview>
+
+    <ng-container *ngIf="!isArchiveTab">
       <div class="change-request-details__decision"
            *ngIf="canApproveOrReject">
         <button mat-stroked-button color="warn" (click)="reject()">

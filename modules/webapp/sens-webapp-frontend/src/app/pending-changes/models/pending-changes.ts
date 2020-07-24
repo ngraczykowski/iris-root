@@ -29,6 +29,9 @@ export interface PendingChange {
   aiSolution: string;
   active: boolean;
   state?: string;
+  decidedAt?: string;
+  decidedBy?: string;
+  deciderComment?: string;
 }
 
 export enum PendingChangesStatus {

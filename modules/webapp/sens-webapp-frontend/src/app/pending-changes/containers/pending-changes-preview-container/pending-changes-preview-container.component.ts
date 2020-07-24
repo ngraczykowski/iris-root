@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Authority } from '@app/core/authorities/model/authority.enum';
-import { ChangeRequestPreviewComponent } from '@app/pending-changes/components/change-request-preview/change-request-preview.component';
+import { PendingChangeRequestPreviewComponent } from '@app/pending-changes/components/pending-change-request-preview/pending-change-request-preview.component';
 import { ChangeRequestDecisionRequestBody } from '@app/pending-changes/models/change-request-decision-request-body';
 import { ChangeRequestDecision } from '@app/pending-changes/models/change-request-decision.enum';
 import { PendingChange, PendingChangesStatus } from '@app/pending-changes/models/pending-changes';
@@ -23,7 +23,7 @@ export class PendingChangesPreviewContainerComponent {
   @Input() changeRequestDetails: PendingChange;
   @Output() refreshList = new EventEmitter();
 
-  @ViewChild('previewComponent', {static: false}) previewComponent: ChangeRequestPreviewComponent;
+  @ViewChild('previewComponent', {static: false}) previewComponent: PendingChangeRequestPreviewComponent;
 
   translatePrefix = 'pendingChanges.changeRequestDetails.';
   translatePrefixDialogReject = this.translatePrefix + 'dialogReject.';
@@ -34,7 +34,7 @@ export class PendingChangesPreviewContainerComponent {
 
   canCancel: boolean = this.authenticatedUserFacade.hasRole(Authority.BUSINESS_OPERATOR);
   canApproveOrReject: boolean = this.authenticatedUserFacade.hasRole(Authority.APPROVER);
-  canUpdateChanges: boolean;
+  isArchiveTab: boolean;
 
   previewEmptyState: StateContent = {
     centered: true,
@@ -52,8 +52,8 @@ export class PendingChangesPreviewContainerComponent {
       private translate: TranslateService,
       private route: ActivatedRoute) {
 
-    this.canUpdateChanges = route.snapshot.data.changeRequestStatuses
-        .includes(PendingChangesStatus.PENDING);
+    this.isArchiveTab = route.snapshot.data.changeRequestStatuses
+        .includes(PendingChangesStatus.CLOSED);
   }
 
   approve() {

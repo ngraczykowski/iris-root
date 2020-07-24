@@ -6,13 +6,13 @@ import { Header } from '@app/ui-components/header/header';
 import { environment } from '@env/environment';
 
 @Component({
-  selector: 'app-change-request-preview',
-  templateUrl: './change-request-preview.component.html',
-  styleUrls: ['./change-request-preview.component.scss'],
+  selector: 'app-pending-change-request-preview',
+  templateUrl: './pending-change-request-preview.component.html',
+  styleUrls: ['./pending-change-request-preview.component.scss'],
   providers: [ChangeRequestPreviewFormService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChangeRequestPreviewComponent {
+export class PendingChangeRequestPreviewComponent {
 
   public pendingChangeData: PendingChange;
   public pendingChangeHeader: Header;
