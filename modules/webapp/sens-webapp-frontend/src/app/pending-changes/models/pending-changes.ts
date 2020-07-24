@@ -29,3 +29,8 @@ export interface PendingChange {
   aiSolution: string;
   active: boolean;
 }
+
+export enum PendingChangesStatus {
+  PENDING = 'PENDING',
+  CLOSED = 'CLOSED'
+}

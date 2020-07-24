@@ -5,8 +5,5 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBra
 import java.util.List;
 
 public interface BulkChangeQuery {
-
-  List<BulkChangeDto> listPending();
-
   List<BulkChangeIdsForReasoningBranchDto> getIds(List<ReasoningBranchIdDto> reasoningBranchIds);
 }

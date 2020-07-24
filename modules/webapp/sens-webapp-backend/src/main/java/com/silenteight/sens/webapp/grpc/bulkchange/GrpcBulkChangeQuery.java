@@ -15,6 +15,8 @@ import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningBranchDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeQuery;
+import com.silenteight.sens.webapp.backend.bulkchange.closed.ClosedBulkChangeQuery;
+import com.silenteight.sens.webapp.backend.bulkchange.pending.PendingBulkChangeQuery;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
@@ -25,7 +27,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.google.rpc.Code.NOT_FOUND;
+import static com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State.STATE_APPLIED;
 import static com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State.STATE_CREATED;
+import static com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State.STATE_REJECTED;
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
 import static com.silenteight.protocol.utils.Uuids.toJavaUuid;
 import static com.silenteight.sens.webapp.grpc.GrpcCommunicationException.codeIs;
@@ -37,21 +41,35 @@ import static io.vavr.control.Try.failure;
 import static io.vavr.control.Try.of;
 import static io.vavr.control.Try.success;
 import static java.util.Collections.emptyList;
+import static java.util.List.of;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class GrpcBulkChangeQuery implements BulkChangeQuery {
+class GrpcBulkChangeQuery
+    implements BulkChangeQuery, ClosedBulkChangeQuery, PendingBulkChangeQuery {
+
+  public static final List<State> PENDING_STATES = of(STATE_CREATED);
+  public static final List<State> CLOSED_STATES = of(STATE_APPLIED, STATE_REJECTED);
 
   @NonNull
   private final BulkBranchChangeGovernanceBlockingStub bulkBranchChangeStub;
 
   @Override
   public List<BulkChangeDto> listPending() {
+    return this.listByState(PENDING_STATES);
+  }
+
+  @Override
+  public List<BulkChangeDto> listClosed() {
+    return this.listByState(CLOSED_STATES);
+  }
+
+  public List<BulkChangeDto> listByState(List<State> states) {
     ListBulkBranchChangesRequest request =
         ListBulkBranchChangesRequest
             .newBuilder()
-            .setStateFilter(filterWith(STATE_CREATED))
+            .setStateFilter(filterWith(states))
             .build();
 
     Try<List<BulkChangeDto>> features =
@@ -65,8 +83,8 @@ class GrpcBulkChangeQuery implements BulkChangeQuery {
     return processResult(features);
   }
 
-  private static Builder filterWith(State state) {
-    return StateFilter.newBuilder().addStates(state);
+  private static Builder filterWith(List<State> states) {
+    return StateFilter.newBuilder().addAllStates(states);
   }
 
   private static BulkChangeDto toDto(BulkBranchChangeView bulkBranchChangeView) {
@@ -120,7 +138,7 @@ class GrpcBulkChangeQuery implements BulkChangeQuery {
     ListBulkBranchChangesRequest request =
         ListBulkBranchChangesRequest
             .newBuilder()
-            .setStateFilter(filterWith(STATE_CREATED))
+            .setStateFilter(filterWith(PENDING_STATES))
             .setReasoningBranchFilter(buildReasoningBranchFilter(reasoningBranchIds))
             .build();
 

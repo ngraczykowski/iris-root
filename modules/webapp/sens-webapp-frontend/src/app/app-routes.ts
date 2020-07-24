@@ -5,7 +5,9 @@ import { CircuitBreakerBranchListComponent } from '@app/circuit-breaker-dashboar
 import { CircuitBreakerDashboardComponent } from '@app/circuit-breaker-dashboard/containers/circuit-breaker-dashboard/circuit-breaker-dashboard.component';
 import { CircuitBreakerDiscrepancyStatus } from '@app/circuit-breaker-dashboard/models/circuit-breaker';
 import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
+import { PendingChangesTabsContainerComponent } from '@app/pending-changes/containers/pending-changes-tabs-container/pending-changes-tabs-container.component';
 import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
+import { PendingChangesStatus } from '@app/pending-changes/models/pending-changes';
 import { ReasoningBranchesBrowserComponent } from '@app/reasoning-branches-browser/containers/reasoning-branches-browser/reasoning-branches-browser.component';
 import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report/containers/reasoning-branches-report/reasoning-branches-report.component';
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
@@ -109,12 +111,34 @@ export const routes: Routes = [
   },
   {
     path: 'reasoning-branches/pending-changes',
-    pathMatch: 'full',
-    component: PendingChangesComponent,
+    component: PendingChangesTabsContainerComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Business Operator', 'Approver']
-    }
+    },
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'queue'
+      },
+      {
+        path: 'queue',
+        pathMatch: 'full',
+        component: PendingChangesComponent,
+        data: {
+          changeRequestStatuses: [PendingChangesStatus.PENDING]
+        }
+      },
+      {
+        path: 'archived',
+        pathMatch: 'full',
+        component: PendingChangesComponent,
+        data: {
+          changeRequestStatuses: [PendingChangesStatus.CLOSED]
+        }
+      },
+    ]
   },
   {
     path: 'users/user-management',

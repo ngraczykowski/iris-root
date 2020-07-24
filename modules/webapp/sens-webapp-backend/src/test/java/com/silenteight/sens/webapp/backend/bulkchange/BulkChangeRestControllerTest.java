@@ -20,11 +20,9 @@ import java.util.UUID;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.CORRELATION_ID_HEADER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.now;
-import static java.util.Collections.emptyList;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.joining;
@@ -51,59 +49,6 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private CreateBulkChangeUseCase createBulkChangeUseCase;
-
-  @Nested
-  class ListBulkChanges {
-
-    @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
-    void its200WithEmptyList_whenNoPendingBulkChanges() {
-      given(bulkChangeQuery.listPending()).willReturn(emptyList());
-
-      get(mappingForList())
-          .contentType(anything())
-          .statusCode(OK.value())
-          .body("size()", is(0));
-    }
-
-    @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
-    void its200WithCorrectBody_whenFound() {
-      UUID id1 = randomUUID();
-      UUID id2 = randomUUID();
-      given(bulkChangeQuery.listPending()).willReturn(List.of(
-          new BulkChangeDto(id1,
-              List.of(new ReasoningBranchIdDto(1L, 12L), new ReasoningBranchIdDto(2L, 13L)),
-              "FALSE_POSITIVE", TRUE, now()),
-          new BulkChangeDto(
-              id2, List.of(new ReasoningBranchIdDto(4L, 15L)), "POTENTIAL_TRUE_POSITIVE", FALSE,
-              now()))
-      );
-
-      get(mappingForList())
-          .contentType(anything())
-          .statusCode(OK.value())
-          .body("[0].id", is(id1.toString()))
-          .body("[0].reasoningBranchIds[0].decisionTreeId", is(1))
-          .body("[0].reasoningBranchIds[0].featureVectorId", is(12))
-          .body("[0].reasoningBranchIds[1].decisionTreeId", is(2))
-          .body("[0].reasoningBranchIds[1].featureVectorId", is(13))
-          .body("[0].aiSolution", is("FALSE_POSITIVE"))
-          .body("[0].active", is(TRUE))
-          .body("[1].id", is(id2.toString()))
-          .body("[1].reasoningBranchIds[0].decisionTreeId", is(4))
-          .body("[1].reasoningBranchIds[0].featureVectorId", is(15))
-          .body("[1].aiSolution", is("POTENTIAL_TRUE_POSITIVE"))
-          .body("[1].active", is(FALSE));
-    }
-
-    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
-    void its403_whenNotPermittedRole() {
-      get(mappingForList()).statusCode(FORBIDDEN.value());
-    }
-
-    private String mappingForList() {
-      return "/bulk-changes";
-    }
-  }
 
   @Nested
   class CreateBulkChange {

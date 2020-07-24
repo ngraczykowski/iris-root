@@ -36,18 +36,6 @@ class BulkChangeRestController {
   @NonNull
   private final CreateBulkChangeUseCase createBulkChangeUseCase;
 
-  @GetMapping("/bulk-changes")
-  @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
-  public ResponseEntity<List<BulkChangeDto>> pendingBulkChanges() {
-    log.debug(CHANGE_REQUEST, "Listing pending Bulk Changes");
-
-    List<BulkChangeDto> bulkChanges = bulkChangeQuery.listPending();
-
-    log.debug(CHANGE_REQUEST, "Found {} pending Bulk Changes", bulkChanges.size());
-
-    return ok(bulkChanges);
-  }
-
   @PostMapping("/bulk-changes")
   @PreAuthorize(BUSINESS_OPERATOR)
   public ResponseEntity<Void> create(

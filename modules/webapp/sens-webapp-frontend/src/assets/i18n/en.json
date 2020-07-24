@@ -179,6 +179,10 @@
     "title": "Reports"
   },
   "pendingChanges": {
+    "tabs": {
+      "queue": "QUEUE",
+      "archived": "ARCHIVE"
+    },
     "prefix": "CR-{{value}}",
     "title": "Pending Changes",
     "dataLabels": {
@@ -189,7 +193,8 @@
       "createdBy": "Created by"
     },
     "emptyState": {
-      "title": "You don't have any Change Request to verify yet."
+      "title.queue": "You don't have any Change Request to verify yet.",
+      "title.closed": "No Change Request was closed yet."
     },
     "updatingList": {
       "title": "Updating Change Requests list"
@@ -509,8 +514,8 @@
   "circuitBreakerDashboard": {
     "title": "Circuit Breaker Dashboard",
     "tabs": {
-      "active": "Active",
-      "archived": "Archived"
+      "active": "ACTIVE",
+      "archived": "ARCHIVE"
     },
     "discrepantBranches" : {
       "state": {

@@ -8,9 +8,8 @@
   </mat-sidenav>
   <mat-sidenav-content
           class="content-internal-margin--vertical content-internal-margin--horizontal">
-    <app-header *ngIf="header"
-                [headerData]="header"></app-header>
-    <app-pending-changes-table
+
+  <app-pending-changes-table
             *ngIf="pendingChangesTable"
             [pendingChangesList]="pendingChangesData"
             (selectedCR)="loadChangeRequestDetails($event)"

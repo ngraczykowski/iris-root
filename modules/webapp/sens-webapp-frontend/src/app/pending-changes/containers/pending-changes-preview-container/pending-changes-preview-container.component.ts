@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { Authority } from '@app/core/authorities/model/authority.enum';
 import { ChangeRequestPreviewComponent } from '@app/pending-changes/components/change-request-preview/change-request-preview.component';
 import { ChangeRequestDecisionRequestBody } from '@app/pending-changes/models/change-request-decision-request-body';
 import { ChangeRequestDecision } from '@app/pending-changes/models/change-request-decision.enum';
-import { PendingChange } from '@app/pending-changes/models/pending-changes';
+import { PendingChange, PendingChangesStatus } from '@app/pending-changes/models/pending-changes';
 import { PendingChangesService } from '@app/pending-changes/services/pending-changes.service';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
-import { Authority } from '@app/core/authorities/model/authority.enum';
 import { DialogComponent } from '@app/ui-components/dialog/dialog.component';
 import { StateContent } from '@app/ui-components/state/state';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,6 +34,7 @@ export class PendingChangesPreviewContainerComponent {
 
   canCancel: boolean = this.authenticatedUserFacade.hasRole(Authority.BUSINESS_OPERATOR);
   canApproveOrReject: boolean = this.authenticatedUserFacade.hasRole(Authority.APPROVER);
+  canUpdateChanges: boolean;
 
   previewEmptyState: StateContent = {
     centered: true,
@@ -47,7 +49,11 @@ export class PendingChangesPreviewContainerComponent {
       private readonly authenticatedUserFacade: AuthenticatedUserFacade,
       private pendingChangesService: PendingChangesService,
       private _snackBar: MatSnackBar,
-      private translate: TranslateService) {
+      private translate: TranslateService,
+      private route: ActivatedRoute) {
+
+    this.canUpdateChanges = route.snapshot.data.changeRequestStatuses
+        .includes(PendingChangesStatus.PENDING);
   }
 
   approve() {
