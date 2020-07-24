@@ -1,22 +1,20 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { environment } from '@env/environment';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-ai-solution',
   templateUrl: './ai-solution.component.html',
-  styleUrls: ['./ai-solution.component.scss']
+  styleUrls: ['./ai-solution.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AiSolutionComponent implements OnChanges {
 
   @Input() aiSolution: string;
 
-  aiSolutionLabel: string;
   aiSolutionStyle: string;
 
   constructor() { }
 
   ngOnChanges() {
-    this.convertSolution(this.aiSolution);
     this.generateAiSolutionStyle(this.aiSolution);
   }
 
@@ -25,13 +23,4 @@ export class AiSolutionComponent implements OnChanges {
     this.aiSolutionStyle = `ai-solution--${solutionStyle}`;
   }
 
-  convertSolution(solution) {
-    const aiSolutions = environment.aiSolutions;
-
-    aiSolutions.forEach(aiSolution => {
-      if (aiSolution.value === solution) {
-        this.aiSolutionLabel = `${aiSolution.label}`;
-      }
-    });
-  }
 }

@@ -7,6 +7,7 @@ import {
   ReasoningBranchesListRequest,
   ReasoningBranchesListResponse
 } from '@app/reasoning-branches-browser/model/branches-list';
+import { ReasoningBranchesService } from '@core/reasoning-branches/services/reasoning-branches.service';
 import { environment } from '@env/environment';
 import { forkJoin, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -17,13 +18,9 @@ import { map, switchMap } from 'rxjs/operators';
 export class ReasoningBranchesListService {
 
   constructor(
-      private http: HttpClient
+      private http: HttpClient,
+      private reasoningBranchesService: ReasoningBranchesService
   ) { }
-
-  getBranchesList(request): Observable<ReasoningBranchesListResponse> {
-    const params = Object.keys(request).map(key => key + '=' + request[key]).join('&');
-    return this.http.get<ReasoningBranchesListResponse>(`${environment.serverApiUrl}/reasoning-branches?${params}`);
-  }
 
   getBulkChangesIds(branches): Observable<Array<BulkChangesResponse>> {
     const params = this.generateBulkChangeParams(branches);
@@ -43,7 +40,7 @@ export class ReasoningBranchesListService {
   }
 
   getReasoningBranchesList(request: ReasoningBranchesListRequest): Observable<ReasoningBranchesListResponse> {
-    return this.getBranchesList(request).pipe(
+    return this.reasoningBranchesService.getList(request).pipe(
         switchMap((response: ReasoningBranchesListResponse) => response.branches.length ? forkJoin({
           branchesList: of(response),
           bulkChanges: this.getBulkChangesIds(response.branches),

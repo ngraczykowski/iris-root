@@ -6,9 +6,9 @@
         <mat-label>AI Solution</mat-label>
         <mat-select (selectionChange)="branchesFiltering($event, 'solution')">
           <mat-option [value]="'all'">All</mat-option>
-          <mat-option *ngFor="let aiSolution of aiSolutions"
-                      [value]="aiSolution.value">
-            {{aiSolution.label | translate}}
+          <mat-option *ngFor="let aiSolution of aiSolutions | async"
+                      [value]="aiSolution">
+            {{ 'aiSolutions.' + aiSolution | translate }}
           </mat-option>
         </mat-select>
       </mat-form-field>

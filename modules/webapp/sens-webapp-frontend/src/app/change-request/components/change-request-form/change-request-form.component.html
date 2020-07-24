@@ -8,15 +8,13 @@
           <mat-option [value]="'Leave unchanged'">
             <span [translate]="'changeRequest.configureForm.aiSolution.options.unchanged'"></span>
           </mat-option>
-          <mat-option [value]="'FALSE_POSITIVE'">
-            <span [translate]="'aiSolutions.falsePositive'"></span>
+
+          <mat-option
+                  *ngFor="let value of aiSolutions | async"
+                  [value]="value">
+            <span [translate]="'aiSolutions.' + value"></span>
           </mat-option>
-          <mat-option [value]="'POTENTIAL_TRUE_POSITIVE'">
-            <span [translate]="'aiSolutions.potentialTruePositive'"></span>
-          </mat-option>
-          <mat-option [value]="'NO_DECISION'">
-            <span [translate]="'aiSolutions.noDecision'"></span>
-          </mat-option>
+
         </mat-select>
         <mat-hint [translate]="translatePrefix + 'aiSolution.hint'"></mat-hint>
         <mat-error

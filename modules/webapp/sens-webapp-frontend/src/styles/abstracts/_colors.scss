@@ -18,6 +18,8 @@ $disabled: $dark-disabled-text;
 
 $solution-potential-true-positive: mat-color($app-warn);
 $solution-false-positive: mat-color($app-positive);
+$solution-hinted-potential-true-positive: mat-color($mat-orange, 500);
+$solution-hinted-false-positive: mat-color($mat-light-green, 500);
 $solution-no-decision: $dark-disabled-text;
 
 $dividers: $dark-dividers;

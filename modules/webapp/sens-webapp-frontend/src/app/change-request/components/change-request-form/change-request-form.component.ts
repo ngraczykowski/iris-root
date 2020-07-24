@@ -1,5 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { AiSolutionsService } from '@core/ai-solutions/services/ai-solutions.service';
+import { Solution } from '@endpoint/configuration/model/solution.enum';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-change-request-form',
@@ -18,7 +21,9 @@ export class ChangeRequestFormComponent implements OnInit {
   form = this._initialState;
   translatePrefix = 'changeRequest.configureForm.';
 
-  constructor() { }
+  aiSolutions: Observable<Solution[]> = this.aiSolutionsService.availableSolutions;
+
+  constructor(private aiSolutionsService: AiSolutionsService) { }
 
   ngOnInit() {
   }

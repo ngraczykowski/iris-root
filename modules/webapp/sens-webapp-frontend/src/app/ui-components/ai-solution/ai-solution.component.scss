@@ -20,6 +20,14 @@
     @include ai-solution($solution-potential-true-positive);
   }
 
+  &--hinted-false-positive {
+    @include ai-solution($solution-hinted-false-positive);
+  }
+
+  &--hinted-potential-true-positive {
+    @include ai-solution($solution-hinted-potential-true-positive);
+  }
+
   &--no-decision {
     @include ai-solution($solution-potential-true-positive);
   }

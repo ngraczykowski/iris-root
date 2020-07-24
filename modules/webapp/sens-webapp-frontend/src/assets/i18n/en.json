@@ -1,9 +1,11 @@
 {
   "aiSolutions": {
-    "falsePositive": "False Positive",
-    "potentialTruePositive": "Potential True Positive",
-    "noDecision": "No Decision",
-    "unchanged": "Leave Unchanged"
+    "FALSE_POSITIVE": "False Positive",
+    "POTENTIAL_TRUE_POSITIVE": "Potential True Positive",
+    "HINTED_FALSE_POSITIVE": "Hinted False Positive",
+    "HINTED_POTENTIAL_TRUE_POSITIVE": "Hinted Potential True Positive",
+    "NO_DECISION": "No Decision",
+    "UNCHANGED": "Leave Unchanged"
   },
   "aiStatus": {
     "disabled": "Disabled",

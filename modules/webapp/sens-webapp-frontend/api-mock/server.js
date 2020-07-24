@@ -420,6 +420,11 @@ app.get('/rest/webapp/api/reasoning-branches/features/:id/names', (req, res) => 
   }
 });
 
+app.get('/rest/webapp/api/configuration/solutions', (req, res) => {
+  res.status(200).send(['FALSE_POSITIVE','POTENTIAL_TRUE_POSITIVE',
+  'HINTED_POTENTIAL_TRUE_POSITIVE', 'HINTED_FALSE_POSITIVE','NO_DECISION']);
+});
+
 function isUserNameUnique(userName, currentUsersList) {
   const isUnique = currentUsersList.filter((user) => {
     return user.userName == userName;

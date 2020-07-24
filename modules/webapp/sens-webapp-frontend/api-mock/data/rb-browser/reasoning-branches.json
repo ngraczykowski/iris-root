@@ -5,7 +5,7 @@
         "decisionTreeId": 1,
         "featureVectorId": 1
       },
-      "aiSolution": "POTENTIAL_TRUE_POSITIVE",
+      "aiSolution": "HINTED_FALSE_POSITIVE",
       "active": false,
       "createdAt": "2020-06-25T14:54:21.659775Z",
       "updatedAt": "2020-06-26T10:24:20.205514Z"
@@ -15,7 +15,7 @@
         "decisionTreeId": 1,
         "featureVectorId": 2
       },
-      "aiSolution": "FALSE_POSITIVE",
+      "aiSolution": "HINTED_POTENTIAL_TRUE_POSITIVE",
       "active": true,
       "createdAt": "2020-06-25T14:54:21.668630Z",
       "updatedAt": null

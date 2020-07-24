@@ -10,7 +10,7 @@ import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user
 import { Authority } from '@app/core/authorities/model/authority.enum';
 import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
-import { environment } from '@env/environment';
+import { AiSolutionsService } from '@core/ai-solutions/services/ai-solutions.service';
 
 @Component({
   selector: 'app-reasoning-branches-list-container',
@@ -70,13 +70,14 @@ export class ReasoningBranchesListContainerComponent implements OnInit {
     pageSize: this.rowsPerPage
   };
 
-  aiSolutions = environment.aiSolutions;
+  aiSolutions = this.aiSolutionsService.availableSolutions;
 
   branchesList: ReasoningBranchesList[] = [];
 
   constructor(
       private reasoningBranchesListService: ReasoningBranchesListService,
       private selectedBranchesService: SelectedBranchesService,
+      private aiSolutionsService: AiSolutionsService,
       private cdr: ChangeDetectorRef,
       private readonly authenticatedUserFacade: AuthenticatedUserFacade
   ) { }
