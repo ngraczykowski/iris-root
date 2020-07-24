@@ -48,7 +48,7 @@ public class GenericExceptionControllerAdvice extends AbstractErrorControllerAdv
     return handle(e, "HttpMessageNotReadable", BAD_REQUEST, Map.of(ERRORS, e.getMessage()));
   }
 
-  private Stream<String> errorDescriptionsOf(MethodArgumentNotValidException e) {
+  private static Stream<String> errorDescriptionsOf(MethodArgumentNotValidException e) {
     BindingResult bindingResult = e.getBindingResult();
     Stream<String> globalErrors = bindingResult
         .getGlobalErrors()

@@ -15,7 +15,7 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANA
 
 @RequiredArgsConstructor
 @Slf4j
-class BaseRegisterUserUseCase {
+abstract class BaseRegisterUserUseCase {
 
   @NonNull
   private final UserRegisteringDomainService userRegisteringDomainService;

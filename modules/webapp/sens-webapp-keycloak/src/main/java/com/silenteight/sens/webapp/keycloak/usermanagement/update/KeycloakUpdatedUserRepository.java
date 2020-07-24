@@ -16,7 +16,7 @@ class KeycloakUpdatedUserRepository implements UpdatedUserRepository {
   private final AuditTracer auditTracer;
 
   @Override
-  public void save(UpdatedUser updatedUser) throws UserUpdateException {
+  public void save(UpdatedUser updatedUser) {
     try {
       keycloakUserUpdater.update(updatedUser);
 

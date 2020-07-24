@@ -4,7 +4,7 @@ import com.silenteight.sens.webapp.keycloak.configmigration.Migration;
 
 public interface RealmNameExtractor {
 
-  String extractRealmName(Migration migration) throws CouldNotExtractRealmNameException;
+  String extractRealmName(Migration migration);
 
   class CouldNotExtractRealmNameException extends RuntimeException {
 

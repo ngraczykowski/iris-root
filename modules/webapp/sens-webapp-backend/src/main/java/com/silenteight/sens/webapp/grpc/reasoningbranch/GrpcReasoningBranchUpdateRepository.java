@@ -85,7 +85,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
     branchChange.setReasoningBranchId(buildGrpcBranchId(treeId, branchId));
 
     newAiSolution
-        .map(this::buildSolutionChange)
+        .map(GrpcReasoningBranchUpdateRepository::buildSolutionChange)
         .ifPresent(branchChange::setSolutionChange);
 
     newIsActive
@@ -108,7 +108,7 @@ class GrpcReasoningBranchUpdateRepository implements ChangeRequestRepository {
         .build();
   }
 
-  private BranchSolutionChange buildSolutionChange(String newSolution) {
+  private static BranchSolutionChange buildSolutionChange(String newSolution) {
     return BranchSolutionChange.newBuilder()
         .setSolution(BranchSolutionMapper.map(newSolution))
         .build();

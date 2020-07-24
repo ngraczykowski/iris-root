@@ -43,7 +43,7 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
 
     Try<Optional<BranchDetailsDto>> details =
         of(() -> branches.getReasoningBranch(buildRequest(treeId, branchId)))
-            .map(this::mapToDetailsDto)
+            .map(GrpcReasoningBranchDetailsQuery::mapToDetailsDto)
             .map(Optional::of);
 
     return mapStatusExceptionsToCommunicationException(details)
@@ -66,7 +66,7 @@ class GrpcReasoningBranchDetailsQuery implements ReasoningBranchDetailsQuery {
     log.info(REASONING_BRANCH, "Fetched Branch details. {}", branchDetails);
   }
 
-  private BranchDetailsDto mapToDetailsDto(ReasoningBranchResponse grpcResponse) {
+  private static BranchDetailsDto mapToDetailsDto(ReasoningBranchResponse grpcResponse) {
     ReasoningBranchSummary reasoningBranch = grpcResponse.getReasoningBranch();
 
     return BranchDetailsDto.builder()

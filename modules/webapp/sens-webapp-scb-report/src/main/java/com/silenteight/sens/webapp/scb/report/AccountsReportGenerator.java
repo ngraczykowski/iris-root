@@ -64,7 +64,7 @@ class AccountsReportGenerator implements ReportGenerator {
     return user.getRoles().stream().map(role -> new ReportUserDto(user, role, timeFormatter));
   }
 
-  private Stream<String> buildReportData(List<ReportUserDto> usersToReport) {
+  private static Stream<String> buildReportData(List<ReportUserDto> usersToReport) {
     return of(new CsvBuilder<>(usersToReport.stream())
         .cell(APPLICATION_NAME, a -> APPLICATION_NAME_VALUE)
         .cell(ACCOUNT_OWNER, ReportUserDto::getUserName)

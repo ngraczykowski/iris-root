@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.keycloak.configmigration;
 
 public interface KeycloakMigrator {
 
-  void migrate(KeycloakMigrations migrations) throws CouldNotPerformMigrationException;
+  void migrate(KeycloakMigrations migrations);
 
   class CouldNotPerformMigrationException extends RuntimeException {
 

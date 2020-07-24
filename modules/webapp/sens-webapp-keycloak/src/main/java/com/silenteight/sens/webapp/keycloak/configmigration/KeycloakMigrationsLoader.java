@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.keycloak.configmigration;
 
 public interface KeycloakMigrationsLoader {
 
-  KeycloakMigrations load() throws CouldNotLoadMigrationsException;
+  KeycloakMigrations load();
 
   class CouldNotLoadMigrationsException extends RuntimeException {
 

@@ -25,7 +25,7 @@ class ResourcesKeycloakMigrationsLoader implements KeycloakMigrationsLoader {
   private final MigrationFilesLoader migrationFilesLoader;
 
   @Override
-  public KeycloakMigrations load() throws CouldNotLoadMigrationsException {
+  public KeycloakMigrations load() {
     log.debug(KEYCLOAK_MIGRATION, "Reading Keycloak migration files");
     MigrationFiles migrationFiles = migrationFilesLoader.load(config.getMigrationsPath());
 

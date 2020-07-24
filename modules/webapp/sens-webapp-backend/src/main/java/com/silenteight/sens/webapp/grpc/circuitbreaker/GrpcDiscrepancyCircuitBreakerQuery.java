@@ -90,6 +90,20 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
         .get();
   }
 
+  private static ListDiscrepancyIdsRequest listDiscrepancyIdsRequestOf(
+      long decisionTreeId, long featureVectorId) {
+
+    DiscrepantBranchId discrepantBranchId = DiscrepantBranchId
+        .newBuilder()
+        .setDecisionTreeId(decisionTreeId)
+        .setFeatureVectorId(featureVectorId)
+        .build();
+
+    return ListDiscrepancyIdsRequest.newBuilder()
+        .setDiscrepantBranchId(discrepantBranchId)
+        .build();
+  }
+
   @Override
   public List<Long> listArchivedDiscrepancyIds(ReasoningBranchIdDto branchId) {
     Try<List<Long>> discrepancyIds =
@@ -123,17 +137,6 @@ class GrpcDiscrepancyCircuitBreakerQuery implements DiscrepancyCircuitBreakerQue
             exception -> Match(exception).of(
                 Case($(), () -> failure(exception))))
         .get();
-  }
-
-  private ListDiscrepancyIdsRequest listDiscrepancyIdsRequestOf(
-      long decisionTreeId, long featureVectorId) {
-    return ListDiscrepancyIdsRequest.newBuilder()
-        .setDiscrepantBranchId(
-            DiscrepantBranchId
-                .newBuilder()
-                .setDecisionTreeId(decisionTreeId)
-                .setFeatureVectorId(featureVectorId)
-        ).build();
   }
 
   private ListDiscrepantBranchesRequest buildDiscrepantBranchesRequest() {

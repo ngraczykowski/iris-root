@@ -121,7 +121,7 @@ class GrpcBulkChangeQuery
            null;
   }
 
-  private <T> List<T> processResult(Try<List<T>> result) {
+  private static <T> List<T> processResult(Try<List<T>> result) {
     return mapStatusExceptionsToCommunicationException(result)
         .recoverWith(
             GrpcCommunicationException.class,

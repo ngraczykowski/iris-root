@@ -62,13 +62,15 @@ class GrpcReasoningBranchesQuery implements
 
   @Override
   public List<BranchDto> findBranchByTreeIdAndBranchIds(long treeId, List<Long> branchIds) {
-    return findByTreeAndBranchIds(treeId, branchIds, this::mapToBranchDto);
+    return findByTreeAndBranchIds(treeId, branchIds, GrpcReasoningBranchesQuery::mapToBranchDto);
   }
 
   @Override
   public List<BranchIdAndSignatureDto> findIdsByTreeIdAndBranchIds(
       long treeId, List<Long> branchIds) {
-    return findByTreeAndBranchIds(treeId, branchIds, this::mapToBranchIdAndSignatureDto);
+
+    return findByTreeAndBranchIds(
+        treeId, branchIds, GrpcReasoningBranchesQuery::mapToBranchIdAndSignatureDto);
   }
 
   private <T> List<T> findByTreeAndBranchIds(
@@ -91,13 +93,15 @@ class GrpcReasoningBranchesQuery implements
         treeId, featureVectorSignatures);
 
     Try<List<BranchIdAndSignatureDto>> branchIds =
-        reasoningBranchesOf(treeId, rb -> containsOneOfSignatures(rb, featureVectorSignatures),
-            this::mapToBranchIdAndSignatureDto);
+        reasoningBranchesOf(
+            treeId,
+            rb -> containsOneOfSignatures(rb, featureVectorSignatures),
+            GrpcReasoningBranchesQuery::mapToBranchIdAndSignatureDto);
 
     return responseFrom(branchIds);
   }
 
-  private <T> List<T> responseFrom(Try<List<T>> reasoningBranches) {
+  private static <T> List<T> responseFrom(Try<List<T>> reasoningBranches) {
     return mapStatusExceptionsToCommunicationException(reasoningBranches)
         .recoverWith(
             GrpcCommunicationException.class,
@@ -115,7 +119,8 @@ class GrpcReasoningBranchesQuery implements
         "Listing Reasoning Branches using gRPC BranchGovernance. treeId={}", treeId);
 
     return mapStatusExceptionsToCommunicationException(
-        reasoningBranchesOf(treeId, rb -> true, this::mapToBranchDtoForReport))
+        reasoningBranchesOf(
+            treeId, rb -> true, GrpcReasoningBranchesQuery::mapToBranchDtoForReport))
         .recoverWith(
             GrpcCommunicationException.class,
             exception -> Match(exception).of(
@@ -164,7 +169,7 @@ class GrpcReasoningBranchesQuery implements
         toBase64String(reasoningBranch.getFeatureVectorSignature()));
   }
 
-  private BranchDto mapToBranchDto(ReasoningBranchSummary reasoningBranch) {
+  private static BranchDto mapToBranchDto(ReasoningBranchSummary reasoningBranch) {
     return BranchDto
         .builder()
         .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
@@ -173,7 +178,7 @@ class GrpcReasoningBranchesQuery implements
         .build();
   }
 
-  private BranchIdAndSignatureDto mapToBranchIdAndSignatureDto(
+  private static BranchIdAndSignatureDto mapToBranchIdAndSignatureDto(
       ReasoningBranchSummary reasoningBranch) {
 
     return new BranchIdAndSignatureDto(
@@ -181,7 +186,9 @@ class GrpcReasoningBranchesQuery implements
         toBase64String(reasoningBranch.getFeatureVectorSignature()));
   }
 
-  private BranchWithFeaturesDto mapToBranchDtoForReport(ReasoningBranchSummary reasoningBranch) {
+  private static BranchWithFeaturesDto mapToBranchDtoForReport(
+      ReasoningBranchSummary reasoningBranch) {
+
     return BranchWithFeaturesDto.builder()
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
         .updatedAt(toInstant(reasoningBranch.getUpdatedAt()))
