@@ -190,7 +190,8 @@
       "aiSolution": "AI Solution",
       "aiStatus": "AI Status",
       "createdAt": "Created at",
-      "createdBy": "Created by"
+      "createdBy": "Created by",
+      "crStatus": "CR status"
     },
     "emptyState": {
       "title.queue": "You don't have any Change Request to verify yet.",

@@ -39,15 +39,15 @@ export class PendingChangesComponent implements OnInit {
   };
 
   private changeRequestStatuses: PendingChangesStatus[];
+  isArchiveTab: boolean;
 
   constructor(
       private pendingChangesService: PendingChangesService,
       private route: ActivatedRoute
   ) {
     this.changeRequestStatuses = route.snapshot.data.changeRequestStatuses;
-
     if (this.changeRequestStatuses.includes(PendingChangesStatus.CLOSED)) {
-      this.listEmptyState.title = this.translatePrefix + 'emptyState.title.closed';
+      this.configureArchiveTab();
     }
   }
 
@@ -87,5 +87,10 @@ export class PendingChangesComponent implements OnInit {
 
   resetChangeRequestDetails() {
     this.changeRequestDetails = null;
+  }
+
+  private configureArchiveTab() {
+    this.isArchiveTab = true;
+    this.listEmptyState.title = this.translatePrefix + 'emptyState.title.closed';
   }
 }

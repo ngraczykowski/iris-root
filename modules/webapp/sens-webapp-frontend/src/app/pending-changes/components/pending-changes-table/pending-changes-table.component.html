@@ -25,7 +25,7 @@
   </ng-container>
 
   <!-- AI Status Column -->
-  <ng-container matColumnDef="active">
+  <ng-container matColumnDef="aiStatus">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
       <span [translate]="translateTablePrefix + 'aiStatus'"></span>
     </mat-header-cell>
@@ -35,6 +35,16 @@
       <span *ngIf="element.active === null"
             class="secondary-text"
             [translate]="'aiStatus.unchanged'"></span>
+    </mat-cell>
+  </ng-container>
+
+  <!-- AI Status Column -->
+  <ng-container matColumnDef="crStatus">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <span [translate]="translateTablePrefix + 'crStatus'"></span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{element.state | titlecase}}
     </mat-cell>
   </ng-container>
 

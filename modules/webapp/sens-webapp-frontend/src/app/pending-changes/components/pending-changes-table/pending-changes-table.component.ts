@@ -12,11 +12,11 @@ import { environment } from '@env/environment';
 export class PendingChangesTableComponent implements OnInit {
 
   @Input() pendingChangesList: PendingChange[] = [];
+  @Input() isArchiveTab: boolean;
   @Output() selectedCR = new EventEmitter<any>();
 
   highlightRow: number;
-
-  displayedColumns: string[] = ['id', 'aiSolution', 'active', 'createdBy', 'createdAt'];
+  displayedColumns: string[];
   dataSource: MatTableDataSource<PendingChange>;
 
   translatePrefix = 'pendingChanges.';
@@ -29,6 +29,10 @@ export class PendingChangesTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.displayedColumns = this.isArchiveTab
+        ? ['id', 'aiSolution', 'aiStatus', 'crStatus', 'createdBy', 'createdAt'] :
+        ['id', 'aiSolution', 'aiStatus', 'createdBy', 'createdAt'];
+
     this.dataSource = new MatTableDataSource(this.pendingChangesList);
     this.dataSource.sort = this.sort;
   }

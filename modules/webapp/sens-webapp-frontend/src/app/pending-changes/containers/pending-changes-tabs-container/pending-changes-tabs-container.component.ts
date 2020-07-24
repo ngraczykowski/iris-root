@@ -21,11 +21,9 @@ export class PendingChangesTabsContainerComponent implements OnInit {
     }
   ];
 
-
   header: Header = {
     title: 'pendingChanges.title',
   };
-
 
   tabTranslatePrefix = 'pendingChanges.tabs.';
   queuedPendingChangesCount$: Observable<any>;

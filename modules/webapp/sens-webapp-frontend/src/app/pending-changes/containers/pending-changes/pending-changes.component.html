@@ -12,6 +12,7 @@
   <app-pending-changes-table
             *ngIf="pendingChangesTable"
             [pendingChangesList]="pendingChangesData"
+            [isArchiveTab]="isArchiveTab"
             (selectedCR)="loadChangeRequestDetails($event)"
             (click)="preview.open()"
     ></app-pending-changes-table>
@@ -21,6 +22,6 @@
                [stateContent]="listLoading"></app-state>
     <app-state *ngIf="pendingChangesError"
                [stateContent]="listError"
-                (submit)="loadPendingChanges()"></app-state>
+               (submit)="loadPendingChanges()"></app-state>
   </mat-sidenav-content>
 </mat-sidenav-container>
