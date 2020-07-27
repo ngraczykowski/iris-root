@@ -9,13 +9,12 @@
   <mat-sidenav-content
           class="content-internal-margin--vertical content-internal-margin--horizontal">
 
-  <app-pending-changes-table
+    <app-pending-changes-table
             *ngIf="pendingChangesTable"
             [pendingChangesList]="pendingChangesData"
             [isArchiveTab]="isArchiveTab"
-            (selectedCR)="loadChangeRequestDetails($event)"
-            (click)="preview.open()"
-    ></app-pending-changes-table>
+            (selectedCR)="loadChangeRequestDetails($event); preview.open()">
+    </app-pending-changes-table>
     <app-state *ngIf="pendingChangesEmptyState"
                [stateContent]="listEmptyState"></app-state>
     <app-state *ngIf="pendingChangesLoading"
