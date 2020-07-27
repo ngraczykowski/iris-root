@@ -2,7 +2,7 @@
 
   <app-discrepant-branch *ngFor="let discrepantBranch of discrepantBranches"
                          [discrepantBranch]="discrepantBranch"
-                         (refreshBranchList)="loadDiscrepantBranches(withArchivedDiscrepancies)">
+                         (refreshBranchList)="loadDiscrepantBranches(discrepancyStatuses)">
   </app-discrepant-branch>
 
 </mat-accordion>
