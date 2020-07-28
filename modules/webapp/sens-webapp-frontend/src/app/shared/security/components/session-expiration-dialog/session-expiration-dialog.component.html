@@ -1,7 +1,7 @@
-<h1 class="mat-dialog-title">{{ 'session-expires-warning.dialog.title' | translate }}</h1>
+<h1 class="mat-dialog-title">{{ 'session-expires-warning.dialog.title' | translate : { min: minutes, sec: seconds } }}</h1>
 <div mat-dialog-content>
   <p class="mat-body">
-    {{ 'session-expires-warning.dialog.description' | translate : { min: minutes, sec: seconds } }}
+    {{ 'session-expires-warning.dialog.description' | translate }}
   </p>
 </div>
 <div mat-dialog-actions>

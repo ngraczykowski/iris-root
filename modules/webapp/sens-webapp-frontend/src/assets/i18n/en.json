@@ -605,10 +605,10 @@
   },
   "session-expires-warning": {
     "dialog": {
-      "title": "No activity detected",
-      "description": "Your session is about to end up. In {{min}}:{{sec}} you will be signed off. Are you still there?",
-      "extend-button": "Yes, extend",
-      "logout-button": "No, sign off"
+      "title": "Your session is about to expire in {{min}}:{{sec}}!",
+      "description": "Due to inactivity, your session will be expired and you will be logged out.",
+      "extend-button": "Extend my session",
+      "logout-button": "Sign out now"
     }
   },
   "error-window": {
