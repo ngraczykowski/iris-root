@@ -14,6 +14,7 @@ import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.keycloak.KeycloakModule;
+import com.silenteight.sens.webapp.notification.NotificationModule;
 import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.user.UserModule;
 
@@ -32,6 +33,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         DeprecatedReasoningBranchModule.class,
         GrpcModule.class,
         KeycloakModule.class,
+        NotificationModule.class,
         ReasoningBranchModule.class,
         ReportModule.class,
         UserModule.class,
