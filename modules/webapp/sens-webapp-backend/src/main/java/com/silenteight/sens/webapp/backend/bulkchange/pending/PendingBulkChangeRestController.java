@@ -28,7 +28,7 @@ class PendingBulkChangeRestController {
   @NonNull
   private final PendingBulkChangeQuery bulkChangeQuery;
 
-  @GetMapping("/bulk-changes/pending")
+  @GetMapping(value = "/bulk-changes", params = "statesFamily=pending")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<BulkChangeDto>> listPending() {
     log.debug(CHANGE_REQUEST, "Listing pending Bulk Changes");

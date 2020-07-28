@@ -26,12 +26,12 @@ export class PendingChangesService {
 
   private getPendingChanges(urlSufix: string): Observable<Array<PendingChangeResponse>> {
     return this.http.get<Array<PendingChangeResponse>>(
-        `${environment.serverApiUrl}/change-requests/${urlSufix}`);
+        `${environment.serverApiUrl}/change-requests?statesFamily=${urlSufix}`);
   }
 
   private getBulkChanges(urlSufix: string): Observable<Array<BulkChangeResponse>> {
     return this.http.get<Array<BulkChangeResponse>>(
-        `${environment.serverApiUrl}/bulk-changes/${urlSufix}`);
+        `${environment.serverApiUrl}/bulk-changes?statesFamily=${urlSufix}`);
   }
 
   getPendingChangesDetails(changeRequestStatuses: PendingChangesStatus[]): Observable<Array<PendingChange>> {

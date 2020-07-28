@@ -26,7 +26,7 @@ class ClosedChangeRequestRestController {
   @NonNull
   private final ClosedChangeRequestQuery changeRequestQuery;
 
-  @GetMapping("/change-requests/closed")
+  @GetMapping(value = "/change-requests", params = "statesFamily=closed")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<ClosedChangeRequestDto>> closed() {
     log.debug(CHANGE_REQUEST, "Listing closed Change Requests");

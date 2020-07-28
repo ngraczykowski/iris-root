@@ -31,7 +31,7 @@ import static org.springframework.http.HttpStatus.OK;
     GenericExceptionControllerAdvice.class })
 class PendingBulkChangeRestControllerTest extends BaseRestControllerTest {
 
-  private static final String URL = "/bulk-changes/pending";
+  private static final String PENDING_BULK_CHANGES_URL = "/bulk-changes?statesFamily=pending";
 
   @MockBean
   private PendingBulkChangeQuery bulkChangeQuery;
@@ -40,7 +40,7 @@ class PendingBulkChangeRestControllerTest extends BaseRestControllerTest {
   void its200WithEmptyList_whenNoPendingBulkChanges() {
     given(bulkChangeQuery.listPending()).willReturn(emptyList());
 
-    get(URL)
+    get(PENDING_BULK_CHANGES_URL)
         .contentType(anything())
         .statusCode(OK.value())
         .body("size()", is(0));
@@ -59,7 +59,7 @@ class PendingBulkChangeRestControllerTest extends BaseRestControllerTest {
             now()))
     );
 
-    get(URL)
+    get(PENDING_BULK_CHANGES_URL)
         .contentType(anything())
         .statusCode(OK.value())
         .body("[0].id", is(id1.toString()))
@@ -78,7 +78,7 @@ class PendingBulkChangeRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
-    get(URL).statusCode(FORBIDDEN.value());
+    get(PENDING_BULK_CHANGES_URL).statusCode(FORBIDDEN.value());
   }
 
 }

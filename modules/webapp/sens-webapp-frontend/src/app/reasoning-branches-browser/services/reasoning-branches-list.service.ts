@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   BulkChanges,
-  BulkChangesResponse, PendingChanges,
-  PendingChangesResponse, ReasoningBranchesList,
+  BulkChangesResponse,
+  PendingChanges,
+  PendingChangesResponse,
+  ReasoningBranchesList,
   ReasoningBranchesListRequest,
   ReasoningBranchesListResponse
 } from '@app/reasoning-branches-browser/model/branches-list';
@@ -36,7 +38,7 @@ export class ReasoningBranchesListService {
   }
 
   getPendingChanges(): Observable<Array<PendingChangesResponse>> {
-    return this.http.get<Array<PendingChangesResponse>>(`${environment.serverApiUrl}/change-requests/pending`);
+    return this.http.get<Array<PendingChangesResponse>>(`${environment.serverApiUrl}/change-requests?statesFamily=pending`);
   }
 
   getReasoningBranchesList(request: ReasoningBranchesListRequest): Observable<ReasoningBranchesListResponse> {

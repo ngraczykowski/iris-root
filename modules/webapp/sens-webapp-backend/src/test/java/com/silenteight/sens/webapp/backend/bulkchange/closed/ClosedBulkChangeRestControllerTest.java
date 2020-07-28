@@ -31,7 +31,7 @@ import static org.springframework.http.HttpStatus.OK;
     GenericExceptionControllerAdvice.class })
 class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
 
-  private static final String URL = "/bulk-changes/closed";
+  private static final String CLOSED_BULK_CHANGES_URL = "/bulk-changes?statesFamily=closed";
 
   @MockBean
   private ClosedBulkChangeQuery bulkChangeQuery;
@@ -40,7 +40,7 @@ class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
   void its200WithEmptyList_whenNoPendingBulkChanges() {
     given(bulkChangeQuery.listClosed()).willReturn(emptyList());
 
-    get(URL)
+    get(CLOSED_BULK_CHANGES_URL)
         .contentType(anything())
         .statusCode(OK.value())
         .body("size()", is(0));
@@ -59,7 +59,7 @@ class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
             now()))
     );
 
-    get(URL)
+    get(CLOSED_BULK_CHANGES_URL)
         .contentType(anything())
         .statusCode(OK.value())
         .body("[0].id", is(id1.toString()))
@@ -78,6 +78,6 @@ class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
-    get(URL).statusCode(FORBIDDEN.value());
+    get(CLOSED_BULK_CHANGES_URL).statusCode(FORBIDDEN.value());
   }
 }

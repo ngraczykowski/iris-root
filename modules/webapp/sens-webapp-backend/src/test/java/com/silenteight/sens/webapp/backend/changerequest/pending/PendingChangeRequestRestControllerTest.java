@@ -26,6 +26,8 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({ PendingChangeRequestRestController.class, GenericExceptionControllerAdvice.class })
 class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
+  private static final String PENDING_CHANGE_REQUESTS_URL = "/change-requests?statesFamily=pending";
+
   @MockBean
   private PendingChangeRequestQuery pendingChangeRequestsQuery;
 
@@ -38,7 +40,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
     void its200_whenNoPendingChangeRequest() {
       given(pendingChangeRequestsQuery.listPending()).willReturn(emptyList());
 
-      get(pendingChangeRequestsPath())
+      get(PENDING_CHANGE_REQUESTS_URL)
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(0));
@@ -49,7 +51,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
       given(pendingChangeRequestsQuery.listPending()).willReturn(
           List.of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
 
-      get(pendingChangeRequestsPath())
+      get(PENDING_CHANGE_REQUESTS_URL)
           .statusCode(OK.value())
           .body("size()", is(2))
           .body("[0].id", equalTo(1))
@@ -66,11 +68,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
     @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
-      get(pendingChangeRequestsPath()).statusCode(FORBIDDEN.value());
-    }
-
-    private String pendingChangeRequestsPath() {
-      return "/change-requests/pending";
+      get(PENDING_CHANGE_REQUESTS_URL).statusCode(FORBIDDEN.value());
     }
 
     private class Fixtures {

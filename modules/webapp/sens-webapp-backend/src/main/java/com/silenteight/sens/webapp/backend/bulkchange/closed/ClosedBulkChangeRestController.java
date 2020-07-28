@@ -28,7 +28,7 @@ class ClosedBulkChangeRestController {
   @NonNull
   private final ClosedBulkChangeQuery bulkChangeQuery;
 
-  @GetMapping("/bulk-changes/closed")
+  @GetMapping(value = "/bulk-changes", params = "statesFamily=closed")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<BulkChangeDto>> listClosed() {
     log.debug(CHANGE_REQUEST, "Listing closed Bulk Changes");

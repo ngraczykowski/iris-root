@@ -26,7 +26,7 @@ class PendingChangeRequestRestController {
   @NonNull
   private final PendingChangeRequestQuery changeRequestQuery;
 
-  @GetMapping("/change-requests/pending")
+  @GetMapping(value = "/change-requests", params = "statesFamily=pending")
   @PreAuthorize(APPROVER_OR_BUSINESS_OPERATOR)
   public ResponseEntity<List<PendingChangeRequestDto>> pending() {
     log.debug(CHANGE_REQUEST, "Listing pending Change Requests");
