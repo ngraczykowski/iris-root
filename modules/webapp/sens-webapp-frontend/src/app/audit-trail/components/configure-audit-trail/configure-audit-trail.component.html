@@ -6,6 +6,7 @@
         matInput
         [matDatepicker]="startDate"
         [max]="form.value.endDate"
+        [errorStateMatcher]="datePickerErrorState(startDate)"
         formControlName="startDate"
         required
         (focus)="startDate.open()"
@@ -21,6 +22,7 @@
         [matDatepicker]="endDate"
         [min]="form.value.startDate"
         required
+        [errorStateMatcher]="datePickerErrorState(endDate)"
         formControlName="endDate"
         (focus)="endDate.open()"
       >

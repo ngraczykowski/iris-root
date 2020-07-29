@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ErrorStateMatcher, MatDatepicker } from '@angular/material';
 import * as moment from 'moment';
 
 @Component({
@@ -28,4 +29,15 @@ export class ConfigureAuditTrailComponent {
   getTodayDate() {
     return new Date();
   }
+
+  public datePickerErrorState(matDatePicker: MatDatepicker<any>): ErrorStateMatcher {
+    return {
+      isErrorState(control: FormControl | null): boolean {
+        const invalidCtrl = !!(control && control.invalid);
+        const datePickerClosed = matDatePicker && !matDatePicker.opened;
+        return invalidCtrl && control.touched && datePickerClosed;
+      }
+    };
+  }
+
 }
