@@ -16,5 +16,6 @@ export const stateEmptyList: StateContent = {
 export const stateError: StateContent = {
   title: prefix + 'state.error.title',
   description: prefix + 'state.error.description',
-  button: prefix + 'state.error.button'
+  button: prefix + 'state.error.button',
+  centered: true
 };
