@@ -12,7 +12,6 @@ import com.silenteight.proto.serp.v1.api.ListReasoningBranchesResponse;
 import com.silenteight.proto.serp.v1.common.Pagination;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.ReasoningBranchesQuery;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchFilterDto;
@@ -55,15 +54,9 @@ import static java.util.stream.Collectors.toList;
 class GrpcReasoningBranchesQuery implements
     ReasoningBranchesQuery,
     ReasoningBranchesReportQuery,
-    ReasoningBranchesValidateQuery,
-    com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.ReasoningBranchesQuery {
+    ReasoningBranchesValidateQuery {
 
   private final BranchGovernanceBlockingStub branchesStub;
-
-  @Override
-  public List<BranchDto> findBranchByTreeIdAndBranchIds(long treeId, List<Long> branchIds) {
-    return findByTreeAndBranchIds(treeId, branchIds, GrpcReasoningBranchesQuery::mapToBranchDto);
-  }
 
   @Override
   public List<BranchIdAndSignatureDto> findIdsByTreeIdAndBranchIds(
@@ -167,15 +160,6 @@ class GrpcReasoningBranchesQuery implements
 
     return signatures.contains(
         toBase64String(reasoningBranch.getFeatureVectorSignature()));
-  }
-
-  private static BranchDto mapToBranchDto(ReasoningBranchSummary reasoningBranch) {
-    return BranchDto
-        .builder()
-        .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
-        .isActive(reasoningBranch.getEnabled())
-        .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
-        .build();
   }
 
   private static BranchIdAndSignatureDto mapToBranchIdAndSignatureDto(

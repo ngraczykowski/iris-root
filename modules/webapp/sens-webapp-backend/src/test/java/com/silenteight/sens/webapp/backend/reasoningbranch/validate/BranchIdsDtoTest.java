@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest;
+package com.silenteight.sens.webapp.backend.reasoningbranch.validate;
 
 import com.silenteight.sens.webapp.backend.reasoningbranch.validate.dto.BranchIdsAndSignaturesDto;
 

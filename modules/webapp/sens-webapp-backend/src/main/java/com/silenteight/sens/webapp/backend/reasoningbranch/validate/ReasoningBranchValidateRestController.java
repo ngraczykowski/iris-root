@@ -21,7 +21,7 @@ import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
-@RestController("ReasoningBranchValidateRestController")
+@RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
 @Slf4j
