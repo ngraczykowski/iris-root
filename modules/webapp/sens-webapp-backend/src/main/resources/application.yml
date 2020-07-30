@@ -251,7 +251,8 @@ sens.web:
       className: "ai-solution-negative-1"
 
 sens.auth:
-  guardedUrlPrefix: "/api/"
+  guardedUrlPrefixes:
+    - "/api/"
   endpoints:
     - requestPath: "/api/change-requests/pending"
       requestMethod: "GET"
