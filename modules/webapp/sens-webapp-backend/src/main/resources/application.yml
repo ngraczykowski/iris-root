@@ -267,7 +267,7 @@ sens.auth:
       permissions:
         - "VIEW_BULK_CHANGES"
 
-permissions.rolePermissionsMappings:
+sens.permissions.rolePermissionsMappings:
   ADMIN:
     - "VIEW_PENDING_CHANGES"
     - "VIEW_REASONING_BEANCHES"
