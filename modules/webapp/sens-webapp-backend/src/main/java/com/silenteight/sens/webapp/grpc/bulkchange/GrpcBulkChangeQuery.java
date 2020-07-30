@@ -14,7 +14,6 @@ import com.silenteight.proto.serp.v1.api.ListBulkBranchChangesRequest.StateFilte
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningBranchDto;
-import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeQuery;
 import com.silenteight.sens.webapp.backend.bulkchange.closed.ClosedBulkChangeQuery;
 import com.silenteight.sens.webapp.backend.bulkchange.pending.PendingBulkChangeQuery;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
@@ -46,8 +45,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class GrpcBulkChangeQuery
-    implements BulkChangeQuery, ClosedBulkChangeQuery, PendingBulkChangeQuery {
+class GrpcBulkChangeQuery implements ClosedBulkChangeQuery, PendingBulkChangeQuery {
 
   public static final List<State> PENDING_STATES = of(STATE_CREATED);
   public static final List<State> CLOSED_STATES = of(STATE_APPLIED, STATE_REJECTED);
@@ -132,13 +130,25 @@ class GrpcBulkChangeQuery
   }
 
   @Override
-  public List<BulkChangeIdsForReasoningBranchDto> getIds(
+  public List<BulkChangeIdsForReasoningBranchDto> getIdsOfPending(
       List<ReasoningBranchIdDto> reasoningBranchIds) {
+    return this.getIds(reasoningBranchIds, PENDING_STATES);
+  }
+
+  @Override
+  public List<BulkChangeIdsForReasoningBranchDto> getIdsOfClosed(
+      List<ReasoningBranchIdDto> reasoningBranchIds) {
+    return this.getIds(reasoningBranchIds, CLOSED_STATES);
+  }
+
+  private List<BulkChangeIdsForReasoningBranchDto> getIds(
+      List<ReasoningBranchIdDto> reasoningBranchIds,
+      List<State> states) {
 
     ListBulkBranchChangesRequest request =
         ListBulkBranchChangesRequest
             .newBuilder()
-            .setStateFilter(filterWith(PENDING_STATES))
+            .setStateFilter(filterWith(states))
             .setReasoningBranchFilter(buildReasoningBranchFilter(reasoningBranchIds))
             .build();
 

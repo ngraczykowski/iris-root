@@ -27,7 +27,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State.STATE_APPLIED;
 import static com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State.STATE_CREATED;
+import static com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State.STATE_REJECTED;
 import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_FALSE_POSITIVE;
 import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
@@ -50,6 +52,7 @@ class GrpcBulkChangeQueryTest {
 
   @BeforeEach
   void setUp() {
+    bulkBranchChangeStub = mock(BulkBranchChangeGovernanceBlockingStub.class);
     bulkChangeQuery = new GrpcBulkChangeQuery(bulkBranchChangeStub);
   }
 
@@ -128,7 +131,7 @@ class GrpcBulkChangeQueryTest {
   }
 
   @Test
-  void returnsBulkChangeIds() {
+  void returnsPendingBulkChangeIds() {
     UUID bulkChangeId1 = randomUUID();
     UUID bulkChangeId2 = randomUUID();
     UUID bulkChangeId3 = randomUUID();
@@ -145,7 +148,7 @@ class GrpcBulkChangeQueryTest {
 
     when(bulkBranchChangeStub.listBulkBranchChanges(
         withStateAndReasoningBranchIds(
-            STATE_CREATED,
+            List.of(STATE_CREATED),
             List.of(reasoningBranchId1, reasoningBranchId2))))
         .thenReturn(
             listBulkBranchChangesResponseWith(
@@ -163,7 +166,58 @@ class GrpcBulkChangeQueryTest {
                     reasoningBranchIdOf(decisionTreeId2, featureVectorId4))));
 
     List<BulkChangeIdsForReasoningBranchDto> bulkChangeIds =
-        bulkChangeQuery.getIds(
+        bulkChangeQuery.getIdsOfPending(
+            List.of(
+                new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1),
+                new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2)));
+
+    assertThat(bulkChangeIds).hasSize(2);
+    assertThat(bulkChangeIds).containsExactly(
+        new BulkChangeIdsForReasoningBranchDto(
+            new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1),
+            List.of(bulkChangeId1, bulkChangeId2)),
+        new BulkChangeIdsForReasoningBranchDto(
+            new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2),
+            List.of(bulkChangeId2, bulkChangeId3)));
+  }
+
+  @Test
+  void returnsClosedBulkChangeIds() {
+    UUID bulkChangeId1 = randomUUID();
+    UUID bulkChangeId2 = randomUUID();
+    UUID bulkChangeId3 = randomUUID();
+    long decisionTreeId1 = 1L;
+    long decisionTreeId2 = 2L;
+    long featureVectorId1 = 12L;
+    long featureVectorId2 = 15L;
+    long featureVectorId3 = 13L;
+    long featureVectorId4 = 25L;
+    ReasoningBranchId reasoningBranchId1 =
+        reasoningBranchIdOf(decisionTreeId1, featureVectorId1).build();
+    ReasoningBranchId reasoningBranchId2 =
+        reasoningBranchIdOf(decisionTreeId2, featureVectorId2).build();
+
+    when(bulkBranchChangeStub.listBulkBranchChanges(
+        withStateAndReasoningBranchIds(
+            List.of(STATE_REJECTED, STATE_APPLIED),
+            List.of(reasoningBranchId1, reasoningBranchId2))))
+        .thenReturn(
+            listBulkBranchChangesResponseWith(
+                bulkBranchChangeViewWith(
+                    bulkChangeId1, true, BRANCH_FALSE_POSITIVE,
+                    reasoningBranchIdOf(decisionTreeId1, featureVectorId1),
+                    reasoningBranchIdOf(decisionTreeId1, featureVectorId3)),
+                bulkBranchChangeViewWith(
+                    bulkChangeId2, true, BRANCH_FALSE_POSITIVE,
+                    reasoningBranchIdOf(decisionTreeId1, featureVectorId1),
+                    reasoningBranchIdOf(decisionTreeId2, featureVectorId2)),
+                bulkBranchChangeViewWith(
+                    bulkChangeId3, false, BRANCH_POTENTIAL_TRUE_POSITIVE,
+                    reasoningBranchIdOf(decisionTreeId2, featureVectorId2),
+                    reasoningBranchIdOf(decisionTreeId2, featureVectorId4))));
+
+    List<BulkChangeIdsForReasoningBranchDto> bulkChangeIds =
+        bulkChangeQuery.getIdsOfClosed(
             List.of(
                 new ReasoningBranchIdDto(decisionTreeId1, featureVectorId1),
                 new ReasoningBranchIdDto(decisionTreeId2, featureVectorId2)));
@@ -184,7 +238,7 @@ class GrpcBulkChangeQueryTest {
     when(bulkBranchChangeStub.listBulkBranchChanges(any())).thenThrow(
         OTHER_STATUS_RUNTIME_EXCEPTION);
 
-    ThrowingCallable featureNamesCall = () -> bulkChangeQuery.getIds(reasoningBranchIds);
+    ThrowingCallable featureNamesCall = () -> bulkChangeQuery.getIdsOfPending(reasoningBranchIds);
 
     assertThatThrownBy(featureNamesCall).isInstanceOf(GrpcCommunicationException.class);
   }
@@ -236,11 +290,11 @@ class GrpcBulkChangeQueryTest {
   }
 
   private ListBulkBranchChangesRequest withStateAndReasoningBranchIds(
-      State state, Collection<ReasoningBranchId> reasoningBranchIds) {
+      List<State> states, Collection<ReasoningBranchId> reasoningBranchIds) {
 
     return argThat(r ->
-        r.getStateFilter().getStatesList().size() == 1
-            && r.getStateFilter().getStatesList().contains(state)
+        r.getStateFilter().getStatesList().size() == states.size()
+            && r.getStateFilter().getStatesList().containsAll(states)
             && r.getReasoningBranchFilter().getReasoningBranchIdsList().size() == 2
             && r.getReasoningBranchFilter().getReasoningBranchIdsList()
             .containsAll(reasoningBranchIds));

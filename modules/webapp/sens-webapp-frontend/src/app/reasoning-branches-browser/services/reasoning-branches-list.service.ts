@@ -26,7 +26,10 @@ export class ReasoningBranchesListService {
 
   getBulkChangesIds(branches): Observable<Array<BulkChangesResponse>> {
     const params = this.generateBulkChangeParams(branches);
-    return this.http.get<Array<BulkChangesResponse>>(`${environment.serverApiUrl}/bulk-changes/ids?reasoningBranchId=${params}`);
+    return this.http.get<Array<BulkChangesResponse>>(
+        `${environment.serverApiUrl}/bulk-changes/ids`
+        + `?reasoningBranchId=${params}`
+        + `&statesFamily=pending`);
   }
 
   private generateBulkChangeParams(branches) {
@@ -38,7 +41,8 @@ export class ReasoningBranchesListService {
   }
 
   getPendingChanges(): Observable<Array<PendingChangesResponse>> {
-    return this.http.get<Array<PendingChangesResponse>>(`${environment.serverApiUrl}/change-requests?statesFamily=pending`);
+    return this.http.get<Array<PendingChangesResponse>>(
+        `${environment.serverApiUrl}/change-requests?statesFamily=pending`);
   }
 
   getReasoningBranchesList(request: ReasoningBranchesListRequest): Observable<ReasoningBranchesListResponse> {
