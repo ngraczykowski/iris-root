@@ -27,8 +27,6 @@ export class ChangeRequestService {
     CorrelationId: uuidv4()
   };
 
-  whiteChar = '\n';
-
   constructor(
       private http: HttpClient
   ) { }
@@ -126,22 +124,6 @@ export class ChangeRequestService {
         ...this.correlationIdHeader
       }
     });
-  }
-
-  parseBranchIds(payload: string) {
-    return this.removeEmptyElements(
-        payload.split(this.whiteChar).map(id => parseInt(id, 0))
-    );
-  }
-
-  parseFeatureVectorSignatures(payload: string) {
-    return this.removeEmptyElements(
-        payload.split(this.whiteChar)
-    );
-  }
-
-  removeEmptyElements(array) {
-    return array.filter(Boolean);
   }
 
   resetService() {
