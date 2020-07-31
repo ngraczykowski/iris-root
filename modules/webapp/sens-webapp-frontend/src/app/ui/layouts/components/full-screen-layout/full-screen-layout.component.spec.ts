@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ErrorPageComponent } from '@app/pages/error-page/error-page.component';
+import { FullScreenLayoutComponent } from './full-screen-layout.component';
 
-describe('ErrorPageComponent', () => {
-  let component: ErrorPageComponent;
-  let fixture: ComponentFixture<ErrorPageComponent>;
+describe('FullScreenLayoutComponent', () => {
+  let component: FullScreenLayoutComponent;
+  let fixture: ComponentFixture<FullScreenLayoutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrorPageComponent ]
+      declarations: [ FullScreenLayoutComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ErrorPageComponent);
+    fixture = TestBed.createComponent(FullScreenLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

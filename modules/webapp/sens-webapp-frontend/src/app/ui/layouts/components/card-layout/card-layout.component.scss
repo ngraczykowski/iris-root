@@ -1,0 +1,16 @@
+@import 'abstracts/8-pt-grid';
+
+:host {
+  text-align: center;
+}
+
+.card-layout {
+  &__image {
+    display: flex;
+    justify-content: center;
+    margin-bottom: calculate-8-pt-grid(4);
+  }
+  &__panel {
+    margin-top: calculate-8-pt-grid(3);
+  }
+}

@@ -4,7 +4,6 @@ import { ChangeRequestComponent } from '@app/change-request/containers/change-re
 import { CircuitBreakerBranchListComponent } from '@app/circuit-breaker-dashboard/containers/circuit-breaker-branch-list/circuit-breaker-branch-list.component';
 import { CircuitBreakerDashboardComponent } from '@app/circuit-breaker-dashboard/containers/circuit-breaker-dashboard/circuit-breaker-dashboard.component';
 import { CircuitBreakerDiscrepancyStatus } from '@app/circuit-breaker-dashboard/models/circuit-breaker';
-import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
 import { PendingChangesTabsContainerComponent } from '@app/pending-changes/containers/pending-changes-tabs-container/pending-changes-tabs-container.component';
 import { PendingChangesComponent } from '@app/pending-changes/containers/pending-changes/pending-changes.component';
 import { PendingChangesStatus } from '@app/pending-changes/models/pending-changes';
@@ -13,14 +12,6 @@ import { ReasoningBranchesReportComponent } from '@app/reasoning-branches-report
 import { AuthenticationGuard } from '@app/shared/security/guard/authentication-guard.service';
 import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.component';
 import { UsersReportComponent } from '@app/users-report/containers/users-report/users-report.component';
-import { ExternalComponent } from './layout/external/external.component';
-
-import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
-import { ErrorPageComponent } from './pages/error-page/error-page.component';
-import { InternalServerErrorComponent } from './pages/internal-server-error/internal-server-error.component';
-import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
-
-import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { SecurityMatrixComponent } from './templates/audit-trail/audit-trail.component';
 import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
@@ -175,34 +166,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: ExternalComponent,
-    children: [
-      {
-        path: '404',
-        component: PageNotFoundComponent,
-      },
-      {
-        path: '403',
-        component: AccessDeniedComponent,
-        canActivate: [AuthenticationGuard]
-      },
-      {
-        path: '401',
-        component: NotAuthenticatedComponent,
-      },
-      {
-        path: 'maintenance',
-        component: MaintenanceComponent,
-      },
-      {
-        path: '500',
-        component: InternalServerErrorComponent,
-      },
-      {
-        path: 'error-page',
-        component: ErrorPageComponent,
-      }
-    ]
+    loadChildren: './warnings/warnings.module#WarningsModule'
   },
   {
     path: '**',

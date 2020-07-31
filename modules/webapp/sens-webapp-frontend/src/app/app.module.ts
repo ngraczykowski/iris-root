@@ -1,5 +1,5 @@
 import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatDialogModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { AppBarModule } from '@app/app-bar/app-bar.module';
@@ -12,13 +12,6 @@ import { PendingChangesModule } from '@app/pending-changes/pending-changes.modul
 import { ChangeRequestModule } from '@app/change-request/change-request.module';
 import { BriefMessageComponent } from '@app/components/brief-message/brief-message.component';
 import { ErrorWindowComponent } from '@app/components/communication-error/error-window.component';
-import { ExternalComponent } from '@app/layout/external/external.component';
-import { AccessDeniedComponent } from '@app/pages/access-denied/access-denied.component';
-import { ErrorPageComponent } from '@app/pages/error-page/error-page.component';
-import { InternalServerErrorComponent } from '@app/pages/internal-server-error/internal-server-error.component';
-import { MaintenanceComponent } from '@app/pages/maintenance/maintenance.component';
-import { NotAuthenticatedComponent } from '@app/pages/not-authenticated/not-authenticated.component';
-import { PageNotFoundComponent } from '@app/pages/page-not-found/page-not-found.component';
 import { ReasoningBranchesBrowserModule } from '@app/reasoning-branches-browser/reasoning-branches-browser.module';
 import { ReasoningBranchesReportModule } from '@app/reasoning-branches-report/reasoning-branches-report.module';
 import { KeycloakInitializer } from '@app/shared/security/bootstrap/keycloak-initializer';
@@ -32,6 +25,7 @@ import { UsersReportModule } from '@app/users-report/users-report.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { TranslateModule } from '@ngx-translate/core';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { concat, Observable } from 'rxjs';
 import { reducers } from './reducers';
@@ -41,15 +35,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
-    AccessDeniedComponent,
-    NotAuthenticatedComponent,
     BriefMessageComponent,
-    ErrorWindowComponent,
-    PageNotFoundComponent,
-    ExternalComponent,
-    MaintenanceComponent,
-    ErrorPageComponent,
-    InternalServerErrorComponent
+    ErrorWindowComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -69,6 +56,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SidenavModule,
     MatSidenavModule,
     MatDialogModule,
+    MatButtonModule,
     ChangeRequestModule,
     SecurityMatrixModule,
     PendingChangesModule,
@@ -76,7 +64,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CircuitBreakerDashboardModule,
     ReasoningBranchesReportModule,
     ReasoningBranchesBrowserModule,
-    UsersReportModule
+    UsersReportModule,
+    TranslateModule
   ],
   providers: [
     WINDOW_PROVIDERS,

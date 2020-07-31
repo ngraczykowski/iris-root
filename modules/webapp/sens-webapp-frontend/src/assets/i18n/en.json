@@ -622,30 +622,32 @@
     }
   },
   "error-page": {
-    "page-not-found": {
-      "title": "This page could not be found",
-      "description": "This page does not exist or you do not have permission to view this page.",
-      "button": "Go back to the previous page"
+    "title": {
+      "default": "This page could not be found",
+      "403": "You don't have permission to view this page",
+      "401": "You aren't authenticated",
+      "maintenance": "Silent Eight is currently down for the scheduled update.",
+      "500": "Internal Server Error"
     },
-    "access-denied": {
-      "title": "You don't have permission to view this page",
-      "description": "Contact your administrator to request permission to view this page.",
-      "button": {
-        "openHome": "Return to home page",
+    "description": {
+      "default": "This page does not exist or you do not have permission to view this page.",
+      "403": "Contact your administrator to request permission to view this page.",
+      "401": "To access this page you need to be authenticated. Please log in.",
+      "maintenance": "The application will automatically be loaded when Silent Eight will be ready.",
+      "500": "Something went wrong. Please try again later."
+    },
+    "buttons": {
+      "default": {
+        "goBack": "Go back to the previous page"
+      },
+      "403": {
+        "return": "Return to home page",
         "signOut": "Sign out of SENS"
-      }
-    },
-    "not-authenticated": {
-      "title": "You aren't authenticated",
-      "description": "To access this page you need to be authenticated. Please log in.",
-      "button": {
-        "login": "Log in to SENS"
+      },
+      "401": {
+        "logIn": "Log in to SENS"
       }
     }
-  },
-  "maintenance": {
-    "title": "Silent Eight is currently down for the scheduled update.",
-    "description": "The application will automatically be loaded when Silent Eight will be ready."
   },
   "loading": {
     "loadingLabel": "Loading",

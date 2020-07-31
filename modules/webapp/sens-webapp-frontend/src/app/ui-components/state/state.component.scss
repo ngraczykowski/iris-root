@@ -1,28 +1,15 @@
 @import 'abstracts/8-pt-grid';
 
-.state {
+:host {
   margin: auto;
   margin-bottom: calculate-8-pt-grid(4);
-  text-align: center;
+}
 
-  &--centered {
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(1.0, 1.0);
-    -webkit-font-smoothing: subpixel-antialiased;
-    backface-visibility: hidden;
-  }
-
-  &__image {
-    margin-bottom: calculate-8-pt-grid(4);
-
-    * {
-      margin: auto;
-    }
-  }
-
-  &__button {
-    margin-top: calculate-8-pt-grid(3);
-  }
+.card-layout--centered {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.0, 1.0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  backface-visibility: hidden;
 }
