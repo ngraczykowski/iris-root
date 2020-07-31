@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 public interface UpdatedUserRepository {
 
-  void save(UpdatedUser updatedUser) throws UserUpdateException;
+  void save(UpdatedUser updatedUser);
 
   class UserUpdateException extends RuntimeException {
 

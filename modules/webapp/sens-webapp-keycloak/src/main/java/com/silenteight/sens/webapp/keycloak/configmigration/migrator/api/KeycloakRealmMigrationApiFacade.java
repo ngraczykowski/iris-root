@@ -40,8 +40,9 @@ class KeycloakRealmMigrationApiFacade implements KeycloakRealmMigrationApi {
     }
   }
 
-  private void setImportPolicyIfNull(
+  private static void setImportPolicyIfNull(
       PartialImportRepresentation partialImportRepresentation, Policy importPolicy) {
+
     if (partialImportRepresentation.getIfResourceExists() == null)
       partialImportRepresentation.setIfResourceExists(importPolicy.name());
   }

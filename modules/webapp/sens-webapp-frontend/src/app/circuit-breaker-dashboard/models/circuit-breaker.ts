@@ -1,9 +1,9 @@
 export interface DiscrepantBranchesResponse {
-  branchId: DiscrepantBranchDetails;
+  branchId: DiscrepantBranchId;
   detectedAt: string;
 }
 
-export interface DiscrepantBranchDetails {
+export interface DiscrepantBranchId {
   decisionTreeId: number;
   featureVectorId: number;
 }
@@ -15,4 +15,9 @@ export interface DiscrepanciesList {
   aiCommentDate: string;
   analystComment: string;
   analystCommentDate: string;
+}
+
+export enum CircuitBreakerDiscrepancyStatus {
+  ACTIVE = 'ACTIVE',
+  ARCHIVED = 'ARCHIVED'
 }

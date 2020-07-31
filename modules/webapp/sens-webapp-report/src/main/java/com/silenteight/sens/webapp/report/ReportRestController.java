@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.common.rest.Authority;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.support.csv.CsvResponseWriter;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,7 +26,6 @@ class ReportRestController {
   private final ReportProvider reportProvider;
 
   @GetMapping("/reports/{reportName}")
-  @PreAuthorize(Authority.ANY_ROLE_EXCEPT_ANALYST)
   public void getReport(
       HttpServletResponse response,
       @PathVariable String reportName,

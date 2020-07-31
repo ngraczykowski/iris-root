@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
+import { AiSolutionsModule } from '@core/ai-solutions/ai-solutions.module';
 import { DecisionTreesModule } from '@core/decision-trees/decision-trees.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChangeRequestComponent } from './containers/change-request/change-request.component';
@@ -56,7 +57,8 @@ import { SharedModule } from '@app/shared/shared.module';
     MatTooltipModule,
     MatDialogModule,
     SharedModule,
-    DecisionTreesModule
+    DecisionTreesModule,
+    AiSolutionsModule
   ],
   entryComponents: [
     RbVerificationDialogComponent,

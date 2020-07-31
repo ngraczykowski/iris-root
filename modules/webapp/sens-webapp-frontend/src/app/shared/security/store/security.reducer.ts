@@ -1,23 +1,7 @@
-import { Principal } from '@app/shared/security/principal.model';
-import { Action, createReducer, on } from '@ngrx/store';
+import { initialState, SecurityState } from '@app/shared/security/store/security.state';
 import { SecurityActions, SecurityActionTypes } from './security.actions';
 
-export interface State {
-  principal: Principal;
-  isLoggedIn: boolean;
-  processing: boolean;
-  error: any;
-}
-
-export const initialState: State = {
-  principal: null,
-  isLoggedIn: false,
-  processing: false,
-  error: null
-};
-
-
-export function reducer(state = initialState, action: SecurityActions): State {
+export function reducer(state = initialState, action: SecurityActions): SecurityState {
   switch (action.type) {
     case SecurityActionTypes.loginSuccess:
       return {
@@ -68,6 +52,11 @@ export function reducer(state = initialState, action: SecurityActions): State {
       return {
         ...state,
         principal: action.payload
+      };
+    case SecurityActionTypes.setSessionExpireTime:
+      return {
+        ...state,
+        sessionExpireTime: action.time
       };
   }
 }

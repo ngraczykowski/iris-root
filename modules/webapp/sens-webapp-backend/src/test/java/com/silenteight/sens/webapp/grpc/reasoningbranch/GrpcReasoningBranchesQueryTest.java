@@ -6,7 +6,6 @@ import com.silenteight.proto.serp.v1.common.Page;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary.Builder;
-import com.silenteight.sens.webapp.backend.deprecated.reasoningbranch.rest.BranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchFilterDto;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
@@ -18,7 +17,6 @@ import com.silenteight.sens.webapp.backend.support.Paging;
 import com.silenteight.sens.webapp.grpc.GrpcCommunicationException;
 
 import com.google.protobuf.ByteString;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +30,6 @@ import static com.silenteight.proto.serp.v1.recommendation.BranchSolution.BRANCH
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.NOT_FOUND_RUNTIME_EXCEPTION;
 import static com.silenteight.sens.webapp.grpc.GrpcFixtures.OTHER_STATUS_RUNTIME_EXCEPTION;
-import static com.silenteight.sens.webapp.grpc.reasoningbranch.GrpcReasoningBranchesQueryTestFixtures.*;
 import static com.silenteight.sens.webapp.grpc.util.ByteStringTestUtils.randomSignature;
 import static com.silenteight.sep.base.common.protocol.ByteStringUtils.toBase64String;
 import static java.util.Arrays.stream;
@@ -53,40 +50,6 @@ class GrpcReasoningBranchesQueryTest {
   @BeforeEach
   void setUp() {
     underTest = new GrpcReasoningBranchesQuery(branchStub);
-  }
-
-  @Test
-  void returnsEmptyList_whenGrpcThrowsNotFoundStatusException() {
-    given(branchStub.listReasoningBranches(any())).willThrow(NOT_FOUND_RUNTIME_EXCEPTION);
-
-    List<BranchDto> actual =
-        underTest.findBranchByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
-
-    assertThat(actual).isEmpty();
-  }
-
-  @Test
-  void throwsGrpcCommunicationException_whenGrpcThrowsOtherThanNotFoundStatusException() {
-    given(branchStub.listReasoningBranches(any())).willThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
-
-    ThrowingCallable when = () ->
-        underTest.findBranchByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
-
-    assertThatThrownBy(when).isInstanceOf(GrpcCommunicationException.class);
-  }
-
-  @Test
-  void returnsCorrectBranchDetails_whenRequestingEnabledBranch() {
-    given(branchStub.listReasoningBranches(LIST_REASONING_BRANCHES_REQUEST)).willReturn(
-        LIST_REASONING_BRANCHES_RESPONSE);
-
-    List<BranchDto> actual =
-        underTest.findBranchByTreeIdAndBranchIds(DECISION_TREE_ID, REASONING_BRANCH_IDS);
-
-    assertThat(actual).hasSize(1);
-    assertThat(actual)
-        .extracting(BranchDto::getReasoningBranchId)
-        .containsOnly(EXISTING_REASONING_BRANCH_ID);
   }
 
   @Test
@@ -126,17 +89,19 @@ class GrpcReasoningBranchesQueryTest {
 
   @Test
   void throwsException_whenGrpcThrowsNotFoundStatusException_requestingByTreeId() {
+    long decisionTreeId = 2;
     given(branchStub.listReasoningBranches(any())).willThrow(NOT_FOUND_RUNTIME_EXCEPTION);
 
-    assertThatThrownBy(() -> underTest.findByTreeId(DECISION_TREE_ID))
+    assertThatThrownBy(() -> underTest.findByTreeId(decisionTreeId))
         .isInstanceOf(DecisionTreeNotFoundException.class);
   }
 
   @Test
   void throwsGrpcException_whenGrpcThrowsOtherThanNotFoundStatusException_requestingByTreeId() {
+    long decisionTreeId = 2;
     given(branchStub.listReasoningBranches(any())).willThrow(OTHER_STATUS_RUNTIME_EXCEPTION);
 
-    assertThatThrownBy(() -> underTest.findByTreeId(DECISION_TREE_ID))
+    assertThatThrownBy(() -> underTest.findByTreeId(decisionTreeId))
         .isInstanceOf(GrpcCommunicationException.class);
   }
 

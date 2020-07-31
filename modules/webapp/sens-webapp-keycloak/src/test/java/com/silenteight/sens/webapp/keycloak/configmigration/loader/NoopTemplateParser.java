@@ -6,8 +6,7 @@ import com.silenteight.sens.webapp.keycloak.configmigration.loader.template.Keyc
 class NoopTemplateParser implements KeycloakConfigTemplateParser {
 
   @Override
-  public String parse(String template, KeycloakTemplateProperties properties)
-      throws CouldNotProcessTemplateException {
+  public String parse(String template, KeycloakTemplateProperties properties) {
     return template;
   }
 }

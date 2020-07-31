@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.TemporaryPasswordDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDto;
-import com.silenteight.sens.webapp.common.rest.Authority;
 import com.silenteight.sens.webapp.user.RolesQuery;
 import com.silenteight.sens.webapp.user.UserQuery;
 import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
@@ -30,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -71,7 +69,6 @@ class UserRestController {
   private final RolesQuery rolesQuery;
 
   @GetMapping
-  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public Page<UserDto> users(Pageable pageable) {
     log.info(USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
@@ -81,7 +78,6 @@ class UserRestController {
   }
 
   @PostMapping
-  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.info(USER_MANAGEMENT, "Creating new User. dto={}", dto);
 
@@ -101,7 +97,6 @@ class UserRestController {
   }
 
   @PatchMapping("/{username}")
-  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<Void> update(
       @PathVariable String username, @Valid @RequestBody UpdateUserDto dto) {
     log.info(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
@@ -127,7 +122,6 @@ class UserRestController {
   }
 
   @PatchMapping("/{username}/password/reset")
-  @PreAuthorize(Authority.ADMIN_OR_ADMINISTRATOR)
   public ResponseEntity<TemporaryPasswordDto> resetPassword(@PathVariable String username) {
     log.info(USER_MANAGEMENT, "Resetting password for a user. username={}", username);
     Try<TemporaryPassword> result = Try.of(() -> resetPasswordUseCase.execute(username));

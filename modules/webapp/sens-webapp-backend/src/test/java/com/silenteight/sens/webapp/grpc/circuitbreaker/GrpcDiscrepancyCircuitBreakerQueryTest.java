@@ -75,7 +75,8 @@ class GrpcDiscrepancyCircuitBreakerQueryTest {
     long featureVectorId2 = 13L;
     Instant detectedAt2 = now();
 
-    when(discrepancyBlockingStub.listBranchesWithArchivedDiscrepancies(any(Empty.class)))
+    when(discrepancyBlockingStub.listBranchesWithArchivedDiscrepancies(
+        any(ListDiscrepantBranchesRequest.class)))
         .thenReturn(
             discrepantBranchesResponseWith(
                 discrepantBranchWith(

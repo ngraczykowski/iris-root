@@ -11,27 +11,8 @@ import org.springframework.context.annotation.Configuration;
 class GrpcReasoningBranchConfiguration {
 
   @Bean
-  GrpcReasoningBranchDetailsQuery grpcReasoningBranchDetailsQuery(
-      @Qualifier("governance") Channel channel) {
-
-    return new GrpcReasoningBranchDetailsQuery(
-        BranchGovernanceGrpc
-            .newBlockingStub(channel)
-            .withWaitForReady());
-  }
-
-  @Bean
   GrpcReasoningBranchesQuery grpcReasoningBranchesQuery(@Qualifier("governance") Channel channel) {
     return new GrpcReasoningBranchesQuery(
-        BranchGovernanceGrpc
-            .newBlockingStub(channel)
-            .withWaitForReady());
-  }
-
-  @Bean
-  GrpcReasoningBranchUpdateRepository grpcReasoningBranchUpdateRepository(
-      @Qualifier("governance") Channel channel) {
-    return new GrpcReasoningBranchUpdateRepository(
         BranchGovernanceGrpc
             .newBlockingStub(channel)
             .withWaitForReady());

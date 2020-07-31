@@ -1,0 +1,14 @@
+<h1 class="mat-dialog-title">{{ 'session-expires-warning.dialog.title' | translate : { min: minutes, sec: seconds } }}</h1>
+<div mat-dialog-content>
+  <p class="mat-body">
+    {{ 'session-expires-warning.dialog.description' | translate }}
+  </p>
+</div>
+<div mat-dialog-actions>
+  <button (click)="logout()" mat-button color="primary">
+    {{'session-expires-warning.dialog.logout-button' | translate}}
+  </button>
+  <button (click)="extend()" mat-flat-button color="primary">
+    {{'session-expires-warning.dialog.extend-button' | translate}}
+   </button>
+</div>

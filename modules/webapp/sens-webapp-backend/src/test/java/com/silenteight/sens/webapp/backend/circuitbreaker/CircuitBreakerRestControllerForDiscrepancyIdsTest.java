@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
+import static com.silenteight.sens.webapp.backend.circuitbreaker.DiscrepancyStatus.ACTIVE;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
@@ -29,7 +30,7 @@ import static org.springframework.http.HttpStatus.OK;
 class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControllerTest {
 
   private static final String DISCREPANCY_IDS_URL_TEMPLATE =
-      "/discrepant-branches/%s/discrepancy-ids?archived=%s";
+      "/discrepant-branches/%s/discrepancy-ids?discrepancyStatuses=%s";
 
   private static final String DISCREPANCY_IDS_WITHOUT_REQUIRED_PARAM_URL_TEMPLATE =
       "/discrepant-branches/%s/discrepancy-ids";
@@ -43,8 +44,6 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
   @Nested
   class DiscrepancyIdsList {
 
-    private static final boolean ACTIVE = false;
-
     @TestWithRole(roles = { BUSINESS_OPERATOR })
     void its200WithEmptyListWhenNoDiscrepancyIds() {
       long decisionTreeId = 1L;
@@ -52,7 +51,7 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
       given(query.listDiscrepancyIds(
           new ReasoningBranchIdDto(decisionTreeId, featureVectorId))).willReturn(emptyList());
 
-      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId, true))
+      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId))
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(0));
@@ -65,7 +64,7 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
       given(query.listDiscrepancyIds(
           new ReasoningBranchIdDto(decisionTreeId, featureVectorId))).willReturn(List.of(22L, 33L));
 
-      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId, ACTIVE))
+      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId))
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(2))
@@ -75,11 +74,11 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })
     void its400_whenBranchIdIncorrect() {
-      get(discrepancyIdsUrlWith("abc", ACTIVE))
+      get(discrepancyIdsUrlWith("abc"))
           .contentType(anything())
           .statusCode(BAD_REQUEST.value());
 
-      get(discrepancyIdsUrlWith("abc-bcd", ACTIVE))
+      get(discrepancyIdsUrlWith("abc-bcd"))
           .contentType(anything())
           .statusCode(BAD_REQUEST.value());
     }
@@ -92,21 +91,19 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
     }
 
     private String discrepancyIdsUrlWith(
-        long decisionTreeId, long featureVectorId, boolean archiveParam) {
+        long decisionTreeId, long featureVectorId) {
       return format(
           DISCREPANCY_IDS_URL_TEMPLATE,
-          format("%d-%d", decisionTreeId, featureVectorId), archiveParam);
+          format("%d-%d", decisionTreeId, featureVectorId), ACTIVE);
     }
 
-    private String discrepancyIdsUrlWith(String branchId, boolean archiveParam) {
-      return format(DISCREPANCY_IDS_URL_TEMPLATE, branchId, archiveParam);
+    private String discrepancyIdsUrlWith(String branchId) {
+      return format(DISCREPANCY_IDS_URL_TEMPLATE, branchId, ACTIVE);
     }
   }
 
   @Nested
   class ArchivedDiscrepancyIdsList {
-
-    private static final boolean ARCHIVED = true;
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })
     void its200WithEmptyListWhenNoDiscrepancyIds() {
@@ -115,7 +112,7 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
       given(query.listArchivedDiscrepancyIds(
           new ReasoningBranchIdDto(decisionTreeId, featureVectorId))).willReturn(emptyList());
 
-      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId, ARCHIVED))
+      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId))
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(0));
@@ -128,7 +125,7 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
       given(query.listArchivedDiscrepancyIds(
           new ReasoningBranchIdDto(decisionTreeId, featureVectorId))).willReturn(List.of(22L, 33L));
 
-      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId, ARCHIVED))
+      get(discrepancyIdsUrlWith(decisionTreeId, featureVectorId))
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(2))
@@ -138,23 +135,24 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })
     void its400_whenBranchIdIncorrect() {
-      get(discrepancyIdsUrlWith("abc", ARCHIVED))
+      get(discrepancyIdsUrlWith("abc"))
           .contentType(anything())
           .statusCode(BAD_REQUEST.value());
 
-      get(discrepancyIdsUrlWith("abc-bcd", ARCHIVED))
+      get(discrepancyIdsUrlWith("abc-bcd"))
           .contentType(anything())
           .statusCode(BAD_REQUEST.value());
     }
 
     private String discrepancyIdsUrlWith(
-        long decisionTreeId, long featureVectorId, boolean archived) {
+        long decisionTreeId, long featureVectorId) {
       return format(
-          DISCREPANCY_IDS_URL_TEMPLATE, format("%d-%d", decisionTreeId, featureVectorId), archived);
+          DISCREPANCY_IDS_URL_TEMPLATE,
+          format("%d-%d", decisionTreeId, featureVectorId), DiscrepancyStatus.ARCHIVED);
     }
 
-    private String discrepancyIdsUrlWith(String branchId, boolean archived) {
-      return format(DISCREPANCY_IDS_URL_TEMPLATE, branchId, archived);
+    private String discrepancyIdsUrlWith(String branchId) {
+      return format(DISCREPANCY_IDS_URL_TEMPLATE, branchId, DiscrepancyStatus.ARCHIVED);
     }
   }
 
@@ -163,7 +161,7 @@ class CircuitBreakerRestControllerForDiscrepancyIdsTest extends BaseRestControll
 
     @TestWithRole(roles = { ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
-      get(format(DISCREPANCY_IDS_URL_TEMPLATE, "1-1", false)).statusCode(FORBIDDEN.value());
+      get(format(DISCREPANCY_IDS_URL_TEMPLATE, "1-1", ACTIVE)).statusCode(FORBIDDEN.value());
     }
 
     @TestWithRole(roles = { BUSINESS_OPERATOR })

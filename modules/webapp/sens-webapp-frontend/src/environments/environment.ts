@@ -93,25 +93,11 @@ export const environment = {
 
   tablePagination: {
     firstPage: 0,
-    rowsPerPage: [20, 50, 100],
-    defaultPageSize: 20
+    rowsPerPage: [10, 25, 50],
+    defaultPageSize: 10
   },
 
   dateFormatting: 'yyyy-MM-dd HH:mm:ss',
 
-  aiSolutions: [
-    {
-      label: 'aiSolutions.falsePositive',
-      value: 'FALSE_POSITIVE'
-    },
-    {
-      label: 'aiSolutions.potentialTruePositive',
-      value: 'POTENTIAL_TRUE_POSITIVE'
-    },
-    {
-      label: 'aiSolutions.noDecision',
-      value: 'NO_DECISION'
-    }
-  ]
 };
 

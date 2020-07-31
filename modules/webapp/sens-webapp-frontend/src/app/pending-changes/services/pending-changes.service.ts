@@ -4,11 +4,13 @@ import { ChangeRequestDecisionRequestBody } from '@app/pending-changes/models/ch
 import { ChangeRequestDecision } from '@app/pending-changes/models/change-request-decision.enum';
 import {
   BulkChangeResponse,
-  PendingChangeResponse
+  PendingChange,
+  PendingChangeResponse,
+  PendingChangesStatus
 } from '@app/pending-changes/models/pending-changes';
 import { environment } from '@env/environment';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { forkJoin, Observable, Subject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -16,38 +18,52 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class PendingChangesService {
 
+  queuedPendingChangesCount: Subject<number> = new Subject<number>();
+
   constructor(
       private http: HttpClient
   ) { }
 
-  getPendingChanges(): Observable<Array<PendingChangeResponse>> {
-    return this.http.get<Array<PendingChangeResponse>>(`${environment.serverApiUrl}/change-requests/pending`);
+  private getPendingChanges(urlSufix: string): Observable<Array<PendingChangeResponse>> {
+    return this.http.get<Array<PendingChangeResponse>>(
+        `${environment.serverApiUrl}/change-requests?statesFamily=${urlSufix}`);
   }
 
-  getBulkChanges(): Observable<Array<BulkChangeResponse>> {
-    return this.http.get<Array<BulkChangeResponse>>(`${environment.serverApiUrl}/bulk-changes`);
+  private getBulkChanges(urlSufix: string): Observable<Array<BulkChangeResponse>> {
+    return this.http.get<Array<BulkChangeResponse>>(
+        `${environment.serverApiUrl}/bulk-changes?statesFamily=${urlSufix}`);
   }
 
-  getPendingChangesDetails() {
+  getPendingChangesDetails(changeRequestStatuses: PendingChangesStatus[]): Observable<Array<PendingChange>> {
+    const shouldFetchPendingChanges = changeRequestStatuses.includes(PendingChangesStatus.PENDING);
+    const urlSufix = shouldFetchPendingChanges ? 'pending' : 'closed';
+
     return forkJoin(
         {
-          pendingChanges: this.getPendingChanges(),
-          bulkChanges: this.getBulkChanges()
+          pendingChanges: this.getPendingChanges(urlSufix),
+          bulkChanges: this.getBulkChanges(urlSufix)
         }
     ).pipe(
-        map(data => {
-          return data.bulkChanges
-              .filter(bulkChange =>
-                  data.pendingChanges.filter(
-                      pendingChange => pendingChange.bulkChangeId === bulkChange.id).length > 0)
-              .map(bulkChanges => {
-                return {
-                  ...bulkChanges, ...data.pendingChanges.filter(
-                      pendingChanges => pendingChanges.bulkChangeId === bulkChanges.id
-                  )[0]
-                };
-              });
-        })
+        map(data =>
+            data.bulkChanges
+                .filter(bulkChange =>
+                    data.pendingChanges.filter(
+                        pendingChange => pendingChange.bulkChangeId === bulkChange.id).length > 0)
+                .map(bulkChanges => {
+                  return {
+                    ...bulkChanges, ...data.pendingChanges.filter(
+                        pendingChanges => pendingChanges.bulkChangeId === bulkChanges.id
+                    )[0]
+                  };
+                })
+        ),
+        tap(
+            data => {
+              if (shouldFetchPendingChanges) {
+                this.queuedPendingChangesCount.next(data.length);
+              }
+            }
+        )
     );
   }
 
@@ -58,5 +74,9 @@ export class PendingChangesService {
         {
           headers: {...({CorrelationId: uuidv4()})}
         });
+  }
+
+  getQueuedPendingChangesCount() {
+    return this.queuedPendingChangesCount.asObservable();
   }
 }

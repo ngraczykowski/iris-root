@@ -9,10 +9,6 @@ public class KeycloakException extends RuntimeException {
 
   private static final long serialVersionUID = 3007391747112415014L;
 
-  public KeycloakException() {
-    super();
-  }
-
   public KeycloakException(String message) {
     super(message);
   }

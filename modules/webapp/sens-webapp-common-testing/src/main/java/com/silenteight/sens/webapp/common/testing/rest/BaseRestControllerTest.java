@@ -56,7 +56,7 @@ public abstract class BaseRestControllerTest {
         MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()));
   }
 
-  public static ValidatableMockMvcResponse get(String mapping) {
+  public static final ValidatableMockMvcResponse get(String mapping) {
     return toValidatableResponse(asyncSender().get(withRoot(mapping)));
   }
 

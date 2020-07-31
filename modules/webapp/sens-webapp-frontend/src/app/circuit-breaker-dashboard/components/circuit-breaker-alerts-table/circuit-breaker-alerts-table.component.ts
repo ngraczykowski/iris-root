@@ -1,10 +1,11 @@
 import {
   Component,
-  Input,
-  Output,
-  ViewChild,
   EventEmitter,
-  SimpleChanges, OnChanges
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -34,7 +35,7 @@ export class CircuitBreakerAlertsTableComponent implements OnChanges {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  translatePrefix = 'circuitBreakerDashboard.element.dataLabels.';
+  translatePrefix = 'circuitBreakerDashboard.discrepancies.dataLabels.';
 
   dateFormatting = environment.dateFormatting;
 

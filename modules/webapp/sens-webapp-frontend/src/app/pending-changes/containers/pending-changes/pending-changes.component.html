@@ -8,20 +8,19 @@
   </mat-sidenav>
   <mat-sidenav-content
           class="content-internal-margin--vertical content-internal-margin--horizontal">
-    <app-header *ngIf="header"
-                [headerData]="header"></app-header>
+
     <app-pending-changes-table
             *ngIf="pendingChangesTable"
             [pendingChangesList]="pendingChangesData"
-            (selectedCR)="loadChangeRequestDetails($event)"
-            (click)="preview.open()"
-    ></app-pending-changes-table>
+            [isArchiveTab]="isArchiveTab"
+            (selectedCR)="loadChangeRequestDetails($event); preview.open()">
+    </app-pending-changes-table>
     <app-state *ngIf="pendingChangesEmptyState"
                [stateContent]="listEmptyState"></app-state>
     <app-state *ngIf="pendingChangesLoading"
                [stateContent]="listLoading"></app-state>
     <app-state *ngIf="pendingChangesError"
                [stateContent]="listError"
-                (submit)="loadPendingChanges()"></app-state>
+               (submit)="loadPendingChanges()"></app-state>
   </mat-sidenav-content>
 </mat-sidenav-container>

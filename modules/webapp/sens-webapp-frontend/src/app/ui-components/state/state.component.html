@@ -1,15 +1,23 @@
-<div class="state" [class.state--centered]="stateContent.centered">
-  <div class="state__image">
+<app-card-layout [centered]="stateContent?.centered">
+
+  <ng-container card-layout-image>
     <mat-spinner *ngIf="stateContent.inProgress" diameter="64"></mat-spinner>
     <img *ngIf="stateContent.image" src="{{stateContent.image}}">
-  </div>
-  <p class="mat-title" *ngIf="stateContent.title" [translate]="stateContent.title"></p>
-  <p class="mat-body" *ngIf="stateContent.description" [translate]="stateContent.description"></p>
-  <button *ngIf="stateContent.button"
+  </ng-container>
+
+  <ng-container *ngIf="stateContent.title" card-layout-title>
+    {{ stateContent.title | translate }}</ng-container>
+
+  <ng-container *ngIf="stateContent.description" card-layout-description>
+    {{ stateContent.description | translate }}</ng-container>
+
+  <button card-layout-panel
+          *ngIf="stateContent.button"
           mat-stroked-button
           color="primary"
           class="state__button"
           (click)="onButtonClick()">
     <span [translate]="stateContent.button"></span>
   </button>
-</div>
+
+</app-card-layout>

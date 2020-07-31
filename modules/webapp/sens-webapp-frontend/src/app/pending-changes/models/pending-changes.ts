@@ -28,4 +28,13 @@ export interface PendingChange {
   id: number;
   aiSolution: string;
   active: boolean;
+  state?: string;
+  decidedAt?: string;
+  decidedBy?: string;
+  deciderComment?: string;
+}
+
+export enum PendingChangesStatus {
+  PENDING = 'PENDING',
+  CLOSED = 'CLOSED'
 }

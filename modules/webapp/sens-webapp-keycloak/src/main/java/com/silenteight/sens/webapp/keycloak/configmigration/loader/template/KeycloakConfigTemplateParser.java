@@ -2,8 +2,7 @@ package com.silenteight.sens.webapp.keycloak.configmigration.loader.template;
 
 public interface KeycloakConfigTemplateParser {
 
-  String parse(String template, KeycloakTemplateProperties properties)
-      throws CouldNotProcessTemplateException;
+  String parse(String template, KeycloakTemplateProperties properties);
 
   class CouldNotProcessTemplateException extends RuntimeException {
 

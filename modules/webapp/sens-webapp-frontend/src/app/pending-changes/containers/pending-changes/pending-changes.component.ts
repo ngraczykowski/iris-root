@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PendingChange } from '@app/pending-changes/models/pending-changes';
+import { ActivatedRoute } from '@angular/router';
+import { PendingChange, PendingChangesStatus } from '@app/pending-changes/models/pending-changes';
 import { PendingChangesService } from '@app/pending-changes/services/pending-changes.service';
-import { Header } from '@app/ui-components/header/header';
 import { StateContent } from '@app/ui-components/state/state';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pending-changes',
@@ -23,7 +22,7 @@ export class PendingChangesComponent implements OnInit {
 
   listEmptyState: StateContent = {
     centered: true,
-    title: this.translatePrefix + 'emptyState.title',
+    title: this.translatePrefix + 'emptyState.title.queue',
   };
 
   listLoading: StateContent = {
@@ -39,11 +38,18 @@ export class PendingChangesComponent implements OnInit {
     button: this.translatePrefix + 'errorState.button'
   };
 
-  header: Header;
+  private changeRequestStatuses: PendingChangesStatus[];
+  isArchiveTab: boolean;
 
   constructor(
-      private pendingChangesService: PendingChangesService
-  ) { }
+      private pendingChangesService: PendingChangesService,
+      private route: ActivatedRoute
+  ) {
+    this.changeRequestStatuses = route.snapshot.data.changeRequestStatuses;
+    if (this.changeRequestStatuses.includes(PendingChangesStatus.CLOSED)) {
+      this.configureArchiveTab();
+    }
+  }
 
   ngOnInit() {
     this.loadPendingChanges();
@@ -53,32 +59,19 @@ export class PendingChangesComponent implements OnInit {
     this.resetChangeRequestDetails();
     this.resetView();
     this.pendingChangesLoading = true;
-    this.pendingChangesService.getPendingChangesDetails().subscribe(data => {
-      this.pendingChangesData = data;
-      this.resetView();
-      if (data.length > 0) {
-        this.pendingChangesTable = true;
-      } else {
-        this.pendingChangesEmptyState = true;
-      }
-      this.generateHeader();
-    }, error => {
-      this.resetView();
-      this.pendingChangesError = true;
-    });
-  }
-
-  generateHeader() {
-    if (this.pendingChangesData.length > 0) {
-      this.header = {
-        title: this.translatePrefix + 'title',
-        count: this.pendingChangesData.length.toString(),
-      };
-    } else {
-      this.header = {
-        title: this.translatePrefix + 'title',
-      };
-    }
+    this.pendingChangesService.getPendingChangesDetails(this.changeRequestStatuses)
+        .subscribe(data => {
+          this.pendingChangesData = data;
+          this.resetView();
+          if (data.length > 0) {
+            this.pendingChangesTable = true;
+          } else {
+            this.pendingChangesEmptyState = true;
+          }
+        }, error => {
+          this.resetView();
+          this.pendingChangesError = true;
+        });
   }
 
   resetView() {
@@ -94,5 +87,10 @@ export class PendingChangesComponent implements OnInit {
 
   resetChangeRequestDetails() {
     this.changeRequestDetails = null;
+  }
+
+  private configureArchiveTab() {
+    this.isArchiveTab = true;
+    this.listEmptyState.title = this.translatePrefix + 'emptyState.title.closed';
   }
 }

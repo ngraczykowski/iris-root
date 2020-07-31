@@ -109,53 +109,10 @@ app.patch('/rest/webapp/api/users/:userName/password/reset', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/decision-trees/:treeId', (req, res) => {
-  setTimeout(() => {
-    if(req.params.treeId === '1') {
-      res.status(200).send({id: 1});
-    } else {
-      res.status(400).send();
-    }
-  }, 1000);
-});
-
-app.get('/rest/webapp/api/decision-trees/:treeId/branches/:branchId',
-    (req, res) => {
-
-  let dataFile;
-      const id = req.params.branchId;
-      try {
-        dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
-        res.status(200).send(JSON.parse(dataFile));
-      } catch (err) {
-        if (err.code === 'ENOENT') {
-          res.status(404).send()
-        }
-      }
-    });
-
 app.get('/rest/webapp/management/info', (req, res) => {
   let dataFile;
   try {
     dataFile = fs.readFileSync(`${dataFolder}/management_info.json`);
-    res.status(200).send(JSON.parse(dataFile));
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      res.status(404).send()
-    }
-  }
-});
-
-app.patch('/rest/webapp/api/decision-trees/:treeId/branches', (req, res) => {
-  let dataFile;
-  const id = req.body.branchIds[0];
-  try {
-    dataFile = fs.readFileSync(`${dataFolder}/reasoning-branch/${id}.json`);
-    let json = JSON.parse(dataFile);
-    json.active = req.body.active;
-    json.aiSolution = req.body.aiSolution;
-    fs.writeFileSync(`${dataFolder}/reasoning-branch/${id}.json`,
-        JSON.stringify(json));
     res.status(200).send(JSON.parse(dataFile));
   } catch (err) {
     if (err.code === 'ENOENT') {
@@ -418,6 +375,11 @@ app.get('/rest/webapp/api/reasoning-branches/features/:id/names', (req, res) => 
       res.status(404).send()
     }
   }
+});
+
+app.get('/rest/webapp/api/configuration/solutions', (req, res) => {
+  res.status(200).send(['FALSE_POSITIVE','POTENTIAL_TRUE_POSITIVE',
+  'HINTED_POTENTIAL_TRUE_POSITIVE', 'HINTED_FALSE_POSITIVE','NO_DECISION']);
 });
 
 function isUserNameUnique(userName, currentUsersList) {

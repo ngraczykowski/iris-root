@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.backend.parser.ParsedReasoningBranchId;
+import com.silenteight.sens.webapp.backend.parser.ReasoningBranchIdParser;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +15,9 @@ public class ReasoningBranchIdDto {
   private long decisionTreeId;
   private long featureVectorId;
 
-  public static ReasoningBranchIdDto valueOf(ParsedReasoningBranchId reasoningBranchId) {
+  public static ReasoningBranchIdDto from(String id) {
+    ParsedReasoningBranchId branchId = ReasoningBranchIdParser.parse(id);
     return new ReasoningBranchIdDto(
-        reasoningBranchId.getDecisionTreeId(), reasoningBranchId.getFeatureVectorId());
+        branchId.getDecisionTreeId(), branchId.getFeatureVectorId());
   }
 }

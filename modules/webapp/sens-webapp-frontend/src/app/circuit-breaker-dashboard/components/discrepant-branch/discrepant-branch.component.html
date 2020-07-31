@@ -1,0 +1,48 @@
+<mat-expansion-panel
+        [attr.id]="'Location' + discrepantBranch.branchId.decisionTreeId + '-' + discrepantBranch.branchId.featureVectorId"
+        (opened)="initDiscrepanciesTable(discrepantBranch)"
+        class="mat-expansion-panel--flat mat-elevation-z0">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ constants.translateKey.headerId | translate:{
+      decisionTreeId: discrepantBranch.branchId.decisionTreeId,
+      reasoningBranchId: discrepantBranch.branchId.featureVectorId
+    } }}
+    </mat-panel-title>
+    <mat-panel-description>
+      {{ constants.translateKey.headerDisabled | translate:{
+      date: discrepantBranch.detectedAt | date:constants.dateFormatting
+    } }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <app-state *ngIf="loadingDiscrepancies"
+             [stateContent]="constants.stateLoading"></app-state>
+  <app-state *ngIf="failedToLoadDiscrepancies"
+             [stateContent]="constants.stateError"></app-state>
+
+  <ng-container *ngIf="discrepanciesList.length">
+    <div class="dynamic-table" [class.dynamic-table--loading]="loadingDiscrepancies">
+      <div class="dynamic-table__spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+      <app-circuit-breaker-alerts-table
+              [discrepanciesList]="discrepanciesList"
+              (page)="reloadTableContent($event)"></app-circuit-breaker-alerts-table>
+    </div>
+    <mat-paginator [pageSizeOptions]="constants.rowsPerPage"
+                   showFirstLastButtons
+                   [length]="numberOfRows"
+                   (page)="reloadTableContent($event)"></mat-paginator>
+
+
+    <mat-action-row *ngIf="showActionButtons">
+      <app-discrepant-branch-action
+              [discrepantBranch]="discrepantBranch"
+              [discrepanciesIds]="discrepanciesIds"
+              (reloadDiscrepantBranches)="reloadBranchList()"
+      ></app-discrepant-branch-action>
+    </mat-action-row>
+  </ng-container>
+
+</mat-expansion-panel>

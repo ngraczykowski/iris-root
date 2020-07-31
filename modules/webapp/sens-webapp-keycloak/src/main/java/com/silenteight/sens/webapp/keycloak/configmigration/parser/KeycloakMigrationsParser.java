@@ -44,7 +44,7 @@ class KeycloakMigrationsParser implements KeycloakHttpBodiesParser, RealmNameExt
   }
 
   @Override
-  public String extractRealmName(Migration migration) throws CouldNotExtractRealmNameException {
+  public String extractRealmName(Migration migration) {
     log.debug(KEYCLOAK_MIGRATION, "Extracting realm name from migration. migrationName={}",
         migration.name());
     return parseToRealmRepresentation(migration.json())

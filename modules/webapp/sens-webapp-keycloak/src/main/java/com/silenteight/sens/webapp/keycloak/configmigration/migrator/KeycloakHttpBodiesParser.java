@@ -8,10 +8,9 @@ import org.keycloak.representations.idm.RealmRepresentation;
 
 public interface KeycloakHttpBodiesParser {
 
-  RealmRepresentation parse(Migration baseMigration) throws CouldNotParseMigrationException;
+  RealmRepresentation parse(Migration baseMigration);
 
-  PartialImportRepresentation parse(PartialMigration partialMigration) throws
-      CouldNotParseMigrationException;
+  PartialImportRepresentation parse(PartialMigration partialMigration);
 
   class CouldNotParseMigrationException extends RuntimeException {
 

@@ -25,6 +25,8 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({ ClosedChangeRequestRestController.class, GenericExceptionControllerAdvice.class })
 class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
 
+  private static final String CLOSED_CHANGE_REQUESTS_URL = "/change-requests?statesFamily=closed";
+
   @MockBean
   private ClosedChangeRequestQuery closedChangeRequestsQuery;
 
@@ -32,7 +34,7 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
   void its200_whenNoPendingChangeRequest() {
     given(closedChangeRequestsQuery.listClosed()).willReturn(emptyList());
 
-    get(closedChangeRequestsPath())
+    get(CLOSED_CHANGE_REQUESTS_URL)
         .contentType(anything())
         .statusCode(OK.value())
         .body("size()", is(0));
@@ -65,7 +67,7 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
                 .state("REJECTED")
                 .build()));
 
-    get(closedChangeRequestsPath())
+    get(CLOSED_CHANGE_REQUESTS_URL)
         .statusCode(OK.value())
         .body("size()", is(2))
         .body("[0].id", equalTo(1))
@@ -86,9 +88,5 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("[1].deciderComment", equalTo("Not good!"))
         .body("[1].decidedAt", notNullValue())
         .body("[1].state", equalTo("REJECTED"));
-  }
-
-  private String closedChangeRequestsPath() {
-    return "/change-requests/closed";
   }
 }

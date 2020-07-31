@@ -34,7 +34,7 @@ class UsersReportGenerator implements ReportGenerator {
 
   static final String USERNAME_COLUMN_HEADER = "user_name";
   static final String DISPLAY_NAME_COLUMN_HEADER = "display_name";
-  static final String TYPE_COLUMN_HEADER = "type";
+  static final String ORIGIN_COLUMN_HEADER = "origin";
   static final String ROLES_COLUMN_HEADER = "roles";
   static final String LAST_LOGIN_AT_COLUMN_HEADER = "last_login_at";
   static final String CREATED_AT_COLUMN_HEADER = "created_at";
@@ -79,7 +79,7 @@ class UsersReportGenerator implements ReportGenerator {
     return new CsvBuilder<>(users.stream())
         .cell(USERNAME_COLUMN_HEADER, UserDto::getUserName)
         .cell(DISPLAY_NAME_COLUMN_HEADER, UserDto::getDisplayName)
-        .cell(TYPE_COLUMN_HEADER, UserDto::getOrigin)
+        .cell(ORIGIN_COLUMN_HEADER, UserDto::getOrigin)
         .cell(ROLES_COLUMN_HEADER, UsersReportGenerator::rolesFormatter)
         .cell(LAST_LOGIN_AT_COLUMN_HEADER, dateFormatter(UserDto::getLastLoginAt))
         .cell(CREATED_AT_COLUMN_HEADER, dateFormatter(UserDto::getCreatedAt))

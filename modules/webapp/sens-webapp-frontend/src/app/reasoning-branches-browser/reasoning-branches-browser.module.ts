@@ -12,6 +12,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { PipeModule } from '@app/shared/pipes/pipe.module';
 import { UiComponentsModule } from '@app/ui-components/ui-components.module';
+import { ReasoningBranchesModule } from '@core/reasoning-branches/reasoning-branches.module';
 import { ReasoningBranchesBrowserComponent } from './containers/reasoning-branches-browser/reasoning-branches-browser.component';
 import { ReasoningBranchesTableComponent } from './components/reasoning-branches-table/reasoning-branches-table.component';
 import { ReasoningBranchesListContainerComponent } from './containers/reasoning-branches-list-container/reasoning-branches-list-container.component';
@@ -47,7 +48,8 @@ import { ReasoningBranchFeaturesComponent } from './components/reasoning-branch-
     MatBottomSheetModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    PipeModule
+    PipeModule,
+    ReasoningBranchesModule,
   ],
   entryComponents: [
     CreateChangeRequestComponent

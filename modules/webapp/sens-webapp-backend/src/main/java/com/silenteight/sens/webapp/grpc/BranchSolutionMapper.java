@@ -22,7 +22,7 @@ public final class BranchSolutionMapper {
   }
 
   private static String addBranchPrefix(String newSolution) {
-    return SOLUTION_PREFIX + newSolution.toUpperCase().replace(" ", "_");
+    return SOLUTION_PREFIX + newSolution.toUpperCase().replace(' ', '_');
   }
 
   public static String map(BranchSolution solution) {

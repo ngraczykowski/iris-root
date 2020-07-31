@@ -9,7 +9,6 @@ import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 
 import java.util.List;
 
-import static com.silenteight.proto.serp.v1.circuitbreaker.command.ArchiveDiscrepanciesCommand.newBuilder;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CIRCUIT_BREAKER;
 
 @Slf4j
@@ -27,7 +26,12 @@ class ArchiveDiscrepanciesUseCase {
     auditTracer.save(new DiscrepancyArchivingRequestedEvent(command));
   }
 
-  private ArchiveDiscrepanciesCommand archiveDiscrepanciesCommandOf(List<Long> discrepancyIds) {
-    return newBuilder().addAllDiscrepancyIds(discrepancyIds).build();
+  private static ArchiveDiscrepanciesCommand archiveDiscrepanciesCommandOf(
+      List<Long> discrepancyIds) {
+
+    return ArchiveDiscrepanciesCommand
+        .newBuilder()
+        .addAllDiscrepancyIds(discrepancyIds)
+        .build();
   }
 }

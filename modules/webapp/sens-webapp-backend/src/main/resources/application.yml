@@ -166,8 +166,12 @@ sens.webapp.messaging:
 
 sens.webapp.change-request.max-closed: 30
 
-sens.grpc:
-  timeout: ${sens.webapp.grpc.timeout}
+sens:
+  grpc:
+    timeout: ${sens.webapp.grpc.timeout}
+
+  circuit-breaker:
+    limit-archived-discrepant-branches: 10
 
 server:
   port: 24410

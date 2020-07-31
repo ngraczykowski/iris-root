@@ -1,0 +1,97 @@
+<ng-container *ngIf="pendingChange">
+  <app-header [headerData]="pendingChangeHeader"></app-header>
+
+  <div class="sidebar-details__section">
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.changeRequestID"></p>
+      <p class="mat-body">
+        {{ 'pendingChanges.prefix' | translate: {value: pendingChange.id} }}
+      </p>
+    </div>
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.reasoningBranchesCount"></p>
+      <p class="mat-body">
+        {{ pendingChange.reasoningBranchIds.length }}
+      </p>
+    </div>
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.changes.labels.aiSolution"></p>
+      <p class="mat-body">
+        <app-ai-solution *ngIf="pendingChange.aiSolution !== null"
+                         [aiSolution]="pendingChange.aiSolution">
+        </app-ai-solution>
+        <span *ngIf="pendingChange.aiSolution === null"
+              class="secondary-text"
+              [translate]="'aiSolutions.UNCHANGED'">
+      </span>
+      </p>
+    </div>
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.changes.labels.aiStatus"></p>
+      <p class="mat-body">
+        <app-element-status *ngIf="pendingChange.active !== null"
+                            [elementStatus]="pendingChange.active">
+        </app-element-status>
+        <span *ngIf="pendingChange.active === null"
+              class="secondary-text"
+              [translate]="'aiStatus.unchanged'"></span>
+      </p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="sidebar-details__section">
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.createdBy"></p>
+      <p class="mat-body">
+        {{ pendingChange.createdBy }}
+      </p>
+    </div>
+    <div class="values-list values-list--horizontal">
+      <p class="mat-body"
+         translate="pendingChanges.changeRequestDetails.details.labels.createdAt"></p>
+      <p class="mat-body">
+        {{ pendingChange.createdAt | date:dateFormatting }}
+      </p>
+    </div>
+    <div class="values-list values-list--vertical">
+      <p class="mat-body" [translate]="translatePrefix + 'reason.title'"></p>
+      <p class="mat-body">
+        {{ pendingChange.comment }}
+      </p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <form [formGroup]="form">
+    <mat-divider></mat-divider>
+    <div class="sidebar-details__section change-request-details-comment">
+      <div class="values-list values-list--vertical">
+        <p class="mat-body" [translate]="translatePrefix + 'decision.title'"></p>
+        <div class="change-request-details__comment">
+          <mat-form-field class="mat-form-field--full-width" appearance="outline">
+            <mat-label [translate]="translatePrefix + 'decision.form.comment.label'"></mat-label>
+            <textarea matInput
+                      formControlName="comment"
+                      cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="3"
+                      cdkAutosizeMaxRows="8"></textarea>
+            <mat-hint [translate]="translatePrefix + 'decision.form.comment.hint'"></mat-hint>
+            <mat-error *ngIf="form.controls.comment.hasError('required')"
+                       [translate]="translatePrefix + requiredCommentValidationMessage">
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</ng-container>

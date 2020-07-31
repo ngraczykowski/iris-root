@@ -3,27 +3,37 @@
 
 <ng-container *ngIf="changeRequestDetails">
   <div class="change-request-details">
-    <app-change-request-preview
+    <app-pending-change-request-preview
+            *ngIf="!isArchiveTab"
             #previewComponent
             [pendingChange]="changeRequestDetails"
             [requiredCommentValidationMessage]="canApproveOrReject ?
-            'decision.form.comment.validation.requiredToApproveOrReject' : 'decision.form.comment.validation.requiredToCancel'"
-    ></app-change-request-preview>
-    <div class="change-request-details__decision"
-         *ngIf="canApproveOrReject">
-      <button mat-stroked-button color="warn" (click)="reject()">
-        <span [translate]="translatePrefixDecision + 'buttons.reject'"></span>
+            'decision.form.comment.validation.requiredToApproveOrReject' : 'decision.form.comment.validation.requiredToCancel'">
+    </app-pending-change-request-preview>
+
+    <app-closed-change-request-preview
+            *ngIf="isArchiveTab"
+            #previewComponent
+            [pendingChange]="changeRequestDetails">
+    </app-closed-change-request-preview>
+
+    <ng-container *ngIf="!isArchiveTab">
+      <div class="change-request-details__decision"
+           *ngIf="canApproveOrReject">
+        <button mat-stroked-button color="warn" (click)="reject()">
+          <span [translate]="translatePrefixDecision + 'buttons.reject'"></span>
+        </button>
+        <button mat-stroked-button color="positive" (click)="approve()">
+          <span [translate]="translatePrefixDecision + 'buttons.approve'"></span>
+        </button>
+      </div>
+      <button *ngIf="canCancel && !canApproveOrReject"
+              mat-stroked-button
+              color="warn"
+              class="mat-button-base--full-width"
+              (click)="cancel()">
+        <span [translate]="translatePrefixDecision + 'buttons.cancel'"></span>
       </button>
-      <button mat-stroked-button color="positive" (click)="approve()">
-        <span [translate]="translatePrefixDecision + 'buttons.approve'"></span>
-      </button>
-    </div>
-    <button *ngIf="canCancel && !canApproveOrReject"
-            mat-stroked-button
-            color="warn"
-            class="mat-button-base--full-width"
-            (click)="cancel()">
-      <span [translate]="translatePrefixDecision + 'buttons.cancel'"></span>
-    </button>
+    </ng-container>
   </div>
 </ng-container>
