@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    ssl:
+      enabled: true
+      key-store: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+      key-store-password: ${sens.webapp.keystore.password}
+      trust-store: file:${serp.home}/cert/truststore.p12
+      trust-store-password: ${sens.webapp.truststore.password}
+
+grpc:
+  client:
+    GLOBAL:
+      negotiationType: TLS
+      security:
+        clientAuthEnabled: true
+        certificateChain: file:${serp.home}/cert/user/user-chain.pem
+        privateKey: file:${serp.home}/cert/user/user-key-pkcs8.pem
+        trustCertCollection: file:${serp.home}/cert/chain.pem

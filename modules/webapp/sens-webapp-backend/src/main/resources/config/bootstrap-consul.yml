@@ -1,0 +1,35 @@
+sens.webapp.consul.enabled: true
+sens.webapp.consul.host: localhost
+sens.webapp.consul.port: 24120
+sens.webapp.consul.instance: ${spring.application.name}-${HOSTNAME:localhost}
+
+spring:
+  cloud:
+    consul:
+      scheme: ${sens.webapp.protocol}
+      host: ${sens.webapp.consul.host}
+      port: ${sens.webapp.consul.port}
+
+      config:
+        prefix: config/sens
+        defaultContext: sens
+        name: ${spring.application.name}
+        format: FILES
+
+      discovery:
+        scheme: ${sens.webapp.protocol}
+        health-check-path: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
+        instance-id: ${sens.webapp.consul.instance}
+        prefer-ip-address: true
+        tags:
+          - "traefik.frontend.rule=PathPrefix: ${server.servlet.context-path}"
+          - "traefik.protocol=${sens.webapp.protocol}"
+          - "traefik.frontend.entryPoints=${sens.webapp.consul.traefik.entryPoints}"
+          - "traefik.frontend.passTLSCert=${sens.webapp.consul.traefik.passTLSCert}"
+          - "prometheus.metrics.path=${server.servlet.context-path}${management.endpoints.web.base-path}/prometheus"
+
+        catalog-services-watch:
+          enabled:  ${sens.webapp.consul.discovery.enabled}
+
+        heartbeat:
+          enabled: ${sens.webapp.consul.discovery.enabled}

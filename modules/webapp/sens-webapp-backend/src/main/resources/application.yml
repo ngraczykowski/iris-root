@@ -100,12 +100,6 @@ spring:
     port: ${sens.webapp.rabbitmq.port}
     username: ${sens.webapp.rabbitmq.user}
     password: ${sens.webapp.rabbitmq.password}
-    ssl:
-      enabled: true
-      key-store: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
-      key-store-password: ${sens.webapp.keystore.password}
-      trust-store: file:${serp.home}/cert/truststore.p12
-      trust-store-password: ${sens.webapp.truststore.password}
     listener:
       type: simple
       direct:
@@ -123,22 +117,17 @@ spring:
 grpc:
   client:
     GLOBAL:
+      negotiationType: PLAINTEXT
       enableKeepAlive: true
-      negotiationType: TLS
-      security:
-        clientAuthEnabled: true
-        certificateChain: file:${serp.home}/cert/user/user-chain.pem
-        privateKey: file:${serp.home}/cert/user/user-key-pkcs8.pem
-        trustCertCollection: file:${serp.home}/cert/chain.pem
 
     governance:
-      address: discovery:///grpc-governance
+      address: static://localhost:24205
 
     reco:
-      address: discovery:///grpc-reco
+      address: static://localhost:24207
 
     circuit-breaker:
-      address: discovery:///grpc-circuit-breaker
+      address: static://localhost:24213
 
 sens.webapp.messaging:
   bulk-change:

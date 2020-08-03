@@ -2,12 +2,10 @@
 # Defaults (overridden by environment variables or arguments)
 ####################################################################################################
 
-sens.webapp.consul.enabled: true
+sens.webapp.consul.enabled: false
+sens.webapp.protocol: http
 sens.webapp.consul.config.enabled: ${sens.webapp.consul.enabled}
 sens.webapp.consul.discovery.enabled: ${sens.webapp.consul.enabled}
-sens.webapp.consul.host: localhost
-sens.webapp.consul.port: 24120
-sens.webapp.consul.instance: ${spring.application.name}-${HOSTNAME:localhost}
 
 sens.webapp.consul.traefik.passTLSCert: false
 sens.webapp.consul.traefik.entryPoints: gateway,unprotectedGateway
@@ -34,44 +32,13 @@ spring:
       enabled: ${sens.webapp.consul.enabled}
 
     consul:
-      scheme: https
-      host: ${sens.webapp.consul.host}
-      port: ${sens.webapp.consul.port}
-
+      enabled: ${sens.webapp.consul.enabled}
       config:
         enabled: ${sens.webapp.consul.config.enabled}
-        prefix: config/sens
-        defaultContext: sens
-        name: ${spring.application.name}
-        format: FILES
-
         watch:
           # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
           #  Do not enable.
           enabled: false
 
-      tls:
-        key-store-instance-type: JKS
-        key-store-path: ${serp.home}/cert/truststore.p12
-        key-store-password: ${sens.webapp.truststore.password}
-        certificate-path: ${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
-        certificate-password: ${sens.webapp.keystore.password}
-
       discovery:
         enabled: ${sens.webapp.consul.discovery.enabled}
-        scheme: http
-        health-check-path: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
-        instance-id: ${sens.webapp.consul.instance}
-        prefer-ip-address: true
-        tags:
-          - "traefik.frontend.rule=PathPrefix: ${server.servlet.context-path}"
-          - "traefik.protocol=http"
-          - "traefik.frontend.entryPoints=${sens.webapp.consul.traefik.entryPoints}"
-          - "traefik.frontend.passTLSCert=${sens.webapp.consul.traefik.passTLSCert}"
-          - "prometheus.metrics.path=${server.servlet.context-path}${management.endpoints.web.base-path}/prometheus"
-
-        catalog-services-watch:
-          enabled:  ${sens.webapp.consul.discovery.enabled}
-
-        heartbeat:
-          enabled: ${sens.webapp.consul.discovery.enabled}
