@@ -29,5 +29,7 @@ export function aiSolutionsReducer(
         loading: false,
         availableSolutions: action.payload
       };
+    default:
+      return state;
   }
 }
