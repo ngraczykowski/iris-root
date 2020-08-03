@@ -34,15 +34,18 @@
         formControlName="reasoningBranchIds"
         matInput
         required
+        [errorStateMatcher]="branchesIdsStateMatcher"
         matTextareaAutosize
         matAutosizeMinRows=5
         matAutosizeMaxRows=10
       ></textarea>
       <mat-hint>
-        {{ translatePrefix + 'rbId.hint' | translate: {length: form.controls.reasoningBranchIds.value?.length} }}
+        {{ translatePrefix + 'rbId.hint' | translate: {number: form.controls.numberOfParsedBranches.value, limit: branchesLimit} }}
       </mat-hint>
-      <mat-error *ngIf="form.controls.reasoningBranchIds.hasError('maxlength')">
-        {{ translatePrefix + 'rbId.errorCharacterLimit' | translate: {length: form.controls.reasoningBranchIds.value?.length} }}
+      <mat-error *ngIf="form.controls.numberOfParsedBranches.hasError('max')"
+                 [translate]="translatePrefix + 'rbSignature.errorBranchesLimit'"
+                 [translateParams]="{number: form.controls.numberOfParsedBranches.errors.max.actual,
+                                      limit: form.controls.numberOfParsedBranches.errors.max.max }">
       </mat-error>
       <mat-error
         *ngIf="form.controls.reasoningBranchIds.hasError('required')"
@@ -62,14 +65,17 @@
         matInput
         required
         matTextareaAutosize
+        [errorStateMatcher]="branchesSignaturesStateMatcher"
         matAutosizeMinRows=5
         matAutosizeMaxRows=10
       ></textarea>
       <mat-hint>
-        {{ translatePrefix + 'rbSignature.hint' | translate: {length: form.controls.reasoningBranchSignature.value?.length} }}
+        {{ translatePrefix + 'rbSignature.hint' | translate: {number: form.controls.numberOfParsedBranches.value, limit: branchesLimit} }}
       </mat-hint>
-      <mat-error *ngIf="form.controls.reasoningBranchSignature.hasError('maxlength')">
-        {{ translatePrefix + 'rbSignature.errorCharacterLimit' | translate: {length: form.controls.reasoningBranchSignature.value?.length} }}
+      <mat-error *ngIf="form.controls.numberOfParsedBranches.hasError('max')"
+                  [translate]="translatePrefix + 'rbSignature.errorBranchesLimit'"
+                  [translateParams]="{number: form.controls.numberOfParsedBranches.errors.max.actual,
+                                      limit: form.controls.numberOfParsedBranches.errors.max.max }">
       </mat-error>
       <mat-error
         *ngIf="form.controls.reasoningBranchSignature.hasError('required')"

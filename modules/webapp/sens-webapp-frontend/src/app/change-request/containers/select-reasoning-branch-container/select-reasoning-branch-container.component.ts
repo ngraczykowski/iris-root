@@ -12,6 +12,7 @@ import { DecisionTreesService } from '@core/decision-trees/services/decision-tre
 import {
   DECISION_TREE_EXISTS_VALIDATOR_ERROR,
 } from '@core/decision-trees/validators/decision-tree-exists.validator';
+import { ReasoningBranchParser } from '@core/reasoning-branches/utils/reasoning-branch-parser';
 import { concat, Observable, throwError } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 
@@ -85,7 +86,7 @@ export class SelectReasoningBranchContainerComponent {
     return this.changeRequestService.validateBranches(
       {
         decisionTreeId: formValue.decisionTreeId,
-        branchIds: this.changeRequestService.parseBranchIds(formValue.reasoningBranchIds)
+        branchIds: ReasoningBranchParser.parseIds(formValue.reasoningBranchIds)
       }
     ).pipe(
         catchError((errorResponse: ValidateBranchIdsErrorResponse) => {
@@ -103,8 +104,8 @@ export class SelectReasoningBranchContainerComponent {
     return this.changeRequestService.validateFeatureVectorSignatures(
       {
         decisionTreeId: formValue.decisionTreeId,
-        featureVectorSignatures: this.changeRequestService
-            .parseFeatureVectorSignatures(formValue.reasoningBranchSignature)
+        featureVectorSignatures: ReasoningBranchParser
+            .parseSignatures(formValue.reasoningBranchSignature)
       }
     ).pipe(
         catchError((errorResponse: ValidateBranchIdsErrorResponse) => {

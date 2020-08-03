@@ -47,16 +47,16 @@
       },
       "rbId": {
         "label": "Reasoning Branch IDs",
-        "hint": "Entered {{length}}/1000 characters",
+        "hint": "Entered {{number}}/{{limit}} branches",
         "errorEmpty": "Reasoning Branch ID is required to create change request",
-        "errorCharacterLimit": "Sorry, but you reached the limit. You entered {{length}} characters where the threshold is 1000 characters. Please reduce the number of characters. ",
+        "errorBranchesLimit": "Sorry, but you reached the limit. You entered {{number}} branches where the threshold is {{limit}} branches. Please reduce the number of branches. ",
         "errorVerificationFail": "Some of the given reasoning branches do not exist"
       },
       "rbSignature": {
         "label": "Reasoning Branch Signatures",
-        "hint": "Entered {{length}}/1000 characters",
+        "hint": "Entered {{number}}/{{limit}} branches",
         "errorEmpty": "Reasoning Branch Signature is required to create change request",
-        "errorCharacterLimit": "Sorry, but you reached the limit. You entered {{length}} characters where the threshold is 1000 characters. Please reduce the number of characters. ",
+        "errorBranchesLimit": "Sorry, but you reached the limit. You entered {{number}} branches where the threshold is {{limit}} branches. Please reduce the number of branches. ",
         "errorVerificationFail": "Some of the given reasoning branches do not exist"
       },
       "verifying": {

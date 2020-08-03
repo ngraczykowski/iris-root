@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroupDirective, ValidationErrors } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { SelectReasoningBranchesFormService } from '@app/change-request/services/select-reasoning-branches-form.service';
 import { DECISION_TREE_EXISTS_VALIDATOR_ERROR } from '@core/decision-trees/validators/decision-tree-exists.validator';
@@ -14,7 +15,14 @@ export class SelectReasoningBranchesFormComponent {
   @Output() formSubmitted = new EventEmitter();
   @Output() formReset = new EventEmitter();
 
+  branchesLimit: number = SelectReasoningBranchesFormService.MAX_NUMBER_OF_BRANCHES;
   decisionTreeExistsErrorCode: string = DECISION_TREE_EXISTS_VALIDATOR_ERROR;
+
+  branchesIdsStateMatcher: ErrorStateMatcher =
+      this.selectReasoningBranchesFormService.createBranchesInputStateMatcher();
+
+  branchesSignaturesStateMatcher: ErrorStateMatcher =
+      this.selectReasoningBranchesFormService.createBranchesInputStateMatcher();
 
   form = this.selectReasoningBranchesFormService.build();
 
