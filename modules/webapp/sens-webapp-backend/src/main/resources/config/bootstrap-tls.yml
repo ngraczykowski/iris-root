@@ -1,5 +1,4 @@
 sens.webapp.protocol: https
-sens.webapp.consul.traefik.passTLSCert: true
 
 spring:
   cloud:
