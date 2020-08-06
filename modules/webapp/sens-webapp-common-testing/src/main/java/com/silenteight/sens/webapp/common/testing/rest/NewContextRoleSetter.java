@@ -23,7 +23,7 @@ class NewContextRoleSetter implements SecurityContextRoleSetter {
 
   private static List<GrantedAuthority> toAuthorityRoles(List<String> roles) {
     return roles.stream()
-        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+        .map(role -> new SimpleGrantedAuthority(role))
         .collect(toList());
   }
 }

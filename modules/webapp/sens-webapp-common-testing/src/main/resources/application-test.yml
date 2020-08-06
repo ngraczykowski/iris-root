@@ -1,0 +1,14 @@
+spring.cloud.consul.enabled: false
+
+sep.auth:
+  methodPermissionsMappings:
+    LIST_REASONING_BRANCHES:
+      permissions:
+        - "VIEW_REASONING_BRANCHES"
+      permitAll: false
+
+  rolePermissionsMappings:
+    APPROVER:
+      - "VIEW_REASONING_BRANCHES"
+    BUSINESS_OPERATOR:
+      - "VIEW_REASONING_BRANCHES"

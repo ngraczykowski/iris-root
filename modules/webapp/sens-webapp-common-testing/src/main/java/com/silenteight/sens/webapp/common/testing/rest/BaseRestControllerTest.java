@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.common.testing.rest;
 
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest.TestRestConfiguration;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRoleExtension;
+import com.silenteight.sep.auth.authorization.AuthorizationModule;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
@@ -13,17 +14,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -38,7 +35,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @WebAppConfiguration
 @SpringBootTest(classes = { TestRestConfiguration.class })
 @ExtendWith({ SpringExtension.class })
-@TestPropertySource(properties = { "spring.cloud.consul.enabled=false" })
+@TestPropertySource(properties = { "spring.config.location = classpath:application-test.yml" })
 public abstract class BaseRestControllerTest {
 
   @Autowired
@@ -52,8 +49,8 @@ public abstract class BaseRestControllerTest {
 
   @BeforeEach
   void setUp() {
-    RestAssuredMockMvc.standaloneSetup(
-        MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()));
+    RestAssuredMockMvc.mockMvc(
+        MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build());
   }
 
   public static final ValidatableMockMvcResponse get(String mapping) {
@@ -153,22 +150,9 @@ public abstract class BaseRestControllerTest {
   }
 
   @Configuration
+  @ComponentScan(basePackageClasses = { AuthorizationModule.class })
   @EnableWebMvc
   @EnableWebSecurity
-  @EnableGlobalMethodSecurity(prePostEnabled = true)
-  static class TestRestConfiguration extends WebSecurityConfigurerAdapter {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().disable();
-    }
-
-    //TODO: investigate why this is needed for the method validation to happen in controller tests.
-    // Normally it's getting created automatically by Spring Boot
-    // Looks like the default Spring Boot config is not used here at all
-    @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor() {
-      return new MethodValidationPostProcessor();
-    }
+  static class TestRestConfiguration {
   }
 }

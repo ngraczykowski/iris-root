@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.backend;
 
-import com.silenteight.sens.auth.AuthModule;
 import com.silenteight.sens.webapp.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeModule;
@@ -17,6 +16,8 @@ import com.silenteight.sens.webapp.keycloak.KeycloakModule;
 import com.silenteight.sens.webapp.notification.NotificationModule;
 import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.user.UserModule;
+import com.silenteight.sep.auth.authentication.AuthenticationModule;
+import com.silenteight.sep.auth.authorization.AuthorizationModule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -25,7 +26,8 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
     scanBasePackageClasses = {
         ApplicationLoggingModule.class,
         AuditModule.class,
-        AuthModule.class,
+        AuthenticationModule.class,
+        AuthorizationModule.class,
         BulkChangeModule.class,
         ChangeRequestModule.class,
         CircuitBreakerModule.class,

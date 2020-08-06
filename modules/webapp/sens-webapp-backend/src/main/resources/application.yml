@@ -254,28 +254,23 @@ sens.web:
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
 
-sens.auth:
-  guardedUrlPrefixes:
-    - "/api/"
-  endpoints:
-    - requestPath: "/api/change-requests/pending"
-      requestMethod: "GET"
+sep.auth:
+  methodPermissionsMappings:
+    LIST_PENDING_CHANGES:
+      permitAll: false
       permissions:
         - "VIEW_PENDING_CHANGES"
-    - requestPath: "/api/reasoning-branches"
-      requestMethod: "GET"
+    LIST_REASONING_BRANCHES:
+      permitAll: false
       permissions:
-        - "VIEW_REASONING_BEANCHES"
-    - requestPath: "/api/bulk-changes/ids"
-      requestMethod: "GET"
+        - "VIEW_REASONING_BRANCHES"
+    LIST_BULK_CHANGES:
+      permitAll: false
       permissions:
         - "VIEW_BULK_CHANGES"
 
-sens.permissions.rolePermissionsMappings:
-  ADMIN:
-    - "VIEW_PENDING_CHANGES"
-    - "VIEW_REASONING_BEANCHES"
-    - "VIEW_BULK_CHANGES"
-  APPROVER:
-    - "APPROVE_CHANGE_REQUEST"
-    - "REJECT_CHANGE_REQUEST"
+  rolePermissionsMappings:
+    ADMIN:
+      - "VIEW_PENDING_CHANGES"
+      - "VIEW_REASONING_BRANCHES"
+      - "VIEW_BULK_CHANGES"
