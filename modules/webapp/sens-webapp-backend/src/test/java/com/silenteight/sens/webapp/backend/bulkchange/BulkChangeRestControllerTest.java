@@ -41,7 +41,6 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private CreateBulkChangeUseCase createBulkChangeUseCase;
 
-
   @TestWithRole(role = BUSINESS_OPERATOR)
   void its202_onCreate() {
     post(CREATE_BULK_CHANGE_URL, bulkChangeDtoWithDefaults(), defaultHeaders())

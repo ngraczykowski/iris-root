@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class DecisionTreeDetailsRestController {
   private final DecisionTreeQuery decisionTreeQuery;
 
   @GetMapping("/decision-trees/{treeId}")
+  @PreAuthorize("isAuthorized('GET_DECISION_TREE')")
   public ResponseEntity<DecisionTreeDto> getDecisionTree(@PathVariable long treeId) {
     return ok(decisionTreeQuery.getDecisionTree(treeId));
   }

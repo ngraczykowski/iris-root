@@ -49,8 +49,8 @@ public abstract class BaseRestControllerTest {
 
   @BeforeEach
   void setUp() {
-    RestAssuredMockMvc.mockMvc(
-        MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build());
+    RestAssuredMockMvc.standaloneSetup(
+        MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()));
   }
 
   public static final ValidatableMockMvcResponse get(String mapping) {

@@ -2,13 +2,17 @@ spring.cloud.consul.enabled: false
 
 sep.auth:
   methodPermissionsMappings:
-    LIST_REASONING_BRANCHES:
-      permissions:
-        - "VIEW_REASONING_BRANCHES"
-      permitAll: false
+    LIST_REASONING_BRANCHES.permissions: [ "VIEW_REASONING_BRANCHES" ]
+    APPROVE_CHANGE_REQUEST.permissions: [ "APPROVE_CHANGE_REQUESTS" ]
+    GET_DECISION_TREE.permissions: [ "VIEW_DECISION_TREE" ]
+    CREATE_BULK_CHANGE.permissions: [ "MANAGE_CHANGE_REQUESTS" ]
 
   rolePermissionsMappings:
     APPROVER:
       - "VIEW_REASONING_BRANCHES"
+      - "APPROVE_CHANGE_REQUESTS"
+      - "VIEW_DECISION_TREE"
     BUSINESS_OPERATOR:
       - "VIEW_REASONING_BRANCHES"
+      - "VIEW_DECISION_TREE"
+      - "MANAGE_CHANGE_REQUESTS"
