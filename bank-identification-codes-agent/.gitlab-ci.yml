@@ -1,0 +1,65 @@
+include:
+  - project: 'build/gitlab-ci-templates'
+    file: '.python_job_template.yml'
+  - project: 'build/gitlab-ci-templates'
+    file: '.python_build_job_template.yml'
+
+.publish_job_template: &publish_job_template
+  extends: .python_job_template
+  when: on_success
+  script:
+    - pip install twine
+    - scripts/publish.sh
+
+stages:
+  - build
+  - publish
+  - release
+  - publish_release
+
+build:
+  extends: .python_build_job_template
+  stage: build
+  only:
+    - master
+    - merge_requests
+    - /^release-.*$/
+  script:
+    - scripts/build.sh
+
+publish:
+  <<: *publish_job_template
+  stage: publish
+  dependencies:
+    - build
+  only:
+    - master
+    - /^release-.*$/
+  except:
+    - merge_requests
+
+release:
+  extends: .python_build_job_template
+  stage: release
+  when: manual
+  only:
+    - master
+    - /^release-.*$/
+  before_script:
+    - repo_url=$(echo "${CI_REPOSITORY_URL}" | cut -d '@' -f 2)
+    - git remote set-url origin https://${GITLAB_CI_USERNAME}:${CI_PUSH_TOKEN}@${repo_url}
+    - git config --global user.email "${GITLAB_CI_EMAIL}"
+    - git config --global user.name "${GITLAB_CI_USERNAME}"
+    - pip install bump2version tox
+    - git tag -d $(git tag -l)
+  script:
+    - scripts/release.sh
+
+publish_release:
+  <<: *publish_job_template
+  stage: publish_release
+  dependencies:
+    - release
+  only:
+    - master
+    - /^release-.*$/

@@ -1,0 +1,33 @@
+= Identification Mismatch Agent
+
+Previously known as Search Code Mismatch Agent.
+
+== Due-diligence question
+Does the trigger text match against the search codes provided in the watchlist?
+
+== Is agent decisive?
+Yes
+
+== Is agent tied to specific message?
+Yes: SWIFT message type and SWIFT message tag but this is **not required** and should be removed as soon as possible.
+
+== Agent output
+
+[%Results,cols=2*]
+|===
+|Value
+|Additional info
+
+|MATCH
+|Alert was triggred on search code, search code matches exactly so it looks like it could be potential true positive
+
+|NO_DECISION
+|Alert was not triggred on search code
+
+|NO_MATCH
+|Alert was triggered on search code but it was only partial match
+
+|AGENT_ERROR
+|internal errors
+
+|===
