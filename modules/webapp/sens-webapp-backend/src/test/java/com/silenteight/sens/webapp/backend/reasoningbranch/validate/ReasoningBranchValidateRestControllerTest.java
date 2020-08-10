@@ -15,12 +15,13 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
@@ -103,6 +104,15 @@ class ReasoningBranchValidateRestControllerTest extends BaseRestControllerTest {
           new BranchIdsAndSignaturesDto(null, signaturesToValidate))
           .statusCode(BAD_REQUEST.value())
           .body("extras.featureVectorSignatures", hasItems("Signature12", "Signature34"));
+    }
+
+    @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+    void its403_whenNotPermittedRole() {
+      List<Long> branchIds = List.of(345L, 678L);
+
+      put(
+          mappingForValidation(TREE_ID), new BranchIdsAndSignaturesDto(branchIds, null))
+          .statusCode(FORBIDDEN.value());
     }
   }
 }

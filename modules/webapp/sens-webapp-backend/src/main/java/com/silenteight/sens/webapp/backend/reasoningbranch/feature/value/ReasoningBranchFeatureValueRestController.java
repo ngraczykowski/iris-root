@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ class ReasoningBranchFeatureValueRestController {
   private final FeatureValuesQuery featureValuesQuery;
 
   @GetMapping("/reasoning-branches/features/{decisionTreeId}-{featureVectorId}/values")
+  @PreAuthorize("isAuthorized('LIST_FEATURE_VALUES')")
   public ResponseEntity<List<String>> featureValues(
       @PathVariable long decisionTreeId, @PathVariable long featureVectorId) {
 

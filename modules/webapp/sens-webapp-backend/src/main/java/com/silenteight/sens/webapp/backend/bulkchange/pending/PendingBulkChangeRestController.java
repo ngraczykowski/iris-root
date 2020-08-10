@@ -9,6 +9,7 @@ import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningB
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +34,7 @@ class PendingBulkChangeRestController {
   private final PendingBulkChangeQuery bulkChangeQuery;
 
   @GetMapping(value = "/bulk-changes", params = PENDING_PARAM)
+  @PreAuthorize("isAuthorized('LIST_PENDING_BULK_CHANGES')")
   public ResponseEntity<List<BulkChangeDto>> listPending() {
     log.debug(CHANGE_REQUEST, "Listing pending Bulk Changes");
 
@@ -44,6 +46,7 @@ class PendingBulkChangeRestController {
   }
 
   @GetMapping(value = "/bulk-changes/ids", params = PENDING_PARAM)
+  @PreAuthorize("isAuthorized('GET_BULK_CHANGE_IDS')")
   public ResponseEntity<List<BulkChangeIdsForReasoningBranchDto>> getIds(
       @RequestParam List<String> reasoningBranchId) {
     log.debug(CHANGE_REQUEST, "Requested to get Bulk Change IDs of pending, reasoningBranchId={}",

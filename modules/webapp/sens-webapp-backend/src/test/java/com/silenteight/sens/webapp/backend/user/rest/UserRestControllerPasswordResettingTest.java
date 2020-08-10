@@ -5,10 +5,7 @@ import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPassword
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
 import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.*;
@@ -55,7 +52,7 @@ class UserRestControllerPasswordResettingTest extends UserRestControllerTest {
         .statusCode(INTERNAL_SERVER_ERROR.value());
   }
 
-  @TestWithRole(roles = { ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, ANALYST, AUDITOR, BUSINESS_OPERATOR })
   void its403_whenNotPermittedRole() {
     patch(getRequestPath()).statusCode(FORBIDDEN.value());
   }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ class CircuitBreakerRestController {
   private final ArchiveDiscrepanciesUseCase archiveUseCase;
 
   @GetMapping("/discrepant-branches")
+  @PreAuthorize("isAuthorized('LIST_DISCREPANT_BRANCHES')")
   public ResponseEntity<List<DiscrepantBranchDto>> listBranchesWithDiscrepancies(
       @RequestParam("discrepancyStatuses") List<DiscrepancyStatus> discrepancyStatuses) {
 
@@ -38,6 +40,7 @@ class CircuitBreakerRestController {
   }
 
   @GetMapping("/discrepant-branches/{branchId}/discrepancy-ids")
+  @PreAuthorize("isAuthorized('LIST_DISCREPANT_BRANCH_IDS')")
   public ResponseEntity<List<Long>> listDiscrepancyIds(
       @PathVariable String branchId,
       @RequestParam("discrepancyStatuses") List<DiscrepancyStatus> discrepancyStatuses) {
@@ -50,12 +53,14 @@ class CircuitBreakerRestController {
   }
 
   @GetMapping("/discrepancies")
+  @PreAuthorize("isAuthorized('LIST_DISCREPANCIES')")
   public ResponseEntity<List<DiscrepancyDto>> listDiscrepancies(
       @RequestParam("id") List<Long> ids) {
     return ok(query.listDiscrepanciesByIds(ids));
   }
 
   @PatchMapping("/discrepancies/archive")
+  @PreAuthorize("isAuthorized('ARCHIVE_DISCREPANCIES')")
   public ResponseEntity<Void> archiveDiscrepancies(@RequestBody List<Long> ids) {
     archiveUseCase.apply(new ArchiveCircuitBreakerDiscrepanciesCommand(ids));
 

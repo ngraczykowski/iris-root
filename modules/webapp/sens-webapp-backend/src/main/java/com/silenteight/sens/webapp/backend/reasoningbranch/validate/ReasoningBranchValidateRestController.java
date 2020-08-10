@@ -9,6 +9,7 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.validate.dto.BranchId
 import com.silenteight.sens.webapp.backend.reasoningbranch.validate.dto.BranchIdsValidationResponseDto;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +24,13 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
 @Slf4j
-public class ReasoningBranchValidateRestController {
+class ReasoningBranchValidateRestController {
+
   @NonNull
   private final ReasoningBranchValidator reasoningBranchValidator;
 
   @PutMapping("/decision-trees/{treeId}/branches/validate")
+  @PreAuthorize("isAuthorized('VALIDATE_REASONING_BRANCHES')")
   public ResponseEntity<BranchIdsValidationResponseDto> validate(
       @PathVariable long treeId, @RequestBody @Valid BranchIdsAndSignaturesDto branchIdsDto) {
 

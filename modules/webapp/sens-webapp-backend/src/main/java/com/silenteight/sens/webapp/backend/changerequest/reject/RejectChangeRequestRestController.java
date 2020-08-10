@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ class RejectChangeRequestRestController {
   private final RejectChangeRequestUseCase rejectChangeRequestUseCase;
 
   @PatchMapping("/change-requests/{id}/reject")
+  @PreAuthorize("isAuthorized('REJECT_CHANGE_REQUEST')")
   public ResponseEntity<Void> reject(
       @PathVariable long id,
       @RequestHeader(CORRELATION_ID_HEADER) UUID correlationId,
