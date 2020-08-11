@@ -121,7 +121,7 @@ app.get('/rest/webapp/management/info', (req, res) => {
   }
 });
 
-app.get('/rest/webapp/api/change-requests/pending', (req, res) => {
+app.get('/rest/webapp/api/change-requests', (req, res) => {
   let dataFile;
   try {
     dataFile = fs.readFileSync(`${dataFolder}/pending-changes.json`);
@@ -258,6 +258,16 @@ app.get('/rest/webapp/api/reports/audit-report', (req, res) => {
     });
     fs.createReadStream(filePath).pipe(res);
   }, 5000);
+});
+
+app.get('/rest/webapp/api/decision-trees/:treeId', (req, res) => {
+  setTimeout(() => {
+  if(req.params.treeId === '1') {
+    res.status(200).send({id: 1});
+  } else {
+    res.status(400).send();
+  }
+}, 1000);
 });
 
 app.put('/rest/webapp/api/decision-trees/:treeId/branches/validate',

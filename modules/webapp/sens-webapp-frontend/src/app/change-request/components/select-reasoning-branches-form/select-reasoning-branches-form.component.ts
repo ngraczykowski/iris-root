@@ -63,7 +63,6 @@ export class SelectReasoningBranchesFormComponent {
   }
 
   resetForm(formDir: FormGroupDirective): void {
-    formDir.resetForm();
     this.selectReasoningBranchesFormService.reset();
     this.formReset.emit();
   }

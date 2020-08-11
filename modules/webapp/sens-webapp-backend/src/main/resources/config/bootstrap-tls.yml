@@ -1,0 +1,11 @@
+sens.webapp.protocol: https
+
+spring:
+  cloud:
+    consul:
+      tls:
+        key-store-instance-type: JKS
+        key-store-path: ${serp.home}/cert/truststore.p12
+        key-store-password: ${sens.webapp.truststore.password}
+        certificate-path: ${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+        certificate-password: ${sens.webapp.keystore.password}

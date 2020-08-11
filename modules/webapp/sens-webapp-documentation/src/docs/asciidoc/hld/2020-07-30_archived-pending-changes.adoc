@@ -1,0 +1,110 @@
+= HLD #12
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-865*
+- Reason: As a Business Operator or Approver, I can see a list of old ChangeRequests
+
+[plantuml,bo-gets-list-of-discrepant-branches,svg]
+-----
+@startuml
+header List closed change requests
+
+actor "Business Operator or Approver" as BOA
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "Pending Changes"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+    database db as "Webapp DB"
+end box
+
+box "Governance" #LightBlue
+    participant G as "Governance" order 88
+end box
+
+BOA -> Frontend : Select Pending Changes
+
+activate Frontend
+
+== Loading closed Pending Changes ==
+
+BOA -> Frontend : Select Archive tab
+
+Frontend -> Backend : Fetch Pending changes with closed states
+activate Backend
+Backend -> Backend : Read max rows from properties
+activate db
+Backend <-> db : Fetch closed Pending changes
+deactivate db
+
+Backend -> Frontend : Closed Pending Changes list
+deactivate Backend
+
+note over Backend, Frontend
+    * id
+    * bulkChangeId - unique bulk change identifier
+    * Created by
+    * Created at
+    * Reason
+    * Closed by
+    * Closed at
+    * Closing Comment
+    * state
+end note
+
+Frontend -> Frontend : extract Bulk Changes ids from Pending Changes
+
+Frontend -> Backend : Fetch Bulk Changes by IDs
+activate Backend
+activate G
+Backend <-> G : Fetch Bulk Changes by IDs
+deactivate G
+
+Backend -> Frontend : Bulk Changes
+deactivate Backend
+note over Backend, Frontend
+    * id - same identifier as bulkChangeId from Pending Changes
+    * reasoningBranchIds
+    * aiSolution
+    * aiStatus
+    * Created at
+end note
+
+Frontend -> Frontend : Merge data from Pending Changes and Bulk Changes
+deactivate Frontend
+
+Frontend -> BOA : List of closed Pending Changes
+note over Frontend, BOA
+    *  ID (Change Request ID)
+    *  AI Solution
+    *  AI Status
+    *  CR status (Accepted/Rejected/Canceled)
+    *  Created by
+    *  Created at
+end note
+
+== Details of closed Pending Changes ==
+
+BOA -> Frontend : Select Pending Change
+activate Frontend
+
+Frontend -> BOA : Details of Pending Change
+note over Frontend, BOA
+    *  ID
+    *  Number of Branches
+    *  AI Solution
+    *  AI Status
+    *  CR Status (Accepted/Rejected/Canceled)
+    *  Created by
+    *  Created at
+    *  Reason
+    *  (Accepted/Rejected/Canceled) by
+    *  (Accepted/Rejected/Canceled) at
+    * Comment
+end note
+
+deactivate Frontend
+
+@enduml
+-----

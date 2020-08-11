@@ -13,17 +13,25 @@ import { ReasoningBranchParser } from '@core/reasoning-branches/utils/reasoning-
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, startWith, takeUntil } from 'rxjs/operators';
 
+const selectReasoningBranchesFormInitValues: any = {
+  decisionTreeId: null,
+  group: 'id',
+  reasoningBranchIds: '',
+  reasoningBranchSignature: '',
+  numberOfParsedBranches: 0
+};
+
 @Injectable()
 export class SelectReasoningBranchesFormService implements OnDestroy {
 
   public static MAX_NUMBER_OF_BRANCHES: number = 100;
 
   private formModel = {
-    decisionTreeId: ['', [Validators.required]],
-    group: ['id'],
-    reasoningBranchIds: [''],
-    reasoningBranchSignature: [''],
-    numberOfParsedBranches: [0,
+    decisionTreeId: [selectReasoningBranchesFormInitValues.decisionTreeId, [Validators.required]],
+    group: [selectReasoningBranchesFormInitValues.group],
+    reasoningBranchIds: [selectReasoningBranchesFormInitValues.reasoningBranchIds],
+    reasoningBranchSignature: [selectReasoningBranchesFormInitValues.reasoningBranchSignature],
+    numberOfParsedBranches: [selectReasoningBranchesFormInitValues.numberOfParsedBranches,
       [Validators.max(SelectReasoningBranchesFormService.MAX_NUMBER_OF_BRANCHES)]]
   };
 
@@ -67,13 +75,10 @@ export class SelectReasoningBranchesFormService implements OnDestroy {
   }
 
   public reset(): void {
-    this.form.reset();
-    this.form.markAsPristine();
     Object.keys(this.form.controls).forEach(key => {
-      this.form.get(key).setErrors(null);
-      this.form.get(key).setValue('');
+      this.form.get(key).reset(selectReasoningBranchesFormInitValues[key]);
     });
-    this.form.setErrors(null);
+    this.form.markAsPristine();
   }
 
   public setErrors(errors: ValidationErrors): void {
