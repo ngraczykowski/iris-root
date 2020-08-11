@@ -35,7 +35,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   private ApproveChangeRequestUseCase approveChangeRequestUseCase;
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its202_whenApproverCallsEndpoint() {
     long changeRequestId = 2L;
 
@@ -44,7 +44,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
   void callsApproveUseCase() {
     long changeRequestId = 2L;
     String approverComment = "some comment";
@@ -71,7 +71,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
   void setsCorrelationIdInThreadLocal() {
     long changeRequestId = 2L;
     UUID correlationId = randomUUID();
@@ -84,7 +84,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its400_ifNoCorrelationIdProvidedInHeader() {
     long changeRequestId = 2L;
 
@@ -95,7 +95,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its400_ifNoApproverCommentInRequestBody() {
     long changeRequestId = 2L;
 

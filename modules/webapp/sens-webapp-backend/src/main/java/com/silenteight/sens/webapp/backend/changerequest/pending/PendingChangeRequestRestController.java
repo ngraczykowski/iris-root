@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ class PendingChangeRequestRestController {
   private final PendingChangeRequestQuery changeRequestQuery;
 
   @GetMapping(value = "/change-requests", params = "statesFamily=pending")
+  @PreAuthorize("isAuthorized('LIST_PENDING_CHANGE_REQUESTS')")
   public ResponseEntity<List<PendingChangeRequestDto>> pending() {
     log.debug(CHANGE_REQUEST, "Listing pending Change Requests");
 

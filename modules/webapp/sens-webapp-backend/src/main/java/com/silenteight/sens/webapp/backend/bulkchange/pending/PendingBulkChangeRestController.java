@@ -46,7 +46,7 @@ class PendingBulkChangeRestController {
   }
 
   @GetMapping(value = "/bulk-changes/ids", params = PENDING_PARAM)
-  @PreAuthorize("isAuthorized('GET_BULK_CHANGE_IDS')")
+  @PreAuthorize("isAuthorized('GET_PENDING_BULK_CHANGE_IDS')")
   public ResponseEntity<List<BulkChangeIdsForReasoningBranchDto>> getIds(
       @RequestParam List<String> reasoningBranchId) {
     log.debug(CHANGE_REQUEST, "Requested to get Bulk Change IDs of pending, reasoningBranchId={}",

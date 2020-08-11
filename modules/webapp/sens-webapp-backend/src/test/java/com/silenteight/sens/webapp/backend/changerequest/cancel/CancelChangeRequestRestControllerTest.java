@@ -35,7 +35,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   private static final String USERNAME = "username";
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its202_whenBusinessOperatorCallsEndpoint() {
     long changeRequestId = 2L;
 
@@ -44,7 +44,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void callsCancelUseCase() {
     long changeRequestId = 2L;
 
@@ -73,7 +73,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void setsCorrelationIdInThreadLocal() {
     long changeRequestId = 2L;
     UUID correlationId = randomUUID();
@@ -86,7 +86,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its400_ifNoCorrelationIdProvidedInHeader() {
     long changeRequestId = 2L;
 
@@ -97,7 +97,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = APPROVER)
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its400_ifNoApproverCommentInRequestBody() {
     patch(
         mappingForCancellation(1L), new CancelChangeRequestDto(null), defaultHeaders())

@@ -6,11 +6,9 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBra
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
-import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 import java.util.Map;
@@ -72,8 +70,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getActive()).isEqualTo(active);
   }
 
-  @Test
-  @WithMockUser(roles = BUSINESS_OPERATOR)
+  @TestWithRole(role = BUSINESS_OPERATOR)
   void setsCorrelationIdInThreadLocal() {
     UUID correlationId = randomUUID();
     post(
@@ -84,8 +81,7 @@ class BulkChangeRestControllerTest extends BaseRestControllerTest {
     assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
   }
 
-  @Test
-  @WithMockUser(roles = BUSINESS_OPERATOR)
+  @TestWithRole(role = BUSINESS_OPERATOR)
   void its400_IfNoCorrelationIdProvidedInHeader() {
     post(CREATE_BULK_CHANGE_URL, bulkChangeDtoWithDefaults())
         .statusCode(BAD_REQUEST.value())

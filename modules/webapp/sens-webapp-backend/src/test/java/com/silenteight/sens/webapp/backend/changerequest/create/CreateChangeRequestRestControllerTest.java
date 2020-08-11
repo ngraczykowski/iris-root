@@ -34,14 +34,14 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   private CreateChangeRequestUseCase createChangeRequestUseCase;
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its202_whenBusinessOperatorCallsEndpoint() {
     post(mappingForChangeRequests(), changeRequestWithDefaults(), defaultHeaders())
         .statusCode(ACCEPTED.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void callsCreateUseCase() {
     UUID bulkChangeId = randomUUID();
     String comment = "comment ABC";
@@ -64,7 +64,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void setsCorrelationIdInThreadLocal() {
     UUID correlationId = randomUUID();
     post(
@@ -82,7 +82,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, roles = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its400_ifNoCorrelationIdProvidedInHeader() {
     post(
         mappingForChangeRequests(),

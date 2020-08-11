@@ -254,23 +254,60 @@ sens.web:
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
 
+# Authorization
 sep.auth:
   methodPermissionsMappings:
-    LIST_PENDING_CHANGES:
-      permitAll: false
-      permissions:
-        - "VIEW_PENDING_CHANGES"
-    LIST_REASONING_BRANCHES:
-      permitAll: false
-      permissions:
-        - "VIEW_REASONING_BRANCHES"
-    LIST_BULK_CHANGES:
-      permitAll: false
-      permissions:
-        - "VIEW_BULK_CHANGES"
+    APPROVE_CHANGE_REQUEST.permissions: [ "APPROVE_CHANGE_REQUESTS" ]
+    ARCHIVE_DISCREPANCIES.permissions: [ "ARCHIVE_DISCREPANCIES" ]
+    CANCEL_CHANGE_REQUEST.permissions: [ "CANCEL_CHANGE_REQUESTS" ]
+    CREATE_BULK_CHANGE.permissions: [ "CREATE_CHANGE_REQUESTS" ]
+    CREATE_CHANGE_REQUEST.permissions: [ "CREATE_CHANGE_REQUESTS" ]
+    CREATE_USER.permissions: [ "MANAGE_USERS" ]
+    EDIT_USER.permissions: [ "MANAGE_USERS" ]
+    GENERATE_REPORT.permissions: [ "GENERATE_REPORTS" ]
+    GET_CLOSED_BULK_CHANGE_IDS.permissions: [ "VIEW_CHANGE_REQUESTS" ]
+    GET_DECISION_TREE.permissions: [ "VIEW_DECISION_TREE" ]
+    GET_PENDING_BULK_CHANGE_IDS.permissions: [ "VIEW_BULK_CHANGES" ]
+    LIST_CLOSED_BULK_CHANGES.permissions: [ "VIEW_CHANGE_REQUESTS" ]
+    LIST_CLOSED_CHANGE_REQUESTS.permissions: [ "VIEW_CHANGE_REQUESTS" ]
+    LIST_DISCREPANCIES.permissions: [ "VIEW_DISCREPANCIES" ]
+    LIST_DISCREPANT_BRANCH_IDS.permissions: [ "VIEW_DISCREPANCIES" ]
+    LIST_DISCREPANT_BRANCHES.permissions: [ "VIEW_DISCREPANCIES" ]
+    LIST_FEATURE_NAMES.permissions: [ "VIEW_FEATURES" ]
+    LIST_FEATURE_VALUES.permissions: [ "VIEW_FEATURES" ]
+    LIST_PENDING_BULK_CHANGES.permissions: [ "VIEW_CHANGE_REQUESTS" ]
+    LIST_PENDING_CHANGE_REQUESTS.permissions: [ "VIEW_CHANGE_REQUESTS" ]
+    LIST_REASONING_BRANCHES.permissions: [ "VIEW_REASONING_BRANCHES" ]
+    LIST_ROLES.permissions: [ "MANAGE_USERS" ]
+    LIST_USERS.permissions: [ "MANAGE_USERS" ]
+    REJECT_CHANGE_REQUEST.permissions: [ "REJECT_CHANGE_REQUESTS" ]
+    RESET_USER_PASSWORD.permissions: [ "MANAGE_USERS" ]
+    SYNC_ANALYSTS.permissions: [ "SYNC_ANALYSTS" ]
+    VALIDATE_REASONING_BRANCHES.permissions: [ "VALIDATE_REASONING_BRANCHES" ]
 
   rolePermissionsMappings:
     ADMIN:
-      - "VIEW_PENDING_CHANGES"
+      - "GENERATE_REPORTS"
+      - "MANAGE_USERS"
+      - "SYNC_ANALYSTS"
+    APPROVER:
+      - "APPROVE_CHANGE_REQUESTS"
+      - "GENERATE_REPORTS"
+      - "REJECT_CHANGE_REQUESTS"
+      - "VIEW_CHANGE_REQUESTS"
+      - "VIEW_DECISION_TREE"
+      - "VIEW_FEATURES"
       - "VIEW_REASONING_BRANCHES"
-      - "VIEW_BULK_CHANGES"
+    AUDITOR:
+      - "GENERATE_REPORTS"
+    BUSINESS_OPERATOR:
+      - "ARCHIVE_DISCREPANCIES"
+      - "CANCEL_CHANGE_REQUESTS"
+      - "CREATE_CHANGE_REQUESTS"
+      - "GENERATE_REPORTS"
+      - "VALIDATE_REASONING_BRANCHES"
+      - "VIEW_CHANGE_REQUESTS"
+      - "VIEW_DECISION_TREE"
+      - "VIEW_DISCREPANCIES"
+      - "VIEW_FEATURES"
+      - "VIEW_REASONING_BRANCHES"

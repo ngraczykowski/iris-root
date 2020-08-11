@@ -9,6 +9,7 @@ import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningB
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +34,7 @@ class ClosedBulkChangeRestController {
   private final ClosedBulkChangeQuery bulkChangeQuery;
 
   @GetMapping(value = "/bulk-changes", params = CLOSED_PARAM)
+  @PreAuthorize("isAuthorized('LIST_CLOSED_BULK_CHANGES')")
   public ResponseEntity<List<BulkChangeDto>> listClosed() {
     log.debug(CHANGE_REQUEST, "Listing closed Bulk Changes");
 
@@ -44,6 +46,7 @@ class ClosedBulkChangeRestController {
   }
 
   @GetMapping(value = "/bulk-changes/ids", params = CLOSED_PARAM)
+  @PreAuthorize("isAuthorized('GET_CLOSED_BULK_CHANGE_IDS')")
   public ResponseEntity<List<BulkChangeIdsForReasoningBranchDto>> getIds(
       @RequestParam List<String> reasoningBranchId) {
     log.debug(CHANGE_REQUEST, "Requested to get Bulk Change IDs of closed, reasoningBranchId={}",
