@@ -17,14 +17,14 @@ import org.springframework.integration.dsl.IntegrationFlows;
 public class MessagingErrorConfiguration {
 
   public static final String ERROR_CHANNEL_NAME = "errorChannel";
-  public static final String ERROR_QUEUE_NAME = "errorQueue";
 
   private final AmqpOutboundFactory amqpOutboundFactory;
+  private final MessagingProperties properties;
 
   @Bean
   Queue errorQueue() {
     return QueueBuilder
-        .durable(ERROR_QUEUE_NAME)
+        .durable(properties.getErrorQueueName())
         .build();
   }
 
@@ -36,7 +36,7 @@ public class MessagingErrorConfiguration {
   @Bean
   IntegrationFlow errorChannelIntegrationFlow() {
     return IntegrationFlows.from(ERROR_CHANNEL_NAME)
-        .handle(amqpOutboundFactory.outboundAdapter().routingKey(ERROR_QUEUE_NAME))
+        .handle(amqpOutboundFactory.outboundAdapter().routingKey(properties.getErrorQueueName()))
         .get();
   }
 }

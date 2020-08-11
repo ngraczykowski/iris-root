@@ -23,7 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.stream.IntStream;
 
-import static com.silenteight.sep.base.common.messaging.MessagingErrorConfiguration.ERROR_QUEUE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -56,7 +55,7 @@ class ErrorChannelIT extends BaseIntegrationTest {
     assertThat(exceptionCount).isEqualTo(errorChannel.getSendCount());
     assertThat(exceptionCount)
         .isEqualTo(amqpAdmin
-            .getQueueProperties(ERROR_QUEUE_NAME)
+            .getQueueProperties("error-queue")
             .get("QUEUE_MESSAGE_COUNT"));
   }
 

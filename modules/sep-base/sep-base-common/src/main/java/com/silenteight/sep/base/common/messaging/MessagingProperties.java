@@ -20,6 +20,8 @@ class MessagingProperties {
   @NotNull
   private Encryption encryption = new Encryption();
 
+  private String errorQueueName = "error-queue";
+
   @Data
   static class Compression {
 
