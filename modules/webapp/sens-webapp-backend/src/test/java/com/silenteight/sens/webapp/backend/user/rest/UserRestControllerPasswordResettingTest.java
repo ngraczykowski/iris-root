@@ -15,7 +15,7 @@ class UserRestControllerPasswordResettingTest extends UserRestControllerTest {
   private static final String USERNAME = "jdoe123";
   private static final String TEMP_PASSWORD = "password";
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its200WithTemporaryPassword_whenPasswordResetIsSuccessful() {
     given(resetInternalUserPasswordUseCase.execute(USERNAME))
         .willReturn(TemporaryPassword.of(TEMP_PASSWORD));
@@ -25,7 +25,7 @@ class UserRestControllerPasswordResettingTest extends UserRestControllerTest {
         .body("temporaryPassword", is(TEMP_PASSWORD));
   }
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its404_whenUserIsNotFound() {
     given(resetInternalUserPasswordUseCase.execute(USERNAME))
         .willThrow(UserNotFoundException.class);
@@ -34,7 +34,7 @@ class UserRestControllerPasswordResettingTest extends UserRestControllerTest {
         .statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its400_whenUserIsInternal() {
     given(resetInternalUserPasswordUseCase.execute(USERNAME))
         .willThrow(UserIsNotInternalException.class);
@@ -43,7 +43,7 @@ class UserRestControllerPasswordResettingTest extends UserRestControllerTest {
         .statusCode(BAD_REQUEST.value());
   }
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its500_whenRuntimeExceptionIsThrown() {
     given(resetInternalUserPasswordUseCase.execute(USERNAME))
         .willThrow(RuntimeException.class);

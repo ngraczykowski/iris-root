@@ -74,7 +74,7 @@ class ReasoningBranchRestControllerTest extends BaseRestControllerTest {
           .body("branches[1].updatedAt", notNullValue());
     }
 
-    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(mappingForReasoningBranches(LIST_BRANCHES_REQUEST))
           .statusCode(FORBIDDEN.value());

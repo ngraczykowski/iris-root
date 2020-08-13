@@ -37,7 +37,7 @@ class ReasoningBranchFeatureNameRestControllerTest extends BaseRestControllerTes
         .body("[1]", equalTo(featureName2));
   }
 
-  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(mappingForFeatureNames(5L)).statusCode(FORBIDDEN.value());
   }

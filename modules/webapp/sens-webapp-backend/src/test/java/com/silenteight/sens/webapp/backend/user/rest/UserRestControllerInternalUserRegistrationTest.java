@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 class UserRestControllerInternalUserRegistrationTest extends UserRestControllerTest {
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its422_whenUseCaseReturnsDomainException() {
     given(registerInternalUserUseCase.apply(any()))
         .willReturn(left(USER_REGISTRATION_DOMAIN_ERROR));
@@ -29,7 +29,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
         .statusCode(UNPROCESSABLE_ENTITY.value());
   }
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its409_whenUseCaseReturnsUsernameNotUnique() {
     given(registerInternalUserUseCase.apply(any()))
         .willReturn(left(USERNAME_NOT_UNIQUE));
@@ -38,7 +38,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
         .statusCode(CONFLICT.value());
   }
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void its201WithValidLocationUri_whenUseCaseReturnsSuccess() {
     given(registerInternalUserUseCase.apply(any()))
         .willReturn(Either.right(USER_REGISTRATION_SUCCESS));

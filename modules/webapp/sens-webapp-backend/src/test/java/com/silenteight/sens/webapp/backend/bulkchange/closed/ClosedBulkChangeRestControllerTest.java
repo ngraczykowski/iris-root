@@ -87,7 +87,7 @@ class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
           .body("[1].active", is(FALSE));
     }
 
-    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(CLOSED_BULK_CHANGES_URL).statusCode(FORBIDDEN.value());
     }
@@ -116,7 +116,7 @@ class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
           .body("[1].bulkChangeIds", hasItems(fixtures.bulkChangeId2.toString()));
     }
 
-    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(mappingForIds(List.of(fixtures.reasoningBranchId1, fixtures.reasoningBranchId2)))
           .statusCode(FORBIDDEN.value());

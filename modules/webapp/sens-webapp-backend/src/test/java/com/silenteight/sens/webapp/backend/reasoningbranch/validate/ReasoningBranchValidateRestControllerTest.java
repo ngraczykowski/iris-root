@@ -106,7 +106,7 @@ class ReasoningBranchValidateRestControllerTest extends BaseRestControllerTest {
           .body("extras.featureVectorSignatures", hasItems("Signature12", "Signature34"));
     }
 
-    @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       List<Long> branchIds = List.of(345L, 678L);
 

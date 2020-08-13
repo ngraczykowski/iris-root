@@ -62,7 +62,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getApproverUsername()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR, ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { BUSINESS_OPERATOR, ADMINISTRATOR, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     long changeRequestId = 2L;
 

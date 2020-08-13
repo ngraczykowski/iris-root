@@ -66,7 +66,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
           .body("[1].comment", equalTo("Disable redundant RBs based on analyses from 2020.04.02"));
     }
 
-    @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+    @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR })
     void its403_whenNotPermittedRole() {
       get(PENDING_CHANGE_REQUESTS_URL).statusCode(FORBIDDEN.value());
     }

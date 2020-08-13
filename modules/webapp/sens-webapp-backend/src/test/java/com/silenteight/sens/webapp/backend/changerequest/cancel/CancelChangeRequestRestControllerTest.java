@@ -63,7 +63,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getCancellerComment()).isEqualTo(cancellerComment);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     long changeRequestId = 2L;
 

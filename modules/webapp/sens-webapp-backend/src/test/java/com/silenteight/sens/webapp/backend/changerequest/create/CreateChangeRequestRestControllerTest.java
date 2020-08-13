@@ -75,7 +75,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(RequestCorrelation.id()).isEqualTo(correlationId);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     post(mappingForChangeRequests(), changeRequestWithDefaults(), defaultHeaders())
         .statusCode(FORBIDDEN.value());

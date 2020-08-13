@@ -6,7 +6,7 @@ import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMIN;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMINISTRATOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
@@ -22,7 +22,7 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
   @MockBean
   private SyncAnalystsUseCase service;
 
-  @TestWithRole(role = ADMIN)
+  @TestWithRole(role = ADMINISTRATOR)
   void producesStats_whenAnalystsAreSync() {
     // given
     when(service.synchronize()).thenReturn(ALL_CHANGED_WITH_ONE_ERROR);

@@ -45,7 +45,7 @@ class DecisionTreeDetailsRestControllerTest extends BaseRestControllerTest {
         .body("extras.treeId", equalTo((int) OTHER_DECISION_TREE_ID));
   }
 
-  @TestWithRole(roles = { ADMIN, ANALYST, AUDITOR })
+  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR })
   void its403_whenNotPermittedRole() {
     get("/decision-trees/" + DECISION_TREE_ID)
         .statusCode(FORBIDDEN.value());
