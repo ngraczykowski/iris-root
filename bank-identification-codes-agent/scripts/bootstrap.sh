@@ -5,11 +5,10 @@ scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
 
 PYTHON="python3"
-if command -v "python3.6" &> /dev/null; then
-    PYTHON="python3.6"
+if command -v "python3.7" &> /dev/null; then
+    PYTHON="python3.7"
 else
-    echo "WARN: The command python3.6 does not exist, using python3 command instead"
-    echo "NOTE: Python 3.6 is the recommended version as it is the version supported by RHEL7."
+    echo "WARN: The command python3.7 does not exist, using python3 command instead"
 fi
 
 cd "$basedir"
@@ -22,5 +21,4 @@ source venv/bin/activate
 
 pip install -U pip setuptools wheel
 pip install -r requirements.txt
-pip install -r ../ts-agent-toolkit
 pip install -e .

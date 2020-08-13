@@ -6,6 +6,7 @@ include:
 
 .publish_job_template: &publish_job_template
   extends: .python_job_template
+  image: python:3.7
   when: on_success
   script:
     - pip install twine
@@ -19,6 +20,7 @@ stages:
 
 build:
   extends: .python_build_job_template
+  image: python:3.7
   stage: build
   only:
     - master
@@ -26,9 +28,17 @@ build:
     - /^release-.*$/
   script:
     - scripts/build.sh
+  artifacts:
+    reports:
+      cobertura: .tox/coverage-report.xml
+      junit:
+        # NOTE(ahaczewski): Disable flake8 report as it has tons of failures.
+        # - .tox/flake8-report.xml
+        - .tox/pytest-report.xml
 
 publish:
   <<: *publish_job_template
+  image: python:3.7
   stage: publish
   dependencies:
     - build
@@ -40,6 +50,7 @@ publish:
 
 release:
   extends: .python_build_job_template
+  image: python:3.7
   stage: release
   when: manual
   only:
@@ -54,9 +65,17 @@ release:
     - git tag -d $(git tag -l)
   script:
     - scripts/release.sh
+  artifacts:
+    reports:
+      cobertura: .tox/coverage-report.xml
+      junit:
+        # NOTE(ahaczewski): Disable flake8 report as it has tons of failures.
+        # - .tox/flake8-report.xml
+        - .tox/pytest-report.xml
 
 publish_release:
   <<: *publish_job_template
+  image: python:3.7
   stage: publish_release
   dependencies:
     - release

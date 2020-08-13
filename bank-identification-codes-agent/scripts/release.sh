@@ -2,9 +2,12 @@
 set -e
 
 function gitRelease() {
+  echo 'Releasing'
   bump2version release
+  echo 'Building'
   scripts/clean.sh
   scripts/build.sh
+  echo 'Reseting release commit'
   git reset --hard HEAD~1 # remove release commit after tag
 }
 
@@ -14,15 +17,20 @@ if [ -z "${branch}" ]; then
 fi
 
 if [ "${branch}" == "master" ]; then
+  echo 'Releasing master'
   gitRelease
+  echo 'Bumping minor'
   bump2version minor # for master
 elif [[ $branch == release* ]]; then
+  echo 'Releasing branch'
   gitRelease
+  echo 'Bumping patch'
   bump2version patch # for release
 else
   echo 'Not a release branch'
   exit 0
 fi
 
-git push --atomic --tags origin HEAD:$branch
+echo 'Pushing'
 
+git push --atomic --tags origin HEAD:$branch

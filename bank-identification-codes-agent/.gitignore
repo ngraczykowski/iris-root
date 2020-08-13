@@ -36,7 +36,7 @@ __pycache__/
 .pytest_cache/
 .tox/
 venv/
-/.coverage
+.coverage
 
 ### Jupyter Notebooks ###
 .ipynb_checkpoints/

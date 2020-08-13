@@ -3,6 +3,27 @@ from typing import NewType, Union, List
 
 from attr import attrs, attrib
 
+__all__ = [
+    "SearchCodeMismatchAgentConfig",
+    "SearchCodeMismatchAgentInput",
+    "Result",
+    "Reason",
+    "NoSearchCodeInWatchlistReason",
+    "MatchingTextTooShortToBeCodeReason",
+    "MatchingTextMatchesWlSearchCodeReason",
+    "MatchingTextIsPartOfLongerSequenceReason",
+    "MatchingTextIsOnlyPartialMatchForSearchCodeReason",
+    "MatchingTextDoesNotMatchWlSearchCodeReason",
+    "MatchingTextDoesNotMatchMatchingFieldReason",
+]
+
+
+@attrs(frozen=True)
+class SearchCodeMismatchAgentConfig:
+    templates_dir = attrib(default=None)
+    comment_timeout = attrib(converter=int, default=250)
+    regex_timeout = attrib(converter=int, default=250)
+
 
 @attrs(frozen=True)
 class SearchCodeMismatchAgentInput:
@@ -67,8 +88,13 @@ class MatchingTextDoesNotMatchMatchingFieldReason:
     matching_field: str = attrib()
 
 
-Reason = NewType('Reason', Union[NoSearchCodeInWatchlistReason,
-                                 MatchingTextTooShortToBeCodeReason,
-                                 MatchingTextMatchesWlSearchCodeReason,
-                                 MatchingTextIsPartOfLongerSequenceReason,
-                                 MatchingTextDoesNotMatchMatchingFieldReason])
+Reason = NewType(
+    "Reason",
+    Union[
+        NoSearchCodeInWatchlistReason,
+        MatchingTextTooShortToBeCodeReason,
+        MatchingTextMatchesWlSearchCodeReason,
+        MatchingTextIsPartOfLongerSequenceReason,
+        MatchingTextDoesNotMatchMatchingFieldReason,
+    ],
+)

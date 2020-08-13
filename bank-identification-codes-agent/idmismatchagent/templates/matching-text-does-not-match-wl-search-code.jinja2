@@ -1,0 +1,7 @@
+{% if search_codes|length > 1 -%}
+    Matching text {{ matching_text }} does not match watchlist {{ wl_type|lower }} search code(s)
+    {{- ' ' }}{{ search_codes|join(', ') }}.
+{% else -%}
+    Matching text {{ matching_text }} does not match watchlist {{ wl_type|lower }} search code
+    {{- ' ' }}{{ search_codes|join(' ') }}.
+{% endif %}
