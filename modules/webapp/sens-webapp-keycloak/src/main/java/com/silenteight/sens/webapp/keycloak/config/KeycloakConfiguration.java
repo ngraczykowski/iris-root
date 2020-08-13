@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-import javax.validation.constraints.NotNull;
-
 import static com.silenteight.sens.webapp.keycloak.config.startup.ImportKeycloakConfiguration.IMPORT_KEYCLOAK_CONFIG_BEAN;
 
 @Configuration
