@@ -1,11 +1,16 @@
 {
-  "/rest": {
+  "/rest/webapp": {
     "target": "http://localhost:24410",
     "secure": false,
     "logLevel": "debug"
   },
   "/auth": {
     "target": "http://localhost:24491",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/rest/governance": {
+    "target": "http://localhost:24204",
     "secure": false,
     "logLevel": "debug"
   }
