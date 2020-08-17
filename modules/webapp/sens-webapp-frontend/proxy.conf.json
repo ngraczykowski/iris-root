@@ -2,11 +2,13 @@
   "/rest": {
     "target": "http://localhost:24410",
     "secure": false,
-    "logLevel": "debug"
+    "logLevel": "debug",
+    "changeOrigin": true
   },
   "/auth": {
     "target": "http://localhost:24491",
     "secure": false,
-    "logLevel": "debug"
+    "logLevel": "debug",
+    "changeOrigin": true
   }
 }
