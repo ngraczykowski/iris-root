@@ -12,7 +12,7 @@ tests_require = [
 ]
 setup(
     name="ts-identification-mismatch-agent",
-    version="1.1.0-dev",
+    version="1.2.0-dev",
     description="Transaction Screening Identification Mismatch Agent",
     author="Silent Eight Pte. Ltd.",
     author_email="proj-scb-tsaas@silenteight.com",
