@@ -25,7 +25,7 @@ setup(
     },
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
-        "ts-agent-toolkit>=1.2,==1.*",
+        "ts-agent-toolkit>=2.1,==2.*",
     ],
     extras_require={
         "tests": tests_require,
