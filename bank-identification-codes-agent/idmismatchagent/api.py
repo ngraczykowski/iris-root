@@ -4,7 +4,6 @@ from typing import NewType, Union, List
 from attr import attrs, attrib
 
 __all__ = [
-    "SearchCodeMismatchAgentConfig",
     "SearchCodeMismatchAgentInput",
     "Result",
     "Reason",
@@ -16,13 +15,6 @@ __all__ = [
     "MatchingTextDoesNotMatchWlSearchCodeReason",
     "MatchingTextDoesNotMatchMatchingFieldReason",
 ]
-
-
-@attrs(frozen=True)
-class SearchCodeMismatchAgentConfig:
-    templates_dir = attrib(default=None)
-    comment_timeout = attrib(converter=int, default=250)
-    regex_timeout = attrib(converter=int, default=250)
 
 
 @attrs(frozen=True)

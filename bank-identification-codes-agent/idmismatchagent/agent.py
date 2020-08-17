@@ -7,30 +7,20 @@ from .api import *
 
 __all__ = ["identification_mismatch_agent"]
 
-from .comments import CommentGenerator
+SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 
 
 def identification_mismatch_agent(
     agent_input: SearchCodeMismatchAgentInput,
-    config: SearchCodeMismatchAgentConfig = SearchCodeMismatchAgentConfig(),
-) -> Tuple[Result, Reason, str]:
+) -> Tuple[Result, Reason]:
     logic = IdMismatchLogic(
         agent_input.matching_field,
         agent_input.matching_text,
         agent_input.wl_type,
         agent_input.wl_search_codes,
     )
-    result, reason = logic.execute()
 
-    comment_generator = CommentGenerator(
-        config.templates_dir, config.comment_timeout, config.regex_timeout, reason
-    )
-    comment = comment_generator.generate()
-
-    if comment is None:
-        return result, reason, "COMMENT GENERATION ERROR"
-
-    return result, reason, comment
+    return logic.execute()
 
 
 @attrs(frozen=True)
@@ -116,4 +106,4 @@ class IdMismatchLogic:
 
 
 def _remove_ids_separators(text: str):
-    return re.sub(r"[-\),\.\/]+", "", text).strip().upper()
+    return SEPARATORS_PATTERN.sub("", text).strip().upper()
