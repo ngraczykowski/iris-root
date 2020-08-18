@@ -23,37 +23,33 @@ class SecurityMatrixReportGeneratorTest {
   @NotNull
   private static String[] getExpectedReport() {
     return new String[] {
-        "ACL,ACL Class,Permissions (technical),Authorities (technical),\"Permission / Action",
-        "\",Role (business),,,,,,,,",
-        ",,hasPermission(),hasAuthority(),,Maker,Approver,Decision Tree Viewer,Decision Tree"
-            + " Manager,Batch Type Manager,Auditor,Inbox Operator,User Manager,Analyst",
-        "T,Decision Tree,DECISION_TREE_CHANGE,,May create a ChangeRequest for any Reasoning"
-            + " Branch in the given tree,X,,,,,,,,",
-        "T,Decision Tree,DECISION_TREE_VIEW,,\"May view a decision tree contents"
-            + " (RBs, alerts)\",X,X,X,,,,,,",
-        "T,Workflow Level,CHANGE_ACCEPT,,Approve ChangeRequest for a given Approval"
-            + " Level,,X,,,,,,,",
-        "F,,,DECISION_TREE_LIST,May access a decision tree list and open any decision tree"
-            + " without its contents (no RB nor alerts),X,X,X,X,X,,,,",
-        "F,,,DECISION_TREE_MANAGE,Create empty tree,,,,X,,,,,",
-        ",,,,\"\"\"Copy Tree\"\" - without history (show appropriate information)\",,,,,,,,,",
-        ",,,,\"\"\"Rename This Tree\"\"\",,,,,,,,,",
-        ",,,,\"\"\"Delete This Tree\"\"\",,,,,,,,,",
-        "F,,,BATCH_TYPE_MANAGE,\"Assignment of Batch Types to Decision Tree",
-        "\",,,,,X,,,,",
-        ",,,,Activation of Batch Types for a Decision Tree,,,,,,,,,",
-        "F,,,AUDIT_GENERATE_REPORT,Generate all audit reports,,,,,,X,,,",
-        "F,,,INBOX_MANAGE,Reading/marking as solved all inbox entries for all Decision"
-            + " Trees,,,,,,,X,,",
-        "F,,,WORKFLOW_MANAGE,May configure workflow - change approval levels for a given"
-            + " tree,,,,,,,,X,",
-        "F,,,USER_MANAGE,\"Managing users",
+        "Permissions (technical),\"Permission / Action",
+        "\",Role (business),,,",
+        "hasPermission(),,Administrator,Approver,Auditor,Business Operator",
+        "APPROVE_CHANGE_REQUESTS,May approve ChangeRequest for any Reasoning Branch in the given"
+            + " tree,,x,,",
+        "ARCHIVE_DISCREPANCIES,May archive discrapent Reasoning Branches with alerts turned off"
+            + " by Circuit Breaker,,,,x",
+        "CANCEL_CHANGE_REQUESTS,May cancel aready created ChangeRequest for any Reasoning Branch"
+            + " in the given tree,,,,x",
+        "CREATE_CHANGE_REQUESTS,May create a ChangeRequest for any Reasoning Branch in the given"
+            + " tree,,,,x",
+        "GENERATE_REPORTS,Generate all audit reports,x,x,x,x",
+        "MANAGE_USERS,\"Managing users",
         "Managing roles assignment",
-        "Managing permissions assignment\",,,,,,,,X,",
-        "F,,,USER_VIEW,View users,,,,,,,,X,",
-        "F,,,SOLUTION_VIEW,Reading recommendations through Chrome Extension for all"
-            + " Batch Types,,,,,,,,,X",
-        ",,,DECISION_TREE_VIEW_ALL,\"May view contents of all decision trees"
-            + " (RBs, alerts)\",,,X?,,,,,," };
+        "Managing passwords reset for users\",x,,,",
+        "REJECT_CHANGE_REQUESTS,May reject ChangeRequest for any Reasoning Branch in the given"
+            + " tree,,x,,",
+        "SYNC_ANALYSTS,Run analyst synchronization job,x,,,",
+        "VALIDATE_REASONING_BRANCHES,Check if given Reasoning Branches exists,,,,x",
+        "VIEW_AVAILABLE_USER_ROLES,View user roles,x,,,",
+        "VIEW_CHANGE_REQUESTS,View created Change Requests,,x,,x",
+        "VIEW_DECISION_TREE,View Decision Tree Details,,x,,x",
+        "VIEW_DISCREPANCIES,View Reasoning Branches with alerts turned off by"
+            + " Circuit Breaker,,,,x",
+        "VIEW_FEATURES,View Reasoning Branch Features names and values,,x,,x",
+        "VIEW_REASONING_BRANCHES,View Reasoning Branches with all properties,,x,,x",
+        "VIEW_USERS,View users,x,,,"
+    };
   }
 }
