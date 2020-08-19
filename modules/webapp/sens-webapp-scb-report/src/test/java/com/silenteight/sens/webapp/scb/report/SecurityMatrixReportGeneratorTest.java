@@ -26,28 +26,24 @@ class SecurityMatrixReportGeneratorTest {
         "Permissions (technical),\"Permission / Action",
         "\",Role (business),,,",
         "hasPermission(),,Administrator,Approver,Auditor,Business Operator",
-        "APPROVE_CHANGE_REQUESTS,May approve ChangeRequest for any Reasoning Branch in the given"
-            + " tree,,x,,",
-        "ARCHIVE_DISCREPANCIES,May archive discrapent Reasoning Branches with alerts turned off"
+        "APPROVE_CHANGE_REQUESTS,May approve Change Request for any Reasoning Branch"
+            + " in the given tree,,x,,",
+        "ARCHIVE_DISCREPANCIES,May archive discrepant alerts that turned off Reasoning Branches"
             + " by Circuit Breaker,,,,x",
-        "CANCEL_CHANGE_REQUESTS,May cancel aready created ChangeRequest for any Reasoning Branch"
+        "CANCEL_CHANGE_REQUESTS,May cancel already created Change Request for any Reasoning Branch"
             + " in the given tree,,,,x",
-        "CREATE_CHANGE_REQUESTS,May create a ChangeRequest for any Reasoning Branch in the given"
-            + " tree,,,,x",
+        "CREATE_CHANGE_REQUESTS,May create a Change Request for any Reasoning Branch"
+            + " in the given tree,,,,x",
         "GENERATE_REPORTS,Generate all audit reports,x,x,x,x",
         "MANAGE_USERS,\"Managing users",
         "Managing roles assignment",
         "Managing passwords reset for users\",x,,,",
-        "REJECT_CHANGE_REQUESTS,May reject ChangeRequest for any Reasoning Branch in the given"
-            + " tree,,x,,",
+        "REJECT_CHANGE_REQUESTS,May reject Change Request for any Reasoning Branch"
+            + " in the given tree,,x,,",
         "SYNC_ANALYSTS,Run analyst synchronization job,x,,,",
-        "VALIDATE_REASONING_BRANCHES,Check if given Reasoning Branches exists,,,,x",
-        "VIEW_AVAILABLE_USER_ROLES,View user roles,x,,,",
         "VIEW_CHANGE_REQUESTS,View created Change Requests,,x,,x",
-        "VIEW_DECISION_TREE,View Decision Tree Details,,x,x,x",
-        "VIEW_DISCREPANCIES,View Reasoning Branches with alerts turned off by"
-            + " Circuit Breaker,,,,x",
-        "VIEW_FEATURES,View Reasoning Branch Features names and values,,x,,x",
+        "VIEW_DISCREPANCIES,View Reasoning Branches with discrepant alerts turned off"
+            + " by Circuit Breaker,,,,x",
         "VIEW_REASONING_BRANCHES,View Reasoning Branches with all properties,,x,,x",
         "VIEW_USERS,View users,x,,,"
     };
