@@ -44,7 +44,7 @@ class SecurityMatrixReportGeneratorTest {
         "VALIDATE_REASONING_BRANCHES,Check if given Reasoning Branches exists,,,,x",
         "VIEW_AVAILABLE_USER_ROLES,View user roles,x,,,",
         "VIEW_CHANGE_REQUESTS,View created Change Requests,,x,,x",
-        "VIEW_DECISION_TREE,View Decision Tree Details,,x,,x",
+        "VIEW_DECISION_TREE,View Decision Tree Details,,x,x,x",
         "VIEW_DISCREPANCIES,View Reasoning Branches with alerts turned off by"
             + " Circuit Breaker,,,,x",
         "VIEW_FEATURES,View Reasoning Branch Features names and values,,x,,x",
