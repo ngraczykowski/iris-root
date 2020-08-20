@@ -17,6 +17,8 @@ public class Authority {
 
   public static final String APPROVER_OR_BUSINESS_OPERATOR =
       "hasAnyRole('APPROVER', 'BUSINESS_OPERATOR')";
+  public static final String APPROVER_OR_AUDITOR_OR_BUSINESS_OPERATOR =
+      "hasAnyRole('APPROVER', 'AUDITOR', 'BUSINESS_OPERATOR')";
   public static final String ANY_ROLE_EXCEPT_ANALYST =
       "hasAnyRole('ADMIN', 'AUDITOR', 'BUSINESS_OPERATOR', 'APPROVER', 'ADMINISTRATOR')";
   public static final String ADMIN_OR_ADMINISTRATOR =
