@@ -42,12 +42,12 @@ class ReportRestControllerIT extends BaseRestControllerTest {
                 "Requested query parameters:\nparamA=paramValueABC\nparamB=paramValueEFG"));
   }
 
-  @TestWithRole(roles = { AUDITOR, ADMINISTRATOR, BUSINESS_OPERATOR, APPROVER })
+  @TestWithRole(roles = { AUDITOR, BUSINESS_OPERATOR, APPROVER })
   void badRequestResponseIfMandatoryParameterNotProvided() {
     get("/reports/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }
 
-  @TestWithRole(roles = { ANALYST })
+  @TestWithRole(roles = { ADMINISTRATOR, ANALYST })
   void its403_whenNotPermittedRole() {
     get("/reports/WRONG_REPORT_NAME").statusCode(FORBIDDEN.value());
   }
