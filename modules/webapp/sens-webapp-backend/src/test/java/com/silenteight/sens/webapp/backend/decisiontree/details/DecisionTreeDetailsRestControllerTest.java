@@ -21,10 +21,11 @@ class DecisionTreeDetailsRestControllerTest extends BaseRestControllerTest {
 
   private static final long DECISION_TREE_ID = 123;
   private static final long OTHER_DECISION_TREE_ID = 456;
+
   @MockBean
   private DecisionTreeQuery decisionTreeQuery;
 
-  @TestWithRole(roles = { ADMINISTRATOR, APPROVER, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, AUDITOR, BUSINESS_OPERATOR })
   void its200WithCorrectBody_whenFound() {
     given(decisionTreeQuery.getDecisionTree(DECISION_TREE_ID)).willReturn(
         new DecisionTreeDto(DECISION_TREE_ID));
@@ -45,7 +46,7 @@ class DecisionTreeDetailsRestControllerTest extends BaseRestControllerTest {
         .body("extras.treeId", equalTo((int) OTHER_DECISION_TREE_ID));
   }
 
-  @TestWithRole(roles = { ANALYST })
+  @TestWithRole(roles = { ADMINISTRATOR, ANALYST })
   void its403_whenNotPermittedRole() {
     get("/decision-trees/" + DECISION_TREE_ID)
         .statusCode(FORBIDDEN.value());

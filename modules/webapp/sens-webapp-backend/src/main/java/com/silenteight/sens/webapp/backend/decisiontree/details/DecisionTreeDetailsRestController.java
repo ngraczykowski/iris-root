@@ -17,7 +17,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
-public class DecisionTreeDetailsRestController {
+class DecisionTreeDetailsRestController {
 
   private final DecisionTreeQuery decisionTreeQuery;
 
