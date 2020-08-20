@@ -20,7 +20,9 @@ import java.util.stream.Stream;
 import static java.lang.Long.parseLong;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.of;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @RequiredArgsConstructor
 class ReasoningBranchReportGenerator implements ReportGenerator {
@@ -89,9 +91,15 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
     return new CsvBuilder<>(branches)
         .cell(REASONING_BRANCH_ID, branch ->
             fullReasoningBranchId(decisionTreeId, branch.getReasoningBranchId()))
-        .cell(UPDATED_AT, branch -> rowDateFormatter.format(branch.getUpdatedAt()))
+        .cell(UPDATED_AT, this::getLastUpdateTime)
         .cell(RECOMMENDATION, BranchWithFeaturesDto::getAiSolution)
         .cell(STATUS, branch -> branch.isActive() ? ENABLED : DISABLED);
+  }
+
+  private String getLastUpdateTime(BranchWithFeaturesDto branch) {
+    return ofNullable(firstNonNull(branch.getUpdatedAt(), branch.getCreatedAt()))
+        .map(rowDateFormatter::format)
+        .orElse(null);
   }
 
   private String formattedCurrentTime() {

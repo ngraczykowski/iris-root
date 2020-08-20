@@ -175,7 +175,8 @@ class GrpcReasoningBranchesQuery implements
 
     return BranchWithFeaturesDto.builder()
         .reasoningBranchId(reasoningBranch.getReasoningBranchId().getFeatureVectorId())
-        .updatedAt(toInstant(reasoningBranch.getUpdatedAt()))
+        .updatedAt(toInstantOrNull(reasoningBranch.getUpdatedAt()))
+        .createdAt(toInstantOrNull(reasoningBranch.getCreatedAt()))
         .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
         .isActive(reasoningBranch.getEnabled())
         .featureValues(reasoningBranch.getFeatureValueList())
@@ -234,7 +235,7 @@ class GrpcReasoningBranchesQuery implements
         .aiSolution(BranchSolutionMapper.map(reasoningBranch.getSolution()))
         .active(reasoningBranch.getEnabled())
         .createdAt(toInstant(reasoningBranch.getCreatedAt()))
-        .updatedAt(mapToUpdatedAt(reasoningBranch.getUpdatedAt()))
+        .updatedAt(toInstantOrNull(reasoningBranch.getUpdatedAt()))
         .build();
   }
 
@@ -242,7 +243,7 @@ class GrpcReasoningBranchesQuery implements
     return new ReasoningBranchIdDto(id.getDecisionTreeId(), id.getFeatureVectorId());
   }
 
-  private static Instant mapToUpdatedAt(Timestamp timestamp) {
+  private static Instant toInstantOrNull(Timestamp timestamp) {
     return isEmptyTimestamp(timestamp) ? null : toInstant(timestamp);
   }
 

@@ -56,6 +56,7 @@ class GrpcReasoningBranchesQueryTest {
   void returnsListOfBranches_whenRequestingByTreeId() {
     long decisionTreeId = 2;
     long reasoningBranchId = 3;
+    Instant createdAt = Instant.parse("2019-10-27T12:31:24.00Z");
     Instant updatedAt = Instant.parse("2019-10-28T15:35:24.00Z");
     String featureValue1 = "featureValue1";
     String featureValue2 = "featureValue2";
@@ -68,6 +69,7 @@ class GrpcReasoningBranchesQueryTest {
                 ReasoningBranchSummary
                     .newBuilder()
                     .setReasoningBranchId(reasoningBranchId(decisionTreeId, reasoningBranchId))
+                    .setCreatedAt(toTimestamp(createdAt))
                     .setUpdatedAt(toTimestamp(updatedAt))
                     .setSolution(BRANCH_FALSE_POSITIVE)
                     .setEnabled(true)
@@ -80,11 +82,32 @@ class GrpcReasoningBranchesQueryTest {
     assertThat(actual.get(0))
         .satisfies(dto -> {
           assertThat(dto.getReasoningBranchId()).isEqualTo(reasoningBranchId);
+          assertThat(dto.getCreatedAt()).isEqualTo(createdAt);
           assertThat(dto.getUpdatedAt()).isEqualTo(updatedAt);
           assertThat(dto.getAiSolution()).isEqualTo("FALSE_POSITIVE");
           assertThat(dto.isActive()).isEqualTo(true);
           assertThat(dto.getFeatureValues()).containsExactly(featureValue1, featureValue2);
         });
+  }
+
+  @Test
+  void handlesMissingDatesProperly_whenRequestingByTreeId() {
+    long decisionTreeId = 2;
+    long reasoningBranchId = 3;
+    given(branchStub.listReasoningBranches(
+        argThat(
+            request -> request.getDecisionTreeFilter().getDecisionTreeIds(0) == decisionTreeId)))
+        .willReturn(
+            reasoningBranchesResponseWith(
+                ReasoningBranchSummary
+                    .newBuilder()
+                    .setReasoningBranchId(reasoningBranchId(decisionTreeId, reasoningBranchId))
+            ));
+
+    List<BranchWithFeaturesDto> actual = underTest.findByTreeId(decisionTreeId);
+    assertThat(actual).hasSize(1);
+    assertThat(actual.get(0).getCreatedAt()).isNull();
+    assertThat(actual.get(0).getUpdatedAt()).isNull();
   }
 
   @Test

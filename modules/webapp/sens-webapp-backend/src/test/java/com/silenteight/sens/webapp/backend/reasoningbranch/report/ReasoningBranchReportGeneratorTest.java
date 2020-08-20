@@ -57,20 +57,19 @@ class ReasoningBranchReportGeneratorTest {
 
   @Test
   void generatesReportWithOneBranch() {
-
     int treeId = 9;
     int reasoningBranchId = 5;
     when(featureNamesQuery.findFeatureNames(reasoningBranchId)).thenReturn(
         List.of("Feature A", "Feature B"));
 
     when(reasoningBranchesReportQuery.findByTreeId(treeId)).thenReturn(
-        List.of(
-            new BranchWithFeaturesDto(
-                reasoningBranchId,
-                Instant.parse("2020-04-15T10:58:53.451667Z"),
-                "FALSE_POSITIVE",
-                false,
-                List.of("feat value1", "feat value2"))));
+        List.of(BranchWithFeaturesDto.builder()
+            .reasoningBranchId(reasoningBranchId)
+            .updatedAt(Instant.parse("2020-04-15T10:58:53.451667Z"))
+            .aiSolution("FALSE_POSITIVE")
+            .isActive(false)
+            .featureValues(List.of("feat value1", "feat value2"))
+            .build()));
 
     Report report = reportGenerator().generateReport(mapWithDecisionTreeId(treeId));
 
@@ -85,21 +84,61 @@ class ReasoningBranchReportGeneratorTest {
   }
 
   @Test
-  void generatesReportWithTwoBranches() {
+  void handlesMissingUpdateAt() {
+    int treeId = 9;
+    int reasoningBranchId = 5;
+    when(featureNamesQuery.findFeatureNames(reasoningBranchId)).thenReturn(emptyList());
 
+    when(reasoningBranchesReportQuery.findByTreeId(treeId)).thenReturn(
+        List.of(BranchWithFeaturesDto.builder()
+            .reasoningBranchId(reasoningBranchId)
+            .createdAt(Instant.parse("2020-04-14T10:25:53.451667Z"))
+            .build()));
+
+    Report report = reportGenerator().generateReport(mapWithDecisionTreeId(treeId));
+
+    assertThat(linesOf(report).get(1)).isEqualTo("9-5,2020-04-14 10:25:53.451667Z,,DISABLED");
+  }
+
+
+  @Test
+  void handlesMissingUpdateAtAndCreatedAt() {
+    int treeId = 9;
+    int reasoningBranchId = 5;
+    when(featureNamesQuery.findFeatureNames(reasoningBranchId)).thenReturn(emptyList());
+
+    when(reasoningBranchesReportQuery.findByTreeId(treeId)).thenReturn(
+        List.of(BranchWithFeaturesDto.builder()
+            .reasoningBranchId(reasoningBranchId)
+            .build()));
+
+    Report report = reportGenerator().generateReport(mapWithDecisionTreeId(treeId));
+
+    assertThat(linesOf(report).get(1)).isEqualTo("9-5,,,DISABLED");
+  }
+
+  @Test
+  void generatesReportWithTwoBranches() {
     int treeId = 15;
     int firstReasoningBranchId = 7;
     when(featureNamesQuery.findFeatureNames(anyLong())).thenReturn(
         List.of("Feat A", "Feat B", "Feat C"));
     when(reasoningBranchesReportQuery.findByTreeId(anyLong())).thenReturn(
         List.of(
-            new BranchWithFeaturesDto(
-                firstReasoningBranchId, Instant.parse("2018-07-12T11:15:31.123456Z"),
-                "HINTED_FALSE_POSITIVE", true,
-                List.of("feature value 1", "feature value 2", "feature value 3")),
-            new BranchWithFeaturesDto(
-                8, Instant.parse("2019-11-30T21:15:00.654321Z"), "POTENTIAL_FALSE_POSITIVE", false,
-                List.of("feature value 4", "feature value 5", "feature value 6"))));
+            BranchWithFeaturesDto.builder()
+                .reasoningBranchId(firstReasoningBranchId)
+                .updatedAt(Instant.parse("2018-07-12T11:15:31.123456Z"))
+                .aiSolution("HINTED_FALSE_POSITIVE")
+                .isActive(true)
+                .featureValues(List.of("feature value 1", "feature value 2", "feature value 3"))
+                .build(),
+            BranchWithFeaturesDto.builder()
+                .reasoningBranchId(8)
+                .updatedAt(Instant.parse("2019-11-30T21:15:00.654321Z"))
+                .aiSolution("POTENTIAL_FALSE_POSITIVE")
+                .isActive(false)
+                .featureValues(List.of("feature value 4", "feature value 5", "feature value 6"))
+                .build()));
 
     Report report = reportGenerator().generateReport(mapWithDecisionTreeId(treeId));
 

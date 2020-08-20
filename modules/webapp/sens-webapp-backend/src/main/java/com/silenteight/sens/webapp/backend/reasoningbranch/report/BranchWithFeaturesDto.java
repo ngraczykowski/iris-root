@@ -14,6 +14,8 @@ public class BranchWithFeaturesDto {
 
   private final Instant updatedAt;
 
+  private final Instant createdAt;
+
   private final String aiSolution;
 
   private final boolean isActive;
