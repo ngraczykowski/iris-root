@@ -3,7 +3,7 @@ import { Authority } from '@core/authorities/model/authority.enum';
 
 export const authoritiesConfig: AuthoritiesConfiguration = {
   features: {
-    users_list: [Authority.ADMIN],
+    users_list: [Authority.ADMIN, Authority.ADMINISTRATOR],
     rb_browser: [Authority.BUSINESS_OPERATOR, Authority.APPROVER],
     rb_change_request: [Authority.BUSINESS_OPERATOR],
     rb_pending_changes: [Authority.BUSINESS_OPERATOR, Authority.APPROVER],
