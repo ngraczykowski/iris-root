@@ -191,6 +191,11 @@ sens.logging.file:
   dir: logs/
   name: ${spring.application.name}
 
+serp:
+  messaging:
+    error-queue:
+      enabled: true
+
 ####################################################################################################
 sens.web:
   cors:
