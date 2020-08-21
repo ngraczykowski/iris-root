@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ public class IntegrationConfiguration {
   private final ObjectProvider<DirectRabbitListenerContainerFactory>
       directRabbitListenerContainerFactories;
 
-  private final ProtoMessageConverter messageConverter;
+  private final ContentTypeDelegatingMessageConverter messageConverter;
   private final RabbitTemplate rabbitTemplate;
 
   @Bean

@@ -20,7 +20,8 @@ class MessagingProperties {
   @NotNull
   private Encryption encryption = new Encryption();
 
-  private String errorQueueName = "error-queue";
+  @NotNull
+  private ErrorQueue errorQueue = new ErrorQueue();
 
   @Data
   static class Compression {
@@ -37,5 +38,13 @@ class MessagingProperties {
 
     // TODO(ahaczewski): Implement message encryption.
     private boolean enabled = false;
+  }
+
+  @Data
+  static class ErrorQueue {
+
+    private boolean enabled = false;
+
+    private String name = "error-queue";
   }
 }

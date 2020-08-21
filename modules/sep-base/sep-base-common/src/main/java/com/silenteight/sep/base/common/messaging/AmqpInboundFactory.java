@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
+import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.integration.amqp.dsl.AbstractMessageListenerContainerSpec;
 import org.springframework.integration.amqp.dsl.Amqp;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterDMLCSpec;
@@ -20,7 +21,7 @@ import static com.silenteight.sep.base.common.messaging.MessagingErrorConfigurat
 //  with our message converting and error handling logic.
 public class AmqpInboundFactory {
 
-  private final ProtoMessageConverter messageConverter;
+  private final ContentTypeDelegatingMessageConverter messageConverter;
 
   @Setter
   private SimpleRabbitListenerContainerFactory simpleMessageListenerContainerFactory;

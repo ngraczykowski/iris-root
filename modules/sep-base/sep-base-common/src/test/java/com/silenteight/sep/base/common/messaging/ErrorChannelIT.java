@@ -20,14 +20,17 @@ import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
 
-@ContextConfiguration(classes = { ErrorChannelConnectionConfiguration.class,
+@ContextConfiguration(classes = {
+    ErrorChannelConnectionConfiguration.class,
     ErrorChannelConfiguration.class })
+@TestPropertySource(properties = "serp.messaging.error-queue.enabled=true")
 class ErrorChannelIT extends BaseIntegrationTest {
 
   private static final String INPUT_QUEUE = "inputQueue";

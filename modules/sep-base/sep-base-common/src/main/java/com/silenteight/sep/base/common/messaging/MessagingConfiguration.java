@@ -10,6 +10,8 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.core.RabbitOperations;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -46,7 +48,7 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
   }
 
   @Bean
-  ProtoMessageConverter messageConverter(MessageRegistry messageRegistry) {
+  ProtoMessageConverter protoMessageConverter(MessageRegistry messageRegistry) {
     ProtoMessageConverter converter = new ProtoMessageConverter(messageRegistry);
 
     converter.setUnpackAny(false);
@@ -58,7 +60,7 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
   @Bean
   MessageSenderFactory messageSenderFactory(
       RabbitOperations operations,
-      ProtoMessageConverter messageConverter,
+      ContentTypeDelegatingMessageConverter messageConverter,
       Collection<SendMessageListener> listeners) {
 
     return new AmqpMessageSenderFactory(operations, messageConverter, listeners);
@@ -94,5 +96,20 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
     factory.afterPropertiesSet();
 
     registrar.setMessageHandlerMethodFactory(factory);
+  }
+
+  @Bean
+  Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
+
+  @Bean
+  ContentTypeDelegatingMessageConverter messageConverter(
+      ProtoMessageConverter protoMessageConverter,
+      Jackson2JsonMessageConverter jackson2JsonMessageConverter) {
+    var converter = new ContentTypeDelegatingMessageConverter(protoMessageConverter);
+    converter.addDelegate("application/x-protobuf", protoMessageConverter);
+    converter.addDelegate("application/json", jackson2JsonMessageConverter);
+    return converter;
   }
 }
