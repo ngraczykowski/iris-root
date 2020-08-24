@@ -25,6 +25,7 @@ public class IntegrationConfiguration {
 
   private final ContentTypeDelegatingMessageConverter messageConverter;
   private final RabbitTemplate rabbitTemplate;
+  private final MessagingProperties messagingProperties;
 
   @Bean
   AmqpInboundFactory amqpInboundChannelAdapterFactory() {
@@ -34,6 +35,7 @@ public class IntegrationConfiguration {
         factory::setSimpleMessageListenerContainerFactory);
     directRabbitListenerContainerFactories.ifAvailable(
         factory::setDirectMessageListenerContainerFactory);
+    factory.setErrorQueueEnabled(messagingProperties.getErrorQueue().isEnabled());
 
     factory.setErrorHandler(
         new CustomConditionalRejectingErrorHandler(new CustomExceptionStrategy()));

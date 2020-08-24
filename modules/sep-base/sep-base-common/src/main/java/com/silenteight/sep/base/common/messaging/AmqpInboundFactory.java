@@ -29,25 +29,35 @@ public class AmqpInboundFactory {
   private DirectRabbitListenerContainerFactory directMessageListenerContainerFactory;
   @Setter
   private ErrorHandler errorHandler;
+  @Setter
+  private boolean errorQueueEnabled;
 
   public AmqpInboundChannelAdapterSMLCSpec simpleAdapter() {
     Preconditions.checkState(simpleMessageListenerContainerFactory != null);
 
-    return Amqp
+    var adapter = Amqp
         .inboundAdapter(simpleMessageListenerContainerFactory.createListenerContainer())
         .messageConverter(messageConverter)
-        .configureContainer(this::configureContainer)
-        .errorChannel(ERROR_CHANNEL_NAME);
+        .configureContainer(this::configureContainer);
+
+    if (errorQueueEnabled)
+      adapter.errorChannel(ERROR_CHANNEL_NAME);
+
+    return adapter;
   }
 
   public AmqpInboundChannelAdapterDMLCSpec directAdapter() {
     Preconditions.checkState(directMessageListenerContainerFactory != null);
 
-    return Amqp
+    var adapter = Amqp
         .inboundAdapter(directMessageListenerContainerFactory.createListenerContainer())
         .messageConverter(messageConverter)
-        .configureContainer(this::configureContainer)
-        .errorChannel(ERROR_CHANNEL_NAME);
+        .configureContainer(this::configureContainer);
+
+    if (errorQueueEnabled)
+      adapter.errorChannel(ERROR_CHANNEL_NAME);
+
+    return adapter;
   }
 
   private void configureContainer(
