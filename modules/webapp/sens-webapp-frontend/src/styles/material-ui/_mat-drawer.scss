@@ -1,0 +1,15 @@
+
+@mixin sens-drawer {
+  .mat-drawer-side {
+    &.app-container__navigation,
+    &.mat-drawer-end {
+      border: 0;
+    }
+  }
+
+  .mat-drawer-container {
+    background: transparent;
+    height: 100%;
+  }
+}
+

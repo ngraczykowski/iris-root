@@ -1,0 +1,51 @@
+<mat-table [dataSource]="list" class="mat-table--main-content" (mouseout)="hoveredRow = null">
+  <ng-container matColumnDef="userName">
+    <mat-header-cell *matHeaderCellDef>
+      <span>{{ 'usersManagement.list.cols.userName' | translate }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element" [innerHTML]="element.userName | highlight: searchQuery">
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="displayName">
+    <mat-header-cell *matHeaderCellDef>
+      <span>{{ 'usersManagement.list.cols.displayName' | translate }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element"  [innerHTML]="element.displayName | highlight: searchQuery">
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="roles">
+    <mat-header-cell *matHeaderCellDef>
+      <span>{{ 'usersManagement.list.cols.roles' | translate }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element" class="mat-cell--panel">
+      <app-inline-chips-list>
+        <mat-chip *ngFor="let role of element.roles"
+                  [disableRipple]="true"
+                  class="sens-static-chip">{{role}}</mat-chip>
+      </app-inline-chips-list>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="origin">
+    <mat-header-cell *matHeaderCellDef>
+      <span>{{ 'usersManagement.list.cols.origin' | translate }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{element.origin}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="profile">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let element" class="mat-cell--panel">
+      <button mat-button color="primary" (click)="edit.emit(element)"
+              [@growHide]="hoveredRow !== element.userName ? 'hidden' : 'visible'">Edit</button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"
+           (mouseover)="hoveredRow = row.userName"></mat-row>
+</mat-table>

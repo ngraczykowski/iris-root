@@ -1,6 +1,7 @@
 import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
 import { MatButtonModule, MatDialogModule } from '@angular/material';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppBarModule } from '@app/app-bar/app-bar.module';
 import { rolesByRedirect, routes } from '@app/app-routes';
@@ -26,10 +27,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateModule } from '@ngx-translate/core';
+import { AnimationModule } from '@ui/animation/animation.module';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { concat, Observable } from 'rxjs';
 import { reducers } from './reducers';
-import { UserManagementModule } from './user-management/user-management.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -50,7 +51,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     }),
     KeycloakAngularModule,
     AuditTrailModule,
-    UserManagementModule,
+    BrowserModule,
     BrowserAnimationsModule,
     AppBarModule,
     SidenavModule,

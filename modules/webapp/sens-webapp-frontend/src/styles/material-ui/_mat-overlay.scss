@@ -1,0 +1,6 @@
+@mixin cdk-overlay() {
+  .overlay-transitive {
+    margin: -48px;
+    pointer-events: none!important;
+  }
+}

@@ -1,0 +1,29 @@
+.inline-chips-list {
+  display: flex;
+
+  .mat-chip-list-wrapper {
+    overflow: hidden;
+    max-height: 40px;
+
+    .mat-standard-chip {
+      flex: 0 0 auto;
+    }
+  }
+
+  .wrapped-chips-counter {
+    display: flex;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+  }
+}

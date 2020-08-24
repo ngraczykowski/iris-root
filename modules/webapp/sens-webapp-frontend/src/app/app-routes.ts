@@ -14,7 +14,6 @@ import { AnalystHomeComponent } from '@app/templates/analyst-home/analyst-home.c
 import { UsersReportComponent } from '@app/users-report/containers/users-report/users-report.component';
 import { AuthorityGuard } from './shared/security/guard/authority-guard.service';
 import { SecurityMatrixComponent } from './templates/audit-trail/audit-trail.component';
-import { UserManagementPageComponent } from './user-management/containers/user-management-page/user-management-page.component';
 
 export const routes: Routes = [
   {
@@ -132,14 +131,6 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'users/user-management',
-    component: UserManagementPageComponent,
-    canActivate: [AuthenticationGuard, AuthorityGuard],
-    data: {
-      authorities: ['Admin', 'Administrator']
-    }
-  },
-  {
     path: 'reports/security-matrix',
     component: SecurityMatrixComponent,
     canActivate: [AuthenticationGuard, AuthorityGuard],
@@ -162,6 +153,14 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuard, AuthorityGuard],
     data: {
       authorities: ['Analyst']
+    }
+  },
+  {
+    path: 'user-management',
+    loadChildren: './miniapps/user-management/user-management.module#UserManagementModule',
+    canActivate: [AuthenticationGuard, AuthorityGuard],
+    data: {
+      authorities: ['Admin', 'Administrator']
     }
   },
   {

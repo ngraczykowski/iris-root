@@ -373,127 +373,79 @@
     }
   },
   "usersManagement": {
-    "title": "Users",
-    "usersList": {
-      "options": {
-        "addUser": "Add User",
-        "search": "Search user e.g. John Doe"
+    "title": "Users list",
+    "form": {
+      "title": {
+        "edit": "Edit user",
+        "create": "Create user"
       },
-      "usersTable": {
-        "username": {
-          "label": "Username"
-        },
-        "displayName": {
-          "label": "Display name",
-          "emptyState": "Display name not specified"
-        },
-        "roles": {
-          "label": "Roles",
-          "emptyState": "No role assigned"
-        },
-        "origin": {
-          "label": "Origin"
-        },
-        "profile": {
-          "label": "Profile",
-          "edit": "Edit",
-          "resetPassword": "Reset password"
-        }
-      }
-    },
-    "userProfile": {
-      "header": {
-        "headline": {
-          "add": "Add New SENS User",
-          "edit": "Edit User Profile",
-          "resetPassword": "Reset password"
+      "button" :{
+        "edit": "Apply changes",
+        "create": "Add new user",
+        "cancel": "Cancel"
+      },
+      "resetPassword": {
+        "button": "Reset password",
+        "newPassword": "New password for {{ user }} is: <b>{{ password }}</b>",
+        "cancel": "cancel"
+      },
+      "roles": {
+        "description": {
+          "ADMIN": "Has access and rights to everything in the application and can manage users.",
+          "ADMINISTRATOR": "Can manage users.",
+          "ANALYST": "The role needed for the analyst to use the chrome extension.",
+          "APPROVER": "Has access to the Approval Queue and can reject or approve pending changes.",
+          "BUSINESS_OPERATOR": "Can manage Decision Trees and Reasoning Branches.",
+          "AUDITOR": "Can generate reports."
         }
       },
-      "content": {
-        "username": {
+      "fields": {
+        "userName": {
           "label": "Username",
-          "input": {
-            "placeholder": "john_doe"
-          },
-          "validation": {
-            "unique": "The username is unique",
-            "length": "The username length is between 3 - 30 characters",
-            "characters": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
+          "errors": {
+            "required": "The username length should be between 3 - 30 characters",
+            "usernameInUsage": "The username should be unique",
+            "minlength": "The username length should be between 3 - 30 characters",
+            "maxlength": "The username length  should be between 3 - 30 characters",
+            "pattern": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
           }
         },
         "displayName": {
           "label": "Display name",
-          "input": {
-            "placeholder": "John Doe"
-          },
-          "validation": {
-            "length": "The display name length is between 3 - 50 characters"
+          "errors": {
+            "minlength": "The display name should be between 3 - 50 characters",
+            "maxlength": "The display name should be between 3 - 50 characters"
           }
         },
         "password": {
           "label": "Password",
-          "temporaryPassword": "Temporary password",
-          "input": {
-            "placeholder": "Password of 8 characters with one digit"
-          },
-          "validation": {
-            "length": {
-              "minLength": "The password length is a minimum of 8 characters"
-            },
-            "letter": "The password contains minimum of one letter",
-            "digit": "The password contains minimum of one digit"
-          },
-          "popup": {
-            "content": "Are you sure you want to reset {{ user }} user password?",
-            "loading": "Reseting password please wait.",
-            "newPassword": "New password for {{ user }} is: <b>{{ password }}</b>"
+          "errors": {
+            "required": "The password length should be a minimum of 8 characters",
+            "minlength": "The password length should be a minimum of 8 characters",
+            "pattern": "The password should be contain minimum of one letter and one digit"
           }
-        },
-        "role": {
-          "label": "Role",
-          "roles": {
-            "analyst": {
-              "label": "Analyst",
-              "hint": "The role needed for the analyst to use the chrome extension."
-            },
-            "auditor": {
-              "label": "Auditor",
-              "hint": "Has access to all reports about the application modules."
-            },
-            "admin": {
-              "label": "Admin",
-              "hint": "Has access and rights to everything in the application and can manage users."
-            },
-            "administrator": {
-              "label": "Administrator",
-              "hint": "Can manage users."
-            },
-            "approver": {
-              "label": "Approver",
-              "hint": "Has Access to the Approval Queue and can reject or approve pending changes."
-            },
-            "businessOperator": {
-              "label": "Business Operator",
-              "hint": "Has access to all Decision Trees, Reasoning Branches, and can manage it."
-            }
-          },
-          "validation": {
-            "atLeastOneRole": "At least one role must be assigned to the user."
-          }
-        },
-        "validation": {
-          "generalValidationError": "Failed to save changes. Please make sure that the provided data meets the input field requirements.",
-          "insufficientStorage": "Failed to save changes to auth server, please try again.",
-          "unauthorized": "Unauthorized error occured, please log in and try again.",
-          "notFound": "Not found error occured, please try again."
+        }
+      }
+    },
+    "list": {
+      "loading": "Loading",
+      "buttons": {
+        "addUser": "Add user"
+      },
+      "filters": {
+        "search": {
+          "placeholder": "Search"
         }
       },
-      "footer": {
-        "buttonClose": "Cancel",
-        "buttonAdd": "Add New User",
-        "buttonApply": "Apply Changes",
-        "buttonActionTooltip": "Fill required field to enable this button",
-        "buttonResetPassword": "Reset password"
+      "cols": {
+        "userName": "Username",
+        "displayName": "Display name",
+        "roles": "Roles",
+        "origin": "Origin"
+      },
+      "noResults": {
+        "title": "No users found",
+        "description": "Try to adjust your filtering options to find what you are looking for."
       }
     }
   },

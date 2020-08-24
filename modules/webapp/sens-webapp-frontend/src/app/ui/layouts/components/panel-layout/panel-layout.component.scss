@@ -1,0 +1,10 @@
+:host {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: flex-end;
+
+  &.panel-layout--left-alignment {
+    justify-content: flex-start;
+  }
+}
+

@@ -1,0 +1,33 @@
+<app-page-layout>
+  <ng-container page-layout-header>
+    <app-header [headerData]="{ title: 'usersManagement.title'}"></app-header>
+  </ng-container>
+  <ng-container page-layout-filters>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{'usersManagement.list.filters.search.placeholder' | translate }}
+      </mat-label>
+      <input [ngModel]="phrase | async" (ngModelChange)="setPhrase($event)" matInput>
+    </mat-form-field>
+    <div class="filters-panel">
+      <button mat-stroked-button color="primary" (click)="addUser()">
+        {{'usersManagement.list.buttons.addUser' | translate }}
+      </button>
+    </div>
+  </ng-container>
+  <ng-container page-layout-content>
+
+    <app-state [stateContent]="loadingState" *ngIf="loading | async; else searchResults">
+    </app-state>
+    <app-state [stateContent]="noResultsState" *ngIf="empty | async">
+    </app-state>
+
+    <ng-template #searchResults>
+      <app-user-management-table
+              [list]="results | async"
+              [searchQuery]="phrase | async"
+              (edit)="editUser($event)"></app-user-management-table>
+    </ng-template>
+
+  </ng-container>
+</app-page-layout>

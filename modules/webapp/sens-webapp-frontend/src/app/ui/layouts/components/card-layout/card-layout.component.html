@@ -1,15 +1,18 @@
-<div class="card-layout__image">
+<div class="optional-projection card-layout__image">
   <ng-content select="[card-layout-image]"></ng-content>
 </div>
-<div class="card-layout__title mat-title">
-  <ng-content select="[card-layout-title]"></ng-content>
+<div class="optional-projection card-layout__title mat-title">
+  <ng-content #title select="[card-layout-title]"></ng-content>
 </div>
-<div class="card-layout__headline mat-headline">
+<div class="optional-projection card-layout__headline mat-headline">
   <ng-content select="[card-layout-headline]"></ng-content>
 </div>
-<p class="card-layout__desc mat-dialog mat-body secondary-text">
+<p class="optional-projection card-layout__desc mat-dialog mat-body secondary-text">
   <ng-content select="[card-layout-description]"></ng-content>
 </p>
-<div class="card-layout__panel">
+<p class="optional-projection card-layout__content">
+  <ng-content select="[card-layout-content]"></ng-content>
+</p>
+<div class="optional-projection card-layout__panel">
   <ng-content select="[card-layout-panel]"></ng-content>
 </div>

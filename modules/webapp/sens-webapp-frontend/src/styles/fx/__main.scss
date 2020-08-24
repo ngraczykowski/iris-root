@@ -1,0 +1,38 @@
+.fx-waterfall {
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      transition-delay: (#{$i*0.1s});
+    }
+  }
+}
+
+.fx-skid-l {
+  transition: transform .5s cubic-bezier(0, 0.2, 0.05, 1), opacity .5s cubic-bezier(0, 0.2, 0.05, 1);
+  opacity: 0;
+  transform: translateX(-60px);
+
+  &.fx-inited {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fx-drop {
+  transition: transform .2s cubic-bezier(0, 0.2, 0.05, 1), opacity .2s cubic-bezier(0, 0.2, 0.05, 1);
+  opacity: 0;
+  transform: translateY(-20px);
+
+  &.fx-inited {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fx-fade {
+  transition: opacity .2s ease-in-out;
+  opacity: 0;
+
+  &.fx-inited {
+    opacity: 1;
+  }
+}

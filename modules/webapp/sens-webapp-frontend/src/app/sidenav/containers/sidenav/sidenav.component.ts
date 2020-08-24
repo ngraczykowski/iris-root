@@ -11,7 +11,7 @@ export class SidenavComponent implements OnInit {
   public static featuresLinks = {
     users_list: {
       label: 'usersList.title',
-      url: '/users/user-management',
+      url: '/user-management',
       icon: 'people_outline'
     },
     rb_browser: {

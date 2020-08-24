@@ -1,6 +1,6 @@
 @import 'abstracts/8-pt-grid';
 
-:host {
+:host.card-layout--centered {
   text-align: center;
 }
 
@@ -12,5 +12,11 @@
   }
   &__panel {
     margin-top: calculate-8-pt-grid(3);
+  }
+}
+
+.optional-projection {
+  &:empty {
+    display: none;
   }
 }

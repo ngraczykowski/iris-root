@@ -1,0 +1,10 @@
+app-panel-layout {
+  button {
+    margin: calculate-8-pt-grid(1);
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+    margin: calculate-8-pt-grid(1);
+  }
+}

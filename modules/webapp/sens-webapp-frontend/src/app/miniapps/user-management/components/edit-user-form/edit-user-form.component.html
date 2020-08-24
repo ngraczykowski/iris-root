@@ -1,0 +1,87 @@
+<app-card-layout [centered]="false">
+
+  <ng-container card-layout-title>
+    <ng-container *ngIf="data">
+      {{ 'usersManagement.form.title.edit' | translate }}
+    </ng-container>
+    <ng-container *ngIf="!data">
+      {{ 'usersManagement.form.title.create' | translate }}
+    </ng-container>
+
+  </ng-container>
+
+  <ng-container card-layout-content>
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="static-error">
+        <mat-label>{{ 'usersManagement.form.fields.userName.label' | translate }} *</mat-label>
+        <input matInput formControlName="userName"/>
+        <mat-error [@transitionMessages]>
+          <span *ngIf="form.hasError('required', 'userName')" [@expansePassing]>{{ 'usersManagement.form.fields.userName.errors.required' | translate }}</span>
+          <span *ngIf="form.hasError('usernameInUsage', 'userName')" [@expansePassing]>{{ 'usersManagement.form.fields.userName.errors.usernameInUsage' | translate }}</span>
+          <span *ngIf="form.hasError('minlength', 'userName')" [@expansePassing]>{{ 'usersManagement.form.fields.userName.errors.minlength' | translate }}</span>
+          <span *ngIf="form.hasError('maxlength', 'userName')" [@expansePassing]>{{ 'usersManagement.form.fields.userName.errors.maxlength' | translate }}</span>
+          <span *ngIf="form.hasError('pattern', 'userName')" [@expansePassing]>{{ 'usersManagement.form.fields.userName.errors.pattern' | translate }}</span>
+        </mat-error>
+
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="static-error">
+        <mat-label>{{ 'usersManagement.form.fields.displayName.label' | translate }}</mat-label>
+        <input matInput formControlName="displayName"/>
+        <mat-error *ngIf="form.controls.displayName.invalid">
+          <span *ngIf="form.hasError('minlength', 'displayName')" [@expansePassing]>{{ 'usersManagement.form.fields.displayName.errors.minlength' | translate }}</span>
+          <span *ngIf="form.hasError('maxlength', 'displayName')" [@expansePassing]>{{ 'usersManagement.form.fields.displayName.errors.maxlength' | translate }}</span>
+        </mat-error>
+
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="static-error" *ngIf="!data">
+        <mat-label>{{ 'usersManagement.form.fields.password.label' | translate }} *</mat-label>
+        <input matInput [type]="passwordInputType" formControlName="password"/>
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
+          <mat-icon>{{passwordInputType === 'password' ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.controls.password.invalid">
+          <span *ngIf="form.hasError('required', 'password')" [@expansePassing]>{{ 'usersManagement.form.fields.password.errors.required' | translate }}</span>
+          <span *ngIf="form.hasError('minlength', 'password')" [@expansePassing]>{{ 'usersManagement.form.fields.password.errors.minlength' | translate }}</span>
+          <span *ngIf="form.hasError('pattern', 'password')" [@expansePassing]>{{ 'usersManagement.form.fields.password.errors.pattern' | translate }}</span>
+        </mat-error>
+      </mat-form-field>
+
+
+      <app-reset-user-password *ngIf="data && data.origin === 'SENS'" [user]="data">
+      </app-reset-user-password>
+
+      <mat-selection-list formControlName="roles">
+        <mat-list-option [value]="authority.ADMIN">
+          <span>{{ authority.ADMIN }}</span>
+          <mat-hint class="mat-caption">
+            {{ 'usersManagement.form.roles.description.ADMIN' | translate }}
+          </mat-hint>
+        </mat-list-option>
+        <div [@expanseHide]="(showAllRoles | async) ? 'visible' : 'hidden'">
+          <mat-list-option *ngFor="let role of authorities" [value]="role">
+            <span>{{role}}</span>
+            <mat-hint class="mat-caption">
+              {{ 'usersManagement.form.roles.description.' + authorityKeys[role] | translate }}
+            </mat-hint>
+          </mat-list-option>
+        </div>
+      </mat-selection-list>
+    </form>
+  </ng-container>
+
+    <app-panel-layout card-layout-panel>
+      <button mat-stroked-button color="primary" (click)="close()" [disabled]="sending">
+        {{ 'usersManagement.form.button.cancel' | translate }}</button>
+      <button *ngIf="!data" mat-flat-button color="primary" (click)="accept()" [disabled]="sending">
+        <app-loading-button-layout [spinner]="sending">
+          {{ 'usersManagement.form.button.create' | translate }}
+        </app-loading-button-layout>
+      </button>
+      <button *ngIf="data" mat-flat-button color="primary" (click)="accept()" [disabled]="sending">
+        <app-loading-button-layout [spinner]="sending">
+          {{ 'usersManagement.form.button.edit' | translate }}
+        </app-loading-button-layout>
+      </button>
+    </app-panel-layout>
+
+</app-card-layout>
