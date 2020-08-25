@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @Value
-@ConfigurationProperties("sens.circuit-breaker.limit-archived-discrepant-branches")
+@ConfigurationProperties("sens.webapp.discrepant-branches.max-archived")
 @ConstructorBinding
 public class CircuitBreakerProperties {
 

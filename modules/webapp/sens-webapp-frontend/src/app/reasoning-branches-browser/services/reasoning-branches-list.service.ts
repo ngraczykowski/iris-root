@@ -24,27 +24,6 @@ export class ReasoningBranchesListService {
       private reasoningBranchesService: ReasoningBranchesService
   ) { }
 
-  getBulkChangesIds(branches): Observable<Array<BulkChangesResponse>> {
-    const params = this.generateBulkChangeParams(branches);
-    return this.http.get<Array<BulkChangesResponse>>(
-        `${environment.serverApiUrl}/bulk-changes/ids`
-        + `?reasoningBranchId=${params}`
-        + `&statesFamily=pending`);
-  }
-
-  private generateBulkChangeParams(branches) {
-    const params = [];
-    branches.forEach(branch => {
-      params.push(`${branch.reasoningBranchId.decisionTreeId}-${branch.reasoningBranchId.featureVectorId}`);
-    });
-    return params.join(',');
-  }
-
-  getPendingChanges(): Observable<Array<PendingChangesResponse>> {
-    return this.http.get<Array<PendingChangesResponse>>(
-        `${environment.serverApiUrl}/change-requests?statesFamily=pending`);
-  }
-
   getReasoningBranchesList(request: ReasoningBranchesListRequest): Observable<ReasoningBranchesListResponse> {
     return this.reasoningBranchesService.getList(request).pipe(
         switchMap((response: ReasoningBranchesListResponse) => response.branches.length ? forkJoin({
@@ -85,5 +64,26 @@ export class ReasoningBranchesListService {
         branch.reasoningBranchId.featureVectorId === change.reasoningBranchId.featureVectorId &&
         branch.reasoningBranchId.decisionTreeId === change.reasoningBranchId.decisionTreeId);
     return bulkChange ? bulkChange.bulkChanges : null;
+  }
+
+  private getBulkChangesIds(branches): Observable<Array<BulkChangesResponse>> {
+    const params = this.generateBulkChangeParams(branches);
+    return this.http.get<Array<BulkChangesResponse>>(
+        `${environment.serverApiUrl}/bulk-changes/ids`
+        + `?reasoningBranchId=${params}`
+        + `&statesFamily=pending`);
+  }
+
+  private generateBulkChangeParams(branches) {
+    const params = [];
+    branches.forEach(branch => {
+      params.push(`${branch.reasoningBranchId.decisionTreeId}-${branch.reasoningBranchId.featureVectorId}`);
+    });
+    return params.join(',');
+  }
+
+  private getPendingChanges(): Observable<Array<PendingChangesResponse>> {
+    return this.http.get<Array<PendingChangesResponse>>(
+        `${environment.serverApiUrl}/change-requests?statesFamily=pending`);
   }
 }

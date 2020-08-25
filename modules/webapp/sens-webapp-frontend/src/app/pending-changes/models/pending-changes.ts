@@ -4,6 +4,11 @@ export interface PendingChangeResponse {
   comment: string;
   id: number;
   createdBy: string;
+
+  state?: string;
+  decidedAt?: string;
+  decidedBy?: string;
+  deciderComment?: string;
 }
 
 export interface BulkChangeResponse {

@@ -79,7 +79,7 @@ class ChangeRequestQueryTest {
 
     verify(repository).findAllByStateIn(
         eq(Set.of(APPROVED, REJECTED, CANCELLED)),
-        eq(PageRequest.of(0, MAX_CLOSED, Direction.DESC, "createdAt")));
+        eq(PageRequest.of(0, MAX_CLOSED, Direction.DESC, "decidedAt")));
   }
 
   @Test

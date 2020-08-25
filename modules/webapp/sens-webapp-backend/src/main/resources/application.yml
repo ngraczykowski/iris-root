@@ -154,13 +154,11 @@ sens.webapp.messaging:
       archive: discrepancy.archive
 
 sens.webapp.change-request.max-closed: 30
+sens.webapp.discrepant-branches.max-archived: 10
 
 sens:
   grpc:
     timeout: ${sens.webapp.grpc.timeout}
-
-  circuit-breaker:
-    limit-archived-discrepant-branches: 10
 
 server:
   port: 24410

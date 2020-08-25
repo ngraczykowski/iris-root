@@ -21,6 +21,7 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.now;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
@@ -39,19 +40,22 @@ import static org.springframework.http.HttpStatus.OK;
     GenericExceptionControllerAdvice.class })
 class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
 
+  private static final String ANY_UUID = "725058de-bb51-480e-8293-3ce4084c6405";
+
   @MockBean
   private ClosedBulkChangeQuery bulkChangeQuery;
 
   @Nested
   class ListBulkChanges {
 
-    private static final String CLOSED_BULK_CHANGES_URL = "/bulk-changes?statesFamily=closed";
+    private static final String CLOSED_BULK_CHANGES_URL =
+        "/bulk-changes?statesFamily=closed&ids=";
 
     @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
-    void its200WithEmptyList_whenNoPendingBulkChanges() {
-      given(bulkChangeQuery.listClosed()).willReturn(emptyList());
+    void its200WithEmptyList_whenNoClosedBulkChanges() {
+      given(bulkChangeQuery.listClosed(emptyList())).willReturn(emptyList());
 
-      get(CLOSED_BULK_CHANGES_URL)
+      get(CLOSED_BULK_CHANGES_URL + ANY_UUID)
           .contentType(anything())
           .statusCode(OK.value())
           .body("size()", is(0));
@@ -61,16 +65,17 @@ class ClosedBulkChangeRestControllerTest extends BaseRestControllerTest {
     void its200WithCorrectBody_whenFound() {
       UUID id1 = randomUUID();
       UUID id2 = randomUUID();
-      given(bulkChangeQuery.listClosed()).willReturn(List.of(
-          new BulkChangeDto(id1,
-              List.of(new ReasoningBranchIdDto(1L, 12L), new ReasoningBranchIdDto(2L, 13L)),
-              "FALSE_POSITIVE", TRUE, now()),
-          new BulkChangeDto(
-              id2, List.of(new ReasoningBranchIdDto(4L, 15L)), "POTENTIAL_TRUE_POSITIVE", FALSE,
-              now()))
-      );
+      given(bulkChangeQuery.listClosed(asList(id1, id2)))
+          .willReturn(List.of(
+              new BulkChangeDto(id1,
+                  List.of(new ReasoningBranchIdDto(1L, 12L), new ReasoningBranchIdDto(2L, 13L)),
+                  "FALSE_POSITIVE", TRUE, now()),
+              new BulkChangeDto(
+                  id2, List.of(new ReasoningBranchIdDto(4L, 15L)), "POTENTIAL_TRUE_POSITIVE", FALSE,
+                  now()))
+          );
 
-      get(CLOSED_BULK_CHANGES_URL)
+      get(CLOSED_BULK_CHANGES_URL + id1 + "," + id2)
           .contentType(anything())
           .statusCode(OK.value())
           .body("[0].id", is(id1.toString()))

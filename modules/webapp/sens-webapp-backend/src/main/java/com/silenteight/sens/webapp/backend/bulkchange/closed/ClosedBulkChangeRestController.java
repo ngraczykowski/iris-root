@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
@@ -35,10 +36,11 @@ class ClosedBulkChangeRestController {
 
   @GetMapping(value = "/bulk-changes", params = CLOSED_PARAM)
   @PreAuthorize("isAuthorized('LIST_CLOSED_BULK_CHANGES')")
-  public ResponseEntity<List<BulkChangeDto>> listClosed() {
+  public ResponseEntity<List<BulkChangeDto>> listClosedByIds(
+      @RequestParam List<UUID> ids) {
     log.debug(CHANGE_REQUEST, "Listing closed Bulk Changes");
 
-    List<BulkChangeDto> bulkChanges = bulkChangeQuery.listClosed();
+    List<BulkChangeDto> bulkChanges = bulkChangeQuery.listClosed(ids);
 
     log.debug(CHANGE_REQUEST, "Found {} closed Bulk Changes", bulkChanges.size());
 

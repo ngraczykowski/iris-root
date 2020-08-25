@@ -8,10 +8,11 @@ import com.silenteight.proto.serp.v1.api.BulkBranchChangeGovernanceGrpc.BulkBran
 import com.silenteight.proto.serp.v1.api.BulkBranchChangeView;
 import com.silenteight.proto.serp.v1.api.BulkBranchChangeView.State;
 import com.silenteight.proto.serp.v1.api.ListBulkBranchChangesRequest;
+import com.silenteight.proto.serp.v1.api.ListBulkBranchChangesRequest.BulkBranchChangeIdsFilter;
 import com.silenteight.proto.serp.v1.api.ListBulkBranchChangesRequest.ReasoningBranchFilter;
 import com.silenteight.proto.serp.v1.api.ListBulkBranchChangesRequest.StateFilter;
-import com.silenteight.proto.serp.v1.api.ListBulkBranchChangesRequest.StateFilter.Builder;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
+import com.silenteight.protocol.utils.Uuids;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeDto;
 import com.silenteight.sens.webapp.backend.bulkchange.BulkChangeIdsForReasoningBranchDto;
 import com.silenteight.sens.webapp.backend.bulkchange.closed.ClosedBulkChangeQuery;
@@ -55,19 +56,20 @@ class GrpcBulkChangeQuery implements ClosedBulkChangeQuery, PendingBulkChangeQue
 
   @Override
   public List<BulkChangeDto> listPending() {
-    return this.listByState(PENDING_STATES);
+    return this.listByState(PENDING_STATES, emptyList());
   }
 
   @Override
-  public List<BulkChangeDto> listClosed() {
-    return this.listByState(CLOSED_STATES);
+  public List<BulkChangeDto> listClosed(List<UUID> bulkChangeIds) {
+    return this.listByState(CLOSED_STATES, bulkChangeIds);
   }
 
-  public List<BulkChangeDto> listByState(List<State> states) {
+  public List<BulkChangeDto> listByState(List<State> states, List<UUID> bulkChangeIds) {
     ListBulkBranchChangesRequest request =
         ListBulkBranchChangesRequest
             .newBuilder()
             .setStateFilter(filterWith(states))
+            .setBulkBranchChangeIdsFilter(filterWithBulkBranchChangeIds(bulkChangeIds))
             .build();
 
     Try<List<BulkChangeDto>> features =
@@ -81,8 +83,18 @@ class GrpcBulkChangeQuery implements ClosedBulkChangeQuery, PendingBulkChangeQue
     return processResult(features);
   }
 
-  private static Builder filterWith(List<State> states) {
-    return StateFilter.newBuilder().addAllStates(states);
+  private static BulkBranchChangeIdsFilter filterWithBulkBranchChangeIds(
+      List<UUID> bulkBranchChangeIds) {
+    return BulkBranchChangeIdsFilter.newBuilder()
+        .addAllBulkBranchChangeIds(
+            bulkBranchChangeIds.stream()
+                .map(Uuids::fromJavaUuid)
+                .collect(toList()))
+        .build();
+  }
+
+  private static StateFilter filterWith(List<State> states) {
+    return StateFilter.newBuilder().addAllStates(states).build();
   }
 
   private static BulkChangeDto toDto(BulkBranchChangeView bulkBranchChangeView) {

@@ -51,7 +51,7 @@ class ChangeRequestQuery implements PendingChangeRequestQuery, ClosedChangeReque
   public List<ClosedChangeRequestDto> listClosed() {
     List<ChangeRequest> changeRequests = repository.findAllByStateIn(
         Set.of(APPROVED, REJECTED, CANCELLED),
-        PageRequest.of(0, properties.getMaxClosed(), DESC, "createdAt"));
+        PageRequest.of(0, properties.getMaxClosed(), DESC, "decidedAt"));
 
     return changeRequests
         .stream()
