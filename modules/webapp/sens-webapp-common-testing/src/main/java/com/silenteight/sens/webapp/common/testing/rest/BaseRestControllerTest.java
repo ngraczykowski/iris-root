@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -155,6 +156,7 @@ public abstract class BaseRestControllerTest {
   @ComponentScan(basePackageClasses = { AuthorizationModule.class })
   @EnableWebMvc
   @EnableWebSecurity
+  @EnableSpringDataWebSupport
   static class TestRestConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
