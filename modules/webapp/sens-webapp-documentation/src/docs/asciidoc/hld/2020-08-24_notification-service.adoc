@@ -3,7 +3,7 @@
 - Reference ticket: *https://silent-eight.aha.io/features/PROD-30*
 - Reason: As a user of WebApp, I can see a notification related to actions I am interested in.
 
-[plantuml,bo-gets-list-of-discrepant-branches,svg]
+[plantuml,notification-service-flow,svg]
 -----
 @startuml
 header Create a new notification
@@ -41,7 +41,7 @@ note over S, Backend
 end note
 Backend -> db : store a notification
 
-Backend <-> db : set a list of subscribers
+Backend <-> db : get a list of subscribers
 
 Backend -> Frontend : Push a notification via websocket
 note over Backend, Frontend
@@ -82,18 +82,111 @@ Backend -> db : remove from subscriber list
 @enduml
 -----
 
-Notes:
+== Technology:
 
-- Notification service pushes notifications via websocket only if (at the time of the notification creation)
-target users are subscribed. If, for whatever reason, the webagent does not receive the notification
-(e.g. due to network issue), notification service does attempt any retries.
-Reason: simplify the design
+Two technologies have been considered for server-to-webagent communication:
+
+1. Server-side events (SSE):
+
+- Unidirectional communication (server -> webagent)
+- Simple concept, simple implementation, simple usage
+- Number of concurrent connections on the browser side limited by the browser (e.g. Chrome: 6)
+- Native support in all major browsers available except for IE which requires polyfill
+- https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events[doc]
+
+2. Websockets:
+- Bidirectional communication (server <-> webagent)
+- Complex, requires additional protocol (TCP - Websockets, HTTP - e.g. STOMP)
+- Some developers reports issues when integrating with enterprise infrastructure
+
+Given the above, SSE has been chosen as a solution, but upgrade to Websockets remains an option.
+
+== Notes:
+
+1. Reliability:
+
+- Notification service pushes notifications via server-side events only if
+(at the time of the notification creation) target users are subscribed.
+If, for whatever reason, the user has no active subscription
+(e.g. network issue, re-connecting due to session time-out, etc)
+notification service does not attempt any retries.
+
+- Reason: simplify the design
+
+2. Delivery acknowledgment:
 
 - There is no acknowledgment of a notification delivery. Therefore, it is impossible to determine
-on the server side whether the notitfication has been delivered/ displayed by webagent or not.
-Reason: simplify the design
+on the server side whether the notification has been delivered/ displayed by webagent or not.
 
-- It is responsibility of the calling service to determine the correct moment to call
+- Reason: simplify the design
+
+3. Notification aggregation:
+
+- Use-case: consider a business process that spans multiple services. Having the asynchronous
+communication the following questions arises: how to agreggate events within a distributed system.
+
+- It is a responsibility of the calling service to determine the correct moment to call
 Create Notification. If there are multiple services involved in the business process, a single service
-should take a role of an orchestrator (encapsulate the business rules).
-Reason: Notification service, being a technical component, should not encapsulate business rules.
+should take a role of a business process orchestrator.
+
+- Reason: Notification service, being a technical component, should not encapsulate business rules.
+
+4. Multi-instance Notification Service support:
+
+- Multi-instance scenario is not supported.
+SSE/ websockets requires maintaining a connection on the server side - one for each active subscription.
+This means Notification Service becomes a stateful component which requires special attention
+when scaling the infrastructure. In a multi-instance scenario this can be solved e.g. by broadcasting
+Send Notification command to all instances, so that each instance can look-up its active subscriptions
+and react accordingly.
+
+- Reason: multi-instance scenario is out-of-scope, simplify the design
+
+[plantuml,multi-instance-notifications,svg]
+-----
+@startuml
+header Pushing notifications in multi-instance setup
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "Frontend"
+end box
+
+box "Notification Service" #LightGreen
+    participant Backend as "Backend"
+    database db as "DB"
+end box
+
+box "Client service" #LightBlue
+    participant S as "Service" order 5
+end box
+
+== Create a notification ==
+
+S -> Backend : Create Notification
+note over S, Backend
+    * event type
+    * parameters
+    * audience
+end note
+Backend -> db : store a notification
+
+Backend -> Backend : broadcast to all Notification Service instances
+note over S, Backend
+    broadcast command to all instances,
+    so that each instance can look-up
+    its active subscriptions
+    and react accordingly.
+end note
+
+Backend -> Frontend : Push a notification via websocket
+note over Backend, Frontend
+    * event type
+    * parameters
+
+    Only if target user has an active subscription,
+    otherwise the notification is not sent
+end note
+
+
+@enduml
+-----
