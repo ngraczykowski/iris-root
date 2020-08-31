@@ -174,8 +174,8 @@ export const routes: Routes = [
 ];
 
 export const rolesByRedirect: Map<string, string> = new Map([
-  ['Admin', 'users/user-management'],
-  ['Administrator', 'users/user-management'],
+  ['Admin', 'user-management'],
+  ['Administrator', 'user-management'],
   ['Business Operator', '/reasoning-branch'],
   ['Auditor', 'reports/audit-trail'],
   ['Analyst', '/analyst'],
