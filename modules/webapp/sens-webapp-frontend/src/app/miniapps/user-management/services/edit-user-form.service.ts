@@ -28,12 +28,7 @@ export class EditUserFormService implements OnDestroy {
       Validators.minLength(3),
       Validators.maxLength(50),
     ])],
-    password: [null, Validators.compose([
-      Validators.required,
-      Validators.minLength(8),
-      Validators.pattern(/\d/),
-      Validators.pattern(/[a-zA-Z]/)
-    ])],
+    password: [null],
     roles: [[]]
   };
 
@@ -51,8 +46,9 @@ export class EditUserFormService implements OnDestroy {
     this.form = this.formBuilder.group(EditUserFormService.formModel);
 
     if (initData) {
-      this.form.get('password').clearValidators();
       this.form.patchValue(initData as any);
+    } else {
+      this.form.get('password').setValidators([Validators.required]);
     }
 
     const initUserName: string = initData && initData.userName ? initData.userName : null;
@@ -90,6 +86,22 @@ export class EditUserFormService implements OnDestroy {
           });
         }
     });
+  }
+
+  public generatePassword(): void {
+    const specialChars: string = '#$^*-!';
+    const digits: string = '3456789';
+    const letters: string = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXY';
+    const charset: string = letters + digits + specialChars;
+
+    const randomSpecialChar: string = specialChars.charAt(Math.floor(Math.random() * specialChars.length ));
+    const randomDigit: string = digits.charAt(Math.floor(Math.random() * digits.length ));
+    const randomString: string = Array.apply(null, Array(6))
+        .map(() => charset.charAt(Math.floor(Math.random() * charset.length ))).join('');
+
+    const newPassword: string = randomString + randomSpecialChar + randomDigit;
+
+    this.form.get('password').setValue(newPassword);
   }
 
 }

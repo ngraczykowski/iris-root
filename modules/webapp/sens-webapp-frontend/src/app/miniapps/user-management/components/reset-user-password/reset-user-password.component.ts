@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UserManagementService } from '@core/user-managemenet/services/user-management.service';
 import { ResetUserPasswordResponse } from '@endpoint/user-management/model/reset-user-password-response';
 import { UserManagementListItem } from '@endpoint/user-management/model/user-management-list-item';
 import { SkidAnimation } from '@ui/animation/triggers/skid.animation';
+import { DialogInstanceComponent } from '@ui/dialog/components/dialog-instance/dialog-instance.component';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -14,8 +15,9 @@ import { finalize } from 'rxjs/operators';
 export class ResetUserPasswordComponent {
 
   @Input() user: UserManagementListItem;
+  @ViewChild('passwordInput', { static: false }) passwordInput: ElementRef<HTMLElement>;
+  @ViewChild('confirmationDialog', { static: true}) confirmationDialog: DialogInstanceComponent;
 
-  confirmation: boolean;
   loading: boolean;
   response: ResetUserPasswordResponse;
 
@@ -28,12 +30,15 @@ export class ResetUserPasswordComponent {
     this.userManagementService.resetPassword(this.user.userName).pipe(
         finalize(() => {
           this.loading = false;
-          this.confirmation = false;
         }))
       .subscribe((response: ResetUserPasswordResponse) => {
         this.response = response;
         this.cdr.markForCheck();
       });
+  }
+
+  confirmation(): void {
+    this.confirmationDialog.open();
   }
 
 }

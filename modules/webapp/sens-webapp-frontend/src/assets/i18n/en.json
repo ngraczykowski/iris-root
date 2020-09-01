@@ -386,8 +386,13 @@
       },
       "resetPassword": {
         "button": "Reset password",
-        "newPassword": "New password for {{ user }} is: <b>{{ password }}</b>",
-        "cancel": "cancel"
+        "cancel": "Cancel",
+        "confirmation": {
+          "title": "Reset password for user {{ username }}?",
+          "description": " The temporary password will be generated, to allow the user to sign in and create a new password.",
+          "close": "Close",
+          "reset": "Reset password"
+        }
       },
       "roles": {
         "description": {
@@ -399,6 +404,11 @@
           "AUDITOR": "Can generate reports."
         }
       },
+      "sections": {
+        "details": "Details",
+        "password": "Password",
+        "roles": "Roles"
+      },
       "fields": {
         "userName": {
           "label": "Username",
@@ -408,21 +418,29 @@
             "minlength": "The username length should be between 3 - 30 characters",
             "maxlength": "The username length  should be between 3 - 30 characters",
             "pattern": "The username can consist of lowercase, numbers, and special characters like: - _ @ . only"
-          }
+          },
+          "hint": "Username must be at least 3 characters long but not more than 30."
         },
         "displayName": {
           "label": "Display name",
           "errors": {
             "minlength": "The display name should be between 3 - 50 characters",
             "maxlength": "The display name should be between 3 - 50 characters"
-          }
+          },
+          "hint": "Display name must be at least 3 characters long but not more than 50."
         },
         "password": {
-          "label": "Password",
+          "label": "Temporary password",
+          "generate": "Generate password",
           "errors": {
-            "required": "The password length should be a minimum of 8 characters",
+            "required": "Password is required",
             "minlength": "The password length should be a minimum of 8 characters",
             "pattern": "The password should be contain minimum of one letter and one digit"
+          },
+          "hints": {
+            "reset": "This password will have to be changed on the user next login.",
+            "create": "This password will have to be changed on the user first login.",
+            "generate": "The temporary password for the first login."
           }
         }
       }

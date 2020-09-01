@@ -1,5 +1,24 @@
 @import '~@angular/material/theming';
 
+@mixin _sens-mat-form-field-no-decorators {
+  .mat-form-field-underline {
+    visibility: hidden;
+  }
+  &.mat-form-field-appearance-outline {
+    .mat-form-field-flex {
+      padding: 0;
+    }
+    .mat-form-field-infix {
+      display: flex;
+      align-items: flex-end;
+      padding: 0;
+    }
+    .mat-form-field-outline {
+      display: none;
+    }
+  }
+}
+
 @mixin sens-mat-form-field($typography) {
   $line-height: mat-line-height($typography, input);
   $subscript-font-scale: 0.75;
@@ -22,28 +41,62 @@
     }
   }
 
-  mat-form-field.static-error  {
-    .mat-form-field-underline  {
-      position: relative;
-      bottom: auto;
-    }
-    .mat-form-field-subscript-wrapper {
-      position: static;
-
-      .ng-trigger-transitionMessages {
-        opacity: 1!important;
-        transform: none!important;
-
+  mat-form-field {
+    &.static-error {
+      .mat-form-field-underline  {
+        position: relative;
+        bottom: auto;
       }
 
-      mat-error {
-        span {
-          margin-bottom: $subscript-margin-top;
-          display: block;
+      .mat-form-field-wrapper{
+        padding-bottom: 0;
+      }
+
+      .mat-form-field-subscript-wrapper {
+        position: static;
+
+        .ng-trigger-transitionMessages {
+          opacity: 1!important;
+          transform: none!important;
+
+        }
+
+        mat-error {
+          span {
+            margin-bottom: $subscript-margin-top;
+            display: block;
+          }
         }
       }
     }
+
+    &.transparent-field {
+      @include _sens-mat-form-field-no-decorators;
+    }
+
+    &.static-height-field {
+      .mat-form-field-infix {
+        height: 4em;
+      }
+    }
+
+    &.lean-field {
+      .mat-form-field-infix {
+        padding: 0;
+        border: 0;
+        height: auto;
+      }
+    }
   }
+
+  mat-error.multiline-error {
+    span {
+      margin-bottom: $subscript-margin-top;
+      display: block;
+    }
+  }
+
+
 }
 
 

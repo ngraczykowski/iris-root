@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-panel-layout',
@@ -6,4 +6,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./panel-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PanelLayoutComponent {}
+export class PanelLayoutComponent {
+  @HostBinding('class.panel-layout') true;
+}

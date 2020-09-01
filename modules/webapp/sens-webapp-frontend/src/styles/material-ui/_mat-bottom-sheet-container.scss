@@ -2,5 +2,10 @@
   .mat-bottom-sheet-container {
     border-top-left-radius: $border-radius-lvl-1 !important; // !important used to overwrite MUI style
     border-top-right-radius: $border-radius-lvl-1 !important; // !important used to overwrite MUI style
+
+    &.mat-bottom-sheet-container-xlarge {
+      min-width: 740px;
+      max-width: calc(100vw - 220px);
+    }
   }
 }

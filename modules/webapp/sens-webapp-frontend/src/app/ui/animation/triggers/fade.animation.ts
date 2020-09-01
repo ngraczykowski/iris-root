@@ -43,4 +43,23 @@ export class FadeAnimation {
       )
     ]);
   }
+
+  static passing(): AnimationMetadata {
+    return trigger('fadePassing', [
+      transition(
+          'void => *',
+          [
+            style({ opacity: 0 }),
+            animate('0.2s', style({ opacity: '*' }))
+          ]
+      ),
+      transition(
+          '* => void',
+          [
+            style({ opacity: '*', position: 'absolute' }),
+            animate('0.2s', style({ opacity: 0, position: 'absolute' }))
+          ]
+      )
+    ]);
+  }
 }

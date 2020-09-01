@@ -1,0 +1,25 @@
+@import 'abstracts/8-pt-grid';
+
+.section-layout {
+
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    display: flex;
+    flex-direction: column;
+    margin: calculate-8-pt-grid(1) 0;
+  }
+
+  & > &__content {
+    position: relative;
+    margin-top: 0;
+
+    & > * {
+      margin-top: calculate-8-pt-grid(1);
+      margin-bottom: calculate-8-pt-grid(2);
+    }
+  }
+}
+
+

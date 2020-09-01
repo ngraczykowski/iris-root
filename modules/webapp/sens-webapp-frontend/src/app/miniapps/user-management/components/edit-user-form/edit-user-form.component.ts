@@ -10,6 +10,8 @@ import { Authority } from '@core/authorities/model/authority.enum';
 import { UserManagementService } from '@core/user-managemenet/services/user-management.service';
 import { UpdateUserRequest } from '@endpoint/user-management/model/update-user-request';
 import { ExpanseAnimations } from '@ui/animation/triggers/expanse.animations';
+import { FadeAnimation } from '@ui/animation/triggers/fade.animation';
+import { SkidAnimation } from '@ui/animation/triggers/skid.animation';
 import { Observable, of } from 'rxjs';
 import { finalize, map, switchMap } from 'rxjs/operators';
 
@@ -19,13 +21,7 @@ import { finalize, map, switchMap } from 'rxjs/operators';
   styleUrls: ['./edit-user-form.component.scss'],
   providers: [EditUserFormService],
   animations: [ExpanseAnimations.hide(), ExpanseAnimations.inOut(), ExpanseAnimations.passing(),
-    trigger('transitionMessages', [
-
-      transition(':enter', [
-        style({ opacity: 1, border: '1px solid #0f0', height: 0 }),
-        animate('1s', style({ opacity: 1, border: '1px solid #00f', height: '*' }))
-      ]),
-    ])]
+    SkidAnimation.inOut(), SkidAnimation.hide(), FadeAnimation.passing(), FadeAnimation.inOut()]
 })
 export class EditUserFormComponent {
 
@@ -37,8 +33,6 @@ export class EditUserFormComponent {
     [Authority.AUDITOR]: 'AUDITOR',
     [Authority.APPROVER]: 'APPROVER',
   };
-
-  passwordInputType: 'text' | 'password' = 'password';
 
   public form: FormGroup;
 
@@ -79,7 +73,8 @@ export class EditUserFormComponent {
     }
   }
 
-  togglePasswordVisibility(): void {
-    this.passwordInputType = this.passwordInputType === 'password' ? 'text' : 'password';
+  generatePassword(): void {
+    this.editUserFormService.generatePassword();
   }
+
 }

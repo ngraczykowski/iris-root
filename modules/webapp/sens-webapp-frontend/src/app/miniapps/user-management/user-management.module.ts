@@ -5,7 +5,7 @@ import {
   MatButtonModule, MatChipsModule, MatDividerModule, MatExpansionModule,
   MatFormFieldModule, MatIconModule,
   MatInputModule, MatListModule,
-  MatTableModule
+  MatTableModule, MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { userManagementRoutes } from '@app/miniapps/user-management/user-management.routing';
@@ -15,6 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AnimationModule } from '@ui/animation/animation.module';
 import { BottomSheetModule } from '@ui/bottom-sheet/bottom-sheet.module';
 import { ChipsModule } from '@ui/chips/chips.module';
+import { DialogModule } from '@ui/dialog/dialog.module';
+import { FormFieldModule } from '@ui/form-field/form-field.module';
 import { HighlightModule } from '@ui/highlight/highlight.module';
 import { LayoutsModule } from '@ui/layouts/layouts.module';
 import { UserManagementListComponent } from './containers/user-management-list/user-management-list.component';
@@ -42,9 +44,12 @@ import { ResetUserPasswordComponent } from './components/reset-user-password/res
       MatListModule,
       MatDividerModule,
       MatExpansionModule,
+      MatTooltipModule,
       HighlightModule,
       TranslateModule,
       AnimationModule,
+      FormFieldModule,
+      DialogModule,
       ChipsModule
   ],
   entryComponents: [EditUserFormComponent]

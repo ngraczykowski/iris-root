@@ -1,4 +1,4 @@
-app-panel-layout {
+.panel-layout {
   button {
     margin: calculate-8-pt-grid(1);
   }
@@ -6,5 +6,10 @@ app-panel-layout {
     display: inline-flex;
     align-items: center;
     margin: calculate-8-pt-grid(1);
+  }
+
+  &--outlined {
+    margin-left: - calculate-8-pt-grid(1);
+    margin-right: - calculate-8-pt-grid(1);
   }
 }
