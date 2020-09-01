@@ -319,3 +319,6 @@ sep.auth:
       - "VIEW_DECISION_TREE"
       - "VIEW_DISCREPANCIES"
       - "VIEW_REASONING_BRANCHES"
+
+# Notifications
+sens.webapp.notification.enabled: true

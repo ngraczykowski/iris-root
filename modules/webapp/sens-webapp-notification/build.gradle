@@ -6,5 +6,6 @@ plugins {
 description = "SENS WebApp Notification"
 
 dependencies {
+  implementation project(":sens-webapp-common")
 }
 
