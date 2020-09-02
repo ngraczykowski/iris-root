@@ -61,13 +61,13 @@ export class PendingChangesService {
       return data.pendingChanges.map(pendingChange => {
         const bulkChangeData: BulkChangeResponse = data.bulkChanges.find(bc => pendingChange.bulkChangeId === bc.id);
 
-        return {
+        return bulkChangeData ? {
           ...pendingChange,
           reasoningBranchIds: bulkChangeData.reasoningBranchIds,
           aiSolution: bulkChangeData.aiSolution,
           active: bulkChangeData.active
-        };
-      });
+        } : null;
+      }).filter(Boolean);
     });
   }
 
