@@ -1,10 +1,9 @@
-import { Overlay } from '@angular/cdk/overlay';
 import {
   AfterContentInit,
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
-  HostBinding,
+  HostBinding, Input,
   OnDestroy,
   QueryList,
   ViewContainerRef,
@@ -30,6 +29,8 @@ export class InlineChipsListComponent implements AfterContentInit, OnDestroy {
   values: string[] = [];
 
   wrappedChips: number;
+
+  @Input() public popupTitle: string;
 
   @HostBinding('class.inline-chips-list') true;
 

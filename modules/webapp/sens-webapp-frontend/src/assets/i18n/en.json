@@ -459,7 +459,8 @@
         "userName": "Username",
         "displayName": "Display name",
         "roles": "Roles",
-        "origin": "Origin"
+        "origin": "Origin",
+        "rolesPopup": "Assigned Roles:"
       },
       "noResults": {
         "title": "No users found",

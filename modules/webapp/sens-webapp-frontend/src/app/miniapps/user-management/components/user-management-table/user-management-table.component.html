@@ -20,7 +20,7 @@
       <span>{{ 'usersManagement.list.cols.roles' | translate }}</span>
     </mat-header-cell>
     <mat-cell *matCellDef="let element" class="mat-cell--panel">
-      <app-inline-chips-list>
+      <app-inline-chips-list [popupTitle]="'usersManagement.list.cols.rolesPopup' | translate">
         <mat-chip *ngFor="let role of element.roles"
                   [disableRipple]="true"
                   class="sens-static-chip">{{role}}</mat-chip>

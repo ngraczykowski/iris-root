@@ -10,14 +10,9 @@
 <ng-template cdkConnectedOverlay
              [cdkConnectedOverlayOrigin]="trigger"
              [cdkConnectedOverlayHasBackdrop]="false"
-             cdkConnectedOverlayPanelClass="overlay-transitive"
+             cdkConnectedOverlayPanelClass="overlay-distance-1"
              [cdkConnectedOverlayOpen]="hovered">
-  <mat-card [style.pointer-events]="'none'">
-    <mat-card-content>
-      <mat-chip-list>
-        <mat-chip *ngFor="let value of values">{{value}}</mat-chip>
-      </mat-chip-list>
-    </mat-card-content>
-  </mat-card>
-
+  <app-footnote [label]="popupTitle">
+    <span footnote-content *ngFor="let value of values">{{value}}</span>
+  </app-footnote>
 </ng-template>

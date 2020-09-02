@@ -15,6 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AnimationModule } from '@ui/animation/animation.module';
 import { BottomSheetModule } from '@ui/bottom-sheet/bottom-sheet.module';
 import { ChipsModule } from '@ui/chips/chips.module';
+import { FootnoteModule } from '@ui/footnote/footnote.module';
 import { DialogModule } from '@ui/dialog/dialog.module';
 import { FormFieldModule } from '@ui/form-field/form-field.module';
 import { HighlightModule } from '@ui/highlight/highlight.module';

@@ -1,0 +1,13 @@
+.list-layout {
+  &__header {
+    margin-bottom: calculate-8-pt-grid(1);
+  }
+  &__content {
+    & > * {
+      margin-bottom: calculate-8-pt-grid(1);
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

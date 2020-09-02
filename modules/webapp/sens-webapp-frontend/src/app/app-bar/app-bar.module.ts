@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { AnimationModule } from '@ui/animation/animation.module';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { AppBarComponent } from './containers/app-bar/app-bar.component';
 import { BrandHeroComponent } from './components/brand-hero/brand-hero.component';
@@ -24,7 +25,8 @@ import { SharedModule } from '@app/shared/shared.module';
     MatListModule,
     MatIconModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    AnimationModule
   ]
 })
 export class AppBarModule { }

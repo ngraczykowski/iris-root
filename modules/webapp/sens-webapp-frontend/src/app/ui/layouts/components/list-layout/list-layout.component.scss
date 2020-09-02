@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-layout {
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -11,10 +11,12 @@ import { PanelLayoutComponent } from './components/panel-layout/panel-layout.com
 import { LoadingButtonLayoutComponent } from './components/loading-button-layout/loading-button-layout.component';
 import { SectionLayoutComponent } from './components/section-layout/section-layout.component';
 import { SectionsGroupLayoutComponent } from './components/sections-group-layout/sections-group-layout.component';
+import { ListLayoutComponent } from './components/list-layout/list-layout.component';
 
 const publicDeclarations: Type<any>[] = [CardLayoutComponent, FullScreenLayoutComponent,
   PageLayoutComponent, PanelLayoutComponent, LoadingButtonLayoutComponent,
-  BottomSheetLayoutComponent, SectionLayoutComponent, SectionsGroupLayoutComponent];
+  BottomSheetLayoutComponent, SectionLayoutComponent, SectionsGroupLayoutComponent,
+  ListLayoutComponent];
 
 @NgModule({
   declarations: [...publicDeclarations],

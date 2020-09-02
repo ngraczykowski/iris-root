@@ -3,4 +3,7 @@
     margin: -48px;
     pointer-events: none!important;
   }
+  .overlay-distance-1 {
+    margin: calculate-8-pt-grid(1) 0;
+  }
 }
