@@ -18,6 +18,8 @@ public class SimpleErrorMessage {
   private final Message failedMessage;
   private final List<Exception> exceptionChain;
   private final String stackTrace;
+  private final String fileName;
+  private final Integer lineNumber;
 
   @Data
   @RequiredArgsConstructor

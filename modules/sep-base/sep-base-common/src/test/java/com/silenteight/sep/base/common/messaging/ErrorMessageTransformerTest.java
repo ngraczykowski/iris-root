@@ -35,6 +35,8 @@ class ErrorMessageTransformerTest {
     assertThat(result.getPayload().getExceptionChain().get(0).getType())
         .isEqualTo(IllegalStateException.class.getName());
     assertThat(result.getPayload().getStackTrace()).isNotBlank();
+    assertThat(result.getPayload().getFileName()).isNotBlank();
+    assertThat(result.getPayload().getLineNumber()).isNotNull();
     assertThat(result.getPayload().getFailedMessage().getProtoPayload())
         .isEqualTo(protoMessagePayload.toByteArray());
     assertThat(result.getPayload().getFailedMessage().getJsonPayload())
@@ -56,6 +58,9 @@ class ErrorMessageTransformerTest {
     assertThat(result.getPayload().getExceptionChain().get(0).getType())
         .isEqualTo(IllegalStateException.class.getName());
     assertThat(result.getPayload().getStackTrace()).isNotBlank();
+    assertThat(result.getPayload().getFileName()).isNotBlank();
+    assertThat(result.getPayload().getFileName()).isEqualTo("ErrorMessageTransformerTest.java");
+    assertThat(result.getPayload().getLineNumber()).isNotNull();
     assertThat(result.getPayload().getFailedMessage().getProtoPayload()).isNull();
     assertThat(result.getPayload().getFailedMessage().getJsonPayload())
         .isEqualTo(new ObjectMapper().valueToTree(testObjectPayload));

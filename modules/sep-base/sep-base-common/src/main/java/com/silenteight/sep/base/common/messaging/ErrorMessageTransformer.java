@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
+
 class ErrorMessageTransformer implements
     GenericTransformer<ErrorMessage, org.springframework.messaging.Message<SimpleErrorMessage>> {
 
@@ -33,10 +35,20 @@ class ErrorMessageTransformer implements
   }
 
   private SimpleErrorMessage createSimpleErrorMessage(ErrorMessage source) {
-    List<Exception> exceptions = extractExceptions(source.getPayload());
-    String stackTrace = Throwables.getStackTraceAsString(source.getPayload());
+    Throwable payload = source.getPayload();
+    List<Exception> exceptions = extractExceptions(payload);
+    String stackTrace = Throwables.getStackTraceAsString(payload);
+    String fileName = "";
+    int lineNumber = 0;
+    StackTraceElement[] payloadStackTrace = payload.getStackTrace();
+
+    if (isNotEmpty(payloadStackTrace)) {
+      fileName = payloadStackTrace[0].getFileName();
+      lineNumber = payloadStackTrace[0].getLineNumber();
+    }
+
     return new SimpleErrorMessage(
-        createMessage(source.getOriginalMessage()), exceptions, stackTrace);
+        createMessage(source.getOriginalMessage()), exceptions, stackTrace, fileName, lineNumber);
   }
 
   private List<Exception> extractExceptions(Throwable throwable) {
