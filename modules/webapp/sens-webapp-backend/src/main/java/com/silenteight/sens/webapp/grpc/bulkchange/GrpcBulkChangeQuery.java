@@ -56,22 +56,28 @@ class GrpcBulkChangeQuery implements ClosedBulkChangeQuery, PendingBulkChangeQue
 
   @Override
   public List<BulkChangeDto> listPending() {
-    return this.listByState(PENDING_STATES, emptyList());
+    ListBulkBranchChangesRequest request =
+        ListBulkBranchChangesRequest
+            .newBuilder()
+            .setStateFilter(filterWith(PENDING_STATES))
+            .build();
+
+    return listBulkChanges(request);
   }
 
   @Override
   public List<BulkChangeDto> listClosed(List<UUID> bulkChangeIds) {
-    return this.listByState(CLOSED_STATES, bulkChangeIds);
-  }
-
-  public List<BulkChangeDto> listByState(List<State> states, List<UUID> bulkChangeIds) {
     ListBulkBranchChangesRequest request =
         ListBulkBranchChangesRequest
             .newBuilder()
-            .setStateFilter(filterWith(states))
+            .setStateFilter(filterWith(CLOSED_STATES))
             .setBulkBranchChangeIdsFilter(filterWithBulkBranchChangeIds(bulkChangeIds))
             .build();
 
+    return listBulkChanges(request);
+  }
+
+  private List<BulkChangeDto> listBulkChanges(ListBulkBranchChangesRequest request) {
     Try<List<BulkChangeDto>> features =
         of(() -> bulkBranchChangeStub
             .listBulkBranchChanges(request)

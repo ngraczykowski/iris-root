@@ -20,6 +20,7 @@ import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -98,19 +99,55 @@ class GrpcBulkChangeQueryTest {
   }
 
   @Test
+  void shouldNotSendReasoningBranchIdsFilterWhenQueryingForPendingChanges() {
+    when(bulkBranchChangeStub.listBulkBranchChanges(any(ListBulkBranchChangesRequest.class)))
+        .thenReturn(defaultListBulkBranchChangesResponse());
+
+    ArgumentCaptor<ListBulkBranchChangesRequest> requestCaptor =
+        ArgumentCaptor.forClass(ListBulkBranchChangesRequest.class);
+    bulkChangeQuery.listPending();
+
+    verify(bulkBranchChangeStub).listBulkBranchChanges(requestCaptor.capture());
+
+    ListBulkBranchChangesRequest request = requestCaptor.getValue();
+    assertThat(request.hasBulkBranchChangeIdsFilter()).isFalse();
+  }
+
+  @Test
+  void shouldSendReasoningBranchIdsFilterWhenQueryingForClosedChanges() {
+    when(bulkBranchChangeStub.listBulkBranchChanges(any(ListBulkBranchChangesRequest.class)))
+        .thenReturn(defaultListBulkBranchChangesResponse());
+    UUID bulkChangeId1 = randomUUID();
+    UUID bulkChangeId2 = randomUUID();
+    bulkChangeQuery.listClosed(List.of(bulkChangeId1, bulkChangeId2));
+
+    ArgumentCaptor<ListBulkBranchChangesRequest> requestCaptor =
+        ArgumentCaptor.forClass(ListBulkBranchChangesRequest.class);
+    verify(bulkBranchChangeStub).listBulkBranchChanges(requestCaptor.capture());
+
+    ListBulkBranchChangesRequest request = requestCaptor.getValue();
+    assertThat(request.hasBulkBranchChangeIdsFilter()).isTrue();
+    assertThat(request.getBulkBranchChangeIdsFilter().getBulkBranchChangeIdsList())
+        .containsExactly(fromJavaUuid(bulkChangeId1), fromJavaUuid(bulkChangeId2));
+  }
+
+  @Test
   void returnsNoChangeIfNoAiSolutionChange() {
     when(bulkBranchChangeStub.listBulkBranchChanges(withState(STATE_CREATED)))
-        .thenReturn(
-            ListBulkBranchChangesResponse
-                .newBuilder()
-                .addChanges(bulkBranchChangeViewWithDefaults())
-                .build());
+        .thenReturn(defaultListBulkBranchChangesResponse());
 
     List<BulkChangeDto> bulkChanges = bulkChangeQuery.listPending();
 
     assertThat(bulkChanges).hasSize(1);
     assertThat(bulkChanges.get(0).getAiSolution()).isNull();
     assertThat(bulkChanges.get(0).getActive()).isNull();
+  }
+
+  private ListBulkBranchChangesResponse defaultListBulkBranchChangesResponse() {
+    return ListBulkBranchChangesResponse
+        .newBuilder()
+        .addChanges(bulkBranchChangeViewWithDefaults())
+        .build();
   }
 
   @Test
