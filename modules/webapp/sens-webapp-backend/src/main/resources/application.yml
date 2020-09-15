@@ -32,6 +32,8 @@ sens.webapp.rabbitmq.password: serp
 sens.webapp.messaging.concurrency: 4
 sens.webapp.messaging.prefetch: 25
 
+sens.webapp.external.apps.reporting-ui.url: http://localhost:24400/kibana/
+
 ####################################################################################################
 info:
   component: "SENS Web App REST API"
@@ -128,6 +130,9 @@ grpc:
 
     circuit-breaker:
       address: static://localhost:24213
+
+sens.webapp.external.apps:
+  reportingUrl: ${sens.webapp.external.apps.reporting-ui.url}
 
 sens.webapp.messaging:
   bulk-change:
@@ -289,6 +294,8 @@ sep.auth:
       - "LIST_REASONING_BRANCHES"
     VIEW_USERS:
       - "LIST_USERS"
+    REPORTING_APP:
+      - "REDIRECT_TO_REPORTING"
 
   rolePermissionsMappings:
     ADMIN:
@@ -310,6 +317,7 @@ sep.auth:
     AUDITOR:
       - "GENERATE_REPORTS"
       - "VIEW_DECISION_TREE"
+      - "REPORTING_APP"
     BUSINESS_OPERATOR:
       - "ARCHIVE_DISCREPANCIES"
       - "CANCEL_CHANGE_REQUESTS"
@@ -319,6 +327,7 @@ sep.auth:
       - "VIEW_DECISION_TREE"
       - "VIEW_DISCREPANCIES"
       - "VIEW_REASONING_BRANCHES"
+      - "REPORTING_APP"
 
 # Notifications
 sens.webapp.notification.enabled: true

@@ -42,6 +42,8 @@ sep.auth:
       - "LIST_REASONING_BRANCHES"
     VIEW_USERS:
       - "LIST_USERS"
+    REPORTING_APP:
+      - "REDIRECT_TO_REPORTING"
 
   rolePermissionsMappings:
     ADMIN:
@@ -63,6 +65,7 @@ sep.auth:
     AUDITOR:
       - "GENERATE_REPORTS"
       - "VIEW_DECISION_TREE"
+      - "REPORTING_APP"
     BUSINESS_OPERATOR:
       - "ARCHIVE_DISCREPANCIES"
       - "CANCEL_CHANGE_REQUESTS"
@@ -72,3 +75,4 @@ sep.auth:
       - "VIEW_DECISION_TREE"
       - "VIEW_DISCREPANCIES"
       - "VIEW_REASONING_BRANCHES"
+      - "REPORTING_APP"
