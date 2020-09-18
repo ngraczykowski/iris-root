@@ -14,59 +14,12 @@ services:
     volumes:
       - postgres-storage:/var/lib/postgresql/data
     networks:
-      - sens-webapp
-
-  keycloak:
-    image: jboss/keycloak:8.0.1
-    restart: unless-stopped
-    volumes:
-      - ./conf/keycloak:/config/
-    environment:
-      KEYCLOAK_USER: "${KEYCLOAK_ADMIN_USERNAME:-sens}"
-      KEYCLOAK_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD:-sens}"
-      DB_ADDR: webapp-db
-      DB_VENDOR: postgres
-      DB_PORT: 5432
-      DB_USER: "${POSTGRES_USER:-sens}"
-      DB_PASSWORD: "${POSTGRES_PASSWORD:-sens}"
-      DB_DATABASE: "${POSTGRES_DB:-sens}"
-    depends_on:
-      - webapp-db
-    command:
-      - >-
-        -b 0.0.0.0
-        -Dkeycloak.profile.feature.upload_scripts=enabled
-    ports:
-      - "${KEYCLOAK_PORT:-24491}:8080"
-    networks:
-      - sens-webapp
-
-  keycloak-saml-idp:
-    image: jboss/keycloak:8.0.1
-    restart: unless-stopped
-    volumes:
-      - ./conf/keycloak-saml-idp:/config/
-    environment:
-      KEYCLOAK_USER: "${EXTERNAL_SAML_ADMIN_USERNAME:-scb}"
-      KEYCLOAK_PASSWORD: "${EXTERNAL_SAML_ADMIN_PASSWORD:-scb}"
-    command:
-      - >-
-        -b 0.0.0.0
-        -Dkeycloak.profile.feature.upload_scripts=enabled
-        -Dkeycloak.migration.action=import
-        -Dkeycloak.migration.provider=singleFile
-        -Dkeycloak.migration.file=/config/saml-realm-realm.json
-        -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
-    ports:
-      - "${EXTERNAL_SAML_PORT:-24494}:8080"
-    networks:
-      - external-premises
+      - default
 
 volumes:
   postgres-storage:
 
 networks:
-  sens-webapp:
-    driver: bridge
-  external-premises:
-    driver: bridge
+  default:
+    external:
+      name: serp_default
