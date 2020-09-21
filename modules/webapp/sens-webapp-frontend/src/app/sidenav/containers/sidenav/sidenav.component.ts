@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticatedUserFacade } from '@app/shared/security/authenticated-user-facade.service';
 import { AuthoritiesService } from '@core/authorities/services/authorities.service';
+import { ExternalAppsService } from '@core/external-apps/services/external-apps.service';
+import { ExternalApp } from '@endpoint/external-apps/model/external-app.enum';
 
 @Component({
   selector: 'app-sidenav',
@@ -76,8 +78,9 @@ export class SidenavComponent implements OnInit {
 
   constructor(
       private authenticatedUser: AuthenticatedUserFacade,
-      private authoritiesService: AuthoritiesService
-  ) { }
+      private authoritiesService: AuthoritiesService,
+      private externalAppsService: ExternalAppsService
+  ) {}
 
   ngOnInit() {
 
@@ -87,11 +90,31 @@ export class SidenavComponent implements OnInit {
           .map((key) => SidenavComponent.featuresLinks[key]);
     });
 
-    this.mainNav = SidenavComponent.sections.filter((section) => section.features.length);
+    this.externalAppsService.getAvailableApps().subscribe((apps: ExternalApp[]) => {
 
-    if (this.mainNav.length) {
-      this.showNavigation.emit(true);
-    }
+      this.mainNav = SidenavComponent.sections.filter((section) => section.features.length);
+
+      if (apps && apps.length) {
+        this.mainNav = [
+          ...this.mainNav,
+          {
+            name: 'externalApps',
+            features: apps.map((app: ExternalApp) => {
+              return {
+                label: 'externalApps.app.' + app,
+                action: () => this.externalAppsService.openApp(app),
+                icon: 'analytics'
+              };
+            })
+          }];
+      }
+
+      if (this.mainNav.length) {
+        this.showNavigation.emit(true);
+      }
+    });
+
+
   }
 
 }

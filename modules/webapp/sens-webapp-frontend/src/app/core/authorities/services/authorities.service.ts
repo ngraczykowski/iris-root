@@ -19,10 +19,19 @@ export class AuthoritiesService {
       return true;
     }
 
-    const userRoles: any[] = this.authenticatedUserFacade.getUserRoles();
+    const userRoles: any[] = this.getRoles();
     const userRolesContainsRequiredRole: boolean =
         userRoles.some(userRole => requiredAuthorities.includes(userRole));
 
     return userRolesContainsRequiredRole;
+  }
+
+  public hasAuthority(authority: Authority): boolean {
+    const userRoles: any[] = this.getRoles();
+    return userRoles.includes(authority);
+  }
+
+  private getRoles(): any[] {
+    return this.authenticatedUserFacade.getUserRoles();
   }
 }

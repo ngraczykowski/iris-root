@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { AuthoritiesModule } from '@core/authorities/authorities.module';
+import { ExternalAppsModule } from '@core/external-apps/external-apps.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { AnimationModule } from '@ui/animation/animation.module';
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
@@ -28,7 +29,8 @@ import { NavigationSectionComponent } from './components/navigation-section/navi
     MatButtonModule,
     RouterModule,
     TranslateModule,
-    AnimationModule
+    AnimationModule,
+    ExternalAppsModule
   ]
 })
 export class SidenavModule { }

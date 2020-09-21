@@ -23,7 +23,13 @@
     "sections": {
       "reasoningBranches": "Reasoning Branches",
       "reports": "Reports",
-      "adminPanel": "Admin Panel"
+      "adminPanel": "Admin Panel",
+      "externalApps": "External systems"
+    }
+  },
+  "externalApps": {
+    "app": {
+      "reporting": "Analytics"
     }
   },
   "changeRequest": {

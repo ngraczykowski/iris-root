@@ -2,7 +2,7 @@ import { NgModule, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 import { BottomSheetLayoutComponent } from '@ui/layouts/components/bottom-sheet-layout/bottom-sheet-layout.component';
-import { WindowService } from '@ui/layouts/services/window.service';
+import { WindowService } from '@core/browser/services/window.service';
 import { CardLayoutComponent } from './components/card-layout/card-layout.component';
 import { FullScreenLayoutComponent } from './components/full-screen-layout/full-screen-layout.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';

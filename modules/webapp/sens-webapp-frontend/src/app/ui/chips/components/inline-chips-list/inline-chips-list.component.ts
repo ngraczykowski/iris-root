@@ -1,3 +1,4 @@
+
 import {
   AfterContentInit,
   ChangeDetectionStrategy, ChangeDetectorRef,
@@ -11,7 +12,7 @@ import {
 } from '@angular/core';
 import { MatChip } from '@angular/material';
 import { LifecycleHelper } from '@app/shared/helpers/lifecycle-helper';
-import { WindowService } from '@ui/layouts/services/window.service';
+import { WindowService } from '@core/browser/services/window.service';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
@@ -59,8 +60,7 @@ export class InlineChipsListComponent implements AfterContentInit, OnDestroy {
 
     combineLatest([
         chipsChanges,
-        this.windowService.getResize()
-            .pipe(startWith(null))
+        this.windowService.resize
     ]).pipe(takeUntil(this.lifecycle.destroyed)).subscribe(([chips, resize]) => {
       if (this.chips && this.chips.length && this.chips.first._elementRef.nativeElement.offsetTop
           !== this.chips.last._elementRef.nativeElement.offsetTop) {
