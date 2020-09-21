@@ -109,7 +109,7 @@ export class SelectReasoningBranchContainerComponent {
       }
     ).pipe(
         catchError((errorResponse: ValidateBranchIdsErrorResponse) => {
-          if (ErrorMapper.hasErrorKey(errorResponse.error, 'BranchIdsNotFound')) {
+          if (ErrorMapper.hasErrorKey(errorResponse.error, 'FeatureVectorSignaturesNotFound')) {
             this.branchValidationFail(errorResponse.error.extras.featureVectorSignatures);
           } else {
             this.validationFails();

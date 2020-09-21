@@ -1,9 +1,11 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
-  selector: 'input[appNumbersOnly]'
+  selector: 'input[appNumbersOnly],textarea[appNumbersOnly]'
 })
 export class NumbersOnlyDirective {
+
+  @Input() allowSeparators: boolean;
 
   private navigationKeys = [
     'Backspace',
@@ -48,13 +50,15 @@ export class NumbersOnlyDirective {
         (e.key === 'x' && e.metaKey === true); // Allow: Cmd+X (Mac)
   }
 
-  isNotAllowedKey(e) {
-    return (e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) &&
+  isNotAllowedKey(e: KeyboardEvent) {
+    const isNotNumber: boolean = (e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) &&
         (e.keyCode < 96 || e.keyCode > 105);
+
+    return  isNotNumber && !(this.allowSeparators && e.keyCode === 188);
   }
 
   digitsOnlyExpression() {
-    return /\D/g;
+    return this.allowSeparators ? /\D\\,/g : /\D/g;
   }
 
   @HostListener('paste', ['$event'])

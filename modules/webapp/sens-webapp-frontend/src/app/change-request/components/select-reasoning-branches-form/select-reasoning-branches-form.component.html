@@ -38,6 +38,8 @@
         matTextareaAutosize
         matAutosizeMinRows=5
         matAutosizeMaxRows=10
+        appNumbersOnly
+        [allowSeparators]="true"
       ></textarea>
       <mat-hint>
         {{ translatePrefix + 'rbId.hint' | translate: {number: form.controls.numberOfParsedBranches.value, limit: branchesLimit} }}
@@ -68,6 +70,8 @@
         [errorStateMatcher]="branchesSignaturesStateMatcher"
         matAutosizeMinRows=5
         matAutosizeMaxRows=10
+        appNumbersOnly
+        [allowSeparators]="true"
       ></textarea>
       <mat-hint>
         {{ translatePrefix + 'rbSignature.hint' | translate: {number: form.controls.numberOfParsedBranches.value, limit: branchesLimit} }}
