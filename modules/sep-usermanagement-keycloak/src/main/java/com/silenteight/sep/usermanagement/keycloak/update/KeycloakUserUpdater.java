@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
@@ -15,6 +16,10 @@ import org.keycloak.representations.idm.UserRepresentation;
 
 import java.util.Set;
 
+import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
+import static com.silenteight.sep.usermanagement.keycloak.update.KeycloakUserLocker.unlock;
+import static java.lang.Boolean.FALSE;
+
 @Slf4j
 @RequiredArgsConstructor
 class KeycloakUserUpdater {
@@ -23,6 +28,8 @@ class KeycloakUserUpdater {
   private final KeycloakUserRetriever keycloakUserRetriever;
   @NonNull
   private final KeycloakUserRoleAssigner roleAssigner;
+  @NonNull
+  private final TimeSource timeSource;
 
   public void update(UpdatedUser updatedUser) {
     log.info(LogMarkers.USER_MANAGEMENT, "Updating user. updatedUser={}", updatedUser);
@@ -35,7 +42,25 @@ class KeycloakUserUpdater {
     if (updatedUser.getRoles() != null) {
       assignRoles(userRepresentation.getId(), updatedUser.getRoles());
     }
+    Boolean locked = updatedUser.getLocked();
+    if (locked != null) {
+      if (updatedUser.getLocked()) {
+        lock(userRepresentation);
+      } else {
+        unlock(userRepresentation);
+      }
+    }
+
     userResource.update(userRepresentation);
+  }
+
+  private void lock(UserRepresentation userRepresentation) {
+    userRepresentation.setEnabled(FALSE);
+    userRepresentation.singleAttribute(LOCKED_AT, lockedAtTime());
+  }
+
+  private String lockedAtTime() {
+    return timeSource.offsetDateTime().toString();
   }
 
   public void assignRoles(String id, Set<String> roles) {

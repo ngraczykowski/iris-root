@@ -4,35 +4,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeConverter;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
-import com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames;
 import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
 
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
+import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
+import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.USER_ORIGIN;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Slf4j
 @RequiredArgsConstructor
-public class KeycloakUserQuery implements UserQuery, UserListQuery {
+public class KeycloakUserQuery implements UserQuery {
 
   private final UsersResource usersResource;
   private final LastLoginTimeProvider lastLoginTimeProvider;
@@ -40,17 +34,13 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   private final TimeConverter timeConverter;
 
   @Override
-  public Page<UserDto> listEnabled(Pageable pageable) {
-    Collection<UserRepresentation> enabledUsers = fetchEnabledUsers();
-
-    List<UserDto> usersPage = enabledUsers
+  public List<UserDto> listAll() {
+    log.info("Listing all users");
+    return usersResource
+        .list(0, MAX_VALUE)
         .stream()
-        .skip(pageable.getOffset())
-        .limit(pageable.getPageSize())
         .map(this::mapToDto)
-        .collect(toList());
-
-    return new PageImpl<>(usersPage, pageable, enabledUsers.size());
+        .collect(toUnmodifiableList());
   }
 
   @Override
@@ -62,14 +52,6 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
         .findFirst();
   }
 
-  private Collection<UserRepresentation> fetchEnabledUsers() {
-    return usersResource
-        .list(0, MAX_VALUE)
-        .stream()
-        .filter(user -> isTrue(user.isEnabled()))
-        .collect(toUnmodifiableList());
-  }
-
   UserDto mapToDto(UserRepresentation userRepresentation) {
     UserDto userDto = new UserDto();
 
@@ -77,7 +59,7 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
         timeConverter.toOffsetFromMilli(userRepresentation.getCreatedTimestamp()));
     userDto.setDisplayName(userRepresentation.getFirstName());
     userDto.setUserName(userRepresentation.getUsername());
-    userDto.setDeletedAt(getDeletedAt(userRepresentation));
+    userDto.setLockedAt(getDeletedAt(userRepresentation));
 
     String userId = userRepresentation.getId();
 
@@ -92,12 +74,12 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
   }
 
   private static String getOrigin(UserRepresentation userRepresentation) {
-    return getAttribute(userRepresentation, KeycloakUserAttributeNames.USER_ORIGIN)
+    return getAttribute(userRepresentation, USER_ORIGIN)
         .orElse(SENS_ORIGIN);
   }
 
   private static OffsetDateTime getDeletedAt(UserRepresentation userRepresentation) {
-    return getAttribute(userRepresentation, KeycloakUserAttributeNames.DELETED_AT)
+    return getAttribute(userRepresentation, LOCKED_AT)
         .map(OffsetDateTime::parse)
         .orElse(null);
   }
@@ -109,23 +91,5 @@ public class KeycloakUserQuery implements UserQuery, UserListQuery {
         .map(attributes -> attributes.getOrDefault(attributeName, emptyList()))
         .filter(attribute -> !attribute.isEmpty())
         .map(attribute -> attribute.get(0));
-  }
-
-  @Override
-  public Collection<UserDto> listEnabled() {
-    return fetchEnabledUsers()
-        .stream()
-        .map(this::mapToDto)
-        .collect(toUnmodifiableList());
-  }
-
-  @Override
-  public Collection<UserDto> listAll() {
-    log.info("Listing all users");
-    return usersResource
-        .list(0, MAX_VALUE)
-        .stream()
-        .map(this::mapToDto)
-        .collect(toUnmodifiableList());
   }
 }

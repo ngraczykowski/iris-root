@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
-import com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers;
 
 import org.jetbrains.annotations.NotNull;
 import org.keycloak.admin.client.resource.*;
@@ -14,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -26,8 +26,7 @@ public class KeycloakUserRoleAssigner {
   private final RolesResource rolesResource;
 
   public void assignRoles(KeycloakUserId userId, Set<String> roles) {
-    log.info(
-        LogMarkers.USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
+    log.info(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
 
     UserResource user = usersResource.get(userId.getUserId());
     RoleScopeResource userRoles = user.roles().realmLevel();

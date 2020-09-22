@@ -5,12 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.usermanagement.api.ResettableUserCredentials;
 import com.silenteight.sep.usermanagement.api.TemporaryPassword;
-import com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
+import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.USER_ORIGIN;
 import static java.util.Optional.ofNullable;
 
 @Slf4j
@@ -38,7 +38,7 @@ class KeycloakResettableUserCredentials implements ResettableUserCredentials {
   @Override
   public boolean ownerIsInternal() {
     return ofNullable(userResource.toRepresentation().getAttributes())
-        .flatMap(attributes -> ofNullable(attributes.get(KeycloakUserAttributeNames.USER_ORIGIN)))
+        .flatMap(attributes -> ofNullable(attributes.get(USER_ORIGIN)))
         .filter(originAttributes -> originAttributes.contains(SENS_ORIGIN))
         .isPresent();
   }

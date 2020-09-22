@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.silenteight.sep.usermanagement.keycloak.retrieval.UserRepresentationFixtures.JOHN_SMITH;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
@@ -28,11 +29,10 @@ class KeycloakUserRetrieverTest {
   @Test
   void emptyUsersList_throwsUserNotFoundException() {
     // given
-    when(usersResource.search(UserRepresentationFixtures.JOHN_SMITH.getUsername())).thenReturn(
-        emptyList());
+    when(usersResource.search(JOHN_SMITH.getUsername())).thenReturn(emptyList());
 
     // when
-    Executable when = () -> underTest.retrieve(UserRepresentationFixtures.JOHN_SMITH.getUsername());
+    Executable when = () -> underTest.retrieve(JOHN_SMITH.getUsername());
 
     // then
     assertThrows(KeycloakUserNotFoundException.class, when);
@@ -42,18 +42,15 @@ class KeycloakUserRetrieverTest {
   void usersList_retrieveUserWithGivenUsername() {
     // given
     UserResource userResource = mock(UserResource.class);
-    when(usersResource.search(UserRepresentationFixtures.JOHN_SMITH.getUsername())).thenReturn(
-        singletonList(
-            UserRepresentationFixtures.JOHN_SMITH));
-    when(usersResource.get(UserRepresentationFixtures.JOHN_SMITH.getId())).thenReturn(userResource);
-    when(userResource.toRepresentation()).thenReturn(UserRepresentationFixtures.JOHN_SMITH);
+    when(usersResource.search(JOHN_SMITH.getUsername())).thenReturn(singletonList(JOHN_SMITH));
+    when(usersResource.get(JOHN_SMITH.getId())).thenReturn(userResource);
+    when(userResource.toRepresentation()).thenReturn(JOHN_SMITH);
 
     // when
-    UserResource result = underTest.retrieve(UserRepresentationFixtures.JOHN_SMITH.getUsername());
+    UserResource result = underTest.retrieve(JOHN_SMITH.getUsername());
 
     // then
     assertThat(result.toRepresentation())
-        .extracting(UserRepresentation::getUsername)
-        .isEqualTo(UserRepresentationFixtures.JOHN_SMITH.getUsername());
+        .extracting(UserRepresentation::getUsername).isEqualTo(JOHN_SMITH.getUsername());
   }
 }

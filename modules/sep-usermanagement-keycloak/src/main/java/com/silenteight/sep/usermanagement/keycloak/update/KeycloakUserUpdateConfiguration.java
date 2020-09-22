@@ -1,6 +1,8 @@
 package com.silenteight.sep.usermanagement.keycloak.update;
 
 
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.usermanagement.api.UserLocker;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
 
@@ -16,6 +18,12 @@ class KeycloakUserUpdateConfiguration {
       KeycloakUserRoleAssigner keycloakUserRoleAssigner) {
 
     return new KeycloakUpdatedUserRepository(
-        new KeycloakUserUpdater(keycloakUserRetriever, keycloakUserRoleAssigner));
+        new KeycloakUserUpdater(
+            keycloakUserRetriever, keycloakUserRoleAssigner, DefaultTimeSource.INSTANCE));
+  }
+
+  @Bean
+  UserLocker keycloakUserLocker(KeycloakUserRetriever keycloakUserRetriever) {
+    return new KeycloakUserLocker(keycloakUserRetriever);
   }
 }

@@ -19,6 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.ANALYST;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.AUDITOR;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_1_ROLES;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_2_NO_ROLES;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
@@ -37,9 +41,9 @@ class SingleRequestRoleProviderTest {
 
   @Test
   void returnsEmptySet_whenUserHasNoRoles() {
-    givenUser(RolesProviderFixtures.USER_2_NO_ROLES);
+    givenUser(USER_2_NO_ROLES);
 
-    List<String> actual = underTest.getForUserId(RolesProviderFixtures.USER_2_NO_ROLES.getUserId());
+    List<String> actual = underTest.getForUserId(USER_2_NO_ROLES.getUserId());
 
     assertThat(actual).isEmpty();
   }
@@ -85,11 +89,10 @@ class SingleRequestRoleProviderTest {
 
   @Test
   void returnsRoles_whenUserHasRoles() {
-    givenUser(RolesProviderFixtures.USER_1_ROLES);
+    givenUser(USER_1_ROLES);
 
-    List<String> actual = underTest.getForUserId(RolesProviderFixtures.USER_1_ROLES.getUserId());
+    List<String> actual = underTest.getForUserId(USER_1_ROLES.getUserId());
 
-    assertThat(actual).containsExactlyInAnyOrder(
-        RolesProviderFixtures.AUDITOR, RolesProviderFixtures.ANALYST);
+    assertThat(actual).containsExactlyInAnyOrder(AUDITOR, ANALYST);
   }
 }

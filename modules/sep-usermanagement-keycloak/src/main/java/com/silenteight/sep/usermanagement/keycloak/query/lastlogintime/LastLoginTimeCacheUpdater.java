@@ -3,10 +3,9 @@ package com.silenteight.sep.usermanagement.keycloak.query.lastlogintime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers;
-
 import org.springframework.scheduling.annotation.Scheduled;
 
+import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
 import static one.util.streamex.EntryStream.of;
 
 @RequiredArgsConstructor
@@ -24,9 +23,9 @@ class LastLoginTimeCacheUpdater {
     int cacheSize = cachedLastLoginTimeProvider.getCacheSize();
     try {
       doUpdateCache(cacheSize);
-      log.info(LogMarkers.USER_MANAGEMENT, "LastLoginTime cache updated");
+      log.info(USER_MANAGEMENT, "LastLoginTime cache updated");
     } catch (RuntimeException e) {
-      log.error(LogMarkers.USER_MANAGEMENT, "Could not update lastLoginTime cache", e);
+      log.error(USER_MANAGEMENT, "Could not update lastLoginTime cache", e);
     }
   }
 
