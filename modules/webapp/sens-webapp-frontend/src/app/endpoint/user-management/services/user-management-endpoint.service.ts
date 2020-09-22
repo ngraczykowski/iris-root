@@ -14,7 +14,7 @@ export class UserManagementEndpointService {
   constructor(private http: HttpClient) {}
 
   list(page: number = 0, size: number = 9999): Observable<UserManagementListResponse> {
-    return this.http.get<UserManagementListResponse>(`${environment.serverApiUrl}/users`, {
+    return this.http.get<UserManagementListResponse>(`${environment.serverApiUrl}/users/pageable`, {
       params: {
           page: page.toString(),
           size: size.toString()

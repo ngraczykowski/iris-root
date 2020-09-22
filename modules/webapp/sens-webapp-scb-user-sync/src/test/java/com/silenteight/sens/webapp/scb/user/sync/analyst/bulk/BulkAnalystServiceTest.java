@@ -2,10 +2,12 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst.bulk;
 
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
-import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
+import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkDeleteAnalystsRequest;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase.RegisterExternalUserCommand;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
 import com.silenteight.sep.usermanagement.api.UserDomainError;
@@ -39,7 +41,7 @@ class BulkAnalystServiceTest {
   @Mock
   private UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase;
   @Mock
-  private LockUserUseCase lockUserUseCase;
+  private RemoveUserUseCase removeUserUseCase;
 
   @InjectMocks
   private BulkAnalystService bulkAnalystService;
@@ -112,6 +114,21 @@ class BulkAnalystServiceTest {
 
     assertThat(result.asMessage()).isEqualTo("2 / 4");
     assertThat(result.errorMessagesWithMaxSizeOf(10)).contains(errorMsg1, errorMsg2);
+  }
+
+  @Test
+  void invokeRemoveCommand() {
+    String user1 = "user1";
+    String user2 = "user2";
+    bulkAnalystService.delete(new BulkDeleteAnalystsRequest(List.of(user1, user2)));
+
+    ArgumentCaptor<RemoveUserCommand> commandCaptor =
+        ArgumentCaptor.forClass(RemoveUserCommand.class);
+
+    verify(removeUserUseCase, times(2)).apply(commandCaptor.capture());
+
+    List<RemoveUserCommand> removeUserCommand = commandCaptor.getAllValues();
+    assertThat(removeUserCommand.get(0).getUsername()).isEqualTo(user1);
   }
 
   private BulkCreateAnalystsRequest requestWithAnalystsNumberOf(int numberOfAnalysts) {

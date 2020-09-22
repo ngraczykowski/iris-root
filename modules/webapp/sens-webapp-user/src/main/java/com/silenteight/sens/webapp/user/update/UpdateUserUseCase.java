@@ -89,6 +89,10 @@ public class UpdateUserUseCase {
     @JsonProperty
     private Set<String> roles;
 
+    @Nullable
+    @JsonProperty
+    private Boolean locked;
+
     @Default
     @JsonIgnore
     private TimeSource timeSource = DefaultTimeSource.INSTANCE;
@@ -113,6 +117,8 @@ public class UpdateUserUseCase {
         result.displayName(displayName);
       if (roles != null)
         result.roles(roles);
+      if (locked != null)
+        result.locked(locked);
 
       return result.build();
     }

@@ -20,6 +20,7 @@ public class UserDtoFixtures {
   static final String ROLE_2 = "other-role";
   static final String CREATED_AT = "2020-01-01T10:00:12+01:00";
   static final String LAST_LOGIN_AT = "2020-06-03T12:21:55+01:00";
+  static final String LOCKED_AT = "2020-07-12T12:21:01+01:00";
 
   static final UserDto ACTIVE_USER = UserDto
       .builder()
@@ -29,6 +30,7 @@ public class UserDtoFixtures {
       .origin(ORIGIN)
       .lastLoginAt(parse(LAST_LOGIN_AT))
       .createdAt(parse(CREATED_AT))
+      .lockedAt(parse(LOCKED_AT))
       .build();
 
   static final UserDto MULTIPLE_ROLES_USER = UserDto

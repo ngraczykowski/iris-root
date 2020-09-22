@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.SyncAnalystStatsDto;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 class SyncAnalystsUseCaseTest {
 
   @Mock
-  private UserListQuery userListQuery;
+  private UserQuery userQuery;
   @Mock
   private ExternalAnalystRepository externalAnalystRepository;
   @Mock
@@ -57,7 +57,7 @@ class SyncAnalystsUseCaseTest {
     syncAnalystProperties = new SyncAnalystProperties();
     underTest = new SyncAnalystConfiguration()
         .syncAnalystsUseCase(
-            userListQuery,
+            userQuery,
             externalAnalystRepository,
             bulkAnalystService,
             auditTracer,
@@ -67,7 +67,7 @@ class SyncAnalystsUseCaseTest {
   @Test
   void usersAvailable_syncAnalysts() {
     // given
-    when(userListQuery.listAll()).thenReturn(
+    when(userQuery.listAll()).thenReturn(
         asList(
             SENS_USER,
             GNS_USER_WITHOUT_ANALYST_ROLE,
@@ -110,7 +110,7 @@ class SyncAnalystsUseCaseTest {
   @Test
   void analystsAvailable_syncAnalysts() {
     // given
-    when(userListQuery.listAll()).thenReturn(emptyList());
+    when(userQuery.listAll()).thenReturn(emptyList());
     when(externalAnalystRepository.list()).thenReturn(
         asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME, NEW_ANALYST));
     when(bulkAnalystService.create(any(BulkCreateAnalystsRequest.class)))
@@ -153,7 +153,7 @@ class SyncAnalystsUseCaseTest {
   @Test
   void usersAndAnalystsAvailable_syncAnalysts() {
     // give
-    when(userListQuery.listAll()).thenReturn(
+    when(userQuery.listAll()).thenReturn(
         asList(
             SENS_USER,
             GNS_USER_WITHOUT_ANALYST_ROLE,
@@ -220,7 +220,7 @@ class SyncAnalystsUseCaseTest {
     syncAnalystProperties.setMaxErrors(3);
     underTest = new SyncAnalystConfiguration()
         .syncAnalystsUseCase(
-            userListQuery,
+            userQuery,
             externalAnalystRepository,
             bulkAnalystService,
             auditTracer,

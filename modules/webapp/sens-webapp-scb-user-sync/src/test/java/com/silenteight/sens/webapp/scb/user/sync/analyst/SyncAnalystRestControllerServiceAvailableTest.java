@@ -28,7 +28,6 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
     post("/users/sync/analysts")
         .statusCode(OK.value())
         .body("added", is(ALL_CHANGED_WITH_ONE_ERROR.getAdded()))
-        .body("restored", is(ALL_CHANGED_WITH_ONE_ERROR.getRestored()))
         .body("addedRole", is(ALL_CHANGED_WITH_ONE_ERROR.getAddedRole()))
         .body("updatedDisplayName", is(ALL_CHANGED_WITH_ONE_ERROR.getUpdatedDisplayName()))
         .body("deleted", is(ALL_CHANGED_WITH_ONE_ERROR.getDeleted()))

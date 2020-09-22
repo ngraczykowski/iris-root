@@ -79,7 +79,7 @@ class AnalystSynchronizer {
   private static Stream<UserDto> getDeletedExternalUsers(Collection<UserDto> users) {
     return users
         .stream()
-        .filter(user -> nonNull(user.getDeletedAt()))
+        .filter(user -> nonNull(user.getLockedAt()))
         .filter(user -> user.hasOrigin(new GnsOrigin()));
   }
 
@@ -97,7 +97,7 @@ class AnalystSynchronizer {
   private static Stream<UserDto> getNonDeletedExternalUsers(Collection<UserDto> users) {
     return users
         .stream()
-        .filter(user -> isNull(user.getDeletedAt()))
+        .filter(user -> isNull(user.getLockedAt()))
         .filter(user -> user.hasOrigin(new GnsOrigin()));
   }
 

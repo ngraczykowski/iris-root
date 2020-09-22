@@ -11,7 +11,7 @@ import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.ReportGenerator;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import java.util.List;
@@ -31,7 +31,7 @@ class AccountsReportGenerator implements ReportGenerator {
   private static final String FILE_NAME = REPORT_NAME + ".csv";
 
   @NonNull
-  private final UserListQuery userQuery;
+  private final UserQuery userQuery;
 
   @NonNull
   private final TimeSource timeSource;
@@ -57,7 +57,7 @@ class AccountsReportGenerator implements ReportGenerator {
   }
 
   private List<ReportUserDto> getUsersDto() {
-    return userQuery.listEnabled().stream().flatMap(this::getUserDto).collect(toList());
+    return userQuery.listAll().stream().flatMap(this::getUserDto).collect(toList());
   }
 
   private Stream<ReportUserDto> getUserDto(UserDto user) {

@@ -4,12 +4,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.*;
-import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
-import com.silenteight.sens.webapp.user.lock.LockUserUseCase.LockUserCommand;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase.UnlockUserCommand;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase.RegisterExternalUserCommand;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase.AddRolesToUserCommand;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
@@ -36,7 +36,7 @@ public class BulkAnalystService {
   @NonNull
   private final UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase;
   @NonNull
-  private final LockUserUseCase lockUserUseCase;
+  private final RemoveUserUseCase removeUserUseCase;
 
   public BulkResult create(BulkCreateAnalystsRequest request) {
     List<SingleResult> results =
@@ -93,12 +93,12 @@ public class BulkAnalystService {
 
   public BulkResult delete(BulkDeleteAnalystsRequest request) {
     List<SingleResult> operationResults =
-        request.asLockUserCommands().stream().map(this::delete).collect(toList());
+        request.asRemoveUserCommands().stream().map(this::delete).collect(toList());
     return new BulkResult(operationResults);
   }
 
-  private SingleResult delete(LockUserCommand command) {
-    lockUserUseCase.apply(command);
+  private SingleResult delete(RemoveUserCommand command) {
+    removeUserUseCase.apply(command);
     return success();
   }
 }

@@ -271,6 +271,7 @@ sep.auth:
     MANAGE_USERS:
       - "CREATE_USER"
       - "EDIT_USER"
+      - "REMOVE_USER"
       - "LIST_ROLES"
       - "RESET_USER_PASSWORD"
     REJECT_CHANGE_REQUESTS:

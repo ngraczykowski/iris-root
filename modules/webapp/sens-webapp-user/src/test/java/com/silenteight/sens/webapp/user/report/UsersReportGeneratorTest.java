@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.user.report;
 
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 class UsersReportGeneratorTest {
 
   @Mock
-  private UserListQuery userListQuery;
+  private UserQuery userQuery;
 
   private TestDateFormatter filenameDateFormatter;
   private TestDateFormatter rowDateFormatter;
@@ -45,7 +45,7 @@ class UsersReportGeneratorTest {
         new MockTimeSource(Instant.parse(CURRENT_TIME)),
         filenameDateFormatter,
         rowDateFormatter,
-        userListQuery);
+        userQuery);
   }
 
   @Test
@@ -57,7 +57,7 @@ class UsersReportGeneratorTest {
 
   @Test
   void reportFilenameContainsNameAndTimestamp() {
-    when(userListQuery.listEnabled()).thenReturn(emptyList());
+    when(userQuery.listAll()).thenReturn(emptyList());
 
     Report report = underTest.generateReport(emptyMap());
 
@@ -67,36 +67,37 @@ class UsersReportGeneratorTest {
 
   @Test
   void reportContainsProperHeaders() {
-    when(userListQuery.listEnabled()).thenReturn(of(ACTIVE_USER));
+    when(userQuery.listAll()).thenReturn(of(ACTIVE_USER));
 
     Report report = underTest.generateReport(emptyMap());
 
     assertThat(report).hasFields(USERNAME_COLUMN_HEADER, DISPLAY_NAME_COLUMN_HEADER,
         ORIGIN_COLUMN_HEADER, ROLES_COLUMN_HEADER, LAST_LOGIN_AT_COLUMN_HEADER,
-        CREATED_AT_COLUMN_HEADER);
+        CREATED_AT_COLUMN_HEADER, LOCKED_AT_COLUMN_HEADER);
   }
 
   @Test
   void reportContainsData() {
-    when(userListQuery.listEnabled()).thenReturn(of(ACTIVE_USER));
+    when(userQuery.listAll()).thenReturn(of(ACTIVE_USER));
 
     Report report = underTest.generateReport(emptyMap());
 
     String expectedLastLoginAt = rowDateFormatter.format(LAST_LOGIN_AT);
     String expectedCreatedAt = rowDateFormatter.format(CREATED_AT);
+    String expectedLockedAt = rowDateFormatter.format(LOCKED_AT);
     assertThat(report).hasValues(0, USERNAME, DISPLAY_NAME, ORIGIN, ROLE_1,
-        expectedLastLoginAt, expectedCreatedAt);
+        expectedLastLoginAt, expectedCreatedAt, expectedLockedAt);
   }
 
   @Test
   void reportContainsUserWithMultipleRoles() {
-    when(userListQuery.listEnabled()).thenReturn(of(MULTIPLE_ROLES_USER));
+    when(userQuery.listAll()).thenReturn(of(MULTIPLE_ROLES_USER));
 
     Report report = underTest.generateReport(emptyMap());
 
     String expectedRole = format("\"%s,%s\"", ROLE_1, ROLE_2);
     assertThat(report).hasValues(0, EMPTY_VALUE, EMPTY_VALUE, ORIGIN, expectedRole,
-        EMPTY_VALUE, EMPTY_VALUE);
+        EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE);
   }
 
   static class UsersReportGeneratorFixtures {

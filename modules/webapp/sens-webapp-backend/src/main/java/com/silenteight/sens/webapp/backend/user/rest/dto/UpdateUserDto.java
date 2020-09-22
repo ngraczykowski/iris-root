@@ -19,12 +19,16 @@ public class UpdateUserDto {
   @Nullable
   private Set<String> roles;
 
+  @Nullable
+  private Boolean locked;
+
   public UpdateUserCommand toCommand(String username) {
     return UpdateUserCommand
         .builder()
         .username(username)
         .displayName(displayName)
         .roles(roles)
+        .locked(locked)
         .build();
   }
 }

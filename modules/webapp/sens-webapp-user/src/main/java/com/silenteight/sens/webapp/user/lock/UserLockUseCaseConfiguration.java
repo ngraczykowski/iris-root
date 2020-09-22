@@ -10,11 +10,6 @@ import org.springframework.context.annotation.Configuration;
 class UserLockUseCaseConfiguration {
 
   @Bean
-  LockUserUseCase lockUserUseCase(UserLocker userLocker, AuditTracer auditTracer) {
-    return new LockUserUseCase(userLocker, auditTracer);
-  }
-
-  @Bean
   UnlockUserUseCase unlockUserUseCase(UserLocker userLocker, AuditTracer auditTracer) {
     return new UnlockUserUseCase(userLocker, auditTracer);
   }

@@ -12,6 +12,8 @@ import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPassword
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
 import com.silenteight.sep.usermanagement.api.*;
@@ -23,6 +25,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,10 +33,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import javax.validation.Valid;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -57,6 +62,9 @@ class UserRestController {
   private final UpdateUserUseCase updateUserUseCase;
 
   @NonNull
+  private final RemoveUserUseCase removeUserUseCase;
+
+  @NonNull
   private final ResetInternalUserPasswordUseCase resetPasswordUseCase;
 
   @NonNull
@@ -67,13 +75,24 @@ class UserRestController {
 
   @GetMapping
   @PreAuthorize("isAuthorized('LIST_USERS')")
-  public Page<UserDto> users(Pageable pageable) {
+  public List<UserDto> users() {
+    log.info(USER_MANAGEMENT, "Listing users");
+    return userQuery.listAll();
+  }
+
+  //TODO(jobarymski): this needs to be removed once the frontend switches
+  // to the users endpoint above
+  @Deprecated
+  @GetMapping("/pageable")
+  @PreAuthorize("isAuthorized('LIST_USERS')")
+  public Page<UserDto> pageableUsers(Pageable pageable) {
     log.info(
         USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
         pageable.getPageNumber(),
         pageable.getPageSize());
-    return userQuery.listEnabled(pageable);
+    List<UserDto> users = userQuery.listAll();
+    return new PageImpl<>(users, pageable, users.size());
   }
 
   @PostMapping
@@ -120,6 +139,17 @@ class UserRestController {
         .path("/{id}")
         .buildAndExpand(username)
         .toUri();
+  }
+
+  @DeleteMapping("/{username}")
+  @PreAuthorize("isAuthorized('REMOVE_USER')")
+  public ResponseEntity<Void> delete(@PathVariable String username) {
+    log.info(USER_MANAGEMENT, "Deleting User {}", username);
+    return Try.run(
+        () -> removeUserUseCase.apply(
+            RemoveUserCommand.builder().username(username).expectedOrigin(SENS_ORIGIN).build()))
+        .mapTry(ignore -> new ResponseEntity<Void>(NO_CONTENT))
+        .get();
   }
 
   @PatchMapping("/{username}/password/reset")

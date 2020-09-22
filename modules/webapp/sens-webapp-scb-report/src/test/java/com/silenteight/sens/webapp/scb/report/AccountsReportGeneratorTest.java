@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.scb.report;
 
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 class AccountsReportGeneratorTest {
 
   @Mock
-  private UserListQuery repository;
+  private UserQuery repository;
 
   private AccountsReportGenerator underTest;
 
@@ -43,9 +43,9 @@ class AccountsReportGeneratorTest {
 
   @ParameterizedTest
   @MethodSource("reportTestCases")
-  void reportTest(Collection<UserDto> users, String expectedReportFile) throws Exception {
+  void reportTest(List<UserDto> users, String expectedReportFile) throws Exception {
     //given
-    when(repository.listEnabled()).thenReturn(users);
+    when(repository.listAll()).thenReturn(users);
 
     //when
     Report report = underTest.generateReport(emptyMap());

@@ -211,7 +211,7 @@ class AnalystSynchronizerTest {
         .displayName(displayName)
         .roles(singletonList(role))
         .origin(origin)
-        .deletedAt(deletedAt)
+        .lockedAt(deletedAt)
         .build();
   }
 }

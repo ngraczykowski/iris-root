@@ -14,7 +14,7 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnal
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.SyncAnalystStatsDto;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toList;
 public class SyncAnalystsUseCase {
 
   @NonNull
-  private final UserListQuery userListQuery;
+  private final UserQuery userQuery;
   @NonNull
   private final ExternalAnalystRepository externalAnalystRepository;
   @NonNull
@@ -44,7 +44,7 @@ public class SyncAnalystsUseCase {
 
     auditTracer.save(new AnalystsSyncRequestedEvent());
 
-    Collection<UserDto> users = userListQuery.listAll();
+    Collection<UserDto> users = userQuery.listAll();
     Collection<Analyst> analysts = externalAnalystRepository.list();
     SynchronizedAnalysts syncResult = analystSynchronizer.synchronize(users, analysts);
 

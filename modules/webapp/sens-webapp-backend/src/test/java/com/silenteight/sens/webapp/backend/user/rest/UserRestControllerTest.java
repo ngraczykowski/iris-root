@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.backend.user.rest;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
+import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase;
 import com.silenteight.sep.usermanagement.api.RolesQuery;
 import com.silenteight.sep.usermanagement.api.UserQuery;
@@ -18,6 +19,9 @@ abstract class UserRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   protected UpdateUserUseCase updateUserUseCase;
+
+  @MockBean
+  protected RemoveUserUseCase removeUserUseCase;
 
   @MockBean
   protected UserQuery userQuery;

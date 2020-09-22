@@ -2,9 +2,6 @@ package com.silenteight.sens.webapp.backend.user.rest;
 
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.ANALYST_USER;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.APPROVER_USER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
@@ -13,7 +10,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -21,13 +17,38 @@ import static org.springframework.http.HttpStatus.OK;
 class UserRestControllerListUsersTest extends UserRestControllerTest {
 
   @TestWithRole(role = ADMINISTRATOR)
-  void its200WithUsersList_whenUsersAreAvailable() {
-    given(userQuery.listEnabled(any(Pageable.class)))
-        .willReturn(new PageImpl<>(asList(ANALYST_USER, APPROVER_USER)));
+  void its200WithUsersList() {
+    given(userQuery.listAll())
+        .willReturn(asList(ANALYST_USER, APPROVER_USER));
 
     get(getRequestPath())
         .statusCode(OK.value())
         .body("size", is(2))
+        .body("[0].userName", equalTo(ANALYST_USER.getUserName()))
+        .body("[0].displayName", equalTo(ANALYST_USER.getDisplayName()))
+        .body("[0].roles", equalTo(ANALYST_USER.getRoles()))
+        .body("[0].lastLoginAt", notNullValue())
+        .body("[0].createdAt", notNullValue())
+        .body("[0].deletedAt", nullValue())
+        .body("[0].origin", equalTo(ANALYST_USER.getOrigin()))
+        .body("[1].userName", equalTo(APPROVER_USER.getUserName()))
+        .body("[1].displayName", equalTo(APPROVER_USER.getDisplayName()))
+        .body("[1].roles", equalTo(APPROVER_USER.getRoles()))
+        .body("[1].lastLoginAt", notNullValue())
+        .body("[1].createdAt", notNullValue())
+        .body("[1].deletedAt", nullValue())
+        .body("[1].origin", equalTo(APPROVER_USER.getOrigin()));
+  }
+
+  @Deprecated
+  @TestWithRole(role = ADMINISTRATOR)
+  void its200WithPageableUsersList_Deprecated() {
+    given(userQuery.listAll())
+        .willReturn(asList(ANALYST_USER, APPROVER_USER));
+
+    get(getRequestPath() + "/pageable?page=0&size=9999")
+        .statusCode(OK.value())
+        .body("content.size", is(2))
         .body("content[0].userName", equalTo(ANALYST_USER.getUserName()))
         .body("content[0].displayName", equalTo(ANALYST_USER.getDisplayName()))
         .body("content[0].roles", equalTo(ANALYST_USER.getRoles()))
@@ -50,6 +71,6 @@ class UserRestControllerListUsersTest extends UserRestControllerTest {
   }
 
   private static String getRequestPath() {
-    return "/users?page=0&size=9999";
+    return "/users";
   }
 }

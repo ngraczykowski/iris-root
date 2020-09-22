@@ -114,6 +114,10 @@ public abstract class BaseRestControllerTest {
     return toValidatableResponse(asyncSender().patch(withRoot(mapping)));
   }
 
+  public static ValidatableMockMvcResponse delete(String mapping) {
+    return toValidatableResponse(asyncSender().delete(withRoot(mapping)));
+  }
+
   public static ValidatableMockMvcResponse patch(String mapping, Map<String, ?> headers) {
     return toValidatableResponse(asyncSender(headers).patch(withRoot(mapping)));
   }

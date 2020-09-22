@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.report.ReportGenerator;
 import com.silenteight.sens.webapp.report.SimpleReport;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import io.vavr.control.Option;
@@ -38,6 +38,7 @@ class UsersReportGenerator implements ReportGenerator {
   static final String ROLES_COLUMN_HEADER = "roles";
   static final String LAST_LOGIN_AT_COLUMN_HEADER = "last_login_at";
   static final String CREATED_AT_COLUMN_HEADER = "created_at";
+  static final String LOCKED_AT_COLUMN_HEADER = "locked_at";
 
   @NonNull
   private final TimeSource timeProvider;
@@ -46,7 +47,7 @@ class UsersReportGenerator implements ReportGenerator {
   @NonNull
   private final DateFormatter rowDateFormatter;
   @NonNull
-  private final UserListQuery userListQuery;
+  private final UserQuery userListQuery;
 
   @Override
   public String getName() {
@@ -71,7 +72,7 @@ class UsersReportGenerator implements ReportGenerator {
   }
 
   private List<String> getReportData() {
-    Collection<UserDto> users = userListQuery.listEnabled();
+    Collection<UserDto> users = userListQuery.listAll();
     return buildReportData(users).collect(toList());
   }
 
@@ -83,6 +84,7 @@ class UsersReportGenerator implements ReportGenerator {
         .cell(ROLES_COLUMN_HEADER, UsersReportGenerator::rolesFormatter)
         .cell(LAST_LOGIN_AT_COLUMN_HEADER, dateFormatter(UserDto::getLastLoginAt))
         .cell(CREATED_AT_COLUMN_HEADER, dateFormatter(UserDto::getCreatedAt))
+        .cell(LOCKED_AT_COLUMN_HEADER, dateFormatter(UserDto::getLockedAt))
         .build()
         .lines();
   }
