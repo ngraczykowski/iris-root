@@ -2,9 +2,9 @@ package com.silenteight.sens.webapp.user.registration.domain;
 
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

@@ -7,11 +7,12 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
-import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
-import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
+import com.silenteight.sep.usermanagement.api.NewUserDetails;
+import com.silenteight.sep.usermanagement.api.NewUserDetails.Credentials;
+import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
 
 import io.vavr.control.Either;
 
@@ -20,22 +21,18 @@ import javax.annotation.Nullable;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
-import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
+import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptySet;
 
 @Slf4j
 public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
-
-  @NonNull
-  private final AuditTracer auditTracer;
 
   public RegisterInternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
       RegisteredUserRepository registeredUserRepository,
       AuditTracer auditTracer) {
 
-    super(userRegisteringDomainService, registeredUserRepository);
-    this.auditTracer = auditTracer;
+    super(userRegisteringDomainService, registeredUserRepository, auditTracer);
   }
 
   public Either<UserDomainError, Success> apply(RegisterInternalUserCommand command) {

@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.*;
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase.LockUserCommand;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
@@ -15,6 +14,7 @@ import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase.AddRolesToUserCommand;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase.UpdateUserDisplayNameCommand;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
 
 import io.vavr.control.Either;
 

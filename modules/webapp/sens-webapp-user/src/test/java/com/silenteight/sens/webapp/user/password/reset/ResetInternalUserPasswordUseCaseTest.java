@@ -10,6 +10,9 @@ import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
+import com.silenteight.sep.usermanagement.api.ResettableUserCredentials;
+import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.UserCredentialsRepository;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;

@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.user.registration;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
+import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

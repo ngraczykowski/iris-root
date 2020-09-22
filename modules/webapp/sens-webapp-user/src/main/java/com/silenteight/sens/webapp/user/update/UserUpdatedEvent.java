@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.usermanagement.update;
+package com.silenteight.sens.webapp.user.update;
 
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 

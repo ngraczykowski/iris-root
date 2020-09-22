@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,8 +25,12 @@ public class UpdateUserDisplayNameUseCase {
   public void apply(UpdateUserDisplayNameCommand command) {
     auditTracer.save(new UserUpdateRequestedEvent(
         command.getUsername(), UpdateUserDisplayNameCommand.class.getName(), command));
+    UpdatedUser updatedUser = command.toUpdatedUser();
 
-    updatedUserRepository.save(command.toUpdatedUser());
+    updatedUserRepository.save(updatedUser);
+
+    auditTracer.save(new UserUpdatedEvent(
+        updatedUser.getUsername(), UpdatedUser.class.getName(), updatedUser));
   }
 
   @Data

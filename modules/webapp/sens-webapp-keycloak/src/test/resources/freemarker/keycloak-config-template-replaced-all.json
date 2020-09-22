@@ -1,9 +1,0 @@
-{
-  "clients": [
-    {
-      "name": "backend",
-      "baseUrl": "http://localhost:24410",
-      "secret": "theSecret"
-    }
-  ]
-}

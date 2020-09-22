@@ -8,20 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.TemporaryPasswordDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDto;
-import com.silenteight.sens.webapp.user.RolesQuery;
-import com.silenteight.sens.webapp.user.UserQuery;
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
-import com.silenteight.sens.webapp.user.dto.RolesDto;
-import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
-import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase;
-import com.silenteight.sens.webapp.user.update.UpdatedUserRepository.UserUpdateException;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
-import com.silenteight.sens.webapp.user.update.exception.RolesValidationException;
+import com.silenteight.sep.usermanagement.api.*;
+import com.silenteight.sep.usermanagement.api.UpdatedUserRepository.UserUpdateException;
+import com.silenteight.sep.usermanagement.api.dto.RolesDto;
+import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -72,7 +68,8 @@ class UserRestController {
   @GetMapping
   @PreAuthorize("isAuthorized('LIST_USERS')")
   public Page<UserDto> users(Pageable pageable) {
-    log.info(USER_MANAGEMENT,
+    log.info(
+        USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
         pageable.getPageNumber(),
         pageable.getPageSize());

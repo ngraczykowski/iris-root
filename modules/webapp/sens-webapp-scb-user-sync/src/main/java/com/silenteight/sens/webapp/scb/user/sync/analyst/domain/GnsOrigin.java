@@ -1,8 +1,9 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst.domain;
 
-import com.silenteight.sens.webapp.user.domain.ExternalOrigin;
 
-public class GnsOrigin extends ExternalOrigin {
+import com.silenteight.sep.usermanagement.api.origin.UserOrigin;
+
+public class GnsOrigin implements UserOrigin {
 
   public static final String GNS_ORIGIN = "GNS";
 

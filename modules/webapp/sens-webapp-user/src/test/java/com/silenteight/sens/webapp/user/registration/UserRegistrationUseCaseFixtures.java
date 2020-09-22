@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.user.registration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
+import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import static java.util.Collections.emptySet;
 import static java.util.Set.of;

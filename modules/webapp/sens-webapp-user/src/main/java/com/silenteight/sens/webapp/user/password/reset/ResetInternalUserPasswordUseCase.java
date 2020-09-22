@@ -5,6 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sep.usermanagement.api.ResettableUserCredentials;
+import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.TemporaryPasswordGenerator;
+import com.silenteight.sep.usermanagement.api.UserCredentialsRepository;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 

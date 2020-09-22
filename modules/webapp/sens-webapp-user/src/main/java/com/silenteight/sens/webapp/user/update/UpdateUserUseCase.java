@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
-import com.silenteight.sens.webapp.user.update.UpdatedUser.UpdatedUserBuilder;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.UpdatedUser.UpdatedUserBuilder;
+import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,8 +54,8 @@ public class UpdateUserUseCase {
     if (roles.isEmpty())
       return;
 
-    Option<RolesDontExistError> validationError = rolesValidator.validate(roles);
-    if (validationError.isDefined())
+    Optional<RolesDontExistError> validationError = rolesValidator.validate(roles);
+    if (validationError.isPresent())
       throw validationError.get().toException();
   }
 
@@ -65,7 +67,10 @@ public class UpdateUserUseCase {
   }
 
   private void update(UpdateUserCommand command) {
-    updatedUserRepository.save(command.toUpdatedUser());
+    UpdatedUser updatedUser = command.toUpdatedUser();
+    updatedUserRepository.save(updatedUser);
+    auditTracer.save(
+        new UserUpdatedEvent(updatedUser.getUsername(), UpdatedUser.class.getName(), updatedUser));
   }
 
   @Data

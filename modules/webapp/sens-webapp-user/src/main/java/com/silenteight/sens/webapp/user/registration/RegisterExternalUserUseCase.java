@@ -6,10 +6,11 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
-import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
+import com.silenteight.sep.usermanagement.api.NewUserDetails;
+import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
 
 import io.vavr.control.Either;
 
@@ -22,16 +23,12 @@ import static java.util.Collections.emptySet;
 @Slf4j
 public class RegisterExternalUserUseCase extends BaseRegisterUserUseCase {
 
-  @NonNull
-  private final AuditTracer auditTracer;
-
   public RegisterExternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
       RegisteredUserRepository registeredUserRepository,
       AuditTracer auditTracer) {
 
-    super(userRegisteringDomainService, registeredUserRepository);
-    this.auditTracer = auditTracer;
+    super(userRegisteringDomainService, registeredUserRepository, auditTracer);
   }
 
   public Either<UserDomainError, Success> apply(RegisterExternalUserCommand command) {

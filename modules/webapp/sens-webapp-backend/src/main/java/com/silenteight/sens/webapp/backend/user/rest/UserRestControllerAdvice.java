@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.backend.user.rest;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestController.UserRegistrationException;
 import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

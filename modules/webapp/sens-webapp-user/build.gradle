@@ -14,6 +14,7 @@ dependencies {
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-report")
+  implementation libraries.silenteight_sep_usermanagement_api
 
   implementation libraries.vavr
 }

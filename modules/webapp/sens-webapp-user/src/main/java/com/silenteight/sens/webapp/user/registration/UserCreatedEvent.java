@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.keycloak.usermanagement.registration;
+package com.silenteight.sens.webapp.user.registration;
 
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 

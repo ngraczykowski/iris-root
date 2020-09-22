@@ -15,6 +15,7 @@ configurations {
 
 // Use pluginJar configuration to define dependencies which should be included inside plugin JAR
 dependencies {
+  implementation libraries.silenteight_sep_usermanagement_api
   implementation libraries.bouncycastle_bcprov
   implementation libraries.commons_lang3
   implementation libraries.jjwt

@@ -9,11 +9,6 @@ keycloak:
     sslRequired: external
     credentials:
       secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
-  migrator:
-    migrations: file:conf/keycloak/*
-    user: sens
-    password: sens
-    authServerUrl: ${keycloak.adapter.authServerUrl}
 
 chrome-extension:
   auth-url: https://serp-master.silenteight.com/auth/realms/sens-webapp/

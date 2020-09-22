@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
-import com.silenteight.sens.webapp.user.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import java.util.List;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.domain.GnsOrigin.GNS_ORIGIN;
-import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
 import static com.silenteight.sens.webapp.user.domain.UserRole.ANALYST;
+import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static java.time.OffsetDateTime.parse;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;

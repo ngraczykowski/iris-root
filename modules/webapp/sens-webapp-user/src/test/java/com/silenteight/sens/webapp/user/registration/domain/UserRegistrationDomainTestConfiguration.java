@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator;
 import com.silenteight.sens.webapp.user.domain.validator.ValidatorConfigurationTestConfiguration;
+import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
 
 public class UserRegistrationDomainTestConfiguration {
 

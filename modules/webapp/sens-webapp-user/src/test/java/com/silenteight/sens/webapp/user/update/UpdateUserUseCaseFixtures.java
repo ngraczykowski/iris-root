@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserCommand;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
+import com.silenteight.sep.usermanagement.api.UpdatedUser;
 
 import java.time.OffsetDateTime;
 import java.util.Set;

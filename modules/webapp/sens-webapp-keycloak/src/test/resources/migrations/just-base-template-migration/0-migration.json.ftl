@@ -1,3 +1,0 @@
-{
-  "someMigration": [=SOME_VALUE]
-}

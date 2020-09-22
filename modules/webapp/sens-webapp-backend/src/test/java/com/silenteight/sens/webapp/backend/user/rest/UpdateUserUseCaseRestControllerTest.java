@@ -1,9 +1,9 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.sens.webapp.user.update.UpdatedUserRepository.UserUpdateException;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
-import com.silenteight.sens.webapp.user.update.exception.RolesValidationException;
+import com.silenteight.sep.usermanagement.api.RolesValidationException;
+import com.silenteight.sep.usermanagement.api.UpdatedUserRepository.UserUpdateException;
 
 import org.springframework.context.annotation.Import;
 

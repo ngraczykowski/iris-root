@@ -2,10 +2,10 @@ package com.silenteight.sens.webapp.backend.user.rest;
 
 import lombok.experimental.UtilityClass;
 
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
-import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import static java.time.OffsetDateTime.parse;
 import static java.util.Collections.singletonList;

@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.user.UserQuery;
-import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
+import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import java.util.Collection;
 import java.util.Set;
@@ -39,8 +41,13 @@ public class AddRolesToUserUseCase {
         .map(UserDto::getRoles)
         .map(command::toUpdatedUser)
         .ifPresentOrElse(
-            updatedUserRepository::save,
+            this::saveUser,
             () -> log.warn("Could not find user. username={}", command.getUsername()));
+  }
+
+  private void saveUser(UpdatedUser user) {
+    updatedUserRepository.save(user);
+    auditTracer.save(new UserUpdatedEvent(user.getUsername(), UpdatedUser.class.getName(), user));
   }
 
   @Data

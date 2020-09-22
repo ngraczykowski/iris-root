@@ -9,10 +9,10 @@ import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.ReportGenerator;
-import com.silenteight.sens.webapp.user.UserListQuery;
-import com.silenteight.sens.webapp.user.dto.UserDto;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.usermanagement.api.UserListQuery;
+import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import java.util.List;
 import java.util.Map;

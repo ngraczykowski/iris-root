@@ -3,7 +3,8 @@ package com.silenteight.sens.webapp.user.registration.domain;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
+import com.silenteight.sep.usermanagement.api.NewUserDetails;
+import com.silenteight.sep.usermanagement.api.NewUserDetails.Credentials;
 
 import java.util.Set;
 

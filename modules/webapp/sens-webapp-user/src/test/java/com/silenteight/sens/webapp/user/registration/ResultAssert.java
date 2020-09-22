@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.user.registration;
 
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
 
 import io.vavr.control.Either;
 import org.assertj.core.api.AbstractAssert;

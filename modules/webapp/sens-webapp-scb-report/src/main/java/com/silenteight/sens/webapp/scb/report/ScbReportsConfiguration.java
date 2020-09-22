@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.usermanagement.api.UserListQuery;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

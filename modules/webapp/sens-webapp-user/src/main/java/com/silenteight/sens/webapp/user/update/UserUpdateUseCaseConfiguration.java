@@ -1,9 +1,10 @@
 package com.silenteight.sens.webapp.user.update;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
-import com.silenteight.sens.webapp.user.UserQuery;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
+import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
+import com.silenteight.sep.usermanagement.api.UserQuery;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

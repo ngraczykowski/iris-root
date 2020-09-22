@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import com.silenteight.sens.webapp.user.password.reset.TemporaryPassword;
-import com.silenteight.sens.webapp.user.password.reset.TemporaryPasswordGenerator;
+import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.TemporaryPasswordGenerator;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;

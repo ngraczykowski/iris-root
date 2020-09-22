@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.user.domain.validator;
 
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
+import com.silenteight.sep.usermanagement.api.SimpleUserDomainError;
 
 import io.vavr.control.Option;
 

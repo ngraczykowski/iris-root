@@ -3,12 +3,12 @@ package com.silenteight.sens.webapp.scb.report;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sens.webapp.user.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
-import static com.silenteight.sens.webapp.user.domain.SensOrigin.SENS_ORIGIN;
+import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 

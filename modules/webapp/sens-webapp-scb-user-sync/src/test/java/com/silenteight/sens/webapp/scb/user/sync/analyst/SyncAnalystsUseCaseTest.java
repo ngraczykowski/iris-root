@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.SyncAnalystStatsDto;
-import com.silenteight.sens.webapp.user.UserListQuery;
+import com.silenteight.sep.usermanagement.api.UserListQuery;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

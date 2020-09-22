@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.report;
 
 import com.silenteight.sens.webapp.report.Report;
-import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
+import com.silenteight.sep.usermanagement.api.UserListQuery;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

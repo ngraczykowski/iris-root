@@ -1,9 +1,0 @@
-{
-  "clients": [
-    {
-      "name": "backend",
-      "baseUrl": "[=BACKEND_BASE_URL]",
-      "secret": "[=BACKEND_SECRET]"
-    }
-  ]
-}

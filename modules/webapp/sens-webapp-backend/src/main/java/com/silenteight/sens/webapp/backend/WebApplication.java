@@ -13,12 +13,12 @@ import com.silenteight.sens.webapp.backend.reasoningbranch.ReasoningBranchModule
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.app.SensWebAppApplicationTemplate;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
-import com.silenteight.sens.webapp.keycloak.KeycloakModule;
 import com.silenteight.sens.webapp.notification.NotificationModule;
 import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.user.UserModule;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
+import com.silenteight.sep.usermanagement.keycloak.UsermanagementKeycloakModule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -36,7 +36,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfigura
         DecisionTreeModule.class,
         ExternalAppsModule.class,
         GrpcModule.class,
-        KeycloakModule.class,
+        UsermanagementKeycloakModule.class,
         NotificationModule.class,
         ReasoningBranchModule.class,
         ReportModule.class,

@@ -2,12 +2,12 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
-import com.silenteight.sens.webapp.user.UserListQuery;
 import com.silenteight.sens.webapp.user.lock.LockUserUseCase;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
+import com.silenteight.sep.usermanagement.api.UserListQuery;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;

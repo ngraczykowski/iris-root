@@ -3,16 +3,23 @@ package com.silenteight.sens.webapp.user.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.domain.validator.*;
+import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
+import com.silenteight.sens.webapp.user.domain.validator.RegexValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
-import com.silenteight.sens.webapp.user.registration.domain.NewUserDetails.Credentials;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
+import com.silenteight.sep.usermanagement.api.NewUserDetails.Credentials;
+import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
+
+import java.util.Optional;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static io.vavr.control.Either.left;
@@ -44,9 +51,9 @@ public class UserRegisteringDomainService {
     if (usernameConstraintRestrictedCharsError.isDefined())
       return left(usernameConstraintRestrictedCharsError.get());
 
-    Option<UsernameNotUniqueError> usernameNotUniqueError =
+    Optional<UsernameNotUniqueError> usernameNotUniqueError =
         usernameUniquenessValidator.validate(registration.getUsername());
-    if (usernameNotUniqueError.isDefined())
+    if (usernameNotUniqueError.isPresent())
       return left(usernameNotUniqueError.get());
 
     Option<InvalidNameLengthError> invalidDisplayNameLengthError =
@@ -55,10 +62,10 @@ public class UserRegisteringDomainService {
       return left(invalidDisplayNameLengthError.get());
 
     if (registration.hasRoles()) {
-      Option<RolesDontExistError> rolesDontExistError =
+      Optional<RolesDontExistError> rolesDontExistError =
           rolesValidator.validate(registration.getRoles());
 
-      if (rolesDontExistError.isDefined())
+      if (rolesDontExistError.isPresent())
         return left(rolesDontExistError.get());
     }
 

@@ -94,8 +94,7 @@ class CircuitBreakerRestControllerForDiscrepantBranchesTest extends BaseRestCont
   }
 
   @Nested
-  class BranchListWithArchivedDiscrepancies {
-
+  class ArchivedDiscrepancies {
     @TestWithRole(roles = { BUSINESS_OPERATOR })
     void its200WithEmptyListWhenNoBranchesWithArchivedDiscrepancies() {
       given(query.listBranchesWithArchivedDiscrepancies()).willReturn(emptyList());

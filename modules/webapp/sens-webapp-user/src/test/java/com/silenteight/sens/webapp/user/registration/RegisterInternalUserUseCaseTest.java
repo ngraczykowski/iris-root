@@ -5,17 +5,17 @@ import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator;
-import com.silenteight.sens.webapp.user.domain.validator.RolesValidator.RolesDontExistError;
-import com.silenteight.sens.webapp.user.domain.validator.UserDomainError;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator;
-import com.silenteight.sens.webapp.user.domain.validator.UsernameUniquenessValidator.UsernameNotUniqueError;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainTestConfiguration;
+import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
+import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
+import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
+import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
 import static com.silenteight.sens.webapp.user.registration.ResultAssert.assertThatResult;
 import static com.silenteight.sens.webapp.user.registration.UserRegistrationUseCaseFixtures.*;
@@ -125,7 +128,7 @@ class RegisterInternalUserUseCaseTest {
 
   @Test
   void displayNameTooLong_returnsValidDomainError() {
-    given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
+    given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
 
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(TOO_LONG_DISPLAYNAME_REQUEST);
@@ -139,7 +142,7 @@ class RegisterInternalUserUseCaseTest {
 
   @Test
   void displayNameTooShort_returnsValidDomainError() {
-    given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
+    given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
 
     Either<UserDomainError, RegisterInternalUserUseCase.Success> actual =
         underTest.apply(TOO_SHORT_DISPLAYNAME_REQUEST);
@@ -156,7 +159,7 @@ class RegisterInternalUserUseCaseTest {
 
     @BeforeEach
     void setUp() {
-      given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
+      given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
     }
 
     @Test
@@ -166,7 +169,6 @@ class RegisterInternalUserUseCaseTest {
 
       assertThatResult(actual)
           .isSuccessWithUsername(NO_ROLES_REGISTRATION_REQUEST.getUsername());
-      verifyAuditLog(NO_ROLES_REGISTRATION_REQUEST);
     }
 
     @Test
@@ -176,7 +178,6 @@ class RegisterInternalUserUseCaseTest {
 
       assertThatResult(actual)
           .isSuccessWithUsername(RESTRICTED_CHAR_VALID_SPECIAL_USERNAME_REQUEST.getUsername());
-      verifyAuditLog(RESTRICTED_CHAR_VALID_SPECIAL_USERNAME_REQUEST);
     }
 
     @Test
@@ -184,7 +185,6 @@ class RegisterInternalUserUseCaseTest {
       underTest.apply(NO_ROLES_REGISTRATION_REQUEST);
 
       verify(registeredUserRepository).save(any());
-      verifyAuditLog(NO_ROLES_REGISTRATION_REQUEST);
     }
   }
 
@@ -193,8 +193,8 @@ class RegisterInternalUserUseCaseTest {
 
     @BeforeEach
     void setUp() {
-      given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
-      given(rolesValidator.validate(any())).willReturn(Option.none());
+      given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
+      given(rolesValidator.validate(any())).willReturn(Optional.empty());
     }
 
     @Test
@@ -204,7 +204,6 @@ class RegisterInternalUserUseCaseTest {
 
       assertThatResult(actual)
           .isSuccessWithUsername(ONE_ROLE_REGISTRATION_REQUEST.getUsername());
-      verifyAuditLog(ONE_ROLE_REGISTRATION_REQUEST);
     }
 
     @Test
@@ -212,7 +211,32 @@ class RegisterInternalUserUseCaseTest {
       underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
       verify(registeredUserRepository).save(any());
-      verifyAuditLog(ONE_ROLE_REGISTRATION_REQUEST);
+    }
+
+    @Test
+    void registerWithRoles_registersEvents() {
+      underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
+
+      UUID correlationId = RequestCorrelation.id();
+
+      ArgumentCaptor<AuditEvent> eventCaptor = ArgumentCaptor.forClass(AuditEvent.class);
+      verify(auditTracer, times(3)).save(eventCaptor.capture());
+      List<AuditEvent> auditEvent = eventCaptor.getAllValues();
+
+      assertThat(auditEvent.get(0).getType()).isEqualTo("InternalUserCreationRequested");
+      assertThat(auditEvent.get(0).getEntityAction()).isEqualTo(CREATE.toString());
+      assertThat(auditEvent.get(0).getCorrelationId()).isEqualTo(correlationId);
+      assertThat(auditEvent.get(0).getDetails()).isEqualTo(obfuscatePasswordFieldForTest(
+          ONE_ROLE_REGISTRATION_REQUEST));
+
+      assertThat(auditEvent.get(1).getType()).isEqualTo("UserCreated");
+      assertThat(auditEvent.get(1).getEntityAction()).isEqualTo(CREATE.toString());
+      assertThat(auditEvent.get(1).getCorrelationId()).isEqualTo(correlationId);
+
+      assertThat(auditEvent.get(2).getType()).isEqualTo("RolesAssigned");
+      assertThat(auditEvent.get(2).getEntityAction()).isEqualTo(UPDATE.toString());
+      assertThat(auditEvent.get(2).getCorrelationId()).isEqualTo(correlationId);
+
     }
   }
 
@@ -221,7 +245,7 @@ class RegisterInternalUserUseCaseTest {
 
     @BeforeEach
     void setUp() {
-      given(usernameUniquenessValidator.validate(any())).willReturn(Option.of(
+      given(usernameUniquenessValidator.validate(any())).willReturn(Optional.of(
           UserRegistrationUseCaseFixtures.USERNAME_NOT_UNIQUE));
     }
 
@@ -248,8 +272,8 @@ class RegisterInternalUserUseCaseTest {
 
     @BeforeEach
     void setUp() {
-      given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
-      given(rolesValidator.validate(any())).willReturn(Option.of(
+      given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
+      given(rolesValidator.validate(any())).willReturn(Optional.of(
           UserRegistrationUseCaseFixtures.ROLES_DONT_EXIST));
     }
 
@@ -276,8 +300,8 @@ class RegisterInternalUserUseCaseTest {
 
     @BeforeEach
     void setUp() {
-      given(usernameUniquenessValidator.validate(any())).willReturn(Option.none());
-      given(rolesValidator.validate(any())).willReturn(Option.none());
+      given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
+      given(rolesValidator.validate(any())).willReturn(Optional.empty());
     }
 
     @Test
