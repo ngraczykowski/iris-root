@@ -1,6 +1,6 @@
 export class ReasoningBranchParser {
 
-  private static whiteChar = '\n';
+  private static whiteChar = /[,\n]+/;
 
   public static parseIds(input: string): number[] {
     return input.split(ReasoningBranchParser.whiteChar)
