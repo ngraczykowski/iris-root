@@ -30,7 +30,7 @@ export class ExternalAppsService {
     this.externalAppsConfiguration.availableApps.filter((app: ExternalAppConfiguration) =>
         this.authorityService.hasAuthority(app.authority)).forEach(
             (app: ExternalAppConfiguration) => apps = apps.concat(app.apps));
-    return of(apps);
+    return of(Array.from(new Set(apps)));
   }
 
   private redirect(link: string): void {
