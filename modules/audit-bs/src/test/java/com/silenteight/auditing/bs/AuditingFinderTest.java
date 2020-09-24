@@ -63,4 +63,22 @@ class AuditingFinderTest {
     assertThat(data).containsExactly(
         DECISION_TREE_ADD_AUDIT_DATA, REASONING_BRANCH_CHANGE_AUDIT_DATA);
   }
+
+  @Test
+  void logsAvailable_returnAuditDataByTypes() {
+    // given
+    when(jdbcTemplate.query(anyString(), any(SqlParameterSource.class), any(RowMapper.class)))
+        .thenReturn(asList(DECISION_TREE_ADD_AUDIT_DATA, REASONING_BRANCH_CHANGE_AUDIT_DATA));
+
+    // when
+    Collection<AuditDataDto> data = underTest.find(
+        FROM,
+        TO,
+        asList(
+            DECISION_TREE_ADD_AUDIT_DATA.getType(), REASONING_BRANCH_CHANGE_AUDIT_DATA.getType()));
+
+    // then
+    assertThat(data).containsExactly(
+        DECISION_TREE_ADD_AUDIT_DATA, REASONING_BRANCH_CHANGE_AUDIT_DATA);
+  }
 }
