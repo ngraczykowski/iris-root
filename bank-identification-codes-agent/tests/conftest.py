@@ -36,7 +36,8 @@ def read_test_cases():
                 row["AP_MATCHINGFIELD"],
                 row["WL_MATCHINGTEXT"],
                 row["WL_TYPE"],
-                row["WL_SEARCH_CODES"],
+                row["WL_SEARCH_CODES"].split(),
+                row["WL_BIC_CODES"].split(),
             )
 
             result_value = row["RESULT"]

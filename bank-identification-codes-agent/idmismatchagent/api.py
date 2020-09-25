@@ -10,6 +10,7 @@ __all__ = [
     "NoSearchCodeInWatchlistReason",
     "MatchingTextTooShortToBeCodeReason",
     "MatchingTextMatchesWlSearchCodeReason",
+    "MatchingTextMatchesWlBicCodeReason",
     "MatchingTextIsPartOfLongerSequenceReason",
     "MatchingTextIsOnlyPartialMatchForSearchCodeReason",
     "MatchingTextDoesNotMatchWlSearchCodeReason",
@@ -24,7 +25,8 @@ class SearchCodeMismatchAgentInput:
     matching_field: str = attrib()
     matching_text: str = attrib()
     wl_type: str = attrib()
-    wl_search_codes: str = attrib()
+    wl_search_codes: list = attrib()
+    wl_bic_codes: list = attrib()
 
 
 class Result(Enum):
@@ -48,6 +50,13 @@ class MatchingTextTooShortToBeCodeReason:
 class MatchingTextMatchesWlSearchCodeReason:
     matching_text: str = attrib()
     search_code: str = attrib()
+    wl_type: str = attrib()
+
+
+@attrs(frozen=True)
+class MatchingTextMatchesWlBicCodeReason:
+    matching_text: str = attrib()
+    bic_code: str = attrib()
     wl_type: str = attrib()
 
 
@@ -86,6 +95,7 @@ Reason = NewType(
         NoSearchCodeInWatchlistReason,
         MatchingTextTooShortToBeCodeReason,
         MatchingTextMatchesWlSearchCodeReason,
+        MatchingTextMatchesWlBicCodeReason,
         MatchingTextIsPartOfLongerSequenceReason,
         MatchingTextDoesNotMatchMatchingFieldReason,
     ],

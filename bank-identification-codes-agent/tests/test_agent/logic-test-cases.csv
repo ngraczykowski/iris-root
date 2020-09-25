@@ -1,8 +1,8 @@
-WL_TYPE,T_TYPE,AP_TAG,AP_MATCHINGFIELD,WL_MATCHINGTEXT,WL_SEARCH_CODES,WL_BIC_CODES,Additional information,RESULT,REASON_TYPE,REASON_wl_type,REASON_matching_text,REASON_raw_matched_sequence,REASON_matching_field,REASON_partial_match,REASON_search_code,REASON_search_codes
+WL_TYPE,T_TYPE,AP_TAG,AP_MATCHINGFIELD,WL_MATCHINGTEXT,WL_SEARCH_CODES,WL_BIC_CODES,Additional information,RESULT,REASON_TYPE,REASON_wl_type,REASON_matching_text,REASON_raw_matched_sequence,REASON_matching_field,REASON_partial_match,REASON_search_code,REASON_search_codes,REASON_bic_code
 Company,103," 50F","/PL53103015080000000550022192
 1/XXX
 2/ADDRESS1
-3/ADDRESS2"," PL53103015080000000550022192",PL53103015080000000550022192,none,"Solved already, full account number match, account number changed to one of districts in warsaw (existing and correct)",NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Company," PL53103015080000000550022192",,,,PL53103015080000000550022192,
+3/ADDRESS2"," PL53103015080000000550022192",PL53103015080000000550022192,none,"Solved already, full account number match, account number changed to one of districts in warsaw (existing and correct)",NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Company," PL53103015080000000550022192",,,,PL53103015080000000550022192,,
 Vessel,199,79,"RFI Document screening
 Document Type : LLI and Email response
 Iran
@@ -14,10 +14,10 @@ Interworld Shipping Agency LLC
 IMO : 9137569  (�)
 Regards
 STANDARD CHARTERED BANK
-",9137569,9137569,none,Solved already. Possibly we should say FP based on RFI agent (not exiseting as it is clear that SCB originated this message),NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Vessel,9137569,,,,9137569,
+",9137569,9137569,none,Solved already. Possibly we should say FP based on RFI agent (not exiseting as it is clear that SCB originated this message),NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Vessel,9137569,,,,9137569,,
 Company,564," 35B","ISIN PL0000108510
 Domestic bonds: Poland, 1.5 25apr2020
-",PL0000108510,PL0000108510,none,Solved already. ISIN,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Company,PL0000108510,,,,PL0000108510,
+",PL0000108510,PL0000108510,none,Solved already. ISIN,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Company,PL0000108510,,,,PL0000108510,,
 Individual,103,59,"/PL53103015080000000550022192
 XXX YYY
 ADDRESS2
@@ -28,36 +28,32 @@ XXX YYY
 ADDRESS2
 ADDRESS2
 ADDRESS3
-",550022192,,
-Company,103," 57A","LATBLV22XXX
-"," LATBLV22",," 
- LATBLV22
-","wrong recommendation here,  account number changed to one of districts in warsaw (existing and correct)",NO_DECISION,NoSearchCodeInWatchlistReason,,,,,,,
-Individual,103,70,"WE REFER TO 23190617054158 FOR15,990.00",190617,190617,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,190617,23190617054158,"WE REFER TO 23190617054158 FOR15,990.00",190617,,
-Individual,103,70,WE REFER TO 190617 company,190617,190617,none,,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Individual,190617,,,,190617,
+",550022192,,,
+Individual,103,70,"WE REFER TO 23190617054158 FOR15,990.00",190617,190617,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,190617,23190617054158,"WE REFER TO 23190617054158 FOR15,990.00",190617,,,
+Individual,103,70,WE REFER TO 190617 company,190617,190617,none,,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Individual,190617,,,,190617,,
 Individual,103,70," ORDER
 190617
-DRAWEE",190617,190617,none,,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Individual,190617,,,,190617,
-Individual,103,70,WE REFER TO 190617 company,99999,99999,none,,NO_DECISION,MatchingTextDoesNotMatchMatchingFieldReason,,99999,,WE REFER TO 190617 company,,,
-Individual,103,70,Havana beach house in Cuba,CUBA,SearchCodeOfCuba,none,,MATCH,MatchingTextIsOnlyPartialMatchForSearchCodeReason,Individual,CUBA,,,,SEARCHCODEOFCUBA,
+DRAWEE",190617,190617,none,,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Individual,190617,,,,190617,,
+Individual,103,70,WE REFER TO 190617 company,99999,99999,none,,NO_DECISION,MatchingTextDoesNotMatchMatchingFieldReason,,99999,,WE REFER TO 190617 company,,,,
+Individual,103,70,Havana beach house in Cuba,CUBA,SearchCodeOfCuba,none,,MATCH,MatchingTextIsOnlyPartialMatchForSearchCodeReason,Individual,CUBA,,,,SEARCHCODEOFCUBA,,
 Individual,103,70,"//01233053837
 LEOPARD SHIPPING AND LO",33053,33053 44030861,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,33053,01233053837,"//01233053837
-LEOPARD SHIPPING AND LO",33053,,
-Individual,103,70,sequence match 01233053837 but no search code,33053,None,none,,NO_DECISION,NoSearchCodeInWatchlistReason,,,,,,,
-Individual,103,70,"sequence with spaces INV NO 315 345 346 347 ",5 346 3,53463,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,5 346 3,345 346 347,"sequence with spaces INV NO 315 345 346 347 ",53463,,
-Company,103,70,sequence with dash 022-67091900 IEC NO,22-670,22670,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,22-670,02267091900,sequence with dash 022-67091900 IEC NO,22670,,
-Company,103,70,"sequence with comma sequence 2,267,095.45 ","2,267,0",22670,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,"2,267,0",226709545,"sequence with comma sequence 2,267,095.45 ",22670,,
-Vessel,103,70,"sequence with slash 1) 3/3 ORIGINALS ",1) 3/3,N133JA,none,,MATCH,MatchingTextIsOnlyPartialMatchForSearchCodeReason,Vessel,1) 3/3,,,,N133JA,
+LEOPARD SHIPPING AND LO",33053,,,
+Individual,103,70,sequence match 01233053837 but no search code,33053,None,none,,NO_DECISION,NoSearchCodeInWatchlistReason,,,,,,,,
+Individual,103,70,"sequence with spaces INV NO 315 345 346 347 ",5 346 3,53463,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,5 346 3,345 346 347,"sequence with spaces INV NO 315 345 346 347 ",53463,,,
+Company,103,70,sequence with dash 022-67091900 IEC NO,22-670,22670,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,22-670,02267091900,sequence with dash 022-67091900 IEC NO,22670,,,
+Company,103,70,"sequence with comma sequence 2,267,095.45 ","2,267,0",22670,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,"2,267,0",226709545,"sequence with comma sequence 2,267,095.45 ",22670,,,
+Vessel,103,70,"sequence with slash 1) 3/3 ORIGINALS ",1) 3/3,N133JA,none,,MATCH,MatchingTextIsOnlyPartialMatchForSearchCodeReason,Vessel,1) 3/3,,,,N133JA,,
 Vessel,103,70,"T +9191773####4 Gift
-",9191773,9191773,none,,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Vessel,9191773,,,,9191773,
+",9191773,9191773,none,,NO_MATCH,MatchingTextMatchesWlSearchCodeReason,Vessel,9191773,,,,9191773,,
 Individual,103,50K,"/0819974012
 XXXX YYYYY ASIA PTE. LTD.
 50 ... SINGAPORE",199740,199740,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,199740,0819974012,"/0819974012
 XXXX YYYYY ASIA PTE. LTD.
-50 ... SINGAPORE",199740,,
+50 ... SINGAPORE",199740,,,
 Individual,103,79,"REF 1151697240970001 / 201992000053
 33LK...",724097,724097,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Individual,724097,1151697240970001,"REF 1151697240970001 / 201992000053
-33LK...",724097,,
+33LK...",724097,,,
 Company,103,50K,"/733053806946
 XXXXYYYY
 ##/## ### AVE
@@ -66,40 +62,40 @@ XXXXYYYY
 XXXXYYYY
 ##/## ### AVE
 ...CROYDON VIC3136 AU
-",33053,,
+",33053,,,
 Vessel,103,72,"/ACC/FFC CUSTOMER IDENTIFICATION
 //NO 72711302
 /REC/INW
 -}	",11302,11302,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Vessel,11302,72711302,"/ACC/FFC CUSTOMER IDENTIFICATION
 //NO 72711302
 /REC/INW
--}	",11302,,
+-}	",11302,,,
 Company,103,57,"ICICI ICICI BANK LTD PUNE BLUERIDGE
 HINJEW... INDIA
 ",ICI IC,ICIIC,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,ICI IC,ICICI ICICI,"ICICI ICICI BANK LTD PUNE BLUERIDGE
 HINJEW... INDIA
-",ICIIC,,
+",ICIIC,,,
 Vessel,798,72,"SCBLEID/ 12107842-1 /
 A--)-)
 -}	",21078,"EP-IRT
-",none,,NO_DECISION,MatchingTextDoesNotMatchWlSearchCodeReason,Vessel,21078,,,,,"[""EP-IRT""]"
+",none,,NO_DECISION,MatchingTextDoesNotMatchWlSearchCodeReason,Vessel,21078,,,,,"[""EP-IRT""]",
 Vessel,700,45A,"QTY : 297.68 SQMT AT THE RATE OF INR 689.04 PER SQMT
 AMOUNT : INR 205113.43
 .
 2.) 19MM",113.43,11343,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Vessel,113.43,20511343,"QTY : 297.68 SQMT AT THE RATE OF INR 689.04 PER SQMT
 AMOUNT : INR 205113.43
 .
-2.) 19MM",11343,,
-Company,103,50,"0905316530012 
+2.) 19MM",11343,,,
+Company,103,50,"0905316530012
 SAGARMATHA AGRO TRADING P.LTD.
-ADARSHNAGAR STREET BIRGUNJ,NEPAL 
-PAN NO.PAN NO. 305530947 
-",5530947,5530947,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,5530947,305530947,"0905316530012 
+ADARSHNAGAR STREET BIRGUNJ,NEPAL
+PAN NO.PAN NO. 305530947
+",5530947,5530947,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,5530947,305530947,"0905316530012
 SAGARMATHA AGRO TRADING P.LTD.
-ADARSHNAGAR STREET BIRGUNJ,NEPAL 
-PAN NO.PAN NO. 305530947 
-",5530947,,
-Company,700,45A,"TOTAL AMOUNT : INR 425,500.00...","425,500",425500 044030727 044525763 049205798,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,"425,500",42550000,"TOTAL AMOUNT : INR 425,500.00...",425500,,
+ADARSHNAGAR STREET BIRGUNJ,NEPAL
+PAN NO.PAN NO. 305530947
+",5530947,,,
+Company,700,45A,"TOTAL AMOUNT : INR 425,500.00...","425,500",425500 044030727 044525763 049205798,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Company,"425,500",42550000,"TOTAL AMOUNT : INR 425,500.00...",425500,,,
 Vessel,103,70,"PMT FOR FREIGHT
 BILL NO. 1153,1151,1152,1138,1144,
 1120,1127,1128,1137,1101,1148,1147,
@@ -108,12 +104,12 @@ BILL NO. 1153,1151,1152,1138,1144,
 BILL NO. 1153,1151,1152,1138,1144,
 1120,1127,1128,1137,1101,1148,1147,
 1146,1146  DATE 15.07.2019
-",11511,,
+",11511,,,
 Vessel,700," 45A","EICHER SPARE PARTS
 84219900, 84099941, 84099941, 85123010, 40169330, 84841090,
 "," 9330, 848",9330848,none,,MATCH,MatchingTextIsPartOfLongerSequenceReason,Vessel," 9330, 848",40169330 84841090,"EICHER SPARE PARTS
 84219900, 84099941, 84099941, 85123010, 40169330, 84841090,
-",9330848,,
+",9330848,,,
 Vessel,700," 45A","EICHER SPARE PARTS
 TOTAL AMOUNT:INR 942,469.19
 ADD FREIGHT AND INSURANCE:INR 19,239.56
@@ -130,4 +126,11 @@ TOTAL QUANTITY: 10849 UNITS
 HARMONIC (H.S) CODE:73181500, 87084000, 87089100, 73182100,
 84553000, 87089900, 85122010, 73182990, 84219900, 87089400,
 84219900, 84099941, 84099941, 85123010, 40169330, 84841090,
-",9330848,,
+",9330848,,,
+Company,103, 57A,LATBLV22000000000, LATBLV22,,"
+ LATBLV22
+",Partial match on a string which is not correct bic code,MATCH,MatchingTextMatchesWlBicCodeReason,Company, LATBLV22,,,,,,LATBLV22
+Company,103, 57A,"LATBLV22XXX
+", LATBLV22,,"
+ LATBLV22
+",Ending part of bic code XXX identifies HEAD OFFICE it should be treated as stop word ,NO_MATCH,MatchingTextMatchesWlBicCodeReason,Company, LATBLV22,,,,,,LATBLV22
