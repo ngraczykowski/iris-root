@@ -29,8 +29,9 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
 
   private static final String REPORT_NAME = "reasoning-branch-report";
   private static final String DECISION_TREE_ID_PARAM = "decisionTreeId";
-  private static final String REASONING_BRANCH_ID = "Reasoning branch ID";
-  private static final String UPDATED_AT = "Updated at";
+  private static final String DECISION_TREE_ID = "Decision Tree ID";
+  private static final String FEATURE_VECTOR_ID = "Feature Vector ID";
+  private static final String UPDATED_AT = "Updated At";
   private static final String RECOMMENDATION = "Recommendation";
   private static final String STATUS = "Status";
   private static final String ENABLED = "ENABLED";
@@ -87,10 +88,9 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
 
   private CsvBuilder<BranchWithFeaturesDto> csvWithFixedColumns(
       long decisionTreeId, Stream<BranchWithFeaturesDto> branches) {
-
     return new CsvBuilder<>(branches)
-        .cell(REASONING_BRANCH_ID, branch ->
-            fullReasoningBranchId(decisionTreeId, branch.getReasoningBranchId()))
+        .cell(DECISION_TREE_ID, a -> String.valueOf(decisionTreeId))
+        .cell(FEATURE_VECTOR_ID, branch -> String.valueOf(branch.getReasoningBranchId()))
         .cell(UPDATED_AT, this::getLastUpdateTime)
         .cell(RECOMMENDATION, BranchWithFeaturesDto::getAiSolution)
         .cell(STATUS, branch -> branch.isActive() ? ENABLED : DISABLED);
@@ -122,10 +122,6 @@ class ReasoningBranchReportGenerator implements ReportGenerator {
     return branches.isEmpty() ?
            emptyList() :
            featureNamesQuery.findFeatureNames(branches.get(0).getReasoningBranchId());
-  }
-
-  private static String fullReasoningBranchId(long decisionTreeId, long reasoningBranchId) {
-    return String.format("%d-%d", decisionTreeId, reasoningBranchId);
   }
 
   @Override

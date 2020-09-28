@@ -29,6 +29,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ReasoningBranchReportGeneratorTest {
 
+  private static final String STATIC_PART_OF_THE_HEADER =
+      "Decision Tree ID,Feature Vector ID,Updated At,Recommendation,Status";
   @Mock
   private ReasoningBranchesReportQuery reasoningBranchesReportQuery;
 
@@ -52,7 +54,7 @@ class ReasoningBranchReportGeneratorTest {
 
     assertThat(reportLines).hasSize(1);
     assertThat(reportLines.get(0))
-        .isEqualTo("Reasoning branch ID,Updated at,Recommendation,Status");
+        .isEqualTo(STATIC_PART_OF_THE_HEADER);
   }
 
   @Test
@@ -77,10 +79,10 @@ class ReasoningBranchReportGeneratorTest {
 
     assertThat(reportLines).hasSize(2);
     assertThat(reportLines.get(0))
-        .isEqualTo("Reasoning branch ID,Updated at,Recommendation,Status,Feature A,Feature B");
+        .isEqualTo(STATIC_PART_OF_THE_HEADER + ",Feature A,Feature B");
     assertThat(reportLines.get(1))
         .isEqualTo(
-            "9-5,2020-04-15 10:58:53.451667Z,FALSE_POSITIVE,DISABLED,feat value1,feat value2");
+            "9,5,2020-04-15 10:58:53.451667Z,FALSE_POSITIVE,DISABLED,feat value1,feat value2");
   }
 
   @Test
@@ -97,7 +99,7 @@ class ReasoningBranchReportGeneratorTest {
 
     Report report = reportGenerator().generateReport(mapWithDecisionTreeId(treeId));
 
-    assertThat(linesOf(report).get(1)).isEqualTo("9-5,2020-04-14 10:25:53.451667Z,,DISABLED");
+    assertThat(linesOf(report).get(1)).isEqualTo("9,5,2020-04-14 10:25:53.451667Z,,DISABLED");
   }
 
 
@@ -114,7 +116,7 @@ class ReasoningBranchReportGeneratorTest {
 
     Report report = reportGenerator().generateReport(mapWithDecisionTreeId(treeId));
 
-    assertThat(linesOf(report).get(1)).isEqualTo("9-5,,,DISABLED");
+    assertThat(linesOf(report).get(1)).isEqualTo("9,5,,,DISABLED");
   }
 
   @Test
@@ -146,12 +148,12 @@ class ReasoningBranchReportGeneratorTest {
 
     assertThat(reportLines).hasSize(3);
     assertThat(reportLines.get(0))
-        .isEqualTo("Reasoning branch ID,Updated at,Recommendation,Status,Feat A,Feat B,Feat C");
+        .isEqualTo(STATIC_PART_OF_THE_HEADER + ",Feat A,Feat B,Feat C");
     assertThat(reportLines.get(1)).isEqualTo(
-        "15-7,2018-07-12 11:15:31.123456Z,HINTED_FALSE_POSITIVE,ENABLED," +
+        "15,7,2018-07-12 11:15:31.123456Z,HINTED_FALSE_POSITIVE,ENABLED," +
             "feature value 1,feature value 2,feature value 3");
     assertThat(reportLines.get(2)).isEqualTo(
-        "15-8,2019-11-30 21:15:00.654321Z,POTENTIAL_FALSE_POSITIVE,DISABLED," +
+        "15,8,2019-11-30 21:15:00.654321Z,POTENTIAL_FALSE_POSITIVE,DISABLED," +
             "feature value 4,feature value 5,feature value 6");
   }
 
@@ -165,7 +167,7 @@ class ReasoningBranchReportGeneratorTest {
 
     assertThat(reportLines).hasSize(1);
     assertThat(reportLines.get(0))
-        .isEqualTo("Reasoning branch ID,Updated at,Recommendation,Status");
+        .isEqualTo(STATIC_PART_OF_THE_HEADER);
   }
 
   @Test
