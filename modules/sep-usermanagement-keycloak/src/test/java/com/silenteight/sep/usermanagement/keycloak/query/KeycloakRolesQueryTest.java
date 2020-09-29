@@ -35,7 +35,7 @@ class KeycloakRolesQueryTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new KeycloakUserQueryConfiguration()
+    underTest = new KeycloakQueryConfiguration()
         .keycloakRolesQuery(rolesResource, internalRoleFilter);
   }
 

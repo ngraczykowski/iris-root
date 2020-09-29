@@ -24,8 +24,7 @@ class KeycloakUserRemoverTest {
   private KeycloakUserRemover keycloakUserRemover;
 
   @Test
-  void removesUser() {
-
+  void removeUser() {
     String username = "userABC";
     when(keycloakUserRetriever.retrieve(username)).thenReturn(userResource);
 

@@ -5,13 +5,14 @@ import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLogin
 import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
 
+import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class KeycloakUserQueryConfiguration {
+class KeycloakQueryConfiguration {
 
   @Bean
   KeycloakUserQuery keycloakUserQuery(
@@ -31,5 +32,15 @@ class KeycloakUserQueryConfiguration {
       RolesResource rolesResource, InternalRoleFilter internalRoleFilter) {
 
     return new KeycloakRolesQuery(rolesResource, internalRoleFilter);
+  }
+
+  @Bean
+  KeycloakEventQuery keycloakEventQuery(RealmResource realmResource) {
+    return new KeycloakEventQuery(realmResource);
+  }
+
+  @Bean
+  KeycloakConfigurationQuery keycloakConfigurationQuery(RealmResource realmResource) {
+    return new KeycloakConfigurationQuery(realmResource);
   }
 }
