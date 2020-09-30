@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.user.update;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 
 import io.vavr.control.Option;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
+import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.NEW_DISPLAY_NAME_COMMAND;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.UPDATED_USER;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.UPDATE_USER_COMMAND;
 import static org.assertj.core.api.Assertions.*;
@@ -30,14 +32,19 @@ class UpdateUserUseCaseTest {
   private UpdatedUserRepository updatedUserRepository;
   @Mock
   private AuditTracer auditTracer;
+  @Mock
+  private UserRolesRetriever userRolesRetriever;
 
   private UpdateUserUseCase underTest;
 
   @BeforeEach
   void setUp() {
     underTest = new UserUpdateUseCaseConfiguration().updateUserUseCase(
-        updatedUserRepository, roles -> Optional.empty(), displayName -> Option.none(),
-        auditTracer);
+        updatedUserRepository,
+        roles -> Optional.empty(),
+        displayName -> Option.none(),
+        auditTracer,
+        userRolesRetriever);
   }
 
   @Test
@@ -50,20 +57,19 @@ class UpdateUserUseCaseTest {
 
     // then
     verify(updatedUserRepository).save(UPDATED_USER);
-
-
   }
 
   @Test
   void updateDisplayNameCommand_registerEvents() {
     // given
     UUID correlationId = RequestCorrelation.id();
+    List<String> roles = List.of("role1", "role3");
+    when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(roles);
 
     // when
     underTest.apply(UPDATE_USER_COMMAND);
 
     // then
-
     ArgumentCaptor<AuditEvent> eventCaptor = ArgumentCaptor.forClass(AuditEvent.class);
     verify(auditTracer, times(2)).save(eventCaptor.capture());
     List<AuditEvent> auditEvent = eventCaptor.getAllValues();
@@ -76,6 +82,10 @@ class UpdateUserUseCaseTest {
     assertThat(auditEvent.get(1).getType()).isEqualTo("UserUpdated");
     assertThat(auditEvent.get(1).getEntityAction()).isEqualTo(UPDATE.toString());
     assertThat(auditEvent.get(1).getCorrelationId()).isEqualTo(correlationId);
-    assertThat(auditEvent.get(1).getDetails()).isEqualTo(UPDATED_USER);
+    assertThat(auditEvent.get(1).getDetails()).isEqualTo(updatedUserDetailsWith(roles));
+  }
+
+  private UpdatedUserDetails updatedUserDetailsWith(List<String> roles) {
+    return new UpdatedUserDetails(UPDATED_USER, roles);
   }
 }

@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.user.update;
 import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 
@@ -29,20 +30,19 @@ class UpdateUserDisplayNameUseCaseTest {
   private UpdatedUserRepository updatedUserRepository;
   @Mock
   private AuditTracer auditTracer;
+  @Mock
+  private UserRolesRetriever userRolesRetriever;
 
   private UpdateUserDisplayNameUseCase underTest;
 
   @BeforeEach
   void setUp() {
     underTest = new UserUpdateUseCaseConfiguration()
-        .updateUserDisplayNameUseCase(updatedUserRepository, auditTracer);
+        .updateUserDisplayNameUseCase(updatedUserRepository, auditTracer, userRolesRetriever);
   }
 
   @Test
   void updateDisplayNameCommand_updateUser() {
-    // given
-    UUID correlationId = RequestCorrelation.id();
-
     // when
     underTest.apply(NEW_DISPLAY_NAME_COMMAND);
 
@@ -50,6 +50,16 @@ class UpdateUserDisplayNameUseCaseTest {
     UpdatedUser updatedUser = updatedUser(
         NEW_DISPLAY_NAME_COMMAND.getUsername(), NEW_DISPLAY_NAME_COMMAND.getDisplayName());
     verify(updatedUserRepository).save(updatedUser);
+  }
+
+  @Test
+  void savesAuditEvents() {
+    UUID correlationId = RequestCorrelation.id();
+
+    List<String> roles = List.of("role1", "role2");
+    when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(roles);
+
+    underTest.apply(NEW_DISPLAY_NAME_COMMAND);
 
     ArgumentCaptor<AuditEvent> eventCaptor = ArgumentCaptor.forClass(AuditEvent.class);
     verify(auditTracer, times(2)).save(eventCaptor.capture());
@@ -63,7 +73,11 @@ class UpdateUserDisplayNameUseCaseTest {
     assertThat(auditEvent.get(1).getType()).isEqualTo("UserUpdated");
     assertThat(auditEvent.get(1).getEntityAction()).isEqualTo(UPDATE.toString());
     assertThat(auditEvent.get(1).getCorrelationId()).isEqualTo(correlationId);
-    assertThat(auditEvent.get(1).getDetails()).isEqualTo(updatedUser);
+    assertThat(auditEvent.get(1).getDetails()).isEqualTo(
+        new UpdatedUserDetails(
+            updatedUser(
+                NEW_DISPLAY_NAME_COMMAND.getUsername(), NEW_DISPLAY_NAME_COMMAND.getDisplayName()),
+            roles));
   }
 
   private static UpdatedUser updatedUser(String username, String displayName) {

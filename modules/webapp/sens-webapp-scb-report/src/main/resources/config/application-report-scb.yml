@@ -1,0 +1,4 @@
+report-scb:
+  dir: ${sens.report-scb.dir}
+  id-management:
+    cron: 0 0 0/12 ? * *

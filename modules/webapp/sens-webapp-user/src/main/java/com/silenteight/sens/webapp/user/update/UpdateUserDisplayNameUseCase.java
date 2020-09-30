@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
@@ -21,6 +22,8 @@ public class UpdateUserDisplayNameUseCase {
   private final UpdatedUserRepository updatedUserRepository;
   @NonNull
   private final AuditTracer auditTracer;
+  @NonNull
+  private final UserRolesRetriever userRolesRetriever;
 
   public void apply(UpdateUserDisplayNameCommand command) {
     auditTracer.save(new UserUpdateRequestedEvent(
@@ -30,7 +33,9 @@ public class UpdateUserDisplayNameUseCase {
     updatedUserRepository.save(updatedUser);
 
     auditTracer.save(new UserUpdatedEvent(
-        updatedUser.getUsername(), UpdatedUser.class.getName(), updatedUser));
+        updatedUser.getUsername(), UpdatedUser.class.getName(),
+        new UpdatedUserDetails(
+            updatedUser, userRolesRetriever.rolesOf(updatedUser.getUsername()))));
   }
 
   @Data

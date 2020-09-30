@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
@@ -19,6 +20,8 @@ public class RemoveUserUseCase {
   private final UserRemover userRemover;
   @NonNull
   private final AuditTracer auditTracer;
+  @NonNull
+  private final UserRolesRetriever userRolesRetriever;
 
   public void apply(RemoveUserCommand command) {
     String username = command.getUsername();
@@ -29,7 +32,10 @@ public class RemoveUserUseCase {
     verifyOrigin(username, command.expectedOrigin);
     userRemover.remove(username);
     auditTracer.save(
-        new UserRemovedEvent(username, RemoveUserCommand.class.getName(), command));
+        new UserRemovedEvent(
+            username, 
+            RemoveUserCommand.class.getName(),
+            new RemovedUserDetails(command, userRolesRetriever.rolesOf(username))));
   }
 
   private void verifyOrigin(String username, String expectedOrigin) {

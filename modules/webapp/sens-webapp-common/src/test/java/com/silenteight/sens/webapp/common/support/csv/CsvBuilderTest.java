@@ -27,7 +27,7 @@ class CsvBuilderTest {
   @Test
   public void shouldReturnsFullCsvForNonEmptyListOfElements() {
     // when
-    String csv = new CsvBuilder<SimpleDto>(Stream.of(
+    String csv = new CsvBuilder<>(Stream.of(
         new SimpleDto("field a 1", 1, 1L),
         new SimpleDto("field a 2", 1, 1L)))
         .cell("header a", SimpleDto::getFieldA)
@@ -35,6 +35,21 @@ class CsvBuilderTest {
 
     // then
     assertThat(csv).isEqualTo("header a\nfield a 1\nfield a 2\n");
+  }
+
+  @Test
+  void shouldReturnTabSeparatedCells() {
+    // when
+    String csv = new CsvBuilder<>(Stream.of(
+        new SimpleDto("field a", 1, 1L),
+        new SimpleDto("field b", 2, 2L)))
+        .delimiter("\t")
+        .cell("header a", SimpleDto::getFieldA)
+        .cell("header b", dto -> String.valueOf(dto.fieldB))
+        .build();
+
+    // then
+    assertThat(csv).isEqualTo("header a\theader b\nfield a\t1\nfield b\t2\n");
   }
 
   @Data

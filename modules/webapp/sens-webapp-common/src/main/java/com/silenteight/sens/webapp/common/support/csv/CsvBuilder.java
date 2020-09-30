@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import static com.silenteight.commons.CSVUtils.getCSVRecordWithDefaultDelimiter;
+import static com.silenteight.commons.CSVUtils.getCSVRecord;
 import static java.util.stream.Collectors.toList;
 
 public class CsvBuilder<T> implements LinesSupplier {
@@ -15,11 +15,17 @@ public class CsvBuilder<T> implements LinesSupplier {
   private final Stream<T> elements;
   private final Collection<String> headers;
   private final Collection<Function<T, String>> cells;
+  private String delimiter = ",";
 
   public CsvBuilder(Stream<T> elements) {
     this.elements = elements;
     this.cells = new ArrayList<>();
     this.headers = new ArrayList<>();
+  }
+
+  public CsvBuilder<T> delimiter(String delimiter) {
+    this.delimiter = delimiter;
+    return this;
   }
 
   public CsvBuilder<T> cell(String header, Function<T, String> value) {
@@ -51,11 +57,11 @@ public class CsvBuilder<T> implements LinesSupplier {
         .stream()
         .map(columnFunction -> columnFunction.apply(element))
         .collect(toList());
-    return getCSVRecordWithDefaultDelimiter(toArray(cellsInRow));
+    return getCSVRecord(delimiter, toArray(cellsInRow));
   }
 
   private String buildHeader() {
-    return getCSVRecordWithDefaultDelimiter(toArray(headers));
+    return getCSVRecord(delimiter, toArray(headers));
   }
 
   private static String[] toArray(Collection<String> collection) {

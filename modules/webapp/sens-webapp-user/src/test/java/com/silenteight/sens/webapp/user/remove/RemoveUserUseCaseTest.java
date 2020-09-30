@@ -4,6 +4,7 @@ import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
@@ -33,12 +34,14 @@ class RemoveUserUseCaseTest {
   private UserRemover userRemover;
   @Mock
   private AuditTracer auditTracer;
+  @Mock
+  private UserRolesRetriever userRolesRetriever;
 
   private RemoveUserUseCase underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new RemoveUserUseCase(userQuery, userRemover, auditTracer);
+    underTest = new RemoveUserUseCase(userQuery, userRemover, auditTracer, userRolesRetriever);
   }
 
   @Test
@@ -63,6 +66,9 @@ class RemoveUserUseCaseTest {
     String origin = "oryg123";
 
     when(userQuery.find(username)).thenReturn(Optional.of(userDtoWith(origin)));
+    List<String> roles = List.of("role1", "role3");
+    when(userRolesRetriever.rolesOf(username)).thenReturn(roles);
+
     UUID correlationId = RequestCorrelation.id();
 
     RemoveUserCommand command = RemoveUserCommand
@@ -76,8 +82,17 @@ class RemoveUserUseCaseTest {
     verify(auditTracer, times(2)).save(eventCaptor.capture());
     List<AuditEvent> auditEvents = eventCaptor.getAllValues();
 
-    assertAuditEvent(auditEvents.get(0), "UserRemovalRequested", correlationId, command);
-    assertAuditEvent(auditEvents.get(1), "UserRemoved", correlationId, command);
+    AuditEvent auditEvent1 = auditEvents.get(0);
+    assertThat(auditEvent1.getType()).isEqualTo("UserRemovalRequested");
+    assertThat(auditEvent1.getEntityAction()).isEqualTo(DELETE.toString());
+    assertThat(auditEvent1.getCorrelationId()).isEqualTo(correlationId);
+    assertThat(auditEvent1.getDetails()).isEqualTo(command);
+
+    AuditEvent auditEvent = auditEvents.get(1);
+    assertThat(auditEvent.getType()).isEqualTo("UserRemoved");
+    assertThat(auditEvent.getEntityAction()).isEqualTo(DELETE.toString());
+    assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
+    assertThat(auditEvent.getDetails()).isEqualTo(new RemovedUserDetails(command, roles));
   }
 
   @Test
@@ -103,11 +118,4 @@ class RemoveUserUseCaseTest {
     return userDto;
   }
 
-  private void assertAuditEvent(
-      AuditEvent auditEvent, String type, UUID correlationId, RemoveUserCommand command) {
-    assertThat(auditEvent.getType()).isEqualTo(type);
-    assertThat(auditEvent.getEntityAction()).isEqualTo(DELETE.toString());
-    assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
-    assertThat(auditEvent.getDetails()).isEqualTo(command);
-  }
 }

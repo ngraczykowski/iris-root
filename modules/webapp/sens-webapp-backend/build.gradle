@@ -58,6 +58,7 @@ dependencies {
   implementation libraries.oracle
 
   implementation libraries.vavr
+  implementation libraries.cronutils
 
   testImplementation project(":sens-webapp-db-changelog")
   testImplementation libraries.rest_assured

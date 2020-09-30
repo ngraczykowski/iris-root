@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.audit.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.RolesValidator;
@@ -38,6 +39,8 @@ public class UpdateUserUseCase {
   private final RolesValidator rolesValidator;
   @NonNull
   private final AuditTracer auditTracer;
+  @NonNull
+  private final UserRolesRetriever userRolesRetriever;
 
   public void apply(UpdateUserCommand command) {
     log.info(USER_MANAGEMENT, "Updating user. command={}", command);
@@ -70,7 +73,9 @@ public class UpdateUserUseCase {
     UpdatedUser updatedUser = command.toUpdatedUser();
     updatedUserRepository.save(updatedUser);
     auditTracer.save(
-        new UserUpdatedEvent(updatedUser.getUsername(), UpdatedUser.class.getName(), updatedUser));
+        new UserUpdatedEvent(updatedUser.getUsername(), UpdatedUser.class.getName(),
+            new UpdatedUserDetails(
+                updatedUser, userRolesRetriever.rolesOf(updatedUser.getUsername()))));
   }
 
   @Data

@@ -47,7 +47,8 @@ public class AddRolesToUserUseCase {
 
   private void saveUser(UpdatedUser user) {
     updatedUserRepository.save(user);
-    auditTracer.save(new UserUpdatedEvent(user.getUsername(), UpdatedUser.class.getName(), user));
+    auditTracer.save(new UserUpdatedEvent(user.getUsername(), UpdatedUser.class.getName(),
+        new UpdatedUserDetails(user, user.getRoles())));
   }
 
   @Data
