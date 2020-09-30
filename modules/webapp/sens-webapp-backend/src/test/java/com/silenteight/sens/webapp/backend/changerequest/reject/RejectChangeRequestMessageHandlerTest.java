@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.changerequest.reject;
 
 import com.silenteight.proto.serp.v1.governance.RejectBulkBranchChangeCommand;
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
 
 import org.junit.jupiter.api.Test;

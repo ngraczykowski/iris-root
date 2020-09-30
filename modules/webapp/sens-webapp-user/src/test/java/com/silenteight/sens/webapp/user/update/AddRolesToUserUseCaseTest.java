@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.user.update;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 import com.silenteight.sep.usermanagement.api.UserQuery;

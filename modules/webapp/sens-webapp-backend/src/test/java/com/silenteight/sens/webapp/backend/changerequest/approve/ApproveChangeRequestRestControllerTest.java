@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.changerequest.approve;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;

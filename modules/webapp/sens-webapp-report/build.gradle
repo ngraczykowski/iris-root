@@ -6,6 +6,7 @@ plugins {
 description = "SENS WebApp Report"
 
 dependencies {
+  implementation project(":sens-webapp-audit-api")
   implementation project(":sens-webapp-common")
 
   implementation libraries.commons_lang3
@@ -17,4 +18,5 @@ dependencies {
 
   testImplementation libraries.rest_assured
   testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libraries.spring_security_test
 }

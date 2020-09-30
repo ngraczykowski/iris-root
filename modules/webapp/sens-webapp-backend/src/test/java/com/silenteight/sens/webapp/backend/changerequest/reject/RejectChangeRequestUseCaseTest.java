@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.backend.changerequest.reject;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.backend.changerequest.reject.RejectChangeRequestUseCaseFixtures.REJECT_COMMAND;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;

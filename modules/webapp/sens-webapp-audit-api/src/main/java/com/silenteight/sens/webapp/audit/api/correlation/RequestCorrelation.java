@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.audit.correlation;
+package com.silenteight.sens.webapp.audit.api.correlation;
 
 import java.util.UUID;
 

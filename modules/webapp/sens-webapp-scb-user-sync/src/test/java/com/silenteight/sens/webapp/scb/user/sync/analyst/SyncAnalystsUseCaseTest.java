@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkResult;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.SingleResult;

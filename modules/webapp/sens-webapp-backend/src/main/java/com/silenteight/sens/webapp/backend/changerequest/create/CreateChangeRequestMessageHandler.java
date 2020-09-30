@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.proto.serp.v1.changerequest.CreateChangeRequestCommand;
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;

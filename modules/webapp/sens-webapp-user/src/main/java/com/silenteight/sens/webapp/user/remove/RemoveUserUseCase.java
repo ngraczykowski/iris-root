@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;

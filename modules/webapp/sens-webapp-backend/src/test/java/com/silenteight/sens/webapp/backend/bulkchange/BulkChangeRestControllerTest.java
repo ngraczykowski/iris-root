@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.backend.bulkchange;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.config.exception.GenericExceptionControllerAdvice;
 import com.silenteight.sens.webapp.backend.reasoningbranch.list.dto.ReasoningBranchIdDto;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;

@@ -4,7 +4,7 @@ import lombok.*;
 import lombok.Builder.Default;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;

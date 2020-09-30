@@ -1,10 +1,10 @@
-package com.silenteight.sens.webapp.audit.trace;
+package com.silenteight.sens.webapp.audit.api.trace;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

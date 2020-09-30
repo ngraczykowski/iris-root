@@ -25,7 +25,15 @@ class ScbReportsProperties {
   @Valid
   private final IdManagementReportProperties idManagement;
 
+  @NotNull
+  @Valid
+  private final AuditHistoryReportProperties auditHistory;
+
   public String idManagementCronExpression() {
     return idManagement.getCron();
+  }
+
+  public String auditHistoryCronExpression() {
+    return auditHistory.getCron();
   }
 }

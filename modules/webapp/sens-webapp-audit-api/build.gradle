@@ -1,0 +1,10 @@
+plugins {
+  id "java-library"
+  id "maven-publish"
+}
+
+description = "SENS WebApp Audit API"
+
+dependencies {
+  api libraries.spring_security_core
+}

@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.lock;
 
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.CREATE;
 
 class UserUnlockedEvent extends AuditEvent {
 

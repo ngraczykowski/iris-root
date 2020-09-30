@@ -33,19 +33,40 @@ class ScbReportsConfiguration {
   }
 
   @Bean
+  IdManagementReportGenerator idManagementReportGenerator(
+      IdManagementEventProvider idManagementEventProvider,
+      ScbReportsProperties scbReportsProperties) {
+
+    return new IdManagementReportGenerator(
+        new DateRangeProvider(
+            scbReportsProperties.idManagementCronExpression(), DefaultTimeSource.INSTANCE),
+        idManagementEventProvider,
+        scbReportsProperties.getDir(),
+        new FileLineWriter(),
+        DefaultTimeSource.INSTANCE);
+  }
+
+  @Bean
   IdManagementEventProvider idManagementEventProvider(AuditingFinder auditingFinder) {
     return new IdManagementEventProvider(auditingFinder);
   }
 
   @Bean
-  IdManagementReportGenerator idManagementReportGenerator(
-      IdManagementEventProvider idManagementEventProvider,
+  AuditHistoryReportGenerator auditHistoryReportGenerator(
+      AuditHistoryEventProvider auditHistoryEventProvider,
       ScbReportsProperties scbReportsProperties) {
-    return new IdManagementReportGenerator(
+
+    return new AuditHistoryReportGenerator(
         new DateRangeProvider(
-            scbReportsProperties.idManagementCronExpression(), DefaultTimeSource.INSTANCE),
-        idManagementEventProvider, scbReportsProperties.getDir(),
+            scbReportsProperties.auditHistoryCronExpression(), DefaultTimeSource.INSTANCE),
+        auditHistoryEventProvider,
+        scbReportsProperties.getDir(),
         new FileLineWriter(),
         DefaultTimeSource.INSTANCE);
+  }
+
+  @Bean
+  AuditHistoryEventProvider auditHistoryEventProvider(AuditingFinder auditingFinder) {
+    return new AuditHistoryEventProvider(auditingFinder);
   }
 }

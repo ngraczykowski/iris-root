@@ -6,7 +6,7 @@ import lombok.ToString;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
 import com.silenteight.sep.usermanagement.api.NewUserDetails;
@@ -19,7 +19,7 @@ import io.vavr.control.Either;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEventUtils.OBFUSCATED_STRING;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static java.util.Collections.emptySet;

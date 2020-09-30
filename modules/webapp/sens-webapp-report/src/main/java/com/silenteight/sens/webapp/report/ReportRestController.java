@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.silenteight.sens.webapp.common.support.request.IpAddressExtractor.from;
 
 @Slf4j
 @RestController
@@ -24,17 +27,17 @@ class ReportRestController {
   private final CsvResponseWriter csvResponseWriter = new CsvResponseWriter();
 
   @NonNull
-  private final ReportProvider reportProvider;
+  private final ReportGeneratorFacade reportGeneratorFacade;
 
   @GetMapping("/reports/{reportName}")
   @PreAuthorize("isAuthorized('GENERATE_REPORT')")
   public void getReport(
+      HttpServletRequest request,
       HttpServletResponse response,
       @PathVariable String reportName,
       @RequestParam Map<String, String> parameters) throws IOException {
 
-    ReportGenerator reportGenerator = reportProvider.getReportGenerator(reportName);
-    Report report = reportGenerator.generateReport(parameters);
+    Report report = reportGeneratorFacade.generate(reportName, from(request), parameters);
     csvResponseWriter.write(response, report.getReportFileName(), report.getReportContent());
   }
 }

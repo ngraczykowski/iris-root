@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.registration;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
-import static com.silenteight.sens.webapp.audit.trace.AuditEventUtils.OBFUSCATED_STRING;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.CREATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEventUtils.OBFUSCATED_STRING;
 import static com.silenteight.sens.webapp.user.registration.ResultAssert.assertThatResult;
 import static com.silenteight.sens.webapp.user.registration.UserRegistrationUseCaseFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -236,7 +236,6 @@ class RegisterInternalUserUseCaseTest {
       assertThat(auditEvent.get(2).getType()).isEqualTo("RolesAssigned");
       assertThat(auditEvent.get(2).getEntityAction()).isEqualTo(UPDATE.toString());
       assertThat(auditEvent.get(2).getCorrelationId()).isEqualTo(correlationId);
-
     }
   }
 

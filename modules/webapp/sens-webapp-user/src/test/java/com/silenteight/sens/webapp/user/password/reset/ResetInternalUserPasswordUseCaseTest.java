@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.GENERATED_PASSWORD;
 import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.INTERNAL_CREDENTIALS;
 import static com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCaseTest.ResetInternalUserPasswordUseCaseFixtures.NON_INTERNAL_CREDENTIALS;

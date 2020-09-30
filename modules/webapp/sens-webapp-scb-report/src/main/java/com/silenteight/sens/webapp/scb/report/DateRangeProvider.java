@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 
 import static com.cronutils.model.CronType.QUARTZ;
 import static com.cronutils.model.definition.CronDefinitionBuilder.instanceDefinitionFor;
+import static com.cronutils.model.time.ExecutionTime.forCron;
 
 /*
 Provides recently elapsed date range based on crone expression
@@ -21,7 +22,7 @@ class DateRangeProvider {
   private final TimeSource timeSource;
 
   DateRangeProvider(String cronExpression, TimeSource timeSource) {
-    executionTime = ExecutionTime.forCron(CRON_PARSER.parse(cronExpression));
+    executionTime = forCron(CRON_PARSER.parse(cronExpression));
     this.timeSource = timeSource;
   }
 

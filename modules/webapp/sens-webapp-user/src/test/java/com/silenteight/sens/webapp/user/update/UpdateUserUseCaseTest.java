@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.update;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.NEW_DISPLAY_NAME_COMMAND;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.UPDATED_USER;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.UPDATE_USER_COMMAND;

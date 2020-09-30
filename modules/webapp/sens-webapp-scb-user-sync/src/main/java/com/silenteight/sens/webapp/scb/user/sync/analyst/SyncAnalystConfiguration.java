@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;

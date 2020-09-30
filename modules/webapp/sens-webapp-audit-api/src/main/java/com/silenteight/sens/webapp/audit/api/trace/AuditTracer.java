@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.audit.trace;
+package com.silenteight.sens.webapp.audit.api.trace;
 
 public interface AuditTracer {
 

@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.backend.changerequest.domain;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.UPDATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.CREATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestState.PENDING;

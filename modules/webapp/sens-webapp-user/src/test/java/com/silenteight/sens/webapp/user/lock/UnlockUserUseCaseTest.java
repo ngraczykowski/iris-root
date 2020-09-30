@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.lock;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sep.usermanagement.api.UserLocker;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.CREATE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.CREATE;
 import static com.silenteight.sens.webapp.user.lock.UnlockUserUseCaseFixtures.UNLOCK_COMMAND;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;

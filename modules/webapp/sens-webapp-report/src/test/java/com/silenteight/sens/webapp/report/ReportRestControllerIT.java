@@ -1,15 +1,21 @@
-package com.silenteight.sens.webapp.report.rest;
+package com.silenteight.sens.webapp.report;
 
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.common.rest.RestConstants;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
-import static com.silenteight.sens.webapp.report.rest.ReportTestFixtures.REPORT_NAME;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMINISTRATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.report.ReportTestFixtures.REPORT_NAME;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -20,13 +26,18 @@ import static org.springframework.http.HttpStatus.OK;
 @ContextConfiguration(classes = ReportTestConfiguration.class)
 class ReportRestControllerIT extends BaseRestControllerTest {
 
-  @TestWithRole(role = AUDITOR)
+  @MockBean
+  private AuditTracer auditTracer;
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = AUDITOR)
   @SuppressWarnings("squid:S2699")
   void notFoundResponseWhenNoReportNameFound() {
     get("/reports/WRONG_REPORT_NAME").statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(role = AUDITOR)
+  @Test
+  @WithMockUser(username = USERNAME, authorities = AUDITOR)
   void reportDataWhenValidReportNameRequested() {
     given()
         .queryParam("paramA", "paramValueABC")
@@ -42,7 +53,8 @@ class ReportRestControllerIT extends BaseRestControllerTest {
                 "Requested query parameters:\nparamA=paramValueABC\nparamB=paramValueEFG"));
   }
 
-  @TestWithRole(roles = { AUDITOR, BUSINESS_OPERATOR, APPROVER })
+  @Test
+  @WithMockUser(username = USERNAME, authorities = AUDITOR)
   void badRequestResponseIfMandatoryParameterNotProvided() {
     get("/reports/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }

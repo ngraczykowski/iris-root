@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.remove;
 
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UserQuery;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.DELETE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.DELETE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.circuitbreaker;
 
 import lombok.NonNull;
 
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 
 class DiscrepancyArchivingRequestedEvent extends AuditEvent {
 

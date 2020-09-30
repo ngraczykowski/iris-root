@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.proto.protobuf.Uuid;
 import com.silenteight.proto.serp.v1.changerequest.RejectChangeRequestCommand;
 import com.silenteight.proto.serp.v1.governance.RejectBulkBranchChangeCommand;
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.backend.changerequest.domain.ChangeRequestService;
 
 import java.util.UUID;

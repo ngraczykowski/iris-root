@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.audit.trace;
+package com.silenteight.sens.webapp.audit.api.trace;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -7,5 +7,4 @@ import lombok.NoArgsConstructor;
 public final class AuditEventUtils {
 
   public static final String OBFUSCATED_STRING = "*********";
-
 }

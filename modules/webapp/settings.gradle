@@ -2,6 +2,7 @@ rootProject.name = 'webapp'
 gradle.ext.sepDependenciesVersion = "1.9.0"
 
 include 'sens-webapp-audit'
+include 'sens-webapp-audit-api'
 include 'sens-webapp-backend'
 include 'sens-webapp-common'
 include 'sens-webapp-common-testing'

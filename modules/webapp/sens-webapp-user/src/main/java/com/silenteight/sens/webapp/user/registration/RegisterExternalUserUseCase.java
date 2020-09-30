@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
 import com.silenteight.sep.usermanagement.api.NewUserDetails;

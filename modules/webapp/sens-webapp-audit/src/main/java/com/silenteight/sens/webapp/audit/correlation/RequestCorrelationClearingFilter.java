@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.audit.correlation;
 
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+
 import java.io.IOException;
 import javax.servlet.*;
 

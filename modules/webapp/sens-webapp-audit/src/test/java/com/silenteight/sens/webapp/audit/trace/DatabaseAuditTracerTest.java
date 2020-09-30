@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.audit.trace;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

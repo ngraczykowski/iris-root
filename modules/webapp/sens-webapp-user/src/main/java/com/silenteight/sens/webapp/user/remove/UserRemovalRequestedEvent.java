@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.remove;
 
-import com.silenteight.sens.webapp.audit.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 
-import static com.silenteight.sens.webapp.audit.trace.AuditEvent.EntityAction.DELETE;
+import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.DELETE;
 
 class UserRemovalRequestedEvent extends AuditEvent {
 

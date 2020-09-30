@@ -1,13 +1,10 @@
-package com.silenteight.sens.webapp.report.rest;
+package com.silenteight.sens.webapp.report;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
 import com.silenteight.sens.webapp.common.support.csv.SimpleLinesSupplier;
-import com.silenteight.sens.webapp.report.Report;
-import com.silenteight.sens.webapp.report.ReportGenerator;
-import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
 
 import org.springframework.context.annotation.Bean;
@@ -18,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.sens.webapp.report.ReportTestFixtures.REPORT_NAME;
 import static java.lang.String.format;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toList;
@@ -35,7 +33,7 @@ class ReportTestConfiguration {
 
     @Override
     public String getName() {
-      return ReportTestFixtures.REPORT_NAME;
+      return REPORT_NAME;
     }
 
     @Override
@@ -54,7 +52,7 @@ class ReportTestConfiguration {
 
     @Override
     public String getReportFileName() {
-      return ReportTestFixtures.REPORT_NAME;
+      return REPORT_NAME;
     }
 
     @Override

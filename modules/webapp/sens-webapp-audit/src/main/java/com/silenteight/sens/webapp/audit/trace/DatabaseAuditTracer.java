@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import java.sql.Timestamp;

@@ -9,8 +9,8 @@ import com.silenteight.proto.serp.v1.governance.CreateBulkBranchChangeCommand.Br
 import com.silenteight.proto.serp.v1.governance.CreateBulkBranchChangeCommand.Builder;
 import com.silenteight.proto.serp.v1.governance.CreateBulkBranchChangeCommand.EnablementChange;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
-import com.silenteight.sens.webapp.audit.correlation.RequestCorrelation;
-import com.silenteight.sens.webapp.audit.trace.AuditTracer;
+import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
+import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.grpc.BranchSolutionMapper;
 
 import org.jetbrains.annotations.NotNull;
