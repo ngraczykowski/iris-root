@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.common.support.csv.FileLineWriter;
+import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
-import static java.io.File.separator;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -53,11 +52,7 @@ class AuditHistoryReportGenerator {
     DateRange dateRange = dateRangeProvider.latestDateRange();
     log.info("Generating audit history report for {}", dateRange);
 
-    fileLineWriter.write(filePath(), reportLines(dateRange));
-  }
-
-  private String filePath() {
-    return reportsDir + separator + fileName();
+    fileLineWriter.write(reportsDir, fileName(), reportLines(dateRange));
   }
 
   private String fileName() {

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
-import com.silenteight.sens.webapp.common.support.csv.FileLineWriter;
+import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
@@ -12,7 +12,6 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -53,7 +52,7 @@ class IdManagementReportGenerator {
     List<IdManagementEventDto> idManagementEvents =
         idManagementEventProvider.idManagementEvents(dateRange.getFrom(), dateRange.getTo());
 
-    lineWriter.write(filePath(), reportLinesFrom(idManagementEvents));
+    lineWriter.write(reportsDir, fileName(), reportLinesFrom(idManagementEvents));
   }
 
   private Stream<String> reportLinesFrom(List<IdManagementEventDto> idManagementEvents) {
@@ -73,12 +72,8 @@ class IdManagementReportGenerator {
   }
 
   //SCB specific requirement
-  private String commaSuffixed(String username) {
-    return format("%s,", username);
-  }
-
-  private String filePath() {
-    return reportsDir + File.separator + fileName();
+  private static String commaSuffixed(String value) {
+    return format("%s,", value);
   }
 
   private String fileName() {

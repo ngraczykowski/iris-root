@@ -1,8 +1,12 @@
 package com.silenteight.sens.webapp.scb.report;
 
 import com.silenteight.auditing.bs.AuditingFinder;
-import com.silenteight.sens.webapp.common.support.csv.FileLineWriter;
+import com.silenteight.sens.webapp.backend.report.domain.ReportMetadataService;
+import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
+import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.EventQuery;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -68,5 +72,33 @@ class ScbReportsConfiguration {
   @Bean
   AuditHistoryEventProvider auditHistoryEventProvider(AuditingFinder auditingFinder) {
     return new AuditHistoryEventProvider(auditingFinder);
+  }
+
+  @Bean
+  UserAuthActivityReportGenerator userAuthActivityReportGenerator(
+      UserAuthActivityEventProvider dataProvider, ScbReportsProperties properties) {
+
+    return new UserAuthActivityReportGenerator(
+        new DateRangeProvider(
+            properties.userAuthActivityCronExpression(), DefaultTimeSource.INSTANCE),
+        dataProvider,
+        properties.getDir(),
+        new FileLineWriter(),
+        DefaultTimeSource.INSTANCE);
+  }
+
+  @Bean
+  UserAuthActivityEventProvider userAuthActivityEventProvider(
+      ConfigurationQuery configurationQuery,
+      EventQuery eventQuery,
+      ReportMetadataService reportMetadataService,
+      UserRolesRetriever userRolesRetriever) {
+
+    return new UserAuthActivityEventProvider(
+        configurationQuery,
+        eventQuery,
+        reportMetadataService,
+        userRolesRetriever,
+        DefaultTimeSource.INSTANCE.timeZone().toZoneId());
   }
 }

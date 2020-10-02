@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sens.webapp.common.support.csv.FileLineWriter;
+import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +28,8 @@ class IdManagementReportGeneratorTest {
   private static final DateRange DEFAULT_DATE_RANGE =
       new DateRange(OffsetDateTime.now(), OffsetDateTime.now());
 
+  private static final String REPORTS_DIR = "path/to/reports";
+
   @Mock
   private DateRangeProvider dateRangeProvider;
 
@@ -46,7 +48,7 @@ class IdManagementReportGeneratorTest {
     idManagementReportGenerator = new IdManagementReportGenerator(
         dateRangeProvider,
         idManagementEventProvider,
-        "",
+        REPORTS_DIR,
         lineWriter,
         new MockTimeSource(now()));
   }
@@ -74,6 +76,7 @@ class IdManagementReportGeneratorTest {
     idManagementReportGenerator.generate();
 
     verify(lineWriter).write(
+        eq(REPORTS_DIR),
         anyString(),
         argThat(streamThat(hasItems(
             "\"AppID_ID,\"\t\"AppID_Name,\"\t\"AppID_Implemented_By,\"\t\""
@@ -99,14 +102,18 @@ class IdManagementReportGeneratorTest {
   @Test
   void storesReportInTheSpecifiedFolderUnderNameSuffixedByTimestamp() throws IOException {
     idManagementReportGenerator =
-        new IdManagementReportGenerator(dateRangeProvider, idManagementEventProvider,
-            "/some_reports_folder", lineWriter,
+        new IdManagementReportGenerator(
+            dateRangeProvider,
+            idManagementEventProvider,
+            REPORTS_DIR,
+            lineWriter,
             new MockTimeSource(Instant.parse("2020-05-22T15:15:30Z")));
 
     idManagementReportGenerator.generate();
 
     verify(lineWriter).write(
-        eq("/some_reports_folder/SURVILLANCE_OPTIMIZATION_ID_Management_20200522151530.csv"),
+        eq(REPORTS_DIR),
+        eq("SURVILLANCE_OPTIMIZATION_ID_Management_20200522151530.csv"),
         any(Stream.class));
   }
 }

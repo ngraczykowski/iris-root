@@ -117,5 +117,4 @@ class RemoveUserUseCaseTest {
     userDto.setOrigin(origin);
     return userDto;
   }
-
 }

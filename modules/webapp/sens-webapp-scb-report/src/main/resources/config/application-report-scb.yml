@@ -4,3 +4,5 @@ report-scb:
     cron: 0 0 0/12 ? * *
   audit-history:
     cron: 0 0 0/1 ? * *
+  user-auth-activity:
+    cron: 0 0 0/1 ? * *

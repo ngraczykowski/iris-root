@@ -19,11 +19,12 @@ import static com.silenteight.sens.webapp.common.testing.matcher.StreamMatcher.s
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AuditHistoryReportGeneratorTest {
+class UserAuthActivityReportGeneratorTest {
 
   private static final DateRange DEFAULT_DATE_RANGE = new DateRange(
       OffsetDateTime.now().minusHours(1), OffsetDateTime.now());
@@ -34,18 +35,18 @@ class AuditHistoryReportGeneratorTest {
   private DateRangeProvider dateRangeProvider;
 
   @Mock
-  private AuditHistoryEventProvider auditHistoryEventProvider;
+  private UserAuthActivityEventProvider userAuthActivityEventProvider;
 
   @Mock
   private FileLineWriter fileLineWriter;
 
-  private AuditHistoryReportGenerator underTest;
+  private UserAuthActivityReportGenerator underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new AuditHistoryReportGenerator(
+    underTest = new UserAuthActivityReportGenerator(
         dateRangeProvider,
-        auditHistoryEventProvider,
+        userAuthActivityEventProvider,
         REPORTS_DIR,
         fileLineWriter,
         new MockTimeSource(Instant.now()));
@@ -55,19 +56,26 @@ class AuditHistoryReportGeneratorTest {
 
   @Test
   void generatesReportRowsFromEvents() throws IOException {
-    when(auditHistoryEventProvider.provide(any(OffsetDateTime.class), any(OffsetDateTime.class)))
+    when(userAuthActivityEventProvider.provide(
+        any(OffsetDateTime.class), any(OffsetDateTime.class)))
         .thenReturn(List.of(
-            AuditHistoryEventDto.builder()
-                .userName("userA")
-                .status("SUCCESS")
-                .ipAddress("192.122.0.8")
-                .timestamp(Instant.parse("2020-08-15T12:14:32Z"))
-                .build(),
-            AuditHistoryEventDto.builder()
-                .userName("userB")
-                .status("FAILED")
+            UserAuthActivityEventDto.builder()
+                .userName("jdoe")
+                .roles(List.of("ANALYST", "AUDITOR"))
                 .ipAddress("192.154.0.1")
-                .timestamp(Instant.parse("2020-09-20T13:15:48Z"))
+                .loginTimestamp(Instant.parse("2020-08-16T12:25:14Z").toEpochMilli())
+                .build(),
+            UserAuthActivityEventDto.builder()
+                .userName("asmith")
+                .roles(List.of("BUSINESS_OPERATOR"))
+                .ipAddress("192.122.0.8")
+                .loginTimestamp(Instant.parse("2020-08-16T12:35:27Z").toEpochMilli())
+                .build(),
+            UserAuthActivityEventDto.builder()
+                .userName("asmith")
+                .roles(List.of("BUSINESS_OPERATOR"))
+                .ipAddress("192.122.0.8")
+                .logoutTimestamp(Instant.parse("2020-08-16T12:50:38Z").toEpochMilli())
                 .build()));
 
     underTest.generate();
@@ -76,9 +84,14 @@ class AuditHistoryReportGeneratorTest {
         eq(REPORTS_DIR),
         anyString(),
         argThat(streamThat(hasItems(
-            "\"Audit_ID,Audit_Status,Access_SourceIP,Audit_Country,Audit_LoginTimeStamp\"",
-            "\"userA,SUCCESS,192.122.0.8,Global,\"\"15082020 12:14:32\"\"\"",
-            "\"userB,FAILED,192.154.0.1,Global,\"\"20092020 13:15:48\"\"\""))));
+            "\"Access_ID,\"\t\"Access_Profile,\"\t\"Access_Country,\"\t\"Access_SourceIP,\"\t"
+                + "\"Access_LoginTimeStamp,\"\tAccess_LogoutTimeStamp",
+            "\"jdoe,\"\t\"ANALYST,AUDITOR,\"\t\"Global,\"\t\"\"\"192.154.0.1\"\",\"\t"
+                + "\"\"\"16082020 12:25:14\"\",\"\t",
+            "\"asmith,\"\t\"BUSINESS_OPERATOR,\"\t\"Global,\"\t\"\"\"192.122.0.8\"\",\"\t"
+                + "\"\"\"16082020 12:35:27\"\",\"\t",
+            "\"asmith,\"\t\"BUSINESS_OPERATOR,\"\t\"Global,\"\t\"\"\"192.122.0.8\"\",\"\t"
+                + "\t\"\"\"16082020 12:50:38\"\"\""))));
   }
 
   @Test
@@ -89,23 +102,23 @@ class AuditHistoryReportGeneratorTest {
 
     underTest.generate();
 
-    verify(auditHistoryEventProvider).provide(from, to);
+    verify(userAuthActivityEventProvider).provide(from, to);
   }
 
   @Test
   void storesReportInTheSpecifiedFolderUnderNameSuffixedByTimestamp() throws IOException {
-    underTest = new AuditHistoryReportGenerator(
+    underTest = new UserAuthActivityReportGenerator(
         dateRangeProvider,
-        auditHistoryEventProvider,
+        userAuthActivityEventProvider,
         REPORTS_DIR,
         fileLineWriter,
-        new MockTimeSource(Instant.parse("2020-05-22T15:15:30Z")));
+        new MockTimeSource(Instant.parse("2020-08-16T12:25:30Z")));
 
     underTest.generate();
 
     verify(fileLineWriter).write(
         eq(REPORTS_DIR),
-        eq("SURVILLANCE_OPTIMIZATION_AuditHistory_20200522151530.csv"),
+        eq("SURVILLANCE_OPTIMIZATION_Login_Logout_20200816122530.csv"),
         any(Stream.class));
   }
 }

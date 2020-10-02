@@ -29,11 +29,19 @@ class ScbReportsProperties {
   @Valid
   private final AuditHistoryReportProperties auditHistory;
 
+  @NotNull
+  @Valid
+  private final UserAuthActivityReportProperties userAuthActivity;
+
   public String idManagementCronExpression() {
     return idManagement.getCron();
   }
 
   public String auditHistoryCronExpression() {
     return auditHistory.getCron();
+  }
+
+  public String userAuthActivityCronExpression() {
+    return userAuthActivity.getCron();
   }
 }
