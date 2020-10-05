@@ -9,10 +9,12 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
 import net.jpountz.lz4.LZ4FrameOutputStream.BLOCKSIZE;
 import net.jpountz.lz4.LZ4FrameOutputStream.FLG.Bits;
 import org.springframework.amqp.support.postprocessor.AbstractCompressingPostProcessor;
+import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
+@Order(PostProcessorsOrdering.COMPRESSION)
 @Getter
 @Setter
 public class Lz4CompressMessagePostProcessor extends AbstractCompressingPostProcessor {

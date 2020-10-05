@@ -2,11 +2,15 @@ package com.silenteight.sep.base.common.messaging;
 
 import lombok.Data;
 
+import com.silenteight.sep.base.common.support.validation.AesKeyLength;
+import com.silenteight.sep.base.common.support.validation.MacLength;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @ConfigurationProperties(prefix = "serp.messaging")
@@ -36,8 +40,17 @@ class MessagingProperties {
   @Data
   static class Encryption {
 
-    // TODO(ahaczewski): Implement message encryption.
     private boolean enabled = false;
+    @NotEmpty
+    private String keySeed;
+    @NotEmpty
+    private String salt;
+    @AesKeyLength
+    private int keySizeInBits = 256;
+    @Min(32)
+    private int nonceSizeInBits = 48; // Recommended by NIST
+    @MacLength
+    private int macSizeInBits = 64; // Lesser should not be used
   }
 
   @Data

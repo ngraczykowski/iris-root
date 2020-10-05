@@ -3,10 +3,12 @@ package com.silenteight.sep.base.common.messaging;
 import net.jpountz.lz4.LZ4Factory;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import org.springframework.amqp.support.postprocessor.AbstractDecompressingPostProcessor;
+import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Order(PostProcessorsOrdering.COMPRESSION)
 public class Lz4DecompressMessagePostProcessor extends AbstractDecompressingPostProcessor {
 
   @Override

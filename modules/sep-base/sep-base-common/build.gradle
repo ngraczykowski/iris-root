@@ -57,6 +57,8 @@ dependencies {
   api libraries.spring_amqp_rabbit
   api libraries.spring_integration_amqp
   implementation libraries.amqp_client
+  implementation libraries.bouncycastle_bcprov
+  implementation libraries.bouncycastle_bcprov_ext
   implementation libraries.lz4_java
   implementation libraries.spring_messaging
 
