@@ -9,11 +9,10 @@
 |Prerequisite|Necessity|Remarks|
 |:-----------:|:-------:|-------|
 |**Java 11** |Mandatory| Web App API uses Java 11, you can  [download and install packages for your system from Azul Systems, Inc.](https://www.azul.com/downloads/zulu-community/?&version=java-11-lts); make sure you install full Java Development Kit (JDK). |
-|**Docker**  |Mandatory| Running database and keycloak server for Web App API, which greatly simplifies development setup. |
+|**Docker**  |Mandatory| Running database for Web App API, which greatly simplifies development setup. |
 |**IntelliJ**|Mandatory| Project is prepared for being worked on in IntelliJ IDEA. |
 |**jEnv**    |Optional | jEnv helps with managing Java versions. [Download it from jEnv site](https://www.jenv.be/) and follow instructions for installing.|   
 |**Gradle**  |Optional | SERP comes with gradle wrapper that you should use for building the project. Nevertheless you might want to have Gradle installed.|
-|**jq**      |Optional | jq is JSON manipulation utility that is being used during Keycloak configuration export. Is is widely used, therefore should be in every popular linux distro repositories. |
 
 
 ### Git repositories
@@ -26,7 +25,6 @@
   * [sens-webapp-db-changelog](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-db-changelog): Web App Module managing database schema
   * [sens-webapp-documentation](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-documentation): Web App Module containing Documentation
   * [sens-webapp-frontend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-frontend): Web App User Interface
-  * [sens-webapp-keycloak](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-keycloak): Web App Module for Keycloak integration
   * [sens-webapp-logging](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-logging): Web App Logging Module
   * [sens-webapp-report](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-report): Web App Module generating basic Reports
   * [sens-webapp-scb-chrome-extension](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-chrome-extension): Web App Module for Chrome Extension integration
@@ -37,14 +35,11 @@
 
 ### Run services
 
-#### Keycloak auth server, external SAML and main database
+#### WebApp database
 
-1. Definitions for all containers can be found in [docker-compose.yml](docker-compose.yml). Run Keycloak and PostgreSQL with:
+1. Definitions for all containers can be found in [docker-compose.yml](docker-compose.yml). Run PostgreSQL with:
         
         docker-compose up -d
-
-2. Log into [Keycloak admin console](http://localhost:24491/auth/admin/) using `sens:sens` credentials,
-to verify it is working properly.
 
 #### SERP
 
@@ -71,8 +66,8 @@ Also make sure that the project was built (`gw build`) before starting the API a
    
 | Profile    | Behaviour                                                                                                                                                                                                                                                                                            |
 |------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dev`      | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:24410/rest/webapp/openapi). |
-| `prod`     | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak config stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates).                                     |
+| `dev`      | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). Additionally launches Swagger UI at [/openapi/ endpoint](localhost:24410/rest/webapp/openapi). |
+| `prod`     | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml).                                   |
 | `swagger`  | It enables Swagger UI for testing purposes                                                                                                                                                                                                                                                           |
   
 1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
@@ -87,49 +82,6 @@ In Spring Boot Run Configuration add following program arguments:
     
 
 ### Configuration
-
-#### Keycloak
-Whole Keycloak development configuration is stored in [conf/keycloak](conf/keycloak) (or [conf/keycloak-saml-idp](conf/keycloak-saml-idp) for SAML idP).
-Everything can be configured using GUI available at:
-- [localhost:24491](http://localhost:24491) for main Keycloak instance
-- [localhost:24494](http://localhost:24494) for SAML idP Keycloak instance
-
-##### Migrations
-Application loads ordered Keycloak migration files. 
-Every file should conform to template: `number-policy-name.json(ftl)`, valid examples are: `1-onEveryRun-myMigration.json` and `2-onFirstRun-myOtherMigration.json.ftl`. 
-The template values can be set in valid `application.yaml` file. First migration is treated as base migration (creates realm) 
-and is always needed, while the others are Keycloak's partial imports. To create such partial import, please refer
-to examples [here](https://github.com/adorsys/keycloak-config-cli/tree/master/src/test/resources/import-files).
-
-##### Users and roles
-Currently we support following roles:
-- Administrator
-- Analyst
-- Approver
-- Auditor
-- Business Operator
-
-Users for development purposes are as follows:
-
-| username            | password            | roles             |
-|---------------------|---------------------|-------------------|
-| `admin`             | `admin`             | Admin             |
-| `analyst`           | `analyst`           | Analyst           |
-| `auditor`           | `auditor`           | Auditor           |
-| `business_operator` | `business_operator` | Business Operator |
-
-##### Exporting
-To export created configuration use either: 
-- [keycloak-scripts/export-config-for-main-keycloak.sh](keycloak-scripts/export-config-for-main-keycloak.sh).
-- [keycloak-scripts/export-config-for-saml-keycloak.sh](keycloak-scripts/export-config-for-saml-keycloak.sh).
->>>
-WARNING: Exporting requires booting up another Keycloak instance in desired container.
-Afterwards such instance is being automatically killed, but on lower spec machines it might take longer.
-Therefore, if the config is not exported within default 20 seconds, you can set `KEYCLOAK_EXPORT_TIMEOUT` 
-environment variable or modify default timeout in [this](keycloak-scripts/internal/1-export-realm.sh) file.
->>>
-##### Reloading new configuration
-`docker-compose down -v --remove-orphans && docker-compose up -d`
 
 #### Database
 
