@@ -305,7 +305,9 @@ sep.auth:
       - "SYNC_ANALYSTS"
       - "VIEW_USERS"
     ADMINISTRATOR:
+      - "GENERATE_REPORTS"
       - "MANAGE_USERS"
+      - "SYNC_ANALYSTS"
       - "VIEW_USERS"
     APPROVER:
       - "APPROVE_CHANGE_REQUESTS"

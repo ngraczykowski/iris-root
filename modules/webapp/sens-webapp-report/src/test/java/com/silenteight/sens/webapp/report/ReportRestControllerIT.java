@@ -12,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMINISTRATOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.report.ReportTestFixtures.REPORT_NAME;
@@ -59,7 +58,7 @@ class ReportRestControllerIT extends BaseRestControllerTest {
     get("/reports/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST })
+  @TestWithRole(roles = { ANALYST })
   void its403_whenNotPermittedRole() {
     get("/reports/WRONG_REPORT_NAME").statusCode(FORBIDDEN.value());
   }
