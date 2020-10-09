@@ -6,7 +6,10 @@ import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
@@ -46,7 +49,7 @@ class DecisionTreeDetailsRestControllerTest extends BaseRestControllerTest {
         .body("extras.treeId", equalTo((int) OTHER_DECISION_TREE_ID));
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST })
+  @TestWithRole(roles = { ANALYST })
   void its403_whenNotPermittedRole() {
     get("/decision-trees/" + DECISION_TREE_ID)
         .statusCode(FORBIDDEN.value());
