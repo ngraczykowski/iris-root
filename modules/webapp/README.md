@@ -49,6 +49,11 @@ Make sure you have completed at least the following:
    ./serp-opt-installer-1.25.0.run
    ```
 
+1. Build serp
+   ```
+   gw build
+   ```
+
 1. Start the serp postgres db via docker-compose
    ```
    cd "${SERP_HOME}
@@ -81,11 +86,20 @@ Make sure you have completed at least the following:
    ./cert/root-ca/root-ca.pem
    ```
    
-1. Start & stop SERP 
+1. Start SERP 
    ```
    ./bin/serp start
-   ./bin/serp stop
    ```
+
+1. Import decision tree
+   ```
+   ./bin/serp dt import conf/dt/dt-serp-deny-migrated.json 
+   ```
+
+1. Stop SERP
+   ```
+   ./bin/serp stop
+   ```   
    
 1. Set system-wide environment variable `SERP_HOME` that points at a serp directory, e.g.:
    ```
@@ -118,16 +132,11 @@ Make sure you have completed at least the following:
 #### WebApp
 Start the WebApp using "WebApplication" run configuration in IntelliJ.
 
-As an alternative you can start Web App API from Gradle script:
-```
-./gradlew sens-webapp-backend:bootRun --args='--serp.home=${SERP_HOME}'
-```   
-
 ### Using services
 By default, you can reach UI for components at:
 - WebApp: https://localhost:24111/
 - Keycloak admin: https://localhost:24111/auth/admin
-- Consul: http://localhost:24120/ui/dc1/services
+- Consul: https://localhost:24120/ui/dc1/services (requires mTLS)
 
 ### Using Swagger UI
 By default, swagger is disabled in production. To enable it you need to apply `swagger` Spring Boot profile.
