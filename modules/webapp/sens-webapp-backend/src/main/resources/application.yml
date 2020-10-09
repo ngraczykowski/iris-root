@@ -116,6 +116,12 @@ spring:
     start-delay-seconds: 15
     poll-period-millis: 1000
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
 grpc:
   client:
     GLOBAL:
@@ -329,6 +335,18 @@ sep.auth:
       - "VIEW_DISCREPANCIES"
       - "VIEW_REASONING_BRANCHES"
       - "REPORTING_APP"
+
+keycloak:
+  adapter:
+    authServerUrl: https://localhost:24110/auth
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials:
+      secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
 
 # Notifications
 sens.webapp.notification.enabled: true

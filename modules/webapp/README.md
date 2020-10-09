@@ -2,6 +2,17 @@
 
 [[_TOC_]]
 
+## Git repositories
+
+Below is a list of repositories relevant for WebApp:
+* [sens-webapp](https://gitlab.silenteight.com/sens/sens-webapp): Main WebApp repository
+* [serp](https://gitlab.silenteight.com/sens/serp): Silent Eight Realtime Platform - an alert resolving engine
+* [sep-auth](https://gitlab.silenteight.com/sep/sep-auth): Authorization Module
+* [sep-usermanagement-api](https://gitlab.silenteight.com/sep/sep-usermanagement-api): Interface for user management
+* [sep-usermanagement-keycloak](https://gitlab.silenteight.com/sep/sep-usermanagement-keycloak): Keycloak implementation of an user management interface
+* [sep-front](https://gitlab.silenteight.com/sens/sep-front): Frontend for WebApp
+* [keycloak-import](https://gitlab.silenteight.com/sens/keycloak-imports): Keycloak configuration
+
 ## Development setup
 
 ### Prerequisites
@@ -9,143 +20,145 @@
 |Prerequisite|Necessity|Remarks|
 |:-----------:|:-------:|-------|
 |**Java 11** |Mandatory| Web App API uses Java 11, you can  [download and install packages for your system from Azul Systems, Inc.](https://www.azul.com/downloads/zulu-community/?&version=java-11-lts); make sure you install full Java Development Kit (JDK). |
-|**Docker**  |Mandatory| Running database and keycloak server for Web App API, which greatly simplifies development setup. |
+|**Docker**  |Mandatory| Running database for Web App API in a container. |
+|**Docker-Compose**  |Mandatory| Docker compose orchestrator. |
 |**IntelliJ**|Mandatory| Project is prepared for being worked on in IntelliJ IDEA. |
 |**jEnv**    |Optional | jEnv helps with managing Java versions. [Download it from jEnv site](https://www.jenv.be/) and follow instructions for installing.|   
 |**Gradle**  |Optional | SERP comes with gradle wrapper that you should use for building the project. Nevertheless you might want to have Gradle installed.|
 |**jq**      |Optional | jq is JSON manipulation utility that is being used during Keycloak configuration export. Is is widely used, therefore should be in every popular linux distro repositories. |
 
+Access to password manager - [Bitwarden](https://bitwarden.silenteight.com/)
 
-### Git repositories
+Properly configured environment - see [Technical Guide](https://docs.google.com/document/d/1-bL5fzQtJfaO3LswByoyI539rnCXr9gDSkb56iTqtmo)
 
-* [sens-webapp](https://gitlab.silenteight.com/sens/sens-webapp): main project consisting of:
-  * [sens-webapp-audit](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-audit): Web App Module generating Audit Report
-  * [sens-webapp-backend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-backend): Web App REST API
-  * [sens-webapp-common](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-common): Web App Module with common tools
-  * [sens-webapp-common-testing](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-common-testing): Web App Module with common tools for tests
-  * [sens-webapp-db-changelog](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-db-changelog): Web App Module managing database schema
-  * [sens-webapp-documentation](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-documentation): Web App Module containing Documentation
-  * [sens-webapp-frontend](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-frontend): Web App User Interface
-  * [sens-webapp-keycloak](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-keycloak): Web App Module for Keycloak integration
-  * [sens-webapp-logging](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-logging): Web App Logging Module
-  * [sens-webapp-report](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-report): Web App Module generating basic Reports
-  * [sens-webapp-scb-chrome-extension](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-chrome-extension): Web App Module for Chrome Extension integration
-  * [sens-webapp-scb-report](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-report): Web App Module generating SCB specific Reports
-  * [sens-webapp-scb-user-sync](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-scb-user-sync): Web App Module for synchronizing SCB Analysts
-  * [sens-webapp-user](https://gitlab.silenteight.com/sens/sens-webapp/tree/master/sens-webapp-user): Web App Module managing User Management
-* [serp](https://gitlab.silenteight.com/sens/serp): Silent Eight Realtime Platform responsible for recommendations generation for given alerts
+### Initial setup
 
-### Run services
+WebApp depends on infrastructure and services managed by SERP CLI, therefore before you start working
+with WebApp you need to setup SERP first.
+ 
+In order to do that checkout [SERP](https://gitlab.silenteight.com/sens/serp) repository and 
+follow [README.md](https://gitlab.silenteight.com/sens/serp/-/blob/master/README.md).
 
-#### Keycloak auth server, external SAML and main database
+Make sure you have completed at least the following:
 
-1. Definitions for all containers can be found in [docker-compose.yml](docker-compose.yml). Run Keycloak and PostgreSQL with:
-        
-        docker-compose up -d
+1. Install `serp-opt-installer` on top of your existing serp directory, e.g.:
+   ```
+   cd "${SERP_HOME} && cd ..
+   wget "https://silenteight.com/repo/jenkins/serp-opt-installer/master/34-IdabJv/serp-opt-installer-1.25.0.run"
+   chmod +x serp-opt-installer-1.25.0.run
+   ./serp-opt-installer-1.25.0.run
+   ```
 
-2. Log into [Keycloak admin console](http://localhost:24491/auth/admin/) using `sens:sens` credentials,
-to verify it is working properly.
+1. Start the serp postgres db via docker-compose
+   ```
+   cd "${SERP_HOME}
+   docker-compose up -d postgres
+   ```
+   
+1. Configure db settings, password placeholders can be filled in based on values stores in Bitwarden:
+   ```
+   ./bin/serp config set-many \
+   db.host="localhost" \
+   db.port="24290" \
+   db.schema="public" \
+   db.name="serp" \
+   db.user="serp" \
+   db.password="serp" \
+   gns.db.host="oracle.silenteight.com" \
+   gns.db.port="1521" \
+   gns.db.service.name="ORCLCDB" \
+   gns.db.user="LC_GNS_WEB_SIT_01" \
+   gns.db.password=<password>
+   ```
+   
+1. Generate certificates:
+   ```
+   ./bin/serp cert generate
+   ```
+
+1. Add the following RootCA certificate as trusted in your web browser:
+   ```
+   ./cert/root-ca/root-ca.pem
+   ```
+   
+1. Start & stop SERP 
+   ```
+   ./bin/serp start
+   ./bin/serp stop
+   ```
+   
+1. Set system-wide environment variable `SERP_HOME` that points at a serp directory, e.g.:
+   ```
+   sudo bash -c "echo 'SERP_HOME' >> /home/user/projects/serp"
+   ```    
+   Make sure that this change takes effect (restart may be needed):
+   ```
+   echo "${SERP_HOME} 
+   ```
+
+### Starting services
 
 #### SERP
-
-1. Pull `serp` git repository.
-
-2. Follow installation instructions from [README](https://gitlab.silenteight.com/sens/serp/blob/master/README.md) file.
-
-#### Web App UI
-
-1. Run script to start Web App UI:
-
-        ./sens-webapp-frontend/npm start
-
-   Successfully started application displays below message on a console:
+1. Start the supervisor:
+   ```
+   ./bin/serp ctl start-supervisor
+   ``` 
    
-        ** Angular Live Development Server is listening on localhost:24400, open your browser on http://localhost:24400/ **
-
-2. Open `http://localhost:24400/` URL in a browser.
-
-#### Web App API
-
-Prior to running API make sure you ran [UI](#web-app-ui), as it starts reverse proxy required by whole app to run correctly.
-Also make sure that the project was built (`gw build`) before starting the API and the plugins are present in the ./plugin/webapp folder as they are used by the Web Application.
+1. Start the infrastructure components: rabbitmq, traefik, keycloak, caddy
+   ```
+   ./bin/serp ctl start infra:* 
+   ```
    
-| Profile    | Behaviour                                                                                                                                                                                                                                                                                            |
-|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dev`      | Uses app properties stored in [`application-dev.yml`](sens-webapp-backend/src/main/resources/application-dev.yml). At startup, loads Keycloak config stored in [`conf/keycloak/`](conf/keycloak) dir. Additionally launches Swagger UI at [/openapi/ endpoint](localhost:24410/rest/webapp/openapi). |
-| `prod`     | Uses app properties stored in [`application-prod.yml`](sens-webapp-backend/src/main/resources/application-prod.yml). At startup, loads Keycloak config stored in [`Keycloak module resources`](sens-webapp-keycloak/src/main/resources/configuration-templates).                                     |
-| `swagger`  | It enables Swagger UI for testing purposes                                                                                                                                                                                                                                                           |
-  
-1. Run `WebApplication` class as a **Spring Boot** service directly from **IntelliJ IDEA**. 
+1. Start the following services: governance, circuit-breaker:
+   ```
+   ./bin/serp ctl start app:governance
+   ./bin/serp ctl start app:circuit-breaker
+   ``` 
 
-In Spring Boot Run Configuration add following program arguments:
+#### WebApp
+Start the WebApp using "WebApplication" run configuration in IntelliJ.
 
-        --serp.home=<path_to_root_of_serp_project>
-   
-   As an alternative you can start Web App API from Gradle script:
-   
-        ./gradlew sens-webapp-backend:bootRun --args='--serp.home=<path_to_root_of_serp_project>'
-    
+As an alternative you can start Web App API from Gradle script:
+```
+./gradlew sens-webapp-backend:bootRun --args='--serp.home=${SERP_HOME}'
+```   
 
-### Configuration
+### Using services
+By default, you can reach UI for components at:
+- WebApp: https://localhost:24111/
+- Keycloak admin: https://localhost:24111/auth/admin
+- Consul: http://localhost:24120/ui/dc1/services
 
-#### Keycloak
-Whole Keycloak development configuration is stored in [conf/keycloak](conf/keycloak) (or [conf/keycloak-saml-idp](conf/keycloak-saml-idp) for SAML idP).
-Everything can be configured using GUI available at:
-- [localhost:24491](http://localhost:24491) for main Keycloak instance
-- [localhost:24494](http://localhost:24494) for SAML idP Keycloak instance
+### Using Swagger UI
+By default, swagger is disabled in production. To enable it you need to apply `swagger` Spring Boot profile.
+UI: [http://localhost:24410/rest/webapp/openapi/swagger-ui/index.html?configUrl=/rest/webapp/openapi/api-docs/swagger-config](http://localhost:24410/rest/webapp/openapi/swagger-ui/index.html?configUrl=/rest/webapp/openapi/api-docs/swagger-config).
 
-##### Migrations
-Application loads ordered Keycloak migration files. 
-Every file should conform to template: `number-policy-name.json(ftl)`, valid examples are: `1-onEveryRun-myMigration.json` and `2-onFirstRun-myOtherMigration.json.ftl`. 
-The template values can be set in valid `application.yaml` file. First migration is treated as base migration (creates realm) 
-and is always needed, while the others are Keycloak's partial imports. To create such partial import, please refer
-to examples [here](https://github.com/adorsys/keycloak-config-cli/tree/master/src/test/resources/import-files).
-
-##### Users and roles
-Currently we support following roles:
-- Administrator
-- Analyst
-- Approver
-- Auditor
-- Business Operator
-
-Users for development purposes are as follows:
-
-| username            | password            | roles             |
-|---------------------|---------------------|-------------------|
-| `admin`             | `admin`             | Admin             |
-| `analyst`           | `analyst`           | Analyst           |
-| `auditor`           | `auditor`           | Auditor           |
-| `business_operator` | `business_operator` | Business Operator |
-
-##### Exporting
-To export created configuration use either: 
-- [keycloak-scripts/export-config-for-main-keycloak.sh](keycloak-scripts/export-config-for-main-keycloak.sh).
-- [keycloak-scripts/export-config-for-saml-keycloak.sh](keycloak-scripts/export-config-for-saml-keycloak.sh).
->>>
-WARNING: Exporting requires booting up another Keycloak instance in desired container.
-Afterwards such instance is being automatically killed, but on lower spec machines it might take longer.
-Therefore, if the config is not exported within default 20 seconds, you can set `KEYCLOAK_EXPORT_TIMEOUT` 
-environment variable or modify default timeout in [this](keycloak-scripts/internal/1-export-realm.sh) file.
->>>
-##### Reloading new configuration
-`docker-compose down -v --remove-orphans && docker-compose up -d`
+In order to make authenticated requests 
+click the key lock icon, type in desired client id (normally this would be `frontend`) 
+and click the `Authorize` button. 
 
 #### Database
+By default, SERP is configured to use a single database for all components, but it is possible
+to configure separate db for WebApp:
 
-Web App API is using PostgreSQL database to persist Web App specific data.  
-Database connection configuration is stored in file: `sens-webapp-backend/resources/application.yml`.  
-It operates on database started by docker-compose command, but can be customized if needed.
+1. Start the webapp postgres db via docker-compose
+   ```
+   cd sens-webapp
+   docker-compose up -d
+   ```
+   
+1. Configure SERP    
+   ```
+   ./bin/serp config set-many \
+   webapp.db.host="localhost" \
+   webapp.db.port="24480" \
+   webapp.db.schema="public" \
+   webapp.db.name="sens" \
+   webapp.db.user="sens" \
+   webapp.db.password="sens"
+   ```
 
-Example configuration:
-
-    sens.webapp.db.host: localhost
-    sens.webapp.db.port: 24480
-    sens.webapp.db.schema: public
-    sens.webapp.db.name: sens_webapp_db
-    sens.webapp.db.user: sens_webapp
-    sens.webapp.db.password: sens_webapp_pass
-    sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
+1. It is sufficient to restart WebApp only.
 
 ## Continuous Integration
 
@@ -182,11 +195,3 @@ Gradle script to the released Web App version.
 1. Create MR with your changes. Wait for an approval and merge it.
 1. [SERP release can be prepared now](https://jenkins.silenteight.com/job/sens/job/sens%252Fserp/).  
 New snapshot/release version will start using newly released Web App release.
-
-## Using Swagger UI
-To use Swagger UI you need apply `swagger` profile to your app, along with a main profile, e.g. --spring.profiles.active=dev,swagger
-and go to [http://localhost:24410/rest/webapp/openapi/swagger-ui/index.html?configUrl=/rest/webapp/openapi/api-docs/swagger-config](http://localhost:24410/rest/webapp/openapi/swagger-ui/index.html?configUrl=/rest/webapp/openapi/api-docs/swagger-config).
-
-In order to make authenticated requests 
-click the key lock icon, type in desired client id (normally this would be `frontend`) 
-and click the `Authorize` button. 
