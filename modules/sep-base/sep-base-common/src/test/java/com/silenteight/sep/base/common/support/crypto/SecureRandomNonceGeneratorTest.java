@@ -10,14 +10,13 @@ class SecureRandomNonceGeneratorTest {
   @Test
   void given32BytesSize_generatesTwoDifferentNoncesOfGivenSize() {
     int nonceSizeInBits = 128;
-    int nonceSizeInBytes = nonceSizeInBits / 4;
+    int nonceSizeInBytes = nonceSizeInBits / 8;
     var underTest = new SecureRandomNonceGenerator(nonceSizeInBits);
 
     byte[] first = underTest.generate();
     byte[] second = underTest.generate();
 
-    assertThat(first).isNotEqualTo(second);
-    assertThat(first).hasSize(nonceSizeInBytes);
+    assertThat(first).isNotEqualTo(second).hasSize(nonceSizeInBytes);
     assertThat(second).hasSize(nonceSizeInBytes);
   }
 }

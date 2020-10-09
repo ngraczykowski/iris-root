@@ -6,16 +6,18 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Target(FIELD)
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = { AesKeyLengthValidator.class })
-public @interface AesKeyLength {
+@Constraint(validatedBy = { IsOneOfValidator.class })
+public @interface IsOneOf {
 
-  String message() default "Value is not valid AES key length. It should be 128, 192 or 256.";
+  int[] value();
+
+  String message() default "Value is not in given set.";
 
   Class<?>[] groups() default {};
 

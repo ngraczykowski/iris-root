@@ -8,7 +8,8 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.silenteight.sep.base.common.grpc.GrpcInterceptorConfiguration,\
   com.silenteight.sep.base.common.grpc.GlobalExceptionHandlingServerInterceptor,\
   com.silenteight.sep.base.common.messaging.IntegrationConfiguration, \
-  com.silenteight.sep.base.common.messaging.MessagingErrorConfiguration
+  com.silenteight.sep.base.common.messaging.MessagingErrorConfiguration, \
+  com.silenteight.sep.base.common.messaging.encryption.MessagingEncryptionConfiguration
 
 org.springframework.context.ApplicationListener=\
   com.silenteight.sep.base.common.support.spring.EnvironmentLoggingApplicationListener

@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 
 @Order(PostProcessorsOrdering.ENCRYPTION)
 @RequiredArgsConstructor
-class DecryptMessagePostProcessor implements MessagePostProcessor {
+public class DecryptMessagePostProcessor implements MessagePostProcessor {
 
   private final AmqpMessageDecrypter decrypter;
 

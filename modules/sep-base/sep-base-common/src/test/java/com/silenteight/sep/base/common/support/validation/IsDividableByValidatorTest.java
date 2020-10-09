@@ -3,7 +3,6 @@ package com.silenteight.sep.base.common.support.validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -12,6 +11,7 @@ import java.util.stream.Stream;
 import javax.validation.ConstraintValidator;
 
 import static java.util.stream.Stream.of;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class IsDividableByValidatorTest {
@@ -26,7 +26,7 @@ class IsDividableByValidatorTest {
 
     @BeforeEach
     void setUp() {
-      BDDMockito.given(isDividableBy.value()).willReturn(4);
+      given(isDividableBy.value()).willReturn(4);
       underTest.initialize(isDividableBy);
     }
 

@@ -18,7 +18,7 @@ class AesGcmEncryptionBundleTest {
   @Nested
   class GivenValidParameters {
 
-    private static final String ENCRYPTION_HEADER = "ENCRYPTION_HEADER";
+    private static final String ENCRYPTION_HEADER = "encryption-nonce";
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -74,7 +74,7 @@ class AesGcmEncryptionBundleTest {
       Message encrypted = encrypter.encrypt(toEncrypt);
 
       byte[] header = encrypted.getMessageProperties().getHeader(ENCRYPTION_HEADER);
-      assertThat(header.length).isNotZero();
+      assertThat(header).isNotEmpty();
       try {
         decoder.decode(header);
       } catch (IllegalArgumentException iae) {

@@ -23,7 +23,7 @@ public class ScryptKeyDerivationFunction {
           parameters.getPerformanceParameter(),
           parameters.getBlockSize(),
           parameters.getParallelizationParameter(),
-          keySizeInBits / 4);
+          keySizeInBits / 8);
     } catch (Exception e) {
       throw new KeyGenerationException(e);
     }

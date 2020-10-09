@@ -15,7 +15,7 @@ import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
-public class AesGcmEncryptionBundle {
+class AesGcmEncryptionBundle {
 
   private static final Encoder BASE64_ENCODER = Base64.getEncoder();
   private static final Decoder BASE64_DECODER = Base64.getDecoder();
@@ -25,7 +25,7 @@ public class AesGcmEncryptionBundle {
   private final String nonceHeaderKey;
   private final int macSizeInBits;
 
-  public AesGcmEncryptionBundle(AesGcmEncryptionParameters parameters) {
+  AesGcmEncryptionBundle(AesGcmEncryptionParameters parameters) {
     this.key = parameters.getKey();
     this.nonceGenerator = parameters.getNonceGenerator();
     this.nonceHeaderKey = parameters.getNonceHeader();

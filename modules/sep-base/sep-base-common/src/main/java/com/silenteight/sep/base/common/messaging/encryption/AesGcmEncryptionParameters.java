@@ -4,14 +4,17 @@ import lombok.Data;
 
 import com.silenteight.sep.base.common.support.crypto.NonceGenerator;
 
+import java.util.Set;
+
 @Data
-public class AesGcmEncryptionParameters {
+class AesGcmEncryptionParameters {
 
   private final byte[] key;
   private final NonceGenerator nonceGenerator;
   private final String nonceHeader;
   private final int macSizeInBits;
 
+  private static final Set<Integer> ALLOWED_MAC_VALUES = Set.of(128, 120, 112, 104, 96);
 
   public AesGcmEncryptionParameters(
       byte[] key, NonceGenerator nonceGenerator, String nonceHeader, int macSizeInBits) {
@@ -19,9 +22,8 @@ public class AesGcmEncryptionParameters {
     if (!keyHasValidLength)
       throw new IllegalArgumentException("AES key needs to be 128, 192 or 256 bits long");
 
-    boolean macSizeIsValid = macSizeInBits >= 32 && macSizeInBits <= 128 && macSizeInBits % 8 == 0;
-    if (!macSizeIsValid)
-      throw new IllegalArgumentException("MAC size needs to be >= 32, <= 128 and dividable by 8");
+    if (!ALLOWED_MAC_VALUES.contains(macSizeInBits))
+      throw new IllegalArgumentException("MAC size needs to in {128, 120, 112, 104, 96}");
 
     this.key = key;
     this.nonceGenerator = nonceGenerator;

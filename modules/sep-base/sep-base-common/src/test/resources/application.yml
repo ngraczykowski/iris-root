@@ -2,6 +2,10 @@ spring.application.name: test-app
 serp:
   messaging:
     compression.enabled: false
+    encryption:
+      enabled: true
+      keySeed: "keySeed"
+      salt: "salt"
 
 spring:
   autoconfigure:

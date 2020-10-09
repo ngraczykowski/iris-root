@@ -12,7 +12,7 @@ public class SecureRandomNonceGenerator implements NonceGenerator {
   @Override
   public byte[] generate() {
     SecureRandom random = new SecureRandom();
-    byte[] nonce = new byte[sizeInBits / 4];
+    byte[] nonce = new byte[sizeInBits / 8];
     random.nextBytes(nonce);
     return nonce;
   }

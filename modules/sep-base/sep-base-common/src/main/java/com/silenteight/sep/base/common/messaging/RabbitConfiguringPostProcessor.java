@@ -3,27 +3,26 @@ package com.silenteight.sep.base.common.messaging;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import com.silenteight.sep.base.common.messaging.encryption.AesGcmEncryptionBundle;
-import com.silenteight.sep.base.common.messaging.encryption.AesGcmEncryptionParameters;
-import com.silenteight.sep.base.common.support.crypto.ScryptKeyDerivationFunction;
-import com.silenteight.sep.base.common.support.crypto.ScryptKeyDerivationFunction.ScryptParameters;
-import com.silenteight.sep.base.common.support.crypto.SecureRandomNonceGenerator;
+import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageDecrypter;
+import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageEncypter;
 
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.postprocessor.DelegatingDecompressingPostProcessor;
 import org.springframework.amqp.support.postprocessor.GUnzipPostProcessor;
 import org.springframework.amqp.support.postprocessor.UnzipPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ErrorHandler;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @RequiredArgsConstructor
 class RabbitConfiguringPostProcessor implements BeanPostProcessor {
-
-  private static final String NONCE_HEADER = "encryption-nonce";
 
   private static final DelegatingDecompressingPostProcessor DECOMPRESSING_POST_PROCESSOR;
 
@@ -41,6 +40,10 @@ class RabbitConfiguringPostProcessor implements BeanPostProcessor {
   private final MessagingProperties properties;
   private final Collection<ReceiveMessageListener> listeners;
   @Setter
+  private AmqpMessageEncypter messageEncrypter;
+  @Setter
+  private AmqpMessageDecrypter messageDecrypter;
+  @Setter
   private ErrorHandler errorHandler;
 
   @Override
@@ -56,7 +59,6 @@ class RabbitConfiguringPostProcessor implements BeanPostProcessor {
   }
 
   private void configureRabbitTemplate(RabbitTemplate template) {
-
     if (errorHandler != null)
       template.setReplyErrorHandler(errorHandler);
 
@@ -67,57 +69,29 @@ class RabbitConfiguringPostProcessor implements BeanPostProcessor {
       template.addBeforePublishPostProcessors(compressor);
     }
 
-    MessagingProperties.Encryption encryptionParams = properties.getEncryption();
+    if (messageEncrypter != null)
+      template.addBeforePublishPostProcessors(new EncryptMessagePostProcessor(messageEncrypter));
 
-    if (encryptionParams.isEnabled()) {
-      configureEncryption(template, encryptionParams);
-    }
+    if (messageDecrypter != null)
+      template.addAfterReceivePostProcessors(new DecryptMessagePostProcessor(messageDecrypter));
 
     template.addAfterReceivePostProcessors(DECOMPRESSING_POST_PROCESSOR);
-  }
-
-  private static void configureEncryption(
-      RabbitTemplate template, MessagingProperties.Encryption encryptionParams) {
-    AesGcmEncryptionBundle encryptionFactory = createEncryptionBundle(encryptionParams);
-
-    template.addBeforePublishPostProcessors(
-        new EncryptMessagePostProcessor(encryptionFactory.getEncrypter()));
-    template.addAfterReceivePostProcessors(
-        new DecryptMessagePostProcessor(encryptionFactory.getDecrypter()));
-  }
-
-  private static AesGcmEncryptionBundle createEncryptionBundle(
-      MessagingProperties.Encryption encryptionParams) {
-    byte[] key = generateEncryptionKey(encryptionParams);
-    var nonceGenerator = new SecureRandomNonceGenerator(encryptionParams.getNonceSizeInBits());
-
-    var encryptorParams = new AesGcmEncryptionParameters(
-        key, nonceGenerator, NONCE_HEADER, encryptionParams.getMacSizeInBits());
-
-    return new AesGcmEncryptionBundle(encryptorParams);
-  }
-
-  private static byte[] generateEncryptionKey(MessagingProperties.Encryption encryption) {
-    var scrypt = new ScryptKeyDerivationFunction(ScryptParameters.defaults());
-    return scrypt.generate(
-        encryption.getKeySeed().getBytes(),
-        encryption.getSalt().getBytes(),
-        encryption.getKeySizeInBits()
-    );
   }
 
   private void configureContainerFactory(AbstractRabbitListenerContainerFactory<?> factory) {
     if (errorHandler != null)
       factory.setErrorHandler(errorHandler);
 
-    if (CollectionUtils.isEmpty(listeners)) {
-      factory.setAfterReceivePostProcessors(DECOMPRESSING_POST_PROCESSOR);
-      return;
-    }
+    List<MessagePostProcessor> postProcessors = new ArrayList<>();
 
-    ListeningMessagePostProcessor meteringProcessor =
-        new ListeningMessagePostProcessor(listeners);
+    postProcessors.add(DECOMPRESSING_POST_PROCESSOR);
 
-    factory.setAfterReceivePostProcessors(DECOMPRESSING_POST_PROCESSOR, meteringProcessor);
+    if (messageDecrypter != null)
+      postProcessors.add(new DecryptMessagePostProcessor(messageDecrypter));
+
+    if (!isEmpty(listeners))
+      postProcessors.add(new ListeningMessagePostProcessor(listeners));
+
+    factory.setAfterReceivePostProcessors(postProcessors.toArray(MessagePostProcessor[]::new));
   }
 }

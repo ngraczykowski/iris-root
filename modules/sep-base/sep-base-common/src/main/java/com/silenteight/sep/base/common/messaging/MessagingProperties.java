@@ -2,8 +2,9 @@ package com.silenteight.sep.base.common.messaging;
 
 import lombok.Data;
 
-import com.silenteight.sep.base.common.support.validation.AesKeyLength;
-import com.silenteight.sep.base.common.support.validation.MacLength;
+import com.silenteight.sep.base.common.messaging.encryption.MessagingEncryptionProperties;
+import com.silenteight.sep.base.common.support.validation.IsDividableBy;
+import com.silenteight.sep.base.common.support.validation.IsOneOf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -38,19 +39,28 @@ class MessagingProperties {
   }
 
   @Data
-  static class Encryption {
+  static class Encryption implements MessagingEncryptionProperties {
 
     private boolean enabled = false;
     @NotEmpty
     private String keySeed;
     @NotEmpty
     private String salt;
-    @AesKeyLength
+    @NotEmpty
+    private String nonceHeader = "encryption-nonce";
+
+    // Cipher uses AES underneath.
+    @IsOneOf({ 128, 192, 256 })
     private int keySizeInBits = 256;
-    @Min(32)
-    private int nonceSizeInBits = 48; // Recommended by NIST
-    @MacLength
-    private int macSizeInBits = 64; // Lesser should not be used
+
+    // Also known as IV (initialization vector). Default is recommended value in NIST SP 800-38D.
+    @Min(8)
+    @IsDividableBy(8)
+    private int nonceSizeInBits = 96;
+
+    // Also known as authentication tag. See NIST SP 800-38D.
+    @IsOneOf({ 128, 120, 112, 104, 96 })
+    private int macSizeInBits = 112;
   }
 
   @Data

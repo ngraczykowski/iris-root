@@ -2,6 +2,9 @@ package com.silenteight.sep.base.common.messaging;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageDecrypter;
+import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageEncypter;
+import com.silenteight.sep.base.common.messaging.encryption.MessagingEncryptionProperties;
 import com.silenteight.sep.base.common.protocol.AnyProtoMessageConverter;
 import com.silenteight.sep.base.common.protocol.MessageRegistry;
 import com.silenteight.sep.base.common.protocol.MessageRegistryFactory;
@@ -15,6 +18,7 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,6 +62,17 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
   }
 
   @Bean
+  @ConditionalOnProperty(
+      prefix = "serp.messaging.encryption",
+      name = "enabled",
+      havingValue = "true"
+  )
+  MessagingEncryptionProperties messagingEncryptionProperties(MessagingProperties props) {
+
+    return props.getEncryption();
+  }
+
+  @Bean
   MessageSenderFactory messageSenderFactory(
       RabbitOperations operations,
       ContentTypeDelegatingMessageConverter messageConverter,
@@ -74,10 +89,18 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
   @Bean
   RabbitConfiguringPostProcessor containerFactoryConfiguringPostProcessor(
       MessagingProperties properties,
-      ObjectProvider<ReceiveMessageListener> listeners) {
+      ObjectProvider<ReceiveMessageListener> listeners,
+      ObjectProvider<AmqpMessageEncypter> encypter,
+      ObjectProvider<AmqpMessageDecrypter> decrypter) {
 
     RabbitConfiguringPostProcessor postProcessor =
-        new RabbitConfiguringPostProcessor(properties, listeners.stream().collect(toList()));
+        new RabbitConfiguringPostProcessor(
+            properties,
+            listeners.stream().collect(toList())
+        );
+
+    encypter.ifAvailable(postProcessor::setMessageEncrypter);
+    decrypter.ifAvailable(postProcessor::setMessageDecrypter);
 
     postProcessor.setErrorHandler(
         new CustomConditionalRejectingErrorHandler(new CustomExceptionStrategy()));

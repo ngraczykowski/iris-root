@@ -32,7 +32,7 @@ class ScryptKeyDerivationFunctionTest {
     byte[] firstGenerated = underTest.generate(
         "password".getBytes(UTF_8), "salt".getBytes(UTF_8), keySizeInBits);
 
-    assertThat(firstGenerated).hasSize(keySizeInBits / 4);
+    assertThat(firstGenerated).hasSize(keySizeInBits / 8);
   }
 
   @Test

@@ -25,7 +25,7 @@ class DecryptMessagePostProcessorTest {
   private DecryptMessagePostProcessor underTest;
 
   @Test
-  void givenMessage_usesEncryptorAndReturns() {
+  void givenMessage_usesDecryptorAndReturns() {
     var inputMessage = new Message("someText".getBytes(UTF_8), new MessageProperties());
     var decryptedMessage = new Message("dcryptedText".getBytes(UTF_8), new MessageProperties());
     given(amqpMessageDecrypter.decrypt(inputMessage)).willReturn(decryptedMessage);
