@@ -60,7 +60,7 @@ Make sure you have completed at least the following:
    docker-compose up -d postgres
    ```
    
-1. Configure db settings, password placeholders can be filled in based on values stores in Bitwarden:
+1. Configure db settings, password placeholders can be filled in based on values stored in Bitwarden:
    ```
    ./bin/serp config set-many \
    db.host="localhost" \
@@ -85,7 +85,16 @@ Make sure you have completed at least the following:
    ```
    ./cert/root-ca/root-ca.pem
    ```
-   
+
+1. Set system-wide environment variable `SERP_HOME` that points at a serp directory, e.g.:
+   ```
+   sudo bash -c "echo 'SERP_HOME' >> /home/user/projects/serp"
+   ```    
+   Make sure that this change takes effect (restart may be needed):
+   ```
+   echo "${SERP_HOME} 
+   ```
+
 1. Start SERP 
    ```
    ./bin/serp start
@@ -96,20 +105,17 @@ Make sure you have completed at least the following:
    ./bin/serp dt import conf/dt/dt-serp-deny-migrated.json 
    ```
 
+1. Create test user
+   ```
+   ./bin/serp user create -u business_operator -d "Business Operator" -r "Business Operator" --password "Password1!"
+   ``` 
+   You may want to use `scripts/create-users.sh` to create multiple users with various rules all at once.
+
 1. Stop SERP
    ```
    ./bin/serp stop
    ```   
    
-1. Set system-wide environment variable `SERP_HOME` that points at a serp directory, e.g.:
-   ```
-   sudo bash -c "echo 'SERP_HOME' >> /home/user/projects/serp"
-   ```    
-   Make sure that this change takes effect (restart may be needed):
-   ```
-   echo "${SERP_HOME} 
-   ```
-
 ### Starting services
 
 #### SERP
@@ -146,7 +152,7 @@ In order to make authenticated requests
 click the key lock icon, type in desired client id (normally this would be `frontend`) 
 and click the `Authorize` button. 
 
-#### Database
+### Database
 By default, SERP is configured to use a single database for all components, but it is possible
 to configure separate db for WebApp:
 
@@ -168,6 +174,23 @@ to configure separate db for WebApp:
    ```
 
 1. It is sufficient to restart WebApp only.
+
+### Users
+The production scripts imported at Keycloak startup creates a single admin account that can be
+used to manage Keycloak's admind panel. In order to access the application you need to create
+a separate application-specific account. 
+
+You can use `scripts/create-users.sh` script to pre-create the following users:
+
+| Username         | User role          | Password            
+|------------------|--------------------|---------------------
+|administrator     | Administrator      | Password1! 
+|business_operator | Business Operator  | Password1! 
+|approver          | Approver           | Password1! 
+|analyst           | Analyst            | Password1! 
+|auditor           | Auditor            | Password1!
+|superuser         | < all above >      | Password1!
+ 
 
 ## Continuous Integration
 
