@@ -1,8 +1,0 @@
-<mat-nav-list class="navigation-section">
-  <h3 matSubheader fx class="fx-waterfall fx-skid-l">
-    {{ 'sideNav.sections.' + sectionData.name | translate }}
-  </h3>
-  <div *ngFor="let feature of sectionData.features" fx class="fx-waterfall fx-skid-l">
-    <app-navigation-element [navElement]="feature"></app-navigation-element>
-  </div>
-</mat-nav-list>

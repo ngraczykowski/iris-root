@@ -1,7 +1,0 @@
-// This function add a unit "px" to the value or calculations performed in SCSS.
-//
-// In you need to add unit to value please use this function instead of add "px" manually.
-
-@function add-px-to-value ($value) {
-  @return $value + px;
-}
