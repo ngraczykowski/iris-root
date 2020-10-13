@@ -90,9 +90,9 @@ Make sure you have completed at least the following:
    ```
    sudo bash -c "echo 'SERP_HOME' >> /home/user/projects/serp"
    ```    
-   Make sure that this change takes effect (restart may be needed):
+   Make sure this change takes effect (restart may be needed):
    ```
-   echo "${SERP_HOME} 
+   echo "${SERP_HOME}"
    ```
 
 1. Start SERP 
