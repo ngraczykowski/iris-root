@@ -86,13 +86,13 @@ Make sure you have completed at least the following:
    ./cert/root-ca/root-ca.pem
    ```
 
-1. Set system-wide environment variable `SERP_HOME` that points at a serp directory, e.g.:
+1. Set system-wide environment variable `SERP_HOME` that points at a SERP directory, e.g.:
    ```
    sudo bash -c "echo 'SERP_HOME' >> /home/user/projects/serp"
    ```    
-   Make sure that this change takes effect (restart may be needed):
+   Make sure this change takes effect (restart may be needed):
    ```
-   echo "${SERP_HOME} 
+   echo "${SERP_HOME}"
    ```
 
 1. Start SERP 
@@ -176,8 +176,8 @@ to configure separate db for WebApp:
 1. It is sufficient to restart WebApp only.
 
 ### Users
-The production scripts imported at Keycloak startup creates a single admin account that can be
-used to manage Keycloak's admind panel. In order to access the application you need to create
+The production scripts imported at Keycloak startup create a single admin account that can be
+used to manage Keycloak's admin panel. In order to access the application you need to create
 a separate application-specific account. 
 
 You can use `scripts/create-users.sh` script to pre-create the following users:
