@@ -69,5 +69,7 @@ class MessagingProperties {
     private boolean enabled = false;
 
     private String name = "error-queue";
+
+    private boolean declare = true;
   }
 }

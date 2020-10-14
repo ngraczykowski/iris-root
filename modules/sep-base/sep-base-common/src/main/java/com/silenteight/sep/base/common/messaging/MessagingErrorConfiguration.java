@@ -31,6 +31,8 @@ public class MessagingErrorConfiguration {
   private final ConnectionFactory connectionFactory;
 
   @Bean
+  @ConditionalOnProperty(prefix = "serp.messaging.error-queue", name = "declare",
+      havingValue = "true", matchIfMissing = true)
   Queue errorQueue() {
     return QueueBuilder
         .durable(properties.getErrorQueue().getName())
