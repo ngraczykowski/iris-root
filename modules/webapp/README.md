@@ -41,22 +41,31 @@ follow [README.md](https://gitlab.silenteight.com/sens/serp/-/blob/master/README
 
 Make sure you have completed at least the following:
 
-1. Install `serp-opt-installer` on top of your existing serp directory, e.g.:
+1. Set system-wide environment variable `SERP_HOME` that points at a SERP directory, e.g.:
    ```
-   cd "${SERP_HOME} && cd ..
+   sudo bash -c "echo 'SERP_HOME=/path/to/serp' >> /etc/environment"
+   ```    
+   Make sure this change takes effect (restart may be needed):
+   ```
+   echo "${SERP_HOME}"
+   ```
+   
+1. Install `serp-opt-installer` on top of your existing SERP directory, e.g.:
+   ```
+   cd "${SERP_HOME}" && cd ..
    wget "https://silenteight.com/repo/jenkins/serp-opt-installer/master/34-IdabJv/serp-opt-installer-1.25.0.run"
    chmod +x serp-opt-installer-1.25.0.run
    ./serp-opt-installer-1.25.0.run
    ```
 
-1. Build serp
+1. Build SERP
    ```
    gw build
    ```
 
-1. Start the serp postgres db via docker-compose
+1. Start the SERP postgres db via docker-compose
    ```
-   cd "${SERP_HOME}
+   cd "${SERP_HOME}"
    docker-compose up -d postgres
    ```
    
@@ -84,15 +93,6 @@ Make sure you have completed at least the following:
 1. Add the following RootCA certificate as trusted in your web browser:
    ```
    ./cert/root-ca/root-ca.pem
-   ```
-
-1. Set system-wide environment variable `SERP_HOME` that points at a SERP directory, e.g.:
-   ```
-   sudo bash -c "echo 'SERP_HOME' >> /home/user/projects/serp"
-   ```    
-   Make sure this change takes effect (restart may be needed):
-   ```
-   echo "${SERP_HOME}"
    ```
 
 1. Start SERP 
@@ -191,6 +191,7 @@ You can use `scripts/create-users.sh` script to pre-create the following users:
 |auditor           | Auditor            | Password1!
 |superuser         | < all above >      | Password1!
  
+This script requires the following services to be running:  Webapp, Keycloak
 
 ## Continuous Integration
 
