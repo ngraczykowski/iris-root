@@ -9,12 +9,10 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
 import net.jpountz.lz4.LZ4FrameOutputStream.BLOCKSIZE;
 import net.jpountz.lz4.LZ4FrameOutputStream.FLG.Bits;
 import org.springframework.amqp.support.postprocessor.AbstractCompressingPostProcessor;
-import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-@Order(PostProcessorsOrdering.COMPRESSION)
 @Getter
 @Setter
 public class Lz4CompressMessagePostProcessor extends AbstractCompressingPostProcessor {
@@ -45,6 +43,11 @@ public class Lz4CompressMessagePostProcessor extends AbstractCompressingPostProc
       return FACTORY.fastCompressor();
     else
       return FACTORY.highCompressor(Math.min(compressionLevel, 9));
+  }
+
+  @Override
+  public int getOrder() {
+    return MessageProcessorsOrdering.COMPRESSION;
   }
 
   @Override

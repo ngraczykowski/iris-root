@@ -3,12 +3,10 @@ package com.silenteight.sep.base.common.messaging;
 import net.jpountz.lz4.LZ4Factory;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import org.springframework.amqp.support.postprocessor.AbstractDecompressingPostProcessor;
-import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Order(PostProcessorsOrdering.COMPRESSION)
 public class Lz4DecompressMessagePostProcessor extends AbstractDecompressingPostProcessor {
 
   @Override
@@ -17,6 +15,11 @@ public class Lz4DecompressMessagePostProcessor extends AbstractDecompressingPost
         stream,
         LZ4Factory.fastestInstance().safeDecompressor(),
         Lz4Utils.createHash());
+  }
+
+  @Override
+  public int getOrder() {
+    return MessageProcessorsOrdering.DECOMPRESSION;
   }
 
   @Override

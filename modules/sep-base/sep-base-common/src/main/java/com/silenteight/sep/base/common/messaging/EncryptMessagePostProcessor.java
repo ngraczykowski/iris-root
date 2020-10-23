@@ -6,16 +6,20 @@ import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageEncypter;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 
-@Order(PostProcessorsOrdering.ENCRYPTION)
 @RequiredArgsConstructor
-public class EncryptMessagePostProcessor implements MessagePostProcessor {
+public class EncryptMessagePostProcessor implements MessagePostProcessor, Ordered {
 
   private final AmqpMessageEncypter encrypter;
 
   @Override
   public Message postProcessMessage(Message message) {
     return encrypter.encrypt(message);
+  }
+
+  @Override
+  public int getOrder() {
+    return MessageProcessorsOrdering.ENCRYPTION;
   }
 }

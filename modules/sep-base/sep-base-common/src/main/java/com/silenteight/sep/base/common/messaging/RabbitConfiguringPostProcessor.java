@@ -48,7 +48,6 @@ class RabbitConfiguringPostProcessor implements BeanPostProcessor {
 
   @Override
   public Object postProcessBeforeInitialization(Object bean, String beanName) {
-
     if (bean instanceof RabbitTemplate)
       configureRabbitTemplate((RabbitTemplate) bean);
 
@@ -72,10 +71,10 @@ class RabbitConfiguringPostProcessor implements BeanPostProcessor {
     if (messageEncrypter != null)
       template.addBeforePublishPostProcessors(new EncryptMessagePostProcessor(messageEncrypter));
 
+    template.addAfterReceivePostProcessors(DECOMPRESSING_POST_PROCESSOR);
+
     if (messageDecrypter != null)
       template.addAfterReceivePostProcessors(new DecryptMessagePostProcessor(messageDecrypter));
-
-    template.addAfterReceivePostProcessors(DECOMPRESSING_POST_PROCESSOR);
   }
 
   private void configureContainerFactory(AbstractRabbitListenerContainerFactory<?> factory) {
