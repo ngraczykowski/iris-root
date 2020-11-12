@@ -1,6 +1,5 @@
 package com.silenteight.sens.webapp.backend.external.apps;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

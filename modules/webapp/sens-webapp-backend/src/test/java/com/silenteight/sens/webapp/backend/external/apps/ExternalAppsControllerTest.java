@@ -8,8 +8,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static java.util.List.of;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 
 @EnableConfigurationProperties(ExternalAppsProperties.class)
@@ -23,6 +26,11 @@ class ExternalAppsControllerTest extends BaseRestControllerTest {
   @TestWithRole(roles = { AUDITOR, BUSINESS_OPERATOR })
   void its307_whenProperRole() {
     get("/apps/reporting").statusCode(FOUND.value()).header("Location", REDIRECT_URL);
+  }
+
+  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, BUSINESS_OPERATOR })
+  void its200_whenListingApps() {
+    get("/apps/list").statusCode(OK.value()).body("apps", equalTo(of("reporting")));
   }
 
   @TestWithRole(roles = { ADMINISTRATOR, ANALYST, APPROVER })
