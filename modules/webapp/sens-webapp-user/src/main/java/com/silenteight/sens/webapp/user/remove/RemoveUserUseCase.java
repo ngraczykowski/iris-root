@@ -11,6 +11,8 @@ import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class RemoveUserUseCase {
 
@@ -30,12 +32,13 @@ public class RemoveUserUseCase {
         new UserRemovalRequestedEvent(
             username, RemoveUserCommand.class.getName(), command));
     verifyOrigin(username, command.expectedOrigin);
+    List<String> roles = userRolesRetriever.rolesOf(username);
     userRemover.remove(username);
     auditTracer.save(
         new UserRemovedEvent(
             username, 
             RemoveUserCommand.class.getName(),
-            new RemovedUserDetails(command, userRolesRetriever.rolesOf(username))));
+            new RemovedUserDetails(command, roles)));
   }
 
   private void verifyOrigin(String username, String expectedOrigin) {
