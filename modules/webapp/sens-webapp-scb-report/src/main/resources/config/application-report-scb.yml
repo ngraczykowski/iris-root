@@ -1,8 +1,8 @@
 report-scb:
   dir: ${sens.report-scb.dir}
   id-management:
-    cron: 0 0 0/12 ? * *
+    cron: ${sens.report-scb.id-management.cron-expression:0 0 0/12 ? * *}
   audit-history:
-    cron: 0 0 0/1 ? * *
+    cron: ${sens.report-scb.audit-history.cron-expression:0 0 0/1 ? * *}
   user-auth-activity:
-    cron: 0 0 0/1 ? * *
+    cron: ${sens.report-scb.user-auth-activity.cron-expression:0 0 0/1 ? * *}
