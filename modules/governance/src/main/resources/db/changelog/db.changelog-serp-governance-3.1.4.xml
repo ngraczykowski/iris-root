@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-governance-3.1.4-1" author="iwnek">
+    <!--@formatter:off-->
+    <createView viewName="governance_decision_tree_query">
+      SELECT dt.decision_tree_id as decision_tree_id
+           , dt.name             as decision_tree_name
+      FROM governance_decision_tree dt
+    </createView>
+    <!--@formatter:on-->
+
+    <renameView
+        oldViewName="governance_decision_tree_activated_groups_query"
+        newViewName="governance_decision_tree_query_decision_group_names"/>
+  </changeSet>
+</databaseChangeLog>

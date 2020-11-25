@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-governance-3.5.0-1" author="mswierczynski">
+    <comment>
+      Add a column for automatic Decision Group activation.
+    </comment>
+
+    <addColumn tableName="governance_decision_tree">
+      <column name="default_for_new_groups" type="boolean" defaultValueBoolean="false"/>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="serp-governance-3.5.0-2" author="mmrowka">
+
+    <dropView viewName="governance_reasoning_branch_query"/>
+
+    <createView viewName="governance_reasoning_branch_query">
+      SELECT dt.decision_tree_id,
+      fv.feature_vector_id,
+      b.solution,
+      b.enabled,
+      fv."values",
+      b.created_at,
+      b.last_used_at
+      FROM governance_decision_tree dt
+      CROSS JOIN governance_feature_vector fv
+      LEFT JOIN governance_branch b
+      ON dt.decision_tree_id = b.decision_tree_id
+      AND b.feature_vector_id = fv.feature_vector_id
+    </createView>
+
+  </changeSet>
+</databaseChangeLog>
