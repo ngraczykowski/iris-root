@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-governance-3.0.0-1" author="ahaczewski">
+    <createTable tableName="governance_decision_tree">
+      <column name="decision_tree_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="features_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_decision_tree"
+        indexName="ix_governance_decision_tree_features_signature">
+      <column name="features_signature"/>
+    </createIndex>
+
+    <createTable tableName="governance_feature_vector">
+      <column name="feature_vector_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="features_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="vector_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="values" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_feature_vector"
+        indexName="ix_governance_feature_vector_features_signature">
+      <column name="features_signature"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_feature_vector"
+        indexName="ix_governance_feature_vector_vector_signature">
+      <column name="vector_signature"/>
+    </createIndex>
+
+    <createTable tableName="governance_branch">
+      <column name="branch_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="decision_tree_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="feature_vector_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="last_used_at" type="TIMESTAMP"/>
+
+      <column name="solution" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="enabled" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_branch"
+        baseColumnNames="decision_tree_id"
+        constraintName="fk_governance_branch_decision_tree_id"
+        referencedTableName="governance_decision_tree"
+        referencedColumnNames="decision_tree_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_branch"
+        baseColumnNames="feature_vector_id"
+        constraintName="fk_governance_branch_feature_vector_id"
+        referencedTableName="governance_feature_vector"
+        referencedColumnNames="feature_vector_id"/>
+
+    <createIndex
+        tableName="governance_branch"
+        indexName="ix_governance_branch_decision_tree_id">
+      <column name="decision_tree_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_branch"
+        indexName="ix_governance_branch_feature_vector_id">
+      <column name="feature_vector_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-2" author="ahaczewski">
+    <!-- @formatter:off -->
+    <createView viewName="governance_reasoning_branch_query">
+      SELECT dt.decision_tree_id  as decision_tree_id
+           , fv.feature_vector_id as reasoning_branch_id
+           , b.solution           as solution
+           , b.enabled            as enabled
+           , fv.values            as values
+           , b.last_used_at       as last_used_at
+      FROM governance_feature_vector fv
+               JOIN governance_decision_tree dt ON fv.features_signature = dt.features_signature
+               LEFT JOIN governance_branch b ON dt.decision_tree_id = b.decision_tree_id AND
+                                                b.feature_vector_id = fv.feature_vector_id
+      ORDER BY 1, 2
+    </createView>
+    <!-- @formatter:on -->
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-3" author="bgulowaty">
+    <createTable tableName="governance_model">
+      <column autoIncrement="true" name="model_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+
+      <column name="signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="alert_features_signature" type="VARCHAR(100)"/>
+      <column name="match_features_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decision_features_signature" type="VARCHAR(100)"/>
+
+      <column name="is_active" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="model" type="${TYPE.BLOB}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="governance_decision_group">
+      <column name="decision_group_id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_decision_group"
+        indexName="ix_decision_group_name">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable tableName="governance_activation">
+      <column name="activation_id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+
+      <column name="decision_group_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decision_tree_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_activation"
+        baseColumnNames="decision_tree_id"
+        constraintName="fk_governance_activation_decision_tree"
+        referencedTableName="governance_decision_tree"
+        referencedColumnNames="decision_tree_id"/>
+    <addForeignKeyConstraint
+        baseTableName="governance_activation"
+        baseColumnNames="decision_group_id"
+        constraintName="fk_governance_activation_decision_group"
+        referencedTableName="governance_decision_group"
+        referencedColumnNames="decision_group_id"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-4" author="bgulowaty">
+    <!--@formatter:off-->
+    <createView viewName="governance_decision_tree_activated_groups_query">
+      SELECT a.decision_tree_id as decision_tree_id
+           , dg.name            as decision_group_name
+      FROM governance_activation a
+               JOIN governance_decision_group dg ON dg.decision_group_id = a.decision_group_id
+    </createView>
+    <createView viewName="governance_decision_tree_query">
+      SELECT dt.decision_tree_id as decision_tree_id
+           , dt.name             as decision_tree_name
+           , m.name              as model_name
+           , m.signature         as model_signature
+      FROM governance_decision_tree dt
+               JOIN governance_model m ON m.match_features_signature = dt.features_signature
+               JOIN governance_activation a ON a.decision_tree_id = dt.decision_tree_id
+    </createView>
+    <!--@formatter:on-->
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-5" author="bgulowaty">
+    <addUniqueConstraint tableName="governance_feature_vector" columnNames="vector_signature"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-6" author="ahaczewski">
+    <!--@formatter:off-->
+    <createView viewName="governance_vector_solution_query">
+      SELECT b.decision_tree_id   as decision_tree_id
+           , fv.feature_vector_id as reasoning_branch_id
+           , dg.name              as decision_group
+           , b.solution           as solution
+           , fv.vector_signature  as vector_signature
+      FROM governance_branch b
+               JOIN governance_feature_vector fv ON b.feature_vector_id = fv.feature_vector_id
+               JOIN governance_activation a ON b.decision_tree_id = a.decision_tree_id
+               JOIN governance_decision_group dg ON a.decision_group_id = dg.decision_group_id
+    </createView>
+    <!--@formatter:on-->
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-7" author="bgulowaty">
+    <dropView viewName="governance_reasoning_branch_query"/>
+    <dropView viewName="governance_decision_tree_query"/>
+    <dropColumn tableName="governance_decision_tree" columnName="features_signature"/>
+
+    <!-- @formatter:off -->
+    <createView viewName="governance_reasoning_branch_query">
+      SELECT dt.decision_tree_id  as decision_tree_id
+           , fv.feature_vector_id as reasoning_branch_id
+           , b.solution           as solution
+           , b.enabled            as enabled
+           , fv.values            as values
+           , b.last_used_at       as last_used_at
+      FROM governance_decision_tree dt
+               LEFT JOIN governance_branch b ON dt.decision_tree_id = b.decision_tree_id
+               JOIN governance_feature_vector fv ON fv.feature_vector_id = b.feature_vector_id
+    </createView>
+    <!-- @formatter:on -->
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-8" author="ahaczewski">
+    <createTable tableName="governance_feature_set">
+      <column name="feature_set_id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+
+      <column name="features_signature" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="features" type="${type.text}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-9" author="ahaczewski">
+    <createIndex
+        tableName="governance_feature_set"
+        indexName="ix_governance_feature_set_features_signature"
+        unique="true">
+      <column name="features_signature"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-3.0.0-10" author="bgulowaty">
+    <createIndex
+        tableName="governance_decision_tree"
+        indexName="ix_governance_decision_tree_name"
+        unique="true">
+      <column name="name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_activation"
+        indexName="ix_governance_activation_decision_group_id"
+        unique="true">
+      <column name="decision_group_id"/>
+    </createIndex>
+    <createIndex
+        tableName="governance_activation"
+        indexName="ix_governance_activation_decision_tree_id">
+      <column name="decision_tree_id"/>
+    </createIndex>
+
+    <dropIndex tableName="governance_decision_group" indexName="ix_decision_group_name"/>
+    <createIndex
+        tableName="governance_decision_group"
+        indexName="ix_decision_group_name"
+        unique="true">
+      <column name="name"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

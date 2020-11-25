@@ -1,0 +1,17 @@
+### Import test Decision Tree
+
+POST http://localhost:24080/rest/governance/api/v1/migrate/decision-tree
+Content-Type: multipart/form-data; boundary=281d46375993d73a38ab887e67fe6103
+
+--281d46375993d73a38ab887e67fe6103
+Content-Disposition: form-data; name="file"; filename="manyFeaturesManyBranches.json"
+Content-Type: application/json
+
+< /home/ahaczewski/code/se/sens/serp/conf/demo/dt-serp-set.json
+--281d46375993d73a38ab887e67fe6103--
+
+### Export feature vectors as Match Groups for SENS
+
+GET http://localhost:24080/rest/governance/api/v1/migrate/match-groups/3SZAB4K8pWfmH_QKYtE4uYi4aUU?tree=Test%20Tree
+
+###

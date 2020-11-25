@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "exportedAt": "2019-08-07 09:40:35.289"
+  },
+  "modelSchema": {
+    "features": [
+      "DOCNO_AGENT"
+    ]
+  },
+  "decisionTree": {
+    "decisionTreeId": 1,
+    "decisionTreeName": "DecisionTree1",
+    "branches": [
+      {
+        "branchId": 4,
+        "matchGroupId": 2,
+        "solution": "FALSE_POSITIVE",
+        "enabled": true,
+        "featureValues": [
+          "NO_DATA"
+        ]
+      }
+    ]
+  }
+}
