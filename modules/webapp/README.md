@@ -98,7 +98,7 @@ Make sure you have completed at least the following:
 1. Start SERP 
    ```
    ./bin/serp start
-   ```
+   ```    
 
 1. Import decision tree
    ```
@@ -115,6 +115,7 @@ Make sure you have completed at least the following:
    ```
    ./bin/serp stop
    ```   
+
    
 ### Starting services
 
@@ -134,6 +135,30 @@ Make sure you have completed at least the following:
    ./bin/serp ctl start app:governance
    ./bin/serp ctl start app:circuit-breaker
    ``` 
+   
+#### Keycloak Import Scripts
+   
+Keycloak import scripts updates clients definition using:
+```
+ ./bin/serp keycloak import
+```
+
+SERP modules are using different clients and it may occur that after manual import   
+tokens sessions has been invalidated and already issued tokens become also invalidated on the server side. 
+This information is not propagated to the clients. As a result any attempt to authenticate using these tokens will result in 401 error. 
+During next attempt Keycloak client will request new tokens and the services will continue to work.
+
+Example:
+    
+```
+./bin/serp report accounts
+ERROR: 500 Server Error: Internal Server Error for url: https://localhost:24111/rest/webapp/api/reports/accounts-report
+```
+In web-app log you may also see:
+
+```
+ javax.ws.rs.NotAuthorizedException: HTTP 401 Unauthorized
+```   
 
 #### WebApp
 Start the WebApp using "WebApplication" run configuration in IntelliJ.
