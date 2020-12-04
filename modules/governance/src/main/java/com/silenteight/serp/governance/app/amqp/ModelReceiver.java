@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.silenteight.serp.governance.common.MessagingConstants.QUEUE_GOVERNANCE_PIPELINE_MODEL;
 import static java.util.Comparator.comparingInt;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -30,11 +31,10 @@ class ModelReceiver {
   private final ModelService modelService;
   private final FeatureSetService featureSetService;
 
-  @RabbitListener(queues = "#{governancePipelineModelQueue}")
+  @RabbitListener(queues = QUEUE_GOVERNANCE_PIPELINE_MODEL)
   public void process(Model pipelineModel) {
     log.info("Received model");
     modelService.storeOrUpdate(pipelineModel);
-
     storeFeatureSets(pipelineModel);
   }
 

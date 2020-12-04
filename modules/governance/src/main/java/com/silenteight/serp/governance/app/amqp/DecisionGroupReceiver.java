@@ -10,13 +10,15 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.StringJoiner;
 
+import static com.silenteight.serp.governance.common.MessagingConstants.QUEUE_GOVERNANCE_DECISION_GROUP;
+
 @RequiredArgsConstructor
 @Slf4j
 class DecisionGroupReceiver {
 
   private final DecisionGroupService service;
 
-  @RabbitListener(queues = "#{governanceDecisionGroupsQueue}")
+  @RabbitListener(queues = QUEUE_GOVERNANCE_DECISION_GROUP)
   public void process(DecisionGroups decisionGroups) {
     log.info("Received decision groups, size: " + decisionGroups.getDecisionGroupCount());
     StringJoiner decisionGroupNamesJoiner = new StringJoiner(",");

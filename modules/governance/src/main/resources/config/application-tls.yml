@@ -1,0 +1,38 @@
+serp:
+  tls:
+    enabled: true
+  server:
+    protocol: https
+  consul:
+    traefik:
+      passTLSCert: true
+      entryPoints: gateway
+
+server:
+  ssl:
+    enabled: true
+    key-store: ${serp.keystore.path}
+    key-store-password: ${serp.keystore.password}
+    key-alias: serp ${spring.application.name}
+    trust-store: ${serp.truststore.path}
+    trust-store-password: ${serp.truststore.password}
+    client-auth: need
+
+grpc:
+  server:
+    security:
+      enabled: true
+      clientAuth: REQUIRE
+      certificateChain: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-chain.pem
+      privateKey: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-key-pkcs8.pem
+      trustCertCollection: file:${serp.home}/cert/chain.pem
+
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: TLS
+      security:
+        clientAuthEnabled: true
+        certificateChain: file:${serp.home}/cert/user/user-chain.pem
+        privateKey: file:${serp.home}/cert/user/user-key-pkcs8.pem
+        trustCertCollection: file:${serp.home}/cert/chain.pem

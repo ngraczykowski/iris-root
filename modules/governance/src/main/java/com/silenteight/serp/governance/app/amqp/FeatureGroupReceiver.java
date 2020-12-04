@@ -8,13 +8,15 @@ import com.silenteight.serp.governance.featuregroup.FeatureGroupService;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
+import static com.silenteight.serp.governance.common.MessagingConstants.QUEUE_GOVERNANCE_PIPELINE_FEATURE_GROUPS;
+
 @RequiredArgsConstructor
 @Slf4j
 class FeatureGroupReceiver {
 
   private final FeatureGroupService service;
 
-  @RabbitListener(queues = "#{governancePipelineFeatureGroupsQueue}")
+  @RabbitListener(queues = QUEUE_GOVERNANCE_PIPELINE_FEATURE_GROUPS)
   public void process(FeatureGroup featureGroup) {
     log.info("Received feature group");
     service.storeVectors(featureGroup);

@@ -3,7 +3,6 @@ package com.silenteight.serp.governance.migrate;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.proto.serp.v1.alert.VectorValue;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
-import com.silenteight.serp.common.model.SignatureCalculator;
 import com.silenteight.serp.governance.activation.ActivationService;
 import com.silenteight.serp.governance.activation.dto.ActivationRequest;
 import com.silenteight.serp.governance.branch.BranchService;
@@ -15,6 +14,7 @@ import com.silenteight.serp.governance.featurevector.dto.StoreFeatureVectorsRequ
 import com.silenteight.serp.governance.featurevector.dto.StoreFeatureVectorsRequest.Vector;
 import com.silenteight.serp.governance.featurevector.dto.StoreFeatureVectorsResponse;
 import com.silenteight.serp.governance.migrate.dto.ImportedDecisionTree;
+import com.silenteight.serp.governance.model.SignatureCalculator;
 
 import com.google.common.io.BaseEncoding;
 import com.google.protobuf.ByteString;

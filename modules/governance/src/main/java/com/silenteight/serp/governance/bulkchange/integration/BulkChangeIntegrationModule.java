@@ -1,7 +1,6 @@
 package com.silenteight.serp.governance.bulkchange.integration;
 
 public final class BulkChangeIntegrationModule {
-
   private BulkChangeIntegrationModule() {
   }
 

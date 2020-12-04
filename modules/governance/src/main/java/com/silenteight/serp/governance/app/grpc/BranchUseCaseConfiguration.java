@@ -19,6 +19,7 @@ class BranchUseCaseConfiguration {
   private final VectorSolutionFinder vectorSolutionFinder;
   private final DecisionGroupService decisionGroupService;
 
+
   @Bean
   ListReasoningBranchesUseCase listReasoningBranchesUseCase() {
     return new ListReasoningBranchesUseCase(reasoningBranchFinder);
