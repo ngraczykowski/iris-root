@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package silenteight.governance.v1.api;
+
+import "google/protobuf/empty.proto";
+
+option java_package = "com.silenteight.proto.governance.v1.api";
+option java_outer_classname = "PolicyStepsGovernanceApiProto";
+option java_multiple_files = true;
+
+service PolicyStepsGovernance {
+    rpc GetSolutions (GetSolutionsRequest) returns (GetSolutionsResponse) {
+    }
+}
+
+message GetSolutionsRequest {
+    FeatureCollection featureCollection = 1;
+    repeated FeatureVector featureVectors = 2;
+}
+
+message GetSolutionsResponse {
+    repeated BranchSolution solutions = 1;
+}
+
+message FeatureCollection {
+    repeated Feature feature = 1;
+}
+
+message Feature {
+    string name = 1;
+}
+
+message FeatureVector {
+  repeated string featureValue = 1;
+}
+
+
+enum BranchSolution {
+  BRANCH_NO_DECISION = 0;
+  BRANCH_FALSE_POSITIVE = 1;
+  BRANCH_POTENTIAL_TRUE_POSITIVE = 2;
+  BRANCH_HINTED_FALSE_POSITIVE = 3;
+  BRANCH_HINTED_POTENTIAL_TRUE_POSITIVE = 4;
+}
