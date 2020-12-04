@@ -48,7 +48,6 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     ModelModule.class,
     NotifierModule.class,
     SolutionDiscrepancyModule.class,
-
     // Interface modules
     GrpcModule.class,
     MailerModule.class,
@@ -61,7 +60,7 @@ public class GovernanceApplication {
 
   public static void main(String[] args) {
     new SerpApplicationTemplate("governance", args, GovernanceApplication.class)
-        .profiles("database", "rabbitmq")
+        .profiles("database", "rabbitmq","messaging")
         .contextCallback(new SerpApplicationContextCallback())
         .runAndExit();
   }

@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
-import com.silenteight.serp.common.rest.RestConstants;
 import com.silenteight.serp.governance.branchquery.ReasoningBranchFinder;
 import com.silenteight.serp.governance.branchquery.dto.ReasoningBranchSummaryDto;
+import com.silenteight.serp.governance.rest.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

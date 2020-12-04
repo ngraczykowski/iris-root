@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.app.rest;
 
-import com.silenteight.serp.common.rest.RestConstants;
 import com.silenteight.serp.governance.app.rest.BaseRestControllerTest.TestRestConfiguration;
+import com.silenteight.serp.governance.rest.RestConstants;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;

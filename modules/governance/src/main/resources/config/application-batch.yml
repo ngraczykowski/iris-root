@@ -1,13 +1,18 @@
 ####################################################################################################
-# Project Information
+# Moved from serp-governance module - don't know if required so delete if not
 ####################################################################################################
-description=Silent Eight Realtime Processing Governance
-group=com.silenteight.serp
-version=1.0.0-SNAPSHOT
+
+# none
 
 ####################################################################################################
-# Gradle Settings
+# CONFIGURATION
 ####################################################################################################
-org.gradle.jvmargs=-Dfile.encoding=UTF-8 -Xms1g -Xmx4g -XX:+UseG1GC -XX:+CMSClassUnloadingEnabled
-org.gradle.parallel=true
-org.gradle.caching=true
+
+# Spring Batch
+spring:
+  batch:
+    # Batch schema management is done with `db/changelog/db.changelog-batch.xml`.
+    initialize-schema: never
+    job:
+      enabled: false
+    table-prefix: ${serp.db.schema}.batch_

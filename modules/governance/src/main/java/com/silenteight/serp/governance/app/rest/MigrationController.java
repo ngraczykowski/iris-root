@@ -3,12 +3,12 @@ package com.silenteight.serp.governance.app.rest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.serp.common.rest.RestConstants;
 import com.silenteight.serp.governance.migrate.ExportService;
 import com.silenteight.serp.governance.migrate.ImportService;
 import com.silenteight.serp.governance.migrate.dto.ExportMatchGroupsRequest;
 import com.silenteight.serp.governance.migrate.dto.ExportMatchGroupsRequest.ExportMatchGroupsRequestBuilder;
 import com.silenteight.serp.governance.migrate.dto.ImportedDecisionTree;
+import com.silenteight.serp.governance.rest.RestConstants;
 
 import com.google.common.io.BaseEncoding;
 import com.google.protobuf.ByteString;
