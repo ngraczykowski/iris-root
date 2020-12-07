@@ -9,6 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,8 +27,8 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @TestPropertySource("classpath:data-test.properties")
 class ChangeRequestRepositoryIT extends BaseDataJpaTest {
 
-  private static final String MAKER_USERNAME = "maker";
-  private static final String MAKER_COMMENT = "This is comment from Maker";
+  private static final String BUSINESS_OPERATOR_USERNAME = "business_operator";
+  private static final String BUSINESS_OPERATOR_COMMENT = "This is comment from Business Operator";
 
   @Autowired
   private ChangeRequestRepository repository;
@@ -36,7 +37,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   void changeRequestSavedToDatabase() {
     // given
     UUID bulkChangeId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT,
+    ChangeRequest changeRequest = new ChangeRequest(bulkChangeId, BUSINESS_OPERATOR_USERNAME,
+        BUSINESS_OPERATOR_COMMENT,
         now());
 
     // when
@@ -104,7 +106,7 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     long differentChangeRequestId = savedChangeRequest.getId() + 1L;
 
     // when, then
-    assertThat(repository.getById(differentChangeRequestId)).isNull();
+    assertThat(repository.findById(differentChangeRequestId)).isEmpty();
   }
 
   @Test
@@ -115,14 +117,10 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     ChangeRequest savedChangeRequest = repository.save(changeRequest);
 
     // when
-    ChangeRequest result = repository.getById(savedChangeRequest.getId());
+    Optional<ChangeRequest> result = repository.findById(savedChangeRequest.getId());
 
-    // thens
-    //TODO: this does not test persisting any fields besides id (they are not added into equals)
-    //e.g.: the test is passing even if we do that:
-    savedChangeRequest.setCreatorComment("changed");
-
-    assertThat(result).isEqualTo(savedChangeRequest);
+    // then
+    assertThat(result).isNotEmpty().get().isEqualTo(savedChangeRequest);
   }
 
   @Test
@@ -137,15 +135,17 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
     repository.save(savedChangeRequest);
 
     // when
-    ChangeRequest result = repository.getById(savedChangeRequest.getId());
+    Optional<ChangeRequest> maybeResult = repository.findById(savedChangeRequest.getId());
 
     // then
-    assertThat(result.getDeciderComment()).isEqualTo(approverComment);
-    assertThat(result.getDecidedBy()).isEqualTo(approverUsername);
+    assertThat(maybeResult).isNotEmpty().get().satisfies(result -> {
+      assertThat(result.getDeciderComment()).isEqualTo(approverComment);
+      assertThat(result.getDecidedBy()).isEqualTo(approverUsername);
+    });
   }
 
   private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {
-    return new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, now());
+    return new ChangeRequest(bulkChangeId, BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, now());
   }
 
   private static ChangeRequest makeApprovedChangeRequest(UUID bulkChangeId) {
@@ -159,7 +159,7 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   private static ChangeRequest makeChangeRequestWithState(
       UUID bulkChangeId, ChangeRequestState state) {
     ChangeRequest changeRequest =
-        new ChangeRequest(bulkChangeId, MAKER_USERNAME, MAKER_COMMENT, now());
+        new ChangeRequest(bulkChangeId, BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, now());
     changeRequest.setState(state);
 
     return changeRequest;
@@ -168,7 +168,7 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   private static ChangeRequest makeChangeRequestWithState(
       OffsetDateTime createdAt, ChangeRequestState state) {
     ChangeRequest changeRequest =
-        new ChangeRequest(randomUUID(), MAKER_USERNAME, MAKER_COMMENT, createdAt);
+        new ChangeRequest(randomUUID(), BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, createdAt);
     changeRequest.setState(state);
 
     return changeRequest;

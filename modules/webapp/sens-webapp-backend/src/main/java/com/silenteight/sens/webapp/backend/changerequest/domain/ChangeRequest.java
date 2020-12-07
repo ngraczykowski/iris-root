@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotAllowedForMakerException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
 
 import java.time.OffsetDateTime;
@@ -81,7 +81,7 @@ class ChangeRequest {
     }
 
     if (isCreatedBy(username)) {
-      throw new ChangeRequestNotAllowedForMakerException(id);
+      throw new ChangeRequestOperationNotAllowedException(id);
     }
 
     state = APPROVED;
@@ -96,7 +96,7 @@ class ChangeRequest {
     }
 
     if (isCreatedBy(username)) {
-      throw new ChangeRequestNotAllowedForMakerException(id);
+      throw new ChangeRequestOperationNotAllowedException(id);
     }
 
     state = REJECTED;

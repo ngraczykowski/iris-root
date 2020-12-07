@@ -49,7 +49,7 @@ public class ChangeRequestService {
         "Approving Change Request. changeRequestId={}, username={}, comment={}, approvedAt={}",
         id, username, comment, approvedAt);
 
-    ChangeRequest changeRequest = Optional.ofNullable(repository.getById(id))
+    ChangeRequest changeRequest = repository.findById(id)
         .orElseThrow(() -> new ChangeRequestNotFoundException(id));
     changeRequest.approve(username, comment, approvedAt);
     repository.save(changeRequest);
@@ -74,7 +74,7 @@ public class ChangeRequestService {
         "Rejecting Change Request. changeRequestId={}, username={}, comment={}, rejectedAt={}",
         id, username, comment, rejectedAt);
 
-    ChangeRequest changeRequest = Optional.ofNullable(repository.getById(id))
+    ChangeRequest changeRequest = repository.findById(id)
         .orElseThrow(() -> new ChangeRequestNotFoundException(id));
     changeRequest.reject(username, comment, rejectedAt);
     repository.save(changeRequest);
@@ -99,7 +99,7 @@ public class ChangeRequestService {
         "Cancelling Change Request. changeRequestId={}, username={}, comment={}, rejectedAt={}",
         id, username, comment, cancelledAt);
 
-    ChangeRequest changeRequest = Optional.ofNullable(repository.getById(id))
+    ChangeRequest changeRequest = repository.findById(id)
         .orElseThrow(() -> new ChangeRequestNotFoundException(id));
     changeRequest.cancel(username, comment, cancelledAt);
     repository.save(changeRequest);

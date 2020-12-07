@@ -2,10 +2,7 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,8 +14,8 @@ class InMemoryChangeRequestRepository implements ChangeRequestRepository {
   private final Map<Long, ChangeRequest> store = new ConcurrentHashMap<>();
 
   @Override
-  public ChangeRequest getById(long id) {
-    return store.get(id);
+  public Optional<ChangeRequest> findById(long id) {
+    return Optional.ofNullable(store.get(id));
   }
 
   @Override

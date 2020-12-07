@@ -9,7 +9,7 @@ import java.util.Set;
 
 interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
 
-  ChangeRequest getById(long id);
+  Optional<ChangeRequest> findById(long id);
 
   ChangeRequest save(ChangeRequest changeRequest);
 
