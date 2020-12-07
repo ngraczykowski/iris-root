@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

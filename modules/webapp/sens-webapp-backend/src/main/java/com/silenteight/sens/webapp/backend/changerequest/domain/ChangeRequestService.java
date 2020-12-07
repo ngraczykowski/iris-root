@@ -8,7 +8,6 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;

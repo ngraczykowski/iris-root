@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
 import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -182,11 +182,11 @@ class ChangeRequestServiceTest {
 
     Optional<ChangeRequest> maybeRepositoryValue = repository.findById(CHANGE_REQUEST_ID);
     assertThat(maybeRepositoryValue).isNotEmpty().get().satisfies(repositoryValue -> {
-          assertThat(repositoryValue.getState()).isEqualTo(REJECTED);
-          assertThat(repositoryValue.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
-          assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
-          assertThat(repositoryValue.getDecidedAt()).isEqualTo(REJECTED_AT);
-        });
+      assertThat(repositoryValue.getState()).isEqualTo(REJECTED);
+      assertThat(repositoryValue.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
+      assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+      assertThat(repositoryValue.getDecidedAt()).isEqualTo(REJECTED_AT);
+    });
     verifyAuditLog("ChangeRequestRejected", changeRequest);
   }
 

@@ -145,7 +145,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
   }
 
   private static ChangeRequest makePendingChangeRequest(UUID bulkChangeId) {
-    return new ChangeRequest(bulkChangeId, BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, now());
+    return new ChangeRequest(
+        bulkChangeId, BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, now());
   }
 
   private static ChangeRequest makeApprovedChangeRequest(UUID bulkChangeId) {
@@ -158,8 +159,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
 
   private static ChangeRequest makeChangeRequestWithState(
       UUID bulkChangeId, ChangeRequestState state) {
-    ChangeRequest changeRequest =
-        new ChangeRequest(bulkChangeId, BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, now());
+    ChangeRequest changeRequest = new ChangeRequest(
+        bulkChangeId, BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, now());
     changeRequest.setState(state);
 
     return changeRequest;
@@ -167,8 +168,8 @@ class ChangeRequestRepositoryIT extends BaseDataJpaTest {
 
   private static ChangeRequest makeChangeRequestWithState(
       OffsetDateTime createdAt, ChangeRequestState state) {
-    ChangeRequest changeRequest =
-        new ChangeRequest(randomUUID(), BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, createdAt);
+    ChangeRequest changeRequest = new ChangeRequest(
+        randomUUID(), BUSINESS_OPERATOR_USERNAME, BUSINESS_OPERATOR_COMMENT, createdAt);
     changeRequest.setState(state);
 
     return changeRequest;
