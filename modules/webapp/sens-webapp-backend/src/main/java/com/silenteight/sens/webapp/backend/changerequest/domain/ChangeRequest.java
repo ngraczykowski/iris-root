@@ -2,6 +2,9 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 
 import lombok.*;
 
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotAllowedForMakerException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
@@ -73,8 +76,13 @@ class ChangeRequest {
   }
 
   void approve(String username, String comment, OffsetDateTime approvedAt) {
-    if (isNotInPendingState())
-      return;
+    if (isNotInPendingState()) {
+      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
+    }
+
+    if (isCreatedBy(username)) {
+      throw new ChangeRequestNotAllowedForMakerException(id);
+    }
 
     state = APPROVED;
     decidedBy = username;
@@ -83,8 +91,13 @@ class ChangeRequest {
   }
 
   void reject(String username, String comment, OffsetDateTime rejectedAt) {
-    if (isNotInPendingState())
-      return;
+    if (isNotInPendingState()) {
+      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
+    }
+
+    if (isCreatedBy(username)) {
+      throw new ChangeRequestNotAllowedForMakerException(id);
+    }
 
     state = REJECTED;
     decidedBy = username;
@@ -93,8 +106,9 @@ class ChangeRequest {
   }
 
   void cancel(String username, String comment, OffsetDateTime cancelledAt) {
-    if (isNotInPendingState())
-      return;
+    if (isNotInPendingState()) {
+      throw new ChangeRequestNotInPendingStateException(bulkChangeId);
+    }
 
     state = CANCELLED;
     decidedBy = username;
@@ -104,5 +118,9 @@ class ChangeRequest {
 
   private boolean isNotInPendingState() {
     return state != PENDING;
+  }
+
+  private boolean isCreatedBy(String username) {
+    return createdBy.equals(username);
   }
 }

@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotAllowedException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.CHANGE_REQUEST;
@@ -48,12 +49,8 @@ public class ChangeRequestService {
         "Approving Change Request. changeRequestId={}, username={}, comment={}, approvedAt={}",
         id, username, comment, approvedAt);
 
-    ChangeRequest changeRequest = repository.getById(id);
-
-    if (changeRequest.getCreatedBy().equals(username)) {
-      throw new ChangeRequestNotAllowedException(id);
-    }
-
+    ChangeRequest changeRequest = Optional.ofNullable(repository.getById(id))
+        .orElseThrow(() -> new ChangeRequestNotFoundException(id));
     changeRequest.approve(username, comment, approvedAt);
     repository.save(changeRequest);
 
@@ -77,12 +74,8 @@ public class ChangeRequestService {
         "Rejecting Change Request. changeRequestId={}, username={}, comment={}, rejectedAt={}",
         id, username, comment, rejectedAt);
 
-    ChangeRequest changeRequest = repository.getById(id);
-
-    if (changeRequest.getCreatedBy().equals(username)) {
-      throw new ChangeRequestNotAllowedException(id);
-    }
-
+    ChangeRequest changeRequest = Optional.ofNullable(repository.getById(id))
+        .orElseThrow(() -> new ChangeRequestNotFoundException(id));
     changeRequest.reject(username, comment, rejectedAt);
     repository.save(changeRequest);
 
@@ -106,7 +99,8 @@ public class ChangeRequestService {
         "Cancelling Change Request. changeRequestId={}, username={}, comment={}, rejectedAt={}",
         id, username, comment, cancelledAt);
 
-    ChangeRequest changeRequest = repository.getById(id);
+    ChangeRequest changeRequest = Optional.ofNullable(repository.getById(id))
+        .orElseThrow(() -> new ChangeRequestNotFoundException(id));
     changeRequest.cancel(username, comment, cancelledAt);
     repository.save(changeRequest);
 

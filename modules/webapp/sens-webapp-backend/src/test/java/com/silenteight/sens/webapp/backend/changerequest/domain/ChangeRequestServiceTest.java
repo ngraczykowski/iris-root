@@ -3,7 +3,9 @@ package com.silenteight.sens.webapp.backend.changerequest.domain;
 import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotAllowedException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotAllowedForMakerException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotFoundException;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,7 @@ class ChangeRequestServiceTest {
   private static final OffsetDateTime CREATION_DATE = parse("2020-05-20T10:15:30+01:00");
   private static final OffsetDateTime APPROVED_AT = parse("2020-05-21T12:10:35+01:00");
   private static final OffsetDateTime REJECTED_AT = parse("2020-05-21T12:10:35+01:00");
+  private static final OffsetDateTime CANCELLED_AT = parse("2020-05-21T12:10:35+01:00");
 
   private ChangeRequestService underTest;
 
@@ -95,11 +98,11 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestNotFoundWhenApproving_throwChangeRequestNotFoundException() {
     // when
-    Executable when =
-        () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, APPROVED_AT);
+    Executable when = () -> underTest.approve(
+        CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, APPROVED_AT);
 
     // then
-    assertThrows(NullPointerException.class, when);
+    assertThrows(ChangeRequestNotFoundException.class, when);
   }
 
   @Test
@@ -124,15 +127,29 @@ class ChangeRequestServiceTest {
   @Test
   void changeRequestApprovedByMaker_throwChangeRequestNotAllowed() {
     // given
-    ChangeRequest changeRequest = makeChangeRequest();
-    repository.save(changeRequest);
+    repository.save(makeChangeRequest());
 
     // when
     Executable when =
         () -> underTest.approve(CHANGE_REQUEST_ID, MAKER_USERNAME, APPROVER_COMMENT, APPROVED_AT);
 
     // then
-    assertThrows(ChangeRequestNotAllowedException.class, when);
+    assertThrows(ChangeRequestNotAllowedForMakerException.class, when);
+  }
+
+  @Test
+  void changeRequestApprovedNotInPendingState_throwChangeRequestInPendingState() {
+    // given
+    ChangeRequest changeRequest = makeChangeRequest();
+    changeRequest.setState(APPROVED);
+    repository.save(changeRequest);
+
+    // when
+    Executable when =
+        () -> underTest.approve(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, APPROVED_AT);
+
+    // then
+    assertThrows(ChangeRequestNotInPendingStateException.class, when);
   }
 
   @Test
@@ -142,7 +159,7 @@ class ChangeRequestServiceTest {
         () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, REJECTED_AT);
 
     // then
-    assertThrows(NullPointerException.class, when);
+    assertThrows(ChangeRequestNotFoundException.class, when);
   }
 
   @Test
@@ -163,7 +180,6 @@ class ChangeRequestServiceTest {
     verifyAuditLog("ChangeRequestRejected", changeRequest);
   }
 
-
   @Test
   void changeRequestRejectedByMaker_throwChangeRequestNotAllowed() {
     // given
@@ -175,26 +191,56 @@ class ChangeRequestServiceTest {
         () -> underTest.reject(CHANGE_REQUEST_ID, MAKER_USERNAME, APPROVER_COMMENT, REJECTED_AT);
 
     // then
-    assertThrows(ChangeRequestNotAllowedException.class, when);
+    assertThrows(ChangeRequestNotAllowedForMakerException.class, when);
+  }
+
+  @Test
+  void changeRequestRejectedNotInPendingState_throwChangeRequestInPendingState() {
+    // given
+    ChangeRequest changeRequest = makeChangeRequest();
+    changeRequest.setState(REJECTED);
+    repository.save(changeRequest);
+
+    // when
+    Executable when =
+        () -> underTest.reject(CHANGE_REQUEST_ID, APPROVER_COMMENT, APPROVER_COMMENT, REJECTED_AT);
+
+    // then
+    assertThrows(ChangeRequestNotInPendingStateException.class, when);
   }
 
   @Test
   void changeRequestFound_cancelChangeRequest() {
     // given
-    OffsetDateTime cancelledAt = parse("2020-05-21T10:15:30+01:00");
     ChangeRequest changeRequest = makeChangeRequest();
     repository.save(changeRequest);
 
     // when
-    underTest.cancel(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, cancelledAt);
+    underTest.cancel(CHANGE_REQUEST_ID, APPROVER_USERNAME, APPROVER_COMMENT, CANCELLED_AT);
 
     // then
     ChangeRequest repositoryValue = repository.getById(CHANGE_REQUEST_ID);
     assertThat(repositoryValue.getState()).isEqualTo(CANCELLED);
     assertThat(repositoryValue.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
     assertThat(repositoryValue.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
-    assertThat(repositoryValue.getDecidedAt()).isEqualTo(cancelledAt);
+    assertThat(repositoryValue.getDecidedAt()).isEqualTo(CANCELLED_AT);
     verifyAuditLog("ChangeRequestCancelled", changeRequest);
+  }
+
+
+  @Test
+  void changeRequestCancelledNotInPendingState_throwChangeRequestInPendingState() {
+    // given
+    ChangeRequest changeRequest = makeChangeRequest();
+    changeRequest.setState(CANCELLED);
+    repository.save(changeRequest);
+
+    // when
+    Executable when =
+        () -> underTest.cancel(CHANGE_REQUEST_ID, APPROVER_COMMENT, APPROVER_COMMENT, REJECTED_AT);
+
+    // then
+    assertThrows(ChangeRequestNotInPendingStateException.class, when);
   }
 
   private static ChangeRequest makeChangeRequest() {
@@ -203,19 +249,6 @@ class ChangeRequestServiceTest {
     changeRequest.setId(CHANGE_REQUEST_ID);
 
     return changeRequest;
-  }
-
-  private void verifyChangeRequest(
-      long changeRequestId,
-      ChangeRequestState expectedState,
-      String approverUsername,
-      OffsetDateTime updatedAt) {
-
-    ChangeRequest repositoryValue = repository.getById(changeRequestId);
-    ChangeRequest changeRequest = repositoryValue;
-    assertThat(changeRequest.getState()).isEqualTo(expectedState);
-    assertThat(changeRequest.getDecidedBy()).isEqualTo(approverUsername);
-    assertThat(changeRequest.getDecidedAt()).isEqualTo(updatedAt);
   }
 
   private void verifyAuditLog(String type, ChangeRequest details) {
