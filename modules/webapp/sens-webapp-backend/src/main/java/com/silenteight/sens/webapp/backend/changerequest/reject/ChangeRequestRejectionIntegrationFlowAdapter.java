@@ -21,7 +21,6 @@ class ChangeRequestRejectionIntegrationFlowAdapter extends IntegrationFlowAdapte
         .handle(
             RejectChangeRequestCommand.class,
             (p, h) -> rejectChangeRequestMessageHandler.handle(p))
-        .channel(REJECT_BULK_CHANGE_OUTBOUND_CHANNEL)
-        .log();
+        .channel(REJECT_BULK_CHANGE_OUTBOUND_CHANNEL);
   }
 }
