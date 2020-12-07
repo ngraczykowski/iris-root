@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.backend.changerequest.domain.exception.ChangeRequestNotAllowedException;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -48,6 +49,11 @@ public class ChangeRequestService {
         id, username, comment, approvedAt);
 
     ChangeRequest changeRequest = repository.getById(id);
+
+    if (changeRequest.getCreatedBy().equals(username)) {
+      throw new ChangeRequestNotAllowedException(id);
+    }
+
     changeRequest.approve(username, comment, approvedAt);
     repository.save(changeRequest);
 
@@ -72,6 +78,11 @@ public class ChangeRequestService {
         id, username, comment, rejectedAt);
 
     ChangeRequest changeRequest = repository.getById(id);
+
+    if (changeRequest.getCreatedBy().equals(username)) {
+      throw new ChangeRequestNotAllowedException(id);
+    }
+
     changeRequest.reject(username, comment, rejectedAt);
     repository.save(changeRequest);
 
