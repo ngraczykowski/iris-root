@@ -8,7 +8,7 @@ public class ChangeRequestOperationNotAllowedException extends RuntimeException
   private static final long serialVersionUID = 4355597242383617206L;
 
   public ChangeRequestOperationNotAllowedException(long changeRequestId) {
-    super("This operation is not allowed to be made by maker. "
+    super("This operation is not allowed. "
         + "Change request with id '" + changeRequestId + "' has been ignored.");
   }
 }
