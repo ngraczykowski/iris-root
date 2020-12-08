@@ -13,21 +13,22 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
-import static java.lang.String.format;
 
 @RequiredArgsConstructor
 @Slf4j
 class IdManagementReportGenerator {
 
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
-      DateTimeFormatter.ofPattern("ddMMyyyy  HH:mm:ss").withZone(TIME_ZONE.toZoneId());
+      DateTimeFormatter.ofPattern("ddMMyyyy HH:mm:ss").withZone(TIME_ZONE.toZoneId());
 
   private static final String FILE_NAME_PREFIX = "SURVILLANCE_OPTIMIZATION_ID_Management_";
+  private static final String APP_ID_COUNTRY_DEFAULT_VALUE = "Global";
 
   @NonNull
   private final DateRangeProvider dateRangeProvider;
@@ -55,25 +56,20 @@ class IdManagementReportGenerator {
     lineWriter.write(reportsDir, fileName(), reportLinesFrom(idManagementEvents));
   }
 
-  private Stream<String> reportLinesFrom(List<IdManagementEventDto> idManagementEvents) {
+  private static Stream<String> reportLinesFrom(List<IdManagementEventDto> idManagementEvents) {
     return new CsvBuilder<>(idManagementEvents.stream())
-        .delimiter("\t")
-        .cell("AppID_ID,", event -> commaSuffixed(event.getUsername()))
-        .cell("AppID_Name,", event -> commaSuffixed(event.getRole()))
-        .cell(
-            "AppID_Implemented_By,", event -> commaSuffixed(event.getPrincipal()))
-        .cell(
-            "AppID_Implemented_TimeStamp,",
-            event -> "\"" + commaSuffixed(TIMESTAMP_FORMATTER.format(event.getTimestamp())) + "\"")
-        .cell("AppID_Status,", event -> commaSuffixed(event.getAction()))
-        .cell("AppID_Country", a -> "Global")
+        .cell("AppID_ID", IdManagementEventDto::getUsername)
+        .cell("AppID_Name", IdManagementEventDto::getRole)
+        .cell("AppID_Implemented_By", IdManagementEventDto::getPrincipal)
+        .cell("AppID_Implemented_TimeStamp", event -> formatDate(event.getTimestamp()))
+        .cell("AppID_Status", IdManagementEventDto::getAction)
+        .cell("AppID_Country", event -> APP_ID_COUNTRY_DEFAULT_VALUE)
         .build()
         .lines();
   }
 
-  //SCB specific requirement
-  private static String commaSuffixed(String value) {
-    return format("%s,", value);
+  private static String formatDate(Instant timestamp) {
+    return TIMESTAMP_FORMATTER.format(timestamp);
   }
 
   private String fileName() {

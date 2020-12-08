@@ -44,7 +44,7 @@ class AuditHistoryEventProvider {
     ReportGenerationDetails details = deserializeDetails(auditData.getDetails());
 
     return AuditHistoryEventDto.builder()
-        .userName(auditData.getPrincipal())
+        .username(auditData.getPrincipal())
         .status(details.getStatus())
         .ipAddress(details.getIpAddress())
         .timestamp(auditData.getTimestamp().toInstant())

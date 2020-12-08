@@ -60,19 +60,19 @@ class UserAuthActivityReportGeneratorTest {
         any(OffsetDateTime.class), any(OffsetDateTime.class)))
         .thenReturn(List.of(
             UserAuthActivityEventDto.builder()
-                .userName("jdoe")
+                .username("jdoe")
                 .roles(List.of("ANALYST", "AUDITOR"))
                 .ipAddress("192.154.0.1")
                 .loginTimestamp(Instant.parse("2020-08-16T12:25:14Z").toEpochMilli())
                 .build(),
             UserAuthActivityEventDto.builder()
-                .userName("asmith")
+                .username("asmith")
                 .roles(List.of("BUSINESS_OPERATOR"))
                 .ipAddress("192.122.0.8")
                 .loginTimestamp(Instant.parse("2020-08-16T12:35:27Z").toEpochMilli())
                 .build(),
             UserAuthActivityEventDto.builder()
-                .userName("asmith")
+                .username("asmith")
                 .roles(List.of("BUSINESS_OPERATOR"))
                 .ipAddress("192.122.0.8")
                 .logoutTimestamp(Instant.parse("2020-08-16T12:50:38Z").toEpochMilli())
@@ -84,14 +84,11 @@ class UserAuthActivityReportGeneratorTest {
         eq(REPORTS_DIR),
         anyString(),
         argThat(streamThat(hasItems(
-            "\"Access_ID,\"\t\"Access_Profile,\"\t\"Access_Country,\"\t\"Access_SourceIP,\"\t"
-                + "\"Access_LoginTimeStamp,\"\tAccess_LogoutTimeStamp",
-            "\"jdoe,\"\t\"ANALYST,AUDITOR,\"\t\"Global,\"\t\"\"\"192.154.0.1\"\",\"\t"
-                + "\"\"\"16082020 12:25:14\"\",\"\t",
-            "\"asmith,\"\t\"BUSINESS_OPERATOR,\"\t\"Global,\"\t\"\"\"192.122.0.8\"\",\"\t"
-                + "\"\"\"16082020 12:35:27\"\",\"\t",
-            "\"asmith,\"\t\"BUSINESS_OPERATOR,\"\t\"Global,\"\t\"\"\"192.122.0.8\"\",\"\t"
-                + "\t\"\"\"16082020 12:50:38\"\"\""))));
+            "Access_ID,Access_Profile,Access_Country,Access_SourceIP,"
+                + "Access_LoginTimeStamp,Access_LogoutTimeStamp",
+            "jdoe,\"ANALYST,AUDITOR\",Global,192.154.0.1,16082020 12:25:14,",
+            "asmith,BUSINESS_OPERATOR,Global,192.122.0.8,16082020 12:35:27,",
+            "asmith,BUSINESS_OPERATOR,Global,192.122.0.8,,16082020 12:50:38"))));
   }
 
   @Test

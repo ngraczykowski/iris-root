@@ -61,14 +61,14 @@ class IdManagementReportGeneratorTest {
             IdManagementEventDto.builder()
                 .username("userA")
                 .role("ANALYST")
-                .principal("userB")
+                .principal("B,user")
                 .action("CREATE")
                 .timestamp(Instant.parse("2020-08-15T12:14:32Z"))
                 .build(),
             IdManagementEventDto.builder()
                 .username("userABC")
                 .role("APPROVER")
-                .principal("userBCD")
+                .principal("BCD,user")
                 .action("DELETE")
                 .timestamp(Instant.parse("2020-09-20T13:15:48Z"))
                 .build()));
@@ -79,12 +79,10 @@ class IdManagementReportGeneratorTest {
         eq(REPORTS_DIR),
         anyString(),
         argThat(streamThat(hasItems(
-            "\"AppID_ID,\"\t\"AppID_Name,\"\t\"AppID_Implemented_By,\"\t\""
-                + "AppID_Implemented_TimeStamp,\"\t\"AppID_Status,\"\tAppID_Country",
-            "\"userA,\"\t\"ANALYST,\"\t\"userB,\"\t\"\"\"15082020  12:14:32,\"\"\"\t\"CREATE,"
-                + "\"\tGlobal",
-            "\"userABC,\"\t\"APPROVER,\"\t\"userBCD,\"\t\"\"\"20092020  13:15:48,\"\"\"\t\"DELETE,"
-                + "\"\tGlobal"))));
+            "AppID_ID,AppID_Name,AppID_Implemented_By,AppID_Implemented_TimeStamp,"
+                + "AppID_Status,AppID_Country",
+            "userA,ANALYST,\"B,user\",15082020 12:14:32,CREATE,Global",
+            "userABC,APPROVER,\"BCD,user\",20092020 13:15:48,DELETE,Global"))));
   }
 
   @Test

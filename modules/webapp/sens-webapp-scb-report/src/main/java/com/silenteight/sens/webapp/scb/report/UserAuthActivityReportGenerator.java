@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
-import static java.lang.String.format;
 import static java.lang.String.join;
 import static java.time.Instant.ofEpochMilli;
 import static java.time.OffsetDateTime.ofInstant;
@@ -30,10 +29,10 @@ class UserAuthActivityReportGenerator {
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormatter.ofPattern("ddMMyyyy HH:mm:ss").withZone(TIME_ZONE.toZoneId());
 
-  private static final String FILE_NAME_PREFIX =
-      "SURVILLANCE_OPTIMIZATION_Login_Logout_";
+  private static final String FILE_NAME_PREFIX = "SURVILLANCE_OPTIMIZATION_Login_Logout_";
   private static final String LIST_ELEMENTS_JOINER = ",";
-  static final String ACCESS_COUNTRY_DEFAULT_VALUE = "Global";
+  private static final String ACCESS_COUNTRY_DEFAULT_VALUE = "Global";
+  private static final String NO_TIMESTAMP_DEFAULT_VALUE = "";
 
   @NonNull
   private final DateRangeProvider dateRangeProvider;
@@ -55,7 +54,10 @@ class UserAuthActivityReportGenerator {
     DateRange dateRange = dateRangeProvider.latestDateRange();
     log.info("Generating user login/logout report for {}", dateRange);
 
-    fileLineWriter.write(reportsDir, fileName(), reportLines(dateRange));
+    List<UserAuthActivityEventDto> userAuthActivityEvents =
+        dataProvider.provide(dateRange.getFrom(), dateRange.getTo());
+
+    fileLineWriter.write(reportsDir, fileName(), reportLines(userAuthActivityEvents));
   }
 
   private String fileName() {
@@ -63,45 +65,26 @@ class UserAuthActivityReportGenerator {
     return FILE_NAME_PREFIX + fileNameDateFormatter.format(timeProvider.now()) + ".csv";
   }
 
-  private Stream<String> reportLines(DateRange dateRange) {
-    List<UserAuthActivityEventDto> data =
-        dataProvider.provide(dateRange.getFrom(), dateRange.getTo());
-
-    return new CsvBuilder<>(data.stream())
-        .delimiter("\t")
-        .cell("Access_ID,", event -> commaSuffixed(event.getUserName()))
-        .cell("Access_Profile,", event -> commaSuffixed(formatList(event.getRoles())))
-        .cell("Access_Country,", event -> commaSuffixed(ACCESS_COUNTRY_DEFAULT_VALUE))
-        .cell("Access_SourceIP,", event -> commaSuffixed(wrapInQuotes(event.getIpAddress())))
-        .cell("Access_LoginTimeStamp,", event -> formatLogin(event.getLoginTimestamp()))
-        .cell("Access_LogoutTimeStamp", event -> formatLogout(event.getLogoutTimestamp()))
+  private Stream<String> reportLines(List<UserAuthActivityEventDto> userAuthActivityEvents) {
+    return new CsvBuilder<>(userAuthActivityEvents.stream())
+        .cell("Access_ID", UserAuthActivityEventDto::getUsername)
+        .cell("Access_Profile", event -> formatList(event.getRoles()))
+        .cell("Access_Country", event -> ACCESS_COUNTRY_DEFAULT_VALUE)
+        .cell("Access_SourceIP", UserAuthActivityEventDto::getIpAddress)
+        .cell("Access_LoginTimeStamp", event -> formatDate(event.getLoginTimestamp()))
+        .cell("Access_LogoutTimeStamp", event -> formatDate(event.getLogoutTimestamp()))
         .build()
         .lines();
-  }
-
-  //SCB specific requirement
-  private static String commaSuffixed(String value) {
-    return format("%s,", value);
-  }
-
-  private static String wrapInQuotes(String value) {
-    return "\"" + value + "\"";
   }
 
   private static String formatList(List<String> list) {
     return join(LIST_ELEMENTS_JOINER, list);
   }
 
-  private String formatLogin(long timestamp) {
-    return timestamp > 0 ? commaSuffixed(wrapInQuotes(formatDate(timestamp))) : "";
-  }
-
-  private String formatLogout(long timestamp) {
-    return timestamp > 0 ? wrapInQuotes(formatDate(timestamp)) : "";
-  }
-
   private String formatDate(long timestamp) {
-    return TIMESTAMP_FORMATTER.format(
-        ofInstant(ofEpochMilli(timestamp), timeProvider.timeZone().toZoneId()));
+    return timestamp > 0 ?
+           TIMESTAMP_FORMATTER.format(
+               ofInstant(ofEpochMilli(timestamp), timeProvider.timeZone().toZoneId()))
+           : NO_TIMESTAMP_DEFAULT_VALUE;
   }
 }

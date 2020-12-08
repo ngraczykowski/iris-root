@@ -58,13 +58,13 @@ class AuditHistoryReportGeneratorTest {
     when(auditHistoryEventProvider.provide(any(OffsetDateTime.class), any(OffsetDateTime.class)))
         .thenReturn(List.of(
             AuditHistoryEventDto.builder()
-                .userName("userA")
+                .username("userA")
                 .status("SUCCESS")
                 .ipAddress("192.122.0.8")
                 .timestamp(Instant.parse("2020-08-15T12:14:32Z"))
                 .build(),
             AuditHistoryEventDto.builder()
-                .userName("userB")
+                .username("userB")
                 .status("FAILED")
                 .ipAddress("192.154.0.1")
                 .timestamp(Instant.parse("2020-09-20T13:15:48Z"))
@@ -76,9 +76,9 @@ class AuditHistoryReportGeneratorTest {
         eq(REPORTS_DIR),
         anyString(),
         argThat(streamThat(hasItems(
-            "\"Audit_ID,Audit_Status,Access_SourceIP,Audit_Country,Audit_LoginTimeStamp\"",
-            "\"userA,SUCCESS,192.122.0.8,Global,\"\"15082020 12:14:32\"\"\"",
-            "\"userB,FAILED,192.154.0.1,Global,\"\"20092020 13:15:48\"\"\""))));
+            "Audit_ID,Audit_Status,Access_SourceIP,Audit_Country,Audit_LoginTimeStamp",
+            "userA,SUCCESS,192.122.0.8,Global,15082020 12:14:32",
+            "userB,FAILED,192.154.0.1,Global,20092020 13:15:48"))));
   }
 
   @Test

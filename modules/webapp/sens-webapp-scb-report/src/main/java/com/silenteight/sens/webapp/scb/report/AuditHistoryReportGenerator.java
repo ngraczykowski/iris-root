@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
@@ -12,8 +13,8 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,11 +27,8 @@ class AuditHistoryReportGenerator {
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormatter.ofPattern("ddMMyyyy HH:mm:ss").withZone(TIME_ZONE.toZoneId());
 
-  private static final String AUDIT_COUNTRY_DEFAULT_VALUE = "Global";
   private static final String FILE_NAME_PREFIX = "SURVILLANCE_OPTIMIZATION_AuditHistory_";
-  private static final String REPORT_HEADER =
-      "Audit_ID,Audit_Status,Access_SourceIP,Audit_Country,Audit_LoginTimeStamp";
-  private static final String DELIMITER = ",";
+  private static final String AUDIT_COUNTRY_DEFAULT_VALUE = "Global";
 
   @NonNull
   private final DateRangeProvider dateRangeProvider;
@@ -52,7 +50,10 @@ class AuditHistoryReportGenerator {
     DateRange dateRange = dateRangeProvider.latestDateRange();
     log.info("Generating audit history report for {}", dateRange);
 
-    fileLineWriter.write(reportsDir, fileName(), reportLines(dateRange));
+    List<AuditHistoryEventDto> auditHistoryEvents =
+        auditHistoryEventProvider.provide(dateRange.getFrom(), dateRange.getTo());
+
+    fileLineWriter.write(reportsDir, fileName(), reportLinesFrom(auditHistoryEvents));
   }
 
   private String fileName() {
@@ -60,33 +61,18 @@ class AuditHistoryReportGenerator {
     return FILE_NAME_PREFIX + fileNameDateFormatter.format(timeProvider.now()) + ".csv";
   }
 
-  private Stream<String> reportLines(DateRange dateRange) {
-    List<String> lines = new ArrayList<>();
-    lines.add(wrapInQuotes(REPORT_HEADER));
-
-    auditHistoryEventProvider
-        .provide(dateRange.getFrom(), dateRange.getTo())
-        .forEach(event -> lines.add(toReportLine(event)));
-
-    return lines.stream();
+  private static Stream<String> reportLinesFrom(List<AuditHistoryEventDto> auditHistoryEvents) {
+    return new CsvBuilder<>(auditHistoryEvents.stream())
+        .cell("Audit_ID", AuditHistoryEventDto::getUsername)
+        .cell("Audit_Status", AuditHistoryEventDto::getStatus)
+        .cell("Access_SourceIP", AuditHistoryEventDto::getIpAddress)
+        .cell("Audit_Country", event -> AUDIT_COUNTRY_DEFAULT_VALUE)
+        .cell("Audit_LoginTimeStamp", event -> formatDate(event.getTimestamp()))
+        .build()
+        .lines();
   }
 
-  private static final String toReportLine(AuditHistoryEventDto event) {
-    List<String> line = new ArrayList<>();
-    line.add(event.getUserName());
-    line.add(event.getStatus());
-    line.add(event.getIpAddress());
-    line.add(AUDIT_COUNTRY_DEFAULT_VALUE);
-    line.add(wrapInDoubleQuotes(TIMESTAMP_FORMATTER.format(event.getTimestamp())));
-
-    return wrapInQuotes(String.join(DELIMITER, line));
-  }
-
-  private static String wrapInDoubleQuotes(String value) {
-    return wrapInQuotes(wrapInQuotes(value));
-  }
-
-  private static String wrapInQuotes(String value) {
-    return "\"" + value + "\"";
+  private static String formatDate(Instant timestamp) {
+    return TIMESTAMP_FORMATTER.format(timestamp);
   }
 }

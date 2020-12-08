@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class UserAuthActivityEventDto {
 
-  private String userName;
+  private String username;
   private List<String> roles;
   private String ipAddress;
   private long loginTimestamp;

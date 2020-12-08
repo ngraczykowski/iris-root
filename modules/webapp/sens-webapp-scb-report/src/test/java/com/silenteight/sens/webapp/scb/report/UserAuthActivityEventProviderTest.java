@@ -491,7 +491,7 @@ class UserAuthActivityEventProviderTest {
       String userName, long timestamp) {
 
     return UserAuthActivityEventDto.builder()
-        .userName(userName)
+        .username(userName)
         .roles(USER_ROLES)
         .ipAddress(IP_ADDRESS)
         .loginTimestamp(timestamp)
@@ -502,7 +502,7 @@ class UserAuthActivityEventProviderTest {
       String userName, long timestamp) {
 
     return UserAuthActivityEventDto.builder()
-        .userName(userName)
+        .username(userName)
         .roles(USER_ROLES)
         .ipAddress(IP_ADDRESS)
         .logoutTimestamp(timestamp)

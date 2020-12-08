@@ -85,13 +85,13 @@ class AuditHistoryEventProviderTest {
     assertThat(events).isEqualTo(
         List.of(
             AuditHistoryEventDto.builder()
-                .userName(principal1)
+                .username(principal1)
                 .status(reportGenerationStatus)
                 .ipAddress(ipAddress1)
                 .timestamp(timestamp1.toInstant())
                 .build(),
             AuditHistoryEventDto.builder()
-                .userName(principal2)
+                .username(principal2)
                 .status(reportGenerationStatus)
                 .ipAddress(ipAddress2)
                 .timestamp(timestamp2.toInstant())

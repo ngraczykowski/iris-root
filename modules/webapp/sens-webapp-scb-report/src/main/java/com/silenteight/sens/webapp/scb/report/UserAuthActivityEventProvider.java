@@ -201,7 +201,7 @@ class UserAuthActivityEventProvider {
 
   private UserAuthActivityEventDto mapToUserLoginActivityEventDto(EventDto event) {
     return UserAuthActivityEventDto.builder()
-        .userName(event.getUserName())
+        .username(event.getUserName())
         .roles(getUserRoles(event.getUserName()))
         .ipAddress(event.getIpAddress())
         .loginTimestamp(event.getTimestamp())
@@ -210,7 +210,7 @@ class UserAuthActivityEventProvider {
 
   private UserAuthActivityEventDto mapToUserLogoutActivityEventDto(EventDto event, long timestamp) {
     return UserAuthActivityEventDto.builder()
-        .userName(event.getUserName())
+        .username(event.getUserName())
         .roles(getUserRoles(event.getUserName()))
         .ipAddress(event.getIpAddress())
         .logoutTimestamp(timestamp)

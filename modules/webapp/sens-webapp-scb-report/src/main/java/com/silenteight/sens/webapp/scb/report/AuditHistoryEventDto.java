@@ -9,7 +9,7 @@ import java.time.Instant;
 @Builder
 public class AuditHistoryEventDto {
 
-  private String userName;
+  private String username;
   private String status;
   private String ipAddress;
   private Instant timestamp;
