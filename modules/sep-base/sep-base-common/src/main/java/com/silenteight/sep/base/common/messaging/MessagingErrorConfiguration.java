@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,9 +46,16 @@ public class MessagingErrorConfiguration {
   }
 
   @Bean
-  IntegrationFlow errorChannelIntegrationFlow() {
+  @ConditionalOnMissingBean
+  ErrorMessageLogger errorMessageLogger(MessagingProperties properties) {
+    return new DefaultErrorMessageLogger(properties.getErrorQueue().getName());
+  }
+
+  @Bean
+  IntegrationFlow errorChannelIntegrationFlow(ErrorMessageLogger errorMessageLogger) {
     return IntegrationFlows.from(ERROR_CHANNEL_NAME)
         .transform(new ErrorMessageTransformer())
+        .log(errorMessageLogger.getLevel(), errorMessageLogger::getErrorMessage)
         .handle(
             ((AmqpOutboundEndpointSpec) Amqp.outboundAdapter(createRabbitTemplate()))
                 .routingKey(properties.getErrorQueue().getName()))
