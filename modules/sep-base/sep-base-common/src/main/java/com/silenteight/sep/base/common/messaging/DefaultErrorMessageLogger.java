@@ -18,6 +18,5 @@ class DefaultErrorMessageLogger implements ErrorMessageLogger {
     return String.format("The following message has been pushed to %s : %s",
             errorQueueName,
             message.getHeaders().toString());
-
   }
 }
