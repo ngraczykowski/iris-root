@@ -10,10 +10,12 @@ class DefaultErrorMessageLogger implements ErrorMessageLogger {
 
   private final String errorQueueName;
 
+  @Override
   public Level getLevel() {
     return Level.WARN;
   }
 
+  @Override
   public Object getErrorMessage(Message<Object> message) {
     return String.format("The following message has been pushed to %s : %s",
             errorQueueName,
