@@ -53,7 +53,7 @@ public class MessagingErrorConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  DefaultLoggingErrorMessageListener errorMessageLogger(MessagingProperties properties) {
+  DefaultLoggingErrorMessageListener errorMessageLogger() {
     LoggingHandler loggingHandler = new LoggingHandler(Level.WARN);
     loggingHandler.setLogExpressionString("");
     return new DefaultLoggingErrorMessageListener(loggingHandler);
