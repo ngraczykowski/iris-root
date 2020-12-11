@@ -24,7 +24,6 @@ import static com.silenteight.sep.usermanagement.api.event.EventType.EXTEND_SESS
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGOUT;
 import static freemarker.template.utility.Collections12.singletonList;
-import static java.lang.Math.max;
 import static java.lang.Math.toIntExact;
 import static java.time.Instant.ofEpochMilli;
 import static java.time.OffsetDateTime.ofInstant;
@@ -60,7 +59,7 @@ class UserAuthActivityEventProvider {
 
     Map<String, List<EventDto>> eventsStore = new ConcurrentHashMap<>();
     List<UserAuthActivityEventDto> data = convertEventsToUserAuthActivities(from, eventsStore);
-    data.addAll(analyzeExpectedLogoutEvents(from, to, eventsStore));
+    data.addAll(getOnlyLoginAndExpectedLogoutEvents(from, to, eventsStore));
     data.sort(new EventComparator());
 
     storeNextReportStartTime(from, eventsStore);
@@ -101,7 +100,7 @@ class UserAuthActivityEventProvider {
     List<UserAuthActivityEventDto> activities = new ArrayList<>();
     switch (event.getType()) {
       case LOGIN:
-        activities.addAll(convertLoginEventToUserAuthActivities(event, fromMillis, eventsStore));
+        storeLoginEvents(event, eventsStore);
         break;
       case LOGOUT:
         activities.addAll(
@@ -118,10 +117,7 @@ class UserAuthActivityEventProvider {
     return activities;
   }
 
-  private List<UserAuthActivityEventDto> convertLoginEventToUserAuthActivities(
-      EventDto event, long fromMillis, Map<String, List<EventDto>> eventsStore) {
-
-    List<UserAuthActivityEventDto> activities = new ArrayList<>();
+  private void storeLoginEvents(EventDto event, Map<String, List<EventDto>> eventsStore) {
     if (event.getUserId() == null) {
       eventsStore
           .values()
@@ -133,12 +129,7 @@ class UserAuthActivityEventProvider {
       eventsStore.get(event.getUserId()).add(event);
     } else {
       eventsStore.put(event.getUserId(), new ArrayList<>(singletonList(event)));
-
-      if (isEventWithinCurrentReport(event, fromMillis))
-        activities.add(mapToUserLoginActivityEventDto(event));
     }
-
-    return activities;
   }
 
   private List<UserAuthActivityEventDto> convertLogoutEventToUserAuthActivities(
@@ -149,16 +140,16 @@ class UserAuthActivityEventProvider {
       List<EventDto> loginEvents = eventsStore.remove(event.getUserId());
 
       if (isEventWithinCurrentReport(event, fromMillis)) {
-        EventDto firstEvent = loginEvents.get(0);
-
-        if (isEventOutsideCurrentReport(firstEvent, fromMillis))
-          activities.add(mapToUserLoginActivityEventDto(firstEvent));
-
-        activities.add(mapToUserLogoutActivityEventDto(firstEvent, event.getTimestamp()));
+        EventDto firstEvent = getFirstEvent(loginEvents);
+        activities.add(mapToUserLoginLogoutActivityEventDto(firstEvent, event.getTimestamp()));
       }
     }
 
     return activities;
+  }
+
+  private static EventDto getFirstEvent(List<EventDto> events) {
+    return events.get(0);
   }
 
   private static List<UserAuthActivityEventDto> convertExtendSessionEventToUserAuthActivities(
@@ -184,7 +175,7 @@ class UserAuthActivityEventProvider {
   }
 
   private static EventDto supplyEventUserData(EventDto event, List<EventDto> previousEvents) {
-    EventDto firstEvent = previousEvents.get(0);
+    EventDto firstEvent = getFirstEvent(previousEvents);
     event.setUserId(firstEvent.getUserId());
     event.setUserName(firstEvent.getUserName());
 
@@ -193,10 +184,6 @@ class UserAuthActivityEventProvider {
 
   private static boolean isEventWithinCurrentReport(EventDto event, long fromMillis) {
     return event.getTimestamp() >= fromMillis;
-  }
-
-  private static boolean isEventOutsideCurrentReport(EventDto event, long fromMillis) {
-    return !isEventWithinCurrentReport(event, fromMillis);
   }
 
   private UserAuthActivityEventDto mapToUserLoginActivityEventDto(EventDto event) {
@@ -208,12 +195,15 @@ class UserAuthActivityEventProvider {
         .build();
   }
 
-  private UserAuthActivityEventDto mapToUserLogoutActivityEventDto(EventDto event, long timestamp) {
+  private UserAuthActivityEventDto mapToUserLoginLogoutActivityEventDto(
+      EventDto loginEvent, long logoutTimestamp) {
+
     return UserAuthActivityEventDto.builder()
-        .username(event.getUserName())
-        .roles(getUserRoles(event.getUserName()))
-        .ipAddress(event.getIpAddress())
-        .logoutTimestamp(timestamp)
+        .username(loginEvent.getUserName())
+        .roles(getUserRoles(loginEvent.getUserName()))
+        .ipAddress(loginEvent.getIpAddress())
+        .loginTimestamp(loginEvent.getTimestamp())
+        .logoutTimestamp(logoutTimestamp)
         .build();
   }
 
@@ -226,7 +216,7 @@ class UserAuthActivityEventProvider {
     }
   }
 
-  private List<UserAuthActivityEventDto> analyzeExpectedLogoutEvents(
+  private List<UserAuthActivityEventDto> getOnlyLoginAndExpectedLogoutEvents(
       OffsetDateTime from, OffsetDateTime to, Map<String, List<EventDto>> eventsStore) {
 
     long fromMillis = from.toInstant().toEpochMilli();
@@ -236,13 +226,13 @@ class UserAuthActivityEventProvider {
     return eventsStore
         .values()
         .stream()
-        .map(events -> analyzeExpectedLogoutEvents(
+        .map(events -> getOnlyLoginAndExpectedLogoutEvents(
             events, fromMillis, toMillis, sessionTimeoutMillis, eventsStore))
         .flatMap(List::stream)
         .collect(toList());
   }
 
-  private List<UserAuthActivityEventDto> analyzeExpectedLogoutEvents(
+  private List<UserAuthActivityEventDto> getOnlyLoginAndExpectedLogoutEvents(
       List<EventDto> events,
       long fromMillis,
       long toMillis,
@@ -250,18 +240,17 @@ class UserAuthActivityEventProvider {
       Map<String, List<EventDto>> eventsStore) {
 
     List<UserAuthActivityEventDto> activities = new ArrayList<>();
+    EventDto firstEvent = getFirstEvent(events);
     EventDto lastEvent = events.get(events.size() - 1);
 
     if (shouldEventBeTreatedAsExpiredLogin(
         lastEvent, fromMillis, toMillis, sessionTimeoutMillis)) {
-      EventDto firstEvent = events.get(0);
-      if (isEventOutsideCurrentReport(firstEvent, fromMillis))
-        activities.add(mapToUserLoginActivityEventDto(firstEvent));
-
-      activities.add(mapToUserLogoutActivityEventDto(
-          lastEvent, lastEvent.getTimestamp() + sessionTimeoutMillis));
+      activities.add(mapToUserLoginLogoutActivityEventDto(
+          firstEvent, lastEvent.getTimestamp() + sessionTimeoutMillis));
 
       eventsStore.remove(firstEvent.getUserId());
+    } else if (isEventWithinCurrentReport(firstEvent, fromMillis)) {
+      activities.add(mapToUserLoginActivityEventDto(firstEvent));
     }
 
     return activities;
@@ -296,9 +285,7 @@ class UserAuthActivityEventProvider {
 
     @Override
     public int compare(UserAuthActivityEventDto dto1, UserAuthActivityEventDto dto2) {
-      return toIntExact(
-          max(dto1.getLoginTimestamp(), dto1.getLogoutTimestamp())
-              - max(dto2.getLoginTimestamp(), dto2.getLogoutTimestamp()));
+      return toIntExact(dto1.getLoginTimestamp() - dto2.getLoginTimestamp());
     }
   }
 }

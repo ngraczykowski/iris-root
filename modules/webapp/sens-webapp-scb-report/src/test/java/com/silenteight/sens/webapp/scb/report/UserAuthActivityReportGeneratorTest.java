@@ -72,9 +72,10 @@ class UserAuthActivityReportGeneratorTest {
                 .loginTimestamp(Instant.parse("2020-08-16T12:35:27Z").toEpochMilli())
                 .build(),
             UserAuthActivityEventDto.builder()
-                .username("asmith")
-                .roles(List.of("BUSINESS_OPERATOR"))
+                .username("jkowalsky")
+                .roles(List.of("APPROVER"))
                 .ipAddress("192.122.0.8")
+                .loginTimestamp(Instant.parse("2020-08-16T12:45:32Z").toEpochMilli())
                 .logoutTimestamp(Instant.parse("2020-08-16T12:50:38Z").toEpochMilli())
                 .build()));
 
@@ -88,7 +89,7 @@ class UserAuthActivityReportGeneratorTest {
                 + "Access_LoginTimeStamp,Access_LogoutTimeStamp",
             "jdoe,\"ANALYST,AUDITOR\",Global,192.154.0.1,16082020 12:25:14,",
             "asmith,BUSINESS_OPERATOR,Global,192.122.0.8,16082020 12:35:27,",
-            "asmith,BUSINESS_OPERATOR,Global,192.122.0.8,,16082020 12:50:38"))));
+            "jkowalsky,APPROVER,Global,192.122.0.8,16082020 12:45:32,16082020 12:50:38"))));
   }
 
   @Test
