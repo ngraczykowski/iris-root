@@ -103,8 +103,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(
             makeUserLoginLogoutActivityEventDto(userName, loginTimestamp, logoutTimestamp)));
   }
@@ -134,8 +133,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(
             makeUserLoginLogoutActivityEventDto(userName, loginTimestamp2, logoutTimestamp2)));
   }
@@ -158,8 +156,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(
             makeUserLoginLogoutActivityEventDto(
                 userName, loginTimestamp, createPastTimestamp(to, 10))));
@@ -183,8 +180,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(makeUserLoginActivityEventDto(userName, loginTimestamp)));
     verify(reportMetadataService).saveStartTime(REPORT_NAME, to.minusMinutes(20));
   }
@@ -245,8 +241,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(2);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(2).isEqualTo(
         List.of(
             makeUserLoginLogoutActivityEventDto(userName1, loginTimestamp1, logoutTimestamp1),
             makeUserLoginLogoutActivityEventDto(userName2, loginTimestamp2, logoutTimestamp2)));
@@ -273,8 +268,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(
             makeUserLoginLogoutActivityEventDto(
                 userName, loginTimestamp1, createPastTimestamp(to, 10))));
@@ -301,8 +295,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(makeUserLoginActivityEventDto(userName, loginTimestamp1)));
     verify(reportMetadataService).saveStartTime(REPORT_NAME, to.minusMinutes(50));
   }
@@ -328,8 +321,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(
             makeUserLoginLogoutActivityEventDto(
                 userName, loginTimestamp, createPastTimestamp(to, 10))));
@@ -356,8 +348,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(1);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(1).isEqualTo(
         singletonList(makeUserLoginActivityEventDto(userName, loginTimestamp)));
     verify(reportMetadataService).saveStartTime(REPORT_NAME, to.minusMinutes(50));
   }
@@ -399,8 +390,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(3);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(3).isEqualTo(
         List.of(
             makeUserLoginLogoutActivityEventDto(
                 userName1, loginTimestamp1, logoutTimestamp1),
@@ -457,8 +447,7 @@ class UserAuthActivityEventProviderTest {
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
 
     // then
-    assertThat(data).hasSize(3);
-    assertThat(data).isEqualTo(
+    assertThat(data).hasSize(3).isEqualTo(
         List.of(
             makeUserLoginLogoutActivityEventDto(
                 userName1, loginTimestamp1, logoutTimestamp1),

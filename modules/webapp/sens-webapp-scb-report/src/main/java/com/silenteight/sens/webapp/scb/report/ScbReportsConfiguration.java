@@ -70,8 +70,8 @@ class ScbReportsConfiguration {
   }
 
   @Bean
-  AuditHistoryEventProvider auditHistoryEventProvider(AuditingFinder auditingFinder) {
-    return new AuditHistoryEventProvider(auditingFinder);
+  AuditHistoryEventProvider auditHistoryEventProvider(EventQuery eventQuery) {
+    return new AuditHistoryEventProvider(eventQuery);
   }
 
   @Bean

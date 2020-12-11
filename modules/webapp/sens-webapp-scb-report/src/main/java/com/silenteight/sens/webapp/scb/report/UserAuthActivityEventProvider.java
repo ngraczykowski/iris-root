@@ -117,7 +117,7 @@ class UserAuthActivityEventProvider {
     return activities;
   }
 
-  private void storeLoginEvents(EventDto event, Map<String, List<EventDto>> eventsStore) {
+  private static void storeLoginEvents(EventDto event, Map<String, List<EventDto>> eventsStore) {
     if (event.getUserId() == null) {
       eventsStore
           .values()

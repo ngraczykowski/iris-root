@@ -3,8 +3,6 @@ package com.silenteight.sens.webapp.scb.report;
 import lombok.Builder;
 import lombok.Value;
 
-import java.time.Instant;
-
 @Value
 @Builder
 public class AuditHistoryEventDto {
@@ -12,5 +10,5 @@ public class AuditHistoryEventDto {
   private String username;
   private String status;
   private String ipAddress;
-  private Instant timestamp;
+  private long timestamp;
 }

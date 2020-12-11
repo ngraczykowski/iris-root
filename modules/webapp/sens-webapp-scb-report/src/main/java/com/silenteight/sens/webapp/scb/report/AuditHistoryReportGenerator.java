@@ -13,12 +13,13 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
+import static java.time.Instant.ofEpochMilli;
+import static java.time.OffsetDateTime.ofInstant;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ class AuditHistoryReportGenerator {
     return FILE_NAME_PREFIX + fileNameDateFormatter.format(timeProvider.now()) + ".csv";
   }
 
-  private static Stream<String> reportLinesFrom(List<AuditHistoryEventDto> auditHistoryEvents) {
+  private Stream<String> reportLinesFrom(List<AuditHistoryEventDto> auditHistoryEvents) {
     return new CsvBuilder<>(auditHistoryEvents.stream())
         .cell("Audit_ID", AuditHistoryEventDto::getUsername)
         .cell("Audit_Status", AuditHistoryEventDto::getStatus)
@@ -72,7 +73,8 @@ class AuditHistoryReportGenerator {
         .lines();
   }
 
-  private static String formatDate(Instant timestamp) {
-    return TIMESTAMP_FORMATTER.format(timestamp);
+  private String formatDate(long timestamp) {
+    return TIMESTAMP_FORMATTER.format(
+        ofInstant(ofEpochMilli(timestamp), timeProvider.timeZone().toZoneId()));
   }
 }

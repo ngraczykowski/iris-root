@@ -3,56 +3,48 @@ package com.silenteight.sens.webapp.scb.report;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.auditing.bs.AuditDataDto;
-import com.silenteight.auditing.bs.AuditingFinder;
-import com.silenteight.sens.webapp.report.ReportGenerationDetails;
-import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-
-import org.apache.commons.lang3.StringUtils;
+import com.silenteight.sep.usermanagement.api.EventQuery;
+import com.silenteight.sep.usermanagement.api.dto.EventDto;
+import com.silenteight.sep.usermanagement.api.event.EventType;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
-import static java.util.Collections.singletonList;
+import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN;
+import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN_ERROR;
+import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class AuditHistoryEventProvider {
 
-  private static final JsonConversionHelper JSON_CONVERTER = JsonConversionHelper.INSTANCE;
+  private static final String SUCCESS_STATUS = "SUCCESS";
+  private static final String FAILURE_STATUS = "FAILED";
 
-  private static final String REPORT_GENERATED_EVENT_TYPE = "ReportGenerated";
-  private static final String AUDIT_REPORT_NAME = "audit-report";
+  private static final Map<EventType, String> EVENT_TYPES_MAPPING = Map.of(
+      LOGIN, SUCCESS_STATUS,
+      LOGIN_ERROR, FAILURE_STATUS);
 
   @NonNull
-  private final AuditingFinder auditingFinder;
+  private final EventQuery eventQuery;
 
   List<AuditHistoryEventDto> provide(@NonNull OffsetDateTime from, @NonNull OffsetDateTime to) {
-    return auditingFinder
-        .find(from, to, singletonList(REPORT_GENERATED_EVENT_TYPE))
+    long reportFromMillis = from.toInstant().toEpochMilli();
+    return eventQuery.getEvents(from, List.of(LOGIN, LOGIN_ERROR))
         .stream()
-        .filter(AuditHistoryEventProvider::isAuditReport)
+        .filter(e -> e.getTimestamp() >= reportFromMillis)
+        .sorted(comparingLong(EventDto::getTimestamp))
         .map(AuditHistoryEventProvider::mapToDto)
         .collect(toList());
   }
 
-  private static boolean isAuditReport(AuditDataDto auditData) {
-    return StringUtils.equals(auditData.getEntityId(), AUDIT_REPORT_NAME);
-  }
-
-  private static AuditHistoryEventDto mapToDto(AuditDataDto auditData) {
-    ReportGenerationDetails details = deserializeDetails(auditData.getDetails());
-
+  private static AuditHistoryEventDto mapToDto(EventDto event) {
     return AuditHistoryEventDto.builder()
-        .username(auditData.getPrincipal())
-        .status(details.getStatus())
-        .ipAddress(details.getIpAddress())
-        .timestamp(auditData.getTimestamp().toInstant())
+        .username(event.getUserName())
+        .status(EVENT_TYPES_MAPPING.get(event.getType()))
+        .ipAddress(event.getIpAddress())
+        .timestamp(event.getTimestamp())
         .build();
-  }
-
-  private static ReportGenerationDetails deserializeDetails(String details) {
-    return JSON_CONVERTER.deserializeObject(
-        JSON_CONVERTER.deserializeFromString(details), ReportGenerationDetails.class);
   }
 }

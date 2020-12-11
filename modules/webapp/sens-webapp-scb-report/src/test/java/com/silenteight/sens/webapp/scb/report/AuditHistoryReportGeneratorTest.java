@@ -61,13 +61,13 @@ class AuditHistoryReportGeneratorTest {
                 .username("userA")
                 .status("SUCCESS")
                 .ipAddress("192.122.0.8")
-                .timestamp(Instant.parse("2020-08-15T12:14:32Z"))
+                .timestamp(Instant.parse("2020-08-15T12:14:32Z").toEpochMilli())
                 .build(),
             AuditHistoryEventDto.builder()
                 .username("userB")
                 .status("FAILED")
                 .ipAddress("192.154.0.1")
-                .timestamp(Instant.parse("2020-09-20T13:15:48Z"))
+                .timestamp(Instant.parse("2020-09-20T13:15:48Z").toEpochMilli())
                 .build()));
 
     underTest.generate();
