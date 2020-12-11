@@ -52,8 +52,8 @@ public class MessagingErrorConfiguration {
   }
 
   @Bean
-  @ConditionalOnMissingBean
-  DefaultLoggingErrorMessageListener errorMessageLogger() {
+  @ConditionalOnMissingBean(ErrorMessageListener.class)
+  ErrorMessageListener errorMessageListener() {
     String logExpression =
         "'Message pushed to " + properties.getErrorQueueName() + " : ' + headers";
     LoggingHandler loggingHandler = new LoggingHandler(Level.WARN);
