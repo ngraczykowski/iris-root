@@ -1,8 +1,10 @@
 package com.silenteight.sep.base.common.messaging;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.ErrorChannelIT.ErrorChannelConfiguration;
+import com.silenteight.sep.base.common.messaging.ErrorChannelIT.ErrorChannelConfiguration.TestErrorMessageListener;
 import com.silenteight.sep.base.testing.BaseIntegrationTest;
 
 import org.junit.jupiter.api.AfterEach;
@@ -17,9 +19,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessagingException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.*;
@@ -36,6 +41,9 @@ class ErrorChannelIT extends BaseIntegrationTest {
 
   @Autowired
   private PublishSubscribeChannel errorChannel;
+
+  @Autowired
+  private TestErrorMessageListener customErrorMessageListener;
 
   @Autowired
   private RabbitTemplate template;
@@ -66,6 +74,8 @@ class ErrorChannelIT extends BaseIntegrationTest {
         .isEqualTo(amqpAdmin
             .getQueueProperties("error-queue")
             .get("QUEUE_MESSAGE_COUNT"));
+    assertThat(customErrorMessageListener.getCount().intValue())
+        .isEqualTo(exceptionCount);
   }
 
   @RequiredArgsConstructor
@@ -96,6 +106,22 @@ class ErrorChannelIT extends BaseIntegrationTest {
             throw new IllegalStateException("Exception in handler: " + p);
           })
           .get();
+    }
+
+    @Bean
+    TestErrorMessageListener customErrorMessageListener() {
+      return new TestErrorMessageListener();
+    }
+
+    class TestErrorMessageListener implements ErrorMessageListener {
+
+      @Getter
+      private final AtomicInteger count = new AtomicInteger();
+
+      @Override
+      public void handleMessage(Message<?> message) throws MessagingException {
+        count.incrementAndGet();
+      }
     }
   }
 }
