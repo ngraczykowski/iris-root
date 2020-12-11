@@ -28,6 +28,10 @@ class MessagingProperties {
   @NotNull
   private ErrorQueue errorQueue = new ErrorQueue();
 
+  public String getErrorQueueName() {
+    return errorQueue.getName();
+  }
+
   @Data
   static class Compression {
 

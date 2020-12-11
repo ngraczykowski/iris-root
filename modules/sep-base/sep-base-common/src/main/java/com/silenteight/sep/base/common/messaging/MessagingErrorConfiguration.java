@@ -42,7 +42,7 @@ public class MessagingErrorConfiguration {
       havingValue = "true", matchIfMissing = true)
   Queue errorQueue() {
     return QueueBuilder
-        .durable(properties.getErrorQueue().getName())
+        .durable(properties.getErrorQueueName())
         .build();
   }
 
@@ -54,8 +54,10 @@ public class MessagingErrorConfiguration {
   @Bean
   @ConditionalOnMissingBean
   DefaultLoggingErrorMessageListener errorMessageLogger() {
+    String logExpression =
+        "'Message pushed to " + properties.getErrorQueueName() + " : ' + headers";
     LoggingHandler loggingHandler = new LoggingHandler(Level.WARN);
-    loggingHandler.setLogExpressionString("");
+    loggingHandler.setLogExpressionString(logExpression);
     return new DefaultLoggingErrorMessageListener(loggingHandler);
   }
 
