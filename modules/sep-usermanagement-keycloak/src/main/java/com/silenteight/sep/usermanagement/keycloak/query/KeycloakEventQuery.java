@@ -17,19 +17,23 @@ import java.util.function.Predicate;
 
 import static com.silenteight.sep.usermanagement.api.event.EventType.EXTEND_SESSION;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN;
+import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN_ERROR;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGOUT;
 import static java.time.format.DateTimeFormatter.ISO_DATE;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 class KeycloakEventQuery implements EventQuery {
 
   private static final String LOGIN_EVENT_TYPE = "LOGIN";
+  private static final String LOGIN_ERROR_EVENT_TYPE = "LOGIN_ERROR";
   private static final String LOGOUT_EVENT_TYPE = "LOGOUT";
   private static final String EXTEND_SESSION_EVENT_TYPE = "REFRESH_TOKEN";
 
   private static final Map<EventType, Set<String>> EVENT_TYPES_MAPPING = Map.of(
       LOGIN, Set.of(LOGIN_EVENT_TYPE),
+      LOGIN_ERROR, Set.of(LOGIN_ERROR_EVENT_TYPE),
       LOGOUT, Set.of(LOGOUT_EVENT_TYPE),
       EXTEND_SESSION, Set.of(EXTEND_SESSION_EVENT_TYPE));
 
@@ -48,6 +52,8 @@ class KeycloakEventQuery implements EventQuery {
     types.forEach(type -> {
       if (type == LOGIN)
         result.addAll(getLoginEvents(events));
+      if (type == LOGIN_ERROR)
+        result.addAll(getLoginErrorEvents(events));
       if (type == LOGOUT)
         result.addAll(getLogoutEvents(events));
       if (type == EXTEND_SESSION)
@@ -71,6 +77,10 @@ class KeycloakEventQuery implements EventQuery {
 
   private List<EventDto> getLoginEvents(List<EventRepresentation> events) {
     return getEventsForType(events, LOGIN);
+  }
+
+  private List<EventDto> getLoginErrorEvents(List<EventRepresentation> events) {
+    return getEventsForType(events, LOGIN_ERROR, KeycloakEventQuery::isUsernamePresent);
   }
 
   private List<EventDto> getLogoutEvents(List<EventRepresentation> events) {
@@ -112,6 +122,10 @@ class KeycloakEventQuery implements EventQuery {
         .ipAddress(event.getIpAddress())
         .timestamp(event.getTime())
         .build();
+  }
+
+  private static boolean isUsernamePresent(EventRepresentation event) {
+    return isNotBlank(event.getDetails().get(USERNAME_DETAILS));
   }
 
   private static boolean isFrontendEvent(EventRepresentation event) {

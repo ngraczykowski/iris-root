@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static com.silenteight.sep.usermanagement.api.event.EventType.EXTEND_SESSION;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN;
+import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN_ERROR;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGOUT;
 import static java.time.OffsetDateTime.parse;
 import static org.assertj.core.api.Assertions.*;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.*;
 class KeycloakEventQueryTest {
 
   private static final String LOGIN_EVENT_TYPE = "LOGIN";
+  private static final String LOGIN_ERROR_EVENT_TYPE = "LOGIN_ERROR";
   private static final String LOGOUT_EVENT_TYPE = "LOGOUT";
   private static final String EXTEND_SESSION_EVENT_TYPE = "REFRESH_TOKEN";
 
@@ -48,11 +50,16 @@ class KeycloakEventQueryTest {
     String frontendEventCodeId = "123";
     String backendEventCodeId = "567";
     long loginTime = 156896544L;
+    long loginErrorTime = 156921137L;
     long logoutTime = 156947890L;
     long extendSessionTime1 = 156900543L;
     long extendSessionTime2 = 156927211L;
     when(realmResource.getEvents(
-        List.of(LOGIN_EVENT_TYPE, LOGOUT_EVENT_TYPE, EXTEND_SESSION_EVENT_TYPE),
+        List.of(
+            LOGIN_EVENT_TYPE,
+            LOGIN_ERROR_EVENT_TYPE,
+            LOGOUT_EVENT_TYPE,
+            EXTEND_SESSION_EVENT_TYPE),
         null,
         null,
         "2020-05-28+01:00",
@@ -66,6 +73,11 @@ class KeycloakEventQueryTest {
                     LOGIN_EVENT_TYPE,
                     userId,
                     loginTime,
+                    Map.of("code_id", frontendEventCodeId, "username", userName)),
+                frontendEventRepresentation(
+                    LOGIN_ERROR_EVENT_TYPE,
+                    userId,
+                    loginErrorTime,
                     Map.of("code_id", frontendEventCodeId, "username", userName)),
                 backendEventRepresentation(
                     EXTEND_SESSION_EVENT_TYPE,
@@ -84,13 +96,15 @@ class KeycloakEventQueryTest {
                     Map.of("code_id", frontendEventCodeId))));
 
     // when
-    List<EventDto> events = underTest.getEvents(from, List.of(LOGIN, LOGOUT, EXTEND_SESSION));
+    List<EventDto> events = underTest.getEvents(
+        from, List.of(LOGIN, LOGIN_ERROR, LOGOUT, EXTEND_SESSION));
 
     // then
-    assertThat(events).hasSize(3);
+    assertThat(events).hasSize(4);
     assertThat(events).isEqualTo(
         List.of(
             loginEventDto(frontendEventCodeId, userId, userName, loginTime),
+            loginErrorEventDto(frontendEventCodeId, userId, userName, loginErrorTime),
             logoutEventDto(frontendEventCodeId, userId, logoutTime),
             extendSessionEventDto(frontendEventCodeId, userId, extendSessionTime2)));
   }
@@ -124,6 +138,12 @@ class KeycloakEventQueryTest {
       String codeId, String userId, String userName, long timestamp) {
 
     return eventDto(LOGIN, codeId, userId, userName, timestamp);
+  }
+
+  private static EventDto loginErrorEventDto(
+      String codeId, String userId, String userName, long timestamp) {
+
+    return eventDto(LOGIN_ERROR, codeId, userId, userName, timestamp);
   }
 
   private static EventDto extendSessionEventDto(
