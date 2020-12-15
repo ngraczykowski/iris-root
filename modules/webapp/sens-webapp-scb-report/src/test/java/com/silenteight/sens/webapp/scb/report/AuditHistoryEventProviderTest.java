@@ -38,13 +38,15 @@ class AuditHistoryEventProviderTest {
     OffsetDateTime to = now();
     String userName = "jdoe";
     long loginErrorTimestamp = createPastTimestamp(to, 40);
-    long loginTimestamp = createPastTimestamp(to, 40);
+    long loginTimestamp = createPastTimestamp(to, 38);
+    long extendSessionTimestamp = createPastTimestamp(to, 30);
 
     when(eventQuery.getEvents(from, List.of(LOGIN, LOGIN_ERROR)))
         .thenReturn(
             List.of(
                 makeLoginErrorEventDto(userName, loginErrorTimestamp),
-                makeLoginEventDto(userName, loginTimestamp)));
+                makeLoginEventDto(userName, loginTimestamp),
+                makeExtendSessionEventDto(extendSessionTimestamp)));
 
     List<AuditHistoryEventDto> events = underTest.provide(from, to);
 
@@ -75,6 +77,10 @@ class AuditHistoryEventProviderTest {
 
   private static EventDto makeLoginEventDto(String userName, long timestamp) {
     return makeEventDto(LOGIN, userName, timestamp);
+  }
+
+  private static EventDto makeExtendSessionEventDto(long timestamp) {
+    return makeEventDto(LOGIN, null, timestamp);
   }
 
   private static EventDto makeEventDto(EventType eventType, String userName, long timestamp) {

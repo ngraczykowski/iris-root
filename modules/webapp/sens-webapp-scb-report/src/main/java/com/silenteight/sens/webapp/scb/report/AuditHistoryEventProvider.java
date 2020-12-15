@@ -15,6 +15,7 @@ import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN_ERROR;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 class AuditHistoryEventProvider {
@@ -33,10 +34,14 @@ class AuditHistoryEventProvider {
     long reportFromMillis = from.toInstant().toEpochMilli();
     return eventQuery.getEvents(from, List.of(LOGIN, LOGIN_ERROR))
         .stream()
-        .filter(e -> e.getTimestamp() >= reportFromMillis)
+        .filter(event -> isCorrectEvent(event, reportFromMillis))
         .sorted(comparingLong(EventDto::getTimestamp))
         .map(AuditHistoryEventProvider::mapToDto)
         .collect(toList());
+  }
+
+  private static boolean isCorrectEvent(EventDto event, long reportFromMillis) {
+    return event.getTimestamp() >= reportFromMillis && isNotBlank(event.getUserName());
   }
 
   private static AuditHistoryEventDto mapToDto(EventDto event) {
