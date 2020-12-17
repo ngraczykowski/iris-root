@@ -23,11 +23,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.silenteight.sep.usermanagement.api.event.EventType.EXTEND_SESSION;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGIN;
 import static com.silenteight.sep.usermanagement.api.event.EventType.LOGOUT;
-import static freemarker.template.utility.Collections12.singletonList;
 import static java.lang.Math.toIntExact;
 import static java.time.Instant.ofEpochMilli;
 import static java.time.OffsetDateTime.ofInstant;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
@@ -271,8 +271,7 @@ class UserAuthActivityEventProvider {
         .values()
         .stream()
         .flatMap(List::stream)
-        .sorted(comparingLong(EventDto::getTimestamp))
-        .findFirst()
+        .min(comparingLong(EventDto::getTimestamp))
         .map(event -> ofInstant(ofEpochMilli(event.getTimestamp()), zoneId))
         .orElse(from);
     reportMetadataService.saveStartTime(REPORT_NAME, nextReportStartTime);

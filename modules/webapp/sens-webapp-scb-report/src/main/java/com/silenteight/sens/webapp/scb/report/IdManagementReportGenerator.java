@@ -59,7 +59,7 @@ class IdManagementReportGenerator {
   private static Stream<String> reportLinesFrom(List<IdManagementEventDto> idManagementEvents) {
     return new CsvBuilder<>(idManagementEvents.stream())
         .cell("AppID_ID", IdManagementEventDto::getUsername)
-        .cell("AppID_Name", IdManagementEventDto::getRole)
+        .cell("AppID_Name", IdManagementEventDto::getRolesAsString)
         .cell("AppID_Implemented_By", IdManagementEventDto::getPrincipal)
         .cell("AppID_Implemented_TimeStamp", event -> formatDate(event.getTimestamp()))
         .cell("AppID_Status", IdManagementEventDto::getAction)

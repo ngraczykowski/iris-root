@@ -27,6 +27,7 @@ import java.util.Set;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static java.time.OffsetDateTime.now;
 import static java.util.Collections.emptySet;
+import static java.util.Set.of;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,7 +37,7 @@ class IdManagementEventProviderTest {
 
   private static final JsonConversionHelper JSON_CONVERTER = JsonConversionHelper.INSTANCE;
   private static final Set<String> USER_MANAGEMENT_EVENT_TYPES =
-      Set.of("UserCreated", "UserUpdated", "UserRemoved");
+      of("UserCreated", "UserUpdated", "UserRemoved");
 
   @Mock
   private AuditingFinder auditingFinder;
@@ -50,7 +51,7 @@ class IdManagementEventProviderTest {
     String principal = "user2";
     String role1 = "roleA";
     String role2 = "roleB";
-    Set<String> roles = Set.of(role1, role2);
+    Set<String> roles = of(role1, role2);
 
     OffsetDateTime from = now().minusHours(6);
     OffsetDateTime to = now();
@@ -68,7 +69,7 @@ class IdManagementEventProviderTest {
     List<IdManagementEventDto> idManagementEvents =
         idManagementEventProvider.idManagementEvents(from, to);
 
-    assertThat(idManagementEvents).hasSize(2);
+    assertThat(idManagementEvents).hasSize(1);
 
     IdManagementEventDto idManagementEvent1 = idManagementEvents.get(0);
     assertThat(idManagementEvent1.getUsername()).isEqualTo(username);
@@ -76,15 +77,7 @@ class IdManagementEventProviderTest {
         Instant.parse("2020-04-15T12:14:32Z"));
     assertThat(idManagementEvent1.getPrincipal()).isEqualTo(principal);
     assertThat(idManagementEvent1.getAction()).isEqualTo("CREATE");
-    assertThat(idManagementEvent1.getRole()).isEqualTo(role1);
-
-    IdManagementEventDto idManagementEvent2 = idManagementEvents.get(1);
-    assertThat(idManagementEvent2.getUsername()).isEqualTo(username);
-    assertThat(idManagementEvent2.getTimestamp()).isEqualTo(
-        Instant.parse(("2020-04-15T12:14:32Z")));
-    assertThat(idManagementEvent2.getPrincipal()).isEqualTo(principal);
-    assertThat(idManagementEvent2.getAction()).isEqualTo("CREATE");
-    assertThat(idManagementEvent2.getRole()).isEqualTo(role2);
+    assertThat(idManagementEvent1.getRoles()).contains(role1, role2);
   }
 
   @Test
@@ -106,7 +99,7 @@ class IdManagementEventProviderTest {
 
     IdManagementEventDto idManagementEvent1 = idManagementEvents.get(0);
     assertThat(idManagementEvent1.getAction()).isEqualTo("CREATE");
-    assertThat(idManagementEvent1.getRole()).isNull();
+    assertThat(idManagementEvent1.getRoles()).contains("NO_ROLE");
   }
 
   @Test
@@ -117,7 +110,7 @@ class IdManagementEventProviderTest {
 
     OffsetDateTime from = now().minusHours(7);
     OffsetDateTime to = now();
-    Set<String> roles = Set.of(role);
+    Set<String> roles = of(role);
 
     when(auditingFinder.find(from, to, USER_MANAGEMENT_EVENT_TYPES))
         .thenReturn(List.of(
@@ -140,7 +133,39 @@ class IdManagementEventProviderTest {
         Instant.parse("2020-04-15T12:14:32.456Z"));
     assertThat(idManagementEvent1.getPrincipal()).isEqualTo(principal);
     assertThat(idManagementEvent1.getAction()).isEqualTo("MODIFY");
-    assertThat(idManagementEvent1.getRole()).isEqualTo(role);
+    assertThat(idManagementEvent1.getRoles()).contains(role);
+  }
+
+  @Test
+  void returnsDeleteEventBasingOnAudit_userHasNoRoles() {
+    String username = "user2";
+    String principal = "user3";
+
+    OffsetDateTime from = now().minusHours(7);
+    OffsetDateTime to = now();
+
+    when(auditingFinder.find(from, to, USER_MANAGEMENT_EVENT_TYPES))
+        .thenReturn(List.of(
+            auditDataDtoWithDefaults()
+                .entityId(username)
+                .timestamp(Timestamp.valueOf("2020-04-15 12:14:32.456"))
+                .type("UserUpdated")
+                .principal(principal)
+                .details(jsonStringOf(updatedUserDetailsWith(emptySet())))
+                .build()));
+
+    List<IdManagementEventDto> idManagementEvents =
+        idManagementEventProvider.idManagementEvents(from, to);
+
+    assertThat(idManagementEvents).hasSize(1);
+
+    IdManagementEventDto idManagementEvent1 = idManagementEvents.get(0);
+    assertThat(idManagementEvent1.getUsername()).isEqualTo(username);
+    assertThat(idManagementEvent1.getTimestamp()).isEqualTo(
+        Instant.parse("2020-04-15T12:14:32.456Z"));
+    assertThat(idManagementEvent1.getPrincipal()).isEqualTo(principal);
+    assertThat(idManagementEvent1.getAction()).isEqualTo("DELETE");
+    assertThat(idManagementEvent1.getRoles()).isEmpty();
   }
 
   @Test
@@ -151,7 +176,7 @@ class IdManagementEventProviderTest {
 
     OffsetDateTime from = now().minusHours(7);
     OffsetDateTime to = now();
-    Set<String> roles = Set.of(role);
+    Set<String> roles = of(role);
 
     when(auditingFinder.find(from, to, USER_MANAGEMENT_EVENT_TYPES))
         .thenReturn(List.of(
@@ -174,7 +199,7 @@ class IdManagementEventProviderTest {
         Instant.parse("2020-04-16T12:14:32.789Z"));
     assertThat(idManagementEvent1.getPrincipal()).isEqualTo(principal);
     assertThat(idManagementEvent1.getAction()).isEqualTo("DELETE");
-    assertThat(idManagementEvent1.getRole()).isEqualTo(role);
+    assertThat(idManagementEvent1.getRoles()).contains(role);
   }
 
   private RemovedUserDetails removedUserDetailsWith(Set<String> roles) {

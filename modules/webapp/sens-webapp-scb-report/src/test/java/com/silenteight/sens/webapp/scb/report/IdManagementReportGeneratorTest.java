@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import static com.silenteight.sens.webapp.common.testing.matcher.StreamMatcher.streamThat;
 import static java.time.Instant.now;
+import static java.util.Collections.singleton;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -60,14 +61,14 @@ class IdManagementReportGeneratorTest {
         .thenReturn(List.of(
             IdManagementEventDto.builder()
                 .username("userA")
-                .role("ANALYST")
+                .roles(singleton("ANALYST"))
                 .principal("B,user")
                 .action("CREATE")
                 .timestamp(Instant.parse("2020-08-15T12:14:32Z"))
                 .build(),
             IdManagementEventDto.builder()
                 .username("userABC")
-                .role("APPROVER")
+                .roles(singleton("APPROVER"))
                 .principal("BCD,user")
                 .action("DELETE")
                 .timestamp(Instant.parse("2020-09-20T13:15:48Z"))
