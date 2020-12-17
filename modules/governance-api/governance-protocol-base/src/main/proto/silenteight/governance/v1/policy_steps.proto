@@ -18,27 +18,32 @@ message GetSolutionsRequest {
     repeated FeatureVector featureVectors = 2;
 }
 
-message GetSolutionsResponse {
-    repeated BranchSolution solutions = 1;
-}
-
 message FeatureCollection {
-    repeated Feature feature = 1;
+  repeated Feature feature = 1;
 }
 
 message Feature {
-    string name = 1;
+  string name = 1;
 }
 
 message FeatureVector {
   repeated string featureValue = 1;
 }
 
+message GetSolutionsResponse {
+    repeated SolutionResponse solutions = 1;
+}
 
-enum BranchSolution {
-  BRANCH_NO_DECISION = 0;
-  BRANCH_FALSE_POSITIVE = 1;
-  BRANCH_POTENTIAL_TRUE_POSITIVE = 2;
-  BRANCH_HINTED_FALSE_POSITIVE = 3;
-  BRANCH_HINTED_POTENTIAL_TRUE_POSITIVE = 4;
+message SolutionResponse {
+  FeatureVectorSolution featureVectorSolution = 1;
+  string featureVectorSignature = 2;
+  string stepId = 3;
+}
+
+enum FeatureVectorSolution {
+  SOLUTION_NO_DECISION = 0;
+  SOLUTION_FALSE_POSITIVE = 1;
+  SOLUTION_POTENTIAL_TRUE_POSITIVE = 2;
+  SOLUTION_HINTED_FALSE_POSITIVE = 3;
+  SOLUTION_HINTED_POTENTIAL_TRUE_POSITIVE = 4;
 }
