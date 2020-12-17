@@ -27,7 +27,7 @@ class IdManagementReportGenerator {
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormatter.ofPattern("ddMMyyyy HH:mm:ss").withZone(TIME_ZONE.toZoneId());
 
-  private static final String FILE_NAME_PREFIX = "SURVILLANCE_OPTIMIZATION_ID_Management_";
+  private static final String FILE_NAME_PREFIX = "SURVEILLANCE_OPTIMIZATION_ID_Management_";
   private static final String APP_ID_COUNTRY_DEFAULT_VALUE = "Global";
 
   @NonNull

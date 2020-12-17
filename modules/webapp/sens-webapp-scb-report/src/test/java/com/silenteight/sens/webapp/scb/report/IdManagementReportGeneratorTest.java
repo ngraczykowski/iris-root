@@ -111,7 +111,7 @@ class IdManagementReportGeneratorTest {
 
     verify(lineWriter).write(
         eq(REPORTS_DIR),
-        eq("SURVILLANCE_OPTIMIZATION_ID_Management_20200522151530.csv"),
+        eq("SURVEILLANCE_OPTIMIZATION_ID_Management_20200522151530.csv"),
         any(Stream.class));
   }
 }

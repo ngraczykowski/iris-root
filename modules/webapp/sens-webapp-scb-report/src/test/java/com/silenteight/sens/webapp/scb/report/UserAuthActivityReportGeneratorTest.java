@@ -116,7 +116,7 @@ class UserAuthActivityReportGeneratorTest {
 
     verify(fileLineWriter).write(
         eq(REPORTS_DIR),
-        eq("SURVILLANCE_OPTIMIZATION_Login_Logout_20200816122530.csv"),
+        eq("SURVEILLANCE_OPTIMIZATION_Login_Logout_20200816122530.csv"),
         any(Stream.class));
   }
 }

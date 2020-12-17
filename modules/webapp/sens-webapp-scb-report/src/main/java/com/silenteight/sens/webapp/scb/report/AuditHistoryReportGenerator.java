@@ -28,7 +28,7 @@ class AuditHistoryReportGenerator {
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormatter.ofPattern("ddMMyyyy HH:mm:ss").withZone(TIME_ZONE.toZoneId());
 
-  private static final String FILE_NAME_PREFIX = "SURVILLANCE_OPTIMIZATION_AuditHistory_";
+  private static final String FILE_NAME_PREFIX = "SURVEILLANCE_OPTIMIZATION_AuditHistory_";
   private static final String AUDIT_COUNTRY_DEFAULT_VALUE = "Global";
 
   @NonNull

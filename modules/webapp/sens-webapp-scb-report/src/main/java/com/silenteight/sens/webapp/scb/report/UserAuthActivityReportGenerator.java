@@ -29,7 +29,7 @@ class UserAuthActivityReportGenerator {
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormatter.ofPattern("ddMMyyyy HH:mm:ss").withZone(TIME_ZONE.toZoneId());
 
-  private static final String FILE_NAME_PREFIX = "SURVILLANCE_OPTIMIZATION_Login_Logout_";
+  private static final String FILE_NAME_PREFIX = "SURVEILLANCE_OPTIMIZATION_Login_Logout_";
   private static final String LIST_ELEMENTS_JOINER = ",";
   private static final String ACCESS_COUNTRY_DEFAULT_VALUE = "Global";
   private static final String NO_TIMESTAMP_DEFAULT_VALUE = "";

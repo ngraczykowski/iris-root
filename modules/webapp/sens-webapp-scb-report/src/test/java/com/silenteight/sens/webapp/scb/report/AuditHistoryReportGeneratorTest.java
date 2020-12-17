@@ -105,7 +105,7 @@ class AuditHistoryReportGeneratorTest {
 
     verify(fileLineWriter).write(
         eq(REPORTS_DIR),
-        eq("SURVILLANCE_OPTIMIZATION_AuditHistory_20200522151530.csv"),
+        eq("SURVEILLANCE_OPTIMIZATION_AuditHistory_20200522151530.csv"),
         any(Stream.class));
   }
 }
