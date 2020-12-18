@@ -1,0 +1,6 @@
+= HLD #14
+
+- Reference ticket: *TBD*
+- Reason: As a BO, I want to add or remove an extra feature from the RB.
+
+If all works fine, there should be no change in the steps.
