@@ -14,8 +14,8 @@ service PolicyStepsGovernance {
 }
 
 message GetSolutionsRequest {
-    FeatureCollection featureCollection = 1;
-    repeated FeatureVector featureVectors = 2;
+    FeatureCollection feature_collection = 1;
+    repeated FeatureVector feature_vectors = 2;
 }
 
 message FeatureCollection {
@@ -27,7 +27,7 @@ message Feature {
 }
 
 message FeatureVector {
-  repeated string featureValue = 1;
+  repeated string feature_value = 1;
 }
 
 message GetSolutionsResponse {
@@ -35,9 +35,9 @@ message GetSolutionsResponse {
 }
 
 message SolutionResponse {
-  FeatureVectorSolution featureVectorSolution = 1;
-  string featureVectorSignature = 2;
-  string stepId = 3;
+  FeatureVectorSolution feature_vector_solution = 1;
+  string feature_vector_signature = 2;
+  string step_id = 3;
 }
 
 enum FeatureVectorSolution {
