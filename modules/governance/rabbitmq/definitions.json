@@ -1,36 +1,6 @@
 {
   "rabbit_version": "3.8.2",
   "rabbitmq_version": "3.8.2",
-  "users": [
-    {
-      "name": "serp",
-      "password_hash": "YoSnCWRxXmpePZ8nDq5V7eviBjisD00LoznYsGkl7R7oOSaU",
-      "hashing_algorithm": "rabbit_password_hashing_sha256",
-      "tags": "administrator"
-    }
-  ],
-  "vhosts": [
-    {
-      "name": "/"
-    }
-  ],
-  "permissions": [
-    {
-      "user": "serp",
-      "vhost": "/",
-      "configure": ".*",
-      "write": ".*",
-      "read": ".*"
-    }
-  ],
-  "topic_permissions": [],
-  "parameters": [],
-  "global_parameters": [
-    {
-      "name": "cluster_name",
-      "value": "rabbit@2f9104e5ed4c"
-    }
-  ],
   "policies": [
   ],
   "queues": [
