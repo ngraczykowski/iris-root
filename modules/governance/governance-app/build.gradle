@@ -1,0 +1,133 @@
+plugins {
+  id "java"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+description = "Governance Application"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterGrpc
+  implementation.extendsFrom starterSpringApp
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterIntegration
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+  testImplementation.extendsFrom starterSpockTest
+}
+
+dependencies {
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_serp_protocol_base
+  implementation libraries.spring_webmvc
+
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.protobuf_java_util
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
+  implementation libraries.jaxb_api
+
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_integration_test
+
+  aspect libraries.silenteight_sep_base_aspects
+
+
+
+//  MY
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.spring_context_support
+
+  implementation libraries.jakarta_inject
+  implementation libraries.jakarta_mail
+
+  implementation libraries.protobuf_java_util
+
+  implementation libraries.querydsl_jpa
+  implementation libraries.silenteight_serp_common
+  annotationProcessor libraries.querydsl_apt_jpa
+  annotationProcessor libraries.jakarta_persistence_api
+  annotationProcessor libraries.jakarta_annotation_api
+  annotationProcessor libraries.spring_boot_configuration_processor
+
+  testImplementation libraries.rest_assured_spring_mock_mvc
+
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.serp.governance.GovernanceApplication"
+  }
+}
+
+jib {
+  from {
+    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+    def imageSuffix = "$version".endsWith("-SNAPSHOT") ? "-debug" : ""
+    image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+  }
+  to {
+    image = "docker.repo.silenteight.com/governance/${project.name}:${version}"
+    if (!"$version".endsWith("-SNAPSHOT"))
+      tags = ["latest"]
+  }
+  container {
+    appRoot = "/silenteight/app"
+    environment = [
+        "SILENTEIGHT_HOME"          : "/silenteight",
+        "CLOUDAPI_DB_HOST"          : "postgres",
+        "CLOUDAPI_DB_PORT"          : "5432",
+        "CLOUDAPI_DB_NAME"          : "governance",
+        "CLOUDAPI_DB_USER"          : "governance",
+        "CLOUDAPI_DB_PASSWORD"      : "governance",
+        "CLOUDAPI_RABBITMQ_HOST"    : "rabbitmq",
+        "CLOUDAPI_RABBITMQ_PORT"    : "5672",
+        "CLOUDAPI_RABBITMQ_USER"    : "governance",
+        "CLOUDAPI_RABBITMQ_PASSWORD": "governance",
+        "CLOUDAPI_RABBITMQ_VHOST"   : "/",
+        "TRUSTSTORE_PATH"           : "/silenteight/cert/truststore.p12",
+        "TRUSTSTORE_PASSWORD"       : "changeme",
+        "TRUSTSTORE_TYPE"           : "PKCS12",
+        "KEYSTORE_PATH"             : "/silenteight/cert/keystore.p12",
+        "KEYSTORE_PASSWORD"         : "changeme",
+        "KEYSTORE_TYPE"             : "PKCS12",
+        // Validates the server certificate is trusted (i.e., is in the trust store).
+        "TLS_VALIDATE_SERVER"       : "true",
+        // Verifies the actual server host name is as states in the certificate.
+        "TLS_VERIFY_HOSTNAME"       : "true",
+        "SPRING_PROFILES_ACTIVE"    : "",
+    ]
+    jvmFlags = [
+        "-XX:MaxRAMPercentage=75",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.jnu.encoding=UTF-8",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djava.io.tmpdir=/tmp",
+        "-Dsilenteight.home=/silenteight",
+        "-Dspring.profiles.include=container",
+        "-Dserver.port=8080",
+        "-Dgrpc.server.port=8081",
+    ]
+    ports = ["8080", "8081"]
+    user = "nonroot"
+    volumes = ["/silenteight/cert"]
+    workingDirectory = "/silenteight"
+  }
+}
+
