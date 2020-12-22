@@ -4,8 +4,8 @@
 
 serp.rabbitmq.host: localhost
 serp.rabbitmq.port: 24130
-serp.rabbitmq.user: serp
-serp.rabbitmq.password: serp
+serp.rabbitmq.user: governance
+serp.rabbitmq.password: governance
 serp.rabbitmq.vhost: /
 #serp.rabbitmq.addresses: ${serp.rabbitmq.host}:${serp.rabbitmq.port}
 serp.messaging.concurrency: 4

@@ -3,11 +3,11 @@
 ####################################################################################################
 
 serp.db.host: localhost
-serp.db.port: 24290
+serp.db.port: 24292
 serp.db.schema: public
-serp.db.name: serp
-serp.db.user: serp
-serp.db.password: serp
+serp.db.name: governance
+serp.db.user: governance
+serp.db.password: governance
 serp.db.url: jdbc:postgresql://${serp.db.host}:${serp.db.port}/${serp.db.name}?currentSchema=${serp.db.schema}
 
 serp.db.connections.min: 1
