@@ -11,8 +11,8 @@ serp.rabbitmq.vhost: /
 serp.messaging.concurrency: 4
 serp.messaging.prefetch: 25
 serp.messaging.encryption.enabled: false
-serp.messaging.encryption.key-seed: "changeMe"
-serp.messaging.encryption.salt: "changeMe"
+serp.messaging.encryption.key-seed: change_me_please
+serp.messaging.encryption.salt: change_me_please
 
 ####################################################################################################
 # CONFIGURATION
