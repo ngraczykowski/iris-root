@@ -59,7 +59,6 @@ dependencies {
   implementation libraries.protobuf_java_util
 
   implementation libraries.querydsl_jpa
-  implementation libraries.silenteight_serp_common
   annotationProcessor libraries.querydsl_apt_jpa
   annotationProcessor libraries.jakarta_persistence_api
   annotationProcessor libraries.jakarta_annotation_api
