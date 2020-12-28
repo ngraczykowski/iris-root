@@ -22,6 +22,7 @@ import com.silenteight.serp.governance.migrate.MigrationModule;
 import com.silenteight.serp.governance.model.ModelModule;
 import com.silenteight.serp.governance.notifier.NotifierModule;
 import com.silenteight.serp.governance.solutiondiscrepancy.SolutionDiscrepancyModule;
+import com.silenteight.serp.governance.step.StepModule;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,6 +49,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     ModelModule.class,
     NotifierModule.class,
     SolutionDiscrepancyModule.class,
+    StepModule.class,
     // Interface modules
     GrpcModule.class,
     MailerModule.class,
