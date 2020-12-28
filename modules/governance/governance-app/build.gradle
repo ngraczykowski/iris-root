@@ -23,6 +23,8 @@ configurations {
 }
 
 dependencies {
+  implementation project(":governance-step")
+
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
@@ -45,9 +47,7 @@ dependencies {
 
   aspect libraries.silenteight_sep_base_aspects
 
-
-
-//  MY
+  //  MY
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
