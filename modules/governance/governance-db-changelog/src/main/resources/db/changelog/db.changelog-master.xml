@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <include file="db/changelog/db.changelog-datatypes.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.0.0.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.1.4.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.2.0.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.4.0.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.5.0.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.6.0.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-3.8.0.xml"/>
+  <include file="db/changelog/db.changelog-serp-governance-4.0.0.xml"/>
+
+  <include file="db/changelog/db.changelog-auditing.xml"/>
+
+</databaseChangeLog>
+
+

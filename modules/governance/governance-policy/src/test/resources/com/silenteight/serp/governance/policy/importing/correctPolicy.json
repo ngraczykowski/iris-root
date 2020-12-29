@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "exportedAt": "2020-04-15 10:58:53.451"
+  },
+  "policy": {
+    "policyId": "01256804-1ce1-4d52-94d4-d1876910f272",
+    "policyName": "policy-name",
+    "steps": [
+      {
+        "solution": "SOLUTION_FALSE_POSITIVE",
+        "stepId": "de1afe98-0b58-4941-9791-4e081f9b8139",
+        "stepName": "branchId=1",
+        "stepDescription": "This is step description",
+        "stepType": "BUSINESS_LOGIC",
+        "featuresLogic": [
+          {
+            "count": 2,
+            "features": {
+              "apType": [ "I" ],
+              "nameAgent": [ "HQ_NO_MATCH" ]
+            }
+          },
+          {
+            "count": 2,
+            "features": {
+              "genderAgent": [ "NO_DATA" ],
+              "dateAgent": [ "NO_DATA" ],
+              "nationalIdAgent": [ "NO_DATA" ],
+              "passportAgent": [ "NO_DATA" ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -23,7 +23,8 @@ configurations {
 }
 
 dependencies {
-  implementation project(":governance-step")
+  implementation project(":governance-db-changelog")
+  implementation project(":governance-policy")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
@@ -42,10 +43,9 @@ dependencies {
 
   implementation libraries.jaxb_api
 
+  testImplementation project(":governance-db-changelog")
   testImplementation libraries.spock_spring
   testImplementation libraries.spring_integration_test
-
-  aspect libraries.silenteight_sep_base_aspects
 
   //  MY
   implementation libraries.silenteight_audit_bs

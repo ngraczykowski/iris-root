@@ -1,0 +1,30 @@
+plugins {
+  id "java"
+  id "maven-publish"
+}
+
+description = "Governance Policy"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterJackson
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_serp_governance_protocol
+  implementation libraries.spring_webmvc
+
+  implementation project(":governance-db-changelog")
+
+  implementation libraries.jaxb_api
+
+  testImplementation project(":governance-db-changelog")
+  testImplementation libraries.silenteight_audit_bs
+}
