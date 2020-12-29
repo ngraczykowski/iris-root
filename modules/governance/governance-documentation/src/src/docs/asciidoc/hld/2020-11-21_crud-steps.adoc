@@ -1,0 +1,92 @@
+= HLD #15
+
+- Reference ticket: *TBD*
+- Reason: As a user of WebApp, I'm able to use CRUD methods on Steps.
+
+We should keep new or edited steps in the browser memory, and when saving, send all create requests.
+
+[plantuml,bo-save-project,svg]
+-----
+@startuml
+header Save project
+
+actor "Business Operator or Approver" as BOA
+
+box "WebApp Frontend" #MintCream
+    participant Frontend
+end box
+
+box "Governance" #LightBlue
+    participant Backend as "Governance"
+    database db as "Governance DB"
+end box
+
+box "RabbitMQ"
+    queue Queue
+end box
+
+====
+
+BOA -> Frontend : Save Policies Project
+
+activate Frontend
+
+loop for each Created Step
+note over Frontend
+ No calls to update Steps, all edit events should create a new Step.
+end note
+    Frontend -> Backend : Create Step
+
+    note over Frontend, Backend
+      * uuid
+      * name
+      * list of features values
+    end note
+
+    Backend -> Queue : Create step command
+    note over Backend, Queue
+      * uuid
+      * name
+      * list of features values
+      * exception_step = false
+    end note
+end loop
+
+Frontend -> Backend : Create Policies Project
+
+deactivate Frontend
+
+note over Frontend, Backend
+ * uuid
+ * name
+ * list of uuid (steps)
+end note
+
+Backend -> Queue : Create Policies Project command
+
+loop for each command
+    Queue -> Backend : Read Create Step command
+    Backend -> db : Save Step
+end loop
+
+Queue -> Backend : Read Create Policies Project command
+Backend -> db : Save Policies project
+note over Backend, db
+ * uuid
+ * name
+ * list of uuid (steps)
+ * created based on uuid
+end note
+
+@enduml
+-----
+Because we do not support editing steps, we do not support deleting steps either.
+All events that we stored in the database shouldn't be edited in any way, due to audit reasons.
+
+To create events, we simply create a step.
+For update events, we create a "copy" of the updated step and store it as a new one.
+For delete events, we simply send a list of uuid (in Policies Project) without the deleted step.
+
+In relation to the above, if we want to remove the exception step we will save Policies Project without this step.
+
+We shouldn't support editing the Policies Project, we should have a new version after editing.

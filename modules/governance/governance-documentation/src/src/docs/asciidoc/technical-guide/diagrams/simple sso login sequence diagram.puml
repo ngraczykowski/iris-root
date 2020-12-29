@@ -1,0 +1,40 @@
+@startuml
+title Simple SSO Login Sequence Diagram
+
+actor Admin
+actor User
+participant Frontend
+participant Backend
+participant Keycloak
+database KeycloakDB
+participant idp as "Identity Provider"
+
+== Configure SAML ==
+
+Admin <- idp : get descriptor (XML file)
+Admin -> Keycloak : import descriptor
+Keycloak -> Admin : export Keycloak descriptor
+Admin -> idp : import Keycloak descriptor
+
+== Sync users ==
+
+Admin -> Backend : sync users from DB
+Backend -> Keycloak : sync users
+Keycloak -> KeycloakDB : CRUD operations
+
+== Login ==
+
+User -> Frontend : login
+Frontend -> Keycloak : redirect user to the Keycloak
+Keycloak -> User : login page
+User -> Keycloak : use SAML authentications
+Keycloak -> idp : authenticate user
+idp -> Keycloak : user authentication
+Keycloak -> KeycloakDB: get roles
+KeycloakDB -> Keycloak : user roles
+Keycloak -> Frontend : authenticate user - send token with roles
+Frontend -> Backend : token with roles
+Backend -> Backend : authorize user based on roles from the token
+Backend -> Frontend : data
+
+@enduml

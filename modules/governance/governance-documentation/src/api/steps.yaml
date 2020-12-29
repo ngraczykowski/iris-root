@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  title: Policy versions and steps
+  description: Policy versions and policy steps API
+  version: 0.2.0
+servers:
+  - url: 'https'
+
+tags:
+  - name: 1st iteration
+    description: Endpoints created during the first iteration
+  - name: 2nd iteration
+    description: Endpoints created during the second iteration
+  - name: policies
+    description: Endpoints related to policies
+  - name: steps
+    description: Endpoints related to policies
+  - name: steps logic
+    description: Endpoints related to steps logic
+  - name: feature vectors
+    description: Endpoints related to steps feature vectors statistics
+  - name: TBD
+    description: To be discussed
+
+paths:
+  /policies?state={state}:
+    get:
+      tags:
+        - 1st iteration
+        - policies
+      description: Returns a list of all policies versions
+      parameters:
+        - in: query
+          name: state
+          required: true
+          description: 'Policy state'
+          schema:
+            $ref: '#/components/schemas/PolicyState'
+      responses:
+        200:
+          description: List of policies versions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Policy'
+
+  /policies:
+    post:
+      tags:
+        - 2nd iteration
+        - policies
+      description: Create a new policy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyCreation'
+      responses:
+        201:
+          description: Created
+        406:
+          description: Could not parse file
+
+  /policies/import:
+    post:
+      tags:
+        - 1st iteration
+        - policies
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+            example:
+              {
+                "metadata": {
+                  "exportedAt": "2019-09-16 19:39:50.574"
+                },
+                "policy": {
+                  policyName: "policy_name",
+                  "steps": [
+                    {
+                      "solution": "FALSE_POSITIVE",
+                      "step-name": "branchId=1",
+                      "featureslogic": [
+                        {
+                          "count": 2,
+                          "features": {
+                            "apType": [ "I" ],
+                            "nameAgent": [ "HQ_NO_MATCH" ]
+                          }
+                        },
+                        {
+                          "count": 2,
+                          "features": {
+                            "genderAgent": [ "NO_DATA" ],
+                            "dateAgent": [ "NO_DATA" ],
+                            "nationalIdAgent": [ "NO_DATA" ],
+                            "passportAgent": [ "NO_DATA" ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+
+      responses:
+        201:
+          description: Created
+
+  /policies/promote/{id}:
+    put:
+      tags:
+        - 2nd iteration
+        - policies
+      description: Promote policy to production
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      responses:
+        202:
+          description: Ok
+
+  /policies/archive:
+    patch:
+      tags:
+        - 2nd iteration
+        - policies
+      description: Archive policies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        200:
+          description: Archived
+
+
+  /policies/{id}/steps:
+    get:
+      tags:
+        - 1st iteration
+        - steps
+      description: 'Return all steps for specific policy'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '527c7c51-c59a-4b9a-ac51-df245ee479f8'
+      responses:
+        200:
+          description: 'A list of step''s logic'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Step'
+
+    post:
+      tags:
+        - 2nd iteration
+        - steps
+      description: 'Create a new step'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Step'
+      responses:
+        201:
+          description: Created
+
+  /policies/{id}/steps/order:
+    get:
+      tags:
+        - 1st iteration
+        - steps
+      description: 'Return an ordered list of steps'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: 'ea4e4a8a-1704-4b30-b9c6-0cdc26628ec1'
+      responses:
+        200:
+          description: 'A list of ordered steps ids'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+                [
+                  '527c7c51-c59a-4b9a-ac51-df245ee479f8',
+                  '7c51527c-c59a-4b9a-ac51-e479f8df245e'
+                ]
+
+    put:
+      tags:
+        - 2nd iteration
+        - steps
+      description: 'Set an order of steps for policy'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '7206df2b-5ba4-4c51-abc7-f073fe25340b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            example: ['1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'b07e57c5-51b1-4650-9273-28e226866b10']
+
+      responses:
+        202:
+          description: OK
+
+  /steps/{id}/logic:
+    get:
+      tags:
+        - 1st iteration
+        - steps logic
+      description: 'Return a step logic'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '32400575-cc51-4663-a810-7888ee9f82ce'
+      responses:
+        200:
+          description: 'Step logic'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureLogicList'
+
+    put:
+      tags:
+        - 2nd iteration
+        - steps logic
+      description: 'Set a step logic'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '3be8b7f5-62b5-4e7a-ab2e-bd9444efbf24'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureLogicList'
+      responses:
+        202:
+          description: OK
+
+  /steps/{id}/vectors/columns:
+    get:
+      tags:
+        - 2nd iteration
+        - feature vectors
+        - TBD
+      description: 'Return a list of feature vectors names'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '091ab92d-a48b-4b77-af67-3db69e4e1ac9'
+      responses:
+        200:
+          description: 'A list of feature vectors'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeatureVector'
+
+  /steps/{id}/vectors:
+    get:
+      tags:
+        - 2nd iteration
+        - feature vectors
+        - TBD
+      description: 'Return a list of feature vectors'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '091ab92d-a48b-4b77-af67-3db69e4e1ac9'
+      responses:
+        200:
+          description: 'A list of feature vectors'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeatureVector'
+
+components:
+  schemas:
+
+    PolicyState:
+      type: string
+      enum: [ draft, saved, archived ]
+
+    Policy:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/PolicyState'
+        updatedAt:
+          type: string
+        updatedBy:
+          type: string
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+      example:
+        id: 'c9fc3fc3-383d-484d-bb91-2966a0e5b846'
+        name: 'New Prod policy'
+        state: 'draft'
+        updatedAt: '2004-02-12T15:19:21Z'
+        updatedBy: 'UserName'
+        createdAt: '2004-02-15T15:19:21Z'
+        createdBy: 'UserName2'
+
+
+    PolicyCreation:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        basePolicy:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'New Prod policy'
+        basePolicy: 'a9912ff3-9d26-4481-8f35-cb130124df69'
+
+
+    Step:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        solution:
+          type: string
+      example:
+        id: 'd55619c0-74c8-4ea8-8c6d-036d3db6f069'
+        name: 'New step'
+        description: 'Step description'
+        solution: 'FALSE_POSITIVE'
+
+    FeatureLogicList:
+      type: object
+      properties:
+        featuresLogic:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureLogicList'
+      example:
+        {
+          'featuresLogic': [
+            {
+              count: 2,
+              features: [
+                {
+                  name: 'apType',
+                  value: [ "I" ]
+                },
+                {
+                  name: 'nameAgent',
+                  value: [ "HQ_NO_MATCH", "NO_MATCH" ]
+                }
+              ]
+            },
+            {
+              count: 3,
+              features: [
+                {
+                  name: 'genderAgent',
+                  value: [ "NO_DATA", "NO_MATCH" ]
+                },
+                {
+                  name: 'dateAgent',
+                  value: [ "NO_MATCH" ]
+                },
+                {
+                  name: 'nationalIdAgent',
+                  value: [ "NO_DATA","NO_MATCH" ]
+                },
+                {
+                  name: 'passportAgent',
+                  value: [ "NO_MATCH" ]
+                }
+              ]
+            }
+          ]
+        }
+
+    FeatureLogic:
+      type: object
+      properties:
+        count:
+          type: integer
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureValue'
+      example:
+        {
+          count: 2,
+          features: [
+            {
+              name: 'apType',
+              value: [ "I" ]
+            },
+            {
+              name: 'nameAgent',
+              value: [ "HQ_NO_MATCH", "NO_MATCH" ]
+            }
+          ]
+        }
+
+    FeatureValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: array
+          items:
+            type: string
+
+    FeatureVector:
+      type: object
+      properties:
+        id:
+          type: integer
+        alertsCount:
+          type: long
+        features:
+          type: array
+          items:
+            type: string
+      example:
+        {
+          "id": 2,
+          "alertsCount": 2344,
+          "features": [ "STRONG_MATCH", "MATCH" ]
+        }
+
+

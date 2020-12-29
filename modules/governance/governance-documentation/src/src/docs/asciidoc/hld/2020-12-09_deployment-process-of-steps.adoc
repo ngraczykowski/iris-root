@@ -1,0 +1,74 @@
+= HLD #25
+
+- Reference ticket: TBA
+- Reason: We want to present the process of preparing, approving and deployment of steps configuration on a pre-prod and prod environment.
+
+ALT on the diagram below presents alternatives:
+
+* import in PROD can be done using CLI (command line interface)
+* import in PROD can be done through the UI
+
+== Deployment process
+[plantuml,preparing-approving-deployment-steps-on-prod,svg]
+-----
+@startuml
+header Deployment process
+
+box SERP
+actor bo as "Business Operator"
+
+actor a as "Approver"
+
+actor s as "Policy Manager"
+end box
+
+box Bank
+actor m as "Production Maintainer\n(tech role)"
+end box
+
+box "Pre-Prod"
+    participant serp as "SERP"
+end box
+
+box "Prod"
+    participant prodserp as "SERP"
+end box
+
+bo -> serp : Create a Simulation
+bo -> serp : Run Simulation
+serp -> serp : Process Simulation
+bo -> serp : Eyeballing on the Simulation results
+bo -> serp : Send Simulation to the Approver
+
+serp -> a : A new Simulation to approve
+
+a -> serp : Eyeballing on the Simulation results
+a -> serp : Approve Simulation
+serp -> serp : SERP use a new policy\non a pre prod env
+
+bo -> serp : Export policy
+serp -> bo : **policy.json**
+
+
+alt CLI import
+
+bo -> s : **policy.json**
+s -> s : Collect all required approvals on the new json. (mail?)
+
+s -> m : Document with a step to import **policy.json** file on a prod
+s -> m : **policy.json**
+
+m -> prodserp : Import **policy.json** on the prod env using CLI
+
+else WebUI import
+
+s -> prodserp : Import **policy.json** on the prod env
+prodserp -> a : A new Policy to approve
+a -> prodserp : Approve a new policy
+
+end alt
+
+prodserp -> prodserp : SERP use a new policy\non a prod env
+
+@enduml
+-----
