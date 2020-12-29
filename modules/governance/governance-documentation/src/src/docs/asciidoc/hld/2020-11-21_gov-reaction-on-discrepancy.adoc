@@ -1,0 +1,49 @@
+= HLD #16
+
+- Reference ticket: *TBD*
+- Reason: As a CB, I want to turn off an RB when found a discrepancy.
+
+[plantuml,gov-reaction-on-discrepancy,svg]
+-----
+@startuml
+header Governance receive a discrepancy alert
+
+box "RabbitMQ"
+    queue Queue
+end box
+
+box "Governance" #LightBlue
+    participant backend as "Governance"
+    database db as "Governance DB"
+end box
+
+Queue -> backend : list of RBs with discovered discrepancy
+
+loop for each RB
+backend -> backend : Create a step based on RB
+
+backend -> db : Save step in DB
+    note over backend, db
+      * uuid
+      * name
+      * list of features values
+      * exception_step = true
+    end note
+end loop
+
+backend -> backend : Create a new Policy Project with new exception steps on top.
+
+backend -> db : Save Policies project
+note over backend, db
+ * uuid
+ * name
+ * list of uuid (steps)
+ * created based on uuid
+end note
+
+backend -> backend : Send event to reload the configuration
+
+== Transaction Ends ==
+
+@enduml
+-----

@@ -1,0 +1,47 @@
+@startuml
+title Using LDAP For Authentication
+
+actor Admin
+actor User
+participant Frontend
+participant Backend as "Backend/CLI"
+participant Keycloak
+database KeycloakDB
+database LDAP
+
+
+== Configure SAML ==
+
+Admin <- idp : get descriptor (XML file)
+Admin -> Keycloak : import descriptor
+Keycloak -> Admin : export Keycloak descriptor
+Admin -> idp : import Keycloak descriptor
+
+== Configure LDAP ==
+
+Admin -> Backend : set LDAP configuration
+Backend -> Keycloak : import LDAP configuration
+Keycloak -> KeycloakDB : save LDAP configuration
+
+== Create first user ==
+
+Admin -> Backend : create user (no password) with role admin \n(user must exists in ldap)
+Backend -> Keycloak : create user with role
+Keycloak -> KeycloakDB : save user with role
+
+== Login ==
+
+User -> Frontend : login
+Frontend -> Keycloak : redirect user to the Keycloak
+Keycloak -> User : login page
+User -> Keycloak : provide username and password
+Keycloak -> LDAP : authenticate user
+LDAP -> Keycloak : user authentication
+Keycloak -> KeycloakDB: get roles
+KeycloakDB -> Keycloak : user roles
+Keycloak -> Frontend : authenticate user - send token with roles
+Frontend -> Backend : token with roles
+Backend -> Backend : authorize user based on roles from the token
+Backend -> Frontend : data
+
+@enduml

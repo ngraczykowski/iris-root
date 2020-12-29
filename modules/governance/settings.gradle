@@ -2,4 +2,5 @@ rootProject.name = 'serp-governance'
 gradle.ext.sepDependenciesVersion = '1.9.0'
 
 include 'governance-app'
+include 'governance-documentation'
 include 'governance-step'

@@ -1,0 +1,42 @@
+= HLD #18
+
+- Reference ticket: *TBD*
+- Reason: As a Reco, I want to receive a solved alert, based on features.
+
+[plantuml,gov-use-steps-to-provide-a-solution,svg]
+-----
+@startuml
+
+box "RabbitMQ"
+    queue Queue
+end box
+
+box "Governance" #LightBlue
+    participant backend as "Governance"
+    database db as "Governance DB"
+end box
+
+note over backend
+Steps changed or app starting
+end note
+backend -> db : Read Policies Project with steps
+db -> backend : Configured steps
+
+====
+Queue -> backend : An alert with feature values
+backend -> backend : Search step with logic matching Feature Vector Values
+
+backend -> backend : Set a solution for the Alert
+backend -> backend : Set Feature Vector Signature in an Alert
+
+
+backend -> Queue : Send Alert
+====
+
+backend -> Queue : Send Feature Vector with Feature Vector Signature,\nsolution, step name, policy version
+Queue ->  backend : Read Feature Vector with Feature Vector Signature,\nsolution, step name, policy version
+backend -> db : Save Reasoning Branch
+
+
+@enduml
+-----
