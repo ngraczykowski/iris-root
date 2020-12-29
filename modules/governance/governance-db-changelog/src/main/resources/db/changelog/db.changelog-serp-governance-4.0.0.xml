@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-governance-4.0.0-1" author="mmastylo">
+    <createTable tableName="governance_policy">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="policy_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_policy"
+        indexName="ix_governance_policy_policy_id">
+      <column name="policy_id"/>
+    </createIndex>
+
+    <createTable tableName="governance_policy_step">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="step_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="solution" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="${type.text}"/>
+      <column name="type" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="policy_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex
+        tableName="governance_policy_step"
+        indexName="ix_governance_policy_step_step_id">
+      <column name="step_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step"
+        baseColumnNames="policy_id"
+        constraintName="fk_governance_policy_step_policy_id"
+        referencedTableName="governance_policy"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createTable tableName="governance_policy_step_feature_logic">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step_feature_logic"
+        baseColumnNames="step_id"
+        constraintName="fk_governance_policy_step_feature_logic_step_id"
+        referencedTableName="governance_policy_step"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createTable tableName="governance_policy_step_feature">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="feature_logic_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step_feature"
+        baseColumnNames="feature_logic_id"
+        constraintName="fk_governance_policy_step_feature_feature_logic_id"
+        referencedTableName="governance_policy_step_feature_logic"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createTable tableName="governance_policy_step_feature_values">
+      <column name="feature_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step_feature_values"
+        baseColumnNames="feature_id"
+        constraintName="fk_governance_policy_step_feature_values_feature_id"
+        referencedTableName="governance_policy_step_feature"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+  </changeSet>
+
+</databaseChangeLog>
