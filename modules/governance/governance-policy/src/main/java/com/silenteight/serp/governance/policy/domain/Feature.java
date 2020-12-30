@@ -27,7 +27,9 @@ class Feature extends BaseEntity {
   private String name;
 
   @ElementCollection
-  @CollectionTable(joinColumns = @JoinColumn(name = "feature_id"))
+  @CollectionTable(
+      name = "governance_policy_step_feature_values",
+      joinColumns = @JoinColumn(name = "feature_id"))
   @Column(name = "value")
   private Collection<String> values = new ArrayList<>();
 
