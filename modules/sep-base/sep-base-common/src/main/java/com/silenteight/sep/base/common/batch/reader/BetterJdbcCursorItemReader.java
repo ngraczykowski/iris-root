@@ -137,10 +137,25 @@ public class BetterJdbcCursorItemReader<T> extends AbstractCursorItemReader<T> {
 
   /**
    * Close the cursor and database connection.
+   *
+   * @deprecated This method is deprecated in favor of
+   * {@link BetterJdbcCursorItemReader#cleanupOnClose(java.sql.Connection)}
+   *     and will be removed in a future release
    */
   @Override
+  @Deprecated(since = "1.11.0", forRemoval = true)
   protected void cleanupOnClose() throws Exception {
     JdbcUtils.closeStatement(this.preparedStatement);
+  }
+
+  /**
+   * Close the cursor and database connection.
+   * @param connection to the database
+   */
+  @Override
+  protected void cleanupOnClose(Connection connection) throws Exception {
+    JdbcUtils.closeStatement(this.preparedStatement);
+    JdbcUtils.closeConnection(connection);
   }
 
   @Nonnull

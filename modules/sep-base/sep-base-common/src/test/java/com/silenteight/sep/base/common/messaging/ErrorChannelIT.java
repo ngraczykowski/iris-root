@@ -16,7 +16,6 @@ import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.messaging.Message;
@@ -40,9 +39,6 @@ class ErrorChannelIT extends BaseIntegrationTest {
   public static final String EXCHANGE = "exchange";
 
   @Autowired
-  private PublishSubscribeChannel errorChannel;
-
-  @Autowired
   private TestErrorMessageListener customErrorMessageListener;
 
   @Autowired
@@ -60,21 +56,18 @@ class ErrorChannelIT extends BaseIntegrationTest {
 
   @Test
   @Timeout(4)
-  public void shouldAddToErrorQueue() {
+  void shouldAddToErrorQueue() {
     var exceptionCount = 3;
 
     IntStream
         .range(0, exceptionCount)
         .forEach(i -> template.convertAndSend(INPUT_QUEUE, "test: " + i));
 
-    await().until(() -> errorChannel.getSendCount() >= exceptionCount);
+    await().until(() -> customErrorMessageListener.getCount().intValue() >= exceptionCount);
 
-    assertThat(exceptionCount).isEqualTo(errorChannel.getSendCount());
-    assertThat(exceptionCount)
-        .isEqualTo(amqpAdmin
-            .getQueueProperties("error-queue")
-            .get("QUEUE_MESSAGE_COUNT"));
     assertThat(customErrorMessageListener.getCount().intValue())
+        .isEqualTo(exceptionCount);
+    assertThat(amqpAdmin.getQueueProperties("error-queue").get("QUEUE_MESSAGE_COUNT"))
         .isEqualTo(exceptionCount);
   }
 
@@ -99,9 +92,9 @@ class ErrorChannelIT extends BaseIntegrationTest {
     IntegrationFlow inputIntegrationFlow() {
       return IntegrationFlows
           .from(amqpInboundFactory
-                  .simpleAdapter()
-                  .messageConverter(new SimpleMessageConverter())
-                  .configureContainer(c -> c.addQueueNames(INPUT_QUEUE)))
+              .simpleAdapter()
+              .messageConverter(new SimpleMessageConverter())
+              .configureContainer(c -> c.addQueueNames(INPUT_QUEUE)))
           .<String>handle((p, h) -> {
             throw new IllegalStateException("Exception in handler: " + p);
           })
@@ -113,7 +106,7 @@ class ErrorChannelIT extends BaseIntegrationTest {
       return new TestErrorMessageListener();
     }
 
-    class TestErrorMessageListener implements ErrorMessageListener {
+    static class TestErrorMessageListener implements ErrorMessageListener {
 
       @Getter
       private final AtomicInteger count = new AtomicInteger();
