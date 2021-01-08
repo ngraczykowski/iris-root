@@ -10,6 +10,11 @@ import java.util.List;
 class SolveConfiguration {
 
   @Bean
+  SolveUseCase solveUseCase(SolvingService solvingService) {
+    return new SolveUseCase(solvingService);
+  }
+
+  @Bean
   SolvingService solvingService(StepPolicyFactory stepPolicyFactory) {
     return new SolvingService(stepPolicyFactory);
   }
