@@ -8,6 +8,7 @@ description = "Governance Policy"
 configurations {
   implementation.extendsFrom starterCommon
   implementation.extendsFrom starterJackson
+  implementation.extendsFrom starterGrpc
 
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
