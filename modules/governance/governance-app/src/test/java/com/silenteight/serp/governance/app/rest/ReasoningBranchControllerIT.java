@@ -3,7 +3,9 @@ package com.silenteight.serp.governance.app.rest;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchId;
 import com.silenteight.proto.serp.v1.governance.ReasoningBranchSummary;
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.serp.governance.branchquery.ReasoningBranchFinder;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
-@Import(ReasoningBranchController.class)
+@Import({ ReasoningBranchController.class, GenericExceptionControllerAdvice.class })
 class ReasoningBranchControllerIT extends BaseRestControllerTest {
 
   private static final long DECISION_TREE_ID = 1L;
@@ -32,7 +34,7 @@ class ReasoningBranchControllerIT extends BaseRestControllerTest {
   void shouldProduceSuccessOutput_whenFinderReturnsEmptyBranches() {
     when(finder.findAllByDecisionTreeId(1)).thenReturn(emptyList());
 
-    perform("/v1/decision-trees/1/reasoning-branches")
+    get("/v1/decision-trees/1/reasoning-branches")
         .statusCode(HttpStatus.OK.value())
         .body("size()", is(0));
   }
@@ -43,7 +45,7 @@ class ReasoningBranchControllerIT extends BaseRestControllerTest {
         createSummary(1L),
         createSummary(2L)));
 
-    perform("/v1/decision-trees/1/reasoning-branches")
+    get("/v1/decision-trees/1/reasoning-branches")
         .statusCode(HttpStatus.OK.value())
         .body("size()", is(2))
         .body("[0].decisionTreeId", equalTo(1))
@@ -63,7 +65,7 @@ class ReasoningBranchControllerIT extends BaseRestControllerTest {
     when(finder.getByDecisionTreeIdAndFeatureVectorId(DECISION_TREE_ID, 2))
         .thenReturn(createSummary(2L));
 
-    perform("/v1/decision-trees/1/reasoning-branches/2")
+    get("/v1/decision-trees/1/reasoning-branches/2")
         .statusCode(HttpStatus.OK.value())
         .body("decisionTreeId", equalTo(1))
         .body("featureVectorId", equalTo(2))
@@ -79,7 +81,7 @@ class ReasoningBranchControllerIT extends BaseRestControllerTest {
     when(finder.getByDecisionTreeIdAndFeatureVectorId(DECISION_TREE_ID, 2))
         .thenThrow(EntityNotFoundException.class);
 
-    perform("/v1/decision-trees/1/reasoning-branches/2")
+    get("/v1/decision-trees/1/reasoning-branches/2")
         .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
@@ -90,7 +92,7 @@ class ReasoningBranchControllerIT extends BaseRestControllerTest {
     when(finder.getByDecisionTreeIdAndFeatureVectorId(DECISION_TREE_ID, 2))
         .thenThrow(RuntimeException.class);
 
-    perform("/v1/decision-trees/1/reasoning-branches/2")
+    get("/v1/decision-trees/1/reasoning-branches/2")
         .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
   }
 

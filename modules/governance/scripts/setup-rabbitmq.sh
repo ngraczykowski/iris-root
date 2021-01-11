@@ -19,7 +19,7 @@ rabbitmqctl() {
   args="$*"
   safe_args="${args/${RABBITMQ_PASSWORD}/<redacted>}"
   echo_ts "--- rabbitmqctl" "$safe_args"
-  docker exec $RABBITMQ_CONTAINER rabbitmqctl "$@"
+  echo "$@"
 }
 
 # Re-create the user

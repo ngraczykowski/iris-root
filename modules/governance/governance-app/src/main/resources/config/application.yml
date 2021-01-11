@@ -177,3 +177,30 @@ grpc:
 
     date-agent:
       address: static://localhost:24313
+
+
+serp.governance:
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+
+
+sep.auth:
+  permissionMethodsMappings:
+    VIEW_POLICIES:
+      - "LIST_SAVED_POLICIES"
+      - "LIST_STEPS_LOGIC"
+      - "LIST_STEPS_ORDER"
+      - "LIST_STEPS"
+    IMPORT_POLICY:
+      - "IMPORT_POLICY"
+
+  rolePermissionsMappings:
+#    POLICY_MANAGER:
+    BUSINESS_OPERATOR:
+      - "VIEW_POLICIES"
+      - "IMPORT_POLICY"

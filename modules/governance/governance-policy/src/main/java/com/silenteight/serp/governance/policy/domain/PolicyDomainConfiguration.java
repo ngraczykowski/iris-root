@@ -14,4 +14,20 @@ class PolicyDomainConfiguration {
   PolicyService policyService(PolicyRepository repository) {
     return new PolicyService(repository);
   }
+
+  @Bean
+  PolicyQuery policyQuery(PolicyRepository policyRepository) {
+    return new PolicyQuery(policyRepository);
+  }
+
+  @Bean
+  StepQuery stepQuery(StepRepository stepRepository, PolicyRepository policyRepository) {
+    return new StepQuery(stepRepository, policyRepository);
+  }
+
+  @Bean
+  FeaturesLogicQuery featuresLogicQuery(
+      StepRepository stepRepository, FeatureLogicRepository featureLogicRepository) {
+    return new FeaturesLogicQuery(stepRepository, featureLogicRepository);
+  }
 }

@@ -82,7 +82,7 @@
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="count" type="BIGINT">
+      <column name="count" type="INT">
         <constraints nullable="false"/>
       </column>
       <column name="step_id" type="BIGINT">

@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.policy.importing;
 
-import com.silenteight.serp.governance.policy.domain.CreatePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +46,7 @@ class ImportPolicyUseCaseTest {
     underTest.apply(command);
 
     // then
-    verify(policyService).doImport(any(CreatePolicyRequest.class));
+    verify(policyService).doImport(any(ImportPolicyRequest.class));
   }
 
   private static ImportedPolicyRoot createImportedPolicyRoot() {

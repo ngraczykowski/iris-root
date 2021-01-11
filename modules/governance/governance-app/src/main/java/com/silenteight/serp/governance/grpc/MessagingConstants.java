@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.common;
+package com.silenteight.serp.governance.grpc;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessagingConstants {
 
-  public static final String EXCHANGE_ALERT_METADATA = "alert.metadata";
   public static final String EXCHANGE_BULK_CHANGE = "bulk-change";
 
   public static final String ROUTE_BULK_CREATED = "bulk-change.created";

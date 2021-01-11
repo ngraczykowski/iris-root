@@ -19,13 +19,22 @@ configurations {
 dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_serp_governance_protocol
-  implementation libraries.spring_webmvc
+  implementation libraries.silenteight_serp_protocol_base
 
   implementation project(":governance-db-changelog")
+  implementation project(":governance-common-web")
+  implementation project(":governance-common-web-testing")
 
-  implementation libraries.jaxb_api
+  implementation libraries.silenteight_serp_governance_protocol
+  implementation libraries.spring_webmvc
+  implementation libraries.spring_security_config
+
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
+  implementation libraries.silenteight_audit_bs
 
   testImplementation project(":governance-db-changelog")
   testImplementation libraries.silenteight_audit_bs
+  testImplementation libraries.rest_assured_spring_mock_mvc
 }

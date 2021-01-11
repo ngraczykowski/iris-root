@@ -1,5 +1,7 @@
 package com.silenteight.serp.governance;
 
+import com.silenteight.sep.auth.authentication.AuthenticationModule;
+import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
 import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 import com.silenteight.serp.governance.activation.ActivationModule;
@@ -11,6 +13,7 @@ import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.branchquery.BranchQueryModule;
 import com.silenteight.serp.governance.branchsolution.BranchSolutionModule;
 import com.silenteight.serp.governance.bulkchange.BulkChangeModule;
+import com.silenteight.serp.governance.common.web.config.WebModule;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupModule;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeModule;
 import com.silenteight.serp.governance.decisiontreesummaryquery.DecisionTreeSummaryQueryModule;
@@ -51,10 +54,13 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     PolicyModule.class,
     SolutionDiscrepancyModule.class,
     // Interface modules
+    AuthenticationModule.class,
+    AuthorizationModule.class,
     GrpcModule.class,
     MailerModule.class,
     RabbitModule.class,
     RestModule.class,
+    WebModule.class,
 })
 @EnableIntegration
 @EnableIntegrationManagement

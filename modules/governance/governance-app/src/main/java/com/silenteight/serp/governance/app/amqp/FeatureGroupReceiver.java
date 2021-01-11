@@ -8,7 +8,7 @@ import com.silenteight.serp.governance.featuregroup.FeatureGroupService;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
-import static com.silenteight.serp.governance.common.MessagingConstants.QUEUE_GOVERNANCE_PIPELINE_FEATURE_GROUPS;
+import static com.silenteight.serp.governance.grpc.MessagingConstants.QUEUE_GOVERNANCE_PIPELINE_FEATURE_GROUPS;
 
 @RequiredArgsConstructor
 @Slf4j

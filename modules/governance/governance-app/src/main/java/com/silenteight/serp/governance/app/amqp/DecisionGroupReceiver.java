@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.StringJoiner;
 
-import static com.silenteight.serp.governance.common.MessagingConstants.QUEUE_GOVERNANCE_DECISION_GROUP;
+import static com.silenteight.serp.governance.grpc.MessagingConstants.QUEUE_GOVERNANCE_DECISION_GROUP;
 
 @RequiredArgsConstructor
 @Slf4j

@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.autoactivation;
 
 import com.silenteight.serp.governance.activation.ActivationService;
 import com.silenteight.serp.governance.activation.dto.ActivationRequest;
-import com.silenteight.serp.governance.commons.Result;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupCreated;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeFacade;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeId;

@@ -4,17 +4,21 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.dto.State;
+import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 class Policy extends BaseAggregateRoot implements IdentifiableEntity {
@@ -63,5 +67,26 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
         .findFirst()
         .orElseThrow(() -> new StepNotFoundException(stepId));
     step.reconfigure(featureLogics);
+  }
+
+  PolicyDto toDto() {
+    return PolicyDto
+        .builder()
+        .id(getId())
+        .name(getName())
+        .policyId(getPolicyId())
+        .state(State.SAVED)
+        .createdAt(getCreatedAt())
+        .createdBy(getCreatedBy())
+        .updatedAt(getUpdatedAt())
+        .updatedBy(getUpdatedBy())
+        .build();
+  }
+
+  public Collection<StepDto> getStepsDto() {
+    return getSteps()
+        .stream()
+        .map(Step::toDto)
+        .collect(toList());
   }
 }
