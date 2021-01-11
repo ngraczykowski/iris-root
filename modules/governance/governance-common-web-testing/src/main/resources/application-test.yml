@@ -1,0 +1,13 @@
+spring.cloud.consul.enabled: false
+
+sep.auth:
+  permissionMethodsMappings:
+    VIEW_POLICIES:
+      - "LIST_SAVED_POLICIES"
+      - "LIST_STEPS_LOGIC"
+      - "LIST_STEPS_ORDER"
+      - "LIST_STEPS"
+
+  rolePermissionsMappings:
+    POLICY_MANAGER:
+      - "VIEW_POLICIES"

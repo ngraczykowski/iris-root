@@ -105,3 +105,11 @@ You should see the command output information similar to this:
 >
 > The setup script uses `docker exec` to run the `rabbitmqctl` command directly in the running RabbitMQ container launched for SERP.
 > If you don't have the RabbitMQ container running, execution of the script will fail.
+
+### Using Swagger UI
+By default, swagger is disabled in production. To enable it you need to apply `swagger` Spring Boot profile.
+UI available under [link](https://localhost:24204/rest/governance/openapi/swagger-ui/index.html?configUrl=/rest/governance/openapi/api-docs/swagger-config).
+
+In order to make authenticated requests
+click the key lock icon, type in desired client id (normally this would be `frontend`)
+and click the `Authorize` button. 

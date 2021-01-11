@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.autoactivation;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.commons.Result;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupCreated;
 
 import org.springframework.context.event.EventListener;

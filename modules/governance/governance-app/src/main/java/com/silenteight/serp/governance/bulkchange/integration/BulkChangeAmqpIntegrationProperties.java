@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import static com.silenteight.serp.governance.common.MessagingConstants.*;
+import static com.silenteight.serp.governance.grpc.MessagingConstants.*;
 
 @Data
 @Validated

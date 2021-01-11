@@ -1,20 +1,17 @@
-package com.silenteight.serp.governance.policy.domain;
+package com.silenteight.serp.governance.policy.domain.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.serp.governance.policy.domain.StepType;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @Value
 @Builder
-public class CreatePolicyRequest {
-
-  @NonNull
-  UUID policyId;
+public class ImportPolicyRequest {
 
   @NonNull
   String policyName;
@@ -31,9 +28,6 @@ public class CreatePolicyRequest {
 
     @NonNull
     FeatureVectorSolution solution;
-
-    @NonNull
-    UUID stepId;
 
     @NonNull
     String stepName;

@@ -4,3 +4,4 @@ plugins {
 }
 
 description = "Governance DB Changelog"
+

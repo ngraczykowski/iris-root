@@ -4,18 +4,24 @@ import lombok.*;
 
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "governance_policy_step")
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 class Step extends BaseModifiableEntity {
@@ -68,5 +74,28 @@ class Step extends BaseModifiableEntity {
   void reconfigure(Collection<FeatureLogic> featureLogics) {
     this.featureLogics.clear();
     this.featureLogics.addAll(featureLogics);
+  }
+
+  public StepDto toDto() {
+    return StepDto
+        .builder()
+        .id(getStepId())
+        .name(getName())
+        .type(getType().name())
+        .description(getDescription())
+        .solution(getSolution().name())
+        .build();
+  }
+
+  public FeaturesLogicDto toFeaturesLogicDto() {
+    return FeaturesLogicDto
+        .builder()
+        .featuresLogic(getFeaturesLogic())
+        .build();
+  }
+
+  @NotNull
+  private List<FeatureLogicDto> getFeaturesLogic() {
+    return getFeatureLogics().stream().map(FeatureLogic::toFeatureLogicDto).collect(toList());
   }
 }

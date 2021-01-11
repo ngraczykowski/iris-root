@@ -23,17 +23,26 @@ configurations {
 }
 
 dependencies {
+  implementation project(":governance-common-web")
+  implementation project(":governance-common-web-testing")
   implementation project(":governance-db-changelog")
   implementation project(":governance-policy")
 
+  implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
-  implementation libraries.spring_webmvc
 
-  implementation libraries.silenteight_audit_bs
+
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
+
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
 
   implementation libraries.commons_lang3
 
@@ -43,11 +52,6 @@ dependencies {
 
   implementation libraries.jaxb_api
 
-  testImplementation project(":governance-db-changelog")
-  testImplementation libraries.spock_spring
-  testImplementation libraries.spring_integration_test
-
-  //  MY
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
@@ -63,6 +67,9 @@ dependencies {
   annotationProcessor libraries.jakarta_persistence_api
   annotationProcessor libraries.jakarta_annotation_api
   annotationProcessor libraries.spring_boot_configuration_processor
+
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_integration_test
 
   testImplementation libraries.rest_assured_spring_mock_mvc
 
