@@ -346,7 +346,7 @@ components:
 
     PolicyState:
       type: string
-      enum: [ draft, saved, archived ]
+      enum: [ draft, saved, used, archived ]
 
     Policy:
       type: object
@@ -357,8 +357,12 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
         state:
           $ref: '#/components/schemas/PolicyState'
+        prod:
+          type: boolean
         updatedAt:
           type: string
         updatedBy:
@@ -418,7 +422,7 @@ components:
         featuresLogic:
           type: array
           items:
-            $ref: '#/components/schemas/FeatureLogicList'
+            $ref: '#/components/schemas/FeatureLogic'
       example:
         {
           'featuresLogic': [
@@ -467,31 +471,36 @@ components:
         features:
           type: array
           items:
-            $ref: '#/components/schemas/FeatureValue'
+            $ref: '#/components/schemas/MatchCondition'
       example:
         {
           count: 2,
           features: [
             {
               name: 'apType',
-              value: [ "I" ]
+              condition: 'is',
+              value: [ "I" ],
             },
             {
               name: 'nameAgent',
+              condition: 'is_not',
               value: [ "HQ_NO_MATCH", "NO_MATCH" ]
             }
           ]
         }
 
-    FeatureValue:
+    MatchCondition:
       type: object
       properties:
         name:
+          type: string
+        condition:
           type: string
         value:
           type: array
           items:
             type: string
+
 
     FeatureVector:
       type: object
