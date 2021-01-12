@@ -3,18 +3,25 @@ package com.silenteight.serp.governance.policy.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.auditing.bs.AuditDataDto;
+import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -22,16 +29,41 @@ public class PolicyService {
 
   @NonNull
   private final PolicyRepository repository;
+  @NonNull
+  private final AuditingLogger auditingLogger;
+  @NonNull
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public UUID doImport(ImportPolicyRequest request) {
-    UUID policyId = UUID.randomUUID();
+    UUID correlationId = randomUUID();
+    UUID policyId = randomUUID();
+    logPolicyCreateRequested(request, policyId, correlationId);
+
     Policy policy = addPolicy(
         policyId, request.getPolicyName(), request.getCreatedBy());
     request.getStepConfigurations()
            .forEach(configuration -> configureImportedStep(policy, configuration));
     Policy savedPolicy = repository.save(policy);
+
+    eventPublisher.publishEvent(new PolicyCreatedEvent(savedPolicy.getPolicyId(), correlationId));
     return savedPolicy.getPolicyId();
+  }
+
+  private void logPolicyCreateRequested(
+      ImportPolicyRequest request, UUID policyId, UUID correlationId) {
+
+    AuditDataDto auditDataDto = AuditDataDto.builder()
+        .correlationId(correlationId)
+        .eventId(randomUUID())
+        .timestamp(Timestamp.from(Instant.now()))
+        .type("PolicyCreateRequested")
+        .entityId(policyId.toString())
+        .entityClass("Policy")
+        .entityAction("CREATE")
+        .details(request.toString())
+        .build();
+    auditingLogger.log(auditDataDto);
   }
 
   private void configureImportedStep(Policy policy, StepConfiguration configuration) {
@@ -57,8 +89,12 @@ public class PolicyService {
 
   @Transactional
   public void addStepToPolicy(
-      @NonNull UUID policyId, @NonNull FeatureVectorSolution solution, @NonNull UUID stepId,
-      @NonNull String stepName, String stepDescription, @NonNull StepType stepType) {
+      @NonNull UUID policyId,
+      @NonNull FeatureVectorSolution solution,
+      @NonNull UUID stepId,
+      @NonNull String stepName,
+      String stepDescription,
+      @NonNull StepType stepType) {
 
     Policy policy = repository.getByPolicyId(policyId);
     doAddStepToPolicy(policy, solution, stepId, stepName, stepDescription, stepType);
@@ -66,8 +102,12 @@ public class PolicyService {
 
   @NotNull
   private Step doAddStepToPolicy(
-      @NonNull Policy policy, @NonNull FeatureVectorSolution solution, @NonNull UUID stepId,
-      @NonNull String stepName, String stepDescription, @NonNull StepType stepType) {
+      @NonNull Policy policy,
+      @NonNull FeatureVectorSolution solution,
+      @NonNull UUID stepId,
+      @NonNull String stepName,
+      String stepDescription,
+      @NonNull StepType stepType) {
 
     Step step = new Step(solution, stepId, stepName, stepDescription, stepType);
     policy.addStep(step);
@@ -117,5 +157,12 @@ public class PolicyService {
 
   private static Feature mapToFeature(FeatureConfiguration configuration) {
     return new Feature(configuration.getName(), configuration.getValues());
+  }
+
+  public PolicyDto getPolicy(UUID policyId) {
+    return repository
+        .findByPolicyId(policyId)
+        .map(Policy::toDto)
+        .orElseThrow();
   }
 }

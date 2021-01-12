@@ -1,11 +1,15 @@
 package com.silenteight.serp.governance.policy.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.Builder.Default;
 
+import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.serp.governance.policy.domain.StepType;
+
+import java.util.Collection;
 import java.util.UUID;
+
+import static java.util.List.of;
 
 @Data
 @Builder
@@ -13,9 +17,16 @@ import java.util.UUID;
 @AllArgsConstructor
 public class StepDto {
 
+  @NonNull
   private UUID id;
+  @NonNull
   private String name;
-  private String type;
+  @NonNull
+  private StepType type;
   private String description;
-  private String solution;
+  @NonNull
+  private FeatureVectorSolution solution;
+  @NonNull
+  @Default
+  private Collection<FeatureLogicDto> featureLogics = of();
 }

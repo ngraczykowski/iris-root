@@ -117,17 +117,17 @@ class StepQueryTest extends BaseDataJpaTest {
     assertThat(result).contains(
         StepDto.builder()
                .id(FIRST_STEP_ID)
-               .solution(SOLUTION_NO_DECISION.name())
+               .solution(SOLUTION_NO_DECISION)
                .name(FIRST_STEP_NAME)
                .description(FIRST_STEP_DESC)
-               .type(FIRST_STEP_TYPE.name())
+               .type(FIRST_STEP_TYPE)
                .build(),
         StepDto.builder()
                .id(SECOND_STEP_ID)
-               .solution(SOLUTION_FALSE_POSITIVE.name())
+               .solution(SOLUTION_FALSE_POSITIVE)
                .name(SECOND_STEP_NAME)
                .description(SECOND_STEP_DESC)
-               .type(SECOND_STEP_TYPE.name())
+               .type(SECOND_STEP_TYPE)
                .build());
   }
 }

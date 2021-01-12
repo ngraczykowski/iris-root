@@ -32,7 +32,7 @@ class ImportPolicyUseCaseTest {
   private ImportPolicyUseCase underTest;
 
   @Test
-  void importPolicy() {
+  void createPolicy() {
     // given
     InputStream inputStream = mock(InputStream.class);
     ImportedPolicyRoot root = createImportedPolicyRoot();

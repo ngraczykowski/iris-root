@@ -1,10 +1,9 @@
 package com.silenteight.serp.governance.policy.solve;
 
+import com.silenteight.serp.governance.policy.domain.PolicyService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 class SolveConfiguration {
@@ -20,18 +19,14 @@ class SolveConfiguration {
   }
 
   @Bean
+  PolicyPromotedEventHandler policyPromotedEventHandler(
+      PolicyService policyService, StepPolicyFactory stepPolicyFactory) {
+
+    return new PolicyPromotedEventHandler(policyService, stepPolicyFactory);
+  }
+
+  @Bean
   StepPolicyFactory stepPolicyFactory() {
-    return new StepPolicyFactory() {
-
-      @Override
-      public List<Step> getSteps() {
-        return new ArrayList<>();
-      }
-
-      @Override
-      public void reconfigure(List<Step> steps) {
-
-      }
-    };
+    return new StepPolicyFactory();
   }
 }

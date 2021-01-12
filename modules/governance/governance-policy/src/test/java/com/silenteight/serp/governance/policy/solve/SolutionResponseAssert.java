@@ -5,6 +5,7 @@ import com.silenteight.proto.governance.v1.api.SolutionResponse;
 
 import org.assertj.core.api.AbstractAssert;
 
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 public class SolutionResponseAssert extends
@@ -26,8 +27,8 @@ public class SolutionResponseAssert extends
     return new SolutionResponseAssert(actual);
   }
 
-  public SolutionResponseAssert hasStepId(String stepId) {
-    if (!actual.getStepId().contentEquals(stepId)) {
+  public SolutionResponseAssert hasStepId(UUID stepId) {
+    if (!actual.getStepId().contentEquals(stepId.toString())) {
       failWithMessage("Expected stepId to be <%s>, but was <%s>",
           stepId, actual.getStepId());
     }
@@ -42,9 +43,5 @@ public class SolutionResponseAssert extends
     }
 
     return this;
-  }
-
-  public GetSolutionsResponseAssert and() {
-    return parent;
   }
 }
