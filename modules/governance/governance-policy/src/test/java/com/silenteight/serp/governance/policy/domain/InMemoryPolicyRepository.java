@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
@@ -11,10 +12,15 @@ public class InMemoryPolicyRepository extends BasicInMemoryRepository<Policy>
     implements PolicyRepository {
 
   @Override
-  public Policy getByPolicyId(UUID policyId) {
+  public Optional<Policy> findByPolicyId(UUID policyId) {
     return stream()
         .filter(policy -> policy.getPolicyId() == policyId)
-        .findFirst()
+        .findFirst();
+  }
+
+  @Override
+  public Policy getByPolicyId(UUID policyId) {
+    return findByPolicyId(policyId)
         .orElseThrow();
   }
 

@@ -39,9 +39,8 @@ class Feature extends BaseEntity {
     this.values = values;
   }
 
-  FeatureDto toFeatureDto() {
-    return FeatureDto
-        .builder()
+  FeatureDto toDto() {
+    return FeatureDto.builder()
         .name(getName())
         .values(getValues())
         .build();

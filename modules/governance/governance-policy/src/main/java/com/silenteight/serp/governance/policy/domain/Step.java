@@ -10,10 +10,8 @@ import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
@@ -58,7 +56,11 @@ class Step extends BaseModifiableEntity {
   private Collection<FeatureLogic> featureLogics = new ArrayList<>();
 
   Step(
-      FeatureVectorSolution solution, UUID stepId, String name, String description, StepType type) {
+      FeatureVectorSolution solution,
+      UUID stepId,
+      String name,
+      String description,
+      StepType type) {
 
     this.solution = solution;
     this.stepId = stepId;
@@ -76,26 +78,28 @@ class Step extends BaseModifiableEntity {
     this.featureLogics.addAll(featureLogics);
   }
 
-  public StepDto toDto() {
-    return StepDto
-        .builder()
+  StepDto toDto() {
+    return StepDto.builder()
         .id(getStepId())
+        .solution(getSolution())
         .name(getName())
-        .type(getType().name())
         .description(getDescription())
-        .solution(getSolution().name())
+        .type(getType())
+        .featureLogics(featureLogicsToDto())
         .build();
+  }
+
+  private Collection<FeatureLogicDto> featureLogicsToDto() {
+    return getFeatureLogics()
+        .stream()
+        .map(FeatureLogic::toDto)
+        .collect(toList());
   }
 
   public FeaturesLogicDto toFeaturesLogicDto() {
     return FeaturesLogicDto
         .builder()
-        .featuresLogic(getFeaturesLogic())
+        .featuresLogic(featureLogicsToDto())
         .build();
-  }
-
-  @NotNull
-  private List<FeatureLogicDto> getFeaturesLogic() {
-    return getFeatureLogics().stream().map(FeatureLogic::toFeatureLogicDto).collect(toList());
   }
 }

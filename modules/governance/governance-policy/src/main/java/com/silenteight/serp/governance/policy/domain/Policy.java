@@ -5,7 +5,6 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
-import com.silenteight.serp.governance.policy.domain.dto.State;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.serp.governance.policy.domain.dto.State.SAVED;
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
@@ -70,20 +70,20 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   }
 
   PolicyDto toDto() {
-    return PolicyDto
-        .builder()
+    return PolicyDto.builder()
         .id(getId())
         .name(getName())
         .policyId(getPolicyId())
-        .state(State.SAVED)
+        .state(SAVED)
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
         .updatedAt(getUpdatedAt())
         .updatedBy(getUpdatedBy())
+        .steps(stepsToDto())
         .build();
   }
 
-  public Collection<StepDto> getStepsDto() {
+  private Collection<StepDto> stepsToDto() {
     return getSteps()
         .stream()
         .map(Step::toDto)

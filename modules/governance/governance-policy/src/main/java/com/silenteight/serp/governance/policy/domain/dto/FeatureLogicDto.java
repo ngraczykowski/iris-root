@@ -14,7 +14,6 @@ import static java.util.List.of;
 public class FeatureLogicDto {
 
   private int count;
-
   @NonNull
   @Default
   private Collection<FeatureDto> features = of();

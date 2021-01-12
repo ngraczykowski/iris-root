@@ -2,32 +2,38 @@ package com.silenteight.serp.governance.policy.solve;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
+
+import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 class Step {
 
-  private final SolutionWithStepId solutionWithStep;
-  private final Map<Integer, List<String>> stepLogic;
+  private final FeatureVectorSolution solution;
+  private final UUID stepId;
+  private final Collection<FeatureLogic> featureLogics;
 
-  boolean matchValues(List<String> values) {
-    return stepLogic
-        .entrySet()
+  boolean matchesFeatureValues(Map<String, String> featureValuesByName) {
+    return featureLogics
         .stream()
-        .allMatch(entry -> match(entry, values));
+        .anyMatch(featureLogic -> matchesFeatureValues(featureLogic, featureValuesByName));
   }
 
-  private static boolean match(Map.Entry<Integer, List<String>> entry, List<String> values) {
-    int key = entry.getKey();
+  private boolean matchesFeatureValues(
+      FeatureLogic featureLogic, Map<String, String> featureValuesByName) {
 
-    if (values.size() > key)
-      return entry.getValue().contains(values.get(key));
-    else
-      return false;
+    return featureLogic
+        .getFeatures()
+        .stream()
+        .filter(feature -> feature.matchesFeatureValues(featureValuesByName))
+        .limit(featureLogic.getCount())
+        .count() == featureLogic.getCount();
   }
 
-  SolutionWithStepId getSolutionWithStepId() {
-    return solutionWithStep;
+  SolveResponse getResponse() {
+    return new SolveResponse(solution, stepId);
   }
 }

@@ -26,8 +26,11 @@ public class FeaturesLogicQuery implements FeatureLogicRequestQuery {
     List<FeatureLogicDto> featureLogicDtos = featureLogicRepository
         .findAllLogicByStepId(id)
         .stream()
-        .map(FeatureLogic::toFeatureLogicDto)
+        .map(FeatureLogic::toDto)
         .collect(toList());
-    return FeaturesLogicDto.builder().featuresLogic(featureLogicDtos).build();
+
+    return FeaturesLogicDto.builder()
+        .featuresLogic(featureLogicDtos)
+        .build();
   }
 }

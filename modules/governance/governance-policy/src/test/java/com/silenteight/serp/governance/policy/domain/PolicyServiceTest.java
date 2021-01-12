@@ -1,5 +1,7 @@
 package com.silenteight.serp.governance.policy.domain;
 
+import com.silenteight.auditing.bs.AuditDataDto;
+import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
@@ -8,6 +10,11 @@ import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.Ste
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,19 +24,27 @@ import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLU
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PolicyServiceTest {
 
   private PolicyRepository repository = new InMemoryPolicyRepository();
+  @Mock
+  private AuditingLogger auditingLogger;
+  @Mock
+  private ApplicationEventPublisher eventPublisher;
+
   private PolicyService underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new PolicyDomainConfiguration().policyService(repository);
+    underTest = new PolicyDomainConfiguration()
+        .policyService(repository, auditingLogger, eventPublisher);
   }
 
   @Test
-  void importPolicy() {
+  void createPolicy() {
     // given
     String featureName = "nameAgent";
     Collection<String> featureValues = List.of("EXACT_MATCH", "NEAR_MATCH");
@@ -68,8 +83,18 @@ class PolicyServiceTest {
     UUID policyId = underTest.doImport(request);
 
     // then
-    var policy = repository.getByPolicyId(policyId);
+    var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
 
+    verify(auditingLogger).log(logCaptor.capture());
+
+    var log = logCaptor.getValue();
+    assertThat(log.getType()).isEqualTo("PolicyCreateRequested");
+    assertThat(log.getEntityId()).isEqualTo(policyId.toString());
+    assertThat(log.getEntityClass()).isEqualTo("Policy");
+    assertThat(log.getEntityAction()).isEqualTo("CREATE");
+    assertThat(log.getDetails()).isEqualTo(request.toString());
+
+    var policy = repository.getByPolicyId(policyId);
     assertThat(policy.getName()).isEqualTo(policyName);
     assertThat(policy.getPolicyId()).isEqualTo(policyId);
     assertThat(policy.getCreatedBy()).isEqualTo(creator);
@@ -90,5 +115,12 @@ class PolicyServiceTest {
     var feature = featureLogic.getFeatures().iterator().next();
     assertThat(feature.getName()).isEqualTo(featureName);
     assertThat(feature.getValues()).isEqualTo(featureValues);
+
+    var eventCaptor = ArgumentCaptor.forClass(PolicyCreatedEvent.class);
+
+    verify(eventPublisher).publishEvent(eventCaptor.capture());
+
+    var event = eventCaptor.getValue();
+    assertThat(event.getPolicyId()).isEqualTo(policyId);
   }
 }
