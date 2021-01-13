@@ -69,7 +69,8 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         STEP_ID,
         STEP_NAME,
         STEP_DESC,
-        STEP_TYPE);
+        STEP_TYPE,
+        0);
 
     FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
 
@@ -86,7 +87,8 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         STEP_ID,
         STEP_NAME,
         STEP_DESC,
-        STEP_TYPE);
+        STEP_TYPE,
+        0);
     FeatureLogicConfiguration firstLogic = FeatureLogicConfiguration
         .builder()
         .count(1)

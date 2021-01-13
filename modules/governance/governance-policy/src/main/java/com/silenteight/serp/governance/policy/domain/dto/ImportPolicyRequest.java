@@ -8,6 +8,7 @@ import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.StepType;
 
 import java.util.Collection;
+import java.util.List;
 
 @Value
 @Builder
@@ -20,7 +21,7 @@ public class ImportPolicyRequest {
   String createdBy;
 
   @NonNull
-  Collection<StepConfiguration> stepConfigurations;
+  List<StepConfiguration> stepConfigurations;
 
   @Value
   @Builder

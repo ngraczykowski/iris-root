@@ -15,7 +15,7 @@ class StepTest {
   void returnsFalseIfHasDifferentStepId() {
     // given
     UUID stepId = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
-    Step step = new Step(SOLUTION_FALSE_POSITIVE, stepId, "step-name", "", BUSINESS_LOGIC);
+    Step step = new Step(SOLUTION_FALSE_POSITIVE, stepId, "step-name", "", BUSINESS_LOGIC, 0);
 
     // when
     boolean result = step.hasStepId(fromString("de1afe98-0b58-4941-9791-4e081f9b8139"));
@@ -28,7 +28,7 @@ class StepTest {
   void returnsTrueIfHasTheSameStepId() {
     // given
     UUID stepId = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
-    Step step = new Step(SOLUTION_FALSE_POSITIVE, stepId, "step-name", "", BUSINESS_LOGIC);
+    Step step = new Step(SOLUTION_FALSE_POSITIVE, stepId, "step-name", "", BUSINESS_LOGIC, 0);
 
     // when
     boolean result = step.hasStepId(stepId);

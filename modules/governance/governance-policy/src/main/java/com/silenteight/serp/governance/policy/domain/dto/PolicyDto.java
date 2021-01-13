@@ -4,7 +4,7 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static java.util.List.of;
@@ -26,11 +26,10 @@ public class PolicyDto {
   private OffsetDateTime createdAt;
   @NonNull
   private String createdBy;
-  @NonNull
   private OffsetDateTime updatedAt;
   @NonNull
   private String updatedBy;
   @NonNull
   @Default
-  private Collection<StepDto> steps = of();
+  private List<StepDto> steps = of();
 }

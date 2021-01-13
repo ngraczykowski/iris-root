@@ -9,10 +9,12 @@ import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.serp.governance.policy.domain.dto.State.SAVED;
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
@@ -83,9 +85,10 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
         .build();
   }
 
-  private Collection<StepDto> stepsToDto() {
+  private List<StepDto> stepsToDto() {
     return getSteps()
         .stream()
+        .sorted(comparingInt(Step::getSortOrder))
         .map(Step::toDto)
         .collect(toList());
   }

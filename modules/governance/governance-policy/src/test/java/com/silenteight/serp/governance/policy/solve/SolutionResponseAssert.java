@@ -8,6 +8,8 @@ import org.assertj.core.api.AbstractAssert;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
+import static com.silenteight.governance.protocol.utils.Uuids.fromJavaUuid;
+
 public class SolutionResponseAssert extends
     AbstractAssert<SolutionResponseAssert, SolutionResponse> {
 
@@ -28,7 +30,7 @@ public class SolutionResponseAssert extends
   }
 
   public SolutionResponseAssert hasStepId(UUID stepId) {
-    if (!actual.getStepId().contentEquals(stepId.toString())) {
+    if (!actual.getStepId().equals(fromJavaUuid(stepId))) {
       failWithMessage("Expected stepId to be <%s>, but was <%s>",
           stepId, actual.getStepId());
     }

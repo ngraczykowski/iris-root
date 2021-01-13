@@ -12,8 +12,8 @@ import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
+import static com.silenteight.governance.protocol.utils.Uuids.fromJavaUuid;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.IntStream.range;
@@ -58,14 +58,12 @@ public class SolveUseCase {
   }
 
   private SolutionResponse asSolutionResponse(SolveResponse solveResponse) {
-    return SolutionResponse.newBuilder()
-        .setFeatureVectorSolution(solveResponse.getSolution())
-        .setStepId(stepIdAsString(solveResponse.getStepId()))
-        // TODO: .setFeatureVectorSignature()
-        .build();
-  }
+    SolutionResponse.Builder builder = SolutionResponse.newBuilder()
+        .setFeatureVectorSolution(solveResponse.getSolution());
 
-  private static String stepIdAsString(UUID stepId) {
-    return stepId != null ? stepId.toString() : "";
+    if (solveResponse.getStepId() != null)
+      builder.setStepId(fromJavaUuid(solveResponse.getStepId()));
+    // TODO: .setFeatureVectorSignature()
+    return builder.build();
   }
 }

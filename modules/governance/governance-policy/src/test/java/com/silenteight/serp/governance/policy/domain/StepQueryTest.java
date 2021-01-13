@@ -79,14 +79,16 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_ID,
         FIRST_STEP_NAME,
         FIRST_STEP_DESC,
-        FIRST_STEP_TYPE);
+        FIRST_STEP_TYPE,
+        0);
     policyService.addStepToPolicy(
         FIRST_POLICY_UID,
         SOLUTION_FALSE_POSITIVE,
         SECOND_STEP_ID,
         SECOND_STEP_NAME,
         SECOND_STEP_DESC,
-        SECOND_STEP_TYPE);
+        SECOND_STEP_TYPE,
+        1);
 
     List<UUID> result = underTest.listStepsOrder(FIRST_POLICY_UID);
 
@@ -103,14 +105,16 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_ID,
         FIRST_STEP_NAME,
         FIRST_STEP_DESC,
-        FIRST_STEP_TYPE);
+        FIRST_STEP_TYPE,
+        0);
     policyService.addStepToPolicy(
         FIRST_POLICY_UID,
         SOLUTION_FALSE_POSITIVE,
         SECOND_STEP_ID,
         SECOND_STEP_NAME,
         SECOND_STEP_DESC,
-        SECOND_STEP_TYPE);
+        SECOND_STEP_TYPE,
+        1);
 
     Collection<StepDto> result = underTest.listSteps(FIRST_POLICY_UID);
 
