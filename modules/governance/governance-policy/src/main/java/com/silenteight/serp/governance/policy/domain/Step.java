@@ -51,6 +51,10 @@ class Step extends BaseModifiableEntity {
   @Column(nullable = false)
   private StepType type = StepType.MANUAL_RULE;
 
+  @ToString.Include
+  @Column(nullable = false)
+  private Integer sortOrder;
+
   @OneToMany(cascade = ALL, orphanRemoval = true)
   @JoinColumn(name = "step_id", updatable = false, nullable = false)
   private Collection<FeatureLogic> featureLogics = new ArrayList<>();
@@ -60,13 +64,15 @@ class Step extends BaseModifiableEntity {
       UUID stepId,
       String name,
       String description,
-      StepType type) {
+      StepType type,
+      Integer sortOrder) {
 
     this.solution = solution;
     this.stepId = stepId;
     this.name = name;
     this.description = description;
     this.type = type;
+    this.sortOrder = sortOrder;
   }
 
   boolean hasStepId(UUID stepId) {

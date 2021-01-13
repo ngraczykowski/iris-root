@@ -147,4 +147,12 @@
         onDelete="CASCADE"/>
   </changeSet>
 
+  <changeSet id="serp-governance-4.0.0-2" author="mmastylo">
+    <addColumn tableName="governance_policy_step">
+      <column name="sort_order" type="BIGINT" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

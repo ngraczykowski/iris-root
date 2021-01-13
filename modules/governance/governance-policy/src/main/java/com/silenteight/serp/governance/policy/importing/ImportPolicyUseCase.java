@@ -40,7 +40,7 @@ public class ImportPolicyUseCase {
         .build();
   }
 
-  private static Collection<StepConfiguration> mapToStepConfigurations(
+  private static List<StepConfiguration> mapToStepConfigurations(
       List<ImportedStep> importedSteps) {
 
     return importedSteps

@@ -19,10 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 
 @RequiredArgsConstructor
 public class PolicyService {
@@ -42,8 +44,7 @@ public class PolicyService {
 
     Policy policy = addPolicy(
         policyId, request.getPolicyName(), request.getCreatedBy());
-    request.getStepConfigurations()
-           .forEach(configuration -> configureImportedStep(policy, configuration));
+    configureImportedSteps(policy, request.getStepConfigurations());
     Policy savedPolicy = repository.save(policy);
 
     eventPublisher.publishEvent(new PolicyCreatedEvent(savedPolicy.getPolicyId(), correlationId));
@@ -66,7 +67,15 @@ public class PolicyService {
     auditingLogger.log(auditDataDto);
   }
 
-  private void configureImportedStep(Policy policy, StepConfiguration configuration) {
+  private void configureImportedSteps(Policy policy, List<StepConfiguration> configurations) {
+    range(0, configurations.size())
+        .boxed()
+        .forEach(i -> configureImportedStep(policy, configurations.get(i), i));
+  }
+
+  private void configureImportedStep(
+      Policy policy, StepConfiguration configuration, int sortOrder) {
+
     UUID stepId = UUID.randomUUID();
     doAddStepToPolicy(
         policy,
@@ -74,7 +83,8 @@ public class PolicyService {
         stepId,
         configuration.getStepName(),
         configuration.getStepDescription(),
-        configuration.getStepType());
+        configuration.getStepType(),
+        sortOrder);
     doConfigureStepLogic(
         policy, stepId, configuration.getFeatureLogicConfigurations());
   }
@@ -94,10 +104,11 @@ public class PolicyService {
       @NonNull UUID stepId,
       @NonNull String stepName,
       String stepDescription,
-      @NonNull StepType stepType) {
+      @NonNull StepType stepType,
+      int sortOrder) {
 
     Policy policy = repository.getByPolicyId(policyId);
-    doAddStepToPolicy(policy, solution, stepId, stepName, stepDescription, stepType);
+    doAddStepToPolicy(policy, solution, stepId, stepName, stepDescription, stepType, sortOrder);
   }
 
   @NotNull
@@ -107,9 +118,10 @@ public class PolicyService {
       @NonNull UUID stepId,
       @NonNull String stepName,
       String stepDescription,
-      @NonNull StepType stepType) {
+      @NonNull StepType stepType,
+      int sortOrder) {
 
-    Step step = new Step(solution, stepId, stepName, stepDescription, stepType);
+    Step step = new Step(solution, stepId, stepName, stepDescription, stepType, sortOrder);
     policy.addStep(step);
     return step;
   }

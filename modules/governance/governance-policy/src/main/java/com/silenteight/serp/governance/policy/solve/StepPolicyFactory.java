@@ -6,18 +6,19 @@ import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
 class StepPolicyFactory {
 
-  private Collection<Step> steps = new ArrayList<>();
+  private List<Step> steps = new ArrayList<>();
 
-  Collection<Step> getSteps() {
+  List<Step> getSteps() {
     return steps;
   }
 
-  void reconfigure(Collection<StepDto> dtos) {
+  void reconfigure(List<StepDto> dtos) {
     steps = dtos
         .stream()
         .map(StepPolicyFactory::mapToStep)
