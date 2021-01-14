@@ -5,6 +5,7 @@ import com.silenteight.sep.base.common.support.persistence.BasicInMemoryReposito
 import org.testcontainers.shaded.org.apache.commons.lang.NotImplementedException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class InMemoryStepRepository extends BasicInMemoryRepository<Step>
@@ -20,6 +21,11 @@ public class InMemoryStepRepository extends BasicInMemoryRepository<Step>
 
   @Override
   public Collection<Step> findAllByPolicyId(long policyId) {
+    throw new NotImplementedException();
+  }
+
+  @Override
+  public List<String> findAllOrderedStepsIdsByPolicyId(long policyId) {
     throw new NotImplementedException();
   }
 

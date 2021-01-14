@@ -21,8 +21,11 @@ class StepQuery implements PolicyStepsRequestQuery, PolicyStepsOrderRequestQuery
   @Override
   public List<UUID> listStepsOrder(UUID policyId) {
     Long id = policyRepository.getIdByPolicyId(policyId);
-    //TODO(kdzieciol): Fix this https://silent8.atlassian.net/browse/WEB-425
-    return stepRepository.findAllByPolicyId(id).stream().map(Step::getStepId).collect(toList());
+    return stepRepository
+        .findAllOrderedStepsIdsByPolicyId(id)
+        .stream()
+        .map(UUID::fromString)
+        .collect(toList());
   }
 
   @Override
