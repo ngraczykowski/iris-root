@@ -35,17 +35,22 @@ class SolveUseCaseTest {
     when(stepPolicyFactory.getSteps()).thenReturn(steps);
     GetSolutionsRequest solutionsRequest = solutionsRequest(
         featureCollection("nameAgent", "dateAgent"),
-        featureVector("PERFECT_MATCH", "EXACT"));
+        featureVector("PERFECT_MATCH", "EXACT"),
+        featureVector("WEAK_MATCH", "WEAK"));
 
     // when
     GetSolutionsResponse response = underTest.solve(solutionsRequest);
 
     // then
     assertThat(response)
-        .hasSolutionsCount(1)
+        .hasSolutionsCount(2)
         .solution(0)
         .hasStepId(STEP_ID_2)
-        .hasSolution(SOLUTION_POTENTIAL_TRUE_POSITIVE);
+        .hasSolution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
+        .and()
+        .solution(1)
+        .hasStepId(STEP_ID_1)
+        .hasSolution(SOLUTION_FALSE_POSITIVE);
   }
 
   @Test
@@ -64,6 +69,7 @@ class SolveUseCaseTest {
     assertThat(response)
         .hasSolutionsCount(1)
         .solution(0)
+        .hasNoStepId()
         .hasSolution(SOLUTION_NO_DECISION);
   }
 
