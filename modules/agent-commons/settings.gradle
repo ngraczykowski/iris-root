@@ -1,0 +1,8 @@
+rootProject.name = 'agent-commons'
+gradle.ext.sepDependenciesVersion = "1.5.0"
+
+include 'agent-config-loader'
+include 'agent-autoconfigure'
+include 'agent-starter'
+include 'agent-starter-test'
+

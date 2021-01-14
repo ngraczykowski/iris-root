@@ -1,0 +1,13 @@
+plugins {
+  id "java-library"
+  id "maven-publish"
+}
+
+description = "Agent config loader"
+
+configurations {
+  implementation.extendsFrom starterSpringApp
+}
+
+dependencies {
+}

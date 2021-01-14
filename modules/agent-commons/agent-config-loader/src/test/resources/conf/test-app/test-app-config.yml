@@ -1,0 +1,13 @@
+foo.bar:
+  evaluationTimeout: PT1S
+
+  decisions:
+    priority:
+      - EXACT_MATCH
+      - STRONG_MATCH
+      - MATCH
+      - INCONCLUSIVE
+      - WEAK_MATCH
+      - NO_MATCH
+      - HQ_NO_MATCH
+      - NO_DATA

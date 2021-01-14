@@ -1,0 +1,29 @@
+# bootstrap-*.yml files contain only configuration required to fetch config from Consul
+
+agent.consul.enabled: false
+
+agent.keystore.path: ${agent.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+agent.keystore.password: LZKH70td5n
+agent.truststore.path: ${agent.home}/cert/truststore.p12
+agent.truststore.password: ${agent.keystore.password}
+
+spring:
+  cloud:
+    service-registry:
+      enabled: ${agent.consul.enabled}
+      auto-registration:
+        enabled: ${agent.consul.enabled}
+    consul:
+      enabled: ${agent.consul.enabled}
+      discovery:
+        enabled: ${agent.consul.enabled}
+        catalog-services-watch:
+          enabled: ${agent.consul.enabled}
+        heartbeat:
+          enabled: ${agent.consul.enabled}
+      config:
+        enabled: ${agent.consul.enabled}
+        watch:
+          # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
+          #  Do not enable.
+          enabled: false

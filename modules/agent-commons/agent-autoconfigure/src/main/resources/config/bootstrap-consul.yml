@@ -1,0 +1,23 @@
+# bootstrap-*.yml files contain only configuration required to fetch config from Consul
+
+agent.consul.enabled: true
+agent.consul.config.enabled: ${agent.consul.enabled}
+
+spring:
+  cloud:
+    consul:
+      scheme: ${agent.consul.protocol:https}
+      host: ${agent.consul.host:localhost}
+      port: ${agent.consul.port:24120}
+
+      config:
+        prefix: config/${spring.application.name}
+        defaultContext: ${spring.application.name}
+        name: serp-${spring.application.name}
+        format: FILES
+      tls:
+        key-store-instance-type: PKCS12
+        key-store-path: ${agent.truststore.path}
+        key-store-password: ${agent.truststore.password}
+        certificate-path: ${agent.keystore.path}
+        certificate-password: ${agent.keystore.password}

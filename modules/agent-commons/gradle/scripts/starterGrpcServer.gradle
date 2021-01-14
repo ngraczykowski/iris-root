@@ -1,0 +1,7 @@
+dependencies {
+  starterGrpcServer libraries.brave_instrumentation_grpc
+  starterGrpcServer libraries.grpc_protobuf
+  starterGrpcServer libraries.grpc_stub
+  starterGrpcServer libraries.grpc_server_spring_boot_starter
+  starterGrpcServer libraries.consul_grpc_registration
+}

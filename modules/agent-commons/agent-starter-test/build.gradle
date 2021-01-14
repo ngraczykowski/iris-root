@@ -1,0 +1,24 @@
+plugins {
+  id "java-library"
+  id "maven-publish"
+}
+
+description = "Agent starter test"
+
+configurations {
+  testImplementation.extendsFrom starterSpockTest
+}
+
+dependencies {
+  api libraries.reactor_test
+  api libraries.spock_core
+  api libraries.groovy_all
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from components.java
+    }
+  }
+}

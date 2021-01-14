@@ -1,0 +1,22 @@
+agent.server.protocol: https
+agent.consul.traefik.passTLSCert: true
+agent.consul.traefik.entryPoints: gateway
+
+grpc:
+  server:
+    security:
+      enabled: true
+      clientAuth: REQUIRE
+      certificateChain: file:${agent.home}/cert/${spring.application.name}/${spring.application.name}-chain.pem
+      privateKey: file:${agent.home}/cert/${spring.application.name}/${spring.application.name}-key-pkcs8.pem
+      trustCertCollection: file:${agent.home}/cert/ca-certs.pem
+
+server:
+  ssl:
+    enabled: true
+    key-store: ${agent.keystore.path}
+    key-store-password: ${agent.keystore.password}
+    key-alias: serp ${spring.application.name}
+    trust-store: ${agent.truststore.path}
+    trust-store-password: ${agent.truststore.password}
+    client-auth: need

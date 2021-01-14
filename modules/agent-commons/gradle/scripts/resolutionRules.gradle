@@ -1,0 +1,21 @@
+subprojects {
+  apply plugin: "nebula.resolution-rules"
+}
+
+dependencies {
+  resolutionRules files("${gradleScriptDir}/local-rules.json")
+  resolutionRules "com.netflix.nebula:gradle-resolution-rules:0.62.0"
+}
+
+nebulaResolutionRules {
+  include = [
+      'align-groovy',
+      'align-grpc',
+      'align-hibernate-core',
+      'align-jackson',
+      'align-okhttp3',
+      'align-protobuf',
+      'align-retrofit',
+      'local-rules',
+  ]
+}

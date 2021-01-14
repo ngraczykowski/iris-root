@@ -1,0 +1,29 @@
+{
+  "replace": [
+    {
+      "module": "commons-lang:commons-lang",
+      "with": "org.apache.commons:commons-lang3",
+      "reason": "Use commons-lang3 instead of commons-lang.",
+      "author": "Andrzej Haczewski",
+      "date": "2019-02-12T00:00:00.000Z"
+    }
+  ],
+  "substitute": [],
+  "deny": [
+    {
+      "module": "commons-logging:commons-logging",
+      "reason": "Commons Logging is banned because we use SLF4J and it has bridge for commons-logging.",
+      "author": "Andrzej Haczewski",
+      "date": "2019-02-12T00:00:00.000Z"
+    },
+    {
+      "module": "commons-validator:commons-validator",
+      "reason": "Commons Validator is banned because pulls in commons-logging and commons-digester. Better alternative is to use Hibernate Validator.",
+      "author": "Andrzej Haczewski",
+      "date": "2019-02-12T00:00:00.000Z"
+    }
+  ],
+  "reject": [],
+  "exclude": [],
+  "align": []
+}

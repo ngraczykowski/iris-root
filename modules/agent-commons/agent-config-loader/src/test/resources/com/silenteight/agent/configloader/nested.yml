@@ -1,0 +1,5 @@
+prefix:
+  nested:
+    string: A Prefixed String
+    number: 123456
+    bool: true

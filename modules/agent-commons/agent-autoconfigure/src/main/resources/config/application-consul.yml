@@ -1,0 +1,25 @@
+agent.consul.instance: ${spring.application.name}-${HOSTNAME:localhost}
+
+spring:
+  cloud:
+    consul:
+      discovery:
+        scheme: https
+        health-check-path: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
+        instance-id: ${agent.consul.instance}
+        prefer-ip-address: true
+        tags:
+          - "traefik.frontend.rule=PathPrefix: ${server.servlet.context-path}"
+          - "traefik.protocol=${agent.server.protocol}"
+          - "traefik.frontend.entryPoints=${agent.consul.traefik.entryPoints}"
+          - "traefik.frontend.passTLSCert=${agent.consul.traefik.passTLSCert}"
+          - "prometheus.metrics.path=${server.servlet.context-path}${management.endpoints.web.base-path}/prometheus"
+
+consul:
+  grpc:
+    registration:
+      tags:
+        - "traefik.frontend.rule=Host: grpc-${spring.application.name}.service.consul"
+        - "traefik.protocol=${agent.server.protocol}"
+        - "traefik.frontend.entryPoints=${agent.consul.traefik.entryPoints}"
+        - "traefik.frontend.passTLSCert=${agent.consul.traefik.passTLSCert}"
