@@ -5,17 +5,14 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
-import static com.silenteight.serp.governance.policy.domain.dto.State.SAVED;
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.toList;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
@@ -40,6 +37,14 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   private String name;
 
   @ToString.Include
+  private String description;
+
+  @ToString.Include
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private PolicyState state;
+
+  @ToString.Include
   @Column(name = "created_by", nullable = false)
   private String createdBy;
 
@@ -56,6 +61,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     this.name = name;
     this.createdBy = createdBy;
     this.updatedBy = createdBy;
+    this.state = DRAFT;
   }
 
   void addStep(Step step) {
@@ -76,20 +82,26 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
         .id(getId())
         .name(getName())
         .policyId(getPolicyId())
-        .state(SAVED)
+        .state(getState())
+        .description(getDescription())
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
         .updatedAt(getUpdatedAt())
         .updatedBy(getUpdatedBy())
-        .steps(stepsToDto())
         .build();
   }
 
-  private List<StepDto> stepsToDto() {
-    return getSteps()
-        .stream()
-        .sorted(comparingInt(Step::getSortOrder))
-        .map(Step::toDto)
-        .collect(toList());
+  void save() {
+    assertState(DRAFT);
+    setState(SAVED);
+  }
+
+  private void assertState(PolicyState state) {
+    if (notInState(state))
+      throw new WrongPolicyStateException(getPolicyId(), getState(), SAVED);
+  }
+
+  private boolean notInState(PolicyState state) {
+    return getState() != state;
   }
 }

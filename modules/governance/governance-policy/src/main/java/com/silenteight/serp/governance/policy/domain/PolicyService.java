@@ -11,6 +11,7 @@ import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.Fea
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,7 +31,9 @@ import static java.util.stream.IntStream.range;
 public class PolicyService {
 
   @NonNull
-  private final PolicyRepository repository;
+  private final PolicyRepository policyRepository;
+  @NonNull
+  private final StepRepository stepRepository;
   @NonNull
   private final AuditingLogger auditingLogger;
   @NonNull
@@ -45,7 +48,8 @@ public class PolicyService {
     Policy policy = addPolicy(
         policyId, request.getPolicyName(), request.getCreatedBy());
     configureImportedSteps(policy, request.getStepConfigurations());
-    Policy savedPolicy = repository.save(policy);
+    policy.save();
+    Policy savedPolicy = policyRepository.save(policy);
 
     eventPublisher.publishEvent(new PolicyCreatedEvent(savedPolicy.getPolicyId(), correlationId));
     return savedPolicy.getPolicyId();
@@ -94,7 +98,7 @@ public class PolicyService {
       @NonNull UUID policyId, @NonNull String policyName, @NonNull String createdBy) {
 
     Policy policy = new Policy(policyId, policyName, createdBy);
-    return repository.save(policy);
+    return policyRepository.save(policy);
   }
 
   @Transactional
@@ -107,7 +111,7 @@ public class PolicyService {
       @NonNull StepType stepType,
       int sortOrder) {
 
-    Policy policy = repository.getByPolicyId(policyId);
+    Policy policy = policyRepository.getByPolicyId(policyId);
     doAddStepToPolicy(policy, solution, stepId, stepName, stepDescription, stepType, sortOrder);
   }
 
@@ -132,7 +136,7 @@ public class PolicyService {
       @NonNull UUID stepId,
       @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations) {
 
-    Policy policy = repository.getByPolicyId(policyId);
+    Policy policy = policyRepository.getByPolicyId(policyId);
     doConfigureStepLogic(policy, stepId, featureLogicConfigurations);
   }
 
@@ -172,9 +176,18 @@ public class PolicyService {
   }
 
   public PolicyDto getPolicy(UUID policyId) {
-    return repository
+    return policyRepository
         .findByPolicyId(policyId)
         .map(Policy::toDto)
         .orElseThrow();
+  }
+
+  public List<StepDto> getPolicySteps(UUID policyId) {
+    Long idByPolicyId = policyRepository.getIdByPolicyId(policyId);
+    return stepRepository
+        .findAllByPolicyId(idByPolicyId)
+        .stream()
+        .map(Step::toDto)
+        .collect(toList());
   }
 }

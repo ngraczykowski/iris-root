@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
@@ -29,7 +30,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class PolicyServiceTest {
 
-  private PolicyRepository repository = new InMemoryPolicyRepository();
+  private PolicyRepository policyRepository = new InMemoryPolicyRepository();
+
+  private StepRepository stepRepository = new InMemoryStepRepository();
   @Mock
   private AuditingLogger auditingLogger;
   @Mock
@@ -40,7 +43,7 @@ class PolicyServiceTest {
   @BeforeEach
   void setUp() {
     underTest = new PolicyDomainConfiguration()
-        .policyService(repository, auditingLogger, eventPublisher);
+        .policyService(policyRepository, stepRepository, auditingLogger, eventPublisher);
   }
 
   @Test
@@ -94,8 +97,9 @@ class PolicyServiceTest {
     assertThat(log.getEntityAction()).isEqualTo("CREATE");
     assertThat(log.getDetails()).isEqualTo(request.toString());
 
-    var policy = repository.getByPolicyId(policyId);
+    var policy = policyRepository.getByPolicyId(policyId);
     assertThat(policy.getName()).isEqualTo(policyName);
+    assertThat(policy.getState()).isEqualTo(SAVED);
     assertThat(policy.getPolicyId()).isEqualTo(policyId);
     assertThat(policy.getCreatedBy()).isEqualTo(creator);
     assertThat(policy.getUpdatedBy()).isEqualTo(creator);
