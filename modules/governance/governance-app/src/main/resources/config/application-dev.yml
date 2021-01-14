@@ -42,3 +42,14 @@ spring:
   jackson:
     serialization:
       indent-output: true
+
+keycloak:
+  adapter:
+    authServerUrl=https://localhost:24111/auth
+    realm=sens-webapp
+    publicClient=false
+    confidentialPort=0
+    principalAttribute=preferred_username
+    resource=backend
+    sslRequired=external
+    credentials.secret=a9392d5f-db39-4bbe-b36e-96aecdbfd9d0
