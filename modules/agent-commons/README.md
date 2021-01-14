@@ -25,7 +25,7 @@ Example usage:
 
 and then in `build.gradle` add:
 
-    implementation libraties.agent_autoconfigure
+    implementation libraries.agent_autoconfigure
 
 
 #### Overwrite default values
@@ -71,7 +71,7 @@ Example usage:
 
 and then in `build.gradle` add:
 
-    testImplementation libraties.agent_starter
+    implementation libraries.agent_starter
 
 ### agent-starter-test
 
@@ -83,7 +83,7 @@ Example usage:
 
 and then in `build.gradle` add:
 
-    testImplementation libraties.agent_starter_test
+    testImplementation libraries.agent_starter_test
 
 ### Building JARs
 
@@ -93,7 +93,7 @@ Build JARs with command:
 
 The command will build JAR files:
 
-- agent-autoconfigure JAR in `agent-autoconfigure/build/libs/agent-autoconfigure-*.jar`.
-- agent-config-loader JAR in `agent-config-loader/build/libs/agent-config-loader-*.jar`.
-- agent-starter JAR in `agent-starter/build/libs/agent-starter-*.jar`.
-- agent-starter-test JAR in `agent-starter-test/build/libs/agent-starter-test-*.jar`.
+- `agent-autoconfigure` JAR in `agent-autoconfigure/build/libs/agent-autoconfigure-*.jar`.
+- `agent-config-loader` JAR in `agent-config-loader/build/libs/agent-config-loader-*.jar`.
+- `agent-starter` JAR in `agent-starter/build/libs/agent-starter-*.jar`.
+- `agent-starter-test` JAR in `agent-starter-test/build/libs/agent-starter-test-*.jar`.
