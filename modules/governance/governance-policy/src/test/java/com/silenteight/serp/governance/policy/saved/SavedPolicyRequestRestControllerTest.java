@@ -3,8 +3,8 @@ package com.silenteight.serp.governance.policy.saved;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.policy.domain.PolicyState;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
-import com.silenteight.serp.governance.policy.domain.dto.State;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -34,11 +34,12 @@ class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
   private static final String UPDATED_BY = "USER2";
   private static final UUID FIRST_POLICY_UUID = UUID.randomUUID();
   private static final UUID SECOND_POLICY_UUID = UUID.randomUUID();
-  private static final PolicyDto FIRST_POLICY_DTO = getPolicyDto(1, State.SAVED, FIRST_POLICY_UUID);
+  private static final PolicyDto FIRST_POLICY_DTO = getPolicyDto(
+      1, PolicyState.SAVED, FIRST_POLICY_UUID);
   private static final PolicyDto SECOND_POLICY_DTO =
-      getPolicyDto(2, State.DRAFT, SECOND_POLICY_UUID);
+      getPolicyDto(2, PolicyState.DRAFT, SECOND_POLICY_UUID);
 
-  private static PolicyDto getPolicyDto(int id, State saved, UUID policyUuid) {
+  private static PolicyDto getPolicyDto(int id, PolicyState saved, UUID policyUuid) {
     return PolicyDto
         .builder()
         .id(id)
@@ -80,14 +81,14 @@ class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .body("size()", is(2))
         .body("[0].id", equalTo(1))
         .body("[0].policyId", equalTo(FIRST_POLICY_UUID.toString()))
-        .body("[0].state", equalTo(State.SAVED.name()))
+        .body("[0].state", equalTo(PolicyState.SAVED.name()))
         .body("[0].createdBy", equalTo(CREATED_BY))
         .body("[0].createdAt", notNullValue())
         .body("[0].updatedBy", equalTo(UPDATED_BY))
         .body("[0].updatedAt", notNullValue())
         .body("[1].id", equalTo(2))
         .body("[1].policyId", equalTo(SECOND_POLICY_UUID.toString()))
-        .body("[1].state", equalTo(State.DRAFT.name()))
+        .body("[1].state", equalTo(PolicyState.DRAFT.name()))
         .body("[1].createdBy", equalTo(CREATED_BY))
         .body("[1].createdAt", notNullValue())
         .body("[1].updatedBy", equalTo(UPDATED_BY))

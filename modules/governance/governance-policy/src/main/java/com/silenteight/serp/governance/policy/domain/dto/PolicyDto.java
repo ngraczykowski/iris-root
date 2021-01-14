@@ -1,13 +1,11 @@
 package com.silenteight.serp.governance.policy.domain.dto;
 
 import lombok.*;
-import lombok.Builder.Default;
+
+import com.silenteight.serp.governance.policy.domain.PolicyState;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.UUID;
-
-import static java.util.List.of;
 
 @Data
 @Builder
@@ -20,16 +18,14 @@ public class PolicyDto {
   private UUID policyId;
   @NonNull
   private String name;
-  @NonNull
-  private State state;
+  private String description;
   @NonNull
   private OffsetDateTime createdAt;
+  @NonNull
+  private PolicyState state;
   @NonNull
   private String createdBy;
   private OffsetDateTime updatedAt;
   @NonNull
   private String updatedBy;
-  @NonNull
-  @Default
-  private List<StepDto> steps = of();
 }

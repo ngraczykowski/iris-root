@@ -149,9 +149,18 @@
 
   <changeSet id="serp-governance-4.0.0-2" author="mmastylo">
     <addColumn tableName="governance_policy_step">
-      <column name="sort_order" type="BIGINT" defaultValueNumeric="0">
+      <column name="sort_order" type="INTEGER" defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-3" author="kdzieciol">
+    <addColumn tableName="governance_policy">
+      <column name="state" type="VARCHAR(12)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="${type.text}"/>
     </addColumn>
   </changeSet>
 

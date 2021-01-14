@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
+import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
@@ -22,7 +23,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class Step extends BaseModifiableEntity {
+class Step extends BaseModifiableEntity implements IdentifiableEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

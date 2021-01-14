@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
-import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
 @RequiredArgsConstructor
 class PolicyPromotedEventHandler {
@@ -17,7 +16,6 @@ class PolicyPromotedEventHandler {
   private final StepPolicyFactory stepPolicyFactory;
 
   void handle(PolicyPromotedEvent event) {
-    PolicyDto policy = policyService.getPolicy(event.getPolicyId());
-    stepPolicyFactory.reconfigure(policy.getSteps());
+    stepPolicyFactory.reconfigure(policyService.getPolicySteps(event.getPolicyId()));
   }
 }

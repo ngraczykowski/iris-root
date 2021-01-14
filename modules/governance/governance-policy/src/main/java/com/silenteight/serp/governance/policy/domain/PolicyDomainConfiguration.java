@@ -15,11 +15,12 @@ class PolicyDomainConfiguration {
 
   @Bean
   PolicyService policyService(
-      PolicyRepository repository,
+      PolicyRepository policyRepository,
+      StepRepository stepRepository,
       AuditingLogger auditingLogger,
       ApplicationEventPublisher eventPublisher) {
 
-    return new PolicyService(repository, auditingLogger, eventPublisher);
+    return new PolicyService(policyRepository, stepRepository, auditingLogger, eventPublisher);
   }
 
   @Bean
