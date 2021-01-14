@@ -31,8 +31,6 @@ import static org.mockito.Mockito.*;
 class PolicyServiceTest {
 
   private PolicyRepository policyRepository = new InMemoryPolicyRepository();
-
-  private StepRepository stepRepository = new InMemoryStepRepository();
   @Mock
   private AuditingLogger auditingLogger;
   @Mock
@@ -43,7 +41,7 @@ class PolicyServiceTest {
   @BeforeEach
   void setUp() {
     underTest = new PolicyDomainConfiguration()
-        .policyService(policyRepository, stepRepository, auditingLogger, eventPublisher);
+        .policyService(policyRepository, auditingLogger, eventPublisher);
   }
 
   @Test
@@ -58,10 +56,11 @@ class PolicyServiceTest {
     StepType stepType = BUSINESS_LOGIC;
     String policyName = "policy-name";
     String creator = "asmith";
-    FeatureConfiguration featureConfiguration = FeatureConfiguration.builder()
-                                                                    .name(featureName)
-                                                                    .values(featureValues)
-                                                                    .build();
+    FeatureConfiguration featureConfiguration =
+        FeatureConfiguration.builder()
+            .name(featureName)
+            .values(featureValues)
+            .build();
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
         .builder()
         .count(logicCount)

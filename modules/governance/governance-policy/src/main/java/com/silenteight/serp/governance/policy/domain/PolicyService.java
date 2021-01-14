@@ -10,8 +10,6 @@ import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -32,8 +30,6 @@ public class PolicyService {
 
   @NonNull
   private final PolicyRepository policyRepository;
-  @NonNull
-  private final StepRepository stepRepository;
   @NonNull
   private final AuditingLogger auditingLogger;
   @NonNull
@@ -173,21 +169,5 @@ public class PolicyService {
 
   private static Feature mapToFeature(FeatureConfiguration configuration) {
     return new Feature(configuration.getName(), configuration.getValues());
-  }
-
-  public PolicyDto getPolicy(UUID policyId) {
-    return policyRepository
-        .findByPolicyId(policyId)
-        .map(Policy::toDto)
-        .orElseThrow();
-  }
-
-  public List<StepDto> getPolicySteps(UUID policyId) {
-    Long idByPolicyId = policyRepository.getIdByPolicyId(policyId);
-    return stepRepository
-        .findAllByPolicyId(idByPolicyId)
-        .stream()
-        .map(Step::toDto)
-        .collect(toList());
   }
 }

@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +20,9 @@ class SolveConfiguration {
 
   @Bean
   PolicyPromotedEventHandler policyPromotedEventHandler(
-      PolicyService policyService, StepPolicyFactory stepPolicyFactory) {
+      PolicyStepsConfigurationQuery stepsConfigurationQuery, StepPolicyFactory stepPolicyFactory) {
 
-    return new PolicyPromotedEventHandler(policyService, stepPolicyFactory);
+    return new PolicyPromotedEventHandler(stepsConfigurationQuery, stepPolicyFactory);
   }
 
   @Bean
