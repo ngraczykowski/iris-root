@@ -1,6 +1,11 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -133,5 +138,77 @@ class StepQueryTest extends BaseDataJpaTest {
                .description(SECOND_STEP_DESC)
                .type(SECOND_STEP_TYPE)
                .build());
+  }
+
+  @Test
+  void listConfigurationStepsShouldReturnConfigurationSteps_whenStepsInPolicy() {
+    policyService.addPolicy(
+        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
+    policyService.addStepToPolicy(
+        FIRST_POLICY_UID,
+        SOLUTION_NO_DECISION,
+        FIRST_STEP_ID,
+        FIRST_STEP_NAME,
+        FIRST_STEP_DESC,
+        FIRST_STEP_TYPE,
+        0);
+    policyService.addStepToPolicy(
+        FIRST_POLICY_UID,
+        SOLUTION_FALSE_POSITIVE,
+        SECOND_STEP_ID,
+        SECOND_STEP_NAME,
+        SECOND_STEP_DESC,
+        SECOND_STEP_TYPE,
+        1);
+    policyService.configureStepLogic(
+        FIRST_POLICY_UID,
+        FIRST_STEP_ID,
+        List.of(
+            FeatureLogicConfiguration.builder()
+                .count(1)
+                .featureConfigurations(
+                    List.of(
+                        createFeatureConfiguration("nameAgent", List.of("MATCH", "NEAR_MATCH"))))
+                .build()));
+
+    Collection<StepConfigurationDto> result = underTest.listStepsConfiguration(FIRST_POLICY_UID);
+
+    assertThat(result).contains(
+        StepConfigurationDto.builder()
+            .id(FIRST_STEP_ID)
+            .solution(SOLUTION_NO_DECISION)
+            .featureLogics(
+                List.of(
+                    FeatureLogicConfigurationDto.builder()
+                        .count(1)
+                        .features(
+                            List.of(
+                                createFeatureConfigurationDto(
+                                    "nameAgent",
+                                    List.of("MATCH", "NEAR_MATCH"))))
+                        .build()))
+            .build(),
+        StepConfigurationDto.builder()
+            .id(SECOND_STEP_ID)
+            .solution(SOLUTION_FALSE_POSITIVE)
+            .build());
+  }
+
+  private static FeatureConfiguration createFeatureConfiguration(
+      String name, Collection<String> values) {
+
+    return FeatureConfiguration.builder()
+        .name(name)
+        .values(values)
+        .build();
+  }
+
+  private static FeatureConfigurationDto createFeatureConfigurationDto(
+      String name, Collection<String> values) {
+
+    return FeatureConfigurationDto.builder()
+        .name(name)
+        .values(values)
+        .build();
   }
 }

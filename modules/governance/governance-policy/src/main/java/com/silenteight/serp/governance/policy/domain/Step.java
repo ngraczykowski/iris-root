@@ -5,8 +5,9 @@ import lombok.*;
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import java.util.ArrayList;
@@ -92,7 +93,6 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
         .name(getName())
         .description(getDescription())
         .type(getType())
-        .featureLogics(featureLogicsToDto())
         .build();
   }
 
@@ -103,10 +103,18 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
         .collect(toList());
   }
 
-  public FeaturesLogicDto toFeaturesLogicDto() {
-    return FeaturesLogicDto
-        .builder()
-        .featuresLogic(featureLogicsToDto())
+  StepConfigurationDto toConfigurationDto() {
+    return StepConfigurationDto.builder()
+        .id(getStepId())
+        .solution(getSolution())
+        .featureLogics(featureLogicsToConfigurationDto())
         .build();
+  }
+
+  private Collection<FeatureLogicConfigurationDto> featureLogicsToConfigurationDto() {
+    return getFeatureLogics()
+        .stream()
+        .map(FeatureLogic::toConfigurationDto)
+        .collect(toList());
   }
 }

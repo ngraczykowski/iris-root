@@ -1,8 +1,8 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,39 +18,41 @@ class StepPolicyFactory {
     return steps;
   }
 
-  void reconfigure(List<StepDto> dtos) {
+  void reconfigure(List<StepConfigurationDto> dtos) {
     steps = dtos
         .stream()
         .map(StepPolicyFactory::mapToStep)
         .collect(toList());
   }
 
-  private static Step mapToStep(StepDto dto) {
+  private static Step mapToStep(StepConfigurationDto dto) {
     return new Step(dto.getSolution(), dto.getId(), mapToFeatureLogics(dto.getFeatureLogics()));
   }
 
-  private static Collection<FeatureLogic> mapToFeatureLogics(Collection<FeatureLogicDto> dtos) {
+  private static Collection<FeatureLogic> mapToFeatureLogics(
+      Collection<FeatureLogicConfigurationDto> dtos) {
+
     return dtos
         .stream()
         .map(StepPolicyFactory::mapToFeatureLogic)
         .collect(toList());
   }
 
-  private static FeatureLogic mapToFeatureLogic(FeatureLogicDto dto) {
+  private static FeatureLogic mapToFeatureLogic(FeatureLogicConfigurationDto dto) {
     return FeatureLogic.builder()
         .count(dto.getCount())
         .features(mapToFeatures(dto.getFeatures()))
         .build();
   }
 
-  private static Collection<Feature> mapToFeatures(Collection<FeatureDto> dtos) {
+  private static Collection<Feature> mapToFeatures(Collection<FeatureConfigurationDto> dtos) {
     return dtos
         .stream()
         .map(StepPolicyFactory::mapToFeature)
         .collect(toList());
   }
 
-  private static Feature mapToFeature(FeatureDto dto) {
+  private static Feature mapToFeature(FeatureConfigurationDto dto) {
     return Feature.builder()
         .name(dto.getName())
         .values(dto.getValues())

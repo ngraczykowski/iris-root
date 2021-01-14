@@ -3,7 +3,9 @@ package com.silenteight.serp.governance.policy.domain;
 import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 
 import java.util.ArrayList;
@@ -51,6 +53,20 @@ class FeatureLogic extends BaseEntity {
     return getFeatures()
         .stream()
         .map(Feature::toDto)
+        .collect(toList());
+  }
+
+  FeatureLogicConfigurationDto toConfigurationDto() {
+    return FeatureLogicConfigurationDto.builder()
+        .count(getCount())
+        .features(featuresToConfigurationDto())
+        .build();
+  }
+
+  private Collection<FeatureConfigurationDto> featuresToConfigurationDto() {
+    return getFeatures()
+        .stream()
+        .map(Feature::toConfigurationDto)
         .collect(toList());
   }
 }

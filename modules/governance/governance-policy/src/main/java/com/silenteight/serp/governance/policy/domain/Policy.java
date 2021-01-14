@@ -64,19 +64,6 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     this.state = DRAFT;
   }
 
-  void addStep(Step step) {
-    steps.add(step);
-  }
-
-  void reconfigureStep(UUID stepId, Collection<FeatureLogic> featureLogics) {
-    Step step = steps
-        .stream()
-        .filter(s -> s.hasStepId(stepId))
-        .findFirst()
-        .orElseThrow(() -> new StepNotFoundException(stepId));
-    step.reconfigure(featureLogics);
-  }
-
   PolicyDto toDto() {
     return PolicyDto.builder()
         .id(getId())
@@ -89,6 +76,19 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
         .updatedAt(getUpdatedAt())
         .updatedBy(getUpdatedBy())
         .build();
+  }
+
+  void addStep(Step step) {
+    steps.add(step);
+  }
+
+  void reconfigureStep(UUID stepId, Collection<FeatureLogic> featureLogics) {
+    Step step = steps
+        .stream()
+        .filter(s -> s.hasStepId(stepId))
+        .findFirst()
+        .orElseThrow(() -> new StepNotFoundException(stepId));
+    step.reconfigure(featureLogics);
   }
 
   void save() {

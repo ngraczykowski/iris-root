@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
 
 import java.util.ArrayList;
@@ -41,6 +42,13 @@ class Feature extends BaseEntity {
 
   FeatureDto toDto() {
     return FeatureDto.builder()
+        .name(getName())
+        .values(getValues())
+        .build();
+  }
+
+  FeatureConfigurationDto toConfigurationDto() {
+    return FeatureConfigurationDto.builder()
         .name(getName())
         .values(getValues())
         .build();
