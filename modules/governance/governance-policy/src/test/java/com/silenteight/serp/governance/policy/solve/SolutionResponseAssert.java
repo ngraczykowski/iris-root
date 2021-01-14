@@ -38,6 +38,14 @@ public class SolutionResponseAssert extends
     return this;
   }
 
+  public SolutionResponseAssert hasNoStepId() {
+    if (actual.hasStepId()) {
+      failWithMessage("Expected stepId to be null, but was <%s>", actual.getStepId());
+    }
+
+    return this;
+  }
+
   public SolutionResponseAssert hasSolution(FeatureVectorSolution solution) {
     if (!actual.getFeatureVectorSolution().equals(solution)) {
       failWithMessage("Expected solution to be <%s>, but was <%s>",
@@ -45,5 +53,9 @@ public class SolutionResponseAssert extends
     }
 
     return this;
+  }
+
+  public GetSolutionsResponseAssert and() {
+    return parent;
   }
 }
