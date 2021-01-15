@@ -1,10 +1,10 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
@@ -183,8 +183,7 @@ class StepQueryTest extends BaseDataJpaTest {
                         .features(
                             List.of(
                                 createFeatureConfigurationDto(
-                                    "nameAgent",
-                                    List.of("MATCH", "NEAR_MATCH"))))
+                                    "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"))))
                         .build()))
             .build(),
         StepConfigurationDto.builder()
@@ -203,12 +202,10 @@ class StepQueryTest extends BaseDataJpaTest {
         .build();
   }
 
-  private static FeatureConfigurationDto createFeatureConfigurationDto(
-      String name, Collection<String> values) {
+  private static MatchConditionConfigurationDto createFeatureConfigurationDto(
+      String name, Condition condition, Collection<String> values) {
 
-    return FeatureConfigurationDto.builder()
-        .name(name)
-        .values(values)
-        .build();
+    return MatchConditionConfigurationDto
+        .builder().name(name).condition(condition).values(values).build();
   }
 }

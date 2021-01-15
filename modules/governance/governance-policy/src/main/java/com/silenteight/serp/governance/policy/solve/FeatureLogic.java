@@ -13,5 +13,5 @@ class FeatureLogic {
   private int count;
 
   @NonNull
-  private Collection<Feature> features;
+  private Collection<MatchCondition> features;
 }

@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 
 import java.util.ArrayList;
@@ -39,22 +39,21 @@ class StepPolicyFactory {
   }
 
   private static FeatureLogic mapToFeatureLogic(FeatureLogicConfigurationDto dto) {
-    return FeatureLogic.builder()
-        .count(dto.getCount())
-        .features(mapToFeatures(dto.getFeatures()))
-        .build();
+    return FeatureLogic
+        .builder().count(dto.getCount()).features(mapToFeatures(dto.getFeatures())).build();
   }
 
-  private static Collection<Feature> mapToFeatures(Collection<FeatureConfigurationDto> dtos) {
-    return dtos
-        .stream()
-        .map(StepPolicyFactory::mapToFeature)
-        .collect(toList());
+  private static Collection<MatchCondition> mapToFeatures(
+      Collection<MatchConditionConfigurationDto> dtos) {
+
+    return dtos.stream().map(StepPolicyFactory::mapToMatchCondition).collect(toList());
   }
 
-  private static Feature mapToFeature(FeatureConfigurationDto dto) {
-    return Feature.builder()
+  private static MatchCondition mapToMatchCondition(MatchConditionConfigurationDto dto) {
+    return MatchCondition
+        .builder()
         .name(dto.getName())
+        .condition(dto.getCondition())
         .values(dto.getValues())
         .build();
   }

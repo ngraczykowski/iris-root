@@ -1,8 +1,9 @@
 package com.silenteight.serp.governance.policy.solve;
 
+import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static java.util.UUID.fromString;
 import static org.mockito.Mockito.*;
 
@@ -60,14 +62,10 @@ class PolicyPromotedEventHandlerTest {
                         .count(2)
                         .features(
                             List.of(
-                                FeatureConfigurationDto.builder()
-                                    .name("nameAgent")
-                                    .values(List.of("PERFECT_MATCH", "NEAR_MATCH"))
-                                    .build(),
-                                FeatureConfigurationDto.builder()
-                                    .name("dateAgent")
-                                    .values(List.of("EXACT", "NEAR"))
-                                    .build()))
+                                getMatchConditionConfigurationDto(
+                                    "nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
+                                getMatchConditionConfigurationDto(
+                                    "dateAgent", IS, List.of("EXACT", "NEAR"))))
                         .build()))
             .build(),
         StepConfigurationDto.builder()
@@ -79,11 +77,15 @@ class PolicyPromotedEventHandlerTest {
                         .count(1)
                         .features(
                             List.of(
-                                FeatureConfigurationDto.builder()
-                                    .name("documentAgent")
-                                    .values(List.of("MATCH", "DIGIT_MATCH"))
-                                    .build()))
+                                getMatchConditionConfigurationDto(
+                                    "documentAgent", IS, List.of("MATCH", "DIGIT_MATCH"))))
                         .build()))
             .build());
+  }
+
+  private static MatchConditionConfigurationDto getMatchConditionConfigurationDto(
+      String name, Condition condition, List<String> values) {
+    return MatchConditionConfigurationDto
+        .builder().name(name).condition(condition).values(values).build();
   }
 }
