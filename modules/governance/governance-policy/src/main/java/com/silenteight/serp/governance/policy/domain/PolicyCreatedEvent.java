@@ -12,6 +12,8 @@ import java.util.UUID;
 @ToString(callSuper = true, doNotUseGetters = true)
 public class PolicyCreatedEvent extends BaseEvent {
 
+  private static final long serialVersionUID = 3659156581203579225L;
+
   @NonNull
   private final UUID policyId;
   @NonNull

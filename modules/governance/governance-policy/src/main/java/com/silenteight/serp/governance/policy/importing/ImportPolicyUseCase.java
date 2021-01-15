@@ -11,7 +11,6 @@ import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.Ste
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
@@ -75,28 +74,29 @@ public class ImportPolicyUseCase {
 
     return FeatureLogicConfiguration
         .builder()
-        .count(importedFeatureLogic.getCount())
-        .featureConfigurations(mapToFeatureConfigurations(importedFeatureLogic.getFeatures()))
+        .count(importedFeatureLogic.getToFulfill())
+        .featureConfigurations(
+            mapToFeatureConfigurations(importedFeatureLogic.getMatchConditions()))
         .build();
   }
 
   private static Collection<FeatureConfiguration> mapToFeatureConfigurations(
-      Map<String, List<String>> features) {
+      Collection<MatchCondition> matchConditions) {
 
-    return features
-        .entrySet()
+    return matchConditions
         .stream()
         .map(ImportPolicyUseCase::mapToFeatureConfiguration)
         .collect(toList());
   }
 
   private static FeatureConfiguration mapToFeatureConfiguration(
-      Map.Entry<String, List<String>> feature) {
+      MatchCondition matchCondition) {
 
     return FeatureConfiguration
         .builder()
-        .name(feature.getKey())
-        .values(feature.getValue())
+        .name(matchCondition.getName())
+        .condition(matchCondition.getCondition())
+        .values(matchCondition.getValues())
         .build();
   }
 }

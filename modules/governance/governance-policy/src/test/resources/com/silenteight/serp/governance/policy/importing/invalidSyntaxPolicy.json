@@ -14,20 +14,43 @@
         "stepType": "BUSINESS_LOGIC",
         "featuresLogic": [
           {
-            "count": 2,
-            "features": {
-              "apType": [ "I" ],
-              "nameAgent": [ "HQ_NO_MATCH" ]
-            }
+            "to_fulfill": 2,
+            "match_conditions": [
+              {
+                "name": "apType",
+                "condition": "is",
+                "values": ["I"]
+              },
+              {
+                "name": "nameAgent",
+                "condition": "is",
+                "values": ["HQ_NO_MATCH"]
+              }
+            ]
           },
           {
-            "count": 2,
-            "features": {
-              "genderAgent": [ "NO_DATA" ],
-              "dateAgent": [ "NO_DATA" ],
-              "nationalIdAgent": [ "NO_DATA" ],
-              "passportAgent": [ "NO_DATA" ]
-            }
+            "to_fulfill": 2,
+            "match_conditions": [
+              {
+                "name": "genderAgent",
+                "condition": "is",
+                "values": ["NO_DATA"]
+              },
+              {
+                "name": "dateAgent",
+                "condition": "is",
+                "values": ["NO_DATA"]
+              },{
+                "name": "nationalIdAgent",
+                "condition": "is",
+                "values": ["NO_DATA"]
+              },
+              {
+                "name": "passportAgent",
+                "condition": "is",
+                "values": ["NO_DATA"]
+              }
+            ]
           }
         ]
   }
