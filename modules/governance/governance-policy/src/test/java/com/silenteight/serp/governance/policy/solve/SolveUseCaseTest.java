@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
 import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
+import com.silenteight.serp.governance.policy.domain.Condition;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,6 +17,7 @@ import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLU
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureCollection;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureVector;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.solutionsRequest;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.solve.GetSolutionsResponseAssert.assertThat;
 import static java.util.UUID.fromString;
 import static org.mockito.Mockito.*;
@@ -82,8 +84,8 @@ class SolveUseCaseTest {
                 createFeatureLogic(
                     2,
                     List.of(
-                        createFeature("nameAgent", List.of("WEAK_MATCH", "MO_MATCH")),
-                        createFeature("dateAgent", List.of("WEAK")))))),
+                        createFeature("nameAgent", IS, List.of("WEAK_MATCH", "MO_MATCH")),
+                        createFeature("dateAgent", IS, List.of("WEAK")))))),
         new Step(
             SOLUTION_POTENTIAL_TRUE_POSITIVE,
             STEP_ID_2,
@@ -91,22 +93,17 @@ class SolveUseCaseTest {
                 createFeatureLogic(
                     2,
                     List.of(
-                        createFeature("nameAgent", List.of("PERFECT_MATCH", "NEAR_MATCH")),
-                        createFeature("dateAgent", List.of("EXACT")),
-                        createFeature("documentAgent", List.of("MATCH", "DIGIT_MATCH")))))));
+                        createFeature("nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
+                        createFeature("dateAgent", IS, List.of("EXACT")),
+                        createFeature("documentAgent", IS, List.of("MATCH", "DIGIT_MATCH")))))));
   }
 
-  private static FeatureLogic createFeatureLogic(int count, Collection<Feature> features) {
-    return FeatureLogic.builder()
-        .count(count)
-        .features(features)
-        .build();
+  private static FeatureLogic createFeatureLogic(int count, Collection<MatchCondition> features) {
+    return FeatureLogic.builder().count(count).features(features).build();
   }
 
-  private static Feature createFeature(String name, Collection<String> values) {
-    return Feature.builder()
-        .name(name)
-        .values(values)
-        .build();
+  private static MatchCondition createFeature(
+      String name, Condition condition, Collection<String> values) {
+    return MatchCondition.builder().name(name).condition(condition).values(values).build();
   }
 }

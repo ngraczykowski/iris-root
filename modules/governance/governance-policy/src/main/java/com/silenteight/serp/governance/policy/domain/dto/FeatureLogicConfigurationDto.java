@@ -16,5 +16,5 @@ public class FeatureLogicConfigurationDto {
   private int count;
   @NonNull
   @Default
-  private Collection<FeatureConfigurationDto> features = of();
+  private Collection<MatchConditionConfigurationDto> features = of();
 }
