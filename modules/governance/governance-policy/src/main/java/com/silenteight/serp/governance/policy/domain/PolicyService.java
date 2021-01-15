@@ -158,7 +158,7 @@ public class PolicyService {
         configuration.getCount(), mapToFeatures(configuration.getFeatureConfigurations()));
   }
 
-  private static Collection<Feature> mapToFeatures(
+  private static Collection<MatchCondition> mapToFeatures(
       Collection<FeatureConfiguration> configurations) {
 
     return configurations
@@ -167,7 +167,8 @@ public class PolicyService {
         .collect(toList());
   }
 
-  private static Feature mapToFeature(FeatureConfiguration configuration) {
-    return new Feature(configuration.getName(), configuration.getValues());
+  private static MatchCondition mapToFeature(FeatureConfiguration configuration) {
+    return new MatchCondition(
+        configuration.getName(), configuration.getCondition(), configuration.getValues());
   }
 }

@@ -35,9 +35,9 @@ class FeatureLogic extends BaseEntity {
 
   @OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "feature_logic_id", updatable = false, nullable = false)
-  private Collection<Feature> features = new ArrayList<>();
+  private Collection<MatchCondition> features = new ArrayList<>();
 
-  FeatureLogic(Integer count, Collection<Feature> features) {
+  FeatureLogic(Integer count, Collection<MatchCondition> features) {
     this.count = count;
     this.features = features;
   }
@@ -52,7 +52,7 @@ class FeatureLogic extends BaseEntity {
   private Collection<FeatureDto> featuresToDto() {
     return getFeatures()
         .stream()
-        .map(Feature::toDto)
+        .map(MatchCondition::toDto)
         .collect(toList());
   }
 
@@ -66,7 +66,7 @@ class FeatureLogic extends BaseEntity {
   private Collection<FeatureConfigurationDto> featuresToConfigurationDto() {
     return getFeatures()
         .stream()
-        .map(Feature::toConfigurationDto)
+        .map(MatchCondition::toConfigurationDto)
         .collect(toList());
   }
 }

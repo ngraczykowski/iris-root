@@ -140,6 +140,10 @@ spring:
       auto-registration:
         enabled: ${serp.consul.enabled}
 
+  servlet:
+    multipart.max-file-size: 10MB
+    multipart.max-request-size: 10MB
+
 grpc:
   server:
     port: 24205

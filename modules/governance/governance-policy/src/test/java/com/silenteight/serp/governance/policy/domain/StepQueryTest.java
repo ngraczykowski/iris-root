@@ -161,16 +161,14 @@ class StepQueryTest extends BaseDataJpaTest {
         SECOND_STEP_DESC,
         SECOND_STEP_TYPE,
         1);
+    FeatureConfiguration featureConfiguration = createFeatureConfiguration(
+        "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"));
+    FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
+        .builder().count(1).featureConfigurations(List.of(featureConfiguration)).build();
     policyService.configureStepLogic(
         FIRST_POLICY_UID,
         FIRST_STEP_ID,
-        List.of(
-            FeatureLogicConfiguration.builder()
-                .count(1)
-                .featureConfigurations(
-                    List.of(
-                        createFeatureConfiguration("nameAgent", List.of("MATCH", "NEAR_MATCH"))))
-                .build()));
+        List.of(featureLogicConfiguration));
 
     Collection<StepConfigurationDto> result = underTest.listStepsConfiguration(FIRST_POLICY_UID);
 
@@ -196,9 +194,13 @@ class StepQueryTest extends BaseDataJpaTest {
   }
 
   private static FeatureConfiguration createFeatureConfiguration(
-      String name, Collection<String> values) {
+      String name, Condition condition, Collection<String> values) {
 
-    return FeatureConfiguration.builder().name(name).condition(IS).values(values).build();
+    return FeatureConfiguration.builder()
+        .name(name)
+        .condition(condition)
+        .values(values)
+        .build();
   }
 
   private static FeatureConfigurationDto createFeatureConfigurationDto(
