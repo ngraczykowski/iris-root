@@ -8,11 +8,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.Map;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
-import static java.util.Collections.singletonList;
+import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 
@@ -78,18 +78,20 @@ class ImportedPolicyRootParserTest {
     assertThat(importedStep.getType()).isEqualTo(BUSINESS_LOGIC);
     assertThat(importedStep.getFeatureLogics()).hasSize(2);
     assertThat(importedStep.getFeatureLogics())
-        .extracting(ImportedFeatureLogic::getCount).containsExactly(2, 2);
+        .extracting(ImportedFeatureLogic::getToFulfill).containsExactly(2, 2);
     assertThat(importedStep.getFeatureLogics())
-        .extracting(ImportedFeatureLogic::getFeatures)
+        .extracting(ImportedFeatureLogic::getMatchConditions)
         .containsExactly(
-            Map.of(
-                "apType", singletonList("I"),
-                "nameAgent", singletonList("HQ_NO_MATCH")),
-            Map.of(
-                "genderAgent", singletonList("NO_DATA"),
-                "dateAgent", singletonList("NO_DATA"),
-                "nationalIdAgent", singletonList("NO_DATA"),
-                "passportAgent", singletonList("NO_DATA")));
+            of(
+                new MatchCondition("apType", IS, of("I")),
+                new MatchCondition("nameAgent", IS, of("HQ_NO_MATCH"))
+            ),
+            of(
+                new MatchCondition("genderAgent", IS, of("NO_DATA")),
+                new MatchCondition("dateAgent", IS, of("NO_DATA")),
+                new MatchCondition("nationalIdAgent", IS, of("NO_DATA")),
+                new MatchCondition("passportAgent", IS, of("NO_DATA"))
+            ));
   }
 
   private static InputStream loadResource(String resource) {

@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static org.assertj.core.api.Assertions.*;
 
 @TestPropertySource("classpath:data-test.properties")
@@ -197,10 +198,7 @@ class StepQueryTest extends BaseDataJpaTest {
   private static FeatureConfiguration createFeatureConfiguration(
       String name, Collection<String> values) {
 
-    return FeatureConfiguration.builder()
-        .name(name)
-        .values(values)
-        .build();
+    return FeatureConfiguration.builder().name(name).condition(IS).values(values).build();
   }
 
   private static FeatureConfigurationDto createFeatureConfigurationDto(

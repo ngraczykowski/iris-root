@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static java.util.Collections.singletonList;
@@ -56,11 +57,8 @@ class PolicyServiceTest {
     StepType stepType = BUSINESS_LOGIC;
     String policyName = "policy-name";
     String creator = "asmith";
-    FeatureConfiguration featureConfiguration =
-        FeatureConfiguration.builder()
-            .name(featureName)
-            .values(featureValues)
-            .build();
+    FeatureConfiguration featureConfiguration = FeatureConfiguration
+        .builder().name(featureName).condition(IS).values(featureValues).build();
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
         .builder()
         .count(logicCount)

@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.silenteight.serp.governance.policy.domain.Condition;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
@@ -13,14 +14,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({ "toFulfill", "matchConditions" })
-class ImportedFeatureLogic {
+@JsonPropertyOrder({ "name", "condition", "values" })
+public class MatchCondition {
 
   @NonNull
-  @JsonProperty("toFulfill")
-  private Integer toFulfill;
+  private String name;
 
   @NonNull
-  @JsonProperty("matchConditions")
-  private List<MatchCondition> matchConditions;
+  private Condition condition;
+
+  @NonNull
+  private List<String> values;
 }

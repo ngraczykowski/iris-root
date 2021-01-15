@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
@@ -122,7 +123,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   }
 
   private FeatureConfiguration getFeatureConfiguration(String featureName2, List<String> match) {
-    return FeatureConfiguration.builder().name(featureName2).values(match).build();
+    return FeatureConfiguration.builder().name(featureName2).condition(IS).values(match).build();
   }
 
   private FeatureLogicDto getFeaturesDto(int count, List<FeatureDto> featureDtos) {

@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.domain.StepType;
 
 import java.util.Collection;
@@ -58,6 +59,9 @@ public class ImportPolicyRequest {
 
     @NonNull
     String name;
+
+    @NonNull
+    Condition condition;
 
     @NonNull
     Collection<String> values;

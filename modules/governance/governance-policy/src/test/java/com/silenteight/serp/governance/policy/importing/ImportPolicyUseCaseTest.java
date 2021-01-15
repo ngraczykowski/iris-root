@@ -11,11 +11,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static java.util.Collections.singletonList;
+import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.mockito.Mockito.*;
 
@@ -37,8 +38,8 @@ class ImportPolicyUseCaseTest {
     InputStream inputStream = mock(InputStream.class);
     ImportedPolicyRoot root = createImportedPolicyRoot();
     ImportPolicyCommand command = ImportPolicyCommand.builder()
-        .inputStream(inputStream)
-        .build();
+                                                     .inputStream(inputStream)
+                                                     .build();
 
     when(importedPolicyRootParser.parse(any(InputStream.class))).thenReturn(root);
 
@@ -50,13 +51,13 @@ class ImportPolicyUseCaseTest {
   }
 
   private static ImportedPolicyRoot createImportedPolicyRoot() {
-    Map<String, List<String>> features = Map.of(
-        "nameAgent", List.of("MATCH", "NEAR_MATCH"),
-        "dateAgent", List.of("EXACT", "NEAR"));
+    List<MatchCondition> matchConditions = of(
+        new MatchCondition("nameAgent", IS, of("MATCH", "NEAR_MATCH")),
+        new MatchCondition("dateAgent", IS, of("EXACT", "NEAR")));
 
     ImportedFeatureLogic importedFeatureLogic = new ImportedFeatureLogic();
-    importedFeatureLogic.setCount(2);
-    importedFeatureLogic.setFeatures(features);
+    importedFeatureLogic.setToFulfill(2);
+    importedFeatureLogic.setMatchConditions(matchConditions);
 
     ImportedStep importedStep = new ImportedStep();
     importedStep.setSolution(SOLUTION_FALSE_POSITIVE);
