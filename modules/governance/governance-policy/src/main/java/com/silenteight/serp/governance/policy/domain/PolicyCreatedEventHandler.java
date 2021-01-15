@@ -7,6 +7,7 @@ import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -23,7 +24,8 @@ class PolicyCreatedEventHandler {
   @NonNull
   private final ApplicationEventPublisher eventPublisher;
 
-  void handle(PolicyCreatedEvent event) {
+  @EventListener
+  public void handle(PolicyCreatedEvent event) {
     logPolicyCreated(event.getPolicyId(), event.getCorrelationId());
     eventPublisher.publishEvent(new PolicyPromotedEvent(event.getPolicyId()));
   }
