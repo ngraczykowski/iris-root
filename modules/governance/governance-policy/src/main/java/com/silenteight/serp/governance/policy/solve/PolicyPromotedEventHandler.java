@@ -7,6 +7,8 @@ import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
+import org.springframework.context.event.EventListener;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,7 +20,8 @@ class PolicyPromotedEventHandler {
   @NonNull
   private final StepPolicyFactory stepPolicyFactory;
 
-  void handle(PolicyPromotedEvent event) {
+  @EventListener
+  public void handle(PolicyPromotedEvent event) {
     List<StepConfigurationDto> steps =
         stepsConfigurationQuery.listStepsConfiguration(event.getPolicyId());
     stepPolicyFactory.reconfigure(steps);
