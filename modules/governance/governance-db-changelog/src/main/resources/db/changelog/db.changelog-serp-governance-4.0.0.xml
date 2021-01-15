@@ -103,7 +103,7 @@
         onUpdate="CASCADE"
         onDelete="CASCADE"/>
 
-    <createTable tableName="governance_policy_step_feature">
+    <createTable tableName="governance_policy_step_match_condition">
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -120,9 +120,9 @@
     </createTable>
 
     <addForeignKeyConstraint
-        baseTableName="governance_policy_step_feature"
+        baseTableName="governance_policy_step_match_condition"
         baseColumnNames="feature_logic_id"
-        constraintName="fk_governance_policy_step_feature_feature_logic_id"
+        constraintName="fk_governance_policy_step_match_condition_feature_logic_id"
         referencedTableName="governance_policy_step_feature_logic"
         referencedColumnNames="id"
         onUpdate="CASCADE"
@@ -141,7 +141,7 @@
         baseTableName="governance_policy_step_feature_values"
         baseColumnNames="feature_id"
         constraintName="fk_governance_policy_step_feature_values_feature_id"
-        referencedTableName="governance_policy_step_feature"
+        referencedTableName="governance_policy_step_match_condition"
         referencedColumnNames="id"
         onUpdate="CASCADE"
         onDelete="CASCADE"/>
@@ -161,6 +161,14 @@
         <constraints nullable="false"/>
       </column>
       <column name="description" type="${type.text}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-4" author="kdzieciol">
+    <addColumn tableName="governance_policy_step_match_condition">
+      <column name="condition" type="VARCHAR(8)">
+        <constraints nullable="false"/>
+      </column>
     </addColumn>
   </changeSet>
 

@@ -11,12 +11,12 @@ import java.util.Collection;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "governance_policy_step_feature")
+@Table(name = "governance_policy_step_match_condition")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class Feature extends BaseEntity {
+class MatchCondition extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,11 @@ class Feature extends BaseEntity {
   @Column(nullable = false)
   private String name;
 
+  @ToString.Include
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Condition condition;
+
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
       name = "governance_policy_step_feature_values",
@@ -35,8 +40,9 @@ class Feature extends BaseEntity {
   @Column(name = "value")
   private Collection<String> values = new ArrayList<>();
 
-  Feature(String name, Collection<String> values) {
+  MatchCondition(String name, Condition condition, Collection<String> values) {
     this.name = name;
+    this.condition = condition;
     this.values = values;
   }
 
