@@ -4,9 +4,9 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,30 +43,19 @@ class FeatureLogic extends BaseEntity {
   }
 
   FeatureLogicDto toDto() {
-    return FeatureLogicDto.builder()
-        .count(getCount())
-        .features(featuresToDto())
-        .build();
+    return FeatureLogicDto.builder().count(getCount()).features(featuresToDto()).build();
   }
 
-  private Collection<FeatureDto> featuresToDto() {
-    return getFeatures()
-        .stream()
-        .map(MatchCondition::toDto)
-        .collect(toList());
+  private Collection<MatchConditionDto> featuresToDto() {
+    return getFeatures().stream().map(MatchCondition::toDto).collect(toList());
   }
 
   FeatureLogicConfigurationDto toConfigurationDto() {
-    return FeatureLogicConfigurationDto.builder()
-        .count(getCount())
-        .features(featuresToConfigurationDto())
-        .build();
+    return FeatureLogicConfigurationDto
+        .builder().count(getCount()).features(featuresToConfigurationDto()).build();
   }
 
   private Collection<FeatureConfigurationDto> featuresToConfigurationDto() {
-    return getFeatures()
-        .stream()
-        .map(MatchCondition::toConfigurationDto)
-        .collect(toList());
+    return getFeatures().stream().map(MatchCondition::toConfigurationDto).collect(toList());
   }
 }

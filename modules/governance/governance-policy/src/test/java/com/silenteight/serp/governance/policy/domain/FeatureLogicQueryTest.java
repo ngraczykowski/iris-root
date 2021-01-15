@@ -1,11 +1,11 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -126,11 +126,11 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
     return FeatureConfiguration.builder().name(featureName2).condition(IS).values(match).build();
   }
 
-  private FeatureLogicDto getFeaturesDto(int count, List<FeatureDto> featureDtos) {
+  private FeatureLogicDto getFeaturesDto(int count, List<MatchConditionDto> featureDtos) {
     return FeatureLogicDto.builder().count(count).features(featureDtos).build();
   }
 
-  private FeatureDto getFeatureDto(String featureName, List<String> values) {
-    return FeatureDto.builder().name(featureName).values(values).build();
+  private MatchConditionDto getFeatureDto(String featureName, List<String> values) {
+    return MatchConditionDto.builder().name(featureName).condition(IS).values(values).build();
   }
 }

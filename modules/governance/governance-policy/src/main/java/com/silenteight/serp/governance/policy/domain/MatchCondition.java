@@ -4,7 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,9 +46,11 @@ class MatchCondition extends BaseEntity {
     this.values = values;
   }
 
-  FeatureDto toDto() {
-    return FeatureDto.builder()
+  MatchConditionDto toDto() {
+    return MatchConditionDto
+        .builder()
         .name(getName())
+        .condition(getCondition())
         .values(getValues())
         .build();
   }

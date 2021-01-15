@@ -3,9 +3,9 @@ package com.silenteight.serp.governance.policy.step;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,9 +41,10 @@ class PolicyStepsLogicRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   private static Collection<FeatureLogicDto> getLogicDto() {
-    FeatureDto featureDto = FeatureDto
+    MatchConditionDto featureDto = MatchConditionDto
         .builder()
         .name(AGENT_NAME)
+        .condition(IS)
         .values(asList(FIRST_VALUE, SECOND_VALUE))
         .build();
     FeatureLogicDto featureLogicDto1 = FeatureLogicDto
