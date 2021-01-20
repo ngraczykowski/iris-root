@@ -22,13 +22,16 @@ import static java.util.stream.IntStream.range;
 public class SolveUseCase {
 
   @NonNull
+  private final StepPolicyFactory stepPolicyFactory;
+  @NonNull
   private final SolvingService solvingService;
 
   public GetSolutionsResponse solve(GetSolutionsRequest request) {
+    List<Step> steps = stepPolicyFactory.getSteps();
     List<String> featureNames = asFeatureNames(request.getFeatureCollection().getFeatureList());
     List<SolutionResponse> solutionResponses = request.getFeatureVectorsList().stream()
         .map(vector -> this.asFeatureValues(featureNames, vector))
-        .map(solvingService::solve)
+        .map(featureValues -> solvingService.solve(steps, featureValues))
         .map(this::asSolutionResponse)
         .collect(toList());
 

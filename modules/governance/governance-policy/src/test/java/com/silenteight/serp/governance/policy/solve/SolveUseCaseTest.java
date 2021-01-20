@@ -4,6 +4,7 @@ import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
 import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
 import com.silenteight.serp.governance.policy.domain.Condition;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -27,8 +28,14 @@ class SolveUseCaseTest {
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
 
-  private final StepPolicyFactory stepPolicyFactory = Mockito.mock(StepPolicyFactory.class);
-  private final SolveUseCase underTest = new SolveUseCase(new SolvingService(stepPolicyFactory));
+  private StepPolicyFactory stepPolicyFactory;
+  private SolveUseCase underTest;
+
+  @BeforeEach
+  void setUp() {
+    stepPolicyFactory = Mockito.mock(StepPolicyFactory.class);
+    underTest = new SolveUseCase(stepPolicyFactory, new SolvingService());
+  }
 
   @Test
   void matchedSolutionReturnsCorrectly() {

@@ -3,10 +3,9 @@ package com.silenteight.serp.governance.policy.solve;
 import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collection;
@@ -21,7 +20,6 @@ import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS_NOT;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SolvingServiceTest {
@@ -34,21 +32,21 @@ class SolvingServiceTest {
   private static final List<Step> STEPS_WITH_IS = createIsSteps();
   private static final List<Step> STEPS_WITH_IS_NOT = createIsNotSteps();
 
-  @Mock
-  private StepPolicyFactory stepPolicyFactory;
-
-  @InjectMocks
   private SolvingService underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new SolvingService();
+  }
 
   @Test
   void defaultSolutionReturnsWhenGivenOnlyOneFeatureValue() {
     // given
     Map<String, String> featureValues = Map.of(
         "nameAgent", "NEAR_MATCH");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS, featureValues);
 
     // then
     assertThat(solution).isEqualTo(DEFAULT_SOLUTION);
@@ -61,10 +59,9 @@ class SolvingServiceTest {
         "nameAgent", "NEAR_MATCH",
         "dateAgent", "EXACT",
         "documentAgent", "NO_DATA");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS, featureValues);
 
     // then
     assertThat(solution).isEqualTo(
@@ -79,10 +76,9 @@ class SolvingServiceTest {
         "dateAgent", "EXACT",
         "documentAgent", "NO_DATA",
         "anotherAgent", "EXACT");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS, featureValues);
 
     // then
     assertThat(solution).isEqualTo(
@@ -96,10 +92,9 @@ class SolvingServiceTest {
         "nameAgent", "NEAR_MATCH",
         "dateAgent", "EXACT",
         "documentAgent", "DIGIT_MATCH");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS, featureValues);
 
     // then
     assertThat(solution).isEqualTo(
@@ -113,10 +108,9 @@ class SolvingServiceTest {
         "nameAgent", "EXACT",
         "dateAgent", "MATCH",
         "documentAgent", "NO_DATA");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS, featureValues);
 
     // then
     assertThat(solution).isEqualTo(DEFAULT_SOLUTION);
@@ -129,10 +123,9 @@ class SolvingServiceTest {
         "nameAgent", "OUT_OF_RANGE",
         "dateAgent", "NO_DATA",
         "documentAgent", "MATCH");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS, featureValues);
 
     // then
     assertThat(solution).isEqualTo(DEFAULT_SOLUTION);
@@ -145,10 +138,9 @@ class SolvingServiceTest {
         "nameAgent", "MATCH",
         "dateAgent", "MATCH",
         "documentAgent", "MATCH");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS_NOT);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS_NOT, featureValues);
 
     // then
     assertThat(solution).isEqualTo(
@@ -162,10 +154,9 @@ class SolvingServiceTest {
         "nameAgent", "MATCH",
         "dateAgent", "NO_DATA",
         "documentAgent", "MATCH");
-    when(stepPolicyFactory.getSteps()).thenReturn(STEPS_WITH_IS_NOT);
 
     // when
-    SolveResponse solution = underTest.solve(featureValues);
+    SolveResponse solution = underTest.solve(STEPS_WITH_IS_NOT, featureValues);
 
     // then
     assertThat(solution).isEqualTo(DEFAULT_SOLUTION);
