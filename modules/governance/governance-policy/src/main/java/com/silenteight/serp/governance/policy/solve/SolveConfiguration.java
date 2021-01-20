@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Configuration;
 class SolveConfiguration {
 
   @Bean
-  SolveUseCase solveUseCase(SolvingService solvingService) {
-    return new SolveUseCase(solvingService);
+  SolveUseCase solveUseCase(StepPolicyFactory stepPolicyFactory, SolvingService solvingService) {
+    return new SolveUseCase(stepPolicyFactory, solvingService);
   }
 
   @Bean
-  SolvingService solvingService(StepPolicyFactory stepPolicyFactory) {
-    return new SolvingService(stepPolicyFactory);
+  SolvingService solvingService() {
+    return new SolvingService();
   }
 
   @Bean
