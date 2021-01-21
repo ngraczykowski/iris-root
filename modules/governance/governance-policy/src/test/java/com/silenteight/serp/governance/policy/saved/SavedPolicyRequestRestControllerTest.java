@@ -26,7 +26,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({ SavedPolicyRequestRestController.class, GenericExceptionControllerAdvice.class })
 class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
-  private static final String SAVED_POLICY_URL = "/v1/policies?state=saved";
+  private static final String SAVED_POLICY_URL = "/v1/policies?state=SAVED";
   private static final String POLICY_NAME = "TEST_POLICY";
   private static final OffsetDateTime CREATED_AT = OffsetDateTime.now().minusHours(1);
   private static final OffsetDateTime UPDATED_AT = OffsetDateTime.now();
