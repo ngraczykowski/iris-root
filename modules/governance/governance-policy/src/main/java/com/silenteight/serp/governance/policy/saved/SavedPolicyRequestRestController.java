@@ -26,7 +26,7 @@ public class SavedPolicyRequestRestController {
   @NonNull
   private final SavedPolicyRequestQuery savedPolicyRequestQuery;
 
-  @GetMapping(value = "/v1/policies", params = "state=saved")
+  @GetMapping(value = "/v1/policies", params = "state=SAVED")
   @PreAuthorize("isAuthorized('LIST_SAVED_POLICIES')")
   public ResponseEntity<Collection<PolicyDto>> saved(@RequestParam String state) {
     return ResponseEntity.ok(savedPolicyRequestQuery.listSaved());
