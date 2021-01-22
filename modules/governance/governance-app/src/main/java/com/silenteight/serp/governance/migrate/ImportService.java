@@ -12,13 +12,13 @@ import com.silenteight.serp.governance.activation.ActivationService;
 import com.silenteight.serp.governance.activation.dto.ActivationRequest;
 import com.silenteight.serp.governance.branch.BranchService;
 import com.silenteight.serp.governance.branch.ConfigureBranchRequest;
+import com.silenteight.serp.governance.common.signature.SignatureCalculator;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupFinder;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeFacade;
 import com.silenteight.serp.governance.featurevector.FeatureVectorService;
 import com.silenteight.serp.governance.featurevector.dto.StoreFeatureVectorsRequest;
 import com.silenteight.serp.governance.featurevector.dto.StoreFeatureVectorsResponse;
 import com.silenteight.serp.governance.migrate.dto.ImportedDecisionTree;
-import com.silenteight.serp.governance.model.SignatureCalculator;
 
 import com.google.common.io.BaseEncoding;
 import com.google.protobuf.ByteString;
