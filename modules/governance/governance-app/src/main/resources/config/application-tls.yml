@@ -5,8 +5,8 @@ serp:
     protocol: https
   consul:
     traefik:
-      passTLSCert: true
-      entryPoints: gateway
+      passTLSCert: false
+      entryPoints: gateway,unprotectedGateway
 
 server:
   ssl:
@@ -16,7 +16,6 @@ server:
     key-alias: serp ${spring.application.name}
     trust-store: ${serp.truststore.path}
     trust-store-password: ${serp.truststore.password}
-    client-auth: need
 
 grpc:
   server:
