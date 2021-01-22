@@ -4,13 +4,12 @@ import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.serp.governance.activation.ActivationService;
 import com.silenteight.serp.governance.branch.BranchService;
+import com.silenteight.serp.governance.common.signature.SignatureCalculator;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupFinder;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeFacade;
 import com.silenteight.serp.governance.featureset.FeatureSetFinder;
 import com.silenteight.serp.governance.featurevector.FeatureVectorFinder;
 import com.silenteight.serp.governance.featurevector.FeatureVectorService;
-import com.silenteight.serp.governance.model.DefaultSignatureCalculator;
-import com.silenteight.serp.governance.model.SignatureCalculator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,11 +35,6 @@ class MigrationModuleConfiguration {
         .branchService(branchService)
         .calculator(signatureCalculator)
         .build();
-  }
-
-  @Bean
-  DefaultSignatureCalculator defaultSignatureCalculator() {
-    return new DefaultSignatureCalculator();
   }
 
   @Bean

@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model;
+package com.silenteight.serp.governance.common.signature;
 
 import com.google.protobuf.ByteString;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -6,19 +6,18 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.security.MessageDigest;
 import java.util.List;
 
-//TODO: if moved to common please replace it and remove
-@SuppressWarnings("findsecbugs:WEAK_MESSAGE_DIGEST_SHA1") // not used for cryptography
-public class DefaultSignatureCalculator implements SignatureCalculator {
+import static com.google.protobuf.ByteString.copyFrom;
 
-  @Override
+@SuppressWarnings("findsecbugs:WEAK_MESSAGE_DIGEST_SHA1") // not used for cryptography
+public class SignatureCalculator {
+
   public ByteString calculateFeaturesSignature(List<String> sortedFeatures) {
-    return ByteString.copyFrom(calculateSignatureForFeatures(sortedFeatures));
+    return copyFrom(calculateSignatureForFeatures(sortedFeatures));
   }
 
-  @Override
   public ByteString calculateVectorSignature(
       ByteString featureSignature, List<String> featureValues) {
-    return ByteString.copyFrom(calculateSignatureForVector(featureSignature, featureValues));
+    return copyFrom(calculateSignatureForVector(featureSignature, featureValues));
   }
 
   private static byte[] calculateSignatureForFeatures(List<String> sortedFeatures) {
@@ -29,7 +28,7 @@ public class DefaultSignatureCalculator implements SignatureCalculator {
     return digest.digest();
   }
 
-  private byte[] calculateSignatureForVector(
+  private static byte[] calculateSignatureForVector(
       ByteString featureSignature, List<String> featureValues) {
 
     MessageDigest digest = DigestUtils.getSha1Digest();

@@ -13,6 +13,7 @@ import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.branchquery.BranchQueryModule;
 import com.silenteight.serp.governance.branchsolution.BranchSolutionModule;
 import com.silenteight.serp.governance.bulkchange.BulkChangeModule;
+import com.silenteight.serp.governance.common.CommonModule;
 import com.silenteight.serp.governance.common.web.config.WebModule;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupModule;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeModule;
@@ -42,6 +43,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     BranchQueryModule.class,
     BranchSolutionModule.class,
     BulkChangeModule.class,
+    CommonModule.class,
     DecisionGroupModule.class,
     DecisionTreeModule.class,
     DecisionTreeSummaryQueryModule.class,
