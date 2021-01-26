@@ -225,6 +225,8 @@ libraries.reactor_grpc_stub =
     [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
+libraries.univocity_parsers = [group: 'com.univocity', name: 'univocity-parsers', version: '2.9.0']
+
 
 // Testing
 libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']
