@@ -5,6 +5,7 @@ import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
 import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 import com.silenteight.serp.governance.activation.ActivationModule;
+import com.silenteight.serp.governance.analytics.AnalyticsModule;
 import com.silenteight.serp.governance.app.amqp.RabbitModule;
 import com.silenteight.serp.governance.app.grpc.GrpcModule;
 import com.silenteight.serp.governance.app.rest.RestModule;
@@ -13,8 +14,8 @@ import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.branchquery.BranchQueryModule;
 import com.silenteight.serp.governance.branchsolution.BranchSolutionModule;
 import com.silenteight.serp.governance.bulkchange.BulkChangeModule;
-import com.silenteight.serp.governance.common.CommonModule;
-import com.silenteight.serp.governance.common.web.config.WebModule;
+import com.silenteight.serp.governance.common.signature.SignatureModule;
+import com.silenteight.serp.governance.common.web.WebModule;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupModule;
 import com.silenteight.serp.governance.decisiontree.DecisionTreeModule;
 import com.silenteight.serp.governance.decisiontreesummaryquery.DecisionTreeSummaryQueryModule;
@@ -38,12 +39,12 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     ActivationModule.class,
+    AnalyticsModule.class,
     AutoActivationModule.class,
     BranchModule.class,
     BranchQueryModule.class,
     BranchSolutionModule.class,
     BulkChangeModule.class,
-    CommonModule.class,
     DecisionGroupModule.class,
     DecisionTreeModule.class,
     DecisionTreeSummaryQueryModule.class,
@@ -55,6 +56,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     NotifierModule.class,
     PolicyModule.class,
     SolutionDiscrepancyModule.class,
+    SignatureModule.class,
     // Interface modules
     AuthenticationModule.class,
     AuthorizationModule.class,
@@ -70,7 +72,7 @@ public class GovernanceApplication {
 
   public static void main(String[] args) {
     new SerpApplicationTemplate("governance", args, GovernanceApplication.class)
-        .profiles("database", "rabbitmq","messaging")
+        .profiles("database", "rabbitmq", "messaging")
         .contextCallback(new SerpApplicationContextCallback())
         .runAndExit();
   }

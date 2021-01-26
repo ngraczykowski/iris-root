@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
 import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
+import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
 import com.silenteight.serp.governance.policy.domain.Condition;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,8 @@ class SolveUseCaseTest {
   @BeforeEach
   void setUp() {
     stepPolicyFactory = Mockito.mock(StepPolicyFactory.class);
-    underTest = new SolveUseCase(stepPolicyFactory, new SolvingService());
+    StoreFeatureVectorSolvedUseCase handler = mock(StoreFeatureVectorSolvedUseCase.class);
+    underTest = new SolveUseCase(stepPolicyFactory, new SolvingService(), handler);
   }
 
   @Test
