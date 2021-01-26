@@ -3,14 +3,12 @@ plugins {
   id "maven-publish"
 }
 
-description = "Governance Policy"
+description = "Governance Analytics"
 
 configurations {
   implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterJackson
-  implementation.extendsFrom starterGrpc
-
   implementation.extendsFrom starterDatabase
+
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
   testImplementation.extendsFrom starterSpringTest
@@ -19,9 +17,6 @@ configurations {
 dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_serp_protocol_base
-
-  implementation libraries.silenteight_serp_governance_protocol
 
   implementation libraries.silenteight_audit_bs
 
@@ -29,15 +24,5 @@ dependencies {
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
 
-  // TODO: WEB-479 - remove dependency on analytics
-  implementation project(":governance-analytics")
-
-  implementation libraries.spring_webmvc
-  implementation libraries.spring_security_config
-
-  implementation libraries.grpc_api
-  implementation libraries.grpc_stub
-
   testImplementation project(":governance-db-changelog")
-  testImplementation libraries.rest_assured_spring_mock_mvc
 }

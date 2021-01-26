@@ -172,4 +172,68 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="serp-governance-4.0.0-5" author="anowicki">
+    <createTable tableName="governance_analytics_feature_vector">
+      <column name="feature_vector_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="vector_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="names" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="values" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_analytics_feature_vector"
+        indexName="ix_governance_analytics_feature_vector_vector_signature"
+        unique="true">
+      <column name="vector_signature"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_analytics_feature_vector"
+        indexName="ix_governance_analytics_feature_vector_names">
+      <column name="names"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-6" author="anowicki">
+    <createTable tableName="governance_analytics_feature_vector_usage">
+      <column name="usage_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="vector_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="version" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="usage_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_analytics_feature_vector_usage"
+        indexName="ix_governance_analytics_feature_vector_usage_vector_signature"
+        unique="true">
+      <column name="vector_signature"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

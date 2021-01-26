@@ -7,6 +7,7 @@ import com.silenteight.proto.governance.v1.api.FeatureVector;
 import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
 import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
 import com.silenteight.proto.governance.v1.api.SolutionResponse;
+import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
 import java.util.Iterator;
@@ -26,12 +27,15 @@ public class SolveUseCase {
   @NonNull
   private final SolvingService solvingService;
 
+  @NonNull
+  private final StoreFeatureVectorSolvedUseCase storeFeatureVectorSolvedUseCase;
+
   public GetSolutionsResponse solve(GetSolutionsRequest request) {
     List<Step> steps = stepPolicyFactory.getSteps();
     List<String> featureNames = asFeatureNames(request.getFeatureCollection().getFeatureList());
     List<SolutionResponse> solutionResponses = request.getFeatureVectorsList().stream()
         .map(vector -> this.asFeatureValues(featureNames, vector))
-        .map(featureValues -> solvingService.solve(steps, featureValues))
+        .map(featureValuesByName -> process(steps, featureValuesByName))
         .map(this::asSolutionResponse)
         .collect(toList());
 
@@ -58,6 +62,12 @@ public class SolveUseCase {
     return range(0, featureNames.size())
         .boxed()
         .collect(toMap(i -> keyIterator.next(), i -> valueIterator.next()));
+  }
+
+  private SolveResponse process(List<Step> steps, Map<String,String> featureValuesByName) {
+    SolveResponse solve = solvingService.solve(steps, featureValuesByName);
+    storeFeatureVectorSolvedUseCase.activate(featureValuesByName, solve.getStepId());
+    return solve;
   }
 
   private SolutionResponse asSolutionResponse(SolveResponse solveResponse) {
