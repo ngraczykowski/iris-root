@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
@@ -15,16 +14,11 @@ public class SolvingService {
   private static final SolveResponse DEFAULT_SOLUTION =
       new SolveResponse(SOLUTION_NO_DECISION);
 
-  public SolveResponse solve(List<Step> steps, Map<String, String> featureValuesByName) {
-    SolveResponse response = getSolutionForValues(steps, featureValuesByName);
-    //TODO(mmastylo): Send Configure Branch message to a queue
-    return response;
-  }
+  public SolveResponse solve(
+      StepsConfigurationSupplier stepsProvider, Map<String, String> featureValuesByName) {
 
-  private SolveResponse getSolutionForValues(
-      List<Step> steps, Map<String, String> featureValuesByName) {
-
-    return steps
+    return stepsProvider
+        .get()
         .stream()
         .filter(step -> step.matchesFeatureValues(featureValuesByName))
         .map(Step::getResponse)

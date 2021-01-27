@@ -7,9 +7,9 @@ import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigura
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,11 +28,13 @@ class PolicyPromotedEventHandlerTest {
   @Mock
   private PolicyStepsConfigurationQuery stepsConfigurationQuery;
 
-  @Mock
-  private StepPolicyFactory stepPolicyFactory;
+  private InUsePolicyStepsSupplier underTest;
 
-  @InjectMocks
-  private PolicyPromotedEventHandler underTest;
+  @BeforeEach
+  void setUp() {
+    SolveConfiguration configuration = new SolveConfiguration();
+    this.underTest = configuration.inUsePolicyStepsSupplier(stepsConfigurationQuery);
+  }
 
   @Test
   void handlePolicyPromotedEvent() {
@@ -48,7 +50,7 @@ class PolicyPromotedEventHandlerTest {
     underTest.handle(event);
 
     // then
-    verify(stepPolicyFactory).reconfigure(steps);
+    verify(stepsConfigurationQuery).listStepsConfiguration(policyId);
   }
 
   private static List<StepConfigurationDto> createSteps() {
@@ -85,7 +87,11 @@ class PolicyPromotedEventHandlerTest {
 
   private static MatchConditionConfigurationDto getMatchConditionConfigurationDto(
       String name, Condition condition, List<String> values) {
-    return MatchConditionConfigurationDto
-        .builder().name(name).condition(condition).values(values).build();
+
+    return MatchConditionConfigurationDto.builder()
+        .name(name)
+        .condition(condition)
+        .values(values)
+        .build();
   }
 }

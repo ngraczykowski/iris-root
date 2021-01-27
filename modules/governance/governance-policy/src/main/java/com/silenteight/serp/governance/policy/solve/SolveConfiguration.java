@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.policy.solve;
 import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,10 +12,11 @@ class SolveConfiguration {
 
   @Bean
   SolveUseCase solveUseCase(
-      StepPolicyFactory stepPolicyFactory,
+      @Qualifier("inUsePolicyStepsSupplier") StepsConfigurationSupplier stepsConfigurationProvider,
       SolvingService solvingService,
       StoreFeatureVectorSolvedUseCase handler) {
-    return new SolveUseCase(stepPolicyFactory, solvingService, handler);
+
+    return new SolveUseCase(stepsConfigurationProvider, solvingService, handler);
   }
 
   @Bean
@@ -22,15 +24,18 @@ class SolveConfiguration {
     return new SolvingService();
   }
 
-  @Bean
-  PolicyPromotedEventHandler policyPromotedEventHandler(
-      PolicyStepsConfigurationQuery stepsConfigurationQuery, StepPolicyFactory stepPolicyFactory) {
+  StepMapper stepMapper() {
+    return new StepMapper();
+  }
 
-    return new PolicyPromotedEventHandler(stepsConfigurationQuery, stepPolicyFactory);
+  @Bean()
+  InUsePolicyStepsSupplier inUsePolicyStepsSupplier(
+      PolicyStepsConfigurationQuery stepsConfigurationQuery) {
+    return new InUsePolicyStepsSupplier(stepsConfigurationQuery, stepMapper());
   }
 
   @Bean
-  StepPolicyFactory stepPolicyFactory() {
-    return new StepPolicyFactory();
+  DefaultStepsConfigurationFactory defaultStepsConfigurationFactory() {
+    return new DefaultStepsConfigurationFactory(stepMapper());
   }
 }

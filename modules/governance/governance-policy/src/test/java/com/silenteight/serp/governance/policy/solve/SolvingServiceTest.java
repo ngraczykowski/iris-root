@@ -1,5 +1,7 @@
 package com.silenteight.serp.governance.policy.solve;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
@@ -29,8 +31,10 @@ class SolvingServiceTest {
 
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
-  private static final List<Step> STEPS_WITH_IS = createIsSteps();
-  private static final List<Step> STEPS_WITH_IS_NOT = createIsNotSteps();
+  private static final StepsConfigurationSupplier STEPS_WITH_IS =
+      new DummyStepsProvider(createIsSteps());
+  private static final StepsConfigurationSupplier STEPS_WITH_IS_NOT =
+      new DummyStepsProvider(createIsNotSteps());
 
   private SolvingService underTest;
 
@@ -182,8 +186,7 @@ class SolvingServiceTest {
                     List.of(
                         createFeature("nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
                         createFeature("dateAgent", IS, List.of("EXACT")),
-                        createFeature("documentAgent", IS, List.of("MATCH", "DIGIT_MATCH"))))))
-    );
+                        createFeature("documentAgent", IS, List.of("MATCH", "DIGIT_MATCH")))))));
   }
 
   private static List<Step> createIsNotSteps() {
@@ -209,6 +212,22 @@ class SolvingServiceTest {
 
   private static MatchCondition createFeature(
       String name, Condition condition, Collection<String> values) {
-    return MatchCondition.builder().name(name).condition(condition).values(values).build();
+
+    return MatchCondition.builder()
+        .name(name)
+        .condition(condition)
+        .values(values)
+        .build();
+  }
+
+  @RequiredArgsConstructor
+  static class DummyStepsProvider implements StepsConfigurationSupplier {
+
+    private final List<Step> steps;
+
+    @Override
+    public List<Step> get() {
+      return steps;
+    }
   }
 }

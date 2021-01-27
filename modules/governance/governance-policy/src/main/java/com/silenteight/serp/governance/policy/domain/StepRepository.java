@@ -25,4 +25,9 @@ interface StepRepository extends Repository<Step, Long> {
 
   @Query("select s.id from Step s where s.stepId = :stepId")
   Long getIdByStepId(UUID stepId);
+
+  @Query(value = "SELECT s.policy_id"
+      + " FROM governance_policy_step s"
+      + " WHERE s.step_id = :stepId", nativeQuery = true)
+  Long getPolicyIdForStep(UUID stepId);
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class FeatureVectorDto {
+
   List<String> names;
   List<String> values;
 }

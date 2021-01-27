@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import com.silenteight.serp.governance.policy.importing.ImportPolicyController.RestConstants;
+import com.silenteight.serp.governance.policy.importing.ImportPolicyRestController.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +22,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(RestConstants.ROOT)
 @RequiredArgsConstructor
-class ImportPolicyController {
+class ImportPolicyRestController {
 
   @NonNull
   private final ImportPolicyUseCase importPolicyUseCase;

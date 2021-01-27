@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.analytics.AnalyticsModule;
 import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
 import com.silenteight.serp.governance.policy.PolicyModule;
 
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(basePackageClasses = {
+    AnalyticsModule.class,
     PolicyModule.class
 })
 class PolicyRepositoryTestConfiguration {

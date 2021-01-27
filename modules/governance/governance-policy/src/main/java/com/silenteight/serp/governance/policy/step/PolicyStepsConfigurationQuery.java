@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface PolicyStepsConfigurationQuery {
 
   List<StepConfigurationDto> listStepsConfiguration(UUID policyId);
+
+  List<StepConfigurationDto> listStepsConfiguration(long policyId);
 }

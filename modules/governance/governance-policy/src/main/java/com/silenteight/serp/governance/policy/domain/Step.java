@@ -6,7 +6,6 @@ import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
@@ -95,13 +94,6 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
         .description(getDescription())
         .type(getType())
         .build();
-  }
-
-  private Collection<FeatureLogicDto> featureLogicsToDto() {
-    return getFeatureLogics()
-        .stream()
-        .map(FeatureLogic::toDto)
-        .collect(toList());
   }
 
   StepConfigurationDto toConfigurationDto() {

@@ -42,16 +42,31 @@ class StepQuery implements
   }
 
   @Override
+  public Long getPolicyIdForStep(UUID stepId) {
+    return stepRepository.getPolicyIdForStep(stepId);
+  }
+
+  @Override
   public List<StepConfigurationDto> listStepsConfiguration(UUID policyId) {
     return getStepsAsStream(policyId)
         .map(Step::toConfigurationDto)
         .collect(toList());
   }
 
+  @Override
+  public List<StepConfigurationDto> listStepsConfiguration(long policyId) {
+    return getStepsAsStream(policyId)
+        .map(Step::toConfigurationDto)
+        .collect(toList());
+  }
+
   private Stream<Step> getStepsAsStream(UUID policyId) {
-    Long id = policyRepository.getIdByPolicyId(policyId);
+    return getStepsAsStream(policyRepository.getIdByPolicyId(policyId));
+  }
+
+  private Stream<Step> getStepsAsStream(long policyId) {
     return stepRepository
-        .findAllOrderedByPolicyId(id)
+        .findAllOrderedByPolicyId(policyId)
         .stream();
   }
 }
