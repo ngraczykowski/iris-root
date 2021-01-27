@@ -60,9 +60,7 @@ paths:
       responses:
         201:
           description: Created
-        406:
-          description: Could not parse file
-  
+
   /policies/{id}:
     patch:
       tags:
@@ -141,56 +139,12 @@ paths:
         201:
           description: Created
 
-  /policies/promote/{id}:
-    put:
-      tags:
-        - 2nd iteration
-        - policies
-      description: Promote policy to production
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: 'Policy Id'
-          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
-      responses:
-        202:
-          description: Ok
-
-  /policies/archive:
-    patch:
-      tags:
-        - 2nd iteration
-        - policies
-      description: Archive policies
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
-      responses:
-        200:
-          description: Archived
-
-
   /policies/{id}/steps:
     get:
       tags:
         - 1st iteration
         - steps
       description: 'Return all steps for specific policy'
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: 'Policy Id'
-          example: '527c7c51-c59a-4b9a-ac51-df245ee479f8'
       responses:
         200:
           description: 'A list of step''s logic'
@@ -270,6 +224,46 @@ paths:
         202:
           description: OK
 
+  /steps/{id}:
+    patch:
+      tags:
+        - 2nd iteration
+        - steps
+      description: 'Edit step'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '32400575-cc51-4663-a810-7888ee9f82ce'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StepEdit'
+      responses:
+        200:
+          description: Saved
+
+    delete:
+      tags:
+        - 2nd iteration
+        - steps
+      description: 'Remove step'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '32400575-cc51-4663-a810-7888ee9f82ce'
+      responses:
+        200:
+          description: Deleted
+
   /steps/{id}/logic:
     get:
       tags:
@@ -317,9 +311,8 @@ paths:
   /steps/{id}/vectors/columns:
     get:
       tags:
-        - 2nd iteration
+        - 1st iteration
         - feature vectors
-        - TBD
       description: 'Return a list of feature vectors names'
       parameters:
         - in: path
@@ -342,9 +335,8 @@ paths:
   /steps/{id}/vectors:
     get:
       tags:
-        - 2nd iteration
+        - 1st iteration
         - feature vectors
-        - TBD
       description: 'Return a list of feature vectors'
       parameters:
         - in: path
@@ -421,6 +413,22 @@ components:
         name: 'New Prod policy'
         basePolicy: 'a9912ff3-9d26-4481-8f35-cb130124df69'
 
+    PolicyEdit:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        state:
+          type: string
+      example:
+        name: 'New Prod policy'
+        description: 'Policy description'
+        state: 'SAVED'
 
     Step:
       type: object
@@ -435,6 +443,20 @@ components:
           type: string
       example:
         id: 'd55619c0-74c8-4ea8-8c6d-036d3db6f069'
+        name: 'New step'
+        description: 'Step description'
+        solution: 'FALSE_POSITIVE'
+
+    StepEdit:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        solution:
+          type: string
+      example:
         name: 'New step'
         description: 'Step description'
         solution: 'FALSE_POSITIVE'
@@ -542,5 +564,3 @@ components:
           "alertsCount": 2344,
           "features": [ "STRONG_MATCH", "MATCH" ]
         }
-
-
