@@ -13,6 +13,13 @@ import org.springframework.context.annotation.Configuration;
 class PolicyFeatureVectorConfiguration {
 
   @Bean
+  FindFeatureVectorsColumnsUseCase findFeatureVectorsColumnsUseCase(
+      FeatureVectorService featureVectorService) {
+
+    return new FindFeatureVectorsColumnsUseCase(featureVectorService);
+  }
+
+  @Bean
   FindMatchingFeatureVectorsUseCase findMatchingFeatureVectorsUseCase(
       PolicyStepsRequestQuery stepQuery,
       PolicyStepsConfigurationQuery stepsConfigurationQuery,
