@@ -1,5 +1,6 @@
 package com.silenteight.serp.governance.policy.domain;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -17,15 +17,12 @@ import static java.util.stream.Collectors.toList;
 @Transactional(readOnly = true)
 class PolicyQuery implements SavedPolicyRequestQuery {
 
+  @NonNull
   private final PolicyRepository policyRepository;
 
   @Override
-  public Collection<PolicyDto> listSaved() {
-    return doListSaved();
-  }
-
   @NotNull
-  private List<PolicyDto> doListSaved() {
+  public Collection<PolicyDto> listSaved() {
     return policyRepository
         .findAll()
         .stream()

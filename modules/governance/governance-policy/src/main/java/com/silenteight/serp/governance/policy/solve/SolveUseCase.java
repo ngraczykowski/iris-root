@@ -23,7 +23,7 @@ import static java.util.stream.IntStream.range;
 public class SolveUseCase {
 
   @NonNull
-  private final StepPolicyFactory stepPolicyFactory;
+  private final StepsConfigurationSupplier stepsConfigurationProvider;
   @NonNull
   private final SolvingService solvingService;
 
@@ -31,11 +31,10 @@ public class SolveUseCase {
   private final StoreFeatureVectorSolvedUseCase storeFeatureVectorSolvedUseCase;
 
   public GetSolutionsResponse solve(GetSolutionsRequest request) {
-    List<Step> steps = stepPolicyFactory.getSteps();
     List<String> featureNames = asFeatureNames(request.getFeatureCollection().getFeatureList());
     List<SolutionResponse> solutionResponses = request.getFeatureVectorsList().stream()
         .map(vector -> this.asFeatureValues(featureNames, vector))
-        .map(featureValuesByName -> process(steps, featureValuesByName))
+        .map(featureValuesByName -> process(stepsConfigurationProvider, featureValuesByName))
         .map(this::asSolutionResponse)
         .collect(toList());
 
@@ -64,8 +63,10 @@ public class SolveUseCase {
         .collect(toMap(i -> keyIterator.next(), i -> valueIterator.next()));
   }
 
-  private SolveResponse process(List<Step> steps, Map<String,String> featureValuesByName) {
-    SolveResponse solve = solvingService.solve(steps, featureValuesByName);
+  private SolveResponse process(
+      StepsConfigurationSupplier stepsProvider, Map<String,String> featureValuesByName) {
+
+    SolveResponse solve = solvingService.solve(stepsProvider, featureValuesByName);
     storeFeatureVectorSolvedUseCase.activate(featureValuesByName, solve.getStepId());
     return solve;
   }

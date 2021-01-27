@@ -1,0 +1,201 @@
+package com.silenteight.serp.governance.policy.featurevector;
+
+import com.silenteight.serp.governance.analytics.featurevector.FeatureVectorService;
+import com.silenteight.serp.governance.analytics.featurevector.dto.FeatureVectorDto;
+import com.silenteight.serp.governance.policy.domain.Condition;
+import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
+import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorsDto;
+import com.silenteight.serp.governance.policy.solve.DefaultStepsProvider;
+import com.silenteight.serp.governance.policy.solve.ReconfigurableStepsConfigurationFactory;
+import com.silenteight.serp.governance.policy.solve.SolvingService;
+import com.silenteight.serp.governance.policy.solve.StepsConfigurationSupplier;
+import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
+import com.silenteight.serp.governance.policy.step.PolicyStepsRequestQuery;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
+import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static java.util.UUID.fromString;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class FindMatchingFeatureVectorsUseCaseTest {
+
+  private static final List FEATURE_NAMES_1 =
+      List.of("nameAgent", "dateAgent", "nationalityAgent");
+  private static final List FEATURE_VALUES_1 = List.of("PERFECT_MATCH", "EXACT", "MATCH");
+  private static final List FEATURE_NAMES_2 = List.of("documentAgent");
+  private static final List FEATURE_VALUES_2 = List.of("DIGIT_MATCH");
+  private static final List FEATURE_NAMES_3 = List.of("documentAgent");
+  private static final List FEATURE_VALUES_3 = List.of("NEAR_MATCH");
+  private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
+  private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+  private static final UUID STEP_ID_3 = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
+
+  @Mock
+  private PolicyStepsRequestQuery policyStepsRequestQuery;
+  @Mock
+  private PolicyStepsConfigurationQuery stepsConfigurationQuery;
+  @Mock
+  private FeatureVectorService featureVectorService;
+  @Mock
+  private ReconfigurableStepsConfigurationFactory stepsConfigurationFactory;
+
+  private FindMatchingFeatureVectorsUseCase underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new FindMatchingFeatureVectorsUseCase(
+        policyStepsRequestQuery,
+        stepsConfigurationQuery,
+        stepsConfigurationFactory,
+        featureVectorService,
+        new SolvingService());
+  }
+
+  @Test
+  void whenStepIsUsed_findMatchingFeatureVectors() {
+    // given
+    long policyId = 2L;
+    List<StepConfigurationDto> steps = createSteps();
+    StepsConfigurationSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
+    Stream<FeatureVectorDto> featureVectors = createFeatureVectors();
+    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_1)).thenReturn(policyId);
+    when(stepsConfigurationQuery.listStepsConfiguration(policyId)).thenReturn(steps);
+    when(stepsConfigurationFactory.getStepsConfigurationProvider(steps))
+        .thenReturn(stepsConfigurationSupplier);
+    when(featureVectorService.getFeatureVectorStream()).thenReturn(featureVectors);
+
+    // when
+    FeatureVectorsDto response = underTest.activate(STEP_ID_1);
+
+    // then
+    assertThat(response.getFeatureVectors()).isNotEmpty();
+    assertThat(response.getFeatureVectors())
+        .extracting(featureVector -> featureVector.getFeatureValues())
+        .containsExactly(
+            Map.of(
+                "nameAgent", "PERFECT_MATCH", "dateAgent", "EXACT", "nationalityAgent", "MATCH"));
+  }
+
+  @Test
+  void whenStepIsNotUsed_findNoMatchingFeatureVectors() {
+    // given
+    long policyId = 2L;
+    List<StepConfigurationDto> steps = createSteps();
+    StepsConfigurationSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
+    Stream<FeatureVectorDto> featureVectors = createFeatureVectors();
+    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_2)).thenReturn(policyId);
+    when(stepsConfigurationQuery.listStepsConfiguration(policyId)).thenReturn(steps);
+    when(stepsConfigurationFactory.getStepsConfigurationProvider(steps))
+        .thenReturn(stepsConfigurationSupplier);
+    when(featureVectorService.getFeatureVectorStream()).thenReturn(featureVectors);
+
+    // when
+    FeatureVectorsDto response = underTest.activate(STEP_ID_2);
+
+    // then
+    assertThat(response.getFeatureVectors()).isEmpty();
+  }
+
+  @Test
+  void whenPreviousStepIsUsed_findNoMatchingFeatureVectors() {
+    // given
+    long policyId = 2L;
+    List<StepConfigurationDto> steps = createSteps();
+    StepsConfigurationSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
+    Stream<FeatureVectorDto> featureVectors = createFeatureVectors();
+    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_3)).thenReturn(policyId);
+    when(stepsConfigurationQuery.listStepsConfiguration(policyId)).thenReturn(steps);
+    when(stepsConfigurationFactory.getStepsConfigurationProvider(steps))
+        .thenReturn(stepsConfigurationSupplier);
+    when(featureVectorService.getFeatureVectorStream()).thenReturn(featureVectors);
+
+    // when
+    FeatureVectorsDto response = underTest.activate(STEP_ID_3);
+
+    // then
+    assertThat(response.getFeatureVectors()).isEmpty();
+  }
+
+  private static List<StepConfigurationDto> createSteps() {
+    return List.of(
+        StepConfigurationDto.builder()
+            .id(STEP_ID_1)
+            .solution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
+            .featureLogics(
+                List.of(
+                    createFeatureLogic(
+                        2,
+                        List.of(
+                            createMatchConditionConfigurationDto(
+                                "nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
+                            createMatchConditionConfigurationDto(
+                                "dateAgent", IS, List.of("EXACT", "NEAR"))))))
+            .build(),
+        StepConfigurationDto.builder()
+            .id(STEP_ID_2)
+            .solution(SOLUTION_FALSE_POSITIVE)
+            .featureLogics(
+                List.of(
+                    createFeatureLogic(
+                        1,
+                        List.of(
+                            createMatchConditionConfigurationDto(
+                                "documentAgent", IS, List.of("NO_MATCH", "NO_DATA"))))))
+            .build(),
+        StepConfigurationDto.builder()
+            .id(STEP_ID_3)
+            .solution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
+            .featureLogics(
+                List.of(
+                    createFeatureLogic(
+                        1,
+                        List.of(
+                            createMatchConditionConfigurationDto(
+                                "nationalityAgent", IS, List.of("MATCH"))))))
+            .build());
+  }
+
+  private static FeatureLogicConfigurationDto createFeatureLogic(
+      int count, Collection<MatchConditionConfigurationDto> features) {
+
+    return FeatureLogicConfigurationDto.builder()
+        .count(count)
+        .features(features)
+        .build();
+  }
+
+  private static MatchConditionConfigurationDto createMatchConditionConfigurationDto(
+      String name, Condition condition, List<String> values) {
+
+    return MatchConditionConfigurationDto.builder()
+        .name(name)
+        .condition(condition)
+        .values(values)
+        .build();
+  }
+
+  private static Stream<FeatureVectorDto> createFeatureVectors() {
+    return List.of(
+        new FeatureVectorDto(FEATURE_NAMES_1, FEATURE_VALUES_1),
+        new FeatureVectorDto(FEATURE_NAMES_2, FEATURE_VALUES_2),
+        new FeatureVectorDto(FEATURE_NAMES_3, FEATURE_VALUES_3))
+        .stream();
+  }
+}

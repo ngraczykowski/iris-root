@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface PolicyStepsRequestQuery {
 
   Collection<StepDto> listSteps(UUID policyId);
+
+  Long getPolicyIdForStep(UUID stepId);
 }

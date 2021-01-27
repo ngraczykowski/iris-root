@@ -29,12 +29,12 @@ class SolveUseCaseTest {
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
 
-  private StepPolicyFactory stepPolicyFactory;
+  private ReconfigurableStepsSupplier stepPolicyFactory;
   private SolveUseCase underTest;
 
   @BeforeEach
   void setUp() {
-    stepPolicyFactory = Mockito.mock(StepPolicyFactory.class);
+    stepPolicyFactory = Mockito.mock(ReconfigurableStepsSupplier.class);
     StoreFeatureVectorSolvedUseCase handler = mock(StoreFeatureVectorSolvedUseCase.class);
     underTest = new SolveUseCase(stepPolicyFactory, new SolvingService(), handler);
   }
@@ -43,7 +43,7 @@ class SolveUseCaseTest {
   void matchedSolutionReturnsCorrectly() {
     // given
     List<Step> steps = defaultStepsConfiguration();
-    when(stepPolicyFactory.getSteps()).thenReturn(steps);
+    when(stepPolicyFactory.get()).thenReturn(steps);
     GetSolutionsRequest solutionsRequest = solutionsRequest(
         featureCollection("nameAgent", "dateAgent"),
         featureVector("PERFECT_MATCH", "EXACT"),
@@ -68,7 +68,7 @@ class SolveUseCaseTest {
   void defaultSolutionReturnsWhenNoStepMatchesValues() {
     // given
     List<Step> steps = defaultStepsConfiguration();
-    when(stepPolicyFactory.getSteps()).thenReturn(steps);
+    when(stepPolicyFactory.get()).thenReturn(steps);
     GetSolutionsRequest solutionsRequest = solutionsRequest(
         featureCollection("nameAgent"),
         featureVector("OUT_OF_RANGE"));
@@ -93,8 +93,10 @@ class SolveUseCaseTest {
                 createFeatureLogic(
                     2,
                     List.of(
-                        createFeature("nameAgent", IS, List.of("WEAK_MATCH", "MO_MATCH")),
-                        createFeature("dateAgent", IS, List.of("WEAK")))))),
+                        createMatchCondition(
+                            "nameAgent", IS, List.of("WEAK_MATCH", "MO_MATCH")),
+                        createMatchCondition(
+                            "dateAgent", IS, List.of("WEAK")))))),
         new Step(
             SOLUTION_POTENTIAL_TRUE_POSITIVE,
             STEP_ID_2,
@@ -102,17 +104,28 @@ class SolveUseCaseTest {
                 createFeatureLogic(
                     2,
                     List.of(
-                        createFeature("nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
-                        createFeature("dateAgent", IS, List.of("EXACT")),
-                        createFeature("documentAgent", IS, List.of("MATCH", "DIGIT_MATCH")))))));
+                        createMatchCondition(
+                            "nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
+                        createMatchCondition(
+                            "dateAgent", IS, List.of("EXACT")),
+                        createMatchCondition(
+                            "documentAgent", IS, List.of("MATCH", "DIGIT_MATCH")))))));
   }
 
   private static FeatureLogic createFeatureLogic(int count, Collection<MatchCondition> features) {
-    return FeatureLogic.builder().count(count).features(features).build();
+    return FeatureLogic.builder()
+        .count(count)
+        .features(features)
+        .build();
   }
 
-  private static MatchCondition createFeature(
+  private static MatchCondition createMatchCondition(
       String name, Condition condition, Collection<String> values) {
-    return MatchCondition.builder().name(name).condition(condition).values(values).build();
+
+    return MatchCondition.builder()
+        .name(name)
+        .condition(condition)
+        .values(values)
+        .build();
   }
 }

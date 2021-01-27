@@ -21,22 +21,23 @@ import java.util.UUID;
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
 @TestPropertySource("classpath:data-test.properties")
 @ContextConfiguration(classes = { PolicyRepositoryTestConfiguration.class })
 class StepQueryTest extends BaseDataJpaTest {
 
-  private static final UUID FIRST_POLICY_UID = UUID.randomUUID();
+  private static final UUID FIRST_POLICY_UID = randomUUID();
   private static final String FIRST_POLICY_NAME = "POLICY_1";
   private static final String FIRST_POLICY_CREATED_BY = "USER_1";
 
-  private static final UUID FIRST_STEP_ID = UUID.randomUUID();
+  private static final UUID FIRST_STEP_ID = randomUUID();
   private static final String FIRST_STEP_NAME = "FIRST_STEP_NAME";
   private static final String FIRST_STEP_DESC = "FIRST_STEP_DESC";
   private static final StepType FIRST_STEP_TYPE = StepType.MANUAL_RULE;
 
-  private static final UUID SECOND_STEP_ID = UUID.randomUUID();
+  private static final UUID SECOND_STEP_ID = randomUUID();
   private static final String SECOND_STEP_NAME = "SECOND_STEP_NAME";
   private static final String SECOND_STEP_DESC = "SECOND_STEP_DESC";
   private static final StepType SECOND_STEP_TYPE = StepType.AI_EXCEPTION;
@@ -143,7 +144,45 @@ class StepQueryTest extends BaseDataJpaTest {
 
   @Test
   void listConfigurationStepsShouldReturnConfigurationSteps_whenStepsInPolicy() {
-    policyService.addPolicy(
+    // given
+    createConfiguredPolicy();
+
+    // when
+    List<StepConfigurationDto> result = underTest.listStepsConfiguration(FIRST_POLICY_UID);
+
+    // then
+    assertThat(result).contains(
+        StepConfigurationDto.builder()
+            .id(FIRST_STEP_ID)
+            .solution(SOLUTION_NO_DECISION)
+            .featureLogics(
+                List.of(
+                    createFeatureLogic(
+                        1,
+                        List.of(
+                            createFeatureConfigurationDto(
+                                "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"))))))
+            .build(),
+        StepConfigurationDto.builder()
+            .id(SECOND_STEP_ID)
+            .solution(SOLUTION_FALSE_POSITIVE)
+            .build());
+  }
+
+  @Test
+  void getPolicyIdForStep_whenStepsInPolicy() {
+    // given
+    Long createdPolicyId = createConfiguredPolicy();
+
+    // when
+    Long policyId = underTest.getPolicyIdForStep(FIRST_STEP_ID);
+
+    // then
+    assertThat(policyId).isEqualTo(createdPolicyId);
+  }
+
+  private Long createConfiguredPolicy() {
+    Policy policy = policyService.addPolicy(
         FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         FIRST_POLICY_UID,
@@ -170,26 +209,16 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_ID,
         List.of(featureLogicConfiguration));
 
-    Collection<StepConfigurationDto> result = underTest.listStepsConfiguration(FIRST_POLICY_UID);
+    return policy.getId();
+  }
 
-    assertThat(result).contains(
-        StepConfigurationDto.builder()
-            .id(FIRST_STEP_ID)
-            .solution(SOLUTION_NO_DECISION)
-            .featureLogics(
-                List.of(
-                    FeatureLogicConfigurationDto.builder()
-                        .count(1)
-                        .features(
-                            List.of(
-                                createFeatureConfigurationDto(
-                                    "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"))))
-                        .build()))
-            .build(),
-        StepConfigurationDto.builder()
-            .id(SECOND_STEP_ID)
-            .solution(SOLUTION_FALSE_POSITIVE)
-            .build());
+  private static FeatureLogicConfigurationDto createFeatureLogic(
+      int count, Collection<MatchConditionConfigurationDto> features) {
+
+    return FeatureLogicConfigurationDto.builder()
+        .count(count)
+        .features(features)
+        .build();
   }
 
   private static FeatureConfiguration createFeatureConfiguration(
