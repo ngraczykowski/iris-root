@@ -26,7 +26,6 @@ public class SolveUseCase {
   private final StepsConfigurationSupplier stepsConfigurationProvider;
   @NonNull
   private final SolvingService solvingService;
-
   @NonNull
   private final StoreFeatureVectorSolvedUseCase storeFeatureVectorSolvedUseCase;
 

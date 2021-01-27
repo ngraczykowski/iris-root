@@ -6,7 +6,12 @@ import com.silenteight.serp.governance.analytics.featurevector.dto.FeatureVector
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 import com.silenteight.serp.governance.common.signature.Signature;
 
+import java.util.List;
 import java.util.stream.Stream;
+
+import static com.google.common.base.Splitter.on;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 @RequiredArgsConstructor
 public class FeatureVectorService {
@@ -44,5 +49,20 @@ public class FeatureVectorService {
         .names(featureVector.getNames())
         .values(featureVector.getValues())
         .build();
+  }
+
+  public List<String> getUniqueFeatureNames() {
+    return analyticsFeatureVectorRepository
+        .findDistinctFeatureNames()
+        .stream()
+        .map(FeatureVectorService::splitFeatureNames)
+        .flatMap(List::stream)
+        .distinct()
+        .collect(toList());
+  }
+
+  private static List<String> splitFeatureNames(String names) {
+    return stream(on(',').split(names).spliterator(), false)
+        .collect(toList());
   }
 }
