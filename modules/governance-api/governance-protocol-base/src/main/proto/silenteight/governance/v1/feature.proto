@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package silenteight.governance.v1.api;
+
+import "google/protobuf/empty.proto";
+
+option java_package = "com.silenteight.proto.governance.v1.api";
+option java_outer_classname = "FeatureProto";
+option java_multiple_files = true;
+
+// Representation of the feature space
+message FeatureCollection {
+  // Ordered list of features
+  repeated Feature feature = 1;
+}
+
+// Single feature with its characteristics
+message Feature {
+  // A unique name of the feature
+  string name = 1;
+}
+
+// Vector representing a single point in the feature space
+message FeatureVector {
+  // Coordinates within feature space defined by FeatureCollection
+  repeated string feature_value = 1;
+}
+
+// Available solutions that can be assigned to each feature vector
+enum FeatureVectorSolution {
+  SOLUTION_NO_DECISION = 0;
+  SOLUTION_FALSE_POSITIVE = 1;
+  SOLUTION_POTENTIAL_TRUE_POSITIVE = 2;
+  SOLUTION_HINTED_FALSE_POSITIVE = 3;
+  SOLUTION_HINTED_POTENTIAL_TRUE_POSITIVE = 4;
+}
