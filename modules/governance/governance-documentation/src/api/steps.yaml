@@ -62,6 +62,29 @@ paths:
           description: Created
         406:
           description: Could not parse file
+  
+  /policies/{id}:
+    patch:
+      tags:
+        - 2nd iteration
+        - policies
+      description: Edit policy
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyEdit'
+      responses:
+        200:
+          description: Saved
 
   /policies/import:
     post:
