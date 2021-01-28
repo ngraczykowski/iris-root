@@ -4,20 +4,37 @@ import lombok.RequiredArgsConstructor;
 
 import com.google.protobuf.ByteString;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
+import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toUnmodifiableList;
+import static java.util.stream.IntStream.range;
 
 @RequiredArgsConstructor
 public class CanonicalFeatureVectorFactory {
 
   private final SignatureCalculator signatureCalculator;
 
-  public CanonicalFeatureVector fromMap(Map<String,String> featureValuesByName) {
-    TreeMap<String, String> sortedMap = new TreeMap<>(featureValuesByName);
+  public CanonicalFeatureVector fromNamesAndValues(
+      List<String> featureNames, List<String> featureValues) {
 
+    Iterator<String> keyIterator = featureNames.iterator();
+    Iterator<String> valueIterator = featureValues.iterator();
+
+    TreeMap<String, String> sortedMap = range(0, featureNames.size())
+        .boxed()
+        .collect(toMap(
+            i -> keyIterator.next(),
+            i -> valueIterator.next(),
+            (o1, o2) -> o1,
+            TreeMap::new));
+
+    return asCanonicalFeatureVector(sortedMap);
+  }
+
+  private CanonicalFeatureVector asCanonicalFeatureVector(TreeMap<String,String> sortedMap) {
     List<String> names = getSortedNames(sortedMap);
     List<String> values = getSortedValues(sortedMap);
     Signature signature = calculateSignature(names, values);

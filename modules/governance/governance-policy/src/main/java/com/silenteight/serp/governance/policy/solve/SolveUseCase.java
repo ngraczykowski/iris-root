@@ -3,18 +3,21 @@ package com.silenteight.serp.governance.policy.solve;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.governance.v1.api.FeatureVector;
-import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
-import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
-import com.silenteight.proto.governance.v1.api.SolutionResponse;
-import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
+import com.silenteight.proto.governance.v1.api.*;
+import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
+import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGateway;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.governance.protocol.utils.Timestamps.toTimestamp;
 import static com.silenteight.governance.protocol.utils.Uuids.fromJavaUuid;
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.IntStream.range;
@@ -27,19 +30,58 @@ public class SolveUseCase {
   @NonNull
   private final SolvingService solvingService;
   @NonNull
-  private final StoreFeatureVectorSolvedUseCase storeFeatureVectorSolvedUseCase;
+  private final FeatureVectorSolvedMessageGateway featureVectorSolvedMessageGateway;
+  @NonNull
+  private final CanonicalFeatureVectorFactory canonicalFeatureVectorFactory;
+  @NonNull
+  private final TimeSource timeSource;
 
   public GetSolutionsResponse solve(GetSolutionsRequest request) {
-    List<String> featureNames = asFeatureNames(request.getFeatureCollection().getFeatureList());
+    FeatureCollection featureCollection = request.getFeatureCollection();
     List<SolutionResponse> solutionResponses = request.getFeatureVectorsList().stream()
-        .map(vector -> this.asFeatureValues(featureNames, vector))
-        .map(featureValuesByName -> process(stepsConfigurationProvider, featureValuesByName))
+        .map(featureVector -> process(featureCollection, featureVector))
         .map(this::asSolutionResponse)
         .collect(toList());
 
     return GetSolutionsResponse.newBuilder()
         .addAllSolutions(solutionResponses)
         .build();
+  }
+
+  private SolveResponse process(FeatureCollection featureCollection, FeatureVector featureVector) {
+    List<String> featureNames = asFeatureNames(featureCollection.getFeatureList());
+    List<String> featureValues = new ArrayList<>(featureVector.getFeatureValueList());
+    Map<String, String> featureValuesByName = asFeatureValues(featureNames, featureValues);
+    SolveResponse solution = solvingService.solve(stepsConfigurationProvider, featureValuesByName);
+
+    // TODO(anowicki): WEB-500: hide this behind service or use canonical form in solvingService
+    CanonicalFeatureVector canonicalFeatureVector =
+        canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
+
+    FeatureVectorSolvedEvent event = FeatureVectorSolvedEvent.newBuilder()
+        .setId(fromJavaUuid(randomUUID()))
+        .setCorrelationId(fromJavaUuid(randomUUID()))
+        .setCreatedAt(toTimestamp(timeSource.now()))
+        .setFeatureCollection(featureCollection)
+        .setFeatureVector(featureVector)
+        .setFeatureVectorSignature(canonicalFeatureVector.getVectorSignature().getValue())
+        .setFeatureVectorSolution(solution.getSolution())
+        .build();
+    featureVectorSolvedMessageGateway.send(event);
+
+    return solution;
+  }
+
+  // TODO(anowicki): WEB-500-Duplicate(CanonicalFeatureVectorFactory).
+  private static Map<String, String> asFeatureValues(
+      List<String> featureNames, List<String> featureValues) {
+
+    Iterator<String> keyIterator = featureNames.iterator();
+    Iterator<String> valueIterator = featureValues.iterator();
+
+    return range(0, featureNames.size())
+        .boxed()
+        .collect(toMap(i -> keyIterator.next(), i -> valueIterator.next()));
   }
 
   private static List<String> asFeatureNames(
@@ -51,32 +93,13 @@ public class SolveUseCase {
         .collect(toList());
   }
 
-  private Map<String, String> asFeatureValues(
-      List<String> featureNames, FeatureVector featureVector) {
-
-    Iterator<String> keyIterator = featureNames.iterator();
-    Iterator<String> valueIterator = featureVector.getFeatureValueList().iterator();
-
-    return range(0, featureNames.size())
-        .boxed()
-        .collect(toMap(i -> keyIterator.next(), i -> valueIterator.next()));
-  }
-
-  private SolveResponse process(
-      StepsConfigurationSupplier stepsProvider, Map<String,String> featureValuesByName) {
-
-    SolveResponse solve = solvingService.solve(stepsProvider, featureValuesByName);
-    storeFeatureVectorSolvedUseCase.activate(featureValuesByName, solve.getStepId());
-    return solve;
-  }
-
   private SolutionResponse asSolutionResponse(SolveResponse solveResponse) {
     SolutionResponse.Builder builder = SolutionResponse.newBuilder()
         .setFeatureVectorSolution(solveResponse.getSolution());
 
     if (solveResponse.getStepId() != null)
       builder.setStepId(fromJavaUuid(solveResponse.getStepId()));
-    // TODO: .setFeatureVectorSignature()
+    // TODO(anowicki): WEB-403: .setFeatureVectorSignature()
     return builder.build();
   }
 }

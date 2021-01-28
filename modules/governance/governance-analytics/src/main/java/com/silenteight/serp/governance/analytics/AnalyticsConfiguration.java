@@ -15,7 +15,8 @@ class AnalyticsConfiguration {
       UsageService usageService,
       FeatureVectorService featureVectorService,
       CanonicalFeatureVectorFactory canonicalFeatureVectorFactory) {
-    return new StoreFeatureVectorSolvedUseCase(featureVectorService, usageService,
-        canonicalFeatureVectorFactory);
+
+    return new StoreFeatureVectorSolvedUseCase(
+        featureVectorService, usageService, canonicalFeatureVectorFactory);
   }
 }

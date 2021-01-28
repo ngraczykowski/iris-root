@@ -3,6 +3,8 @@ package com.silenteight.serp.governance.analytics;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.proto.governance.v1.api.Feature;
+import com.silenteight.proto.governance.v1.api.FeatureVectorSolvedEvent;
 import com.silenteight.serp.governance.analytics.featurevector.FeatureVectorService;
 import com.silenteight.serp.governance.analytics.usage.UsageService;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
@@ -10,8 +12,10 @@ import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFa
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public class StoreFeatureVectorSolvedUseCase {
@@ -26,9 +30,17 @@ public class StoreFeatureVectorSolvedUseCase {
   private final CanonicalFeatureVectorFactory canonicalFeatureVectorFactory;
 
   @Transactional
-  public void activate(Map<String, String> featureValuesByName, UUID stepId) {
-    CanonicalFeatureVector canonicalFeatureVector = canonicalFeatureVectorFactory
-        .fromMap(featureValuesByName);
+  public void activate(FeatureVectorSolvedEvent event) {
+    List<String> featureNames = event.getFeatureCollection()
+        .getFeatureList()
+        .stream()
+        .map(Feature::getName)
+        .collect(toList());
+    List<String> featureValues = new ArrayList<>(event.getFeatureVector().getFeatureValueList());
+
+    CanonicalFeatureVector canonicalFeatureVector =
+        canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
+
     featureVectorService.storeUniqueFeatureVector(canonicalFeatureVector);
     usageService.markAsUsed(canonicalFeatureVector);
   }

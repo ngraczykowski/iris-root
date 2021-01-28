@@ -9,7 +9,7 @@ configurations {
   implementation.extendsFrom starterCommon
   implementation.extendsFrom starterJackson
   implementation.extendsFrom starterGrpc
-
+  implementation.extendsFrom starterMessaging
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
@@ -25,12 +25,10 @@ dependencies {
 
   implementation libraries.silenteight_audit_bs
 
+  implementation project(":governance-analytics")
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
-
-  // TODO: WEB-479 - remove dependency on analytics
-  implementation project(":governance-analytics")
 
   implementation libraries.spring_webmvc
   implementation libraries.spring_security_config

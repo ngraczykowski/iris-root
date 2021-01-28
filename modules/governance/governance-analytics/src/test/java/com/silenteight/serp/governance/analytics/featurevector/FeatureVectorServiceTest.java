@@ -19,6 +19,7 @@ class FeatureVectorServiceTest {
   private static final String VALUE_2 = "NO_DATA";
   private static final Signature SIGNATURE_1 = new Signature(copyFromUtf8("signature_1"));
   private static final Signature SIGNATURE_2 = new Signature(copyFromUtf8("signature_2"));
+  private static final Signature SIGNATURE_3 = new Signature(copyFromUtf8("signature_3"));
 
   private final InMemoryAnalyticsFeatureVectorRepository repository =
       new InMemoryAnalyticsFeatureVectorRepository();
@@ -86,13 +87,13 @@ class FeatureVectorServiceTest {
     CanonicalFeatureVector vector2 = CanonicalFeatureVector.builder()
         .names(of(FEATURE_1))
         .values(of(VALUE_1))
-        .vectorSignature(SIGNATURE_1)
+        .vectorSignature(SIGNATURE_2)
         .build();
 
     CanonicalFeatureVector vector3 = CanonicalFeatureVector.builder()
         .names(of(FEATURE_2))
         .values(of(VALUE_2))
-        .vectorSignature(SIGNATURE_2)
+        .vectorSignature(SIGNATURE_3)
         .build();
 
     underTest.storeUniqueFeatureVector(vector1);
@@ -101,6 +102,6 @@ class FeatureVectorServiceTest {
 
     List<String> uniqueFeatureNames = underTest.getUniqueFeatureNames();
 
-    assertThat(uniqueFeatureNames).isEqualTo(List.of(FEATURE_1, FEATURE_2));
+    assertThat(uniqueFeatureNames).containsExactlyInAnyOrder(FEATURE_1, FEATURE_2);
   }
 }
