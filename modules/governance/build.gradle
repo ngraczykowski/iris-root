@@ -27,7 +27,6 @@ subprojects {Project subproject ->
   pluginManager.withPlugin("java") {
     subproject.apply from: "${gradleScriptDir}/dependencies.gradle"
 
-    subproject.pluginManager.apply "maven-publish"
     subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
     subproject.dependencies {

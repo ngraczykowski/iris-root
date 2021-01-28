@@ -75,9 +75,11 @@ dependencies {
   aspect libraries.silenteight_sep_base_aspects
 }
 
-jar {
-  manifest {
-    attributes "Main-Class": "com.silenteight.serp.governance.GovernanceApplication"
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
   }
 }
 
