@@ -1,22 +1,3 @@
-####################################################################################################
-# Defaults (overridden by environment variables or arguments)
-####################################################################################################
-
-serp.rabbitmq.host: localhost
-serp.rabbitmq.port: 24130
-serp.rabbitmq.user: governance
-serp.rabbitmq.password: governance
-serp.rabbitmq.vhost: /
-#serp.rabbitmq.addresses: ${serp.rabbitmq.host}:${serp.rabbitmq.port}
-serp.messaging.concurrency: 4
-serp.messaging.prefetch: 25
-serp.messaging.encryption.enabled: false
-serp.messaging.encryption.key-seed: change_me_please
-serp.messaging.encryption.salt: change_me_please
-
-####################################################################################################
-# CONFIGURATION
-####################################################################################################
 
 spring:
   rabbitmq:
@@ -48,9 +29,17 @@ integration:
   start-delay-seconds: 15
   poll-period-millis: 1000
 
-# Encryption
 serp:
+  rabbitmq:
+    host: localhost
+    port: 24130
+    user: governance
+    password: governance
+    vhost: /
+
   messaging:
+    concurrency: 4
+    prefetch: 25
     encryption:
       enabled: ${serp.rabbitmq.encryption.enabled}
       key-seed: ${serp.rabbitmq.encryption.key.seed}
