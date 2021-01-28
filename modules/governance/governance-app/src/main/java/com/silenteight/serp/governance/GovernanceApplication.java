@@ -14,6 +14,7 @@ import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.branchquery.BranchQueryModule;
 import com.silenteight.serp.governance.branchsolution.BranchSolutionModule;
 import com.silenteight.serp.governance.bulkchange.BulkChangeModule;
+import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
 import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
 import com.silenteight.serp.governance.decisiongroup.DecisionGroupModule;
@@ -58,6 +59,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     SolutionDiscrepancyModule.class,
     SignatureModule.class,
     // Interface modules
+    AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
     GrpcModule.class,

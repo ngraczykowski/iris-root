@@ -1,6 +1,8 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
+import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGateway;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,9 +16,11 @@ class SolveConfiguration {
   SolveUseCase solveUseCase(
       @Qualifier("inUsePolicyStepsSupplier") StepsConfigurationSupplier stepsConfigurationProvider,
       SolvingService solvingService,
-      StoreFeatureVectorSolvedUseCase handler) {
+      FeatureVectorSolvedMessageGateway gateway,
+      CanonicalFeatureVectorFactory canonicalFeatureVectorFactory) {
 
-    return new SolveUseCase(stepsConfigurationProvider, solvingService, handler);
+    return new SolveUseCase(stepsConfigurationProvider, solvingService, gateway,
+        canonicalFeatureVectorFactory, DefaultTimeSource.INSTANCE);
   }
 
   @Bean

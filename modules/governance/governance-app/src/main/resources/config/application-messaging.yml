@@ -59,3 +59,12 @@ serp:
       mac-size-in-bits: ${serp.rabbitmq.encryption.mac.size}
       nonce-size-in-bits: ${serp.rabbitmq.encryption.nonce.size}
       nonce-header: ${serp.rabbitmq.encryption.nonce.header}
+
+  governance:
+    feature-vector:
+      integration:
+        request:
+          exchange-name: feature-vector
+          routing-key: feature-vector.solved
+        receive:
+          queue-name: governance.analytics

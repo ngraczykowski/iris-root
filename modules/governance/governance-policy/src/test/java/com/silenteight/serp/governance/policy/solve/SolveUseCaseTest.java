@@ -2,13 +2,17 @@ package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
 import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
-import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
+import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.serp.governance.common.signature.SignatureCalculator;
 import com.silenteight.serp.governance.policy.domain.Condition;
+import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGatewayMock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -20,23 +24,30 @@ import static com.silenteight.serp.governance.GovernanceProtoUtils.featureCollec
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureVector;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.solutionsRequest;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
-import static com.silenteight.serp.governance.policy.solve.GetSolutionsResponseAssert.assertThat;
 import static java.util.UUID.fromString;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SolveUseCaseTest {
 
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+  private static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
 
   private ReconfigurableStepsSupplier stepPolicyFactory;
+  private FeatureVectorSolvedMessageGatewayMock gateway;
   private SolveUseCase underTest;
 
   @BeforeEach
   void setUp() {
     stepPolicyFactory = Mockito.mock(ReconfigurableStepsSupplier.class);
-    StoreFeatureVectorSolvedUseCase handler = mock(StoreFeatureVectorSolvedUseCase.class);
-    underTest = new SolveUseCase(stepPolicyFactory, new SolvingService(), handler);
+    gateway = new FeatureVectorSolvedMessageGatewayMock();
+    CanonicalFeatureVectorFactory canonicalFeatureVectorFactory =
+        new CanonicalFeatureVectorFactory(new SignatureCalculator());
+    TimeSource fixed = Mockito.mock(TimeSource.class);
+    when(fixed.now()).thenReturn(NOW);
+    underTest = new SolveUseCase(stepPolicyFactory, new SolvingService(),
+        gateway, canonicalFeatureVectorFactory, fixed);
   }
 
   @Test
@@ -53,7 +64,7 @@ class SolveUseCaseTest {
     GetSolutionsResponse response = underTest.solve(solutionsRequest);
 
     // then
-    assertThat(response)
+    GetSolutionsResponseAssert.assertThat(response)
         .hasSolutionsCount(2)
         .solution(0)
         .hasStepId(STEP_ID_2)
@@ -77,11 +88,27 @@ class SolveUseCaseTest {
     GetSolutionsResponse response = underTest.solve(solutionsRequest);
 
     // then
-    assertThat(response)
+    GetSolutionsResponseAssert.assertThat(response)
         .hasSolutionsCount(1)
         .solution(0)
         .hasNoStepId()
         .hasSolution(SOLUTION_NO_DECISION);
+  }
+
+  @Test
+  void shouldEmitEvent() {
+    // given
+    List<Step> steps = defaultStepsConfiguration();
+    when(stepPolicyFactory.get()).thenReturn(steps);
+    GetSolutionsRequest solutionsRequest = solutionsRequest(
+        featureCollection("nameAgent"),
+        featureVector("OUT_OF_RANGE"));
+
+    // when
+    underTest.solve(solutionsRequest);
+
+    // then
+    assertThat(gateway.getLastEvent()).isNotNull();
   }
 
   private static List<Step> defaultStepsConfiguration() {

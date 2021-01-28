@@ -59,6 +59,13 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {}
+    },
+    {
+      "name": "governance.analytics",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
     }
   ],
   "exchanges": [
@@ -75,6 +82,15 @@
       "name": "alert.metadata",
       "vhost": "/",
       "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "feature-vector",
+      "vhost": "/",
+      "type": "topic",
       "durable": true,
       "auto_delete": false,
       "internal": false,
@@ -144,6 +160,14 @@
       "destination": "governance.solution-discrepancy",
       "destination_type": "queue",
       "routing_key": "learning.discrepancy-detected",
+      "arguments": {}
+    },
+    {
+      "source": "feature-vector",
+      "vhost": "/",
+      "destination": "governance.analytics",
+      "destination_type": "queue",
+      "routing_key": "feature-vector.solved",
       "arguments": {}
     }
   ]
