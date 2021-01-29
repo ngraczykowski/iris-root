@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.policy.domain.dto;
 
 import lombok.*;
 
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.StepType;
 
 import java.util.UUID;
@@ -21,5 +20,5 @@ public class StepDto {
   private StepType type;
   private String description;
   @NonNull
-  private FeatureVectorSolution solution;
+  private Solution solution;
 }
