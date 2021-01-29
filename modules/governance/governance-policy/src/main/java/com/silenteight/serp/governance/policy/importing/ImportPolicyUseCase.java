@@ -26,15 +26,16 @@ public class ImportPolicyUseCase {
 
   public UUID apply(@NonNull ImportPolicyCommand command) {
     ImportedPolicyRoot root = importedPolicyRootParser.parse(command.getInputStream());
-    return policyService.doImport(createRequest(root.getPolicy()));
+    return policyService.doImport(createRequest(root.getPolicy(), command.getImportedBy()));
   }
 
-  private static ImportPolicyRequest createRequest(@NonNull ImportedPolicy importedPolicy) {
+  private static ImportPolicyRequest createRequest(
+      @NonNull ImportedPolicy importedPolicy, @NonNull String createdBy) {
+
     return ImportPolicyRequest
         .builder()
         .policyName(importedPolicy.getName())
-        // TODO(mmastylo): use real user name
-        .createdBy("import")
+        .createdBy(createdBy)
         .stepConfigurations(mapToStepConfigurations(importedPolicy.getSteps()))
         .build();
   }

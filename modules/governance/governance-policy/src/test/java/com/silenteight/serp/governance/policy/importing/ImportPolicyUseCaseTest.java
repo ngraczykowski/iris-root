@@ -36,10 +36,12 @@ class ImportPolicyUseCaseTest {
   void createPolicy() {
     // given
     InputStream inputStream = mock(InputStream.class);
+    String importedBy = "asmith";
     ImportedPolicyRoot root = createImportedPolicyRoot();
     ImportPolicyCommand command = ImportPolicyCommand.builder()
-                                                     .inputStream(inputStream)
-                                                     .build();
+        .inputStream(inputStream)
+        .importedBy(importedBy)
+        .build();
 
     when(importedPolicyRootParser.parse(any(InputStream.class))).thenReturn(root);
 
