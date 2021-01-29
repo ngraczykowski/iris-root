@@ -13,9 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PolicyDto {
 
-  private long id;
   @NonNull
-  private UUID policyId;
+  private UUID id;
+  private long policyId;
   @NonNull
   private String name;
   private String description;

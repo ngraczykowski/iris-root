@@ -66,9 +66,9 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
   PolicyDto toDto() {
     return PolicyDto.builder()
-        .id(getId())
+        .policyId(getId())
         .name(getName())
-        .policyId(getPolicyId())
+        .id(getPolicyId())
         .state(getState())
         .description(getDescription())
         .createdAt(getCreatedAt())

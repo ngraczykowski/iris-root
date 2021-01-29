@@ -127,7 +127,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   }
 
   private FeatureLogicDto getFeaturesDto(int count, List<MatchConditionDto> featureDtos) {
-    return FeatureLogicDto.builder().count(count).features(featureDtos).build();
+    return FeatureLogicDto.builder().toFulfill(count).features(featureDtos).build();
   }
 
   private MatchConditionDto getFeatureDto(String featureName, List<String> values) {
