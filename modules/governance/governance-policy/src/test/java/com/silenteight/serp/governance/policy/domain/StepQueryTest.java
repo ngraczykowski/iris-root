@@ -21,6 +21,7 @@ import java.util.UUID;
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.serp.governance.policy.domain.dto.Solution.of;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
@@ -128,14 +129,14 @@ class StepQueryTest extends BaseDataJpaTest {
     assertThat(result).contains(
         StepDto.builder()
                .id(FIRST_STEP_ID)
-               .solution(SOLUTION_NO_DECISION)
+               .solution(of(SOLUTION_NO_DECISION))
                .name(FIRST_STEP_NAME)
                .description(FIRST_STEP_DESC)
                .type(FIRST_STEP_TYPE)
                .build(),
         StepDto.builder()
                .id(SECOND_STEP_ID)
-               .solution(SOLUTION_FALSE_POSITIVE)
+               .solution(of(SOLUTION_FALSE_POSITIVE))
                .name(SECOND_STEP_NAME)
                .description(SECOND_STEP_DESC)
                .type(SECOND_STEP_TYPE)

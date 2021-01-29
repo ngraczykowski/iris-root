@@ -16,6 +16,7 @@ import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLU
 import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
+import static com.silenteight.serp.governance.policy.domain.dto.Solution.of;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.anything;
@@ -44,7 +45,7 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
       .name(FIRST_STEP_NAME)
       .type(FIRST_STEP_TYPE)
       .description(FIRST_STEP_DESCRIPTION)
-      .solution(FIRST_SOLUTION)
+      .solution(of(FIRST_SOLUTION))
       .build();
   private static final UUID SECOND_STEP_ID = UUID.randomUUID();
   private static final StepDto SECOND_STEP = StepDto
@@ -53,7 +54,7 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
       .name(SECOND_STEP_NAME)
       .type(SECOND_STEP_TYPE)
       .description(SECOND_STEP_DESCRIPTION)
-      .solution(SECOND_SOLUTION)
+      .solution(of(SECOND_SOLUTION))
       .build();
 
   @MockBean
@@ -84,11 +85,11 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].name", is(FIRST_STEP_NAME))
         .body("[0].type", is(FIRST_STEP_TYPE.toString()))
         .body("[0].description", is(FIRST_STEP_DESCRIPTION))
-        .body("[0].solution", is(FIRST_SOLUTION.toString()))
+        .body("[0].solution", is(of(FIRST_SOLUTION).toString()))
         .body("[1].id", is(SECOND_STEP_ID.toString()))
         .body("[1].name", is(SECOND_STEP_NAME))
         .body("[0].type", is(SECOND_STEP_TYPE.toString()))
         .body("[1].description", is(SECOND_STEP_DESCRIPTION))
-        .body("[1].solution", is(SECOND_SOLUTION.toString()));
+        .body("[1].solution", is(of(SECOND_SOLUTION).toString()));
   }
 }
