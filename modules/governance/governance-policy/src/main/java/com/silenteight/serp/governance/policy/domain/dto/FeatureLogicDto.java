@@ -13,7 +13,7 @@ import static java.util.List.of;
 @AllArgsConstructor
 public class FeatureLogicDto {
 
-  private int count;
+  private int toFulfill;
   @NonNull
   @Default
   private Collection<MatchConditionDto> features = of();

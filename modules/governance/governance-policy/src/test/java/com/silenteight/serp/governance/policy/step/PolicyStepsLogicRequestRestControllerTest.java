@@ -49,12 +49,12 @@ class PolicyStepsLogicRequestRestControllerTest extends BaseRestControllerTest {
         .build();
     FeatureLogicDto featureLogicDto1 = FeatureLogicDto
         .builder()
-        .count(2)
+        .toFulfill(2)
         .features(asList(featureDto, featureDto))
         .build();
     FeatureLogicDto featureLogicDto2 = FeatureLogicDto
         .builder()
-        .count(1)
+        .toFulfill(1)
         .features(asList(featureDto))
         .build();
     return asList(featureLogicDto1, featureLogicDto2);
@@ -86,13 +86,13 @@ class PolicyStepsLogicRequestRestControllerTest extends BaseRestControllerTest {
 
     get(POLICY_STEPS_LOGIC_URL)
         .statusCode(OK.value())
-        .body("featuresLogic[0].count", is(2))
+        .body("featuresLogic[0].toFulfill", is(2))
         .body("featuresLogic[0].features[0].name", is(AGENT_NAME))
         .body("featuresLogic[0].features[0].values[0]", is(FIRST_VALUE))
         .body("featuresLogic[0].features[0].values[1]", is(SECOND_VALUE))
         .body("featuresLogic[0].features[1].values[0]", is(FIRST_VALUE))
         .body("featuresLogic[0].features[1].values[1]", is(SECOND_VALUE))
-        .body("featuresLogic[1].count", is(1))
+        .body("featuresLogic[1].toFulfill", is(1))
         .body("featuresLogic[1].features[0].name", is(AGENT_NAME))
         .body("featuresLogic[1].features[0].values[0]", is(FIRST_VALUE))
         .body("featuresLogic[1].features[0].values[1]", is(SECOND_VALUE));

@@ -43,7 +43,7 @@ class FeatureLogic extends BaseEntity {
   }
 
   FeatureLogicDto toDto() {
-    return FeatureLogicDto.builder().count(getCount()).features(featuresToDto()).build();
+    return FeatureLogicDto.builder().toFulfill(getCount()).features(featuresToDto()).build();
   }
 
   private Collection<MatchConditionDto> featuresToDto() {
