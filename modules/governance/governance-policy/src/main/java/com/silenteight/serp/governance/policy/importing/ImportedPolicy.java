@@ -24,6 +24,8 @@ class ImportedPolicy {
   @JsonProperty("policyName")
   private String name;
 
+  private String description;
+
   @NonNull
   private List<ImportedStep> steps;
 }

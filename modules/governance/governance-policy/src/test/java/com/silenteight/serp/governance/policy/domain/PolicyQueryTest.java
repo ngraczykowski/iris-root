@@ -20,6 +20,7 @@ class PolicyQueryTest extends BaseDataJpaTest {
 
   private static final UUID FIRST_POLICY_UID = UUID.randomUUID();
   private static final String FIRST_POLICY_NAME = "POLICY_1";
+  private static final String FIRST_POLICY_DESC = "FIRST_DESC";
   private static final String FIRST_POLICY_CREATED_BY = "USER_1";
 
   private static final UUID SECOND_POLICY_UID = UUID.randomUUID();
@@ -49,9 +50,9 @@ class PolicyQueryTest extends BaseDataJpaTest {
   @Test
   void listSavedShouldReturnSavedPolicies_whenSavedInDb() {
     Policy firstSaved = policyService.addPolicy(
-        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
+        FIRST_POLICY_UID, FIRST_POLICY_DESC, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
     Policy secondSaved = policyService.addPolicy(
-        SECOND_POLICY_UID, SECOND_POLICY_NAME, SECOND_POLICY_CREATED_BY);
+        SECOND_POLICY_UID, null, SECOND_POLICY_NAME, SECOND_POLICY_CREATED_BY);
 
     Collection<PolicyDto> result = underTest.listSaved();
 

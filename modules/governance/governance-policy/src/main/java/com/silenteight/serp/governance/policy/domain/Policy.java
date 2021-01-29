@@ -56,9 +56,10 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   @JoinColumn(name = "policy_id", updatable = false, nullable = false)
   private Collection<Step> steps = new ArrayList<>();
 
-  Policy(UUID policyId, String name, String createdBy) {
+  Policy(UUID policyId, String name, String description, String createdBy) {
     this.policyId = policyId;
     this.name = name;
+    this.description = description;
     this.createdBy = createdBy;
     this.updatedBy = createdBy;
     this.state = DRAFT;
