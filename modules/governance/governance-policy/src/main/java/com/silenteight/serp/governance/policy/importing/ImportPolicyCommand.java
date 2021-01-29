@@ -12,4 +12,7 @@ public class ImportPolicyCommand {
 
   @NonNull
   InputStream inputStream;
+
+  @NonNull
+  String importedBy;
 }

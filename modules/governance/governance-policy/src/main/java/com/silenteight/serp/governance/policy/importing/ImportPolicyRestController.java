@@ -8,6 +8,7 @@ import com.silenteight.serp.governance.policy.importing.ImportPolicyRestControll
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,10 +31,12 @@ class ImportPolicyRestController {
   @PostMapping(value = "/v1/policies/import", consumes = "multipart/form-data")
   @PreAuthorize("isAuthorized('IMPORT_POLICY')")
   public ResponseEntity<PolicyImportedResponse> importPolicy(
-      @RequestParam("file") MultipartFile file) throws IOException {
+      @RequestParam("file") MultipartFile file, Authentication authentication) throws IOException {
 
-    ImportPolicyCommand command = ImportPolicyCommand
-        .builder().inputStream(file.getInputStream()).build();
+    ImportPolicyCommand command = ImportPolicyCommand.builder()
+        .inputStream(file.getInputStream())
+        .importedBy(authentication.getName())
+        .build();
     UUID policyId = importPolicyUseCase.apply(command);
 
     return ok(new PolicyImportedResponse(policyId));
