@@ -42,7 +42,7 @@ public class PolicyService {
     logPolicyCreateRequested(request, policyId, correlationId);
 
     Policy policy = addPolicy(
-        policyId, request.getPolicyName(), request.getCreatedBy());
+        policyId, request.getDescription(), request.getPolicyName(), request.getCreatedBy());
     configureImportedSteps(policy, request.getStepConfigurations());
     policy.save();
     Policy savedPolicy = policyRepository.save(policy);
@@ -91,9 +91,12 @@ public class PolicyService {
 
   @NotNull
   public Policy addPolicy(
-      @NonNull UUID policyId, @NonNull String policyName, @NonNull String createdBy) {
+      @NonNull UUID policyId,
+      String description,
+      @NonNull String policyName,
+      @NonNull String createdBy) {
 
-    Policy policy = new Policy(policyId, policyName, createdBy);
+    Policy policy = new Policy(policyId, policyName, description, createdBy);
     return policyRepository.save(policy);
   }
 

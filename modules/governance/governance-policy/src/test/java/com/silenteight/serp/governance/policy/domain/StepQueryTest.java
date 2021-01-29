@@ -29,9 +29,10 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(classes = { PolicyRepositoryTestConfiguration.class })
 class StepQueryTest extends BaseDataJpaTest {
 
-  private static final UUID FIRST_POLICY_UID = randomUUID();
-  private static final String FIRST_POLICY_NAME = "POLICY_1";
-  private static final String FIRST_POLICY_CREATED_BY = "USER_1";
+  private static final UUID POLICY_UID = randomUUID();
+  private static final String POLICY_NAME = "POLICY_1";
+  private static final String POLICY_DESC = "FIRST_POLICY_DESCRIPTION";
+  private static final String POLICY_CREATED_BY = "USER_1";
 
   private static final UUID FIRST_STEP_ID = randomUUID();
   private static final String FIRST_STEP_NAME = "FIRST_STEP_NAME";
@@ -62,17 +63,19 @@ class StepQueryTest extends BaseDataJpaTest {
 
   @Test
   void listStepsOrderShouldReturnEmpty_whenNoStepsInPolicy() {
-    policyService.addPolicy(FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
-    List<UUID> result = underTest.listStepsOrder(FIRST_POLICY_UID);
+    policyService.addPolicy(
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
+    List<UUID> result = underTest.listStepsOrder(POLICY_UID);
 
     assertThat(result).isEmpty();
   }
 
   @Test
   void listStepsShouldReturnEmpty_whenNoStepsInPolicy() {
-    policyService.addPolicy(FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
+    policyService.addPolicy(
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
 
-    Collection<StepDto> result = underTest.listSteps(FIRST_POLICY_UID);
+    Collection<StepDto> result = underTest.listSteps(POLICY_UID);
 
     assertThat(result).isEmpty();
   }
@@ -80,9 +83,9 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void listStepsOrderShouldSteps_whenStepsInPolicy() {
     policyService.addPolicy(
-        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         SOLUTION_NO_DECISION,
         FIRST_STEP_ID,
         FIRST_STEP_NAME,
@@ -90,7 +93,7 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_TYPE,
         1);
     policyService.addStepToPolicy(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         SOLUTION_FALSE_POSITIVE,
         SECOND_STEP_ID,
         SECOND_STEP_NAME,
@@ -98,7 +101,7 @@ class StepQueryTest extends BaseDataJpaTest {
         SECOND_STEP_TYPE,
         0);
 
-    List<UUID> result = underTest.listStepsOrder(FIRST_POLICY_UID);
+    List<UUID> result = underTest.listStepsOrder(POLICY_UID);
 
     assertThat(result).contains(FIRST_STEP_ID, SECOND_STEP_ID);
   }
@@ -106,9 +109,9 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void listStepsShouldReturnSteps_whenStepsInPolicy() {
     policyService.addPolicy(
-        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         SOLUTION_NO_DECISION,
         FIRST_STEP_ID,
         FIRST_STEP_NAME,
@@ -116,7 +119,7 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_TYPE,
         0);
     policyService.addStepToPolicy(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         SOLUTION_FALSE_POSITIVE,
         SECOND_STEP_ID,
         SECOND_STEP_NAME,
@@ -124,7 +127,7 @@ class StepQueryTest extends BaseDataJpaTest {
         SECOND_STEP_TYPE,
         1);
 
-    Collection<StepDto> result = underTest.listSteps(FIRST_POLICY_UID);
+    Collection<StepDto> result = underTest.listSteps(POLICY_UID);
 
     assertThat(result).contains(
         StepDto.builder()
@@ -149,7 +152,7 @@ class StepQueryTest extends BaseDataJpaTest {
     createConfiguredPolicy();
 
     // when
-    List<StepConfigurationDto> result = underTest.listStepsConfiguration(FIRST_POLICY_UID);
+    List<StepConfigurationDto> result = underTest.listStepsConfiguration(POLICY_UID);
 
     // then
     assertThat(result).contains(
@@ -184,9 +187,9 @@ class StepQueryTest extends BaseDataJpaTest {
 
   private Long createConfiguredPolicy() {
     Policy policy = policyService.addPolicy(
-        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         SOLUTION_NO_DECISION,
         FIRST_STEP_ID,
         FIRST_STEP_NAME,
@@ -194,7 +197,7 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_TYPE,
         0);
     policyService.addStepToPolicy(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         SOLUTION_FALSE_POSITIVE,
         SECOND_STEP_ID,
         SECOND_STEP_NAME,
@@ -206,7 +209,7 @@ class StepQueryTest extends BaseDataJpaTest {
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
         .builder().count(1).featureConfigurations(List.of(featureConfiguration)).build();
     policyService.configureStepLogic(
-        FIRST_POLICY_UID,
+        POLICY_UID,
         FIRST_STEP_ID,
         List.of(featureLogicConfiguration));
 

@@ -35,6 +35,7 @@ public class ImportPolicyUseCase {
     return ImportPolicyRequest
         .builder()
         .policyName(importedPolicy.getName())
+        .description(importedPolicy.getDescription())
         .createdBy(createdBy)
         .stepConfigurations(mapToStepConfigurations(importedPolicy.getSteps()))
         .build();

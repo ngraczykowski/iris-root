@@ -18,6 +18,8 @@ public class ImportPolicyRequest {
   @NonNull
   String policyName;
 
+  String description;
+
   @NonNull
   String createdBy;
 

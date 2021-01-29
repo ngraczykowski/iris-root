@@ -27,6 +27,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
 
   private static final UUID POLICY_UID = UUID.randomUUID();
   private static final String POLICY_NAME = "POLICY_1";
+  private static final String POLICY_DESC = "POLICY_DESC";
   private static final String POLICY_CREATED_BY = "USER_1";
 
   private static final UUID STEP_ID = UUID.randomUUID();
@@ -63,7 +64,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   @Test
   void listLogicShouldReturnEmpty_whenNothingIsSaved() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,
@@ -81,7 +82,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   @Test
   void listLogicShouldReturnLogic_whenLogicIsSaved() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,
