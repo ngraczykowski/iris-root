@@ -1,34 +1,28 @@
-package com.silenteight.sep.base.common.messaging;
+package com.silenteight.sep.base.common.messaging.compression;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.sep.base.common.messaging.compression.CompressionBundle.Compressor;
 
 import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4Factory;
 import net.jpountz.lz4.LZ4FrameOutputStream;
 import net.jpountz.lz4.LZ4FrameOutputStream.BLOCKSIZE;
 import net.jpountz.lz4.LZ4FrameOutputStream.FLG.Bits;
-import org.springframework.amqp.support.postprocessor.AbstractCompressingPostProcessor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-@Getter
-@Setter
-public class Lz4CompressMessagePostProcessor extends AbstractCompressingPostProcessor {
-
-  public static final int FASTEST_COMPRESSION = 1;
-
-  public static final int DEFAULT_COMPRESSION = FASTEST_COMPRESSION;
-
-  public static final int BEST_COMPRESSION = 9;
+@RequiredArgsConstructor
+class Lz4Compressor implements Compressor {
 
   private static final LZ4Factory FACTORY = LZ4Factory.fastestInstance();
 
-  private int compressionLevel = 1;
+  private final int compressionLevel;
 
   @Override
-  protected OutputStream getCompressorStream(OutputStream stream) throws IOException {
+  public @NotNull OutputStream compress(@NotNull OutputStream stream) throws IOException {
     return new LZ4FrameOutputStream(
         stream,
         BLOCKSIZE.SIZE_64KB,
@@ -43,15 +37,5 @@ public class Lz4CompressMessagePostProcessor extends AbstractCompressingPostProc
       return FACTORY.fastCompressor();
     else
       return FACTORY.highCompressor(Math.min(compressionLevel, 9));
-  }
-
-  @Override
-  public int getOrder() {
-    return MessageProcessorsOrdering.COMPRESSION;
-  }
-
-  @Override
-  protected String getEncoding() {
-    return "lz4";
   }
 }

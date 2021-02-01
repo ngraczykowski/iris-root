@@ -1,6 +1,7 @@
-package com.silenteight.sep.base.common.messaging;
+package com.silenteight.sep.base.common.messaging.postprocessing;
 
 import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageDecrypter;
+import com.silenteight.sep.base.common.messaging.postprocessing.DecryptMessagePostProcessor;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

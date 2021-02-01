@@ -1,4 +1,4 @@
-package com.silenteight.sep.base.common.messaging;
+package com.silenteight.sep.base.common.messaging.postprocessing;
 
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ class MessageProcessorsOrderingIT {
   @Test
   void preProcessorsHaveCorrectOrdering() {
     var encryptMessagePostProcessor = new EncryptMessagePostProcessor(null);
-    var lz4CompressMessagePostProcessor = new Lz4CompressMessagePostProcessor();
+    var lz4CompressMessagePostProcessor = new CompressMessagePostProcessor(null, null);
 
     var orderedPreProcessors = MessagePostProcessorUtils.sort(
         List.of(encryptMessagePostProcessor, lz4CompressMessagePostProcessor)
@@ -26,7 +26,7 @@ class MessageProcessorsOrderingIT {
   @Test
   void postProcessorsHaveCorrectOrdering() {
     var decryptMessagePostProcessor = new DecryptMessagePostProcessor(null);
-    var lz4DecompressMessagePostProcessor = new Lz4DecompressMessagePostProcessor();
+    var lz4DecompressMessagePostProcessor = new DecompressMessagePostProcessor(null, null);
 
     var orderedPostProcessors = MessagePostProcessorUtils.sort(
         List.of(decryptMessagePostProcessor, lz4DecompressMessagePostProcessor)

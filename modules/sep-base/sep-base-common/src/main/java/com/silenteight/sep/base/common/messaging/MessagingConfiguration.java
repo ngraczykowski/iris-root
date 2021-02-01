@@ -2,9 +2,14 @@ package com.silenteight.sep.base.common.messaging;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.messaging.MessagingProperties.Compression;
+import com.silenteight.sep.base.common.messaging.compression.CompressionBundle;
+import com.silenteight.sep.base.common.messaging.compression.Lz4CompressionBundleConfigurer;
 import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageDecrypter;
 import com.silenteight.sep.base.common.messaging.encryption.AmqpMessageEncypter;
 import com.silenteight.sep.base.common.messaging.encryption.MessagingEncryptionProperties;
+import com.silenteight.sep.base.common.messaging.postprocessing.SepMessagePostProcessors;
+import com.silenteight.sep.base.common.messaging.postprocessing.SepMessagePostProcessorsConfigurer;
 import com.silenteight.sep.base.common.protocol.AnyProtoMessageConverter;
 import com.silenteight.sep.base.common.protocol.MessageRegistry;
 import com.silenteight.sep.base.common.protocol.MessageRegistryFactory;
@@ -27,6 +32,7 @@ import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -73,6 +79,31 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
   }
 
   @Bean
+  SepMessagePostProcessors sepMessagePostProcessors(
+      MessagingProperties properties,
+      ObjectProvider<AmqpMessageDecrypter> decrypter,
+      ObjectProvider<AmqpMessageEncypter> encrypter) {
+    var configurer = new SepMessagePostProcessorsConfigurer();
+
+    decrypter.ifAvailable(configurer::setMessageDecrypter);
+    encrypter.ifAvailable(configurer::setMessageEncrypter);
+
+    tryConfigureCompression(properties.getCompression())
+        .ifPresent(configurer::setCompressionBundle);
+
+    return configurer.configure();
+  }
+
+  private static Optional<CompressionBundle> tryConfigureCompression(Compression compression) {
+    if (compression.isEnabled()) {
+      var configurer = new Lz4CompressionBundleConfigurer(compression.getLevel());
+      return Optional.of(configurer.configure());
+    }
+
+    return Optional.empty();
+  }
+
+  @Bean
   MessageSenderFactory messageSenderFactory(
       RabbitOperations operations,
       ContentTypeDelegatingMessageConverter messageConverter,
@@ -88,24 +119,18 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
 
   @Bean
   RabbitConfiguringPostProcessor containerFactoryConfiguringPostProcessor(
-      MessagingProperties properties,
-      ObjectProvider<ReceiveMessageListener> listeners,
-      ObjectProvider<AmqpMessageEncypter> encypter,
-      ObjectProvider<AmqpMessageDecrypter> decrypter) {
+      SepMessagePostProcessors sepMessagePostProcessors,
+      ObjectProvider<ReceiveMessageListener> listeners) {
 
-    RabbitConfiguringPostProcessor postProcessor =
-        new RabbitConfiguringPostProcessor(
-            properties,
-            listeners.stream().collect(toList())
-        );
+    var rabbitConfigPostProcessor = new RabbitConfiguringPostProcessor(
+        sepMessagePostProcessors,
+        listeners.stream().collect(toList())
+    );
 
-    encypter.ifAvailable(postProcessor::setMessageEncrypter);
-    decrypter.ifAvailable(postProcessor::setMessageDecrypter);
-
-    postProcessor.setErrorHandler(
+    rabbitConfigPostProcessor.setErrorHandler(
         new CustomConditionalRejectingErrorHandler(new CustomExceptionStrategy()));
 
-    return postProcessor;
+    return rabbitConfigPostProcessor;
   }
 
   @Override

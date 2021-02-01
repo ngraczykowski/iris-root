@@ -1,4 +1,4 @@
-package com.silenteight.sep.base.common.messaging;
+package com.silenteight.sep.base.common.messaging.postprocessing;
 
 class MessageProcessorsOrdering {
 

@@ -1,4 +1,4 @@
-package com.silenteight.sep.base.common.messaging;
+package com.silenteight.sep.base.common.messaging.postprocessing;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,7 +9,7 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.core.Ordered;
 
 @RequiredArgsConstructor
-public class EncryptMessagePostProcessor implements MessagePostProcessor, Ordered {
+class EncryptMessagePostProcessor implements MessagePostProcessor, Ordered {
 
   private final AmqpMessageEncypter encrypter;
 

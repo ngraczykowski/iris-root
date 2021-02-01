@@ -2,6 +2,7 @@ package com.silenteight.sep.base.common.messaging;
 
 import lombok.Data;
 
+import com.silenteight.sep.base.common.messaging.compression.Lz4CompressionBundleConfigurer;
 import com.silenteight.sep.base.common.messaging.encryption.MessagingEncryptionProperties;
 import com.silenteight.sep.base.common.support.validation.IsDividableBy;
 import com.silenteight.sep.base.common.support.validation.IsOneOf;
@@ -37,8 +38,8 @@ class MessagingProperties {
 
     private boolean enabled = true;
 
-    @Min(Lz4CompressMessagePostProcessor.FASTEST_COMPRESSION)
-    @Max(Lz4CompressMessagePostProcessor.BEST_COMPRESSION)
+    @Min(Lz4CompressionBundleConfigurer.FASTEST_COMPRESSION)
+    @Max(Lz4CompressionBundleConfigurer.BEST_COMPRESSION)
     private int level = 4;
   }
 
