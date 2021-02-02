@@ -45,4 +45,8 @@ class FeatureVector extends BaseEntity implements IdentifiableEntity {
     this.names = names;
     this.values = values;
   }
+
+  String getSignatureAsString() {
+    return vectorSignature.asString();
+  }
 }

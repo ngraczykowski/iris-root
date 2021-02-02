@@ -6,10 +6,11 @@ import com.silenteight.proto.governance.v1.api.FeatureVector;
 import com.silenteight.proto.governance.v1.api.FeatureVectorSolvedEvent;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.analytics.featurevector.FeatureVectorService;
-import com.silenteight.serp.governance.analytics.featurevector.dto.FeatureVectorDto;
 import com.silenteight.serp.governance.analytics.usage.UsageService;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.serp.governance.policy.featurevector.FeatureVectorUsageQuery;
+import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorWithUsageDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.List.of;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -45,14 +46,29 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
   @Autowired
   FeatureVectorService featureVectorService;
 
+  @Autowired
+  FeatureVectorUsageQuery featureVectorQuery;
+
   @Test
   void shouldStoreFeatureVector() {
     FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent();
 
     underTest.activate(event);
 
-    assertThat(featureVectorService.getFeatureVectorStream())
-        .containsExactly(new FeatureVectorDto(of(FEATURE_NAME), of(FEATURE_VALUE)));
+    CanonicalFeatureVector canonicalFeatureVector = canonicalFeatureVectorFactory
+        .fromNamesAndValues(of(FEATURE_NAME), of(FEATURE_VALUE));
+    List<FeatureVectorWithUsageDto> vectors = featureVectorQuery
+        .getAllWithUsage()
+        .collect(toList());
+    assertThat(vectors)
+        .extracting(FeatureVectorWithUsageDto::getSignature)
+        .containsExactly(canonicalFeatureVector.vectorSignatureAsString());
+    assertThat(vectors)
+        .extracting(FeatureVectorWithUsageDto::getNames)
+        .containsExactly(of(FEATURE_NAME));
+    assertThat(vectors)
+        .extracting(FeatureVectorWithUsageDto::getValues)
+        .containsExactly(of(FEATURE_VALUE));
   }
 
   @Test
@@ -77,7 +93,7 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
   private static FeatureCollection featureCollection(String... featureNames) {
     List<Feature> features = Arrays.stream(featureNames)
         .map(name -> Feature.newBuilder().setName(name).build())
-        .collect(Collectors.toList());
+        .collect(toList());
 
     return FeatureCollection.newBuilder()
         .addAllFeature(features)

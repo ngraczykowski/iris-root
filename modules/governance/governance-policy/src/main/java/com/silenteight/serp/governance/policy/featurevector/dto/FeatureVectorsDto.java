@@ -15,5 +15,8 @@ public class FeatureVectorsDto {
 
   @NonNull
   @Default
+  private Collection<String> columns = of();
+  @NonNull
+  @Default
   private Collection<FeatureVectorDto> featureVectors = of();
 }

@@ -5,8 +5,6 @@ import com.silenteight.serp.governance.common.signature.Signature;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.google.protobuf.ByteString.copyFromUtf8;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -76,32 +74,4 @@ class FeatureVectorServiceTest {
     assertThat(repository.count()).isEqualTo(2);
   }
 
-  @Test
-  void shouldGetUniqueFeatureNames() {
-    CanonicalFeatureVector vector1 = CanonicalFeatureVector.builder()
-        .names(of(FEATURE_1, FEATURE_2))
-        .values(of(VALUE_1))
-        .vectorSignature(SIGNATURE_1)
-        .build();
-
-    CanonicalFeatureVector vector2 = CanonicalFeatureVector.builder()
-        .names(of(FEATURE_1))
-        .values(of(VALUE_1))
-        .vectorSignature(SIGNATURE_2)
-        .build();
-
-    CanonicalFeatureVector vector3 = CanonicalFeatureVector.builder()
-        .names(of(FEATURE_2))
-        .values(of(VALUE_2))
-        .vectorSignature(SIGNATURE_3)
-        .build();
-
-    underTest.storeUniqueFeatureVector(vector1);
-    underTest.storeUniqueFeatureVector(vector2);
-    underTest.storeUniqueFeatureVector(vector3);
-
-    List<String> uniqueFeatureNames = underTest.getUniqueFeatureNames();
-
-    assertThat(uniqueFeatureNames).containsExactlyInAnyOrder(FEATURE_1, FEATURE_2);
-  }
 }
