@@ -8,7 +8,7 @@ plugins {
   id "io.freefair.aspectj" version "5.0.1" apply false
   id "nebula.resolution-rules" version "7.7.7"
   // Spring boot plugin version should be same as Spring version in sep-dependencies
-  id "org.springframework.boot" version "2.3.3.RELEASE" apply false
+  id "org.springframework.boot" version "2.3.6.RELEASE" apply false
   id "com.google.cloud.tools.jib" version '2.4.0' apply false
 }
 
