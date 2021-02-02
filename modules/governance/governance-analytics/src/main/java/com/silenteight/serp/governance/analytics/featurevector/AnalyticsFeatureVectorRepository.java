@@ -23,7 +23,15 @@ interface AnalyticsFeatureVectorRepository extends Repository<FeatureVector, Lon
   @QueryHints(value = {
       @QueryHint(name = HINT_FETCH_SIZE, value = "50"),
       @QueryHint(name = HINT_READONLY, value = "true"), })
-  Stream<FeatureVector> findAll();
+  @Query(value = "SELECT"
+      + "   fv.names as names,"
+      + "   fv.values as values,"
+      + "   fvu.usage_count as usageCount,"
+      + "   fv.vector_signature as signature"
+      + " FROM governance_analytics_feature_vector fv"
+      + " JOIN governance_analytics_feature_vector_usage fvu "
+      + "   ON fv.vector_signature = fvu.vector_signature", nativeQuery = true)
+  Stream<FeatureVectorWithUsage> findAllWithUsage();
 
   @Query(value = "SELECT DISTINCT fv.names"
       + " FROM governance_analytics_feature_vector fv", nativeQuery = true)

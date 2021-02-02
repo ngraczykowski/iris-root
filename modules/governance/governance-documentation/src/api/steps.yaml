@@ -308,30 +308,6 @@ paths:
         202:
           description: OK
 
-  /steps/{id}/vectors/columns:
-    get:
-      tags:
-        - 1st iteration
-        - feature vectors
-      description: 'Return a list of feature vectors names'
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: 'Step Id'
-          example: '091ab92d-a48b-4b77-af67-3db69e4e1ac9'
-      responses:
-        200:
-          description: 'A list of feature vectors'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FeatureVector'
-
   /steps/{id}/vectors:
     get:
       tags:

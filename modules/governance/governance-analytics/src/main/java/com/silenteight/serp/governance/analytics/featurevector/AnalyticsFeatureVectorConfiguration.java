@@ -13,6 +13,14 @@ class AnalyticsFeatureVectorConfiguration {
   @Bean
   FeatureVectorService analyticsFeatureVectorService(
       AnalyticsFeatureVectorRepository analyticsFeatureVectorRepository) {
+
     return new FeatureVectorService(analyticsFeatureVectorRepository);
+  }
+
+  @Bean
+  FeatureVectorQuery analyticsFeatureVectorQuery(
+      AnalyticsFeatureVectorRepository analyticsFeatureVectorRepository) {
+
+    return new FeatureVectorQuery(analyticsFeatureVectorRepository);
   }
 }

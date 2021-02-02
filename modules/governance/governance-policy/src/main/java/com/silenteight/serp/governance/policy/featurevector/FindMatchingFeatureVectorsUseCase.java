@@ -3,21 +3,18 @@ package com.silenteight.serp.governance.policy.featurevector;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.analytics.featurevector.FeatureVectorService;
-import com.silenteight.serp.governance.analytics.featurevector.dto.FeatureVectorDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
+import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorDto;
+import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorWithUsageDto;
 import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorsDto;
-import com.silenteight.serp.governance.policy.solve.ReconfigurableStepsConfigurationFactory;
 import com.silenteight.serp.governance.policy.solve.SolvingService;
 import com.silenteight.serp.governance.policy.solve.StepsConfigurationSupplier;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
-import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
-import com.silenteight.serp.governance.policy.step.PolicyStepsRequestQuery;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
@@ -28,63 +25,114 @@ import static java.util.stream.IntStream.range;
 public class FindMatchingFeatureVectorsUseCase {
 
   @NonNull
-  private final PolicyStepsRequestQuery stepQuery;
+  private final StepsConfigurationSupplierFactory configurationSupplier;
   @NonNull
-  private final PolicyStepsConfigurationQuery stepsConfigurationQuery;
+  private final FeatureVectorUsageQuery featureVectorUsageQuery;
   @NonNull
-  private final ReconfigurableStepsConfigurationFactory stepsConfigurationFactory;
-  @NonNull
-  private final FeatureVectorService featureVectorService;
+  private final FeatureNamesQuery featureNamesQuery;
   @NonNull
   private final SolvingService solvingService;
 
+  @Transactional
   public FeatureVectorsDto activate(@NonNull UUID stepId) {
-    StepsConfigurationSupplier stepsConfigurationProvider = getStepsConfigurationProvider(stepId);
-    try (Stream<FeatureVectorDto> vectors = featureVectorService.getFeatureVectorStream()) {
-      return FeatureVectorsDto.builder()
-          .featureVectors(
-              vectors
-                  .map(FindMatchingFeatureVectorsUseCase::toFeatureValuesByName)
-                  .filter(vector -> isSolvedWithStep(vector, stepsConfigurationProvider, stepId))
-                  .map(FindMatchingFeatureVectorsUseCase::asDto)
-                  .collect(toList()))
-          .build();
+    List<String> columns = getColumns();
+    List<FeatureVectorDto> featureVectors = getFeatureVectors(stepId, columns);
+
+    return FeatureVectorsDto.builder()
+        .columns(columns)
+        .featureVectors(featureVectors)
+        .build();
+  }
+
+  private List<String> getColumns() {
+    return featureNamesQuery
+        .getUniqueFeatureNames()
+        .stream()
+        .sorted()
+        .collect(toList());
+  }
+
+  private List<FeatureVectorDto> getFeatureVectors(UUID stepId, List<String> columns) {
+    StepsConfigurationSupplier stepsConfigurationProvider =
+        configurationSupplier.getConfigurationSupplierBasedOnStep(stepId);
+    FeatureVectorSolver featureVectorSolver =
+        new FeatureVectorSolver(stepsConfigurationProvider, stepId);
+
+    return featureVectorUsageQuery
+        .getAllWithUsage()
+        .map(FeatureValueWithUsageWrapper::new)
+        .filter(featureVectorSolver::isSolvedWithStep)
+        .map(wrapper -> mapToDto(columns, wrapper))
+        .collect(toList());
+  }
+
+  private static FeatureVectorDto mapToDto(
+      List<String> columns, FeatureValueWithUsageWrapper wrapper) {
+
+    return FeatureVectorDto.builder()
+        .signature(wrapper.getSignature())
+        .usageCount(wrapper.getUsageCount())
+        .values(mapToValues(columns, wrapper.getFeatureValuesByName()))
+        .build();
+  }
+
+  private static List<String> mapToValues(
+      List<String> columns, Map<String, String> featureValuesByName) {
+
+    return columns
+        .stream()
+        .map(featureValuesByName::get)
+        .collect(toList());
+  }
+
+  private static class FeatureValueWithUsageWrapper {
+
+    @NonNull
+    private final FeatureVectorWithUsageDto featureVectorWithUsage;
+    @NonNull
+    private final Map<String, String> featureValuesByName;
+
+    FeatureValueWithUsageWrapper(FeatureVectorWithUsageDto featureVectorWithUsage) {
+      this.featureVectorWithUsage = featureVectorWithUsage;
+      featureValuesByName = toFeatureValuesByName(featureVectorWithUsage);
+    }
+
+    private static Map<String, String> toFeatureValuesByName(FeatureVectorWithUsageDto vector) {
+      List<String> names = vector.getNames();
+      List<String> values = vector.getValues();
+
+      return range(0, names.size())
+          .boxed()
+          .collect(toMap(names::get, values::get));
+    }
+
+    String getSignature() {
+      return featureVectorWithUsage.getSignature();
+    }
+
+    long getUsageCount() {
+      return featureVectorWithUsage.getUsageCount();
+    }
+
+    Map<String, String> getFeatureValuesByName() {
+      return featureValuesByName;
     }
   }
 
-  private static Map<String, String> toFeatureValuesByName(FeatureVectorDto vector) {
-    List<String> names = vector.getNames();
-    List<String> values = vector.getValues();
+  @RequiredArgsConstructor
+  private class FeatureVectorSolver {
 
-    return range(0, names.size())
-        .boxed()
-        .collect(toMap(names::get, values::get));
-  }
+    @NonNull
+    private final StepsConfigurationSupplier stepsConfigurationProvider;
+    @NonNull
+    private final UUID stepId;
 
-  private StepsConfigurationSupplier getStepsConfigurationProvider(UUID stepId) {
-    Long policyId = stepQuery.getPolicyIdForStep(stepId);
-    List<StepConfigurationDto> stepsConfigurationDto = stepsConfigurationQuery
-        .listStepsConfiguration(policyId);
-    return stepsConfigurationFactory.getStepsConfigurationProvider(stepsConfigurationDto);
-  }
+    public boolean isSolvedWithStep(FeatureValueWithUsageWrapper wrapper) {
+      SolveResponse solveResponse = solvingService.solve(
+          stepsConfigurationProvider, wrapper.getFeatureValuesByName());
+      UUID solvedStepId = solveResponse.getStepId();
 
-  private boolean isSolvedWithStep(
-      Map<String, String> featureValuesByName,
-      StepsConfigurationSupplier stepsConfigurationProvider,
-      UUID stepId) {
-
-    SolveResponse solveResponse = solvingService.solve(
-        stepsConfigurationProvider, featureValuesByName);
-    UUID solvedStepId = solveResponse.getStepId();
-
-    return nonNull(solvedStepId) && solvedStepId.equals(stepId);
-  }
-
-  private static com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorDto asDto(
-      Map<String, String> featureValuesByName) {
-
-    return com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorDto.builder()
-        .featureValues(featureValuesByName)
-        .build();
+      return nonNull(solvedStepId) && solvedStepId.equals(stepId);
+    }
   }
 }

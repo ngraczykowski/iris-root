@@ -18,4 +18,8 @@ public class CanonicalFeatureVector {
 
   @EqualsAndHashCode.Include
   Signature vectorSignature;
+
+  public String vectorSignatureAsString() {
+    return vectorSignature.asString();
+  }
 }

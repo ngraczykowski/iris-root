@@ -24,7 +24,6 @@ dependencies {
 
   implementation libraries.silenteight_audit_bs
 
-  implementation project(":governance-analytics")
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
