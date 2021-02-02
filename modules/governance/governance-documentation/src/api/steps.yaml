@@ -143,7 +143,15 @@ paths:
     get:
       tags:
         - 1st iteration
-        - steps
+        - steps      
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
       description: 'Return all steps for specific policy'
       responses:
         200:
@@ -169,7 +177,7 @@ paths:
         201:
           description: Created
 
-  /policies/{id}/steps/order:
+  /policies/{id}/steps-order:
     get:
       tags:
         - 1st iteration
