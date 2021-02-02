@@ -17,6 +17,8 @@ interface PolicyRepository extends Repository<Policy, Long> {
 
   Collection<Policy> findAll();
 
+  Collection<Policy> findAllByStateIn(Collection<PolicyState> states);
+
   @Query("select p.id from Policy p where p.policyId = :policyId")
   Long getIdByPolicyId(UUID policyId);
 }

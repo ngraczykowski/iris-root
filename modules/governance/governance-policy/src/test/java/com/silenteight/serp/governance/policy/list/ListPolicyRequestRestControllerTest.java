@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.saved;
+package com.silenteight.serp.governance.policy.list;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
@@ -13,7 +13,8 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
-import static java.util.Arrays.asList;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -23,10 +24,12 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ SavedPolicyRequestRestController.class, GenericExceptionControllerAdvice.class })
-class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
+@Import({ ListPolicyRequestRestController.class, GenericExceptionControllerAdvice.class })
+class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
+  private static final String NO_FILTER_POLICY_URL = "/v1/policies";
   private static final String SAVED_POLICY_URL = "/v1/policies?state=SAVED";
+  private static final String TWO_STATES_POLICY_URL = "/v1/policies?state=SAVED&state=DRAFT";
   private static final String POLICY_NAME = "TEST_POLICY";
   private static final OffsetDateTime CREATED_AT = OffsetDateTime.now().minusHours(1);
   private static final OffsetDateTime UPDATED_AT = OffsetDateTime.now();
@@ -35,9 +38,9 @@ class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
   private static final UUID FIRST_POLICY_UUID = UUID.randomUUID();
   private static final UUID SECOND_POLICY_UUID = UUID.randomUUID();
   private static final PolicyDto FIRST_POLICY_DTO = getPolicyDto(
-      1, PolicyState.SAVED, FIRST_POLICY_UUID);
+      1, SAVED, FIRST_POLICY_UUID);
   private static final PolicyDto SECOND_POLICY_DTO =
-      getPolicyDto(2, PolicyState.DRAFT, SECOND_POLICY_UUID);
+      getPolicyDto(2, DRAFT, SECOND_POLICY_UUID);
 
   private static PolicyDto getPolicyDto(int id, PolicyState saved, UUID policyUuid) {
     return PolicyDto
@@ -54,11 +57,11 @@ class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @MockBean
-  private SavedPolicyRequestQuery savedPolicyRequestQuery;
+  private ListPolicyRequestQuery savedPolicyRequestQuery;
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenNoPolicies() {
-    given(savedPolicyRequestQuery.listSaved()).willReturn(of());
+    given(savedPolicyRequestQuery.list(of(SAVED))).willReturn(of());
 
     get(SAVED_POLICY_URL)
         .contentType(anything())
@@ -72,15 +75,47 @@ class SavedPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @TestWithRole(roles = { POLICY_MANAGER })
+  void its200_whenNoFilterAndPoliciesFound() {
+    given(savedPolicyRequestQuery.listAll()).willReturn(of(FIRST_POLICY_DTO));
+
+    get(NO_FILTER_POLICY_URL)
+        .statusCode(OK.value())
+        .body("size()", is(1))
+        .body("[0].id", equalTo(FIRST_POLICY_UUID.toString()))
+        .body("[0].policyId", equalTo(1))
+        .body("[0].state", equalTo(SAVED.name()))
+        .body("[0].createdBy", equalTo(CREATED_BY))
+        .body("[0].createdAt", notNullValue())
+        .body("[0].updatedBy", equalTo(UPDATED_BY))
+        .body("[0].updatedAt", notNullValue());
+  }
+
+  @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenPoliciesFound() {
-    given(savedPolicyRequestQuery.listSaved()).willReturn(
-        asList(FIRST_POLICY_DTO, SECOND_POLICY_DTO));
+    given(savedPolicyRequestQuery.list(of(SAVED))).willReturn(of(FIRST_POLICY_DTO));
 
     get(SAVED_POLICY_URL)
         .statusCode(OK.value())
-        .body("size()", is(2))
-        .body("[0].policyId", equalTo(1))
+        .body("size()", is(1))
         .body("[0].id", equalTo(FIRST_POLICY_UUID.toString()))
+        .body("[0].policyId", equalTo(1))
+        .body("[0].state", equalTo(SAVED.name()))
+        .body("[0].createdBy", equalTo(CREATED_BY))
+        .body("[0].createdAt", notNullValue())
+        .body("[0].updatedBy", equalTo(UPDATED_BY))
+        .body("[0].updatedAt", notNullValue());
+  }
+
+  @TestWithRole(roles = { POLICY_MANAGER })
+  void its200_whenPoliciesFoundInTwoStates() {
+    given(savedPolicyRequestQuery.list(of(SAVED, DRAFT))).willReturn(
+        of(FIRST_POLICY_DTO, SECOND_POLICY_DTO));
+
+    get(TWO_STATES_POLICY_URL)
+        .statusCode(OK.value())
+        .body("size()", is(2))
+        .body("[0].id", equalTo(FIRST_POLICY_UUID.toString()))
+        .body("[0].policyId", equalTo(1))
         .body("[0].state", equalTo(PolicyState.SAVED.name()))
         .body("[0].createdBy", equalTo(CREATED_BY))
         .body("[0].createdAt", notNullValue())

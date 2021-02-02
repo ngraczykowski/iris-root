@@ -30,6 +30,11 @@ public class InMemoryPolicyRepository extends BasicInMemoryRepository<Policy>
   }
 
   @Override
+  public Collection<Policy> findAllByStateIn(Collection<PolicyState> states) {
+    return stream().filter(policy -> states.contains(policy.getState())).collect(toList());
+  }
+
+  @Override
   public Long getIdByPolicyId(UUID policyId) {
     return getByPolicyId(policyId).getId();
   }

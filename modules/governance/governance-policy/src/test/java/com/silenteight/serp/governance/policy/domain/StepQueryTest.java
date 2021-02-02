@@ -64,7 +64,7 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void listStepsOrderShouldReturnEmpty_whenNoStepsInPolicy() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
     List<UUID> result = underTest.listStepsOrder(POLICY_UID);
 
     assertThat(result).isEmpty();
@@ -73,7 +73,7 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void listStepsShouldReturnEmpty_whenNoStepsInPolicy() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
 
     Collection<StepDto> result = underTest.listSteps(POLICY_UID);
 
@@ -83,7 +83,7 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void listStepsOrderShouldSteps_whenStepsInPolicy() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,
@@ -109,7 +109,7 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void listStepsShouldReturnSteps_whenStepsInPolicy() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,
@@ -187,7 +187,7 @@ class StepQueryTest extends BaseDataJpaTest {
 
   private Long createConfiguredPolicy() {
     Policy policy = policyService.addPolicy(
-        POLICY_UID, POLICY_DESC, POLICY_NAME, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,

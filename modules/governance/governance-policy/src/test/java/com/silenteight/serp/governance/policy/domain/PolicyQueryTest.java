@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.Collection;
 import java.util.UUID;
 
+import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
 @TestPropertySource("classpath:data-test.properties")
@@ -42,22 +46,45 @@ class PolicyQueryTest extends BaseDataJpaTest {
 
   @Test
   void listSavedShouldReturnEmpty_whenNothingIsSaved() {
-    Collection<PolicyDto> result = underTest.listSaved();
+    Collection<PolicyDto> result = underTest.list(of(SAVED));
 
     assertThat(result).isEmpty();
   }
 
   @Test
   void listSavedShouldReturnSavedPolicies_whenSavedInDb() {
-    Policy firstSaved = policyService.addPolicy(
-        FIRST_POLICY_UID, FIRST_POLICY_DESC, FIRST_POLICY_NAME, FIRST_POLICY_CREATED_BY);
-    Policy secondSaved = policyService.addPolicy(
-        SECOND_POLICY_UID, null, SECOND_POLICY_NAME, SECOND_POLICY_CREATED_BY);
+    Policy saved = createSavedPolicy(
+        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_DESC, FIRST_POLICY_CREATED_BY);
+    createDraftPolicy(SECOND_POLICY_UID, SECOND_POLICY_NAME, null, SECOND_POLICY_CREATED_BY);
 
-    Collection<PolicyDto> result = underTest.listSaved();
+    Collection<PolicyDto> result = underTest.list(of(SAVED));
 
-    assertThat(result).contains(
-        firstSaved.toDto(),
-        secondSaved.toDto());
+    assertThat(result).containsOnly(saved.toDto());
+  }
+
+  @Test
+  void listSavedAndDraftedShouldReturnSavedAndDraftedPolicies_whenSavedInDb() {
+    Policy saved = createSavedPolicy(
+        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_DESC, FIRST_POLICY_CREATED_BY);
+    Policy draft = createDraftPolicy(
+        SECOND_POLICY_UID, SECOND_POLICY_NAME, null, SECOND_POLICY_CREATED_BY);
+
+    Collection<PolicyDto> result = underTest.list(of(SAVED, DRAFT));
+
+    assertThat(result).containsExactlyInAnyOrder(saved.toDto(), draft.toDto());
+  }
+
+  @NotNull
+  private Policy createSavedPolicy(
+      UUID uuid, String name, String description, String createdBy) {
+    Policy result = createDraftPolicy(uuid, name, description, createdBy);
+    policyService.savePolicy(uuid);
+    return result;
+  }
+
+  @NotNull
+  private Policy createDraftPolicy(
+      UUID uuid, String name, String description, String createdBy) {
+    return policyService.addPolicy(uuid, name, description, createdBy);
   }
 }
