@@ -42,7 +42,7 @@ public class PolicyService {
     logPolicyCreateRequested(request, policyId, correlationId);
 
     Policy policy = addPolicy(
-        policyId, request.getDescription(), request.getPolicyName(), request.getCreatedBy());
+        policyId, request.getPolicyName(), request.getDescription(), request.getCreatedBy());
     configureImportedSteps(policy, request.getStepConfigurations());
     policy.save();
     Policy savedPolicy = policyRepository.save(policy);
@@ -92,8 +92,8 @@ public class PolicyService {
   @NotNull
   public Policy addPolicy(
       @NonNull UUID policyId,
-      String description,
       @NonNull String policyName,
+      String description,
       @NonNull String createdBy) {
 
     Policy policy = new Policy(policyId, policyName, description, createdBy);
@@ -173,5 +173,11 @@ public class PolicyService {
   private static MatchCondition mapToFeature(FeatureConfiguration configuration) {
     return new MatchCondition(
         configuration.getName(), configuration.getCondition(), configuration.getValues());
+  }
+
+  void savePolicy(@NonNull UUID policyId) {
+    Policy policy = policyRepository.getByPolicyId(policyId);
+    policy.save();
+    policyRepository.save(policy);
   }
 }

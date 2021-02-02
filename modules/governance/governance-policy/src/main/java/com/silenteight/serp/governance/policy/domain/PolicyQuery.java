@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
-import com.silenteight.serp.governance.policy.saved.SavedPolicyRequestQuery;
+import com.silenteight.serp.governance.policy.list.ListPolicyRequestQuery;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,14 +15,23 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class PolicyQuery implements SavedPolicyRequestQuery {
+class PolicyQuery implements ListPolicyRequestQuery {
 
   @NonNull
   private final PolicyRepository policyRepository;
 
   @Override
   @NotNull
-  public Collection<PolicyDto> listSaved() {
+  public Collection<PolicyDto> list(Collection<PolicyState> states) {
+    return policyRepository
+        .findAllByStateIn(states)
+        .stream()
+        .map(Policy::toDto)
+        .collect(toList());
+  }
+
+  @Override
+  public Collection<PolicyDto> listAll() {
     return policyRepository
         .findAll()
         .stream()
