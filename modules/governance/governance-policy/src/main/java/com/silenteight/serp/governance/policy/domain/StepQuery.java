@@ -8,6 +8,8 @@ import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery
 import com.silenteight.serp.governance.policy.step.PolicyStepsOrderRequestQuery;
 import com.silenteight.serp.governance.policy.step.PolicyStepsRequestQuery;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +49,7 @@ class StepQuery implements
   }
 
   @Override
+  @Transactional
   public List<StepConfigurationDto> listStepsConfiguration(UUID policyId) {
     return getStepsAsStream(policyId)
         .map(Step::toConfigurationDto)
@@ -54,6 +57,7 @@ class StepQuery implements
   }
 
   @Override
+  @Transactional
   public List<StepConfigurationDto> listStepsConfiguration(long policyId) {
     return getStepsAsStream(policyId)
         .map(Step::toConfigurationDto)

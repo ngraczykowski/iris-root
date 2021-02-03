@@ -57,8 +57,7 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
   @Column(nullable = false)
   private Integer sortOrder;
 
-  // TODO: WEB-470 set fetch to LAZY
-  @OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @OneToMany(cascade = ALL, orphanRemoval = true)
   @JoinColumn(name = "step_id", updatable = false, nullable = false)
   private Collection<FeatureLogic> featureLogics = new ArrayList<>();
 
