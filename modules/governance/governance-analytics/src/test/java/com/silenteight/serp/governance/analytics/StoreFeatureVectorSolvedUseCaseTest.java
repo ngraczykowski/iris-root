@@ -1,9 +1,9 @@
 package com.silenteight.serp.governance.analytics;
 
-import com.silenteight.proto.governance.v1.api.Feature;
-import com.silenteight.proto.governance.v1.api.FeatureCollection;
-import com.silenteight.proto.governance.v1.api.FeatureVector;
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolvedEvent;
+import com.silenteight.governance.api.v1.Feature;
+import com.silenteight.governance.api.v1.FeatureCollection;
+import com.silenteight.governance.api.v1.FeatureVector;
+import com.silenteight.governance.api.v1.FeatureVectorSolvedEvent;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.analytics.featurevector.FeatureVectorService;
 import com.silenteight.serp.governance.analytics.usage.UsageService;

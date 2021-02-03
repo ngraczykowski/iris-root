@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.policy.solve;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.governance.v1.api.*;
+import com.silenteight.governance.api.v1.*;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.governance.protocol.utils.Timestamps.toTimestamp;
-import static com.silenteight.governance.protocol.utils.Uuids.fromJavaUuid;
+import static com.silenteight.governance.api.utils.Timestamps.toTimestamp;
+import static com.silenteight.governance.api.utils.Uuids.fromJavaUuid;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -36,14 +36,14 @@ public class SolveUseCase {
   @NonNull
   private final TimeSource timeSource;
 
-  public GetSolutionsResponse solve(GetSolutionsRequest request) {
+  public SolveFeaturesResponse solve(SolveFeaturesRequest request) {
     FeatureCollection featureCollection = request.getFeatureCollection();
     List<SolutionResponse> solutionResponses = request.getFeatureVectorsList().stream()
         .map(featureVector -> process(featureCollection, featureVector))
         .map(this::asSolutionResponse)
         .collect(toList());
 
-    return GetSolutionsResponse.newBuilder()
+    return SolveFeaturesResponse.newBuilder()
         .addAllSolutions(solutionResponses)
         .build();
   }
@@ -85,11 +85,11 @@ public class SolveUseCase {
   }
 
   private static List<String> asFeatureNames(
-      List<com.silenteight.proto.governance.v1.api.Feature> features) {
+      List<com.silenteight.governance.api.v1.Feature> features) {
 
     return features
         .stream()
-        .map(com.silenteight.proto.governance.v1.api.Feature::getName)
+        .map(com.silenteight.governance.api.v1.Feature::getName)
         .collect(toList());
   }
 

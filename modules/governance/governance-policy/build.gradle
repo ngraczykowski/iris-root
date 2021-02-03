@@ -20,7 +20,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
 
-  implementation libraries.silenteight_serp_governance_protocol
+  implementation libraries.silenteight_governance_api
 
   implementation libraries.silenteight_audit_bs
 
