@@ -1,23 +1,23 @@
 syntax = "proto3";
 
-package silenteight.governance.v1.api;
+package silenteight.governance.api.v1;
 
 import "google/protobuf/empty.proto";
 
 import public "silenteight/protobuf/uuid.proto";
-import public "silenteight/governance/v1/feature.proto";
+import public "silenteight/governance/api/v1/feature.proto";
 
-option java_package = "com.silenteight.proto.governance.v1.api";
+option java_package = "com.silenteight.governance.api.v1";
 option java_outer_classname = "PolicyStepsGovernanceApiProto";
 option java_multiple_files = true;
 
 service PolicyStepsGovernance {
-  rpc GetSolutions (GetSolutionsRequest) returns (GetSolutionsResponse) {
+  rpc SolveFeatures (SolveFeaturesRequest) returns (SolveFeaturesResponse) {
   }
 }
 
 // Batch request
-message GetSolutionsRequest {
+message SolveFeaturesRequest {
   // Feature space definitions
   FeatureCollection feature_collection = 1;
   // Ordered collection of feature vectors
@@ -25,7 +25,7 @@ message GetSolutionsRequest {
 }
 
 // Batch response
-message GetSolutionsResponse {
+message SolveFeaturesResponse {
   // Ordered collection of responses
   repeated SolutionResponse solutions = 1;
 }
@@ -35,7 +35,7 @@ message SolutionResponse {
   // Solution assigned to a vector
   FeatureVectorSolution feature_vector_solution = 1;
   // Any two vectors with the same signatures are considered the same.
-  string feature_vector_signature = 2;
+  bytes feature_vector_signature = 2;
   // Id of the step that triggered the solution
   protobuf.Uuid step_id = 3;
 }

@@ -1,2 +1,2 @@
-# Governance Protocol
+# Governance API
 

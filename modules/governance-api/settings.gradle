@@ -1,4 +1,4 @@
-rootProject.name = "governance-protocol"
+rootProject.name = "governance-api"
 
-include "governance-protocol-base"
+include "se-governance-api"
 
