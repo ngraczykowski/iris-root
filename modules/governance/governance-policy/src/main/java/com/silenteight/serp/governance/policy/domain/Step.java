@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.policy.domain;
 
 import lombok.*;
 
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;

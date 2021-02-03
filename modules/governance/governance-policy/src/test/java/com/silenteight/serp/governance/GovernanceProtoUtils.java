@@ -1,9 +1,9 @@
 package com.silenteight.serp.governance;
 
-import com.silenteight.proto.governance.v1.api.Feature;
-import com.silenteight.proto.governance.v1.api.FeatureCollection;
-import com.silenteight.proto.governance.v1.api.FeatureVector;
-import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
+import com.silenteight.governance.api.v1.Feature;
+import com.silenteight.governance.api.v1.FeatureCollection;
+import com.silenteight.governance.api.v1.FeatureVector;
+import com.silenteight.governance.api.v1.SolveFeaturesRequest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,9 +13,9 @@ import static java.util.stream.Collectors.toList;
 
 public class GovernanceProtoUtils {
 
-  public static GetSolutionsRequest solutionsRequest(
+  public static SolveFeaturesRequest solveFeaturesRequest(
       FeatureCollection featureCollection, FeatureVector... featureVectors) {
-    return GetSolutionsRequest.newBuilder()
+    return SolveFeaturesRequest.newBuilder()
         .setFeatureCollection(featureCollection)
         .addAllFeatureVectors(asList(featureVectors))
         .build();

@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;

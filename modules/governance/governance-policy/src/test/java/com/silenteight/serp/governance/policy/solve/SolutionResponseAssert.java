@@ -1,26 +1,26 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
-import com.silenteight.proto.governance.v1.api.SolutionResponse;
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
+import com.silenteight.governance.api.v1.SolutionResponse;
 
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-import static com.silenteight.governance.protocol.utils.Uuids.fromJavaUuid;
+import static com.silenteight.governance.api.utils.Uuids.fromJavaUuid;
 
 public class SolutionResponseAssert extends
     AbstractAssert<SolutionResponseAssert, SolutionResponse> {
 
   @Nullable
-  private final GetSolutionsResponseAssert parent;
+  private final SolveFeaturesResponseAssert parent;
 
   SolutionResponseAssert(SolutionResponse solutionResponse) {
     this(solutionResponse, null);
   }
 
-  SolutionResponseAssert(SolutionResponse solutionResponse, GetSolutionsResponseAssert parent) {
+  SolutionResponseAssert(SolutionResponse solutionResponse, SolveFeaturesResponseAssert parent) {
     super(solutionResponse, SolutionResponseAssert.class);
     this.parent = parent;
   }
@@ -55,7 +55,7 @@ public class SolutionResponseAssert extends
     return this;
   }
 
-  public GetSolutionsResponseAssert and() {
+  public SolveFeaturesResponseAssert and() {
     return parent;
   }
 }

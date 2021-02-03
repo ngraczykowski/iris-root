@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;

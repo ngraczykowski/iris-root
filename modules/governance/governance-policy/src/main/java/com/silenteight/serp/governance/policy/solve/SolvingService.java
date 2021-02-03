@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
 import java.util.Map;
 
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 
 @Slf4j
 public class SolvingService {

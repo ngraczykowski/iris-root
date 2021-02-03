@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.analytics.listener;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolvedEvent;
+import com.silenteight.governance.api.v1.FeatureVectorSolvedEvent;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;

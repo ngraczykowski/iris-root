@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.proto.governance.v1.api.GetSolutionsRequest;
-import com.silenteight.proto.governance.v1.api.GetSolutionsResponse;
+import com.silenteight.governance.api.v1.SolveFeaturesRequest;
+import com.silenteight.governance.api.v1.SolveFeaturesResponse;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
 import com.silenteight.serp.governance.common.signature.SignatureCalculator;
@@ -17,12 +17,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_NO_DECISION;
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureCollection;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureVector;
-import static com.silenteight.serp.governance.GovernanceProtoUtils.solutionsRequest;
+import static com.silenteight.serp.governance.GovernanceProtoUtils.solveFeaturesRequest;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
@@ -55,16 +55,16 @@ class SolveUseCaseTest {
     // given
     List<Step> steps = defaultStepsConfiguration();
     when(stepPolicyFactory.get()).thenReturn(steps);
-    GetSolutionsRequest solutionsRequest = solutionsRequest(
+    SolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
         featureCollection("nameAgent", "dateAgent"),
         featureVector("PERFECT_MATCH", "EXACT"),
         featureVector("WEAK_MATCH", "WEAK"));
 
     // when
-    GetSolutionsResponse response = underTest.solve(solutionsRequest);
+    SolveFeaturesResponse response = underTest.solve(solutionsRequest);
 
     // then
-    GetSolutionsResponseAssert.assertThat(response)
+    SolveFeaturesResponseAssert.assertThat(response)
         .hasSolutionsCount(2)
         .solution(0)
         .hasStepId(STEP_ID_2)
@@ -80,15 +80,15 @@ class SolveUseCaseTest {
     // given
     List<Step> steps = defaultStepsConfiguration();
     when(stepPolicyFactory.get()).thenReturn(steps);
-    GetSolutionsRequest solutionsRequest = solutionsRequest(
+    SolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
         featureCollection("nameAgent"),
         featureVector("OUT_OF_RANGE"));
 
     // when
-    GetSolutionsResponse response = underTest.solve(solutionsRequest);
+    SolveFeaturesResponse response = underTest.solve(solutionsRequest);
 
     // then
-    GetSolutionsResponseAssert.assertThat(response)
+    SolveFeaturesResponseAssert.assertThat(response)
         .hasSolutionsCount(1)
         .solution(0)
         .hasNoStepId()
@@ -100,7 +100,7 @@ class SolveUseCaseTest {
     // given
     List<Step> steps = defaultStepsConfiguration();
     when(stepPolicyFactory.get()).thenReturn(steps);
-    GetSolutionsRequest solutionsRequest = solutionsRequest(
+    SolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
         featureCollection("nameAgent"),
         featureVector("OUT_OF_RANGE"));
 

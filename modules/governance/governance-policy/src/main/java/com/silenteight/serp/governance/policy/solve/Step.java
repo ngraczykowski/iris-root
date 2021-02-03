@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.policy.solve;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
 import java.util.Collection;

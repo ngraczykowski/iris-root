@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.policy.step;
 
-import com.silenteight.proto.governance.v1.api.FeatureVectorSolution;
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Import;
 
 import java.util.UUID;
 
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.proto.governance.v1.api.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.dto.Solution.of;
