@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.governance.api.v1.SolutionResponse;
+import com.silenteight.serp.governance.common.signature.Signature;
 
 import org.assertj.core.api.AbstractAssert;
 
@@ -50,6 +51,15 @@ public class SolutionResponseAssert extends
     if (!actual.getFeatureVectorSolution().equals(solution)) {
       failWithMessage("Expected solution to be <%s>, but was <%s>",
           solution, actual.getFeatureVectorSolution());
+    }
+
+    return this;
+  }
+
+  public SolutionResponseAssert hasVectorSignature(Signature signature) {
+    if (!actual.getFeatureVectorSignature().equals(signature.getValue())) {
+      failWithMessage("Expected signature to be <%s>, but was <%s>",
+          signature, new Signature(actual.getFeatureVectorSignature()));
     }
 
     return this;
