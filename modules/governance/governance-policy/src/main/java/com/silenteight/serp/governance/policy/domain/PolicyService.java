@@ -43,7 +43,7 @@ public class PolicyService {
 
     Policy policy = addPolicy(
         policyId, request.getPolicyName(), request.getDescription(), request.getCreatedBy());
-    configureImportedSteps(policy, request.getStepConfigurations());
+    configureImportedSteps(policy, request.getStepConfigurations(), request.getCreatedBy());
     policy.save();
     Policy savedPolicy = policyRepository.save(policy);
 
@@ -67,14 +67,16 @@ public class PolicyService {
     auditingLogger.log(auditDataDto);
   }
 
-  private void configureImportedSteps(Policy policy, List<StepConfiguration> configurations) {
+  private void configureImportedSteps(
+      Policy policy, List<StepConfiguration> configurations, String createdBy) {
+
     range(0, configurations.size())
         .boxed()
-        .forEach(i -> configureImportedStep(policy, configurations.get(i), i));
+        .forEach(i -> configureImportedStep(policy, configurations.get(i), i, createdBy));
   }
 
   private void configureImportedStep(
-      Policy policy, StepConfiguration configuration, int sortOrder) {
+      Policy policy, StepConfiguration configuration, int sortOrder, String createdBy) {
 
     UUID stepId = UUID.randomUUID();
     doAddStepToPolicy(
@@ -84,7 +86,8 @@ public class PolicyService {
         configuration.getStepName(),
         configuration.getStepDescription(),
         configuration.getStepType(),
-        sortOrder);
+        sortOrder,
+        createdBy);
     doConfigureStepLogic(
         policy, stepId, configuration.getFeatureLogicConfigurations());
   }
@@ -108,10 +111,12 @@ public class PolicyService {
       @NonNull String stepName,
       String stepDescription,
       @NonNull StepType stepType,
-      int sortOrder) {
+      int sortOrder,
+      String createdBy) {
 
     Policy policy = policyRepository.getByPolicyId(policyId);
-    doAddStepToPolicy(policy, solution, stepId, stepName, stepDescription, stepType, sortOrder);
+    doAddStepToPolicy(
+        policy, solution, stepId, stepName, stepDescription, stepType, sortOrder, createdBy);
   }
 
   @NotNull
@@ -122,9 +127,11 @@ public class PolicyService {
       @NonNull String stepName,
       String stepDescription,
       @NonNull StepType stepType,
-      int sortOrder) {
+      int sortOrder,
+      String createdBy) {
 
-    Step step = new Step(solution, stepId, stepName, stepDescription, stepType, sortOrder);
+    Step step = new Step(
+        solution, stepId, stepName, stepDescription, stepType, sortOrder, createdBy);
     policy.addStep(step);
     return step;
   }
