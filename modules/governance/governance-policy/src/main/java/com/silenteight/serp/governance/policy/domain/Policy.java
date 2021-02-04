@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static javax.persistence.CascadeType.ALL;
 
@@ -94,6 +95,15 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
   void save() {
     assertState(DRAFT);
+    setState(SAVED);
+  }
+
+  void use() {
+    assertState(SAVED);
+    setState(IN_USE);
+  }
+
+  void stopUsing() {
     setState(SAVED);
   }
 

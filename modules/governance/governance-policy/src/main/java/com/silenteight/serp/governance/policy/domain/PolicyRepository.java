@@ -21,4 +21,6 @@ interface PolicyRepository extends Repository<Policy, Long> {
 
   @Query("select p.id from Policy p where p.policyId = :policyId")
   Long getIdByPolicyId(UUID policyId);
+
+  Optional<Policy> findByStateEquals(PolicyState policyState);
 }

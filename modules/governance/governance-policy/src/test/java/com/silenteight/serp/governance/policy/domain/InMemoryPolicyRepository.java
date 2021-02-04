@@ -38,4 +38,9 @@ public class InMemoryPolicyRepository extends BasicInMemoryRepository<Policy>
   public Long getIdByPolicyId(UUID policyId) {
     return getByPolicyId(policyId).getId();
   }
+
+  @Override
+  public Optional<Policy> findByStateEquals(PolicyState policyState) {
+    return Optional.empty();
+  }
 }

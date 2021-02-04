@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.event.EventListener;
 
 import java.util.ArrayList;
@@ -21,6 +20,8 @@ class InUsePolicyStepsSupplier implements StepsConfigurationSupplier, InUsePolic
   @NonNull
   private final PolicyStepsConfigurationQuery stepsConfigurationQuery;
   @NonNull
+  private final InUsePolicyQuery inUsePolicyQuery;
+  @NonNull
   private final StepMapper stepMapper;
 
   private List<Step> steps = new ArrayList<>();
@@ -32,17 +33,16 @@ class InUsePolicyStepsSupplier implements StepsConfigurationSupplier, InUsePolic
 
   @EventListener
   public void handle(PolicyPromotedEvent event) {
-    steps = loadSteps(event.getPolicyId());
+    loadSteps(event.getPolicyId());
   }
 
   @Override
   public void loadInUsePolicy() {
-    // TODO(kdzieciol): load in use policy https://silent8.atlassian.net/browse/WEB-462
+    inUsePolicyQuery.getPolicyInUse().ifPresent(this::loadSteps);
   }
 
-  @NotNull
-  private List<Step> loadSteps(UUID policyId) {
-    return stepsConfigurationQuery
+  private void loadSteps(UUID policyId) {
+    steps = stepsConfigurationQuery
         .listStepsConfiguration(policyId)
         .stream()
         .map(stepMapper::map)

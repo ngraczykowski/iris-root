@@ -28,12 +28,16 @@ class PolicyPromotedEventHandlerTest {
   @Mock
   private PolicyStepsConfigurationQuery stepsConfigurationQuery;
 
+  @Mock
+  private InUsePolicyQuery inUsePolicyQuery;
+
   private InUsePolicyStepsSupplier underTest;
 
   @BeforeEach
   void setUp() {
     SolveConfiguration configuration = new SolveConfiguration();
-    this.underTest = configuration.inUsePolicyStepsSupplier(stepsConfigurationQuery);
+    this.underTest = configuration.inUsePolicyStepsSupplier(
+        stepsConfigurationQuery, inUsePolicyQuery);
   }
 
   @Test

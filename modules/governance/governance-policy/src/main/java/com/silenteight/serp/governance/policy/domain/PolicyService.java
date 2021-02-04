@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
+import static java.util.Set.of;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
@@ -44,9 +46,9 @@ public class PolicyService {
     Policy policy = addPolicy(
         policyId, request.getPolicyName(), request.getDescription(), request.getCreatedBy());
     configureImportedSteps(policy, request.getStepConfigurations(), request.getCreatedBy());
-    policy.save();
     Policy savedPolicy = policyRepository.save(policy);
-
+    savePolicy(policyId);
+    usePolicy(policyId);
     eventPublisher.publishEvent(new PolicyCreatedEvent(savedPolicy.getPolicyId(), correlationId));
     return savedPolicy.getPolicyId();
   }
@@ -186,5 +188,11 @@ public class PolicyService {
     Policy policy = policyRepository.getByPolicyId(policyId);
     policy.save();
     policyRepository.save(policy);
+  }
+
+  @Transactional
+  public void usePolicy(@NonNull UUID policyId) {
+    policyRepository.findAllByStateIn(of(IN_USE)).forEach(Policy::stopUsing);
+    policyRepository.findByPolicyId(policyId).ifPresent(Policy::use);
   }
 }

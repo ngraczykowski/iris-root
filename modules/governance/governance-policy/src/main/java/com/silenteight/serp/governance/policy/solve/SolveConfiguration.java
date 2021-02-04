@@ -34,8 +34,8 @@ class SolveConfiguration {
 
   @Bean()
   InUsePolicyStepsSupplier inUsePolicyStepsSupplier(
-      PolicyStepsConfigurationQuery stepsConfigurationQuery) {
-    return new InUsePolicyStepsSupplier(stepsConfigurationQuery, stepMapper());
+      PolicyStepsConfigurationQuery stepsConfigurationQuery, InUsePolicyQuery inUsePolicyQuery) {
+    return new InUsePolicyStepsSupplier(stepsConfigurationQuery, inUsePolicyQuery, stepMapper());
   }
 
   @Bean

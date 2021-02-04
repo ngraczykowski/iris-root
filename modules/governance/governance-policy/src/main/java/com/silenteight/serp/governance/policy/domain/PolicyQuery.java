@@ -5,17 +5,21 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.list.ListPolicyRequestQuery;
+import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
+import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class PolicyQuery implements ListPolicyRequestQuery {
+class PolicyQuery implements ListPolicyRequestQuery, InUsePolicyQuery {
 
   @NonNull
   private final PolicyRepository policyRepository;
@@ -37,5 +41,10 @@ class PolicyQuery implements ListPolicyRequestQuery {
         .stream()
         .map(Policy::toDto)
         .collect(toList());
+  }
+
+  @Override
+  public Optional<UUID> getPolicyInUse() {
+    return policyRepository.findByStateEquals(IN_USE).map(Policy::getPolicyId);
   }
 }
