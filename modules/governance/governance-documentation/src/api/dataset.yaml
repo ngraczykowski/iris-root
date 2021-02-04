@@ -74,7 +74,7 @@ components:
         name: 'Dataset name'
         description: 'Dataset description'
         query:
-          processingDate:
+          alertGenerationDate:
             from: '2004-02-12T15:19:21Z'
             to: '2005-02-12T15:19:21Z'
         updatedAt: '2004-02-12T15:19:21Z'
@@ -104,18 +104,18 @@ components:
         name: 'New dataset'
         description: 'Dataset description'
         query:
-          range:
+          alertGenerationDate:
             from: '2004-02-12T15:19:21Z'
             to: '2005-02-12T15:19:21Z'
 
     Query:
       type: object
       properties:
-        range:
+        alertGenerationDate:
           type: object
           $ref: '#components/schemas/RangeQuery'
       example:
-        range:
+        alertGenerationDate:
           from: '2004-02-12T15:19:21Z'
           to: '2005-02-12T15:19:21Z'
 
