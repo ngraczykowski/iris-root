@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.common.signature;
 
 import javax.persistence.AttributeConverter;
 
-import static com.silenteight.sep.base.common.protocol.ByteStringUtils.fromBase64String;
 import static com.silenteight.sep.base.common.protocol.ByteStringUtils.toBase64String;
 
 public class SignatureConverter implements AttributeConverter<Signature, String> {
@@ -16,10 +15,10 @@ public class SignatureConverter implements AttributeConverter<Signature, String>
   }
 
   @Override
-  public Signature convertToEntityAttribute(String dbData) {
-    if (dbData == null)
+  public Signature convertToEntityAttribute(String value) {
+    if (value == null)
       return null;
 
-    return new Signature(fromBase64String(dbData));
+    return Signature.fromBase64(value);
   }
 }
