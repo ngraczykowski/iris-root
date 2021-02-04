@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
@@ -46,7 +46,7 @@ class PolicyServiceTest {
   }
 
   @Test
-  void createPolicy() {
+  void importPolicy() {
     // given
     String featureName = "nameAgent";
     Collection<String> featureValues = List.of("EXACT_MATCH", "NEAR_MATCH");
@@ -96,7 +96,7 @@ class PolicyServiceTest {
 
     var policy = policyRepository.getByPolicyId(policyId);
     assertThat(policy.getName()).isEqualTo(policyName);
-    assertThat(policy.getState()).isEqualTo(SAVED);
+    assertThat(policy.getState()).isEqualTo(IN_USE);
     assertThat(policy.getPolicyId()).isEqualTo(policyId);
     assertThat(policy.getCreatedBy()).isEqualTo(creator);
     assertThat(policy.getUpdatedBy()).isEqualTo(creator);
