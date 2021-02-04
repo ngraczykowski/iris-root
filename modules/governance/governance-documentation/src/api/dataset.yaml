@@ -44,7 +44,7 @@ components:
 
     DatasetState:
       type: string
-      enum: [ current, archived ]
+      enum: [ CURRENT, ARCHIVED ]
 
     DatasetValue:
       type: object
@@ -60,6 +60,8 @@ components:
         query:
           type: object
           $ref: '#/components/schemas/Query'
+        alertsCount:
+          type: number
         updatedAt:
           type: string
         updatedBy:
@@ -77,6 +79,7 @@ components:
           alertGenerationDate:
             from: '2004-02-12T15:19:21Z'
             to: '2005-02-12T15:19:21Z'
+        alertsCount: 75303
         updatedAt: '2004-02-12T15:19:21Z'
         updatedBy: 'UserName'
         createdAt: '2004-02-15T15:19:21Z'
