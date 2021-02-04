@@ -42,6 +42,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   private static final String FEATURE_NAME_2 = "name";
   private static final String FEATURE_NAME_3 = "dob";
   private static final String FEATURE_NAME_4 = "doc";
+  private static final String USER_NAME = "user";
 
   private FeaturesLogicQuery underTest;
 
@@ -72,7 +73,8 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         STEP_NAME,
         STEP_DESC,
         STEP_TYPE,
-        0);
+        0,
+        USER_NAME);
 
     FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
 
@@ -90,7 +92,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         STEP_NAME,
         STEP_DESC,
         STEP_TYPE,
-        0);
+        0, "user");
     FeatureLogicConfiguration firstLogic = FeatureLogicConfiguration
         .builder()
         .count(1)

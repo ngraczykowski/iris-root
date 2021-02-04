@@ -57,6 +57,14 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
   @Column(nullable = false)
   private Integer sortOrder;
 
+  @ToString.Include
+  @Column(name = "created_by", nullable = false)
+  private String createdBy;
+
+  @ToString.Include
+  @Column(name = "updated_by", nullable = false)
+  private String updatedBy;
+
   @OneToMany(cascade = ALL, orphanRemoval = true)
   @JoinColumn(name = "step_id", updatable = false, nullable = false)
   private Collection<FeatureLogic> featureLogics = new ArrayList<>();
@@ -67,7 +75,8 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
       String name,
       String description,
       StepType type,
-      Integer sortOrder) {
+      Integer sortOrder,
+      String createdBy) {
 
     this.solution = solution;
     this.stepId = stepId;
@@ -75,6 +84,8 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
     this.description = description;
     this.type = type;
     this.sortOrder = sortOrder;
+    this.createdBy = createdBy;
+    this.updatedBy = createdBy;
   }
 
   boolean hasStepId(UUID stepId) {
@@ -87,17 +98,23 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
   }
 
   StepDto toDto() {
-    return StepDto.builder()
+    return StepDto
+        .builder()
         .id(getStepId())
         .solution(Solution.of(getSolution()))
         .name(getName())
         .description(getDescription())
         .type(getType())
+        .createdBy(getCreatedBy())
+        .createdAt(getCreatedAt())
+        .updatedBy(getUpdatedBy())
+        .updatedAt(getLastModifyAt())
         .build();
   }
 
   StepConfigurationDto toConfigurationDto() {
-    return StepConfigurationDto.builder()
+    return StepConfigurationDto
+        .builder()
         .id(getStepId())
         .solution(getSolution())
         .featureLogics(featureLogicsToConfigurationDto())

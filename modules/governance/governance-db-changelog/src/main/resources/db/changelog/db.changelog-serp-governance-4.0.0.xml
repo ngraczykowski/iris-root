@@ -235,5 +235,16 @@
       <column name="vector_signature"/>
     </createIndex>
   </changeSet>
+  
+  <changeSet id="serp-governance-4.0.0-7" author="kdzieciol">
+    <addColumn tableName="governance_policy_step">
+      <column name="created_by" type="VARCHAR(64)" defaultValue="migration">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_by" type="VARCHAR(64)" defaultValue="migration">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 
 </databaseChangeLog>
