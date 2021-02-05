@@ -117,7 +117,7 @@ class PolicyServiceTest {
     assertThat(feature.getName()).isEqualTo(featureName);
     assertThat(feature.getValues()).isEqualTo(featureValues);
 
-    var eventCaptor = ArgumentCaptor.forClass(PolicyCreatedEvent.class);
+    var eventCaptor = ArgumentCaptor.forClass(PolicyImportedEvent.class);
 
     verify(eventPublisher).publishEvent(eventCaptor.capture());
 

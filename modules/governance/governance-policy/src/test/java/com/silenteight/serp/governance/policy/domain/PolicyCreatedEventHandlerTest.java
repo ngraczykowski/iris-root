@@ -34,7 +34,7 @@ class PolicyCreatedEventHandlerTest {
     var correlationId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
 
     // when
-    underTest.handle(new PolicyCreatedEvent(policyId, correlationId));
+    underTest.handle(new PolicyImportedEvent(policyId, correlationId));
 
     // then
     var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);

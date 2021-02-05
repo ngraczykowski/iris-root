@@ -5,6 +5,9 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.exception.StepNotFoundException;
+import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateChangeException;
+import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,7 +78,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
         .description(getDescription())
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
-        .updatedAt(getUpdatedAt())
+        .updatedAt(getLastModifyAt())
         .updatedBy(getUpdatedBy())
         .build();
   }
@@ -94,12 +97,12 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   }
 
   void save() {
-    assertState(DRAFT);
+    assertAllowedStateChange(DRAFT, SAVED);
     setState(SAVED);
   }
 
   void use() {
-    assertState(SAVED);
+    assertAllowedStateChange(SAVED, IN_USE);
     setState(IN_USE);
   }
 
@@ -107,9 +110,24 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     setState(SAVED);
   }
 
-  private void assertState(PolicyState state) {
+  private void assertAllowedStateChange(PolicyState state, PolicyState desirable) {
     if (notInState(state))
-      throw new WrongPolicyStateException(getPolicyId(), getState(), SAVED);
+      throw new WrongPolicyStateChangeException(getPolicyId(), getState(), desirable);
+  }
+
+  public void setName(String name) {
+    assertEditState();
+    this.name = name;
+  }
+
+  public void setDescription(String description) {
+    assertEditState();
+    this.description = description;
+  }
+
+  private void assertEditState() {
+    if (notInState(DRAFT))
+      throw new WrongPolicyStateException(getPolicyId(), getState());
   }
 
   private boolean notInState(PolicyState state) {

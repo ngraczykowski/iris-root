@@ -5,7 +5,7 @@ import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
 import java.util.Collection;
 
-public interface ListPolicyRequestQuery {
+public interface ListPoliciesRequestQuery {
 
   Collection<PolicyDto> list(Collection<PolicyState> states);
 

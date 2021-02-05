@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
+import static java.util.Optional.ofNullable;
 import static java.util.Set.of;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
@@ -43,13 +44,13 @@ public class PolicyService {
     UUID policyId = randomUUID();
     logPolicyCreateRequested(request, policyId, correlationId);
 
-    Policy policy = addPolicy(
+    Policy policy = addPolicyInternal(
         policyId, request.getPolicyName(), request.getDescription(), request.getCreatedBy());
     configureImportedSteps(policy, request.getStepConfigurations(), request.getCreatedBy());
     Policy savedPolicy = policyRepository.save(policy);
-    savePolicy(policyId);
-    usePolicy(policyId);
-    eventPublisher.publishEvent(new PolicyCreatedEvent(savedPolicy.getPolicyId(), correlationId));
+    savePolicy(policyId, request.getCreatedBy());
+    usePolicy(policyId, request.getCreatedBy());
+    eventPublisher.publishEvent(new PolicyImportedEvent(savedPolicy.getPolicyId(), correlationId));
     return savedPolicy.getPolicyId();
   }
 
@@ -94,8 +95,15 @@ public class PolicyService {
         policy, stepId, configuration.getFeatureLogicConfigurations());
   }
 
+  public UUID addPolicy(
+      @NonNull UUID policyId,
+      @NonNull String policyName,
+      @NonNull String createdBy) {
+    return addPolicyInternal(policyId, policyName, null, createdBy).getPolicyId();
+  }
+
   @NotNull
-  public Policy addPolicy(
+  Policy addPolicyInternal(
       @NonNull UUID policyId,
       @NonNull String policyName,
       String description,
@@ -184,15 +192,39 @@ public class PolicyService {
         configuration.getName(), configuration.getCondition(), configuration.getValues());
   }
 
-  void savePolicy(@NonNull UUID policyId) {
+  @Transactional
+  public void savePolicy(@NonNull UUID policyId, @NonNull String savedBy) {
     Policy policy = policyRepository.getByPolicyId(policyId);
     policy.save();
+    policy.setUpdatedBy(savedBy);
     policyRepository.save(policy);
   }
 
   @Transactional
-  public void usePolicy(@NonNull UUID policyId) {
-    policyRepository.findAllByStateIn(of(IN_USE)).forEach(Policy::stopUsing);
-    policyRepository.findByPolicyId(policyId).ifPresent(Policy::use);
+  public void usePolicy(@NonNull UUID policyId, @NonNull String activatedBy) {
+    stopUsingOtherPolicies(activatedBy);
+    useSelectedPolicy(policyId, activatedBy);
+  }
+
+  private void stopUsingOtherPolicies(String activatedBy) {
+    policyRepository.findAllByStateIn(of(IN_USE)).forEach(policy -> {
+      policy.stopUsing();
+      policy.setUpdatedBy(activatedBy);
+    });
+  }
+
+  private void useSelectedPolicy(UUID policyId, String activatedBy) {
+    policyRepository.findByPolicyId(policyId).ifPresent(policy -> {
+      policy.use();
+      policy.setUpdatedBy(activatedBy);
+    });
+  }
+
+  @Transactional
+  public void updatePolicy(UUID id, String name, String description, String updatedBy) {
+    Policy policy = policyRepository.getByPolicyId(id);
+    ofNullable(name).ifPresent(policy::setName);
+    ofNullable(description).ifPresent(policy::setDescription);
+    policy.setUpdatedBy(updatedBy);
   }
 }

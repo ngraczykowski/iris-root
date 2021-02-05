@@ -65,7 +65,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   @Test
   void listLogicShouldReturnEmpty_whenNothingIsSaved() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,
@@ -84,7 +84,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   @Test
   void listLogicShouldReturnLogic_whenLogicIsSaved() {
     policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
+        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,

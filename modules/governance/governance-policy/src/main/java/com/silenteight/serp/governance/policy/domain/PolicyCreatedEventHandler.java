@@ -25,7 +25,7 @@ class PolicyCreatedEventHandler {
   private final ApplicationEventPublisher eventPublisher;
 
   @EventListener
-  public void handle(PolicyCreatedEvent event) {
+  public void handle(PolicyImportedEvent event) {
     logPolicyCreated(event.getPolicyId(), event.getCorrelationId());
     eventPublisher.publishEvent(new PolicyPromotedEvent(event.getPolicyId()));
   }
