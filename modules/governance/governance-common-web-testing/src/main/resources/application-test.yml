@@ -9,6 +9,11 @@ sep.auth:
       - "LIST_STEPS"
       - "LIST_STEP_FEATURE_VECTORS"
 
+    MANAGE_POLICY:
+      - "CREATE_POLICY"
+      - "EDIT_POLICY"
+
   rolePermissionsMappings:
     POLICY_MANAGER:
       - "VIEW_POLICIES"
+      - "MANAGE_POLICY"

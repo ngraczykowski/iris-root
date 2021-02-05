@@ -36,4 +36,5 @@ dependencies {
 
   testImplementation project(":governance-db-changelog")
   testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libraries.spring_security_test
 }

@@ -26,17 +26,17 @@ import static java.util.List.of;
 public class ListPolicyRequestRestController {
 
   @NonNull
-  private final ListPolicyRequestQuery savedPolicyRequestQuery;
+  private final ListPoliciesRequestQuery listPolicyRequestQuery;
 
   @GetMapping(value = "/v1/policies")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
   public ResponseEntity<Collection<PolicyDto>> list() {
-    return ResponseEntity.ok(savedPolicyRequestQuery.listAll());
+    return ResponseEntity.ok(listPolicyRequestQuery.listAll());
   }
 
   @GetMapping(value = "/v1/policies", params = "state")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
   public ResponseEntity<Collection<PolicyDto>> list(@RequestParam PolicyState... state) {
-    return ResponseEntity.ok(savedPolicyRequestQuery.list(of(state)));
+    return ResponseEntity.ok(listPolicyRequestQuery.list(of(state)));
   }
 }

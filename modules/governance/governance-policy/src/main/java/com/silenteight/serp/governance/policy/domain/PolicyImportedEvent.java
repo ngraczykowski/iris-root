@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class PolicyCreatedEvent extends BaseEvent {
+public class PolicyImportedEvent extends BaseEvent {
 
   private static final long serialVersionUID = 3659156581203579225L;
 

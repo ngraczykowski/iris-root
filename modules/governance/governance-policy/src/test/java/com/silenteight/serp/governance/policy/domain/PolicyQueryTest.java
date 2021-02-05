@@ -78,13 +78,13 @@ class PolicyQueryTest extends BaseDataJpaTest {
   private Policy createSavedPolicy(
       UUID uuid, String name, String description, String createdBy) {
     Policy result = createDraftPolicy(uuid, name, description, createdBy);
-    policyService.savePolicy(uuid);
+    policyService.savePolicy(uuid, createdBy);
     return result;
   }
 
   @NotNull
   private Policy createDraftPolicy(
       UUID uuid, String name, String description, String createdBy) {
-    return policyService.addPolicy(uuid, name, description, createdBy);
+    return policyService.addPolicyInternal(uuid, name, description, createdBy);
   }
 }

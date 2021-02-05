@@ -57,11 +57,11 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @MockBean
-  private ListPolicyRequestQuery savedPolicyRequestQuery;
+  private ListPoliciesRequestQuery listPolicyRequestQuery;
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenNoPolicies() {
-    given(savedPolicyRequestQuery.list(of(SAVED))).willReturn(of());
+    given(listPolicyRequestQuery.list(of(SAVED))).willReturn(of());
 
     get(SAVED_POLICY_URL)
         .contentType(anything())
@@ -76,7 +76,7 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenNoFilterAndPoliciesFound() {
-    given(savedPolicyRequestQuery.listAll()).willReturn(of(FIRST_POLICY_DTO));
+    given(listPolicyRequestQuery.listAll()).willReturn(of(FIRST_POLICY_DTO));
 
     get(NO_FILTER_POLICY_URL)
         .statusCode(OK.value())
@@ -92,7 +92,7 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenPoliciesFound() {
-    given(savedPolicyRequestQuery.list(of(SAVED))).willReturn(of(FIRST_POLICY_DTO));
+    given(listPolicyRequestQuery.list(of(SAVED))).willReturn(of(FIRST_POLICY_DTO));
 
     get(SAVED_POLICY_URL)
         .statusCode(OK.value())
@@ -108,7 +108,7 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenPoliciesFoundInTwoStates() {
-    given(savedPolicyRequestQuery.list(of(SAVED, DRAFT))).willReturn(
+    given(listPolicyRequestQuery.list(of(SAVED, DRAFT))).willReturn(
         of(FIRST_POLICY_DTO, SECOND_POLICY_DTO));
 
     get(TWO_STATES_POLICY_URL)
