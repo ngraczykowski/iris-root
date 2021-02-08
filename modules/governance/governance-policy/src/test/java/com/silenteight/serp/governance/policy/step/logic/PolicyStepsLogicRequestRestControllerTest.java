@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.step;
+package com.silenteight.serp.governance.policy.step.logic;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;

@@ -125,7 +125,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     this.description = description;
   }
 
-  private void assertEditState() {
+  void assertEditState() {
     if (notInState(DRAFT))
       throw new WrongPolicyStateException(getPolicyId(), getState());
   }

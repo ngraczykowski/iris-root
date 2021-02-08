@@ -10,6 +10,8 @@ import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.exception.StepsOrderListsSizeMismatch;
+import com.silenteight.serp.governance.policy.domain.exception.WrongIdsListInSetStepsOrder;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +21,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
@@ -226,5 +229,42 @@ public class PolicyService {
     ofNullable(name).ifPresent(policy::setName);
     ofNullable(description).ifPresent(policy::setDescription);
     policy.setUpdatedBy(updatedBy);
+  }
+
+  @Transactional
+  public void setStepsOrder(UUID id, List<UUID> stepsOrder, String user) {
+    Policy policy = policyRepository.getByPolicyId(id);
+    policy.assertEditState();
+    Collection<Step> steps = policy.getSteps();
+    assertSameSize(id, stepsOrder, steps);
+    assertSameUuids(id, steps, stepsOrder);
+    updateStepsOrder(stepsOrder, user, steps);
+    policyRepository.save(policy);
+  }
+
+  private void updateStepsOrder(List<UUID> stepsOrder, String user, Collection<Step> steps) {
+    steps.forEach(step -> updateOrderOfStep(stepsOrder, user, step));
+  }
+
+  private void updateOrderOfStep(List<UUID> stepsOrder, String user, Step step) {
+    step.setSortOrder(stepsOrder.indexOf(step.getStepId()));
+    step.setUpdatedBy(user);
+  }
+
+  private void assertSameSize(UUID id, List<UUID> requestedOrder, Collection<Step> steps) {
+    long dbStepsSize = steps.size();
+    int requestStepsSize = requestedOrder.size();
+    if (dbStepsSize != requestStepsSize)
+      throw new StepsOrderListsSizeMismatch(id, requestStepsSize, dbStepsSize);
+  }
+
+  private void assertSameUuids(UUID id, Collection<Step> steps, List<UUID> stepsOrder) {
+    Optional<Step> shouldBeEmpty = steps
+        .stream()
+        .filter(step -> !stepsOrder.contains(step.getStepId()))
+        .findAny();
+
+    if (shouldBeEmpty.isPresent())
+      throw new WrongIdsListInSetStepsOrder(id);
   }
 }

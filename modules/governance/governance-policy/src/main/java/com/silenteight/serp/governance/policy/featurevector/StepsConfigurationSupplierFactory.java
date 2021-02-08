@@ -7,7 +7,7 @@ import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.solve.ReconfigurableStepsConfigurationFactory;
 import com.silenteight.serp.governance.policy.solve.StepsConfigurationSupplier;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
-import com.silenteight.serp.governance.policy.step.PolicyStepsRequestQuery;
+import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import java.util.List;
 import java.util.UUID;

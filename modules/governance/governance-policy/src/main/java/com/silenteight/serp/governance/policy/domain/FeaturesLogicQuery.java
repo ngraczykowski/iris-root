@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
-import com.silenteight.serp.governance.policy.step.FeatureLogicRequestQuery;
+import com.silenteight.serp.governance.policy.step.logic.FeatureLogicRequestQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FeaturesLogicQuery implements FeatureLogicRequestQuery {
+class FeaturesLogicQuery implements FeatureLogicRequestQuery {
 
   private final StepRepository stepRepository;
   private final FeatureLogicRepository featureLogicRepository;

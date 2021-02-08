@@ -7,7 +7,12 @@ import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.exception.StepsOrderListsSizeMismatch;
+import com.silenteight.serp.governance.policy.domain.exception.WrongIdsListInSetStepsOrder;
+import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateChangeException;
+import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateException;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,19 +22,36 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
+import static com.silenteight.serp.governance.policy.domain.StepType.MANUAL_RULE;
 import static java.util.Collections.singletonList;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PolicyServiceTest {
+
+  private static final UUID POLICY_ID = UUID.randomUUID();
+  private static final String POLICY_NAME = "policy_name";
+  private static final String USER = "username";
+  private static final String OTHER_USER = "username2";
+  private static final String NEW_POLICY_NAME = "new name";
+  private static final String NEW_DESCRIPTION = "new description name";
+
+  private static final UUID FIRST_STEP = UUID.randomUUID();
+  private static final UUID SECOND_STEP = UUID.randomUUID();
+  private static final UUID THIRD_STEP = UUID.randomUUID();
+  private static final UUID OTHER_STEP = UUID.randomUUID();
+  private static final String STEP_NAME = "step name";
+  private static final String STEP_DESCRIPTION = "step description";
 
   private PolicyRepository policyRepository = new InMemoryPolicyRepository();
   @Mock
@@ -49,7 +71,7 @@ class PolicyServiceTest {
   void importPolicy() {
     // given
     String featureName = "nameAgent";
-    Collection<String> featureValues = List.of("EXACT_MATCH", "NEAR_MATCH");
+    Collection<String> featureValues = of("EXACT_MATCH", "NEAR_MATCH");
     int logicCount = 1;
     FeatureVectorSolution stepSolution = SOLUTION_FALSE_POSITIVE;
     String stepName = "step-1";
@@ -123,5 +145,150 @@ class PolicyServiceTest {
 
     var event = eventCaptor.getValue();
     assertThat(event.getPolicyId()).isEqualTo(policyId);
+  }
+
+  @Test
+  void savePolicyOnDraftWillChangeState() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    underTest.savePolicy(uuid, OTHER_USER);
+
+    policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(SAVED);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  @Test
+  void savePolicyOnNonDraftWillThrowException() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setState(SAVED);
+
+    assertThatExceptionOfType(WrongPolicyStateChangeException.class)
+        .isThrownBy(() -> underTest.savePolicy(uuid, OTHER_USER));
+  }
+
+  @Test
+  void usePolicyOnSaveWillChangeState() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setState(SAVED);
+
+    underTest.usePolicy(uuid, OTHER_USER);
+
+    policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(IN_USE);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  @Test
+  void usePolicyOnNonSaveWillThrowException() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    assertThatExceptionOfType(WrongPolicyStateChangeException.class)
+        .isThrownBy(() -> underTest.usePolicy(uuid, USER));
+  }
+
+  @Test
+  void updatePolicyOnDraftWillUpdatePolicy() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    underTest.updatePolicy(uuid, NEW_POLICY_NAME, NEW_DESCRIPTION, OTHER_USER);
+
+    policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getName()).isEqualTo(NEW_POLICY_NAME);
+    assertThat(policy.getDescription()).isEqualTo(NEW_DESCRIPTION);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  @Test
+  void updatePolicyOnNonDraftWillThrowException() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setState(SAVED);
+
+    assertThatExceptionOfType(WrongPolicyStateException.class)
+        .isThrownBy(() -> underTest.updatePolicy(uuid, NEW_POLICY_NAME, null, OTHER_USER));
+  }
+
+  @Test
+  void setStepsOrderOnDraftWillChangeOrder() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.addStep(createStep(FIRST_STEP, 0));
+    policy.addStep(createStep(SECOND_STEP, 1));
+    policy.addStep(createStep(THIRD_STEP, 2));
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    underTest.setStepsOrder(
+        uuid, of(THIRD_STEP, FIRST_STEP, SECOND_STEP), OTHER_USER);
+
+    policy = policyRepository.getByPolicyId(POLICY_ID);
+    assertStepOrder(policy, FIRST_STEP, 1);
+    assertStepOrder(policy, SECOND_STEP, 2);
+    assertStepOrder(policy, THIRD_STEP, 0);
+  }
+
+  private void assertStepOrder(Policy policy, UUID firstStep, int order) {
+    policy
+        .getSteps()
+        .stream()
+        .filter(step -> step.hasStepId(firstStep))
+        .findFirst()
+        .ifPresent(step -> assertThat(step.getSortOrder()).isEqualTo(order));
+  }
+
+  @Test
+  void setStepsOrderOnNonDraftWillThrowException() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setState(SAVED);
+
+    assertThatExceptionOfType(WrongPolicyStateException.class)
+        .isThrownBy(() -> underTest.setStepsOrder(
+            uuid, of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
+  }
+
+  @Test
+  void setStepsOrderOnDraftWithWrongStepsSizeWillThrowException() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    assertThatExceptionOfType(StepsOrderListsSizeMismatch.class)
+        .isThrownBy(() -> underTest.setStepsOrder(
+            uuid, of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
+  }
+
+  @Test
+  void setStepsOrderOnDraftWithWrongStepsWillThrowException() {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.addStep(createStep(FIRST_STEP, 0));
+    policy.addStep(createStep(SECOND_STEP, 1));
+    policy.addStep(createStep(THIRD_STEP, 2));
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    assertThatExceptionOfType(WrongIdsListInSetStepsOrder.class)
+        .isThrownBy(() -> underTest.setStepsOrder(
+            uuid, of(FIRST_STEP, SECOND_STEP, OTHER_STEP), OTHER_USER));
+  }
+
+  @NotNull
+  private Step createStep(UUID firstStep, int sortOrder) {
+    return new Step(
+        SOLUTION_FALSE_POSITIVE,
+        firstStep,
+        STEP_NAME,
+        STEP_DESCRIPTION,
+        MANUAL_RULE,
+        sortOrder,
+        USER);
   }
 }
