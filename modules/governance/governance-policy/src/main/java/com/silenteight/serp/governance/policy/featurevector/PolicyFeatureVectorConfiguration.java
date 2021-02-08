@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.policy.featurevector;
 import com.silenteight.serp.governance.policy.solve.ReconfigurableStepsConfigurationFactory;
 import com.silenteight.serp.governance.policy.solve.SolvingService;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
-import com.silenteight.serp.governance.policy.step.PolicyStepsRequestQuery;
+import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

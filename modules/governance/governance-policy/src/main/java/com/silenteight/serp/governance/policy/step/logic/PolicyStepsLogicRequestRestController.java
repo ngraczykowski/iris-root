@@ -1,10 +1,10 @@
-package com.silenteight.serp.governance.policy.step;
+package com.silenteight.serp.governance.policy.step.logic;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
@@ -22,14 +21,14 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
-class PolicyStepsRequestRestController {
+class PolicyStepsLogicRequestRestController {
 
   @NonNull
-  private final PolicyStepsRequestQuery policyStepsRequestQuery;
+  private final FeatureLogicRequestQuery policyStepsLogicRequestQuery;
 
-  @GetMapping(value = "/v1/policies/{id}/steps")
-  @PreAuthorize("isAuthorized('LIST_STEPS')")
-  public ResponseEntity<Collection<StepDto>> steps(@PathVariable UUID id) {
-    return ResponseEntity.ok(policyStepsRequestQuery.listSteps(id));
+  @GetMapping(value = "/v1/steps/{id}/logic")
+  @PreAuthorize("isAuthorized('LIST_STEPS_LOGIC')")
+  public ResponseEntity<FeaturesLogicDto> steps(@PathVariable UUID id) {
+    return ResponseEntity.ok(policyStepsLogicRequestQuery.listStepsFeaturesLogic(id));
   }
 }

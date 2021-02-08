@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.step;
+package com.silenteight.serp.governance.policy.step.logic;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
 

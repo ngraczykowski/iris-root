@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.step;
+package com.silenteight.serp.governance.policy.step.list;
 
 import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
