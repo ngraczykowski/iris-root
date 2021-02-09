@@ -87,13 +87,21 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     steps.add(step);
   }
 
-  void reconfigureStep(UUID stepId, Collection<FeatureLogic> featureLogics) {
+  void reconfigureStep(
+      @NonNull UUID stepId,
+      @NonNull Collection<FeatureLogic> featureLogics,
+      @NonNull String editedBy) {
+
+    assertEditState();
+    
     Step step = steps
         .stream()
         .filter(s -> s.hasStepId(stepId))
         .findFirst()
         .orElseThrow(() -> new StepNotFoundException(stepId));
+    step.setUpdatedBy(editedBy);
     step.reconfigure(featureLogics);
+    setUpdatedBy(editedBy);
   }
 
   void save() {

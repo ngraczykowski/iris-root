@@ -6,12 +6,11 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.governance.api.v1.FeatureVectorSolution;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
-import com.silenteight.serp.governance.policy.domain.exception.StepsOrderListsSizeMismatch;
-import com.silenteight.serp.governance.policy.domain.exception.WrongIdsListInSetStepsOrder;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.exception.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -42,7 +41,7 @@ public class PolicyService {
   private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
-  public UUID doImport(ImportPolicyRequest request) {
+  public UUID doImport(ConfigurePolicyRequest request) {
     UUID correlationId = randomUUID();
     UUID policyId = randomUUID();
     logPolicyCreateRequested(request, policyId, correlationId);
@@ -58,7 +57,7 @@ public class PolicyService {
   }
 
   private void logPolicyCreateRequested(
-      ImportPolicyRequest request, UUID policyId, UUID correlationId) {
+      ConfigurePolicyRequest request, UUID policyId, UUID correlationId) {
 
     AuditDataDto auditDataDto = AuditDataDto.builder()
         .correlationId(correlationId)
@@ -95,7 +94,7 @@ public class PolicyService {
         sortOrder,
         createdBy);
     doConfigureStepLogic(
-        policy, stepId, configuration.getFeatureLogicConfigurations());
+        policy, stepId, configuration.getFeatureLogicConfigurations(), createdBy);
   }
 
   public UUID addPolicy(
@@ -151,34 +150,58 @@ public class PolicyService {
 
   @Transactional
   public void configureStepLogic(
-      @NonNull UUID policyId,
+      @NonNull Long policyId,
       @NonNull UUID stepId,
-      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations) {
+      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations,
+      @NonNull String editedBy) {
 
-    Policy policy = policyRepository.getByPolicyId(policyId);
-    doConfigureStepLogic(policy, stepId, featureLogicConfigurations);
+    Policy policy = policyRepository.getById(policyId);
+    doConfigureStepLogic(policy, stepId, featureLogicConfigurations, editedBy);
   }
 
   private void doConfigureStepLogic(
       @NonNull Policy policy,
       @NonNull UUID stepId,
-      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations) {
+      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations,
+      @NonNull String editedBy) {
 
-    policy.reconfigureStep(stepId, mapToFeatureLogics(featureLogicConfigurations));
+    policy.reconfigureStep(
+        stepId, mapToFeatureLogics(stepId, featureLogicConfigurations), editedBy);
   }
 
   private static Collection<FeatureLogic> mapToFeatureLogics(
-      Collection<FeatureLogicConfiguration> configurations) {
+      @NonNull UUID stepId, Collection<FeatureLogicConfiguration> configurations) {
+
+    if (configurations.isEmpty())
+      throw new EmptyFeaturesLogicConfiguration(stepId);
 
     return configurations
         .stream()
-        .map(PolicyService::mapToFeatureLogic)
+        .map(configuration -> mapToFeatureLogic(stepId, configuration))
         .collect(toList());
   }
 
-  private static FeatureLogic mapToFeatureLogic(FeatureLogicConfiguration configuration) {
+  private static FeatureLogic mapToFeatureLogic(
+      @NonNull UUID stepId, FeatureLogicConfiguration configuration) {
+
+    assertFeatureConfigurationsNotEmpty(stepId, configuration.getFeatureConfigurations());
+    assertToFulfillValueIsCorrect(
+        stepId, configuration.getToFulfill(), configuration.getFeatureConfigurations().size());
+
     return new FeatureLogic(
-        configuration.getCount(), mapToFeatures(configuration.getFeatureConfigurations()));
+        configuration.getToFulfill(), mapToFeatures(configuration.getFeatureConfigurations()));
+  }
+
+  private static void assertFeatureConfigurationsNotEmpty(
+      UUID stepId, Collection<FeatureConfiguration> featureConfigurations) {
+
+    if (featureConfigurations.isEmpty())
+      throw new EmptyFeatureConfiguration(stepId);
+  }
+
+  private static void assertToFulfillValueIsCorrect(UUID stepId, int toFulfill, int maxSize) {
+    if (toFulfill > maxSize || toFulfill < 1)
+      throw new WrongToFulfillValue(stepId, toFulfill, maxSize);
   }
 
   private static Collection<MatchCondition> mapToFeatures(
@@ -191,8 +214,17 @@ public class PolicyService {
   }
 
   private static MatchCondition mapToFeature(FeatureConfiguration configuration) {
+    assertValueListNotEmpty(configuration.getName(), configuration.getValues());
+
     return new MatchCondition(
         configuration.getName(), configuration.getCondition(), configuration.getValues());
+  }
+
+  private static void assertValueListNotEmpty(
+      @NonNull String featureName, @NonNull Collection<String> values) {
+
+    if (values.isEmpty())
+      throw new EmptyMatchConditionValueException(featureName);
   }
 
   @Transactional

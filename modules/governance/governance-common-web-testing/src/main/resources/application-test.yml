@@ -13,7 +13,12 @@ sep.auth:
       - "CREATE_POLICY"
       - "EDIT_POLICY"
 
+    MANAGE_STEPS:
+      - "EDIT_STEPS_LOGIC"
+
   rolePermissionsMappings:
     POLICY_MANAGER:
       - "VIEW_POLICIES"
+      - "IMPORT_POLICY"
       - "MANAGE_POLICY"
+      - "MANAGE_STEPS"

@@ -1,10 +1,10 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -83,8 +83,8 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
 
   @Test
   void listLogicShouldReturnLogic_whenLogicIsSaved() {
-    policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+    Policy policy = policyService.addPolicyInternal(
+        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
         SOLUTION_NO_DECISION,
@@ -95,19 +95,20 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         0, "user");
     FeatureLogicConfiguration firstLogic = FeatureLogicConfiguration
         .builder()
-        .count(1)
+        .toFulfill(1)
         .featureConfigurations(of(getFeatureConfiguration(FEATURE_NAME_1, of(INDIVIDUAL))))
         .build();
     FeatureLogicConfiguration secondLogic = FeatureLogicConfiguration
         .builder()
-        .count(2)
+        .toFulfill(2)
         .featureConfigurations(of(
             getFeatureConfiguration(FEATURE_NAME_2, of(MATCH, HQ_NO_MATCH)),
             getFeatureConfiguration(FEATURE_NAME_3, of(MATCH)),
             getFeatureConfiguration(FEATURE_NAME_4, of(MATCH))))
         .build();
 
-    policyService.configureStepLogic(POLICY_UID, STEP_ID, of(firstLogic, secondLogic));
+    policyService.configureStepLogic(
+        policy.getId(), STEP_ID, of(firstLogic, secondLogic), USER_NAME);
 
     FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
 

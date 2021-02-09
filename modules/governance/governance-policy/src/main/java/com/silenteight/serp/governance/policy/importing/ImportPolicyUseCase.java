@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,10 +29,10 @@ public class ImportPolicyUseCase {
     return policyService.doImport(createRequest(root.getPolicy(), command.getImportedBy()));
   }
 
-  private static ImportPolicyRequest createRequest(
+  private static ConfigurePolicyRequest createRequest(
       @NonNull ImportedPolicy importedPolicy, @NonNull String createdBy) {
 
-    return ImportPolicyRequest
+    return ConfigurePolicyRequest
         .builder()
         .policyName(importedPolicy.getName())
         .description(importedPolicy.getDescription())
@@ -76,7 +76,7 @@ public class ImportPolicyUseCase {
 
     return FeatureLogicConfiguration
         .builder()
-        .count(importedFeatureLogic.getToFulfill())
+        .toFulfill(importedFeatureLogic.getToFulfill())
         .featureConfigurations(
             mapToFeatureConfigurations(importedFeatureLogic.getMatchConditions()))
         .build();

@@ -3,14 +3,11 @@ package com.silenteight.serp.governance.policy.domain;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.governance.api.v1.FeatureVectorSolution;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.StepConfiguration;
-import com.silenteight.serp.governance.policy.domain.exception.StepsOrderListsSizeMismatch;
-import com.silenteight.serp.governance.policy.domain.exception.WrongIdsListInSetStepsOrder;
-import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateChangeException;
-import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateException;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.exception.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
@@ -79,12 +77,12 @@ class PolicyServiceTest {
     StepType stepType = BUSINESS_LOGIC;
     String policyName = "policy-name";
     String creator = "asmith";
-    FeatureConfiguration featureConfiguration = FeatureConfiguration
-        .builder().name(featureName).condition(IS).values(featureValues).build();
+    List<FeatureConfiguration> featureConfiguration = getFeatureConfiguration(
+        featureName, featureValues);
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
         .builder()
-        .count(logicCount)
-        .featureConfigurations(singletonList(featureConfiguration))
+        .toFulfill(logicCount)
+        .featureConfigurations(featureConfiguration)
         .build();
     StepConfiguration stepConfiguration = StepConfiguration
         .builder()
@@ -94,7 +92,7 @@ class PolicyServiceTest {
         .stepType(stepType)
         .featureLogicConfigurations(singletonList(featureLogicConfiguration))
         .build();
-    ImportPolicyRequest request = ImportPolicyRequest
+    ConfigurePolicyRequest request = ConfigurePolicyRequest
         .builder()
         .policyName(policyName)
         .createdBy(creator)
@@ -148,9 +146,89 @@ class PolicyServiceTest {
   }
 
   @Test
+  void configureStepWithZeroFeatureConfigurationWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+
+    Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
+        0, of());
+    assertThatExceptionOfType(EmptyFeatureConfiguration.class)
+        .isThrownBy(() -> underTest.configureStepLogic(
+            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+  }
+
+  @Test
+  void configureStepWithZeroFeaturesConfigurationWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+
+    assertThatExceptionOfType(EmptyFeaturesLogicConfiguration.class)
+        .isThrownBy(() -> underTest.configureStepLogic(
+            policy.getId(), FIRST_STEP, of(), USER));
+  }
+
+  @Test
+  void configureStepWithZeroMatchConditionValuesWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+    Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
+        1, getFeatureConfiguration("name", of()));
+
+    assertThatExceptionOfType(EmptyMatchConditionValueException.class)
+        .isThrownBy(() -> underTest.configureStepLogic(
+            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+  }
+
+  @Test
+  void configureStepWithZeroInToFulfillValueWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+    Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
+        0, getFeatureConfiguration("name", of("value")));
+
+    assertThatExceptionOfType(WrongToFulfillValue.class)
+        .isThrownBy(() -> underTest.configureStepLogic(
+            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+  }
+
+  @Test
+  void configureStepWithTooBigInToFulfillValueWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 2)));
+    Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
+        0, getFeatureConfiguration("name", of("value")));
+
+    assertThatExceptionOfType(WrongToFulfillValue.class)
+        .isThrownBy(() -> underTest.configureStepLogic(
+            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+  }
+
+  @NotNull
+  private Policy createPolicyWithSteps(Collection<Step> steps) {
+    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    steps.forEach(policy::addStep);
+    policyRepository.save(policy);
+    return policy;
+  }
+
+  private List<FeatureConfiguration> getFeatureConfiguration(
+      String name, Collection<String> value) {
+
+    return of(FeatureConfiguration.builder().name(name).condition(IS).values(value).build());
+  }
+
+  private Collection<FeatureLogicConfiguration> getFeatureLogicConfiguration(
+      int toFulfill, Collection<FeatureConfiguration> featureConfiguration) {
+    FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
+        .builder()
+        .toFulfill(toFulfill)
+        .featureConfigurations(featureConfiguration)
+        .build();
+
+    return of(featureLogicConfiguration);
+  }
+
+  @Test
   void savePolicyOnDraftWillChangeState() {
     UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
+
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     underTest.savePolicy(uuid, OTHER_USER);
@@ -219,15 +297,15 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnDraftWillChangeOrder() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
-    policy.addStep(createStep(FIRST_STEP, 0));
-    policy.addStep(createStep(SECOND_STEP, 1));
-    policy.addStep(createStep(THIRD_STEP, 2));
+    Policy policy = createPolicyWithSteps(of(
+        createStep(FIRST_STEP, 0),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     underTest.setStepsOrder(
-        uuid, of(THIRD_STEP, FIRST_STEP, SECOND_STEP), OTHER_USER);
+        policy.getPolicyId(), of(THIRD_STEP, FIRST_STEP, SECOND_STEP), OTHER_USER);
 
     policy = policyRepository.getByPolicyId(POLICY_ID);
     assertStepOrder(policy, FIRST_STEP, 1);
@@ -252,7 +330,7 @@ class PolicyServiceTest {
 
     assertThatExceptionOfType(WrongPolicyStateException.class)
         .isThrownBy(() -> underTest.setStepsOrder(
-            uuid, of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
+            policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
   }
 
   @Test
@@ -263,21 +341,21 @@ class PolicyServiceTest {
 
     assertThatExceptionOfType(StepsOrderListsSizeMismatch.class)
         .isThrownBy(() -> underTest.setStepsOrder(
-            uuid, of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
+            policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
   }
 
   @Test
   void setStepsOrderOnDraftWithWrongStepsWillThrowException() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
-    policy.addStep(createStep(FIRST_STEP, 0));
-    policy.addStep(createStep(SECOND_STEP, 1));
-    policy.addStep(createStep(THIRD_STEP, 2));
+    Policy policy = createPolicyWithSteps(of(
+        createStep(FIRST_STEP, 0),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     assertThatExceptionOfType(WrongIdsListInSetStepsOrder.class)
         .isThrownBy(() -> underTest.setStepsOrder(
-            uuid, of(FIRST_STEP, SECOND_STEP, OTHER_STEP), OTHER_USER));
+            policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, OTHER_STEP), OTHER_USER));
   }
 
   @NotNull

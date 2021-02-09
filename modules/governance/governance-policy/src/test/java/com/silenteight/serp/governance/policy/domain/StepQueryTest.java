@@ -1,9 +1,9 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.ImportPolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
@@ -203,11 +203,12 @@ class StepQueryTest extends BaseDataJpaTest {
     FeatureConfiguration featureConfiguration = createFeatureConfiguration(
         "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"));
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
-        .builder().count(1).featureConfigurations(List.of(featureConfiguration)).build();
+        .builder().toFulfill(1).featureConfigurations(List.of(featureConfiguration)).build();
     policyService.configureStepLogic(
-        POLICY_UID,
+        policy.getId(),
         FIRST_STEP_ID,
-        List.of(featureLogicConfiguration));
+        List.of(featureLogicConfiguration),
+        USER);
 
     return policy.getId();
   }
