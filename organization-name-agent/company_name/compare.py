@@ -147,7 +147,6 @@ def check_abbreviation(information, abbreviation) -> float:
             max_result, check_abbreviation([words[1:], *rest], abbreviation)
         )
 
-    print(information, abbreviation, max_result)
     return max_result
 
 
