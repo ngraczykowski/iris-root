@@ -13,7 +13,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class ImportPolicyRequest {
+public class ConfigurePolicyRequest {
 
   @NonNull
   String policyName;
@@ -49,7 +49,7 @@ public class ImportPolicyRequest {
   @Builder
   public static class FeatureLogicConfiguration {
 
-    int count;
+    int toFulfill;
 
     @NonNull
     Collection<FeatureConfiguration> featureConfigurations;
