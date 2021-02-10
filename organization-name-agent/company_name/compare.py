@@ -5,6 +5,7 @@ import string
 from typing import *  # sorry
 
 import fuzzywuzzy.fuzz
+import unidecode
 
 
 LEGAL_TERMS = {
@@ -39,6 +40,7 @@ COMMON = {
     "technology",
     "motor",
     "computer",
+    "international",
 }
 
 NameInformation = collections.namedtuple(
@@ -47,7 +49,13 @@ NameInformation = collections.namedtuple(
 
 
 def clear_name(name):
-    return name.lower().strip().strip(",.").replace(", ", " ").replace(". ", " ")
+    return (
+        unidecode.unidecode(name.lower())
+        .strip()
+        .strip(",.")
+        .replace(", ", " ")
+        .replace(". ", " ")
+    )
 
 
 def cut_something(name, bag_of_something):
@@ -103,7 +111,7 @@ def check_abbreviation(information, abbreviation) -> float:
             return 1
         if rest:
             if rest[0]:
-                new_information = [[rest[0][0]], rest[0][1:], *rest[1:]]
+                new_information = [rest[0][0].split(), rest[0][1:], *rest[1:]]
             else:
                 new_information = [[], *rest[1:]]
             max_result = max(
@@ -113,7 +121,7 @@ def check_abbreviation(information, abbreviation) -> float:
         return max(max_result, 1 / (1 + len(abbreviation)))
 
     if not abbreviation:
-        if words[0] == "of":
+        if words[0] == "of" and len(words) <= 3:
             return 0.8
         return 1 / (1 + len(words))
 
@@ -191,31 +199,42 @@ def _names_to_compare(
         return " ".join((base, *suffixes))
 
     if not first.common_suffixes or not second.common_suffixes:
-        return first.base, second.base
+        yield first.base, second.base
+
     shortest_length = min(len(first.common_suffixes), len(second.common_suffixes))
     if (
         first.common_suffixes[:shortest_length]
         == second.common_suffixes[:shortest_length]
     ):
-        return _join(first.base, first.common_suffixes[:shortest_length]), _join(
+        yield _join(first.base, first.common_suffixes[:shortest_length]), _join(
             second.base, second.common_suffixes[:shortest_length]
         )
 
-    return _join(first.base, first.common_suffixes), _join(
+    yield _join(first.base, first.common_suffixes), _join(
         second.base, second.common_suffixes
     )
 
 
 def tokenization_score(first: NameInformation, second: NameInformation) -> float:
-    first_name, second_name = _names_to_compare(first, second)
-    first_tokens, second_tokens = set(first_name.split()), set(second_name.split())
-    return len(first_tokens.intersection(second_tokens)) / len(
-        first_tokens.union(second_tokens)
-    )
+    result = 0
+    for first_name, second_name in _names_to_compare(first, second):
+        first_tokens, second_tokens = set(first_name.split()), set(second_name.split())
+        result = max(
+            result,
+            len(first_tokens.intersection(second_tokens))
+            / len(first_tokens.union(second_tokens)),
+        )
+    return result
 
 
 def fuzzy_score(first: NameInformation, second: NameInformation) -> float:
-    return fuzzywuzzy.fuzz.ratio(*_names_to_compare(first, second)) / 100
+    result = 0
+    for first_name, second_name in _names_to_compare(first, second):
+        result = max(
+            result,
+            fuzzywuzzy.fuzz.ratio(first_name, second_name),
+        )
+    return result / 100
 
 
 def score(first, second):

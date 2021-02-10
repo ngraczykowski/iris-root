@@ -108,7 +108,7 @@ def test_legal(first, second):
         ("Inspur Group", "inspur"),
     ),
 )
-def test(first, second):
+def test_common(first, second):
     assert compare(first, second), score(first, second)
 
 
@@ -150,3 +150,13 @@ def test_score_legal_terms():
     assert score("A corp", "A corporation")["legal_terms"] == 1
     assert score("A corp", "A")["legal_terms"] == 0.5
     assert score("A plc", "A  limited")["legal_terms"] == 0
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("Mondelez International, Inc.", "Mondelēz"),
+    ),
+)
+def test_diacritic(first, second):
+    assert compare(first, second), score(first, second)
