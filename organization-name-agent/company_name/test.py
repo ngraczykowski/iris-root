@@ -11,15 +11,18 @@ from .compare import compare, score
         ("Activision-Blizzard", "Activision Blizzard, Inc. "),
         ("Alexion Pharmaceuticals Inc.", "Alexion"),
         ("EISOO Information Technology Corp.", "eisoo"),
+        ("Atlassian Corporation Plc", "Atlassian Corporation public limited company")
     ),
 )
 def test_basic(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(("first", "second"), (("AMAZON", "GOOGLE"),))
 def test_basic_negative(first, second):
-    assert not compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert not compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -31,7 +34,8 @@ def test_basic_negative(first, second):
     ),
 )
 def test_typos(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -50,12 +54,14 @@ def test_typos(first, second):
         ("China Medical Technologies, Inc.", "CMED"),
         ("Commercial Aircraft Corporation of China, Ltd.", "COMAC"),
         ("China Ocean Shipping Company, Limited", "COSCO"),
+        ("China Ocean Shipping Company, Limited", "COSCO Limited"),
         ("Dalian Hi-Think Computer Technology Corporation", "DHC"),
         ("The Kraft Heinz Company", "KHC"),
     ),
 )
 def test_abbreviation(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -69,7 +75,8 @@ def test_abbreviation(first, second):
     ),
 )
 def test_additional_info(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -82,7 +89,8 @@ def test_additional_info(first, second):
     ),
 )
 def test_country_as_company(first, second):
-    assert not compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert not compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -96,7 +104,8 @@ def test_country_as_company(first, second):
     ),
 )
 def test_legal(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -109,7 +118,8 @@ def test_legal(first, second):
     ),
 )
 def test_common(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -121,7 +131,8 @@ def test_common(first, second):
     ),
 )
 def test_hard(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -132,7 +143,8 @@ def test_hard(first, second):
     ),
 )
 def test_nissan(first, second):
-    assert not compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert not compare(first, second)
 
 
 @pytest.mark.parametrize(
@@ -143,7 +155,8 @@ def test_nissan(first, second):
     ),
 )
 def test_places(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
 
 
 def test_score_legal_terms():
@@ -154,9 +167,20 @@ def test_score_legal_terms():
 
 @pytest.mark.parametrize(
     ("first", "second"),
-    (
-        ("Mondelez International, Inc.", "Mondelēz"),
-    ),
+    (("Mondelez International, Inc.", "Mondelēz"),),
 )
 def test_diacritic(first, second):
-    assert compare(first, second), score(first, second)
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("f and  import export", "famie"),
+        ("a & a  industries inc", "a&aiii"),
+        ("256 equities inc", "joint stock company yamalsairlines"),
+    ),
+)
+def test_strange_input(first, second):
+    print(repr(first), repr(second), score(first, second))

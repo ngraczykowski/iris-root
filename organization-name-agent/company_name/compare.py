@@ -43,19 +43,22 @@ COMMON = {
     "international",
 }
 
+WEAK_WORDS = {"of", "the", "for", "and"}
+
 NameInformation = collections.namedtuple(
     "NameInformation", ("base", "common_suffixes", "legal", "parenthesis_information")
 )
 
 
 def clear_name(name):
-    return (
+    name = (
         unidecode.unidecode(name.lower())
         .strip()
         .strip(",.")
         .replace(", ", " ")
         .replace(". ", " ")
     )
+    return re.sub(r"\.\w{2,3}\b", "", name)  # .net, .com, .org, .de
 
 
 def cut_something(name, bag_of_something):
@@ -80,8 +83,6 @@ def cut_common(name):
 
 def cut_extra(name):
     extra = list(re.finditer(r"\([^)]+\)", name))
-    if not extra:
-        return name, []
     t = []
     for extra_information in reversed(extra):
         pos = extra_information.span()
@@ -102,65 +103,91 @@ def cut_all(name) -> NameInformation:
     )
 
 
-def check_abbreviation(information, abbreviation) -> float:
-    words, *rest = information
-    max_result = 0.0
+def _check_abbreviation_for_next_word(
+    word, rest_of_information, abbreviation, length_of_all
+):
+    # words such as of / the / ... are often omitted in abbreviation
+    if not word or word in WEAK_WORDS:
+        yield check_abbreviation(rest_of_information, abbreviation, length_of_all)
 
-    if not words:
-        if not abbreviation:
-            return 1
-        if rest:
-            if rest[0]:
-                new_information = [rest[0][0].split(), rest[0][1:], *rest[1:]]
-            else:
-                new_information = [[], *rest[1:]]
-            max_result = max(
-                max_result, 0.9 * check_abbreviation(new_information, abbreviation)
-            )
-
-        return max(max_result, 1 / (1 + len(abbreviation)))
-
-    if not abbreviation:
-        if words[0] == "of" and len(words) <= 3:
-            return 0.8
-        return 1 / (1 + len(words))
-
-    if abbreviation[0] in string.digits:
-        duplicate_by = int(abbreviation[0])
-        max_result = max(
-            max_result,
-            check_abbreviation(
-                information, duplicate_by * abbreviation[1] + abbreviation[2:]
-            ),
-        )
-
-    if abbreviation[0] == " ":
-        return check_abbreviation(information, abbreviation[1:])
-
-    word = words[0]
     if word[0] == abbreviation[0] or (word == "and" and abbreviation[0] == "&"):
-        max_result = max(
-            max_result, check_abbreviation([words[1:], *rest], abbreviation[1:])
-        )
+        yield check_abbreviation(rest_of_information, abbreviation[1:], length_of_all)
+
+        # sometimes, for nicer abbreviation, more than one character from each word is taken
         for i, w in enumerate(word):
             if len(abbreviation) > i and w == abbreviation[i]:
-                max_result = max(
-                    max_result,
-                    0.9 * check_abbreviation([words[1:], *rest], abbreviation[i + 1 :]),
+                yield check_abbreviation(
+                    rest_of_information, abbreviation[i + 1 :], length_of_all
                 )
             else:
                 break
-    if word in {"of", "the", "for", "and"}:
-        max_result = max(
-            max_result, check_abbreviation([words[1:], *rest], abbreviation)
+
+    # 4H - Head, Heart, Hands, Health type of abbreviation
+    if (
+        abbreviation[0] in string.digits
+        and abbreviation[1]
+        and abbreviation[1] not in string.digits
+        and abbreviation[1] == word[0]
+    ):
+        duplicate_by = int(abbreviation[0]) - 1
+        yield check_abbreviation(
+            rest_of_information,
+            duplicate_by * abbreviation[1] + abbreviation[2:],
+            length_of_all,
         )
 
-    return max_result
+
+def _check_abbreviation_when_no_abbreviation(words, length_of_all):
+    left_words = len(set(words).difference(WEAK_WORDS))
+    if not left_words:
+        return 1
+
+    if words[0] == "of":
+        left_words -= 1
+    return 1 - left_words / length_of_all
+
+
+def _check_abbreviation_when_no_words(rest_of_information, abbreviation, length_of_all):
+    if rest_of_information:
+        if rest_of_information[0]:
+            # getting new words from common suffixes
+            new_information = [
+                rest_of_information[0][0].split(),
+                rest_of_information[0][1:],
+                *rest_of_information[1:],
+            ]
+            yield check_abbreviation(new_information, abbreviation, length_of_all)
+        elif rest_of_information[1]:
+            # getting abbreviation from legal
+            legal_information = rest_of_information[1]
+            if legal_information:
+                # only first legal information is freely accessible in abbreviation - next ones should be penalized
+                yield check_abbreviation([[legal_information[0]], [], []], abbreviation, length_of_all)
+
+    yield 1 - len(abbreviation) / length_of_all
+
+
+def check_abbreviation(information, abbreviation, length_of_all: int) -> float:
+    words, *rest = information
+
+    if not abbreviation:
+        return _check_abbreviation_when_no_abbreviation(words, length_of_all)
+
+    if not words:
+        return max(
+            _check_abbreviation_when_no_words(rest, abbreviation, length_of_all),
+            default=0,
+        )
+
+    return max(
+        _check_abbreviation_for_next_word(
+            words[0], [words[1:], *rest], abbreviation, length_of_all
+        ),
+        default=0,
+    )
 
 
 def legal_score(first, second) -> float:
-    # if not first and not second:
-    #    return 1
     if not first or not second:
         return 0.5
     norm_first = [LEGAL_TERMS.get(t, t) for t in first]
@@ -175,20 +202,18 @@ def legal_score(first, second) -> float:
 
 
 def abbreviation_score(information, abbreviation) -> float:
-    return (
-        (
-            check_abbreviation(
-                [
-                    information.base.split(" "),
-                    information.common_suffixes,
-                    information.legal,
-                ],
-                abbreviation.replace(".", ""),
-            )
-            * max(1, (len(abbreviation) + 7) / 10)
-        )
-        if len(abbreviation) < 0.5 * len(information.base)
-        else 0
+    if len(abbreviation) > 0.5 * len(information.base):
+        return 0
+
+    words = information.base.split()
+    return check_abbreviation(
+        [
+            words,
+            information.common_suffixes,
+            information.legal,
+        ],
+        abbreviation.replace(".", "").replace(" ", ""),
+        length_of_all=len(words),
     )
 
 
@@ -219,20 +244,25 @@ def tokenization_score(first: NameInformation, second: NameInformation) -> float
     result = 0
     for first_name, second_name in _names_to_compare(first, second):
         first_tokens, second_tokens = set(first_name.split()), set(second_name.split())
+        common = first_tokens.intersection(second_tokens)
+        different = first_tokens.symmetric_difference(second_tokens).difference(
+            WEAK_WORDS
+        )
         result = max(
             result,
-            len(first_tokens.intersection(second_tokens))
-            / len(first_tokens.union(second_tokens)),
+            len(common) / (len(common) + len(different)),
         )
     return result
 
 
-def fuzzy_score(first: NameInformation, second: NameInformation) -> float:
+def fuzzy_score(
+    first: NameInformation, second: NameInformation, fuzz_function="ratio"
+) -> float:
     result = 0
     for first_name, second_name in _names_to_compare(first, second):
         result = max(
             result,
-            fuzzywuzzy.fuzz.ratio(first_name, second_name),
+            getattr(fuzzywuzzy.fuzz, fuzz_function)(first_name, second_name),
         )
     return result / 100
 
@@ -255,7 +285,13 @@ def score(first, second):
     return {
         "parenthesis_match": extra_match,
         "abbreviation": abbreviate_score,
-        "fuzzy": fuzzy_score(first_information, second_information),
+        "fuzzy": fuzzy_score(first_information, second_information, "ratio"),
+        "partial_fuzzy": fuzzy_score(
+            first_information, second_information, "partial_ratio"
+        ),
+        "sorted_fuzzy": fuzzy_score(
+            first_information, second_information, "token_sort_ratio"
+        ),
         "legal_terms": legal_score(first_information.legal, second_information.legal),
         "tokenization": tokenization_score(first_information, second_information),
     }
