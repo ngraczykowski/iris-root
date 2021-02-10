@@ -11,7 +11,7 @@ from .compare import compare, score
         ("Activision-Blizzard", "Activision Blizzard, Inc. "),
         ("Alexion Pharmaceuticals Inc.", "Alexion"),
         ("EISOO Information Technology Corp.", "eisoo"),
-        ("Atlassian Corporation Plc", "Atlassian Corporation public limited company")
+        ("Atlassian Corporation Plc", "Atlassian Corporation public limited company"),
     ),
 )
 def test_basic(first, second):
@@ -19,7 +19,7 @@ def test_basic(first, second):
     assert compare(first, second)
 
 
-@pytest.mark.parametrize(("first", "second"), (("AMAZON", "GOOGLE"),))
+@pytest.mark.parametrize(("first", "second"), (("AMAZON", "GOOGLE"),  ("intuit",  "intuitive surgical")))
 def test_basic_negative(first, second):
     print(repr(first), repr(second), score(first, second))
     assert not compare(first, second)
@@ -180,7 +180,22 @@ def test_diacritic(first, second):
         ("f and  import export", "famie"),
         ("a & a  industries inc", "a&aiii"),
         ("256 equities inc", "joint stock company yamalsairlines"),
+        ("r7 group", "r7 gronp"),
     ),
 )
 def test_strange_input(first, second):
     print(repr(first), repr(second), score(first, second))
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("International", "International"),
+        ("Internacional", "International"),
+        ("pplc", "pplc"),
+        ("", ""),
+    ),
+)
+def test_empty_names(first, second):
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)

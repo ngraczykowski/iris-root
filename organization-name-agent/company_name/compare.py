@@ -114,18 +114,18 @@ def _check_abbreviation_for_next_word(
         yield check_abbreviation(rest_of_information, abbreviation[1:], length_of_all)
 
         # sometimes, for nicer abbreviation, more than one character from each word is taken
-        for i, w in enumerate(word):
+        for i, w in zip(range(5), word):
             if len(abbreviation) > i and w == abbreviation[i]:
                 yield check_abbreviation(
                     rest_of_information, abbreviation[i + 1 :], length_of_all
-                )
+                ) * (1 - 0.5 / length_of_all)
             else:
                 break
 
     # 4H - Head, Heart, Hands, Health type of abbreviation
     if (
         abbreviation[0] in string.digits
-        and abbreviation[1]
+        and len(abbreviation) > 1
         and abbreviation[1] not in string.digits
         and abbreviation[1] == word[0]
     ):
@@ -202,10 +202,10 @@ def legal_score(first, second) -> float:
 
 
 def abbreviation_score(information, abbreviation) -> float:
-    if len(abbreviation) > 0.5 * len(information.base):
+    words = information.base.split()
+    if len(abbreviation) > 0.5 * len(information.base) or len(abbreviation) < 2 or not words:
         return 0
 
-    words = information.base.split()
     return check_abbreviation(
         [
             words,
@@ -243,6 +243,8 @@ def _names_to_compare(
 def tokenization_score(first: NameInformation, second: NameInformation) -> float:
     result = 0
     for first_name, second_name in _names_to_compare(first, second):
+        if not first_name or not second_name:
+            continue
         first_tokens, second_tokens = set(first_name.split()), set(second_name.split())
         common = first_tokens.intersection(second_tokens)
         different = first_tokens.symmetric_difference(second_tokens).difference(
@@ -301,7 +303,7 @@ def compare(
     first,
     second,
     fuzzy_match_threshold=0.8,
-    abbreviate_threshold=0.8,
+    abbreviate_threshold=0.7,
     tokenization_threshold=0.8,
 ):
     scored = score(first, second)
