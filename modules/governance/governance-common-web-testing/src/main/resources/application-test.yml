@@ -15,6 +15,9 @@ sep.auth:
 
     MANAGE_STEPS:
       - "EDIT_STEPS_LOGIC"
+      - "CREATE_STEP"
+      - "EDIT_STEP"
+      - "REMOVE_STEP"
 
   rolePermissionsMappings:
     POLICY_MANAGER:
