@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.SetStepsOrderRequest;
 
 @RequiredArgsConstructor
 class SetPolicyStepsUseCase {
@@ -12,7 +13,8 @@ class SetPolicyStepsUseCase {
   private final PolicyService policyService;
 
   public void activate(SetPolicyStepsOrderCommand command) {
-    policyService.setStepsOrder(
-        command.getPolicyId(), command.getStepsOrder(), command.getUpdatedBy());
+    SetStepsOrderRequest request = SetStepsOrderRequest
+        .of(command.getPolicyId(), command.getStepsOrder(), command.getUpdatedBy());
+    policyService.setStepsOrder(request);
   }
 }

@@ -2,6 +2,8 @@ package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.dto.SavePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.UpdatePolicyRequest;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,13 +80,15 @@ class PolicyQueryTest extends BaseDataJpaTest {
   private Policy createSavedPolicy(
       UUID uuid, String name, String description, String createdBy) {
     Policy result = createDraftPolicy(uuid, name, description, createdBy);
-    policyService.savePolicy(uuid, createdBy);
+    policyService.savePolicy(SavePolicyRequest.of(uuid, createdBy));
     return result;
   }
 
   @NotNull
   private Policy createDraftPolicy(
-      UUID uuid, String name, String description, String createdBy) {
-    return policyService.addPolicyInternal(uuid, name, description, createdBy);
+      UUID policyId, String name, String description, String createdBy) {
+    UUID uuid = policyService.addPolicy(policyId, name, createdBy);
+    policyService.updatePolicy(UpdatePolicyRequest.of(policyId, null, description, createdBy));
+    return policyRepository.getByPolicyId(uuid);
   }
 }

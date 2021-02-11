@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.CreateStepRequest;
 
 @RequiredArgsConstructor
 class CreateStepUseCase {
@@ -12,7 +13,7 @@ class CreateStepUseCase {
   private final PolicyService policyService;
 
   void activate(@NonNull CreateStepCommand command) {
-    policyService.addStepToPolicy(
+    CreateStepRequest request = CreateStepRequest.of(
         command.getPolicyId(),
         command.getSolution().getFeatureVectorSolution(),
         command.getStepId(),
@@ -20,5 +21,6 @@ class CreateStepUseCase {
         command.getDescription(),
         command.getStepType(),
         command.getCreatedBy());
+    policyService.addStepToPolicy(request);
   }
 }

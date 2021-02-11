@@ -6,12 +6,14 @@ import com.silenteight.serp.governance.common.web.exception.GenericExceptionCont
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigureStepLogicRequest;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.EditStepLogicDto;
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.MatchConditionDto;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -23,6 +25,7 @@ import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -55,8 +58,14 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(ACCEPTED.value());
 
-    verify(policyService).configureStepLogic(
-        POLICY_ID, STEP_ID, getFeatureLogicConfiguration(), USERNAME);
+    ArgumentCaptor<ConfigureStepLogicRequest> captor = ArgumentCaptor
+        .forClass(ConfigureStepLogicRequest.class);
+    verify(policyService).configureStepLogic(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getStepId()).isEqualTo(STEP_ID);
+    assertThat(captor.getValue().getFeatureLogicConfigurations())
+        .isEqualTo(getFeatureLogicConfiguration());
+    assertThat(captor.getValue().getEditedBy()).isEqualTo(USERNAME);
   }
 
   private Collection<FeatureLogicDto> getFeatureLogicDto() {

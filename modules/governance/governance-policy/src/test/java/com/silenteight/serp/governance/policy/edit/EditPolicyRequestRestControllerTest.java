@@ -6,6 +6,9 @@ import com.silenteight.serp.governance.common.web.exception.GenericExceptionCont
 import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.PolicyState;
+import com.silenteight.serp.governance.policy.domain.dto.SavePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.UpdatePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.UsePolicyRequest;
 import com.silenteight.serp.governance.policy.edit.dto.EditPolicyDto;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,8 +52,12 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(OK.value());
 
-    verify(policyService).updatePolicy(
-        POLICY_ID, POLICY_NAME, POLICY_DESCRIPTION, USERNAME);
+    ArgumentCaptor<UpdatePolicyRequest> captor = ArgumentCaptor.forClass(UpdatePolicyRequest.class);
+    verify(policyService).updatePolicy(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getName()).isEqualTo(POLICY_NAME);
+    assertThat(captor.getValue().getDescription()).isEqualTo(POLICY_DESCRIPTION);
+    assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
@@ -78,7 +85,10 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(OK.value());
 
-    verify(policyService).savePolicy(POLICY_ID, USERNAME);
+    ArgumentCaptor<SavePolicyRequest> captor = ArgumentCaptor.forClass(SavePolicyRequest.class);
+    verify(policyService).savePolicy(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getSavedBy()).isEqualTo(USERNAME);
   }
 
   @Test
@@ -93,7 +103,10 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(OK.value());
 
-    verify(policyService).usePolicy(POLICY_ID, USERNAME);
+    ArgumentCaptor<UsePolicyRequest> captor = ArgumentCaptor.forClass(UsePolicyRequest.class);
+    verify(policyService).usePolicy(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getActivatedBy()).isEqualTo(USERNAME);
     verify(eventHandler).handle(eventHandled.capture());
     assertThat(eventHandled.getValue().getPolicyId()).isEqualTo(POLICY_ID);
   }

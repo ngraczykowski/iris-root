@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.UsePolicyRequest;
 
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -19,7 +20,13 @@ class UsePolicyUseCase {
   private final ApplicationEventPublisher eventPublisher;
 
   void activate(@NonNull UUID id, @NonNull String user) {
-    policyService.usePolicy(id, user);
-    eventPublisher.publishEvent(PolicyPromotedEvent.builder().policyId(id).build());
+    UsePolicyRequest request = UsePolicyRequest.of(id, user);
+    policyService.usePolicy(request);
+    PolicyPromotedEvent event = PolicyPromotedEvent
+        .builder()
+        .policyId(id)
+        .correlationId(request.getCorrelationId())
+        .build();
+    eventPublisher.publishEvent(event);
   }
 }

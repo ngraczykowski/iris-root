@@ -5,10 +5,12 @@ import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWith
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.dto.Solution;
+import com.silenteight.serp.governance.policy.domain.dto.UpdateStepRequest;
 import com.silenteight.serp.governance.policy.step.edit.dto.EditStepDto;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,6 +18,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -48,13 +51,14 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(NO_CONTENT.value());
 
-    verify(policyService).updateStep(
-        POLICY_ID,
-        STEP_ID,
-        NAME,
-        null,
-        SOLUTION.getFeatureVectorSolution(),
-        USERNAME);
+    ArgumentCaptor<UpdateStepRequest> captor = ArgumentCaptor.forClass(UpdateStepRequest.class);
+    verify(policyService).updateStep(captor.capture());
+    assertThat(captor.getValue().getId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getStepId()).isEqualTo(STEP_ID);
+    assertThat(captor.getValue().getName()).isEqualTo(NAME);
+    assertThat(captor.getValue().getDescription()).isNull();
+    assertThat(captor.getValue().getSolution()).isEqualTo(SOLUTION.getFeatureVectorSolution());
+    assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })

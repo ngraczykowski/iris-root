@@ -4,10 +4,12 @@ import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTes
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.CreateStepRequest;
 import com.silenteight.serp.governance.policy.domain.dto.Solution;
 import com.silenteight.serp.governance.policy.step.create.dto.CreateStepDto;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -44,14 +47,15 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(NO_CONTENT.value());
 
-    verify(policyService).addStepToPolicy(
-        POLICY_ID,
-        SOLUTION.getFeatureVectorSolution(),
-        STEP_ID,
-        NAME,
-        DESCRIPTION,
-        BUSINESS_LOGIC,
-        USERNAME);
+    ArgumentCaptor<CreateStepRequest> captor = ArgumentCaptor.forClass(CreateStepRequest.class);
+    verify(policyService).addStepToPolicy(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getSolution()).isEqualTo(SOLUTION.getFeatureVectorSolution());
+    assertThat(captor.getValue().getStepId()).isEqualTo(STEP_ID);
+    assertThat(captor.getValue().getStepName()).isEqualTo(NAME);
+    assertThat(captor.getValue().getStepDescription()).isEqualTo(DESCRIPTION);
+    assertThat(captor.getValue().getStepType()).isEqualTo(BUSINESS_LOGIC);
+    assertThat(captor.getValue().getCreatedBy()).isEqualTo(USERNAME);
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
