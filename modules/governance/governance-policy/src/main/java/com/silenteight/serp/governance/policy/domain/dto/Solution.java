@@ -12,15 +12,19 @@ public enum Solution {
   POTENTIAL_TRUE_POSITIVE(FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE),
   HINTED_POTENTIAL_TRUE_POSITIVE(FeatureVectorSolution.SOLUTION_HINTED_POTENTIAL_TRUE_POSITIVE);
 
-  private final FeatureVectorSolution solutionNoDecision;
+  private final FeatureVectorSolution featureVectorSolution;
 
   Solution(FeatureVectorSolution solutionNoDecision) {
-    this.solutionNoDecision = solutionNoDecision;
+    this.featureVectorSolution = solutionNoDecision;
+  }
+
+  public FeatureVectorSolution getFeatureVectorSolution() {
+    return featureVectorSolution;
   }
 
   public static Solution of(FeatureVectorSolution solution) {
     return Stream.of(Solution.values())
-        .filter(value -> value.solutionNoDecision.equals(solution))
+        .filter(value -> value.featureVectorSolution.equals(solution))
         .findFirst()
         .orElseThrow(
             () -> new FeatureVectorSolutionInSolutionNotFoundException(solution.name()));

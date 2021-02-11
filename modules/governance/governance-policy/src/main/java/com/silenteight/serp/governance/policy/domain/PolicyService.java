@@ -10,7 +10,10 @@ import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
-import com.silenteight.serp.governance.policy.domain.exception.*;
+import com.silenteight.serp.governance.policy.domain.exception.EmptyFeatureConfiguration;
+import com.silenteight.serp.governance.policy.domain.exception.EmptyFeaturesLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.exception.EmptyMatchConditionValueException;
+import com.silenteight.serp.governance.policy.domain.exception.WrongToFulfillValue;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,7 +23,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
@@ -32,6 +34,8 @@ import static java.util.stream.IntStream.range;
 
 @RequiredArgsConstructor
 public class PolicyService {
+
+  private static final int DEFAULT_STEP_ORDER_VALUE = Integer.MAX_VALUE;
 
   @NonNull
   private final PolicyRepository policyRepository;
@@ -84,7 +88,7 @@ public class PolicyService {
       Policy policy, StepConfiguration configuration, int sortOrder, String createdBy) {
 
     UUID stepId = UUID.randomUUID();
-    doAddStepToPolicy(
+    addStep(
         policy,
         configuration.getSolution(),
         stepId,
@@ -123,16 +127,22 @@ public class PolicyService {
       @NonNull String stepName,
       String stepDescription,
       @NonNull StepType stepType,
-      int sortOrder,
       String createdBy) {
 
     Policy policy = policyRepository.getByPolicyId(policyId);
-    doAddStepToPolicy(
-        policy, solution, stepId, stepName, stepDescription, stepType, sortOrder, createdBy);
+    addStep(
+        policy,
+        solution,
+        stepId,
+        stepName,
+        stepDescription,
+        stepType,
+        DEFAULT_STEP_ORDER_VALUE,
+        createdBy);
   }
 
   @NotNull
-  private Step doAddStepToPolicy(
+  private Step addStep(
       @NonNull Policy policy,
       @NonNull FeatureVectorSolution solution,
       @NonNull UUID stepId,
@@ -266,37 +276,29 @@ public class PolicyService {
   @Transactional
   public void setStepsOrder(UUID id, List<UUID> stepsOrder, String user) {
     Policy policy = policyRepository.getByPolicyId(id);
-    policy.assertEditState();
-    Collection<Step> steps = policy.getSteps();
-    assertSameSize(id, stepsOrder, steps);
-    assertSameUuids(id, steps, stepsOrder);
-    updateStepsOrder(stepsOrder, user, steps);
+    policy.updateStepsOrder(stepsOrder, user);
     policyRepository.save(policy);
   }
 
-  private void updateStepsOrder(List<UUID> stepsOrder, String user, Collection<Step> steps) {
-    steps.forEach(step -> updateOrderOfStep(stepsOrder, user, step));
+  @Transactional
+  public void updateStep(
+      long policyId,
+      UUID id,
+      String name,
+      String description,
+      FeatureVectorSolution solution,
+      String updatedBy) {
+    Policy policy = policyRepository.getById(policyId);
+    policy.updateStep(id, name, description, solution, updatedBy);
+    policy.setUpdatedBy(updatedBy);
+    policyRepository.save(policy);
   }
 
-  private void updateOrderOfStep(List<UUID> stepsOrder, String user, Step step) {
-    step.setSortOrder(stepsOrder.indexOf(step.getStepId()));
-    step.setUpdatedBy(user);
-  }
-
-  private void assertSameSize(UUID id, List<UUID> requestedOrder, Collection<Step> steps) {
-    long dbStepsSize = steps.size();
-    int requestStepsSize = requestedOrder.size();
-    if (dbStepsSize != requestStepsSize)
-      throw new StepsOrderListsSizeMismatch(id, requestStepsSize, dbStepsSize);
-  }
-
-  private void assertSameUuids(UUID id, Collection<Step> steps, List<UUID> stepsOrder) {
-    Optional<Step> shouldBeEmpty = steps
-        .stream()
-        .filter(step -> !stepsOrder.contains(step.getStepId()))
-        .findAny();
-
-    if (shouldBeEmpty.isPresent())
-      throw new WrongIdsListInSetStepsOrder(id);
+  @Transactional
+  public void deleteStep(long policyId, UUID id, String updatedBy) {
+    Policy policy = policyRepository.getById(policyId);
+    policy.deleteStep(id);
+    policy.setUpdatedBy(updatedBy);
+    policyRepository.save(policy);
   }
 }

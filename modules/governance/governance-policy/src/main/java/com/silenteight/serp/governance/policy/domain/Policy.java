@@ -2,21 +2,22 @@ package com.silenteight.serp.governance.policy.domain;
 
 import lombok.*;
 
+import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
-import com.silenteight.serp.governance.policy.domain.exception.StepNotFoundException;
-import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateChangeException;
-import com.silenteight.serp.governance.policy.domain.exception.WrongPolicyStateException;
+import com.silenteight.serp.governance.policy.domain.exception.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static java.util.Optional.ofNullable;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
@@ -140,5 +141,62 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
   private boolean notInState(PolicyState state) {
     return getState() != state;
+  }
+
+  public void updateStep(
+      UUID stepId,
+      String name,
+      String description,
+      FeatureVectorSolution solution,
+      String editedBy) {
+
+    assertEditState();
+
+    Step step = getSteps()
+        .stream()
+        .filter(s -> s.hasStepId(stepId))
+        .findFirst()
+        .orElseThrow(() -> new StepNotFoundException(stepId));
+    step.setUpdatedBy(editedBy);
+
+    ofNullable(name).ifPresent(step::setName);
+    ofNullable(description).ifPresent(step::setDescription);
+    ofNullable(solution).ifPresent(step::setSolution);
+
+    setUpdatedBy(editedBy);
+  }
+
+  public void deleteStep(UUID id) {
+    assertEditState();
+    getSteps().removeIf(s -> s.hasStepId(id));
+  }
+
+  public void updateStepsOrder(List<UUID> stepsOrder, String user) {
+    assertEditState();
+    assertSameSize(stepsOrder);
+    assertSameUuids(stepsOrder);
+    getSteps().forEach(step -> updateOrderOfStep(stepsOrder, user, step));
+    setUpdatedBy(user);
+  }
+
+  private void assertSameSize(List<UUID> requestedOrder) {
+    long dbStepsSize = getSteps().size();
+    int requestStepsSize = requestedOrder.size();
+    if (dbStepsSize != requestStepsSize)
+      throw new StepsOrderListsSizeMismatch(getPolicyId(), requestStepsSize, dbStepsSize);
+  }
+
+  private void assertSameUuids(List<UUID> stepsOrder) {
+    boolean notAllIdsCovered = getSteps()
+        .stream()
+        .anyMatch(step -> !stepsOrder.contains(step.getStepId()));
+
+    if (notAllIdsCovered)
+      throw new WrongIdsListInSetStepsOrder(getPolicyId());
+  }
+
+  private void updateOrderOfStep(List<UUID> stepsOrder, String user, Step step) {
+    step.setSortOrder(stepsOrder.indexOf(step.getStepId()));
+    step.setUpdatedBy(user);
   }
 }

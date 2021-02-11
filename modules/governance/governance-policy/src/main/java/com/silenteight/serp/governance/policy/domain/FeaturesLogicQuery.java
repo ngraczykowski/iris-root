@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
-import com.silenteight.serp.governance.policy.step.logic.FeatureLogicRequestQuery;
+import com.silenteight.serp.governance.policy.step.logic.list.FeatureLogicRequestQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 

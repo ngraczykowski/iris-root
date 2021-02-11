@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +21,7 @@ import java.util.UUID;
 import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
@@ -44,7 +44,6 @@ class StepQueryTest extends BaseDataJpaTest {
   private static final String SECOND_STEP_DESC = "SECOND_STEP_DESC";
   private static final StepType SECOND_STEP_TYPE = StepType.AI_EXCEPTION;
 
-  private static final OffsetDateTime CREATION_TIME = OffsetDateTime.now();
   private static final String USER = "user";
 
   private StepQuery underTest;
@@ -94,7 +93,6 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_NAME,
         FIRST_STEP_DESC,
         FIRST_STEP_TYPE,
-        1,
         POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
@@ -103,8 +101,8 @@ class StepQueryTest extends BaseDataJpaTest {
         SECOND_STEP_NAME,
         SECOND_STEP_DESC,
         SECOND_STEP_TYPE,
-        0,
         POLICY_CREATED_BY);
+    policyService.setStepsOrder(POLICY_UID, of(SECOND_STEP_ID, FIRST_STEP_ID), USER);
 
     List<UUID> result = underTest.listStepsOrder(POLICY_UID);
 
@@ -122,7 +120,6 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_NAME,
         FIRST_STEP_DESC,
         FIRST_STEP_TYPE,
-        0,
         POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
@@ -131,8 +128,8 @@ class StepQueryTest extends BaseDataJpaTest {
         SECOND_STEP_NAME,
         SECOND_STEP_DESC,
         SECOND_STEP_TYPE,
-        1,
         POLICY_CREATED_BY);
+    policyService.setStepsOrder(POLICY_UID, of(FIRST_STEP_ID, SECOND_STEP_ID), USER);
 
     Collection<StepDto> result = underTest.listSteps(POLICY_UID);
 
@@ -154,12 +151,12 @@ class StepQueryTest extends BaseDataJpaTest {
             .id(FIRST_STEP_ID)
             .solution(SOLUTION_NO_DECISION)
             .featureLogics(
-                List.of(
+                of(
                     createFeatureLogic(
                         1,
-                        List.of(
+                        of(
                             createFeatureConfigurationDto(
-                                "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"))))))
+                                "nameAgent", IS, of("MATCH", "NEAR_MATCH"))))))
             .build(),
         StepConfigurationDto.builder()
             .id(SECOND_STEP_ID)
@@ -189,7 +186,6 @@ class StepQueryTest extends BaseDataJpaTest {
         FIRST_STEP_NAME,
         FIRST_STEP_DESC,
         FIRST_STEP_TYPE,
-        0,
         POLICY_CREATED_BY);
     policyService.addStepToPolicy(
         POLICY_UID,
@@ -198,16 +194,17 @@ class StepQueryTest extends BaseDataJpaTest {
         SECOND_STEP_NAME,
         SECOND_STEP_DESC,
         SECOND_STEP_TYPE,
-        1,
         POLICY_CREATED_BY);
+    policyService.setStepsOrder(POLICY_UID, of(FIRST_STEP_ID, SECOND_STEP_ID), USER);
+
     FeatureConfiguration featureConfiguration = createFeatureConfiguration(
-        "nameAgent", IS, List.of("MATCH", "NEAR_MATCH"));
+        "nameAgent", IS, of("MATCH", "NEAR_MATCH"));
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
-        .builder().toFulfill(1).featureConfigurations(List.of(featureConfiguration)).build();
+        .builder().toFulfill(1).featureConfigurations(of(featureConfiguration)).build();
     policyService.configureStepLogic(
         policy.getId(),
         FIRST_STEP_ID,
-        List.of(featureLogicConfiguration),
+        of(featureLogicConfiguration),
         USER);
 
     return policy.getId();

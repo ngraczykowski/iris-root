@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
-import com.silenteight.serp.governance.policy.step.list.PolicyStepsOrderRequestQuery;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
+import com.silenteight.serp.governance.policy.step.order.list.PolicyStepsOrderRequestQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 

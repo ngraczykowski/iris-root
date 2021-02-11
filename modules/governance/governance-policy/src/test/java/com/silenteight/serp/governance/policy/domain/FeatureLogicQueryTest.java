@@ -73,7 +73,6 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         STEP_NAME,
         STEP_DESC,
         STEP_TYPE,
-        0,
         USER_NAME);
 
     FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
@@ -92,7 +91,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
         STEP_NAME,
         STEP_DESC,
         STEP_TYPE,
-        0, "user");
+        "user");
     FeatureLogicConfiguration firstLogic = FeatureLogicConfiguration
         .builder()
         .toFulfill(1)

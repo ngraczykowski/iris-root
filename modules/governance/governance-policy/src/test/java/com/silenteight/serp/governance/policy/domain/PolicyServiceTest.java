@@ -19,10 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
@@ -50,6 +53,8 @@ class PolicyServiceTest {
   private static final UUID OTHER_STEP = UUID.randomUUID();
   private static final String STEP_NAME = "step name";
   private static final String STEP_DESCRIPTION = "step description";
+  private static final String OTHER_STEP_NAME = "other step name";
+  private static final String OTHER_STEP_DESCRIPTION = "other step description";
 
   private PolicyRepository policyRepository = new InMemoryPolicyRepository();
   @Mock
@@ -311,6 +316,7 @@ class PolicyServiceTest {
     assertStepOrder(policy, FIRST_STEP, 1);
     assertStepOrder(policy, SECOND_STEP, 2);
     assertStepOrder(policy, THIRD_STEP, 0);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 
   private void assertStepOrder(Policy policy, UUID firstStep, int order) {
@@ -368,5 +374,84 @@ class PolicyServiceTest {
         MANUAL_RULE,
         sortOrder,
         USER);
+  }
+
+  @Test
+  void updatedStepOnNonDraftWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(
+        createStep(FIRST_STEP, 0),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    ));
+    policy.setState(SAVED);
+
+    assertThatExceptionOfType(WrongPolicyStateException.class)
+        .isThrownBy(() -> underTest.updateStep(
+            policy.getId(), FIRST_STEP, STEP_NAME, null, SOLUTION_FALSE_POSITIVE, OTHER_USER));
+  }
+
+  @Test
+  void updatedStepOnDraftWillUpdateStep() {
+    Policy policy = createPolicyWithSteps(of(
+        createStep(FIRST_STEP, 0),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    ));
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    underTest.updateStep(
+        policy.getId(),
+        FIRST_STEP,
+        OTHER_STEP_NAME,
+        OTHER_STEP_DESCRIPTION,
+        SOLUTION_NO_DECISION,
+        OTHER_USER);
+
+    policy = policyRepository.getByPolicyId(policy.getPolicyId());
+    Step updatedStep = policy
+        .getSteps().stream().filter(step -> step.hasStepId(FIRST_STEP)).findFirst().orElseThrow();
+    assertThat(updatedStep.getName()).isEqualTo(OTHER_STEP_NAME);
+    assertThat(updatedStep.getDescription()).isEqualTo(OTHER_STEP_DESCRIPTION);
+    assertThat(updatedStep.getSortOrder()).isZero();
+    assertThat(updatedStep.getUpdatedBy()).isEqualTo(OTHER_USER);
+    assertThat(updatedStep.getCreatedBy()).isEqualTo(USER);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  @Test
+  void deleteStepOnNonDraftWillThrowException() {
+    Policy policy = createPolicyWithSteps(of(
+        createStep(FIRST_STEP, 0),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    ));
+    policy.setState(SAVED);
+
+    assertThatExceptionOfType(WrongPolicyStateException.class)
+        .isThrownBy(() -> underTest.deleteStep(policy.getId(), FIRST_STEP, OTHER_USER));
+  }
+
+  @Test
+  void deleteStepOnDraftWillDeleteStep() {
+    Policy policy = createPolicyWithSteps(of(
+        createStep(FIRST_STEP, 0),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    ));
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    underTest.deleteStep(policy.getId(), SECOND_STEP, OTHER_USER);
+
+    policy = policyRepository.getByPolicyId(policy.getPolicyId());
+
+    List<Step> sortedSteps = policy
+        .getSteps()
+        .stream()
+        .sorted(Comparator.comparing(Step::getSortOrder))
+        .collect(Collectors.toList());
+    assertThat(sortedSteps)
+        .extracting(Step::getStepId)
+        .containsExactly(FIRST_STEP, THIRD_STEP);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 }
