@@ -24,8 +24,9 @@ LEGAL_TERMS = {
     "pvt": "private",
     "inc": "incorporated",
     "incorporation": "incorporated",
-    "gmbh": "gesellschaft mit beschränkter haftung",
+    "gmbh": "gesellschaft mit beschrankter haftung",
     "ag": "aktiengesellschaft",
+    "sa": "societe anonyme",
 }
 TERMS = {*LEGAL_TERMS.keys(), *LEGAL_TERMS.values()}
 
@@ -41,6 +42,11 @@ COMMON = {
     "motor",
     "computer",
     "international",
+    "investments",
+    "management",
+    "capital",
+    "securities",
+    "development",
 }
 
 WEAK_WORDS = {"of", "the", "for", "and"}
