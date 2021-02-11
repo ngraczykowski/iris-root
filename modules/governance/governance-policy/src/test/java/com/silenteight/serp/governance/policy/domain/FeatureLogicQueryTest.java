@@ -1,11 +1,9 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +48,9 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   private PolicyService policyService;
 
   @Autowired
+  private PolicyRepository policyRepository;
+
+  @Autowired
   private FeatureLogicRepository featureLogicRepository;
 
   @Autowired
@@ -66,14 +67,9 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   void listLogicShouldReturnEmpty_whenNothingIsSaved() {
     policyService.addPolicy(
         POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_NO_DECISION,
-        STEP_ID,
-        STEP_NAME,
-        STEP_DESC,
-        STEP_TYPE,
-        USER_NAME);
+    CreateStepRequest request = CreateStepRequest.of(
+        POLICY_UID, SOLUTION_NO_DECISION, STEP_ID, STEP_NAME, STEP_DESC, STEP_TYPE, USER_NAME);
+    policyService.addStepToPolicy(request);
 
     FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
 
@@ -82,16 +78,11 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
 
   @Test
   void listLogicShouldReturnLogic_whenLogicIsSaved() {
-    Policy policy = policyService.addPolicyInternal(
-        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_NO_DECISION,
-        STEP_ID,
-        STEP_NAME,
-        STEP_DESC,
-        STEP_TYPE,
-        "user");
+    UUID uuid = policyService.addPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    CreateStepRequest createStepRequest = CreateStepRequest.of(
+        POLICY_UID, SOLUTION_NO_DECISION, STEP_ID, STEP_NAME, STEP_DESC, STEP_TYPE, "user");
+    policyService.addStepToPolicy(createStepRequest);
     FeatureLogicConfiguration firstLogic = FeatureLogicConfiguration
         .builder()
         .toFulfill(1)
@@ -106,8 +97,9 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
             getFeatureConfiguration(FEATURE_NAME_4, of(MATCH))))
         .build();
 
-    policyService.configureStepLogic(
-        policy.getId(), STEP_ID, of(firstLogic, secondLogic), USER_NAME);
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policy.getId(), STEP_ID, of(firstLogic, secondLogic), USER_NAME);
+    policyService.configureStepLogic(request);
 
     FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
 

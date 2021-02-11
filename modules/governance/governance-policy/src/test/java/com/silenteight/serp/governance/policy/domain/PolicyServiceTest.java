@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.governance.api.v1.FeatureVectorSolution;
-import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
@@ -56,7 +56,7 @@ class PolicyServiceTest {
   private static final String OTHER_STEP_NAME = "other step name";
   private static final String OTHER_STEP_DESCRIPTION = "other step description";
 
-  private PolicyRepository policyRepository = new InMemoryPolicyRepository();
+  private final PolicyRepository policyRepository = new InMemoryPolicyRepository();
   @Mock
   private AuditingLogger auditingLogger;
   @Mock
@@ -110,14 +110,7 @@ class PolicyServiceTest {
     // then
     var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
 
-    verify(auditingLogger).log(logCaptor.capture());
-
-    var log = logCaptor.getValue();
-    assertThat(log.getType()).isEqualTo("PolicyCreateRequested");
-    assertThat(log.getEntityId()).isEqualTo(policyId.toString());
-    assertThat(log.getEntityClass()).isEqualTo("Policy");
-    assertThat(log.getEntityAction()).isEqualTo("CREATE");
-    assertThat(log.getDetails()).isEqualTo(request.toString());
+    verify(auditingLogger, times(8)).log(logCaptor.capture());
 
     var policy = policyRepository.getByPolicyId(policyId);
     assertThat(policy.getName()).isEqualTo(policyName);
@@ -154,20 +147,20 @@ class PolicyServiceTest {
   void configureStepWithZeroFeatureConfigurationWillThrowException() {
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
 
-    Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
-        0, of());
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policy.getId(), FIRST_STEP, getFeatureLogicConfiguration(0, of()), USER);
     assertThatExceptionOfType(EmptyFeatureConfiguration.class)
-        .isThrownBy(() -> underTest.configureStepLogic(
-            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+        .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
   void configureStepWithZeroFeaturesConfigurationWillThrowException() {
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
 
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policy.getId(), FIRST_STEP, of(), USER);
     assertThatExceptionOfType(EmptyFeaturesLogicConfiguration.class)
-        .isThrownBy(() -> underTest.configureStepLogic(
-            policy.getId(), FIRST_STEP, of(), USER));
+        .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
@@ -176,9 +169,10 @@ class PolicyServiceTest {
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         1, getFeatureConfiguration("name", of()));
 
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policy.getId(), FIRST_STEP, featureLogicConfiguration, USER);
     assertThatExceptionOfType(EmptyMatchConditionValueException.class)
-        .isThrownBy(() -> underTest.configureStepLogic(
-            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+        .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
@@ -187,9 +181,10 @@ class PolicyServiceTest {
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         0, getFeatureConfiguration("name", of("value")));
 
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policy.getId(), FIRST_STEP, featureLogicConfiguration, USER);
     assertThatExceptionOfType(WrongToFulfillValue.class)
-        .isThrownBy(() -> underTest.configureStepLogic(
-            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+        .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
@@ -198,9 +193,10 @@ class PolicyServiceTest {
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         0, getFeatureConfiguration("name", of("value")));
 
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policy.getId(), FIRST_STEP, featureLogicConfiguration, USER);
     assertThatExceptionOfType(WrongToFulfillValue.class)
-        .isThrownBy(() -> underTest.configureStepLogic(
-            policy.getId(), FIRST_STEP, featureLogicConfiguration, USER));
+        .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @NotNull
@@ -236,7 +232,7 @@ class PolicyServiceTest {
 
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
-    underTest.savePolicy(uuid, OTHER_USER);
+    underTest.savePolicy(SavePolicyRequest.of(uuid, OTHER_USER));
 
     policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(SAVED);
@@ -250,7 +246,7 @@ class PolicyServiceTest {
     policy.setState(SAVED);
 
     assertThatExceptionOfType(WrongPolicyStateChangeException.class)
-        .isThrownBy(() -> underTest.savePolicy(uuid, OTHER_USER));
+        .isThrownBy(() -> underTest.savePolicy(SavePolicyRequest.of(uuid, OTHER_USER)));
   }
 
   @Test
@@ -259,7 +255,7 @@ class PolicyServiceTest {
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
-    underTest.usePolicy(uuid, OTHER_USER);
+    underTest.usePolicy(UsePolicyRequest.of(uuid, OTHER_USER));
 
     policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(IN_USE);
@@ -273,7 +269,7 @@ class PolicyServiceTest {
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     assertThatExceptionOfType(WrongPolicyStateChangeException.class)
-        .isThrownBy(() -> underTest.usePolicy(uuid, USER));
+        .isThrownBy(() -> underTest.usePolicy(UsePolicyRequest.of(uuid, USER)));
   }
 
   @Test
@@ -282,7 +278,8 @@ class PolicyServiceTest {
     Policy policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
-    underTest.updatePolicy(uuid, NEW_POLICY_NAME, NEW_DESCRIPTION, OTHER_USER);
+    underTest.updatePolicy(
+        UpdatePolicyRequest.of(uuid, NEW_POLICY_NAME, NEW_DESCRIPTION, OTHER_USER));
 
     policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getName()).isEqualTo(NEW_POLICY_NAME);
@@ -297,7 +294,8 @@ class PolicyServiceTest {
     policy.setState(SAVED);
 
     assertThatExceptionOfType(WrongPolicyStateException.class)
-        .isThrownBy(() -> underTest.updatePolicy(uuid, NEW_POLICY_NAME, null, OTHER_USER));
+        .isThrownBy(() -> underTest.updatePolicy(
+            UpdatePolicyRequest.of(uuid, NEW_POLICY_NAME, null, OTHER_USER)));
   }
 
   @Test
@@ -309,8 +307,9 @@ class PolicyServiceTest {
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
-    underTest.setStepsOrder(
-        policy.getPolicyId(), of(THIRD_STEP, FIRST_STEP, SECOND_STEP), OTHER_USER);
+    SetStepsOrderRequest request = SetStepsOrderRequest
+        .of(policy.getPolicyId(), of(THIRD_STEP, FIRST_STEP, SECOND_STEP), OTHER_USER);
+    underTest.setStepsOrder(request);
 
     policy = policyRepository.getByPolicyId(POLICY_ID);
     assertStepOrder(policy, FIRST_STEP, 1);
@@ -334,9 +333,10 @@ class PolicyServiceTest {
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
+    SetStepsOrderRequest request = SetStepsOrderRequest
+        .of(policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER);
     assertThatExceptionOfType(WrongPolicyStateException.class)
-        .isThrownBy(() -> underTest.setStepsOrder(
-            policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
+        .isThrownBy(() -> underTest.setStepsOrder(request));
   }
 
   @Test
@@ -345,9 +345,10 @@ class PolicyServiceTest {
     Policy policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
+    SetStepsOrderRequest request = SetStepsOrderRequest
+        .of(policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER);
     assertThatExceptionOfType(StepsOrderListsSizeMismatch.class)
-        .isThrownBy(() -> underTest.setStepsOrder(
-            policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER));
+        .isThrownBy(() -> underTest.setStepsOrder(request));
   }
 
   @Test
@@ -359,9 +360,10 @@ class PolicyServiceTest {
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
+    SetStepsOrderRequest request = SetStepsOrderRequest
+        .of(policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, OTHER_STEP), OTHER_USER);
     assertThatExceptionOfType(WrongIdsListInSetStepsOrder.class)
-        .isThrownBy(() -> underTest.setStepsOrder(
-            policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, OTHER_STEP), OTHER_USER));
+        .isThrownBy(() -> underTest.setStepsOrder(request));
   }
 
   @NotNull
@@ -385,9 +387,10 @@ class PolicyServiceTest {
     ));
     policy.setState(SAVED);
 
+    UpdateStepRequest request = UpdateStepRequest.of(
+        policy.getId(), FIRST_STEP, STEP_NAME, null, SOLUTION_FALSE_POSITIVE, OTHER_USER);
     assertThatExceptionOfType(WrongPolicyStateException.class)
-        .isThrownBy(() -> underTest.updateStep(
-            policy.getId(), FIRST_STEP, STEP_NAME, null, SOLUTION_FALSE_POSITIVE, OTHER_USER));
+        .isThrownBy(() -> underTest.updateStep(request));
   }
 
   @Test
@@ -399,13 +402,14 @@ class PolicyServiceTest {
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
-    underTest.updateStep(
+    UpdateStepRequest request = UpdateStepRequest.of(
         policy.getId(),
         FIRST_STEP,
         OTHER_STEP_NAME,
         OTHER_STEP_DESCRIPTION,
         SOLUTION_NO_DECISION,
         OTHER_USER);
+    underTest.updateStep(request);
 
     policy = policyRepository.getByPolicyId(policy.getPolicyId());
     Step updatedStep = policy
@@ -428,7 +432,8 @@ class PolicyServiceTest {
     policy.setState(SAVED);
 
     assertThatExceptionOfType(WrongPolicyStateException.class)
-        .isThrownBy(() -> underTest.deleteStep(policy.getId(), FIRST_STEP, OTHER_USER));
+        .isThrownBy(() -> underTest.deleteStep(
+            DeleteStepRequest.of(policy.getId(), FIRST_STEP, OTHER_USER)));
   }
 
   @Test
@@ -440,7 +445,7 @@ class PolicyServiceTest {
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
-    underTest.deleteStep(policy.getId(), SECOND_STEP, OTHER_USER);
+    underTest.deleteStep(DeleteStepRequest.of(policy.getId(), SECOND_STEP, OTHER_USER));
 
     policy = policyRepository.getByPolicyId(policy.getPolicyId());
 

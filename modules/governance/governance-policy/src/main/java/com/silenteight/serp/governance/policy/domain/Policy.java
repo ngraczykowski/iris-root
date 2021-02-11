@@ -84,11 +84,12 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
         .build();
   }
 
-  void addStep(Step step) {
+  public void addStep(Step step) {
+    assertEditState();
     steps.add(step);
   }
 
-  void reconfigureStep(
+  public void reconfigureStep(
       @NonNull UUID stepId,
       @NonNull Collection<FeatureLogic> featureLogics,
       @NonNull String editedBy) {
@@ -105,17 +106,18 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     setUpdatedBy(editedBy);
   }
 
-  void save() {
+  public void save() {
     assertAllowedStateChange(DRAFT, SAVED);
     setState(SAVED);
   }
 
-  void use() {
+  public void use() {
     assertAllowedStateChange(SAVED, IN_USE);
     setState(IN_USE);
   }
 
-  void stopUsing() {
+  public void stopUsing() {
+    assertAllowedStateChange(IN_USE, SAVED);
     setState(SAVED);
   }
 

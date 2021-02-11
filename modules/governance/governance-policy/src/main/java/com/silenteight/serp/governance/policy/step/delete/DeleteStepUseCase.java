@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.DeleteStepRequest;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ class DeleteStepUseCase {
 
   void activate(@NonNull DeleteStepCommand command) {
     Long policyId = policyStepsRequestQuery.getPolicyIdForStep(command.getId());
-    policyService.deleteStep(policyId, command.getId(), command.getUpdatedBy());
+    policyService.deleteStep(
+        DeleteStepRequest.of(policyId, command.getId(), command.getUpdatedBy()));
   }
 }

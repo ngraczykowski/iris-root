@@ -1,12 +1,9 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,25 +81,7 @@ class StepQueryTest extends BaseDataJpaTest {
 
   @Test
   void listStepsOrderShouldSteps_whenStepsInPolicy() {
-    policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_NO_DECISION,
-        FIRST_STEP_ID,
-        FIRST_STEP_NAME,
-        FIRST_STEP_DESC,
-        FIRST_STEP_TYPE,
-        POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_FALSE_POSITIVE,
-        SECOND_STEP_ID,
-        SECOND_STEP_NAME,
-        SECOND_STEP_DESC,
-        SECOND_STEP_TYPE,
-        POLICY_CREATED_BY);
-    policyService.setStepsOrder(POLICY_UID, of(SECOND_STEP_ID, FIRST_STEP_ID), USER);
+    createPolicyWithTwoSteps();
 
     List<UUID> result = underTest.listStepsOrder(POLICY_UID);
 
@@ -111,28 +90,9 @@ class StepQueryTest extends BaseDataJpaTest {
 
   @Test
   void listStepsShouldReturnSteps_whenStepsInPolicy() {
-    policyService.addPolicy(
-        POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_NO_DECISION,
-        FIRST_STEP_ID,
-        FIRST_STEP_NAME,
-        FIRST_STEP_DESC,
-        FIRST_STEP_TYPE,
-        POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_FALSE_POSITIVE,
-        SECOND_STEP_ID,
-        SECOND_STEP_NAME,
-        SECOND_STEP_DESC,
-        SECOND_STEP_TYPE,
-        POLICY_CREATED_BY);
-    policyService.setStepsOrder(POLICY_UID, of(FIRST_STEP_ID, SECOND_STEP_ID), USER);
+    createPolicyWithTwoSteps();
 
     Collection<StepDto> result = underTest.listSteps(POLICY_UID);
-
 
     assertThat(result).extracting(StepDto::getId).contains(FIRST_STEP_ID, SECOND_STEP_ID);
   }
@@ -146,22 +106,20 @@ class StepQueryTest extends BaseDataJpaTest {
     List<StepConfigurationDto> result = underTest.listStepsConfiguration(POLICY_UID);
 
     // then
-    assertThat(result).contains(
-        StepConfigurationDto.builder()
-            .id(FIRST_STEP_ID)
-            .solution(SOLUTION_NO_DECISION)
-            .featureLogics(
-                of(
-                    createFeatureLogic(
-                        1,
-                        of(
-                            createFeatureConfigurationDto(
-                                "nameAgent", IS, of("MATCH", "NEAR_MATCH"))))))
-            .build(),
-        StepConfigurationDto.builder()
-            .id(SECOND_STEP_ID)
-            .solution(SOLUTION_FALSE_POSITIVE)
-            .build());
+    List<MatchConditionConfigurationDto> featureConfigurationDto = of(
+        createFeatureConfigurationDto("nameAgent", IS, of("MATCH", "NEAR_MATCH")));
+    StepConfigurationDto firstStep = StepConfigurationDto
+        .builder()
+        .id(FIRST_STEP_ID)
+        .solution(SOLUTION_NO_DECISION)
+        .featureLogics(of(createFeatureLogic(1, featureConfigurationDto)))
+        .build();
+    StepConfigurationDto secondStep = StepConfigurationDto
+        .builder()
+        .id(SECOND_STEP_ID)
+        .solution(SOLUTION_FALSE_POSITIVE)
+        .build();
+    assertThat(result).contains(firstStep, secondStep);
   }
 
   @Test
@@ -177,43 +135,25 @@ class StepQueryTest extends BaseDataJpaTest {
   }
 
   private Long createConfiguredPolicy() {
-    Policy policy = policyService.addPolicyInternal(
-        POLICY_UID, POLICY_NAME, POLICY_DESC, POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_NO_DECISION,
-        FIRST_STEP_ID,
-        FIRST_STEP_NAME,
-        FIRST_STEP_DESC,
-        FIRST_STEP_TYPE,
-        POLICY_CREATED_BY);
-    policyService.addStepToPolicy(
-        POLICY_UID,
-        SOLUTION_FALSE_POSITIVE,
-        SECOND_STEP_ID,
-        SECOND_STEP_NAME,
-        SECOND_STEP_DESC,
-        SECOND_STEP_TYPE,
-        POLICY_CREATED_BY);
-    policyService.setStepsOrder(POLICY_UID, of(FIRST_STEP_ID, SECOND_STEP_ID), USER);
+    createPolicyWithTwoSteps();
+    Long policyId = policyRepository.getIdByPolicyId(POLICY_UID);
 
     FeatureConfiguration featureConfiguration = createFeatureConfiguration(
         "nameAgent", IS, of("MATCH", "NEAR_MATCH"));
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
         .builder().toFulfill(1).featureConfigurations(of(featureConfiguration)).build();
-    policyService.configureStepLogic(
-        policy.getId(),
-        FIRST_STEP_ID,
-        of(featureLogicConfiguration),
-        USER);
+    ConfigureStepLogicRequest request = ConfigureStepLogicRequest
+        .of(policyId, FIRST_STEP_ID, of(featureLogicConfiguration), USER);
+    policyService.configureStepLogic(request);
 
-    return policy.getId();
+    return policyId;
   }
 
   private static FeatureLogicConfigurationDto createFeatureLogic(
       int count, Collection<MatchConditionConfigurationDto> features) {
 
-    return FeatureLogicConfigurationDto.builder()
+    return FeatureLogicConfigurationDto
+        .builder()
         .count(count)
         .features(features)
         .build();
@@ -222,7 +162,8 @@ class StepQueryTest extends BaseDataJpaTest {
   private static FeatureConfiguration createFeatureConfiguration(
       String name, Condition condition, Collection<String> values) {
 
-    return FeatureConfiguration.builder()
+    return FeatureConfiguration
+        .builder()
         .name(name)
         .condition(condition)
         .values(values)
@@ -234,5 +175,30 @@ class StepQueryTest extends BaseDataJpaTest {
 
     return MatchConditionConfigurationDto
         .builder().name(name).condition(condition).values(values).build();
+  }
+
+  private void createPolicyWithTwoSteps() {
+    policyService.addPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+    CreateStepRequest firstRequest = CreateStepRequest.of(
+        POLICY_UID,
+        SOLUTION_NO_DECISION,
+        FIRST_STEP_ID,
+        FIRST_STEP_NAME,
+        FIRST_STEP_DESC,
+        FIRST_STEP_TYPE,
+        POLICY_CREATED_BY);
+    policyService.addStepToPolicy(firstRequest);
+    CreateStepRequest secondRequest = CreateStepRequest.of(
+        POLICY_UID,
+        SOLUTION_FALSE_POSITIVE,
+        SECOND_STEP_ID,
+        SECOND_STEP_NAME,
+        SECOND_STEP_DESC,
+        SECOND_STEP_TYPE,
+        POLICY_CREATED_BY);
+    policyService.addStepToPolicy(secondRequest);
+    SetStepsOrderRequest stepsOrderReqest = SetStepsOrderRequest.of(
+        POLICY_UID, of(SECOND_STEP_ID, FIRST_STEP_ID), USER);
+    policyService.setStepsOrder(stepsOrderReqest);
   }
 }

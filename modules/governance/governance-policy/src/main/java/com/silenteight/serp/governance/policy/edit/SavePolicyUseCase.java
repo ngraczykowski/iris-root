@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.SavePolicyRequest;
 
 import java.util.UUID;
 
@@ -13,6 +14,6 @@ class SavePolicyUseCase {
   private final PolicyService policyService;
 
   void activate(@NonNull UUID id, @NonNull String userName) {
-    policyService.savePolicy(id, userName);
+    policyService.savePolicy(SavePolicyRequest.of(id, userName));
   }
 }

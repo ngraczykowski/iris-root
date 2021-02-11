@@ -27,7 +27,8 @@ class PolicyCreatedEventHandler {
   @EventListener
   public void handle(PolicyImportedEvent event) {
     logPolicyCreated(event.getPolicyId(), event.getCorrelationId());
-    eventPublisher.publishEvent(new PolicyPromotedEvent(event.getPolicyId()));
+    eventPublisher.publishEvent(
+        new PolicyPromotedEvent(event.getPolicyId(), event.getCorrelationId()));
   }
 
   private void logPolicyCreated(UUID policyId, UUID correlationId) {
@@ -39,7 +40,6 @@ class PolicyCreatedEventHandler {
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("CREATE")
-        .details(policyId.toString())
         .build();
     auditingLogger.log(auditDataDto);
   }

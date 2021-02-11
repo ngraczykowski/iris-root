@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.UpdateStepRequest;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 @RequiredArgsConstructor
@@ -17,12 +18,12 @@ class EditStepUseCase {
   void activate(@NonNull EditStepCommand command) {
     Long policyId = policyStepsRequestQuery.getPolicyIdForStep(command.getId());
     policyService.updateStep(
-        policyId,
-        command.getId(),
-        command.getName(),
-        command.getDescription(),
-        command.getSolution().getFeatureVectorSolution(),
-        command.getUpdatedBy()
-    );
+        UpdateStepRequest.of(
+            policyId,
+            command.getId(),
+            command.getName(),
+            command.getDescription(),
+            command.getFeatureVectorSolution(),
+            command.getUpdatedBy()));
   }
 }

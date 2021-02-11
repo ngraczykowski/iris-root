@@ -1,9 +1,6 @@
 package com.silenteight.serp.governance.policy.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEvent;
 
@@ -17,5 +14,8 @@ public class PolicyPromotedEvent extends BaseEvent {
 
   private static final long serialVersionUID = 5429401906070764168L;
 
+  @NonNull
   private final UUID policyId;
+  @NonNull
+  private final UUID correlationId;
 }

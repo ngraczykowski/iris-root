@@ -3,10 +3,9 @@ package com.silenteight.serp.governance.policy.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.governance.api.v1.FeatureVectorSolution;
-import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
@@ -19,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +25,6 @@ import java.util.UUID;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static java.util.Optional.ofNullable;
 import static java.util.Set.of;
-import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
@@ -46,49 +42,49 @@ public class PolicyService {
 
   @Transactional
   public UUID doImport(ConfigurePolicyRequest request) {
-    UUID correlationId = randomUUID();
-    UUID policyId = randomUUID();
-    logPolicyCreateRequested(request, policyId, correlationId);
+    request.preAudit(auditingLogger::log);
 
-    Policy policy = addPolicyInternal(
-        policyId, request.getPolicyName(), request.getDescription(), request.getCreatedBy());
-    configureImportedSteps(policy, request.getStepConfigurations(), request.getCreatedBy());
+    AddPolicyRequest addPolicyRequest = AddPolicyRequest.of(
+        request.getCorrelationId(),
+        request.getPolicyId(),
+        request.getPolicyName(),
+        request.getDescription(),
+        request.getCreatedBy());
+
+    Policy policy = addPolicyInternal(addPolicyRequest);
+    configureImportedSteps(
+        request.getCorrelationId(),
+        policy,
+        request.getStepConfigurations(),
+        request.getCreatedBy());
     Policy savedPolicy = policyRepository.save(policy);
-    savePolicy(policyId, request.getCreatedBy());
-    usePolicy(policyId, request.getCreatedBy());
-    eventPublisher.publishEvent(new PolicyImportedEvent(savedPolicy.getPolicyId(), correlationId));
+    savePolicy(SavePolicyRequest.of(request.getPolicyId(), request.getCreatedBy()));
+    usePolicy(UsePolicyRequest.of(request.getPolicyId(), request.getCreatedBy()));
+    eventPublisher.publishEvent(new PolicyImportedEvent(
+        savedPolicy.getPolicyId(), request.getCorrelationId()));
+    request.postAudit(auditingLogger::log);
     return savedPolicy.getPolicyId();
   }
 
-  private void logPolicyCreateRequested(
-      ConfigurePolicyRequest request, UUID policyId, UUID correlationId) {
-
-    AuditDataDto auditDataDto = AuditDataDto.builder()
-        .correlationId(correlationId)
-        .eventId(randomUUID())
-        .timestamp(Timestamp.from(Instant.now()))
-        .type("PolicyCreateRequested")
-        .entityId(policyId.toString())
-        .entityClass("Policy")
-        .entityAction("CREATE")
-        .details(request.toString())
-        .build();
-    auditingLogger.log(auditDataDto);
-  }
-
   private void configureImportedSteps(
-      Policy policy, List<StepConfiguration> configurations, String createdBy) {
+      UUID correlationID, Policy policy, List<StepConfiguration> configurations, String createdBy) {
 
     range(0, configurations.size())
         .boxed()
-        .forEach(i -> configureImportedStep(policy, configurations.get(i), i, createdBy));
+        .forEach(i -> configureImportedStep(
+            correlationID, policy, configurations.get(i), i, createdBy));
   }
 
   private void configureImportedStep(
-      Policy policy, StepConfiguration configuration, int sortOrder, String createdBy) {
+      UUID correlationId,
+      Policy policy,
+      StepConfiguration configuration,
+      int sortOrder,
+      String createdBy) {
 
     UUID stepId = UUID.randomUUID();
     addStep(
+        correlationId,
         policy,
         configuration.getSolution(),
         stepId,
@@ -105,44 +101,46 @@ public class PolicyService {
       @NonNull UUID policyId,
       @NonNull String policyName,
       @NonNull String createdBy) {
-    return addPolicyInternal(policyId, policyName, null, createdBy).getPolicyId();
+    AddPolicyRequest addPolicyRequest = AddPolicyRequest.of(policyId, policyName, null, createdBy);
+    addPolicyRequest.preAudit(auditingLogger::log);
+    Policy policy = addPolicyInternal(addPolicyRequest);
+    addPolicyRequest.postAudit(auditingLogger::log);
+    return policy.getPolicyId();
   }
 
   @NotNull
-  Policy addPolicyInternal(
-      @NonNull UUID policyId,
-      @NonNull String policyName,
-      String description,
-      @NonNull String createdBy) {
-
-    Policy policy = new Policy(policyId, policyName, description, createdBy);
-    return policyRepository.save(policy);
+  Policy addPolicyInternal(AddPolicyRequest addPolicyRequest) {
+    addPolicyRequest.preAudit(auditingLogger::log);
+    Policy policy = new Policy(
+        addPolicyRequest.getPolicyId(),
+        addPolicyRequest.getPolicyName(),
+        addPolicyRequest.getDescription(),
+        addPolicyRequest.getCreatedBy());
+    policy = policyRepository.save(policy);
+    addPolicyRequest.postAudit(auditingLogger::log);
+    return policy;
   }
 
   @Transactional
-  public void addStepToPolicy(
-      @NonNull UUID policyId,
-      @NonNull FeatureVectorSolution solution,
-      @NonNull UUID stepId,
-      @NonNull String stepName,
-      String stepDescription,
-      @NonNull StepType stepType,
-      String createdBy) {
-
-    Policy policy = policyRepository.getByPolicyId(policyId);
+  public void addStepToPolicy(CreateStepRequest createStepRequest) {
+    createStepRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(createStepRequest.getPolicyId());
     addStep(
+        UUID.randomUUID(),
         policy,
-        solution,
-        stepId,
-        stepName,
-        stepDescription,
-        stepType,
+        createStepRequest.getSolution(),
+        createStepRequest.getStepId(),
+        createStepRequest.getStepName(),
+        createStepRequest.getStepDescription(),
+        createStepRequest.getStepType(),
         DEFAULT_STEP_ORDER_VALUE,
-        createdBy);
+        createStepRequest.getCreatedBy());
+    createStepRequest.postAudit(auditingLogger::log);
   }
 
   @NotNull
   private Step addStep(
+      @NonNull UUID correlationId,
       @NonNull Policy policy,
       @NonNull FeatureVectorSolution solution,
       @NonNull UUID stepId,
@@ -159,14 +157,15 @@ public class PolicyService {
   }
 
   @Transactional
-  public void configureStepLogic(
-      @NonNull Long policyId,
-      @NonNull UUID stepId,
-      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations,
-      @NonNull String editedBy) {
-
-    Policy policy = policyRepository.getById(policyId);
-    doConfigureStepLogic(policy, stepId, featureLogicConfigurations, editedBy);
+  public void configureStepLogic(ConfigureStepLogicRequest configureStepLogicRequest) {
+    configureStepLogicRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getById(configureStepLogicRequest.getPolicyId());
+    doConfigureStepLogic(
+        policy,
+        configureStepLogicRequest.getStepId(),
+        configureStepLogicRequest.getFeatureLogicConfigurations(),
+        configureStepLogicRequest.getEditedBy());
+    configureStepLogicRequest.postAudit(auditingLogger::log);
   }
 
   private void doConfigureStepLogic(
@@ -238,17 +237,21 @@ public class PolicyService {
   }
 
   @Transactional
-  public void savePolicy(@NonNull UUID policyId, @NonNull String savedBy) {
-    Policy policy = policyRepository.getByPolicyId(policyId);
+  public void savePolicy(SavePolicyRequest savePolicyRequest) {
+    savePolicyRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(savePolicyRequest.getPolicyId());
     policy.save();
-    policy.setUpdatedBy(savedBy);
+    policy.setUpdatedBy(savePolicyRequest.getSavedBy());
     policyRepository.save(policy);
+    savePolicyRequest.postAudit(auditingLogger::log);
   }
 
   @Transactional
-  public void usePolicy(@NonNull UUID policyId, @NonNull String activatedBy) {
-    stopUsingOtherPolicies(activatedBy);
-    useSelectedPolicy(policyId, activatedBy);
+  public void usePolicy(UsePolicyRequest usePolicyRequest) {
+    usePolicyRequest.preAudit(auditingLogger::log);
+    stopUsingOtherPolicies(usePolicyRequest.getActivatedBy());
+    useSelectedPolicy(usePolicyRequest.getPolicyId(), usePolicyRequest.getActivatedBy());
+    usePolicyRequest.postAudit(auditingLogger::log);
   }
 
   private void stopUsingOtherPolicies(String activatedBy) {
@@ -266,39 +269,47 @@ public class PolicyService {
   }
 
   @Transactional
-  public void updatePolicy(UUID id, String name, String description, String updatedBy) {
-    Policy policy = policyRepository.getByPolicyId(id);
-    ofNullable(name).ifPresent(policy::setName);
-    ofNullable(description).ifPresent(policy::setDescription);
-    policy.setUpdatedBy(updatedBy);
+  public void updatePolicy(UpdatePolicyRequest updatePolicyRequest) {
+    updatePolicyRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(updatePolicyRequest.getPolicyId());
+    ofNullable(updatePolicyRequest.getName()).ifPresent(policy::setName);
+    ofNullable(updatePolicyRequest.getDescription()).ifPresent(policy::setDescription);
+    policy.setUpdatedBy(updatePolicyRequest.getUpdatedBy());
+    updatePolicyRequest.postAudit(auditingLogger::log);
   }
 
   @Transactional
-  public void setStepsOrder(UUID id, List<UUID> stepsOrder, String user) {
-    Policy policy = policyRepository.getByPolicyId(id);
-    policy.updateStepsOrder(stepsOrder, user);
+  public void setStepsOrder(SetStepsOrderRequest setStepsOrderReqest) {
+    setStepsOrderReqest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(setStepsOrderReqest.getPolicyId());
+    policy.updateStepsOrder(
+        setStepsOrderReqest.getStepsOrder(), setStepsOrderReqest.getUpdatedBy());
     policyRepository.save(policy);
+    setStepsOrderReqest.postAudit(auditingLogger::log);
   }
 
   @Transactional
-  public void updateStep(
-      long policyId,
-      UUID id,
-      String name,
-      String description,
-      FeatureVectorSolution solution,
-      String updatedBy) {
-    Policy policy = policyRepository.getById(policyId);
-    policy.updateStep(id, name, description, solution, updatedBy);
-    policy.setUpdatedBy(updatedBy);
+  public void updateStep(UpdateStepRequest updateStepRequest) {
+    updateStepRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getById(updateStepRequest.getId());
+    policy.updateStep(
+        updateStepRequest.getStepId(),
+        updateStepRequest.getName(),
+        updateStepRequest.getDescription(),
+        updateStepRequest.getSolution(),
+        updateStepRequest.getUpdatedBy());
+    policy.setUpdatedBy(updateStepRequest.getUpdatedBy());
     policyRepository.save(policy);
+    updateStepRequest.postAudit(auditingLogger::log);
   }
 
   @Transactional
-  public void deleteStep(long policyId, UUID id, String updatedBy) {
-    Policy policy = policyRepository.getById(policyId);
-    policy.deleteStep(id);
-    policy.setUpdatedBy(updatedBy);
+  public void deleteStep(DeleteStepRequest deleteStepRequest) {
+    deleteStepRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getById(deleteStepRequest.getPolicyId());
+    policy.deleteStep(deleteStepRequest.getStepId());
+    policy.setUpdatedBy(deleteStepRequest.getDeletedBy());
     policyRepository.save(policy);
+    deleteStepRequest.postAudit(auditingLogger::log);
   }
 }

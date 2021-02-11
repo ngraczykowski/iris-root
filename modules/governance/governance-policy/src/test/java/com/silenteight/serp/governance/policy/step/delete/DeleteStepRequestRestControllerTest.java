@@ -4,9 +4,11 @@ import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTes
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.DeleteStepRequest;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -14,6 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -42,7 +45,11 @@ class DeleteStepRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(NO_CONTENT.value());
 
-    verify(policyService).deleteStep(POLICY_ID, STEP_ID, USERNAME);
+    ArgumentCaptor<DeleteStepRequest> captor = ArgumentCaptor.forClass(DeleteStepRequest.class);
+    verify(policyService).deleteStep(captor.capture());
+    assertThat(captor.getValue().getStepId()).isEqualTo(STEP_ID);
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getDeletedBy()).isEqualTo(USERNAME);
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })

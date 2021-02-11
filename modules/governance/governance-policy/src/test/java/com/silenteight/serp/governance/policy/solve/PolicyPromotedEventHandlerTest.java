@@ -25,6 +25,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class PolicyPromotedEventHandlerTest {
 
+  private static final UUID CORRELATION_ID = UUID.randomUUID();
   @Mock
   private PolicyStepsConfigurationQuery stepsConfigurationQuery;
 
@@ -45,8 +46,10 @@ class PolicyPromotedEventHandlerTest {
     // given
     UUID policyId = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
     List<StepConfigurationDto> steps = createSteps();
-    PolicyPromotedEvent event = PolicyPromotedEvent.builder()
+    PolicyPromotedEvent event = PolicyPromotedEvent
+        .builder()
         .policyId(policyId)
+        .correlationId(CORRELATION_ID)
         .build();
     when(stepsConfigurationQuery.listStepsConfiguration(policyId)).thenReturn(steps);
 
@@ -58,34 +61,35 @@ class PolicyPromotedEventHandlerTest {
   }
 
   private static List<StepConfigurationDto> createSteps() {
+    List<MatchConditionConfigurationDto> firstStepMatchConfiguration = List.of(
+        getMatchConditionConfigurationDto("nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
+        getMatchConditionConfigurationDto("dateAgent", IS, List.of("EXACT", "NEAR")));
+    List<FeatureLogicConfigurationDto> firstStepFeaturesConfiguration = List.of(
+        FeatureLogicConfigurationDto
+            .builder()
+            .count(2)
+            .features(firstStepMatchConfiguration)
+            .build());
+
+    List<MatchConditionConfigurationDto> secondStepMatchConfiguration = List.of(
+        getMatchConditionConfigurationDto("documentAgent", IS, List.of("MATCH", "DIGIT_MATCH")));
+    List<FeatureLogicConfigurationDto> secondStepFeaturesConfiguration = List.of(
+        FeatureLogicConfigurationDto
+            .builder()
+            .count(1)
+            .features(secondStepMatchConfiguration)
+            .build());
+
     return List.of(
         StepConfigurationDto.builder()
             .id(fromString("de1afe98-0b58-4941-9791-4e081f9b8139"))
             .solution(SOLUTION_FALSE_POSITIVE)
-            .featureLogics(
-                List.of(
-                    FeatureLogicConfigurationDto.builder()
-                        .count(2)
-                        .features(
-                            List.of(
-                                getMatchConditionConfigurationDto(
-                                    "nameAgent", IS, List.of("PERFECT_MATCH", "NEAR_MATCH")),
-                                getMatchConditionConfigurationDto(
-                                    "dateAgent", IS, List.of("EXACT", "NEAR"))))
-                        .build()))
+            .featureLogics(firstStepFeaturesConfiguration)
             .build(),
         StepConfigurationDto.builder()
             .id(fromString("de1afe98-0b58-4941-9791-4e081f9b8139"))
             .solution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
-            .featureLogics(
-                List.of(
-                    FeatureLogicConfigurationDto.builder()
-                        .count(1)
-                        .features(
-                            List.of(
-                                getMatchConditionConfigurationDto(
-                                    "documentAgent", IS, List.of("MATCH", "DIGIT_MATCH"))))
-                        .build()))
+            .featureLogics(secondStepFeaturesConfiguration)
             .build());
   }
 

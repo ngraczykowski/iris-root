@@ -47,7 +47,6 @@ class PolicyCreatedEventHandlerTest {
     assertThat(log.getEntityId()).isEqualTo(policyId.toString());
     assertThat(log.getEntityClass()).isEqualTo("Policy");
     assertThat(log.getEntityAction()).isEqualTo("CREATE");
-    assertThat(log.getDetails()).isEqualTo(policyId.toString());
 
     var policyPromotedEventCaptor = ArgumentCaptor.forClass(PolicyPromotedEvent.class);
 

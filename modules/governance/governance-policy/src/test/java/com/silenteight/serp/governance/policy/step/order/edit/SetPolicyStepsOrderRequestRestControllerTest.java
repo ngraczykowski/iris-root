@@ -4,9 +4,11 @@ import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTes
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.SetStepsOrderRequest;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static java.util.List.of;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -48,7 +51,12 @@ class SetPolicyStepsOrderRequestRestControllerTest extends BaseRestControllerTes
         .contentType(anything())
         .statusCode(OK.value());
 
-    verify(policyService).setStepsOrder(POLICY_ID, steps, USERNAME);
+    ArgumentCaptor<SetStepsOrderRequest> captor = ArgumentCaptor
+        .forClass(SetStepsOrderRequest.class);
+    verify(policyService).setStepsOrder(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getStepsOrder()).isEqualTo(steps);
+    assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
