@@ -30,7 +30,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID POLICY_ID = UUID.randomUUID();
-  private static final String CREATE_STEP_URL = "/v1/policies/" + POLICY_ID.toString() + "/steps/";
+  private static final String CREATE_STEP_URL = "/v1/policies/" + POLICY_ID.toString() + "/steps";
 
   private static final UUID STEP_ID = UUID.randomUUID();
   private static final String NAME = "name";
