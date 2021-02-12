@@ -181,9 +181,6 @@ public class PolicyService {
   private static Collection<FeatureLogic> mapToFeatureLogics(
       @NonNull UUID stepId, Collection<FeatureLogicConfiguration> configurations) {
 
-    if (configurations.isEmpty())
-      throw new EmptyFeaturesLogicConfiguration(stepId);
-
     return configurations
         .stream()
         .map(configuration -> mapToFeatureLogic(stepId, configuration))

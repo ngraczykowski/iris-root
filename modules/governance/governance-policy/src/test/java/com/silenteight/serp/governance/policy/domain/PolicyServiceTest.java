@@ -154,13 +154,12 @@ class PolicyServiceTest {
   }
 
   @Test
-  void configureStepWithZeroFeaturesConfigurationWillThrowException() {
+  void configureStepWithZeroFeaturesConfigurationIsValidRequest() {
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
         .of(policy.getId(), FIRST_STEP, of(), USER);
-    assertThatExceptionOfType(EmptyFeaturesLogicConfiguration.class)
-        .isThrownBy(() -> underTest.configureStepLogic(request));
+    assertThatNoException().isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
