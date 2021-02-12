@@ -1,11 +1,10 @@
 import collections
 import itertools
-import json
 import random
 import multiprocessing
 import csv
 
-import pandas
+import numpy
 
 from typing import *
 
@@ -47,27 +46,30 @@ def compute_scores(
                 writer.writerow({**row, **scored})
 
 
-def get_companies(source):
-    return pandas.read_csv(source)
-
-
-companies_df = get_companies("./data/company_pairs_with_results.csv")
+COMPANY_FILE = "./data/company_pairs_with_results.csv"
+with open(COMPANY_FILE, "rt") as f:
+    companies_columns = {name: i for i, name in enumerate(next(f).rstrip().split(",")[2:])}
+companies_df = numpy.genfromtxt(COMPANY_FILE, delimiter=",")[1:].transpose()[2:]
 
 Score = collections.namedtuple("Score", ("accuracy", "precision", "recall"))
 
 
 def get_threshold_score(thresholds):
     correct = []
-    for keys, threshold in thresholds:
-        value = sum(companies_df[key] for key in keys)
+    for i, threshold in enumerate(thresholds):
+        if threshold is None:
+            continue
+        keys = scores_all_keys[i]
+        value = sum(companies_df[companies_columns[key]] for key in keys)
         correct.append((value >= threshold))
-    result = pandas.DataFrame(correct).any()
+    result = numpy.any(correct, axis=0)
 
-    tp = (companies_df["is_similar"] == 1 & result).sum()
-    tn = (companies_df["is_similar"] == 0 & ~result).sum()
+    i = companies_columns["is_similar"]
+    tp = ((companies_df[i] == 1) & result).sum()
+    tn = ((companies_df[i] == 0) & ~result).sum()
 
-    fp = (companies_df["is_similar"] == 0 & result).sum()
-    fn = (companies_df["is_similar"] == 1 & ~result).sum()
+    fp = ((companies_df[i] == 0) & result).sum()
+    fn = ((companies_df[i] == 1) & ~result).sum()
 
     accuracy = (tp + tn) / (tp + tn + fp + fn)
     precision = tp / (tp + fp)
@@ -80,9 +82,8 @@ def get_thresholds(set_keys, keys):
         yield set_keys
         return
 
-    for i in range(40, 101, 10):
-        yield from get_thresholds((*set_keys, (keys[0], i / 100)), keys[1:])
-    yield from get_thresholds(set_keys, keys[1:])
+    for i in [0.10, 0.20, 0.30, 0.40, 0.50, 0.6, 0.70, 0.8, 0.90, 1, 1.1]:
+        yield from get_thresholds((*set_keys, i), keys[1:])
 
 
 def print_top(result: List[Tuple[Any, Score]], k=3):
@@ -106,14 +107,17 @@ def main():
     random.shuffle(thresholds)
     print(len(thresholds))
     result = []
-    for i in range(1, len(thresholds), 50):
-        this_thresholds = thresholds[i : i + 50]
-        for r in pool.imap(get_threshold_score, this_thresholds):
+    for i in range(1, len(thresholds), 5000):
+        this_thresholds = thresholds[i : i + 5000]
+        for r in pool.imap(get_threshold_score, this_thresholds, 100):
             result.append(r)
         print_top(result)
-        with open("./data/thresholds_scores.json", "wt") as f:
-            json.dump(result, f, indent=2)
-        break
+
+        with open("./data/thresholds_scores.csv", "wt") as f:
+            writer = csv.writer(f)
+            writer.writerow(([*[k[0] for k in scores_all_keys], "accuracy", "precision", "recall"]))
+            for r in result:
+                writer.writerow([*r[0], *r[1]])
 
 
 if __name__ == "__main__":
