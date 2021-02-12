@@ -10,7 +10,6 @@ import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyFeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.exception.EmptyFeaturesLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyMatchConditionValueException;
 import com.silenteight.serp.governance.policy.domain.exception.WrongToFulfillValue;
 
