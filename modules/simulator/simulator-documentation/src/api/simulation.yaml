@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  title: Simulation
+  description: Simulation API
+  version: 0.1.0
+servers:
+  - url: 'https'
+
+paths:
+  /simulations:
+    get:
+      description: Returns a list of simulations
+      responses:
+        200:
+          description: List of simulations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimulationListQuery'
+
+    post:
+      description: Create a new simulation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSimulationRequest'
+      responses:
+        201:
+          description: Created
+
+  /simulations/{id}:
+    get:
+      description: Returns a simulation details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Simulation UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Simulation details
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SimulationQuery'
+
+  /simulations/{id}/statistics/efficiency:
+    get:
+      description: Returns an efficiency statistics
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Simulation UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns an efficiency
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/EfficiencyQuery'
+
+  /simulations/{id}/statistics/effectiveness:
+    get:
+      description: Returns an effectivenes statistics
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Simulation UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns an effectivenes
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/EffectivenessQuery'
+
+  /simulations/{id}/statistics/vectors:
+    get:
+      description: Returns an vectors statistics
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Simulation UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns an effidetails
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/VectorsQuery'
+
+  /simulations/{id}/reports:
+    get:
+      description: Returns a list of reports
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Simulation UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns a list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportQuery'
+
+  /reports/{id}:
+    get:
+      description: Returns simulation report
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Report UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns a list of reports
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+
+
+components:
+  schemas:
+
+    SimulationStatus:
+      type: string
+      enum: [ PENDING, PROCESSING, COMPLETED]
+
+    CreateSimulationRequest:
+      type: object
+      required:
+        - id
+        - name
+        - datasetId
+        - policyId
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        datasetId:
+          type: string
+          description: Dataset UUID
+        policyId:
+          type: string
+          description: Policy UUID
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'New simulation'
+        description: 'Simulation description'
+        datasetId: 'b4708d8c-4832-6fde-8dc0-d17b4708d8ca'
+        policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
+
+    SimulationListQuery:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        datasetId:
+          type: string
+          description: Dataset UUID
+        policyId:
+          type: string
+          description: Policy UUID
+        status:
+          type: object
+          $ref: '#/components/schemas/SimulationStatus'
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Simulation name'
+        description: 'Simulation description'
+        datasetId: 'b4708d8c-4832-6fde-8dc0-d17b4708d8ca'
+        policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        status: 'PENDING'
+        createdAt: '2004-02-12T15:19:21Z'
+        createdBy: 'UserName'
+        updatedAt: '2004-02-15T15:19:21Z'
+
+    SimulationQuery:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        datasetId:
+          type: string
+          description: Dataset UUID
+        policyId:
+          type: string
+          description: Policy UUID
+        status:
+          type: object
+          $ref: '#/components/schemas/SimulationStatus'
+        startedAt:
+          type: string
+        finishedAt:
+          type: string
+        updatedAt:
+          type: string
+        updatedBy:
+          type: string
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Simulation name'
+        description: 'Simulation description'
+        datasetId: 'b4708d8c-4832-6fde-8dc0-d17b4708d8ca'
+        policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        status: 'PENDING'
+        createdAt: '2004-02-12T15:09:21Z'
+        startedAt: '2004-02-12T16:19:21Z'
+        finishedAt: '2004-02-13T09:19:21Z'
+        updatedAt: '2004-02-13T09:19:21Z'
+        createdBy: 'UserName'
+
+    EfficiencyQuery:
+      type: object
+      properties:
+        solvedAlerts:
+          type: number
+        allAlerts:
+          type: number
+      example:
+        solvedAlerts: 3632
+        allAlerts: 10000
+
+    EffectivenessQuery:
+      type: object
+      properties:
+        aiSolvedAsFalsePositive:
+          type: number
+        analystSolvedAsFalsePositive:
+          type: number
+      example:
+        aiSolvedAsFalsePositive: 3632
+        analystSolvedAsFalsePositive: 3632
+
+    VectorsQuery:
+      type: object
+      properties:
+        coveredVectors:
+          type: number
+        allVectors:
+          type: number
+      example:
+        coveredVectors: 401
+        allVectors: 1000
+
+    ReportQuery:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Report UUID
+        name:
+          type: string
+        url:
+          type: string
+      example:
+        id: '4708d8ca-6fde-8dc0-4832-d17b4708d8ca'
+        name: Reasoning Branch Scorer
+        url: https://dev.bravo.silenteight.com/rest/api/simulator/reports/4708d8ca-6fde-8dc0-4832-d17b4708d8ca
