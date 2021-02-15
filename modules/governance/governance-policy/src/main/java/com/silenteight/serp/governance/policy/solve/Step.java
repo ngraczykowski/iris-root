@@ -17,20 +17,7 @@ class Step {
   private final Collection<FeatureLogic> featureLogics;
 
   boolean matchesFeatureValues(Map<String, String> featureValuesByName) {
-    return featureLogics
-        .stream()
-        .anyMatch(featureLogic -> matchesFeatureValues(featureLogic, featureValuesByName));
-  }
-
-  private boolean matchesFeatureValues(
-      FeatureLogic featureLogic, Map<String, String> featureValuesByName) {
-
-    return featureLogic
-        .getFeatures()
-        .stream()
-        .filter(feature -> feature.matchesFeatureValues(featureValuesByName))
-        .limit(featureLogic.getCount())
-        .count() == featureLogic.getCount();
+    return featureLogics.stream().allMatch(featureLogic -> featureLogic.match(featureValuesByName));
   }
 
   SolveResponse getResponse() {
