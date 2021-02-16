@@ -11,7 +11,7 @@ serp:
 spring:
   cloud:
     consul:
-      enabled: ${serp.consul.enabled}
+      enabled: true
       scheme: ${serp.consul.protocol}
       host: ${serp.consul.host}
       port: ${serp.consul.port:24120}
