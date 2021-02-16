@@ -1,3 +1,16 @@
 @Library('pipeline-shared-library') _
 
-gradleBuild(jdkVersion: 'jdk-11', sonarEnabled: true)
+gradleBuild(jdkVersion: 'jdk-11',
+sonarEnabled: true,
+ additionalStages:{
+  stage('Deploy On Nomad') {
+    script {
+        def utils = new com.silenteight.jenkins.ci.Utils()
+        if(utils.getGitBranch() == 'master'){
+            sh './nomad/deploy.sh -var-file=master.vars'
+        } else {
+            echo 'This is not a release branch ignore Nomad deployment'
+        }
+    }
+  }
+})

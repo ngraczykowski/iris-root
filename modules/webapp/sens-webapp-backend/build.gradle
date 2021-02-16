@@ -2,6 +2,7 @@ plugins {
   id "java"
   id "io.freefair.aspectj.post-compile-weaving"
   id "maven-publish"
+  id "org.springframework.boot"
 }
 
 description = "SENS WebApp Backend"
