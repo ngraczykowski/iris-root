@@ -2,32 +2,16 @@ spring:
   cloud:
     consul:
       discovery:
-        enabled: ${serp.consul.discovery.enabled}
-        scheme: ${serp.consul.protocol}
-        health-check-path: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
-        instance-id: ${serp.consul.instance}
-        prefer-ip-address: true
-        tags:
-          - "traefik.frontend.rule=PathPrefix: ${server.servlet.context-path}"
-          - "traefik.protocol=${serp.server.protocol}"
-          - "traefik.frontend.entryPoints=${serp.consul.traefik.entryPoints}"
-          - "traefik.frontend.passTLSCert=${serp.consul.traefik.passTLSCert}"
-          - "prometheus.metrics.path=${server.servlet.context-path}${management.endpoints.web.base-path}/prometheus"
+        enabled: true
+        register: false
+        register-health-check: false
 
         catalog-services-watch:
-          enabled:  ${serp.consul.discovery.enabled}
+          enabled: true
 
-        heartbeat:
-          enabled: ${serp.consul.discovery.enabled}
-
-consul:
-  grpc:
-    registration:
-      tags:
-        - "traefik.frontend.rule=Host: grpc-${spring.application.name}.service.consul"
-        - "traefik.protocol=${serp.server.protocol}"
-        - "traefik.frontend.entryPoints=${serp.consul.traefik.entryPoints}"
-        - "traefik.frontend.passTLSCert=${serp.consul.traefik.passTLSCert}"
+    service-registry:
+      auto-registration:
+        enabled: false
 
 grpc:
   client:
