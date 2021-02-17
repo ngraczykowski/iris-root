@@ -8,10 +8,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyMap;
+import static java.util.Objects.nonNull;
 
 
 // Lists all files in given resources directory
@@ -23,19 +25,37 @@ public class ResourceDirectoryFilenamesFinder {
 
   private static final int MAX_DEPTH = 1;
   private static final String JAR_SCHEME = "jar";
+  private static final String URI_DIR_SEPARATOR = "!";
   private final String resourceDirectoryPath;
 
   public Stream<String> find() throws IOException {
     log.debug("Reading files in {}", resourceDirectoryPath);
     var fileNames = new ArrayList<String>();
-    var directoryUri = tryGettingDirectoryUri();
+    var directoryUri = tryGettingDirectoryUri(resourceDirectoryPath);
 
-    try (var ignored = newFilesystemIfJar(directoryUri)) {
-      var directoryPath = Paths.get(directoryUri);
+    try (var jarFileSystem = newFilesystemIfJar(directoryUri)) {
+      Path directoryPath;
+      if (nonNull(jarFileSystem)) {
+        directoryPath = jarFileSystem.getPath(resourceDirectoryPath);
+      } else {
+        directoryPath = Paths.get(directoryUri);
+      }
       forEachFilenameInDirectory(directoryPath, fileNames::add);
     }
-
     return fileNames.stream();
+  }
+
+  private static Optional<String> getNestedJarPath(String directoryUriString) {
+    var dirs = directoryUriString.split(URI_DIR_SEPARATOR);
+    if (hasNestedJar(directoryUriString)) {
+      return Optional.of(dirs[1]);
+    }
+    return Optional.empty();
+  }
+
+  private static boolean hasNestedJar(String directoryUriString) {
+    var dirs = directoryUriString.split(URI_DIR_SEPARATOR);
+    return nonNull(dirs) && dirs.length > 2 && dirs[1].contains(".jar");
   }
 
   private static void forEachFilenameInDirectory(
@@ -48,17 +68,36 @@ public class ResourceDirectoryFilenamesFinder {
     }
   }
 
-  private URI tryGettingDirectoryUri() throws IOException {
+  private URI tryGettingDirectoryUri(String resourceDirectoryPath) throws IOException {
     try {
-      return ResourceDirectoryFilenamesFinder.class.getResource(resourceDirectoryPath).toURI();
+      return ResourceDirectoryFilenamesFinder.class
+          .getResource(resourceDirectoryPath)
+          .toURI();
     } catch (URISyntaxException e) {
       throw new IOException(e);
     }
   }
 
   private static FileSystem newFilesystemIfJar(URI directoryUri) throws IOException {
-    return directoryUri.getScheme().equals(JAR_SCHEME)
-           ? FileSystems.newFileSystem(directoryUri, emptyMap())
-           : null;
+    FileSystem fileSystem = null;
+    if (JAR_SCHEME.equals(directoryUri.getScheme())) {
+      fileSystem = getOrCreateFileSystem(directoryUri);
+      var nestedJarPath = getNestedJarPath(directoryUri.toString());
+      if (nestedJarPath.isPresent()) {
+        fileSystem = FileSystems.newFileSystem(fileSystem.getPath(nestedJarPath.get()), null);
+      }
+    }
+    return fileSystem;
+  }
+
+  private static FileSystem getOrCreateFileSystem(URI directoryUri) throws IOException {
+    FileSystem fileSystem;
+    try {
+      fileSystem = FileSystems.getFileSystem(directoryUri);
+    } catch (FileSystemNotFoundException e) {
+      // file system does not exist, create a new one
+      fileSystem = FileSystems.newFileSystem(directoryUri, emptyMap());
+    }
+    return fileSystem;
   }
 }

@@ -3,24 +3,18 @@ package com.silenteight.agent.common.io;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
-import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.*;
 
 class ResourceDirectoryFilenamesFinderTest {
 
   private final ResourceDirectoryFilenamesFinder underTest =
       new ResourceDirectoryFilenamesFinder("/resourcefileslister");
 
-  private static String extractFilename(String s) {
-    var splited = s.split("/");
-    return splited[splited.length - 1];
-  }
-
   @Test
-  void readsTestResourcesCorrectly() throws IOException, URISyntaxException {
+  void readsTestResourcesCorrectly() throws IOException {
     var files = underTest.find();
 
-    System.out.println(files.collect(toList()));
+    assertThat(files.count()).isEqualTo(2);
   }
 }
