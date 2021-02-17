@@ -1,0 +1,27 @@
+ext {
+  libraries = [:]
+}
+
+// @formatter:off
+
+libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot']
+
+libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api']
+
+configurations.all {
+  exclude group: 'org.glassfish', module: 'javax.el'
+  exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+
+  resolutionStrategy {
+    failOnVersionConflict()
+    preferProjectModules()
+  }
+}
+
+dependencies {
+  implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  annotationProcessor platform(
+      "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+
+  implementation libraries.slf4j_api
+}

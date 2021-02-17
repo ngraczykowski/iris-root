@@ -1,0 +1,2145 @@
+---
+openapi: 3.0.1
+info:
+  title: HSCB-Bridge-bulk API
+  description: HSCB-Bridge-bulk API
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /async/bulk/hscb-bridge/v1/recommend_alerts:
+    post:
+      summary: Submit bulk of alerts for async recommendations.
+      requestBody:
+        description: List of alerts to recommend.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alerts'
+        required: true
+      responses:
+        "200":
+          description: Confirmation of accepting bulk.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAcceptedResponse'
+  /async/bulk/hscb-bridge/v1/{bulkId}/status:
+    get:
+      summary: Status of bulk processing for given ID
+      parameters:
+        - name: bulkId
+          in: path
+          description: The id bulk job.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of requested alerts with status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkStatusResponse'
+  /async/bulk/hscb-bridge/v1/{bulkId}/result:
+    get:
+      summary: Get results from bulk job.
+      parameters:
+        - name: bulkId
+          in: path
+          description: The id bulk job.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of alerts with recommendation.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/BulkSolvedAlertsResponse'
+  /async/bulk/hscb-bridge/v1/{bulkId}/cancel:
+    get:
+      summary: Cancel bulk with given id.
+      parameters:
+        - name: bulkId
+          in: path
+          description: The id bulk job.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Bulk with given has been cancled.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/BulkCancelResponse'
+components:
+  schemas:
+    usersByGroup:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          description: Group ID
+        groupName:
+          type: string
+          description: Group Name
+        userid:
+          type: integer
+          description: Unique ID of the user that is a member of the group
+        username:
+          type: string
+          description: The users username
+        realm:
+          type: string
+          description: source of authentication e.g. domain
+        fullname:
+          type: string
+          description: Users full name
+    deletedusers:
+      type: object
+      properties:
+        userid:
+          type: integer
+          description: Unique ID of the user
+        username:
+          type: string
+          description: The users username
+        display:
+          type: string
+          description: The name that will be used to display the user against their activities once the end user has been deleted from the solution.
+        fullname:
+          type: string
+          description: Users full name
+    users:
+      type: object
+      properties:
+        userid:
+          type: integer
+          description: Unique ID of the user
+        username:
+          type: string
+          description: The users username
+        realm:
+          type: string
+          description: Source of authentication e.g. domain
+        fullname:
+          type: string
+          description: Users full name
+    countryCTRPScreeningIndividuals:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordId:
+          type: number
+          description: Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID.
+        inputStream:
+          type: string
+          description: Describe where the alert was generated
+        countryCode:
+          type: string
+          description: The field provides the country code which raised the alert. This will always be a two character code
+        typeOfMatch:
+          type: string
+          description: Describes the type of country match, this will currently be&#58; Country Match or CTRP Match
+        countryName:
+          type: string
+          description: The field provides the country name which raised the alert.
+        matchType:
+          type: string
+          description: This list one of three match types&#58; Nationality or Residency
+        oWSWatchlistName:
+          type: string
+          description: This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Individuals this will always be ISSC.
+        pRBListType:
+          type: string
+          description: This is the type of match that has been found it is parent group of OWS Watchlist Name, currently it will always be SSC
+        cTRPValue:
+          type: string
+          description: List the specific CTRP value that triggered the alert. For example if this is Havana, Country Name will be CUBA
+        cTRPLevel:
+          type: integer
+          description: Type of CTRP Record e.g. 1 =Country, 2=Postcode
+        cTRPCommonality:
+          type: integer
+          description: The number of countries in the world that feature a place of this name
+        cTRPSource:
+          type: integer
+          description: This provides a description of the CTRP Source element.
+        cTRPNameType:
+          type: string
+          description: describes the CTRP type that matched
+        cTRPRuleNarrative:
+          type: string
+          description: Provides a description of what the rule was raised against
+        alertKeyFragment:
+          type: string
+          description: Provides the full code for the match type that will be used to create the Alert Key.
+    customerEntities:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordId:
+          type: number
+          description: Refers to a Customer name record (relationship) within an alert where there are multiple Customer name records within the same alert. This is the working record ID.
+        inputStream:
+          type: string
+          description: Denotes the type of data, for example&#58; Customer Data
+        sourceSystemHistoryID:
+          type: integer
+          description: Identifier used during reconciliation to store customer information
+        closeOfBusinessDate:
+          type: string
+          description: The date the business ceased trading
+        partitionNumber:
+          type: integer
+          description: Where a customer feed is larger than a certain threshold it will be partitioned into sections. The partion number denotes which partition this record has come from.
+        sourceSystemIdentifier:
+          type: string
+          description: The Identifier used to identify where the feed originated from
+        externalProfileID:
+          type: string
+          description: Customer ID from source system
+        concatenatedProfileID:
+          type: string
+          description: Customer ID from source system concatenated with the source system name to ensure the customer ID is unique.
+        profileType:
+          type: string
+          description: Party type code
+        partyRoleTypeCode:
+          type: string
+          description: Provides the ID relating to the customer type
+        profileStatus:
+          type: string
+          description: Partyy status code
+        profileSegment:
+          type: string
+          description: Line of Business customer segment.
+        lOBName:
+          type: string
+          description: Line of Business name
+        lOBRegion:
+          type: string
+          description: Line of Business region
+        lOBCountry:
+          type: string
+          description: Line of Business Country Code
+        hSBCLegalEntityCode:
+          type: string
+          description: HSBC legal entity code
+        nameCategoryCode:
+          type: string
+          description: Customer name category code
+        nameTypeCode:
+          type: string
+          description: Name Type Code
+        nameLanguageTypeCode:
+          type: string
+          description: The language associated to the name type code
+        entityNameOriginal:
+          type: string
+          description: The Entity name as originally provided
+        pEPIndicator:
+          type: string
+          description: Indicates if the record is regarded as a PEP or not in the source system
+        specialCategoryCustomer:
+          type: string
+          description: Indicates if the record is regarded as a Special Chategory Person or not in the source system
+        sourceAddressType:
+          type: string
+          description: The Address Type provided for this customer record
+        addressFormatCode:
+          type: string
+          description: Indicates if the address is provided in a structured or unstructured format
+        addressLanguageTypeCode:
+          type: string
+          description: Indicates if the address is provided in the primary or secondary language
+        sourceAddressLine1:
+          type: string
+          description: Address Line 1 as provided in the customer record
+        sourceAddressLine2:
+          type: string
+          description: Address Line 2 as provided in the customer record
+        sourceAddressLine3:
+          type: string
+          description: Address Line 3 as provided in the customer record
+        sourceAddressLine4:
+          type: string
+          description: Address Line 4 as provided in the customer record
+        sourceAddressLine5:
+          type: string
+          description: Address Line 5 as provided in the customer record
+        sourceAddressLine6:
+          type: string
+          description: Address Line 6 as provided in the customer record
+        sourceAddressLine7:
+          type: string
+          description: Address Line 7 as provided in the customer record
+        sourceAddressLine8:
+          type: string
+          description: Address Line 8 as provided in the customer record
+        sourceAddressLine9:
+          type: string
+          description: Address Line 9 as provided in the customer record
+        sourceAddressLine10:
+          type: string
+          description: Address Line 10 as provided in the customer record
+        sourcePostalCode:
+          type: string
+          description: Address Postcode as provided in the customer record
+        sourceAddressCountry:
+          type: string
+          description: Address Country as provided in the customer record
+        identificationDocument1:
+          type: string
+          description: Identification document.
+        identificationDocument2:
+          type: string
+          description: Identification document
+        identificationDocument3:
+          type: string
+          description: Identification document
+        identificationDocument4:
+          type: string
+          description: Identification document
+        identificationDocument5:
+          type: string
+          description: Identification document
+        identificationDocument6:
+          type: string
+          description: Identification document
+        identificationDocument7:
+          type: string
+          description: Identification document
+        identificationDocument8:
+          type: string
+          description: Identification document
+        identificationDocument9:
+          type: string
+          description: Identification document
+        identificationDocument10:
+          type: string
+          description: Identification document
+        tradesWithCountries:
+          type: string
+          description: List of countries the customer trades with
+        subsidiariesOperatesInCountries:
+          type: string
+          description: List of countries the customer's subsidiaries operate in
+        exportCountries:
+          type: string
+          description: List of countries the customer exports to
+        importCountries:
+          type: string
+          description: List of countries the customer imports from
+        countriesOfIncorporation:
+          type: string
+          description: List of countires where the customer was/is incorporated
+        countriesOfRegistrationOriginal:
+          type: string
+          description: List of countries where the customer is registered
+        countriesOfBusiness:
+          type: string
+          description: List of countries where the customer conducts business
+        countriesOfHeadOffice:
+          type: string
+          description: List of countries where the customer has a head office
+        edqCustID:
+          type: string
+          description: Customer ID from source system concatenated with the source system name to ensure the customer ID is unique
+        edqCustSubID:
+          type: string
+          description: Customer ID from the source system
+        edqLoBCountryCode:
+          type: string
+          description: The ISO country code the the Line of Business this record is associated to
+        addressCountry:
+          type: string
+          description: The refined and or Derived country names associated to the customer record
+        edqAddressCountryCode:
+          type: string
+          description: The ISO country code Derived from the customer's address
+        edqTradesWithCountries:
+          type: string
+          description: A standardised list of countries the customer trades with
+        edqExportsCountries:
+          type: string
+          description: A standardised list of countries the customer exports to
+        edqImportsCountries:
+          type: string
+          description: A standardised list of countries the customer imports from
+        edqIncorporationCountries:
+          type: string
+          description: A standardised list of countires where the customer was/is incorporated
+        edqIncorporationCountriesCodes:
+          type: string
+          description: A standardised list of country codes where the customer was/is incorporated
+        registrationCountry:
+          type: string
+          description: A standardised list of countries where the customer is registered
+        edqRegiistrationCountriesCodes:
+          type: string
+          description: A standardised list of country codes where the customer is registered
+        edqBusinessCountries:
+          type: string
+          description: A standardised list of countries where the customer conducts business
+        edqHeadOfficeCountries:
+          type: string
+          description: A standardised list of countries where the customer has a head office
+        countriesAll:
+          type: string
+          description: A standardised list of all country names associated to the customer record. All standardised names will ISO names.
+        countriesAllCodes:
+          type: string
+          description: A standardised list of all country names in ISO 2 character code format associated to the customer record.
+        edqLoB:
+          type: string
+          description: The standardised Line of Business name
+        edqPermission:
+          type: string
+          description: Record permission allows user visibility depending on permissions granted
+        taxID:
+          type: string
+          description: Derived TAX ID
+        city:
+          type: string
+          description: Derived City name
+        profileHyperlink:
+          type: string
+          description: Not currently used.
+        searchHyperlink:
+          type: string
+          description: Provides a google hyperlink for the customer record.
+        edqListKey:
+          type: string
+          description: Indicates the record  type
+        address:
+          type: string
+          description: Full concatenated address post refinement
+        entityName:
+          type: string
+          description: Standardised Entity name
+        postalCode:
+          type: string
+          description: Standardise Postal code
+        personOrBusinessIndicator:
+          type: string
+          description: Standardised indicator used to identify the customer as a Person or Business
+        edqCloseOfBusinessDate:
+          type: string
+          description: Standardised Close of Business date
+        operatingCountries:
+          type: string
+          description: A standardised list of countries where the customer is operates
+        edqOperatingCountriesCodes:
+          type: string
+          description: A standardsied list of ISO country codes where the customer operates
+        registrationNumber:
+          type: string
+          description: A standardised version of the customer registration number
+        profileNameType:
+          type: string
+          description: The description of the name type code
+        edqPartyRoleTypeDescription:
+          type: string
+          description: The description of the customer role type
+        edqPartyStatusCodeDescription:
+          type: string
+          description: The description of the customer status
+        edqDay1SpikeFlag:
+          type: string
+          description: This should not be used see extended attributes in the CaseWithURL table for the edqDay1Spike value to use.
+        originalScriptName:
+          type: string
+          description: Entity name as originally provided
+        profileFullAddress:
+          type: string
+          description: Original address data concatenated together
+        edqScreeningMode:
+          type: string
+          description: This will always be "Batch" until realtime screening is provided.
+        edqCaseKey:
+          type: string
+          description: The element of the CaseKey from the customer side. This is joined with the elements from the list to form the KeyLabel
+        addressType:
+          type: string
+          description: The standardise address type value
+        sSCCodes:
+          type: string
+          description: For development use only
+        cTRPFragment:
+          type: string
+          description: For development use only
+        requestUserName:
+          type: string
+          description: N/A - For Day 1
+        requestDateTime:
+          type: string
+          description: N/A - For Day 1
+    worldCheckEntities:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordID:
+          type: number
+          description: Refers to a record within an Alert where there are multiple Customer name records within the same Alert
+        inputStream:
+          type: string
+          description: Denotes the type of data, for example&#58; Customer Data
+        listKey:
+          type: string
+          description: Indicates list origin e.g. WC for world check list
+        listSubKey:
+          type: string
+          description: Indicates the origin of a record and its type e.g. WC-SAN
+        listRecordType:
+          type: string
+          description: Indicates the type of matching record e.g. SAN
+        listRecordOrigin:
+          type: string
+          description: List the origin where the World-Check record was derived e.g. OFAC
+        listRecordID:
+          type: string
+          description: Unique Identifier assigned to the World-Check record
+        listRecordSubID:
+          type: string
+          description: ID for the sub records within a World-Check record
+        registrationNumber:
+          type: string
+          description: Entity Registration Number
+        entityNameOriginal:
+          type: string
+          description: Entity Name
+        entityNameDerived:
+          type: string
+          description: Records the Entity Name where it has been derived by OWS
+        nameType:
+          type: string
+          description: Records the type of name in use, for example&#58; Primary Name
+        nameQuality:
+          type: string
+          description: Indicates the accuracy of the name information, Low, Medium or High
+        primaryName:
+          type: string
+          description: Primary Name of the Watchlist Entry
+        originalScriptName:
+          type: string
+          description: Watchlist original script name
+        aliasIsAcronym:
+          type: string
+          description: Indicates is the name is an alias or primary name
+        vesselIndicator:
+          type: string
+          description: Marks if the Watchlist Entry is a Vessel
+        vesselInfo:
+          type: string
+          description: Information relating to the Vessel
+        address:
+          type: string
+          description: Watchlist Entry's address (if known)
+        city:
+          type: string
+          description: Watchlist Entry's city (if known)
+        state:
+          type: string
+          description: Watchlist Entry's state (if known)
+        postalCode:
+          type: string
+          description: Watchlist Entry's postal code (if known)
+        addressCountry:
+          type: string
+          description: Watchlist Entry's address country (if known)
+        registrationCountry:
+          type: string
+          description: Watchlist Entry's registration country (if known)
+        operatingCountries:
+          type: string
+          description: Watchlist Entry operating country (if known)
+        countryCodesAll:
+          type: string
+          description: Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format
+        countriesAll:
+          type: string
+          description: Records all of the Countries within the Customer record that will be screened for Prohibitions
+        profileHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        searchHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        linkedProfiles:
+          type: string
+          description: Any known associated Watchlist Entry profiles
+        linkedRelationships:
+          type: string
+          description: Any known associated Watchlist Entry relationships
+        riskScore:
+          type: number
+          description: World-Check assigned risk score
+        pEPRiskScore:
+          type: number
+          description: World-Check assigned PEP risk score
+        dataConfidenceScore:
+          type: number
+          description: Not Provided
+        dataConfidenceComment:
+          type: string
+          description: Not Provided
+        inactiveFlag:
+          type: string
+          description: Denotes if the record is considered inactive on World-Check
+        inactiveSinceDate:
+          type: string
+          description: Date since the record was marked inactive
+        pEPClassification:
+          type: string
+          description: Type of PEP, for example&#58; Local Counsellor
+        category:
+          type: string
+          description: Category of PEP, for example&#58; Local Government
+        externalSources:
+          type: string
+          description: Records any external sources used to collate information about the Watchlist Entry
+        linkedTo:
+          type: string
+          description: Associated parties ID
+        companies:
+          type: string
+          description: Companies associated with the Watchlist Entry (if known)
+        furtherInformation:
+          type: string
+          description: Any further information as deemed useful by World-Check
+        subCategoryDescription:
+          type: string
+          description: Groups PEPs according to predefined categories
+        updateCategory:
+          type: string
+          description: Indicates the type ofchange last made, highlighting the significance of each update.
+        nativeAliasLanguageName:
+          type: string
+          description: Name in non-Latin character set
+        nativeAliasLanguageCountry:
+          type: string
+          description: Country in non-Latin character set
+        cachedExternalSources:
+          type: string
+          description: Records any external sources used to collate information about the Watchlist Entry
+        addedDate:
+          type: string
+          description: Date data source was added
+        lastUpdatedDate:
+          type: string
+          description: Data since the Watchlist Entry was last updated
+        edqWCListType:
+          type: string
+          description: Indicates the watchlist origin using the HSBC name specification
+        edqOWSWatchlistName:
+          type: string
+          description: The world check watchlist name is transposed into a HSBC equivalent.
+    customerIndividuals:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordId:
+          type: number
+          description: Refers to a Customer name record (relationship) within an alert where there are multiple Customer name records within the same alert. This is the working record ID.
+        inputStream:
+          type: string
+          description: Denotes the type of data, for example&#58; Customer Data
+        sourceSystemHistoryID:
+          type: number
+          description: Identifier used during reconciliation to store customer information
+        closeOfBusinessDate:
+          type: string
+          description: The date the business ceased trading
+        partitionNumber:
+          type: number
+          description: Where a customer feed is larger than a certain threshold it will be partitioned into sections. The partion number denotes which partition this record has come from.
+        sourceSystemIdentifier:
+          type: number
+          description: The Identifier used to identify where the feed originated from
+        externalProfileID:
+          type: string
+          description: Customer ID from source system
+        concatenatedProfileID:
+          type: string
+          description: Customer ID from source system concatenated with the source system name to ensure the customer ID is unique.
+        profileType:
+          type: string
+          description: Party type code
+        partyRoleTypeCode:
+          type: string
+          description: Provides the ID relating to the customer type
+        profileStatus:
+          type: string
+          description: Partyy status code
+        profileSegment:
+          type: string
+          description: Line of Business customer segment.
+        loBName:
+          type: string
+          description: Line of Business name
+        loBRegion:
+          type: string
+          description: Line of Business region
+        loBCountry:
+          type: string
+          description: Line of Business Country Code
+        hSBCLegalEntityCode:
+          type: string
+          description: HSBC legal entity code
+        nameCategoryCode:
+          type: string
+          description: Customer name category code
+        nameTypeCode:
+          type: string
+          description: Name Type Code
+        nameLanguageTypeCode:
+          type: string
+          description: The language associated to the name type code
+        givenName:
+          type: string
+          description: Customer Given Name
+        middleName:
+          type: string
+          description: Customer Middle Name
+        familyNameOriginal:
+          type: string
+          description: Customer Family Name (Original)
+        initialsOriginal:
+          type: string
+          description: Initials (Original)
+        profileFullName:
+          type: string
+          description: Original Unstructured Name
+        pEPIndicator:
+          type: string
+          description: Indicates if the record is regarded as a PEP or not in the source system
+        specialCategoryCustomerIndicator:
+          type: string
+          description: Indicates if the record is regarded as a Special Chategory Person or not in the source system
+        genderCode:
+          type: string
+          description: Original Customer Gender Code
+        birthDate:
+          type: string
+          description: Original Customer Birth Date
+        placeOfBirth:
+          type: string
+          description: Original Country Of Birth Name
+        townOfBirth:
+          type: string
+          description: Original Town Of Birth
+        state,ProvinceOrCountyOfBirth:
+          type: string
+          description: Original State, Province or County of Birth
+        countryOfBirthOriginal:
+          type: string
+          description: Original Country Of Birth Code
+        sourceAddressType:
+          type: string
+          description: The Address Type provided for this customer record
+        addressFormatCode:
+          type: string
+          description: Indicates if the address is provided in a structured or unstructured format
+        addressLanguageTypeCode:
+          type: string
+          description: Indicates if the address is provided in the primary or secondary language
+        sourceAddressLine1:
+          type: string
+          description: Address Line 1 as provided in the customer record
+        sourceAddressLine2:
+          type: string
+          description: Address Line 2 as provided in the customer record
+        sourceAddressLine3:
+          type: string
+          description: Address Line 3 as provided in the customer record
+        sourceAddressLine4:
+          type: string
+          description: Address Line 4 as provided in the customer record
+        sourceAddressLine5:
+          type: string
+          description: Address Line 5 as provided in the customer record
+        sourceAddressLine6:
+          type: string
+          description: Address Line 6 as provided in the customer record
+        sourceAddressLine7:
+          type: string
+          description: Address Line 7 as provided in the customer record
+        sourceAddressLine8:
+          type: string
+          description: Address Line 8 as provided in the customer record
+        sourceAddressLine9:
+          type: string
+          description: Address Line 9 as provided in the customer record
+        sourceAddressLine10:
+          type: string
+          description: Address Line 10 as provided in the customer record
+        sourcePostalCode:
+          type: string
+          description: Address Postal Code as provided in the customer record
+        sourceCountry:
+          type: string
+          description: Address Country as provided in the customer record
+        identificationDocument1:
+          type: string
+          description: Identification document.
+        identificationDocument2:
+          type: string
+          description: Identification document.
+        identificationDocument3:
+          type: string
+          description: Identification document.
+        identificationDocument4:
+          type: string
+          description: Identification document.
+        identificationDocument5:
+          type: string
+          description: Identification document.
+        identificationDocument6:
+          type: string
+          description: Identification document.
+        identificationDocument7:
+          type: string
+          description: Identification document.
+        identificationDocument8:
+          type: string
+          description: Identification document.
+        identificationDocument9:
+          type: string
+          description: Identification document.
+        identificationDocument10:
+          type: string
+          description: Identification document.
+        residenceCountries:
+          type: string
+          description: List of countries where the customer has been resident
+        nationalityCitizenshipCountries:
+          type: string
+          description: Original List of countries where the customer has nationality
+        employer1Details:
+          type: string
+          description: Customer Employer 1 Name
+        employer1Address1:
+          type: string
+          description: Customer Employer 1 Address 1
+        employer1Address2:
+          type: string
+          description: Customer Employer 1 Address 2
+        employer1Address3:
+          type: string
+          description: Customer Employer 1 Address 3
+        employer2Details:
+          type: string
+          description: Customer Employer 2 Name
+        employer2Address1:
+          type: string
+          description: Customer Employer 2 Address 1
+        employer2Address2:
+          type: string
+          description: Customer Employer 2 Address 2
+        employer2Address3:
+          type: string
+          description: Customer Employer 2 Address 3
+        employer3Details:
+          type: string
+          description: Customer Employer 3 Name
+        employer3Address1:
+          type: string
+          description: Customer Employer 3 Address 1
+        employer3Address2:
+          type: string
+          description: Customer Employer 3 Address 2
+        employer3Address3:
+          type: string
+          description: Customer Employer 3 Address 3
+        edqCustID:
+          type: string
+          description: Customer ID from source system concatenated with the source system name to ensure the customer ID is unique
+        edqCustSubID:
+          type: string
+          description: Customer ID from the source system
+        titleDerived:
+          type: string
+          description: Title as derived by OWS
+        givenNamesDerived:
+          type: string
+          description: Given Name as derived by OWS
+        fullNameDerived:
+          type: string
+          description: Full Name as derived by OWS
+        familyNameDerived:
+          type: string
+          description: Family Name as derived by OWS
+        initials:
+          type: string
+          description: Customer Initials
+        edqLoBCountryCode:
+          type: string
+          description: The ISO country code the the Line of Business this record is associated to
+        countryOfBirth:
+          type: string
+          description: A standardised list of all birth country names associated to the customer record. All standardised names will ISO names.
+        addressCountry:
+          type: string
+          description: A standardised list of all address country names associated to the customer record. All standardised names will ISO names.
+        edqAddressCountryCode:
+          type: string
+          description: A standardised list of all address country names in ISO 2 character code format associated to the customer record.
+        countryOfResidence:
+          type: string
+          description: A standardised list of all residency country names associated to the customer record. All standardised names will ISO names.
+        edqBirthCountryCode:
+          type: string
+          description: A standardised list of all birth country names in ISO 2 character code format associated to the customer record.
+        edqResidenceCountriesCode:
+          type: string
+          description: A standardised list of all residency country names in ISO 2 character code format associated to the customer record.
+        nationalityOrCitizenship:
+          type: string
+          description: A standardised list of all country names associated to the customer record. All standardised names will ISO names.
+        nationalityCountries:
+          type: string
+          description: A standardised list of all country names in ISO 2 character code format associated to the customer record.
+        countriesAll:
+          type: string
+          description: A standardised list of all country names associated to the customer record. All standardised names will ISO names.
+        edqCountriesAllCodes:
+          type: string
+          description: A standardised list of all country names in iso 2 character code format associated to the customer record.
+        edqEmployerAllCountries:
+          type: string
+          description: A standardised list of all employer country names associated to the customer record.. All standardised names will ISO names.
+        edqEmployerAllCountriesCodes:
+          type: string
+          description: A standardised list of all employer country names in ISO 2 character code format associated to the customer record.
+        edqLoB:
+          type: string
+          description: The standardised Line of Business name
+        edqPermission:
+          type: string
+          description: For development use only
+        taxID:
+          type: string
+          description: Derived TAX ID
+        dateOfBirth:
+          type: string
+          description: Standardised Date Of Birth
+        dOBOriginal:
+          type: string
+          description: Original Date Of Birth
+        edqDOBString:
+          type: string
+          description: Standardised Date Of Birth in alternate format
+        yearOfBirth:
+          type: string
+          description: Year Of Birth
+        city:
+          type: string
+          description: Standardised City
+        postalCode:
+          type: string
+          description: Standardised Postal Code
+        profileFullAddress:
+          type: string
+          description: Original address data concatenated together
+        gender:
+          type: string
+          description: Standardised Gender
+        genderDerivedFlag:
+          type: string
+          description: Is Gender Derived?
+        profileHyperlink:
+          type: string
+          description: Not currently used.
+        searchHyperlink:
+          type: string
+          description: Provides a google hyperlink for the customer record.
+        edqListKey:
+          type: string
+          description: Indicates the record  type
+        passportNumber:
+          type: string
+          description: Customer Passport Number
+        passportIssueCountry:
+          type: string
+          description: Customer Passport Issue Country
+        socialSecurityNumber:
+          type: string
+          description: Customer Social Security Number
+        edqCloseOfBusinessDate:
+          type: string
+          description: Customer Close Of Business Date
+        profileOccupation:
+          type: string
+          description: Customer Occupation
+        personOrBusinessIndicator:
+          type: string
+          description: Standardised indicator used to identify the customer as a Person or Business
+        profileNameType:
+          type: string
+          description: The description of the name type code
+        edqPartyRoleTypeDescription:
+          type: string
+          description: The description of the customer role type
+        edqPartyStatusCodeDescription:
+          type: string
+          description: The description of the customer status
+        edqDay1SpikeFlag:
+          type: string
+          description: This should not be used see extended attributes in the CaseWithURL table for the edqDay1Spike value to use.
+        originalScriptName:
+          type: string
+          description: Full name as originally provided
+        address:
+          type: string
+          description: Full concatenated address post refinement
+        givenNamesOriginal:
+          type: string
+          description: Original Customer Given Name
+        surname:
+          type: string
+          description: Original Family name
+        edqScreeningMode:
+          type: string
+          description: This will always be "Batch" until realtime screening is provided.
+        edqCaseKey:
+          type: string
+          description: The element of the CaseKey from the customer side. This is joined with the elements from the list to form the KeyLabel
+        addressType:
+          type: string
+          description: The standardise address type value
+        sSCCodes:
+          type: string
+          description: For development use only
+        cTRPFragment:
+          type: string
+          description: For development use only
+        requestUserName:
+          type: string
+          description: N/A - For Day 1
+        requestDateTimeDDMMYYYY0000:
+          type: string
+          description: N/A - For Day 1
+        autoDiscountDecision:
+          type: string
+          description: List ID&#58;List Record Type&#58;=3 digit result code from Auto Discounting process
+        recordType:
+          type: string
+          description: Indicates the type of record
+        dummy:
+          type: string
+          description: For development use only
+    worldCheckIndividuals:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordID:
+          type: number
+          description: Refers to a record within an Alert where there are multiple Customer name records within the same Alert
+        inputStream:
+          type: string
+          description: Denotes the type of data, for example&#58; Customer Data
+        listKey:
+          type: string
+          description: Indicates list origin e.g. WC for world check list
+        listSubKey:
+          type: string
+          description: Indicates the origin of a record and its type e.g. WC-SAN
+        listRecordType:
+          type: string
+          description: Indicates the type of matching record e.g. SAN
+        listRecordOrigin:
+          type: string
+          description: List the origin where the World-Check record was derived e.g. OFAC
+        listRecordID:
+          type: string
+          description: Unique Identifier assigned to the World-Check record
+        listRecordSubID:
+          type: string
+          description: ID for the sub records within a World-Check record
+        passportNumber:
+          type: string
+          description: Watchlist Entry's Passport Number (if known)
+        nationalId:
+          type: string
+          description: Watchlist Entry's National Identification Number (if known)
+        title:
+          type: string
+          description: Watchlist Entry's title (if known)
+        fullNameOriginal:
+          type: string
+          description: Watchlist Entry's Full Name
+        givenNamesOriginal:
+          type: string
+          description: Watchlist Entry's Given Name
+        familyNameOriginal:
+          type: string
+          description: Watchlist Entry's Family Name
+        fullNameDerived:
+          type: string
+          description: Records a Family Name where it has been derived by OWS
+        givenNamesDerived:
+          type: string
+          description: Records a Given Name where it has been derived by OWS
+        familyNameDerived:
+          type: string
+          description: Records a Family Name where it has been derived by OWS
+        nameType:
+          type: string
+          description: Records the type of name in use, for example&#58; Primary Name
+        nameQuality:
+          type: string
+          description: Indicates the accuracy of the name information, Low, Medium or High
+        primaryName:
+          type: string
+          description: Primary Name of the Watchlist Entry
+        originalScriptName:
+          type: string
+          description: Watchlist original script name
+        gender:
+          type: string
+          description: Watchlist Entry's gender (if known)
+        genderDerivedFlag:
+          type: string
+          description: Denotes if the Watchlist Entry's gender has been derived by OWS
+        dateOfBirth:
+          type: string
+          description: Watchlist Entry's date of birth (if known)
+        yearOfBirth:
+          type: integer
+          description: Watchlist Entry's year of birth (if known)
+        deceasedFlag:
+          type: string
+          description: Watchlist Entry is known or believed to be deceased
+        deceasedDate:
+          type: string
+          description: Date the Watchlist Entry is known or believed to have become deceased
+        occupation:
+          type: string
+          description: Watchlist Entry's occupation (if known)
+        address:
+          type: string
+          description: Watchlist Entry's address (if known)
+        city:
+          type: string
+          description: Watchlist Entry's city (if known)
+        state:
+          type: string
+          description: Watchlist Entry's state (if known)
+        postalCode:
+          type: string
+          description: Watchlist Entry's postal code (if known)
+        addressCountry:
+          type: string
+          description: Watchlist Entry's address country (if known)
+        residencyCountry:
+          type: string
+          description: Watchlist Entry's country of residence (if known)
+        countryOfBirth:
+          type: string
+          description: Watchlist Entry's country of birth (if known)
+        nationalities:
+          type: string
+          description: Watchlist Entry's nationality (if known)
+        countryCodesAll:
+          type: string
+          description: Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format
+        countriesAll:
+          type: string
+          description: Records all of the Countries within the Customer record that will be screened for Prohibitions
+        profileHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        searchHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        linkedProfiles:
+          type: string
+          description: Any known associated Watchlist Entry profiles
+        linkedRelationships:
+          type: string
+          description: Any known associated Watchlist Entry relationships
+        riskScore:
+          type: number
+          description: World-Check assigned risk score
+        pEPRiskScore:
+          type: number
+          description: World-Check assigned PEP risk score
+        dataConfidenceScore:
+          type: number
+          description: Not Provided
+        dataConfidenceComment:
+          type: string
+          description: Not Provided
+        inactiveFlag:
+          type: string
+          description: Denotes if the record is considered inactive on World-Check
+        inactiveSinceDate:
+          type: string
+          description: Date since the record was marked inactive
+        pEPClassification:
+          type: string
+          description: Type of PEP, for example&#58; Local Counsellor
+        category:
+          type: string
+          description: Category of PEP, for example&#58; Local Government
+        externalSources:
+          type: string
+          description: Records any external sources used to collate information about the Watchlist Entry
+        linkedTo:
+          type: string
+          description: Associated parties ID
+        companies:
+          type: string
+          description: Companies associated with the Watchlist Entry (if known)
+        dateOfBirthOriginal:
+          type: string
+          description: The date of birth as originally provided
+        yearOfBirthApproximated:
+          type: string
+          description: Year of birth approximation
+        placeOfBirthOriginal:
+          type: string
+          description: Place of birth details as originally provided
+        furtherInformation:
+          type: string
+          description: Any further information as deemed useful by World-Check
+        countriesOriginal:
+          type: string
+          description: Associated country information as originally provided
+        socialSecurityNumber:
+          type: string
+          description: Social Security number
+        passportCountry:
+          type: string
+          description: Passport country
+        subCategoryDescription:
+          type: string
+          description: Groups PEPs according to predefined categories
+        updateCategory:
+          type: string
+          description: Indicates the type ofchange last made, highlighting the significance of each update.
+        nativeAliasLanguageName:
+          type: string
+          description: Name in non-Latin character set
+        nativeAliasLanguageCountry:
+          type: string
+          description: Country in non-Latin character set
+        cachedExternalSources:
+          type: string
+          description: Records any external sources used to collate information about the Watchlist Entry
+        addedDate:
+          type: string
+          description: Date data source was added
+        lastUpdatedDate:
+          type: string
+          description: Data since the Watchlist Entry was last updated
+        edqOWSWatchlistName:
+          type: string
+          description: Indicates the watchlist origin using the HSBC name specification
+        dOBs:
+          type: string
+          description: List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated to a record.
+        iDNumbers:
+          type: string
+          description: Identification Numbers
+        recordType:
+          type: string
+          description: Indicates the type of record
+        dummy:
+          type: string
+          description: For development use only
+    caseComments:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        commentId:
+          type: integer
+          description: Unique identifier assigned to a comment
+        commentedBy:
+          type: integer
+          description: Which User was the author of the comment
+        commentDateTime:
+          type: string
+          description: Date and time the comment was made
+        caseComment:
+          type: string
+          description: Displays the comment
+        deletedFlag:
+          type: integer
+          description: Marks if the comment has been deleted from view in Case Management. The comment will not be deleted from the audit trail of the Case or Alert. Capability to delete comments may not be granted to all Users.
+        restrictingPermission:
+          type: string
+          description: Will display if access to the comment has been restricted, for example, Level 3 Only. If the comment has not been restricted, this field will be displayed as blank.
+    relationships:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique identifier assigned to the Case or Alert within Case Management
+        inputId:
+          type: number
+          description: Identifier for the type of data inputted from the Screening Subject
+        inputName:
+          type: string
+          description: Describes the source of the input data, for example&#58; Customer Data
+        recordID:
+          type: number
+          description: Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID.
+        relatedInputId:
+          type: number
+          description: Identifier for the type of data input from the Watchlist
+        relatedInputName:
+          type: string
+          description: Describes the source of the input data, for example&#58; WorldCheck_Entities
+        relatedRecordId:
+          type: number
+          description: Refers to a Watchlist record within an Alert where there are multiple Watchlist records within the same Alert.
+        ruleName:
+          type: string
+          description: Denotes the Match Rule the Alert was generated against
+        priorityScore:
+          type: number
+          description: Records the associated Match Rule priority score
+        relationshipHash:
+          type: string
+          description: Hash of the relationship value
+    privateListIndividuals:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordID:
+          type: number
+          description: Refers to a record within an Alert where there are multiple Customer name records within the same Alert
+        inputStream:
+          type: string
+          description: Denotes the type of data, for example&#58; Customer Data
+        listKey:
+          type: string
+          description: Indicates list origin e.g. WC for world check list
+        listSubKey:
+          type: string
+          description: Indicates the origin of a record and its type e.g. WC-SAN
+        listRecordType:
+          type: string
+          description: Indicates the type of matching record e.g. SAN
+        listRecordOrigin:
+          type: string
+          description: List the origin where the Private List record was derived e.g. OFAC
+        listRecordID:
+          type: string
+          description: Unique Identifier assigned to the Private List record
+        listRecordSubID:
+          type: string
+          description: ID for the sub records within a Private List record
+        passportNumber:
+          type: string
+          description: Watchlist Entry's Passport Number (if known)
+        nationalId:
+          type: string
+          description: Watchlist Entry's National Identification Number (if known)
+        title:
+          type: string
+          description: Watchlist Entry's title (if known)
+        fullNameOriginal:
+          type: string
+          description: Watchlist Entry's Full Name
+        givenNamesOriginal:
+          type: string
+          description: Watchlist Entry's Given Name
+        familyNameOriginal:
+          type: string
+          description: Watchlist Entry's Family Name
+        fullNameDerived:
+          type: string
+          description: Records a Family Name where it has been derived by OWS
+        givenNamesDerived:
+          type: string
+          description: Records a Given Name where it has been derived by OWS
+        familyNameDerived:
+          type: string
+          description: Records a Family Name where it has been derived by OWS
+        nameType:
+          type: string
+          description: Records the type of name in use, for example&#58; Primary Name
+        nameQuality:
+          type: string
+          description: Indicates the accuracy of the name information, Low, Medium or High
+        primaryName:
+          type: string
+          description: Primary Name of the Watchlist Entry
+        originalScriptName:
+          type: string
+          description: Watchlist original script name
+        gender:
+          type: string
+          description: Watchlist Entry's gender (if known)
+        genderDerivedFlag:
+          type: string
+          description: Denotes if the Watchlist Entry's gender has been derived by OWS
+        dateOfBirth:
+          type: string
+          description: Watchlist Entry's date of birth (if known)
+        yearOfBirth:
+          type: integer
+          description: Watchlist Entry's year of birth (if known)
+        deceasedFlag:
+          type: string
+          description: Watchlist Entry is known or believed to be deceased
+        deceasedDate:
+          type: string
+          description: Date the Watchlist Entry is known or believed to have become deceased
+        occupation:
+          type: string
+          description: Watchlist Entry's occupation (if known)
+        address:
+          type: string
+          description: Watchlist Entry's address (if known)
+        city:
+          type: string
+          description: Watchlist Entry's city (if known)
+        placeOfBirth:
+          type: string
+          description: Watchlist Entry's Place Of Birth (if known)
+        postalCode:
+          type: string
+          description: Watchlist Entry's postal code (if known)
+        addressCountry:
+          type: string
+          description: Watchlist Entry's address country (if known)
+        residencyCountry:
+          type: string
+          description: Watchlist Entry's country of residence (if known)
+        countryOfBirth:
+          type: string
+          description: Watchlist Entry's country of birth (if known)
+        nationalities:
+          type: string
+          description: Watchlist Entry's nationality (if known)
+        countryCodesAll:
+          type: string
+          description: Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format
+        countriesAll:
+          type: string
+          description: Records all of the Countries within the Customer record that will be screened for Prohibitions
+        profileHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        searchHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        linkedProfiles:
+          type: string
+          description: Any known associated Watchlist Entry profiles
+        linkedRelationships:
+          type: string
+          description: Any known associated Watchlist Entry relationships
+        riskScore:
+          type: number
+          description: Private List assigned risk score
+        pEPRiskScore:
+          type: number
+          description: Private List assigned PEP risk score
+        dataConfidenceScore:
+          type: number
+          description: Not Provided
+        dataConfidenceComment:
+          type: string
+          description: Not Provided
+        inactiveFlag:
+          type: string
+          description: Denotes if the record is considered inactive in the Private List
+        inactiveSinceDate:
+          type: string
+          description: Date since the record was marked inactive
+        pEPClassification:
+          type: string
+          description: Type of PEP, for example&#58; Local Counsellor
+        addedDate:
+          type: string
+          description: Date data source was added
+        lastUpdatedDate:
+          type: string
+          description: Data since the Watchlist Entry was last updated
+        edqAddressType:
+          type: string
+          description: Address label as provided by the private list
+        edqCurrentAddress:
+          type: string
+          description: Indicates with a yes or no if this is a current address
+        edqTelephoneNumber:
+          type: string
+          description: Telephone number
+        edqCellNumberBusiness:
+          type: string
+          description: Telephone number
+        edqCellNumberPersonal:
+          type: string
+          description: Telephone number
+        edqTaxNumber:
+          type: string
+          description: Individuals TAX Number
+        edqDrivingLicence:
+          type: string
+          description: Individuals Driving Licence Number
+        edqEmailAddress:
+          type: string
+          description: Email Address
+        edqNINumber:
+          type: string
+          description: Individuals National Insurance Number
+        edqSCION_REF:
+          type: string
+          description: SCION reference indicator
+        edqListCustomerType:
+          type: string
+          description: Indicates if the record is a Person or Business, P or B respectively.
+        edqSuffix:
+          type: string
+          description: Name suffix
+        edqRole:
+          type: string
+          description: Individuals role
+        edqListCategory:
+          type: string
+          description: Indicates the list record's category.
+        edqFurtherInfo:
+          type: string
+          description: Any further information as deemed useful
+        edqSSN:
+          type: string
+          description: Individuals Social Security Number
+        edqCustomerID:
+          type: string
+          description: Customer ID the record relates to
+        edqListName:
+          type: string
+          description: Full name of the SCION list
+        edqWatchListType:
+          type: string
+          description: SCION List short form  name
+        middleName1Derived:
+          type: string
+          description: Watchlist Entry's Derived Middle Name 1
+        middleName2Derived:
+          type: string
+          description: Watchlist Entry's Derived Middle Name 2
+        middleName1Original:
+          type: string
+          description: Watchlist Entry's Original Middle Name 1
+        middleName2Original:
+          type: string
+          description: Watchlist Entry's Original Middle Name 2
+        currentAddress:
+          type: string
+          description: Watchlist Entry's current address (if known)
+        recordType:
+          type: string
+          description: Indicates the type of record
+        dummy:
+          type: string
+          description: For development use only
+    caseAttachments:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        attachmentId:
+          type: integer
+          description: Unique identifier added the attachment
+        attachmentBy:
+          type: integer
+          description: Which User added the attachment
+        attachmentDateTime:
+          type: string
+          description: Date and time the attachment was added
+        attachmentName:
+          type: string
+          description: Name of the attachment.
+        sourceName:
+          type: string
+          description: Indicate the case source the attachment relates to. This will always be Sentry.
+        description:
+          type: string
+          description: The descriotion given to the attachment by the end user
+        mimeType:
+          type: string
+          description: Displays the source where the attachment originated
+        deletedFlag:
+          type: integer
+          description: Marks if the attachment has been deleted
+        restrictingPermission:
+          type: string
+          description: Will display if access to the attachment has been restricted, for example, Level 3 Only. If the attachment has not been restricted, this field will be displayed as blank.
+    privateListEntities:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordId:
+          type: number
+          description: Refers to a record within an Alert where there are multiple Customer name records within the same Alert
+        inputStream:
+          type: string
+          description: Denotes the type of data, for example&#58; Private List Data
+        listKey:
+          type: string
+          description: Indicates list origin e.g. WC for world check list
+        listSubKey:
+          type: string
+          description: Indicates the origin of a record and its type e.g. WC-SAN
+        listRecordType:
+          type: string
+          description: Indicates the type of matching record e.g. SAN
+        listRecordOrigin:
+          type: string
+          description: List the origin where the Private List record was derived e.g. OFAC
+        listRecordId:
+          type: string
+          description: Unique Identifier assigned to the Private List record
+        listRecordSubId:
+          type: string
+          description: ID for the sub records within a Private List record
+        registrationNumber:
+          type: string
+          description: Entity Registration Number
+        entityNameOriginal:
+          type: string
+          description: Entity Name
+        entityNameDerived:
+          type: string
+          description: Records the Entity Name where it has been derived by OWS
+        nameType:
+          type: string
+          description: Records the type of name in use, for example&#58; Primary Name
+        nameQuality:
+          type: string
+          description: Indicates the accuracy of the name information, Low, Medium or High
+        primaryName:
+          type: string
+          description: Primary Name of the Watchlist Entry
+        originalScriptName:
+          type: string
+          description: Watchlist original script name
+        aliasIsAcronym:
+          type: string
+          description: Indicates is the name is an alias or primary name
+        vesselIndicator:
+          type: string
+          description: Marks if the Watchlist Entry is a Vessel
+        vesselInfo:
+          type: string
+          description: Information relating to the Vessel
+        address:
+          type: string
+          description: Watchlist Entry's address (if known)
+        city:
+          type: string
+          description: Watchlist Entry's city (if known)
+        state:
+          type: string
+          description: Watchlist Entry's state (if known)
+        postalCode:
+          type: string
+          description: Watchlist Entry's postal code (if known)
+        addressCountry:
+          type: string
+          description: Watchlist Entry's address country (if known)
+        registrationCountry:
+          type: string
+          description: Watchlist Entry's registration country (if known)
+        operatingCountries:
+          type: string
+          description: Watchlist Entry operating country (if known)
+        countryCodesAll:
+          type: string
+          description: Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format
+        countriesAll:
+          type: string
+          description: Records all of the Countries within the Customer record that will be screened for Prohibitions
+        profileHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        searchHyperlink:
+          type: string
+          description: Watchlist Entry address (if known)
+        linkedProfiles:
+          type: string
+          description: Any known associated Watchlist Entry profiles
+        linkedRelationships:
+          type: string
+          description: Any known associated Watchlist Entry relationships
+        riskScore:
+          type: number
+          description: Private List assigned risk score
+        pEPRiskScore:
+          type: number
+          description: Private List assigned PEP risk score
+        dataConfidenceScore:
+          type: number
+          description: Not Provided
+        dataConfidenceComment:
+          type: string
+          description: Not Provided
+        inactiveFlag:
+          type: string
+          description: Denotes if the record is considered inactive in the Private List
+        inactiveSinceDate:
+          type: string
+          description: Date since the record was marked inactive
+        pEPClassification:
+          type: string
+          description: Type of PEP, for example&#58; Local Counsellor
+        addedDate:
+          type: string
+          description: Date data source was added
+        lastUpdatedDate:
+          type: string
+          description: Data since the Watchlist Entry was last updated
+        addressType:
+          type: string
+          description: Address label as provided by the private list
+        currentAddress:
+          type: string
+          description: Address
+        telephoneNumber:
+          type: string
+          description: Telephone number
+        edqBusinessTelephoneNumber:
+          type: string
+          description: Business Telephone Number that has been normalised
+        telephoneNumberBusiness:
+          type: string
+          description: Business Telephone Number
+        edqCellNumberPersonal:
+          type: string
+          description: Mobile phone number (normalised)
+        edqTaxNumber:
+          type: string
+          description: Tax Number (Normalised)
+        edqEmailAddress:
+          type: string
+          description: Email address
+        sCIONReferenceNumber:
+          type: string
+          description: SCION Reference Number
+        role:
+          type: string
+          description: The role the person has within a business
+        listCategory:
+          type: string
+          description: Indicates the list record's category.
+        furtherInfo:
+          type: string
+          description: Any further information as deemed useful
+        edqBusinessType:
+          type: string
+          description: Indicates the business sector
+        dateOfIncorporation:
+          type: string
+          description: Date of incorporation from a date format attribute
+        edqDataOfIncorporationSTRING:
+          type: string
+          description: Date of Incorporation from a string format attribute
+        externalCustomerID:
+          type: string
+          description: Customer ID the record relates to
+        listCustomerType:
+          type: string
+          description: Indicates if the record is a Person or Business, P or B respectively.
+        edqListName:
+          type: string
+          description: Full name of the SCION list
+        edqWatchlistLstType:
+          type: string
+          description: SCION List short form  name
+        primaryName1:
+          type: string
+          description: Customers primary name
+        entityName:
+          type: string
+          description: Entity name, place holder 1
+        entityName1:
+          type: string
+          description: Entity name place holder 2
+        entityName2:
+          type: string
+          description: Entity name place holder 3
+    caseHistory:
+      type: object
+      properties:
+        caseID:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        modifiedBy:
+          type: integer
+          description: Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or Attachments constitute a modification
+        modifiedDateTime:
+          type: string
+          description: Date and time of the modification
+        attribute:
+          type: string
+          description: Records what has changed within the Case or Alert
+        oldValue:
+          type: string
+          description: Records the previous state of the Case or Alert, for example&#58; Level 1 Review
+        newValue:
+          type: string
+          description: Records the new state of the Case or Alert, for example&#58; Discount False Positive
+        transition:
+          type: string
+          description: Records the transition used to move the alert through the workflow
+    countryCTRPScreeningEntities:
+      type: object
+      properties:
+        caseId:
+          type: integer
+          description: Unique Identifier assigned to the Case or Alert within Case Management
+        recordId:
+          type: number
+          description: Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID.
+        inputStream:
+          type: string
+          description: Describe where the alert was generated
+        countryCode:
+          type: string
+          description: The field provides the country code which raised the alert. This will always be a two character code
+        typeOfMatch:
+          type: string
+          description: Describes the type of country match, this will currently be&#58; Country Match or CTRP Match
+        countryName:
+          type: string
+          description: The field provides the country name which raised the alert.
+        matchType:
+          type: string
+          description: This list one of three match types&#58; Trading, Registration or Operation.
+        oWSWatchlistName:
+          type: string
+          description: This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Entities this will always be ESSC.
+        pRBListType:
+          type: string
+          description: This is the type of match that has been found it is parent group of OWS Watchlist Name, currently it will always be SSC
+        cTRPValue:
+          type: string
+          description: List the specific CTRP value that triggered the alert. For example if this is Havana, Country Name will be CUBA
+        cTRPLevel:
+          type: integer
+          description: Type of CTRP Record e.g. 1 =Country, 2=Postcode
+        cTRPCommonality:
+          type: integer
+          description: The number of countries in the world that feature a place of this name
+        cTRPSource:
+          type: integer
+          description: This provides a description of the CTRP Source element.
+        cTRPNameType:
+          type: string
+          description: describes the CTRP type that matched
+        cTRPRuleNarrative:
+          type: string
+          description: Provides a description of what the rule was raised against
+        alertKeyFragment:
+          type: string
+          description: Provides the full code for the match type that will be used to create the Alert Key.
+    casesWithAlertURL:
+      type: object
+      properties:
+        iD:
+          type: integer
+          description: Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link to other tables.
+        caseGroup:
+          type: string
+          description: Records an associated group to the Case or Alert, for example&#58; Match
+        caseType:
+          type: string
+          description: Denotes if this is a Case ("Case") or an Alert ("Issue")
+        externalID:
+          type: string
+          description: A unique ID of the alerts as it appears in Case Management.
+        externalIdSort:
+          type: string
+          description: A unique ID of the alert that is used in reporting. The value of the code is padded with zeros
+        caseKey:
+          type: string
+          description: Unique internal Hash which identifies an alert.
+        keyLabel:
+          type: string
+          description: A Unique Identifier for the Case or Alert, composed of "Customer ID&#58; Watchlist Alert Generated Against&#58; Watch Person ID"
+        parentID:
+          type: integer
+          description: ID number for the parent Case of the Alert. If viewing at Case Level; the field will display "-1"
+        supplementaryKey:
+          type: string
+          description: Hash of the supplementary data held against an alert, used by the system to identify if any supplementary data has changed.
+        supplementaryType:
+          type: string
+          description: Identifies and provides grouping by type of supplementary data
+        flagKey:
+          type: string
+          description: Hash of the flag key data held against an alert, used by the system to identify if any flag key data has changed. If a change is identified the caseMaker is updated.
+        description:
+          type: string
+          description: Name of the Customer when initially provided or if updated by a user.
+        createdBy:
+          type: integer
+          description: Records how the Case was created, for example&#58; Batch, Manual or Real-Time Screening
+        createdDateTime:
+          type: string
+          description: Date the Case or Alert was created
+        modifiedBy:
+          type: integer
+          description: Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or Attachments constitute a modification
+        modifiedDateTime:
+          type: string
+          description: Date and time of the modification
+        assignedUser:
+          type: integer
+          description: ID of the user to whom the Case or Alert is assigned
+        assignedBy:
+          type: integer
+          description: ID of the user who assigned the Case or Alert to the User
+        assignedDateTime:
+          type: string
+          description: Date and time the Case or Alert was assigned
+        priority:
+          type: integer
+          description: Records the alert priority level (250=Low, 500=Medium, 750=High)
+        permission:
+          type: string
+          description: Permission assigned to the Case or Alert
+        currentState:
+          type: string
+          description: Workflow state in which the Alert currently resides, for example&#58; Level 1 Review
+        derivedState:
+          type: string
+          description: Workflow state in which the Case currently resides. Case state is controlled by the system and is derived from the activity associated with the Alerts within the Case. A Case cannot be closed until all of the Alerts within it have been closed.
+        stateExpiry:
+          type: string
+          description: Date when the current state of the Alert will expire
+        stateChangeBy:
+          type: integer
+          description: Which User undertook the last transition of the Alert through the Workflow
+        stateChangeDateTime:
+          type: string
+          description: Date and time the state of the Case or Alert was changed
+        sourceId:
+          type: integer
+          description: Case Source System ID
+        sourceName:
+          type: string
+          description: Case Source System Name
+        caseMarker:
+          type: integer
+          description: this is the review flag which if  indicates if customer data in any of the review flag fields has been updated. This is used to signify a change or trigger a realert. 0 indicates no review flag set.
+        updatedBy:
+          type: integer
+          description: User ID of the account that updated the case.
+        updatedDateTime:
+          type: string
+          description: Date and time the alert was updated.
+        groupId:
+          type: string
+          description: ID number of the associated permission or grouping to which the Case or Alert belongs, for example&#58; Country or Regional Group.
+        groupLevel:
+          type: integer
+          description: Where the group sits within the permission or grouping structure
+        extendedAttribute1:
+          type: integer
+          description: Escalation. Indicates if the alert has been escalated.
+        extendedAttribute2:
+          type: integer
+          description: Priority Score. Indicates how accurate the match is between the customer and the list record scored 0 to 100. It is not a percentage.
+        extendedAttribute3:
+          type: string
+          description: Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100
+        extendedAttribute4:
+          type: string
+          description: PEP Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100
+        extendedAttribute5:
+          type: string
+          description: List Record Type. Describes the type of list record the match is against.
+        extendedAttribute6:
+          type: string
+          description: Screening Mode. Indicate the type of screening that created the alert.
+        extendedAttribute7:
+          type: string
+          description: is the QA Flag which indicates if an alert has been subject to a QA review.
+        extendedAttribute8:
+          type: string
+          description: Day 1 Spike Flag. Indicates if an alert was created on day 1. "Day 1 Spike" = created on Day 1, "BAU" = createdon Day 1 but has ben work to closure.
+        extendedAttribute9:
+          type: string
+          description: BAU Spike Flag. Indicates if the alert was created as part of an influx of alert i.e. a spike, after day 1. "Yes" indicates this is a BAU spike
+        extendedAttribute10:
+          type: string
+          description: OWS Watchlist Name, describe the specific type of list the matching record came from.
+        extendedAttribute11:
+          type: string
+          description: Line of Business, describes the Line of business the alert is related to.
+        extendedAttribute12:
+          type: string
+          description: HSBC priority Flag, indicates the HSBC priority of an alert.
+        extendedAttribute13:
+          type: integer
+          description: SLA Flag, a marker to define when an alert was created, closed or re-opened
+        alertURL:
+          type: string
+          description: URL, which take you directly to the system where this alert resides and open the alert.
+    Alert:
+      type: object
+      properties:
+        userInformation:
+          $ref: '#/components/schemas/Alert_userInformation'
+        systemInformation:
+          $ref: '#/components/schemas/Alert_systemInformation'
+    SolvedAlert:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        apName:
+          type: string
+        wlName:
+          type: string
+        recommendation:
+          $ref: '#/components/schemas/SolvedAlertStatus'
+        comment:
+          type: string
+    Alerts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Alert'
+    BulkAlertStatus:
+      type: string
+      enum:
+        - STORED
+        - ERROR
+        - PROCESSING
+        - COMPLETED
+    BulkStatus:
+      type: string
+      enum:
+        - PROCESSING
+        - ERROR
+        - COMPLETED
+        - CANCEL
+    SolvedAlertStatus:
+      type: string
+      enum:
+        - POTENTIAL_MATCH
+        - NO_MATCH
+        - MATCH
+        - FALSE_MATCH
+        - ERROR
+    BulkAlertItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          $ref: '#/components/schemas/BulkAlertStatus'
+        errorMessage:
+          type: string
+    BulkAcceptedResponse:
+      type: object
+      properties:
+        bulkId:
+          type: string
+          format: uuid
+        requestedAlerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkAlertItem'
+    BulkStatusResponse:
+      type: object
+      properties:
+        bulkId:
+          type: string
+          format: uuid
+        bulkStatus:
+          $ref: '#/components/schemas/BulkStatus'
+        requestedAlerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkAlertItem'
+    BulkCancelResponse:
+      type: object
+      properties:
+        bulkId:
+          type: string
+          format: uuid
+        bulkStatus:
+          $ref: '#/components/schemas/BulkStatus'
+    BulkSolvedAlertsResponse:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SolvedAlert'
+    Alert_userInformation:
+      type: object
+      properties:
+        usersByGroup:
+          $ref: '#/components/schemas/usersByGroup'
+        deletedusers:
+          $ref: '#/components/schemas/deletedusers'
+        users:
+          $ref: '#/components/schemas/users'
+    Alert_systemInformation:
+      type: object
+      properties:
+        countryCTRPScreeningIndividuals:
+          $ref: '#/components/schemas/countryCTRPScreeningIndividuals'
+        customerEntities:
+          $ref: '#/components/schemas/customerEntities'
+        worldCheckEntities:
+          $ref: '#/components/schemas/worldCheckEntities'
+        customerIndividuals:
+          $ref: '#/components/schemas/customerIndividuals'
+        worldCheckIndividuals:
+          $ref: '#/components/schemas/worldCheckIndividuals'
+        caseComments:
+          $ref: '#/components/schemas/caseComments'
+        relationships:
+          $ref: '#/components/schemas/relationships'
+        privateListIndividuals:
+          $ref: '#/components/schemas/privateListIndividuals'
+        caseAttachments:
+          $ref: '#/components/schemas/caseAttachments'
+        privateListEntities:
+          $ref: '#/components/schemas/privateListEntities'
+        caseHistory:
+          $ref: '#/components/schemas/caseHistory'
+        countryCTRPScreeningEntities:
+          $ref: '#/components/schemas/countryCTRPScreeningEntities'
+        casesWithAlertURL:
+          $ref: '#/components/schemas/casesWithAlertURL'

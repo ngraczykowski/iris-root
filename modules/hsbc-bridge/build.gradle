@@ -1,19 +1,24 @@
 plugins {
-    id 'java'
+  id "java"
+  id "idea"
+  id "maven-publish"
 }
 
-group 'com.silenteight.hsbc'
-version '0.0.1-SNAPSHOT'
+ext {
+  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
+}
+
+apply from: "${gradleScriptDir}/dependencies.gradle"
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
