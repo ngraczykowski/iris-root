@@ -1,9 +1,6 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -17,7 +14,7 @@ public enum SolvedAlertStatus {
     FALSE_MATCH("FALSE_MATCH"),
     ERROR("ERROR");
 
-  private String value;
+  private final String value;
 
   SolvedAlertStatus(String value) {
     this.value = value;

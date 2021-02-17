@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.ArrayList;
 
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * Alerts

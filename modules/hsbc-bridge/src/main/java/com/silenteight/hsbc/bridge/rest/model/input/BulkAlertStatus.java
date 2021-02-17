@@ -1,9 +1,6 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -16,7 +13,7 @@ public enum BulkAlertStatus {
     PROCESSING("PROCESSING"),
     COMPLETED("COMPLETED");
 
-  private String value;
+  private final String value;
 
   BulkAlertStatus(String value) {
     this.value = value;
