@@ -5,8 +5,12 @@ ext {
 // @formatter:off
 
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot']
+libraries.spring_boot_starter_web =
+    [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
 
-libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api']
+libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-api']
+
+libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30']
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -19,9 +23,9 @@ configurations.all {
 }
 
 dependencies {
-  implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-  annotationProcessor platform(
-      "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  //implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  //annotationProcessor platform(
+  //    "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
 
   implementation libraries.slf4j_api
 }

@@ -3,8 +3,6 @@ package com.silenteight.hsbc.bridge.rest.model.input;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.AlertSystemInformation;
-import io.swagger.model.AlertUserInformation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;

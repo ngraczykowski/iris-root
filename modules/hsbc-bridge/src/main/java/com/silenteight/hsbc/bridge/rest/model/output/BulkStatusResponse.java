@@ -6,8 +6,6 @@ import com.silenteight.hsbc.bridge.rest.model.input.BulkStatus;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.BulkAlertItem;
-import io.swagger.model.BulkStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
