@@ -4,6 +4,7 @@ sep.auth:
   permissionMethodsMappings:
     SIMULATION_MANAGEMENT:
       - "CREATE_SIMULATION"
+      - "LIST_SIMULATIONS"
 
   rolePermissionsMappings:
     BUSINESS_OPERATOR:

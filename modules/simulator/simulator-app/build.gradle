@@ -3,7 +3,6 @@ plugins {
   id "maven-publish"
   id "io.freefair.aspectj.post-compile-weaving"
   id "org.springframework.boot"
-  id "com.google.cloud.tools.jib"
 }
 
 description = "Simulator"
@@ -24,6 +23,7 @@ configurations {
 dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-db-changelog")
+  implementation project(":simulator-management")
 
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common

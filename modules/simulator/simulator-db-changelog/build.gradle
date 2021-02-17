@@ -4,3 +4,10 @@ plugins {
 
 description = "Simulator DB Changelog"
 
+configurations {
+  implementation.extendsFrom starterDatabase
+}
+
+dependencies {
+  implementation libraries.silenteight_audit_bs
+}

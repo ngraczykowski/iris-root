@@ -5,6 +5,60 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-<!--  <changeSet id="simulator-1.0.0-1" author="?">-->
-<!--  </changeSet>-->
+  <changeSet id="simulator-1.0.0-1" author="anowicki">
+    <createTable tableName="simulator_simulation">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="simulation_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="TEXT"/>
+      <column name="policy_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="started_at" type="TIMESTAMP"/>
+      <column name="finished_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex
+        tableName="simulator_simulation"
+        indexName="ix_simulator_simulation_id"
+        unique="true">
+      <column name="simulation_id"/>
+    </createIndex>
+
+    <createTable tableName="simulator_simulation_dataset_id">
+      <column name="simulation_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="dataset_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="simulator_simulation_dataset_id"
+        baseColumnNames="simulation_id"
+        constraintName="fk_simulator_simulation_simulation_id"
+        referencedTableName="simulator_simulation"
+        referencedColumnNames="simulation_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+
+  </changeSet>
 </databaseChangeLog>
