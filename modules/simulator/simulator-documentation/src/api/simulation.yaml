@@ -242,8 +242,6 @@ components:
           type: string
         updatedAt:
           type: string
-        updatedBy:
-          type: string
         createdAt:
           type: string
         createdBy:
