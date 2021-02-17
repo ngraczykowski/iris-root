@@ -1,4 +1,4 @@
-# Sens WebApp Documentation
+# Simulator Documentation
 
 ## Prerequisites
 
