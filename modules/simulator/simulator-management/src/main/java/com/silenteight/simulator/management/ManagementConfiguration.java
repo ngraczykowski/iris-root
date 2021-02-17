@@ -1,5 +1,7 @@
 package com.silenteight.simulator.management;
 
+import com.silenteight.auditing.bs.AuditingLogger;
+
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +14,9 @@ class ManagementConfiguration {
 
   @Bean
   CreateSimulationUseCase createSimulationUseCase(
-      SimulationEntityRepository simulationEntityRepository) {
+      SimulationEntityRepository simulationEntityRepository, AuditingLogger auditingLogger) {
     SimulationService simulationService = new SimulationService(simulationEntityRepository);
-    return new CreateSimulationUseCase(simulationService);
+    return new CreateSimulationUseCase(simulationService, auditingLogger);
   }
 
   @Bean
