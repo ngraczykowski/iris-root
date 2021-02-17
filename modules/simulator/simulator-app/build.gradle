@@ -1,0 +1,65 @@
+plugins {
+  id "java"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+description = "Simulator"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterSpringApp
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterIntegration
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+  testImplementation.extendsFrom starterSpockTest
+}
+
+dependencies {
+  implementation project(":simulator-common-web")
+  implementation project(":simulator-db-changelog")
+
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_serp_protocol_base
+  implementation libraries.silenteight_spring_cloud_consul_discovery
+
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
+  implementation libraries.spring_context_support
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+  implementation libraries.spring_cloud_starter_consul_config
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.jaxb_api
+  implementation libraries.jakarta_inject
+
+  implementation libraries.protobuf_java_util
+
+  testImplementation project(":simulator-common-web-testing")
+
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_integration_test
+  testImplementation libraries.rest_assured_spring_mock_mvc
+
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

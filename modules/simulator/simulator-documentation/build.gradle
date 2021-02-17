@@ -9,7 +9,7 @@ ext {
   generatedAsciidocSourcesDir = "$buildDir/generated/sources/asciidoc"
 }
 
-description = "Serp Governance Documentation"
+description = "Simulator Documentation"
 
 asciidoctorConfig {
   includeSources = {

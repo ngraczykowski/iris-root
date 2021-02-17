@@ -1,0 +1,55 @@
+# Spring `dev` profile configuration
+serp:
+  show-env: true
+
+logging:
+  level:
+    ROOT: DEBUG
+    com.silenteight.sep: DEBUG
+    com.silenteight.serp: DEBUG
+    com.silenteight.solvers: INFO
+    io.opencensus: INFO
+    io.netty: INFO
+    io.grpc.netty: INFO
+    org.quartz.core.JobRunShell: DEBUG
+
+management:
+  info:
+    git:
+      mode: full
+
+  endpoints:
+    enabled-by-default: true
+
+    web:
+      exposure:
+        include: "*"
+
+server:
+  error:
+    include-stacktrace: on_trace_param
+
+spring:
+  jpa:
+    show-sql: true
+
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate.generate_statistics: true
+
+  jackson:
+    serialization:
+      indent-output: true
+
+keycloak:
+  adapter:
+    authServerUrl: https://localhost:24111/auth
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials.secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0

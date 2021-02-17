@@ -1,0 +1,50 @@
+
+spring:
+  rabbitmq:
+    # virtual-host:
+    # addresses: ${serp.rabbitmq.addresses}
+    host: ${serp.rabbitmq.host}
+    port: ${serp.rabbitmq.port}
+    username: ${serp.rabbitmq.user}
+    password: ${serp.rabbitmq.password}
+    virtual-host: ${serp.rabbitmq.vhost}
+    ssl:
+      enabled: ${serp.tls.enabled}
+      key-store: file:${serp.keystore.path}
+      key-store-password: ${serp.keystore.password}
+      trust-store: file:${serp.truststore.path}
+      trust-store-password: ${serp.truststore.password}
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+
+# Spring Integration
+integration:
+  start-delay-seconds: 15
+  poll-period-millis: 1000
+
+serp:
+  rabbitmq:
+    host: localhost
+    port: 24130
+    user: serp
+    password: serp
+    vhost: /
+
+  messaging:
+    concurrency: 4
+    prefetch: 25
+    encryption:
+      enabled: ${serp.rabbitmq.encryption.enabled}
+      key-seed: ${serp.rabbitmq.encryption.key.seed}
+      salt: ${serp.rabbitmq.encryption.key.salt}
+      key-size-in-bits: ${serp.rabbitmq.encryption.key.size}
+      mac-size-in-bits: ${serp.rabbitmq.encryption.mac.size}
+      nonce-size-in-bits: ${serp.rabbitmq.encryption.nonce.size}
+      nonce-header: ${serp.rabbitmq.encryption.nonce.header}

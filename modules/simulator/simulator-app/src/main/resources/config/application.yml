@@ -1,0 +1,142 @@
+####################################################################################################
+# Error Queue Configuration
+####################################################################################################
+serp.messaging.error-queue.enabled: true
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+serp.web.threads.io: 4
+serp.web.threads.worker: 16
+serp.server.protocol: http
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+serp.execution.threads: 8
+serp.execution.threads.max: 16
+serp.execution.queue: 10000
+
+serp.scheduling.threads: 2
+
+# XXX(ahaczewski): Temporarily set to true, until we're sure customer correctly configured SERP.
+serp.show-env: true
+
+#---------------------------------------------------------------------------------------------------
+# SERVICE DISCOVERY
+#---------------------------------------------------------------------------------------------------
+serp.consul.discovery.enabled: ${serp.consul.enabled}
+
+#---------------------------------------------------------------------------------------------------
+# mTLS - enabled by default
+#---------------------------------------------------------------------------------------------------
+serp.tls.enabled: false
+serp.consul.traefik.passTLSCert: ${serp.tls.enabled}
+serp.consul.traefik.entryPoints: unprotectedGateway
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+# Embedded server configuration
+server:
+  port: 24214
+  forward-headers-strategy: native
+  undertow:
+    io-threads: ${serp.web.threads.io}
+    worker-threads: ${serp.web.threads.worker}
+
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+# Management HTTP server
+management:
+  health:
+    mail:
+      enabled: false
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+    # loggers endpoint is secured with mTLS
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: simulator
+  # AOP configuration - disabled due to AspectJ compile-time weaving use
+  aop:
+    auto: false
+
+  # Task execution and scheduling
+  task:
+    execution:
+      pool:
+        core-size: ${serp.execution.threads}
+        max-size: ${serp.execution.threads.max}
+        queue-capacity: ${serp.execution.queue}
+        keep-alive: 10s
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool.size: ${serp.scheduling.threads}
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+
+  groovy:
+    template:
+      check-template-location: false
+
+  cloud:
+    service-registry:
+      enabled: ${serp.consul.enabled}
+      auto-registration:
+        enabled: ${serp.consul.enabled}
+
+  servlet:
+    multipart.max-file-size: 10MB
+    multipart.max-request-size: 10MB
+
+simulator:
+  web:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      exposed-headers: "Authorization,Link,X-Total-Count"
+      allow-credentials: true
+      max-age: 1800
+
+sep.auth:
+  permissionMethodsMappings:
+    SIMULATION_MANAGEMENT:
+      - "CREATE_SIMULATION"
+
+  rolePermissionsMappings:
+    BUSINESS_OPERATOR:
+      - "SIMULATION_MANAGEMENT"

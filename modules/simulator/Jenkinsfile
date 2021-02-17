@@ -1,0 +1,3 @@
+@Library('pipeline-shared-library@master') _
+
+gradleBuild(jdkVersion: 'jdk-11', sonarEnabled: true)

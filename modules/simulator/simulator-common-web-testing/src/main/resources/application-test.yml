@@ -1,0 +1,10 @@
+spring.cloud.consul.enabled: false
+
+sep.auth:
+  permissionMethodsMappings:
+    SIMULATION_MANAGEMENT:
+      - "CREATE_SIMULATION"
+
+  rolePermissionsMappings:
+    BUSINESS_OPERATOR:
+      - "SIMULATION_MANAGEMENT"

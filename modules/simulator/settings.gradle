@@ -1,0 +1,8 @@
+rootProject.name = 'simulator'
+gradle.ext.sepDependenciesVersion = '1.12.0'
+
+include 'simulator-app'
+include 'simulator-common-web'
+include 'simulator-common-web-testing'
+include 'simulator-db-changelog'
+include 'simulator-documentation'
