@@ -1,0 +1,34 @@
+@startuml
+participant HSBC
+participant "SERP Bridge"
+
+participant RabbitMQ
+participant Pipeline
+participant Agents
+participant Reco
+participant Governance
+participant PostgresDB
+== **1) Receive Request with Alerts for Processing** ==
+
+HSBC -> "SERP Bridge": Http request [REST/HTTP]
+"SERP Bridge" -> PostgresDB: Store alerts
+HSBC <- "SERP Bridge": Http response with bulk id [REST/HTTP]
+"SERP Bridge" -> RabbitMQ: Send message
+
+== **3) Solve alert hit** ==
+    loop each agent
+    RabbitMQ -> Pipeline: Receive message
+loop each alert
+      Pipeline -> Agents : Solve request
+      Agents --> Pipeline : Solve response
+    end
+  Pipeline -> RabbitMQ : Send message
+  == **3) Recommend alert** ==
+  RabbitMQ -> Reco: Receive message
+  group Recommendation
+    Reco -> Governance: GRPC call
+    Governance --> Reco: GRPC call
+    Reco -> PostgresDB: Store recommendation
+  end
+end
+@enduml

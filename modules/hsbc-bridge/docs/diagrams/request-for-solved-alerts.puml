@@ -1,0 +1,14 @@
+@startuml
+participant HSBC
+participant "SERP Bridge"
+
+participant PostgresDB
+== **1) Receive Request for solved Alerts** ==
+HSBC -> "SERP Bridge": Http request for bulk status
+"SERP Bridge" <- PostgresDB: Check bulk status
+HSBC <- "SERP Bridge": Http response with bulk status for given id
+
+HSBC -> "SERP Bridge": Http request for results of bulk processing
+"SERP Bridge" <- PostgresDB: Retrieve recommendations for given bulk id
+"SERP Bridge" --> HSBC: Http response
+@enduml
