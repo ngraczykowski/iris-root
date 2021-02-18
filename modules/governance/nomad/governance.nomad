@@ -3,6 +3,12 @@ variable "governance_artifact" {
   description = "The name of file containing Governance artifact"
 }
 
+variable "governance_artifact_checksum" {
+  type = string
+  description = "Artifact SHA256 checksum should be provided"
+}
+
+
 variable "memory" {
   default = 1500
 }
@@ -103,6 +109,9 @@ job "governance" {
 
       artifact {
         source = var.governance_artifact
+        options {
+          checksum = "${var.governance_artifact_checksum}"
+        }
         mode = "file"
         destination = "local/governance-app.jar"
       }
