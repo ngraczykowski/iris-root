@@ -15,13 +15,7 @@ import javax.validation.Valid;
 
 public class SolvedAlert   {
   @JsonProperty("id")
-  private Long id = null;
-
-  @JsonProperty("apName")
-  private String apName = null;
-
-  @JsonProperty("wlName")
-  private String wlName = null;
+  private Integer id = null;
 
   @JsonProperty("recommendation")
   private SolvedAlertStatus recommendation = null;
@@ -29,7 +23,7 @@ public class SolvedAlert   {
   @JsonProperty("comment")
   private String comment = null;
 
-  public SolvedAlert id(Long id) {
+  public SolvedAlert id(Integer id) {
     this.id = id;
     return this;
   }
@@ -40,50 +34,12 @@ public class SolvedAlert   {
    **/
   @Schema(description = "")
   
-    public Long getId() {
+    public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
-  }
-
-  public SolvedAlert apName(String apName) {
-    this.apName = apName;
-    return this;
-  }
-
-  /**
-   * Get apName
-   * @return apName
-   **/
-  @Schema(description = "")
-  
-    public String getApName() {
-    return apName;
-  }
-
-  public void setApName(String apName) {
-    this.apName = apName;
-  }
-
-  public SolvedAlert wlName(String wlName) {
-    this.wlName = wlName;
-    return this;
-  }
-
-  /**
-   * Get wlName
-   * @return wlName
-   **/
-  @Schema(description = "")
-  
-    public String getWlName() {
-    return wlName;
-  }
-
-  public void setWlName(String wlName) {
-    this.wlName = wlName;
   }
 
   public SolvedAlert recommendation(SolvedAlertStatus recommendation) {
@@ -136,15 +92,13 @@ public class SolvedAlert   {
     }
     SolvedAlert solvedAlert = (SolvedAlert) o;
     return Objects.equals(this.id, solvedAlert.id) &&
-        Objects.equals(this.apName, solvedAlert.apName) &&
-        Objects.equals(this.wlName, solvedAlert.wlName) &&
         Objects.equals(this.recommendation, solvedAlert.recommendation) &&
         Objects.equals(this.comment, solvedAlert.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, apName, wlName, recommendation, comment);
+    return Objects.hash(id, recommendation, comment);
   }
 
   @Override
@@ -153,8 +107,6 @@ public class SolvedAlert   {
     sb.append("class SolvedAlert {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    apName: ").append(toIndentedString(apName)).append("\n");
-    sb.append("    wlName: ").append(toIndentedString(wlName)).append("\n");
     sb.append("    recommendation: ").append(toIndentedString(recommendation)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("}");

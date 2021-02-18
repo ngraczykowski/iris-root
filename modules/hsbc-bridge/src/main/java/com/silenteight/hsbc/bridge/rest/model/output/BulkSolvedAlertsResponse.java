@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -20,9 +22,55 @@ import javax.validation.constraints.*;
 
 
 public class BulkSolvedAlertsResponse   {
+  @JsonProperty("bulkId")
+  private UUID bulkId = null;
+
+  @JsonProperty("bulkStatus")
+  private BulkStatus bulkStatus = null;
+
   @JsonProperty("alerts")
   @Valid
   private List<SolvedAlert> alerts = null;
+
+  public BulkSolvedAlertsResponse bulkId(UUID bulkId) {
+    this.bulkId = bulkId;
+    return this;
+  }
+
+  /**
+   * Get bulkId
+   * @return bulkId
+   **/
+  @Schema(description = "")
+
+  @Valid
+  public UUID getBulkId() {
+    return bulkId;
+  }
+
+  public void setBulkId(UUID bulkId) {
+    this.bulkId = bulkId;
+  }
+
+  public BulkSolvedAlertsResponse bulkStatus(BulkStatus bulkStatus) {
+    this.bulkStatus = bulkStatus;
+    return this;
+  }
+
+  /**
+   * Get bulkStatus
+   * @return bulkStatus
+   **/
+  @Schema(description = "")
+
+  @Valid
+  public BulkStatus getBulkStatus() {
+    return bulkStatus;
+  }
+
+  public void setBulkStatus(BulkStatus bulkStatus) {
+    this.bulkStatus = bulkStatus;
+  }
 
   public BulkSolvedAlertsResponse alerts(List<SolvedAlert> alerts) {
     this.alerts = alerts;
@@ -61,19 +109,23 @@ public class BulkSolvedAlertsResponse   {
       return false;
     }
     BulkSolvedAlertsResponse bulkSolvedAlertsResponse = (BulkSolvedAlertsResponse) o;
-    return Objects.equals(this.alerts, bulkSolvedAlertsResponse.alerts);
+    return Objects.equals(this.alerts, bulkSolvedAlertsResponse.alerts) &&
+        Objects.equals(this.bulkId, bulkSolvedAlertsResponse.bulkId) &&
+        Objects.equals(this.bulkStatus, bulkSolvedAlertsResponse.bulkStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(alerts);
+    return Objects.hash(bulkId, bulkStatus, alerts);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BulkSolvedAlertsResponse {\n");
-    
+
+    sb.append("    bulkId: ").append(toIndentedString(bulkId)).append("\n");
+    sb.append("    bulkStatus: ").append(toIndentedString(bulkStatus)).append("\n");
     sb.append("    alerts: ").append(toIndentedString(alerts)).append("\n");
     sb.append("}");
     return sb.toString();

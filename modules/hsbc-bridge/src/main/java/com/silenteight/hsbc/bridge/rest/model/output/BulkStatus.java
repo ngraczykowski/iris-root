@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.rest.model.output;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -8,10 +8,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * Gets or Sets BulkStatus
  */
 public enum BulkStatus {
+  STORED("STORED"),
+  ERROR("ERROR"),
+  CANCELLED("CANCELLED"),
   PROCESSING("PROCESSING"),
-    ERROR("ERROR"),
-    COMPLETED("COMPLETED"),
-    CANCEL("CANCEL");
+  COMPLETED("COMPLETED");
 
   private final String value;
 

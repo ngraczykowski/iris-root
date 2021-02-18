@@ -8,11 +8,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * Gets or Sets SolvedAlertStatus
  */
 public enum SolvedAlertStatus {
-  POTENTIAL_MATCH("POTENTIAL_MATCH"),
-    NO_MATCH("NO_MATCH"),
-    MATCH("MATCH"),
-    FALSE_MATCH("FALSE_MATCH"),
-    ERROR("ERROR");
+  MANUAL_INVESTIGATION("MANUAL_INVESTIGATION"),
+  POTENTIAL_TRUE_POSITIVE("POTENTIAL_TRUE_POSITIVE"),
+  FALSE_POSITIVE("FALSE_POSITIVE");
 
   private final String value;
 

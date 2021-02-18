@@ -1,9 +1,11 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.rest.model.output;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
 
 /**
@@ -12,13 +14,13 @@ import javax.validation.Valid;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
 
+public class BulkAlertItem {
 
-public class BulkAlertItem   {
   @JsonProperty("id")
   private Integer id = null;
 
   @JsonProperty("status")
-  private BulkAlertStatus status = null;
+  private BulkStatus status = null;
 
   @JsonProperty("errorMessage")
   private String errorMessage = null;
@@ -30,11 +32,12 @@ public class BulkAlertItem   {
 
   /**
    * Get id
+   *
    * @return id
    **/
   @Schema(description = "")
-  
-    public Integer getId() {
+
+  public Integer getId() {
     return id;
   }
 
@@ -42,23 +45,24 @@ public class BulkAlertItem   {
     this.id = id;
   }
 
-  public BulkAlertItem status(BulkAlertStatus status) {
+  public BulkAlertItem status(BulkStatus status) {
     this.status = status;
     return this;
   }
 
   /**
    * Get status
+   *
    * @return status
    **/
   @Schema(description = "")
-  
-    @Valid
-    public BulkAlertStatus getStatus() {
+
+  @Valid
+  public BulkStatus getStatus() {
     return status;
   }
 
-  public void setStatus(BulkAlertStatus status) {
+  public void setStatus(BulkStatus status) {
     this.status = status;
   }
 
@@ -69,11 +73,12 @@ public class BulkAlertItem   {
 
   /**
    * Get errorMessage
+   *
    * @return errorMessage
    **/
   @Schema(description = "")
-  
-    public String getErrorMessage() {
+
+  public String getErrorMessage() {
     return errorMessage;
   }
 
@@ -105,7 +110,7 @@ public class BulkAlertItem   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BulkAlertItem {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    errorMessage: ").append(toIndentedString(errorMessage)).append("\n");
@@ -114,8 +119,8 @@ public class BulkAlertItem   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
