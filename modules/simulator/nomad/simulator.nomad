@@ -3,6 +3,11 @@ variable "simulator_artifact" {
   description = "The name of file containing Simulator artifact"
 }
 
+variable "simulator_artifact_checksum" {
+  type = string
+  description = "Artifact SHA256 checksum should be provided"
+}
+
 variable "memory" {
   default = 1500
 }
@@ -66,6 +71,9 @@ job "simulator" {
 
       artifact {
         source = var.simulator_artifact
+        options {
+          checksum = "${var.simulator_artifact_checksum}"
+        }
         mode = "file"
         destination = "local/simulator-app.jar"
       }
