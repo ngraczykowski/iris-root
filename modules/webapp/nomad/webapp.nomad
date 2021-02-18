@@ -2,6 +2,11 @@ variable "webapp_artifact" {
   type = string
 }
 
+variable "webapp_artifact_checksum" {
+  type = string
+  description = "Artifact SHA256 checksum should be provided"
+}
+
 variable "memory" {
   default = 1500
 }
@@ -64,6 +69,9 @@ job "webapp" {
 
       artifact {
         source = var.webapp_artifact
+        options {
+            checksum = "${var.webapp_artifact_checksum}"
+        }
         mode = "file"
         destination = "local/sens-webapp-backend.jar"
       }
