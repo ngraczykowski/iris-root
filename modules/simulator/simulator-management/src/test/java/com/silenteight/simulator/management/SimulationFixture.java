@@ -1,6 +1,5 @@
 package com.silenteight.simulator.management;
 
-import com.silenteight.simulator.management.dto.CreateSimulationRequest;
 import com.silenteight.simulator.management.dto.SimulationDto;
 import com.silenteight.simulator.management.dto.SimulationState;
 
@@ -30,6 +29,7 @@ class SimulationFixture {
           .description(DESCRIPTION)
           .policyId(POLICY_ID)
           .datasetId(DATASET_ID)
+          .createdBy(USERNAME)
           .build();
 
   public static final SimulationDto SIMULATION_DTO =

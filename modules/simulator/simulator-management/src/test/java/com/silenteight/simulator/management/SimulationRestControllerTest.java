@@ -39,7 +39,7 @@ class SimulationRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its201_whenSimulationCreated() {
-    doNothing().when(createSimulationUseCase).activate(any(), any());
+    doNothing().when(createSimulationUseCase).activate(any());
 
     post(SIMULATIONS_URL, CREATE_SIMULATION_REQUEST)
         .statusCode(CREATED.value());
@@ -49,7 +49,7 @@ class SimulationRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its400_whenSimulationUuidExists() {
     doThrow(NonUniqueSimulationException.class)
-        .when(createSimulationUseCase).activate(any(), any());
+        .when(createSimulationUseCase).activate(any());
 
     post(SIMULATIONS_URL, CREATE_SIMULATION_REQUEST)
         .statusCode(BAD_REQUEST.value());

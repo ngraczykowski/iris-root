@@ -1,12 +1,14 @@
 package com.silenteight.simulator.management.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 
 import java.util.UUID;
 
 @Value
 @Builder
-public class CreateSimulationRequest {
+public class CreateSimulationRequestDto {
 
   @NonNull
   UUID id;

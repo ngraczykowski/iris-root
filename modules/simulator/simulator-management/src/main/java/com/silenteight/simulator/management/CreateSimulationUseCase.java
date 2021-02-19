@@ -3,7 +3,7 @@ package com.silenteight.simulator.management;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.simulator.management.dto.CreateSimulationRequest;
+import com.silenteight.auditing.bs.AuditingLogger;
 
 @AllArgsConstructor
 public class CreateSimulationUseCase {
@@ -11,7 +11,12 @@ public class CreateSimulationUseCase {
   @NonNull
   private final SimulationService simulationService;
 
-  public void activate(CreateSimulationRequest request, String username) {
-    simulationService.createSimulation(request, username);
+  @NonNull
+  private final AuditingLogger auditingLogger;
+
+  public void activate(CreateSimulationRequest request) {
+    request.preAudit(auditingLogger::log);
+    simulationService.createSimulation(request);
+    request.postAudit(auditingLogger::log);
   }
 }

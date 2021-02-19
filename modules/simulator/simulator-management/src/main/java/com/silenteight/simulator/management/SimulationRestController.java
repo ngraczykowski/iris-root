@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.simulator.common.web.rest.RestConstants;
-import com.silenteight.simulator.management.dto.CreateSimulationRequest;
+import com.silenteight.simulator.management.dto.CreateSimulationRequestDto;
 import com.silenteight.simulator.management.dto.SimulationDto;
 
 import org.springframework.http.HttpStatus;
@@ -32,10 +32,19 @@ public class SimulationRestController {
   @PostMapping(SIMULATIONS_URL)
   @PreAuthorize("isAuthorized('CREATE_SIMULATION')")
   public ResponseEntity<Void> createDataset(
-      @RequestBody @Valid CreateSimulationRequest createSimulationRequest,
+      @RequestBody @Valid CreateSimulationRequestDto createSimulationRequestDto,
       Authentication authentication) {
 
-    useCase.activate(createSimulationRequest, authentication.getName());
+    final CreateSimulationRequest createSimulationRequest = CreateSimulationRequest.builder()
+        .id(createSimulationRequestDto.getId())
+        .name(createSimulationRequestDto.getName())
+        .description(createSimulationRequestDto.getDescription())
+        .createdBy(authentication.getName())
+        .datasetId(createSimulationRequestDto.getDatasetId())
+        .policyId(createSimulationRequestDto.getPolicyId())
+        .build();
+
+    useCase.activate(createSimulationRequest);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -44,5 +53,4 @@ public class SimulationRestController {
   public ResponseEntity<List<SimulationDto>> listSimulations() {
     return ResponseEntity.ok(simulationQuery.listAllSimulations());
   }
-
 }
