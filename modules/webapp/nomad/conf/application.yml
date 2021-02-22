@@ -3,7 +3,7 @@ server:
 
 keycloak:
   adapter:
-    auth-server-url: https://auth.dev.silenteight.com
+    auth-server-url: https://auth.silenteight.com
     realm: sens-webapp
     public-client: false
     confidential-port: 0
