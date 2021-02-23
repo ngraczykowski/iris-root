@@ -3,6 +3,7 @@
 gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
+    includeBuildNumberInSnapshotVersion: true,
     additionalStages: {
       stage('Deploy On Nomad') {
         script {
