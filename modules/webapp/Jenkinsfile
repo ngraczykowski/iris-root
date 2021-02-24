@@ -1,16 +1,20 @@
-@Library('pipeline-shared-library') _
+@Library('pipeline-shared-library@master') _
 
-gradleBuild(jdkVersion: 'jdk-11',
-sonarEnabled: true,
- additionalStages:{
-  stage('Deploy On Nomad') {
-    script {
-        def utils = new com.silenteight.jenkins.ci.Utils()
-        if(utils.getGitBranch() == 'master'){
+gradleBuild(
+    jdkVersion: 'jdk-11',
+    sonarEnabled: true,
+    includeBuildNumberInSnapshotVersion: true,
+    additionalStages: {
+      stage('Deploy On Nomad') {
+        script {
+          def utils = new com.silenteight.jenkins.ci.Utils()
+          // FIXME(ahaczewski): Use `when` if possible.
+          if (utils.getGitBranch() == 'master') {
             sh './nomad/deploy.sh -var-file=master.vars'
-        } else {
+          } else {
             echo 'This is not a release branch ignore Nomad deployment'
+          }
         }
+      }
     }
-  }
-})
+)
