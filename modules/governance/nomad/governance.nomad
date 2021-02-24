@@ -50,6 +50,9 @@ job "governance" {
       tags = concat([
         "http",
         "traefik.enable=true",
+        # Those 2 tags are required to gather metrics by prometheus
+        "traefik.protocol=http",
+        "prometheus.metrics.path=/rest/governance/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
       ], var.http_tags)
