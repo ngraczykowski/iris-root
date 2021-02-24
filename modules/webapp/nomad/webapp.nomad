@@ -46,6 +46,9 @@ job "webapp" {
       tags = concat([
         "http",
         "traefik.enable=true",
+        # Those 2 tags are required to gather metrics by prometheus
+        "traefik.protocol=http",
+        "prometheus.metrics.path=/rest/webapp/management/prometheus"
       ], var.http_tags)
 
       check_restart {
