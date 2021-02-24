@@ -1,14 +1,19 @@
 package com.silenteight.hsbc.bridge.bulk.repository;
 
+import com.silenteight.hsbc.bridge.bulk.Bulk;
 import com.silenteight.hsbc.bridge.bulk.BulkStatus;
-import com.silenteight.hsbc.bridge.bulk.dto.CreateBulkResult;
-import com.silenteight.hsbc.bridge.bulk.dto.UpdateBulkResult;
-import com.silenteight.hsbc.bridge.rest.model.input.Alerts;
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.UUID;
 
 public interface BulkWriteRepository {
 
-  CreateBulkResult createBulk(Alerts alerts);
-  UpdateBulkResult updateBulkStatus(UUID id, BulkStatus status);
+  Bulk save(Bulk bulk);
+
+  @Modifying
+  @Query("update Bulk b set b.status = :status where b.id = :id")
+  void updateStatusById(@Param("id") UUID id, @Param("status") BulkStatus status);
 }

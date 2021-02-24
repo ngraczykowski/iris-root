@@ -6,7 +6,7 @@ import com.silenteight.hsbc.bridge.bulk.*;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.rest.model.input.Alerts;
+import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest;
 import com.silenteight.hsbc.bridge.rest.model.output.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/async/bulk/v1")
@@ -29,8 +30,8 @@ public class BulkRestController {
   private final CancelBulkUseCase cancelBulkUseCase;
 
   @PostMapping("/recommendAlerts")
-  public ResponseEntity<BulkAcceptedResponse> recommendAlerts(@RequestBody Alerts alerts) {
-    return ResponseEntity.ok(createBulkUseCase.recommend(alerts));
+  public ResponseEntity<BulkAcceptedResponse> recommendAlerts(@Valid @RequestBody HsbcRecommendationRequest request) {
+    return ResponseEntity.ok(createBulkUseCase.recommend(request));
   }
 
   @GetMapping("/{id}/result")

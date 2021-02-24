@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.0-1
+      author: bmartofel
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_bulk
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: status
+                  type: varchar(30)
+        - createTable:
+            tableName: hsbc_bridge_alert
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: case_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: bytea
+        - createTable:
+            tableName: hsbc_bridge_bulk_item
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement:  true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: bulk_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bulk_id
+                    references: hsbc_bridge_bulk(id)
+              - column:
+                  name: alert_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_alert_id
+                    references: hsbc_bridge_alert(id)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: status
+                  type: varchar(30)

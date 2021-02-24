@@ -18,7 +18,7 @@ public class AlertUserInformation   {
   private UsersByGroup usersByGroup = null;
 
   @JsonProperty("deletedusers")
-  private Deletedusers deletedusers = null;
+  private DeletedUsers deletedusers = null;
 
   @JsonProperty("users")
   private Users users = null;
@@ -43,7 +43,7 @@ public class AlertUserInformation   {
     this.usersByGroup = usersByGroup;
   }
 
-  public AlertUserInformation deletedusers(Deletedusers deletedusers) {
+  public AlertUserInformation deletedusers(DeletedUsers deletedusers) {
     this.deletedusers = deletedusers;
     return this;
   }
@@ -55,11 +55,11 @@ public class AlertUserInformation   {
   @Schema(description = "")
   
     @Valid
-    public Deletedusers getDeletedusers() {
+    public DeletedUsers getDeletedusers() {
     return deletedusers;
   }
 
-  public void setDeletedusers(Deletedusers deletedusers) {
+  public void setDeletedusers(DeletedUsers deletedusers) {
     this.deletedusers = deletedusers;
   }
 

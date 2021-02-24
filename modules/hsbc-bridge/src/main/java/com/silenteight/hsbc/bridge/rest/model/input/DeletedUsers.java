@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
 
 
-public class Deletedusers   {
+public class DeletedUsers {
   @JsonProperty("userid")
   private Integer userid = null;
 
@@ -25,7 +25,7 @@ public class Deletedusers   {
   @JsonProperty("fullname")
   private String fullname = null;
 
-  public Deletedusers userid(Integer userid) {
+  public DeletedUsers userid(Integer userid) {
     this.userid = userid;
     return this;
   }
@@ -44,7 +44,7 @@ public class Deletedusers   {
     this.userid = userid;
   }
 
-  public Deletedusers username(String username) {
+  public DeletedUsers username(String username) {
     this.username = username;
     return this;
   }
@@ -63,7 +63,7 @@ public class Deletedusers   {
     this.username = username;
   }
 
-  public Deletedusers display(String display) {
+  public DeletedUsers display(String display) {
     this.display = display;
     return this;
   }
@@ -82,7 +82,7 @@ public class Deletedusers   {
     this.display = display;
   }
 
-  public Deletedusers fullname(String fullname) {
+  public DeletedUsers fullname(String fullname) {
     this.fullname = fullname;
     return this;
   }
@@ -110,7 +110,7 @@ public class Deletedusers   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Deletedusers deletedusers = (Deletedusers) o;
+    DeletedUsers deletedusers = (DeletedUsers) o;
     return Objects.equals(this.userid, deletedusers.userid) &&
         Objects.equals(this.username, deletedusers.username) &&
         Objects.equals(this.display, deletedusers.display) &&
