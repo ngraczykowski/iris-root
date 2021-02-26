@@ -6,3 +6,4 @@ spring:
 {{- end }}
     # NOTE(ahaczewski): Intentionally left empty.
     host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
