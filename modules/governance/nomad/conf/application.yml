@@ -12,7 +12,4 @@ keycloak:
     public-client: false
     confidential-port: 0
     principal-attribute: preferred_username
-    resource: backend
     ssl-required: external
-    credentials:
-      secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0

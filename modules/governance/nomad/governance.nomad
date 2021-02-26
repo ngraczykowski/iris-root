@@ -8,6 +8,10 @@ variable "governance_artifact_checksum" {
   description = "Artifact SHA256 checksum should be provided"
 }
 
+variable "namespace" {
+  type    = string
+  default = "dev"
+}
 
 variable "memory" {
   default = 1500
@@ -30,6 +34,8 @@ job "governance" {
     "dc1"
   ]
 
+  namespace = "${var.namespace}"
+
   update {
     auto_revert = true
   }
@@ -45,7 +51,7 @@ job "governance" {
     }
 
     service {
-      name = "governance"
+      name = "${var.namespace}-governance"
       port = "http"
       tags = concat([
         "http",
@@ -74,7 +80,7 @@ job "governance" {
     }
 
     service {
-      name = "governance"
+      name = "${var.namespace}-governance"
       port = "grpc"
       tags = [
         "grpc",
@@ -99,7 +105,7 @@ job "governance" {
     # Dummy registration of a service required for Spring Consul Discovery.
     # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
     service {
-      name = "grpc-governance"
+      name = "${var.namespace}-grpc-governance"
       port = "grpc"
       tags = [
         "grpc",
@@ -120,7 +126,7 @@ job "governance" {
       }
 
       template {
-        data = "{{ key \"governance/secrets\" }}"
+        data = "{{ key \"${var.namespace}/governance/secrets\" }}"
         destination = "secrets/governance.env"
         env = true
       }
@@ -140,6 +146,12 @@ job "governance" {
       template {
         data = file("./conf/application-messaging.yml")
         destination = "local/conf/application-messaging.yml"
+        change_mode = "noop"
+      }
+
+      template {
+        data = file("./conf/application-consul.yml")
+        destination = "local/conf/application-consul.yml"
         change_mode = "noop"
       }
 
