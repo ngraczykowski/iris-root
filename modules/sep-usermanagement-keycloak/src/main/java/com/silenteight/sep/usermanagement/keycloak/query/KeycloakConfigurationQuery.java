@@ -5,6 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
+import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
+import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakAuthConfigurationDto;
+import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakDto;
 
 import org.keycloak.admin.client.resource.RealmResource;
 
@@ -19,6 +23,9 @@ class KeycloakConfigurationQuery implements ConfigurationQuery {
   @NonNull
   private final RealmResource realmResource;
 
+  @NonNull
+  private final KeycloakConfigurationProperties keycloakConfigurationProperties;
+
   @Override
   public int getSessionIdleTimeoutSeconds() {
     try {
@@ -28,5 +35,16 @@ class KeycloakConfigurationQuery implements ConfigurationQuery {
       log.error("Could not get session idle timeout", e);
       return DEFAULT_SESSION_IDLE_TIMEOUT_SECONDS;
     }
+  }
+
+  @Override
+  public AuthConfigurationDto getAuthConfiguration() {
+    KeycloakDto keycloak = KeycloakDto.builder()
+        .url(keycloakConfigurationProperties.getAuthServerUrl())
+        .realm(keycloakConfigurationProperties.getRealm())
+        .clientId(keycloakConfigurationProperties.getFrontendClientId())
+        .build();
+
+    return new KeycloakAuthConfigurationDto(keycloak);
   }
 }

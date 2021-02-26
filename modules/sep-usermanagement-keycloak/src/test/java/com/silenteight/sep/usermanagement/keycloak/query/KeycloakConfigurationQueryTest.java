@@ -1,10 +1,16 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
+import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
+import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
+import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakAuthConfigurationDto;
+import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakDto;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.representations.adapters.config.AdapterConfig;
 import org.keycloak.representations.idm.RealmRepresentation;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -14,13 +20,26 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class KeycloakConfigurationQueryTest {
 
+  private static final String AUTH_SERVER_URL = "https://auth.silenteight.com";
+  private static final String REALM = "sens-webapp";
   private static final int DEFAULT_SESSION_TIMEOUT = 1800;
-
-  @InjectMocks
-  private KeycloakConfigurationQuery underTest;
 
   @Mock
   private RealmResource realmResource;
+
+  private KeycloakConfigurationQuery underTest;
+
+  @BeforeEach
+  void setUp() {
+    AdapterConfig adapterConfig = new AdapterConfig();
+    adapterConfig.setAuthServerUrl(AUTH_SERVER_URL);
+    adapterConfig.setRealm(REALM);
+
+    KeycloakConfigurationProperties keycloakConfigurationProperties =
+        new KeycloakConfigurationProperties(adapterConfig);
+
+    underTest = new KeycloakConfigurationQuery(realmResource, keycloakConfigurationProperties);
+  }
 
   @Test
   void givenSessionTimeout_returnSessionTimeout() {
@@ -57,6 +76,23 @@ class KeycloakConfigurationQueryTest {
 
     // then
     assertThat(result).isEqualTo(DEFAULT_SESSION_TIMEOUT);
+  }
+
+  @Test
+  void givenKeycloakProperties_returnAuthConfiguration() {
+    // when
+    AuthConfigurationDto authConfiguration = underTest.getAuthConfiguration();
+
+    // then
+    assertThat(authConfiguration).isInstanceOf(KeycloakAuthConfigurationDto.class);
+    KeycloakAuthConfigurationDto keycloakAuthConfiguration =
+        (KeycloakAuthConfigurationDto) authConfiguration;
+    assertThat(keycloakAuthConfiguration.getKeycloak()).isEqualTo(
+        KeycloakDto.builder()
+            .url(AUTH_SERVER_URL)
+            .realm(REALM)
+            .clientId("frontend")
+            .build());
   }
 
   private static RealmRepresentation realmRepresentation(int sessionTimeout) {

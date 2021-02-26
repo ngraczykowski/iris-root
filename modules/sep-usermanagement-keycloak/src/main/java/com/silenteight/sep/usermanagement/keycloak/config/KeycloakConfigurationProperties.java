@@ -11,9 +11,19 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "keycloak")
 @Value
 @ConstructorBinding
-class KeycloakConfigurationProperties {
+public class KeycloakConfigurationProperties {
 
   @NotNull
   AdapterConfig adapter;
 
+  @NotNull
+  String frontendClientId = "frontend";
+
+  public String getAuthServerUrl() {
+    return adapter.getAuthServerUrl();
+  }
+
+  public String getRealm() {
+    return adapter.getRealm();
+  }
 }

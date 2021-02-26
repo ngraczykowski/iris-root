@@ -1,6 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
+import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
 import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
@@ -40,7 +41,10 @@ class KeycloakQueryConfiguration {
   }
 
   @Bean
-  KeycloakConfigurationQuery keycloakConfigurationQuery(RealmResource realmResource) {
-    return new KeycloakConfigurationQuery(realmResource);
+  KeycloakConfigurationQuery keycloakConfigurationQuery(
+      RealmResource realmResource,
+      KeycloakConfigurationProperties keycloakConfigurationProperties) {
+
+    return new KeycloakConfigurationQuery(realmResource, keycloakConfigurationProperties);
   }
 }
