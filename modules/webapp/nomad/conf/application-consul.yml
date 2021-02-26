@@ -1,0 +1,10 @@
+grpc:
+  client:
+    governance:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+
+    reco:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-reco
+
+    circuit-breaker:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-circuit-breaker

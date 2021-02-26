@@ -1,8 +1,9 @@
 sens:
   webapp:
     db:
-      name: webapp
-{{- with service "webapp-db-service-postgre" }}
+      name: {{ env "NOMAD_NAMESPACE" }}-webapp
+{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+{{- with service (print $nomad_namespace "-webapp-db") }}
       host: {{ (index . 0).Address }}
       port: {{ (index . 0).Port }}
 {{ end -}}

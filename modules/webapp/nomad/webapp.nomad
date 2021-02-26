@@ -7,6 +7,11 @@ variable "webapp_artifact_checksum" {
   description = "Artifact SHA256 checksum should be provided"
 }
 
+variable "namespace" {
+  type    = string
+  default = "dev"
+}
+
 variable "memory" {
   default = 1500
 }
@@ -28,6 +33,8 @@ job "webapp" {
     "dc1"
   ]
 
+  namespace = "${var.namespace}"
+
   group "webapp" {
     count = 3
 
@@ -41,7 +48,7 @@ job "webapp" {
     }
 
     service {
-      name = "webapp"
+      name = "${var.namespace}-webapp"
       port = "http"
       tags = concat([
         "http",
@@ -80,7 +87,7 @@ job "webapp" {
       }
 
       template {
-        data = "{{ key \"webapp/secrets\" }}"
+        data = "{{ key \"${var.namespace}/webapp/secrets\" }}"
         destination = "secrets/webapp.env"
         env = true
       }
@@ -100,6 +107,12 @@ job "webapp" {
       template {
         data = file("conf/application-messaging.yml")
         destination = "local/conf/application-messaging.yml"
+        change_mode = "noop"
+      }
+
+      template {
+        data = file("./conf/application-consul.yml")
+        destination = "local/conf/application-consul.yml"
         change_mode = "noop"
       }
 
