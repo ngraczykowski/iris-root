@@ -17,7 +17,7 @@ public class KeycloakConfigurationProperties {
   AdapterConfig adapter;
 
   @NotNull
-  String frontendClientId = "frontend";
+  String frontendClientId;
 
   public String getAuthServerUrl() {
     return adapter.getAuthServerUrl();

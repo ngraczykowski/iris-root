@@ -22,6 +22,7 @@ class KeycloakConfigurationQueryTest {
 
   private static final String AUTH_SERVER_URL = "https://auth.silenteight.com";
   private static final String REALM = "sens-webapp";
+  private static final String FRONTEND_CLIENT_ID = "frontend";
   private static final int DEFAULT_SESSION_TIMEOUT = 1800;
 
   @Mock
@@ -36,7 +37,7 @@ class KeycloakConfigurationQueryTest {
     adapterConfig.setRealm(REALM);
 
     KeycloakConfigurationProperties keycloakConfigurationProperties =
-        new KeycloakConfigurationProperties(adapterConfig);
+        new KeycloakConfigurationProperties(adapterConfig, FRONTEND_CLIENT_ID);
 
     underTest = new KeycloakConfigurationQuery(realmResource, keycloakConfigurationProperties);
   }
@@ -91,7 +92,7 @@ class KeycloakConfigurationQueryTest {
         KeycloakDto.builder()
             .url(AUTH_SERVER_URL)
             .realm(REALM)
-            .clientId("frontend")
+            .clientId(FRONTEND_CLIENT_ID)
             .build());
   }
 
