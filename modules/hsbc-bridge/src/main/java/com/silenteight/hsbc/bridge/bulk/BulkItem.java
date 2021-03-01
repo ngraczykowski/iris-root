@@ -39,4 +39,9 @@ class BulkItem extends BaseEntity {
   public BulkItem(Alert alert) {
     this.alert = alert;
   }
+
+  @Transient
+  public int getAlertCaseId() {
+    return this.alert.getCaseId();
+  }
 }

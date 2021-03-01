@@ -22,7 +22,7 @@ public class CreateBulkUseCase {
   private final BulkWriteRepository writeRepository;
 
   @Transactional
-  public BulkAcceptedResponse recommend(HsbcRecommendationRequest request) {
+  public BulkAcceptedResponse createBulk(HsbcRecommendationRequest request) {
     var bulkItems = getBulkItems(request.getAlerts());
     var bulk = createBulk(bulkItems);
 
@@ -42,7 +42,7 @@ public class CreateBulkUseCase {
   private List<BulkAlertItem> getRequestedAlerts(Collection<BulkItem> bulkItems) {
     return bulkItems.stream().map(r -> {
       var bulkItem = new BulkAlertItem();
-      bulkItem.setId(r.getAlert().getCaseId());
+      bulkItem.setId(r.getAlertCaseId());
       bulkItem.setStatus(BulkStatus.fromValue(r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());

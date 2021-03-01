@@ -31,7 +31,7 @@ public class BulkRestController {
 
   @PostMapping("/recommendAlerts")
   public ResponseEntity<BulkAcceptedResponse> recommendAlerts(@Valid @RequestBody HsbcRecommendationRequest request) {
-    return ResponseEntity.ok(createBulkUseCase.recommend(request));
+    return ResponseEntity.ok(createBulkUseCase.createBulk(request));
   }
 
   @GetMapping("/{id}/result")

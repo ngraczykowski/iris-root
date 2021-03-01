@@ -1,6 +1,7 @@
 plugins {
   id "java"
   id "idea"
+  id "groovy"
   id "maven-publish"
   id "io.swagger.core.v3.swagger-gradle-plugin" version "2.1.6"
 }
@@ -34,6 +35,9 @@ dependencies {
 
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+  testCompile 'org.codehaus.groovy:groovy-all:3.0.7'
+  testCompile 'org.spockframework:spock-core:2.0-M4-groovy-3.0'
 }
 
 test {

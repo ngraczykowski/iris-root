@@ -7,9 +7,7 @@ import com.silenteight.hsbc.bridge.rest.model.output.BulkAlertItem;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkStatus;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkStatusResponse;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class GetBulkStatusUseCase {
   private List<BulkAlertItem> getRequestedAlerts(Collection<BulkItem> bulkItems) {
     return bulkItems.stream().map(r -> {
       var bulkItem = new BulkAlertItem();
-      bulkItem.setId(r.getAlert().getCaseId());
+      bulkItem.setId(r.getAlertCaseId());
       bulkItem.setStatus(BulkStatus.fromValue(r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());
