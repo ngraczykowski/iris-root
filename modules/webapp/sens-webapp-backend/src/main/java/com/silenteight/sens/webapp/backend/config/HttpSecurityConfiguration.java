@@ -33,6 +33,7 @@ class HttpSecurityConfiguration {
         .authorizeRequests()
         .antMatchers(RestConstants.OPENAPI_PREFIX + "/**").permitAll()
         .antMatchers(RestConstants.MANAGEMENT_PREFIX + "/**").permitAll()
+        .antMatchers(RestConstants.ROOT + RestConstants.AUTH_CONFIGURATION_PREFIX).permitAll()
         .anyRequest().authenticated();
   }
 }
