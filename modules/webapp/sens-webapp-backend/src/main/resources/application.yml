@@ -340,3 +340,7 @@ sep.auth:
 
 # Notifications
 sens.webapp.notification.enabled: true
+
+# Keycloak
+keycloak:
+  frontend-client-id: frontend
