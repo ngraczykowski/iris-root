@@ -1,0 +1,83 @@
+plugins {
+  id "java"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "com.google.cloud.tools.jib"
+}
+
+description = "Cloud API Application"
+
+dependencies {
+  implementation project(":cloud-api-features-api")
+  implementation project(":cloud-api-model")
+  implementation project(":cloud-api-name-screening")
+  implementation project(":cloud-api-screening-engine")
+  implementation project(":cloud-api-screening-engine-wc1")
+
+  // Utilities
+  implementation libraries.commons_lang3
+  implementation libraries.commons_text
+  implementation libraries.guava
+
+  // Base Libraries
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+
+  // Application Starters
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_webflux
+  implementation libraries.micrometer_prometheus
+
+  // Spring Sleuth
+  implementation libraries.spring_cloud_starter_sleuth
+
+  // Validator
+  implementation libraries.tomcat_embed_el
+  implementation libraries.hibernate_validator
+
+  // APIs
+  implementation libraries.jakarta_persistence_api
+  implementation libraries.jakarta_transaction_api
+
+  // Jackson
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_databind
+  runtimeOnly libraries.jackson_dataformat_xml
+  runtimeOnly libraries.jackson_datatype_jdk8
+  runtimeOnly libraries.jackson_datatype_jsr310
+  runtimeOnly libraries.jackson_module_afterburner
+  runtimeOnly libraries.jackson_module_paranamer
+  runtimeOnly libraries.jackson_module_parameter_names
+
+  // Database
+  implementation libraries.liquibase_core
+  implementation libraries.spring_jdbc
+  implementation libraries.spring_data_jpa
+  implementation libraries.hikari_cp
+  implementation libraries.hibernate_core
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.hibernate_jcache
+  runtimeOnly libraries.caffeine
+  runtimeOnly libraries.caffeine_jcache
+  
+  // Messaging
+  implementation libraries.amqp_client
+  implementation libraries.lz4_java
+  implementation libraries.spring_boot_starter_integration
+  implementation libraries.spring_integration_amqp
+  implementation libraries.spring_integration_core
+
+  // AspectJ
+  implementation libraries.aspectjrt
+  aspect libraries.silenteight_sep_base_aspects
+
+  // Testing
+  testImplementation libraries.junit_jupiter_api
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.cloudapi.app.CloudApiApplication"
+  }
+}

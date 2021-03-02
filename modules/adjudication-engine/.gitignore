@@ -1,0 +1,96 @@
+### Various ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.DS_Store
+*.bak
+*.orig
+
+### jenv ###
+.java-version
+
+### IntelliJ IDEA ###
+.idea/
+
+out/
+*.iws
+*.iml
+*.ipr
+.attach_pid*
+
+
+### Gradle ###
+build/
+.gradle/
+
+### Docker ###
+/.env
+
+### User configuration ###
+/conf/prometheus/prometheus.yml
+/conf/traefik/traefik.toml
+/conf/*.properties
+/conf/*.yml
+/conf/settings.toml
+/conf/settings.toml.*.backup
+/conf/consul/consul.hcl
+/conf/rabbitmq/rabbitmq.conf
+/conf/rabbitmq/rabbitmq-env.conf
+/conf/supervisor/supervisord.conf
+/conf/grafana/config.ini
+/conf/grafana/provisioning/datasources/prometheus.yml
+/conf/keycloak/standalone.xml
+/conf/keycloak/standalone_xml_history/
+/conf/keycloak/logging.properties
+/conf/keycloak/keycloak-add-user.json
+/conf/caddy/Caddyfile
+/conf/caddy/caddy.json
+/conf/agent/bootstrap.properties
+/conf/agent/bootstrap-consul.properties
+/conf/serp/bootstrap.properties
+/conf/serp/*-bootstrap.properties
+/conf/serp/serp-*.properties
+/conf/serp/serp.properties
+/conf/sens/sens.properties
+/conf/sens/sens-*.properties
+/conf/sens/bootstrap.properties
+/conf/name-agent
+/conf/date-agent
+
+### Installation ###
+/tmp/
+/opt/
+/run/
+/data/
+/log/**/*.log
+/log/**/*.log.*
+/log/**/*.json
+/log/**/*.json.*
+/log/**/*.txt
+!/log/.keep
+/lib/
+/plugin/
+/.dependencies/
+/.serp-opt-installer.version
+/cert/
+/html/
+
+### Test script configuration and json resonses
+/scripts/test/run-tests-cases-settings.sh
+/api/examples/test_cases/*RESPONSE*.json
+/api/examples/test_cases/*report*.csv
+
+### Python ###
+__pycache__/
+*.egg-info/
+*.dist-info/
+.eggs/
+.pip-cache/
+.pytest_cache/
+venv/
+
+### Jupyter Notebooks ###
+.ipynb_checkpoints/

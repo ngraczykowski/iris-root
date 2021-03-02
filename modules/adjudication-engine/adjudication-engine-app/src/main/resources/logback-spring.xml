@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <include resource="logback-defaults.xml"/>
+  <property name="MARKER_LOG_LEVEL_PATTERN"
+            value="%clr(%marker) %clr([${spring.application.name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}])"/>
+  <property name="MARKER_CONSOLE_LOG_PATTERN"
+            value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${MARKER_LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+  <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+  <!-- Standard output and error appenders -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf-8</charset>
+    </encoder>
+    <target>System.out</target>
+    <filter class="com.silenteight.adjudication.namescreening.logstash.NonAuditLevelFilter">
+      <level>ERROR</level>
+      <onMatch>DENY</onMatch>
+      <onMismatch>ACCEPT</onMismatch>
+    </filter>
+  </appender>
+  <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf-8</charset>
+    </encoder>
+    <filter class="com.silenteight.adjudication.namescreening.logstash.NonAuditThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <target>System.err</target>
+  </appender>
+  <appender name="AUDIT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${MARKER_CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf-8</charset>
+    </encoder>
+    <filter class="com.silenteight.adjudication.namescreening.logstash.AuditPassingFilter"/>
+    <target>System.out</target>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="STDERR"/>
+    <appender-ref ref="AUDIT"/>
+  </root>
+</configuration>

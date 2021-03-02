@@ -1,0 +1,48 @@
+# Spring `dev` profile configuration
+serp:
+  show-env: true
+  messaging:
+    error-queue:
+      declare: false
+      enabled: true
+      name: cloudapi.error-queue
+
+
+logging:
+  level:
+    com.silenteight.sep: DEBUG
+    com.silenteight.cloudapi: DEBUG
+    io.opencensus: INFO
+    io.netty: INFO
+    io.grpc.netty: INFO
+    org.quartz.core.JobRunShell: DEBUG
+
+management:
+  info:
+    git:
+      mode: full
+
+  endpoints:
+    enabled-by-default: true
+
+    web:
+      exposure:
+        include: "*"
+
+server:
+  error:
+    include-stacktrace: on_trace_param
+
+spring:
+  jpa:
+    show-sql: true
+
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate.generate_statistics: true
+
+  jackson:
+    serialization:
+      indent-output: true

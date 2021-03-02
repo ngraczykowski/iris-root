@@ -1,0 +1,14 @@
+allprojects {
+  apply plugin: "idea"
+
+  idea {
+    module {
+      [".gradle", "build", "data", "lib", "log", "opt", "plugin", "run", "tmp", "cert", "python", "html"].
+        each {
+          excludeDirs += file("$projectDir/$it")
+        }
+      outputDir file("${buildDir}/idea/production/${delegate.name}")
+      testOutputDir file("${buildDir}/idea/test/${delegate.name}")
+    }
+  }
+}
