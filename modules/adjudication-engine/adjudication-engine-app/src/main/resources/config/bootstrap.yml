@@ -18,9 +18,9 @@ ae:
     host: localhost
     port: 24780
     schema: public
-    name: ae
-    user: ae
-    password: ae
+    name: adjudication-engine
+    user: adjudication-engine
+    password: adjudication-engine
     url: jdbc:postgresql://${ae.db.host}:${ae.db.port}/${ae.db.name}?currentSchema=${ae.db.schema}
     connections:
       min: 1
@@ -32,8 +32,8 @@ ae:
   rabbitmq:
     host: localhost
     port: 24130
-    user: ae
-    password: ae
+    user: adjudication-engine
+    password: adjudication-engine
     vhost: /
     tls:
       enabled: false

@@ -7,9 +7,9 @@ services:
     ports:
       - "${POSTGRES_PORT:-24780}:5432"
     environment:
-      POSTGRES_DB: "${POSTGRES_DB:-ae}"
-      POSTGRES_USER: "${POSTGRES_USER:-ae}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-ae}"
+      POSTGRES_DB: "${POSTGRES_DB:-adjudication-engine}"
+      POSTGRES_USER: "${POSTGRES_USER:-adjudication-engine}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-adjudication-engine}"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - postgres-storage:/var/lib/postgresql/data
