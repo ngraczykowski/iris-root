@@ -94,3 +94,6 @@ venv/
 
 ### Jupyter Notebooks ###
 .ipynb_checkpoints/
+
+### Nomad deployment artifacts ###
+/nomad/artifacts
