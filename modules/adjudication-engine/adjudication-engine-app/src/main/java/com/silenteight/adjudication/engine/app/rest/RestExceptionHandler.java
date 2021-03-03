@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.app.rest;
+package com.silenteight.adjudication.engine.app.rest;
 
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.annotation.Order;

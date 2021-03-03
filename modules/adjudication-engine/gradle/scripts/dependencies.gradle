@@ -24,7 +24,6 @@ libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protoco
 libraries.silenteight_serp_protocol_ns = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-ns', version: serpProtocolVersion]
 libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
 libraries.silenteight_spring_cloud_consul_discovery = [group: 'com.silenteight.spring.cloud.consul.discovery', name: 'silenteight-spring-cloud-consul-discovery', version: '2.4.0']
-libraries.wc1_api_client = [group: 'com.silenteight.wc1api', name: 'wc1-api-client', version: '2.1.0']
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']

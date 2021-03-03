@@ -3,17 +3,12 @@ plugins {
   id "maven-publish"
   id "io.freefair.aspectj.post-compile-weaving"
   id "com.google.cloud.tools.jib"
+  id "org.springframework.boot"
 }
 
-description = "Cloud API Application"
+description = "Adjudication Engine Application"
 
 dependencies {
-  implementation project(":cloud-api-features-api")
-  implementation project(":cloud-api-model")
-  implementation project(":cloud-api-name-screening")
-  implementation project(":cloud-api-screening-engine")
-  implementation project(":cloud-api-screening-engine-wc1")
-
   // Utilities
   implementation libraries.commons_lang3
   implementation libraries.commons_text
@@ -78,6 +73,6 @@ dependencies {
 
 jar {
   manifest {
-    attributes "Main-Class": "com.silenteight.cloudapi.app.CloudApiApplication"
+    attributes "Main-Class": "com.silenteight.adjudication.engine.app.AdjudicationEngineApplication"
   }
 }

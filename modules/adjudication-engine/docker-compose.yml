@@ -5,11 +5,11 @@ services:
     image: postgres:12
     restart: unless-stopped
     ports:
-      - "${POSTGRES_PORT:-24580}:5432"
+      - "${POSTGRES_PORT:-24780}:5432"
     environment:
-      POSTGRES_DB: "${POSTGRES_DB:-adjudication}"
-      POSTGRES_USER: "${POSTGRES_USER:-adjudication}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-adjudication}"
+      POSTGRES_DB: "${POSTGRES_DB:-ae}"
+      POSTGRES_USER: "${POSTGRES_USER:-ae}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-ae}"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - postgres-storage:/var/lib/postgresql/data

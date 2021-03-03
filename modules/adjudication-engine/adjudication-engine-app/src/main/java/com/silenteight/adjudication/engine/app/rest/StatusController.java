@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.app.rest;
+package com.silenteight.adjudication.engine.app.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

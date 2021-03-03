@@ -16,11 +16,11 @@ cloudapi:
   #-------------------------------------------------------------------------------------------------
   db:
     host: localhost
-    port: 24580
+    port: 24780
     schema: public
-    name: cloudapi
-    user: cloudapi
-    password: cloudapi
+    name: ae
+    user: ae
+    password: ae
     url: jdbc:postgresql://${cloudapi.db.host}:${cloudapi.db.port}/${cloudapi.db.name}?currentSchema=${cloudapi.db.schema}
     connections:
       min: 1
@@ -82,7 +82,7 @@ cloudapi:
 #-------------------------------------------------------------------------------------------------
 spring:
   application:
-    name: cloudapi
+    name: adjudication-engine
 
 #-------------------------------------------------------------------------------------------------
 # PORTS

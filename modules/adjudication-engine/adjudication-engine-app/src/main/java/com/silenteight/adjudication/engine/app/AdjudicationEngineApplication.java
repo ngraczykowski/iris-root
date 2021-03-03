@@ -1,8 +1,8 @@
-package com.silenteight.adjudication.app;
+package com.silenteight.adjudication.engine.app;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.CloudApiModule;
+import com.silenteight.adjudication.engine.AdjudicationEngineModule;
 import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
@@ -26,11 +26,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = CloudApiModule.class)
+@ComponentScan(basePackageClasses = AdjudicationEngineModule.class)
 @EnableIntegration
 @EnableIntegrationManagement
 @EnableTransactionManagement
-@IntegrationComponentScan(basePackageClasses = CloudApiModule.class)
+@IntegrationComponentScan(basePackageClasses = AdjudicationEngineModule.class)
 @Slf4j
 class AdjudicationEngineApplication {
 

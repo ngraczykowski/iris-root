@@ -3,4 +3,4 @@ serp:
     error-queue:
       declare: false
       enabled: true
-      name: cloudapi.error-queue
+      name: adjudication-engine.error-queue

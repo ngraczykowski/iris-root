@@ -5,13 +5,13 @@ serp:
     error-queue:
       declare: false
       enabled: true
-      name: cloudapi.error-queue
+      name: adjudication-engine.error-queue
 
 
 logging:
   level:
     com.silenteight.sep: DEBUG
-    com.silenteight.cloudapi: DEBUG
+    com.silenteight.adjudication.engine: DEBUG
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
