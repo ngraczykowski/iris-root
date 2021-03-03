@@ -1,4 +1,4 @@
-serp:
+ae:
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-adjudication-engine
   {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
