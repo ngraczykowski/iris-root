@@ -69,7 +69,6 @@ dependencies {
 
   // Testing
   testImplementation libraries.junit_jupiter_api
-  testImplementation libraries.spring_boot_starter_test
 }
 
 jar {
