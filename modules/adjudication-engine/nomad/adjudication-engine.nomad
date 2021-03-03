@@ -204,12 +204,6 @@ job "adjudication-engine" {
         change_mode = "noop"
       }
 
-      template {
-        data        = file("./conf/application-consul.yml")
-        destination = "local/conf/application-consul.yml"
-        change_mode = "noop"
-      }
-
       config {
         command = "java"
         args    = [
