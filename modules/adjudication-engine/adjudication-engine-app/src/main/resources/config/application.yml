@@ -7,8 +7,8 @@ server:
   forward-headers-strategy: native
   undertow:
     threads:
-      io: ${cloudapi.web.threads.io}
-      worker: ${cloudapi.web.threads.worker}
+      io: ${ae.web.threads.io}
+      worker: ${ae.web.threads.worker}
 
   error:
     include-exception: true
@@ -73,31 +73,31 @@ spring:
   datasource:
     # Postgres database
     type: com.zaxxer.hikari.HikariDataSource
-    url: ${cloudapi.db.url}
-    username: ${cloudapi.db.user}
-    password: ${cloudapi.db.password}
+    url: ${ae.db.url}
+    username: ${ae.db.user}
+    password: ${ae.db.password}
     initialization-mode: never
 
     # Hikari pool configuration
     hikari:
       pool-name: Database-Pool
-      minimum-idle: ${cloudapi.db.connections.min}
-      maximum-pool-size: ${cloudapi.db.connections.max}
+      minimum-idle: ${ae.db.connections.min}
+      maximum-pool-size: ${ae.db.connections.max}
       auto-commit: false
-      schema: ${cloudapi.db.schema}
+      schema: ${ae.db.schema}
       isolate-internal-queries: true
       # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
-      #  just before HikariCP runs `SET SESSION search_path TO '${cloudapi.db.schema}'` which begins
+      #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
       connection-init-sql: SELECT 1
       data-source-properties:
-        ApplicationName: Cloud API
+        ApplicationName: Adjudication Engine
 
   # Database migrations
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
-    default-schema: ${cloudapi.db.schema}
+    default-schema: ${ae.db.schema}
     contexts: default
 
   # Spring Data JPA
@@ -125,27 +125,27 @@ spring:
   # MESSAGING
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
-    # addresses: ${cloudapi.rabbitmq.addresses}
-    host: ${cloudapi.rabbitmq.host}
-    port: ${cloudapi.rabbitmq.port}
-    username: ${cloudapi.rabbitmq.user}
-    password: ${cloudapi.rabbitmq.password}
-    virtual-host: ${cloudapi.rabbitmq.vhost}
+    # addresses: ${ae.rabbitmq.addresses}
+    host: ${ae.rabbitmq.host}
+    port: ${ae.rabbitmq.port}
+    username: ${ae.rabbitmq.user}
+    password: ${ae.rabbitmq.password}
+    virtual-host: ${ae.rabbitmq.vhost}
     listener:
       type: simple
       direct:
-        consumers-per-queue: ${cloudapi.messaging.concurrency}
-        prefetch: ${cloudapi.messaging.prefetch}
+        consumers-per-queue: ${ae.messaging.concurrency}
+        prefetch: ${ae.messaging.prefetch}
       simple:
         concurrency: 1
-        max-concurrency: ${cloudapi.messaging.concurrency}
-        prefetch: ${cloudapi.messaging.prefetch}
+        max-concurrency: ${ae.messaging.concurrency}
+        prefetch: ${ae.messaging.prefetch}
 
   jackson:
     default-property-inclusion: NON_NULL
 
 info:
-  env: ${cloudapi.env:local}
+  env: ${ae.env:local}
 
 clear-sensitive-data:
   cron:

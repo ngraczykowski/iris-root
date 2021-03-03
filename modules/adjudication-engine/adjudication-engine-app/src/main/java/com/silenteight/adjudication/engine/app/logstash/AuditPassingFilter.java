@@ -9,7 +9,7 @@ import static ch.qos.logback.core.spi.FilterReply.NEUTRAL;
 import static com.silenteight.adjudication.engine.app.logstash.LogMarkers.AUDIT;
 
 /**
- * Pass AUDIT events from Cloud API, while dany all others.
+ * Pass AUDIT events, while dany all others.
  * <p/>
  * Used together with Logstash appender, to output there only events that carry business value.
  */

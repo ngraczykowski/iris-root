@@ -4,12 +4,12 @@ spring:
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
     ssl:
-      enabled: ${cloudapi.rabbitmq.tls.enabled:true}
-      trust-store: file:${cloudapi.tls.trust-store}
-      trust-store-password: ${cloudapi.tls.trust-store-password}
-      trust-store-type: ${cloudapi.tls.trust-store-type}
-      key-store: file:${cloudapi.tls.key-store}
-      key-store-password: ${cloudapi.tls.key-store-password}
-      key-store-type: ${cloudapi.tls.key-store-type}
-      validate-server-certificate: ${cloudapi.tls.validate-server-certificate}
-      verify-hostname: ${cloudapi.tls.verify-hostname}
+      enabled: ${ae.rabbitmq.tls.enabled:true}
+      trust-store: file:${ae.tls.trust-store}
+      trust-store-password: ${ae.tls.trust-store-password}
+      trust-store-type: ${ae.tls.trust-store-type}
+      key-store: file:${ae.tls.key-store}
+      key-store-password: ${ae.tls.key-store-password}
+      key-store-type: ${ae.tls.key-store-type}
+      validate-server-certificate: ${ae.tls.validate-server-certificate}
+      verify-hostname: ${ae.tls.verify-hostname}

@@ -2,7 +2,7 @@
 # Defaults (overridden by environment variables or arguments)
 ####################################################################################################
 
-cloudapi:
+ae:
   #-------------------------------------------------------------------------------------------------
   # WEB
   #-------------------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ cloudapi:
     name: ae
     user: ae
     password: ae
-    url: jdbc:postgresql://${cloudapi.db.host}:${cloudapi.db.port}/${cloudapi.db.name}?currentSchema=${cloudapi.db.schema}
+    url: jdbc:postgresql://${ae.db.host}:${ae.db.port}/${ae.db.name}?currentSchema=${ae.db.schema}
     connections:
       min: 1
       max: 10
@@ -32,8 +32,8 @@ cloudapi:
   rabbitmq:
     host: localhost
     port: 24130
-    user: cloudapi
-    password: cloudapi
+    user: ae
+    password: ae
     vhost: /
     tls:
       enabled: false
@@ -41,41 +41,6 @@ cloudapi:
   messaging:
     concurrency: 4
     prefetch: 25
-
-  name-screening:
-    integration:
-      request:
-        outbound-exchange-name: cloudns.command
-        outbound-routing-key: screening-engine.screen-customer
-      receive:
-        queue-name: cloudapi.alert-recommendation
-      events:
-        inbound-queue-name: cloudapi.screening-events
-
-  #-------------------------------------------------------------------------------------------------
-  # SCREENING ENGINE
-  #-------------------------------------------------------------------------------------------------
-  screening-engine:
-    decision-group: CLOUD
-    wc1:
-      cache-ttl: 60
-      group-id: 5nzbfqa9q6d71f13bjkc30ls3
-    integration:
-      commands:
-        inbound-queue-name: screening-engine.commands
-      alert:
-        outbound-exchange-name: alert.unprocessed
-        outbound-routing-key:
-      decision-group:
-        outbound-exchange-name: alert.metadata
-        outbound-routing-key: alert.decision-groups
-      check-pending-screening:
-        outbound-exchange-name: cloudns.command
-        outbound-routing-key: screening-engine.check-screening
-      events:
-        outbound-exchange-name: cloudns.event
-        started-event-routing-key: screening-engine.screening-started-event
-        finished-event-routing-key: screening-engine.screening-finished-event
 
 #-------------------------------------------------------------------------------------------------
 # APPLICATION NAME
@@ -88,8 +53,8 @@ spring:
 # PORTS
 #-------------------------------------------------------------------------------------------------
 server:
-  port: 24500
+  port: 24700
 
 grpc:
   server:
-    port: 24501
+    port: 24701

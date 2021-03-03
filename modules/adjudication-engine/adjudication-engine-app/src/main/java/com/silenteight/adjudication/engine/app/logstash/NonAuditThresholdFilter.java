@@ -8,7 +8,7 @@ import static ch.qos.logback.core.spi.FilterReply.DENY;
 import static com.silenteight.adjudication.engine.app.logstash.LogMarkers.AUDIT;
 
 /**
- * Deny AUDIT events from Cloud API, while all others pass on selected threshold.
+ * Deny AUDIT events, while all others pass on selected threshold.
  * <p/>
  * Used together with Logstash appender, to output there only events that carry business value.
  */
