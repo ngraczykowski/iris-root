@@ -1,6 +1,6 @@
 server:
-  port: { { env "NOMAD_PORT_http" } }
+  port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
   server:
-    port: { { env "NOMAD_PORT_grpc" } }
+    port: {{ env "NOMAD_PORT_grpc" }}
