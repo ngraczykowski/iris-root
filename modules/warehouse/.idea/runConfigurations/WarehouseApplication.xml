@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WarehouseApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="warehouse.warehouse-app.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.WarehouseApplication" />
+    <option name="ACTIVE_PROFILES" value="linux,wharehouse,database,rabbitmq,messaging,swagger,dev,consul,tls" />
+    <option name="VM_PARAMETERS" value="-Xms1g -Xmx1g -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Djava.io.tmpdir=${SERP_HOME}/tmp -Djavax.net.ssl.trustStore=${SERP_HOME}/cert/truststore.p12 -Djavax.net.ssl.trustStorePassword=LZKH70td5n" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,52 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+serp.consul.enabled: false
+serp.consul.config.enabled: ${serp.consul.enabled}
+
+serp.keystore.path: ${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+serp.keystore.password: LZKH70td5n
+serp.truststore.path: ${serp.home}/cert/truststore.p12
+serp.truststore.password: ${serp.keystore.password}
+
+# Symmetric key used to encrypt and decrypt secrets
+serp.config.secret: change_me_to_secret_key
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# CLOUD
+#---------------------------------------------------------------------------------------------------
+spring:
+  cloud:
+    consul:
+      enabled: ${serp.consul.enabled}
+      config:
+        enabled: ${serp.consul.config.enabled}
+        watch:
+          # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
+          #  Do not enable.
+          enabled: false
+encrypt:
+  key: ${serp.config.secret}
+
+# RabbitMQ Connection
+serp.rabbitmq.host: localhost
+serp.rabbitmq.port: 24130
+serp.rabbitmq.user: serp
+serp.rabbitmq.password: serp
+
+# RabbitMQ Encryption
+serp.rabbitmq.encryption.enabled: false
+serp.rabbitmq.encryption.key.seed: change_me_please
+serp.rabbitmq.encryption.key.salt: change_me_please
+serp.rabbitmq.encryption.key.size: 256
+serp.rabbitmq.encryption.mac.size: 112
+serp.rabbitmq.encryption.nonce.size: 96
+serp.rabbitmq.encryption.nonce.header: encryption-nonce
+# Connection Pool
+serp.db.connections.min: 1
+serp.db.connections.max: 10

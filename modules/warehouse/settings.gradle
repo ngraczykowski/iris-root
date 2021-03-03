@@ -1,0 +1,8 @@
+rootProject.name = 'warehouse'
+gradle.ext.sepDependenciesVersion = '1.12.0'
+
+include 'warehouse-app'
+include 'warehouse-common-web'
+include 'warehouse-common-web-testing'
+include 'warehouse-db-changelog'
+include 'warehouse-documentation'
