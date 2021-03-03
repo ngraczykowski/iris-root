@@ -7,7 +7,6 @@ serp:
       enabled: true
       name: adjudication-engine.error-queue
 
-
 logging:
   level:
     com.silenteight.sep: DEBUG

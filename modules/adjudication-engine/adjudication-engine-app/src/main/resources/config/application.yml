@@ -146,9 +146,3 @@ spring:
 
 info:
   env: ${ae.env:local}
-
-clear-sensitive-data:
-  cron:
-    expression: '0 0 */12 * * ?'
-
-
