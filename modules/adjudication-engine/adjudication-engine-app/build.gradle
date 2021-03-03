@@ -63,6 +63,9 @@ dependencies {
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core
 
+  // GRPC
+  implementation libraries.grpc_server_spring_boot_starter
+
   // AspectJ
   implementation libraries.aspectjrt
   aspect libraries.silenteight_sep_base_aspects
