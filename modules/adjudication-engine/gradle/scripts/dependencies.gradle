@@ -64,6 +64,7 @@ libraries.spring_boot_starter_quartz = [group: 'org.springframework.boot', name:
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
 libraries.spring_boot_starter_webflux = [group: 'org.springframework.boot', name: 'spring-boot-starter-webflux']
+libraries.spring_boot_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test']
 libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
 
