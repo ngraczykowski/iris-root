@@ -16,7 +16,7 @@ ae:
   #-------------------------------------------------------------------------------------------------
   db:
     host: localhost
-    port: 24780
+    port: 24880
     schema: public
     name: adjudication-engine
     user: adjudication-engine
@@ -53,8 +53,8 @@ spring:
 # PORTS
 #-------------------------------------------------------------------------------------------------
 server:
-  port: 24700
+  port: 24800
 
 grpc:
   server:
-    port: 24701
+    port: 24801

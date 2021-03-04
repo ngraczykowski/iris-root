@@ -5,7 +5,7 @@ services:
     image: postgres:12
     restart: unless-stopped
     ports:
-      - "${POSTGRES_PORT:-24780}:5432"
+      - "${POSTGRES_PORT:-24880}:5432"
     environment:
       POSTGRES_DB: "${POSTGRES_DB:-adjudication-engine}"
       POSTGRES_USER: "${POSTGRES_USER:-adjudication-engine}"
