@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package silenteight.governance.api.v1;
 
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
 
 import public "silenteight/protobuf/uuid.proto";
@@ -12,20 +14,26 @@ option java_outer_classname = "PolicyStepsGovernanceApiProto";
 option java_multiple_files = true;
 
 service PolicyStepsGovernance {
-  rpc SolveFeatures (SolveFeaturesRequest) returns (SolveFeaturesResponse) {
+  rpc BatchSolveFeatures (BatchSolveFeaturesRequest) returns (BatchSolveFeaturesResponse) {
+    option (google.api.http) = {
+      post: "/v1/{policy_name=policies/*}:batchSolve"
+      body: "*"
+    };
   }
 }
 
 // Batch request
-message SolveFeaturesRequest {
+message BatchSolveFeaturesRequest {
+  // Name of policy used for solving
+  string policy_name = 1 [(google.api.field_behavior) = REQUIRED];
   // Feature space definitions
-  FeatureCollection feature_collection = 1;
+  FeatureCollection feature_collection = 2;
   // Ordered collection of feature vectors
-  repeated FeatureVector feature_vectors = 2;
+  repeated FeatureVector feature_vectors = 3;
 }
 
 // Batch response
-message SolveFeaturesResponse {
+message BatchSolveFeaturesResponse {
   // Ordered collection of responses
   repeated SolutionResponse solutions = 1;
 }
