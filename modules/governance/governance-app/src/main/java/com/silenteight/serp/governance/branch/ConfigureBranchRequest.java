@@ -6,13 +6,12 @@ import lombok.Value;
 
 import com.silenteight.proto.serp.v1.recommendation.BranchSolution;
 
-import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
 @Value
 @Builder
-public class ConfigureBranchRequest implements BranchChange {
+public class ConfigureBranchRequest {
 
   long decisionTreeId;
   long featureVectorId;
@@ -24,14 +23,4 @@ public class ConfigureBranchRequest implements BranchChange {
   // BS
   @NonNull
   UUID correlationId;
-
-  @Override
-  public Optional<BranchSolution> getSolutionChange() {
-    return Optional.ofNullable(solution);
-  }
-
-  @Override
-  public Optional<Boolean> getEnabledChange() {
-    return Optional.ofNullable(enabled);
-  }
 }
