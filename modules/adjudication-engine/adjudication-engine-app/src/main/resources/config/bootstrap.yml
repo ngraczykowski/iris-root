@@ -31,9 +31,9 @@ ae:
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
     host: localhost
-    port: 24130
-    user: adjudication-engine
-    password: adjudication-engine
+    port: 24160
+    user: dev
+    password: dev
     vhost: /
     tls:
       enabled: false
