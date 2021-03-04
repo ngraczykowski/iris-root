@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   postgres:
-    image: postgres:12
+    image: docker.io/library/postgres:12
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT:-24880}:5432"

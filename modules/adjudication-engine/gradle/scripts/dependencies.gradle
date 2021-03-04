@@ -5,24 +5,20 @@ ext {
   // Silent Eight
   //***********************************
   silenteightCommonsVersion = "2.1.0"
-  silenteightSepBaseVersion = "1.9.0"
-  serpProtocolVersion = "0.26.0"
+  silenteightSepBaseVersion = "1.10.1"
+  adjudicationEngineApiVersion = "0.1.0-SNAPSHOT"
 }
 
 // @formatter:off
 
 // Silent Eight
+libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
-libraries.silenteight_screening_protocol_base = [group: 'com.silenteight.screening.protocol', name: 'screening-protocol-base', version: '0.5.0', changing: true]
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_serp_protocol_agent = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-agent', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-base', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_ns = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-ns', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
 libraries.silenteight_spring_cloud_consul_discovery = [group: 'com.silenteight.spring.cloud.consul.discovery', name: 'silenteight-spring-cloud-consul-discovery', version: '2.4.0']
 
 // Spring
