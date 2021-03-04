@@ -1,0 +1,4 @@
+rootProject.name = "data-source-api-root"
+
+include "data-source-api"
+
