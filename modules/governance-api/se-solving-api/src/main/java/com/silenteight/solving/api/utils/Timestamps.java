@@ -1,4 +1,4 @@
-package com.silenteight.governance.api.utils;
+package com.silenteight.solving.api.utils;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;

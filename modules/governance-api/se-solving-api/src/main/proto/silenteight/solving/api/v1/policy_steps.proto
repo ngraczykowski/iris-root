@@ -1,19 +1,19 @@
 syntax = "proto3";
 
-package silenteight.governance.api.v1;
+package silenteight.solving.api.v1;
 
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
 
 import public "silenteight/protobuf/uuid.proto";
-import public "silenteight/governance/api/v1/feature.proto";
+import public "silenteight/solving/api/v1/feature.proto";
 
-option java_package = "com.silenteight.governance.api.v1";
-option java_outer_classname = "PolicyStepsGovernanceApiProto";
+option java_package = "com.silenteight.solving.api.v1";
+option java_outer_classname = "PolicyStepsSolvingApiProto";
 option java_multiple_files = true;
 
-service PolicyStepsGovernance {
+service PolicyStepsSolving {
   rpc BatchSolveFeatures (BatchSolveFeaturesRequest) returns (BatchSolveFeaturesResponse) {
     option (google.api.http) = {
       post: "/v1/{policy_name=policies/*}:batchSolve"

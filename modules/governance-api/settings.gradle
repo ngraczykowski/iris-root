@@ -1,5 +1,4 @@
 rootProject.name = "governance-api"
 
-include "se-governance-api"
 include "se-model-api"
-
+include "se-solving-api"
