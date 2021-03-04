@@ -30,7 +30,8 @@ interface AnalyticsFeatureVectorRepository extends Repository<FeatureVector, Lon
       + "   fv.vector_signature as signature"
       + " FROM governance_analytics_feature_vector fv"
       + " JOIN governance_analytics_feature_vector_usage fvu "
-      + "   ON fv.vector_signature = fvu.vector_signature", nativeQuery = true)
+      + "   ON fv.vector_signature = fvu.vector_signature"
+      + " ORDER BY fvu.usage_count DESC", nativeQuery = true)
   Stream<FeatureVectorWithUsage> findAllWithUsage();
 
   @Query(value = "SELECT DISTINCT fv.names"
