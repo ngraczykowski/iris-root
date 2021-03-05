@@ -1,0 +1,12 @@
+plugins {
+  id "java-library"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+}
+
+description = "Adjudication Engine Dataset"
+
+dependencies {
+  implementation libraries.adjudication_engine_api
+  implementation libraries.grpc_spring_boot_starter
+}
