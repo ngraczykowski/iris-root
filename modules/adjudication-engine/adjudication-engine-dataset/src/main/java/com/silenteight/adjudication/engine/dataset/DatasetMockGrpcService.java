@@ -9,6 +9,7 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
@@ -44,7 +45,7 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
         .newBuilder()
         .setName("datasets/" + UUID.randomUUID())
         .setAlertCount(alertsCount)
-        .setCreateTime(Timestamp.newBuilder().setSeconds(System.currentTimeMillis()))
+        .setCreateTime(Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()))
         .build();
     responseObserver.onNext(dataset);
     responseObserver.onCompleted();
@@ -62,7 +63,7 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
         .newBuilder()
         .setName(request.getName())
         .setAlertCount(123)
-        .setCreateTime(Timestamp.newBuilder().setSeconds(System.currentTimeMillis()))
+        .setCreateTime(Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()))
         .build();
     responseObserver.onNext(dataset);
     responseObserver.onCompleted();
