@@ -30,4 +30,8 @@ interface StepRepository extends Repository<Step, Long> {
       + " FROM governance_policy_step s"
       + " WHERE s.step_id = :stepId", nativeQuery = true)
   Long getPolicyIdForStep(UUID stepId);
+
+  @Query(value = "SELECT count(*) FROM governance_policy_step s WHERE s.policy_id = :policyId",
+      nativeQuery = true)
+  Long countStepsByPolicyId(long policyId);
 }

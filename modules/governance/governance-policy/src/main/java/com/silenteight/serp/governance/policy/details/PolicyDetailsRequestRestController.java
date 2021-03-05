@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.details.dto.PolicyDetailsDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,11 +24,11 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 class PolicyDetailsRequestRestController {
 
   @NonNull
-  private final PolicyDetailsRequestQuery policyDetailsRequestQuery;
+  private final PolicyDetailsUseCase policyDetailsUseCase;
 
   @GetMapping(value = "/v1/policies/{id}")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
-  public ResponseEntity<PolicyDto> details(@PathVariable UUID id) {
-    return ResponseEntity.ok(policyDetailsRequestQuery.details(id));
+  public ResponseEntity<PolicyDetailsDto> details(@PathVariable UUID id) {
+    return ResponseEntity.ok(policyDetailsUseCase.activate(id));
   }
 }
