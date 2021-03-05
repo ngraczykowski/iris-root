@@ -85,58 +85,7 @@ paths:
 
 components:
   schemas:
-    usersByGroup:
-      type: object
-      properties:
-        groupId:
-          type: integer
-          description: Group ID
-        groupName:
-          type: string
-          description: Group Name
-        userid:
-          type: integer
-          description: Unique ID of the user that is a member of the group
-        username:
-          type: string
-          description: The users username
-        realm:
-          type: string
-          description: source of authentication e.g. domain
-        fullname:
-          type: string
-          description: Users full name
-    deletedUsers:
-      type: object
-      properties:
-        userid:
-          type: integer
-          description: Unique ID of the user
-        username:
-          type: string
-          description: The users username
-        display:
-          type: string
-          description: The name that will be used to display the user against their activities once the end user has been deleted from the solution.
-        fullname:
-          type: string
-          description: Users full name
-    users:
-      type: object
-      properties:
-        userId:
-          type: integer
-          description: Unique ID of the user
-        username:
-          type: string
-          description: The users username
-        realm:
-          type: string
-          description: Source of authentication e.g. domain
-        fullname:
-          type: string
-          description: Users full name
-    countryCtrpScreeningIndividuals:
+    CountryCtrpScreeningIndividuals:
       type: object
       properties:
         caseId:
@@ -160,7 +109,6 @@ components:
         matchType:
           type: string
           description: This list one of three match types&#58; Nationality or Residency
-
         owsWatchlistName:
           type: string
           description: This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Individuals this will always be ISSC.
@@ -188,7 +136,7 @@ components:
         alertKeyFragment:
           type: string
           description: Provides the full code for the match type that will be used to create the Alert Key.
-    customerEntities:
+    CustomerEntities:
       type: object
       properties:
         caseId:
@@ -200,7 +148,7 @@ components:
         inputStream:
           type: string
           description: Denotes the type of data, for example&#58; Customer Data
-        sourceSystemHistoryID:
+        sourceSystemHistoryId:
           type: integer
           description: Identifier used during reconciliation to store customer information
         closeOfBusinessDate:
@@ -491,7 +439,7 @@ components:
         requestDateTime:
           type: string
           description: N/A - For Day 1
-    worldCheckEntities:
+    WorldCheckEntities:
       type: object
       properties:
         caseId:
@@ -653,7 +601,7 @@ components:
         edqOwsWatchlistName:
           type: string
           description: The world check watchlist name is transposed into a HSBC equivalent.
-    customerIndividuals:
+    CustomerIndividuals:
       type: object
       properties:
         caseId:
@@ -872,7 +820,7 @@ components:
         employer3Address3:
           type: string
           description: Customer Employer 3 Address 3
-        edqCustID:
+        edqCustId:
           type: string
           description: Customer ID from source system concatenated with the source system name to ensure the customer ID is unique
         edqCustSubId:
@@ -1049,7 +997,7 @@ components:
         dummy:
           type: string
           description: For development use only
-    worldCheckIndividuals:
+    WorldCheckIndividuals:
       type: object
       properties:
         caseId:
@@ -1073,10 +1021,10 @@ components:
         listRecordOrigin:
           type: string
           description: List the origin where the World-Check record was derived e.g. OFAC
-        listRecordID:
+        listRecordId:
           type: string
           description: Unique Identifier assigned to the World-Check record
-        listRecordSubID:
+        listRecordSubId:
           type: string
           description: ID for the sub records within a World-Check record
         passportNumber:
@@ -1271,7 +1219,7 @@ components:
         dummy:
           type: string
           description: For development use only
-    caseComments:
+    CaseComments:
       type: object
       properties:
         caseId:
@@ -1295,7 +1243,7 @@ components:
         restrictingPermission:
           type: string
           description: Will display if access to the comment has been restricted, for example, Level 3 Only. If the comment has not been restricted, this field will be displayed as blank.
-    relationships:
+    Relationships:
       type: object
       properties:
         caseId:
@@ -1307,7 +1255,7 @@ components:
         inputName:
           type: string
           description: Describes the source of the input data, for example&#58; Customer Data
-        recordID:
+        recordId:
           type: number
           description: Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID.
         relatedInputId:
@@ -1328,7 +1276,7 @@ components:
         relationshipHash:
           type: string
           description: Hash of the relationship value
-    privateListIndividuals:
+    PrivateListIndividuals:
       type: object
       properties:
         caseId:
@@ -1565,40 +1513,7 @@ components:
         dummy:
           type: string
           description: For development use only
-    caseAttachments:
-      type: object
-      properties:
-        caseId:
-          type: integer
-          description: Unique Identifier assigned to the Case or Alert within Case Management
-        attachmentId:
-          type: integer
-          description: Unique identifier added the attachment
-        attachmentBy:
-          type: integer
-          description: Which User added the attachment
-        attachmentDateTime:
-          type: string
-          description: Date and time the attachment was added
-        attachmentName:
-          type: string
-          description: Name of the attachment.
-        sourceName:
-          type: string
-          description: Indicate the case source the attachment relates to. This will always be Sentry.
-        description:
-          type: string
-          description: The descriotion given to the attachment by the end user
-        mimeType:
-          type: string
-          description: Displays the source where the attachment originated
-        deletedFlag:
-          type: integer
-          description: Marks if the attachment has been deleted
-        restrictingPermission:
-          type: string
-          description: Will display if access to the attachment has been restricted, for example, Level 3 Only. If the attachment has not been restricted, this field will be displayed as blank.
-    privateListEntities:
+    PrivateListEntities:
       type: object
       properties:
         caseId:
@@ -1793,7 +1708,7 @@ components:
         entityName2:
           type: string
           description: Entity name place holder 3
-    caseHistory:
+    CaseHistory:
       type: object
       properties:
         caseId:
@@ -1817,7 +1732,7 @@ components:
         transition:
           type: string
           description: Records the transition used to move the alert through the workflow
-    countryCtrpScreeningEntities:
+    CountryCtrpScreeningEntities:
       type: object
       properties:
         caseId:
@@ -1869,7 +1784,7 @@ components:
         alertKeyFragment:
           type: string
           description: Provides the full code for the match type that will be used to create the Alert Key.
-    casesWithAlertURL:
+    CasesWithAlertURL:
       type: object
       properties:
         id:
@@ -2017,44 +1932,57 @@ components:
     Alert:
       type: object
       properties:
-        userInformation:
-          type: object
-          properties:
-            usersByGroup:
-              $ref: '#/components/schemas/usersByGroup'
-            deletedUsers:
-              $ref: '#/components/schemas/deletedUsers'
-            users:
-              $ref: '#/components/schemas/users'
         systemInformation:
           type: object
           properties:
             countryCtrpScreeningIndividuals:
-              $ref: '#/components/schemas/countryCtrpScreeningIndividuals'
+              type: array
+              items:
+                $ref: '#/components/schemas/CountryCtrpScreeningIndividuals'
             customerEntities:
-              $ref: '#/components/schemas/customerEntities'
+              type: array
+              items:
+                $ref: '#/components/schemas/CustomerEntities'
             worldCheckEntities:
-              $ref: '#/components/schemas/worldCheckEntities'
+              type: array
+              items:
+                $ref: '#/components/schemas/WorldCheckEntities'
             customerIndividuals:
-              $ref: '#/components/schemas/customerIndividuals'
+              type: array
+              items:
+                $ref: '#/components/schemas/CustomerIndividuals'
             worldCheckIndividuals:
-              $ref: '#/components/schemas/worldCheckIndividuals'
+              type: array
+              items:
+                $ref: '#/components/schemas/WorldCheckIndividuals'
             caseComments:
-              $ref: '#/components/schemas/caseComments'
+              type: array
+              items:
+                $ref: '#/components/schemas/CaseComments'
             relationships:
-              $ref: '#/components/schemas/relationships'
+              type: array
+              items:
+                $ref: '#/components/schemas/Relationships'
             privateListIndividuals:
-              $ref: '#/components/schemas/privateListIndividuals'
-            caseAttachments:
-              $ref: '#/components/schemas/caseAttachments'
+              type: array
+              items:
+                $ref: '#/components/schemas/PrivateListIndividuals'
             privateListEntities:
-              $ref: '#/components/schemas/privateListEntities'
+              type: array
+              items:
+                $ref: '#/components/schemas/PrivateListEntities'
             caseHistory:
-              $ref: '#/components/schemas/caseHistory'
+              type: array
+              items:
+                $ref: '#/components/schemas/CaseHistory'
             countryCtrpScreeningEntities:
-              $ref: '#/components/schemas/countryCtrpScreeningEntities'
+              type: array
+              items:
+                $ref: '#/components/schemas/CountryCtrpScreeningEntities'
             casesWithAlertURL:
-              $ref: '#/components/schemas/casesWithAlertURL'
+              type: array
+              items:
+                $ref: '#/components/schemas/CasesWithAlertURL'
     SolvedAlert:
       type: object
       properties:
@@ -2067,9 +1995,13 @@ components:
           type: string
 
     Alerts:
-      type: array
-      items:
-        $ref: "#/components/schemas/Alert"
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Alert"
+
 
     BulkStatus:
       type: string
@@ -2144,5 +2076,5 @@ components:
             $ref: '#/components/schemas/SolvedAlert'
 servers:
   # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
+  - description: SILENT EIGHT HSBC REST API
     url: https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0

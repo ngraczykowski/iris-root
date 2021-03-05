@@ -1,251 +1,99 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
 
-/**
- * WorldCheckIndividuals
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@javax.annotation.Generated(
+    value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
+    date = "2021-03-05T14:11:51.641Z[GMT]")
+public class WorldCheckIndividuals {
 
-public class WorldCheckIndividuals   {
-  @JsonProperty("caseId")
   private Integer caseId = null;
-
-  @JsonProperty("recordID")
-  private BigDecimal recordID = null;
-
-  @JsonProperty("inputStream")
+  private BigDecimal recordId = null;
   private String inputStream = null;
-
-  @JsonProperty("listKey")
   private String listKey = null;
-
-  @JsonProperty("listSubKey")
   private String listSubKey = null;
-
-  @JsonProperty("listRecordType")
   private String listRecordType = null;
-
-  @JsonProperty("listRecordOrigin")
   private String listRecordOrigin = null;
-
-  @JsonProperty("listRecordID")
-  private String listRecordID = null;
-
-  @JsonProperty("listRecordSubID")
-  private String listRecordSubID = null;
-
-  @JsonProperty("passportNumber")
+  private String listRecordId = null;
+  private String listRecordSubId = null;
   private String passportNumber = null;
-
-  @JsonProperty("nationalId")
   private String nationalId = null;
-
-  @JsonProperty("title")
   private String title = null;
-
-  @JsonProperty("fullNameOriginal")
   private String fullNameOriginal = null;
-
-  @JsonProperty("givenNamesOriginal")
   private String givenNamesOriginal = null;
-
-  @JsonProperty("familyNameOriginal")
   private String familyNameOriginal = null;
-
-  @JsonProperty("fullNameDerived")
   private String fullNameDerived = null;
-
-  @JsonProperty("givenNamesDerived")
   private String givenNamesDerived = null;
-
-  @JsonProperty("familyNameDerived")
   private String familyNameDerived = null;
-
-  @JsonProperty("nameType")
   private String nameType = null;
-
-  @JsonProperty("nameQuality")
   private String nameQuality = null;
-
-  @JsonProperty("primaryName")
   private String primaryName = null;
-
-  @JsonProperty("originalScriptName")
   private String originalScriptName = null;
-
-  @JsonProperty("gender")
   private String gender = null;
-
-  @JsonProperty("genderDerivedFlag")
   private String genderDerivedFlag = null;
-
-  @JsonProperty("dateOfBirth")
   private String dateOfBirth = null;
-
-  @JsonProperty("yearOfBirth")
   private Integer yearOfBirth = null;
-
-  @JsonProperty("deceasedFlag")
   private String deceasedFlag = null;
-
-  @JsonProperty("deceasedDate")
   private String deceasedDate = null;
-
-  @JsonProperty("occupation")
   private String occupation = null;
-
-  @JsonProperty("address")
   private String address = null;
-
-  @JsonProperty("city")
   private String city = null;
-
-  @JsonProperty("state")
   private String state = null;
-
-  @JsonProperty("postalCode")
   private String postalCode = null;
-
-  @JsonProperty("addressCountry")
   private String addressCountry = null;
-
-  @JsonProperty("residencyCountry")
   private String residencyCountry = null;
-
-  @JsonProperty("countryOfBirth")
   private String countryOfBirth = null;
-
-  @JsonProperty("nationalities")
   private String nationalities = null;
-
-  @JsonProperty("countryCodesAll")
   private String countryCodesAll = null;
-
-  @JsonProperty("countriesAll")
   private String countriesAll = null;
-
-  @JsonProperty("profileHyperlink")
   private String profileHyperlink = null;
-
-  @JsonProperty("searchHyperlink")
   private String searchHyperlink = null;
-
-  @JsonProperty("linkedProfiles")
   private String linkedProfiles = null;
-
-  @JsonProperty("linkedRelationships")
   private String linkedRelationships = null;
-
-  @JsonProperty("riskScore")
   private BigDecimal riskScore = null;
-
-  @JsonProperty("pEPRiskScore")
-  private BigDecimal pEPRiskScore = null;
-
-  @JsonProperty("dataConfidenceScore")
+  private BigDecimal pepRiskScore = null;
   private BigDecimal dataConfidenceScore = null;
-
-  @JsonProperty("dataConfidenceComment")
   private String dataConfidenceComment = null;
-
-  @JsonProperty("inactiveFlag")
   private String inactiveFlag = null;
-
-  @JsonProperty("inactiveSinceDate")
   private String inactiveSinceDate = null;
-
-  @JsonProperty("pEPClassification")
-  private String pEPClassification = null;
-
-  @JsonProperty("category")
+  private String pepClassification = null;
   private String category = null;
-
-  @JsonProperty("externalSources")
   private String externalSources = null;
-
-  @JsonProperty("linkedTo")
   private String linkedTo = null;
-
-  @JsonProperty("companies")
   private String companies = null;
-
-  @JsonProperty("dateOfBirthOriginal")
   private String dateOfBirthOriginal = null;
-
-  @JsonProperty("yearOfBirthApproximated")
   private String yearOfBirthApproximated = null;
-
-  @JsonProperty("placeOfBirthOriginal")
   private String placeOfBirthOriginal = null;
-
-  @JsonProperty("furtherInformation")
   private String furtherInformation = null;
-
-  @JsonProperty("countriesOriginal")
   private String countriesOriginal = null;
-
-  @JsonProperty("socialSecurityNumber")
   private String socialSecurityNumber = null;
-
-  @JsonProperty("passportCountry")
   private String passportCountry = null;
-
-  @JsonProperty("subCategoryDescription")
   private String subCategoryDescription = null;
-
-  @JsonProperty("updateCategory")
   private String updateCategory = null;
-
-  @JsonProperty("nativeAliasLanguageName")
   private String nativeAliasLanguageName = null;
-
-  @JsonProperty("nativeAliasLanguageCountry")
   private String nativeAliasLanguageCountry = null;
-
-  @JsonProperty("cachedExternalSources")
   private String cachedExternalSources = null;
-
-  @JsonProperty("addedDate")
   private String addedDate = null;
-
-  @JsonProperty("lastUpdatedDate")
   private String lastUpdatedDate = null;
-
-  @JsonProperty("edqOWSWatchlistName")
-  private String edqOWSWatchlistName = null;
-
-  @JsonProperty("dOBs")
-  private String dOBs = null;
-
-  @JsonProperty("iDNumbers")
-  private String iDNumbers = null;
-
-  @JsonProperty("recordType")
+  private String edqOwsWatchlistName = null;
+  private String dobs = null;
+  private String idNumbers = null;
   private String recordType = null;
-
-  @JsonProperty("dummy")
   private String dummy = null;
-
-  public WorldCheckIndividuals caseId(Integer caseId) {
-    this.caseId = caseId;
-    return this;
-  }
 
   /**
    * Unique Identifier assigned to the Case or Alert within Case Management
-   * @return caseId
    **/
+
   @Schema(description = "Unique Identifier assigned to the Case or Alert within Case Management")
-  
-    public Integer getCaseId() {
+  @JsonProperty("caseId")
+  public Integer getCaseId() {
     return caseId;
   }
 
@@ -253,38 +101,28 @@ public class WorldCheckIndividuals   {
     this.caseId = caseId;
   }
 
-  public WorldCheckIndividuals recordID(BigDecimal recordID) {
-    this.recordID = recordID;
-    return this;
-  }
-
   /**
-   * Refers to a record within an Alert where there are multiple Customer name records within the same Alert
-   * @return recordID
+   * Refers to a record within an Alert where there are multiple Customer name records within the
+   * same Alert
    **/
+
   @Schema(description = "Refers to a record within an Alert where there are multiple Customer name records within the same Alert")
-  
-    @Valid
-    public BigDecimal getRecordID() {
-    return recordID;
+  @JsonProperty("recordId")
+  public BigDecimal getRecordId() {
+    return recordId;
   }
 
-  public void setRecordID(BigDecimal recordID) {
-    this.recordID = recordID;
-  }
-
-  public WorldCheckIndividuals inputStream(String inputStream) {
-    this.inputStream = inputStream;
-    return this;
+  public void setRecordId(BigDecimal recordId) {
+    this.recordId = recordId;
   }
 
   /**
-   * Denotes the type of data, for example&#58; Customer Data
-   * @return inputStream
+   * Denotes the type of data, for example&amp;#58; Customer Data
    **/
+
   @Schema(description = "Denotes the type of data, for example&#58; Customer Data")
-  
-    public String getInputStream() {
+  @JsonProperty("inputStream")
+  public String getInputStream() {
     return inputStream;
   }
 
@@ -292,18 +130,13 @@ public class WorldCheckIndividuals   {
     this.inputStream = inputStream;
   }
 
-  public WorldCheckIndividuals listKey(String listKey) {
-    this.listKey = listKey;
-    return this;
-  }
-
   /**
    * Indicates list origin e.g. WC for world check list
-   * @return listKey
    **/
+
   @Schema(description = "Indicates list origin e.g. WC for world check list")
-  
-    public String getListKey() {
+  @JsonProperty("listKey")
+  public String getListKey() {
     return listKey;
   }
 
@@ -311,18 +144,13 @@ public class WorldCheckIndividuals   {
     this.listKey = listKey;
   }
 
-  public WorldCheckIndividuals listSubKey(String listSubKey) {
-    this.listSubKey = listSubKey;
-    return this;
-  }
-
   /**
    * Indicates the origin of a record and its type e.g. WC-SAN
-   * @return listSubKey
    **/
+
   @Schema(description = "Indicates the origin of a record and its type e.g. WC-SAN")
-  
-    public String getListSubKey() {
+  @JsonProperty("listSubKey")
+  public String getListSubKey() {
     return listSubKey;
   }
 
@@ -330,18 +158,13 @@ public class WorldCheckIndividuals   {
     this.listSubKey = listSubKey;
   }
 
-  public WorldCheckIndividuals listRecordType(String listRecordType) {
-    this.listRecordType = listRecordType;
-    return this;
-  }
-
   /**
    * Indicates the type of matching record e.g. SAN
-   * @return listRecordType
    **/
+
   @Schema(description = "Indicates the type of matching record e.g. SAN")
-  
-    public String getListRecordType() {
+  @JsonProperty("listRecordType")
+  public String getListRecordType() {
     return listRecordType;
   }
 
@@ -349,18 +172,13 @@ public class WorldCheckIndividuals   {
     this.listRecordType = listRecordType;
   }
 
-  public WorldCheckIndividuals listRecordOrigin(String listRecordOrigin) {
-    this.listRecordOrigin = listRecordOrigin;
-    return this;
-  }
-
   /**
    * List the origin where the World-Check record was derived e.g. OFAC
-   * @return listRecordOrigin
    **/
+
   @Schema(description = "List the origin where the World-Check record was derived e.g. OFAC")
-  
-    public String getListRecordOrigin() {
+  @JsonProperty("listRecordOrigin")
+  public String getListRecordOrigin() {
     return listRecordOrigin;
   }
 
@@ -368,56 +186,41 @@ public class WorldCheckIndividuals   {
     this.listRecordOrigin = listRecordOrigin;
   }
 
-  public WorldCheckIndividuals listRecordID(String listRecordID) {
-    this.listRecordID = listRecordID;
-    return this;
-  }
-
   /**
    * Unique Identifier assigned to the World-Check record
-   * @return listRecordID
    **/
+
   @Schema(description = "Unique Identifier assigned to the World-Check record")
-  
-    public String getListRecordID() {
-    return listRecordID;
+  @JsonProperty("listRecordId")
+  public String getListRecordId() {
+    return listRecordId;
   }
 
-  public void setListRecordID(String listRecordID) {
-    this.listRecordID = listRecordID;
-  }
-
-  public WorldCheckIndividuals listRecordSubID(String listRecordSubID) {
-    this.listRecordSubID = listRecordSubID;
-    return this;
+  public void setListRecordId(String listRecordId) {
+    this.listRecordId = listRecordId;
   }
 
   /**
    * ID for the sub records within a World-Check record
-   * @return listRecordSubID
    **/
+
   @Schema(description = "ID for the sub records within a World-Check record")
-  
-    public String getListRecordSubID() {
-    return listRecordSubID;
+  @JsonProperty("listRecordSubId")
+  public String getListRecordSubId() {
+    return listRecordSubId;
   }
 
-  public void setListRecordSubID(String listRecordSubID) {
-    this.listRecordSubID = listRecordSubID;
-  }
-
-  public WorldCheckIndividuals passportNumber(String passportNumber) {
-    this.passportNumber = passportNumber;
-    return this;
+  public void setListRecordSubId(String listRecordSubId) {
+    this.listRecordSubId = listRecordSubId;
   }
 
   /**
-   * Watchlist Entry's Passport Number (if known)
-   * @return passportNumber
+   * Watchlist Entry&#x27;s Passport Number (if known)
    **/
+
   @Schema(description = "Watchlist Entry's Passport Number (if known)")
-  
-    public String getPassportNumber() {
+  @JsonProperty("passportNumber")
+  public String getPassportNumber() {
     return passportNumber;
   }
 
@@ -425,18 +228,13 @@ public class WorldCheckIndividuals   {
     this.passportNumber = passportNumber;
   }
 
-  public WorldCheckIndividuals nationalId(String nationalId) {
-    this.nationalId = nationalId;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's National Identification Number (if known)
-   * @return nationalId
+   * Watchlist Entry&#x27;s National Identification Number (if known)
    **/
+
   @Schema(description = "Watchlist Entry's National Identification Number (if known)")
-  
-    public String getNationalId() {
+  @JsonProperty("nationalId")
+  public String getNationalId() {
     return nationalId;
   }
 
@@ -444,18 +242,13 @@ public class WorldCheckIndividuals   {
     this.nationalId = nationalId;
   }
 
-  public WorldCheckIndividuals title(String title) {
-    this.title = title;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's title (if known)
-   * @return title
+   * Watchlist Entry&#x27;s title (if known)
    **/
+
   @Schema(description = "Watchlist Entry's title (if known)")
-  
-    public String getTitle() {
+  @JsonProperty("title")
+  public String getTitle() {
     return title;
   }
 
@@ -463,18 +256,13 @@ public class WorldCheckIndividuals   {
     this.title = title;
   }
 
-  public WorldCheckIndividuals fullNameOriginal(String fullNameOriginal) {
-    this.fullNameOriginal = fullNameOriginal;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's Full Name
-   * @return fullNameOriginal
+   * Watchlist Entry&#x27;s Full Name
    **/
+
   @Schema(description = "Watchlist Entry's Full Name")
-  
-    public String getFullNameOriginal() {
+  @JsonProperty("fullNameOriginal")
+  public String getFullNameOriginal() {
     return fullNameOriginal;
   }
 
@@ -482,18 +270,13 @@ public class WorldCheckIndividuals   {
     this.fullNameOriginal = fullNameOriginal;
   }
 
-  public WorldCheckIndividuals givenNamesOriginal(String givenNamesOriginal) {
-    this.givenNamesOriginal = givenNamesOriginal;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's Given Name
-   * @return givenNamesOriginal
+   * Watchlist Entry&#x27;s Given Name
    **/
+
   @Schema(description = "Watchlist Entry's Given Name")
-  
-    public String getGivenNamesOriginal() {
+  @JsonProperty("givenNamesOriginal")
+  public String getGivenNamesOriginal() {
     return givenNamesOriginal;
   }
 
@@ -501,18 +284,13 @@ public class WorldCheckIndividuals   {
     this.givenNamesOriginal = givenNamesOriginal;
   }
 
-  public WorldCheckIndividuals familyNameOriginal(String familyNameOriginal) {
-    this.familyNameOriginal = familyNameOriginal;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's Family Name
-   * @return familyNameOriginal
+   * Watchlist Entry&#x27;s Family Name
    **/
+
   @Schema(description = "Watchlist Entry's Family Name")
-  
-    public String getFamilyNameOriginal() {
+  @JsonProperty("familyNameOriginal")
+  public String getFamilyNameOriginal() {
     return familyNameOriginal;
   }
 
@@ -520,18 +298,13 @@ public class WorldCheckIndividuals   {
     this.familyNameOriginal = familyNameOriginal;
   }
 
-  public WorldCheckIndividuals fullNameDerived(String fullNameDerived) {
-    this.fullNameDerived = fullNameDerived;
-    return this;
-  }
-
   /**
    * Records a Family Name where it has been derived by OWS
-   * @return fullNameDerived
    **/
+
   @Schema(description = "Records a Family Name where it has been derived by OWS")
-  
-    public String getFullNameDerived() {
+  @JsonProperty("fullNameDerived")
+  public String getFullNameDerived() {
     return fullNameDerived;
   }
 
@@ -539,18 +312,13 @@ public class WorldCheckIndividuals   {
     this.fullNameDerived = fullNameDerived;
   }
 
-  public WorldCheckIndividuals givenNamesDerived(String givenNamesDerived) {
-    this.givenNamesDerived = givenNamesDerived;
-    return this;
-  }
-
   /**
    * Records a Given Name where it has been derived by OWS
-   * @return givenNamesDerived
    **/
+
   @Schema(description = "Records a Given Name where it has been derived by OWS")
-  
-    public String getGivenNamesDerived() {
+  @JsonProperty("givenNamesDerived")
+  public String getGivenNamesDerived() {
     return givenNamesDerived;
   }
 
@@ -558,18 +326,13 @@ public class WorldCheckIndividuals   {
     this.givenNamesDerived = givenNamesDerived;
   }
 
-  public WorldCheckIndividuals familyNameDerived(String familyNameDerived) {
-    this.familyNameDerived = familyNameDerived;
-    return this;
-  }
-
   /**
    * Records a Family Name where it has been derived by OWS
-   * @return familyNameDerived
    **/
+
   @Schema(description = "Records a Family Name where it has been derived by OWS")
-  
-    public String getFamilyNameDerived() {
+  @JsonProperty("familyNameDerived")
+  public String getFamilyNameDerived() {
     return familyNameDerived;
   }
 
@@ -577,18 +340,13 @@ public class WorldCheckIndividuals   {
     this.familyNameDerived = familyNameDerived;
   }
 
-  public WorldCheckIndividuals nameType(String nameType) {
-    this.nameType = nameType;
-    return this;
-  }
-
   /**
-   * Records the type of name in use, for example&#58; Primary Name
-   * @return nameType
+   * Records the type of name in use, for example&amp;#58; Primary Name
    **/
+
   @Schema(description = "Records the type of name in use, for example&#58; Primary Name")
-  
-    public String getNameType() {
+  @JsonProperty("nameType")
+  public String getNameType() {
     return nameType;
   }
 
@@ -596,18 +354,13 @@ public class WorldCheckIndividuals   {
     this.nameType = nameType;
   }
 
-  public WorldCheckIndividuals nameQuality(String nameQuality) {
-    this.nameQuality = nameQuality;
-    return this;
-  }
-
   /**
    * Indicates the accuracy of the name information, Low, Medium or High
-   * @return nameQuality
    **/
+
   @Schema(description = "Indicates the accuracy of the name information, Low, Medium or High")
-  
-    public String getNameQuality() {
+  @JsonProperty("nameQuality")
+  public String getNameQuality() {
     return nameQuality;
   }
 
@@ -615,18 +368,13 @@ public class WorldCheckIndividuals   {
     this.nameQuality = nameQuality;
   }
 
-  public WorldCheckIndividuals primaryName(String primaryName) {
-    this.primaryName = primaryName;
-    return this;
-  }
-
   /**
    * Primary Name of the Watchlist Entry
-   * @return primaryName
    **/
+
   @Schema(description = "Primary Name of the Watchlist Entry")
-  
-    public String getPrimaryName() {
+  @JsonProperty("primaryName")
+  public String getPrimaryName() {
     return primaryName;
   }
 
@@ -634,18 +382,13 @@ public class WorldCheckIndividuals   {
     this.primaryName = primaryName;
   }
 
-  public WorldCheckIndividuals originalScriptName(String originalScriptName) {
-    this.originalScriptName = originalScriptName;
-    return this;
-  }
-
   /**
    * Watchlist original script name
-   * @return originalScriptName
    **/
+
   @Schema(description = "Watchlist original script name")
-  
-    public String getOriginalScriptName() {
+  @JsonProperty("originalScriptName")
+  public String getOriginalScriptName() {
     return originalScriptName;
   }
 
@@ -653,18 +396,13 @@ public class WorldCheckIndividuals   {
     this.originalScriptName = originalScriptName;
   }
 
-  public WorldCheckIndividuals gender(String gender) {
-    this.gender = gender;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's gender (if known)
-   * @return gender
+   * Watchlist Entry&#x27;s gender (if known)
    **/
+
   @Schema(description = "Watchlist Entry's gender (if known)")
-  
-    public String getGender() {
+  @JsonProperty("gender")
+  public String getGender() {
     return gender;
   }
 
@@ -672,18 +410,13 @@ public class WorldCheckIndividuals   {
     this.gender = gender;
   }
 
-  public WorldCheckIndividuals genderDerivedFlag(String genderDerivedFlag) {
-    this.genderDerivedFlag = genderDerivedFlag;
-    return this;
-  }
-
   /**
-   * Denotes if the Watchlist Entry's gender has been derived by OWS
-   * @return genderDerivedFlag
+   * Denotes if the Watchlist Entry&#x27;s gender has been derived by OWS
    **/
+
   @Schema(description = "Denotes if the Watchlist Entry's gender has been derived by OWS")
-  
-    public String getGenderDerivedFlag() {
+  @JsonProperty("genderDerivedFlag")
+  public String getGenderDerivedFlag() {
     return genderDerivedFlag;
   }
 
@@ -691,18 +424,13 @@ public class WorldCheckIndividuals   {
     this.genderDerivedFlag = genderDerivedFlag;
   }
 
-  public WorldCheckIndividuals dateOfBirth(String dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's date of birth (if known)
-   * @return dateOfBirth
+   * Watchlist Entry&#x27;s date of birth (if known)
    **/
+
   @Schema(description = "Watchlist Entry's date of birth (if known)")
-  
-    public String getDateOfBirth() {
+  @JsonProperty("dateOfBirth")
+  public String getDateOfBirth() {
     return dateOfBirth;
   }
 
@@ -710,18 +438,13 @@ public class WorldCheckIndividuals   {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public WorldCheckIndividuals yearOfBirth(Integer yearOfBirth) {
-    this.yearOfBirth = yearOfBirth;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's year of birth (if known)
-   * @return yearOfBirth
+   * Watchlist Entry&#x27;s year of birth (if known)
    **/
+
   @Schema(description = "Watchlist Entry's year of birth (if known)")
-  
-    public Integer getYearOfBirth() {
+  @JsonProperty("yearOfBirth")
+  public Integer getYearOfBirth() {
     return yearOfBirth;
   }
 
@@ -729,18 +452,13 @@ public class WorldCheckIndividuals   {
     this.yearOfBirth = yearOfBirth;
   }
 
-  public WorldCheckIndividuals deceasedFlag(String deceasedFlag) {
-    this.deceasedFlag = deceasedFlag;
-    return this;
-  }
-
   /**
    * Watchlist Entry is known or believed to be deceased
-   * @return deceasedFlag
    **/
+
   @Schema(description = "Watchlist Entry is known or believed to be deceased")
-  
-    public String getDeceasedFlag() {
+  @JsonProperty("deceasedFlag")
+  public String getDeceasedFlag() {
     return deceasedFlag;
   }
 
@@ -748,18 +466,13 @@ public class WorldCheckIndividuals   {
     this.deceasedFlag = deceasedFlag;
   }
 
-  public WorldCheckIndividuals deceasedDate(String deceasedDate) {
-    this.deceasedDate = deceasedDate;
-    return this;
-  }
-
   /**
    * Date the Watchlist Entry is known or believed to have become deceased
-   * @return deceasedDate
    **/
+
   @Schema(description = "Date the Watchlist Entry is known or believed to have become deceased")
-  
-    public String getDeceasedDate() {
+  @JsonProperty("deceasedDate")
+  public String getDeceasedDate() {
     return deceasedDate;
   }
 
@@ -767,18 +480,13 @@ public class WorldCheckIndividuals   {
     this.deceasedDate = deceasedDate;
   }
 
-  public WorldCheckIndividuals occupation(String occupation) {
-    this.occupation = occupation;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's occupation (if known)
-   * @return occupation
+   * Watchlist Entry&#x27;s occupation (if known)
    **/
+
   @Schema(description = "Watchlist Entry's occupation (if known)")
-  
-    public String getOccupation() {
+  @JsonProperty("occupation")
+  public String getOccupation() {
     return occupation;
   }
 
@@ -786,18 +494,13 @@ public class WorldCheckIndividuals   {
     this.occupation = occupation;
   }
 
-  public WorldCheckIndividuals address(String address) {
-    this.address = address;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's address (if known)
-   * @return address
+   * Watchlist Entry&#x27;s address (if known)
    **/
+
   @Schema(description = "Watchlist Entry's address (if known)")
-  
-    public String getAddress() {
+  @JsonProperty("address")
+  public String getAddress() {
     return address;
   }
 
@@ -805,18 +508,13 @@ public class WorldCheckIndividuals   {
     this.address = address;
   }
 
-  public WorldCheckIndividuals city(String city) {
-    this.city = city;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's city (if known)
-   * @return city
+   * Watchlist Entry&#x27;s city (if known)
    **/
+
   @Schema(description = "Watchlist Entry's city (if known)")
-  
-    public String getCity() {
+  @JsonProperty("city")
+  public String getCity() {
     return city;
   }
 
@@ -824,18 +522,13 @@ public class WorldCheckIndividuals   {
     this.city = city;
   }
 
-  public WorldCheckIndividuals state(String state) {
-    this.state = state;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's state (if known)
-   * @return state
+   * Watchlist Entry&#x27;s state (if known)
    **/
+
   @Schema(description = "Watchlist Entry's state (if known)")
-  
-    public String getState() {
+  @JsonProperty("state")
+  public String getState() {
     return state;
   }
 
@@ -843,18 +536,13 @@ public class WorldCheckIndividuals   {
     this.state = state;
   }
 
-  public WorldCheckIndividuals postalCode(String postalCode) {
-    this.postalCode = postalCode;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's postal code (if known)
-   * @return postalCode
+   * Watchlist Entry&#x27;s postal code (if known)
    **/
+
   @Schema(description = "Watchlist Entry's postal code (if known)")
-  
-    public String getPostalCode() {
+  @JsonProperty("postalCode")
+  public String getPostalCode() {
     return postalCode;
   }
 
@@ -862,18 +550,13 @@ public class WorldCheckIndividuals   {
     this.postalCode = postalCode;
   }
 
-  public WorldCheckIndividuals addressCountry(String addressCountry) {
-    this.addressCountry = addressCountry;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's address country (if known)
-   * @return addressCountry
+   * Watchlist Entry&#x27;s address country (if known)
    **/
+
   @Schema(description = "Watchlist Entry's address country (if known)")
-  
-    public String getAddressCountry() {
+  @JsonProperty("addressCountry")
+  public String getAddressCountry() {
     return addressCountry;
   }
 
@@ -881,18 +564,13 @@ public class WorldCheckIndividuals   {
     this.addressCountry = addressCountry;
   }
 
-  public WorldCheckIndividuals residencyCountry(String residencyCountry) {
-    this.residencyCountry = residencyCountry;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's country of residence (if known)
-   * @return residencyCountry
+   * Watchlist Entry&#x27;s country of residence (if known)
    **/
+
   @Schema(description = "Watchlist Entry's country of residence (if known)")
-  
-    public String getResidencyCountry() {
+  @JsonProperty("residencyCountry")
+  public String getResidencyCountry() {
     return residencyCountry;
   }
 
@@ -900,18 +578,13 @@ public class WorldCheckIndividuals   {
     this.residencyCountry = residencyCountry;
   }
 
-  public WorldCheckIndividuals countryOfBirth(String countryOfBirth) {
-    this.countryOfBirth = countryOfBirth;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's country of birth (if known)
-   * @return countryOfBirth
+   * Watchlist Entry&#x27;s country of birth (if known)
    **/
+
   @Schema(description = "Watchlist Entry's country of birth (if known)")
-  
-    public String getCountryOfBirth() {
+  @JsonProperty("countryOfBirth")
+  public String getCountryOfBirth() {
     return countryOfBirth;
   }
 
@@ -919,18 +592,13 @@ public class WorldCheckIndividuals   {
     this.countryOfBirth = countryOfBirth;
   }
 
-  public WorldCheckIndividuals nationalities(String nationalities) {
-    this.nationalities = nationalities;
-    return this;
-  }
-
   /**
-   * Watchlist Entry's nationality (if known)
-   * @return nationalities
+   * Watchlist Entry&#x27;s nationality (if known)
    **/
+
   @Schema(description = "Watchlist Entry's nationality (if known)")
-  
-    public String getNationalities() {
+  @JsonProperty("nationalities")
+  public String getNationalities() {
     return nationalities;
   }
 
@@ -938,18 +606,14 @@ public class WorldCheckIndividuals   {
     this.nationalities = nationalities;
   }
 
-  public WorldCheckIndividuals countryCodesAll(String countryCodesAll) {
-    this.countryCodesAll = countryCodesAll;
-    return this;
-  }
-
   /**
-   * Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format
-   * @return countryCodesAll
+   * Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country
+   * Code format
    **/
+
   @Schema(description = "Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format")
-  
-    public String getCountryCodesAll() {
+  @JsonProperty("countryCodesAll")
+  public String getCountryCodesAll() {
     return countryCodesAll;
   }
 
@@ -957,18 +621,13 @@ public class WorldCheckIndividuals   {
     this.countryCodesAll = countryCodesAll;
   }
 
-  public WorldCheckIndividuals countriesAll(String countriesAll) {
-    this.countriesAll = countriesAll;
-    return this;
-  }
-
   /**
    * Records all of the Countries within the Customer record that will be screened for Prohibitions
-   * @return countriesAll
    **/
+
   @Schema(description = "Records all of the Countries within the Customer record that will be screened for Prohibitions")
-  
-    public String getCountriesAll() {
+  @JsonProperty("countriesAll")
+  public String getCountriesAll() {
     return countriesAll;
   }
 
@@ -976,18 +635,13 @@ public class WorldCheckIndividuals   {
     this.countriesAll = countriesAll;
   }
 
-  public WorldCheckIndividuals profileHyperlink(String profileHyperlink) {
-    this.profileHyperlink = profileHyperlink;
-    return this;
-  }
-
   /**
    * Watchlist Entry address (if known)
-   * @return profileHyperlink
    **/
+
   @Schema(description = "Watchlist Entry address (if known)")
-  
-    public String getProfileHyperlink() {
+  @JsonProperty("profileHyperlink")
+  public String getProfileHyperlink() {
     return profileHyperlink;
   }
 
@@ -995,18 +649,13 @@ public class WorldCheckIndividuals   {
     this.profileHyperlink = profileHyperlink;
   }
 
-  public WorldCheckIndividuals searchHyperlink(String searchHyperlink) {
-    this.searchHyperlink = searchHyperlink;
-    return this;
-  }
-
   /**
    * Watchlist Entry address (if known)
-   * @return searchHyperlink
    **/
+
   @Schema(description = "Watchlist Entry address (if known)")
-  
-    public String getSearchHyperlink() {
+  @JsonProperty("searchHyperlink")
+  public String getSearchHyperlink() {
     return searchHyperlink;
   }
 
@@ -1014,18 +663,13 @@ public class WorldCheckIndividuals   {
     this.searchHyperlink = searchHyperlink;
   }
 
-  public WorldCheckIndividuals linkedProfiles(String linkedProfiles) {
-    this.linkedProfiles = linkedProfiles;
-    return this;
-  }
-
   /**
    * Any known associated Watchlist Entry profiles
-   * @return linkedProfiles
    **/
+
   @Schema(description = "Any known associated Watchlist Entry profiles")
-  
-    public String getLinkedProfiles() {
+  @JsonProperty("linkedProfiles")
+  public String getLinkedProfiles() {
     return linkedProfiles;
   }
 
@@ -1033,18 +677,13 @@ public class WorldCheckIndividuals   {
     this.linkedProfiles = linkedProfiles;
   }
 
-  public WorldCheckIndividuals linkedRelationships(String linkedRelationships) {
-    this.linkedRelationships = linkedRelationships;
-    return this;
-  }
-
   /**
    * Any known associated Watchlist Entry relationships
-   * @return linkedRelationships
    **/
+
   @Schema(description = "Any known associated Watchlist Entry relationships")
-  
-    public String getLinkedRelationships() {
+  @JsonProperty("linkedRelationships")
+  public String getLinkedRelationships() {
     return linkedRelationships;
   }
 
@@ -1052,19 +691,13 @@ public class WorldCheckIndividuals   {
     this.linkedRelationships = linkedRelationships;
   }
 
-  public WorldCheckIndividuals riskScore(BigDecimal riskScore) {
-    this.riskScore = riskScore;
-    return this;
-  }
-
   /**
    * World-Check assigned risk score
-   * @return riskScore
    **/
+
   @Schema(description = "World-Check assigned risk score")
-  
-    @Valid
-    public BigDecimal getRiskScore() {
+  @JsonProperty("riskScore")
+  public BigDecimal getRiskScore() {
     return riskScore;
   }
 
@@ -1072,39 +705,27 @@ public class WorldCheckIndividuals   {
     this.riskScore = riskScore;
   }
 
-  public WorldCheckIndividuals pEPRiskScore(BigDecimal pEPRiskScore) {
-    this.pEPRiskScore = pEPRiskScore;
-    return this;
-  }
-
   /**
    * World-Check assigned PEP risk score
-   * @return pEPRiskScore
    **/
+
   @Schema(description = "World-Check assigned PEP risk score")
-  
-    @Valid
-    public BigDecimal getPEPRiskScore() {
-    return pEPRiskScore;
+  @JsonProperty("pepRiskScore")
+  public BigDecimal getPepRiskScore() {
+    return pepRiskScore;
   }
 
-  public void setPEPRiskScore(BigDecimal pEPRiskScore) {
-    this.pEPRiskScore = pEPRiskScore;
-  }
-
-  public WorldCheckIndividuals dataConfidenceScore(BigDecimal dataConfidenceScore) {
-    this.dataConfidenceScore = dataConfidenceScore;
-    return this;
+  public void setPepRiskScore(BigDecimal pepRiskScore) {
+    this.pepRiskScore = pepRiskScore;
   }
 
   /**
    * Not Provided
-   * @return dataConfidenceScore
    **/
+
   @Schema(description = "Not Provided")
-  
-    @Valid
-    public BigDecimal getDataConfidenceScore() {
+  @JsonProperty("dataConfidenceScore")
+  public BigDecimal getDataConfidenceScore() {
     return dataConfidenceScore;
   }
 
@@ -1112,18 +733,13 @@ public class WorldCheckIndividuals   {
     this.dataConfidenceScore = dataConfidenceScore;
   }
 
-  public WorldCheckIndividuals dataConfidenceComment(String dataConfidenceComment) {
-    this.dataConfidenceComment = dataConfidenceComment;
-    return this;
-  }
-
   /**
    * Not Provided
-   * @return dataConfidenceComment
    **/
+
   @Schema(description = "Not Provided")
-  
-    public String getDataConfidenceComment() {
+  @JsonProperty("dataConfidenceComment")
+  public String getDataConfidenceComment() {
     return dataConfidenceComment;
   }
 
@@ -1131,18 +747,13 @@ public class WorldCheckIndividuals   {
     this.dataConfidenceComment = dataConfidenceComment;
   }
 
-  public WorldCheckIndividuals inactiveFlag(String inactiveFlag) {
-    this.inactiveFlag = inactiveFlag;
-    return this;
-  }
-
   /**
    * Denotes if the record is considered inactive on World-Check
-   * @return inactiveFlag
    **/
+
   @Schema(description = "Denotes if the record is considered inactive on World-Check")
-  
-    public String getInactiveFlag() {
+  @JsonProperty("inactiveFlag")
+  public String getInactiveFlag() {
     return inactiveFlag;
   }
 
@@ -1150,18 +761,13 @@ public class WorldCheckIndividuals   {
     this.inactiveFlag = inactiveFlag;
   }
 
-  public WorldCheckIndividuals inactiveSinceDate(String inactiveSinceDate) {
-    this.inactiveSinceDate = inactiveSinceDate;
-    return this;
-  }
-
   /**
    * Date since the record was marked inactive
-   * @return inactiveSinceDate
    **/
+
   @Schema(description = "Date since the record was marked inactive")
-  
-    public String getInactiveSinceDate() {
+  @JsonProperty("inactiveSinceDate")
+  public String getInactiveSinceDate() {
     return inactiveSinceDate;
   }
 
@@ -1169,37 +775,27 @@ public class WorldCheckIndividuals   {
     this.inactiveSinceDate = inactiveSinceDate;
   }
 
-  public WorldCheckIndividuals pEPClassification(String pEPClassification) {
-    this.pEPClassification = pEPClassification;
-    return this;
-  }
-
   /**
-   * Type of PEP, for example&#58; Local Counsellor
-   * @return pEPClassification
+   * Type of PEP, for example&amp;#58; Local Counsellor
    **/
+
   @Schema(description = "Type of PEP, for example&#58; Local Counsellor")
-  
-    public String getPEPClassification() {
-    return pEPClassification;
+  @JsonProperty("pepClassification")
+  public String getPepClassification() {
+    return pepClassification;
   }
 
-  public void setPEPClassification(String pEPClassification) {
-    this.pEPClassification = pEPClassification;
-  }
-
-  public WorldCheckIndividuals category(String category) {
-    this.category = category;
-    return this;
+  public void setPepClassification(String pepClassification) {
+    this.pepClassification = pepClassification;
   }
 
   /**
-   * Category of PEP, for example&#58; Local Government
-   * @return category
+   * Category of PEP, for example&amp;#58; Local Government
    **/
+
   @Schema(description = "Category of PEP, for example&#58; Local Government")
-  
-    public String getCategory() {
+  @JsonProperty("category")
+  public String getCategory() {
     return category;
   }
 
@@ -1207,18 +803,13 @@ public class WorldCheckIndividuals   {
     this.category = category;
   }
 
-  public WorldCheckIndividuals externalSources(String externalSources) {
-    this.externalSources = externalSources;
-    return this;
-  }
-
   /**
    * Records any external sources used to collate information about the Watchlist Entry
-   * @return externalSources
    **/
+
   @Schema(description = "Records any external sources used to collate information about the Watchlist Entry")
-  
-    public String getExternalSources() {
+  @JsonProperty("externalSources")
+  public String getExternalSources() {
     return externalSources;
   }
 
@@ -1226,18 +817,13 @@ public class WorldCheckIndividuals   {
     this.externalSources = externalSources;
   }
 
-  public WorldCheckIndividuals linkedTo(String linkedTo) {
-    this.linkedTo = linkedTo;
-    return this;
-  }
-
   /**
    * Associated parties ID
-   * @return linkedTo
    **/
+
   @Schema(description = "Associated parties ID")
-  
-    public String getLinkedTo() {
+  @JsonProperty("linkedTo")
+  public String getLinkedTo() {
     return linkedTo;
   }
 
@@ -1245,18 +831,13 @@ public class WorldCheckIndividuals   {
     this.linkedTo = linkedTo;
   }
 
-  public WorldCheckIndividuals companies(String companies) {
-    this.companies = companies;
-    return this;
-  }
-
   /**
    * Companies associated with the Watchlist Entry (if known)
-   * @return companies
    **/
+
   @Schema(description = "Companies associated with the Watchlist Entry (if known)")
-  
-    public String getCompanies() {
+  @JsonProperty("companies")
+  public String getCompanies() {
     return companies;
   }
 
@@ -1264,18 +845,13 @@ public class WorldCheckIndividuals   {
     this.companies = companies;
   }
 
-  public WorldCheckIndividuals dateOfBirthOriginal(String dateOfBirthOriginal) {
-    this.dateOfBirthOriginal = dateOfBirthOriginal;
-    return this;
-  }
-
   /**
    * The date of birth as originally provided
-   * @return dateOfBirthOriginal
    **/
+
   @Schema(description = "The date of birth as originally provided")
-  
-    public String getDateOfBirthOriginal() {
+  @JsonProperty("dateOfBirthOriginal")
+  public String getDateOfBirthOriginal() {
     return dateOfBirthOriginal;
   }
 
@@ -1283,18 +859,13 @@ public class WorldCheckIndividuals   {
     this.dateOfBirthOriginal = dateOfBirthOriginal;
   }
 
-  public WorldCheckIndividuals yearOfBirthApproximated(String yearOfBirthApproximated) {
-    this.yearOfBirthApproximated = yearOfBirthApproximated;
-    return this;
-  }
-
   /**
    * Year of birth approximation
-   * @return yearOfBirthApproximated
    **/
+
   @Schema(description = "Year of birth approximation")
-  
-    public String getYearOfBirthApproximated() {
+  @JsonProperty("yearOfBirthApproximated")
+  public String getYearOfBirthApproximated() {
     return yearOfBirthApproximated;
   }
 
@@ -1302,18 +873,13 @@ public class WorldCheckIndividuals   {
     this.yearOfBirthApproximated = yearOfBirthApproximated;
   }
 
-  public WorldCheckIndividuals placeOfBirthOriginal(String placeOfBirthOriginal) {
-    this.placeOfBirthOriginal = placeOfBirthOriginal;
-    return this;
-  }
-
   /**
    * Place of birth details as originally provided
-   * @return placeOfBirthOriginal
    **/
+
   @Schema(description = "Place of birth details as originally provided")
-  
-    public String getPlaceOfBirthOriginal() {
+  @JsonProperty("placeOfBirthOriginal")
+  public String getPlaceOfBirthOriginal() {
     return placeOfBirthOriginal;
   }
 
@@ -1321,18 +887,13 @@ public class WorldCheckIndividuals   {
     this.placeOfBirthOriginal = placeOfBirthOriginal;
   }
 
-  public WorldCheckIndividuals furtherInformation(String furtherInformation) {
-    this.furtherInformation = furtherInformation;
-    return this;
-  }
-
   /**
    * Any further information as deemed useful by World-Check
-   * @return furtherInformation
    **/
+
   @Schema(description = "Any further information as deemed useful by World-Check")
-  
-    public String getFurtherInformation() {
+  @JsonProperty("furtherInformation")
+  public String getFurtherInformation() {
     return furtherInformation;
   }
 
@@ -1340,18 +901,13 @@ public class WorldCheckIndividuals   {
     this.furtherInformation = furtherInformation;
   }
 
-  public WorldCheckIndividuals countriesOriginal(String countriesOriginal) {
-    this.countriesOriginal = countriesOriginal;
-    return this;
-  }
-
   /**
    * Associated country information as originally provided
-   * @return countriesOriginal
    **/
+
   @Schema(description = "Associated country information as originally provided")
-  
-    public String getCountriesOriginal() {
+  @JsonProperty("countriesOriginal")
+  public String getCountriesOriginal() {
     return countriesOriginal;
   }
 
@@ -1359,18 +915,13 @@ public class WorldCheckIndividuals   {
     this.countriesOriginal = countriesOriginal;
   }
 
-  public WorldCheckIndividuals socialSecurityNumber(String socialSecurityNumber) {
-    this.socialSecurityNumber = socialSecurityNumber;
-    return this;
-  }
-
   /**
    * Social Security number
-   * @return socialSecurityNumber
    **/
+
   @Schema(description = "Social Security number")
-  
-    public String getSocialSecurityNumber() {
+  @JsonProperty("socialSecurityNumber")
+  public String getSocialSecurityNumber() {
     return socialSecurityNumber;
   }
 
@@ -1378,18 +929,13 @@ public class WorldCheckIndividuals   {
     this.socialSecurityNumber = socialSecurityNumber;
   }
 
-  public WorldCheckIndividuals passportCountry(String passportCountry) {
-    this.passportCountry = passportCountry;
-    return this;
-  }
-
   /**
    * Passport country
-   * @return passportCountry
    **/
+
   @Schema(description = "Passport country")
-  
-    public String getPassportCountry() {
+  @JsonProperty("passportCountry")
+  public String getPassportCountry() {
     return passportCountry;
   }
 
@@ -1397,18 +943,13 @@ public class WorldCheckIndividuals   {
     this.passportCountry = passportCountry;
   }
 
-  public WorldCheckIndividuals subCategoryDescription(String subCategoryDescription) {
-    this.subCategoryDescription = subCategoryDescription;
-    return this;
-  }
-
   /**
    * Groups PEPs according to predefined categories
-   * @return subCategoryDescription
    **/
+
   @Schema(description = "Groups PEPs according to predefined categories")
-  
-    public String getSubCategoryDescription() {
+  @JsonProperty("subCategoryDescription")
+  public String getSubCategoryDescription() {
     return subCategoryDescription;
   }
 
@@ -1416,18 +957,13 @@ public class WorldCheckIndividuals   {
     this.subCategoryDescription = subCategoryDescription;
   }
 
-  public WorldCheckIndividuals updateCategory(String updateCategory) {
-    this.updateCategory = updateCategory;
-    return this;
-  }
-
   /**
    * Indicates the type ofchange last made, highlighting the significance of each update.
-   * @return updateCategory
    **/
+
   @Schema(description = "Indicates the type ofchange last made, highlighting the significance of each update.")
-  
-    public String getUpdateCategory() {
+  @JsonProperty("updateCategory")
+  public String getUpdateCategory() {
     return updateCategory;
   }
 
@@ -1435,18 +971,13 @@ public class WorldCheckIndividuals   {
     this.updateCategory = updateCategory;
   }
 
-  public WorldCheckIndividuals nativeAliasLanguageName(String nativeAliasLanguageName) {
-    this.nativeAliasLanguageName = nativeAliasLanguageName;
-    return this;
-  }
-
   /**
    * Name in non-Latin character set
-   * @return nativeAliasLanguageName
    **/
+
   @Schema(description = "Name in non-Latin character set")
-  
-    public String getNativeAliasLanguageName() {
+  @JsonProperty("nativeAliasLanguageName")
+  public String getNativeAliasLanguageName() {
     return nativeAliasLanguageName;
   }
 
@@ -1454,18 +985,13 @@ public class WorldCheckIndividuals   {
     this.nativeAliasLanguageName = nativeAliasLanguageName;
   }
 
-  public WorldCheckIndividuals nativeAliasLanguageCountry(String nativeAliasLanguageCountry) {
-    this.nativeAliasLanguageCountry = nativeAliasLanguageCountry;
-    return this;
-  }
-
   /**
    * Country in non-Latin character set
-   * @return nativeAliasLanguageCountry
    **/
+
   @Schema(description = "Country in non-Latin character set")
-  
-    public String getNativeAliasLanguageCountry() {
+  @JsonProperty("nativeAliasLanguageCountry")
+  public String getNativeAliasLanguageCountry() {
     return nativeAliasLanguageCountry;
   }
 
@@ -1473,18 +999,13 @@ public class WorldCheckIndividuals   {
     this.nativeAliasLanguageCountry = nativeAliasLanguageCountry;
   }
 
-  public WorldCheckIndividuals cachedExternalSources(String cachedExternalSources) {
-    this.cachedExternalSources = cachedExternalSources;
-    return this;
-  }
-
   /**
    * Records any external sources used to collate information about the Watchlist Entry
-   * @return cachedExternalSources
    **/
+
   @Schema(description = "Records any external sources used to collate information about the Watchlist Entry")
-  
-    public String getCachedExternalSources() {
+  @JsonProperty("cachedExternalSources")
+  public String getCachedExternalSources() {
     return cachedExternalSources;
   }
 
@@ -1492,18 +1013,13 @@ public class WorldCheckIndividuals   {
     this.cachedExternalSources = cachedExternalSources;
   }
 
-  public WorldCheckIndividuals addedDate(String addedDate) {
-    this.addedDate = addedDate;
-    return this;
-  }
-
   /**
    * Date data source was added
-   * @return addedDate
    **/
+
   @Schema(description = "Date data source was added")
-  
-    public String getAddedDate() {
+  @JsonProperty("addedDate")
+  public String getAddedDate() {
     return addedDate;
   }
 
@@ -1511,18 +1027,13 @@ public class WorldCheckIndividuals   {
     this.addedDate = addedDate;
   }
 
-  public WorldCheckIndividuals lastUpdatedDate(String lastUpdatedDate) {
-    this.lastUpdatedDate = lastUpdatedDate;
-    return this;
-  }
-
   /**
    * Data since the Watchlist Entry was last updated
-   * @return lastUpdatedDate
    **/
+
   @Schema(description = "Data since the Watchlist Entry was last updated")
-  
-    public String getLastUpdatedDate() {
+  @JsonProperty("lastUpdatedDate")
+  public String getLastUpdatedDate() {
     return lastUpdatedDate;
   }
 
@@ -1530,75 +1041,56 @@ public class WorldCheckIndividuals   {
     this.lastUpdatedDate = lastUpdatedDate;
   }
 
-  public WorldCheckIndividuals edqOWSWatchlistName(String edqOWSWatchlistName) {
-    this.edqOWSWatchlistName = edqOWSWatchlistName;
-    return this;
-  }
-
   /**
    * Indicates the watchlist origin using the HSBC name specification
-   * @return edqOWSWatchlistName
    **/
+
   @Schema(description = "Indicates the watchlist origin using the HSBC name specification")
-  
-    public String getEdqOWSWatchlistName() {
-    return edqOWSWatchlistName;
+  @JsonProperty("edqOwsWatchlistName")
+  public String getEdqOwsWatchlistName() {
+    return edqOwsWatchlistName;
   }
 
-  public void setEdqOWSWatchlistName(String edqOWSWatchlistName) {
-    this.edqOWSWatchlistName = edqOWSWatchlistName;
-  }
-
-  public WorldCheckIndividuals dOBs(String dOBs) {
-    this.dOBs = dOBs;
-    return this;
+  public void setEdqOwsWatchlistName(String edqOwsWatchlistName) {
+    this.edqOwsWatchlistName = edqOwsWatchlistName;
   }
 
   /**
-   * List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated to a record.
-   * @return dOBs
+   * List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated
+   * to a record.
    **/
+
   @Schema(description = "List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated to a record.")
-  
-    public String getDOBs() {
-    return dOBs;
+  @JsonProperty("dobs")
+  public String getDobs() {
+    return dobs;
   }
 
-  public void setDOBs(String dOBs) {
-    this.dOBs = dOBs;
-  }
-
-  public WorldCheckIndividuals iDNumbers(String iDNumbers) {
-    this.iDNumbers = iDNumbers;
-    return this;
+  public void setDobs(String dobs) {
+    this.dobs = dobs;
   }
 
   /**
    * Identification Numbers
-   * @return iDNumbers
    **/
+
   @Schema(description = "Identification Numbers")
-  
-    public String getIDNumbers() {
-    return iDNumbers;
+  @JsonProperty("idNumbers")
+  public String getIdNumbers() {
+    return idNumbers;
   }
 
-  public void setIDNumbers(String iDNumbers) {
-    this.iDNumbers = iDNumbers;
-  }
-
-  public WorldCheckIndividuals recordType(String recordType) {
-    this.recordType = recordType;
-    return this;
+  public void setIdNumbers(String idNumbers) {
+    this.idNumbers = idNumbers;
   }
 
   /**
    * Indicates the type of record
-   * @return recordType
    **/
+
   @Schema(description = "Indicates the type of record")
-  
-    public String getRecordType() {
+  @JsonProperty("recordType")
+  public String getRecordType() {
     return recordType;
   }
 
@@ -1606,18 +1098,13 @@ public class WorldCheckIndividuals   {
     this.recordType = recordType;
   }
 
-  public WorldCheckIndividuals dummy(String dummy) {
-    this.dummy = dummy;
-    return this;
-  }
-
   /**
    * For development use only
-   * @return dummy
    **/
+
   @Schema(description = "For development use only")
-  
-    public String getDummy() {
+  @JsonProperty("dummy")
+  public String getDummy() {
     return dummy;
   }
 
@@ -1635,100 +1122,115 @@ public class WorldCheckIndividuals   {
       return false;
     }
     WorldCheckIndividuals worldCheckIndividuals = (WorldCheckIndividuals) o;
-    return Objects.equals(this.caseId, worldCheckIndividuals.caseId) &&
-        Objects.equals(this.recordID, worldCheckIndividuals.recordID) &&
-        Objects.equals(this.inputStream, worldCheckIndividuals.inputStream) &&
-        Objects.equals(this.listKey, worldCheckIndividuals.listKey) &&
-        Objects.equals(this.listSubKey, worldCheckIndividuals.listSubKey) &&
-        Objects.equals(this.listRecordType, worldCheckIndividuals.listRecordType) &&
-        Objects.equals(this.listRecordOrigin, worldCheckIndividuals.listRecordOrigin) &&
-        Objects.equals(this.listRecordID, worldCheckIndividuals.listRecordID) &&
-        Objects.equals(this.listRecordSubID, worldCheckIndividuals.listRecordSubID) &&
-        Objects.equals(this.passportNumber, worldCheckIndividuals.passportNumber) &&
-        Objects.equals(this.nationalId, worldCheckIndividuals.nationalId) &&
-        Objects.equals(this.title, worldCheckIndividuals.title) &&
-        Objects.equals(this.fullNameOriginal, worldCheckIndividuals.fullNameOriginal) &&
-        Objects.equals(this.givenNamesOriginal, worldCheckIndividuals.givenNamesOriginal) &&
-        Objects.equals(this.familyNameOriginal, worldCheckIndividuals.familyNameOriginal) &&
-        Objects.equals(this.fullNameDerived, worldCheckIndividuals.fullNameDerived) &&
-        Objects.equals(this.givenNamesDerived, worldCheckIndividuals.givenNamesDerived) &&
-        Objects.equals(this.familyNameDerived, worldCheckIndividuals.familyNameDerived) &&
-        Objects.equals(this.nameType, worldCheckIndividuals.nameType) &&
-        Objects.equals(this.nameQuality, worldCheckIndividuals.nameQuality) &&
-        Objects.equals(this.primaryName, worldCheckIndividuals.primaryName) &&
-        Objects.equals(this.originalScriptName, worldCheckIndividuals.originalScriptName) &&
-        Objects.equals(this.gender, worldCheckIndividuals.gender) &&
-        Objects.equals(this.genderDerivedFlag, worldCheckIndividuals.genderDerivedFlag) &&
-        Objects.equals(this.dateOfBirth, worldCheckIndividuals.dateOfBirth) &&
-        Objects.equals(this.yearOfBirth, worldCheckIndividuals.yearOfBirth) &&
-        Objects.equals(this.deceasedFlag, worldCheckIndividuals.deceasedFlag) &&
-        Objects.equals(this.deceasedDate, worldCheckIndividuals.deceasedDate) &&
-        Objects.equals(this.occupation, worldCheckIndividuals.occupation) &&
-        Objects.equals(this.address, worldCheckIndividuals.address) &&
-        Objects.equals(this.city, worldCheckIndividuals.city) &&
-        Objects.equals(this.state, worldCheckIndividuals.state) &&
-        Objects.equals(this.postalCode, worldCheckIndividuals.postalCode) &&
-        Objects.equals(this.addressCountry, worldCheckIndividuals.addressCountry) &&
-        Objects.equals(this.residencyCountry, worldCheckIndividuals.residencyCountry) &&
-        Objects.equals(this.countryOfBirth, worldCheckIndividuals.countryOfBirth) &&
-        Objects.equals(this.nationalities, worldCheckIndividuals.nationalities) &&
-        Objects.equals(this.countryCodesAll, worldCheckIndividuals.countryCodesAll) &&
-        Objects.equals(this.countriesAll, worldCheckIndividuals.countriesAll) &&
-        Objects.equals(this.profileHyperlink, worldCheckIndividuals.profileHyperlink) &&
-        Objects.equals(this.searchHyperlink, worldCheckIndividuals.searchHyperlink) &&
-        Objects.equals(this.linkedProfiles, worldCheckIndividuals.linkedProfiles) &&
-        Objects.equals(this.linkedRelationships, worldCheckIndividuals.linkedRelationships) &&
-        Objects.equals(this.riskScore, worldCheckIndividuals.riskScore) &&
-        Objects.equals(this.pEPRiskScore, worldCheckIndividuals.pEPRiskScore) &&
-        Objects.equals(this.dataConfidenceScore, worldCheckIndividuals.dataConfidenceScore) &&
-        Objects.equals(this.dataConfidenceComment, worldCheckIndividuals.dataConfidenceComment) &&
-        Objects.equals(this.inactiveFlag, worldCheckIndividuals.inactiveFlag) &&
-        Objects.equals(this.inactiveSinceDate, worldCheckIndividuals.inactiveSinceDate) &&
-        Objects.equals(this.pEPClassification, worldCheckIndividuals.pEPClassification) &&
-        Objects.equals(this.category, worldCheckIndividuals.category) &&
-        Objects.equals(this.externalSources, worldCheckIndividuals.externalSources) &&
-        Objects.equals(this.linkedTo, worldCheckIndividuals.linkedTo) &&
-        Objects.equals(this.companies, worldCheckIndividuals.companies) &&
-        Objects.equals(this.dateOfBirthOriginal, worldCheckIndividuals.dateOfBirthOriginal) &&
-        Objects.equals(this.yearOfBirthApproximated, worldCheckIndividuals.yearOfBirthApproximated) &&
-        Objects.equals(this.placeOfBirthOriginal, worldCheckIndividuals.placeOfBirthOriginal) &&
-        Objects.equals(this.furtherInformation, worldCheckIndividuals.furtherInformation) &&
-        Objects.equals(this.countriesOriginal, worldCheckIndividuals.countriesOriginal) &&
-        Objects.equals(this.socialSecurityNumber, worldCheckIndividuals.socialSecurityNumber) &&
-        Objects.equals(this.passportCountry, worldCheckIndividuals.passportCountry) &&
-        Objects.equals(this.subCategoryDescription, worldCheckIndividuals.subCategoryDescription) &&
-        Objects.equals(this.updateCategory, worldCheckIndividuals.updateCategory) &&
-        Objects.equals(this.nativeAliasLanguageName, worldCheckIndividuals.nativeAliasLanguageName) &&
-        Objects.equals(this.nativeAliasLanguageCountry, worldCheckIndividuals.nativeAliasLanguageCountry) &&
-        Objects.equals(this.cachedExternalSources, worldCheckIndividuals.cachedExternalSources) &&
-        Objects.equals(this.addedDate, worldCheckIndividuals.addedDate) &&
-        Objects.equals(this.lastUpdatedDate, worldCheckIndividuals.lastUpdatedDate) &&
-        Objects.equals(this.edqOWSWatchlistName, worldCheckIndividuals.edqOWSWatchlistName) &&
-        Objects.equals(this.dOBs, worldCheckIndividuals.dOBs) &&
-        Objects.equals(this.iDNumbers, worldCheckIndividuals.iDNumbers) &&
-        Objects.equals(this.recordType, worldCheckIndividuals.recordType) &&
-        Objects.equals(this.dummy, worldCheckIndividuals.dummy);
+    return Objects.equals(caseId, worldCheckIndividuals.caseId) &&
+        Objects.equals(recordId, worldCheckIndividuals.recordId) &&
+        Objects.equals(inputStream, worldCheckIndividuals.inputStream) &&
+        Objects.equals(listKey, worldCheckIndividuals.listKey) &&
+        Objects.equals(listSubKey, worldCheckIndividuals.listSubKey) &&
+        Objects.equals(listRecordType, worldCheckIndividuals.listRecordType) &&
+        Objects.equals(listRecordOrigin, worldCheckIndividuals.listRecordOrigin) &&
+        Objects.equals(listRecordId, worldCheckIndividuals.listRecordId) &&
+        Objects.equals(listRecordSubId, worldCheckIndividuals.listRecordSubId) &&
+        Objects.equals(passportNumber, worldCheckIndividuals.passportNumber) &&
+        Objects.equals(nationalId, worldCheckIndividuals.nationalId) &&
+        Objects.equals(title, worldCheckIndividuals.title) &&
+        Objects.equals(fullNameOriginal, worldCheckIndividuals.fullNameOriginal) &&
+        Objects.equals(givenNamesOriginal, worldCheckIndividuals.givenNamesOriginal) &&
+        Objects.equals(familyNameOriginal, worldCheckIndividuals.familyNameOriginal) &&
+        Objects.equals(fullNameDerived, worldCheckIndividuals.fullNameDerived) &&
+        Objects.equals(givenNamesDerived, worldCheckIndividuals.givenNamesDerived) &&
+        Objects.equals(familyNameDerived, worldCheckIndividuals.familyNameDerived) &&
+        Objects.equals(nameType, worldCheckIndividuals.nameType) &&
+        Objects.equals(nameQuality, worldCheckIndividuals.nameQuality) &&
+        Objects.equals(primaryName, worldCheckIndividuals.primaryName) &&
+        Objects.equals(originalScriptName, worldCheckIndividuals.originalScriptName) &&
+        Objects.equals(gender, worldCheckIndividuals.gender) &&
+        Objects.equals(genderDerivedFlag, worldCheckIndividuals.genderDerivedFlag) &&
+        Objects.equals(dateOfBirth, worldCheckIndividuals.dateOfBirth) &&
+        Objects.equals(yearOfBirth, worldCheckIndividuals.yearOfBirth) &&
+        Objects.equals(deceasedFlag, worldCheckIndividuals.deceasedFlag) &&
+        Objects.equals(deceasedDate, worldCheckIndividuals.deceasedDate) &&
+        Objects.equals(occupation, worldCheckIndividuals.occupation) &&
+        Objects.equals(address, worldCheckIndividuals.address) &&
+        Objects.equals(city, worldCheckIndividuals.city) &&
+        Objects.equals(state, worldCheckIndividuals.state) &&
+        Objects.equals(postalCode, worldCheckIndividuals.postalCode) &&
+        Objects.equals(addressCountry, worldCheckIndividuals.addressCountry) &&
+        Objects.equals(residencyCountry, worldCheckIndividuals.residencyCountry) &&
+        Objects.equals(countryOfBirth, worldCheckIndividuals.countryOfBirth) &&
+        Objects.equals(nationalities, worldCheckIndividuals.nationalities) &&
+        Objects.equals(countryCodesAll, worldCheckIndividuals.countryCodesAll) &&
+        Objects.equals(countriesAll, worldCheckIndividuals.countriesAll) &&
+        Objects.equals(profileHyperlink, worldCheckIndividuals.profileHyperlink) &&
+        Objects.equals(searchHyperlink, worldCheckIndividuals.searchHyperlink) &&
+        Objects.equals(linkedProfiles, worldCheckIndividuals.linkedProfiles) &&
+        Objects.equals(linkedRelationships, worldCheckIndividuals.linkedRelationships) &&
+        Objects.equals(riskScore, worldCheckIndividuals.riskScore) &&
+        Objects.equals(pepRiskScore, worldCheckIndividuals.pepRiskScore) &&
+        Objects.equals(dataConfidenceScore, worldCheckIndividuals.dataConfidenceScore) &&
+        Objects.equals(dataConfidenceComment, worldCheckIndividuals.dataConfidenceComment) &&
+        Objects.equals(inactiveFlag, worldCheckIndividuals.inactiveFlag) &&
+        Objects.equals(inactiveSinceDate, worldCheckIndividuals.inactiveSinceDate) &&
+        Objects.equals(pepClassification, worldCheckIndividuals.pepClassification) &&
+        Objects.equals(category, worldCheckIndividuals.category) &&
+        Objects.equals(externalSources, worldCheckIndividuals.externalSources) &&
+        Objects.equals(linkedTo, worldCheckIndividuals.linkedTo) &&
+        Objects.equals(companies, worldCheckIndividuals.companies) &&
+        Objects.equals(dateOfBirthOriginal, worldCheckIndividuals.dateOfBirthOriginal) &&
+        Objects.equals(yearOfBirthApproximated, worldCheckIndividuals.yearOfBirthApproximated) &&
+        Objects.equals(placeOfBirthOriginal, worldCheckIndividuals.placeOfBirthOriginal) &&
+        Objects.equals(furtherInformation, worldCheckIndividuals.furtherInformation) &&
+        Objects.equals(countriesOriginal, worldCheckIndividuals.countriesOriginal) &&
+        Objects.equals(socialSecurityNumber, worldCheckIndividuals.socialSecurityNumber) &&
+        Objects.equals(passportCountry, worldCheckIndividuals.passportCountry) &&
+        Objects.equals(subCategoryDescription, worldCheckIndividuals.subCategoryDescription) &&
+        Objects.equals(updateCategory, worldCheckIndividuals.updateCategory) &&
+        Objects.equals(nativeAliasLanguageName, worldCheckIndividuals.nativeAliasLanguageName) &&
+        Objects.equals(nativeAliasLanguageCountry, worldCheckIndividuals.nativeAliasLanguageCountry)
+        &&
+        Objects.equals(cachedExternalSources, worldCheckIndividuals.cachedExternalSources) &&
+        Objects.equals(addedDate, worldCheckIndividuals.addedDate) &&
+        Objects.equals(lastUpdatedDate, worldCheckIndividuals.lastUpdatedDate) &&
+        Objects.equals(edqOwsWatchlistName, worldCheckIndividuals.edqOwsWatchlistName) &&
+        Objects.equals(dobs, worldCheckIndividuals.dobs) &&
+        Objects.equals(idNumbers, worldCheckIndividuals.idNumbers) &&
+        Objects.equals(recordType, worldCheckIndividuals.recordType) &&
+        Objects.equals(dummy, worldCheckIndividuals.dummy);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(caseId, recordID, inputStream, listKey, listSubKey, listRecordType, listRecordOrigin, listRecordID, listRecordSubID, passportNumber, nationalId, title, fullNameOriginal, givenNamesOriginal, familyNameOriginal, fullNameDerived, givenNamesDerived, familyNameDerived, nameType, nameQuality, primaryName, originalScriptName, gender, genderDerivedFlag, dateOfBirth, yearOfBirth, deceasedFlag, deceasedDate, occupation, address, city, state, postalCode, addressCountry, residencyCountry, countryOfBirth, nationalities, countryCodesAll, countriesAll, profileHyperlink, searchHyperlink, linkedProfiles, linkedRelationships, riskScore, pEPRiskScore, dataConfidenceScore, dataConfidenceComment, inactiveFlag, inactiveSinceDate, pEPClassification, category, externalSources, linkedTo, companies, dateOfBirthOriginal, yearOfBirthApproximated, placeOfBirthOriginal, furtherInformation, countriesOriginal, socialSecurityNumber, passportCountry, subCategoryDescription, updateCategory, nativeAliasLanguageName, nativeAliasLanguageCountry, cachedExternalSources, addedDate, lastUpdatedDate, edqOWSWatchlistName, dOBs, iDNumbers, recordType, dummy);
+    return Objects.hash(
+        caseId, recordId, inputStream, listKey, listSubKey, listRecordType, listRecordOrigin,
+        listRecordId, listRecordSubId, passportNumber, nationalId, title, fullNameOriginal,
+        givenNamesOriginal, familyNameOriginal, fullNameDerived, givenNamesDerived,
+        familyNameDerived, nameType, nameQuality, primaryName, originalScriptName, gender,
+        genderDerivedFlag, dateOfBirth, yearOfBirth, deceasedFlag, deceasedDate, occupation,
+        address, city, state, postalCode, addressCountry, residencyCountry, countryOfBirth,
+        nationalities, countryCodesAll, countriesAll, profileHyperlink, searchHyperlink,
+        linkedProfiles, linkedRelationships, riskScore, pepRiskScore, dataConfidenceScore,
+        dataConfidenceComment, inactiveFlag, inactiveSinceDate, pepClassification, category,
+        externalSources, linkedTo, companies, dateOfBirthOriginal, yearOfBirthApproximated,
+        placeOfBirthOriginal, furtherInformation, countriesOriginal, socialSecurityNumber,
+        passportCountry, subCategoryDescription, updateCategory, nativeAliasLanguageName,
+        nativeAliasLanguageCountry, cachedExternalSources, addedDate, lastUpdatedDate,
+        edqOwsWatchlistName, dobs, idNumbers, recordType, dummy);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class WorldCheckIndividuals {\n");
-    
+
     sb.append("    caseId: ").append(toIndentedString(caseId)).append("\n");
-    sb.append("    recordID: ").append(toIndentedString(recordID)).append("\n");
+    sb.append("    recordId: ").append(toIndentedString(recordId)).append("\n");
     sb.append("    inputStream: ").append(toIndentedString(inputStream)).append("\n");
     sb.append("    listKey: ").append(toIndentedString(listKey)).append("\n");
     sb.append("    listSubKey: ").append(toIndentedString(listSubKey)).append("\n");
     sb.append("    listRecordType: ").append(toIndentedString(listRecordType)).append("\n");
     sb.append("    listRecordOrigin: ").append(toIndentedString(listRecordOrigin)).append("\n");
-    sb.append("    listRecordID: ").append(toIndentedString(listRecordID)).append("\n");
-    sb.append("    listRecordSubID: ").append(toIndentedString(listRecordSubID)).append("\n");
+    sb.append("    listRecordId: ").append(toIndentedString(listRecordId)).append("\n");
+    sb.append("    listRecordSubId: ").append(toIndentedString(listRecordSubId)).append("\n");
     sb.append("    passportNumber: ").append(toIndentedString(passportNumber)).append("\n");
     sb.append("    nationalId: ").append(toIndentedString(nationalId)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
@@ -1762,35 +1264,71 @@ public class WorldCheckIndividuals   {
     sb.append("    profileHyperlink: ").append(toIndentedString(profileHyperlink)).append("\n");
     sb.append("    searchHyperlink: ").append(toIndentedString(searchHyperlink)).append("\n");
     sb.append("    linkedProfiles: ").append(toIndentedString(linkedProfiles)).append("\n");
-    sb.append("    linkedRelationships: ").append(toIndentedString(linkedRelationships)).append("\n");
+    sb
+        .append("    linkedRelationships: ")
+        .append(toIndentedString(linkedRelationships))
+        .append("\n");
     sb.append("    riskScore: ").append(toIndentedString(riskScore)).append("\n");
-    sb.append("    pEPRiskScore: ").append(toIndentedString(pEPRiskScore)).append("\n");
-    sb.append("    dataConfidenceScore: ").append(toIndentedString(dataConfidenceScore)).append("\n");
-    sb.append("    dataConfidenceComment: ").append(toIndentedString(dataConfidenceComment)).append("\n");
+    sb.append("    pepRiskScore: ").append(toIndentedString(pepRiskScore)).append("\n");
+    sb
+        .append("    dataConfidenceScore: ")
+        .append(toIndentedString(dataConfidenceScore))
+        .append("\n");
+    sb
+        .append("    dataConfidenceComment: ")
+        .append(toIndentedString(dataConfidenceComment))
+        .append("\n");
     sb.append("    inactiveFlag: ").append(toIndentedString(inactiveFlag)).append("\n");
     sb.append("    inactiveSinceDate: ").append(toIndentedString(inactiveSinceDate)).append("\n");
-    sb.append("    pEPClassification: ").append(toIndentedString(pEPClassification)).append("\n");
+    sb.append("    pepClassification: ").append(toIndentedString(pepClassification)).append("\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    externalSources: ").append(toIndentedString(externalSources)).append("\n");
     sb.append("    linkedTo: ").append(toIndentedString(linkedTo)).append("\n");
     sb.append("    companies: ").append(toIndentedString(companies)).append("\n");
-    sb.append("    dateOfBirthOriginal: ").append(toIndentedString(dateOfBirthOriginal)).append("\n");
-    sb.append("    yearOfBirthApproximated: ").append(toIndentedString(yearOfBirthApproximated)).append("\n");
-    sb.append("    placeOfBirthOriginal: ").append(toIndentedString(placeOfBirthOriginal)).append("\n");
+    sb
+        .append("    dateOfBirthOriginal: ")
+        .append(toIndentedString(dateOfBirthOriginal))
+        .append("\n");
+    sb
+        .append("    yearOfBirthApproximated: ")
+        .append(toIndentedString(yearOfBirthApproximated))
+        .append("\n");
+    sb
+        .append("    placeOfBirthOriginal: ")
+        .append(toIndentedString(placeOfBirthOriginal))
+        .append("\n");
     sb.append("    furtherInformation: ").append(toIndentedString(furtherInformation)).append("\n");
     sb.append("    countriesOriginal: ").append(toIndentedString(countriesOriginal)).append("\n");
-    sb.append("    socialSecurityNumber: ").append(toIndentedString(socialSecurityNumber)).append("\n");
+    sb
+        .append("    socialSecurityNumber: ")
+        .append(toIndentedString(socialSecurityNumber))
+        .append("\n");
     sb.append("    passportCountry: ").append(toIndentedString(passportCountry)).append("\n");
-    sb.append("    subCategoryDescription: ").append(toIndentedString(subCategoryDescription)).append("\n");
+    sb
+        .append("    subCategoryDescription: ")
+        .append(toIndentedString(subCategoryDescription))
+        .append("\n");
     sb.append("    updateCategory: ").append(toIndentedString(updateCategory)).append("\n");
-    sb.append("    nativeAliasLanguageName: ").append(toIndentedString(nativeAliasLanguageName)).append("\n");
-    sb.append("    nativeAliasLanguageCountry: ").append(toIndentedString(nativeAliasLanguageCountry)).append("\n");
-    sb.append("    cachedExternalSources: ").append(toIndentedString(cachedExternalSources)).append("\n");
+    sb
+        .append("    nativeAliasLanguageName: ")
+        .append(toIndentedString(nativeAliasLanguageName))
+        .append("\n");
+    sb
+        .append("    nativeAliasLanguageCountry: ")
+        .append(toIndentedString(nativeAliasLanguageCountry))
+        .append("\n");
+    sb
+        .append("    cachedExternalSources: ")
+        .append(toIndentedString(cachedExternalSources))
+        .append("\n");
     sb.append("    addedDate: ").append(toIndentedString(addedDate)).append("\n");
     sb.append("    lastUpdatedDate: ").append(toIndentedString(lastUpdatedDate)).append("\n");
-    sb.append("    edqOWSWatchlistName: ").append(toIndentedString(edqOWSWatchlistName)).append("\n");
-    sb.append("    dOBs: ").append(toIndentedString(dOBs)).append("\n");
-    sb.append("    iDNumbers: ").append(toIndentedString(iDNumbers)).append("\n");
+    sb
+        .append("    edqOwsWatchlistName: ")
+        .append(toIndentedString(edqOwsWatchlistName))
+        .append("\n");
+    sb.append("    dobs: ").append(toIndentedString(dobs)).append("\n");
+    sb.append("    idNumbers: ").append(toIndentedString(idNumbers)).append("\n");
     sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
     sb.append("    dummy: ").append(toIndentedString(dummy)).append("\n");
     sb.append("}");
@@ -1798,8 +1336,8 @@ public class WorldCheckIndividuals   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {

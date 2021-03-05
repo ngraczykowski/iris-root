@@ -692,9 +692,6 @@
             defs["Alert"] = {
   "type" : "object",
   "properties" : {
-    "userInformation" : {
-      "$ref" : "#/components/schemas/Alert_userInformation"
-    },
     "systemInformation" : {
       "$ref" : "#/components/schemas/Alert_systemInformation"
     }
@@ -703,65 +700,89 @@
             defs["Alert_systemInformation"] = {
   "type" : "object",
   "properties" : {
-    "countryCTRPScreeningIndividuals" : {
-      "$ref" : "#/components/schemas/countryCTRPScreeningIndividuals"
+    "countryCtrpScreeningIndividuals" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CountryCtrpScreeningIndividuals"
+      }
     },
     "customerEntities" : {
-      "$ref" : "#/components/schemas/customerEntities"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CustomerEntities"
+      }
     },
     "worldCheckEntities" : {
-      "$ref" : "#/components/schemas/worldCheckEntities"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/WorldCheckEntities"
+      }
     },
     "customerIndividuals" : {
-      "$ref" : "#/components/schemas/customerIndividuals"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CustomerIndividuals"
+      }
     },
     "worldCheckIndividuals" : {
-      "$ref" : "#/components/schemas/worldCheckIndividuals"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/WorldCheckIndividuals"
+      }
     },
     "caseComments" : {
-      "$ref" : "#/components/schemas/caseComments"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CaseComments"
+      }
     },
     "relationships" : {
-      "$ref" : "#/components/schemas/relationships"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Relationships"
+      }
     },
     "privateListIndividuals" : {
-      "$ref" : "#/components/schemas/privateListIndividuals"
-    },
-    "caseAttachments" : {
-      "$ref" : "#/components/schemas/caseAttachments"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/PrivateListIndividuals"
+      }
     },
     "privateListEntities" : {
-      "$ref" : "#/components/schemas/privateListEntities"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/PrivateListEntities"
+      }
     },
     "caseHistory" : {
-      "$ref" : "#/components/schemas/caseHistory"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CaseHistory"
+      }
     },
-    "countryCTRPScreeningEntities" : {
-      "$ref" : "#/components/schemas/countryCTRPScreeningEntities"
+    "countryCtrpScreeningEntities" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CountryCtrpScreeningEntities"
+      }
     },
     "casesWithAlertURL" : {
-      "$ref" : "#/components/schemas/casesWithAlertURL"
-    }
-  }
-};
-            defs["Alert_userInformation"] = {
-  "type" : "object",
-  "properties" : {
-    "usersByGroup" : {
-      "$ref" : "#/components/schemas/usersByGroup"
-    },
-    "deletedusers" : {
-      "$ref" : "#/components/schemas/deletedusers"
-    },
-    "users" : {
-      "$ref" : "#/components/schemas/users"
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/CasesWithAlertURL"
+      }
     }
   }
 };
             defs["Alerts"] = {
-  "type" : "array",
-  "items" : {
-    "$ref" : "#/components/schemas/Alert"
+  "type" : "object",
+  "properties" : {
+    "alerts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Alert"
+      }
+    }
   }
 };
             defs["BulkAcceptedResponse"] = {
@@ -786,16 +807,12 @@
       "type" : "integer"
     },
     "status" : {
-      "$ref" : "#/components/schemas/BulkAlertStatus"
+      "$ref" : "#/components/schemas/BulkStatus"
     },
     "errorMessage" : {
       "type" : "string"
     }
   }
-};
-            defs["BulkAlertStatus"] = {
-  "type" : "string",
-  "enum" : [ "STORED", "ERROR", "PROCESSING", "COMPLETED" ]
 };
             defs["BulkCancelResponse"] = {
   "type" : "object",
@@ -812,6 +829,13 @@
             defs["BulkSolvedAlertsResponse"] = {
   "type" : "object",
   "properties" : {
+    "bulkId" : {
+      "type" : "string",
+      "format" : "uuid"
+    },
+    "bulkStatus" : {
+      "$ref" : "#/components/schemas/BulkStatus"
+    },
     "alerts" : {
       "type" : "array",
       "items" : {
@@ -822,7 +846,7 @@
 };
             defs["BulkStatus"] = {
   "type" : "string",
-  "enum" : [ "PROCESSING", "ERROR", "COMPLETED", "CANCEL" ]
+  "enum" : [ "PROCESSING", "ERROR", "COMPLETED", "CANCELLED", "STORED" ]
 };
             defs["BulkStatusResponse"] = {
   "type" : "object",
@@ -842,52 +866,7 @@
     }
   }
 };
-            defs["caseAttachments"] = {
-  "type" : "object",
-  "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
-    },
-    "attachmentId" : {
-      "type" : "integer",
-      "description" : "Unique identifier added the attachment"
-    },
-    "attachmentBy" : {
-      "type" : "integer",
-      "description" : "Which User added the attachment"
-    },
-    "attachmentDateTime" : {
-      "type" : "string",
-      "description" : "Date and time the attachment was added"
-    },
-    "attachmentName" : {
-      "type" : "string",
-      "description" : "Name of the attachment."
-    },
-    "sourceName" : {
-      "type" : "string",
-      "description" : "Indicate the case source the attachment relates to. This will always be Sentry."
-    },
-    "description" : {
-      "type" : "string",
-      "description" : "The descriotion given to the attachment by the end user"
-    },
-    "mimeType" : {
-      "type" : "string",
-      "description" : "Displays the source where the attachment originated"
-    },
-    "deletedFlag" : {
-      "type" : "integer",
-      "description" : "Marks if the attachment has been deleted"
-    },
-    "restrictingPermission" : {
-      "type" : "string",
-      "description" : "Will display if access to the attachment has been restricted, for example, Level 3 Only. If the attachment has not been restricted, this field will be displayed as blank."
-    }
-  }
-};
-            defs["caseComments"] = {
+            defs["CaseComments"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -920,10 +899,10 @@
     }
   }
 };
-            defs["caseHistory"] = {
+            defs["CaseHistory"] = {
   "type" : "object",
   "properties" : {
-    "caseID" : {
+    "caseId" : {
       "type" : "integer",
       "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
     },
@@ -953,10 +932,10 @@
     }
   }
 };
-            defs["casesWithAlertURL"] = {
+            defs["CasesWithAlertURL"] = {
   "type" : "object",
   "properties" : {
-    "iD" : {
+    "id" : {
       "type" : "integer",
       "description" : "Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link to other tables."
     },
@@ -968,7 +947,7 @@
       "type" : "string",
       "description" : "Denotes if this is a Case (\"Case\") or an Alert (\"Issue\")"
     },
-    "externalID" : {
+    "externalId" : {
       "type" : "string",
       "description" : "A unique ID of the alerts as it appears in Case Management."
     },
@@ -984,7 +963,7 @@
       "type" : "string",
       "description" : "A Unique Identifier for the Case or Alert, composed of \"Customer ID&#58; Watchlist Alert Generated Against&#58; Watch Person ID\""
     },
-    "parentID" : {
+    "parentId" : {
       "type" : "integer",
       "description" : "ID number for the parent Case of the Alert. If viewing at Case Level; the field will display \"-1\""
     },
@@ -1140,13 +1119,13 @@
       "type" : "integer",
       "description" : "SLA Flag, a marker to define when an alert was created, closed or re-opened"
     },
-    "alertURL" : {
+    "alertUrl" : {
       "type" : "string",
       "description" : "URL, which take you directly to the system where this alert resides and open the alert."
     }
   }
 };
-            defs["countryCTRPScreeningEntities"] = {
+            defs["CountryCtrpScreeningEntities"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -1177,35 +1156,35 @@
       "type" : "string",
       "description" : "This list one of three match types&#58; Trading, Registration or Operation."
     },
-    "oWSWatchlistName" : {
+    "owsWatchlistName" : {
       "type" : "string",
       "description" : "This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Entities this will always be ESSC."
     },
-    "pRBListType" : {
+    "prbListType" : {
       "type" : "string",
       "description" : "This is the type of match that has been found it is parent group of OWS Watchlist Name, currently it will always be SSC"
     },
-    "cTRPValue" : {
+    "ctrpValue" : {
       "type" : "string",
       "description" : "List the specific CTRP value that triggered the alert. For example if this is Havana, Country Name will be CUBA"
     },
-    "cTRPLevel" : {
+    "ctrpLevel" : {
       "type" : "integer",
       "description" : "Type of CTRP Record e.g. 1 =Country, 2=Postcode"
     },
-    "cTRPCommonality" : {
+    "ctrpCommonality" : {
       "type" : "integer",
       "description" : "The number of countries in the world that feature a place of this name"
     },
-    "cTRPSource" : {
+    "ctrpSource" : {
       "type" : "integer",
       "description" : "This provides a description of the CTRP Source element."
     },
-    "cTRPNameType" : {
+    "ctrpNameType" : {
       "type" : "string",
       "description" : "describes the CTRP type that matched"
     },
-    "cTRPRuleNarrative" : {
+    "ctrpRuleNarrative" : {
       "type" : "string",
       "description" : "Provides a description of what the rule was raised against"
     },
@@ -1215,7 +1194,7 @@
     }
   }
 };
-            defs["countryCTRPScreeningIndividuals"] = {
+            defs["CountryCtrpScreeningIndividuals"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -1246,35 +1225,35 @@
       "type" : "string",
       "description" : "This list one of three match types&#58; Nationality or Residency"
     },
-    "oWSWatchlistName" : {
+    "owsWatchlistName" : {
       "type" : "string",
       "description" : "This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Individuals this will always be ISSC."
     },
-    "pRBListType" : {
+    "prbListType" : {
       "type" : "string",
       "description" : "This is the type of match that has been found it is parent group of OWS Watchlist Name, currently it will always be SSC"
     },
-    "cTRPValue" : {
+    "ctrpValue" : {
       "type" : "string",
       "description" : "List the specific CTRP value that triggered the alert. For example if this is Havana, Country Name will be CUBA"
     },
-    "cTRPLevel" : {
+    "ctrpLevel" : {
       "type" : "integer",
       "description" : "Type of CTRP Record e.g. 1 =Country, 2=Postcode"
     },
-    "cTRPCommonality" : {
+    "ctrpCommonality" : {
       "type" : "integer",
       "description" : "The number of countries in the world that feature a place of this name"
     },
-    "cTRPSource" : {
+    "ctrpSource" : {
       "type" : "integer",
       "description" : "This provides a description of the CTRP Source element."
     },
-    "cTRPNameType" : {
+    "ctrpNameType" : {
       "type" : "string",
       "description" : "describes the CTRP type that matched"
     },
-    "cTRPRuleNarrative" : {
+    "ctrpRuleNarrative" : {
       "type" : "string",
       "description" : "Provides a description of what the rule was raised against"
     },
@@ -1284,7 +1263,7 @@
     }
   }
 };
-            defs["customerEntities"] = {
+            defs["CustomerEntities"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -1299,7 +1278,7 @@
       "type" : "string",
       "description" : "Denotes the type of data, for example&#58; Customer Data"
     },
-    "sourceSystemHistoryID" : {
+    "sourceSystemHistoryId" : {
       "type" : "integer",
       "description" : "Identifier used during reconciliation to store customer information"
     },
@@ -1315,11 +1294,11 @@
       "type" : "string",
       "description" : "The Identifier used to identify where the feed originated from"
     },
-    "externalProfileID" : {
+    "externalProfileId" : {
       "type" : "string",
       "description" : "Customer ID from source system"
     },
-    "concatenatedProfileID" : {
+    "concatenatedProfileId" : {
       "type" : "string",
       "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique."
     },
@@ -1339,19 +1318,19 @@
       "type" : "string",
       "description" : "Line of Business customer segment."
     },
-    "lOBName" : {
+    "lobName" : {
       "type" : "string",
       "description" : "Line of Business name"
     },
-    "lOBRegion" : {
+    "lobRegion" : {
       "type" : "string",
       "description" : "Line of Business region"
     },
-    "lOBCountry" : {
+    "lobCountry" : {
       "type" : "string",
       "description" : "Line of Business Country Code"
     },
-    "hSBCLegalEntityCode" : {
+    "hsbcLegalEntityCode" : {
       "type" : "string",
       "description" : "HSBC legal entity code"
     },
@@ -1371,7 +1350,7 @@
       "type" : "string",
       "description" : "The Entity name as originally provided"
     },
-    "pEPIndicator" : {
+    "pepIndicator" : {
       "type" : "string",
       "description" : "Indicates if the record is regarded as a PEP or not in the source system"
     },
@@ -1511,15 +1490,15 @@
       "type" : "string",
       "description" : "List of countries where the customer has a head office"
     },
-    "edqCustID" : {
+    "edqCustId" : {
       "type" : "string",
       "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique"
     },
-    "edqCustSubID" : {
+    "edqCustSubId" : {
       "type" : "string",
       "description" : "Customer ID from the source system"
     },
-    "edqLoBCountryCode" : {
+    "edqLobCountryCode" : {
       "type" : "string",
       "description" : "The ISO country code the the Line of Business this record is associated to"
     },
@@ -1575,7 +1554,7 @@
       "type" : "string",
       "description" : "A standardised list of all country names in ISO 2 character code format associated to the customer record."
     },
-    "edqLoB" : {
+    "edqLob" : {
       "type" : "string",
       "description" : "The standardised Line of Business name"
     },
@@ -1583,7 +1562,7 @@
       "type" : "string",
       "description" : "Record permission allows user visibility depending on permissions granted"
     },
-    "taxID" : {
+    "taxId" : {
       "type" : "string",
       "description" : "Derived TAX ID"
     },
@@ -1671,11 +1650,11 @@
       "type" : "string",
       "description" : "The standardise address type value"
     },
-    "sSCCodes" : {
+    "sscCodes" : {
       "type" : "string",
       "description" : "For development use only"
     },
-    "cTRPFragment" : {
+    "ctrpFragment" : {
       "type" : "string",
       "description" : "For development use only"
     },
@@ -1689,7 +1668,7 @@
     }
   }
 };
-            defs["customerIndividuals"] = {
+            defs["CustomerIndividuals"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -1704,7 +1683,7 @@
       "type" : "string",
       "description" : "Denotes the type of data, for example&#58; Customer Data"
     },
-    "sourceSystemHistoryID" : {
+    "sourceSystemHistoryId" : {
       "type" : "number",
       "description" : "Identifier used during reconciliation to store customer information"
     },
@@ -1720,11 +1699,11 @@
       "type" : "number",
       "description" : "The Identifier used to identify where the feed originated from"
     },
-    "externalProfileID" : {
+    "externalProfileId" : {
       "type" : "string",
       "description" : "Customer ID from source system"
     },
-    "concatenatedProfileID" : {
+    "concatenatedProfileId" : {
       "type" : "string",
       "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique."
     },
@@ -1744,19 +1723,19 @@
       "type" : "string",
       "description" : "Line of Business customer segment."
     },
-    "loBName" : {
+    "lobName" : {
       "type" : "string",
       "description" : "Line of Business name"
     },
-    "loBRegion" : {
+    "lobRegion" : {
       "type" : "string",
       "description" : "Line of Business region"
     },
-    "loBCountry" : {
+    "lobCountry" : {
       "type" : "string",
       "description" : "Line of Business Country Code"
     },
-    "hSBCLegalEntityCode" : {
+    "hsbcLegalEntityCode" : {
       "type" : "string",
       "description" : "HSBC legal entity code"
     },
@@ -1792,7 +1771,7 @@
       "type" : "string",
       "description" : "Original Unstructured Name"
     },
-    "pEPIndicator" : {
+    "pepIndicator" : {
       "type" : "string",
       "description" : "Indicates if the record is regarded as a PEP or not in the source system"
     },
@@ -1816,7 +1795,7 @@
       "type" : "string",
       "description" : "Original Town Of Birth"
     },
-    "state,ProvinceOrCountyOfBirth" : {
+    "stateProvinceOrCountyOfBirth" : {
       "type" : "string",
       "description" : "Original State, Province or County of Birth"
     },
@@ -1980,11 +1959,11 @@
       "type" : "string",
       "description" : "Customer Employer 3 Address 3"
     },
-    "edqCustID" : {
+    "edqCustId" : {
       "type" : "string",
       "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique"
     },
-    "edqCustSubID" : {
+    "edqCustSubId" : {
       "type" : "string",
       "description" : "Customer ID from the source system"
     },
@@ -2008,7 +1987,7 @@
       "type" : "string",
       "description" : "Customer Initials"
     },
-    "edqLoBCountryCode" : {
+    "edqLobCountryCode" : {
       "type" : "string",
       "description" : "The ISO country code the the Line of Business this record is associated to"
     },
@@ -2060,7 +2039,7 @@
       "type" : "string",
       "description" : "A standardised list of all employer country names in ISO 2 character code format associated to the customer record."
     },
-    "edqLoB" : {
+    "edqLob" : {
       "type" : "string",
       "description" : "The standardised Line of Business name"
     },
@@ -2068,7 +2047,7 @@
       "type" : "string",
       "description" : "For development use only"
     },
-    "taxID" : {
+    "taxId" : {
       "type" : "string",
       "description" : "Derived TAX ID"
     },
@@ -2076,11 +2055,11 @@
       "type" : "string",
       "description" : "Standardised Date Of Birth"
     },
-    "dOBOriginal" : {
+    "dobOriginal" : {
       "type" : "string",
       "description" : "Original Date Of Birth"
     },
-    "edqDOBString" : {
+    "edqDobString" : {
       "type" : "string",
       "description" : "Standardised Date Of Birth in alternate format"
     },
@@ -2188,11 +2167,11 @@
       "type" : "string",
       "description" : "The standardise address type value"
     },
-    "sSCCodes" : {
+    "sscCodes" : {
       "type" : "string",
       "description" : "For development use only"
     },
-    "cTRPFragment" : {
+    "ctrpFragment" : {
       "type" : "string",
       "description" : "For development use only"
     },
@@ -2218,28 +2197,7 @@
     }
   }
 };
-            defs["deletedusers"] = {
-  "type" : "object",
-  "properties" : {
-    "userid" : {
-      "type" : "integer",
-      "description" : "Unique ID of the user"
-    },
-    "username" : {
-      "type" : "string",
-      "description" : "The users username"
-    },
-    "display" : {
-      "type" : "string",
-      "description" : "The name that will be used to display the user against their activities once the end user has been deleted from the solution."
-    },
-    "fullname" : {
-      "type" : "string",
-      "description" : "Users full name"
-    }
-  }
-};
-            defs["privateListEntities"] = {
+            defs["PrivateListEntities"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -2374,7 +2332,7 @@
       "type" : "number",
       "description" : "Private List assigned risk score"
     },
-    "pEPRiskScore" : {
+    "pepRiskScore" : {
       "type" : "number",
       "description" : "Private List assigned PEP risk score"
     },
@@ -2394,7 +2352,7 @@
       "type" : "string",
       "description" : "Date since the record was marked inactive"
     },
-    "pEPClassification" : {
+    "pepClassification" : {
       "type" : "string",
       "description" : "Type of PEP, for example&#58; Local Counsellor"
     },
@@ -2438,7 +2396,7 @@
       "type" : "string",
       "description" : "Email address"
     },
-    "sCIONReferenceNumber" : {
+    "scionReferenceNumber" : {
       "type" : "string",
       "description" : "SCION Reference Number"
     },
@@ -2462,11 +2420,11 @@
       "type" : "string",
       "description" : "Date of incorporation from a date format attribute"
     },
-    "edqDataOfIncorporationSTRING" : {
+    "edqDataOfIncorporationString" : {
       "type" : "string",
       "description" : "Date of Incorporation from a string format attribute"
     },
-    "externalCustomerID" : {
+    "externalCustomerId" : {
       "type" : "string",
       "description" : "Customer ID the record relates to"
     },
@@ -2500,14 +2458,14 @@
     }
   }
 };
-            defs["privateListIndividuals"] = {
+            defs["PrivateListIndividuals"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
       "type" : "integer",
       "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
     },
-    "recordID" : {
+    "recordId" : {
       "type" : "number",
       "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
     },
@@ -2531,11 +2489,11 @@
       "type" : "string",
       "description" : "List the origin where the Private List record was derived e.g. OFAC"
     },
-    "listRecordID" : {
+    "listRecordId" : {
       "type" : "string",
       "description" : "Unique Identifier assigned to the Private List record"
     },
-    "listRecordSubID" : {
+    "listRecordSubId" : {
       "type" : "string",
       "description" : "ID for the sub records within a Private List record"
     },
@@ -2679,7 +2637,7 @@
       "type" : "number",
       "description" : "Private List assigned risk score"
     },
-    "pEPRiskScore" : {
+    "pepRiskScore" : {
       "type" : "number",
       "description" : "Private List assigned PEP risk score"
     },
@@ -2743,11 +2701,11 @@
       "type" : "string",
       "description" : "Email Address"
     },
-    "edqNINumber" : {
+    "edqNiNumber" : {
       "type" : "string",
       "description" : "Individuals National Insurance Number"
     },
-    "edqSCION_REF" : {
+    "edqScionRef" : {
       "type" : "string",
       "description" : "SCION reference indicator"
     },
@@ -2771,11 +2729,11 @@
       "type" : "string",
       "description" : "Any further information as deemed useful"
     },
-    "edqSSN" : {
+    "edqSsn" : {
       "type" : "string",
       "description" : "Individuals Social Security Number"
     },
-    "edqCustomerID" : {
+    "edqCustomerId" : {
       "type" : "string",
       "description" : "Customer ID the record relates to"
     },
@@ -2817,7 +2775,7 @@
     }
   }
 };
-            defs["relationships"] = {
+            defs["Relationships"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
@@ -2832,7 +2790,7 @@
       "type" : "string",
       "description" : "Describes the source of the input data, for example&#58; Customer Data"
     },
-    "recordID" : {
+    "recordId" : {
       "type" : "number",
       "description" : "Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID."
     },
@@ -2867,13 +2825,7 @@
   "properties" : {
     "id" : {
       "type" : "integer",
-      "format" : "int64"
-    },
-    "apName" : {
-      "type" : "string"
-    },
-    "wlName" : {
-      "type" : "string"
+      "format" : "int32"
     },
     "recommendation" : {
       "$ref" : "#/components/schemas/SolvedAlertStatus"
@@ -2885,66 +2837,16 @@
 };
             defs["SolvedAlertStatus"] = {
   "type" : "string",
-  "enum" : [ "POTENTIAL_MATCH", "NO_MATCH", "MATCH", "FALSE_MATCH", "ERROR" ]
+  "enum" : [ "POTENTIAL_TRUE_POSITIVE", "FALSE_POSITIVE", "MANUAL_INVESTIGATION" ]
 };
-            defs["users"] = {
-  "type" : "object",
-  "properties" : {
-    "userid" : {
-      "type" : "integer",
-      "description" : "Unique ID of the user"
-    },
-    "username" : {
-      "type" : "string",
-      "description" : "The users username"
-    },
-    "realm" : {
-      "type" : "string",
-      "description" : "Source of authentication e.g. domain"
-    },
-    "fullname" : {
-      "type" : "string",
-      "description" : "Users full name"
-    }
-  }
-};
-            defs["usersByGroup"] = {
-  "type" : "object",
-  "properties" : {
-    "groupId" : {
-      "type" : "integer",
-      "description" : "Group ID"
-    },
-    "groupName" : {
-      "type" : "string",
-      "description" : "Group Name"
-    },
-    "userid" : {
-      "type" : "integer",
-      "description" : "Unique ID of the user that is a member of the group"
-    },
-    "username" : {
-      "type" : "string",
-      "description" : "The users username"
-    },
-    "realm" : {
-      "type" : "string",
-      "description" : "source of authentication e.g. domain"
-    },
-    "fullname" : {
-      "type" : "string",
-      "description" : "Users full name"
-    }
-  }
-};
-            defs["worldCheckEntities"] = {
+            defs["WorldCheckEntities"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
       "type" : "integer",
       "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
     },
-    "recordID" : {
+    "recordId" : {
       "type" : "number",
       "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
     },
@@ -2968,11 +2870,11 @@
       "type" : "string",
       "description" : "List the origin where the World-Check record was derived e.g. OFAC"
     },
-    "listRecordID" : {
+    "listRecordId" : {
       "type" : "string",
       "description" : "Unique Identifier assigned to the World-Check record"
     },
-    "listRecordSubID" : {
+    "listRecordSubId" : {
       "type" : "string",
       "description" : "ID for the sub records within a World-Check record"
     },
@@ -3072,7 +2974,7 @@
       "type" : "number",
       "description" : "World-Check assigned risk score"
     },
-    "pEPRiskScore" : {
+    "pepRiskScore" : {
       "type" : "number",
       "description" : "World-Check assigned PEP risk score"
     },
@@ -3092,7 +2994,7 @@
       "type" : "string",
       "description" : "Date since the record was marked inactive"
     },
-    "pEPClassification" : {
+    "pepClassification" : {
       "type" : "string",
       "description" : "Type of PEP, for example&#58; Local Counsellor"
     },
@@ -3144,24 +3046,24 @@
       "type" : "string",
       "description" : "Data since the Watchlist Entry was last updated"
     },
-    "edqWCListType" : {
+    "edqWcListType" : {
       "type" : "string",
       "description" : "Indicates the watchlist origin using the HSBC name specification"
     },
-    "edqOWSWatchlistName" : {
+    "edqOwsWatchlistName" : {
       "type" : "string",
       "description" : "The world check watchlist name is transposed into a HSBC equivalent."
     }
   }
 };
-            defs["worldCheckIndividuals"] = {
+            defs["WorldCheckIndividuals"] = {
   "type" : "object",
   "properties" : {
     "caseId" : {
       "type" : "integer",
       "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
     },
-    "recordID" : {
+    "recordId" : {
       "type" : "number",
       "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
     },
@@ -3185,11 +3087,11 @@
       "type" : "string",
       "description" : "List the origin where the World-Check record was derived e.g. OFAC"
     },
-    "listRecordID" : {
+    "listRecordId" : {
       "type" : "string",
       "description" : "Unique Identifier assigned to the World-Check record"
     },
-    "listRecordSubID" : {
+    "listRecordSubId" : {
       "type" : "string",
       "description" : "ID for the sub records within a World-Check record"
     },
@@ -3333,7 +3235,7 @@
       "type" : "number",
       "description" : "World-Check assigned risk score"
     },
-    "pEPRiskScore" : {
+    "pepRiskScore" : {
       "type" : "number",
       "description" : "World-Check assigned PEP risk score"
     },
@@ -3353,7 +3255,7 @@
       "type" : "string",
       "description" : "Date since the record was marked inactive"
     },
-    "pEPClassification" : {
+    "pepClassification" : {
       "type" : "string",
       "description" : "Type of PEP, for example&#58; Local Counsellor"
     },
@@ -3429,15 +3331,15 @@
       "type" : "string",
       "description" : "Data since the Watchlist Entry was last updated"
     },
-    "edqOWSWatchlistName" : {
+    "edqOwsWatchlistName" : {
       "type" : "string",
       "description" : "Indicates the watchlist origin using the HSBC name specification"
     },
-    "dOBs" : {
+    "dobs" : {
       "type" : "string",
       "description" : "List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated to a record."
     },
-    "iDNumbers" : {
+    "idNumbers" : {
       "type" : "string",
       "description" : "Identification Numbers"
     },
@@ -3468,17 +3370,17 @@
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
-                    <li data-group="Default" data-name="asyncBulkHscbBridgeV1BulkIdCancelGet" class="">
-                      <a href="#api-Default-asyncBulkHscbBridgeV1BulkIdCancelGet">asyncBulkHscbBridgeV1BulkIdCancelGet</a>
+                    <li data-group="Default" data-name="asyncBulkV1BulkIdCancelGet" class="">
+                      <a href="#api-Default-asyncBulkV1BulkIdCancelGet">asyncBulkV1BulkIdCancelGet</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkHscbBridgeV1BulkIdResultGet" class="">
-                      <a href="#api-Default-asyncBulkHscbBridgeV1BulkIdResultGet">asyncBulkHscbBridgeV1BulkIdResultGet</a>
+                    <li data-group="Default" data-name="asyncBulkV1BulkIdResultGet" class="">
+                      <a href="#api-Default-asyncBulkV1BulkIdResultGet">asyncBulkV1BulkIdResultGet</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkHscbBridgeV1BulkIdStatusGet" class="">
-                      <a href="#api-Default-asyncBulkHscbBridgeV1BulkIdStatusGet">asyncBulkHscbBridgeV1BulkIdStatusGet</a>
+                    <li data-group="Default" data-name="asyncBulkV1BulkIdStatusGet" class="">
+                      <a href="#api-Default-asyncBulkV1BulkIdStatusGet">asyncBulkV1BulkIdStatusGet</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkHscbBridgeV1RecommendAlertsPost" class="">
-                      <a href="#api-Default-asyncBulkHscbBridgeV1RecommendAlertsPost">asyncBulkHscbBridgeV1RecommendAlertsPost</a>
+                    <li data-group="Default" data-name="asyncBulkV1RecommendPost" class="">
+                      <a href="#api-Default-asyncBulkV1RecommendPost">asyncBulkV1RecommendPost</a>
                     </li>
           </ul>
         </nav>
@@ -3501,10 +3403,10 @@
         <div id="sections">
                 <section id="api-Default">
                   <h1>Default</h1>
-                    <div id="api-Default-asyncBulkHscbBridgeV1BulkIdCancelGet">
-                      <article id="api-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0" data-group="User" data-name="asyncBulkHscbBridgeV1BulkIdCancelGet" data-version="0">
+                    <div id="api-Default-asyncBulkV1BulkIdCancelGet">
+                      <article id="api-Default-asyncBulkV1BulkIdCancelGet-0" data-group="User" data-name="asyncBulkV1BulkIdCancelGet" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkHscbBridgeV1BulkIdCancelGet</h1>
+                          <h1>asyncBulkV1BulkIdCancelGet</h1>
                           <p>Cancel bulk with given id.</p>
                         </div>
                         <div class="pull-right"></div>
@@ -3513,31 +3415,31 @@
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/hscb-bridge/v1/{bulkId}/cancel</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/{bulkId}/cancel</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"//async/bulk/hscb-bridge/v1/{bulkId}/cancel"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/cancel"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -3553,17 +3455,17 @@ public class DefaultApiExample {
         DefaultApi apiInstance = new DefaultApi();
         UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
         try {
-            BulkCancelResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdCancelGet(bulkId);
+            BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1BulkIdCancelGet");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdCancelGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
@@ -3572,26 +3474,26 @@ public class DefaultApiExample {
         DefaultApi apiInstance = new DefaultApi();
         UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
         try {
-            BulkCancelResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdCancelGet(bulkId);
+            BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1BulkIdCancelGet");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdCancelGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-objc">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">UUID *bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // The id bulk job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Cancel bulk with given id.
-[apiInstance asyncBulkHscbBridgeV1BulkIdCancelGetWith:bulkId
+[apiInstance asyncBulkV1BulkIdCancelGetWith:bulkId
               completionHandler: ^(BulkCancelResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -3603,7 +3505,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-javascript">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
@@ -3616,14 +3518,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkHscbBridgeV1BulkIdCancelGet(bulkId, callback);
+api.asyncBulkV1BulkIdCancelGet(bulkId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -3632,7 +3534,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkHscbBridgeV1BulkIdCancelGetExample
+    public class asyncBulkV1BulkIdCancelGetExample
     {
         public void main()
         {
@@ -3643,12 +3545,12 @@ namespace Example
             try
             {
                 // Cancel bulk with given id.
-                BulkCancelResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdCancelGet(bulkId);
+                BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkHscbBridgeV1BulkIdCancelGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdCancelGet: " + e.Message );
             }
         }
     }
@@ -3656,7 +3558,7 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
@@ -3664,15 +3566,15 @@ $api_instance = new Swagger\Client\ApiDefaultApi();
 $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
 
 try {
-    $result = $api_instance->asyncBulkHscbBridgeV1BulkIdCancelGet($bulkId);
+    $result = $api_instance->asyncBulkV1BulkIdCancelGet($bulkId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdCancelGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdCancelGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
@@ -3681,15 +3583,15 @@ my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 my $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | The id bulk job.
 
 eval { 
-    my $result = $api_instance->asyncBulkHscbBridgeV1BulkIdCancelGet(bulkId => $bulkId);
+    my $result = $api_instance->asyncBulkV1BulkIdCancelGet(bulkId => $bulkId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdCancelGet: $@\n";
+    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdCancelGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdCancelGet-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -3702,10 +3604,10 @@ bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | The id bulk job.
 
 try: 
     # Cancel bulk with given id.
-    api_response = api_instance.async_bulk_hscb_bridge_v1_bulk_id_cancel_get(bulkId)
+    api_response = api_instance.async_bulk_v1_bulk_id_cancel_get(bulkId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdCancelGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBulkV1BulkIdCancelGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -3721,7 +3623,7 @@ except ApiException as e:
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkHscbBridgeV1BulkIdCancelGet_bulkId">
+                                      <div id="d2e199_asyncBulkV1BulkIdCancelGet_bulkId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -3749,22 +3651,22 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Bulk with given has been cancled. </h3>
+                            <h3> Status: 200 - Bulk with given has been canceled. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkHscbBridgeV1BulkIdCancelGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdCancelGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkHscbBridgeV1BulkIdCancelGet-200-schema">
-                                  <div id='responses-asyncBulkHscbBridgeV1BulkIdCancelGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdCancelGet-200-schema">
+                                  <div id='responses-asyncBulkV1BulkIdCancelGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Bulk with given has been cancled.",
+  "description" : "Bulk with given has been canceled.",
   "content" : {
     "application/octet-stream" : {
       "schema" : {
@@ -3786,24 +3688,24 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkHscbBridgeV1BulkIdCancelGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkHscbBridgeV1BulkIdCancelGet-200-schema-200');
+                                        $('#responses-asyncBulkV1BulkIdCancelGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBulkV1BulkIdCancelGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkHscbBridgeV1BulkIdCancelGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBulkV1BulkIdCancelGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkHscbBridgeV1BulkIdResultGet">
-                      <article id="api-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0" data-group="User" data-name="asyncBulkHscbBridgeV1BulkIdResultGet" data-version="0">
+                    <div id="api-Default-asyncBulkV1BulkIdResultGet">
+                      <article id="api-Default-asyncBulkV1BulkIdResultGet-0" data-group="User" data-name="asyncBulkV1BulkIdResultGet" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkHscbBridgeV1BulkIdResultGet</h1>
+                          <h1>asyncBulkV1BulkIdResultGet</h1>
                           <p>Get results from bulk job.</p>
                         </div>
                         <div class="pull-right"></div>
@@ -3812,31 +3714,31 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/hscb-bridge/v1/{bulkId}/result</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/{bulkId}/result</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdResultGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"//async/bulk/hscb-bridge/v1/{bulkId}/result"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/result"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -3852,17 +3754,17 @@ public class DefaultApiExample {
         DefaultApi apiInstance = new DefaultApi();
         UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
         try {
-            BulkSolvedAlertsResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdResultGet(bulkId);
+            BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1BulkIdResultGet");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdResultGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
@@ -3871,26 +3773,26 @@ public class DefaultApiExample {
         DefaultApi apiInstance = new DefaultApi();
         UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
         try {
-            BulkSolvedAlertsResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdResultGet(bulkId);
+            BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1BulkIdResultGet");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdResultGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-objc">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">UUID *bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // The id bulk job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Get results from bulk job.
-[apiInstance asyncBulkHscbBridgeV1BulkIdResultGetWith:bulkId
+[apiInstance asyncBulkV1BulkIdResultGetWith:bulkId
               completionHandler: ^(BulkSolvedAlertsResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -3902,7 +3804,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-javascript">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
@@ -3915,14 +3817,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkHscbBridgeV1BulkIdResultGet(bulkId, callback);
+api.asyncBulkV1BulkIdResultGet(bulkId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -3931,7 +3833,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkHscbBridgeV1BulkIdResultGetExample
+    public class asyncBulkV1BulkIdResultGetExample
     {
         public void main()
         {
@@ -3942,12 +3844,12 @@ namespace Example
             try
             {
                 // Get results from bulk job.
-                BulkSolvedAlertsResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdResultGet(bulkId);
+                BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkHscbBridgeV1BulkIdResultGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdResultGet: " + e.Message );
             }
         }
     }
@@ -3955,7 +3857,7 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
@@ -3963,15 +3865,15 @@ $api_instance = new Swagger\Client\ApiDefaultApi();
 $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
 
 try {
-    $result = $api_instance->asyncBulkHscbBridgeV1BulkIdResultGet($bulkId);
+    $result = $api_instance->asyncBulkV1BulkIdResultGet($bulkId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdResultGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdResultGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
@@ -3980,15 +3882,15 @@ my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 my $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | The id bulk job.
 
 eval { 
-    my $result = $api_instance->asyncBulkHscbBridgeV1BulkIdResultGet(bulkId => $bulkId);
+    my $result = $api_instance->asyncBulkV1BulkIdResultGet(bulkId => $bulkId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdResultGet: $@\n";
+    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdResultGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdResultGet-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -4001,10 +3903,10 @@ bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | The id bulk job.
 
 try: 
     # Get results from bulk job.
-    api_response = api_instance.async_bulk_hscb_bridge_v1_bulk_id_result_get(bulkId)
+    api_response = api_instance.async_bulk_v1_bulk_id_result_get(bulkId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdResultGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBulkV1BulkIdResultGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -4020,7 +3922,7 @@ except ApiException as e:
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkHscbBridgeV1BulkIdResultGet_bulkId">
+                                      <div id="d2e199_asyncBulkV1BulkIdResultGet_bulkId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -4052,14 +3954,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkHscbBridgeV1BulkIdResultGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdResultGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkHscbBridgeV1BulkIdResultGet-200-schema">
-                                  <div id='responses-asyncBulkHscbBridgeV1BulkIdResultGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdResultGet-200-schema">
+                                  <div id='responses-asyncBulkV1BulkIdResultGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -4085,24 +3987,24 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkHscbBridgeV1BulkIdResultGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkHscbBridgeV1BulkIdResultGet-200-schema-200');
+                                        $('#responses-asyncBulkV1BulkIdResultGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBulkV1BulkIdResultGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkHscbBridgeV1BulkIdResultGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBulkV1BulkIdResultGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkHscbBridgeV1BulkIdStatusGet">
-                      <article id="api-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0" data-group="User" data-name="asyncBulkHscbBridgeV1BulkIdStatusGet" data-version="0">
+                    <div id="api-Default-asyncBulkV1BulkIdStatusGet">
+                      <article id="api-Default-asyncBulkV1BulkIdStatusGet-0" data-group="User" data-name="asyncBulkV1BulkIdStatusGet" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkHscbBridgeV1BulkIdStatusGet</h1>
+                          <h1>asyncBulkV1BulkIdStatusGet</h1>
                           <p>Status of bulk processing for given ID</p>
                         </div>
                         <div class="pull-right"></div>
@@ -4111,31 +4013,31 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/hscb-bridge/v1/{bulkId}/status</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/{bulkId}/status</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//async/bulk/hscb-bridge/v1/{bulkId}/status"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/status"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -4151,17 +4053,17 @@ public class DefaultApiExample {
         DefaultApi apiInstance = new DefaultApi();
         UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
         try {
-            BulkStatusResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdStatusGet(bulkId);
+            BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1BulkIdStatusGet");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdStatusGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
@@ -4170,26 +4072,26 @@ public class DefaultApiExample {
         DefaultApi apiInstance = new DefaultApi();
         UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
         try {
-            BulkStatusResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdStatusGet(bulkId);
+            BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1BulkIdStatusGet");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdStatusGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-objc">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">UUID *bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // The id bulk job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Status of bulk processing for given ID
-[apiInstance asyncBulkHscbBridgeV1BulkIdStatusGetWith:bulkId
+[apiInstance asyncBulkV1BulkIdStatusGetWith:bulkId
               completionHandler: ^(BulkStatusResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -4201,7 +4103,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-javascript">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
@@ -4214,14 +4116,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkHscbBridgeV1BulkIdStatusGet(bulkId, callback);
+api.asyncBulkV1BulkIdStatusGet(bulkId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -4230,7 +4132,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkHscbBridgeV1BulkIdStatusGetExample
+    public class asyncBulkV1BulkIdStatusGetExample
     {
         public void main()
         {
@@ -4241,12 +4143,12 @@ namespace Example
             try
             {
                 // Status of bulk processing for given ID
-                BulkStatusResponse result = apiInstance.asyncBulkHscbBridgeV1BulkIdStatusGet(bulkId);
+                BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkHscbBridgeV1BulkIdStatusGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdStatusGet: " + e.Message );
             }
         }
     }
@@ -4254,7 +4156,7 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
@@ -4262,15 +4164,15 @@ $api_instance = new Swagger\Client\ApiDefaultApi();
 $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
 
 try {
-    $result = $api_instance->asyncBulkHscbBridgeV1BulkIdStatusGet($bulkId);
+    $result = $api_instance->asyncBulkV1BulkIdStatusGet($bulkId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdStatusGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdStatusGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
@@ -4279,15 +4181,15 @@ my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 my $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | The id bulk job.
 
 eval { 
-    my $result = $api_instance->asyncBulkHscbBridgeV1BulkIdStatusGet(bulkId => $bulkId);
+    my $result = $api_instance->asyncBulkV1BulkIdStatusGet(bulkId => $bulkId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdStatusGet: $@\n";
+    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdStatusGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1BulkIdStatusGet-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -4300,10 +4202,10 @@ bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | The id bulk job.
 
 try: 
     # Status of bulk processing for given ID
-    api_response = api_instance.async_bulk_hscb_bridge_v1_bulk_id_status_get(bulkId)
+    api_response = api_instance.async_bulk_v1_bulk_id_status_get(bulkId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkHscbBridgeV1BulkIdStatusGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBulkV1BulkIdStatusGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -4319,7 +4221,7 @@ except ApiException as e:
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkHscbBridgeV1BulkIdStatusGet_bulkId">
+                                      <div id="d2e199_asyncBulkV1BulkIdStatusGet_bulkId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -4351,14 +4253,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkHscbBridgeV1BulkIdStatusGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdStatusGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkHscbBridgeV1BulkIdStatusGet-200-schema">
-                                  <div id='responses-asyncBulkHscbBridgeV1BulkIdStatusGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdStatusGet-200-schema">
+                                  <div id='responses-asyncBulkV1BulkIdStatusGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -4384,24 +4286,24 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkHscbBridgeV1BulkIdStatusGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkHscbBridgeV1BulkIdStatusGet-200-schema-200');
+                                        $('#responses-asyncBulkV1BulkIdStatusGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBulkV1BulkIdStatusGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkHscbBridgeV1BulkIdStatusGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBulkV1BulkIdStatusGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkHscbBridgeV1RecommendAlertsPost">
-                      <article id="api-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0" data-group="User" data-name="asyncBulkHscbBridgeV1RecommendAlertsPost" data-version="0">
+                    <div id="api-Default-asyncBulkV1RecommendPost">
+                      <article id="api-Default-asyncBulkV1RecommendPost-0" data-group="User" data-name="asyncBulkV1RecommendPost" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkHscbBridgeV1RecommendAlertsPost</h1>
+                          <h1>asyncBulkV1RecommendPost</h1>
                           <p>Submit bulk of alerts for async recommendations.</p>
                         </div>
                         <div class="pull-right"></div>
@@ -4410,32 +4312,32 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/async/bulk/hscb-bridge/v1/recommend_alerts</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/async/bulk/v1/recommend</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBulkV1RecommendPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBulkV1RecommendPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"//async/bulk/hscb-bridge/v1/recommend_alerts"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/recommend"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -4449,47 +4351,47 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        array[Alert] body = ; // array[Alert] | List of alerts to recommend.
+        Alerts body = ; // Alerts | List of alerts to recommend.
         try {
-            BulkAcceptedResponse result = apiInstance.asyncBulkHscbBridgeV1RecommendAlertsPost(body);
+            BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1RecommendAlertsPost");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1RecommendPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        array[Alert] body = ; // array[Alert] | List of alerts to recommend.
+        Alerts body = ; // Alerts | List of alerts to recommend.
         try {
-            BulkAcceptedResponse result = apiInstance.asyncBulkHscbBridgeV1RecommendAlertsPost(body);
+            BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkHscbBridgeV1RecommendAlertsPost");
+            System.err.println("Exception when calling DefaultApi#asyncBulkV1RecommendPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">array[Alert] *body = ; // List of alerts to recommend.
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Alerts *body = ; // List of alerts to recommend.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Submit bulk of alerts for async recommendations.
-[apiInstance asyncBulkHscbBridgeV1RecommendAlertsPostWith:body
+[apiInstance asyncBulkV1RecommendPostWith:body
               completionHandler: ^(BulkAcceptedResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -4501,11 +4403,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-javascript">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
-var body = ; // {{array[Alert]}} List of alerts to recommend.
+var body = ; // {{Alerts}} List of alerts to recommend.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -4514,14 +4416,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkHscbBridgeV1RecommendAlertsPost(body, callback);
+api.asyncBulkV1RecommendPost(body, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -4530,23 +4432,23 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkHscbBridgeV1RecommendAlertsPostExample
+    public class asyncBulkV1RecommendPostExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var body = new array[Alert](); // array[Alert] | List of alerts to recommend.
+            var body = new Alerts(); // Alerts | List of alerts to recommend.
 
             try
             {
                 // Submit bulk of alerts for async recommendations.
-                BulkAcceptedResponse result = apiInstance.asyncBulkHscbBridgeV1RecommendAlertsPost(body);
+                BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkHscbBridgeV1RecommendAlertsPost: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBulkV1RecommendPost: " + e.Message );
             }
         }
     }
@@ -4554,40 +4456,40 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // array[Alert] | List of alerts to recommend.
+$body = ; // Alerts | List of alerts to recommend.
 
 try {
-    $result = $api_instance->asyncBulkHscbBridgeV1RecommendAlertsPost($body);
+    $result = $api_instance->asyncBulkV1RecommendPost($body);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkHscbBridgeV1RecommendAlertsPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBulkV1RecommendPost: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = [WWW::SwaggerClient::Object::array[Alert]->new()]; # array[Alert] | List of alerts to recommend.
+my $body = WWW::SwaggerClient::Object::Alerts->new(); # Alerts | List of alerts to recommend.
 
 eval { 
-    my $result = $api_instance->asyncBulkHscbBridgeV1RecommendAlertsPost(body => $body);
+    my $result = $api_instance->asyncBulkV1RecommendPost(body => $body);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkHscbBridgeV1RecommendAlertsPost: $@\n";
+    warn "Exception when calling DefaultApi->asyncBulkV1RecommendPost: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkHscbBridgeV1RecommendAlertsPost-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -4596,14 +4498,14 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # array[Alert] | List of alerts to recommend.
+body =  # Alerts | List of alerts to recommend.
 
 try: 
     # Submit bulk of alerts for async recommendations.
-    api_response = api_instance.async_bulk_hscb_bridge_v1_recommend_alerts_post(body)
+    api_response = api_instance.async_bulk_v1_recommend_post(body)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkHscbBridgeV1RecommendAlertsPost: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBulkV1RecommendPost: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -4646,12 +4548,12 @@ except ApiException as e:
                                   }
                                 
                                   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_asyncBulkHscbBridgeV1RecommendAlertsPost_body');
+                                  var result = $('#d2e199_asyncBulkV1RecommendPost_body');
                                   result.empty();
                                   result.append(view.render());
                                 });
                                 </script>
-                                <div id="d2e199_asyncBulkHscbBridgeV1RecommendAlertsPost_body"></div>
+                                <div id="d2e199_asyncBulkV1RecommendPost_body"></div>
                                 </td>
                                 </tr>
                             </table>
@@ -4663,14 +4565,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkHscbBridgeV1RecommendAlertsPost-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBulkV1RecommendPost-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkHscbBridgeV1RecommendAlertsPost-200-schema">
-                                  <div id='responses-asyncBulkHscbBridgeV1RecommendAlertsPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBulkV1RecommendPost-200-schema">
+                                  <div id='responses-asyncBulkV1RecommendPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -4696,14 +4598,14 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkHscbBridgeV1RecommendAlertsPost-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkHscbBridgeV1RecommendAlertsPost-200-schema-200');
+                                        $('#responses-asyncBulkV1RecommendPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBulkV1RecommendPost-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkHscbBridgeV1RecommendAlertsPost-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBulkV1RecommendPost-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 

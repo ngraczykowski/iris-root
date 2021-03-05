@@ -1,190 +1,86 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
-
-/**
- * CasesWithAlertURL
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
 
 
-public class CasesWithAlertURL   {
-  @JsonProperty("iD")
-  private Integer iD = null;
+@javax.annotation.Generated(
+    value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
+    date = "2021-03-05T14:11:51.641Z[GMT]")
+public class CasesWithAlertURL {
 
-  @JsonProperty("caseGroup")
+  private Integer id = null;
   private String caseGroup = null;
-
-  @JsonProperty("caseType")
   private String caseType = null;
-
-  @JsonProperty("externalID")
-  private String externalID = null;
-
-  @JsonProperty("externalIdSort")
+  private String externalId = null;
   private String externalIdSort = null;
-
-  @JsonProperty("caseKey")
   private String caseKey = null;
-
-  @JsonProperty("keyLabel")
   private String keyLabel = null;
-
-  @JsonProperty("parentID")
-  private Integer parentID = null;
-
-  @JsonProperty("supplementaryKey")
+  private Integer parentId = null;
   private String supplementaryKey = null;
-
-  @JsonProperty("supplementaryType")
   private String supplementaryType = null;
-
-  @JsonProperty("flagKey")
   private String flagKey = null;
-
-  @JsonProperty("description")
   private String description = null;
-
-  @JsonProperty("createdBy")
   private Integer createdBy = null;
-
-  @JsonProperty("createdDateTime")
   private String createdDateTime = null;
-
-  @JsonProperty("modifiedBy")
   private Integer modifiedBy = null;
-
-  @JsonProperty("modifiedDateTime")
   private String modifiedDateTime = null;
-
-  @JsonProperty("assignedUser")
   private Integer assignedUser = null;
-
-  @JsonProperty("assignedBy")
   private Integer assignedBy = null;
-
-  @JsonProperty("assignedDateTime")
   private String assignedDateTime = null;
-
-  @JsonProperty("priority")
   private Integer priority = null;
-
-  @JsonProperty("permission")
   private String permission = null;
-
-  @JsonProperty("currentState")
   private String currentState = null;
-
-  @JsonProperty("derivedState")
   private String derivedState = null;
-
-  @JsonProperty("stateExpiry")
   private String stateExpiry = null;
-
-  @JsonProperty("stateChangeBy")
   private Integer stateChangeBy = null;
-
-  @JsonProperty("stateChangeDateTime")
   private String stateChangeDateTime = null;
-
-  @JsonProperty("sourceId")
   private Integer sourceId = null;
-
-  @JsonProperty("sourceName")
   private String sourceName = null;
-
-  @JsonProperty("caseMarker")
   private Integer caseMarker = null;
-
-  @JsonProperty("updatedBy")
   private Integer updatedBy = null;
-
-  @JsonProperty("updatedDateTime")
   private String updatedDateTime = null;
-
-  @JsonProperty("groupId")
   private String groupId = null;
-
-  @JsonProperty("groupLevel")
   private Integer groupLevel = null;
-
-  @JsonProperty("extendedAttribute1")
   private Integer extendedAttribute1 = null;
-
-  @JsonProperty("extendedAttribute2")
   private Integer extendedAttribute2 = null;
-
-  @JsonProperty("extendedAttribute3")
   private String extendedAttribute3 = null;
-
-  @JsonProperty("extendedAttribute4")
   private String extendedAttribute4 = null;
-
-  @JsonProperty("extendedAttribute5")
   private String extendedAttribute5 = null;
-
-  @JsonProperty("extendedAttribute6")
   private String extendedAttribute6 = null;
-
-  @JsonProperty("extendedAttribute7")
   private String extendedAttribute7 = null;
-
-  @JsonProperty("extendedAttribute8")
   private String extendedAttribute8 = null;
-
-  @JsonProperty("extendedAttribute9")
   private String extendedAttribute9 = null;
-
-  @JsonProperty("extendedAttribute10")
   private String extendedAttribute10 = null;
-
-  @JsonProperty("extendedAttribute11")
   private String extendedAttribute11 = null;
-
-  @JsonProperty("extendedAttribute12")
   private String extendedAttribute12 = null;
-
-  @JsonProperty("extendedAttribute13")
   private Integer extendedAttribute13 = null;
-
-  @JsonProperty("alertURL")
-  private String alertURL = null;
-
-  public CasesWithAlertURL iD(Integer iD) {
-    this.iD = iD;
-    return this;
-  }
+  private String alertUrl = null;
 
   /**
-   * Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link to other tables.
-   * @return iD
+   * Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link
+   * to other tables.
    **/
+
   @Schema(description = "Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link to other tables.")
-  
-    public Integer getID() {
-    return iD;
+  @JsonProperty("id")
+  public Integer getId() {
+    return id;
   }
 
-  public void setID(Integer iD) {
-    this.iD = iD;
-  }
-
-  public CasesWithAlertURL caseGroup(String caseGroup) {
-    this.caseGroup = caseGroup;
-    return this;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   /**
-   * Records an associated group to the Case or Alert, for example&#58; Match
-   * @return caseGroup
+   * Records an associated group to the Case or Alert, for example&amp;#58; Match
    **/
+
   @Schema(description = "Records an associated group to the Case or Alert, for example&#58; Match")
-  
-    public String getCaseGroup() {
+  @JsonProperty("caseGroup")
+  public String getCaseGroup() {
     return caseGroup;
   }
 
@@ -192,18 +88,13 @@ public class CasesWithAlertURL   {
     this.caseGroup = caseGroup;
   }
 
-  public CasesWithAlertURL caseType(String caseType) {
-    this.caseType = caseType;
-    return this;
-  }
-
   /**
-   * Denotes if this is a Case (\"Case\") or an Alert (\"Issue\")
-   * @return caseType
+   * Denotes if this is a Case (\&quot;Case\&quot;) or an Alert (\&quot;Issue\&quot;)
    **/
+
   @Schema(description = "Denotes if this is a Case (\"Case\") or an Alert (\"Issue\")")
-  
-    public String getCaseType() {
+  @JsonProperty("caseType")
+  public String getCaseType() {
     return caseType;
   }
 
@@ -211,37 +102,27 @@ public class CasesWithAlertURL   {
     this.caseType = caseType;
   }
 
-  public CasesWithAlertURL externalID(String externalID) {
-    this.externalID = externalID;
-    return this;
-  }
-
   /**
    * A unique ID of the alerts as it appears in Case Management.
-   * @return externalID
    **/
+
   @Schema(description = "A unique ID of the alerts as it appears in Case Management.")
-  
-    public String getExternalID() {
-    return externalID;
+  @JsonProperty("externalId")
+  public String getExternalId() {
+    return externalId;
   }
 
-  public void setExternalID(String externalID) {
-    this.externalID = externalID;
-  }
-
-  public CasesWithAlertURL externalIdSort(String externalIdSort) {
-    this.externalIdSort = externalIdSort;
-    return this;
+  public void setExternalId(String externalId) {
+    this.externalId = externalId;
   }
 
   /**
    * A unique ID of the alert that is used in reporting. The value of the code is padded with zeros
-   * @return externalIdSort
    **/
+
   @Schema(description = "A unique ID of the alert that is used in reporting. The value of the code is padded with zeros")
-  
-    public String getExternalIdSort() {
+  @JsonProperty("externalIdSort")
+  public String getExternalIdSort() {
     return externalIdSort;
   }
 
@@ -249,18 +130,13 @@ public class CasesWithAlertURL   {
     this.externalIdSort = externalIdSort;
   }
 
-  public CasesWithAlertURL caseKey(String caseKey) {
-    this.caseKey = caseKey;
-    return this;
-  }
-
   /**
    * Unique internal Hash which identifies an alert.
-   * @return caseKey
    **/
+
   @Schema(description = "Unique internal Hash which identifies an alert.")
-  
-    public String getCaseKey() {
+  @JsonProperty("caseKey")
+  public String getCaseKey() {
     return caseKey;
   }
 
@@ -268,18 +144,14 @@ public class CasesWithAlertURL   {
     this.caseKey = caseKey;
   }
 
-  public CasesWithAlertURL keyLabel(String keyLabel) {
-    this.keyLabel = keyLabel;
-    return this;
-  }
-
   /**
-   * A Unique Identifier for the Case or Alert, composed of \"Customer ID&#58; Watchlist Alert Generated Against&#58; Watch Person ID\"
-   * @return keyLabel
+   * A Unique Identifier for the Case or Alert, composed of \&quot;Customer ID&amp;#58; Watchlist
+   * Alert Generated Against&amp;#58; Watch Person ID\&quot;
    **/
+
   @Schema(description = "A Unique Identifier for the Case or Alert, composed of \"Customer ID&#58; Watchlist Alert Generated Against&#58; Watch Person ID\"")
-  
-    public String getKeyLabel() {
+  @JsonProperty("keyLabel")
+  public String getKeyLabel() {
     return keyLabel;
   }
 
@@ -287,37 +159,29 @@ public class CasesWithAlertURL   {
     this.keyLabel = keyLabel;
   }
 
-  public CasesWithAlertURL parentID(Integer parentID) {
-    this.parentID = parentID;
-    return this;
-  }
-
   /**
-   * ID number for the parent Case of the Alert. If viewing at Case Level; the field will display \"-1\"
-   * @return parentID
+   * ID number for the parent Case of the Alert. If viewing at Case Level; the field will display
+   * \&quot;-1\&quot;
    **/
+
   @Schema(description = "ID number for the parent Case of the Alert. If viewing at Case Level; the field will display \"-1\"")
-  
-    public Integer getParentID() {
-    return parentID;
+  @JsonProperty("parentId")
+  public Integer getParentId() {
+    return parentId;
   }
 
-  public void setParentID(Integer parentID) {
-    this.parentID = parentID;
-  }
-
-  public CasesWithAlertURL supplementaryKey(String supplementaryKey) {
-    this.supplementaryKey = supplementaryKey;
-    return this;
+  public void setParentId(Integer parentId) {
+    this.parentId = parentId;
   }
 
   /**
-   * Hash of the supplementary data held against an alert, used by the system to identify if any supplementary data has changed.
-   * @return supplementaryKey
+   * Hash of the supplementary data held against an alert, used by the system to identify if any
+   * supplementary data has changed.
    **/
+
   @Schema(description = "Hash of the supplementary data held against an alert, used by the system to identify if any supplementary data has changed.")
-  
-    public String getSupplementaryKey() {
+  @JsonProperty("supplementaryKey")
+  public String getSupplementaryKey() {
     return supplementaryKey;
   }
 
@@ -325,18 +189,13 @@ public class CasesWithAlertURL   {
     this.supplementaryKey = supplementaryKey;
   }
 
-  public CasesWithAlertURL supplementaryType(String supplementaryType) {
-    this.supplementaryType = supplementaryType;
-    return this;
-  }
-
   /**
    * Identifies and provides grouping by type of supplementary data
-   * @return supplementaryType
    **/
+
   @Schema(description = "Identifies and provides grouping by type of supplementary data")
-  
-    public String getSupplementaryType() {
+  @JsonProperty("supplementaryType")
+  public String getSupplementaryType() {
     return supplementaryType;
   }
 
@@ -344,18 +203,14 @@ public class CasesWithAlertURL   {
     this.supplementaryType = supplementaryType;
   }
 
-  public CasesWithAlertURL flagKey(String flagKey) {
-    this.flagKey = flagKey;
-    return this;
-  }
-
   /**
-   * Hash of the flag key data held against an alert, used by the system to identify if any flag key data has changed. If a change is identified the caseMaker is updated.
-   * @return flagKey
+   * Hash of the flag key data held against an alert, used by the system to identify if any flag key
+   * data has changed. If a change is identified the caseMaker is updated.
    **/
+
   @Schema(description = "Hash of the flag key data held against an alert, used by the system to identify if any flag key data has changed. If a change is identified the caseMaker is updated.")
-  
-    public String getFlagKey() {
+  @JsonProperty("flagKey")
+  public String getFlagKey() {
     return flagKey;
   }
 
@@ -363,18 +218,13 @@ public class CasesWithAlertURL   {
     this.flagKey = flagKey;
   }
 
-  public CasesWithAlertURL description(String description) {
-    this.description = description;
-    return this;
-  }
-
   /**
    * Name of the Customer when initially provided or if updated by a user.
-   * @return description
    **/
+
   @Schema(description = "Name of the Customer when initially provided or if updated by a user.")
-  
-    public String getDescription() {
+  @JsonProperty("description")
+  public String getDescription() {
     return description;
   }
 
@@ -382,18 +232,13 @@ public class CasesWithAlertURL   {
     this.description = description;
   }
 
-  public CasesWithAlertURL createdBy(Integer createdBy) {
-    this.createdBy = createdBy;
-    return this;
-  }
-
   /**
-   * Records how the Case was created, for example&#58; Batch, Manual or Real-Time Screening
-   * @return createdBy
+   * Records how the Case was created, for example&amp;#58; Batch, Manual or Real-Time Screening
    **/
+
   @Schema(description = "Records how the Case was created, for example&#58; Batch, Manual or Real-Time Screening")
-  
-    public Integer getCreatedBy() {
+  @JsonProperty("createdBy")
+  public Integer getCreatedBy() {
     return createdBy;
   }
 
@@ -401,18 +246,13 @@ public class CasesWithAlertURL   {
     this.createdBy = createdBy;
   }
 
-  public CasesWithAlertURL createdDateTime(String createdDateTime) {
-    this.createdDateTime = createdDateTime;
-    return this;
-  }
-
   /**
    * Date the Case or Alert was created
-   * @return createdDateTime
    **/
+
   @Schema(description = "Date the Case or Alert was created")
-  
-    public String getCreatedDateTime() {
+  @JsonProperty("createdDateTime")
+  public String getCreatedDateTime() {
     return createdDateTime;
   }
 
@@ -420,18 +260,14 @@ public class CasesWithAlertURL   {
     this.createdDateTime = createdDateTime;
   }
 
-  public CasesWithAlertURL modifiedBy(Integer modifiedBy) {
-    this.modifiedBy = modifiedBy;
-    return this;
-  }
-
   /**
-   * Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or Attachments constitute a modification
-   * @return modifiedBy
+   * Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or
+   * Attachments constitute a modification
    **/
+
   @Schema(description = "Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or Attachments constitute a modification")
-  
-    public Integer getModifiedBy() {
+  @JsonProperty("modifiedBy")
+  public Integer getModifiedBy() {
     return modifiedBy;
   }
 
@@ -439,18 +275,13 @@ public class CasesWithAlertURL   {
     this.modifiedBy = modifiedBy;
   }
 
-  public CasesWithAlertURL modifiedDateTime(String modifiedDateTime) {
-    this.modifiedDateTime = modifiedDateTime;
-    return this;
-  }
-
   /**
    * Date and time of the modification
-   * @return modifiedDateTime
    **/
+
   @Schema(description = "Date and time of the modification")
-  
-    public String getModifiedDateTime() {
+  @JsonProperty("modifiedDateTime")
+  public String getModifiedDateTime() {
     return modifiedDateTime;
   }
 
@@ -458,18 +289,13 @@ public class CasesWithAlertURL   {
     this.modifiedDateTime = modifiedDateTime;
   }
 
-  public CasesWithAlertURL assignedUser(Integer assignedUser) {
-    this.assignedUser = assignedUser;
-    return this;
-  }
-
   /**
    * ID of the user to whom the Case or Alert is assigned
-   * @return assignedUser
    **/
+
   @Schema(description = "ID of the user to whom the Case or Alert is assigned")
-  
-    public Integer getAssignedUser() {
+  @JsonProperty("assignedUser")
+  public Integer getAssignedUser() {
     return assignedUser;
   }
 
@@ -477,18 +303,13 @@ public class CasesWithAlertURL   {
     this.assignedUser = assignedUser;
   }
 
-  public CasesWithAlertURL assignedBy(Integer assignedBy) {
-    this.assignedBy = assignedBy;
-    return this;
-  }
-
   /**
    * ID of the user who assigned the Case or Alert to the User
-   * @return assignedBy
    **/
+
   @Schema(description = "ID of the user who assigned the Case or Alert to the User")
-  
-    public Integer getAssignedBy() {
+  @JsonProperty("assignedBy")
+  public Integer getAssignedBy() {
     return assignedBy;
   }
 
@@ -496,18 +317,13 @@ public class CasesWithAlertURL   {
     this.assignedBy = assignedBy;
   }
 
-  public CasesWithAlertURL assignedDateTime(String assignedDateTime) {
-    this.assignedDateTime = assignedDateTime;
-    return this;
-  }
-
   /**
    * Date and time the Case or Alert was assigned
-   * @return assignedDateTime
    **/
+
   @Schema(description = "Date and time the Case or Alert was assigned")
-  
-    public String getAssignedDateTime() {
+  @JsonProperty("assignedDateTime")
+  public String getAssignedDateTime() {
     return assignedDateTime;
   }
 
@@ -515,18 +331,13 @@ public class CasesWithAlertURL   {
     this.assignedDateTime = assignedDateTime;
   }
 
-  public CasesWithAlertURL priority(Integer priority) {
-    this.priority = priority;
-    return this;
-  }
-
   /**
-   * Records the alert priority level (250=Low, 500=Medium, 750=High)
-   * @return priority
+   * Records the alert priority level (250&#x3D;Low, 500&#x3D;Medium, 750&#x3D;High)
    **/
+
   @Schema(description = "Records the alert priority level (250=Low, 500=Medium, 750=High)")
-  
-    public Integer getPriority() {
+  @JsonProperty("priority")
+  public Integer getPriority() {
     return priority;
   }
 
@@ -534,18 +345,13 @@ public class CasesWithAlertURL   {
     this.priority = priority;
   }
 
-  public CasesWithAlertURL permission(String permission) {
-    this.permission = permission;
-    return this;
-  }
-
   /**
    * Permission assigned to the Case or Alert
-   * @return permission
    **/
+
   @Schema(description = "Permission assigned to the Case or Alert")
-  
-    public String getPermission() {
+  @JsonProperty("permission")
+  public String getPermission() {
     return permission;
   }
 
@@ -553,18 +359,13 @@ public class CasesWithAlertURL   {
     this.permission = permission;
   }
 
-  public CasesWithAlertURL currentState(String currentState) {
-    this.currentState = currentState;
-    return this;
-  }
-
   /**
-   * Workflow state in which the Alert currently resides, for example&#58; Level 1 Review
-   * @return currentState
+   * Workflow state in which the Alert currently resides, for example&amp;#58; Level 1 Review
    **/
+
   @Schema(description = "Workflow state in which the Alert currently resides, for example&#58; Level 1 Review")
-  
-    public String getCurrentState() {
+  @JsonProperty("currentState")
+  public String getCurrentState() {
     return currentState;
   }
 
@@ -572,18 +373,15 @@ public class CasesWithAlertURL   {
     this.currentState = currentState;
   }
 
-  public CasesWithAlertURL derivedState(String derivedState) {
-    this.derivedState = derivedState;
-    return this;
-  }
-
   /**
-   * Workflow state in which the Case currently resides. Case state is controlled by the system and is derived from the activity associated with the Alerts within the Case. A Case cannot be closed until all of the Alerts within it have been closed.
-   * @return derivedState
+   * Workflow state in which the Case currently resides. Case state is controlled by the system and
+   * is derived from the activity associated with the Alerts within the Case. A Case cannot be
+   * closed until all of the Alerts within it have been closed.
    **/
+
   @Schema(description = "Workflow state in which the Case currently resides. Case state is controlled by the system and is derived from the activity associated with the Alerts within the Case. A Case cannot be closed until all of the Alerts within it have been closed.")
-  
-    public String getDerivedState() {
+  @JsonProperty("derivedState")
+  public String getDerivedState() {
     return derivedState;
   }
 
@@ -591,18 +389,13 @@ public class CasesWithAlertURL   {
     this.derivedState = derivedState;
   }
 
-  public CasesWithAlertURL stateExpiry(String stateExpiry) {
-    this.stateExpiry = stateExpiry;
-    return this;
-  }
-
   /**
    * Date when the current state of the Alert will expire
-   * @return stateExpiry
    **/
+
   @Schema(description = "Date when the current state of the Alert will expire")
-  
-    public String getStateExpiry() {
+  @JsonProperty("stateExpiry")
+  public String getStateExpiry() {
     return stateExpiry;
   }
 
@@ -610,18 +403,13 @@ public class CasesWithAlertURL   {
     this.stateExpiry = stateExpiry;
   }
 
-  public CasesWithAlertURL stateChangeBy(Integer stateChangeBy) {
-    this.stateChangeBy = stateChangeBy;
-    return this;
-  }
-
   /**
    * Which User undertook the last transition of the Alert through the Workflow
-   * @return stateChangeBy
    **/
+
   @Schema(description = "Which User undertook the last transition of the Alert through the Workflow")
-  
-    public Integer getStateChangeBy() {
+  @JsonProperty("stateChangeBy")
+  public Integer getStateChangeBy() {
     return stateChangeBy;
   }
 
@@ -629,18 +417,13 @@ public class CasesWithAlertURL   {
     this.stateChangeBy = stateChangeBy;
   }
 
-  public CasesWithAlertURL stateChangeDateTime(String stateChangeDateTime) {
-    this.stateChangeDateTime = stateChangeDateTime;
-    return this;
-  }
-
   /**
    * Date and time the state of the Case or Alert was changed
-   * @return stateChangeDateTime
    **/
+
   @Schema(description = "Date and time the state of the Case or Alert was changed")
-  
-    public String getStateChangeDateTime() {
+  @JsonProperty("stateChangeDateTime")
+  public String getStateChangeDateTime() {
     return stateChangeDateTime;
   }
 
@@ -648,18 +431,13 @@ public class CasesWithAlertURL   {
     this.stateChangeDateTime = stateChangeDateTime;
   }
 
-  public CasesWithAlertURL sourceId(Integer sourceId) {
-    this.sourceId = sourceId;
-    return this;
-  }
-
   /**
    * Case Source System ID
-   * @return sourceId
    **/
+
   @Schema(description = "Case Source System ID")
-  
-    public Integer getSourceId() {
+  @JsonProperty("sourceId")
+  public Integer getSourceId() {
     return sourceId;
   }
 
@@ -667,18 +445,13 @@ public class CasesWithAlertURL   {
     this.sourceId = sourceId;
   }
 
-  public CasesWithAlertURL sourceName(String sourceName) {
-    this.sourceName = sourceName;
-    return this;
-  }
-
   /**
    * Case Source System Name
-   * @return sourceName
    **/
+
   @Schema(description = "Case Source System Name")
-  
-    public String getSourceName() {
+  @JsonProperty("sourceName")
+  public String getSourceName() {
     return sourceName;
   }
 
@@ -686,18 +459,15 @@ public class CasesWithAlertURL   {
     this.sourceName = sourceName;
   }
 
-  public CasesWithAlertURL caseMarker(Integer caseMarker) {
-    this.caseMarker = caseMarker;
-    return this;
-  }
-
   /**
-   * this is the review flag which if  indicates if customer data in any of the review flag fields has been updated. This is used to signify a change or trigger a realert. 0 indicates no review flag set.
-   * @return caseMarker
+   * this is the review flag which if  indicates if customer data in any of the review flag fields
+   * has been updated. This is used to signify a change or trigger a realert. 0 indicates no review
+   * flag set.
    **/
+
   @Schema(description = "this is the review flag which if  indicates if customer data in any of the review flag fields has been updated. This is used to signify a change or trigger a realert. 0 indicates no review flag set.")
-  
-    public Integer getCaseMarker() {
+  @JsonProperty("caseMarker")
+  public Integer getCaseMarker() {
     return caseMarker;
   }
 
@@ -705,18 +475,13 @@ public class CasesWithAlertURL   {
     this.caseMarker = caseMarker;
   }
 
-  public CasesWithAlertURL updatedBy(Integer updatedBy) {
-    this.updatedBy = updatedBy;
-    return this;
-  }
-
   /**
    * User ID of the account that updated the case.
-   * @return updatedBy
    **/
+
   @Schema(description = "User ID of the account that updated the case.")
-  
-    public Integer getUpdatedBy() {
+  @JsonProperty("updatedBy")
+  public Integer getUpdatedBy() {
     return updatedBy;
   }
 
@@ -724,18 +489,13 @@ public class CasesWithAlertURL   {
     this.updatedBy = updatedBy;
   }
 
-  public CasesWithAlertURL updatedDateTime(String updatedDateTime) {
-    this.updatedDateTime = updatedDateTime;
-    return this;
-  }
-
   /**
    * Date and time the alert was updated.
-   * @return updatedDateTime
    **/
+
   @Schema(description = "Date and time the alert was updated.")
-  
-    public String getUpdatedDateTime() {
+  @JsonProperty("updatedDateTime")
+  public String getUpdatedDateTime() {
     return updatedDateTime;
   }
 
@@ -743,18 +503,14 @@ public class CasesWithAlertURL   {
     this.updatedDateTime = updatedDateTime;
   }
 
-  public CasesWithAlertURL groupId(String groupId) {
-    this.groupId = groupId;
-    return this;
-  }
-
   /**
-   * ID number of the associated permission or grouping to which the Case or Alert belongs, for example&#58; Country or Regional Group.
-   * @return groupId
+   * ID number of the associated permission or grouping to which the Case or Alert belongs, for
+   * example&amp;#58; Country or Regional Group.
    **/
+
   @Schema(description = "ID number of the associated permission or grouping to which the Case or Alert belongs, for example&#58; Country or Regional Group.")
-  
-    public String getGroupId() {
+  @JsonProperty("groupId")
+  public String getGroupId() {
     return groupId;
   }
 
@@ -762,18 +518,13 @@ public class CasesWithAlertURL   {
     this.groupId = groupId;
   }
 
-  public CasesWithAlertURL groupLevel(Integer groupLevel) {
-    this.groupLevel = groupLevel;
-    return this;
-  }
-
   /**
    * Where the group sits within the permission or grouping structure
-   * @return groupLevel
    **/
+
   @Schema(description = "Where the group sits within the permission or grouping structure")
-  
-    public Integer getGroupLevel() {
+  @JsonProperty("groupLevel")
+  public Integer getGroupLevel() {
     return groupLevel;
   }
 
@@ -781,18 +532,13 @@ public class CasesWithAlertURL   {
     this.groupLevel = groupLevel;
   }
 
-  public CasesWithAlertURL extendedAttribute1(Integer extendedAttribute1) {
-    this.extendedAttribute1 = extendedAttribute1;
-    return this;
-  }
-
   /**
    * Escalation. Indicates if the alert has been escalated.
-   * @return extendedAttribute1
    **/
+
   @Schema(description = "Escalation. Indicates if the alert has been escalated.")
-  
-    public Integer getExtendedAttribute1() {
+  @JsonProperty("extendedAttribute1")
+  public Integer getExtendedAttribute1() {
     return extendedAttribute1;
   }
 
@@ -800,18 +546,14 @@ public class CasesWithAlertURL   {
     this.extendedAttribute1 = extendedAttribute1;
   }
 
-  public CasesWithAlertURL extendedAttribute2(Integer extendedAttribute2) {
-    this.extendedAttribute2 = extendedAttribute2;
-    return this;
-  }
-
   /**
-   * Priority Score. Indicates how accurate the match is between the customer and the list record scored 0 to 100. It is not a percentage.
-   * @return extendedAttribute2
+   * Priority Score. Indicates how accurate the match is between the customer and the list record
+   * scored 0 to 100. It is not a percentage.
    **/
+
   @Schema(description = "Priority Score. Indicates how accurate the match is between the customer and the list record scored 0 to 100. It is not a percentage.")
-  
-    public Integer getExtendedAttribute2() {
+  @JsonProperty("extendedAttribute2")
+  public Integer getExtendedAttribute2() {
     return extendedAttribute2;
   }
 
@@ -819,18 +561,14 @@ public class CasesWithAlertURL   {
     this.extendedAttribute2 = extendedAttribute2;
   }
 
-  public CasesWithAlertURL extendedAttribute3(String extendedAttribute3) {
-    this.extendedAttribute3 = extendedAttribute3;
-    return this;
-  }
-
   /**
-   * Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100
-   * @return extendedAttribute3
+   * Risk Score. Indicates, if provided with the list data, how much of a risk the individual or
+   * entity is. 0 to 100
    **/
+
   @Schema(description = "Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100")
-  
-    public String getExtendedAttribute3() {
+  @JsonProperty("extendedAttribute3")
+  public String getExtendedAttribute3() {
     return extendedAttribute3;
   }
 
@@ -838,18 +576,14 @@ public class CasesWithAlertURL   {
     this.extendedAttribute3 = extendedAttribute3;
   }
 
-  public CasesWithAlertURL extendedAttribute4(String extendedAttribute4) {
-    this.extendedAttribute4 = extendedAttribute4;
-    return this;
-  }
-
   /**
-   * PEP Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100
-   * @return extendedAttribute4
+   * PEP Risk Score. Indicates, if provided with the list data, how much of a risk the individual or
+   * entity is. 0 to 100
    **/
+
   @Schema(description = "PEP Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100")
-  
-    public String getExtendedAttribute4() {
+  @JsonProperty("extendedAttribute4")
+  public String getExtendedAttribute4() {
     return extendedAttribute4;
   }
 
@@ -857,18 +591,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute4 = extendedAttribute4;
   }
 
-  public CasesWithAlertURL extendedAttribute5(String extendedAttribute5) {
-    this.extendedAttribute5 = extendedAttribute5;
-    return this;
-  }
-
   /**
    * List Record Type. Describes the type of list record the match is against.
-   * @return extendedAttribute5
    **/
+
   @Schema(description = "List Record Type. Describes the type of list record the match is against.")
-  
-    public String getExtendedAttribute5() {
+  @JsonProperty("extendedAttribute5")
+  public String getExtendedAttribute5() {
     return extendedAttribute5;
   }
 
@@ -876,18 +605,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute5 = extendedAttribute5;
   }
 
-  public CasesWithAlertURL extendedAttribute6(String extendedAttribute6) {
-    this.extendedAttribute6 = extendedAttribute6;
-    return this;
-  }
-
   /**
    * Screening Mode. Indicate the type of screening that created the alert.
-   * @return extendedAttribute6
    **/
+
   @Schema(description = "Screening Mode. Indicate the type of screening that created the alert.")
-  
-    public String getExtendedAttribute6() {
+  @JsonProperty("extendedAttribute6")
+  public String getExtendedAttribute6() {
     return extendedAttribute6;
   }
 
@@ -895,18 +619,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute6 = extendedAttribute6;
   }
 
-  public CasesWithAlertURL extendedAttribute7(String extendedAttribute7) {
-    this.extendedAttribute7 = extendedAttribute7;
-    return this;
-  }
-
   /**
    * is the QA Flag which indicates if an alert has been subject to a QA review.
-   * @return extendedAttribute7
    **/
+
   @Schema(description = "is the QA Flag which indicates if an alert has been subject to a QA review.")
-  
-    public String getExtendedAttribute7() {
+  @JsonProperty("extendedAttribute7")
+  public String getExtendedAttribute7() {
     return extendedAttribute7;
   }
 
@@ -914,18 +633,14 @@ public class CasesWithAlertURL   {
     this.extendedAttribute7 = extendedAttribute7;
   }
 
-  public CasesWithAlertURL extendedAttribute8(String extendedAttribute8) {
-    this.extendedAttribute8 = extendedAttribute8;
-    return this;
-  }
-
   /**
-   * Day 1 Spike Flag. Indicates if an alert was created on day 1. \"Day 1 Spike\" = created on Day 1, \"BAU\" = createdon Day 1 but has ben work to closure.
-   * @return extendedAttribute8
+   * Day 1 Spike Flag. Indicates if an alert was created on day 1. \&quot;Day 1 Spike\&quot; &#x3D;
+   * created on Day 1, \&quot;BAU\&quot; &#x3D; createdon Day 1 but has ben work to closure.
    **/
+
   @Schema(description = "Day 1 Spike Flag. Indicates if an alert was created on day 1. \"Day 1 Spike\" = created on Day 1, \"BAU\" = createdon Day 1 but has ben work to closure.")
-  
-    public String getExtendedAttribute8() {
+  @JsonProperty("extendedAttribute8")
+  public String getExtendedAttribute8() {
     return extendedAttribute8;
   }
 
@@ -933,18 +648,14 @@ public class CasesWithAlertURL   {
     this.extendedAttribute8 = extendedAttribute8;
   }
 
-  public CasesWithAlertURL extendedAttribute9(String extendedAttribute9) {
-    this.extendedAttribute9 = extendedAttribute9;
-    return this;
-  }
-
   /**
-   * BAU Spike Flag. Indicates if the alert was created as part of an influx of alert i.e. a spike, after day 1. \"Yes\" indicates this is a BAU spike
-   * @return extendedAttribute9
+   * BAU Spike Flag. Indicates if the alert was created as part of an influx of alert i.e. a spike,
+   * after day 1. \&quot;Yes\&quot; indicates this is a BAU spike
    **/
+
   @Schema(description = "BAU Spike Flag. Indicates if the alert was created as part of an influx of alert i.e. a spike, after day 1. \"Yes\" indicates this is a BAU spike")
-  
-    public String getExtendedAttribute9() {
+  @JsonProperty("extendedAttribute9")
+  public String getExtendedAttribute9() {
     return extendedAttribute9;
   }
 
@@ -952,18 +663,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute9 = extendedAttribute9;
   }
 
-  public CasesWithAlertURL extendedAttribute10(String extendedAttribute10) {
-    this.extendedAttribute10 = extendedAttribute10;
-    return this;
-  }
-
   /**
    * OWS Watchlist Name, describe the specific type of list the matching record came from.
-   * @return extendedAttribute10
    **/
+
   @Schema(description = "OWS Watchlist Name, describe the specific type of list the matching record came from.")
-  
-    public String getExtendedAttribute10() {
+  @JsonProperty("extendedAttribute10")
+  public String getExtendedAttribute10() {
     return extendedAttribute10;
   }
 
@@ -971,18 +677,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute10 = extendedAttribute10;
   }
 
-  public CasesWithAlertURL extendedAttribute11(String extendedAttribute11) {
-    this.extendedAttribute11 = extendedAttribute11;
-    return this;
-  }
-
   /**
    * Line of Business, describes the Line of business the alert is related to.
-   * @return extendedAttribute11
    **/
+
   @Schema(description = "Line of Business, describes the Line of business the alert is related to.")
-  
-    public String getExtendedAttribute11() {
+  @JsonProperty("extendedAttribute11")
+  public String getExtendedAttribute11() {
     return extendedAttribute11;
   }
 
@@ -990,18 +691,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute11 = extendedAttribute11;
   }
 
-  public CasesWithAlertURL extendedAttribute12(String extendedAttribute12) {
-    this.extendedAttribute12 = extendedAttribute12;
-    return this;
-  }
-
   /**
    * HSBC priority Flag, indicates the HSBC priority of an alert.
-   * @return extendedAttribute12
    **/
+
   @Schema(description = "HSBC priority Flag, indicates the HSBC priority of an alert.")
-  
-    public String getExtendedAttribute12() {
+  @JsonProperty("extendedAttribute12")
+  public String getExtendedAttribute12() {
     return extendedAttribute12;
   }
 
@@ -1009,18 +705,13 @@ public class CasesWithAlertURL   {
     this.extendedAttribute12 = extendedAttribute12;
   }
 
-  public CasesWithAlertURL extendedAttribute13(Integer extendedAttribute13) {
-    this.extendedAttribute13 = extendedAttribute13;
-    return this;
-  }
-
   /**
    * SLA Flag, a marker to define when an alert was created, closed or re-opened
-   * @return extendedAttribute13
    **/
+
   @Schema(description = "SLA Flag, a marker to define when an alert was created, closed or re-opened")
-  
-    public Integer getExtendedAttribute13() {
+  @JsonProperty("extendedAttribute13")
+  public Integer getExtendedAttribute13() {
     return extendedAttribute13;
   }
 
@@ -1028,23 +719,18 @@ public class CasesWithAlertURL   {
     this.extendedAttribute13 = extendedAttribute13;
   }
 
-  public CasesWithAlertURL alertURL(String alertURL) {
-    this.alertURL = alertURL;
-    return this;
-  }
-
   /**
    * URL, which take you directly to the system where this alert resides and open the alert.
-   * @return alertURL
    **/
+
   @Schema(description = "URL, which take you directly to the system where this alert resides and open the alert.")
-  
-    public String getAlertURL() {
-    return alertURL;
+  @JsonProperty("alertUrl")
+  public String getAlertUrl() {
+    return alertUrl;
   }
 
-  public void setAlertURL(String alertURL) {
-    this.alertURL = alertURL;
+  public void setAlertUrl(String alertUrl) {
+    this.alertUrl = alertUrl;
   }
 
 
@@ -1057,73 +743,82 @@ public class CasesWithAlertURL   {
       return false;
     }
     CasesWithAlertURL casesWithAlertURL = (CasesWithAlertURL) o;
-    return Objects.equals(this.iD, casesWithAlertURL.iD) &&
-        Objects.equals(this.caseGroup, casesWithAlertURL.caseGroup) &&
-        Objects.equals(this.caseType, casesWithAlertURL.caseType) &&
-        Objects.equals(this.externalID, casesWithAlertURL.externalID) &&
-        Objects.equals(this.externalIdSort, casesWithAlertURL.externalIdSort) &&
-        Objects.equals(this.caseKey, casesWithAlertURL.caseKey) &&
-        Objects.equals(this.keyLabel, casesWithAlertURL.keyLabel) &&
-        Objects.equals(this.parentID, casesWithAlertURL.parentID) &&
-        Objects.equals(this.supplementaryKey, casesWithAlertURL.supplementaryKey) &&
-        Objects.equals(this.supplementaryType, casesWithAlertURL.supplementaryType) &&
-        Objects.equals(this.flagKey, casesWithAlertURL.flagKey) &&
-        Objects.equals(this.description, casesWithAlertURL.description) &&
-        Objects.equals(this.createdBy, casesWithAlertURL.createdBy) &&
-        Objects.equals(this.createdDateTime, casesWithAlertURL.createdDateTime) &&
-        Objects.equals(this.modifiedBy, casesWithAlertURL.modifiedBy) &&
-        Objects.equals(this.modifiedDateTime, casesWithAlertURL.modifiedDateTime) &&
-        Objects.equals(this.assignedUser, casesWithAlertURL.assignedUser) &&
-        Objects.equals(this.assignedBy, casesWithAlertURL.assignedBy) &&
-        Objects.equals(this.assignedDateTime, casesWithAlertURL.assignedDateTime) &&
-        Objects.equals(this.priority, casesWithAlertURL.priority) &&
-        Objects.equals(this.permission, casesWithAlertURL.permission) &&
-        Objects.equals(this.currentState, casesWithAlertURL.currentState) &&
-        Objects.equals(this.derivedState, casesWithAlertURL.derivedState) &&
-        Objects.equals(this.stateExpiry, casesWithAlertURL.stateExpiry) &&
-        Objects.equals(this.stateChangeBy, casesWithAlertURL.stateChangeBy) &&
-        Objects.equals(this.stateChangeDateTime, casesWithAlertURL.stateChangeDateTime) &&
-        Objects.equals(this.sourceId, casesWithAlertURL.sourceId) &&
-        Objects.equals(this.sourceName, casesWithAlertURL.sourceName) &&
-        Objects.equals(this.caseMarker, casesWithAlertURL.caseMarker) &&
-        Objects.equals(this.updatedBy, casesWithAlertURL.updatedBy) &&
-        Objects.equals(this.updatedDateTime, casesWithAlertURL.updatedDateTime) &&
-        Objects.equals(this.groupId, casesWithAlertURL.groupId) &&
-        Objects.equals(this.groupLevel, casesWithAlertURL.groupLevel) &&
-        Objects.equals(this.extendedAttribute1, casesWithAlertURL.extendedAttribute1) &&
-        Objects.equals(this.extendedAttribute2, casesWithAlertURL.extendedAttribute2) &&
-        Objects.equals(this.extendedAttribute3, casesWithAlertURL.extendedAttribute3) &&
-        Objects.equals(this.extendedAttribute4, casesWithAlertURL.extendedAttribute4) &&
-        Objects.equals(this.extendedAttribute5, casesWithAlertURL.extendedAttribute5) &&
-        Objects.equals(this.extendedAttribute6, casesWithAlertURL.extendedAttribute6) &&
-        Objects.equals(this.extendedAttribute7, casesWithAlertURL.extendedAttribute7) &&
-        Objects.equals(this.extendedAttribute8, casesWithAlertURL.extendedAttribute8) &&
-        Objects.equals(this.extendedAttribute9, casesWithAlertURL.extendedAttribute9) &&
-        Objects.equals(this.extendedAttribute10, casesWithAlertURL.extendedAttribute10) &&
-        Objects.equals(this.extendedAttribute11, casesWithAlertURL.extendedAttribute11) &&
-        Objects.equals(this.extendedAttribute12, casesWithAlertURL.extendedAttribute12) &&
-        Objects.equals(this.extendedAttribute13, casesWithAlertURL.extendedAttribute13) &&
-        Objects.equals(this.alertURL, casesWithAlertURL.alertURL);
+    return Objects.equals(id, casesWithAlertURL.id) &&
+        Objects.equals(caseGroup, casesWithAlertURL.caseGroup) &&
+        Objects.equals(caseType, casesWithAlertURL.caseType) &&
+        Objects.equals(externalId, casesWithAlertURL.externalId) &&
+        Objects.equals(externalIdSort, casesWithAlertURL.externalIdSort) &&
+        Objects.equals(caseKey, casesWithAlertURL.caseKey) &&
+        Objects.equals(keyLabel, casesWithAlertURL.keyLabel) &&
+        Objects.equals(parentId, casesWithAlertURL.parentId) &&
+        Objects.equals(supplementaryKey, casesWithAlertURL.supplementaryKey) &&
+        Objects.equals(supplementaryType, casesWithAlertURL.supplementaryType) &&
+        Objects.equals(flagKey, casesWithAlertURL.flagKey) &&
+        Objects.equals(description, casesWithAlertURL.description) &&
+        Objects.equals(createdBy, casesWithAlertURL.createdBy) &&
+        Objects.equals(createdDateTime, casesWithAlertURL.createdDateTime) &&
+        Objects.equals(modifiedBy, casesWithAlertURL.modifiedBy) &&
+        Objects.equals(modifiedDateTime, casesWithAlertURL.modifiedDateTime) &&
+        Objects.equals(assignedUser, casesWithAlertURL.assignedUser) &&
+        Objects.equals(assignedBy, casesWithAlertURL.assignedBy) &&
+        Objects.equals(assignedDateTime, casesWithAlertURL.assignedDateTime) &&
+        Objects.equals(priority, casesWithAlertURL.priority) &&
+        Objects.equals(permission, casesWithAlertURL.permission) &&
+        Objects.equals(currentState, casesWithAlertURL.currentState) &&
+        Objects.equals(derivedState, casesWithAlertURL.derivedState) &&
+        Objects.equals(stateExpiry, casesWithAlertURL.stateExpiry) &&
+        Objects.equals(stateChangeBy, casesWithAlertURL.stateChangeBy) &&
+        Objects.equals(stateChangeDateTime, casesWithAlertURL.stateChangeDateTime) &&
+        Objects.equals(sourceId, casesWithAlertURL.sourceId) &&
+        Objects.equals(sourceName, casesWithAlertURL.sourceName) &&
+        Objects.equals(caseMarker, casesWithAlertURL.caseMarker) &&
+        Objects.equals(updatedBy, casesWithAlertURL.updatedBy) &&
+        Objects.equals(updatedDateTime, casesWithAlertURL.updatedDateTime) &&
+        Objects.equals(groupId, casesWithAlertURL.groupId) &&
+        Objects.equals(groupLevel, casesWithAlertURL.groupLevel) &&
+        Objects.equals(extendedAttribute1, casesWithAlertURL.extendedAttribute1) &&
+        Objects.equals(extendedAttribute2, casesWithAlertURL.extendedAttribute2) &&
+        Objects.equals(extendedAttribute3, casesWithAlertURL.extendedAttribute3) &&
+        Objects.equals(extendedAttribute4, casesWithAlertURL.extendedAttribute4) &&
+        Objects.equals(extendedAttribute5, casesWithAlertURL.extendedAttribute5) &&
+        Objects.equals(extendedAttribute6, casesWithAlertURL.extendedAttribute6) &&
+        Objects.equals(extendedAttribute7, casesWithAlertURL.extendedAttribute7) &&
+        Objects.equals(extendedAttribute8, casesWithAlertURL.extendedAttribute8) &&
+        Objects.equals(extendedAttribute9, casesWithAlertURL.extendedAttribute9) &&
+        Objects.equals(extendedAttribute10, casesWithAlertURL.extendedAttribute10) &&
+        Objects.equals(extendedAttribute11, casesWithAlertURL.extendedAttribute11) &&
+        Objects.equals(extendedAttribute12, casesWithAlertURL.extendedAttribute12) &&
+        Objects.equals(extendedAttribute13, casesWithAlertURL.extendedAttribute13) &&
+        Objects.equals(alertUrl, casesWithAlertURL.alertUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(iD, caseGroup, caseType, externalID, externalIdSort, caseKey, keyLabel, parentID, supplementaryKey, supplementaryType, flagKey, description, createdBy, createdDateTime, modifiedBy, modifiedDateTime, assignedUser, assignedBy, assignedDateTime, priority, permission, currentState, derivedState, stateExpiry, stateChangeBy, stateChangeDateTime, sourceId, sourceName, caseMarker, updatedBy, updatedDateTime, groupId, groupLevel, extendedAttribute1, extendedAttribute2, extendedAttribute3, extendedAttribute4, extendedAttribute5, extendedAttribute6, extendedAttribute7, extendedAttribute8, extendedAttribute9, extendedAttribute10, extendedAttribute11, extendedAttribute12, extendedAttribute13, alertURL);
+    return Objects.hash(
+        id, caseGroup, caseType, externalId, externalIdSort, caseKey, keyLabel, parentId,
+        supplementaryKey, supplementaryType, flagKey, description, createdBy, createdDateTime,
+        modifiedBy, modifiedDateTime, assignedUser, assignedBy, assignedDateTime, priority,
+        permission, currentState, derivedState, stateExpiry, stateChangeBy, stateChangeDateTime,
+        sourceId, sourceName, caseMarker, updatedBy, updatedDateTime, groupId, groupLevel,
+        extendedAttribute1, extendedAttribute2, extendedAttribute3, extendedAttribute4,
+        extendedAttribute5, extendedAttribute6, extendedAttribute7, extendedAttribute8,
+        extendedAttribute9, extendedAttribute10, extendedAttribute11, extendedAttribute12,
+        extendedAttribute13, alertUrl);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CasesWithAlertURL {\n");
-    
-    sb.append("    iD: ").append(toIndentedString(iD)).append("\n");
+
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    caseGroup: ").append(toIndentedString(caseGroup)).append("\n");
     sb.append("    caseType: ").append(toIndentedString(caseType)).append("\n");
-    sb.append("    externalID: ").append(toIndentedString(externalID)).append("\n");
+    sb.append("    externalId: ").append(toIndentedString(externalId)).append("\n");
     sb.append("    externalIdSort: ").append(toIndentedString(externalIdSort)).append("\n");
     sb.append("    caseKey: ").append(toIndentedString(caseKey)).append("\n");
     sb.append("    keyLabel: ").append(toIndentedString(keyLabel)).append("\n");
-    sb.append("    parentID: ").append(toIndentedString(parentID)).append("\n");
+    sb.append("    parentId: ").append(toIndentedString(parentId)).append("\n");
     sb.append("    supplementaryKey: ").append(toIndentedString(supplementaryKey)).append("\n");
     sb.append("    supplementaryType: ").append(toIndentedString(supplementaryType)).append("\n");
     sb.append("    flagKey: ").append(toIndentedString(flagKey)).append("\n");
@@ -1141,7 +836,10 @@ public class CasesWithAlertURL   {
     sb.append("    derivedState: ").append(toIndentedString(derivedState)).append("\n");
     sb.append("    stateExpiry: ").append(toIndentedString(stateExpiry)).append("\n");
     sb.append("    stateChangeBy: ").append(toIndentedString(stateChangeBy)).append("\n");
-    sb.append("    stateChangeDateTime: ").append(toIndentedString(stateChangeDateTime)).append("\n");
+    sb
+        .append("    stateChangeDateTime: ")
+        .append(toIndentedString(stateChangeDateTime))
+        .append("\n");
     sb.append("    sourceId: ").append(toIndentedString(sourceId)).append("\n");
     sb.append("    sourceName: ").append(toIndentedString(sourceName)).append("\n");
     sb.append("    caseMarker: ").append(toIndentedString(caseMarker)).append("\n");
@@ -1158,18 +856,30 @@ public class CasesWithAlertURL   {
     sb.append("    extendedAttribute7: ").append(toIndentedString(extendedAttribute7)).append("\n");
     sb.append("    extendedAttribute8: ").append(toIndentedString(extendedAttribute8)).append("\n");
     sb.append("    extendedAttribute9: ").append(toIndentedString(extendedAttribute9)).append("\n");
-    sb.append("    extendedAttribute10: ").append(toIndentedString(extendedAttribute10)).append("\n");
-    sb.append("    extendedAttribute11: ").append(toIndentedString(extendedAttribute11)).append("\n");
-    sb.append("    extendedAttribute12: ").append(toIndentedString(extendedAttribute12)).append("\n");
-    sb.append("    extendedAttribute13: ").append(toIndentedString(extendedAttribute13)).append("\n");
-    sb.append("    alertURL: ").append(toIndentedString(alertURL)).append("\n");
+    sb
+        .append("    extendedAttribute10: ")
+        .append(toIndentedString(extendedAttribute10))
+        .append("\n");
+    sb
+        .append("    extendedAttribute11: ")
+        .append(toIndentedString(extendedAttribute11))
+        .append("\n");
+    sb
+        .append("    extendedAttribute12: ")
+        .append(toIndentedString(extendedAttribute12))
+        .append("\n");
+    sb
+        .append("    extendedAttribute13: ")
+        .append(toIndentedString(extendedAttribute13))
+        .append("\n");
+    sb.append("    alertUrl: ").append(toIndentedString(alertUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {

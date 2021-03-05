@@ -1,51 +1,31 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
-
-/**
- * CaseComments
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
 
 
-public class CaseComments   {
-  @JsonProperty("caseId")
+@javax.annotation.Generated(
+    value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
+    date = "2021-03-05T14:11:51.641Z[GMT]")
+public class CaseComments {
+
   private Integer caseId = null;
-
-  @JsonProperty("commentId")
   private Integer commentId = null;
-
-  @JsonProperty("commentedBy")
   private Integer commentedBy = null;
-
-  @JsonProperty("commentDateTime")
   private String commentDateTime = null;
-
-  @JsonProperty("caseComment")
   private String caseComment = null;
-
-  @JsonProperty("deletedFlag")
   private Integer deletedFlag = null;
-
-  @JsonProperty("restrictingPermission")
   private String restrictingPermission = null;
-
-  public CaseComments caseId(Integer caseId) {
-    this.caseId = caseId;
-    return this;
-  }
 
   /**
    * Unique Identifier assigned to the Case or Alert within Case Management
-   * @return caseId
    **/
+
   @Schema(description = "Unique Identifier assigned to the Case or Alert within Case Management")
-  
-    public Integer getCaseId() {
+  @JsonProperty("caseId")
+  public Integer getCaseId() {
     return caseId;
   }
 
@@ -53,18 +33,13 @@ public class CaseComments   {
     this.caseId = caseId;
   }
 
-  public CaseComments commentId(Integer commentId) {
-    this.commentId = commentId;
-    return this;
-  }
-
   /**
    * Unique identifier assigned to a comment
-   * @return commentId
    **/
+
   @Schema(description = "Unique identifier assigned to a comment")
-  
-    public Integer getCommentId() {
+  @JsonProperty("commentId")
+  public Integer getCommentId() {
     return commentId;
   }
 
@@ -72,18 +47,13 @@ public class CaseComments   {
     this.commentId = commentId;
   }
 
-  public CaseComments commentedBy(Integer commentedBy) {
-    this.commentedBy = commentedBy;
-    return this;
-  }
-
   /**
    * Which User was the author of the comment
-   * @return commentedBy
    **/
+
   @Schema(description = "Which User was the author of the comment")
-  
-    public Integer getCommentedBy() {
+  @JsonProperty("commentedBy")
+  public Integer getCommentedBy() {
     return commentedBy;
   }
 
@@ -91,18 +61,13 @@ public class CaseComments   {
     this.commentedBy = commentedBy;
   }
 
-  public CaseComments commentDateTime(String commentDateTime) {
-    this.commentDateTime = commentDateTime;
-    return this;
-  }
-
   /**
    * Date and time the comment was made
-   * @return commentDateTime
    **/
+
   @Schema(description = "Date and time the comment was made")
-  
-    public String getCommentDateTime() {
+  @JsonProperty("commentDateTime")
+  public String getCommentDateTime() {
     return commentDateTime;
   }
 
@@ -110,18 +75,13 @@ public class CaseComments   {
     this.commentDateTime = commentDateTime;
   }
 
-  public CaseComments caseComment(String caseComment) {
-    this.caseComment = caseComment;
-    return this;
-  }
-
   /**
    * Displays the comment
-   * @return caseComment
    **/
+
   @Schema(description = "Displays the comment")
-  
-    public String getCaseComment() {
+  @JsonProperty("caseComment")
+  public String getCaseComment() {
     return caseComment;
   }
 
@@ -129,18 +89,15 @@ public class CaseComments   {
     this.caseComment = caseComment;
   }
 
-  public CaseComments deletedFlag(Integer deletedFlag) {
-    this.deletedFlag = deletedFlag;
-    return this;
-  }
-
   /**
-   * Marks if the comment has been deleted from view in Case Management. The comment will not be deleted from the audit trail of the Case or Alert. Capability to delete comments may not be granted to all Users.
-   * @return deletedFlag
+   * Marks if the comment has been deleted from view in Case Management. The comment will not be
+   * deleted from the audit trail of the Case or Alert. Capability to delete comments may not be
+   * granted to all Users.
    **/
+
   @Schema(description = "Marks if the comment has been deleted from view in Case Management. The comment will not be deleted from the audit trail of the Case or Alert. Capability to delete comments may not be granted to all Users.")
-  
-    public Integer getDeletedFlag() {
+  @JsonProperty("deletedFlag")
+  public Integer getDeletedFlag() {
     return deletedFlag;
   }
 
@@ -148,18 +105,14 @@ public class CaseComments   {
     this.deletedFlag = deletedFlag;
   }
 
-  public CaseComments restrictingPermission(String restrictingPermission) {
-    this.restrictingPermission = restrictingPermission;
-    return this;
-  }
-
   /**
-   * Will display if access to the comment has been restricted, for example, Level 3 Only. If the comment has not been restricted, this field will be displayed as blank.
-   * @return restrictingPermission
+   * Will display if access to the comment has been restricted, for example, Level 3 Only. If the
+   * comment has not been restricted, this field will be displayed as blank.
    **/
+
   @Schema(description = "Will display if access to the comment has been restricted, for example, Level 3 Only. If the comment has not been restricted, this field will be displayed as blank.")
-  
-    public String getRestrictingPermission() {
+  @JsonProperty("restrictingPermission")
+  public String getRestrictingPermission() {
     return restrictingPermission;
   }
 
@@ -177,39 +130,44 @@ public class CaseComments   {
       return false;
     }
     CaseComments caseComments = (CaseComments) o;
-    return Objects.equals(this.caseId, caseComments.caseId) &&
-        Objects.equals(this.commentId, caseComments.commentId) &&
-        Objects.equals(this.commentedBy, caseComments.commentedBy) &&
-        Objects.equals(this.commentDateTime, caseComments.commentDateTime) &&
-        Objects.equals(this.caseComment, caseComments.caseComment) &&
-        Objects.equals(this.deletedFlag, caseComments.deletedFlag) &&
-        Objects.equals(this.restrictingPermission, caseComments.restrictingPermission);
+    return Objects.equals(caseId, caseComments.caseId) &&
+        Objects.equals(commentId, caseComments.commentId) &&
+        Objects.equals(commentedBy, caseComments.commentedBy) &&
+        Objects.equals(commentDateTime, caseComments.commentDateTime) &&
+        Objects.equals(caseComment, caseComments.caseComment) &&
+        Objects.equals(deletedFlag, caseComments.deletedFlag) &&
+        Objects.equals(restrictingPermission, caseComments.restrictingPermission);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(caseId, commentId, commentedBy, commentDateTime, caseComment, deletedFlag, restrictingPermission);
+    return Objects.hash(
+        caseId, commentId, commentedBy, commentDateTime, caseComment, deletedFlag,
+        restrictingPermission);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CaseComments {\n");
-    
+
     sb.append("    caseId: ").append(toIndentedString(caseId)).append("\n");
     sb.append("    commentId: ").append(toIndentedString(commentId)).append("\n");
     sb.append("    commentedBy: ").append(toIndentedString(commentedBy)).append("\n");
     sb.append("    commentDateTime: ").append(toIndentedString(commentDateTime)).append("\n");
     sb.append("    caseComment: ").append(toIndentedString(caseComment)).append("\n");
     sb.append("    deletedFlag: ").append(toIndentedString(deletedFlag)).append("\n");
-    sb.append("    restrictingPermission: ").append(toIndentedString(restrictingPermission)).append("\n");
+    sb
+        .append("    restrictingPermission: ")
+        .append(toIndentedString(restrictingPermission))
+        .append("\n");
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {

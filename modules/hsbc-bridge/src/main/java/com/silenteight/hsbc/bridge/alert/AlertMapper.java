@@ -7,6 +7,6 @@ class AlertMapper {
 
     //fill alert
 
-    return new Alert(caseWithAlert.getID(), "alertProto PLACEHOLDER".getBytes());
+    return new Alert(caseWithAlert.get(0).getId(), "alertProto PLACEHOLDER".getBytes());
   }
 }

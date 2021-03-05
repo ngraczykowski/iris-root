@@ -1,62 +1,36 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
 
-/**
- * Relationships
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@javax.annotation.Generated(
+    value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
+    date = "2021-03-05T14:11:51.641Z[GMT]")
+public class Relationships {
 
-public class Relationships   {
-  @JsonProperty("caseId")
   private Integer caseId = null;
-
-  @JsonProperty("inputId")
   private BigDecimal inputId = null;
-
-  @JsonProperty("inputName")
   private String inputName = null;
-
-  @JsonProperty("recordID")
-  private BigDecimal recordID = null;
-
-  @JsonProperty("relatedInputId")
+  private BigDecimal recordId = null;
   private BigDecimal relatedInputId = null;
-
-  @JsonProperty("relatedInputName")
   private String relatedInputName = null;
-
-  @JsonProperty("relatedRecordId")
   private BigDecimal relatedRecordId = null;
-
-  @JsonProperty("ruleName")
   private String ruleName = null;
-
-  @JsonProperty("priorityScore")
   private BigDecimal priorityScore = null;
-
-  @JsonProperty("relationshipHash")
   private String relationshipHash = null;
-
-  public Relationships caseId(Integer caseId) {
-    this.caseId = caseId;
-    return this;
-  }
 
   /**
    * Unique identifier assigned to the Case or Alert within Case Management
-   * @return caseId
    **/
+
   @Schema(description = "Unique identifier assigned to the Case or Alert within Case Management")
-  
-    public Integer getCaseId() {
+  @JsonProperty("caseId")
+  public Integer getCaseId() {
     return caseId;
   }
 
@@ -64,19 +38,13 @@ public class Relationships   {
     this.caseId = caseId;
   }
 
-  public Relationships inputId(BigDecimal inputId) {
-    this.inputId = inputId;
-    return this;
-  }
-
   /**
    * Identifier for the type of data inputted from the Screening Subject
-   * @return inputId
    **/
+
   @Schema(description = "Identifier for the type of data inputted from the Screening Subject")
-  
-    @Valid
-    public BigDecimal getInputId() {
+  @JsonProperty("inputId")
+  public BigDecimal getInputId() {
     return inputId;
   }
 
@@ -84,18 +52,13 @@ public class Relationships   {
     this.inputId = inputId;
   }
 
-  public Relationships inputName(String inputName) {
-    this.inputName = inputName;
-    return this;
-  }
-
   /**
-   * Describes the source of the input data, for example&#58; Customer Data
-   * @return inputName
+   * Describes the source of the input data, for example&amp;#58; Customer Data
    **/
+
   @Schema(description = "Describes the source of the input data, for example&#58; Customer Data")
-  
-    public String getInputName() {
+  @JsonProperty("inputName")
+  public String getInputName() {
     return inputName;
   }
 
@@ -103,39 +66,28 @@ public class Relationships   {
     this.inputName = inputName;
   }
 
-  public Relationships recordID(BigDecimal recordID) {
-    this.recordID = recordID;
-    return this;
-  }
-
   /**
-   * Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID.
-   * @return recordID
+   * Refers to a Customer name record within an Alert where there are multiple Customer name records
+   * within the same Alert. This is the working record ID.
    **/
+
   @Schema(description = "Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID.")
-  
-    @Valid
-    public BigDecimal getRecordID() {
-    return recordID;
+  @JsonProperty("recordId")
+  public BigDecimal getRecordId() {
+    return recordId;
   }
 
-  public void setRecordID(BigDecimal recordID) {
-    this.recordID = recordID;
-  }
-
-  public Relationships relatedInputId(BigDecimal relatedInputId) {
-    this.relatedInputId = relatedInputId;
-    return this;
+  public void setRecordId(BigDecimal recordId) {
+    this.recordId = recordId;
   }
 
   /**
    * Identifier for the type of data input from the Watchlist
-   * @return relatedInputId
    **/
+
   @Schema(description = "Identifier for the type of data input from the Watchlist")
-  
-    @Valid
-    public BigDecimal getRelatedInputId() {
+  @JsonProperty("relatedInputId")
+  public BigDecimal getRelatedInputId() {
     return relatedInputId;
   }
 
@@ -143,18 +95,13 @@ public class Relationships   {
     this.relatedInputId = relatedInputId;
   }
 
-  public Relationships relatedInputName(String relatedInputName) {
-    this.relatedInputName = relatedInputName;
-    return this;
-  }
-
   /**
-   * Describes the source of the input data, for example&#58; WorldCheck_Entities
-   * @return relatedInputName
+   * Describes the source of the input data, for example&amp;#58; WorldCheck_Entities
    **/
+
   @Schema(description = "Describes the source of the input data, for example&#58; WorldCheck_Entities")
-  
-    public String getRelatedInputName() {
+  @JsonProperty("relatedInputName")
+  public String getRelatedInputName() {
     return relatedInputName;
   }
 
@@ -162,19 +109,14 @@ public class Relationships   {
     this.relatedInputName = relatedInputName;
   }
 
-  public Relationships relatedRecordId(BigDecimal relatedRecordId) {
-    this.relatedRecordId = relatedRecordId;
-    return this;
-  }
-
   /**
-   * Refers to a Watchlist record within an Alert where there are multiple Watchlist records within the same Alert.
-   * @return relatedRecordId
+   * Refers to a Watchlist record within an Alert where there are multiple Watchlist records within
+   * the same Alert.
    **/
+
   @Schema(description = "Refers to a Watchlist record within an Alert where there are multiple Watchlist records within the same Alert.")
-  
-    @Valid
-    public BigDecimal getRelatedRecordId() {
+  @JsonProperty("relatedRecordId")
+  public BigDecimal getRelatedRecordId() {
     return relatedRecordId;
   }
 
@@ -182,18 +124,13 @@ public class Relationships   {
     this.relatedRecordId = relatedRecordId;
   }
 
-  public Relationships ruleName(String ruleName) {
-    this.ruleName = ruleName;
-    return this;
-  }
-
   /**
    * Denotes the Match Rule the Alert was generated against
-   * @return ruleName
    **/
+
   @Schema(description = "Denotes the Match Rule the Alert was generated against")
-  
-    public String getRuleName() {
+  @JsonProperty("ruleName")
+  public String getRuleName() {
     return ruleName;
   }
 
@@ -201,19 +138,13 @@ public class Relationships   {
     this.ruleName = ruleName;
   }
 
-  public Relationships priorityScore(BigDecimal priorityScore) {
-    this.priorityScore = priorityScore;
-    return this;
-  }
-
   /**
    * Records the associated Match Rule priority score
-   * @return priorityScore
    **/
+
   @Schema(description = "Records the associated Match Rule priority score")
-  
-    @Valid
-    public BigDecimal getPriorityScore() {
+  @JsonProperty("priorityScore")
+  public BigDecimal getPriorityScore() {
     return priorityScore;
   }
 
@@ -221,18 +152,13 @@ public class Relationships   {
     this.priorityScore = priorityScore;
   }
 
-  public Relationships relationshipHash(String relationshipHash) {
-    this.relationshipHash = relationshipHash;
-    return this;
-  }
-
   /**
    * Hash of the relationship value
-   * @return relationshipHash
    **/
+
   @Schema(description = "Hash of the relationship value")
-  
-    public String getRelationshipHash() {
+  @JsonProperty("relationshipHash")
+  public String getRelationshipHash() {
     return relationshipHash;
   }
 
@@ -250,32 +176,34 @@ public class Relationships   {
       return false;
     }
     Relationships relationships = (Relationships) o;
-    return Objects.equals(this.caseId, relationships.caseId) &&
-        Objects.equals(this.inputId, relationships.inputId) &&
-        Objects.equals(this.inputName, relationships.inputName) &&
-        Objects.equals(this.recordID, relationships.recordID) &&
-        Objects.equals(this.relatedInputId, relationships.relatedInputId) &&
-        Objects.equals(this.relatedInputName, relationships.relatedInputName) &&
-        Objects.equals(this.relatedRecordId, relationships.relatedRecordId) &&
-        Objects.equals(this.ruleName, relationships.ruleName) &&
-        Objects.equals(this.priorityScore, relationships.priorityScore) &&
-        Objects.equals(this.relationshipHash, relationships.relationshipHash);
+    return Objects.equals(caseId, relationships.caseId) &&
+        Objects.equals(inputId, relationships.inputId) &&
+        Objects.equals(inputName, relationships.inputName) &&
+        Objects.equals(recordId, relationships.recordId) &&
+        Objects.equals(relatedInputId, relationships.relatedInputId) &&
+        Objects.equals(relatedInputName, relationships.relatedInputName) &&
+        Objects.equals(relatedRecordId, relationships.relatedRecordId) &&
+        Objects.equals(ruleName, relationships.ruleName) &&
+        Objects.equals(priorityScore, relationships.priorityScore) &&
+        Objects.equals(relationshipHash, relationships.relationshipHash);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(caseId, inputId, inputName, recordID, relatedInputId, relatedInputName, relatedRecordId, ruleName, priorityScore, relationshipHash);
+    return Objects.hash(
+        caseId, inputId, inputName, recordId, relatedInputId, relatedInputName, relatedRecordId,
+        ruleName, priorityScore, relationshipHash);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Relationships {\n");
-    
+
     sb.append("    caseId: ").append(toIndentedString(caseId)).append("\n");
     sb.append("    inputId: ").append(toIndentedString(inputId)).append("\n");
     sb.append("    inputName: ").append(toIndentedString(inputName)).append("\n");
-    sb.append("    recordID: ").append(toIndentedString(recordID)).append("\n");
+    sb.append("    recordId: ").append(toIndentedString(recordId)).append("\n");
     sb.append("    relatedInputId: ").append(toIndentedString(relatedInputId)).append("\n");
     sb.append("    relatedInputName: ").append(toIndentedString(relatedInputName)).append("\n");
     sb.append("    relatedRecordId: ").append(toIndentedString(relatedRecordId)).append("\n");
@@ -287,8 +215,8 @@ public class Relationships   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {

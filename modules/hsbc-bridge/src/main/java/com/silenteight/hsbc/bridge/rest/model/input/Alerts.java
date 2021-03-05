@@ -1,30 +1,34 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
 import java.util.Objects;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 @javax.annotation.Generated(
     value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
     date = "2021-03-05T14:11:51.641Z[GMT]")
-public class Alert {
+public class Alerts {
 
-  private AlertSystemInformation systemInformation = null;
+  private List<Alert> alerts = new ArrayList<Alert>();
 
   /**
    *
    **/
 
   @Schema(description = "")
-  @JsonProperty("systemInformation")
-  public AlertSystemInformation getSystemInformation() {
-    return systemInformation;
+  @JsonProperty("alerts")
+  public List<Alert> getAlerts() {
+    return alerts;
   }
 
-  public void setSystemInformation(AlertSystemInformation systemInformation) {
-    this.systemInformation = systemInformation;
+  public void setAlerts(List<Alert> alerts) {
+    this.alerts = alerts;
   }
 
 
@@ -36,21 +40,21 @@ public class Alert {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Alert alert = (Alert) o;
-    return Objects.equals(systemInformation, alert.systemInformation);
+    Alerts alerts = (Alerts) o;
+    return Objects.equals(alerts, alerts.alerts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(systemInformation);
+    return Objects.hash(alerts);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Alert {\n");
+    sb.append("class Alerts {\n");
 
-    sb.append("    systemInformation: ").append(toIndentedString(systemInformation)).append("\n");
+    sb.append("    alerts: ").append(toIndentedString(alerts)).append("\n");
     sb.append("}");
     return sb.toString();
   }
