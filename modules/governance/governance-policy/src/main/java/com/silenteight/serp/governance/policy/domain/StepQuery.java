@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.domain;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.serp.governance.policy.details.PolicyStepsCountQuery;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
@@ -21,7 +22,8 @@ import static java.util.stream.Collectors.toList;
 class StepQuery implements
     PolicyStepsRequestQuery,
     PolicyStepsOrderRequestQuery,
-    PolicyStepsConfigurationQuery {
+    PolicyStepsConfigurationQuery,
+    PolicyStepsCountQuery {
 
   private final StepRepository stepRepository;
   private final PolicyRepository policyRepository;
@@ -72,5 +74,10 @@ class StepQuery implements
     return stepRepository
         .findAllOrderedByPolicyId(policyId)
         .stream();
+  }
+
+  @Override
+  public long getStepsCount(UUID policyId) {
+    return stepRepository.countStepsByPolicyId(policyRepository.getIdByPolicyId(policyId));
   }
 }

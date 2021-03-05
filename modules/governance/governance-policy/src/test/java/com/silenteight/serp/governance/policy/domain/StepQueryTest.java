@@ -134,6 +134,30 @@ class StepQueryTest extends BaseDataJpaTest {
     assertThat(policyId).isEqualTo(createdPolicyId);
   }
 
+  @Test
+  void getStepsCount_whenNoStepsInPolicy() {
+    // given
+    policyService.addPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+
+    // when
+    long stepsCount = underTest.getStepsCount(POLICY_UID);
+
+    // then
+    assertThat(stepsCount).isZero();
+  }
+
+  @Test
+  void getStepsCount_whenStepsInPolicy() {
+    // given
+    createPolicyWithTwoSteps();
+
+    // when
+    long stepsCount = underTest.getStepsCount(POLICY_UID);
+
+    // then
+    assertThat(stepsCount).isEqualTo(2L);
+  }
+
   private Long createConfiguredPolicy() {
     createPolicyWithTwoSteps();
     Long policyId = policyRepository.getIdByPolicyId(POLICY_UID);

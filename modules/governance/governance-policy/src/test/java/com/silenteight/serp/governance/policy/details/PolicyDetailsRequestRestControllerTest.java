@@ -3,8 +3,8 @@ package com.silenteight.serp.governance.policy.details;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.policy.details.dto.PolicyDetailsDto;
 import com.silenteight.serp.governance.policy.domain.PolicyState;
-import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -33,24 +33,26 @@ class PolicyDetailsRequestRestControllerTest extends BaseRestControllerTest {
   private static final String CREATED_BY = "USER";
   private static final String UPDATED_BY = "USER2";
   private static final UUID POLICY_UUID = UUID.randomUUID();
-  private static final PolicyDto POLICY_DTO = PolicyDto
+  private static final int STEPS_COUNT = 2;
+  private static final PolicyDetailsDto POLICY_DTO = PolicyDetailsDto
       .builder()
       .policyId(1)
       .name(POLICY_NAME)
       .state(PolicyState.SAVED)
-      .id(PolicyDetailsRequestRestControllerTest.POLICY_UUID)
+      .id(POLICY_UUID)
       .createdAt(CREATED_AT)
       .updatedAt(UPDATED_AT)
       .createdBy(CREATED_BY)
       .updatedBy(UPDATED_BY)
+      .stepsCount(STEPS_COUNT)
       .build();
 
   @MockBean
-  private PolicyDetailsRequestQuery policyDetailsRequestQuery;
+  private PolicyDetailsUseCase policyDetailsUseCase;
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its404_whenNoPolicies() {
-    given(policyDetailsRequestQuery.details(POLICY_UUID))
+    given(policyDetailsUseCase.activate(POLICY_UUID))
         .willThrow(new EntityNotFoundException());
 
     get(getPolicyMapper(POLICY_UUID))
@@ -65,7 +67,7 @@ class PolicyDetailsRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenPolicyDetails() {
-    given(policyDetailsRequestQuery.details(POLICY_UUID)).willReturn(POLICY_DTO);
+    given(policyDetailsUseCase.activate(POLICY_UUID)).willReturn(POLICY_DTO);
 
     get(getPolicyMapper(POLICY_UUID))
         .statusCode(OK.value())
@@ -75,7 +77,8 @@ class PolicyDetailsRequestRestControllerTest extends BaseRestControllerTest {
         .body("createdBy", equalTo(CREATED_BY))
         .body("createdAt", notNullValue())
         .body("updatedBy", equalTo(UPDATED_BY))
-        .body("updatedAt", notNullValue());
+        .body("updatedAt", notNullValue())
+        .body("stepsCount", equalTo(STEPS_COUNT));
   }
 
   private String getPolicyMapper(UUID policyUuid) {
