@@ -48,7 +48,7 @@ subprojects {Project subproject ->
         "-Xlintfile", "${rootProject.projectDir}/Xlint.properties".toString(),
     ]
 
-    subproject.tasks.withType(JavaCompile).configureEach {JavaCompile java ->
+    subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
       java.ajc.options.compilerArgs = ajcArgs
       java.options.fork = true
       java.options.compilerArgs << "-parameters"

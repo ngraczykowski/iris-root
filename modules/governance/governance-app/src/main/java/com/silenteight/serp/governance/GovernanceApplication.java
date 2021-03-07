@@ -10,9 +10,11 @@ import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
 import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
 import com.silenteight.serp.governance.mailer.MailerModule;
+import com.silenteight.serp.governance.model.ModelModule;
 import com.silenteight.serp.governance.notifier.NotifierModule;
 import com.silenteight.serp.governance.policy.PolicyModule;
 import com.silenteight.serp.governance.solutiondiscrepancy.SolutionDiscrepancyModule;
+import com.silenteight.serp.governance.strategy.StrategyModule;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,9 +27,11 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     // Domain modules
     AnalyticsModule.class,
     BranchModule.class,
+    ModelModule.class,
     NotifierModule.class,
     PolicyModule.class,
     SolutionDiscrepancyModule.class,
+    StrategyModule.class,
     SignatureModule.class,
     // Interface modules
     AmqpCommonModule.class,
