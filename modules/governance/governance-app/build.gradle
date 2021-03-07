@@ -28,6 +28,8 @@ dependencies {
   implementation project(":governance-db-changelog")
   implementation project(":governance-policy")
   implementation project(":governance-analytics")
+  implementation project(":governance-model")
+  implementation project(":governance-strategy")
 
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common
