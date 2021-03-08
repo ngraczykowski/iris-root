@@ -29,10 +29,12 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
   @Override
   public void createDataset(
       CreateDatasetRequest request, StreamObserver<Dataset> responseObserver) {
-    if (request.getFilterCase() == FilterCase.FILTER_NOT_SET)
+    if (request.getFilterCase() == FilterCase.FILTER_NOT_SET) {
       responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
           .withDescription("filter must be set")
           .asRuntimeException());
+      return;
+    }
 
     int alertsCount;
 
@@ -54,10 +56,12 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
   @Override
   public void getDataset(
       GetDatasetRequest request, StreamObserver<Dataset> responseObserver) {
-    if (request.getName().isBlank())
+    if (request.getName().isBlank()) {
       responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
           .withDescription("name must be set")
           .asRuntimeException());
+      return;
+    }
 
     Dataset dataset = Dataset
         .newBuilder()
@@ -72,10 +76,12 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
   @Override
   public void listDatasets(
       ListDatasetsRequest request, StreamObserver<ListDatasetsResponse> responseObserver) {
-    if (request.getPageSize() <= 0)
+    if (request.getPageSize() <= 0) {
       responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
           .withDescription("pageSize must be greater than 0")
           .asRuntimeException());
+      return;
+    }
 
     ListDatasetsResponse.Builder builder = ListDatasetsResponse.newBuilder();
     for (int i = 0; i < request.getPageSize(); i++) {
@@ -90,15 +96,19 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
   public void listDatasetAlerts(
       ListDatasetAlertsRequest request,
       StreamObserver<ListDatasetAlertsResponse> responseObserver) {
-    if (request.getPageSize() <= 0)
+    if (request.getPageSize() <= 0) {
       responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
           .withDescription("pageSize must be greater than 0")
           .asRuntimeException());
+      return;
+    }
 
-    if (request.getDataset().isBlank())
+    if (request.getDataset().isBlank()) {
       responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
           .withDescription("dataset must be set")
           .asRuntimeException());
+      return;
+    }
 
     ListDatasetAlertsResponse.Builder builder = ListDatasetAlertsResponse.newBuilder();
     for (int i = 0; i < request.getPageSize(); i++) {
