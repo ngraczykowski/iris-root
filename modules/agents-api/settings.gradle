@@ -1,0 +1,4 @@
+rootProject.name = "agents-api"
+
+include "protocol-agents"
+include "agents-api"
