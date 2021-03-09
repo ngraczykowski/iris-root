@@ -85,7 +85,13 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
 
     ListDatasetsResponse.Builder builder = ListDatasetsResponse.newBuilder();
     for (int i = 0; i < request.getPageSize(); i++) {
-      builder.addDatasets("datasets/" + UUID.randomUUID().toString());
+      Dataset dataset = Dataset
+          .newBuilder()
+          .setName("datasets/" + UUID.randomUUID())
+          .setAlertCount(123)
+          .setCreateTime(Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()))
+          .build();
+      builder.addDatasets(dataset);
     }
     builder.setNextPageToken(generateRandomPageToken());
     responseObserver.onNext(builder.build());
