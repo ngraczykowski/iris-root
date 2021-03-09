@@ -1,10 +1,11 @@
 import collections
+import itertools
 import re
 import string
 
-from typing import *  # sorry
+from typing import Mapping, Set
 
-import fuzzywuzzy.fuzz
+import fuzzywuzzy.fuzz as fuzz
 import unidecode
 
 
@@ -21,70 +22,176 @@ LEGAL_TERMS = {
     "plc": "public limited company",
     "limited": "limited liability company",
     "corp": "corporation",
+    "pc": "professional corporation",
     "pvt": "private",
     "inc": "incorporated",
     "incorporation": "incorporated",
+    "pty": "unlimited proprietary",
+    "ilp": "incorporated limited partnership",
     "gmbh": "gesellschaft mit beschrankter haftung",
     "ag": "aktiengesellschaft",
+    "ab": "aktiebolag",
+    "as": "aksjeselskap",
+    "ans": "ansvarlig selskap",
+    "nv": "naamloze vennootschap",
+    "kk": "kabushiki gaisha",
+    "ek": "ekonomisk forening",
+    "hb": "handelsbolag",
+    "kb": "kommanditbolag",
+    "bv": "besloten vennootschap",
+    "cv": "commanditaire vennootschap",
     "sa": "societe anonyme",
+    "sociedad anonima": "societe anonyme",
+    "de cv": "capital variable",
+    "ltda": "limited liability company",
+    "ooo": "obschestvo s ogranichennoy otvetstvennostyu",
+    "pao": "publichnoye aktsionernoye obschestvo",
+    "oao": "otkrytoye aktsionernoye obschestvo",
+    "sas": "sociedad por acciones simplificada",
+    "srl": "sociedad de responsabilidad limitada",
+    "sci": "sociedad de capital e industria",
+    "sc": "sociedad colectiva",
+    "sarl": "societe a responsabilite limitee",
+    "cic": "community interest company",
+    "cio": "charitable incorporated organisation",
+    "jsc": "joint-stock company",
+    "ojsc": "open joint-stock company",
+    "pjsc": "public joint-stock company",
+    "fze": "free zone establishment",
+    "fzco": "free zone company",
+    "soe": "state-owned enterprise",
+    "goe": "government-owned enterprise",
+    "sdn bhd": "sendirian berhad",
+    "bhd": "berhad",
 }
-TERMS = {*LEGAL_TERMS.keys(), *LEGAL_TERMS.values()}
 
-COMMON = {
-    "pharmaceuticals",
-    "technologies",
-    "association",
-    "group",
-    "devices",
-    "communications",
-    "information",
-    "technology",
-    "motor",
-    "computer",
-    "international",
-    "investments",
-    "management",
-    "capital",
-    "securities",
-    "development",
-}
+TERMS = {*LEGAL_TERMS.keys(), *LEGAL_TERMS.values()}
 
 WEAK_WORDS = {"of", "the", "for", "and"}
 
+COMMON_SUFFIXES = {
+    "asset",
+    "association",
+    "bank",
+    "banking",
+    "brothers",
+    "capital",
+    "commercial",
+    "communication",
+    "communications",
+    "construction",
+    "consulting",
+    "computer",
+    "credit",
+    "development",
+    "devices",
+    "energy",
+    "engineering",
+    "enterprise",
+    "enterprises",
+    "equity",
+    "export",
+    "exports",
+    "finance",
+    "financial",
+    "fund",
+    "general",
+    "global",
+    "group",
+    "holding",
+    "holdings",
+    "industries",
+    "information",
+    "international",
+    "invest",
+    "investment",
+    "investments",
+    "joint",
+    "logistics",
+    "management",
+    "manufacturing",
+    "marketing",
+    "media",
+    "partners",
+    "pharmaceuticals",
+    "regional",
+    "securities",
+    "services",
+    "shipping",
+    "stock",
+    "support",
+    "tech",
+    "technologies",
+    "technology",
+    "trade",
+    "trading",
+    "trust",
+    *WEAK_WORDS
+}
+
+COMMON_PREFIXES = COMMON_SUFFIXES
+
 NameInformation = collections.namedtuple(
-    "NameInformation", ("base", "common_suffixes", "legal", "parenthesis_information")
+    "NameInformation",
+    ("common_prefixes", "base", "common_suffixes", "legal", "parenthesis_information")
 )
 
 
-def clear_name(name):
-    name = (
-        unidecode.unidecode(name.lower())
-        .strip()
-        .strip(",.")
-        .replace(", ", " ")
-        .replace(". ", " ")
-    )
+def clear_name(name: str) -> str:
+    name = unidecode.unidecode(name.lower()).replace(",", " ").strip()
     return re.sub(r"\.\w{2,3}\b", "", name)  # .net, .com, .org, .de
 
 
-def cut_something(name, bag_of_something):
+def term_variants(term: str) -> Set[str]:
+    return {
+        term,
+        term + ".",
+        *(
+            " ".join(w).strip()
+            for w in itertools.product(
+                *[
+                    (" ".join(t), "".join(t), ". ".join(t) + ".", ".".join(t) + ".")
+                    for t in term.split()
+                ]
+            )
+        ),
+    }
+
+
+def cut_from_end(name: str, terms_to_cut):
     possibilities = []
-    for term in bag_of_something:
-        if name.endswith(" " + term):
-            possibilities.append(term)
+    for term in terms_to_cut:
+        for term_variant in term_variants(term):
+            if name.endswith(" " + term_variant):
+                possibilities.append((term_variant, term))
     if not possibilities:
         return name, []
-    best_one = sorted([(len(x), x) for x in possibilities])[-1][1]
-    base, legal_term = cut_something(name[: -len(best_one)].strip(), bag_of_something)
-    return base.strip(), (*legal_term, best_one)
+    best_one = sorted([(len(x[0]), x) for x in possibilities])[-1][1]
+    base, other_terms = cut_from_end(name[: -len(best_one[0])].strip(), terms_to_cut)
+    return base.strip(), (*other_terms, best_one[1])
+
+
+def cut_from_start(name: str, terms_to_cut):
+    possibilities = []
+    for term in terms_to_cut:
+        for term_variant in term_variants(term):
+            if name.startswith(term_variant + " "):
+                possibilities.append((term_variant, term))
+    if not possibilities:
+        return [], name
+    best_one = sorted([(len(x[0]), x) for x in possibilities])[-1][1]
+    other_terms, base = cut_from_start(name[len(best_one[0]):].strip(), terms_to_cut)
+    return (best_one[1], *other_terms), base.strip()
 
 
 def cut_legal_terms(name):
-    return cut_something(name, TERMS)
+    return cut_from_end(name, TERMS)
 
 
 def cut_common(name):
-    return cut_something(name, COMMON)
+    common_base, common_suffixes = cut_from_end(name, COMMON_SUFFIXES)
+    common_prefixes, base = cut_from_start(common_base, COMMON_PREFIXES)
+    return common_prefixes, base, common_suffixes
 
 
 def cut_extra(name):
@@ -92,21 +199,26 @@ def cut_extra(name):
     t = []
     for extra_information in reversed(extra):
         pos = extra_information.span()
-        t.append(name[pos[0] + 1 : pos[1] - 1])
-        name = name[: pos[0]].strip() + " " + name[pos[1] :].strip()
+        t.append(name[pos[0] + 1:pos[1] - 1].strip())
+        name = name[:pos[0]].strip() + " " + name[pos[1]:].strip()
     return name.strip(), t
 
 
 def cut_all(name) -> NameInformation:
     extra_base, extra = cut_extra(name)
     legal_base, legal = cut_legal_terms(extra_base)
-    common_base, common = cut_common(legal_base)
+    common_prefixes, common_base, common_suffixes = cut_common(legal_base)
     return NameInformation(
+        common_prefixes=common_prefixes,
         base=common_base,
-        common_suffixes=common,
+        common_suffixes=common_suffixes,
         legal=legal,
         parenthesis_information=extra,
     )
+
+
+def _without_whitespaces(*names):
+    return ("".join(name.split()) for name in names)
 
 
 def _check_abbreviation_for_next_word(
@@ -123,7 +235,7 @@ def _check_abbreviation_for_next_word(
         for i, w in zip(range(5), word):
             if len(abbreviation) > i and w == abbreviation[i]:
                 yield check_abbreviation(
-                    rest_of_information, abbreviation[i + 1 :], length_of_all
+                    rest_of_information, abbreviation[i + 1:], length_of_all
                 ) * (1 - 0.5 / length_of_all)
             else:
                 break
@@ -167,8 +279,11 @@ def _check_abbreviation_when_no_words(rest_of_information, abbreviation, length_
             # getting abbreviation from legal
             legal_information = rest_of_information[1]
             if legal_information:
-                # only first legal information is freely accessible in abbreviation - next ones should be penalized
-                yield check_abbreviation([[legal_information[0]], [], []], abbreviation, length_of_all)
+                # only first legal information is freely accessible in abbreviation
+                # - next ones should be penalized
+                yield check_abbreviation(
+                    [[legal_information[0]], [], []], abbreviation, length_of_all
+                )
 
     yield 1 - len(abbreviation) / length_of_all
 
@@ -207,9 +322,13 @@ def legal_score(first, second) -> float:
     return 0
 
 
-def abbreviation_score(information, abbreviation) -> float:
-    words = information.base.split()
-    if len(abbreviation) > 0.5 * len(information.base) or len(abbreviation) < 2 or not words:
+def abbreviation_score(information: NameInformation, abbreviation: str) -> float:
+    words = [*information.common_prefixes, *information.base.split()]
+    if (
+        len(abbreviation) >= len(information.base)
+        or len(abbreviation) < 2
+        or not words
+    ):
         return 0
 
     return check_abbreviation(
@@ -223,63 +342,32 @@ def abbreviation_score(information, abbreviation) -> float:
     )
 
 
-def _names_to_compare(
-    first: NameInformation, second: NameInformation
-) -> Tuple[str, str]:
-    def _join(base, suffixes):
-        return " ".join((base, *suffixes))
+def tokenization_score(first_name: str, second_name: str, absolute=False) -> float:
+    if not first_name or not second_name:
+        return 0
 
-    if not first.common_suffixes or not second.common_suffixes:
-        yield first.base, second.base
-
-    shortest_length = min(len(first.common_suffixes), len(second.common_suffixes))
-    if (
-        first.common_suffixes[:shortest_length]
-        == second.common_suffixes[:shortest_length]
-    ):
-        yield _join(first.base, first.common_suffixes[:shortest_length]), _join(
-            second.base, second.common_suffixes[:shortest_length]
-        )
-
-    yield _join(first.base, first.common_suffixes), _join(
-        second.base, second.common_suffixes
-    )
+    first_tokens, second_tokens = set(first_name.split()), set(second_name.split())
+    common = first_tokens.intersection(second_tokens)
+    different = first_tokens.symmetric_difference(second_tokens).difference(WEAK_WORDS)
+    return len(common) if absolute else len(common) / (len(common) + len(different))
 
 
-def tokenization_score(first: NameInformation, second: NameInformation) -> float:
-    result = 0
-    for first_name, second_name in _names_to_compare(first, second):
-        if not first_name or not second_name:
-            continue
-        first_tokens, second_tokens = set(first_name.split()), set(second_name.split())
-        common = first_tokens.intersection(second_tokens)
-        different = first_tokens.symmetric_difference(second_tokens).difference(
-            WEAK_WORDS
-        )
-        result = max(
-            result,
-            len(common) / (len(common) + len(different)),
-        )
-    return result
-
-
-def fuzzy_score(
-    first: NameInformation, second: NameInformation, fuzz_function="ratio"
-) -> float:
-    result = 0
-    for first_name, second_name in _names_to_compare(first, second):
-        result = max(
-            result,
-            getattr(fuzzywuzzy.fuzz, fuzz_function)(first_name, second_name),
-        )
-    return result / 100
-
-
-def score(first, second):
+def compare(first: str, second: str) -> Mapping[str, float]:
     first_information = cut_all(clear_name(first))
     first_base = first_information.base
+    first = " ".join((
+        *first_information.common_prefixes,
+        first_information.base,
+        *first_information.common_suffixes
+    ))
+
     second_information = cut_all(clear_name(second))
     second_base = second_information.base
+    second = " ".join((
+        *second_information.common_prefixes,
+        second_information.base,
+        *second_information.common_suffixes
+    ))
 
     extra_match = float(
         second_base in first_information.parenthesis_information
@@ -293,33 +381,11 @@ def score(first, second):
     return {
         "parenthesis_match": extra_match,
         "abbreviation": abbreviate_score,
-        "fuzzy": fuzzy_score(first_information, second_information, "ratio"),
-        "partial_fuzzy": fuzzy_score(
-            first_information, second_information, "partial_ratio"
-        ),
-        "sorted_fuzzy": fuzzy_score(
-            first_information, second_information, "token_sort_ratio"
-        ),
+        "fuzzy_on_base": fuzz.ratio(*_without_whitespaces(first_base, second_base)) / 100,
+        "fuzzy": fuzz.ratio(*_without_whitespaces(first, second)) / 100,
+        "partial_fuzzy": fuzz.partial_ratio(*_without_whitespaces(first, second)) / 100,
+        "sorted_fuzzy": fuzz.token_sort_ratio(*_without_whitespaces(first, second)) / 100,
         "legal_terms": legal_score(first_information.legal, second_information.legal),
-        "tokenization": tokenization_score(first_information, second_information),
+        "tokenization": tokenization_score(first, second),
+        "absolute_tokenization": tokenization_score(first, second, absolute=True),
     }
-
-
-def compare(
-    first,
-    second,
-    fuzzy_match_threshold=0.8,
-    abbreviate_threshold=0.7,
-    tokenization_threshold=0.8,
-):
-    scored = score(first, second)
-
-    return (
-        (scored["fuzzy"] >= fuzzy_match_threshold)
-        or (scored["abbreviation"] >= abbreviate_threshold)
-        or (
-            scored["parenthesis_match"]
-            and scored["abbreviation"] >= 0.5 * abbreviate_threshold
-        )
-        or (scored["tokenization"] >= tokenization_threshold)
-    )

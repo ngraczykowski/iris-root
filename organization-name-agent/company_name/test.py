@@ -1,6 +1,16 @@
 import pytest
 
-from .compare import compare, score
+from .compare import compare
+
+score = compare
+
+
+def compare(first, second):
+    result = score(first, second)
+    for k in ("abbreviation", "fuzzy", "fuzzy_on_base"):
+        if result[k] > 0.6:
+            return True
+    return False
 
 
 @pytest.mark.parametrize(
@@ -16,13 +26,17 @@ from .compare import compare, score
 )
 def test_basic(first, second):
     print(repr(first), repr(second), score(first, second))
-    assert compare(first, second)
+    result = score(first, second)
+    assert result["fuzzy_on_base"] > 0.6
 
 
-@pytest.mark.parametrize(("first", "second"), (("AMAZON", "GOOGLE"),  ("intuit",  "intuitive surgical")))
+@pytest.mark.parametrize(
+    ("first", "second"), (("AMAZON", "GOOGLE"), ("intuit", "intuitive surgical"))
+)
 def test_basic_negative(first, second):
     print(repr(first), repr(second), score(first, second))
-    assert not compare(first, second)
+    result = score(first, second)
+    assert result["fuzzy_on_base"] < 0.6
 
 
 @pytest.mark.parametrize(
@@ -185,6 +199,26 @@ def test_diacritic(first, second):
 )
 def test_strange_input(first, second):
     print(repr(first), repr(second), score(first, second))
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (("AIOC", "A I O C"), ("AIOC", "A\tI  O \tC")),
+)
+def test_whitespaces(first, second):
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
+
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (("Group Grant", "Grant"), ("the al", "al")),
+)
+def test_common_prefixes(first, second):
+    print(repr(first), repr(second), score(first, second))
+    assert compare(first, second)
+    assert False
 
 
 @pytest.mark.parametrize(
