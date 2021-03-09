@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package silenteight.agent.date.v1.api;
+
+option java_package = "com.silenteight.proto.agent.date.v1.api";
+option java_outer_classname = "DateAgentApiProto";
+option java_multiple_files = true;
+
+service DateAgent {
+    rpc RecognizeDates (RecognizeDatesRequest) returns (stream RecognizeDatesResponse) {
+    }
+    rpc DiscountDates (DiscountDatesRequest) returns (stream DiscountDatesResponse) {
+    }
+}
+
+message RecognizeDatesRequest {
+    string alerted_value = 1 [deprecated = true];
+    repeated string matched_values = 2;
+    string instance_name = 3;
+    repeated string alerted_values = 4;
+}
+
+message RecognizeDatesResponse {
+    string result = 1;
+    RecognizeDatesReason reason = 2;
+}
+
+message RecognizeDatesReason {
+    string customer_value = 1 [deprecated = true];
+    repeated string watchlist_values = 2;
+    string match_date = 3;
+    repeated string customer_values = 4;
+}
+
+message DiscountDatesRequest {
+  repeated string matched_values = 1;
+  repeated string alerted_values = 2;
+}
+
+message DiscountDatesResponse {
+  string result = 1;
+  DiscountDatesReason reason = 2;
+}
+
+message DiscountDatesReason {
+  string watchlist_match_date = 1;
+  string customer_match_date = 2;
+  DiscountDatesConfig config = 3;
+}
+
+message DiscountDatesConfig {
+  //Minimum age that person could be for the event to occur.
+  int32 min_age = 1;
+}
+

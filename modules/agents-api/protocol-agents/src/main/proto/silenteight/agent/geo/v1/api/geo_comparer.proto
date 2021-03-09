@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package silenteight.agent.geo.v1.api;
+
+import public "silenteight/agent/geo/v1/api/common.proto";
+
+option java_package = "com.silenteight.proto.agent.geo.v1.api";
+option java_outer_classname = "GeoLocationComparerApiProto";
+option java_multiple_files = true;
+
+service GeoLocationComparer {
+
+  rpc CompareGeoLocations (CompareGeoLocationsRequest) returns (CompareGeoLocationsResponse) {
+  }
+}
+
+message CompareGeoLocationsRequest {
+  repeated Location alerted_party_locations = 1;
+  repeated Location watchlist_party_locations = 2;
+}
+
+message CompareGeoLocationsResponse {
+  string solution = 1;
+}

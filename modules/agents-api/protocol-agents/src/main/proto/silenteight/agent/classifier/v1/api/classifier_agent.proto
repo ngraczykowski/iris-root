@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package silenteight.agent.classifier.v1.api;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_package = "com.silenteight.proto.agent.classifier.v1.api";
+option java_outer_classname = "ClassifierAgentApiProto";
+option java_multiple_files = true;
+
+service ClassifierAgent {
+    rpc ClassifyText (ClassifyTextRequest) returns (stream ClassifyTextResponse) {
+    }
+
+    rpc GetClassifierAgentDescriptor (google.protobuf.Empty) returns (ClassifierAgentDescriptor) {
+    }
+}
+
+message ClassifyTextRequest {
+    // Number of results with the highest probability returned by Classifier Agent.
+    // If the field is not passed by then Long.MAX_VALUE will be used
+    google.protobuf.Int32Value top_results_limit = 3;
+    // The probability above which results will be returned.
+    // If the field is not passed by all the results will be returned.
+    google.protobuf.DoubleValue probability_threshold = 4;
+    // Inputs collection for which responses should be generated
+    repeated ClassifyTextInput inputs = 2;
+}
+
+message ClassifyTextInput {
+    // Text to be classified
+    string text = 1;
+}
+
+message ClassifyTextResponse {
+    // Index of inputs collection element from the request body
+    uint32 input_index = 1;
+    // Collection of the all class probabilities
+    repeated ClassificationProbability probabilities = 2;
+}
+
+message ClassificationProbability {
+    // Class name for which probability has been calculated
+    string classification = 1;
+    // Class probability for given input text
+    double probability = 2;
+}
+
+message ClassifierAgentDescriptor {
+    // Name of the classifier agent.
+    string name = 1;
+    // Description of the classifier agent.
+    string description = 2;
+    // Names of classes the classifier can return.
+    repeated string class_names = 3;
+}

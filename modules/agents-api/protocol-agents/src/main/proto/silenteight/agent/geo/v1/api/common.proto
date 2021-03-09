@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package silenteight.agent.geo.v1.api;
+
+import "google/protobuf/any.proto";
+
+option java_package = "com.silenteight.proto.agent.geo.v1.api";
+option java_outer_classname = "GeoCommonProto";
+option java_multiple_files = true;
+
+message Location {
+    string name = 1;
+    LocationType type = 2;
+    uint32 id = 3;
+    string code = 4;
+    // A reference id to the parent location.
+    uint32 parent_id = 5;
+    google.protobuf.Any details = 6;
+}
+
+enum LocationType {
+    // Default value if the type isn't specified.
+    LOCATION_TYPE_UNSPECIFIED = 0;
+    // A state or equivalent level location.
+    ADMINISTRATIVE_AREA = 1;
+    // A country level location.
+    COUNTRY = 2;
+    // A city or equivalent level location.
+    LOCALITY = 3;
+    // A postal code level location.
+    // POSTAL_CODE = 4;
+    // A street address level location.
+    // STREET_ADDRESS = 5;
+    // A county or equivalent level location.
+    // SUB_ADMINISTRATIVE_AREA = 6;
+    // A sublocality is a subdivision of a locality, f.e a city borough, ward, or arrondissement.
+    // SUB_LOCALITY = 7;
+}

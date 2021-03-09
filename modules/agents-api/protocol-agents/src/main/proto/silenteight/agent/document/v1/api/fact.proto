@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package silenteight.agent.document.v1.api;
+
+option java_package = "com.silenteight.proto.agent.document.v1.api";
+option java_outer_classname = "DocumentFactProto";
+option java_multiple_files = true;
+
+message Facts {
+    message CountryFact {
+        //alpha-2 code
+        string code = 1;
+        string name = 2;
+    }
+
+    message GenderFact {
+        enum Gender {
+            UNKNOWN = 0;
+            FEMALE = 1;
+            MALE = 2;
+        }
+
+        Gender gender = 1;
+    }
+
+    message BirthDateFact {
+        message Year {
+            uint32 value = 1;
+        }
+        message Month {
+            uint32 value = 1;
+        }
+        message Day {
+            uint32 value = 1;
+        }
+
+        Year year = 1;
+        //optional
+        Month month = 2;
+        //optional
+        Day day = 3;
+    }
+
+    message LocationFact {
+        // China and Pakistan National Ids contain information about Registered Location.
+        // That information consists of id and the city or state name.
+        string id = 1;
+        string name = 2;
+    }
+
+    message PartyTypeFact {
+        enum PartyType {
+            UNKNOWN = 0;
+            INDIVIDUAL = 1;
+            ORGANIZATION = 2;
+        }
+
+        PartyType party_type = 1;
+    }
+
+    repeated CountryFact countries = 1;
+    GenderFact gender = 2;
+    repeated BirthDateFact birth_dates = 3;
+    repeated LocationFact locations = 4;
+    PartyTypeFact party_type = 5;
+}

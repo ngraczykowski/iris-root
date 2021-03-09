@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package silenteight.agent.geo.v1.api;
+
+import public "silenteight/agent/geo/v1/api/common.proto";
+
+option java_package = "com.silenteight.proto.agent.geo.v1.api";
+option java_outer_classname = "GeoLocationExtractorApiProto";
+option java_multiple_files = true;
+
+service GeoLocationExtractor {
+
+    rpc ExtractLocation (ExtractLocationRequest) returns (ExtractLocationResponse) {
+    }
+}
+
+message ExtractLocationRequest {
+    // Location string
+    string value = 1;
+}
+
+message ExtractLocationResponse {
+    // List of extracted locations
+    repeated Location extracted_locations = 1;
+}

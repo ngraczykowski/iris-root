@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package silenteight.agent.document.v1.api;
+
+import public "silenteight/agent/document/v1/api/fact.proto";
+
+option java_package = "com.silenteight.proto.agent.document.v1.api";
+option java_outer_classname = "DocumentAgentApiProto";
+option java_multiple_files = true;
+
+service DocumentAgent {
+    rpc RecognizeDocuments (RecognizeDocumentsRequest) returns (stream RecognizeDocumentsResponse) {
+    }
+
+    rpc CompareDocumentNumbers (CompareDocumentNumbersRequest) returns (CompareDocumentNumbersResponse) {
+    }
+
+
+    rpc SolveDocNo (SolveDocNoRequest) returns (SolveDocNoResponse) {
+    }
+
+}
+
+message RecognizeDocumentsRequest {
+    repeated string document_numbers = 1;
+}
+
+message RecognizeDocumentsResponse {
+    message RecognizedDocument {
+        string type = 1;
+        Facts recognized_facts = 2;
+    }
+
+    // Index of inputs collection element from the request body
+    uint64 index = 1;
+    repeated RecognizedDocument documents = 2;
+}
+
+message CompareDocumentNumbersRequest {
+    message PartyDocuments {
+        repeated DocumentToCompare documents = 1;
+        Facts known_facts = 2;
+    }
+
+    message DocumentToCompare {
+        string number = 1;
+        //optional
+        KnownType known_type = 2;
+    }
+
+    message KnownType {
+        string type = 1;
+    }
+
+    PartyDocuments alerted_documents = 1;
+    PartyDocuments matched_documents = 2;
+}
+
+message CompareDocumentNumbersResponse {
+    message ComparisionResult {
+        string alerted_document_number = 1;
+        string matched_document_number = 2;
+        repeated string recognized_types = 3;
+        string solution = 4;
+    }
+
+    message Document {
+        string number = 1;
+        repeated string recognized_types = 3;
+    }
+
+    repeated Document alerted_documents = 1;
+    repeated Document matched_documents = 2;
+
+    string solution = 3;
+
+    repeated ComparisionResult results = 4;
+}
+
+message SolveDocNoRequest {
+  // Alerted document number values
+  repeated string alerted_values = 1;
+  // Matched documents to compare
+  repeated string matched_values = 2;
+}
+
+message SolveDocNoResponse {
+  string result = 1;
+  // Reason of the most matching documents
+  DocnoSolveReason reason = 2;
+}
+
+message DocnoSolveReason {
+  string customer_value = 1 [deprecated = true];
+  repeated string customer_values = 3;
+  repeated string watchlist_values = 2;
+}

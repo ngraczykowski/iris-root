@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package silenteight.agent.country.v1.api;
+
+option java_package = "com.silenteight.proto.agent.country.v1.api";
+option java_outer_classname = "CountryAgentApiProto";
+option java_multiple_files = true;
+
+service CountryAgent {
+
+    rpc CompareCountries (CompareCountriesRequest) returns (CompareCountriesResponse) {
+    }
+    
+    rpc ExtractCountries (ExtractCountriesRequest) returns (ExtractCountriesResponse) {
+    }
+}
+
+message CompareCountriesRequest {
+  // Alerted countries values
+  repeated string alerted_values = 1;
+  // Matched countries to compare
+  repeated string matched_values = 2;
+}
+
+message CompareCountriesResponse {
+  string result = 1;
+  // Reason of the most matching countries
+  CompareCountriesReason reason = 2;
+}
+
+message CompareCountriesReason {
+  string customer_value = 1;
+  repeated string matched_values = 3;
+  repeated string customer_values = 4;
+  repeated string watchlist_values = 2;
+}
+
+message ExtractCountriesRequest {
+  // Input values
+  repeated string values = 1;
+}
+
+message ExtractCountriesResponse {
+  repeated ExtractedCountry results = 1;
+}
+
+message ExtractedCountry {
+  string original_value = 1;
+  repeated string extracted_values = 2;
+}

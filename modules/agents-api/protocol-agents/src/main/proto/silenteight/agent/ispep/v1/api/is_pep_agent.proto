@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package silenteight.agent.is_pep.v1.api;
+
+option java_package = "com.silenteight.proto.agent.ispep.v1.api";
+option java_outer_classname = "IsPepAgentApiProto";
+option java_multiple_files = true;
+
+service IsPepAgent {
+  rpc VerifyIfIsPep (IsPepRequest) returns (IsPepResponse) {
+  }
+
+  // Allows the agent client to get the fields it needs to provide to the agent
+  rpc GetModelFieldNames(GetModelFieldNamesRequest) returns (GetModelFieldNamesResponse) {
+  }
+}
+
+message IsPepRequest {
+  PotentialPep potential_pep = 1;
+  // the region of a bank than can change Is PEP rules
+  string bank_region = 2;
+}
+
+message PotentialPep {
+  // watchlist field name to value
+  map<string, string> fields = 1;
+}
+
+message IsPepResponse {
+  string solution = 1;
+  Reason reason = 2;
+  ModelDetails model_details = 3;
+
+  message Reason {
+    string message = 1;
+    repeated string no_pep_positions = 2;
+    repeated string not_matched_positions = 3;
+    repeated string pep_positions = 4;
+    // uids of true PEPs connected to the potential PEPs
+    repeated string linked_peps_uids = 5;
+  }
+}
+
+message ModelDetails {
+  string version = 1;
+  string region_name = 2;
+}
+
+message GetModelFieldNamesRequest {
+  // the region of a bank than can change Is PEP rules
+  string bank_region = 1;
+}
+
+message GetModelFieldNamesResponse {
+  ModelFieldNames model_field_names = 1;
+}
+
+message ModelFieldNames {
+  // field names used for hashing
+  repeated string field_names = 1;
+  ModelDetails model_details = 2;
+}
