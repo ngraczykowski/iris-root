@@ -23,15 +23,11 @@ message SolvingModel {
   // The unique name of the model. This is always system-assigned.
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
   // Policy that binds together feature vectors with solution at match level. Set via Policy API.
-  string policy_name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string policy_name = 2 [(google.api.field_behavior) = REQUIRED];
   // Strategy which represents an algorithm for determining alert level solution. Required for Solving API.
-  string strategy_name = 3;
-  // List of agents that are required to determine feature vector for each match
-  repeated Agent agents = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
-}
-
-// Attributes of an agent required for invocation
-message Agent {
-  // Topic's routing key used for dispatching message. Provided by an agent.
-  string routing_key = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string strategy_name = 3 [(google.api.field_behavior) = REQUIRED];
+  // List of agent configs that that are required to determine feature vector for each match
+  // [`agents/<Agent Name>/versions/<Agent Version>/configs/<Agent Config Version>`]
+  //  e.g. `agents/name_agent/version/4.35/configs/345`.
+  repeated string agent_configs = 4 [(google.api.field_behavior) = REQUIRED];
 }
