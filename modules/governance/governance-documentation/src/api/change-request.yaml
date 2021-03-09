@@ -1,0 +1,223 @@
+openapi: 3.0.3
+info:
+  title: Change Request
+  description: Maker/Approver flow to approve or reject simulation and apply changes in the production model
+  version: 1.0.0
+servers:
+  - url: 'https'
+
+paths:
+
+  /api/v1/change-requests:
+    post:
+      tags:
+        - change-request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChangeRequestDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+
+    get:
+      tags:
+        - change-request
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeRequestDto'
+
+  /api/v1/change-requests?state={state}:
+    get:
+      tags:
+        - change-request
+      parameters:
+        - in: query
+          name: state
+          required: false
+          description: 'Change Request State'
+          schema:
+            $ref: '#/components/schemas/ChangeRequestState'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeRequestDto'
+
+  /api/v1/change-requests/{id}:
+    get:
+      tags:
+        - change-request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeRequestDto'
+
+  '/api/v1/change-requests/{id}:approve':
+    post:
+      tags:
+        - change-request
+      operationId: approve
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveChangeRequestDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+
+  '/api/v1/change-requests/{id}:cancel':
+    post:
+      tags:
+        - change-request
+      operationId: cancel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelChangeRequestDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+
+  '/api/v1/change-requests/{id}:reject':
+    post:
+      tags:
+        - change-request
+      operationId: reject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectChangeRequestRequestDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+
+components:
+  schemas:
+    CreateChangeRequestDto:
+      required:
+        - simulationName
+        - comment
+      type: object
+      properties:
+        simulationName:
+          type: string
+        comment:
+          type: string
+      example:
+        simulationName: simulations/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
+        comment: Maker comment
+
+    ChangeRequestState:
+      type: string
+      enum: [ PENDING, ARCHIVED ]
+
+    ChangeRequestDecision:
+      type: string
+      enum: [ ACCEPTED, REJECTED ]
+
+    ChangeRequestDto:
+      type: object
+      properties:
+        changeRequestName:
+          type: string
+        simulationName:
+          type: string
+        state:
+          $ref: '#/components/schemas/ChangeRequestState'
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        comment:
+          type: string
+        decidedBy:
+          type: string
+        decidedAt:
+          type: string
+          format: date-time
+        deciderComment:
+          type: string
+        decision:
+          $ref: '#/components/schemas/ChangeRequestDecision'
+      example:
+        changeRequestName: change-requests/f0a23955-b63c-480c-8941-d9d6d9bf2fc1
+        simulationName: simulations/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
+        state: ARCHIVED
+        createdBy: Maker
+        createdAt: '2004-02-12T15:19:21Z'
+        comment: Maker comment
+        decidedBy: Approver
+        decidedAt: '2004-02-12T17:19:21Z'
+        deciderComment: Approver comment
+        decision: ACCEPTED
+
+    ApproveChangeRequestDto:
+      required:
+        - approverComment
+      type: object
+      properties:
+        approverComment:
+          type: string
+
+    RejectChangeRequestRequestDto:
+      required:
+        - rejectorComment
+      type: object
+      properties:
+        rejectorComment:
+          type: string
+
+    CancelChangeRequestDto:
+      required:
+        - cancellerComment
+      type: object
+      properties:
+        cancellerComment:
+          type: string
