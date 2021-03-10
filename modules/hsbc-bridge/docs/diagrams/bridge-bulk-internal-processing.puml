@@ -1,0 +1,70 @@
+@startuml
+
+participant HSBC as a
+participant Agent as j
+participant Bulk as b
+participant "Raw Alert Data Converter" as c
+participant Database as d
+participant Analysis as e
+participant "Alert Facade" as f
+participant "Match Facade" as g
+participant "Adjudication Engine" as h
+participant Governance as i
+
+
+participant "Data Source API" as k
+participant "Data Source Provider" as l
+participant "Transform/Feature" as m
+
+==Solving==
+
+a -> b: Request with Alerts to solve
+b -> d: Store raw alerts
+b -->> c: Bulk stored event
+c -> d: get Alerts for given bulk
+d -> c: retrieve data
+loop
+    c -> c: Create Alert
+    c -> d: store Alert
+    c -> c: Create Match
+    c -> d: store Match
+end
+c -> h: Register Alerts - BatchCreateAlerts
+c -> h: Register Matches - BatchCreateMatches
+
+c -->> e: Bulk converted event
+'group "Can be removed"
+'e -> d: get Alerts id list for given bulk
+'d -> e: retrieve data
+'e -> f: get Alerts data
+'f -> d: ask for data
+'d -> f: retrieve data
+'f -> e: return data
+'e -> h: Register Alerts
+'e -> g: get Matches data
+'g -> d: ask for data
+'d -> g: retrieve data
+'g -> e: return data
+'e -> h: Register Matches
+'end group
+e -> d: get Alerts for given bulk
+d -> e: retrieve data
+e -> h: Create Dataset
+e -> i: Get default Model
+e -> h: Create Analysis
+
+==Data Source API case==
+
+j -> k: Request from Country agent with "other countries" feature
+k -> l:
+l -> g: Get requested Matches
+g -> d: get Matches
+d -> g: retrieve data from db
+g -> l: retrieve data
+l -> m: ask for InputData for agent
+m -> m: transform fields accordingly to feature
+m -> l: retrieve InputData
+l -> j: retrieve CountryInputData for "other countries" feature
+
+
+@enduml

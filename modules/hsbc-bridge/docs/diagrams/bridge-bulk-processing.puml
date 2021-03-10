@@ -1,0 +1,25 @@
+@startuml
+participant HSBC as a
+participant "SERP Bridge" as b
+participant "Bridge Database" as c
+participant "Adjudication Engine" as d
+
+
+a -> b: Http request with data (list of alerts)
+b -> c: Store raw alerts (save bulk)
+b -> a: Response to HSBC
+b -> c: get Alert
+b -> b: convert Alert to matches
+b -> c: store matches in database
+b -> d: register Alert
+b -> d: register Matches
+b -> d: Create dataset for (save bulk)
+b -> d: Get Default Model
+b -> d: Create Analysis
+b -> d: ?? Add Dataset ??
+d -> b: Recommendations Generated
+b -> d: Get Recommendations
+b -> b: create OWS output
+b -> a: Return recommendations as a file
+
+@enduml
