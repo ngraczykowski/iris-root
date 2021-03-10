@@ -9,6 +9,7 @@ plugins {
 description = "Adjudication Engine Application"
 
 dependencies {
+  implementation project(":adjudication-engine-alerts")
   implementation project(":adjudication-engine-dataset")
 
   // Utilities

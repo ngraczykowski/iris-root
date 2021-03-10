@@ -1,0 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation libraries.adjudication_engine_api
+    implementation libraries.grpc_spring_boot_starter
+    implementation libraries.protobuf_java_util
+}
