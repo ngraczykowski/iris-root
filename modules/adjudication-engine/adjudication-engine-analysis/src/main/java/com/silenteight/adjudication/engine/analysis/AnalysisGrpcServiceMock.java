@@ -37,10 +37,8 @@ class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
     }
 
     responseObserver.onNext(Analysis
-                    .newBuilder()
+                    .newBuilder(request.getAnalysis())
                     .setName("analysis/" + UUID.randomUUID())
-                    .setPolicy("policy/54317992-a203-4e95-b145-b47d6a3aef0a")
-                    .setStrategy("strategy/back_test")
                     .setCreateTime(Timestamp.newBuilder()
                                             .setSeconds(Instant.now().getEpochSecond()))
                     .setState(Analysis.State.NEW)
@@ -72,17 +70,17 @@ class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
                                StreamObserver<BatchAddDatasetsResponse> responseObserver) {
     if (request.getAnalysis().isBlank() || request.getDatasetsCount() == 0) {
       responseObserver.onError(fromCode(INVALID_ARGUMENT.getCode())
-          .withDescription("Analysis name must be set")
+          .withDescription("Analysis name and datasets must be set")
           .asRuntimeException());
       return;
     }
 
     var resultBuilder = BatchAddDatasetsResponse.newBuilder();
 
-    for (int i = 0; i < request.getDatasetsCount(); i++) {
-      resultBuilder.setAnalysisDatasets(i, AnalysisDataset
+    for (var dataset : request.getDatasetsList()) {
+      resultBuilder.addAnalysisDatasets(AnalysisDataset
           .newBuilder()
-          .setName(request.getAnalysis() + "/" + request.getDatasets(i))
+          .setName(request.getAnalysis() + "/" + dataset)
           .setAlertCount(current().nextInt(1, 100))
           .setPendingAlerts(current().nextInt(0, 10))
           .build());
