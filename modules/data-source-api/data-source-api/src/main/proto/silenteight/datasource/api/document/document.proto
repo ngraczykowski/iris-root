@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.document;
+
+import "google/api/annotations.proto";
+import "silenteight/datasource/api/common/common.proto";
+
+option java_package = "com.silenteight.datasource.api.document";
+option java_outer_classname = "DocumentInputProto";
+option java_multiple_files = true;
+
+service DocumentInputService {
+  rpc BatchGetMatchDocumentInputsV1 (silenteight.datasource.api.common.BatchGetMatchAgentInputsRequest) returns (stream BatchGetMatchDocumentInputsV1Response) {
+    option (google.api.http) = {
+      post: "/agent-inputs/document/versions/1/matches:batchGet",
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchDocumentInputsV1Response {
+  repeated DocumentInput document_inputs = 1;
+}
+
+message DocumentInput {
+  string match = 1;
+  repeated DocumentFeatureInput document_features_input = 2;
+}
+
+message DocumentFeatureInput {
+  string feature = 1;
+  repeated string alerted_party_documents = 2;
+  repeated string watchlist_documents = 3;
+}

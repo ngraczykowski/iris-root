@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.location;
+
+import "google/api/annotations.proto";
+import "silenteight/datasource/api/common/common.proto";
+
+option java_package = "com.silenteight.datasource.api.location";
+option java_outer_classname = "LocationInputProto";
+option java_multiple_files = true;
+
+service LocationInputService {
+  rpc BatchGetMatchLocationInputsV1 (silenteight.datasource.api.common.BatchGetMatchAgentInputsRequest) returns (stream BatchGetMatchLocationInputsV1Response) {
+    option (google.api.http) = {
+      post: "/agent-inputs/location/versions/1/matches:batchGet",
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchLocationInputsV1Response {
+  repeated LocationInput location_inputs = 1;
+}
+
+/**
+  Location is a full text description
+  example: "Jerozolimskie 2/50, 01-200 Warszawa, mazowieckie, Poland"
+ */
+message LocationInput {
+  string match = 1;
+  repeated LocationFeatureInput lcoation_feature_inputs = 2;
+}
+
+message LocationFeatureInput {
+  string feature = 1;
+  repeated string alerted_party_locations = 2;
+  repeated string watchlist_locations = 3;
+}

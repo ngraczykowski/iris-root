@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.nationalid;
+
+import "google/api/annotations.proto";
+import "silenteight/datasource/api/common/common.proto";
+
+option java_package = "com.silenteight.datasource.api.nationalid";
+option java_outer_classname = "NationalIdInputProto";
+option java_multiple_files = true;
+
+service NationalIdInputService {
+  rpc BatchGetMatchNationalIdInputsV1 (silenteight.datasource.api.common.BatchGetMatchAgentInputsRequest) returns (stream BatchGetMatchNationalIdInputsV1Response) {
+    option (google.api.http) = {
+      post: "/agent-inputs/national-id/versions/1/matches:batchGet",
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchNationalIdInputsV1Response {
+  repeated NationalIdInput national_id_inputs = 1;
+}
+
+message NationalIdInput {
+  string match = 1;
+  repeated NationalIdFeatureInput national_id_feature_inputs = 2;
+}
+
+message NationalIdFeatureInput {
+  string feature = 1;
+
+  // original document numbers
+  repeated string alerted_party_document_numbers = 2;
+  repeated string watchlist_document_numbers = 3;
+
+  // country from other sources
+  string alerted_party_country = 4;
+  string watchlist_country = 5;
+}
