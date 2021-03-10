@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package silenteight.agents.v1.api.exchange;
+
+import "google/protobuf/struct.proto";
+
+option java_package = "com.silenteight.agents.v1.api.exchange";
+option java_outer_classname = "AgentsExchangeProto";
+option java_multiple_files = true;
+
+message AgentExchangeRequest {
+  repeated string matches = 1;
+  repeated string features = 2;
+}
+
+message AgentExchangeResponse {
+  repeated AgentOutput agent_outputs = 1;
+}
+
+message AgentOutput {
+  string match = 1;
+  repeated Feature features = 2;
+
+  message Feature {
+    string feature = 1;
+    string solution = 2;
+    google.protobuf.Struct reason = 3;
+  }
+}
