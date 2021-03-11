@@ -1,16 +1,48 @@
 ext {
   libraries = [:]
+
+  //***********************************
+  // Silent Eight
+  //***********************************
+  adjudicationEngineApiVersion = "0.1.0-SNAPSHOT"
+
+  //***********************************
+  // Dependency Versions
+  //***********************************
+  springVersion = "2.4.2"
+  junitJupiterVersion = "5.6.0"
 }
 
-// @formatter:off
+// Silent Eight
+libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 
-libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot']
-libraries.spring_boot_starter_web =
-    [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
+// Spring
+libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springVersion]
+libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
+libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springVersion]
+libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
+libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springVersion]
 
-libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-api']
+// Database
+libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.18']
+libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '4.3.1']
 
+// APIs
 libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30']
+libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final']
+
+// OpenAPI & Swagger
+libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version: '3.0.0']
+
+// Others
+libraries.lombook = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
+
+// Testing
+libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.7']
+libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: '2.0-M4-groovy-3.0']
+libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
+libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -23,9 +55,29 @@ configurations.all {
 }
 
 dependencies {
-  //implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-  //annotationProcessor platform(
-  //    "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-
+  compileOnly libraries.lombook
+  annotationProcessor libraries.lombook
+  compile libraries.javax_validation_api
+  compile libraries.springfox_oas
   implementation libraries.slf4j_api
+  implementation libraries.postgresql
+  implementation libraries.liquibase_core
+  implementation libraries.spring_boot
+  implementation libraries.spring_data_jpa
+  implementation libraries.spring_boot_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_validation
+  implementation libraries.spring_boot_starter_web
+  testImplementation libraries.junit_jupiter_api
+  testRuntimeOnly libraries.junit_jupiter_engine
+  testCompile libraries.groovy_all
+  testCompile libraries.spock_core
+}
+
+repositories {
+  mavenCentral()
+}
+
+test {
+  useJUnitPlatform()
 }
