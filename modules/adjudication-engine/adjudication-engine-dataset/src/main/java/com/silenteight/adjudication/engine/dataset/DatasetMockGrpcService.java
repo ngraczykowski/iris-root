@@ -119,7 +119,7 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
     ListDatasetAlertsResponse.Builder builder = ListDatasetAlertsResponse.newBuilder();
     for (int i = 0; i < request.getPageSize(); i++) {
       builder.addDatasetAlertNames(
-          "datasets/" + request.getDataset() + "/alerts/" + UUID.randomUUID().toString());
+          request.getDataset() + "/alerts/" + UUID.randomUUID().toString());
     }
     builder.setNextPageToken(generateRandomPageToken());
     responseObserver.onNext(builder.build());
