@@ -197,6 +197,10 @@ public class AlertSystemInformation {
     return casesWithAlertURL;
   }
 
+  public CasesWithAlertURL getCaseWithAlertURL() {
+    return casesWithAlertURL.get(0);
+  }
+
   public void setCasesWithAlertURL(List<CasesWithAlertURL> casesWithAlertURL) {
     this.casesWithAlertURL = casesWithAlertURL;
   }
