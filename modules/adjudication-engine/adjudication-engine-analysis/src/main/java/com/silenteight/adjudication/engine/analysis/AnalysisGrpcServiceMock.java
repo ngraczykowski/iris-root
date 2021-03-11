@@ -145,6 +145,7 @@ class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
           .newBuilder()
           .setName(request.getAnalysis() + "/recommendations/" + i)
           .setCreateTime(makePastTimestamp())
+          .setAlert("alerts/" + current().nextInt(100, 10000))
           .setRecommendationComment(
               "That is a " + action.toLowerCase().replace('_', ' ') + ", mate!")
           .setRecommendedAction(action)
@@ -170,6 +171,7 @@ class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
         .newBuilder()
         .setName(request.getRecommendation())
         .setCreateTime(makePastTimestamp())
+        .setAlert("alerts/" + current().nextInt(100, 10000))
         .setRecommendationComment("That is a " + action.toLowerCase().replace('_', ' ') + ", mate!")
         .setRecommendedAction(action)
         .build());
