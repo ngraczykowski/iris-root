@@ -4,7 +4,6 @@ package silenteight.solving.api.v1;
 
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
-import "google/protobuf/empty.proto";
 
 import public "silenteight/protobuf/uuid.proto";
 import public "silenteight/solving/api/v1/feature.proto";

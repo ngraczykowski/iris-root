@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package silenteight.solving.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import public "silenteight/solving/api/v1/alert.proto";
+
+option java_package = "com.silenteight.solving.api.v1";
+option java_outer_classname = "AlertsSolvingApiProto";
+option java_multiple_files = true;
+
+service AlertsSolving {
+  rpc BatchSolveAlerts (BatchSolveAlertsRequest) returns (BatchSolveAlertsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{strategy=strategies/*}:batchSolve"
+      body: "alerts"
+    };
+  }
+}
+
+// Batch request
+message BatchSolveAlertsRequest {
+  // Name of strategy used for solving
+  string strategy = 1 [(google.api.field_behavior) = REQUIRED];
+  // Ordered collection of alerts
+  repeated Alert alerts = 2;
+}
+
+// Batch response
+message BatchSolveAlertsResponse {
+  // Ordered collection of responses
+  repeated SolveAlertSolutionResponse solutions = 1;
+}
+
+// Single response
+message SolveAlertSolutionResponse {
+  // Solution assigned to an alert
+  string alert_solution = 1;
+  // Any two alerts with the same name are considered the same.
+  string alert_name = 2;
+}

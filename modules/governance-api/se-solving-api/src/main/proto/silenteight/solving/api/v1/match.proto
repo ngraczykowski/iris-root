@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package silenteight.solving.api.v1;
+
+import public "silenteight/solving/api/v1/feature.proto";
+
+option java_package = "com.silenteight.solving.api.v1";
+option java_outer_classname = "MatchProto";
+option java_multiple_files = true;
+
+// Representation of the alert
+message Match {
+  // Solution of the match
+  FeatureVectorSolution solution = 1;
+  // Ordered collection of match state flags
+  repeated MatchFlag flags = 2;
+}
+
+// Available states of match
+enum MatchFlag {
+  // No flag is set.
+  MATCH_FLAG_UNSPECIFIED = 0;
+  // Match is obsolete.
+  OBSOLETE = 1;
+  // Match is already solved.
+  SOLVED = 2;
+}
