@@ -160,7 +160,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
       return;
     }
     Alert alert = Alert.newBuilder()
-        .setName("alerts/" + UUID.randomUUID().toString())
+        .setName(request.getAlert())
         .setAlertId(UUID.randomUUID().toString())
         .setCreateTime(Timestamps.fromMillis(System.currentTimeMillis()))
         .build();
@@ -203,7 +203,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
     }
     Timestamp timestamp = Timestamps.fromMillis(System.currentTimeMillis());
     Match match = Match.newBuilder()
-        .setName("matches/" + UUID.randomUUID().toString())
+        .setName(request.getMatch())
         .setMatchId(UUID.randomUUID().toString())
         .setCreateTime(timestamp)
         .build();
