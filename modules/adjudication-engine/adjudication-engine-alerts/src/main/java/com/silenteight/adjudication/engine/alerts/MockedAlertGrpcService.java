@@ -87,7 +87,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
     Timestamp creationTimestamp = Timestamps.fromMillis(System.currentTimeMillis());
     Match responseMatch = Match.newBuilder(request.getMatch())
         .setCreateTime(creationTimestamp)
-        .setName("alerts/" + request.getAlert() + "/matches/" + UUID.randomUUID().toString())
+        .setName(request.getAlert() + "/matches/" + UUID.randomUUID().toString())
         .build();
     responseObserver.onNext(responseMatch);
     responseObserver.onCompleted();
