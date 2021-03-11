@@ -3,12 +3,15 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
+import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository;
 import com.silenteight.hsbc.bridge.rest.model.input.Alert;
 import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest;
+import com.silenteight.hsbc.bridge.rest.model.output.BulkAcceptedResponse;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkAlertItem;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkStatus;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkAcceptedResponse;
+
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,11 +23,14 @@ public class CreateBulkUseCase {
 
   private final AlertFacade alertFacade;
   private final BulkWriteRepository writeRepository;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public BulkAcceptedResponse createBulk(HsbcRecommendationRequest request) {
     var bulkItems = getBulkItems(request.getAlerts());
     var bulk = createBulk(bulkItems);
+
+    eventPublisher.publishEvent(new BulkStoredEvent(bulk.getId()));
 
     var response = new BulkAcceptedResponse();
     response.setBulkId(bulk.getId());

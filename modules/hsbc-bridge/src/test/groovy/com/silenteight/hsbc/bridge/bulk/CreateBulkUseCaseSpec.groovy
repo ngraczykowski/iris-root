@@ -2,17 +2,20 @@ package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade
 import com.silenteight.hsbc.bridge.alert.RawAlert
+import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository
 import com.silenteight.hsbc.bridge.rest.model.input.Alert
 import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest
 
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 class CreateBulkUseCaseSpec extends Specification {
 
   def alertFacade = Mock(AlertFacade)
   def bulkWriteRepository = Mock(BulkWriteRepository)
-  def underTest = new CreateBulkUseCase(alertFacade, bulkWriteRepository)
+  def eventPublisher = Mock(ApplicationEventPublisher)
+  def underTest = new CreateBulkUseCase(alertFacade, bulkWriteRepository, eventPublisher)
 
   def 'should create bulk'() {
     given:
@@ -24,6 +27,7 @@ class CreateBulkUseCaseSpec extends Specification {
     then:
     1 * alertFacade.map(_ as Alert) >> new RawAlert(caseId: 1)
     1 * bulkWriteRepository.save(_ as Bulk) >> { Bulk bulk -> bulk }
+    1 * eventPublisher.publishEvent(_ as BulkStoredEvent)
     result.bulkId
     result.requestedAlerts.size() == 1
   }
