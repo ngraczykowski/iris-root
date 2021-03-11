@@ -7,7 +7,7 @@ public class AlertFacade {
 
   private final AlertMapper alertMapper;
 
-  public Alert map(com.silenteight.hsbc.bridge.rest.model.input.Alert alert) {
+  public RawAlert map(com.silenteight.hsbc.bridge.rest.model.input.Alert alert) {
     return alertMapper.map(alert);
   }
 }

@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade
+import com.silenteight.hsbc.bridge.alert.RawAlert
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository
 import com.silenteight.hsbc.bridge.rest.model.input.Alert
 import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest
@@ -21,7 +22,7 @@ class CreateBulkUseCaseSpec extends Specification {
     def result = underTest.createBulk(request)
 
     then:
-    1 * alertFacade.map(_ as Alert) >> new com.silenteight.hsbc.bridge.alert.Alert(caseId: 1)
+    1 * alertFacade.map(_ as Alert) >> new RawAlert(caseId: 1)
     1 * bulkWriteRepository.save(_ as Bulk) >> { Bulk bulk -> bulk }
     result.bulkId
     result.requestedAlerts.size() == 1

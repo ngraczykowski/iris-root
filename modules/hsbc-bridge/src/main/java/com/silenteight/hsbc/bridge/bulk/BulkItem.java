@@ -2,8 +2,7 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.*;
 
-import com.silenteight.hsbc.bridge.alert.Alert;
-import com.silenteight.hsbc.bridge.bulk.BulkStatus;
+import com.silenteight.hsbc.bridge.alert.RawAlert;
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import java.util.UUID;
@@ -34,9 +33,9 @@ class BulkItem extends BaseEntity {
   UUID bulkId;
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  private Alert alert;
+  private RawAlert alert;
 
-  public BulkItem(Alert alert) {
+  public BulkItem(RawAlert alert) {
     this.alert = alert;
   }
 
