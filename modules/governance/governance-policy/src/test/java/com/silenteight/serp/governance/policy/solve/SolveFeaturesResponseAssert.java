@@ -7,8 +7,8 @@ import org.assertj.core.api.AbstractAssert;
 public class SolveFeaturesResponseAssert extends
     AbstractAssert<SolveFeaturesResponseAssert, BatchSolveFeaturesResponse> {
 
-  SolveFeaturesResponseAssert(BatchSolveFeaturesResponse batchSolveFeaturesResponse) {
-    super(batchSolveFeaturesResponse, SolveFeaturesResponseAssert.class);
+  SolveFeaturesResponseAssert(BatchSolveFeaturesResponse solveFeaturesResponse) {
+    super(solveFeaturesResponse, SolveFeaturesResponseAssert.class);
   }
 
   public static SolveFeaturesResponseAssert assertThat(BatchSolveFeaturesResponse actual) {

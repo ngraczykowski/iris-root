@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
@@ -35,7 +36,7 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
   @ToString.Include
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private FeatureVectorSolution solution = FeatureVectorSolution.SOLUTION_NO_DECISION;
+  private FeatureVectorSolution solution = SOLUTION_NO_DECISION;
 
   @ToString.Include
   @Column(nullable = false)

@@ -110,7 +110,7 @@ paths:
                   policyName: "policy_name",
                   "steps": [
                     {
-                      "solution": "FALSE_POSITIVE",
+                      "solution": "SOLUTION_FALSE_POSITIVE",
                       "step-name": "branchId=1",
                       "featureslogic": [
                         {

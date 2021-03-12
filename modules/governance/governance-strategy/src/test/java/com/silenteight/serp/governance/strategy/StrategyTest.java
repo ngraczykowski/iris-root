@@ -8,12 +8,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static com.silenteight.serp.governance.strategy.StrategyFixture.CURRENT_STRATEGY_NAME;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = { StrategyTestConfiguration.class })
 @ExtendWith({ SpringExtension.class })
 class StrategyTest {
+
+  private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 
   @Autowired
   CurrentStrategyProvider currentStrategyProvider;

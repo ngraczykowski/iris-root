@@ -10,15 +10,16 @@ import com.silenteight.solving.api.v1.PolicyStepsSolvingGrpc;
 
 import com.google.rpc.Code;
 import com.google.rpc.Status;
-import io.grpc.protobuf.StatusProto;
 import io.grpc.stub.StreamObserver;
+
+import static io.grpc.protobuf.StatusProto.toStatusRuntimeException;
 
 @RequiredArgsConstructor
 class PolicyStepsGrpcService
     extends PolicyStepsSolvingGrpc.PolicyStepsSolvingImplBase {
 
   @NonNull
-  private SolveUseCase solveUseCase;
+  private final SolveUseCase solveUseCase;
 
   @Override
   public void batchSolveFeatures(
@@ -32,10 +33,10 @@ class PolicyStepsGrpcService
       Status status = Status
           .newBuilder()
           .setCode(Code.INTERNAL_VALUE)
-          .setMessage("Unhandled error occurred in Governance while calling 'getSolutions'.")
+          .setMessage("Unhandled error occurred in Governance while calling 'batchSolveFeatures'.")
           .build();
 
-      responseObserver.onError(StatusProto.toStatusRuntimeException(status));
+      responseObserver.onError(toStatusRuntimeException(status));
     }
   }
 }

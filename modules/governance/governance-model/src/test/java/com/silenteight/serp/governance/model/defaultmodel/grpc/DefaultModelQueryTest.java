@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.serp.governance.model.defaultmodel.grpc.DefaultModelQuery.DEFAULT_MODEL_NAME;
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
-import static com.silenteight.serp.governance.strategy.StrategyFixture.CURRENT_STRATEGY_NAME;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -20,6 +19,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DefaultModelQueryTest {
+
+  private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 
   @Mock
   private CurrentPolicyProvider currentPolicyProvider;
