@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import static com.silenteight.sens.webapp.common.testing.matcher.StreamMatcher.streamThat;
 import static java.time.Instant.now;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -115,4 +116,29 @@ class IdManagementReportGeneratorTest {
         eq("SURVEILLANCE_OPTIMIZATION_ID_Management_20200522151530.csv"),
         any(Stream.class));
   }
+
+  @Test
+  void generatesReportWithNoRoleStringIfRoleEmpty() throws IOException {
+    when(idManagementEventProvider
+        .idManagementEvents(any(OffsetDateTime.class), any(OffsetDateTime.class)))
+        .thenReturn(List.of(
+            IdManagementEventDto.builder()
+                .username("userA")
+                .roles(emptyList())
+                .principal("B,user")
+                .action("CREATE")
+                .timestamp(Instant.parse("2020-08-15T12:14:32Z"))
+                .build()));
+
+    idManagementReportGenerator.generate();
+
+    verify(lineWriter).write(
+        eq(REPORTS_DIR),
+        anyString(),
+        argThat(streamThat(hasItems(
+            "AppID_ID,AppID_Name,AppID_Implemented_By,AppID_Implemented_TimeStamp,"
+                + "AppID_Status,AppID_Country",
+            "userA,NO_ROLE,\"B,user\",15082020 12:14:32,CREATE,Global"))));
+  }
+
 }

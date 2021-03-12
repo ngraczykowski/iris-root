@@ -13,6 +13,7 @@ import static java.lang.String.join;
 public class IdManagementEventDto {
 
   private static final String DELIMITER = ",";
+  private static final String NO_ROLE = "NO_ROLE";
 
   String username;
   Collection<String> roles;
@@ -21,6 +22,6 @@ public class IdManagementEventDto {
   String action;
 
   String getRolesAsString() {
-    return join(DELIMITER, roles);
+    return roles.isEmpty() ? NO_ROLE : join(DELIMITER, roles);
   }
 }
