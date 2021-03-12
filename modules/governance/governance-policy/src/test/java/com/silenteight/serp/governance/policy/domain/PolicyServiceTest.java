@@ -2,12 +2,12 @@ package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.*;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,14 +24,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.MANUAL_RULE;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;

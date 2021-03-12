@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.policy.solve.amqp;
 
 import lombok.Getter;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolvedEvent;
+import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
 
 public class FeatureVectorSolvedMessageGatewayMock implements FeatureVectorSolvedMessageGateway {
 

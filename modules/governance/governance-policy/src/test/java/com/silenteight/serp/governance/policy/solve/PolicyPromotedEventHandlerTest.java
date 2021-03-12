@@ -16,9 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static java.util.UUID.fromString;
 import static org.mockito.Mockito.*;
 
@@ -32,12 +32,12 @@ class PolicyPromotedEventHandlerTest {
   @Mock
   private InUsePolicyQuery inUsePolicyQuery;
 
-  private InUsePolicyStepsSupplier underTest;
+  private PolicyStepsSupplierFactory underTest;
 
   @BeforeEach
   void setUp() {
     SolveConfiguration configuration = new SolveConfiguration();
-    this.underTest = configuration.inUsePolicyStepsSupplier(
+    this.underTest = configuration.stepsSupplierFactory(
         stepsConfigurationQuery, inUsePolicyQuery);
   }
 

@@ -58,14 +58,6 @@ class StepQuery implements
         .collect(toList());
   }
 
-  @Override
-  @Transactional
-  public List<StepConfigurationDto> listStepsConfiguration(long policyId) {
-    return getStepsAsStream(policyId)
-        .map(Step::toConfigurationDto)
-        .collect(toList());
-  }
-
   private Stream<Step> getStepsAsStream(UUID policyId) {
     return getStepsAsStream(policyRepository.getIdByPolicyId(policyId));
   }

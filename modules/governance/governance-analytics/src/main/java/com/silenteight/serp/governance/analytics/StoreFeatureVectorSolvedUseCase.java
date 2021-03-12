@@ -3,12 +3,12 @@ package com.silenteight.serp.governance.analytics;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.governance.api.v1.Feature;
-import com.silenteight.governance.api.v1.FeatureVectorSolvedEvent;
 import com.silenteight.serp.governance.analytics.featurevector.FeatureVectorService;
 import com.silenteight.serp.governance.analytics.usage.UsageService;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.solving.api.v1.Feature;
+import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
 
 import org.springframework.transaction.annotation.Transactional;
 

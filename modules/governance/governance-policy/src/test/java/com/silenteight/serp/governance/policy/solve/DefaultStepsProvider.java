@@ -9,7 +9,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class DefaultStepsProvider implements StepsConfigurationSupplier {
+public class DefaultStepsProvider implements StepsSupplier {
 
   private static StepMapper stepMapper = new StepMapper();
 

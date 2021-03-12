@@ -1,11 +1,11 @@
 package com.silenteight.serp.governance.policy.step.list;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.StepType;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -13,11 +13,11 @@ import org.springframework.context.annotation.Import;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.dto.Solution.of;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.anything;

@@ -2,8 +2,8 @@ package com.silenteight.serp.governance.policy.solve;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.Collection;
 import java.util.Map;

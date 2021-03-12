@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.StepType;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

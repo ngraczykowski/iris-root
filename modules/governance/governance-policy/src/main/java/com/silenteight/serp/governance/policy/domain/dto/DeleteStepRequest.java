@@ -18,7 +18,6 @@ import static java.util.UUID.randomUUID;
 public class DeleteStepRequest implements AuditableRequest {
 
   UUID correlationId = UUID.randomUUID();
-  @NonNull
   long policyId;
   @NonNull
   UUID stepId;

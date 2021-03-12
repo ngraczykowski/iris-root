@@ -1,8 +1,7 @@
 package com.silenteight.serp.governance.policy.featurevector;
 
-import com.silenteight.serp.governance.policy.solve.ReconfigurableStepsConfigurationFactory;
 import com.silenteight.serp.governance.policy.solve.SolvingService;
-import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
+import com.silenteight.serp.governance.policy.solve.StepsSupplierProvider;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.springframework.context.annotation.Bean;
@@ -13,25 +12,18 @@ class PolicyFeatureVectorConfiguration {
 
   @Bean
   FindMatchingFeatureVectorsUseCase findMatchingFeatureVectorsUseCase(
-      StepsConfigurationSupplierFactory stepsConfigurationSupplierFactory,
       FeatureVectorUsageQuery featureVectorUsageQuery,
       FeatureNamesQuery featureNamesQuery,
-      SolvingService solvingService) {
+      PolicyStepsRequestQuery policyStepsRequestQuery,
+      PolicyByIdQuery policyByIdQuery,
+      StepsSupplierProvider stepsSupplierProvider) {
 
     return new FindMatchingFeatureVectorsUseCase(
-        stepsConfigurationSupplierFactory,
-        featureVectorUsageQuery,
         featureNamesQuery,
-        solvingService);
-  }
-
-  @Bean
-  StepsConfigurationSupplierFactory stepsConfigurationSupplierFactory(
-      PolicyStepsRequestQuery stepQuery,
-      PolicyStepsConfigurationQuery stepsConfigurationQuery,
-      ReconfigurableStepsConfigurationFactory stepsConfigurationFactory) {
-
-    return new StepsConfigurationSupplierFactory(
-        stepQuery, stepsConfigurationQuery, stepsConfigurationFactory);
+        new SolvingService(),
+        featureVectorUsageQuery,
+        policyStepsRequestQuery,
+        policyByIdQuery,
+        stepsSupplierProvider);
   }
 }

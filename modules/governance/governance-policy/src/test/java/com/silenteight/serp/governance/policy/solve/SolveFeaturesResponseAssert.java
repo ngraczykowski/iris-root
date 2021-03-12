@@ -1,17 +1,17 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.governance.api.v1.SolveFeaturesResponse;
+import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 
 import org.assertj.core.api.AbstractAssert;
 
 public class SolveFeaturesResponseAssert extends
-    AbstractAssert<SolveFeaturesResponseAssert, SolveFeaturesResponse> {
+    AbstractAssert<SolveFeaturesResponseAssert, BatchSolveFeaturesResponse> {
 
-  SolveFeaturesResponseAssert(SolveFeaturesResponse solveFeaturesResponse) {
-    super(solveFeaturesResponse, SolveFeaturesResponseAssert.class);
+  SolveFeaturesResponseAssert(BatchSolveFeaturesResponse batchSolveFeaturesResponse) {
+    super(batchSolveFeaturesResponse, SolveFeaturesResponseAssert.class);
   }
 
-  public static SolveFeaturesResponseAssert assertThat(SolveFeaturesResponse actual) {
+  public static SolveFeaturesResponseAssert assertThat(BatchSolveFeaturesResponse actual) {
     return new SolveFeaturesResponseAssert(actual);
   }
 

@@ -7,8 +7,10 @@ import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorDto
 import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorWithUsageDto;
 import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorsDto;
 import com.silenteight.serp.governance.policy.solve.SolvingService;
-import com.silenteight.serp.governance.policy.solve.StepsConfigurationSupplier;
+import com.silenteight.serp.governance.policy.solve.StepsSupplier;
+import com.silenteight.serp.governance.policy.solve.StepsSupplierProvider;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
+import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +27,17 @@ import static java.util.stream.IntStream.range;
 public class FindMatchingFeatureVectorsUseCase {
 
   @NonNull
-  private final StepsConfigurationSupplierFactory configurationSupplier;
-  @NonNull
-  private final FeatureVectorUsageQuery featureVectorUsageQuery;
-  @NonNull
   private final FeatureNamesQuery featureNamesQuery;
   @NonNull
   private final SolvingService solvingService;
+  @NonNull
+  private final FeatureVectorUsageQuery featureVectorUsageQuery;
+  @NonNull
+  private final PolicyStepsRequestQuery policyStepsRequestQuery;
+  @NonNull
+  private final PolicyByIdQuery policyByIdQuery;
+  @NonNull
+  private final StepsSupplierProvider stepsSupplierProvider;
 
   @Transactional
   public FeatureVectorsDto activate(@NonNull UUID stepId) {
@@ -53,10 +59,10 @@ public class FindMatchingFeatureVectorsUseCase {
   }
 
   private List<FeatureVectorDto> getFeatureVectors(UUID stepId, List<String> columns) {
-    StepsConfigurationSupplier stepsConfigurationProvider =
-        configurationSupplier.getConfigurationSupplierBasedOnStep(stepId);
-    FeatureVectorSolver featureVectorSolver =
-        new FeatureVectorSolver(stepsConfigurationProvider, stepId);
+    Long idOfPolicy = policyStepsRequestQuery.getPolicyIdForStep(stepId);
+    UUID policyId = policyByIdQuery.getPolicyIdById(idOfPolicy);
+    StepsSupplier stepsSupplier = stepsSupplierProvider.getStepsSupplier(policyId);
+    FeatureVectorSolver featureVectorSolver = new FeatureVectorSolver(stepsSupplier, stepId);
 
     return featureVectorUsageQuery
         .getAllWithUsage()
@@ -123,13 +129,14 @@ public class FindMatchingFeatureVectorsUseCase {
   private class FeatureVectorSolver {
 
     @NonNull
-    private final StepsConfigurationSupplier stepsConfigurationProvider;
+    private final StepsSupplier stepsSupplier;
+
     @NonNull
     private final UUID stepId;
 
     public boolean isSolvedWithStep(FeatureValueWithUsageWrapper wrapper) {
       SolveResponse solveResponse = solvingService.solve(
-          stepsConfigurationProvider, wrapper.getFeatureValuesByName());
+          stepsSupplier, wrapper.getFeatureValuesByName());
       UUID solvedStepId = solveResponse.getStepId();
 
       return nonNull(solvedStepId) && solvedStepId.equals(stepId);

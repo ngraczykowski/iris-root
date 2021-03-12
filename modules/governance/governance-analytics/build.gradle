@@ -16,7 +16,7 @@ configurations {
 dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_governance_api
+  implementation libraries.silenteight_solving_api
 
   implementation libraries.silenteight_audit_bs
 

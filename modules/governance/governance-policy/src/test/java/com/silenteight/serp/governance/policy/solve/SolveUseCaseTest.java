@@ -1,72 +1,79 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.governance.api.v1.*;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
 import com.silenteight.serp.governance.common.signature.Signature;
 import com.silenteight.serp.governance.common.signature.SignatureCalculator;
 import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGatewayMock;
+import com.silenteight.solving.api.v1.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.governance.api.utils.Timestamps.toTimestamp;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.protocol.utils.Uuids.fromJavaUuid;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureCollection;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.featureVector;
 import static com.silenteight.serp.governance.GovernanceProtoUtils.solveFeaturesRequest;
 import static com.silenteight.serp.governance.common.signature.Signature.fromBase64;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.solving.api.utils.Timestamps.toTimestamp;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SolveUseCaseTest {
 
+  private static final String POLICY_NAME_RESOURCE_PREFIX = "policies/";
+  private static final UUID POLICY_ID = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
+  private static final String POLICY_NAME = POLICY_NAME_RESOURCE_PREFIX + POLICY_ID.toString();
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
   private static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
   private static final Signature SIGNATURE_1 = fromBase64("o7uPxWV913+ljhPW2uH+g7eAFeQ=");
   private static final Signature SIGNATURE_2 = fromBase64("BWrL65LzOy8daIJSWiZCRxG96XA=");
 
-  private ReconfigurableStepsSupplier stepPolicyFactory;
+  private StepsSupplier stepsSupplier;
   private FeatureVectorSolvedMessageGatewayMock gateway;
   private SolveUseCase underTest;
 
   @BeforeEach
   void setUp() {
-    stepPolicyFactory = Mockito.mock(ReconfigurableStepsSupplier.class);
+    stepsSupplier = mock(StepsSupplier.class);
     gateway = new FeatureVectorSolvedMessageGatewayMock();
     CanonicalFeatureVectorFactory canonicalFeatureVectorFactory =
         new CanonicalFeatureVectorFactory(new SignatureCalculator());
-    TimeSource fixed = Mockito.mock(TimeSource.class);
+    TimeSource fixed = mock(TimeSource.class);
     when(fixed.now()).thenReturn(NOW);
-    underTest = new SolveUseCase(stepPolicyFactory, new SolvingService(),
-        gateway, canonicalFeatureVectorFactory, fixed);
+    underTest = new SolveUseCase(
+        policyId -> stepsSupplier,
+        new SolvingService(),
+        gateway,
+        canonicalFeatureVectorFactory,
+        fixed);
   }
 
   @Test
   void matchedSolutionReturnsCorrectly() {
     // given
     List<Step> steps = defaultStepsConfiguration();
-    when(stepPolicyFactory.get()).thenReturn(steps);
-    SolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
+    when(stepsSupplier.get()).thenReturn(steps);
+    BatchSolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
+        POLICY_NAME,
         featureCollection("nameAgent", "dateAgent"),
         featureVector("PERFECT_MATCH", "EXACT"),
         featureVector("WEAK_MATCH", "WEAK"));
 
     // when
-    SolveFeaturesResponse response = underTest.solve(solutionsRequest);
+    BatchSolveFeaturesResponse response = underTest.solve(solutionsRequest);
 
     // then
     SolveFeaturesResponseAssert.assertThat(response)
@@ -86,13 +93,14 @@ class SolveUseCaseTest {
   void defaultSolutionReturnsWhenNoStepMatchesValues() {
     // given
     List<Step> steps = defaultStepsConfiguration();
-    when(stepPolicyFactory.get()).thenReturn(steps);
-    SolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
+    when(stepsSupplier.get()).thenReturn(steps);
+    BatchSolveFeaturesRequest solutionsRequest = solveFeaturesRequest(
+        POLICY_NAME,
         featureCollection("nameAgent"),
         featureVector("OUT_OF_RANGE"));
 
     // when
-    SolveFeaturesResponse response = underTest.solve(solutionsRequest);
+    BatchSolveFeaturesResponse response = underTest.solve(solutionsRequest);
 
     // then
     SolveFeaturesResponseAssert.assertThat(response)
@@ -106,10 +114,11 @@ class SolveUseCaseTest {
   void shouldEmitEvent() {
     // given
     List<Step> steps = defaultStepsConfiguration();
-    when(stepPolicyFactory.get()).thenReturn(steps);
+    when(stepsSupplier.get()).thenReturn(steps);
     FeatureCollection featureCollection = featureCollection("nameAgent", "dateAgent");
     FeatureVector featureVector = featureVector("PERFECT_MATCH", "EXACT");
-    SolveFeaturesRequest solutionsRequest = solveFeaturesRequest(featureCollection, featureVector);
+    BatchSolveFeaturesRequest solutionsRequest =
+        solveFeaturesRequest(POLICY_NAME, featureCollection, featureVector);
 
     // when
     underTest.solve(solutionsRequest);

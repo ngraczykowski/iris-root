@@ -5,7 +5,6 @@ import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFa
 import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGateway;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,33 +12,24 @@ import org.springframework.context.annotation.Configuration;
 class SolveConfiguration {
 
   @Bean
+  PolicyStepsSupplierFactory stepsSupplierFactory(
+      PolicyStepsConfigurationQuery stepsConfigurationQuery,
+      InUsePolicyQuery inUsePolicyQuery) {
+    return new PolicyStepsSupplierFactory(
+        stepsConfigurationQuery, inUsePolicyQuery, new StepMapper());
+  }
+
+  @Bean
   SolveUseCase solveUseCase(
-      @Qualifier("inUsePolicyStepsSupplier") StepsConfigurationSupplier stepsConfigurationProvider,
-      SolvingService solvingService,
+      StepsSupplierProvider stepsSupplierProvider,
       FeatureVectorSolvedMessageGateway gateway,
       CanonicalFeatureVectorFactory canonicalFeatureVectorFactory) {
 
-    return new SolveUseCase(stepsConfigurationProvider, solvingService, gateway,
-        canonicalFeatureVectorFactory, DefaultTimeSource.INSTANCE);
-  }
-
-  @Bean
-  SolvingService solvingService() {
-    return new SolvingService();
-  }
-
-  StepMapper stepMapper() {
-    return new StepMapper();
-  }
-
-  @Bean()
-  InUsePolicyStepsSupplier inUsePolicyStepsSupplier(
-      PolicyStepsConfigurationQuery stepsConfigurationQuery, InUsePolicyQuery inUsePolicyQuery) {
-    return new InUsePolicyStepsSupplier(stepsConfigurationQuery, inUsePolicyQuery, stepMapper());
-  }
-
-  @Bean
-  DefaultStepsConfigurationFactory defaultStepsConfigurationFactory() {
-    return new DefaultStepsConfigurationFactory(stepMapper());
+    return new SolveUseCase(
+        stepsSupplierProvider,
+        new SolvingService(),
+        gateway,
+        canonicalFeatureVectorFactory,
+        DefaultTimeSource.INSTANCE);
   }
 }
