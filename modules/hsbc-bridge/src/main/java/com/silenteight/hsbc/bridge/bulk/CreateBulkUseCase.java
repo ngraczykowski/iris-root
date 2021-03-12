@@ -27,7 +27,7 @@ public class CreateBulkUseCase {
 
   @Transactional
   public BulkAcceptedResponse createBulk(HsbcRecommendationRequest request) {
-    var bulkItems = getBulkItems(request.getAlerts());
+    var bulkItems = processAlertsToBulkItems(request.getAlerts());
     var bulk = createBulk(bulkItems);
 
     eventPublisher.publishEvent(new BulkStoredEvent(bulk.getId()));
@@ -54,7 +54,7 @@ public class CreateBulkUseCase {
     }).collect(Collectors.toList());
   }
 
-  private List<BulkItem> getBulkItems(List<Alert> alerts) {
+  private List<BulkItem> processAlertsToBulkItems(List<Alert> alerts) {
     return alerts.stream()
         .map(alertFacade::map)
         .map(BulkItem::new)
