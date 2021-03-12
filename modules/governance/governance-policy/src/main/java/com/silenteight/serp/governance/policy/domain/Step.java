@@ -2,13 +2,13 @@ package com.silenteight.serp.governance.policy.domain;
 
 import lombok.*;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.Solution;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.ArrayList;
 import java.util.Collection;

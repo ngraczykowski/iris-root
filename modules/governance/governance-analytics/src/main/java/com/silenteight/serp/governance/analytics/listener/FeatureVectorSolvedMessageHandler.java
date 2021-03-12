@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolvedEvent;
 import com.silenteight.serp.governance.analytics.StoreFeatureVectorSolvedUseCase;
+import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
 
 import org.springframework.messaging.MessagingException;
 

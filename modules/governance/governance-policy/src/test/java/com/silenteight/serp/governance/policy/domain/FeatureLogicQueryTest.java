@@ -14,8 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
@@ -25,7 +25,6 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
 
   private static final UUID POLICY_UID = UUID.randomUUID();
   private static final String POLICY_NAME = "POLICY_1";
-  private static final String POLICY_DESC = "POLICY_DESC";
   private static final String POLICY_CREATED_BY = "USER_1";
 
   private static final UUID STEP_ID = UUID.randomUUID();

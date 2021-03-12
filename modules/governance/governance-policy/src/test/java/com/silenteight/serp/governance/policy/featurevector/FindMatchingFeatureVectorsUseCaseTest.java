@@ -9,7 +9,8 @@ import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorWit
 import com.silenteight.serp.governance.policy.featurevector.dto.FeatureVectorsDto;
 import com.silenteight.serp.governance.policy.solve.DefaultStepsProvider;
 import com.silenteight.serp.governance.policy.solve.SolvingService;
-import com.silenteight.serp.governance.policy.solve.StepsConfigurationSupplier;
+import com.silenteight.serp.governance.policy.solve.StepsSupplier;
+import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +23,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
 import static java.util.Arrays.asList;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
@@ -33,6 +34,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class FindMatchingFeatureVectorsUseCaseTest {
 
+  private static final long ID_OF_POLICY = 11;
+  private static final UUID POLICY_ID = fromString("306659cf-569d-4138-8a71-2ec0578653b1");
   private static final List<String> COLUMNS =
       List.of("nameAgent", "dateAgent", "genderAgent", "nationalityAgent");
   private static final String SIGNATURE_1 = "signature_1";
@@ -53,33 +56,37 @@ class FindMatchingFeatureVectorsUseCaseTest {
   private static final UUID STEP_ID_3 = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
 
   @Mock
-  private StepsConfigurationSupplierFactory stepsConfigurationSupplierFactory;
-  @Mock
   private FeatureVectorUsageQuery featureVectorUsageQuery;
   @Mock
   private FeatureNamesQuery featureNamesQuery;
+  @Mock
+  private PolicyStepsRequestQuery policyStepsRequestQuery;
+  @Mock
+  private PolicyByIdQuery policyByIdQuery;
 
   private FindMatchingFeatureVectorsUseCase underTest;
 
   @BeforeEach
   void setUp() {
+    List<StepConfigurationDto> steps = createSteps();
+    StepsSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
+
     underTest = new FindMatchingFeatureVectorsUseCase(
-        stepsConfigurationSupplierFactory,
-        featureVectorUsageQuery,
         featureNamesQuery,
-        new SolvingService());
+        new SolvingService(),
+        featureVectorUsageQuery,
+        policyStepsRequestQuery,
+        policyByIdQuery,
+        policyId -> stepsConfigurationSupplier);
   }
 
   @Test
   void whenStepIsUsed_findMatchingFeatureVectors() {
     // given
-    long policyId = 2L;
-    List<StepConfigurationDto> steps = createSteps();
-    StepsConfigurationSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
     Stream<FeatureVectorWithUsageDto> featureVectors = createFeatureVectors();
-    when(stepsConfigurationSupplierFactory.getConfigurationSupplierBasedOnStep(STEP_ID_1))
-        .thenReturn(stepsConfigurationSupplier);
     when(featureNamesQuery.getUniqueFeatureNames()).thenReturn(COLUMNS);
+    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_1)).thenReturn(ID_OF_POLICY);
+    when(policyByIdQuery.getPolicyIdById(ID_OF_POLICY)).thenReturn(POLICY_ID);
     when(featureVectorUsageQuery.getAllWithUsage()).thenReturn(featureVectors);
 
     // when
@@ -103,13 +110,10 @@ class FindMatchingFeatureVectorsUseCaseTest {
   @Test
   void whenStepIsNotUsed_findNoMatchingFeatureVectors() {
     // given
-    long policyId = 2L;
-    List<StepConfigurationDto> steps = createSteps();
-    StepsConfigurationSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
     Stream<FeatureVectorWithUsageDto> featureVectors = createFeatureVectors();
-    when(stepsConfigurationSupplierFactory.getConfigurationSupplierBasedOnStep(STEP_ID_2))
-        .thenReturn(stepsConfigurationSupplier);
     when(featureVectorUsageQuery.getAllWithUsage()).thenReturn(featureVectors);
+    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_2)).thenReturn(ID_OF_POLICY);
+    when(policyByIdQuery.getPolicyIdById(ID_OF_POLICY)).thenReturn(POLICY_ID);
 
     // when
     FeatureVectorsDto response = underTest.activate(STEP_ID_2);
@@ -121,13 +125,10 @@ class FindMatchingFeatureVectorsUseCaseTest {
   @Test
   void whenPreviousStepIsUsed_findNoMatchingFeatureVectors() {
     // given
-    long policyId = 2L;
-    List<StepConfigurationDto> steps = createSteps();
-    StepsConfigurationSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
     Stream<FeatureVectorWithUsageDto> featureVectors = createFeatureVectors();
-    when(stepsConfigurationSupplierFactory.getConfigurationSupplierBasedOnStep(STEP_ID_3))
-        .thenReturn(stepsConfigurationSupplier);
     when(featureVectorUsageQuery.getAllWithUsage()).thenReturn(featureVectors);
+    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_3)).thenReturn(ID_OF_POLICY);
+    when(policyByIdQuery.getPolicyIdById(ID_OF_POLICY)).thenReturn(POLICY_ID);
 
     // when
     FeatureVectorsDto response = underTest.activate(STEP_ID_3);

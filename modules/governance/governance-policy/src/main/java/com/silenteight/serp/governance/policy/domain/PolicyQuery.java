@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.details.PolicyDetailsRequestQuery;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.featurevector.PolicyByIdQuery;
 import com.silenteight.serp.governance.policy.list.ListPoliciesRequestQuery;
 import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
 
@@ -20,7 +21,8 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class PolicyQuery implements ListPoliciesRequestQuery, InUsePolicyQuery, PolicyDetailsRequestQuery {
+class PolicyQuery implements
+    ListPoliciesRequestQuery, PolicyByIdQuery, InUsePolicyQuery, PolicyDetailsRequestQuery {
 
   @NonNull
   private final PolicyRepository policyRepository;
@@ -42,6 +44,11 @@ class PolicyQuery implements ListPoliciesRequestQuery, InUsePolicyQuery, PolicyD
         .stream()
         .map(Policy::toDto)
         .collect(toList());
+  }
+
+  @Override
+  public UUID getPolicyIdById(Long id) {
+    return policyRepository.getById(id).getPolicyId();
   }
 
   @Override

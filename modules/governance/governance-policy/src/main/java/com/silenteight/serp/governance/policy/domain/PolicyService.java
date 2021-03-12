@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
@@ -12,6 +11,7 @@ import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.
 import com.silenteight.serp.governance.policy.domain.exception.EmptyFeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyMatchConditionValueException;
 import com.silenteight.serp.governance.policy.domain.exception.WrongToFulfillValue;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;

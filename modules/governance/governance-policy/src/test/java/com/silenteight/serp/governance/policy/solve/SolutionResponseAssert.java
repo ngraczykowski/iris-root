@@ -1,15 +1,15 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
-import com.silenteight.governance.api.v1.SolutionResponse;
 import com.silenteight.serp.governance.common.signature.Signature;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
+import com.silenteight.solving.api.v1.SolutionResponse;
 
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-import static com.silenteight.governance.api.utils.Uuids.fromJavaUuid;
+import static com.silenteight.solving.api.utils.Uuids.fromJavaUuid;
 
 public class SolutionResponseAssert extends
     AbstractAssert<SolutionResponseAssert, SolutionResponse> {

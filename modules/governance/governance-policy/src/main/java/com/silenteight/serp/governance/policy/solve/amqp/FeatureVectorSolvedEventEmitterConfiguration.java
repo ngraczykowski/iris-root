@@ -14,7 +14,7 @@ import static com.silenteight.serp.governance.common.integration.FeatureVectorSo
 class FeatureVectorSolvedEventEmitterConfiguration {
 
   @Bean
-  public GatewayProxyFactoryBean createFeatureVectorSolvedMessageGateway() {
+  GatewayProxyFactoryBean createFeatureVectorSolvedMessageGateway() {
     GatewayProxyFactoryBean factoryBean =
         new GatewayProxyFactoryBean(FeatureVectorSolvedMessageGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());

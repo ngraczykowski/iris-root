@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.policy.domain.dto;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.stream.Stream;
 

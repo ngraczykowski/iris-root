@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 
 import java.util.Map;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 
 @Slf4j
 public class SolvingService {
@@ -15,9 +15,9 @@ public class SolvingService {
       new SolveResponse(SOLUTION_NO_DECISION);
 
   public SolveResponse solve(
-      StepsConfigurationSupplier stepsProvider, Map<String, String> featureValuesByName) {
+      StepsSupplier stepsSupplier, Map<String, String> featureValuesByName) {
 
-    return stepsProvider
+    return stepsSupplier
         .get()
         .stream()
         .filter(step -> step.matchesFeatureValues(featureValuesByName))

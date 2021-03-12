@@ -65,6 +65,17 @@ class PolicyQueryTest extends BaseDataJpaTest {
   }
 
   @Test
+  void getPolicyIdByIdShouldReturnPolicyId_whenSavedInDb() {
+    Policy saved = createSavedPolicy(
+        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_DESC, FIRST_POLICY_CREATED_BY);
+    createDraftPolicy(SECOND_POLICY_UID, SECOND_POLICY_NAME, null, SECOND_POLICY_CREATED_BY);
+
+    UUID policyId = underTest.getPolicyIdById(saved.getId());
+
+    assertThat(policyId).isEqualTo(FIRST_POLICY_UID);
+  }
+
+  @Test
   void listSavedAndDraftedShouldReturnSavedAndDraftedPolicies_whenSavedInDb() {
     Policy saved = createSavedPolicy(
         FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_DESC, FIRST_POLICY_CREATED_BY);

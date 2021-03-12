@@ -9,9 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.InputStream;
 import java.time.Instant;
 
-import static com.silenteight.governance.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
+import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;

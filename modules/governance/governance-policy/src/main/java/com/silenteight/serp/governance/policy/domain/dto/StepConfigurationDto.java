@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.policy.domain.dto;
 import lombok.*;
 import lombok.Builder.Default;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.Collection;
 import java.util.UUID;

@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.dto.Solution;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.UUID;
 import javax.annotation.Nullable;

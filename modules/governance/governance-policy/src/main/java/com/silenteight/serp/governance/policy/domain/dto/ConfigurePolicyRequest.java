@@ -5,9 +5,9 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
-import com.silenteight.governance.api.v1.FeatureVectorSolution;
 import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.domain.StepType;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -98,6 +98,6 @@ public class ConfigurePolicyRequest implements AuditableRequest {
         .entityAction("CREATE")
         .details(this.toString())
         .principal(createdBy)
-.build();
+        .build();
   }
 }
