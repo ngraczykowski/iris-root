@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
-import static com.silenteight.serp.governance.strategy.StrategyFixture.CURRENT_STRATEGY_NAME;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,6 +19,8 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(classes = { ModelTestConfiguration.class })
 @ExtendWith({ SpringExtension.class })
 class ModelTest {
+
+  private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 
   @Autowired
   DefaultModelQuery defaultModelQuery;

@@ -1,6 +1,6 @@
 plugins {
   id "java"
-  id "java-test-fixtures"
+  id "groovy"
 }
 
 description = "Governance Strategy"
@@ -14,6 +14,7 @@ configurations {
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
   testImplementation.extendsFrom starterSpringTest
+  testImplementation.extendsFrom starterSpockTest
 }
 
 dependencies {
@@ -38,4 +39,5 @@ dependencies {
   testImplementation project(":governance-db-changelog")
   testImplementation libraries.rest_assured_spring_mock_mvc
   testImplementation libraries.spring_security_test
+  testImplementation libraries.spock_spring
 }
