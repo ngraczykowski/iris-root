@@ -1,0 +1,210 @@
+= HLD #26
+
+== Governance - harvesting configuration data
+
+- Reference ticket: TBA
+- Reason:
+
+- Outdated: New version will be prepared, but for the documentary reason I will leave it in HLD.
+
+== Diagram
+[plantuml,governance-harvesting-config-data,svg]
+-----
+@startuml
+header Governance - harvesting configuration data
+
+participant Bridge as b
+
+participant "Adjudication Engine" as ae
+
+participant Agents as a
+
+participant DataSource as ds
+
+participant Governance as g
+
+participant Nomad as n
+
+b -> g : 1 - features
+b -> g : 2 - categories
+
+n -> g : 3 - static agents configuration
+
+g -> a : get inputs and responses
+a -> g : 4 - agents inputs and responses
+
+g -> g : connect dots
+
+b -> g : get default model
+g -> b : 5 - default model
+
+b -> ae : create analysis based on model (features)
+
+ae -> a : 6 - solve match
+
+a -> ds : get input data
+ds -> a : 7 - input data
+
+@enduml
+-----
+
+## Proto examples
+
+### 1. features
+
+    {
+      "features": {
+        "agent-inputs/name/version/1.0.0": [
+          "features/name/version/1.0.0"
+        ],
+        "agent-inputs/date/version/1.0.0": [
+          "features/dob/version/1.0.0"
+        ],
+        "agent-inputs/country/version/1.0.0": [
+          "features/nationality/version/1.0.0",
+          "features/residency/version/1.0.0"
+        ],
+        "agent-inputs/country/version/2.0.0": [
+          "features/nationality/version/2.0.0",
+          "features/residency/version/1.0.0"
+        ],
+        "agent-inputs/document/version/1.0.0": [
+          "features/nationalId/version/1.0.0",
+          "features/passport/version/1.0.0"
+        ],
+        ...
+      }
+    }
+
+### 2. categories
+
+    {
+        "categories/apType": {
+            type: categoryType.Enumerated,
+            values: [
+              "COMPANY",
+              "INDIVIDUAL"
+            ]
+        },
+        "categories/isDeny": {
+            type: categoryType.Enumerated,
+            values: [
+              "YES",
+              "NO"
+           ]
+        }
+        "categories/country": {
+            type: categoryType.Value
+        }
+    }
+
+    enum categoryType: [
+        Enumerated,
+        Value
+    ]
+
+### 3. agents configuration
+
+    {
+      "agentConfigs": [
+        { "name": "agents/nameAgent/versions/1.0.0/config/1" },
+        { "name": "agents/dateAgent/versions/1.0.0/config/1" }
+      ]
+    }
+
+
+### 4. agents inputs and responses
+
+    "agents/nameAgent/versions/1.0.0/config/1" ->
+    {
+        input: "agent-inputs/name/version/1.0.0",
+        responses: [
+          "STRONG_MATCH",
+          "MATCH",
+          "WEAK_MATCH",
+          "NO_MATCH",
+          "EXACT_MATCH",
+          "HQ_NO_MATCH",
+          "NO_DATA"
+        ]
+    }
+
+### connect dots
+
+    agents: [
+        {
+            routingKey: "agents/nameAgent/versions/1.0.0/config/1",
+            "agent-inputs/name/version/1.0.0": [
+              "features/name/version/1.0.0"
+            ],
+            responses: [
+              "STRONG_MATCH",
+              "MATCH",
+              "WEAK_MATCH",
+              "NO_MATCH",
+              "EXACT_MATCH",
+              "HQ_NO_MATCH",
+              "NO_DATA"
+            ]
+        },
+        {
+            routingKey: "agents/countryAgent/versions/1.0.0/config/1",
+            "agent-inputs/country/version/1.0.0": [
+              "features/nationality/version/1.0.0",
+              "features/residency/version/1.0.0",
+            ],
+            responses: [
+              "MATCH",
+              "NO_MATCH",
+              "NO_DATA"
+            ]
+        },
+        {
+            routingKey: "agents/countryAgent/versions/2.0.0/config/1",
+            "agent-inputs/country/version/2.0.0": [
+              "features/nationality/version/1.0.0",
+              "features/residency/version/1.0.0",
+            ],
+            responses: [
+              "MATCH",
+              "NO_MATCH",
+              "NO_DATA"
+            ]
+        }
+
+
+### 5. default model
+
+    {
+        policyId: ...
+        features: [
+            {
+                routingKey: "agents/nameAgent/versions/1.0.0/config/1",
+                feature: "features/name/version/1.0.0"
+            },
+            {
+                routingKey: "agents/countryAgent/versions/1.0.0/config/1",
+                feature: "features/nationality/version/1.0.0"
+            },
+            {
+                routingKey: "agents/countryAgent/versions/1.0.0/config/1",
+                feature: "features/residence/version/1.0.0"
+            }
+        ]
+        ...
+    }
+
+### 6. solve match
+
+    "agents/nameAgent/versions/1.0.0/config/1" -> {
+        feature: "features/name/version/1.0.0"
+        matches: [ <match id1>, <match id2>, ...]
+    }
+
+### 7. input data
+
+
+    "agent-inputs/name" -> {
+        feature: "features/name/version/1.0.0"
+        matches: [ <match id1>, <match id2>, ...]
+    }
