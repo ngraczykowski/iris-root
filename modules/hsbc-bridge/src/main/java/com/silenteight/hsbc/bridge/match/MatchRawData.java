@@ -1,18 +1,18 @@
 package com.silenteight.hsbc.bridge.match;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import com.silenteight.hsbc.bridge.domain.*;
 
 import java.util.List;
 
-@Value
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchRawData {
 
-  List<CountryCtrpScreeningEntities> countryCtrpScreeningEntities;
-  List<CountryCtrpScreeningIndividuals> countryCtrpScreeningIndividuals;
+  List<CountryCtrpScreening> countryCtrpScreeningEntities;
+  List<CountryCtrpScreening> countryCtrpScreeningIndividuals;
   List<CustomerEntities> customerEntities;
   List<CustomerIndividuals> customerIndividuals;
   List<WorldCheckEntities> worldCheckEntities;

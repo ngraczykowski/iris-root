@@ -6,7 +6,7 @@ import com.silenteight.hsbc.bridge.rest.model.input.CasesWithAlertURL
 
 import spock.lang.Specification
 
-class AlertRawMapperTest extends Specification {
+class AlertRawMapperSpec extends Specification {
 
   def underTest = new AlertRawMapper()
 

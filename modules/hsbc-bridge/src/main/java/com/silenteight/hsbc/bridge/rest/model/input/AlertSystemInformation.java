@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.rest.model.input;
 import java.util.Objects;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -197,6 +198,7 @@ public class AlertSystemInformation {
     return casesWithAlertURL;
   }
 
+  @JsonIgnore
   public CasesWithAlertURL getCaseWithAlertURL() {
     return casesWithAlertURL.get(0);
   }
