@@ -7,7 +7,11 @@ import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL;
 
 @RequiredArgsConstructor
 @Getter
-public class AlertRawData {
+class AlertRawData {
 
   private final CasesWithAlertURL casesWithAlertURL;
+
+  int getCaseId() {
+    return casesWithAlertURL.getId();
+  }
 }

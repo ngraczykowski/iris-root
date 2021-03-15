@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.match;
 
 import lombok.*;
 
-import com.silenteight.hsbc.bridge.alert.AlertEntity;
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -17,7 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "hsbc_bridge_match")
-public class MatchEntity extends BaseEntity {
+class MatchEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
@@ -26,7 +25,10 @@ public class MatchEntity extends BaseEntity {
 
   private byte[] payload;
 
-  @ManyToOne
-  private AlertEntity alert;
+  private long alertId;
 
+  MatchEntity(long alertId, byte[] payload) {
+    this.alertId = alertId;
+    this.payload = payload;
+  }
 }

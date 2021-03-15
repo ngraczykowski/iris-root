@@ -48,7 +48,7 @@ public class CreateBulkUseCase {
   private List<BulkAlertItem> getRequestedAlerts(Collection<BulkItem> bulkItems) {
     return bulkItems.stream().map(r -> {
       var bulkItem = new BulkAlertItem();
-      bulkItem.setId(r.getAlertCaseId());
+      bulkItem.setId(r.getAlertExternalId());
       bulkItem.setStatus(BulkStatus.fromValue(r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());
@@ -56,8 +56,13 @@ public class CreateBulkUseCase {
 
   private List<BulkItem> processAlertsToBulkItems(List<Alert> alerts) {
     return alerts.stream()
-        .map(alertFacade::map)
-        .map(BulkItem::new)
+        .map(this::mapToBulkItem)
         .collect(Collectors.toList());
+  }
+
+  private BulkItem mapToBulkItem(Alert a) {
+    var alertId = a.getSystemInformation().getCaseWithAlertURL().getId();
+    var payload = alertFacade.convertToPayload(a);
+    return new BulkItem(alertId, payload);
   }
 }

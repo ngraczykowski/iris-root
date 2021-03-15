@@ -9,8 +9,14 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class AlertFacadeConfiguration {
 
+  private final AlertRepository alertRepository;
+
   @Bean
   AlertFacade alertFacade() {
-    return new AlertFacade(new AlertMapper());
+    return AlertFacade.builder()
+        .alertMapper(new AlertMapper())
+        .alertRawMapper(new AlertRawMapper())
+        .alertRepository(alertRepository)
+        .build();
   }
 }

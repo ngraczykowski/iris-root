@@ -24,30 +24,12 @@ databaseChangeLog:
                   name: status
                   type: varchar(30)
         - createTable:
-            tableName: hsbc_bridge_raw_alert
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: case_id
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
-                  name: payload
-                  type: bytea
-        - createTable:
             tableName: hsbc_bridge_bulk_item
             columns:
               - column:
                   name: id
                   type: bigint
-                  autoIncrement:  true
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -59,11 +41,13 @@ databaseChangeLog:
                     foreignKeyName: fk_bulk_id
                     references: hsbc_bridge_bulk(id)
               - column:
-                  name: alert_id
-                  type: bigint
+                  name: alert_external_id
+                  type: int
                   constraints:
-                    foreignKeyName: fk_raw_alert_id
-                    references: hsbc_bridge_raw_alert(id)
+                    nullable: false
+              - column:
+                  name: payload
+                  type: bytea
               - column:
                   name: created_at
                   type: timestamp
@@ -85,6 +69,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -117,6 +102,14 @@ databaseChangeLog:
               - column:
                   name: payload
                   type: bytea
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
               - column:
                   name: alert_id
                   type: bigint

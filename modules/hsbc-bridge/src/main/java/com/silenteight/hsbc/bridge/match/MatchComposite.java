@@ -1,10 +1,12 @@
 package com.silenteight.hsbc.bridge.match;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
-@Data
+@Builder
+@Value
 public class MatchComposite {
 
-  private long id;
-  private MatchRawData rawData;
+  long id;
+  MatchRawData rawData;
 }

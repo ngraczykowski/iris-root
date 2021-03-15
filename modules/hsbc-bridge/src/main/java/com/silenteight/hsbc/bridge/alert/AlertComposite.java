@@ -1,10 +1,14 @@
 package com.silenteight.hsbc.bridge.alert;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
-@Data
+import com.silenteight.hsbc.bridge.rest.model.input.Alert;
+
+@Builder
+@Value
 public class AlertComposite {
 
-  private Long id;
-  private AlertRawData rawData;
+  long id;
+  Alert alert;
 }

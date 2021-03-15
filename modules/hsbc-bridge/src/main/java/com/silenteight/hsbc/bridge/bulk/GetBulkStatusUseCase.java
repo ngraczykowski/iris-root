@@ -29,7 +29,7 @@ public class GetBulkStatusUseCase {
   private List<BulkAlertItem> getRequestedAlerts(Collection<BulkItem> bulkItems) {
     return bulkItems.stream().map(r -> {
       var bulkItem = new BulkAlertItem();
-      bulkItem.setId(r.getAlertCaseId());
+      bulkItem.setId(r.getAlertExternalId());
       bulkItem.setStatus(BulkStatus.fromValue(r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());

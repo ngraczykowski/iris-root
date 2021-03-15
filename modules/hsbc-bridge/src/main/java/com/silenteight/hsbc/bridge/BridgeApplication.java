@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge;
 
 import com.silenteight.hsbc.bridge.alert.AlertModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
+import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.rest.RestModule;
 
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackageClasses = {
     AlertModule.class,
     BulkModule.class,
+    MatchModule.class,
     RestModule.class
 })
 public class BridgeApplication {

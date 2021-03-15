@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.alert.RawAlert
 import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository
 
 import spock.lang.Specification
@@ -12,8 +11,7 @@ class GetBulkStatusUseCaseSpec extends Specification {
 
   def 'should get bulk status'() {
     given:
-    var alert = new RawAlert(caseId: 100)
-    var bulkItem = new BulkItem(alert)
+    var bulkItem = new BulkItem(100, "".getBytes())
     def bulk = new Bulk(items: [bulkItem])
 
     when:
@@ -26,7 +24,7 @@ class GetBulkStatusUseCaseSpec extends Specification {
       bulkStatus.name() == bulk.status.name()
       with(requestedAlerts) {
         size() == bulk.items.size()
-        first().id == bulk.items[0].alert.caseId
+        first().id == bulk.items[0].alertExternalId
         first().status.name() == bulk.items[0].status.name()
       }
     }

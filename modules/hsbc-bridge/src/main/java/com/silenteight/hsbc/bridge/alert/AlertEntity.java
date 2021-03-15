@@ -3,9 +3,6 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
-import com.silenteight.hsbc.bridge.match.MatchEntity;
-
-import java.util.List;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -18,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "hsbc_bridge_alert")
-public class AlertEntity extends BaseEntity {
+class AlertEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
@@ -27,11 +24,8 @@ public class AlertEntity extends BaseEntity {
   private int caseId;
   private byte[] payload;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "alert_id")
-  private List<MatchEntity> matches;
-
-  public AlertEntity(int caseId) {
+  public AlertEntity(int caseId, byte[] payload) {
     this.caseId = caseId;
+    this.payload = payload;
   }
 }

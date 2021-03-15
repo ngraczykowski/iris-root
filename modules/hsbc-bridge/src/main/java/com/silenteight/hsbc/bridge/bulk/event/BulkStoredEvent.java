@@ -9,5 +9,5 @@ import java.util.UUID;
 @Getter
 public class BulkStoredEvent {
 
-  private final UUID message;
+  private final UUID bulkId;
 }
