@@ -5,6 +5,7 @@ ext {
   // Silent Eight
   //***********************************
   adjudicationEngineApiVersion = "0.1.0-SNAPSHOT"
+  silenteightDataSourceApiVersion = "0.1.0-SNAPSHOT"
 
   //***********************************
   // Dependency Versions
@@ -15,6 +16,7 @@ ext {
 
 // Silent Eight
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
+libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
 
 // Spring
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springVersion]
@@ -36,7 +38,7 @@ libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-a
 libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version: '3.0.0']
 
 // Others
-libraries.lombook = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
+libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.7']
@@ -55,8 +57,8 @@ configurations.all {
 }
 
 dependencies {
-  compileOnly libraries.lombook
-  annotationProcessor libraries.lombook
+  compileOnly libraries.lombok
+  annotationProcessor libraries.lombok
   compile libraries.javax_validation_api
   compile libraries.springfox_oas
   implementation libraries.slf4j_api
@@ -69,6 +71,7 @@ dependencies {
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
   implementation libraries.adjudication_engine_api
+  implementation libraries.data_source_api
   testImplementation libraries.junit_jupiter_api
   testRuntimeOnly libraries.junit_jupiter_engine
   testCompile libraries.groovy_all
