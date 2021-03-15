@@ -68,6 +68,7 @@ dependencies {
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
+  implementation libraries.adjudication_engine_api
   testImplementation libraries.junit_jupiter_api
   testRuntimeOnly libraries.junit_jupiter_engine
   testCompile libraries.groovy_all
