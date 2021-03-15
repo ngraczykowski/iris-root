@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 
 import com.silenteight.hsbc.bridge.alert.AlertComposite;
-import com.silenteight.hsbc.bridge.rest.model.input.Alert;
+import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,15 +28,15 @@ public class MatchFacade {
 
   @Transactional
   public Collection<Long> prepareAndSaveMatches(@NonNull AlertComposite alertComposite) {
-    byte[] payload = getPayload(alertComposite.getAlert());
+    byte[] payload = getPayload(alertComposite.getAlertSystemInformation());
     var matchEntity = new MatchEntity(alertComposite.getId(), payload);
 
     matchRepository.save(matchEntity);
     return List.of(matchEntity.getId());
   }
 
-  private byte[] getPayload(Alert alert) {
-    var matchRawData = matchRawMapper.map(alert);
+  private byte[] getPayload(AlertSystemInformation alertSystemInformation) {
+    var matchRawData = matchRawMapper.map(alertSystemInformation);
 
     return matchPayloadConverter.convert(matchRawData);
   }

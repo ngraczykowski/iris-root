@@ -7,7 +7,6 @@ import com.silenteight.hsbc.bridge.rest.model.input.Alert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.client.HttpServerErrorException.NotImplemented;
 
 import java.io.IOException;
 
@@ -16,16 +15,6 @@ class AlertMapper {
 
   private final ObjectMapper objectMapper = new ObjectMapper()
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-  byte[] map(Alert alert) {
-    try {
-      return objectMapper.writeValueAsBytes(alert);
-    } catch (JsonProcessingException e) {
-      // TODO
-      log.error("Exception occured on saving alert payload", e);
-      throw new RuntimeException("FIXME!!");
-    }
-  }
 
   Alert map(byte[] alertPayload) {
     try {

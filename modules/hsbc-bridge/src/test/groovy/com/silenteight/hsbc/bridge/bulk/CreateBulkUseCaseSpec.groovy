@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository
 import com.silenteight.hsbc.bridge.rest.model.input.Alert
@@ -13,10 +12,10 @@ import spock.lang.Specification
 
 class CreateBulkUseCaseSpec extends Specification {
 
-  def alertFacade = Mock(AlertFacade)
+  def bulkItemPayloadConverter = Mock(BulkItemPayloadConverter)
   def bulkWriteRepository = Mock(BulkWriteRepository)
   def eventPublisher = Mock(ApplicationEventPublisher)
-  def underTest = new CreateBulkUseCase(alertFacade, bulkWriteRepository, eventPublisher)
+  def underTest = new CreateBulkUseCase(bulkItemPayloadConverter, bulkWriteRepository, eventPublisher)
 
   def 'should create bulk'() {
     given:
@@ -30,7 +29,7 @@ class CreateBulkUseCaseSpec extends Specification {
     def result = underTest.createBulk(request)
 
     then:
-    1 * alertFacade.convertToPayload(_ as Alert) >> "".getBytes()
+    1 * bulkItemPayloadConverter.map(_ as Alert) >> "".getBytes()
     1 * bulkWriteRepository.save(_ as Bulk) >> {Bulk bulk -> bulk}
     1 * eventPublisher.publishEvent(_ as BulkStoredEvent)
     result.bulkId

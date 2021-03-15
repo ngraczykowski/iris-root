@@ -7,6 +7,6 @@ import lombok.Value;
 @Value
 public class MatchComposite {
 
-  long id;
+  Long id;
   MatchRawData rawData;
 }

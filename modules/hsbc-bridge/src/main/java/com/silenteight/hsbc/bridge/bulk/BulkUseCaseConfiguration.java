@@ -21,7 +21,7 @@ class BulkUseCaseConfiguration {
 
   @Bean
   CreateBulkUseCase createBulkUseCase() {
-    return new CreateBulkUseCase(alertFacade, bulkRepository, eventPublisher);
+    return new CreateBulkUseCase(new BulkItemPayloadConverter(), bulkRepository, eventPublisher);
   }
 
   @Bean

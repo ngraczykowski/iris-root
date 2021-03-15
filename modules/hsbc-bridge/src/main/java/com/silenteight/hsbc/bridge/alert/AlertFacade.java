@@ -15,10 +15,6 @@ public class AlertFacade {
   private final AlertRawMapper alertRawMapper;
   private final AlertRepository alertRepository;
 
-  public byte[] convertToPayload(Alert alert) {
-    return alertMapper.map(alert);
-  }
-
   @Transactional
   public AlertComposite prepareAndSaveAlert(byte[] payload) {
     var alert = alertMapper.map(payload);

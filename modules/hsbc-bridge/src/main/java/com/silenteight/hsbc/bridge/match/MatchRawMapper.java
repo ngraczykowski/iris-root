@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.match;
 
 import lombok.NonNull;
 
-import com.silenteight.hsbc.bridge.rest.model.input.Alert;
+import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,9 +16,7 @@ class MatchRawMapper {
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
-  MatchRawData map(@NonNull Alert alert) {
-    var systemInformation = alert.getSystemInformation();
-
+  MatchRawData map(@NonNull AlertSystemInformation systemInformation) {
     return objectMapper.convertValue(systemInformation, MatchRawData.class);
   }
 }

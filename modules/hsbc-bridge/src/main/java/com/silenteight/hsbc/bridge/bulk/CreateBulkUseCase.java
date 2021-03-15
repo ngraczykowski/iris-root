@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository;
 import com.silenteight.hsbc.bridge.rest.model.input.Alert;
@@ -21,7 +20,7 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class CreateBulkUseCase {
 
-  private final AlertFacade alertFacade;
+  private final BulkItemPayloadConverter bulkItemPayloadConverter;
   private final BulkWriteRepository writeRepository;
   private final ApplicationEventPublisher eventPublisher;
 
@@ -62,7 +61,7 @@ public class CreateBulkUseCase {
 
   private BulkItem mapToBulkItem(Alert a) {
     var alertId = a.getSystemInformation().getCaseWithAlertURL().getId();
-    var payload = alertFacade.convertToPayload(a);
+    var payload = bulkItemPayloadConverter.map(a);
     return new BulkItem(alertId, payload);
   }
 }

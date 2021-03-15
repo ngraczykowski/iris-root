@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.bridge.match
 
-import com.silenteight.hsbc.bridge.rest.model.input.Alert
 import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation
 import com.silenteight.hsbc.bridge.rest.model.input.CountryCtrpScreeningEntities
 import com.silenteight.hsbc.bridge.rest.model.input.CountryCtrpScreeningIndividuals
@@ -18,25 +17,25 @@ class MatchRawMapperSpec extends Specification {
 
   def 'should map alert to raw match data'() {
     when:
-    def result = underTest.map(fixtures.alert)
+    def result = underTest.map(fixtures.systemInformation)
 
     then:
-    with (result.countryCtrpScreeningEntities.first()) {
+    with(result.countryCtrpScreeningEntities.first()) {
       caseId == fixtures.countryCtrpScreeningEntities.caseId
     }
-    with (result.countryCtrpScreeningIndividuals.first()) {
+    with(result.countryCtrpScreeningIndividuals.first()) {
       caseId == fixtures.countryCtrpScreeningIndividuals.caseId
     }
-    with (result.worldCheckEntities.first()) {
+    with(result.worldCheckEntities.first()) {
       caseId == fixtures.worldCheckEntities.caseId
     }
-    with (result.worldCheckIndividuals.first()) {
+    with(result.worldCheckIndividuals.first()) {
       caseId == fixtures.worldCheckIndividual.caseId
     }
-    with (result.customerEntities.first()) {
+    with(result.customerEntities.first()) {
       caseId == fixtures.customerEntities.caseId
     }
-    with (result.customerIndividuals.first()) {
+    with(result.customerIndividuals.first()) {
       caseId == fixtures.customerIndividuals.caseId
     }
   }
@@ -69,15 +68,13 @@ class MatchRawMapperSpec extends Specification {
         caseId: caseId
     )
 
-    def alert = new Alert(
-        systemInformation: new AlertSystemInformation(
-            countryCtrpScreeningEntities: [countryCtrpScreeningEntities],
-            countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
-            customerEntities: [customerEntities],
-            customerIndividuals: [customerIndividuals],
-            worldCheckEntities: [worldCheckEntities],
-            worldCheckIndividuals: [worldCheckIndividual]
-        )
+    def systemInformation = new AlertSystemInformation(
+        countryCtrpScreeningEntities: [countryCtrpScreeningEntities],
+        countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
+        customerEntities: [customerEntities],
+        customerIndividuals: [customerIndividuals],
+        worldCheckEntities: [worldCheckEntities],
+        worldCheckIndividuals: [worldCheckIndividual]
     )
   }
 }
