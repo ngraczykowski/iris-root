@@ -2,7 +2,7 @@ server:
   port: {{ env "NOMAD_PORT_http" }}
 
 keycloak:
-  frontend-client-id: frontend
+  frontend-client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   adapter:
     auth-server-url: https://auth.silenteight.com
     realm: sens-webapp
