@@ -2,11 +2,7 @@ package com.silenteight.hsbc.datasource.grpc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.api.common.BatchGetMatchAgentInputsRequest;
-import com.silenteight.datasource.api.date.BatchGetMatchDateInputsV1Response;
-import com.silenteight.datasource.api.date.DateFeatureInput;
-import com.silenteight.datasource.api.date.DateInput;
-import com.silenteight.datasource.api.date.DateInputServiceGrpc;
+import com.silenteight.datasource.api.date.v1.*;
 import com.silenteight.hsbc.datasource.date.dto.DateInputRequest;
 import com.silenteight.hsbc.datasource.date.DateInputProvider;
 import com.silenteight.hsbc.datasource.date.dto.DateInputResponse;
@@ -24,19 +20,20 @@ class DataSourceDateInputGrpcService extends DateInputServiceGrpc.DateInputServi
 
   private final DateInputProvider dateInputProvider;
 
+
   @Override
-  public void batchGetMatchDateInputsV1(
-      BatchGetMatchAgentInputsRequest request,
-      StreamObserver<BatchGetMatchDateInputsV1Response> responseObserver) {
+  public void batchGetMatchDateInputs(
+      BatchGetMatchDateInputsRequest request,
+      StreamObserver<BatchGetMatchDateInputsResponse> responseObserver) {
     var dateInputRequest = createRequest(request);
     responseObserver.onNext(provideInput(dateInputRequest));
     responseObserver.onCompleted();
   }
 
-  private BatchGetMatchDateInputsV1Response provideInput(DateInputRequest request) {
+  private BatchGetMatchDateInputsResponse provideInput(DateInputRequest request) {
     var input = dateInputProvider.provideInput(request);
 
-    return BatchGetMatchDateInputsV1Response.newBuilder()
+    return BatchGetMatchDateInputsResponse.newBuilder()
         .addAllDateInputs(toResponse(input))
         .build();
   }
@@ -55,7 +52,7 @@ class DataSourceDateInputGrpcService extends DateInputServiceGrpc.DateInputServi
     );
   }
 
-  private DateInputRequest createRequest(BatchGetMatchAgentInputsRequest request) {
+  private DateInputRequest createRequest(BatchGetMatchDateInputsRequest request) {
     var matchIds = request.getMatchesList().stream().map(Long::valueOf).collect(toList());
 
     return DateInputRequest.builder()
