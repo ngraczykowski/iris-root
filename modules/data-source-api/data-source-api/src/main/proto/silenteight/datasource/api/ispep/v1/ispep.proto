@@ -1,23 +1,23 @@
 syntax = "proto3";
 
-package silenteight.datasource.api.ispep;
+package silenteight.datasource.api.ispep.v1;
 
 import "google/api/annotations.proto";
 
-option java_package = "com.silenteight.datasource.api.ispep";
-option java_outer_classname = "IsPepInputProto";
+option java_package = "com.silenteight.datasource.api.ispep.v1";
+option java_outer_classname = "IsPepProto";
 option java_multiple_files = true;
 
 service IsPepInputService {
-  rpc BatchGetMatchIsPepInputsV1 (BatchGetMatchIsPepInputsV1Request) returns (stream BatchGetMatchIsPepInputsV1Response) {
+  rpc BatchGetMatchIsPepInputs (BatchGetMatchIsPepInputsRequest) returns (stream BatchGetMatchIsPepInputsResponse) {
     option (google.api.http) = {
-      post: "/agent-inputs/ispep/versions/1/matches:batchGet",
+      post: "/agent-inputs/ispep/versions/v1/matches:batchGet"
       body: "*"
     };
   }
 }
 
-message BatchGetMatchIsPepInputsV1Request {
+message BatchGetMatchIsPepInputsRequest {
   repeated string matches = 1;
   repeated RegionModelFields model_configuration = 2;
 }
@@ -27,7 +27,7 @@ message RegionModelFields {
   repeated string required_fields = 2;
 }
 
-message BatchGetMatchIsPepInputsV1Response {
+message BatchGetMatchIsPepInputsResponse {
   repeated IsPepInput is_pep_inputs = 1;
 }
 

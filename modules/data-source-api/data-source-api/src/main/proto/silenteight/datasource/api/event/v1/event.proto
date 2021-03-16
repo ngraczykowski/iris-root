@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.event.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.event.v1";
+option java_outer_classname = "EventProto";
+option java_multiple_files = true;
+
+/**
+  Intended for Date logical discounting
+ */
+service EventInputService {
+  rpc BatchGetMatchEventInputs (BatchGetMatchEventInputsRequest) returns (stream BatchGetMatchEventInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/event/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchEventInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchEventInputsResponse {
+  repeated EventInput event_inputs = 1;
+}
+
+message EventInput {
+  string match = 1;
+  repeated EventFeatureInput event_feature_inputs = 2;
+}
+
+message EventFeatureInput {
+  string feature = 1;
+  repeated string alerted_party_dates = 2;
+  repeated string watchlist_events = 3;
+}
