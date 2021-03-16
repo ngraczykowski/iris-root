@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="adjudication-engine-dataset-1.0.0-1" author="tbozek">
+    <createTable tableName="ae_dataset">
+      <column name="dataset_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="create_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="ae_dataset_alert">
+      <column name="dataset_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_dataset_alert"
+        baseColumnNames="dataset_id"
+        constraintName="fk_ae_dataset_alerts_dataset_id"
+        referencedTableName="ae_dataset"
+        referencedColumnNames="dataset_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_dataset_alert"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_ae_dataset_alerts_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"/>
+
+    <createIndex tableName="ae_dataset_alert" indexName="ix_ae_dataset_alert_alert_id" unique="false">
+      <column name="alert_id"/>
+    </createIndex>
+    <createIndex tableName="ae_dataset_alert" indexName="ix_ae_dataset_alert_dataset_id" unique="false">
+      <column name="dataset_id"/>
+    </createIndex>
+
+    <addUniqueConstraint tableName="ae_dataset_alert" columnNames="dataset_id,alert_id" constraintName="uq_ae_dataset_alert_dataset_id_alert_id"/>
+
+  </changeSet>
+</databaseChangeLog>
