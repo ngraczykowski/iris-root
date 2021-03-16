@@ -38,8 +38,8 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
 
     int alertsCount;
 
-    if (request.hasAlertNames())
-      alertsCount = request.getAlertNames().getAlertNamesCount();
+    if (request.hasNamedAlerts())
+      alertsCount = request.getNamedAlerts().getAlertsCount();
     else
       alertsCount = 123;
 

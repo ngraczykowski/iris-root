@@ -1,7 +1,7 @@
 package com.silenteight.adjudication.engine.analysis;
 
 import com.silenteight.adjudication.api.v1.*;
-import com.silenteight.adjudication.api.v1.Analysis.FeaturesDefinition;
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceImplBase;
 
 import com.google.protobuf.Timestamp;
@@ -112,12 +112,13 @@ class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
         .setName(request.getAnalysis())
         .setPolicy("policies/" + UUID.randomUUID().toString())
         .setStrategy("strategies/back_test")
-        .addFeatures(FeaturesDefinition.newBuilder()
-            .setAgentConfig("agents/country/versions/2.0.0/config/1")
-            .addAllFeatures(List.of("features/nationality", "features/residency")))
-        .addFeatures(FeaturesDefinition.newBuilder()
-            .setAgentConfig("agents/name/versions/3.1.0/config/1")
-            .addAllFeatures(List.of("features/name")))
+        .addFeatures(Feature.newBuilder()
+            .setFeature("features/nationality")
+            .setAgentConfig("agents/country/versions/2.0.0/config/1"))
+        .addFeatures(Feature.newBuilder()
+            .setFeature("features/name")
+            .setAgentConfig("agents/name/versions/3.1.0/config/1"))
+        .addCategories("DENY")
         .setCreateTime(makePastTimestamp())
         .setState(Analysis.State.NEW)
         .setPendingAlerts(pendingAlerts)

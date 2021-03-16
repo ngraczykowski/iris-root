@@ -97,7 +97,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
   @Override
   public void batchCreateAlertMatches(
       BatchCreateAlertMatchesRequest request,
-      StreamObserver<BatchCreateMatchesResponse> responseObserver) {
+      StreamObserver<BatchCreateAlertMatchesResponse> responseObserver) {
     log.info("Create batch alert matches count: {}", request.getMatchesCount());
     long matchesFailed = request
         .getMatchesList()
@@ -109,7 +109,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
       return;
     }
     Timestamp creationTimestamp = Timestamps.fromMillis(System.currentTimeMillis());
-    BatchCreateMatchesResponse response =
+    BatchCreateAlertMatchesResponse response =
         createAlertMatchesResponse(request, responseObserver, creationTimestamp);
     responseObserver.onNext(response);
     responseObserver.onCompleted();
@@ -137,7 +137,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
     Timestamp creationTimestamp = Timestamps.fromMillis(System.currentTimeMillis());
     List<Match> matches = Lists.newArrayList();
     request.getAlertMatchesList().stream().forEach(batchAlertRequest -> {
-      BatchCreateMatchesResponse alertMatchesResponse = createAlertMatchesResponse(
+      BatchCreateAlertMatchesResponse alertMatchesResponse = createAlertMatchesResponse(
           batchAlertRequest,
           responseObserver,
           creationTimestamp);
@@ -212,7 +212,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
     responseObserver.onCompleted();
   }
 
-  private BatchCreateMatchesResponse createAlertMatchesResponse(
+  private BatchCreateAlertMatchesResponse createAlertMatchesResponse(
       BatchCreateAlertMatchesRequest request,
       StreamObserver responseObserver, Timestamp creationTimestamp) {
     List<Match> responseMatches = Lists.newArrayList();
@@ -223,7 +223,7 @@ class MockedAlertGrpcService extends AlertServiceImplBase {
             .setCreateTime(creationTimestamp)
             .build())
     ).collect(Collectors.toList());
-    BatchCreateMatchesResponse response = BatchCreateMatchesResponse.newBuilder()
+    BatchCreateAlertMatchesResponse response = BatchCreateAlertMatchesResponse.newBuilder()
         .addAllMatches(responseMatches)
         .build();
     return response;
