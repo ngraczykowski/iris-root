@@ -39,6 +39,10 @@ libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-a
 // OpenAPI & Swagger
 libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version: '3.0.0']
 
+// GRPC
+libraries.grpc_spring_boot_starter = [group: 'io.github.lognet', name: 'grpc-spring-boot-starter', version: '4.4.5']
+
+
 // Others
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 
@@ -75,6 +79,7 @@ dependencies {
   implementation libraries.adjudication_engine_api
   implementation libraries.data_source_api
   implementation libraries.silenteight_governance_model_api
+  implementation libraries.grpc_spring_boot_starter
   testImplementation libraries.junit_jupiter_api
   testRuntimeOnly libraries.junit_jupiter_engine
   testCompile libraries.groovy_all
