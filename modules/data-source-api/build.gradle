@@ -6,11 +6,11 @@ plugins {
 }
 
 ext {
-  protobufVersion = "3.11.4"
+  protobufVersion = "3.15.6"
   protocVersion = protobufVersion
-  grpcVersion = "1.27.2"
-  commonProtosVersion = "1.17.0"
-  reactiveGrpcVersion = "1.0.0"
+  grpcVersion = "1.36.0"
+  commonProtosVersion = "2.1.0"
+  reactiveGrpcVersion = "1.0.1"
 }
 
 projectSetup {
