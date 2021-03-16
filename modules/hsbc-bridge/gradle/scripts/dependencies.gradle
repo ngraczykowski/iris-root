@@ -25,6 +25,7 @@ libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot',
 libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springVersion]
 libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
+libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springVersion]
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springVersion]
 
@@ -65,6 +66,7 @@ configurations.all {
 dependencies {
   compileOnly libraries.lombok
   annotationProcessor libraries.lombok
+  annotationProcessor libraries.spring_boot_configuration_processor
   compile libraries.javax_validation_api
   compile libraries.springfox_oas
   implementation libraries.slf4j_api

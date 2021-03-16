@@ -1,0 +1,16 @@
+package com.silenteight.hsbc.bridge.model;
+
+import lombok.Builder;
+import lombok.Value;
+
+import java.util.List;
+
+@Builder
+@Value
+public class SolvingModelDto {
+
+  String name;
+  String policyName;
+  String strategyName;
+  List<String> agentConfigs;
+}
