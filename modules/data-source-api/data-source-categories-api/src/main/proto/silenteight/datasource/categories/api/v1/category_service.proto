@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package silenteight.datasource.categories.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/datasource/categories/api/v1/category.proto";
+import "silenteight/datasource/categories/api/v1/category_value.proto";
+
+option java_package = "com.silenteight.datasource.categories.api.v1";
+option java_outer_classname = "CategoryServiceProto";
+option java_multiple_files = true;
+
+service CategoryService {
+
+  rpc ListCategories (ListCategoriesRequest) returns (ListCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/v1/categories"
+    };
+  }
+
+  rpc BatchGetMatchCategoryValues (BatchGetMatchCategoryValuesRequest) returns (BatchGetMatchCategoryValuesResponse) {
+    option (google.api.http) = {
+      post: "/v1/categories/-/matches:batchGet"
+      body: "match_values"
+    };
+  }
+}
+
+message ListCategoriesRequest {
+}
+
+message ListCategoriesResponse {
+  // The list of all categories.
+  repeated Category categories = 1;
+}
+
+message BatchGetMatchCategoryValuesRequest {
+  // The list of matches to retrieve category values for, in form of
+  // `categories/<Category>/matches/<Match ID>`.
+  repeated string match_values = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchGetMatchCategoryValuesResponse {
+  // The list of values of category for each requested match.
+  repeated CategoryValue category_values = 1;
+}
