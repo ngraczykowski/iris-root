@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-  <include file="db/changelog/db.changelog-adjudication-engine-dataset-1.0.0.xml"/>
-  <include file="db/changelog/db.changelog-adjudication-engine-dataset-1.1.0.xml"/>
+  <changeSet id="adjudication-engine-dataset-1.1.0-1" author="tbozek">
+    <renameColumn tableName="ae_dataset" oldColumnName="create_time" newColumnName="created_at"/>
+  </changeSet>
 </databaseChangeLog>
-
