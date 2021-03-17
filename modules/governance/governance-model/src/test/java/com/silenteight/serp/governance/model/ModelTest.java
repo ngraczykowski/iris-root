@@ -8,6 +8,7 @@ import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = { ModelTestConfiguration.class })
 @ExtendWith({ SpringExtension.class })
+@AutoConfigureJsonTesters
 class ModelTest {
 
   private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";

@@ -15,6 +15,12 @@ serp:
         inbound-queue-name: governance.solution-discrepancy
         outbound-exchange-name: notification
         reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
+    model:
+      agentConfigurationSource: classpath:agent_configs.json
+      featureSetSource: classpath:feature_sets.json
+      agentDetailsSource: classpath:agent_details.json
+      categorySource: classpath:categories.json
+
 ####################################################################################################
 # Error Queue Configuration
 ####################################################################################################
