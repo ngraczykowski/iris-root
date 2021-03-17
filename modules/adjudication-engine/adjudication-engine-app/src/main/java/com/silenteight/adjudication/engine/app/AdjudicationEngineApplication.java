@@ -70,7 +70,7 @@ class AdjudicationEngineApplication {
     @Override
     public ConfigurableApplicationBuilder configure(ConfigurableApplicationBuilder builder) {
       return builder
-          .bootstrapProperties("spring.application.name=adjudication-engine");
+          .bootstrapProperties("spring.application.name=ae");
     }
 
     @Override
