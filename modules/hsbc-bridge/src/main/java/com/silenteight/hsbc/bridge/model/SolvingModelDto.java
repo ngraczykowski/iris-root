@@ -12,5 +12,6 @@ public class SolvingModelDto {
   String name;
   String policyName;
   String strategyName;
-  List<String> agentConfigs;
+  List<FeatureDto> features;
+  List<String> categories;
 }

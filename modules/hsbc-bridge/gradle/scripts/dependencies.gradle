@@ -13,6 +13,7 @@ ext {
   //***********************************
   springVersion = "2.4.2"
   junitJupiterVersion = "5.6.0"
+  mockitoVersion = "3.8.0"
 }
 
 // Silent Eight
@@ -43,7 +44,6 @@ libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version
 // GRPC
 libraries.grpc_spring_boot_starter = [group: 'io.github.lognet', name: 'grpc-spring-boot-starter', version: '4.4.5']
 
-
 // Others
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 
@@ -52,6 +52,8 @@ libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', versio
 libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: '2.0-M4-groovy-3.0']
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
 libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
+libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
+libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -83,6 +85,8 @@ dependencies {
   implementation libraries.silenteight_governance_model_api
   implementation libraries.grpc_spring_boot_starter
   testImplementation libraries.junit_jupiter_api
+  testImplementation libraries.mockito_core
+  testImplementation libraries.mockito_junit_jupiter
   testRuntimeOnly libraries.junit_jupiter_engine
   testCompile libraries.groovy_all
   testCompile libraries.spock_core

@@ -7,6 +7,8 @@ import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceB
 
 import com.google.protobuf.Empty;
 
+import static com.silenteight.hsbc.bridge.model.SolvingModelMapper.mapToSolvingModelDto;
+
 @RequiredArgsConstructor
 public class GetDefaultModelUseCase {
 
@@ -15,12 +17,6 @@ public class GetDefaultModelUseCase {
   public SolvingModelDto getSolvingModel() {
     SolvingModel defaultSolvingModel =
         solvingModelServiceBlockingStub.getDefaultSolvingModel(Empty.getDefaultInstance());
-
-    return SolvingModelDto.builder()
-        .name(defaultSolvingModel.getName())
-        .policyName(defaultSolvingModel.getPolicyName())
-        .strategyName(defaultSolvingModel.getStrategyName())
-        .agentConfigs(defaultSolvingModel.getAgentConfigsList())
-        .build();
+    return mapToSolvingModelDto(defaultSolvingModel);
   }
 }
