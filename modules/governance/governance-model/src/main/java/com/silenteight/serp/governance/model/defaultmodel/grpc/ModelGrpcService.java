@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
+import com.silenteight.serp.governance.model.NonResolvableResourceException;
 
 import com.google.protobuf.Empty;
 import com.google.rpc.Status;
@@ -24,6 +25,9 @@ class ModelGrpcService
       "Requested model is not fully configured.";
   private static final String GET_DEFAULT_SOLVING_MODEL_ERROR =
       "Unhandled error occurred in Governance while calling 'getDefaultSolvingModel'.";
+  private static final String MODEL_CANNOT_BE_RESOLVED_ERROR =
+      "Some elements of the current configuration cannot be resolved. "
+          + "Make sure all services are running";
 
   @NonNull
   private final DefaultModelQuery defaultModelQuery;
@@ -34,6 +38,14 @@ class ModelGrpcService
     try {
       responseObserver.onNext(defaultModelQuery.get());
       responseObserver.onCompleted();
+    } catch (NonResolvableResourceException e) {
+      Status status = Status.newBuilder()
+          .setCode(FAILED_PRECONDITION_VALUE)
+          .setMessage(MODEL_CANNOT_BE_RESOLVED_ERROR)
+          .build();
+
+      log.error(MODEL_CANNOT_BE_RESOLVED_ERROR, e);
+      responseObserver.onError(StatusProto.toStatusRuntimeException(status));
     } catch (ModelMisconfiguredException e) {
       Status status = Status.newBuilder()
           .setCode(FAILED_PRECONDITION_VALUE)
