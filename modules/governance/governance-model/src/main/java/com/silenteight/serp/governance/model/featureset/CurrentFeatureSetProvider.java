@@ -2,5 +2,5 @@ package com.silenteight.serp.governance.model.featureset;
 
 public interface CurrentFeatureSetProvider {
 
-  FeatureSetDto getCurrentAgentConfigSet();
+  FeatureSetDto getCurrentFeatureSet();
 }

@@ -5,7 +5,7 @@ import static java.util.List.of;
 public class AgentDetailsFixture {
 
   public static final String AGENT_FEATURE_NAME = "features/name";
-  public static final String AGENT_FEATURE_DATE = "features/date";
+  public static final String AGENT_FEATURE_DATE = "features/dob";
   public static final String AGENT_RESPONSE_MATCH = "MATCH";
   public static final String AGENT_RESPONSE_NO_DATA = "NO_DATA";
 

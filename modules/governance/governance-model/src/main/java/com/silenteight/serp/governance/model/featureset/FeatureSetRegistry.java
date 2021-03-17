@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 
+import static java.lang.String.format;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static java.util.stream.Collectors.toUnmodifiableMap;
@@ -47,11 +48,11 @@ public class FeatureSetRegistry implements CurrentFeatureSetProvider {
       new ConcurrentHashMap<>();
 
   @Override
-  public FeatureSetDto getCurrentAgentConfigSet() {
-    return getAgentConfigSet(DEFAULT_FEATURE_SET);
+  public FeatureSetDto getCurrentFeatureSet() {
+    return getFeatureSet(DEFAULT_FEATURE_SET);
   }
 
-  public FeatureSetDto getAgentConfigSet(String configName) {
+  public FeatureSetDto getFeatureSet(String configName) {
     FeatureSetJson featureSet = Optional.ofNullable(featureSets.get(configName))
         .orElseThrow(() -> new NonResolvableResourceException(configName));
 
@@ -62,12 +63,18 @@ public class FeatureSetRegistry implements CurrentFeatureSetProvider {
 
     return FeatureSetDto.builder()
         .name(featureSet.getName())
-        .agentConfigs(features)
+        .features(features)
         .build();
   }
 
   private FeatureDto resolve(FeatureJson feature) {
     AgentDto agentDto = resolveAgent(feature.getAgentConfig());
+
+    if (!agentDto.canHandleFeature(feature.getName())) {
+      String errorMessage = format("Agent '%s' is not capable of solving feature '%s'",
+          agentDto.getName(), feature.getName());
+      throw new InvalidFeatureSetException(errorMessage);
+    }
 
     return FeatureDto.builder()
         .name(feature.getName())
