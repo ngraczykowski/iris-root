@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-1" author="tbozek">
+    <createTable tableName="ae_feature">
+      <column name="feature_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="feature" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="agent_config" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="ae_category">
+      <column name="category_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="category" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-2" author="tbozek">
+    <createTable tableName="ae_analysis">
+      <column name="analysis_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="policy" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="strategy" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="state" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-3" author="tbozek">
+    <createTable tableName="ae_analysis_label">
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="name" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="value" type="VARCHAR(150)"/>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_analysis_label"
+        columnNames="analysis_id, name"
+        constraintName="pk_ae_analysis_label"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_label"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_label_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <createIndex
+        tableName="ae_analysis_label"
+        indexName="ix_ae_analysis_label_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-4" author="tbozek">
+    <createTable tableName="ae_analysis_feature">
+      <column name="analysis_id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="feature_id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_analysis_feature"
+        columnNames="analysis_id, feature_id"
+        constraintName="pk_ae_analysis_feature"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_feature"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_feature_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_feature"
+        baseColumnNames="feature_id"
+        constraintName="fk_ae_analysis_feature_feature_id"
+        referencedTableName="ae_feature"
+        referencedColumnNames="feature_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <createIndex
+        tableName="ae_analysis_feature"
+        indexName="ix_ae_analysis_feature_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_feature"
+        indexName="ix_ae_analysis_category_feature_id">
+      <column name="feature_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-5" author="tbozek">
+    <createTable tableName="ae_analysis_category">
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_analysis_category"
+        columnNames="analysis_id, category_id"
+        constraintName="pk_ae_analysis_category"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_category"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_category_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_category"
+        baseColumnNames="category_id"
+        constraintName="fk_ae_analysis_category_feature_id"
+        referencedTableName="ae_category"
+        referencedColumnNames="category_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <createIndex
+        tableName="ae_analysis_category"
+        indexName="ix_ae_analysis_category_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_category"
+        indexName="ix_ae_analysis_category_category_id">
+      <column name="category_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-6" author="tbozek">
+    <createTable tableName="ae_analysis_dataset">
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="dataset_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_analysis_dataset"
+        columnNames="analysis_id, dataset_id"
+        constraintName="pk_ae_analysis_dataset"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_dataset"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_dataset_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_dataset"
+        baseColumnNames="dataset_id"
+        constraintName="fk_ae_analysis_dataset_dataset_id"
+        referencedTableName="ae_dataset"
+        referencedColumnNames="dataset_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <createIndex
+        tableName="ae_analysis_dataset"
+        indexName="ix_ae_analysis_dataset_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_dataset"
+        indexName="ix_ae_analysis_dataset_dataset_id">
+      <column name="dataset_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-7" author="tbozek">
+    <createView viewName="ae_analysis_alert_query"
+                fullDefinition="true"
+                path="db/changelog/sql/create_ae_analysis_alert_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-8" author="tbozek">
+    <!-- Create procedure required due to usage of $$ in sql script -->
+    <createProcedure path="db/changelog/sql/create_ae_analysis_alert_query_refresh_procedure.sql"/>
+    <sqlFile path="db/changelog/sql/create_ae_analysis_alert_dataset_trigger.sql"/>
+
+    <rollback>
+      <sqlFile path="db/changelog/sql/drop_ae_analysis_alert_dataset_trigger.sql"/>
+      <sqlFile path="db/changelog/sql/drop_ae_analysis_alert_query_refresh_procedure.sql"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-9" author="tbozek">
+    <createTable tableName="ae_match_solution">
+      <column name="match_solution_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="match_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="solution" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_solution"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_match_solution_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="NO ACTION"
+        onUpdate="NO ACTION"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_solution"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_solution_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="NO ACTION"
+        onUpdate="NO ACTION"/>
+    <createIndex
+        tableName="ae_match_solution"
+        indexName="ix_ae_match_solution_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_match_solution"
+        indexName="ix_ae_match_solution_match_id">
+      <column name="match_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-10" author="tbozek">
+    <createTable tableName="ae_recommendation">
+      <column name="recommendation_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="recommended_action" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="recommendation_comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_recommendation"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_recommendation_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="NO ACTION"
+        onUpdate="NO ACTION"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_recommendation"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_recommendation_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="NO ACTION"
+        onUpdate="NO ACTION"/>
+    <createIndex
+        tableName="ae_recommendation"
+        indexName="ix_ae_recommendation_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_recommendation"
+        indexName="ix_ae_recommendation_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-11" author="tbozek">
+    <createTable tableName="ae_recommendation_match_solution">
+      <column name="recommendation_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="match_solution_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_recommendation_match_solution"
+        columnNames="recommendation_id, match_solution_id"
+        constraintName="pk_ae_recommendation_match_solution"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_recommendation_match_solution"
+        baseColumnNames="recommendation_id"
+        constraintName="fk_ae_recommendation_match_solution_recommendation_id"
+        referencedTableName="ae_recommendation"
+        referencedColumnNames="recommendation_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_recommendation_match_solution"
+        baseColumnNames="match_solution_id"
+        constraintName="fk_ae_recommendation_match_solution_match_solution_id"
+        referencedTableName="ae_match_solution"
+        referencedColumnNames="match_solution_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+    <createIndex
+        tableName="ae_recommendation_match_solution"
+        indexName="ix_ae_recommendation_match_solution_recommendation_id">
+      <column name="recommendation_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_recommendation_match_solution"
+        indexName="ix_ae_recommendation_match_solution_match_solution_id">
+      <column name="match_solution_id"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>
