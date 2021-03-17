@@ -4,6 +4,7 @@ import static java.util.List.of;
 
 public class CategoryFixture {
 
+  public static final String ISDENY_CATEGORY_NAME = "categories/isDeny";
   public static final String APTYPE_CATEGORY_NAME = "categories/apType";
   public static final CategoryType APTYPE_CATEGORY_TYPE = CategoryType.ENUMERATED;
   public static final String APTYPE_COMPANY_VALUE = "COMPANY";

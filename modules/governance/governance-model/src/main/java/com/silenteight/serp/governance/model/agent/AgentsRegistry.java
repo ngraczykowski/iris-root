@@ -43,6 +43,7 @@ public class AgentsRegistry {
 
     return AgentDto.builder()
         .name(agentConfigDto.getName())
+        .features(agentDetailDto.getFeatures())
         .solutions(agentDetailDto.getResponses())
         .build();
   }

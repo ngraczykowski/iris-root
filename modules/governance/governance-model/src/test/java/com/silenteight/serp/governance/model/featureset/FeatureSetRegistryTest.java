@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.model.featureset;
 
 import com.silenteight.serp.governance.model.TestResourceLoader;
+import com.silenteight.serp.governance.model.agent.AgentDto;
 import com.silenteight.serp.governance.model.agent.AgentsRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,8 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static com.silenteight.serp.governance.model.agent.AgentFixture.NAME_AGENT;
 import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
 import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
 import static com.silenteight.serp.governance.model.featureset.FeatureSetRegistry.DEFAULT_FEATURE_SET;
 import static java.util.Optional.of;
@@ -49,14 +53,14 @@ class FeatureSetRegistryTest {
   }
 
   @Test
-  void shouldReturnCollectionOfAgentConfigSets() {
+  void shouldReturnValidFeatureSet() {
     when(agentsRegistry.getSingleAgent(NAME_AGENT_CONFIG_NAME)).thenReturn(of(NAME_AGENT));
 
     underTest.init();
-    FeatureSetDto currentFeatureSetDto = underTest.getCurrentAgentConfigSet();
+    FeatureSetDto currentFeatureSetDto = underTest.getCurrentFeatureSet();
 
     assertThat(currentFeatureSetDto.getName()).isEqualTo(DEFAULT_FEATURE_SET);
-    assertThat(currentFeatureSetDto.getAgentConfigs()).containsExactlyInAnyOrder(
+    assertThat(currentFeatureSetDto.getFeatures()).containsExactlyInAnyOrder(
         new FeatureDto(AGENT_FEATURE_NAME, NAME_AGENT.getName(), NAME_AGENT.getSolutions())
     );
   }
@@ -65,7 +69,23 @@ class FeatureSetRegistryTest {
   void shouldThrowExceptionIfReferencedResourceIsNotPresent() {
     underTest.init();
 
-    assertThatThrownBy(underTest::getCurrentAgentConfigSet)
+    assertThatThrownBy(underTest::getCurrentFeatureSet)
         .isInstanceOf(NonResolvableFeatureSetException.class);
+  }
+
+  @Test
+  void shouldEnsureExposedFeatureSetIsValid() {
+    AgentDto misconfiguredAgent = AgentDto.builder()
+        .name(NAME_AGENT_CONFIG_NAME)
+        .features(List.of(AGENT_FEATURE_DATE))
+        .solutions(List.of())
+        .build();
+
+    when(agentsRegistry.getSingleAgent(NAME_AGENT_CONFIG_NAME)).thenReturn(of(misconfiguredAgent));
+
+    underTest.init();
+    assertThatThrownBy(() -> underTest.getFeatureSet(DEFAULT_FEATURE_SET))
+        .isInstanceOf(InvalidFeatureSetException.class)
+        .hasMessageContaining("is not capable of solving feature '" + AGENT_FEATURE_NAME + "'");
   }
 }

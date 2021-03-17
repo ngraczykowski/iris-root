@@ -13,5 +13,5 @@ public class FeatureSetDto {
   @NonNull
   String name;
   @NonNull
-  List<FeatureDto> agentConfigs;
+  List<FeatureDto> features;
 }

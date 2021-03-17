@@ -1,7 +1,7 @@
 serp:
   governance:
     model:
-      agentConfigurationSource: classpath:agent_configs.json
-      featureSetSource: classpath:feature_sets.json
-      agentDetailsSource: classpath:agent_details.json
-      categorySource: classpath:categories.json
+      agentConfigurationSource: classpath:test_agent_configs.json
+      featureSetSource: classpath:test_feature_sets.json
+      agentDetailsSource: classpath:test_agent_details.json
+      categorySource: classpath:test_categories.json

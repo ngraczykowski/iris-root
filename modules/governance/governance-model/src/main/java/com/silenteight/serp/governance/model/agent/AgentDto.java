@@ -13,5 +13,11 @@ public class AgentDto {
   @NonNull
   String name;
   @NonNull
+  List<String> features;
+  @NonNull
   List<String> solutions;
+
+  public boolean canHandleFeature(String featureName) {
+    return features.contains(featureName);
+  }
 }

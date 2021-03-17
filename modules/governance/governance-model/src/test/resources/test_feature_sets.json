@@ -1,0 +1,14 @@
+[
+  {
+    "name" : "feature-sets/1",
+    "features": [
+      {
+        "name": "features/name",
+        "agentConfig": "agents/nameAgent/versions/1.0.0/config/1"
+      }, {
+        "name": "features/dob",
+        "agentConfig": "agents/dateAgent/versions/1.0.0/config/1"
+      }
+    ]
+  }
+]

@@ -1,5 +1,6 @@
 package com.silenteight.serp.governance.model;
 
+import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.serp.governance.model.defaultmodel.grpc.DefaultModelQuery;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
@@ -12,6 +13,10 @@ import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
+import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
+import static com.silenteight.serp.governance.model.category.CategoryFixture.ISDENY_CATEGORY_NAME;
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -42,5 +47,9 @@ class ModelTest {
 
     assertThat(solvingModel.getStrategyName()).isEqualTo(CURRENT_STRATEGY_NAME);
     assertThat(solvingModel.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
+    assertThat(solvingModel.getFeaturesList()).extracting(Feature::getName)
+        .containsExactlyInAnyOrder(AGENT_FEATURE_NAME, AGENT_FEATURE_DATE);
+    assertThat(solvingModel.getCategoriesList())
+        .containsExactlyInAnyOrder(APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME);
   }
 }
