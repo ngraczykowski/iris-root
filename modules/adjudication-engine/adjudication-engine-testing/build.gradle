@@ -1,0 +1,10 @@
+plugins {
+  id "java-library"
+}
+
+dependencies {
+  implementation libraries.spring_boot_starter_data_jpa
+
+  runtimeOnly libraries.liquibase_core
+  runtimeOnly libraries.postgresql
+}

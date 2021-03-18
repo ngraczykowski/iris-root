@@ -1,9 +1,14 @@
 plugins {
-    id 'java-library'
+  id "java-library"
 }
 
 dependencies {
-    implementation libraries.adjudication_engine_api
-    implementation libraries.grpc_spring_boot_starter
-    implementation libraries.protobuf_java_util
+  implementation libraries.adjudication_engine_api
+  implementation libraries.grpc_spring_boot_starter
+  implementation libraries.protobuf_java_util
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.spring_data_jpa
+
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libraries.silenteight_sep_base_testing
 }

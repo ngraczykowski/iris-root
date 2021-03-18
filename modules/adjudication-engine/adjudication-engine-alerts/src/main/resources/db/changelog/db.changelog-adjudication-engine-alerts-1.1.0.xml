@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="adjudication-engine-alerts-1.1.0-1" author="ahaczewski">
+    <renameColumn tableName="ae_alert" oldColumnName="create_time" newColumnName="created_at"/>
+    <renameColumn tableName="ae_alert" oldColumnName="alert_time" newColumnName="alerted_at"/>
+    <renameColumn tableName="ae_match" oldColumnName="create_time" newColumnName="created_at"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.1.0-2" author="ahaczewski">
+    <comment>
+      Rename collection tables so that automatic naming convention from Hibernate picks them up.
+    </comment>
+
+    <renameTable oldTableName="ae_alert_label" newTableName="ae_alert_labels"/>
+    <renameTable oldTableName="ae_match_label" newTableName="ae_match_labels"/>
+  </changeSet>
+</databaseChangeLog>
