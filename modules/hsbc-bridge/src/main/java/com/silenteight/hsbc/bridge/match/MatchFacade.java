@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 @Builder
@@ -39,5 +40,13 @@ public class MatchFacade {
     var matchRawData = matchRawMapper.map(alertSystemInformation);
 
     return matchPayloadConverter.convert(matchRawData);
+  }
+
+  //validate match id number // throw custom exception
+  public List<MatchComposite> getMatches(@NonNull List<String> matchIds) {
+    return matchIds.stream()
+        .map(Long::valueOf)
+        .map(this::getMatch)
+        .collect(Collectors.toList());
   }
 }

@@ -8,5 +8,6 @@ import java.util.List;
 @Value
 @Builder
 public class DateInputRequest {
-  List<Long> matchIds;
+  List<String> matches;
+  List<String> features;
 }
