@@ -1,0 +1,30 @@
+= 1. SYS - Return entity type and severity mode in Date Feature Input
+
+Date: 2021-03-18
+
+== Status
+
+Accepted
+
+== Context
+
+Date Agent can be used with different configurations:
+
+- INDIVIDUAL / ORGANISATION / ENTITY
+- NORMAL vs STRICT
+
+We need to get the configuration back to the agent, so we know which one to run.
+
+== Solutions
+
+. Send configuration name to the agent.
+. Make the decision inside the agent facade. Data Source API needs to send `isDeny` and `apType` to the agent.
+. Data Source API sends `EntityType` and `SeverityMode` to the agent. Agent chooses the configuration.
+
+== Decision
+
+Data Source API sends `EntityType` and `SeverityMode` to the agent. Agent chooses the configuration.
+
+== Consequences
+
+Data Source does not have to know the Agent configuration name, so they're not coupled. Data Source keeps its transforms (responsibility of the former PipelineModel). The Agent does not know about particular customer data but only about semantically relevant information.
