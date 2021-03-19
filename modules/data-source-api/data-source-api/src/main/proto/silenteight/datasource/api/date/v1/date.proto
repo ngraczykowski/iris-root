@@ -37,4 +37,18 @@ message DateFeatureInput {
   string feature = 1;
   repeated string alerted_party_dates = 2;
   repeated string watchlist_dates = 3;
+
+  EntityType alerted_party_type = 4;
+  SeverityMode mode = 5;
+
+  enum EntityType {
+    ENTITY_TYPE_UNSPECIFIED = 0;
+    INDIVIDUAL = 1;
+    ORGANIZATION = 2;
+  }
+
+  enum SeverityMode {
+    NORMAL = 0;
+    STRICT = 1;
+  }
 }
