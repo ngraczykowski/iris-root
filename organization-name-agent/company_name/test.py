@@ -218,7 +218,6 @@ def test_whitespaces(first, second):
 def test_common_prefixes(first, second):
     print(repr(first), repr(second), score(first, second))
     assert compare(first, second)
-    assert False
 
 
 @pytest.mark.parametrize(
@@ -233,3 +232,46 @@ def test_common_prefixes(first, second):
 def test_empty_names(first, second):
     print(repr(first), repr(second), score(first, second))
     assert compare(first, second)
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("Gazprom International School of Currency", "gazprom (uk) middle east fz company"),
+        ("VTB Capital PLC","VTB KAPITAL ZHILAYA NEDVIZHIMOST OOO"),
+        ("VTB-company", "company-something_very-vtb-serious")
+    )
+)
+def test_blacklist(first, second):
+    print(repr(first), repr(second), score(first, second))
+    assert score(first, second)['blacklisted'] == 1
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("John International", "Jon International"),
+        ("Somofore", "Somophore")
+    ),
+)
+def test_phonetic_names(first, second):
+    print(repr(first), repr(second), score(first, second))
+    scored = score(first, second)
+    assert scored['fuzzy_on_base'] < 1
+    assert scored['phonetics_on_base'] == 1
+
+
+@pytest.mark.parametrize(
+    ("first", "second", "expected_score"),
+    (
+        ("TOYOTA MOTOR FINANCE (CHINA) COMPANY LIMITED", "TOYOTA MOTOR FINANCE (THE PEOPLE'S REPUBLIC OF CHINA) COMPANY LIMITED", 1),
+        ("Nissan (UK) ", "Somophore (United Kingdom)", 1),
+        ("Nissan (UK) Limited", "Nissan (CHINA) Limited", 0),
+        ("Nissan (UK) Limited", "Nissan", 0.5),
+        ("Nissan (awesome) Limited", "Nissam (awesome) corporation", 0.5)
+    ),
+)
+def test_countries(first, second, expected_score):
+    print(repr(first), repr(second), score(first, second))
+    scored = score(first, second)
+    assert scored['country'] == expected_score

@@ -2,12 +2,17 @@ import collections
 import itertools
 import re
 import string
-
-from typing import Mapping, Set
+from typing import Mapping, Set, Sequence
 
 import fuzzywuzzy.fuzz as fuzz
+import phonetics
 import unidecode
 
+from .countries import COUNTRY_MAPPING
+
+
+BLACKLIST = {"gazprom", "vtb"}
+BLACKLIST_REGEX = re.compile(r"\b(" + "|".join(BLACKLIST) + r")\b", re.IGNORECASE)
 
 LEGAL_TERMS = {
     "co": "company",
@@ -352,7 +357,38 @@ def tokenization_score(first_name: str, second_name: str, absolute=False) -> flo
     return len(common) if absolute else len(common) / (len(common) + len(different))
 
 
+def phonetic_score(first_name: str, second_name: str) -> float:
+    scores = [
+        fuzz.ratio(n1, n2)
+        for n1, n2 in itertools.product(
+             phonetics.dmetaphone(first_name), phonetics.dmetaphone(second_name)
+        )
+        if n1 and n2
+    ]
+    return max(scores) / 100 if scores else 0
+
+
+def _get_countries(parenthesis_information: Sequence[str]) -> Set[int]:
+    return set(itertools.chain(*(
+        COUNTRY_MAPPING.get(c.strip(), []) for c in parenthesis_information
+    )))
+
+
+def country_score(first_countries, second_countries) -> float:
+    first_country_ids, second_country_ids = (
+        _get_countries(first_countries),
+        _get_countries(second_countries),
+    )
+
+    if not first_country_ids or not second_country_ids:
+        return 0.5
+
+    return float(bool(first_country_ids.intersection(second_country_ids)))
+
+
 def compare(first: str, second: str) -> Mapping[str, float]:
+    blacklisted = float(bool(BLACKLIST_REGEX.search(first) or BLACKLIST_REGEX.search(second)))
+
     first_information = cut_all(clear_name(first))
     first_base = first_information.base
     first = " ".join((
@@ -388,4 +424,11 @@ def compare(first: str, second: str) -> Mapping[str, float]:
         "legal_terms": legal_score(first_information.legal, second_information.legal),
         "tokenization": tokenization_score(first, second),
         "absolute_tokenization": tokenization_score(first, second, absolute=True),
+        "blacklisted": blacklisted,
+        "country": country_score(
+            first_information.parenthesis_information,
+            second_information.parenthesis_information,
+        ),
+        "phonetics_on_base": phonetic_score(first_base, second_base),
+        "phonetics": phonetic_score(first, second),
     }
