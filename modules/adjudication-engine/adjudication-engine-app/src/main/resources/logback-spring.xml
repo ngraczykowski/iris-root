@@ -4,97 +4,62 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="logback-defaults.xml"/>
-  <springProfile name="dev">
-    <property name="MARKER_LOG_LEVEL_PATTERN"
-              value="%clr(%marker) %clr([${spring.application.name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}])"/>
-    <property name="MARKER_CONSOLE_LOG_PATTERN"
-              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${MARKER_LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}:%L){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
-    <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
-    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+  <property
+      name="MARKER_LOG_LEVEL_PATTERN"
+      value="%clr(%marker) %clr([${spring.application.name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}])"/>
+  <property
+      name="MARKER_CONSOLE_LOG_PATTERN"
+      value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${MARKER_LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(${LOG_LOGGER_PATTERN:-%-40.40logger{39}}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+  <property
+      name="CONSOLE_LOG_PATTERN"
+      value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %5level %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(${LOG_LOGGER_PATTERN:-%-40.40logger{39}}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+  <property
+      name="FILE_LOG_PATTERN"
+      value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] ${LOG_LOGGER_PATTERN:-%-40.40logger{39}} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
-    <!-- Standard output and error appenders -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>${MARKER_CONSOLE_LOG_PATTERN}</pattern>
-        <charset>utf-8</charset>
-      </encoder>
-      <target>System.out</target>
-      <filter class="com.silenteight.adjudication.engine.app.logstash.NonAuditLevelFilter">
-        <level>ERROR</level>
-        <onMatch>DENY</onMatch>
-        <onMismatch>ACCEPT</onMismatch>
-      </filter>
-    </appender>
-    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-        <charset>utf-8</charset>
-      </encoder>
-      <filter class="com.silenteight.adjudication.engine.app.logstash.NonAuditThresholdFilter">
-        <level>ERROR</level>
-      </filter>
-      <target>System.err</target>
-    </appender>
-    <appender name="AUDIT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>${MARKER_CONSOLE_LOG_PATTERN}</pattern>
-        <charset>utf-8</charset>
-      </encoder>
-      <filter class="com.silenteight.adjudication.engine.app.logstash.AuditPassingFilter"/>
-      <target>System.out</target>
-    </appender>
-    <root level="INFO">
-      <appender-ref ref="STDOUT"/>
-      <appender-ref ref="STDERR"/>
-      <appender-ref ref="AUDIT"/>
-    </root>
+  <springProfile name="loglines">
+    <!-- Includes line number with the logger -->
+    <property name="LOG_LOGGER_PATTERN" value="-40.40logger{39}:%L"/>
   </springProfile>
 
-  <springProfile name="!dev">
-    <property name="MARKER_LOG_LEVEL_PATTERN"
-              value="%clr(%marker) %clr([${spring.application.name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}])"/>
-    <property name="MARKER_CONSOLE_LOG_PATTERN"
-              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${MARKER_LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+  <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
-    <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
-    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
-
-    <!-- Standard output and error appenders -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>${MARKER_CONSOLE_LOG_PATTERN}</pattern>
-        <charset>utf-8</charset>
-      </encoder>
-      <target>System.out</target>
-      <filter class="com.silenteight.adjudication.engine.app.logstash.NonAuditLevelFilter">
-        <level>ERROR</level>
-        <onMatch>DENY</onMatch>
-        <onMismatch>ACCEPT</onMismatch>
-      </filter>
-    </appender>
-    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-        <charset>utf-8</charset>
-      </encoder>
-      <filter class="com.silenteight.adjudication.engine.app.logstash.NonAuditThresholdFilter">
-        <level>ERROR</level>
-      </filter>
-      <target>System.err</target>
-    </appender>
-    <appender name="AUDIT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>${MARKER_CONSOLE_LOG_PATTERN}</pattern>
-        <charset>utf-8</charset>
-      </encoder>
-      <filter class="com.silenteight.adjudication.engine.app.logstash.AuditPassingFilter"/>
-      <target>System.out</target>
-    </appender>
-    <root level="INFO">
-      <appender-ref ref="STDOUT"/>
-      <appender-ref ref="STDERR"/>
-      <appender-ref ref="AUDIT"/>
-    </root>
-  </springProfile>
+  <!-- Standard output and error appenders -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf-8</charset>
+    </encoder>
+    <target>System.out</target>
+    <filter class="com.silenteight.adjudication.engine.app.logstash.NonAuditLevelFilter">
+      <level>ERROR</level>
+      <onMatch>DENY</onMatch>
+      <onMismatch>ACCEPT</onMismatch>
+    </filter>
+  </appender>
+  <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf-8</charset>
+    </encoder>
+    <filter class="com.silenteight.adjudication.engine.app.logstash.NonAuditThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <target>System.err</target>
+  </appender>
+  <appender name="AUDIT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${MARKER_CONSOLE_LOG_PATTERN}</pattern>
+      <charset>utf-8</charset>
+    </encoder>
+    <filter class="com.silenteight.adjudication.engine.app.logstash.AuditPassingFilter"/>
+    <target>System.out</target>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="STDERR"/>
+    <appender-ref ref="AUDIT"/>
+  </root>
 </configuration>
