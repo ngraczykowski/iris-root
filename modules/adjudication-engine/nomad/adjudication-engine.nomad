@@ -113,7 +113,7 @@ job "adjudication-engine" {
         "traefik.enable=true",
         # Those 2 tags are required to gather metrics by prometheus
         "traefik.protocol=http",
-        "prometheus.metrics.path=/rest/adjudication-engine/management/prometheus",
+        "prometheus.metrics.path=/rest/ae/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
       ], var.http_tags)
@@ -127,7 +127,7 @@ job "adjudication-engine" {
       check {
         name     = "Adjudication Engine HTTP Health Check"
         type     = "http"
-        path     = "/rest/adjudication-engine/management/health"
+        path     = "/rest/ae/management/health"
         method   = "GET"
         interval = "10s"
         timeout  = "2s"
