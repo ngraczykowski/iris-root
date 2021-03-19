@@ -11,9 +11,11 @@ import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
@@ -30,6 +32,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableIntegration
 @EnableIntegrationManagement
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackageClasses = AdjudicationEngineModule.class)
+@EntityScan(basePackageClasses = AdjudicationEngineModule.class)
 @IntegrationComponentScan(basePackageClasses = AdjudicationEngineModule.class)
 @Slf4j
 class AdjudicationEngineApplication {

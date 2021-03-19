@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.alerts;
+package com.silenteight.adjudication.engine.alerts.service;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,6 +11,7 @@ import com.google.protobuf.util.Timestamps;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Comparator;
@@ -20,7 +21,8 @@ import java.util.stream.Collectors;
 
 @GrpcService
 @Slf4j
-class MockedAlertGrpcService extends AlertServiceImplBase {
+@Profile("mock")
+class MockedGrpcAlertServiceImpl extends AlertServiceImplBase {
 
   @Override
   public void createAlert(

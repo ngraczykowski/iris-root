@@ -1,0 +1,9 @@
+plugins {
+  id "java-library"
+}
+
+dependencies {
+  api libraries.protobuf_java
+
+  testImplementation libraries.protobuf_java_util
+}

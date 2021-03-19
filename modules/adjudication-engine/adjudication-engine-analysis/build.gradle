@@ -7,6 +7,7 @@ plugins {
 description = "Adjudication Engine Analysis"
 
 dependencies {
+  implementation project(":adjudication-engine-common")
   implementation libraries.adjudication_engine_api
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.protobuf_java_util

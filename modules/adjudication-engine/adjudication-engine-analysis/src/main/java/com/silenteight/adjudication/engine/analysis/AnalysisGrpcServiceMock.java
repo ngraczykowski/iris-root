@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromInstant;
 import static io.grpc.Status.INVALID_ARGUMENT;
 import static io.grpc.Status.fromCode;
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -223,19 +224,11 @@ class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
   }
 
   private Timestamp makeTimestampNow() {
-    return makeTimestamp(Instant.now());
+    return fromInstant(Instant.now());
   }
 
   private Timestamp makePastTimestamp() {
     // NOTE(ahaczewski): 7*24*60*60 = 604800 seconds = 7 days.
-    return makeTimestamp(Instant.now().minusSeconds(current().nextInt(60, 7 * 24 * 60 * 60)));
-  }
-
-  private Timestamp makeTimestamp(Instant instant) {
-    return Timestamp
-        .newBuilder()
-        .setSeconds(instant.getEpochSecond())
-        .setNanos(instant.getNano())
-        .build();
+    return fromInstant(Instant.now().minusSeconds(current().nextInt(60, 7 * 24 * 60 * 60)));
   }
 }
