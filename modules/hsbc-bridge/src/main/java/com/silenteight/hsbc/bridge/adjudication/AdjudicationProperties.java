@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model;
+package com.silenteight.hsbc.bridge.adjudication;
 
 import lombok.Data;
 
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties("grpc.governance")
-class SolvingModelGrpcProperties {
+@ConfigurationProperties("grpc.adjudication")
+class AdjudicationProperties {
 
   private String address;
 }

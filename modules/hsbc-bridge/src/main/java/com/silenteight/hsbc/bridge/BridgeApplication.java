@@ -1,8 +1,11 @@
 package com.silenteight.hsbc.bridge;
 
+import com.silenteight.hsbc.bridge.adjudication.AdjudicationModule;
 import com.silenteight.hsbc.bridge.alert.AlertModule;
+import com.silenteight.hsbc.bridge.analysis.AnalysisModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
+import com.silenteight.hsbc.bridge.model.Model;
 import com.silenteight.hsbc.bridge.rest.RestModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
 import com.silenteight.hsbc.datasource.provider.DataSourceProviderModule;
@@ -16,8 +19,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @ComponentScan(basePackageClasses = {
     AlertModule.class,
+    AdjudicationModule.class,
+    AnalysisModule.class,
     BulkModule.class,
     MatchModule.class,
+    Model.class,
     RestModule.class,
 
     DataSourceApiGrpcModule.class,
