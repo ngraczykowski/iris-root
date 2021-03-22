@@ -9,7 +9,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @RequiredArgsConstructor
@@ -17,8 +17,15 @@ class SolvingModelConfiguration {
 
   private final SolvingModelGrpcProperties solvingModelGrpcProperties;
 
+  @Profile("dev")
   @Bean
-  GetDefaultModelUseCase getDefaultModelUseCase() {
+  ModelUseCase getDefaultModelMockUseCase() {
+    return new GetDefaultModelUseCaseMock();
+  }
+
+  @Profile("!dev")
+  @Bean
+  ModelUseCase getDefaultModelUseCase() {
     return new GetDefaultModelUseCase(getStub());
   }
 

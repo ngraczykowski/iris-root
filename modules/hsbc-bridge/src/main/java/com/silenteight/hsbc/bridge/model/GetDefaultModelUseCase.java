@@ -10,10 +10,11 @@ import com.google.protobuf.Empty;
 import static com.silenteight.hsbc.bridge.model.SolvingModelMapper.mapToSolvingModelDto;
 
 @RequiredArgsConstructor
-public class GetDefaultModelUseCase {
+public class GetDefaultModelUseCase implements ModelUseCase {
 
   private final SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
 
+  @Override
   public SolvingModelDto getSolvingModel() {
     SolvingModel defaultSolvingModel =
         solvingModelServiceBlockingStub.getDefaultSolvingModel(Empty.getDefaultInstance());
