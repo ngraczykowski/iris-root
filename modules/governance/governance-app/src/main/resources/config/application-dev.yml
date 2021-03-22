@@ -1,6 +1,12 @@
 # Spring `dev` profile configuration
 serp:
   show-env: true
+  rabbitmq:
+    host: localhost
+    port: 24160
+    user: dev
+    password: dev
+    vhost: /
 
 logging:
   level:
