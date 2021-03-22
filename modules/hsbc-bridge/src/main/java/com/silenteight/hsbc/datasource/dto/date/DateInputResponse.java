@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.date.dto;
+package com.silenteight.hsbc.datasource.dto.date;
 
 import lombok.Builder;
 import lombok.Value;

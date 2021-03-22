@@ -42,10 +42,8 @@ public class MatchFacade {
     return matchPayloadConverter.convert(matchRawData);
   }
 
-  //validate match id number // throw custom exception
-  public List<MatchComposite> getMatches(@NonNull List<String> matchIds) {
+  public List<MatchComposite> getMatches(@NonNull List<Long> matchIds) {
     return matchIds.stream()
-        .map(Long::valueOf)
         .map(this::getMatch)
         .collect(Collectors.toList());
   }

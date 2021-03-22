@@ -4,8 +4,8 @@ import com.silenteight.hsbc.bridge.alert.AlertModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.rest.RestModule;
-import com.silenteight.hsbc.datasource.date.DateInputModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
+import com.silenteight.hsbc.datasource.provider.DataSourceProviderModule;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     RestModule.class,
 
     DataSourceApiGrpcModule.class,
-    DateInputModule.class
+    DataSourceProviderModule.class
 })
 public class BridgeApplication {
 

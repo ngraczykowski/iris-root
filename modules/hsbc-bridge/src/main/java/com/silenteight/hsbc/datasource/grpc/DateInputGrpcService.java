@@ -3,11 +3,11 @@ package com.silenteight.hsbc.datasource.grpc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.api.date.v1.*;
-import com.silenteight.hsbc.datasource.date.dto.DateFeatureInputDto;
-import com.silenteight.hsbc.datasource.date.dto.DateInputDto;
-import com.silenteight.hsbc.datasource.date.dto.DateInputRequest;
-import com.silenteight.hsbc.datasource.date.DateInputProvider;
-import com.silenteight.hsbc.datasource.date.dto.DateInputResponse;
+import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
+import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
+import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
+import com.silenteight.hsbc.datasource.dto.date.DateInputDto;
+import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
 
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase {
 
-  private final DateInputProvider dateInputProvider;
+  private final DataSourceInputProvider<DateInputResponse> dateInputProvider;
 
   @Override
   public void batchGetMatchDateInputs(
       BatchGetMatchDateInputsRequest request,
       StreamObserver<BatchGetMatchDateInputsResponse> responseObserver) {
-    var dateInputRequest = createRequest(request);
-    responseObserver.onNext(provideInput(dateInputRequest));
+    var inputRequest = createRequest(request);
+    responseObserver.onNext(provideInput(inputRequest));
     responseObserver.onCompleted();
   }
 
-  private BatchGetMatchDateInputsResponse provideInput(DateInputRequest request) {
+  private BatchGetMatchDateInputsResponse provideInput(DataSourceInputRequest request) {
     var input = dateInputProvider.provideInput(request);
 
     return BatchGetMatchDateInputsResponse.newBuilder()
@@ -63,8 +63,8 @@ class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase
         .build();
   }
 
-  private DateInputRequest createRequest(BatchGetMatchDateInputsRequest request) {
-    return DateInputRequest.builder()
+  private DataSourceInputRequest createRequest(BatchGetMatchDateInputsRequest request) {
+    return DataSourceInputRequest.builder()
         .features(request.getFeaturesList())
         .matches(request.getMatchesList())
         .build();
