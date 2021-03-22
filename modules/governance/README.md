@@ -47,64 +47,18 @@ Start database service using the command:
 > The above command runs `docker-compose` in compatibility mode (the `--compatibility` argument).
 > This is required to limit the amount of memory to services, otherwise it would be impossible to start all the services on regular developer's computer.
 
-### Starting RabbitMQ from SERP
+### Starting RabbitMQ 
+Governance uses RabbitMQ message broker to communicate with other components.
 
-The Governance uses RabbitMQ message broker to communicate with SERP, and SERP starts RabbitMQ as part of its set of infrastructural services.
-Therefore, the Governance reuses the RabbitMQ that SERP maintains.
+To start RabbitMQ, follow the steps:
 
-To start RabbitMQ from SERP, follow the steps:
+1. Clone [Common Docker Infrastructure]:
 
-1. Clone [the SERP repository][SERP GitLab Repository]:
-
-       git clone git@gitlab.silenteight.com:sens/serp.git
-
-2. Run the following commands:
-
-       cd serp
-       docker-compose --compatibility up -d rabbitmq traefik
-
-   > **NOTE**
-   >
-   > You start Traefik to access RabbitMQ Management UI on the same port SERP developers access it.
-
-3. Ensure that RabbitMQ is running:
-
-       $ docker-compose --compatibility ps rabbitmq traefik
-            Name                    Command               State   ...
-       -----------------------------------------------------------...
-       serp_rabbitmq_1   docker-entrypoint.sh rabbi ...   Up      ...
-       serp_traefik_1    /traefik --api                   Up      ...
-
-   The `State` column must read `Up`.
-
-4. Log in to the [RabbitMQ Management UI](http://localhost:24111/rabbitmq) using user `serp` and password `serp`.
-
-Once RabbitMQ and Traefik are running, you are ready to configure Governance access and exchanges.
-
-### Configuring RabbitMQ for Governance
-
-To configure RabbitMQ for Governance, run the following command:
-
-    ./scripts/setup-rabbitmq.sh
-
-You should see the command output information similar to this:
-
-    2020-09-25 07:45:27+02:00 --- rabbitmqctl delete_user governance
-    Deleting user "governance" ...
-    2020-09-25 07:45:28+02:00 --- rabbitmqctl add_user governance <redacted>
-    Adding user "governance" ...
-    2020-09-25 07:45:29+02:00 --- rabbitmqctl set_user_tags governance monitoring management
-    Setting tags for user "governance" to [monitoring, management] ...
-    2020-09-25 07:45:29+02:00 --- rabbitmqctl set_permissions -p / governance .* .* .*
-    Setting permissions for user "governance" in vhost "/" ...
-    2020-09-25 07:45:30+02:00 --- rabbitmqctl import_definitions --format json /etc/rabbitmq/definitions.json
-    Importing definitions in JSON from a file at "/etc/rabbitmq/definitions.json" ...
-    Successfully started definition import. This process is asynchronous and can take some time.
-
-> **NOTE**
->
-> The setup script uses `docker exec` to run the `rabbitmqctl` command directly in the running RabbitMQ container launched for SERP.
-> If you don't have the RabbitMQ container running, execution of the script will fail.
+       git clone https://gitlab.silenteight.com/sens/common-docker-infrastructure
+       
+1. Start docker-compose. It is sufficient to start just the rabbitmq service.
+    
+       docker-compose up -d rabbitmq
 
 ### Using Swagger UI
 By default, swagger is disabled in production. To enable it you need to apply `swagger` Spring Boot profile.
