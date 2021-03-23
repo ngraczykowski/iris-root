@@ -1,0 +1,8 @@
+plugins {
+  id "java-library"
+}
+
+dependencies {
+  implementation libraries.governance_solving_api
+  implementation libraries.grpc_spring_boot_starter
+}

@@ -1,0 +1,33 @@
+{
+  "policyName": "policies/1",
+  "featureCollection": {
+    "feature": [
+      {
+        "name": "features/name"
+      },
+      {
+        "name": "features/dob"
+      }
+    ]
+  },
+  "featureVectors": [
+    {
+      "featureValue": [
+        "MATCH",
+        "MATCH"
+      ]
+    },
+    {
+      "featureValue": [
+        "MATCH",
+        "NO_MATCH"
+      ]
+    },
+    {
+      "featureValue": [
+        "NO_MATCH",
+        "NO_MATCH"
+      ]
+    }
+  ]
+}

@@ -16,6 +16,7 @@ ext {
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 libraries.governance_api = [group: 'com.silenteight.governance.api', name: 'se-governance-api', version: governanceApiVersion]
+libraries.governance_solving_api = [group: 'com.silenteight.governance.api', name: 'se-solving-api', version: governanceApiVersion]
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]

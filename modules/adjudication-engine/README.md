@@ -5,3 +5,9 @@
 3. Start docker services from this repo using:
 
        docker-compose up -d
+
+### Enable mocks
+
+To test application with mocked dependencies activate following Spring Profiles:
+
+    mock-governance
