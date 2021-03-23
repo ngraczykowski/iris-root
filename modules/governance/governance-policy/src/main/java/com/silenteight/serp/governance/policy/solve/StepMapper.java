@@ -24,10 +24,7 @@ class StepMapper {
   }
 
   private static FeatureLogic mapToFeatureLogic(FeatureLogicConfigurationDto dto) {
-    return FeatureLogic.builder()
-        .count(dto.getCount())
-        .features(mapToFeatures(dto.getFeatures()))
-        .build();
+    return new FeatureLogic(dto.getCount(), mapToFeatures(dto.getFeatures()));
   }
 
   private static Collection<MatchCondition> mapToFeatures(
@@ -40,11 +37,6 @@ class StepMapper {
   }
 
   private static MatchCondition mapToMatchCondition(MatchConditionConfigurationDto dto) {
-    return MatchCondition
-        .builder()
-        .name(dto.getName())
-        .condition(dto.getCondition())
-        .values(dto.getValues())
-        .build();
+    return new MatchCondition(dto.getName(), dto.getCondition(), dto.getValues());
   }
 }
