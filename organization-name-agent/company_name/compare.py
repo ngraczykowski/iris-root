@@ -2,7 +2,7 @@ import collections
 import itertools
 import re
 import string
-from typing import Mapping, Set, Sequence
+from typing import Mapping, Set, Sequence, Tuple
 
 import fuzzywuzzy.fuzz as fuzz
 import phonetics
@@ -138,7 +138,7 @@ COMMON_PREFIXES = COMMON_SUFFIXES
 
 NameInformation = collections.namedtuple(
     "NameInformation",
-    ("common_prefixes", "base", "common_suffixes", "legal", "parenthesis_information")
+    ("common_prefixes", "base", "common_suffixes", "legal", "countries", "parenthesis")
 )
 
 
@@ -170,7 +170,7 @@ def cut_from_end(name: str, terms_to_cut):
             if name.endswith(" " + term_variant):
                 possibilities.append((term_variant, term))
     if not possibilities:
-        return name, []
+        return name, ()
     best_one = sorted([(len(x[0]), x) for x in possibilities])[-1][1]
     base, other_terms = cut_from_end(name[: -len(best_one[0])].strip(), terms_to_cut)
     return base.strip(), (*other_terms, best_one[1])
@@ -183,7 +183,7 @@ def cut_from_start(name: str, terms_to_cut):
             if name.startswith(term_variant + " "):
                 possibilities.append((term_variant, term))
     if not possibilities:
-        return [], name
+        return (), name
     best_one = sorted([(len(x[0]), x) for x in possibilities])[-1][1]
     other_terms, base = cut_from_start(name[len(best_one[0]):].strip(), terms_to_cut)
     return (best_one[1], *other_terms), base.strip()
@@ -215,10 +215,11 @@ def cut_all(name) -> NameInformation:
     common_prefixes, common_base, common_suffixes = cut_common(legal_base)
     return NameInformation(
         common_prefixes=common_prefixes,
-        base=common_base,
+        base=tuple(common_base.split()),
         common_suffixes=common_suffixes,
         legal=legal,
-        parenthesis_information=extra,
+        countries=tuple(c for c in extra if c in COUNTRY_MAPPING),
+        parenthesis=tuple(c for c in extra if c not in COUNTRY_MAPPING),
     )
 
 
@@ -328,9 +329,9 @@ def legal_score(first, second) -> float:
 
 
 def abbreviation_score(information: NameInformation, abbreviation: str) -> float:
-    words = [*information.common_prefixes, *information.base.split()]
+    words = [*information.common_prefixes, *information.base]
     if (
-        len(abbreviation) >= len(information.base)
+        len(abbreviation) >= len("".join(information.base))
         or len(abbreviation) < 2
         or not words
     ):
@@ -386,35 +387,38 @@ def country_score(first_countries, second_countries) -> float:
     return float(bool(first_country_ids.intersection(second_country_ids)))
 
 
-def compare(first: str, second: str) -> Mapping[str, float]:
+def compare(
+        first: str, second: str
+) -> Tuple[Mapping[str, float], Tuple[Mapping[str, Tuple[str, ...]], Mapping[str, Tuple[str, ...]]]]:
+
     blacklisted = float(bool(BLACKLIST_REGEX.search(first) or BLACKLIST_REGEX.search(second)))
 
     first_information = cut_all(clear_name(first))
-    first_base = first_information.base
+    first_base = " ".join(first_information.base)
     first = " ".join((
         *first_information.common_prefixes,
-        first_information.base,
+        *first_information.base,
         *first_information.common_suffixes
     ))
 
     second_information = cut_all(clear_name(second))
-    second_base = second_information.base
+    second_base = " ".join(second_information.base)
     second = " ".join((
         *second_information.common_prefixes,
-        second_information.base,
+        *second_information.base,
         *second_information.common_suffixes
     ))
 
     extra_match = float(
-        second_base in first_information.parenthesis_information
-        or first_base in second_information.parenthesis_information
+        second_base in first_information.parenthesis
+        or first_base in second_information.parenthesis
     )
     abbreviate_score = max(
         abbreviation_score(first_information, second_base),
         abbreviation_score(second_information, first_base),
     )
 
-    return {
+    scores = {
         "parenthesis_match": extra_match,
         "abbreviation": abbreviate_score,
         "fuzzy_on_base": fuzz.ratio(*_without_whitespaces(first_base, second_base)) / 100,
@@ -426,9 +430,11 @@ def compare(first: str, second: str) -> Mapping[str, float]:
         "absolute_tokenization": tokenization_score(first, second, absolute=True),
         "blacklisted": blacklisted,
         "country": country_score(
-            first_information.parenthesis_information,
-            second_information.parenthesis_information,
+            first_information.countries,
+            second_information.countries,
         ),
         "phonetics_on_base": phonetic_score(first_base, second_base),
         "phonetics": phonetic_score(first, second),
     }
+
+    return scores, (first_information._asdict(), second_information._asdict())
