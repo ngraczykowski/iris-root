@@ -2,6 +2,7 @@ plugins {
   id "java-library"
   id "maven-publish"
   id "io.freefair.aspectj.post-compile-weaving"
+  id "groovy"
 }
 
 description = "Adjudication Engine Dataset"
@@ -9,4 +10,12 @@ description = "Adjudication Engine Dataset"
 dependencies {
   implementation libraries.adjudication_engine_api
   implementation libraries.grpc_spring_boot_starter
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.spring_data_jpa
+  implementation project(":adjudication-engine-alerts")
+  implementation project(":adjudication-engine-common")
+
+  // We need to have liquibase change log files to create db structures
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libraries.silenteight_sep_base_testing
 }

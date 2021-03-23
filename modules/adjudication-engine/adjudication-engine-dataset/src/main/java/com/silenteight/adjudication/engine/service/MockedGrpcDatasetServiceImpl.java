@@ -1,4 +1,6 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.service;
+
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.CreateDatasetRequest.FilterCase;
@@ -8,15 +10,17 @@ import com.google.protobuf.Timestamp;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
 
-// TODO tkleszcz: mocked service replace with real one
 @GrpcService
-class DatasetMockGrpcService extends DatasetServiceImplBase {
+@Slf4j
+@Profile("mock")
+class MockedGrpcDatasetServiceImpl extends DatasetServiceImplBase {
 
   private final Random random = new Random();
 
@@ -29,6 +33,7 @@ class DatasetMockGrpcService extends DatasetServiceImplBase {
   @Override
   public void createDataset(
       CreateDatasetRequest request, StreamObserver<Dataset> responseObserver) {
+    log.info("Create dataset MOCKED GRPC call");
     if (request.getFilterCase() == FilterCase.FILTER_NOT_SET) {
       responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
           .withDescription("filter must be set")

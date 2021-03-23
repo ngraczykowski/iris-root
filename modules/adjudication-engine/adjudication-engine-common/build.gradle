@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
   api libraries.protobuf_java
+  implementation libraries.guava
 
   testImplementation libraries.protobuf_java_util
 }
