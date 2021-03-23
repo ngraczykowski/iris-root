@@ -210,19 +210,12 @@ class SolvingServiceTest {
   }
 
   private static FeatureLogic createFeatureLogic(int count, Collection<MatchCondition> features) {
-    return FeatureLogic.builder()
-        .count(count)
-        .features(features)
-        .build();
+    return new FeatureLogic(count, features);
   }
 
   private static MatchCondition createFeature(
       String name, Condition condition, Collection<String> values) {
 
-    return MatchCondition.builder()
-        .name(name)
-        .condition(condition)
-        .values(values)
-        .build();
+    return new MatchCondition(name, condition, values);
   }
 }

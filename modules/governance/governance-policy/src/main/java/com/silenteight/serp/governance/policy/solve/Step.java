@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
@@ -8,13 +8,23 @@ import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.concurrent.ThreadSafe;
 
-@RequiredArgsConstructor
+import static java.util.List.copyOf;
+
+@Value
+@ThreadSafe
 class Step {
 
-  private final FeatureVectorSolution solution;
-  private final UUID stepId;
-  private final Collection<FeatureLogic> featureLogics;
+  FeatureVectorSolution solution;
+  UUID stepId;
+  Collection<FeatureLogic> featureLogics;
+
+  Step(FeatureVectorSolution solution, UUID stepId, Collection<FeatureLogic> featureLogics) {
+    this.solution = solution;
+    this.stepId = stepId;
+    this.featureLogics = copyOf(featureLogics);
+  }
 
   boolean matchesFeatureValues(Map<String, String> featureValuesByName) {
     return featureLogics.stream().allMatch(featureLogic -> featureLogic.match(featureValuesByName));

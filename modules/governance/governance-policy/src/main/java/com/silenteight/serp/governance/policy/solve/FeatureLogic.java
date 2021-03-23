@@ -1,20 +1,27 @@
 package com.silenteight.serp.governance.policy.solve;
 
-import lombok.*;
+import lombok.NonNull;
+import lombok.Value;
 
 import java.util.Collection;
 import java.util.Map;
+import javax.annotation.concurrent.ThreadSafe;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+import static java.util.List.copyOf;
+
+@Value
+@ThreadSafe
 class FeatureLogic {
 
-  private int count;
+  int count;
 
   @NonNull
-  private Collection<MatchCondition> features;
+  Collection<MatchCondition> features;
+
+  FeatureLogic(int count, @NonNull Collection<MatchCondition> features) {
+    this.count = count;
+    this.features = copyOf(features);
+  }
 
   public boolean match(Map<String, String> featureValuesByName) {
     return getFeatures()
