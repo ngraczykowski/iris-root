@@ -8,7 +8,10 @@ import fuzzywuzzy.fuzz as fuzz
 import phonetics
 import unidecode
 
-from .countries import COUNTRY_MAPPING
+try:
+    from .countries import COUNTRY_MAPPING
+except ImportError:
+    from countries import COUNTRY_MAPPING
 
 
 BLACKLIST = {"gazprom", "vtb"}
