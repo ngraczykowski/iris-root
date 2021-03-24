@@ -161,6 +161,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -179,7 +180,7 @@ databaseChangeLog:
                   type: varchar(50)
               - column:
                   name: multi_value
-                  type: int
+                  type: boolean
                   constraints:
                     nullable: false
               - column:

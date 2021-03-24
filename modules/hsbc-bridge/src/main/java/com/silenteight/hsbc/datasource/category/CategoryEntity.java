@@ -20,6 +20,8 @@ import static lombok.AccessLevel.PROTECTED;
 class CategoryEntity extends BaseEntity {
 
   @Id
+  @Column(name = "id", nullable = false, insertable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private String displayName;
@@ -33,4 +35,12 @@ class CategoryEntity extends BaseEntity {
       joinColumns = @JoinColumn(name = "category_id"))
   @Column(name = "value")
   private List<String> allowedValues;
+
+  CategoryEntity(CategoryModel categoryModel) {
+    this.name = categoryModel.getName();
+    this.displayName = categoryModel.getDisplayName();
+    this.multiValue = categoryModel.isMultiValue();
+    this.type = categoryModel.getType();
+    this.allowedValues = categoryModel.getAllowedValues();
+  }
 }
