@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,7 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 import com.silenteight.adjudication.engine.common.protobuf.TimestampConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 class CreateDatasetUseCase {
 
+  private static final String NAME_PREFIX = "datasets/";
+
   @NonNull
   private final DatasetRepository datasetRepository;
   @NonNull
@@ -28,15 +31,16 @@ class CreateDatasetUseCase {
   @Transactional
   Dataset createDataset(NamedAlerts namedAlerts) {
     var dataset = datasetRepository.save(DatasetEntity.builder().build());
+
     namedAlerts
         .getAlertsList()
         .stream()
         .map(alertName -> mapNamedAlert(alertName, dataset))
-        .forEach(datasetAlertEntity -> datasetAlertRepository.save(datasetAlertEntity));
+        .forEach(datasetAlertRepository::save);
 
     return Dataset
         .newBuilder()
-        .setName("datasets/" + dataset.getId())
+        .setName(NAME_PREFIX + dataset.getId())
         .setCreateTime(TimestampConverter.fromOffsetDateTime(dataset.getCreatedAt()))
         .setAlertCount(namedAlerts.getAlertsCount())
         .build();
@@ -47,13 +51,15 @@ class CreateDatasetUseCase {
   }
 
   Dataset getDataset(String name) {
-    var dataset = datasetRepository.findById(ResourceName.getResource(name).getId("datasets"));
-    if (dataset.isPresent()) {
-      var datasetEntity = dataset.get();
-      var alertCount = datasetAlertRepository.countByIdDatasetId(datasetEntity.getId());
-      return fromEntity(datasetEntity, alertCount);
+    var datasetId = ResourceName.getResource(name).getId("datasets");
+    var dataset = datasetRepository.findById(datasetId);
+    if (dataset.isEmpty()) {
+      throw new EntityNotFoundException(datasetId);
     }
-    throw new RuntimeException(String.format("Entity not found by name:%s", name));
+
+    var datasetEntity = dataset.get();
+    var alertCount = datasetAlertRepository.countByIdDatasetId(datasetId);
+    return fromEntity(datasetEntity, alertCount);
   }
 
   Page<Dataset> listDataset(Pageable pageable) {
@@ -69,14 +75,14 @@ class CreateDatasetUseCase {
   Page<String> listDatasetAlerts(Pageable pageable, long datasetId) {
     return datasetAlertRepository
         .findAllByIdDatasetId(pageable, datasetId)
-        .map(datasetEntity -> "datasets/" + datasetId + "/alerts/"
+        .map(datasetEntity -> NAME_PREFIX + datasetId + "/alerts/"
             + datasetEntity.getId().getAlertId());
 
   }
 
   private Dataset fromEntity(DatasetEntity entity, long alertCount) {
     return Dataset.newBuilder()
-        .setName("datasets/" + entity.getId())
+        .setName(NAME_PREFIX + entity.getId())
         .setCreateTime(TimestampConverter.fromOffsetDateTime(entity.getCreatedAt()))
         .setAlertCount(alertCount)
         .build();
@@ -91,5 +97,4 @@ class CreateDatasetUseCase {
             .build())
         .build();
   }
-
 }

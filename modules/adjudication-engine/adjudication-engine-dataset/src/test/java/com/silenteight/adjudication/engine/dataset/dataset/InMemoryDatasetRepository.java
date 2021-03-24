@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 

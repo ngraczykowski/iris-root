@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;

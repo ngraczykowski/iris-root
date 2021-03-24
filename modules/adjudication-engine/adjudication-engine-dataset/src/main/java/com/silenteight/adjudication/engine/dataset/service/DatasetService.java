@@ -1,11 +1,11 @@
-package com.silenteight.adjudication.engine.service;
+package com.silenteight.adjudication.engine.dataset.service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.*;
-import com.silenteight.adjudication.engine.dataset.DatasetFacade;
+import com.silenteight.adjudication.engine.dataset.dataset.DatasetFacade;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

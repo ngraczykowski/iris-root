@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;

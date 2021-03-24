@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
@@ -11,8 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
-
-public class DatasetRepositoryIT extends BaseDataJpaTest {
+class DatasetRepositoryIT extends BaseDataJpaTest {
 
   @Autowired
   private DatasetRepository repository;

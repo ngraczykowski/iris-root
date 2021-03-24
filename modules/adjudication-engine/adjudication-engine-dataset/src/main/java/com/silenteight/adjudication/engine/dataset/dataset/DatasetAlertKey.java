@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import lombok.*;
 
@@ -18,6 +18,8 @@ import static lombok.AccessLevel.PROTECTED;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 class DatasetAlertKey implements Serializable {
 
+  private static final long serialVersionUID = 6925160290708786662L;
+
   @Column(nullable = false)
   @NonNull
   private Long datasetId;
@@ -25,5 +27,4 @@ class DatasetAlertKey implements Serializable {
   @Column(nullable = false)
   @NonNull
   private Long alertId;
-
 }

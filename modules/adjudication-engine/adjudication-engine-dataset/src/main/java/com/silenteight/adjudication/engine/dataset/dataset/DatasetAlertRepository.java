@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset;
+package com.silenteight.adjudication.engine.dataset.dataset;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

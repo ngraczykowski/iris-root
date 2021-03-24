@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.dataset
+package com.silenteight.adjudication.engine.dataset.dataset
 
 
 import com.silenteight.adjudication.api.v1.NamedAlerts
@@ -8,7 +8,7 @@ import com.silenteight.adjudication.engine.common.model.EntityName
 import org.springframework.data.domain.PageRequest
 import spock.lang.Specification
 
-import static com.silenteight.adjudication.engine.dataset.DatasetFixture.inMemoryDatasetFacade
+import static com.silenteight.adjudication.engine.dataset.dataset.DatasetFixture.inMemoryDatasetFacade
 
 class CreateDatasetUseCaseAcceptanceSpec extends Specification {
   private DatasetFacade facade = inMemoryDatasetFacade();
