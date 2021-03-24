@@ -3,11 +3,8 @@ package com.silenteight.adjudication.engine.alerts.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceImplBase;
-import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
-import com.silenteight.adjudication.api.v1.BatchCreateAlertsResponse;
-import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -33,6 +30,28 @@ class GrpcAlertServiceImpl extends AlertServiceImplBase {
       BatchCreateAlertsRequest request,
       StreamObserver<BatchCreateAlertsResponse> responseObserver) {
     responseObserver.onNext(alertService.batchCreateAlerts(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void createMatch(CreateMatchRequest request, StreamObserver<Match> responseObserver) {
+    responseObserver.onNext(alertService.createMatch(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void batchCreateAlertMatches(
+      BatchCreateAlertMatchesRequest request,
+      StreamObserver<BatchCreateAlertMatchesResponse> responseObserver) {
+    responseObserver.onNext(alertService.batchCreateAlertMatches(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void batchCreateMatches(
+      BatchCreateMatchesRequest request,
+      StreamObserver<BatchCreateMatchesResponse> responseObserver) {
+    responseObserver.onNext(alertService.batchCreateMatches(request));
     responseObserver.onCompleted();
   }
 }

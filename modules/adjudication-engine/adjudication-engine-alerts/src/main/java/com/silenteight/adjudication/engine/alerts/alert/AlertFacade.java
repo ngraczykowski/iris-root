@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.Alert;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +17,8 @@ public class AlertFacade {
   @NonNull
   private final CreateAlertsUseCase createAlertsUseCase;
 
-  public List<Alert> createAlerts(Iterable<Alert> alerts) {
+  @Nonnull
+  public List<Alert> createAlerts(@NonNull Iterable<Alert> alerts) {
     return createAlertsUseCase.createAlerts(alerts);
   }
 }

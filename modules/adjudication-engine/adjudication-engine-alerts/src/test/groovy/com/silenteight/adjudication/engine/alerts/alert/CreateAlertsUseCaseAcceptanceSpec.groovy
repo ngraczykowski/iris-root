@@ -11,7 +11,7 @@ import static com.silenteight.adjudication.engine.alerts.alert.AlertFixtures.inM
 
 class CreateAlertsUseCaseAcceptanceSpec extends Specification {
 
-  private AlertFacade facade = inMemoryAlertFacade();
+  private AlertFacade facade = inMemoryAlertFacade()
 
   def "creates an alert given the alert with id and labels"() {
     given:

@@ -19,4 +19,30 @@
     <renameTable oldTableName="ae_alert_label" newTableName="ae_alert_labels"/>
     <renameTable oldTableName="ae_match_label" newTableName="ae_match_labels"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.1.0-3" author="ahaczewski">
+    <comment>
+      Add missing columns to ae_match table.
+    </comment>
+
+    <addColumn tableName="ae_match">
+      <column name="client_match_identifier" type="VARCHAR(100)"/>
+      <column name="sort_index" type="INTEGER"/>
+    </addColumn>
+
+    <createIndex tableName="ae_match" indexName="ix_ae_match_client_match_identifier">
+      <column name="client_match_identifier"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.1.0-4" author="ahaczewski">
+    <comment>
+      Ensure there is no match with the same sort_index in the same alert.
+    </comment>
+
+    <addUniqueConstraint
+        tableName="ae_match"
+        columnNames="alert_id, sort_index"
+        constraintName="uq_ae_match_alert_id_sort_index"/>
+  </changeSet>
 </databaseChangeLog>
