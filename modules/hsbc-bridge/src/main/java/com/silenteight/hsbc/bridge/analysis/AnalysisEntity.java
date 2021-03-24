@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.match;
+package com.silenteight.hsbc.bridge.analysis;
 
 import lombok.*;
 
@@ -15,22 +15,21 @@ import static lombok.AccessLevel.PROTECTED;
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
-@Table(name = "hsbc_bridge_match")
-class MatchEntity extends BaseEntity {
+@Table(name = "hsbc_bridge_analysis")
+public class AnalysisEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private byte[] payload;
+  private String analysisName;
+  private String datasetName;
+  private String solvingModelName;
 
-  private long alertId;
-
-  private String name;
-
-  MatchEntity(long alertId, byte[] payload) {
-    this.alertId = alertId;
-    this.payload = payload;
+  AnalysisEntity(String analysisName, String datasetName, String solvingModelName) {
+    this.analysisName = analysisName;
+    this.datasetName = datasetName;
+    this.solvingModelName = solvingModelName;
   }
 }

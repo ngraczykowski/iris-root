@@ -54,6 +54,7 @@ class BulkProcessor {
 
     return AlertMatchIdComposite.builder()
         .alertId(alertComposite.getId())
+        .caseId(alertComposite.getCaseId())
         .matchIds(matchIds)
         .build();
   }

@@ -27,6 +27,7 @@ public class AlertFacade {
 
     return AlertComposite.builder()
         .id(alertEntity.getId())
+        .caseId(alertEntity.getCaseId())
         .alert(alert)
         .build();
   }

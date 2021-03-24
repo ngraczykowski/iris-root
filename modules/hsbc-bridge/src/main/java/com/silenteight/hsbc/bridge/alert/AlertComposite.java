@@ -11,6 +11,7 @@ import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
 public class AlertComposite {
 
   long id;
+  int caseId;
   Alert alert;
 
   public AlertSystemInformation getAlertSystemInformation() {

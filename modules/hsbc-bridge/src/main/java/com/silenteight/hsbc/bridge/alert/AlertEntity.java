@@ -21,7 +21,11 @@ class AlertEntity extends BaseEntity {
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private int caseId;
+
+  private String name;
+
   private byte[] payload;
 
   public AlertEntity(int caseId, byte[] payload) {

@@ -79,6 +79,9 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: name
+                  type: varchar(256)
+              - column:
                   name: created_at
                   type: timestamp
                   constraints:
@@ -100,6 +103,9 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: name
+                  type: varchar(256)
+              - column:
                   name: payload
                   type: bytea
               - column:
@@ -117,6 +123,33 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_alert_id
                     references: hsbc_bridge_alert(id)
+        - createTable:
+            tableName: hsbc_bridge_analysis
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: analysis_name
+                  type: varchar(256)
+              - column:
+                  name: dataset_name
+                  type: varchar(256)
+              - column:
+                  name: solving_model_name
+                  type: varchar(256)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
 
   - changeSet:
       id: 1.0.0-3

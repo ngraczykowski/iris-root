@@ -13,7 +13,13 @@ import org.springframework.context.annotation.Configuration;
 class AnalysisEventConfiguration {
 
   private final AdjudicationFacade adjudicationFacade;
+  private final AnalysisRepository analysisRepository;
   private final ModelUseCase modelUseCase;
+
+  @Bean
+  AnalysisEventHandler analysisEventHandler() {
+    return new AnalysisEventHandler(analysisRepository);
+  }
 
   @Bean
   BulkPreProcessingFinishedEventHandler bulkPreProcessingFinishedEventHandler() {
