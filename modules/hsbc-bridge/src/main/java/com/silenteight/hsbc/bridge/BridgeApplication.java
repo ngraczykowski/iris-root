@@ -7,16 +7,21 @@ import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.model.Model;
 import com.silenteight.hsbc.bridge.rest.RestModule;
+import com.silenteight.hsbc.datasource.category.DataSourceCategoryModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
 import com.silenteight.hsbc.datasource.provider.DataSourceProviderModule;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableAutoConfiguration
-@EnableJpaRepositories
+@EnableJpaRepositories("com.silenteight.hsbc")
+@EntityScan(basePackages = {"com.silenteight.hsbc"})
+@EnableTransactionManagement
 @ComponentScan(basePackageClasses = {
     AlertModule.class,
     AdjudicationModule.class,
@@ -27,7 +32,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     RestModule.class,
 
     DataSourceApiGrpcModule.class,
-    DataSourceProviderModule.class
+    DataSourceProviderModule.class,
+    DataSourceCategoryModule.class
 })
 public class BridgeApplication {
 

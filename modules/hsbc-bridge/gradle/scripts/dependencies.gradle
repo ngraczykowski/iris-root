@@ -19,6 +19,7 @@ ext {
 // Silent Eight
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
+libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
 libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceModelApiVersion]
 
 // Spring
@@ -82,6 +83,7 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.adjudication_engine_api
   implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
   implementation libraries.silenteight_governance_model_api
   implementation libraries.grpc_spring_boot_starter
   testImplementation libraries.junit_jupiter_api

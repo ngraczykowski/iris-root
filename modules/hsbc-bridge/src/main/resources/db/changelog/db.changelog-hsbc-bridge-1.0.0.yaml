@@ -117,3 +117,103 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_alert_id
                     references: hsbc_bridge_alert(id)
+
+  - changeSet:
+      id: 1.0.0-3
+      author: bmartofel
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_category
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(50)
+              - column:
+                  name: multi_value
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+  - changeSet:
+      id: 1.0.0-4
+      author: bmartofel
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_category_allowed_values
+            columns:
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_category_id
+                    references: hsbc_bridge_category(id)
+              - column:
+                  name: value
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1.0.0-5
+      author: bmartofel
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_match_category
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: match_value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_match_category_id
+                    references: hsbc_bridge_match_category(id)
+        - createTable:
+            tableName: hsbc_bridge_match_category_values
+            columns:
+              - column:
+                  name: match_category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_match_category_cid
+                    references: hsbc_bridge_category(id)
+              - column:
+                  name: value
+                  type: varchar(100)
+                  constraints:
+                    nullable: false

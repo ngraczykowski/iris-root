@@ -1,0 +1,36 @@
+package com.silenteight.hsbc.datasource.category;
+
+import lombok.*;
+
+import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
+
+import java.util.List;
+import javax.persistence.*;
+
+import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PROTECTED;
+
+@Data
+@NoArgsConstructor(access = PROTECTED)
+@Setter(NONE)
+@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
+@Entity
+@Table(name = "hsbc_bridge_category")
+class CategoryEntity extends BaseEntity {
+
+  @Id
+  private Long id;
+  private String name;
+  private String displayName;
+  private boolean multiValue;
+  @Enumerated(EnumType.STRING)
+  private CategoryType type;
+
+  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+  @CollectionTable(
+      name = "hsbc_bridge_category_allowed_values",
+      joinColumns = @JoinColumn(name = "category_id"))
+  @Column(name = "value")
+  private List<String> allowedValues;
+}

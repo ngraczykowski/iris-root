@@ -7,7 +7,6 @@ import com.silenteight.datasource.api.ispep.v1.IsPepInputServiceGrpc.IsPepInputS
 import com.silenteight.hsbc.datasource.dto.ispep.*;
 import com.silenteight.hsbc.datasource.provider.IsPepInputProvider;
 
-import com.google.protobuf.ProtocolStringList;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
