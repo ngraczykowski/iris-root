@@ -1,8 +1,10 @@
 package com.silenteight.adjudication.engine.alerts.match;
 
+import com.silenteight.adjudication.engine.alerts.match.MatchRepository.SortIndexOnly;
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
+import org.assertj.core.api.AbstractOptionalAssert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,23 +36,22 @@ class MatchRepositoryIT extends BaseDataJpaTest {
 
   @Test
   void shouldNotFindAnySortIndexForEmptyRepository() {
-    assertThat(repository.findFirstByAlertIdOrderBySortIndexDesc(1)).isEmpty();
+    assertThatLastSortIndex().isEmpty();
   }
 
   @Test
   void shouldFindLatestSortIndex() {
     givenMatch(1);
     givenMatch(2);
-
-    assertThat(repository.findFirstByAlertIdOrderBySortIndexDesc(ALERT_ID))
-        .isNotEmpty()
-        .hasValueSatisfying(r -> assertThat(r.getSortIndex()).isEqualTo(2));
+    assertThatLastSortIndex().isNotEmpty().hasValue(2);
 
     givenMatch(20);
+    assertThatLastSortIndex().isNotEmpty().hasValue(20);
+  }
 
-    assertThat(repository.findFirstByAlertIdOrderBySortIndexDesc(ALERT_ID))
-        .isNotEmpty()
-        .hasValueSatisfying(r -> assertThat(r.getSortIndex()).isEqualTo(20));
+  private AbstractOptionalAssert<?, Integer> assertThatLastSortIndex() {
+    return assertThat(repository.findFirstByAlertIdOrderBySortIndexDesc(ALERT_ID))
+        .map(SortIndexOnly::getSortIndex);
   }
 
   @NotNull
