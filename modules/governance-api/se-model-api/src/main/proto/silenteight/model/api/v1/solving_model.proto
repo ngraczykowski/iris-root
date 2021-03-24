@@ -16,6 +16,17 @@ service SolvingModelService {
       get: "/v1/solving-models:getDefault"
     };
   }
+
+  rpc GetSolvingModel(ModelRequest) returns (SolvingModel) {
+      option (google.api.http) = {
+      get: "/v1/{model=solving-models/*}"
+    };
+  }
+}
+
+message ModelRequest {
+    // Name of solving model
+    string model = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Binds together configurations of different part of the system required for solving set of alerts
@@ -31,6 +42,7 @@ message SolvingModel {
   repeated string categories = 5 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Representation of the feature
 message Feature {
   // The unique name of the feature. This name is obtained from an external API.
   // [`features/<Feature Name>`]
