@@ -7,12 +7,29 @@ option java_outer_classname = "IsPepAgentApiProto";
 option java_multiple_files = true;
 
 service IsPepAgent {
+
+  rpc VerifyIfIsProceduralPep (IsProceduralPepRequest) returns (IsProceduralPepResponse) {
+  }
+
+  rpc VerifyIfIsHistoricalPep (IsHistoricalPepRequest) returns (IsHistoricalPepResponse) {
+  }
+
   rpc VerifyIfIsPep (IsPepRequest) returns (IsPepResponse) {
   }
 
   // Allows the agent client to get the fields it needs to provide to the agent
   rpc GetModelFieldNames(GetModelFieldNamesRequest) returns (GetModelFieldNamesResponse) {
   }
+}
+
+message IsProceduralPepRequest {
+  PotentialPep potential_pep = 1;
+  // the region of a bank than can change Is PEP rules
+  string bank_region = 2;
+}
+
+message IsHistoricalPepRequest {
+  string uid = 1;
 }
 
 message IsPepRequest {
@@ -26,19 +43,52 @@ message PotentialPep {
   map<string, string> fields = 1;
 }
 
+message IsProceduralPepResponse {
+  string solution = 1;
+  ProceduralReason reason = 2;
+  ModelDetails model_details = 3;
+}
+
+message IsHistoricalPepResponse {
+  string solution = 1;
+  HistoricalReason reason = 2;
+  ModelDetails model_details = 3;
+}
+
 message IsPepResponse {
   string solution = 1;
   Reason reason = 2;
   ModelDetails model_details = 3;
+}
 
-  message Reason {
-    string message = 1;
-    repeated string no_pep_positions = 2;
-    repeated string not_matched_positions = 3;
-    repeated string pep_positions = 4;
-    // uids of true PEPs connected to the potential PEPs
-    repeated string linked_peps_uids = 5;
-  }
+message ProceduralReason {
+  string message = 1;
+  repeated string no_pep_positions = 2;
+  repeated string not_matched_positions = 3;
+  repeated string pep_positions = 4;
+  // uids of true PEPs connected to the potential PEPs
+  repeated string linked_peps_uids = 5;
+}
+
+message HistoricalReason {
+  string message = 1;
+  // number of not pep decisions in learning store
+  uint32 number_of_not_pep_decisions = 2;
+  // number of pep decisions in learning store
+  uint32 number_of_pep_decisions = 3;
+}
+
+message Reason {
+  string message = 1;
+  repeated string no_pep_positions = 2;
+  repeated string not_matched_positions = 3;
+  repeated string pep_positions = 4;
+  // uids of true PEPs connected to the potential PEPs
+  repeated string linked_peps_uids = 5;
+  // number of not pep decisions in learning store
+  uint32 number_of_not_pep_decisions = 6;
+  // number of pep decisions in learning store
+  uint32 number_of_pep_decisions = 7;
 }
 
 message ModelDetails {
