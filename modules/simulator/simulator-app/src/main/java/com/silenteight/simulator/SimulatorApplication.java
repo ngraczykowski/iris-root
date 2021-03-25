@@ -6,6 +6,8 @@ import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
 import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 import com.silenteight.simulator.common.integration.AmqpCommonModule;
 import com.silenteight.simulator.common.web.WebModule;
+import com.silenteight.simulator.dataset.DatasetModule;
+import com.silenteight.simulator.grpc.GrpcModule;
 import com.silenteight.simulator.management.ManagementModule;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,11 +19,13 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 @ComponentScan(basePackageClasses = {
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
+    DatasetModule.class,
     ManagementModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    GrpcModule.class,
     WebModule.class,
 })
 @EnableIntegration

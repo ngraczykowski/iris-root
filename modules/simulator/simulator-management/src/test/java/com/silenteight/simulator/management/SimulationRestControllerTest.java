@@ -1,7 +1,7 @@
 package com.silenteight.simulator.management;
 
-import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.management.SimulationFixture.*;
 import static com.silenteight.simulator.management.SimulationRestController.SIMULATIONS_URL;
 import static java.util.List.of;

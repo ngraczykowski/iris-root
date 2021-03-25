@@ -1,4 +1,4 @@
-package com.silenteight.sens.governance.common.testing.rest.testwithrole;
+package com.silenteight.simulator.common.testing.rest.testwithrole;
 
 import java.util.List;
 

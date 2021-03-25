@@ -1,11 +1,8 @@
 plugins {
   id "java"
-  id "maven-publish"
-  id "io.freefair.aspectj.post-compile-weaving"
-  id "org.springframework.boot"
 }
 
-description = "Simulator"
+description = "Simulator Dataset"
 
 configurations {
   implementation.extendsFrom starterCommon
@@ -17,29 +14,22 @@ configurations {
   implementation.extendsFrom starterGrpcClient
 
   testImplementation.extendsFrom starterSpringTest
-  testImplementation.extendsFrom starterSpockTest
 }
 
 dependencies {
   implementation project(":simulator-common-web")
-  implementation project(":simulator-dataset")
-  implementation project(":simulator-db-changelog")
-  implementation project(":simulator-management")
 
-  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_adjudication_api
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
-  implementation libraries.silenteight_spring_cloud_consul_discovery
 
-  implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web
 
   implementation libraries.spring_context_support
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
-  implementation libraries.spring_cloud_starter_consul_config
 
   implementation libraries.commons_lang3
 
@@ -60,12 +50,4 @@ dependencies {
   testImplementation libraries.spring_security_test
 
   aspect libraries.silenteight_sep_base_aspects
-}
-
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-    }
-  }
 }

@@ -61,4 +61,40 @@
         initiallyDeferred="true"/>
 
   </changeSet>
+
+  <changeSet id="simulator-1.0.0-2" author="anowicki">
+    <createTable tableName="simulator_dataset">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="dataset_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="resource_name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="TEXT"/>
+      <column name="generation_date_from" type="TIMESTAMP"/>
+      <column name="generation_date_to" type="TIMESTAMP"/>
+      <column name="initial_alert_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="simulator_dataset"
+        indexName="ix_simulator_dataset_dataset_id"
+        unique="true">
+      <column name="dataset_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
