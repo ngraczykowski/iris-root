@@ -23,7 +23,11 @@ message AgentOutput {
 
   message Feature {
     string feature = 1;
-    string solution = 2;
-    google.protobuf.Struct reason = 3;
+    repeated FeatureSolution feature_solutions = 2;
+  }
+
+  message FeatureSolution {
+    string solution = 1;
+    google.protobuf.Struct reason = 2;
   }
 }
