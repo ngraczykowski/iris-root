@@ -1,6 +1,12 @@
 # Spring `dev` profile configuration
 serp:
   show-env: true
+  rabbitmq:
+    host: localhost
+    port: 24160
+    user: dev
+    password: dev
+    vhost: /
 
 logging:
   level:
@@ -42,6 +48,15 @@ spring:
   jackson:
     serialization:
       indent-output: true
+
+grpc:
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: PLAINTEXT
+
+    adjudication-engine:
+      address: static://localhost:24801
 
 keycloak:
   adapter:

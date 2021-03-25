@@ -2,10 +2,13 @@ spring.cloud.consul.enabled: false
 
 sep.auth:
   permissionMethodsMappings:
+    DATASET_MANAGEMENT:
+      - "CREATE_DATASET"
     SIMULATION_MANAGEMENT:
       - "CREATE_SIMULATION"
       - "LIST_SIMULATIONS"
 
   rolePermissionsMappings:
     BUSINESS_OPERATOR:
+      - "DATASET_MANAGEMENT"
       - "SIMULATION_MANAGEMENT"

@@ -1,8 +1,8 @@
-package com.silenteight.sens.governance.common.testing.rest;
+package com.silenteight.simulator.common.testing.rest;
 
-import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest.TestRestConfiguration;
-import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRoleExtension;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
+import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest.TestRestConfiguration;
+import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRoleExtension;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;

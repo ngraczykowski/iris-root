@@ -19,3 +19,8 @@ spring:
 
         heartbeat:
           enabled: ${serp.consul.discovery.enabled}
+
+grpc:
+  client:
+    adjudication-engine:
+      address: discovery:///grpc-adjudication-engine

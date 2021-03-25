@@ -43,7 +43,7 @@ serp.consul.traefik.entryPoints: unprotectedGateway
 #---------------------------------------------------------------------------------------------------
 # Embedded server configuration
 server:
-  port: 24214
+  port: 24890
   forward-headers-strategy: native
   undertow:
     io-threads: ${serp.web.threads.io}
@@ -134,10 +134,13 @@ simulator:
 
 sep.auth:
   permissionMethodsMappings:
+    DATASET_MANAGEMENT:
+      - "CREATE_DATASET"
     SIMULATION_MANAGEMENT:
       - "CREATE_SIMULATION"
       - "LIST_SIMULATIONS"
 
   rolePermissionsMappings:
     BUSINESS_OPERATOR:
+      - "DATASET_MANAGEMENT"
       - "SIMULATION_MANAGEMENT"
