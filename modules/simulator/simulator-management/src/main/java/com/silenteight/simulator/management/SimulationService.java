@@ -1,29 +1,30 @@
 package com.silenteight.simulator.management;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
-
-import com.silenteight.simulator.management.dto.SimulationState;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Set;
 
-@AllArgsConstructor
+import static com.silenteight.simulator.management.dto.SimulationState.PENDING;
+
+@RequiredArgsConstructor
 class SimulationService {
 
   @NonNull
-  private SimulationEntityRepository repository;
+  private final SimulationEntityRepository repository;
 
-  void createSimulation(CreateSimulationRequest request) {
+  void createSimulation(CreateSimulationRequest request, String analysisName) {
     SimulationEntity simulationEntity = SimulationEntity.builder()
         .simulationId(request.getId())
         .createdBy(request.getCreatedBy())
         .name(request.getName())
         .description(request.getDescription())
-        .policyId(request.getPolicyId())
-        .datasetIds(Set.of(request.getDatasetId()))
-        .state(SimulationState.PENDING)
+        .modelName(request.getModelName())
+        .analysisName(analysisName)
+        .datasetNames(Set.of(request.getDatasetName()))
+        .state(PENDING)
         .build();
 
     try {

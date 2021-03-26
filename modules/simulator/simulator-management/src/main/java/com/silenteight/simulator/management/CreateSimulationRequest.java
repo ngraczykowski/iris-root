@@ -7,11 +7,11 @@ import lombok.Value;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.simulator.common.audit.AuditableRequest;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static java.sql.Timestamp.from;
+import static java.time.Instant.now;
 import static java.util.UUID.randomUUID;
 
 @Value
@@ -33,10 +33,10 @@ public class CreateSimulationRequest implements AuditableRequest {
   String createdBy;
 
   @NonNull
-  UUID datasetId;
+  String datasetName;
 
   @NonNull
-  UUID policyId;
+  String modelName;
 
   @Builder.Default
   UUID correlationId = UUID.randomUUID();
@@ -56,12 +56,12 @@ public class CreateSimulationRequest implements AuditableRequest {
         .builder()
         .correlationId(correlationId)
         .eventId(randomUUID())
-        .timestamp(Timestamp.from(Instant.now()))
+        .timestamp(from(now()))
         .type(type)
         .entityId(id.toString())
         .entityClass("Simulation")
         .entityAction("CREATE")
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }

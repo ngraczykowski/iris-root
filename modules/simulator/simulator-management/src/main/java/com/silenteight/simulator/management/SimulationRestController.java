@@ -7,7 +7,6 @@ import com.silenteight.simulator.common.web.rest.RestConstants;
 import com.silenteight.simulator.management.dto.CreateSimulationRequestDto;
 import com.silenteight.simulator.management.dto.SimulationDto;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,10 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import javax.validation.Valid;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
+
 @RestController
 @RequestMapping(RestConstants.ROOT)
 @AllArgsConstructor
-public class SimulationRestController {
+class SimulationRestController {
 
   static final String SIMULATIONS_URL = "/v1/simulations";
 
@@ -40,17 +43,17 @@ public class SimulationRestController {
         .name(createSimulationRequestDto.getName())
         .description(createSimulationRequestDto.getDescription())
         .createdBy(authentication.getName())
-        .datasetId(createSimulationRequestDto.getDatasetId())
-        .policyId(createSimulationRequestDto.getPolicyId())
+        .datasetName(createSimulationRequestDto.getDatasetName())
+        .modelName(createSimulationRequestDto.getModelName())
         .build();
 
     useCase.activate(createSimulationRequest);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    return status(CREATED).build();
   }
 
   @GetMapping(SIMULATIONS_URL)
   @PreAuthorize("isAuthorized('LIST_SIMULATIONS')")
   public ResponseEntity<List<SimulationDto>> listSimulations() {
-    return ResponseEntity.ok(simulationQuery.listAllSimulations());
+    return ok(simulationQuery.listAllSimulations());
   }
 }

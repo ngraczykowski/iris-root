@@ -58,6 +58,9 @@ grpc:
     adjudication-engine:
       address: static://localhost:24801
 
+    governance:
+      address: static://localhost:24205
+
 keycloak:
   adapter:
     authServerUrl: https://localhost:24111/auth

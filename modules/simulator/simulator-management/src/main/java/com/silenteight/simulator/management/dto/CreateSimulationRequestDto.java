@@ -19,8 +19,8 @@ public class CreateSimulationRequestDto {
   String description;
 
   @NonNull
-  UUID datasetId;
+  String datasetName;
 
   @NonNull
-  UUID policyId;
+  String modelName;
 }

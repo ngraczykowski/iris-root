@@ -14,14 +14,22 @@ class ManagementConfiguration {
 
   @Bean
   CreateSimulationUseCase createSimulationUseCase(
-      SimulationEntityRepository simulationEntityRepository, AuditingLogger auditingLogger) {
-    SimulationService simulationService = new SimulationService(simulationEntityRepository);
-    return new CreateSimulationUseCase(simulationService, auditingLogger);
+      ModelService modelService,
+      AnalysisService analysisService,
+      SimulationService simulationService,
+      AuditingLogger auditingLogger) {
+
+    return new CreateSimulationUseCase(
+        modelService, analysisService, simulationService, auditingLogger);
   }
 
   @Bean
-  SimulationQuery simulationQuery(
-      SimulationEntityRepository simulationEntityRepository) {
+  SimulationService simulationService(SimulationEntityRepository simulationEntityRepository) {
+    return new SimulationService(simulationEntityRepository);
+  }
+
+  @Bean
+  SimulationQuery simulationQuery(SimulationEntityRepository simulationEntityRepository) {
     return new SimulationQuery(simulationEntityRepository);
   }
 }

@@ -42,8 +42,8 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDto.getStatus()).isEqualTo(PENDING);
     assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(simulationDto.getCreatedAt()).isNotNull();
-    assertThat(simulationDto.getDatasetId()).isEqualTo(DATASET_ID);
-    assertThat(simulationDto.getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(simulationDto.getDatasetName()).isEqualTo(DATASET_NAME);
+    assertThat(simulationDto.getModelName()).isEqualTo(MODEL_NAME);
   }
 
   private SimulationEntity persistSimulation() {
@@ -52,8 +52,9 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .name(NAME)
         .state(STATUS)
         .createdBy(USERNAME)
-        .datasetIds(of(DATASET_ID))
-        .policyId(POLICY_ID)
+        .datasetNames(of(DATASET_NAME))
+        .modelName(MODEL_NAME)
+        .analysisName(ANALYSIS_NAME)
         .build();
 
     return simulationEntityRepository.save(simulationEntity);

@@ -2,76 +2,54 @@ package com.silenteight.simulator.management;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.simulator.management.dto.SimulationState;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.silenteight.simulator.management.CreateSimulationRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.management.CreateSimulationRequest.PRE_AUDIT_TYPE;
-import static com.silenteight.simulator.management.SimulationFixture.*;
+import static com.silenteight.simulator.management.SimulationFixture.ANALYSIS;
+import static com.silenteight.simulator.management.SimulationFixture.CREATE_SIMULATION_REQUEST;
+import static com.silenteight.simulator.management.SimulationFixture.SOLVING_MODEL;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
 
-@Transactional
-@TestPropertySource("classpath:/data-test.properties")
-@ContextConfiguration(classes = { ManagementTestConfiguration.class })
-class CreateSimulationUseCaseTest extends BaseDataJpaTest {
+@ExtendWith(MockitoExtension.class)
+class CreateSimulationUseCaseTest {
 
-  @Autowired
-  CreateSimulationUseCase underTest;
+  @InjectMocks
+  private CreateSimulationUseCase underTest;
 
-  @Autowired
-  SimulationEntityRepository simulationEntityRepository;
+  @Mock
+  private ModelService modelService;
 
-  @Autowired
-  AuditingLogger auditingLogger;
+  @Mock
+  private AnalysisService analysisService;
 
-  @Test
-  void shouldCreateSimulation() {
-    underTest.activate(CREATE_SIMULATION_REQUEST);
+  @Mock
+  private SimulationService simulationService;
 
-    Collection<SimulationEntity> simulations = simulationEntityRepository.findAll();
-
-    assertThat(simulations).hasSize(1);
-    SimulationEntity simulationEntity = new LinkedList<>(simulations).get(0);
-    assertThat(simulationEntity.getSimulationId()).isEqualTo(SIMULATION_ID);
-    assertThat(simulationEntity.getName()).isEqualTo(NAME);
-    assertThat(simulationEntity.getDescription()).isEqualTo(DESCRIPTION);
-    assertThat(simulationEntity.getDatasetIds()).containsExactly(DATASET_ID);
-    assertThat(simulationEntity.getPolicyId()).isEqualTo(POLICY_ID);
-    assertThat(simulationEntity.getState()).isEqualTo(SimulationState.PENDING);
-    assertThat(simulationEntity.getCreatedBy()).isEqualTo(USERNAME);
-    assertThat(simulationEntity.getCreatedAt()).isNotNull();
-    assertThat(simulationEntity.getStartedAt()).isNull();
-    assertThat(simulationEntity.getFinishedAt()).isNull();
-  }
+  @Mock
+  private AuditingLogger auditingLogger;
 
   @Test
-  void shouldThrowWhenUuidAlreadyExists()  {
+  void createSimulation() {
+    // given
+    when(modelService.getModel(CREATE_SIMULATION_REQUEST.getModelName())).thenReturn(SOLVING_MODEL);
+    when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(ANALYSIS);
+
+    // when
     underTest.activate(CREATE_SIMULATION_REQUEST);
 
-    assertThatThrownBy(() -> underTest.activate(CREATE_SIMULATION_REQUEST))
-        .isInstanceOf(NonUniqueSimulationException.class);
-  }
-
-  @Test
-  void shouldCreateAuditEntry() {
-    Mockito.reset(auditingLogger);
-
-    underTest.activate(CREATE_SIMULATION_REQUEST);
-
+    // then
+    verify(simulationService).createSimulation(CREATE_SIMULATION_REQUEST, ANALYSIS.getName());
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);
