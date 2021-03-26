@@ -9,6 +9,8 @@ configurations {
   implementation.extendsFrom starterSpringApp
   implmenetation.extendsFrom starterJackson
 
+  implementation.extendsFrom starterGrpcClient
+
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
@@ -19,6 +21,9 @@ dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-db-changelog")
 
+  implementation libraries.silenteight_adjudication_api
+  implementation libraries.silenteight_model_api
+
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_auth
   implementation libraries.silenteight_audit_bs
@@ -28,6 +33,11 @@ dependencies {
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
   implementation libraries.commons_lang3
+
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
+  implementation libraries.protobuf_java_util
 
   aspect libraries.silenteight_sep_base_aspects
 

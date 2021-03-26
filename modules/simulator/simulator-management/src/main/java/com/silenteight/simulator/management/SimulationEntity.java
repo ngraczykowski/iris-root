@@ -49,14 +49,18 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   @NonNull
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-      name = "simulator_simulation_dataset_id",
+      name = "simulator_simulation_dataset_name",
       joinColumns = @JoinColumn(name = "simulation_id", referencedColumnName = "simulation_id"))
-  @Column(name = "dataset_id", nullable = false)
-  private Set<UUID> datasetIds;
+  @Column(name = "dataset_name", nullable = false)
+  private Set<String> datasetNames;
 
   @ToString.Include
-  @Column(name = "policy_id", nullable = false)
-  private UUID policyId;
+  @Column(name = "model_name", nullable = false)
+  private String modelName;
+
+  @ToString.Include
+  @Column(name = "analysis_name", nullable = false)
+  private String analysisName;
 
   @ToString.Include
   @Enumerated(EnumType.STRING)
@@ -76,20 +80,21 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   private OffsetDateTime finishedAt;
 
   static SimulationDto toDto(SimulationEntity simulationEntity) {
-    List<UUID> uuids = new ArrayList<>(simulationEntity.getDatasetIds());
-    if (uuids.size() != 1) {
+    List<String> datasetNames = new ArrayList<>(simulationEntity.getDatasetNames());
+    if (datasetNames.size() != 1) {
       String msg = String.format(
-          "Each simulation needs to have exactly one datasetId assigned. Found = %s", uuids);
+          "Each simulation needs to have exactly one datasetName assigned. Found = %s",
+          datasetNames);
       throw new IllegalStateException(msg);
     }
-    UUID datasetId = uuids.get(0);
+    String datasetName = datasetNames.get(0);
 
     return SimulationDto.builder()
         .id(simulationEntity.getSimulationId())
         .name(simulationEntity.getName())
         .status(simulationEntity.getState())
-        .datasetId(datasetId)
-        .policyId(simulationEntity.getPolicyId())
+        .datasetName(datasetName)
+        .modelName(simulationEntity.getModelName())
         .createdAt(simulationEntity.getCreatedAt())
         .createdBy(simulationEntity.getCreatedBy())
         .build();

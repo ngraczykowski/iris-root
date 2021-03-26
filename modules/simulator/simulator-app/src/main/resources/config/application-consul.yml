@@ -24,3 +24,6 @@ grpc:
   client:
     adjudication-engine:
       address: discovery:///grpc-adjudication-engine
+
+    governance:
+      address: discovery:///grpc-governance

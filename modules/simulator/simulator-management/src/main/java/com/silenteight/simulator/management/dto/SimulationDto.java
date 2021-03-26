@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Value
 @Builder
@@ -18,10 +17,10 @@ public class SimulationDto {
   String name;
 
   @NonNull
-  UUID datasetId;
+  String datasetName;
 
   @NonNull
-  UUID policyId;
+  String modelName;
 
   @NonNull
   SimulationState status;

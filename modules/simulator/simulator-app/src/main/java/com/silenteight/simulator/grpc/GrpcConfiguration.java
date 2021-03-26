@@ -13,4 +13,10 @@ class GrpcConfiguration {
   Channel adjudicationEngineChannel(Channel adjudicationEngineChannel) {
     return adjudicationEngineChannel;
   }
+
+  @Bean("governance")
+  @GrpcClient("governance")
+  Channel governanceChannel(Channel governanceChannel) {
+    return governanceChannel;
+  }
 }

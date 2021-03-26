@@ -74,8 +74,8 @@ class SimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].name", is(NAME))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(SimulationFixture.USERNAME))
-        .body("[0].datasetId", is(DATASET_ID.toString()))
-        .body("[0].policyId", is(POLICY_ID.toString()))
+        .body("[0].datasetName", is(DATASET_NAME))
+        .body("[0].modelName", is(MODEL_NAME))
         .body("[0].status", is(STATUS.toString()));
   }
 
