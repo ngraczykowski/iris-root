@@ -9,6 +9,7 @@ import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBloc
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,21 +24,58 @@ class AdjudicationConfiguration {
         alertService, dataService, analysisService);
   }
 
+  @Profile("!dev")
   @Bean
-  DatasetService datasetService(DatasetServiceBlockingStub datasetServiceBlockingStub) {
-    return new DatasetService(datasetServiceBlockingStub);
+  AlertService alertService(AdjudicationApi adjudicationApiGrpc) {
+    return new AlertService(adjudicationApiGrpc, eventPublisher);
   }
 
+  @Profile("dev")
+  @Bean
+  AlertService alertServiceMock(AdjudicationApi adjudicationApiMock) {
+    return new AlertService(adjudicationApiMock, eventPublisher);
+  }
+
+  @Profile("!dev")
+  @Bean
+  DatasetService datasetService(AdjudicationApi adjudicationApiGrpc) {
+    return new DatasetService(adjudicationApiGrpc);
+  }
+
+  @Profile("dev")
+  @Bean
+  DatasetService datasetServiceMock(AdjudicationApi adjudicationApiMock) {
+    return new DatasetService(adjudicationApiMock);
+  }
+
+  @Profile("!dev")
   @Bean
   AnalysisService analysisService(
-      AnalysisServiceBlockingStub analysisServiceBlockingStub,
+      AdjudicationApi adjudicationApiGrpc,
       ApplicationEventPublisher eventPublisher) {
-    return new AnalysisService(analysisServiceBlockingStub, eventPublisher);
+    return new AnalysisService(adjudicationApiGrpc, eventPublisher);
+  }
+
+  @Profile("dev")
+  @Bean
+  AnalysisService analysisServiceMock(
+      AdjudicationApi adjudicationApiMock,
+      ApplicationEventPublisher eventPublisher) {
+    return new AnalysisService(adjudicationApiMock, eventPublisher);
   }
 
   @Bean
-  AlertService alertService(AlertServiceBlockingStub alertServiceBlockingStub) {
-    return new AlertService(alertServiceBlockingStub, eventPublisher);
+  AdjudicationApi adjudicationApiGrpc(
+      AlertServiceBlockingStub alertServiceBlockingStub,
+      AnalysisServiceBlockingStub analysisServiceBlockingStub,
+      DatasetServiceBlockingStub datasetServiceBlockingStub) {
+    return new AdjudicationApiGrpc(
+        alertServiceBlockingStub, analysisServiceBlockingStub, datasetServiceBlockingStub);
+  }
+
+  @Bean
+  AdjudicationApi adjudicationApiMock() {
+    return new AdjudicationApiMock();
   }
 
 }

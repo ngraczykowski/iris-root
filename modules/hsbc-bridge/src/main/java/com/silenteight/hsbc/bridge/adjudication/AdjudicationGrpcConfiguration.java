@@ -24,21 +24,21 @@ public class AdjudicationGrpcConfiguration {
   AlertServiceBlockingStub alertServiceBlockingStub() {
     ManagedChannel channel = createManagedChannel();
 
-    return AlertServiceGrpc.newBlockingStub(channel);
+    return AlertServiceGrpc.newBlockingStub(channel).withWaitForReady();
   }
 
   @Bean
   AnalysisServiceBlockingStub analysisServiceBlockingStub() {
     ManagedChannel channel = createManagedChannel();
 
-    return AnalysisServiceGrpc.newBlockingStub(channel);
+    return AnalysisServiceGrpc.newBlockingStub(channel).withWaitForReady();
   }
 
   @Bean
   DatasetServiceBlockingStub datasetServiceBlockingStub() {
     ManagedChannel channel = createManagedChannel();
 
-    return DatasetServiceGrpc.newBlockingStub(channel);
+    return DatasetServiceGrpc.newBlockingStub(channel).withWaitForReady();
   }
 
   private ManagedChannel createManagedChannel() {

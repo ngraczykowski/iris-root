@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.adjudication;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.CreateDatasetRequest;
-import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 class DatasetService {
 
-  private final DatasetServiceBlockingStub datasetServiceBlockingStub;
+  private final AdjudicationApi adjudicationApi;
 
   String createDataset(List<String> alertIds) {
     NamedAlerts namedAlerts = NamedAlerts.newBuilder()
@@ -22,7 +21,7 @@ class DatasetService {
         .setNamedAlerts(namedAlerts)
         .build();
 
-    var dataset = datasetServiceBlockingStub.createDataset(createDatasetRequest);
+    var dataset = adjudicationApi.createDataset(createDatasetRequest);
 
     return dataset.getName();
   }

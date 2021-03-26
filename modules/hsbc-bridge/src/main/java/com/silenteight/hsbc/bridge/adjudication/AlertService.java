@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.adjudication;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.*;
-import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.event.UpdateMatchWithNameEvent;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class AlertService {
 
-  private final AlertServiceBlockingStub alertServiceBlockingStub;
+  private final AdjudicationApi adjudicationApi;
   private final ApplicationEventPublisher eventPublisher;
 
   List<String> createBatchAlertsWithMatches(
@@ -51,7 +50,7 @@ class AlertService {
     var batchCreateAlertsRequest =
         BatchCreateAlertsRequest.newBuilder().addAllAlerts(alerts).build();
 
-    return alertServiceBlockingStub.batchCreateAlerts(batchCreateAlertsRequest);
+    return adjudicationApi.batchCreateAlerts(batchCreateAlertsRequest);
   }
 
   private void registerMatches(
@@ -77,7 +76,7 @@ class AlertService {
           .addAllMatches(matches)
           .build();
 
-    }).map(alertServiceBlockingStub::batchCreateAlertMatches)
+    }).map(adjudicationApi::batchCreateAlertMatches)
         .map(BatchCreateAlertMatchesResponse::getMatchesList)
         .flatMap(List::stream)
         .collect(Collectors.toList());

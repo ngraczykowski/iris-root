@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.AddDatasetRequest;
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
-import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.hsbc.bridge.analysis.event.CreateAnalysisEvent;
 import com.silenteight.hsbc.bridge.model.SolvingModelDto;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class AnalysisService {
 
-  private final AnalysisServiceBlockingStub analysisServiceBlockingStub;
+  private final AdjudicationApi adjudicationApi;
   private final ApplicationEventPublisher eventPublisher;
 
   String createAnalysisWithDataset(
@@ -44,14 +43,14 @@ class AnalysisService {
         .setAnalysis(analysis)
         .build();
 
-    Analysis analysisResponse = analysisServiceBlockingStub.createAnalysis(analysisRequest);
+    Analysis analysisResponse = adjudicationApi.createAnalysis(analysisRequest);
 
     AddDatasetRequest addDatasetRequest = AddDatasetRequest.newBuilder()
         .setAnalysis(analysisResponse.getName())
         .setDataset(datasetId)
         .build();
 
-    analysisServiceBlockingStub.addDataset(addDatasetRequest);
+    adjudicationApi.addDataset(addDatasetRequest);
 
     publishCreateAnalysisEvent(analysisResponse.getName(), datasetId, solvingModel.getName());
 
