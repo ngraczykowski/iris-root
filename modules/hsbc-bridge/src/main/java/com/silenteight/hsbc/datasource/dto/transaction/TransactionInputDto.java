@@ -10,5 +10,5 @@ import java.util.List;
 public class TransactionInputDto {
 
   String match;
-  List<TransactionFeatureInputDto> transactionFeatureInputs;
+  List<TransactionFeatureInputDto> featureInputs;
 }

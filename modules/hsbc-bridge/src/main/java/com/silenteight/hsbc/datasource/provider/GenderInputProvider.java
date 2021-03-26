@@ -3,10 +3,17 @@ package com.silenteight.hsbc.datasource.provider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
+import com.silenteight.hsbc.bridge.match.MatchRawData;
 import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
+import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
+import com.silenteight.hsbc.datasource.dto.gender.GenderInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputResponse;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class GenderInputProvider implements DataSourceInputProvider<GenderInputResponse> {
@@ -16,6 +23,28 @@ class GenderInputProvider implements DataSourceInputProvider<GenderInputResponse
 
   @Override
   public GenderInputResponse toResponse(DataSourceInputCommand command) {
-    return null;
+    var features = command.getFeatures();
+    var matches = command.getMatches();
+
+    return GenderInputResponse.builder()
+        .inputs(getInputs(matches, features))
+        .build();
+  }
+
+  private List<GenderInputDto> getInputs(List<MatchComposite> matches, List<String> features) {
+    return matches.stream()
+        .map(match -> GenderInputDto.builder()
+            .match(match.getName())
+            .featureInputs(getFeatureInputs(features, match.getRawData()))
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  private List<GenderFeatureInputDto> getFeatureInputs(
+      List<String> features, MatchRawData matchRawData) {
+    return features.stream()
+        .map(featureName -> (GenderFeatureInputDto)
+            getFeatureRetriever(featureName).retrieve(matchRawData))
+        .collect(Collectors.toList());
   }
 }

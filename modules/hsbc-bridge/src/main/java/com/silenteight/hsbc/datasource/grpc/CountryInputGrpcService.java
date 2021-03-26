@@ -51,7 +51,7 @@ class CountryInputGrpcService extends CountryInputServiceImplBase {
     return inputs.stream()
         .map(t -> CountryInput.newBuilder()
             .setMatch(t.getMatch())
-            .addAllCountryFeatureInputs(toCountryFeatureInput(t.getCountryFeatureInputs()))
+            .addAllCountryFeatureInputs(toCountryFeatureInput(t.getFeatureInputs()))
             .build())
         .collect(Collectors.toList());
   }

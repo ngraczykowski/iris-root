@@ -10,5 +10,5 @@ import java.util.List;
 public class DocumentInputDto {
 
   String match;
-  List<DocumentFeatureInputDto> documentFeatureInputs;
+  List<DocumentFeatureInputDto> featureInputs;
 }

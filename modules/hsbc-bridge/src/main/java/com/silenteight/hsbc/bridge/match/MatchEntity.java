@@ -29,8 +29,9 @@ class MatchEntity extends BaseEntity {
 
   private String name;
 
-  MatchEntity(long alertId, byte[] payload) {
+  MatchEntity(long alertId, String name, byte[] payload) {
     this.alertId = alertId;
+    this.name = name;
     this.payload = payload;
   }
 }

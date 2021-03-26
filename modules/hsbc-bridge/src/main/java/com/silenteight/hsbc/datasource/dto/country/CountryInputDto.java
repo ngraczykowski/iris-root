@@ -10,5 +10,5 @@ import java.util.List;
 public class CountryInputDto {
 
   String match;
-  List<CountryFeatureInputDto> countryFeatureInputs;
+  List<CountryFeatureInputDto> featureInputs;
 }

@@ -6,6 +6,8 @@ import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation
 
 import spock.lang.Specification
 
+import static java.util.Optional.of
+
 class MatchFacadeSpec extends Specification {
 
   def matchRepository = Mock(MatchRepository)
@@ -20,13 +22,13 @@ class MatchFacadeSpec extends Specification {
   def 'should get match by id'() {
     given:
     def id = 1
-    matchRepository.findById(id) >> new MatchEntity(2, fixtures.matchPayload)
 
     when:
     def result = underTest.getMatch(id)
 
     then:
     result.rawData == fixtures.matchRawData
+    1 * matchRepository.findById(id) >> of(new MatchEntity(2, "", fixtures.matchPayload))
   }
 
   def 'should prepare and save matches'() {

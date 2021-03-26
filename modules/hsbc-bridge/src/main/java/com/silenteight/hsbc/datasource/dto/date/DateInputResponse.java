@@ -8,5 +8,6 @@ import java.util.List;
 @Value
 @Builder
 public class DateInputResponse {
-  List<DateInputDto> dateInputs;
+
+  List<DateInputDto> inputs;
 }

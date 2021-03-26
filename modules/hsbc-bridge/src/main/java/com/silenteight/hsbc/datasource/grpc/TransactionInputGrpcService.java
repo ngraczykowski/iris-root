@@ -48,7 +48,7 @@ class TransactionInputGrpcService extends TransactionInputServiceImplBase {
     return inputs.stream()
         .map(i -> TransactionInput.newBuilder()
             .setMatch(i.getMatch())
-            .addAllTransactionFeatureInputs(mapFeatureInputs(i.getTransactionFeatureInputs()))
+            .addAllTransactionFeatureInputs(mapFeatureInputs(i.getFeatureInputs()))
             .build())
         .collect(Collectors.toList());
   }

@@ -48,7 +48,7 @@ class DocumentInputGrpcService extends DocumentInputServiceImplBase {
     return inputs.stream()
         .map(i -> DocumentInput.newBuilder()
             .setMatch(i.getMatch())
-            .addAllDocumentFeaturesInput(mapFeatureInputs(i.getDocumentFeatureInputs()))
+            .addAllDocumentFeaturesInput(mapFeatureInputs(i.getFeatureInputs()))
             .build())
         .collect(Collectors.toList());
   }

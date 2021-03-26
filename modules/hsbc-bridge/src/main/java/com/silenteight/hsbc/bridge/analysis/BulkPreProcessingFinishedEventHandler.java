@@ -21,6 +21,7 @@ class BulkPreProcessingFinishedEventHandler {
       BulkPreProcessingFinishedEvent bulkPreProcessingFinishedEvent) {
     log.info("Received bulkPreProcessingFinishedEvent");
 
+    //FIXME mmrowka - this should not block the bulk save
     String analysisId = adjudicationFacade.createAnalysis(
         bulkPreProcessingFinishedEvent.getAlertMatchIdComposites(), modelUseCase);
 

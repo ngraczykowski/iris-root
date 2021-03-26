@@ -39,7 +39,7 @@ class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase
   }
 
   private List<DateInput> toResponse(DateInputResponse response) {
-    return response.getDateInputs().stream()
+    return response.getInputs().stream()
         .map(this::toDateInput)
         .collect(Collectors.toList());
   }
@@ -47,7 +47,7 @@ class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase
   private DateInput toDateInput(DateInputDto dateInputDto) {
     return DateInput.newBuilder()
         .setMatch(dateInputDto.getMatch())
-        .addAllDateFeatureInputs(toDateFeatureInputs(dateInputDto.getDateFeatureInputs()))
+        .addAllDateFeatureInputs(toDateFeatureInputs(dateInputDto.getFeatureInputs()))
         .build();
   }
 
