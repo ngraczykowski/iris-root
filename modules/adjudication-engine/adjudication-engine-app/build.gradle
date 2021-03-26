@@ -12,6 +12,7 @@ dependencies {
   implementation project(":adjudication-engine-alerts")
   implementation project(":adjudication-engine-analysis")
   implementation project(":adjudication-engine-dataset")
+  implementation project(":adjudication-engine-mock-agents")
   implementation project(":adjudication-engine-mock-governance")
 
   // Utilities
