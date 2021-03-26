@@ -1,0 +1,33 @@
+{
+  "policyName": "policies/af85189b-fa0d-437b-9009-ebb5e5bd5028",
+  "featureCollection": {
+    "feature": [
+      {
+        "name": "features/name"
+      },
+      {
+        "name": "features/dob"
+      }
+    ]
+  },
+  "featureVectors": [
+    {
+      "featureValue": [
+        "MATCH",
+        "MATCH"
+      ]
+    },
+    {
+      "featureValue": [
+        "MATCH",
+        "NO_MATCH"
+      ]
+    },
+    {
+      "featureValue": [
+        "NO_MATCH",
+        "NO_MATCH"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+plugins {
+  id "java-library"
+}
+
+dependencies {
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.grpc_spring_boot_starter
+}
