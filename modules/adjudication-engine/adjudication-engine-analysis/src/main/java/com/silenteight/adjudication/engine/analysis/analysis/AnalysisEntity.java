@@ -1,0 +1,100 @@
+package com.silenteight.adjudication.engine.analysis.analysis;
+
+import lombok.*;
+import lombok.EqualsAndHashCode.Include;
+
+import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+
+import org.hibernate.annotations.Fetch;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.persistence.*;
+
+import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromOffsetDateTime;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.*;
+import static org.hibernate.annotations.FetchMode.SUBSELECT;
+
+@Data
+@AllArgsConstructor(access = PRIVATE)
+@NoArgsConstructor(access = PROTECTED)
+@Setter(NONE)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Entity(name = "Analysis")
+@Builder(access = PACKAGE)
+class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
+
+  @Id
+  @Column(name = "analysis_id", insertable = false, updatable = false, nullable = false)
+  @GeneratedValue(strategy = IDENTITY)
+  @Setter(PUBLIC)
+  @Include
+  private Long id;
+
+  @Column(updatable = false, nullable = false)
+  @NonNull
+  private String policy;
+
+  @Column(updatable = false, nullable = false)
+  @NonNull
+  private String strategy;
+
+  @Column(updatable = false, nullable = false)
+  @NonNull
+  @Enumerated(EnumType.STRING)
+  private Analysis.State state;
+
+  @ElementCollection(fetch = LAZY)
+  @CollectionTable(joinColumns = @JoinColumn(name = "analysis_id"))
+  @MapKeyColumn(name = "name")
+  @Column(name = "value")
+  @Fetch(SUBSELECT)
+  @Singular
+  private Map<String, String> labels;
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "analysis_id", referencedColumnName = "analysis_id", nullable = false)
+  @OrderBy("id")
+  @Singular
+  private List<AnalysisCategoryEntity> categories;
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "analysis_id", referencedColumnName = "analysis_id", nullable = false)
+  @OrderBy("id")
+  @Singular
+  private List<AnalysisFeatureEntity> features;
+
+  Analysis toAnalysis() {
+    return Analysis
+        .newBuilder()
+        .setName("analysis/" + getId())
+        .setPolicy(getPolicy())
+        .setStrategy(getStrategy())
+        .setState(getState())
+        .setCreateTime(fromOffsetDateTime(getCreatedAt()))
+        .putAllLabels(getLabels())
+        .addAllCategories(getCategoriesForProto())
+        .addAllFeatures(getFeaturesForProto())
+        .build();
+  }
+
+  private List<String> getCategoriesForProto() {
+    return getCategories()
+        .stream()
+        .map(AnalysisCategoryEntity::getCategory)
+        .collect(Collectors.toList());
+  }
+
+  private List<Feature> getFeaturesForProto() {
+    return getFeatures()
+        .stream()
+        .map(AnalysisFeatureEntity::toFeature)
+        .collect(Collectors.toList());
+  }
+}

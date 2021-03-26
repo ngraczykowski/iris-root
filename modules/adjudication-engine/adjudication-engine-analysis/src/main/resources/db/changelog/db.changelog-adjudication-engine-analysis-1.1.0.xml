@@ -380,4 +380,69 @@
       <column name="match_solution_id"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-12" author="tkleszcz">
+    <renameTable oldTableName="ae_analysis_label" newTableName="ae_analysis_labels"/>
+
+    <!-- Below tables are not used ATM and are removed to avoid confusion. -->
+    <dropTable tableName="ae_analysis_category"/>
+    <dropTable tableName="ae_analysis_feature"/>
+
+    <createTable tableName="ae_analysis_categories">
+      <!-- Internal auto incremented ID used for ordering. -->
+      <column name="analysis_category_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="category" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="ae_analysis_features">
+      <!-- Internal auto incremented ID used for ordering. -->
+      <column name="analysis_feature_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="feature" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="agent_config" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_categories"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_categories_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_features"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_features_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"/>
+    <createIndex
+        tableName="ae_analysis_categories"
+        indexName="ix_ae_analysis_categories_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_features"
+        indexName="ix_ae_analysis_features_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

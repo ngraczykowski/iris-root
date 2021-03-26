@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis;
+package com.silenteight.adjudication.engine.analysis.service;
 
 import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
@@ -7,6 +7,7 @@ import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceIm
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,7 +20,8 @@ import static io.grpc.Status.fromCode;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @GrpcService
-class AnalysisGrpcServiceMock extends AnalysisServiceImplBase {
+@Profile("mock")
+class MockedGrpcAnalysisService extends AnalysisServiceImplBase {
 
   private static final List<String> SOLUTIONS =
       List.of("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE", "NO_DECISION");
