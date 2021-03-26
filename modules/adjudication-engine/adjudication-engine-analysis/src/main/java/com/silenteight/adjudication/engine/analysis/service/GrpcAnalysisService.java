@@ -2,9 +2,8 @@ package com.silenteight.adjudication.engine.analysis.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceImplBase;
-import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;

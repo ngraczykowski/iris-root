@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 @RequiredArgsConstructor
 @Service
@@ -24,12 +21,8 @@ class CreateAnalysisUseCase {
   private final AnalysisRepository repository;
 
   @Transactional
-  List<Analysis> createAnalysis(Iterable<Analysis> analysis) {
-    return StreamSupport.stream(analysis.spliterator(), false)
-        .map(this::createEntity)
-        .map(repository::save)
-        .map(AnalysisEntity::toAnalysis)
-        .collect(toUnmodifiableList());
+  Analysis createAnalysis(Analysis analysis) {
+    return repository.save(createEntity(analysis)).toAnalysis();
   }
 
   private AnalysisEntity createEntity(Analysis analysis) {
