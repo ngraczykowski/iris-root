@@ -60,7 +60,7 @@ dependencies {
   runtimeOnly libraries.hibernate_jcache
   runtimeOnly libraries.caffeine
   runtimeOnly libraries.caffeine_jcache
-  
+
   // Messaging
   implementation libraries.amqp_client
   implementation libraries.lz4_java

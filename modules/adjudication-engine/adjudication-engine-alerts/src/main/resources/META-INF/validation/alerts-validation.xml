@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<constraint-mappings
+    xmlns="http://xmlns.jcp.org/xml/ns/validation/mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/validation/mapping
+        http://xmlns.jcp.org/xml/ns/validation/mapping/validation-mapping-2.0.xsd"
+    version="2.0">
+
+  <default-package>com.silenteight.adjudication.api.v1</default-package>
+
+  <bean class="Alert">
+    <field name="priority_">
+      <constraint annotation="javax.validation.constraints.Min">
+        <element name="value">0</element>
+      </constraint>
+      <constraint annotation="javax.validation.constraints.Max">
+        <element name="value">10</element>
+      </constraint>
+    </field>
+    <getter name="alertId">
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Size">
+        <element name="max">100</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="Match">
+    <field name="index_">
+      <constraint annotation="javax.validation.constraints.Min">
+        <element name="value">0</element>
+      </constraint>
+    </field>
+    <getter name="matchId">
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Size">
+        <element name="max">100</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="CreateAlertRequest">
+    <field name="alert_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotNull"/>
+    </field>
+  </bean>
+
+  <bean class="BatchCreateAlertsRequest">
+    <field name="alerts_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Size">
+        <element name="max">10000</element>
+      </constraint>
+    </field>
+  </bean>
+
+  <bean class="CreateMatchRequest">
+    <field name="match_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotNull"/>
+    </field>
+    <getter name="alert">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="BatchCreateAlertMatchesRequest">
+    <field name="matches_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Size">
+        <element name="max">10000</element>
+      </constraint>
+    </field>
+    <getter name="alert">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="BatchCreateMatchesRequest">
+    <field name="alertMatches_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Size">
+        <element name="max">10000</element>
+      </constraint>
+    </field>
+  </bean>
+</constraint-mappings>

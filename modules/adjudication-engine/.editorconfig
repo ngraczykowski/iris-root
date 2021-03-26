@@ -3,12 +3,12 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
-indent_size = 4
+indent_size = 2
 indent_style = space
 insert_final_newline = true
 max_line_length = 100
-tab_width = 4
-ij_continuation_indent_size = 8
+tab_width = 8
+ij_continuation_indent_size = 4
 ij_formatter_off_tag = @formatter:off
 ij_formatter_on_tag = @formatter:on
 ij_formatter_tags_enabled = true
@@ -17,9 +17,6 @@ ij_visual_guides = none
 ij_wrap_on_typing = false
 
 [*.java]
-indent_size = 2
-tab_width = 8
-ij_continuation_indent_size = 4
 ij_java_align_consecutive_assignments = false
 ij_java_align_consecutive_variable_declarations = false
 ij_java_align_group_field_declarations = false
@@ -269,7 +266,6 @@ ij_java_wrap_first_method_in_call_chain = true
 ij_java_wrap_long_lines = false
 
 [{*.1598381339622, *.yaml, *.yml}]
-indent_size = 2
 ij_yaml_align_values_properties = do_not_align
 ij_yaml_autoinsert_sequence_marker = true
 ij_yaml_block_mapping_on_new_line = false
@@ -282,7 +278,6 @@ ij_yaml_spaces_within_braces = true
 ij_yaml_spaces_within_brackets = true
 
 [{*.bash, *.sh, *.zsh}]
-indent_size = 2
 tab_width = 2
 ij_shell_binary_ops_start_line = false
 ij_shell_keep_column_alignment_padding = false
@@ -291,9 +286,6 @@ ij_shell_redirect_followed_by_space = false
 ij_shell_switch_cases_indented = false
 
 [{*.gant, *.gradle, *.groovy, *.gsh, *.gson, *.gy, Jenkinsfile}]
-indent_size = 2
-tab_width = 8
-ij_continuation_indent_size = 4
 ij_groovy_align_group_field_declarations = false
 ij_groovy_align_multiline_array_initializer_expression = true
 ij_groovy_align_multiline_assignment = false
@@ -473,7 +465,6 @@ ij_groovy_while_on_new_line = false
 ij_groovy_wrap_long_lines = false
 
 [{*.hcl, *.nomad, *.vars}]
-indent_size = 2
 ij_hcl_array_wrapping = 2
 ij_hcl_keep_blank_lines_in_code = 2
 ij_hcl_keep_indents_on_empty_lines = false

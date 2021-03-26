@@ -10,12 +10,14 @@ import com.google.protobuf.Timestamp;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
+import javax.validation.Valid;
 
 @GrpcService
 @Slf4j
@@ -41,6 +43,11 @@ class MockedGrpcDatasetServiceImpl extends DatasetServiceImplBase {
       return;
     }
 
+    responseObserver.onNext(doCreateDataset(request));
+    responseObserver.onCompleted();
+  }
+
+  private Dataset doCreateDataset(@Valid CreateDatasetRequest request) {
     int alertsCount;
 
     if (request.hasNamedAlerts())
@@ -48,34 +55,29 @@ class MockedGrpcDatasetServiceImpl extends DatasetServiceImplBase {
     else
       alertsCount = 123;
 
-    Dataset dataset = Dataset
+    return Dataset
         .newBuilder()
         .setName("datasets/" + UUID.randomUUID())
         .setAlertCount(alertsCount)
         .setCreateTime(Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()))
         .build();
-    responseObserver.onNext(dataset);
-    responseObserver.onCompleted();
   }
 
   @Override
   public void getDataset(
       GetDatasetRequest request, StreamObserver<Dataset> responseObserver) {
-    if (request.getName().isBlank()) {
-      responseObserver.onError(Status.fromCode(Status.INVALID_ARGUMENT.getCode())
-          .withDescription("name must be set")
-          .asRuntimeException());
-      return;
-    }
+    responseObserver.onNext(doGetDataset(request));
+    responseObserver.onCompleted();
+  }
 
-    Dataset dataset = Dataset
+  @NotNull
+  private Dataset doGetDataset(@Valid GetDatasetRequest request) {
+    return Dataset
         .newBuilder()
         .setName(request.getName())
         .setAlertCount(123)
         .setCreateTime(Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()))
         .build();
-    responseObserver.onNext(dataset);
-    responseObserver.onCompleted();
   }
 
   @Override

@@ -11,6 +11,12 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.spring_data_jpa
 
+  // NOTE(ahaczewski): This enables aspects for validating classes. Spring Web and Tx are required
+  //  for correctly compiling aspects.
+  aspect libraries.silenteight_sep_base_aspects
+  compileOnly libraries.spring_web
+  compileOnly libraries.spring_tx
+
   testImplementation project(":adjudication-engine-testing")
   testImplementation libraries.silenteight_sep_base_testing
 }

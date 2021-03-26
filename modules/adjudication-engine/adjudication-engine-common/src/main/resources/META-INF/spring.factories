@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.adjudication.engine.common.grpc.GrpcExceptionsConfiguration

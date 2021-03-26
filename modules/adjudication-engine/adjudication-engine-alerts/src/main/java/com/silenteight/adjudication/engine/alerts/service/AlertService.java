@@ -11,6 +11,7 @@ import com.silenteight.adjudication.engine.alerts.match.NewAlertMatches;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import javax.validation.Valid;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 
@@ -23,16 +24,16 @@ class AlertService {
   @NonNull
   private final MatchFacade matchFacade;
 
-  Alert createAlert(CreateAlertRequest request) {
+  Alert createAlert(@Valid CreateAlertRequest request) {
     return alertFacade.createAlerts(List.of(request.getAlert())).get(0);
   }
 
-  BatchCreateAlertsResponse batchCreateAlerts(BatchCreateAlertsRequest request) {
+  BatchCreateAlertsResponse batchCreateAlerts(@Valid BatchCreateAlertsRequest request) {
     var alerts = alertFacade.createAlerts(request.getAlertsList());
     return BatchCreateAlertsResponse.newBuilder().addAllAlerts(alerts).build();
   }
 
-  Match createMatch(CreateMatchRequest request) {
+  Match createMatch(@Valid CreateMatchRequest request) {
     var newAlertMatches = NewAlertMatches.builder()
         .parentAlert(request.getAlert())
         .match(request.getMatch())
@@ -41,7 +42,9 @@ class AlertService {
     return matchFacade.createMatches(List.of(newAlertMatches)).get(0);
   }
 
-  BatchCreateAlertMatchesResponse batchCreateAlertMatches(BatchCreateAlertMatchesRequest request) {
+  BatchCreateAlertMatchesResponse batchCreateAlertMatches(
+      @Valid BatchCreateAlertMatchesRequest request) {
+
     var newAlertMatches = NewAlertMatches.builder()
         .parentAlert(request.getAlert())
         .matches(request.getMatchesList())
@@ -54,7 +57,7 @@ class AlertService {
         .build();
   }
 
-  BatchCreateMatchesResponse batchCreateMatches(BatchCreateMatchesRequest request) {
+  BatchCreateMatchesResponse batchCreateMatches(@Valid BatchCreateMatchesRequest request) {
     var newAlertMatchesList = request
         .getAlertMatchesList()
         .stream()
