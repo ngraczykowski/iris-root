@@ -41,4 +41,9 @@ class AgentsConfiguration {
 
     return new AgentsRegistry(agentDiscovery, agentDetailsClient);
   }
+
+  @Bean
+  AgentMappingService agentMappingService(AgentsRegistry agentsRegistry) {
+    return new AgentMappingService(agentsRegistry);
+  }
 }
