@@ -136,6 +136,8 @@ components:
         alertKeyFragment:
           type: string
           description: Provides the full code for the match type that will be used to create the Alert Key.
+      required:
+        - caseId
     CustomerEntities:
       type: object
       properties:
@@ -439,6 +441,8 @@ components:
         requestDateTime:
           type: string
           description: N/A - For Day 1
+      required:
+        - caseId
     WorldCheckEntities:
       type: object
       properties:
@@ -601,6 +605,8 @@ components:
         edqOwsWatchlistName:
           type: string
           description: The world check watchlist name is transposed into a HSBC equivalent.
+      required:
+        - caseId
     CustomerIndividuals:
       type: object
       properties:
@@ -997,6 +1003,8 @@ components:
         dummy:
           type: string
           description: For development use only
+      required:
+        - caseId
     WorldCheckIndividuals:
       type: object
       properties:
@@ -1219,6 +1227,8 @@ components:
         dummy:
           type: string
           description: For development use only
+      required:
+        - caseId
     CaseComments:
       type: object
       properties:
@@ -1243,6 +1253,8 @@ components:
         restrictingPermission:
           type: string
           description: Will display if access to the comment has been restricted, for example, Level 3 Only. If the comment has not been restricted, this field will be displayed as blank.
+      required:
+        - caseId
     Relationships:
       type: object
       properties:
@@ -1276,6 +1288,8 @@ components:
         relationshipHash:
           type: string
           description: Hash of the relationship value
+      required:
+        - caseId
     PrivateListIndividuals:
       type: object
       properties:
@@ -1513,6 +1527,8 @@ components:
         dummy:
           type: string
           description: For development use only
+      required:
+        - caseId
     PrivateListEntities:
       type: object
       properties:
@@ -1708,6 +1724,8 @@ components:
         entityName2:
           type: string
           description: Entity name place holder 3
+      required:
+        - caseId
     CaseHistory:
       type: object
       properties:
@@ -1732,6 +1750,8 @@ components:
         transition:
           type: string
           description: Records the transition used to move the alert through the workflow
+      required:
+        - caseId
     CountryCtrpScreeningEntities:
       type: object
       properties:
@@ -1756,7 +1776,6 @@ components:
         matchType:
           type: string
           description: This list one of three match types&#58; Trading, Registration or Operation.
-
         owsWatchlistName:
           type: string
           description: This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Entities this will always be ESSC.
@@ -1784,6 +1803,8 @@ components:
         alertKeyFragment:
           type: string
           description: Provides the full code for the match type that will be used to create the Alert Key.
+      required:
+        - caseId
     CasesWithAlertURL:
       type: object
       properties:
@@ -1928,7 +1949,8 @@ components:
         alertUrl:
           type: string
           description: URL, which take you directly to the system where this alert resides and open the alert.
-
+      required:
+        - id
     Alert:
       type: object
       properties:

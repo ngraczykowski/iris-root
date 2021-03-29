@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.bridge.rest.model.input;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.Objects;
 
 
 @javax.annotation.Generated(
@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
     date = "2021-03-05T14:11:51.641Z[GMT]")
 public class CasesWithAlertURL {
 
-  private Integer id = null;
+  private int id;
   private String caseGroup = null;
   private String caseType = null;
   private String externalId = null;
@@ -66,11 +66,11 @@ public class CasesWithAlertURL {
 
   @Schema(description = "Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link to other tables.")
   @JsonProperty("id")
-  public Integer getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(int id) {
     this.id = id;
   }
 
