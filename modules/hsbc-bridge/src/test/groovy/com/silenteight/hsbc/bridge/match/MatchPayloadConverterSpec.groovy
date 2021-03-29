@@ -28,7 +28,7 @@ class MatchPayloadConverterSpec extends Specification {
     def convertedResult = underTest.convert(resultInBytes)
 
     then:
-    resultInBytes.length == 9242
+    resultInBytes.length == 9285
     with(convertedResult) {
       !countryCtrpScreeningIndividuals.isEmpty()
       !countryCtrpScreeningEntities.isEmpty()

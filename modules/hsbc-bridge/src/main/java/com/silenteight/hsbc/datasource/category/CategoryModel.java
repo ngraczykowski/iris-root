@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.category;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.util.List;
@@ -10,9 +11,10 @@ import javax.validation.constraints.NotNull;
 @Value
 class CategoryModel {
 
-  @NotNull String name;
+  @NonNull String name;
   String displayName;
   boolean multiValue;
-  @NotNull CategoryType type;
-  @NotNull List<String> allowedValues;
+  @NonNull CategoryType type;
+  @NonNull List<String> allowedValues;
+  @NonNull CategoryValueRetriever valueRetriever;
 }

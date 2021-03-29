@@ -1,17 +1,22 @@
 package com.silenteight.hsbc.bridge.match
 
 import com.silenteight.hsbc.bridge.alert.AlertComposite
+import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent
 import com.silenteight.hsbc.bridge.rest.model.input.Alert
 import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation
+import com.silenteight.hsbc.bridge.rest.model.input.CasesWithAlertURL
 
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 import static java.util.Optional.of
 
 class MatchFacadeSpec extends Specification {
 
+  def eventPublisher = Mock(ApplicationEventPublisher)
   def matchRepository = Mock(MatchRepository)
   def underTest = MatchFacade.builder()
+      .eventPublisher(eventPublisher)
       .matchPayloadConverter(new MatchPayloadConverter())
       .matchRepository(matchRepository)
       .matchRawMapper(new MatchRawMapper())
@@ -43,6 +48,7 @@ class MatchFacadeSpec extends Specification {
 
     then:
     1 * matchRepository.save(_ as MatchEntity) >> {MatchEntity entity -> entity.id = 2}
+    1 * eventPublisher.publishEvent(_ as StoredMatchesEvent)
     result == [2]
   }
 
@@ -52,7 +58,9 @@ class MatchFacadeSpec extends Specification {
     byte[] matchPayload = new MatchPayloadConverter().convert(matchRawData)
 
     Alert alert = new Alert(
-        systemInformation: new AlertSystemInformation()
+        systemInformation: new AlertSystemInformation(
+            casesWithAlertURL: [new CasesWithAlertURL()]
+        )
     )
   }
 }

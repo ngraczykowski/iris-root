@@ -8,4 +8,6 @@ import java.util.Collection;
 interface MatchCategoryRepository extends Repository<MatchCategoryEntity, Long> {
 
   Collection<MatchCategoryEntity> findByMatchValueIn(Collection<String> matchValues);
+
+  void save(MatchCategoryEntity matchCategory);
 }

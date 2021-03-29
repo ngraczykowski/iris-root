@@ -4,7 +4,10 @@ import lombok.Builder;
 import lombok.NonNull;
 
 import com.silenteight.hsbc.bridge.alert.AlertComposite;
+import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent;
 import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
+
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +21,7 @@ public class MatchFacade {
   private final MatchPayloadConverter matchPayloadConverter;
   private final MatchRepository matchRepository;
   private final MatchRawMapper matchRawMapper;
+  private final ApplicationEventPublisher eventPublisher;
 
   public MatchComposite getMatch(long id) {
     var matchResult = matchRepository.findById(id);
@@ -27,27 +31,33 @@ public class MatchFacade {
     }
 
     var matchEntity = matchResult.get();
-    return MatchComposite.builder()
-        .id(matchEntity.getId())
-        .name(matchEntity.getName())
-        .rawData(matchPayloadConverter.convert(matchEntity.getPayload()))
-        .build();
+    return toMatchComposite(matchEntity);
   }
 
   @Transactional
   public Collection<Long> prepareAndSaveMatches(@NonNull AlertComposite alertComposite) {
     var matchName = alertComposite.getCaseId() + "";
-    byte[] payload = getPayload(alertComposite.getAlertSystemInformation());
+    var matchRawData = matchRawMapper.map(alertComposite.getAlertSystemInformation());
+    byte[] payload = getPayload(matchRawData);
     var matchEntity = new MatchEntity(alertComposite.getId(), matchName, payload);
 
     matchRepository.save(matchEntity);
+
+    eventPublisher.publishEvent(new StoredMatchesEvent(List.of(toMatchComposite(matchEntity))));
+
     return List.of(matchEntity.getId());
   }
 
-  private byte[] getPayload(AlertSystemInformation alertSystemInformation) {
-    var matchRawData = matchRawMapper.map(alertSystemInformation);
-
+  private byte[] getPayload(MatchRawData matchRawData) {
     return matchPayloadConverter.convert(matchRawData);
+  }
+
+  private MatchComposite toMatchComposite(MatchEntity matchEntity) {
+    return MatchComposite.builder()
+        .id(matchEntity.getId())
+        .name(matchEntity.getName())
+        .rawData(matchPayloadConverter.convert(matchEntity.getPayload()))
+        .build();
   }
 
   public List<MatchComposite> getMatches(@NonNull List<Long> matchIds) {

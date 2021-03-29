@@ -21,4 +21,9 @@ class CategoryUseCaseConfiguration {
   GetMatchCategoryValuesUseCase getMatchCategoryValuesUseCase() {
     return new GetMatchCategoryValuesUseCase(matchCategoryRepository);
   }
+
+  @Bean
+  StoreMatchCategoriesUseCase storeMatchCategoriesUseCase() {
+    return new StoreMatchCategoriesUseCase(categoryRepository, matchCategoryRepository);
+  }
 }

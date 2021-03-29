@@ -9,4 +9,6 @@ interface CategoryRepository extends Repository<CategoryEntity, Long> {
   Collection<CategoryEntity> findAll();
 
   void save(CategoryEntity entity);
+
+  CategoryEntity findByName(String name);
 }

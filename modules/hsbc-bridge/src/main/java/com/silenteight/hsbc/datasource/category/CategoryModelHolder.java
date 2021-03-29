@@ -15,6 +15,10 @@ class CategoryModelHolder {
         .type(CategoryType.ANY_STRING)
         .multiValue(false)
         .allowedValues(List.of())
+        .valueRetriever(matchRawData -> {
+          var alertWithCaseUrl = matchRawData.getCaseWithAlertURL();
+          return List.of(alertWithCaseUrl.getSourceName());
+        })
         .build();
 
     var country = CategoryModel.builder()
@@ -23,6 +27,9 @@ class CategoryModelHolder {
         .type(CategoryType.ANY_STRING)
         .multiValue(true)
         .allowedValues(List.of())
+        .valueRetriever(matchRawData -> {
+          return List.of("GB");
+        })
         .build();
 
     var customerType = CategoryModel.builder()
@@ -31,6 +38,7 @@ class CategoryModelHolder {
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
         .allowedValues(List.of("I", "C"))
+        .valueRetriever(matchRawData -> List.of(matchRawData.isIndividual() ? "I" : "C"))
         .build();
 
     var hitType = CategoryModel.builder()
@@ -39,6 +47,10 @@ class CategoryModelHolder {
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
         .allowedValues(List.of("SAN", "PEP", "AM"))
+        .valueRetriever(matchRawData -> {
+          var alertWithCaseUrl = matchRawData.getCaseWithAlertURL();
+          return List.of(alertWithCaseUrl.getExtendedAttribute3());
+        })
         .build();
 
     return List.of(
@@ -54,7 +66,7 @@ class CategoryModelHolder {
 
   static Optional<CategoryModel> getCategoryModelByName(String name) {
     return CATEGORIES.stream()
-        .filter(c->c.getName().equals(name))
+        .filter(c -> c.getName().equals(name))
         .findFirst();
   }
 }

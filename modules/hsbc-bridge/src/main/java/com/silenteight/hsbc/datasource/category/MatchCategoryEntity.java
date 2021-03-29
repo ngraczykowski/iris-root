@@ -39,4 +39,10 @@ class MatchCategoryEntity {
   public String getCategoryName() {
     return category.getName();
   }
+
+  MatchCategoryEntity(String matchValue, CategoryEntity category, List<String> values) {
+    this.matchValue = matchValue;
+    this.category = category;
+    this.values = values;
+  }
 }

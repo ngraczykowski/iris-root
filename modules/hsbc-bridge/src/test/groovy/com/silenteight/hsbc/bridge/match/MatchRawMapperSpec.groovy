@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.match
 
 import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation
+import com.silenteight.hsbc.bridge.rest.model.input.CasesWithAlertURL
 import com.silenteight.hsbc.bridge.rest.model.input.CountryCtrpScreeningEntities
 import com.silenteight.hsbc.bridge.rest.model.input.CountryCtrpScreeningIndividuals
 import com.silenteight.hsbc.bridge.rest.model.input.CustomerEntities
@@ -69,6 +70,7 @@ class MatchRawMapperSpec extends Specification {
     )
 
     def systemInformation = new AlertSystemInformation(
+        casesWithAlertURL: [new CasesWithAlertURL()],
         countryCtrpScreeningEntities: [countryCtrpScreeningEntities],
         countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
         customerEntities: [customerEntities],

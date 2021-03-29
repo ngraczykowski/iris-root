@@ -234,8 +234,8 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_match_category_id
-                    references: hsbc_bridge_match_category(id)
+                    foreignKeyName: fk_category_match_category_id
+                    references: hsbc_bridge_category(id)
         - createTable:
             tableName: hsbc_bridge_match_category_values
             columns:
@@ -245,7 +245,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_match_category_cid
-                    references: hsbc_bridge_category(id)
+                    references: hsbc_bridge_match_category(id)
               - column:
                   name: value
                   type: varchar(100)
