@@ -107,5 +107,4 @@ public class CustomerEntities {
   private String ctrpFragment;
   private String requestUserName;
   private String requestDateTime;
-  
 }
