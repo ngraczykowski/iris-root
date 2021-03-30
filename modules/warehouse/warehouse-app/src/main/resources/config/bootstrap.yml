@@ -19,7 +19,7 @@ warehouse:
     port: 24160
     user: dev
     password: dev
-    vhost: /
+    virtual-host: /
     tls:
       enabled: false
 

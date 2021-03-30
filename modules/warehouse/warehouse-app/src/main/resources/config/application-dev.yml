@@ -6,7 +6,7 @@ serp:
     port: 24160
     user: dev
     password: dev
-    vhost: /
+    virtual-host: /
 
 logging:
   level:
