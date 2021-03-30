@@ -73,7 +73,7 @@ class CategoryGrpcService extends CategoryServiceImplBase {
   }
 
   private ListCategoriesResponse getCategoriesResponse() {
-    var categories = listCategoriesUseCase.activate();
+    var categories = listCategoriesUseCase.getCategories();
 
     return ListCategoriesResponse.newBuilder()
         .addAllCategories(mapCategories(categories))

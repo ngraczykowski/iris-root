@@ -14,6 +14,7 @@ ext {
   springVersion = "2.4.2"
   junitJupiterVersion = "5.6.0"
   mockitoVersion = "3.8.0"
+  spockVersion = "2.0-M5-groovy-3.0"
 }
 
 // Silent Eight
@@ -50,11 +51,13 @@ libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.1
 
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.7']
-libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: '2.0-M4-groovy-3.0']
+libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
+libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockVersion]
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
 libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
 libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
 libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
+libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion]
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -89,6 +92,8 @@ dependencies {
   testImplementation libraries.junit_jupiter_api
   testImplementation libraries.mockito_core
   testImplementation libraries.mockito_junit_jupiter
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_starter_test
   testRuntimeOnly libraries.junit_jupiter_engine
   testCompile libraries.groovy_all
   testCompile libraries.spock_core

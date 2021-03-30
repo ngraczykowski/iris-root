@@ -12,7 +12,7 @@ public class ListCategoriesUseCase {
 
   private final CategoryRepository categoryRepository;
 
-  public List<CategoryDto> activate() {
+  public List<CategoryDto> getCategories() {
 
     return categoryRepository.findAll().stream()
         .map(e -> CategoryDto.builder()
