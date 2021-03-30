@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-class RecommendationFacadeConfiguration {
+class RecommendationEventConfiguration {
 
   private final RecommendationRepository recommendationRepository;
 
   @Bean
-  RecommendationFacade recommendationFacade() {
-    return new RecommendationFacade(recommendationRepository);
+  NewRecommendationEventListener recommendationEventListener() {
+    return new NewRecommendationEventListener(recommendationRepository);
   }
 }

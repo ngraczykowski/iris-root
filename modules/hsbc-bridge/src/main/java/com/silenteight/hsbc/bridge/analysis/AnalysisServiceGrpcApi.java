@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.hsbc.bridge.analysis.dto.*;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
 
 @RequiredArgsConstructor
 class AnalysisServiceGrpcApi implements AnalysisServiceApi {
@@ -64,6 +67,9 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
 
   private RecommendationDto mapRecommendation(Recommendation recommendation) {
     return RecommendationDto.builder()
+        .alert(recommendation.getAlert())
+        .name(recommendation.getName())
+        .date(toOffsetDateTime(recommendation.getCreateTimeOrBuilder()))
         .recommendedAction(recommendation.getRecommendedAction())
         .recommendationComment(recommendation.getRecommendationComment())
         .build();

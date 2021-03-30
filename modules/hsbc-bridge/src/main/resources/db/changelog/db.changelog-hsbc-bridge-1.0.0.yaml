@@ -251,3 +251,42 @@ databaseChangeLog:
                   type: varchar(100)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 1.0.0-6
+      author: bmartofel
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_recommendation
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: alert
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommended_action
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommendation_comment
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommended_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

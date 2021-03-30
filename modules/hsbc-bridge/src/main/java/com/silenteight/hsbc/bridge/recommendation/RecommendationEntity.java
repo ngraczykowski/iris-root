@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -16,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "hsbc_bridge_recommendation")
-class RecommendationEntity extends BaseEntity {
+class RecommendationEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
@@ -25,9 +26,15 @@ class RecommendationEntity extends BaseEntity {
 
   private String recommendedAction;
   private String recommendationComment;
+  private String alert;
+  private String name;
+  private OffsetDateTime recommendedAt;
 
-  RecommendationEntity(StoreRecommendationCommand command) {
-    this.recommendedAction = command.getRecommendedAction();
-    this.recommendationComment = command.getRecommendationComment();
+  RecommendationEntity(RecommendationDto recommendation) {
+    this.recommendedAction = recommendation.getRecommendedAction();
+    this.recommendationComment = recommendation.getRecommendationComment();
+    this.alert = recommendation.getAlert();
+    this.name = recommendation.getName();
+    this.recommendedAt = recommendation.getDate();
   }
 }

@@ -6,6 +6,7 @@ import com.silenteight.hsbc.bridge.analysis.AnalysisModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.model.Model;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
 import com.silenteight.hsbc.bridge.rest.RestModule;
 import com.silenteight.hsbc.datasource.category.DataSourceCategoryModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     MatchModule.class,
     Model.class,
     RestModule.class,
+    RecommendationModule.class,
 
     DataSourceApiGrpcModule.class,
     DataSourceProviderModule.class,
