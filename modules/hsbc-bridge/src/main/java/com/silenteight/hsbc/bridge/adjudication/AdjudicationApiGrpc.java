@@ -11,7 +11,6 @@ import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBloc
 class AdjudicationApiGrpc implements AdjudicationApi {
 
   private final AlertServiceBlockingStub alertServiceBlockingStub;
-  private final AnalysisServiceBlockingStub analysisServiceBlockingStub;
   private final DatasetServiceBlockingStub datasetServiceBlockingStub;
 
   @Override
@@ -24,17 +23,6 @@ class AdjudicationApiGrpc implements AdjudicationApi {
   public BatchCreateAlertMatchesResponse batchCreateAlertMatches(
       BatchCreateAlertMatchesRequest request) {
     return alertServiceBlockingStub.batchCreateAlertMatches(request);
-  }
-
-  @Override
-  public AnalysisDataset addDataset(
-      AddDatasetRequest request) {
-    return analysisServiceBlockingStub.addDataset(request);
-  }
-
-  @Override
-  public Analysis createAnalysis(CreateAnalysisRequest request) {
-    return analysisServiceBlockingStub.createAnalysis(request);
   }
 
   @Override

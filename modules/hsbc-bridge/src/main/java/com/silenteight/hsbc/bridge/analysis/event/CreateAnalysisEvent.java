@@ -1,13 +1,15 @@
 package com.silenteight.hsbc.bridge.analysis.event;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
-@Getter
-@RequiredArgsConstructor
+@Builder
+@Value
 public class CreateAnalysisEvent {
 
-  private final String analysisName;
-  private final String datasetName;
-  private final String solvingModelName;
+  String analysisName;
+  String datasetName;
+  String solvingModelName;
 }

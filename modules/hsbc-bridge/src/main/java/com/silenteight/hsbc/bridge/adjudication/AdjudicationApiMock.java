@@ -79,36 +79,6 @@ class AdjudicationApiMock implements AdjudicationApi {
   }
 
   @Override
-  public AnalysisDataset addDataset(AddDatasetRequest request) {
-    if (request.getAnalysis().isBlank() || request.getDataset().isBlank()) {
-      throw new RuntimeException("Analysis and dataset name must be set");
-    }
-
-    return AnalysisDataset
-        .newBuilder()
-        .setName(request.getAnalysis() + "/" + request.getDataset())
-        .setAlertCount(current().nextInt(1, 100))
-        .setPendingAlerts(current().nextInt(0, 10))
-        .build();
-  }
-
-  @Override
-  public Analysis createAnalysis(CreateAnalysisRequest request) {
-    if (!request.hasAnalysis() ||
-        request.getAnalysis().getPolicy().isBlank() ||
-        request.getAnalysis().getStrategy().isBlank()) {
-      throw new RuntimeException("Analysis must be set");
-    }
-
-    return Analysis
-        .newBuilder(request.getAnalysis())
-        .setName("analysis/" + UUID.randomUUID())
-        .setCreateTime(now())
-        .setState(Analysis.State.NEW)
-        .build();
-  }
-
-  @Override
   public Dataset createDataset(CreateDatasetRequest request) {
     if (request.getFilterCase() == FilterCase.FILTER_NOT_SET) {
       throw new RuntimeException("filter must be set");

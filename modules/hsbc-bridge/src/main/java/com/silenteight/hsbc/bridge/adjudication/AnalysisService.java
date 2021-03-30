@@ -2,10 +2,10 @@ package com.silenteight.hsbc.bridge.adjudication;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.AddDatasetRequest;
-import com.silenteight.adjudication.api.v1.Analysis;
-import com.silenteight.adjudication.api.v1.Analysis.Feature;
-import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
+import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
+import com.silenteight.hsbc.bridge.analysis.dto.AddDatasetRequestDto;
+import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisRequestDto;
+import com.silenteight.hsbc.bridge.analysis.dto.FeatureDto;
 import com.silenteight.hsbc.bridge.analysis.event.CreateAnalysisEvent;
 import com.silenteight.hsbc.bridge.model.SolvingModelDto;
 
@@ -18,48 +18,49 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class AnalysisService {
 
-  private final AdjudicationApi adjudicationApi;
+  private final AnalysisServiceApi analysisServiceApi;
   private final ApplicationEventPublisher eventPublisher;
 
-  String createAnalysisWithDataset(
-      SolvingModelDto solvingModel, int alertsCount, String datasetId) {
+  String createAnalysisWithDataset(SolvingModelDto solvingModel, String datasetId) {
 
-    List<Feature> features = solvingModel.getFeatures().stream().map(f ->
-        Feature.newBuilder()
-            .setFeature(f.getName())
-            .setAgentConfig(f.getAgentConfig())
-            .build()).collect(Collectors.toList());
+    var analysisName = createAnalysis(solvingModel);
+    addDataset(analysisName, datasetId);
 
-    Analysis analysis = Analysis.newBuilder()
-        .setName(UUID.randomUUID().toString())
-        .setPolicy(solvingModel.getPolicyName())
-        .setStrategy(solvingModel.getStrategyName())
-        .addAllFeatures(features)
-        .setPendingAlerts(alertsCount)
-        .setAlertCount(alertsCount)
-        .build();
+    eventPublisher.publishEvent(CreateAnalysisEvent.builder()
+        .analysisName(analysisName)
+        .datasetName(datasetId)
+        .solvingModelName(solvingModel.getName())
+        .build());
 
-    CreateAnalysisRequest analysisRequest = CreateAnalysisRequest.newBuilder()
-        .setAnalysis(analysis)
-        .build();
-
-    Analysis analysisResponse = adjudicationApi.createAnalysis(analysisRequest);
-
-    AddDatasetRequest addDatasetRequest = AddDatasetRequest.newBuilder()
-        .setAnalysis(analysisResponse.getName())
-        .setDataset(datasetId)
-        .build();
-
-    adjudicationApi.addDataset(addDatasetRequest);
-
-    publishCreateAnalysisEvent(analysisResponse.getName(), datasetId, solvingModel.getName());
-
-    return analysisResponse.getName();
+    return analysisName;
   }
 
-  private void publishCreateAnalysisEvent(
-      String analysisId, String datasetId, String solvingModelName) {
-    eventPublisher.publishEvent(new CreateAnalysisEvent(analysisId, datasetId, solvingModelName));
+  private String createAnalysis(SolvingModelDto solvingModel) {
+    var request = CreateAnalysisRequestDto.builder()
+        .name(UUID.randomUUID().toString())
+        .policy(solvingModel.getPolicyName())
+        .strategy(solvingModel.getStrategyName())
+        .features(map(solvingModel.getFeatures()))
+        .build();
 
+    return analysisServiceApi.createAnalysis(request).getName();
+  }
+
+  private static List<FeatureDto> map(List<com.silenteight.hsbc.bridge.model.FeatureDto> features) {
+    return features.stream().map(f ->
+        FeatureDto.builder()
+            .name(f.getName())
+            .agentConfig(f.getAgentConfig())
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  private void addDataset(String analysis, String dataset) {
+    var request = AddDatasetRequestDto.builder()
+        .analysis(analysis)
+        .dataset(dataset)
+        .build();
+
+    analysisServiceApi.addDataset(request);
   }
 }

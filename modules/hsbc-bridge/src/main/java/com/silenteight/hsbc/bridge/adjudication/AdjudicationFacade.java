@@ -23,6 +23,6 @@ public class AdjudicationFacade {
 
     String datasetId = datasetService.createDataset(alertIds);
     SolvingModelDto solvingModel = modelUseCase.getSolvingModel();
-    return analysisService.createAnalysisWithDataset(solvingModel, alertIds.size(), datasetId);
+    return analysisService.createAnalysisWithDataset(solvingModel, datasetId);
   }
 }

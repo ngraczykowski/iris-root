@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
+import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 class AdjudicationConfiguration {
 
+  private final AnalysisServiceApi analysisServiceApi;
   private final ApplicationEventPublisher eventPublisher;
 
   @Bean
@@ -50,27 +52,22 @@ class AdjudicationConfiguration {
 
   @Profile("!dev")
   @Bean
-  AnalysisService analysisService(
-      AdjudicationApi adjudicationApiGrpc,
-      ApplicationEventPublisher eventPublisher) {
-    return new AnalysisService(adjudicationApiGrpc, eventPublisher);
+  AnalysisService analysisService() {
+    return new AnalysisService(analysisServiceApi, eventPublisher);
   }
 
   @Profile("dev")
   @Bean
-  AnalysisService analysisServiceMock(
-      AdjudicationApi adjudicationApiMock,
-      ApplicationEventPublisher eventPublisher) {
-    return new AnalysisService(adjudicationApiMock, eventPublisher);
+  AnalysisService analysisServiceMock() {
+    return new AnalysisService(analysisServiceApi, eventPublisher);
   }
 
   @Bean
   AdjudicationApi adjudicationApiGrpc(
       AlertServiceBlockingStub alertServiceBlockingStub,
-      AnalysisServiceBlockingStub analysisServiceBlockingStub,
       DatasetServiceBlockingStub datasetServiceBlockingStub) {
     return new AdjudicationApiGrpc(
-        alertServiceBlockingStub, analysisServiceBlockingStub, datasetServiceBlockingStub);
+        alertServiceBlockingStub, datasetServiceBlockingStub);
   }
 
   @Bean
