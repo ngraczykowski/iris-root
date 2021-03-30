@@ -1,8 +1,0 @@
-serp:
-  db:
-    name: {{ env "NOMAD_NAMESPACE" }}-warehouse
-  {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
-  {{- with service (print $nomad_namespace "-warehouse-db") }}
-    host: {{ (index . 0).Address }}
-    port: {{ (index . 0).Port }}
-  {{ end -}}

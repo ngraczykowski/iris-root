@@ -191,11 +191,6 @@ job "warehouse" {
         destination = "local/conf/application.yml"
         change_mode = "restart"
       }
-      template {
-        data = file("./conf/application-database.yml")
-        destination = "local/conf/application-database.yml"
-        change_mode = "restart"
-      }
 
       config {
         command = "java"
@@ -209,7 +204,7 @@ job "warehouse" {
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
           "-jar",
           "local/warehouse-app.jar",
-          "--spring.profiles.active=linux,warehouse,database,rabbitmq,messaging",
+          "--spring.profiles.active=linux,warehouse,rabbitmq,messaging",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }

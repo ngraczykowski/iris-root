@@ -1,53 +1,14 @@
-####################################################################################################
-# Error Queue Configuration
-####################################################################################################
-serp.messaging.error-queue.enabled: true
-
 #---------------------------------------------------------------------------------------------------
 # SERVER
 #---------------------------------------------------------------------------------------------------
-serp.web.threads.io: 4
-serp.web.threads.worker: 16
-serp.server.protocol: http
 
-#---------------------------------------------------------------------------------------------------
-# GENERAL
-#---------------------------------------------------------------------------------------------------
-serp.execution.threads: 8
-serp.execution.threads.max: 16
-serp.execution.queue: 10000
-
-serp.scheduling.threads: 2
-
-# XXX(ahaczewski): Temporarily set to true, until we're sure customer correctly configured SERP.
-serp.show-env: true
-
-#---------------------------------------------------------------------------------------------------
-# SERVICE DISCOVERY
-#---------------------------------------------------------------------------------------------------
-serp.consul.discovery.enabled: ${serp.consul.enabled}
-
-#---------------------------------------------------------------------------------------------------
-# mTLS - enabled by default
-#---------------------------------------------------------------------------------------------------
-serp.tls.enabled: false
-serp.consul.traefik.passTLSCert: ${serp.tls.enabled}
-serp.consul.traefik.entryPoints: unprotectedGateway
-
-####################################################################################################
-# CONFIGURATION
-####################################################################################################
-
-#---------------------------------------------------------------------------------------------------
-# SERVER
-#---------------------------------------------------------------------------------------------------
 # Embedded server configuration
 server:
-  port: 24214
   forward-headers-strategy: native
   undertow:
-    io-threads: ${serp.web.threads.io}
-    worker-threads: ${serp.web.threads.worker}
+    threads:
+      io: ${warehouse.web.threads.io}
+      worker: ${warehouse.web.threads.worker}
 
   servlet:
     context-path: /rest/${spring.application.name}
@@ -62,9 +23,6 @@ server:
 
 # Management HTTP server
 management:
-  health:
-    mail:
-      enabled: false
   endpoint:
     health.show-details: always
 
@@ -72,7 +30,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
     # loggers endpoint is secured with mTLS
     loggers:
       sensitive: false
@@ -81,62 +39,47 @@ management:
     tags:
       application: ${spring.application.name}
 
-#---------------------------------------------------------------------------------------------------
-# GENERAL
-#---------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------
+# SPRING INTEGRATION
+#-------------------------------------------------------------------------------------------------
+integration:
+  start-delay-seconds: 15
+  poll-period-millis: 1000
+
+
 spring:
-  application:
-    name: warehouse
-  # AOP configuration - disabled due to AspectJ compile-time weaving use
+  #-------------------------------------------------------------------------------------------------
+  # GENERAL
+  #-------------------------------------------------------------------------------------------------
   aop:
     auto: false
 
-  # Task execution and scheduling
   task:
     execution:
       pool:
-        core-size: ${serp.execution.threads}
-        max-size: ${serp.execution.threads.max}
-        queue-capacity: ${serp.execution.queue}
+        core-size: 8
         keep-alive: 10s
+        max-size: 16
+        queue-capacity: 10000
       thread-name-prefix: pool-task-
 
     scheduling:
-      pool.size: ${serp.scheduling.threads}
+      pool:
+        size: 2
       thread-name-prefix: pool-scheduling-
 
   main:
     banner-mode: 'off'
 
-  groovy:
-    template:
-      check-template-location: false
-
-  cloud:
-    service-registry:
-      enabled: ${serp.consul.enabled}
-      auto-registration:
-        enabled: ${serp.consul.enabled}
-
-  servlet:
-    multipart.max-file-size: 10MB
-    multipart.max-request-size: 10MB
-
-simulator:
-  web:
-    cors:
-      allowed-origins: "*"
-      allowed-methods: "*"
-      allowed-headers: "*"
-      exposed-headers: "Authorization,Link,X-Total-Count"
-      allow-credentials: true
-      max-age: 1800
+#-------------------------------------------------------------------------------------------------
+# REST API AUTH
+#-------------------------------------------------------------------------------------------------
 
 sep.auth:
   permissionMethodsMappings:
-    SIMULATION_MANAGEMENT:
-      - "CREATE_SIMULATION"
+    REPORTS_MANAGEMENT:
+      - "GENERATE_REPORT"
 
   rolePermissionsMappings:
     BUSINESS_OPERATOR:
-      - "SIMULATION_MANAGEMENT"
+      - "REPORTS_MANAGEMENT"

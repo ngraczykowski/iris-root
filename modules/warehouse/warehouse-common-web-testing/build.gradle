@@ -13,7 +13,7 @@ dependencies {
   api libraries.test_containers
   api libraries.reactor_test
 
-  implementation project(":warehouse-common-web")
+  implementation project(":warehouse-common")
 
   implementation libraries.spring_jdbc
   implementation libraries.spring_test

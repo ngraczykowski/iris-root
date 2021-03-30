@@ -1,70 +1,27 @@
-spring:
-  # Task execution and scheduling
-  task:
-    execution:
-      pool:
-        core-size: 2
-        max-size: 2
-        queue-capacity: 1000
-        keep-alive: 10s
-      thread-name-prefix: testing-task-
+#-------------------------------------------------------------------------------------------------
+# REST API AUTH
+#-------------------------------------------------------------------------------------------------
 
-    scheduling:
-      pool.size: 2
-      thread-name-prefix: testing-scheduling-
+sep.auth:
+  permissionMethodsMappings:
+    REPORTS_MANAGEMENT:
+      - "GENERATE_REPORT"
 
-  #-------------------------------------------------------------------------------------------------
-  # DATABASE
-  #-------------------------------------------------------------------------------------------------
-  datasource:
-    # Hikari pool configuration
-    hikari:
-      pool-name: Database-Test-Pool
-      minimum-idle: 1
-      maximum-pool-size: 3
-      schema: public
-      data-source-properties:
-        ApplicationName: SERP Testing
+  rolePermissionsMappings:
+    BUSINESS_OPERATOR:
+      - "REPORTS_MANAGEMENT"
 
-  # Do not replace datasource for testing, as test datasource is configured using
-  # PostgresContainer.Initializer
-  test:
-    database:
-      replace: none
+#-------------------------------------------------------------------------------------------------
+# KEYCLOAK
+#-------------------------------------------------------------------------------------------------
 
-  # Database migrations
-  liquibase:
-    default-schema: public
-    contexts: default,test
-    change-log: classpath:db/changelog/db.changelog-master.xml
-  # Spring Data JPA
-  jpa:
-    # Do not show SQL in tests by default. Database integration tests override this anyway.
-    show-sql: false
-
-    hibernate:
-      ddl-auto: validate
-
-  # RabbitMQ
-  rabbitmq:
-    ssl:
-      enabled: false
-
-  application:
-    name: simulator
-
-serp:
-  consul:
-    enabled: false
-  web:
-    port-file:
-      enabled: false
-  grpc:
-    port-file:
-      enabled: false
-
-silenteight:
-  consul:
-    http:
-      pooling-client:
-        enabled: false
+keycloak:
+  adapter:
+    authServerUrl: https://localhost:24111/auth
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials.secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0

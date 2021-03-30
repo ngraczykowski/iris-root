@@ -1,13 +1,13 @@
 package com.silenteight.warehouse;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@SpringBootTest(classes = WarehouseApplication.class)
 class WarehouseApplicationTest {
 
   @Test
-  void name() {
-    assertTrue(true);
+  @SuppressWarnings("squid:S2699")
+  void testContext() {
   }
 }

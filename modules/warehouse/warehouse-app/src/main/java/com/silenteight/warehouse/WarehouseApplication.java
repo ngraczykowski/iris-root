@@ -28,8 +28,8 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 public class WarehouseApplication {
 
   public static void main(String[] args) {
-    new SerpApplicationTemplate("simulator", args, WarehouseApplication.class)
-        .profiles("database", "rabbitmq", "messaging")
+    new SerpApplicationTemplate("warehouse", args, WarehouseApplication.class)
+        .profiles("rabbitmq", "messaging")
         .contextCallback(new SerpApplicationContextCallback())
         .runAndExit();
   }
