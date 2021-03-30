@@ -2,51 +2,55 @@
 # Defaults (overridden by environment variables or arguments)
 ####################################################################################################
 
-serp.consul.enabled: false
-serp.consul.config.enabled: ${serp.consul.enabled}
+warehouse:
+  #-------------------------------------------------------------------------------------------------
+  # WEB
+  #-------------------------------------------------------------------------------------------------
+  web:
+    threads:
+      io: 4
+      worker: 16
 
-serp.keystore.path: ${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
-serp.keystore.password: LZKH70td5n
-serp.truststore.path: ${serp.home}/cert/truststore.p12
-serp.truststore.password: ${serp.keystore.password}
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 24160
+    user: dev
+    password: dev
+    vhost: /
+    tls:
+      enabled: false
 
-# Symmetric key used to encrypt and decrypt secrets
-serp.config.secret: change_me_to_secret_key
+  messaging:
+    concurrency: 4
+    prefetch: 25
 
-####################################################################################################
-# CONFIGURATION
-####################################################################################################
-
-#---------------------------------------------------------------------------------------------------
-# CLOUD
-#---------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------
+# APPLICATION NAME
+#-------------------------------------------------------------------------------------------------
 spring:
-  cloud:
-    consul:
-      enabled: ${serp.consul.enabled}
-      config:
-        enabled: ${serp.consul.config.enabled}
-        watch:
-          # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
-          #  Do not enable.
-          enabled: false
-encrypt:
-  key: ${serp.config.secret}
+  application:
+    name: warehouse
 
-# RabbitMQ Connection
-serp.rabbitmq.host: localhost
-serp.rabbitmq.port: 24130
-serp.rabbitmq.user: serp
-serp.rabbitmq.password: serp
+#-------------------------------------------------------------------------------------------------
+# PORTS
+#-------------------------------------------------------------------------------------------------
+server:
+  port: 24900
 
-# RabbitMQ Encryption
-serp.rabbitmq.encryption.enabled: false
-serp.rabbitmq.encryption.key.seed: change_me_please
-serp.rabbitmq.encryption.key.salt: change_me_please
-serp.rabbitmq.encryption.key.size: 256
-serp.rabbitmq.encryption.mac.size: 112
-serp.rabbitmq.encryption.nonce.size: 96
-serp.rabbitmq.encryption.nonce.header: encryption-nonce
-# Connection Pool
-serp.db.connections.min: 1
-serp.db.connections.max: 10
+grpc:
+  server:
+    port: 24901
+
+
+#-------------------------------------------------------------------------------------------------
+# SEP_BASE
+#-------------------------------------------------------------------------------------------------
+serp:
+  show-env: true
+
+  messaging:
+    error-queue:
+      enabled: true

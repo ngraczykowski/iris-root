@@ -1,6 +1,12 @@
 # Spring `dev` profile configuration
 serp:
   show-env: true
+  rabbitmq:
+    host: localhost
+    port: 24160
+    user: dev
+    password: dev
+    vhost: /
 
 logging:
   level:
@@ -30,15 +36,6 @@ server:
     include-stacktrace: on_trace_param
 
 spring:
-  jpa:
-    show-sql: true
-
-    hibernate:
-      ddl-auto: validate
-
-    properties:
-      hibernate.generate_statistics: true
-
   jackson:
     serialization:
       indent-output: true

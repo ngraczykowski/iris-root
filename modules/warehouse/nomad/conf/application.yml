@@ -11,6 +11,6 @@ spring:
       {{ if $index }},{{ end -}}
       {{ $rabbit.Address }}:{{ $rabbit.Port -}}
 {{- end }}
-# NOTE(ahaczewski): Intentionally left empty.
+  # NOTE(ahaczewski): Intentionally left empty.
   host:
   virtual-host: /{{ env "NOMAD_NAMESPACE" }}

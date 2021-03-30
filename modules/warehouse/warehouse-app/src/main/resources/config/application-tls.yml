@@ -1,37 +1,15 @@
-serp:
-  tls:
-    enabled: true
-  server:
-    protocol: https
-  consul:
-    traefik:
-      passTLSCert: false
-      entryPoints: gateway,unprotectedGateway
-
-server:
-  ssl:
-    enabled: true
-    key-store: ${serp.keystore.path}
-    key-store-password: ${serp.keystore.password}
-    key-alias: serp ${spring.application.name}
-    trust-store: ${serp.truststore.path}
-    trust-store-password: ${serp.truststore.password}
-
-grpc:
-  server:
-    security:
-      enabled: true
-      clientAuth: REQUIRE
-      certificateChain: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-chain.pem
-      privateKey: file:${serp.home}/cert/${spring.application.name}/${spring.application.name}-key-pkcs8.pem
-      trustCertCollection: file:${serp.home}/cert/chain.pem
-
-  client:
-    GLOBAL:
-      enableKeepAlive: true
-      negotiationType: TLS
-      security:
-        clientAuthEnabled: true
-        certificateChain: file:${serp.home}/cert/user/user-chain.pem
-        privateKey: file:${serp.home}/cert/user/user-key-pkcs8.pem
-        trustCertCollection: file:${serp.home}/cert/chain.pem
+spring:
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    ssl:
+      enabled: ${warehouse.rabbitmq.tls.enabled:true}
+      trust-store: file:${warehouse.tls.trust-store}
+      trust-store-password: ${warehouse.tls.trust-store-password}
+      trust-store-type: ${warehouse.tls.trust-store-type}
+      key-store: file:${warehouse.tls.key-store}
+      key-store-password: ${warehouse.tls.key-store-password}
+      key-store-type: ${warehouse.tls.key-store-type}
+      validate-server-certificate: ${warehouse.tls.validate-server-certificate}
+      verify-hostname: ${warehouse.tls.verify-hostname}

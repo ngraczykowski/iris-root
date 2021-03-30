@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 class WebApplicationConfiguration {
 
   @Bean
-  @ConfigurationProperties(prefix = "simulator.web")
+  @ConfigurationProperties(prefix = "warehouse.web")
   WebApplicationProperties webApplicationProperties() {
     return new WebApplicationProperties();
   }
