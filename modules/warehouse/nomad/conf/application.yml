@@ -14,3 +14,12 @@ spring:
   # NOTE(ahaczewski): Intentionally left empty.
   host:
   virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+keycloak:
+  adapter:
+    auth-server-url: https://auth.silenteight.com
+    realm: sens-webapp
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external
