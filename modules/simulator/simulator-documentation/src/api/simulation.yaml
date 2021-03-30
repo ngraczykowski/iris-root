@@ -165,7 +165,7 @@ components:
       required:
         - id
         - name
-        - datasetId
+        - datasetNames
         - policyId
       properties:
         id:
@@ -174,9 +174,12 @@ components:
           type: string
         description:
           type: string
-        datasetId:
-          type: string
-          description: Dataset UUID
+        datasetNames:
+          type: array
+          items:
+            properties:
+              datasetName:
+                type: string
         policyId:
           type: string
           description: Policy UUID
@@ -184,7 +187,7 @@ components:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'New simulation'
         description: 'Simulation description'
-        datasetId: 'b4708d8c-4832-6fde-8dc0-d17b4708d8ca'
+        datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
 
     SimulationListQuery:
@@ -194,9 +197,12 @@ components:
           type: string
         name:
           type: string
-        datasetId:
-          type: string
-          description: Dataset UUID
+        datasetNames:
+          type: array
+          items:
+            properties:
+              datasetName:
+                type: string
         policyId:
           type: string
           description: Policy UUID
@@ -213,7 +219,7 @@ components:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'Simulation name'
         description: 'Simulation description'
-        datasetId: 'b4708d8c-4832-6fde-8dc0-d17b4708d8ca'
+        datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
         status: 'PENDING'
         createdAt: '2004-02-12T15:19:21Z'
@@ -227,9 +233,12 @@ components:
           type: string
         name:
           type: string
-        datasetId:
-          type: string
-          description: Dataset UUID
+        datasetNames:
+          type: array
+          items:
+            properties:
+              datasetName:
+                type: string
         policyId:
           type: string
           description: Policy UUID
@@ -250,7 +259,7 @@ components:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'Simulation name'
         description: 'Simulation description'
-        datasetId: 'b4708d8c-4832-6fde-8dc0-d17b4708d8ca'
+        datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
         status: 'PENDING'
         createdAt: '2004-02-12T15:09:21Z'
