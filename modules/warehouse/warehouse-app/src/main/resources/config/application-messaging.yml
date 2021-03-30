@@ -5,7 +5,7 @@ spring:
     port: ${warehouse.rabbitmq.port}
     username: ${warehouse.rabbitmq.user}
     password: ${warehouse.rabbitmq.password}
-    virtual-host: ${warehouse.rabbitmq.vhost}
+    virtual-host: ${warehouse.rabbitmq.virtual-host}
     listener:
       type: simple
       direct:
