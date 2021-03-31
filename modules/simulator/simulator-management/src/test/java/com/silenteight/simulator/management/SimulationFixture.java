@@ -35,7 +35,7 @@ class SimulationFixture {
           .name(NAME)
           .description(DESCRIPTION)
           .modelName(MODEL_NAME)
-          .datasetName(DATASET_NAME)
+          .datasetNames(DATASET_NAMES)
           .createdBy(USERNAME)
           .build();
 

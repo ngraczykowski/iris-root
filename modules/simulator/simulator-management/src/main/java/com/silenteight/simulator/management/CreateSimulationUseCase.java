@@ -27,9 +27,15 @@ public class CreateSimulationUseCase {
 
     SolvingModel model = modelService.getModel(request.getModelName());
     Analysis analysis = analysisService.createAnalysis(model);
-    analysisService.addDatasetToAnalysis(analysis.getName(), request.getDatasetName());
+    request
+        .getDatasetNames()
+        .forEach(datasetName -> addDatasetToAnalysis(analysis.getName(), datasetName));
     simulationService.createSimulation(request, analysis.getName());
 
     request.postAudit(auditingLogger::log);
+  }
+
+  private void addDatasetToAnalysis(String analysisName, String datasetName) {
+    analysisService.addDatasetToAnalysis(analysisName, datasetName);
   }
 }

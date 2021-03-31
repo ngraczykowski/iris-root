@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.List;
 import java.util.UUID;
 
 @Value
@@ -19,7 +20,7 @@ public class CreateSimulationRequestDto {
   String description;
 
   @NonNull
-  String datasetName;
+  List<String> datasetNames;
 
   @NonNull
   String modelName;
