@@ -17,7 +17,10 @@
         <constraints nullable="false"/>
       </column>
       <column name="description" type="TEXT"/>
-      <column name="policy_id" type="${type.uuid}">
+      <column name="model_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis_name" type="VARCHAR(64)">
         <constraints nullable="false"/>
       </column>
       <column name="state" type="VARCHAR(24)">
@@ -40,17 +43,17 @@
       <column name="simulation_id"/>
     </createIndex>
 
-    <createTable tableName="simulator_simulation_dataset_id">
+    <createTable tableName="simulator_simulation_dataset_name">
       <column name="simulation_id" type="${type.uuid}">
         <constraints nullable="false"/>
       </column>
-      <column name="dataset_id" type="${type.uuid}">
+      <column name="dataset_name" type="VARCHAR(64)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <addForeignKeyConstraint
-        baseTableName="simulator_simulation_dataset_id"
+        baseTableName="simulator_simulation_dataset_name"
         baseColumnNames="simulation_id"
         constraintName="fk_simulator_simulation_simulation_id"
         referencedTableName="simulator_simulation"
@@ -59,18 +62,14 @@
         onUpdate="CASCADE"
         deferrable="true"
         initiallyDeferred="true"/>
-
   </changeSet>
 
-  <changeSet id="simulator-1.0.0-2" author="anowicki">
+  <changeSet id="simulator-1.0.0-2" author="mmastylo">
     <createTable tableName="simulator_dataset">
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="dataset_id" type="${type.uuid}">
-        <constraints nullable="false"/>
-      </column>
-      <column name="resource_name" type="VARCHAR(256)">
+      <column name="dataset_name" type="VARCHAR(64)">
         <constraints nullable="false"/>
       </column>
       <column name="created_by" type="VARCHAR(64)">
@@ -79,64 +78,19 @@
       <column name="created_at" type="TIMESTAMP">
         <constraints nullable="false"/>
       </column>
+      <column name="initial_alert_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
       <column name="name" type="TEXT">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="TEXT"/>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
       <column name="generation_date_from" type="TIMESTAMP"/>
       <column name="generation_date_to" type="TIMESTAMP"/>
-      <column name="initial_alert_count" type="BIGINT">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
-
-    <createIndex
-        tableName="simulator_dataset"
-        indexName="ix_simulator_dataset_dataset_id"
-        unique="true">
-      <column name="dataset_id"/>
-    </createIndex>
-  </changeSet>
-
-  <changeSet id="simulator-1.0.0-3" author="mmastylo">
-    <addColumn tableName="simulator_simulation">
-      <column name="analysis_name" type="VARCHAR(256)">
-        <constraints nullable="false"/>
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="simulator-1.0.0-4" author="mmastylo">
-    <renameColumn
-        tableName="simulator_simulation"
-        oldColumnName="policy_id"
-        newColumnName="model_id"/>
-  </changeSet>
-
-  <changeSet id="simulator-1.0.0-5" author="mmastylo">
-    <renameColumn
-        tableName="simulator_simulation"
-        oldColumnName="model_id"
-        newColumnName="model_name"/>
-
-    <modifyDataType
-        tableName="simulator_simulation"
-        columnName="model_name"
-        newDataType="VARCHAR(256)"/>
-
-    <renameTable
-        oldTableName="simulator_simulation_dataset_id"
-        newTableName="simulator_simulation_dataset_name"/>
-
-    <renameColumn
-        tableName="simulator_simulation_dataset_name"
-        oldColumnName="dataset_id"
-        newColumnName="dataset_name"/>
-
-    <modifyDataType
-        tableName="simulator_simulation_dataset_name"
-        columnName="dataset_name"
-        newDataType="VARCHAR(256)"/>
   </changeSet>
 
 </databaseChangeLog>

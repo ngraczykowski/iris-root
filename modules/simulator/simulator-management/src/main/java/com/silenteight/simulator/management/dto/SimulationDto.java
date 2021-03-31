@@ -6,13 +6,14 @@ import lombok.Value;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Value
 @Builder
 public class SimulationDto {
 
   @NonNull
-  java.util.UUID id;
+  UUID id;
 
   @NonNull
   String name;

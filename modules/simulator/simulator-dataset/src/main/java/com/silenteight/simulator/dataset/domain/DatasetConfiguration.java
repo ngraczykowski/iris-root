@@ -14,4 +14,9 @@ class DatasetConfiguration {
   DatasetMetadataService datasetMetadataService(DatasetEntityRepository repository) {
     return new DatasetMetadataService(repository);
   }
+
+  @Bean
+  DatasetQuery datasetQuery(DatasetEntityRepository repository) {
+    return new DatasetQuery(repository);
+  }
 }

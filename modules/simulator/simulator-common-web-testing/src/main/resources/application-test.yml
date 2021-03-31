@@ -4,8 +4,10 @@ sep.auth:
   permissionMethodsMappings:
     DATASET_MANAGEMENT:
       - "CREATE_DATASET"
+      - "LIST_DATASETS"
     SIMULATION_MANAGEMENT:
       - "CREATE_SIMULATION"
+      - "LIST_DATASETS"
       - "LIST_SIMULATIONS"
 
   rolePermissionsMappings:

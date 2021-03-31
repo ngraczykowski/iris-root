@@ -25,7 +25,7 @@ class CreateDatasetRestController {
   @NonNull
   private final CreateDatasetUseCase useCase;
 
-  @PostMapping("/v1/dataset")
+  @PostMapping("/v1/datasets")
   @PreAuthorize("isAuthorized('CREATE_DATASET')")
   public ResponseEntity<Void> create(
       @RequestBody @Valid CreateDatasetRequest request, Authentication authentication) {

@@ -41,9 +41,9 @@ class CreateDatasetUseCaseTest {
     verify(datasetMetadataService).createMetadata(CREATE_DATASET_REQUEST, dataset, USERNAME);
   }
 
-  private static Dataset makeDataset(String resourceName, long alertCount) {
+  private static Dataset makeDataset(String datasetName, long alertCount) {
     return Dataset.newBuilder()
-        .setName(resourceName)
+        .setName(datasetName)
         .setAlertCount(alertCount)
         .build();
   }
