@@ -447,6 +447,36 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.1.0-13" author="tbozek">
+    <createTable tableName="ae_match_category_value">
+      <column name="match_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_id" type="BIGINT" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey
+        tableName="ae_match_category_value"
+        columnNames="match_id,category_id"
+        constraintName="uq_ae_match_category_value_match_id_category_id"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_category_value"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_category_value_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_category_value"
+        baseColumnNames="category_id"
+        constraintName="fk_ae_match_category_value_category_id"
+        referencedTableName="ae_category"
+        referencedColumnNames="category_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-14" author="tbozek">
 
     <createTable tableName="ae_agent_config">
 
