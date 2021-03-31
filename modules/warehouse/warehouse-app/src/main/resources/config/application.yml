@@ -2,13 +2,12 @@
 # SERVER
 #---------------------------------------------------------------------------------------------------
 
-# Embedded server configuration
 server:
   forward-headers-strategy: native
   undertow:
     threads:
-      io: ${warehouse.web.threads.io}
-      worker: ${warehouse.web.threads.worker}
+      io: 4
+      worker: 16
 
   servlet:
     context-path: /rest/${spring.application.name}
@@ -21,7 +20,6 @@ server:
 # MANAGEMENT
 #---------------------------------------------------------------------------------------------------
 
-# Management HTTP server
 management:
   endpoint:
     health.show-details: always
@@ -39,18 +37,18 @@ management:
     tags:
       application: ${spring.application.name}
 
-#-------------------------------------------------------------------------------------------------
-# SPRING INTEGRATION
-#-------------------------------------------------------------------------------------------------
-integration:
-  start-delay-seconds: 15
-  poll-period-millis: 1000
-
+warehouse:
+  messaging:
+    concurrency: 4
+    prefetch: 25
 
 spring:
   #-------------------------------------------------------------------------------------------------
   # GENERAL
   #-------------------------------------------------------------------------------------------------
+  application:
+    name: warehouse
+
   aop:
     auto: false
 
@@ -70,6 +68,34 @@ spring:
 
   main:
     banner-mode: 'off'
+
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    ssl:
+      enabled: false
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${warehouse.messaging.concurrency}
+        prefetch: ${warehouse.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${warehouse.messaging.concurrency}
+        prefetch: ${warehouse.messaging.prefetch}
+
+#---------------------------------------------------------------------------------------------------
+# SEP BASE CONFIGURATION
+#---------------------------------------------------------------------------------------------------
+
+serp:
+  show-env: true
+
+  messaging:
+    error-queue:
+      enabled: true
+
 
 #-------------------------------------------------------------------------------------------------
 # REST API AUTH

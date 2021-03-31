@@ -1,5 +1,18 @@
 # Silent Eight Warehouse
 
+## Configuration management
+
+There are multiple yml configuration files in the `warehouse-app/src/main/resources/config`:
+
+- `application.yml` contains all application-related configuration
+- `application-local.yml` contains all deployment-related configuration required to run
+the application locally. This file can be considered to be a base for creating *.yml configuration
+for any other deployments, e.g. nomad deployment stored in `nomad/conf/application.yml`  
+- `application-dev.yml` contains configuration convenient for development 
+such as logging, pretty-print, etc.
+- `application-swagger.yml` enables and configures swagger
+- `application-tls.yml` enables and configures tls
+
 ## Development Setup
 
 Before you can run Warehouse, you have to have a few infrastructural services running:

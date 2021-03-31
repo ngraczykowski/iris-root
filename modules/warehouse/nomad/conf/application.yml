@@ -1,11 +1,7 @@
 server:
   port: {{ env "NOMAD_PORT_http" }}
 
-grpc:
-  server:
-    port: {{ env "NOMAD_PORT_grpc" }}
-
-warehouse:
+spring:
   rabbitmq:
     addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
       {{ if $index }},{{ end -}}

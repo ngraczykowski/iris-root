@@ -25,8 +25,6 @@ variable "http_tags" {
 locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
-  database_node_destination = "eu2"
-  database_volume = "/srv/sep-cluster/postgres/${var.namespace}-warehouse"
 }
 
 job "warehouse" {
@@ -41,59 +39,6 @@ job "warehouse" {
   update {
     auto_revert = true
   }
-
-  group "database" {
-    count = 1
-
-    constraint {
-      attribute = "${node.unique.name}"
-      value     = "${local.database_node_destination}"
-    }
-
-    network {
-      port "tcp" {
-        to = 5432
-      }
-    }
-
-    task "postgres" {
-      driver = "docker"
-
-      template {
-        data        = "{{ key \"database/${var.namespace}-warehouse/secrets\" }}"
-        destination = "secrets/warehouse.env"
-        env         = true
-      }
-
-      config {
-        image   = "postgres:10"
-        ports   = [
-          "tcp"
-        ]
-        volumes = [
-          "${local.database_volume}:/var/lib/postgresql/data"
-        ]
-      }
-
-      service {
-        name = "${var.namespace}-warehouse-db"
-
-        port = "tcp"
-
-        check {
-          type     = "tcp"
-          interval = "30s"
-          timeout  = "5s"
-        }
-      }
-
-      resources {
-        cpu    = 750
-        memory = 1024
-      }
-    }
-  }
-
 
   group "warehouse" {
     count = 1
@@ -134,40 +79,6 @@ job "warehouse" {
       }
     }
 
-    service {
-      name = "${var.namespace}-warehouse"
-      port = "grpc"
-      tags = [
-        "grpc",
-        # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
-        "gRPC.port=${NOMAD_PORT_grpc}",
-      ]
-
-      check_restart {
-        limit = 3
-        grace = "90s"
-        ignore_warnings = false
-      }
-
-      check {
-        name = "gRPC Port Alive Check"
-        type = "tcp"
-        interval = "10s"
-        timeout = "2s"
-      }
-    }
-
-    # Dummy registration of a service required for Spring Consul Discovery.
-    # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
-    service {
-      name = "${var.namespace}-grpc-warehouse"
-      port = "grpc"
-      tags = [
-        "grpc",
-        "gRPC.port=${NOMAD_PORT_grpc}",
-      ]
-    }
-
     task "warehouse" {
       driver = "raw_exec"
 
@@ -204,7 +115,7 @@ job "warehouse" {
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
           "-jar",
           "local/warehouse-app.jar",
-          "--spring.profiles.active=linux,warehouse,rabbitmq,messaging",
+          "--spring.profiles.active=linux,swagger",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }
