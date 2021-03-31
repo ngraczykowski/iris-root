@@ -4,15 +4,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
+
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Value
 @Builder
 public class CreateDatasetRequest {
-
-  @NonNull
-  UUID datasetId;
 
   @NonNull
   String name;

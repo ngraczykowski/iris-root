@@ -29,7 +29,7 @@ class CreateDatasetRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its201_whenDatasetCreated() {
     doNothing().when(createDatasetUseCase).activate(any(), any());
-    post("/v1/dataset", CREATE_DATASET_REQUEST)
+    post("/v1/datasets", CREATE_DATASET_REQUEST)
         .statusCode(CREATED.value());
   }
 
@@ -38,7 +38,7 @@ class CreateDatasetRestControllerTest extends BaseRestControllerTest {
       username = USERNAME,
       authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
   void its403_whenNotPermittedRoleForCreating() {
-    post("/v1/dataset", CREATE_DATASET_REQUEST)
+    post("/v1/datasets", CREATE_DATASET_REQUEST)
         .contentType(JSON)
         .statusCode(FORBIDDEN.value());
   }

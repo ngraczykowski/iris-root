@@ -1,4 +1,4 @@
-package com.silenteight.simulator.dataset.create;
+package com.silenteight.simulator.dataset.dto;
 
 import lombok.Builder;
 import lombok.NonNull;

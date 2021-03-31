@@ -4,12 +4,15 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
+import com.silenteight.simulator.dataset.dto.DatasetDto;
+import com.silenteight.simulator.dataset.dto.RangeQueryDto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Slf4j
@@ -35,13 +38,8 @@ class DatasetEntity extends BaseEntity implements Serializable {
 
   @NonNull
   @ToString.Include
-  @Column(name = "dataset_id", updatable = false, nullable = false)
-  private UUID datasetId;
-
-  @NonNull
-  @ToString.Include
-  @Column(name = "resource_name", nullable = false)
-  private String resourceName;
+  @Column(name = "dataset_name", nullable = false)
+  private String datasetName;
 
   @NonNull
   @ToString.Include
@@ -61,6 +59,12 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @Column(name = "description")
   private String description;
 
+  @Builder.Default
+  @ToString.Include
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private DatasetState state = CURRENT;
+
   @ToString.Include
   @Column(name = "generation_date_from")
   private OffsetDateTime generationDateFrom;
@@ -68,4 +72,30 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @ToString.Include
   @Column(name = "generation_date_to")
   private OffsetDateTime generationDateTo;
+
+  static DatasetDto toDto(DatasetEntity datasetEntity) {
+    return DatasetDto.builder()
+        .datasetName(datasetEntity.getDatasetName())
+        .name(datasetEntity.getName())
+        .description(datasetEntity.getDescription())
+        .state(datasetEntity.getState())
+        .alertsCount(datasetEntity.getInitialAlertCount())
+        .query(toQuery(datasetEntity))
+        .createdAt(datasetEntity.getCreatedAt())
+        .createdBy(datasetEntity.getCreatedBy())
+        .build();
+  }
+
+  private static AlertSelectionCriteriaDto toQuery(DatasetEntity datasetEntity) {
+    return AlertSelectionCriteriaDto.builder()
+        .alertGenerationDate(toRange(datasetEntity))
+        .build();
+  }
+
+  private static RangeQueryDto toRange(DatasetEntity datasetEntity) {
+    return RangeQueryDto.builder()
+        .from(datasetEntity.getGenerationDateFrom())
+        .to(datasetEntity.getGenerationDateTo())
+        .build();
+  }
 }
