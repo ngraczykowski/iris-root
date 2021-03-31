@@ -19,9 +19,9 @@ public class AlertFacade {
   private final AlertRepository alertRepository;
 
   @Transactional
-  public AlertComposite prepareAndSaveAlert(byte[] payload) {
+  public AlertComposite prepareAndSaveAlert(long bulkItemId, byte[] payload) {
     var alert = alertMapper.map(payload);
-    var alertEntity = getAlertEntity(alert);
+    var alertEntity = prepareAlertEntity(bulkItemId, alert);
 
     alertRepository.save(alertEntity);
 
@@ -43,13 +43,11 @@ public class AlertFacade {
     }).collect(Collectors.toList());
   }
 
-  private AlertEntity getAlertEntity(Alert alert) {
+  private AlertEntity prepareAlertEntity(long bulkItemId, Alert alert) {
     var alertRawData = alertRawMapper.map(alert);
+    var caseId = alertRawData.getCasesWithAlertURL().getId();
 
-    try {
-      return alertMapper.map(alertRawData);
-    } catch (JsonProcessingException e) {
-      throw new AlertPreProcessingFailedException(alertRawData.getCaseId());
-    }
+    var payload = alertMapper.map(alertRawData);
+    return new AlertEntity(caseId, bulkItemId, payload);
   }
 }

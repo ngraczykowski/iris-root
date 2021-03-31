@@ -79,6 +79,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: bulk_item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bulk_item_id
+                    references: hsbc_bridge_bulk_item(id)
+              - column:
                   name: name
                   type: varchar(256)
               - column:

@@ -39,17 +39,15 @@ class BulkProcessor {
 
     var bulk = bulkQueryRepository.findById(bulkId);
     var alertMatchIds = bulk.getItems().stream()
-        .map(BulkItem::getPayload)
         .map(this::saveAndCollectAlertAndMatches)
         .collect(Collectors.toList());
-
 
     log.info("Bulk processing finished, bulkId={}", bulkId);
     eventPublisher.publishEvent(new BulkPreProcessingFinishedEvent(alertMatchIds));
   }
 
-  private AlertMatchIdComposite saveAndCollectAlertAndMatches(byte[] payload) {
-    var alertComposite = alertFacade.prepareAndSaveAlert(payload);
+  private AlertMatchIdComposite saveAndCollectAlertAndMatches(BulkItem bulkItem) {
+    var alertComposite = alertFacade.prepareAndSaveAlert(bulkItem.getId(), bulkItem.getPayload());
     var matchIds = matchFacade.prepareAndSaveMatches(alertComposite);
 
     return AlertMatchIdComposite.builder()

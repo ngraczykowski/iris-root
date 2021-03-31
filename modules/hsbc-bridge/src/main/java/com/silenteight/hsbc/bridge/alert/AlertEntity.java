@@ -26,10 +26,13 @@ class AlertEntity extends BaseEntity {
 
   private String name;
 
+  private long bulkItemId;
+
   private byte[] payload;
 
-  public AlertEntity(int caseId, byte[] payload) {
+  public AlertEntity(int caseId, long bulkItemId, byte[] payload) {
     this.caseId = caseId;
+    this.bulkItemId = bulkItemId;
     this.payload = payload;
   }
 }

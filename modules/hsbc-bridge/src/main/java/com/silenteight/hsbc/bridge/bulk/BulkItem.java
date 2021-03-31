@@ -24,6 +24,7 @@ class BulkItem extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Setter
   @Enumerated(EnumType.STRING)
   private BulkStatus status = BulkStatus.STORED;
 

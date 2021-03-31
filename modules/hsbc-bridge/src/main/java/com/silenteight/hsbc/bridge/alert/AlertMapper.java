@@ -26,12 +26,11 @@ class AlertMapper {
     }
   }
 
-  AlertEntity map(AlertRawData alertRawData) throws JsonProcessingException {
-    var caseId = alertRawData.getCasesWithAlertURL().getId();
-
-    return new AlertEntity(
-        caseId,
-        objectMapper.writeValueAsBytes(alertRawData)
-    );
+  byte[] map(AlertRawData alertRawData) {
+    try {
+      return objectMapper.writeValueAsBytes(alertRawData);
+    } catch (JsonProcessingException e) {
+      throw new AlertPreProcessingFailedException(alertRawData.getCaseId());
+    }
   }
 }
