@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.*;
+import com.silenteight.adjudication.engine.common.page.PageConverter;
 import com.silenteight.adjudication.engine.dataset.dataset.DatasetFacade;
 
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +36,7 @@ class DatasetService {
   }
 
   ListDatasetsResponse listDataset(@Valid ListDatasetsRequest request) {
-    var page = Integer.parseInt(request.getPageToken());
+    var page = PageConverter.fromPageToken(request.getPageToken());
     return datasetFacade.listDataset(PageRequest.of(page, request.getPageSize()));
   }
 
