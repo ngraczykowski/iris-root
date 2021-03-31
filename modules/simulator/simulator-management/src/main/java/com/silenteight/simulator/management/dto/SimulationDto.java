@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Value
 @Builder
@@ -17,7 +18,7 @@ public class SimulationDto {
   String name;
 
   @NonNull
-  String datasetName;
+  List<String> datasetNames;
 
   @NonNull
   String modelName;

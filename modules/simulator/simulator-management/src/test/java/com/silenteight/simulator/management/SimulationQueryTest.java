@@ -42,7 +42,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDto.getStatus()).isEqualTo(PENDING);
     assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(simulationDto.getCreatedAt()).isNotNull();
-    assertThat(simulationDto.getDatasetName()).isEqualTo(DATASET_NAME);
+    assertThat(simulationDto.getDatasetNames()).isEqualTo(DATASET_NAMES);
     assertThat(simulationDto.getModelName()).isEqualTo(MODEL_NAME);
   }
 
