@@ -16,12 +16,8 @@ class AnalysisFixtures {
   private static final String[] CATEGORIES = {
       "source_system", "country", "customer_type", "hit_category" };
 
-  static AnalysisFacade inMemoryAnalysisFacade() {
-    var analysisRepository = new InMemoryAnalysisRepository();
-
-    var createAnalysisUseCase = new CreateAnalysisUseCase(analysisRepository);
-
-    return new AnalysisFacade(createAnalysisUseCase);
+  static CreateAnalysisUseCase inMemoryAnalysisUseCase() {
+    return new CreateAnalysisUseCase(new InMemoryAnalysisRepository());
   }
 
   static Analysis randomAnalysis() {

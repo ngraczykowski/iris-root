@@ -1,0 +1,7 @@
+{
+  "datasets": [
+    "datasets/1",
+    "datasets/2"
+  ],
+  "analysis": "analysis/1"
+}

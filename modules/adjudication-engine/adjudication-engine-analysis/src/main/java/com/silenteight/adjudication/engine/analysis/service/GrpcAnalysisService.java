@@ -23,4 +23,18 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
     responseObserver.onNext(analysisService.createAnalysis(request));
     responseObserver.onCompleted();
   }
+
+  @Override
+  public void addDataset(
+      AddDatasetRequest request, StreamObserver<AnalysisDataset> responseObserver) {
+    responseObserver.onNext(analysisService.addDataset(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void batchAddDatasets(
+      BatchAddDatasetsRequest request, StreamObserver<BatchAddDatasetsResponse> responseObserver) {
+    responseObserver.onNext(analysisService.batchAddDatasets(request));
+    responseObserver.onCompleted();
+  }
 }

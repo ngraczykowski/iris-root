@@ -11,13 +11,13 @@ class CreateAnalysisUseCaseTest {
 
   private static final String[] IGNORED_PROTO_FIELDS =
       { "createTime_", "name_", "state_", "memoizedHashCode" };
-  private AnalysisFacade facade = AnalysisFixtures.inMemoryAnalysisFacade();
+  private CreateAnalysisUseCase useCase = AnalysisFixtures.inMemoryAnalysisUseCase();
 
   @Test
   void createAnalysis() {
     var analysis = AnalysisFixtures.randomAnalysis();
 
-    var created = facade.createAnalysis(analysis);
+    var created = useCase.createAnalysis(analysis);
 
     assertAnalysisEqualsIgnoringStateAndName(analysis, created);
   }
@@ -26,7 +26,7 @@ class CreateAnalysisUseCaseTest {
   void createAnalysisWithoutLabelsCategoriesAndFeatures() {
     var analysis = AnalysisFixtures.randomAnalysisWithoutLabelsCategoriesAndFeatures();
 
-    var created = facade.createAnalysis(analysis);
+    var created = useCase.createAnalysis(analysis);
 
     assertAnalysisEqualsIgnoringStateAndName(analysis, created);
   }
@@ -34,7 +34,7 @@ class CreateAnalysisUseCaseTest {
   @Test
   void createMultipleAnalysis() {
     for (var analysis : AnalysisFixtures.randomAnalysisList()) {
-      var created = facade.createAnalysis(analysis);
+      var created = useCase.createAnalysis(analysis);
 
       assertAnalysisEqualsIgnoringStateAndName(analysis, created);
     }

@@ -533,4 +533,10 @@
     <!-- This column is not required since we have ae_config as a separate table -->
     <dropColumn tableName="ae_feature" columnName="agent_config"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-13" author="tkleszcz">
+    <createView
+        viewName="ae_analysis_dataset_query"
+        path="db/changelog/sql/create_ae_analysis_dataset_query.sql"/>
+  </changeSet>
 </databaseChangeLog>
