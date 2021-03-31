@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Dataset
+  description: Dataset for simulation
+  version: 0.1.0
+servers:
+  - url: '{environment}/rest/simulator/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24160
+          - https://localhost:24111
+        default: http://localhost:24160
+
+
+paths:
+  /datasets?state={state}:
+    get:
+      description: Returns a list of datasets
+      parameters:
+        - in: query
+          name: state
+          required: false
+          description: 'Dataset state'
+          schema:
+            $ref: '#/components/schemas/DatasetState'
+      responses:
+        200:
+          description: List of datasets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+
+  /datasets:
+    post:
+      description: Create a new dataset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatasetRequest'
+      responses:
+        201:
+          description: Created
+
+
+components:
+  schemas:
+
+    DatasetState:
+      type: string
+      enum: [ CURRENT, ARCHIVED ]
+
+    Dataset:
+      type: object
+      properties:
+        datasetName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        state:
+          $ref: '#/components/schemas/DatasetState'
+        query:
+          type: object
+          $ref: '#/components/schemas/Query'
+        alertsCount:
+          type: number
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+      example:
+        datasetName: 'datasets/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Dataset name'
+        description: 'Dataset description'
+        query:
+          alertGenerationDate:
+            from: '2004-02-12T15:19:21Z'
+            to: '2005-02-12T15:19:21Z'
+        alertsCount: 75303
+        createdAt: '2004-02-15T15:19:21Z'
+        createdBy: 'UserName2'
+
+
+    CreateDatasetRequest:
+      type: object
+      required:
+        - name
+        - query
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        query:
+          type: object
+          $ref: '#/components/schemas/Query'
+      example:
+        name: 'New dataset'
+        description: 'Dataset description'
+        query:
+          alertGenerationDate:
+            from: '2004-02-12T15:19:21Z'
+            to: '2005-02-12T15:19:21Z'
+
+    Query:
+      type: object
+      properties:
+        alertGenerationDate:
+          type: object
+          $ref: '#components/schemas/RangeQuery'
+      example:
+        alertGenerationDate:
+          from: '2004-02-12T15:19:21Z'
+          to: '2005-02-12T15:19:21Z'
+
+
+    RangeQuery:
+      type: object
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+      example:
+        from: '2004-02-12T15:19:21Z'
+        to: '2005-02-12T15:19:21Z'
+
+
