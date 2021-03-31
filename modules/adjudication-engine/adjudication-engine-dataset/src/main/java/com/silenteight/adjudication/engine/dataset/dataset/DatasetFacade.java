@@ -9,6 +9,8 @@ import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @Service
 public class DatasetFacade {
@@ -16,11 +18,11 @@ public class DatasetFacade {
   @NonNull
   private final CreateDatasetUseCase createDatasetUseCase;
 
-  public Dataset createDataset(NamedAlerts namedAlerts) {
+  public Dataset createDataset(@Valid NamedAlerts namedAlerts) {
     return createDatasetUseCase.createDataset(namedAlerts);
   }
 
-  public Dataset createDataset(FilteredAlerts filteredAlerts) {
+  public Dataset createDataset(@Valid FilteredAlerts filteredAlerts) {
     return createDatasetUseCase.createDataset(filteredAlerts);
   }
 

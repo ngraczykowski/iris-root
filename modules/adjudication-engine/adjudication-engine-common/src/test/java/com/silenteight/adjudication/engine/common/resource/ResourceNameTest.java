@@ -32,7 +32,7 @@ public class ResourceNameTest {
     var resource = ResourceName.getResource(name).replaceName("datasets", "matches", 7);
     assertThat(resource.getId("matches")).isEqualTo(7);
     assertThatThrownBy(() -> resource.getId("datasets"))
-        .hasMessage("No such token");
+        .hasMessage("ResourceName could not find token for name: datasets");
     assertThat(resource.getPath()).isEqualTo("alerts/1/matches/7");
 
   }

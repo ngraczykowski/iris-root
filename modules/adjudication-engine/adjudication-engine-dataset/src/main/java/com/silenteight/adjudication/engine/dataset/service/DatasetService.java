@@ -10,6 +10,8 @@ import com.silenteight.adjudication.engine.dataset.dataset.DatasetFacade;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -28,16 +30,16 @@ class DatasetService {
     }
   }
 
-  Dataset getDataset(GetDatasetRequest request) {
+  Dataset getDataset(@Valid GetDatasetRequest request) {
     return datasetFacade.getDataset(request.getName());
   }
 
-  ListDatasetsResponse listDataset(ListDatasetsRequest request) {
+  ListDatasetsResponse listDataset(@Valid ListDatasetsRequest request) {
     var page = Integer.parseInt(request.getPageToken());
     return datasetFacade.listDataset(PageRequest.of(page, request.getPageSize()));
   }
 
-  ListDatasetAlertsResponse listDatasetAlerts(ListDatasetAlertsRequest request) {
+  ListDatasetAlertsResponse listDatasetAlerts(@Valid ListDatasetAlertsRequest request) {
     var page = Integer.parseInt(request.getPageToken());
     return datasetFacade.listDatasetAlerts(
         PageRequest.of(page, request.getPageSize()), request.getDataset());

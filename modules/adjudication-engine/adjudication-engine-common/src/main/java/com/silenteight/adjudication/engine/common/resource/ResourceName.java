@@ -11,6 +11,7 @@ import com.google.common.base.Splitter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -68,7 +69,8 @@ public class ResourceName {
     if (pathTokens.containsKey(name)) {
       return pathTokens.get(name);
     }
-    throw new RuntimeException("No such token");
+    throw new NoSuchElementException(
+        String.format("ResourceName could not find token for name: %s", name));
   }
 
   public ResourceName copy() {

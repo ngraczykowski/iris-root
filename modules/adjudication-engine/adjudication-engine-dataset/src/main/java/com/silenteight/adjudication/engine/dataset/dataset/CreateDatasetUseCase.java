@@ -47,7 +47,7 @@ class CreateDatasetUseCase {
   }
 
   Dataset createDataset(FilteredAlerts filteredAlerts) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException("This operation is not yet implemented");
   }
 
   Dataset getDataset(String name) {
