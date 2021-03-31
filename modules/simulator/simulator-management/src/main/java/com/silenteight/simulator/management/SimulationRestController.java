@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -43,7 +44,7 @@ class SimulationRestController {
         .name(createSimulationRequestDto.getName())
         .description(createSimulationRequestDto.getDescription())
         .createdBy(authentication.getName())
-        .datasetName(createSimulationRequestDto.getDatasetName())
+        .datasetNames(new ArrayList<>(createSimulationRequestDto.getDatasetNames()))
         .modelName(createSimulationRequestDto.getModelName())
         .build();
 

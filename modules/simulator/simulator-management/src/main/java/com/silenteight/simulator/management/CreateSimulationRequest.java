@@ -7,6 +7,7 @@ import lombok.Value;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.simulator.common.audit.AuditableRequest;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -33,13 +34,13 @@ public class CreateSimulationRequest implements AuditableRequest {
   String createdBy;
 
   @NonNull
-  String datasetName;
+  List<String> datasetNames;
 
   @NonNull
   String modelName;
 
   @Builder.Default
-  UUID correlationId = UUID.randomUUID();
+  UUID correlationId = randomUUID();
 
   @Override
   public void preAudit(Consumer<AuditDataDto> logger) {
