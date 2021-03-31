@@ -5,13 +5,11 @@ import lombok.NonNull;
 
 import com.silenteight.hsbc.bridge.alert.AlertComposite;
 import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent;
-import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
 
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
@@ -32,6 +30,10 @@ public class MatchFacade {
 
     var matchEntity = matchResult.get();
     return toMatchComposite(matchEntity);
+  }
+
+  public List<MatchComposite> getMatchesByAlertId(long alertId) {
+    return toMatchComposites(matchRepository.findMatchEntitiesByAlertId(alertId));
   }
 
   @Transactional
@@ -58,6 +60,16 @@ public class MatchFacade {
         .name(matchEntity.getName())
         .rawData(matchPayloadConverter.convert(matchEntity.getPayload()))
         .build();
+  }
+
+  private List<MatchComposite> toMatchComposites(List<MatchEntity> matchEntities) {
+    return matchEntities.stream()
+        .map(matchEntity -> MatchComposite.builder()
+            .id(matchEntity.getId())
+            .name(matchEntity.getName())
+            .rawData(matchPayloadConverter.convert(matchEntity.getPayload()))
+            .build())
+        .collect(Collectors.toList());
   }
 
   public List<MatchComposite> getMatches(@NonNull List<Long> matchIds) {

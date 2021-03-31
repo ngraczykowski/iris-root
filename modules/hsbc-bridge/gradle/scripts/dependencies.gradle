@@ -20,6 +20,7 @@ ext {
 // Silent Eight
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
+libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
 libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceModelApiVersion]
 
@@ -45,6 +46,7 @@ libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version
 
 // GRPC
 libraries.grpc_spring_boot_starter = [group: 'io.github.lognet', name: 'grpc-spring-boot-starter', version: '4.4.5']
+libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.15.6']
 
 // Others
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
@@ -86,9 +88,11 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.adjudication_engine_api
   implementation libraries.data_source_api
+  implementation libraries.data_source_comments_api
   implementation libraries.data_source_categories_api
   implementation libraries.silenteight_governance_model_api
   implementation libraries.grpc_spring_boot_starter
+  implementation libraries.protobuf_util
   testImplementation libraries.junit_jupiter_api
   testImplementation libraries.mockito_core
   testImplementation libraries.mockito_junit_jupiter

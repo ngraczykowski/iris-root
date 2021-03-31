@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 interface MatchRepository extends Repository<MatchEntity, Long> {
@@ -13,8 +14,10 @@ interface MatchRepository extends Repository<MatchEntity, Long> {
 
   Optional<MatchEntity> findById(long id);
 
+  List<MatchEntity> findMatchEntitiesByAlertId(long id);
+
   @Modifying
   @Query("update MatchEntity m set m.name=:name where m.id=:id")
-  void updateNameById(@Param("id")long id, @Param("name")String name);
+  void updateNameById(@Param("id") long id, @Param("name") String name);
 
 }

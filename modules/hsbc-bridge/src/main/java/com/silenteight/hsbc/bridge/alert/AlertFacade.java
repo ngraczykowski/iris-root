@@ -4,12 +4,11 @@ import lombok.Builder;
 
 import com.silenteight.hsbc.bridge.rest.model.input.Alert;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import static java.util.stream.Collectors.toList;
 
 @Builder
 public class AlertFacade {
@@ -32,15 +31,23 @@ public class AlertFacade {
         .build();
   }
 
-  public List<AlertInfo> getAlerts(Collection<Long> alertIds) {
-    return alertRepository.findByIdIn(alertIds).stream().map(a -> {
+  public List<AlertInfo> getAlertsByIds(Collection<Long> alertIds) {
+    return mapToAlertInfo(alertRepository.findByIdIn(alertIds));
+  }
+
+  public List<AlertInfo> getAlertByName(String name) {
+    return mapToAlertInfo(alertRepository.findByName(name).stream().collect(toList()));
+  }
+
+  private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
+    return alertEntities.stream().map(a -> {
       AlertRawData alertRawData = alertRawMapper.map(a.getPayload());
 
       return new AlertInfo(
           a.getId(),
           a.getCaseId(),
           alertRawData.getCasesWithAlertURL());
-    }).collect(Collectors.toList());
+    }).collect(toList());
   }
 
   private AlertEntity prepareAlertEntity(long bulkItemId, Alert alert) {
