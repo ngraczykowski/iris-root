@@ -29,7 +29,6 @@ public class WarehouseApplication {
 
   public static void main(String[] args) {
     new SerpApplicationTemplate("warehouse", args, WarehouseApplication.class)
-        .profiles("rabbitmq", "messaging")
         .contextCallback(new SerpApplicationContextCallback())
         .runAndExit();
   }
