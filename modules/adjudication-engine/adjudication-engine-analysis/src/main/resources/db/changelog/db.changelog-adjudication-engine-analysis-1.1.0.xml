@@ -445,4 +445,62 @@
       <column name="analysis_id"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.1.0-13" author="tbozek">
+
+    <createTable tableName="ae_agent_config">
+
+      <column name="agent_config_id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="name" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint tableName="ae_agent_config"
+                         columnNames="name"
+                         constraintName="uq_ae_agent_config_name"/>
+
+    <createTable tableName="ae_match_feature_value">
+      <column name="feature_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="agent_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_match_feature_value"
+        columnNames="feature_id, match_id,agent_config_id"
+        constraintName="pk_ae_match_feature_value"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_feature_value"
+        baseColumnNames="feature_id"
+        constraintName="fk_ae_match_feature_value_feature_id"
+        referencedTableName="ae_feature"
+        referencedColumnNames="feature_id"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_feature_value"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_feature_value_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_feature_value"
+        baseColumnNames="agent_config_id"
+        constraintName="fk_ae_match_feature_value_agent_config_id"
+        referencedTableName="ae_agent_config"
+        referencedColumnNames="agent_config_id"/>
+    <!-- This column is not required since we have ae_config as a separate table -->
+    <dropColumn tableName="ae_feature" columnName="agent_config"/>
+  </changeSet>
 </databaseChangeLog>
