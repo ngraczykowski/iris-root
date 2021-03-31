@@ -20,6 +20,7 @@ class SimulationFixture {
   static final String DESCRIPTION = "Simulation description";
   static final String MODEL_NAME = "solving-models/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   static final String DATASET_NAME = "datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
+  static final List<String> DATASET_NAMES = List.of(DATASET_NAME);
   static final String USERNAME = "USERNAME";
   static final SimulationState STATUS = PENDING;
   static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
@@ -43,7 +44,7 @@ class SimulationFixture {
           .id(SIMULATION_ID)
           .name(NAME)
           .modelName(MODEL_NAME)
-          .datasetName(DATASET_NAME)
+          .datasetNames(DATASET_NAMES)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
           .status(STATUS)

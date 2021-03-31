@@ -10,7 +10,6 @@ import com.silenteight.simulator.management.dto.SimulationState;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
@@ -80,20 +79,11 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   private OffsetDateTime finishedAt;
 
   static SimulationDto toDto(SimulationEntity simulationEntity) {
-    List<String> datasetNames = new ArrayList<>(simulationEntity.getDatasetNames());
-    if (datasetNames.size() != 1) {
-      String msg = String.format(
-          "Each simulation needs to have exactly one datasetName assigned. Found = %s",
-          datasetNames);
-      throw new IllegalStateException(msg);
-    }
-    String datasetName = datasetNames.get(0);
-
     return SimulationDto.builder()
         .id(simulationEntity.getSimulationId())
         .name(simulationEntity.getName())
         .status(simulationEntity.getState())
-        .datasetName(datasetName)
+        .datasetNames(new ArrayList<>(simulationEntity.getDatasetNames()))
         .modelName(simulationEntity.getModelName())
         .createdAt(simulationEntity.getCreatedAt())
         .createdBy(simulationEntity.getCreatedBy())
