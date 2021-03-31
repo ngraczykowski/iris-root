@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.alert.event;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -9,5 +10,6 @@ import java.util.Map;
 @Getter
 public class UpdateAlertWithNameEvent {
 
-  private final Map<String, String> alertIdToName;
+  @NonNull
+  private final Map<Long, String> alertIdToName;
 }

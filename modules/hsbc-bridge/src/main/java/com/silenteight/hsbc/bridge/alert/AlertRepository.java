@@ -1,12 +1,10 @@
 package com.silenteight.hsbc.bridge.alert;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 interface AlertRepository extends Repository<AlertEntity, Long> {
 
@@ -14,7 +12,7 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
 
   List<AlertEntity> findByIdIn(Collection<Long> alertIds);
 
-  @Modifying
-  @Query("update AlertEntity a set a.name=:name where a.id=:id")
-  void updateNameById(@Param("id") long id, @Param("name") String name);
+  Optional<AlertEntity> findByName(String name);
+
+  Optional<AlertEntity> findById(Long id);
 }

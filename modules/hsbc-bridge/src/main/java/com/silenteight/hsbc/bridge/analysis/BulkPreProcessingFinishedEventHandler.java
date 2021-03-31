@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.bulk.event.BulkPreProcessingFinishedEvent;
 import com.silenteight.hsbc.bridge.model.ModelUseCase;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,11 +18,11 @@ class BulkPreProcessingFinishedEventHandler {
   private final ModelUseCase modelUseCase;
 
   @EventListener
+  @Async
   public void onBulkPreProcessingFinishedEvent(
       BulkPreProcessingFinishedEvent bulkPreProcessingFinishedEvent) {
     log.info("Received bulkPreProcessingFinishedEvent");
 
-    //FIXME mmrowka - this should not block the bulk save
     String analysisId = adjudicationFacade.createAnalysis(
         bulkPreProcessingFinishedEvent.getAlertMatchIdComposites(), modelUseCase);
 

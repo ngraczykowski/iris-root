@@ -24,6 +24,7 @@ class AlertEntity extends BaseEntity {
 
   private int caseId;
 
+  @Setter
   private String name;
 
   private long bulkItemId;

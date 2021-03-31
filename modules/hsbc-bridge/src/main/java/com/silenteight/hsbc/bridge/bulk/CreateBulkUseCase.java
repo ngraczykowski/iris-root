@@ -20,7 +20,6 @@ public class CreateBulkUseCase {
   private final BulkProvider bulkProvider;
   private final ApplicationEventPublisher eventPublisher;
 
-
   public BulkAcceptedResponse createBulk(HsbcRecommendationRequest request) {
     Bulk bulk = bulkProvider.getBulk(request);
 

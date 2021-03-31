@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkItemStatusEvent;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ class BulkItemStatusUpdater {
   private final BulkItemRepository bulkItemRepository;
 
   @EventListener
+  @Async
   @Transactional
   public void onUpdateBulkStatusEvent(UpdateBulkItemStatusEvent event) {
     var findResult = bulkItemRepository.findById(event.getBulkItemId());

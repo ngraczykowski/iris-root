@@ -7,10 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -32,5 +29,10 @@ public abstract class BaseEntity {
 
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
+  }
+
+  @PrePersist
+  void prePersist() {
+    updatedAt = OffsetDateTime.now();
   }
 }

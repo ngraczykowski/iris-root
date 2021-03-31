@@ -90,10 +90,13 @@ class AlertService {
         new UpdateAlertWithNameEvent(batchCreateAlertsResponse
             .getAlertsList()
             .stream()
-            .collect(Collectors.toMap(Alert::getAlertId, Alert::getName)));
+            .collect(Collectors.toMap(getAlertId(), Alert::getName)));
 
     eventPublisher.publishEvent(updateAlertWithNameEvent);
+  }
 
+  private Function<Alert, Long> getAlertId() {
+    return alert -> Long.parseLong(alert.getAlertId());
   }
 
   private void publishUpdateMatchWithNameEvent(List<Match> matches) {

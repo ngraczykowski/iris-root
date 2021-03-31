@@ -13,6 +13,8 @@ import com.silenteight.hsbc.bridge.match.MatchFacade;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +29,8 @@ class BulkProcessor {
   private final MatchFacade matchFacade;
 
   @EventListener
+  @Transactional
+  @Async
   public void onBulkStoredEvent(BulkStoredEvent bulkStoredEvent) {
     var bulkId = bulkStoredEvent.getBulkId();
     log.info("Received bulkStoredEvent, bulkId: {}", bulkId);
