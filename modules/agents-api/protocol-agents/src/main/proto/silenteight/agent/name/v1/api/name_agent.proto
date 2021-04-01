@@ -84,7 +84,8 @@ message CompareFreeTextRequest {
 }
 
 message CompareFreeTextResponse {
-  string result = 1;
+  string solution = 1;
+  string context = 2;
 }
 
 message GetNameAgentDescriptorRequest {
