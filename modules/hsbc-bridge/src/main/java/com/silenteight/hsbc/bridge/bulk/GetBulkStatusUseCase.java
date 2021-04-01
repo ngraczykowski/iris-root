@@ -4,11 +4,17 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkAlertItem;
+import com.silenteight.hsbc.bridge.rest.model.output.BulkProcessingStatusResponse;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkStatus;
 import com.silenteight.hsbc.bridge.rest.model.output.BulkStatusResponse;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
 
 @RequiredArgsConstructor
 public class GetBulkStatusUseCase {
@@ -22,6 +28,15 @@ public class GetBulkStatusUseCase {
     response.setBulkId(id);
     response.setBulkStatus(BulkStatus.fromValue(result.getStatus().name()));
     response.setRequestedAlerts(getRequestedAlerts(result.getItems()));
+
+    return response;
+  }
+
+  public BulkProcessingStatusResponse isProcessing() {
+    var result = bulkQueryRepository.existsByStatusIn(List.of(STORED, PROCESSING));
+
+    var response = new BulkProcessingStatusResponse();
+    response.setIsAdjudicationEngineProcessing(result);
 
     return response;
   }

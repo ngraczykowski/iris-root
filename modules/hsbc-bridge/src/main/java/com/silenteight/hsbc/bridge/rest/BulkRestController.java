@@ -47,6 +47,11 @@ public class BulkRestController {
     return mapper.writeValueAsBytes(result);
   }
 
+  @GetMapping("/processingStatus")
+  public ResponseEntity<BulkProcessingStatusResponse> checkProcessingStatus() {
+    return ResponseEntity.ok(getBulkStatusUseCase.isProcessing());
+  }
+
   @GetMapping("/{id}/status")
   public ResponseEntity<BulkStatusResponse> getBulkStatus(@PathVariable UUID id) {
     return ResponseEntity.ok(getBulkStatusUseCase.getStatus(id));

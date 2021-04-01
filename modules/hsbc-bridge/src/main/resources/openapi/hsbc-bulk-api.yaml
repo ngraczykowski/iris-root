@@ -45,6 +45,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/BulkStatusResponse'
 
+  /async/bulk/v1/processingStatus:
+    get:
+      summary: Status of bulk processing for all bulks
+      responses:
+        200:
+          description: Boolean value if AE processing or not.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/BulkProcessingStatusResponse"
+
   /async/bulk/v1/{bulkId}/result:
     get:
       summary: Get results from bulk job.
@@ -2024,7 +2037,6 @@ components:
           items:
             $ref: "#/components/schemas/Alert"
 
-
     BulkStatus:
       type: string
       enum:
@@ -2074,6 +2086,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BulkAlertItem'
+
+    BulkProcessingStatusResponse:
+      type: object
+      properties:
+        isAdjudicationEngineProcessing:
+          type: boolean
 
     BulkCancelResponse:
       type: object
