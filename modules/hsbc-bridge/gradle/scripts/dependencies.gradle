@@ -12,6 +12,7 @@ ext {
   // Dependency Versions
   //***********************************
   springVersion = "2.4.2"
+  springRabbitVersion = "2.3.6"
   junitJupiterVersion = "5.6.0"
   mockitoVersion = "3.8.0"
   spockVersion = "2.0-M5-groovy-3.0"
@@ -51,6 +52,11 @@ libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-ut
 // Others
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 
+// Messaging
+libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
+libraries.spring_amqp_starter = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: springVersion]
+libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
+
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.7']
 libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
@@ -60,6 +66,9 @@ libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupit
 libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
 libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
 libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion]
+libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit', version: springVersion]
+libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springVersion]
+
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -84,8 +93,11 @@ dependencies {
   implementation libraries.spring_data_jpa
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_amqp_starter
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_amqp
+  implementation libraries.spring_rabbit
   implementation libraries.adjudication_engine_api
   implementation libraries.data_source_api
   implementation libraries.data_source_comments_api
@@ -93,6 +105,8 @@ dependencies {
   implementation libraries.silenteight_governance_model_api
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.protobuf_util
+
+  testAnnotationProcessor libraries.lombok
   testImplementation libraries.junit_jupiter_api
   testImplementation libraries.mockito_core
   testImplementation libraries.mockito_junit_jupiter
@@ -101,6 +115,7 @@ dependencies {
   testRuntimeOnly libraries.junit_jupiter_engine
   testCompile libraries.groovy_all
   testCompile libraries.spock_core
+  testCompile libraries.lombok
 }
 
 repositories {

@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.adjudication;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
-import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
 
@@ -75,4 +74,10 @@ class AdjudicationConfiguration {
     return new AdjudicationApiMock();
   }
 
+  @Profile("!dev")
+  @Bean
+  AdjudicationRecommendationListener adjudicationRecommendationListener(
+      ApplicationEventPublisher eventPublisher) {
+    return new AdjudicationRecommendationListener(eventPublisher);
+  }
 }

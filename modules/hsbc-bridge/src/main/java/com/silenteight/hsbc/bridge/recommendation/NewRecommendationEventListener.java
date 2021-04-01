@@ -20,7 +20,7 @@ class NewRecommendationEventListener {
 
   @EventListener
   @Transactional
-  void onNewRecommendationEvent(NewRecommendationEvent event){
+  public void onNewRecommendationEvent(NewRecommendationEvent event) {
     var recommendation = event.getRecommendation();
     var alert = recommendation.getAlert();
 

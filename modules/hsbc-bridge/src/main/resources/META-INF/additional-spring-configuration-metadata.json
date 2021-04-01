@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "silenteight.bridge.recommendations.queue",
+      "type": "java.lang.String",
+      "description": "Bridge recommendation queue name."
+    }
+  ]
+}

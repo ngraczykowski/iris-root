@@ -1,13 +1,11 @@
 package com.silenteight.hsbc.bridge.recommendation.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 
-@AllArgsConstructor
-@Getter
+@Value
 public class NewRecommendationEvent {
 
-  private final RecommendationDto recommendation;
+  RecommendationDto recommendation;
 }
