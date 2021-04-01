@@ -15,4 +15,6 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   Optional<AlertEntity> findByName(String name);
 
   Optional<AlertEntity> findById(Long id);
+
+  Optional<AlertEntity> findByBulkItemId(long bulkItemId);
 }

@@ -50,6 +50,12 @@ public class AlertFacade {
     }).collect(toList());
   }
 
+  public String getAlertNameByBulkId(long bulkItemId) {
+    return alertRepository.findByBulkItemId(bulkItemId)
+        .orElseThrow(() -> new AlertNotFoundException(bulkItemId))
+        .getName();
+  }
+
   private AlertEntity prepareAlertEntity(long bulkItemId, Alert alert) {
     var alertRawData = alertRawMapper.map(alert);
     var caseId = alertRawData.getCasesWithAlertURL().getId();
