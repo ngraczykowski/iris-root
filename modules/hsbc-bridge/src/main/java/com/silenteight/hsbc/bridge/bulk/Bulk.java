@@ -25,6 +25,7 @@ public class Bulk extends BaseEntity {
   @Id
   private UUID id;
 
+  @Setter
   @Enumerated(value = EnumType.STRING)
   private BulkStatus status = BulkStatus.STORED;
 
