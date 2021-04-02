@@ -1,0 +1,69 @@
+openapi: 3.0.3
+info:
+  title: Categories
+  description: List of all categories
+  version: 0.1.0
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24160
+
+paths:
+  /categories:
+    get:
+      description: Returns a list of all categories
+      responses:
+        200:
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoriesListDto'
+components:
+  schemas:
+    CategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+
+    CategoriesListDto:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDto'
+      example:
+        {
+          "categories": [
+            {
+              "name": "categories/apType",
+              "type": "ENUMERATED",
+              "values": [
+                  "COMPANY",
+                  "INDIVIDUAL"
+              ]
+            },
+            {
+              "name": "categories/isDeny",
+              "type": "ENUMERATED",
+              "values": [
+                  "YES",
+                  "NO"
+              ]
+            }
+          ]
+        }
