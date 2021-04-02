@@ -5,42 +5,42 @@ ext {
   // Silent Eight
   //***********************************
   adjudicationEngineApiVersion = "0.1.0-SNAPSHOT"
-  silenteightDataSourceApiVersion = "0.1.0-SNAPSHOT"
   governanceModelApiVersion = "1.3.0-SNAPSHOT"
+  silenteightDataSourceApiVersion = "0.1.0-SNAPSHOT"
 
   //***********************************
   // Dependency Versions
   //***********************************
-  springVersion = "2.4.2"
-  springRabbitVersion = "2.3.6"
   junitJupiterVersion = "5.6.0"
   mockitoVersion = "3.8.0"
   spockVersion = "2.0-M5-groovy-3.0"
+  springRabbitVersion = "2.3.6"
+  springVersion = "2.4.2"
 }
 
 // Silent Eight
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
-libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
+libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
 libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceModelApiVersion]
 
 // Spring
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springVersion]
-libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springVersion]
-libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springVersion]
-libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springVersion]
+libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
+libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
 
 // Database
-libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.18']
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '4.3.1']
+libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.18']
 
 // APIs
-libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30']
 libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final']
+libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30']
 
 // OpenAPI & Swagger
 libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version: '3.0.0']
@@ -59,15 +59,15 @@ libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabb
 
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.7']
-libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
-libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockVersion]
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
 libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
 libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
 libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
-libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion]
+libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
+libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockVersion]
 libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit', version: springVersion]
 libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springVersion]
+libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion]
 
 
 configurations.all {
@@ -81,41 +81,41 @@ configurations.all {
 }
 
 dependencies {
-  compileOnly libraries.lombok
   annotationProcessor libraries.lombok
   annotationProcessor libraries.spring_boot_configuration_processor
   compile libraries.javax_validation_api
   compile libraries.springfox_oas
-  implementation libraries.slf4j_api
-  implementation libraries.postgresql
-  implementation libraries.liquibase_core
-  implementation libraries.spring_boot
-  implementation libraries.spring_data_jpa
-  implementation libraries.spring_boot_actuator
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_amqp_starter
-  implementation libraries.spring_boot_starter_validation
-  implementation libraries.spring_boot_starter_web
-  implementation libraries.spring_amqp
-  implementation libraries.spring_rabbit
+  compileOnly libraries.lombok
   implementation libraries.adjudication_engine_api
   implementation libraries.data_source_api
-  implementation libraries.data_source_comments_api
   implementation libraries.data_source_categories_api
-  implementation libraries.silenteight_governance_model_api
+  implementation libraries.data_source_comments_api
   implementation libraries.grpc_spring_boot_starter
+  implementation libraries.liquibase_core
+  implementation libraries.postgresql
   implementation libraries.protobuf_util
+  implementation libraries.silenteight_governance_model_api
+  implementation libraries.slf4j_api
+  implementation libraries.spring_amqp
+  implementation libraries.spring_amqp_starter
+  implementation libraries.spring_boot
+  implementation libraries.spring_boot_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_validation
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_data_jpa
+  implementation libraries.spring_rabbit
 
   testAnnotationProcessor libraries.lombok
+  testCompile libraries.groovy_all
+  testCompile libraries.lombok
+  testCompile libraries.spock_core
   testImplementation libraries.junit_jupiter_api
   testImplementation libraries.mockito_core
   testImplementation libraries.mockito_junit_jupiter
   testImplementation libraries.spock_spring
   testImplementation libraries.spring_starter_test
   testRuntimeOnly libraries.junit_jupiter_engine
-  testCompile libraries.groovy_all
-  testCompile libraries.spock_core
-  testCompile libraries.lombok
 }
 
 repositories {
