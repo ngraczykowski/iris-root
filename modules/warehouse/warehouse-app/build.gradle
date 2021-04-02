@@ -20,6 +20,7 @@ configurations {
 
 dependencies {
   implementation project(":warehouse-common")
+  implementation project(":warehouse-indexer")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing

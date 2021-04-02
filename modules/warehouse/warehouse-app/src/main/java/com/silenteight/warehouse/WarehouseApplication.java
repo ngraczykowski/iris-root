@@ -6,6 +6,7 @@ import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
 import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.web.WebModule;
+import com.silenteight.warehouse.indexer.IndexerModule;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,7 +17,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 @ComponentScan(basePackageClasses = {
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
-
+    IndexerModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,
