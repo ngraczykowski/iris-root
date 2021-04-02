@@ -34,7 +34,6 @@ COMMON_SUFFIXES = {
     "asset",
     "association",
     "authorised distributor",
-    "bank",
     "banking",
     "brothers",
     "capital",
@@ -162,7 +161,7 @@ def fix_expression_divided(information: NameInformation) -> NameInformation:
     for joining_index, joining_data in enumerate(data):
         if joining_index and joining_data and joining_data[0] in JOINING_WORDS:
             new_index = [i for i in reversed(range(joining_index)) if data[i]][0]
-            data[new_index] = [*data[new_index], joining_data[0]]
+            data[new_index] = tuple((*data[new_index], joining_data[0]))
             data[joining_index] = joining_data[1:]
 
     # move word after "and" to part with "and"
@@ -178,7 +177,7 @@ def fix_expression_divided(information: NameInformation) -> NameInformation:
                 second_word = None
 
             if second_word:
-                data[joining_index] = [*joining_data, second_word]
+                data[joining_index] = tuple((*joining_data, second_word))
 
     information.base, information.common_suffixes, information.legal = data
     return information

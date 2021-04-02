@@ -42,13 +42,13 @@ KNOWN_LEGAL_ENTITIES = {
     "Erhvervsdrivende fond": (),
     "Forening med begrænset ansvar": ("F.M.B.A.",),
     "Forening": (),
-    "free zone company": ("fzco",),
+    "free zone company": ("fzco", "fzc", "fz-llc", "fz llc", "fz company", "fz co"),
     "free zone establishment": ("fze",),
     "Fylkeskommunalt foretak": ("FKF", ),
     "General Partnership": ("GP",),
     "Genossenschaft": ("gen", ),
     "Gensidigt selskab": ("G/S",),
-    "gesellschaft mit beschrankter haftung": ("gmbh","gesellschaft m.b.h.", "ges.m.b.h.",),
+    "gesellschaft mit beschrankter haftung": ("gmbh", "gesellschaft m.b.h.", "ges.m.b.h.",),
     "government owned enterprise": ("goe",),
     "handelsbolag": ("hb",),
     "helseforetak": ("HF", ),
@@ -127,6 +127,7 @@ KNOWN_LEGAL_ENTITIES = {
     "srltda": (),
     "State Company": ("plc",),
     "State Joint Venture Company": ("plc",),
+    "state owned asset": ("soa", ),
     "state owned enterprise": ("soe", ),
     "státní podnik": ("s.p.",),
     "Tovarystvo z obmezhenoiu vidpovidalnistiu": ("T.O.V.", ),
@@ -152,6 +153,7 @@ def _clean_name(name):
 
 
 def _legal_term_variants(term: str) -> Set[str]:
+    # TODO - it is probably way to complicated
     if "." in term:
         variants = {
             term,
