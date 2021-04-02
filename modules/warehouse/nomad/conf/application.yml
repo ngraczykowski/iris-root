@@ -11,6 +11,15 @@ spring:
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
+warehouse:
+  messaging:
+    integration:
+      alert-indexing-inbound:
+        queue-name: warehouse.index-request
+      alert-indexed-outbound:
+        exchange-name: alert-indexed
+        routing-key: alert.indexed
+
 keycloak:
   adapter:
     auth-server-url: https://auth.silenteight.com

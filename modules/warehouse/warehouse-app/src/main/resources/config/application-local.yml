@@ -24,3 +24,12 @@ keycloak:
     resource: backend
     sslRequired: external
     credentials.secret: change-me
+
+warehouse:
+  messaging:
+    integration:
+      alert-indexing-inbound:
+        queue-name: warehouse.index-request
+      alert-indexed-outbound:
+        exchange-name: alert-indexed
+        routing-key: alert.indexed

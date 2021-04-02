@@ -4,11 +4,11 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  serpProtocolVersion = "0.27.0"
   silenteightAuditBsVersion = "1.2.0"
   silenteightCommonsVersion = "2.0.0"
   silenteightSepAuthVersion = "1.0.0"
   silenteightSepBaseVersion = "1.10.0"
+  silenteightDataApiVersion = "1.0.0-SNAPSHOT"
   silenteightSepUsermanagementApiVersion = "1.4.0"
   silenteightSepUsermanagementKeycloakVersion = "1.3.0"
 }
@@ -22,10 +22,7 @@ libraries.silenteight_sep_auth = [group: "com.silenteight.sep.auth", name: "sep-
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_serp_protocol_agent = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-agent', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-base', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_ns = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-ns', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
+libraries.silenteight_data_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: silenteightDataApiVersion]
 libraries.silenteight_spring_cloud_consul_discovery = [group: 'com.silenteight.spring.cloud.consul.discovery', name: 'silenteight-spring-cloud-consul-discovery', version: '2.4.0']
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 
@@ -75,8 +72,6 @@ libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', nam
 libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
 
 libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
-libraries.spring_cloud_starter_consul = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul']
-libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
 libraries.spring_cloud_test_support = [group: 'org.springframework.cloud', name: 'spring-cloud-test-support']
 
@@ -209,6 +204,7 @@ libraries.rest_assured_spring_mock_mvc = [group: 'io.rest-assured', name: 'sprin
 libraries.spock_core = [group: 'org.spockframework', name: 'spock-core']
 libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring']
 libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers']
+libraries.test_containers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq']
 libraries.test_containers_elasticsearch = [group: 'org.testcontainers', name: 'elasticsearch']
 libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'junit-jupiter']
 libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
