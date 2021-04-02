@@ -208,6 +208,7 @@ sep.auth:
       - "LIST_STEPS"
       - "LIST_STEP_FEATURE_VECTORS"
       - "LIST_AGENTS"
+      - "LIST_CATEGORIES"
     IMPORT_POLICY:
       - "IMPORT_POLICY"
     MANAGE_POLICY:
