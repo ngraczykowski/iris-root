@@ -8,9 +8,9 @@ import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedExce
 import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
-import com.silenteight.hsbc.bridge.rest.model.input.SolvedAlert;
-import com.silenteight.hsbc.bridge.rest.model.input.SolvedAlertStatus;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkSolvedAlertsResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlert;
+import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkSolvedAlertsResponse;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +36,7 @@ public class GetBulkResultsUseCase {
 
     var response = new BulkSolvedAlertsResponse();
     response.setBulkId(bulk.getId());
-    response.setBulkStatus(com.silenteight.hsbc.bridge.rest.model.output.BulkStatus.valueOf(
+    response.setBulkStatus(com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus.valueOf(
         bulk.getStatus().name()));
     response.setAlerts(getSolvedAlerts(bulk.getItems()));
     return response;

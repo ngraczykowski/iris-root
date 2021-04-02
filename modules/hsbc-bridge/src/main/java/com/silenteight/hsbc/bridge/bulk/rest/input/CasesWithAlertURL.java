@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.bulk.rest.input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

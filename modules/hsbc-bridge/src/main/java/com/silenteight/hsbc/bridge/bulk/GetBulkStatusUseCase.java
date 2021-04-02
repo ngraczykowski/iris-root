@@ -3,10 +3,10 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkAlertItem;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkProcessingStatusResponse;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkStatus;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkStatusResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkProcessingStatusResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatusResponse;
 
 import java.util.Collection;
 import java.util.List;

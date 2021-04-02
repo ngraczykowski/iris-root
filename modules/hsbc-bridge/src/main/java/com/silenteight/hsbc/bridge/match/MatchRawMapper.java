@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.match;
 import lombok.NonNull;
 
 import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL;
-import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation;
+import com.silenteight.hsbc.bridge.bulk.rest.input.AlertSystemInformation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

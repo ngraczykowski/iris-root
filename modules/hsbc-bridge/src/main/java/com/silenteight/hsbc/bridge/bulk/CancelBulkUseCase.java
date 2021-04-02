@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkCancelResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkCancelResponse;
 
 import java.util.UUID;
 import javax.transaction.Transactional;
@@ -20,7 +20,7 @@ public class CancelBulkUseCase {
 
     BulkCancelResponse response = new BulkCancelResponse();
     response.bulkId(id);
-    response.bulkStatus(com.silenteight.hsbc.bridge.rest.model.output.BulkStatus.CANCELLED);
+    response.bulkStatus(com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus.CANCELLED);
     return response;
   }
 }

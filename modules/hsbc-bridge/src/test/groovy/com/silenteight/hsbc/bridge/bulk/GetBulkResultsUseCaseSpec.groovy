@@ -4,7 +4,7 @@ import com.silenteight.hsbc.bridge.alert.AlertFacade
 import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade
-import com.silenteight.hsbc.bridge.rest.model.input.SolvedAlertStatus
+import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus
 
 import spock.lang.Specification
 
@@ -26,7 +26,7 @@ class GetBulkResultsUseCaseSpec extends Specification {
     then:
     with(result) {
       bulkId == bulkId
-      bulkStatus == com.silenteight.hsbc.bridge.rest.model.output.BulkStatus.COMPLETED
+      bulkStatus == com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus.COMPLETED
       alerts.size() == 1
       with(alerts.first()) {
         id == fixtures.bulkItem.alertExternalId

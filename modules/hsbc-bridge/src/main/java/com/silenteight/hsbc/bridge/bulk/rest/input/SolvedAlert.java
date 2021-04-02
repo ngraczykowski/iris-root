@@ -1,9 +1,13 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.bulk.rest.input;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
 
 /**
@@ -11,9 +15,9 @@ import javax.validation.Valid;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
+@JsonInclude(Include.NON_NULL)
+public class SolvedAlert {
 
-
-public class SolvedAlert   {
   @JsonProperty("id")
   private Integer id = null;
 
@@ -30,11 +34,11 @@ public class SolvedAlert   {
 
   /**
    * Get id
+   *
    * @return id
    **/
   @Schema(description = "")
-  
-    public Integer getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -49,12 +53,12 @@ public class SolvedAlert   {
 
   /**
    * Get recommendation
+   *
    * @return recommendation
    **/
   @Schema(description = "")
-  
-    @Valid
-    public SolvedAlertStatus getRecommendation() {
+  @Valid
+  public SolvedAlertStatus getRecommendation() {
     return recommendation;
   }
 
@@ -69,11 +73,11 @@ public class SolvedAlert   {
 
   /**
    * Get comment
+   *
    * @return comment
    **/
   @Schema(description = "")
-  
-    public String getComment() {
+  public String getComment() {
     return comment;
   }
 
@@ -105,7 +109,7 @@ public class SolvedAlert   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SolvedAlert {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    recommendation: ").append(toIndentedString(recommendation)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
@@ -114,8 +118,8 @@ public class SolvedAlert   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first
+   * line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {

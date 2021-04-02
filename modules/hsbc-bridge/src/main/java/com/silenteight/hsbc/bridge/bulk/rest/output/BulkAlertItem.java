@@ -1,7 +1,9 @@
-package com.silenteight.hsbc.bridge.rest.model.output;
+package com.silenteight.hsbc.bridge.bulk.rest.output;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +15,7 @@ import javax.validation.Valid;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
-
+@JsonInclude(Include.NON_NULL)
 public class BulkAlertItem {
 
   @JsonProperty("id")

@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-package com.silenteight.hsbc.bridge.rest.model.output;
+package com.silenteight.hsbc.bridge.bulk.rest.output;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;

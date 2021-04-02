@@ -3,10 +3,10 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
-import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkAcceptedResponse;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkAlertItem;
-import com.silenteight.hsbc.bridge.rest.model.output.BulkStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAcceptedResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
+import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus;
 
 import org.springframework.context.ApplicationEventPublisher;
 

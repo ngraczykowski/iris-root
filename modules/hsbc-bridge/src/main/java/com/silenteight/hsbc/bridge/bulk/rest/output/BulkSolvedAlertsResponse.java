@@ -1,10 +1,12 @@
-package com.silenteight.hsbc.bridge.rest.model.output;
+package com.silenteight.hsbc.bridge.bulk.rest.output;
 
-import com.silenteight.hsbc.bridge.rest.model.input.SolvedAlert;
+import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlert;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +14,13 @@ import java.util.UUID;
 
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * BulkSolvedAlertsResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
-
-
+@JsonInclude(Include.NON_NULL)
 public class BulkSolvedAlertsResponse   {
   @JsonProperty("bulkId")
   private UUID bulkId = null;

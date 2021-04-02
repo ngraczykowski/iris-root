@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.bulk.rest.input;
 
 import java.util.Objects;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.bulk.rest.input;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.rest.model.input.Alert;
+import com.silenteight.hsbc.bridge.bulk.rest.input.Alert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

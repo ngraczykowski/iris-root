@@ -1,8 +1,8 @@
 package com.silenteight.hsbc.bridge.alert
 
 import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
-import com.silenteight.hsbc.bridge.rest.model.input.Alert
-import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation
+import com.silenteight.hsbc.bridge.bulk.rest.input.Alert
+import com.silenteight.hsbc.bridge.bulk.rest.input.AlertSystemInformation
 
 import spock.lang.Specification
 

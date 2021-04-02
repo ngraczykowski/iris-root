@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.bulk.rest.input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,7 +10,7 @@ import java.util.Objects;
 @javax.annotation.Generated(
     value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
     date = "2021-03-05T14:11:51.641Z[GMT]")
-public class CountryCtrpScreeningEntities {
+public class CountryCtrpScreeningIndividuals {
 
   private int caseId;
   private BigDecimal recordId = null;
@@ -117,10 +117,10 @@ public class CountryCtrpScreeningEntities {
   }
 
   /**
-   * This list one of three match types&amp;#58; Trading, Registration or Operation.
+   * This list one of three match types&amp;#58; Nationality or Residency
    **/
 
-  @Schema(description = "This list one of three match types&#58; Trading, Registration or Operation.")
+  @Schema(description = "This list one of three match types&#58; Nationality or Residency")
   @JsonProperty("matchType")
   public String getMatchType() {
     return matchType;
@@ -132,10 +132,10 @@ public class CountryCtrpScreeningEntities {
 
   /**
    * This is the specific type of match that has ben identified, it is a sub-type of PRB List Type.
-   * Currently for Entities this will always be ESSC.
+   * Currently for Individuals this will always be ISSC.
    **/
 
-  @Schema(description = "This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Entities this will always be ESSC.")
+  @Schema(description = "This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Individuals this will always be ISSC.")
   @JsonProperty("owsWatchlistName")
   public String getOwsWatchlistName() {
     return owsWatchlistName;
@@ -268,23 +268,24 @@ public class CountryCtrpScreeningEntities {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CountryCtrpScreeningEntities countryCtrpScreeningEntities = (CountryCtrpScreeningEntities) o;
-    return Objects.equals(caseId, countryCtrpScreeningEntities.caseId) &&
-        Objects.equals(recordId, countryCtrpScreeningEntities.recordId) &&
-        Objects.equals(inputStream, countryCtrpScreeningEntities.inputStream) &&
-        Objects.equals(countryCode, countryCtrpScreeningEntities.countryCode) &&
-        Objects.equals(typeOfMatch, countryCtrpScreeningEntities.typeOfMatch) &&
-        Objects.equals(countryName, countryCtrpScreeningEntities.countryName) &&
-        Objects.equals(matchType, countryCtrpScreeningEntities.matchType) &&
-        Objects.equals(owsWatchlistName, countryCtrpScreeningEntities.owsWatchlistName) &&
-        Objects.equals(prbListType, countryCtrpScreeningEntities.prbListType) &&
-        Objects.equals(ctrpValue, countryCtrpScreeningEntities.ctrpValue) &&
-        Objects.equals(ctrpLevel, countryCtrpScreeningEntities.ctrpLevel) &&
-        Objects.equals(ctrpCommonality, countryCtrpScreeningEntities.ctrpCommonality) &&
-        Objects.equals(ctrpSource, countryCtrpScreeningEntities.ctrpSource) &&
-        Objects.equals(ctrpNameType, countryCtrpScreeningEntities.ctrpNameType) &&
-        Objects.equals(ctrpRuleNarrative, countryCtrpScreeningEntities.ctrpRuleNarrative) &&
-        Objects.equals(alertKeyFragment, countryCtrpScreeningEntities.alertKeyFragment);
+    CountryCtrpScreeningIndividuals countryCtrpScreeningIndividuals =
+        (CountryCtrpScreeningIndividuals) o;
+    return Objects.equals(caseId, countryCtrpScreeningIndividuals.caseId) &&
+        Objects.equals(recordId, countryCtrpScreeningIndividuals.recordId) &&
+        Objects.equals(inputStream, countryCtrpScreeningIndividuals.inputStream) &&
+        Objects.equals(countryCode, countryCtrpScreeningIndividuals.countryCode) &&
+        Objects.equals(typeOfMatch, countryCtrpScreeningIndividuals.typeOfMatch) &&
+        Objects.equals(countryName, countryCtrpScreeningIndividuals.countryName) &&
+        Objects.equals(matchType, countryCtrpScreeningIndividuals.matchType) &&
+        Objects.equals(owsWatchlistName, countryCtrpScreeningIndividuals.owsWatchlistName) &&
+        Objects.equals(prbListType, countryCtrpScreeningIndividuals.prbListType) &&
+        Objects.equals(ctrpValue, countryCtrpScreeningIndividuals.ctrpValue) &&
+        Objects.equals(ctrpLevel, countryCtrpScreeningIndividuals.ctrpLevel) &&
+        Objects.equals(ctrpCommonality, countryCtrpScreeningIndividuals.ctrpCommonality) &&
+        Objects.equals(ctrpSource, countryCtrpScreeningIndividuals.ctrpSource) &&
+        Objects.equals(ctrpNameType, countryCtrpScreeningIndividuals.ctrpNameType) &&
+        Objects.equals(ctrpRuleNarrative, countryCtrpScreeningIndividuals.ctrpRuleNarrative) &&
+        Objects.equals(alertKeyFragment, countryCtrpScreeningIndividuals.alertKeyFragment);
   }
 
   @Override
@@ -298,7 +299,7 @@ public class CountryCtrpScreeningEntities {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CountryCtrpScreeningEntities {\n");
+    sb.append("class CountryCtrpScreeningIndividuals {\n");
 
     sb.append("    caseId: ").append(toIndentedString(caseId)).append("\n");
     sb.append("    recordId: ").append(toIndentedString(recordId)).append("\n");

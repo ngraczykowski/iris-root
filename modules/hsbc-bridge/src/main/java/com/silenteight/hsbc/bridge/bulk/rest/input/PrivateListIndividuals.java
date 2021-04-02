@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.rest.model.input;
+package com.silenteight.hsbc.bridge.bulk.rest.input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,7 @@ import java.util.Objects;
 @javax.annotation.Generated(
     value = "io.swagger.codegen.v3.generators.java.JavaResteasyServerCodegen",
     date = "2021-03-05T14:11:51.641Z[GMT]")
-public class WorldCheckIndividuals {
+public class PrivateListIndividuals {
 
   private int caseId;
   private BigDecimal recordId = null;
@@ -42,7 +42,7 @@ public class WorldCheckIndividuals {
   private String occupation = null;
   private String address = null;
   private String city = null;
-  private String state = null;
+  private String placeOfBirth = null;
   private String postalCode = null;
   private String addressCountry = null;
   private String residencyCountry = null;
@@ -60,28 +60,33 @@ public class WorldCheckIndividuals {
   private String dataConfidenceComment = null;
   private String inactiveFlag = null;
   private String inactiveSinceDate = null;
-  private String pepClassification = null;
-  private String category = null;
-  private String externalSources = null;
-  private String linkedTo = null;
-  private String companies = null;
-  private String dateOfBirthOriginal = null;
-  private String yearOfBirthApproximated = null;
-  private String placeOfBirthOriginal = null;
-  private String furtherInformation = null;
-  private String countriesOriginal = null;
-  private String socialSecurityNumber = null;
-  private String passportCountry = null;
-  private String subCategoryDescription = null;
-  private String updateCategory = null;
-  private String nativeAliasLanguageName = null;
-  private String nativeAliasLanguageCountry = null;
-  private String cachedExternalSources = null;
+  private String pEPClassification = null;
   private String addedDate = null;
   private String lastUpdatedDate = null;
-  private String edqOwsWatchlistName = null;
-  private String dobs = null;
-  private String idNumbers = null;
+  private String edqAddressType = null;
+  private String edqCurrentAddress = null;
+  private String edqTelephoneNumber = null;
+  private String edqCellNumberBusiness = null;
+  private String edqCellNumberPersonal = null;
+  private String edqTaxNumber = null;
+  private String edqDrivingLicence = null;
+  private String edqEmailAddress = null;
+  private String edqNiNumber = null;
+  private String edqScionRef = null;
+  private String edqListCustomerType = null;
+  private String edqSuffix = null;
+  private String edqRole = null;
+  private String edqListCategory = null;
+  private String edqFurtherInfo = null;
+  private String edqSsn = null;
+  private String edqCustomerId = null;
+  private String edqListName = null;
+  private String edqWatchListType = null;
+  private String middleName1Derived = null;
+  private String middleName2Derived = null;
+  private String middleName1Original = null;
+  private String middleName2Original = null;
+  private String currentAddress = null;
   private String recordType = null;
   private String dummy = null;
 
@@ -171,10 +176,10 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * List the origin where the World-Check record was derived e.g. OFAC
+   * List the origin where the Private List record was derived e.g. OFAC
    **/
 
-  @Schema(description = "List the origin where the World-Check record was derived e.g. OFAC")
+  @Schema(description = "List the origin where the Private List record was derived e.g. OFAC")
   @JsonProperty("listRecordOrigin")
   public String getListRecordOrigin() {
     return listRecordOrigin;
@@ -185,10 +190,10 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * Unique Identifier assigned to the World-Check record
+   * Unique Identifier assigned to the Private List record
    **/
 
-  @Schema(description = "Unique Identifier assigned to the World-Check record")
+  @Schema(description = "Unique Identifier assigned to the Private List record")
   @JsonProperty("listRecordId")
   public String getListRecordId() {
     return listRecordId;
@@ -199,10 +204,10 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * ID for the sub records within a World-Check record
+   * ID for the sub records within a Private List record
    **/
 
-  @Schema(description = "ID for the sub records within a World-Check record")
+  @Schema(description = "ID for the sub records within a Private List record")
   @JsonProperty("listRecordSubId")
   public String getListRecordSubId() {
     return listRecordSubId;
@@ -521,17 +526,17 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * Watchlist Entry&#x27;s state (if known)
+   * Watchlist Entry&#x27;s Place Of Birth (if known)
    **/
 
-  @Schema(description = "Watchlist Entry's state (if known)")
-  @JsonProperty("state")
-  public String getState() {
-    return state;
+  @Schema(description = "Watchlist Entry's Place Of Birth (if known)")
+  @JsonProperty("placeOfBirth")
+  public String getPlaceOfBirth() {
+    return placeOfBirth;
   }
 
-  public void setState(String state) {
-    this.state = state;
+  public void setPlaceOfBirth(String placeOfBirth) {
+    this.placeOfBirth = placeOfBirth;
   }
 
   /**
@@ -690,10 +695,10 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * World-Check assigned risk score
+   * Private List assigned risk score
    **/
 
-  @Schema(description = "World-Check assigned risk score")
+  @Schema(description = "Private List assigned risk score")
   @JsonProperty("riskScore")
   public BigDecimal getRiskScore() {
     return riskScore;
@@ -704,10 +709,10 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * World-Check assigned PEP risk score
+   * Private List assigned PEP risk score
    **/
 
-  @Schema(description = "World-Check assigned PEP risk score")
+  @Schema(description = "Private List assigned PEP risk score")
   @JsonProperty("pepRiskScore")
   public BigDecimal getPepRiskScore() {
     return pepRiskScore;
@@ -746,10 +751,10 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * Denotes if the record is considered inactive on World-Check
+   * Denotes if the record is considered inactive in the Private List
    **/
 
-  @Schema(description = "Denotes if the record is considered inactive on World-Check")
+  @Schema(description = "Denotes if the record is considered inactive in the Private List")
   @JsonProperty("inactiveFlag")
   public String getInactiveFlag() {
     return inactiveFlag;
@@ -778,237 +783,13 @@ public class WorldCheckIndividuals {
    **/
 
   @Schema(description = "Type of PEP, for example&#58; Local Counsellor")
-  @JsonProperty("pepClassification")
-  public String getPepClassification() {
-    return pepClassification;
+  @JsonProperty("pEPClassification")
+  public String getPEPClassification() {
+    return pEPClassification;
   }
 
-  public void setPepClassification(String pepClassification) {
-    this.pepClassification = pepClassification;
-  }
-
-  /**
-   * Category of PEP, for example&amp;#58; Local Government
-   **/
-
-  @Schema(description = "Category of PEP, for example&#58; Local Government")
-  @JsonProperty("category")
-  public String getCategory() {
-    return category;
-  }
-
-  public void setCategory(String category) {
-    this.category = category;
-  }
-
-  /**
-   * Records any external sources used to collate information about the Watchlist Entry
-   **/
-
-  @Schema(description = "Records any external sources used to collate information about the Watchlist Entry")
-  @JsonProperty("externalSources")
-  public String getExternalSources() {
-    return externalSources;
-  }
-
-  public void setExternalSources(String externalSources) {
-    this.externalSources = externalSources;
-  }
-
-  /**
-   * Associated parties ID
-   **/
-
-  @Schema(description = "Associated parties ID")
-  @JsonProperty("linkedTo")
-  public String getLinkedTo() {
-    return linkedTo;
-  }
-
-  public void setLinkedTo(String linkedTo) {
-    this.linkedTo = linkedTo;
-  }
-
-  /**
-   * Companies associated with the Watchlist Entry (if known)
-   **/
-
-  @Schema(description = "Companies associated with the Watchlist Entry (if known)")
-  @JsonProperty("companies")
-  public String getCompanies() {
-    return companies;
-  }
-
-  public void setCompanies(String companies) {
-    this.companies = companies;
-  }
-
-  /**
-   * The date of birth as originally provided
-   **/
-
-  @Schema(description = "The date of birth as originally provided")
-  @JsonProperty("dateOfBirthOriginal")
-  public String getDateOfBirthOriginal() {
-    return dateOfBirthOriginal;
-  }
-
-  public void setDateOfBirthOriginal(String dateOfBirthOriginal) {
-    this.dateOfBirthOriginal = dateOfBirthOriginal;
-  }
-
-  /**
-   * Year of birth approximation
-   **/
-
-  @Schema(description = "Year of birth approximation")
-  @JsonProperty("yearOfBirthApproximated")
-  public String getYearOfBirthApproximated() {
-    return yearOfBirthApproximated;
-  }
-
-  public void setYearOfBirthApproximated(String yearOfBirthApproximated) {
-    this.yearOfBirthApproximated = yearOfBirthApproximated;
-  }
-
-  /**
-   * Place of birth details as originally provided
-   **/
-
-  @Schema(description = "Place of birth details as originally provided")
-  @JsonProperty("placeOfBirthOriginal")
-  public String getPlaceOfBirthOriginal() {
-    return placeOfBirthOriginal;
-  }
-
-  public void setPlaceOfBirthOriginal(String placeOfBirthOriginal) {
-    this.placeOfBirthOriginal = placeOfBirthOriginal;
-  }
-
-  /**
-   * Any further information as deemed useful by World-Check
-   **/
-
-  @Schema(description = "Any further information as deemed useful by World-Check")
-  @JsonProperty("furtherInformation")
-  public String getFurtherInformation() {
-    return furtherInformation;
-  }
-
-  public void setFurtherInformation(String furtherInformation) {
-    this.furtherInformation = furtherInformation;
-  }
-
-  /**
-   * Associated country information as originally provided
-   **/
-
-  @Schema(description = "Associated country information as originally provided")
-  @JsonProperty("countriesOriginal")
-  public String getCountriesOriginal() {
-    return countriesOriginal;
-  }
-
-  public void setCountriesOriginal(String countriesOriginal) {
-    this.countriesOriginal = countriesOriginal;
-  }
-
-  /**
-   * Social Security number
-   **/
-
-  @Schema(description = "Social Security number")
-  @JsonProperty("socialSecurityNumber")
-  public String getSocialSecurityNumber() {
-    return socialSecurityNumber;
-  }
-
-  public void setSocialSecurityNumber(String socialSecurityNumber) {
-    this.socialSecurityNumber = socialSecurityNumber;
-  }
-
-  /**
-   * Passport country
-   **/
-
-  @Schema(description = "Passport country")
-  @JsonProperty("passportCountry")
-  public String getPassportCountry() {
-    return passportCountry;
-  }
-
-  public void setPassportCountry(String passportCountry) {
-    this.passportCountry = passportCountry;
-  }
-
-  /**
-   * Groups PEPs according to predefined categories
-   **/
-
-  @Schema(description = "Groups PEPs according to predefined categories")
-  @JsonProperty("subCategoryDescription")
-  public String getSubCategoryDescription() {
-    return subCategoryDescription;
-  }
-
-  public void setSubCategoryDescription(String subCategoryDescription) {
-    this.subCategoryDescription = subCategoryDescription;
-  }
-
-  /**
-   * Indicates the type ofchange last made, highlighting the significance of each update.
-   **/
-
-  @Schema(description = "Indicates the type ofchange last made, highlighting the significance of each update.")
-  @JsonProperty("updateCategory")
-  public String getUpdateCategory() {
-    return updateCategory;
-  }
-
-  public void setUpdateCategory(String updateCategory) {
-    this.updateCategory = updateCategory;
-  }
-
-  /**
-   * Name in non-Latin character set
-   **/
-
-  @Schema(description = "Name in non-Latin character set")
-  @JsonProperty("nativeAliasLanguageName")
-  public String getNativeAliasLanguageName() {
-    return nativeAliasLanguageName;
-  }
-
-  public void setNativeAliasLanguageName(String nativeAliasLanguageName) {
-    this.nativeAliasLanguageName = nativeAliasLanguageName;
-  }
-
-  /**
-   * Country in non-Latin character set
-   **/
-
-  @Schema(description = "Country in non-Latin character set")
-  @JsonProperty("nativeAliasLanguageCountry")
-  public String getNativeAliasLanguageCountry() {
-    return nativeAliasLanguageCountry;
-  }
-
-  public void setNativeAliasLanguageCountry(String nativeAliasLanguageCountry) {
-    this.nativeAliasLanguageCountry = nativeAliasLanguageCountry;
-  }
-
-  /**
-   * Records any external sources used to collate information about the Watchlist Entry
-   **/
-
-  @Schema(description = "Records any external sources used to collate information about the Watchlist Entry")
-  @JsonProperty("cachedExternalSources")
-  public String getCachedExternalSources() {
-    return cachedExternalSources;
-  }
-
-  public void setCachedExternalSources(String cachedExternalSources) {
-    this.cachedExternalSources = cachedExternalSources;
+  public void setPEPClassification(String pEPClassification) {
+    this.pEPClassification = pEPClassification;
   }
 
   /**
@@ -1040,46 +821,339 @@ public class WorldCheckIndividuals {
   }
 
   /**
-   * Indicates the watchlist origin using the HSBC name specification
+   * Address label as provided by the private list
    **/
 
-  @Schema(description = "Indicates the watchlist origin using the HSBC name specification")
-  @JsonProperty("edqOwsWatchlistName")
-  public String getEdqOwsWatchlistName() {
-    return edqOwsWatchlistName;
+  @Schema(description = "Address label as provided by the private list")
+  @JsonProperty("edqAddressType")
+  public String getEdqAddressType() {
+    return edqAddressType;
   }
 
-  public void setEdqOwsWatchlistName(String edqOwsWatchlistName) {
-    this.edqOwsWatchlistName = edqOwsWatchlistName;
+  public void setEdqAddressType(String edqAddressType) {
+    this.edqAddressType = edqAddressType;
   }
 
   /**
-   * List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated
-   * to a record.
+   * Indicates with a yes or no if this is a current address
    **/
 
-  @Schema(description = "List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated to a record.")
-  @JsonProperty("dobs")
-  public String getDobs() {
-    return dobs;
+  @Schema(description = "Indicates with a yes or no if this is a current address")
+  @JsonProperty("edqCurrentAddress")
+  public String getEdqCurrentAddress() {
+    return edqCurrentAddress;
   }
 
-  public void setDobs(String dobs) {
-    this.dobs = dobs;
+  public void setEdqCurrentAddress(String edqCurrentAddress) {
+    this.edqCurrentAddress = edqCurrentAddress;
   }
 
   /**
-   * Identification Numbers
+   * Telephone number
    **/
 
-  @Schema(description = "Identification Numbers")
-  @JsonProperty("idNumbers")
-  public String getIdNumbers() {
-    return idNumbers;
+  @Schema(description = "Telephone number")
+  @JsonProperty("edqTelephoneNumber")
+  public String getEdqTelephoneNumber() {
+    return edqTelephoneNumber;
   }
 
-  public void setIdNumbers(String idNumbers) {
-    this.idNumbers = idNumbers;
+  public void setEdqTelephoneNumber(String edqTelephoneNumber) {
+    this.edqTelephoneNumber = edqTelephoneNumber;
+  }
+
+  /**
+   * Telephone number
+   **/
+
+  @Schema(description = "Telephone number")
+  @JsonProperty("edqCellNumberBusiness")
+  public String getEdqCellNumberBusiness() {
+    return edqCellNumberBusiness;
+  }
+
+  public void setEdqCellNumberBusiness(String edqCellNumberBusiness) {
+    this.edqCellNumberBusiness = edqCellNumberBusiness;
+  }
+
+  /**
+   * Telephone number
+   **/
+
+  @Schema(description = "Telephone number")
+  @JsonProperty("edqCellNumberPersonal")
+  public String getEdqCellNumberPersonal() {
+    return edqCellNumberPersonal;
+  }
+
+  public void setEdqCellNumberPersonal(String edqCellNumberPersonal) {
+    this.edqCellNumberPersonal = edqCellNumberPersonal;
+  }
+
+  /**
+   * Individuals TAX Number
+   **/
+
+  @Schema(description = "Individuals TAX Number")
+  @JsonProperty("edqTaxNumber")
+  public String getEdqTaxNumber() {
+    return edqTaxNumber;
+  }
+
+  public void setEdqTaxNumber(String edqTaxNumber) {
+    this.edqTaxNumber = edqTaxNumber;
+  }
+
+  /**
+   * Individuals Driving Licence Number
+   **/
+
+  @Schema(description = "Individuals Driving Licence Number")
+  @JsonProperty("edqDrivingLicence")
+  public String getEdqDrivingLicence() {
+    return edqDrivingLicence;
+  }
+
+  public void setEdqDrivingLicence(String edqDrivingLicence) {
+    this.edqDrivingLicence = edqDrivingLicence;
+  }
+
+  /**
+   * Email Address
+   **/
+
+  @Schema(description = "Email Address")
+  @JsonProperty("edqEmailAddress")
+  public String getEdqEmailAddress() {
+    return edqEmailAddress;
+  }
+
+  public void setEdqEmailAddress(String edqEmailAddress) {
+    this.edqEmailAddress = edqEmailAddress;
+  }
+
+  /**
+   * Individuals National Insurance Number
+   **/
+
+  @Schema(description = "Individuals National Insurance Number")
+  @JsonProperty("edqNiNumber")
+  public String getEdqNiNumber() {
+    return edqNiNumber;
+  }
+
+  public void setEdqNiNumber(String edqNiNumber) {
+    this.edqNiNumber = edqNiNumber;
+  }
+
+  /**
+   * SCION reference indicator
+   **/
+
+  @Schema(description = "SCION reference indicator")
+  @JsonProperty("edqScionRef")
+  public String getEdqScionRef() {
+    return edqScionRef;
+  }
+
+  public void setEdqScionRef(String edqScionRef) {
+    this.edqScionRef = edqScionRef;
+  }
+
+  /**
+   * Indicates if the record is a Person or Business, P or B respectively.
+   **/
+
+  @Schema(description = "Indicates if the record is a Person or Business, P or B respectively.")
+  @JsonProperty("edqListCustomerType")
+  public String getEdqListCustomerType() {
+    return edqListCustomerType;
+  }
+
+  public void setEdqListCustomerType(String edqListCustomerType) {
+    this.edqListCustomerType = edqListCustomerType;
+  }
+
+  /**
+   * Name suffix
+   **/
+
+  @Schema(description = "Name suffix")
+  @JsonProperty("edqSuffix")
+  public String getEdqSuffix() {
+    return edqSuffix;
+  }
+
+  public void setEdqSuffix(String edqSuffix) {
+    this.edqSuffix = edqSuffix;
+  }
+
+  /**
+   * Individuals role
+   **/
+
+  @Schema(description = "Individuals role")
+  @JsonProperty("edqRole")
+  public String getEdqRole() {
+    return edqRole;
+  }
+
+  public void setEdqRole(String edqRole) {
+    this.edqRole = edqRole;
+  }
+
+  /**
+   * Indicates the list record&#x27;s category.
+   **/
+
+  @Schema(description = "Indicates the list record's category.")
+  @JsonProperty("edqListCategory")
+  public String getEdqListCategory() {
+    return edqListCategory;
+  }
+
+  public void setEdqListCategory(String edqListCategory) {
+    this.edqListCategory = edqListCategory;
+  }
+
+  /**
+   * Any further information as deemed useful
+   **/
+
+  @Schema(description = "Any further information as deemed useful")
+  @JsonProperty("edqFurtherInfo")
+  public String getEdqFurtherInfo() {
+    return edqFurtherInfo;
+  }
+
+  public void setEdqFurtherInfo(String edqFurtherInfo) {
+    this.edqFurtherInfo = edqFurtherInfo;
+  }
+
+  /**
+   * Individuals Social Security Number
+   **/
+
+  @Schema(description = "Individuals Social Security Number")
+  @JsonProperty("edqSsn")
+  public String getEdqSsn() {
+    return edqSsn;
+  }
+
+  public void setEdqSsn(String edqSsn) {
+    this.edqSsn = edqSsn;
+  }
+
+  /**
+   * Customer ID the record relates to
+   **/
+
+  @Schema(description = "Customer ID the record relates to")
+  @JsonProperty("edqCustomerId")
+  public String getEdqCustomerId() {
+    return edqCustomerId;
+  }
+
+  public void setEdqCustomerId(String edqCustomerId) {
+    this.edqCustomerId = edqCustomerId;
+  }
+
+  /**
+   * Full name of the SCION list
+   **/
+
+  @Schema(description = "Full name of the SCION list")
+  @JsonProperty("edqListName")
+  public String getEdqListName() {
+    return edqListName;
+  }
+
+  public void setEdqListName(String edqListName) {
+    this.edqListName = edqListName;
+  }
+
+  /**
+   * SCION List short form  name
+   **/
+
+  @Schema(description = "SCION List short form  name")
+  @JsonProperty("edqWatchListType")
+  public String getEdqWatchListType() {
+    return edqWatchListType;
+  }
+
+  public void setEdqWatchListType(String edqWatchListType) {
+    this.edqWatchListType = edqWatchListType;
+  }
+
+  /**
+   * Watchlist Entry&#x27;s Derived Middle Name 1
+   **/
+
+  @Schema(description = "Watchlist Entry's Derived Middle Name 1")
+  @JsonProperty("middleName1Derived")
+  public String getMiddleName1Derived() {
+    return middleName1Derived;
+  }
+
+  public void setMiddleName1Derived(String middleName1Derived) {
+    this.middleName1Derived = middleName1Derived;
+  }
+
+  /**
+   * Watchlist Entry&#x27;s Derived Middle Name 2
+   **/
+
+  @Schema(description = "Watchlist Entry's Derived Middle Name 2")
+  @JsonProperty("middleName2Derived")
+  public String getMiddleName2Derived() {
+    return middleName2Derived;
+  }
+
+  public void setMiddleName2Derived(String middleName2Derived) {
+    this.middleName2Derived = middleName2Derived;
+  }
+
+  /**
+   * Watchlist Entry&#x27;s Original Middle Name 1
+   **/
+
+  @Schema(description = "Watchlist Entry's Original Middle Name 1")
+  @JsonProperty("middleName1Original")
+  public String getMiddleName1Original() {
+    return middleName1Original;
+  }
+
+  public void setMiddleName1Original(String middleName1Original) {
+    this.middleName1Original = middleName1Original;
+  }
+
+  /**
+   * Watchlist Entry&#x27;s Original Middle Name 2
+   **/
+
+  @Schema(description = "Watchlist Entry's Original Middle Name 2")
+  @JsonProperty("middleName2Original")
+  public String getMiddleName2Original() {
+    return middleName2Original;
+  }
+
+  public void setMiddleName2Original(String middleName2Original) {
+    this.middleName2Original = middleName2Original;
+  }
+
+  /**
+   * Watchlist Entry&#x27;s current address (if known)
+   **/
+
+  @Schema(description = "Watchlist Entry's current address (if known)")
+  @JsonProperty("currentAddress")
+  public String getCurrentAddress() {
+    return currentAddress;
+  }
+
+  public void setCurrentAddress(String currentAddress) {
+    this.currentAddress = currentAddress;
   }
 
   /**
@@ -1119,81 +1193,85 @@ public class WorldCheckIndividuals {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    WorldCheckIndividuals worldCheckIndividuals = (WorldCheckIndividuals) o;
-    return Objects.equals(caseId, worldCheckIndividuals.caseId) &&
-        Objects.equals(recordId, worldCheckIndividuals.recordId) &&
-        Objects.equals(inputStream, worldCheckIndividuals.inputStream) &&
-        Objects.equals(listKey, worldCheckIndividuals.listKey) &&
-        Objects.equals(listSubKey, worldCheckIndividuals.listSubKey) &&
-        Objects.equals(listRecordType, worldCheckIndividuals.listRecordType) &&
-        Objects.equals(listRecordOrigin, worldCheckIndividuals.listRecordOrigin) &&
-        Objects.equals(listRecordId, worldCheckIndividuals.listRecordId) &&
-        Objects.equals(listRecordSubId, worldCheckIndividuals.listRecordSubId) &&
-        Objects.equals(passportNumber, worldCheckIndividuals.passportNumber) &&
-        Objects.equals(nationalId, worldCheckIndividuals.nationalId) &&
-        Objects.equals(title, worldCheckIndividuals.title) &&
-        Objects.equals(fullNameOriginal, worldCheckIndividuals.fullNameOriginal) &&
-        Objects.equals(givenNamesOriginal, worldCheckIndividuals.givenNamesOriginal) &&
-        Objects.equals(familyNameOriginal, worldCheckIndividuals.familyNameOriginal) &&
-        Objects.equals(fullNameDerived, worldCheckIndividuals.fullNameDerived) &&
-        Objects.equals(givenNamesDerived, worldCheckIndividuals.givenNamesDerived) &&
-        Objects.equals(familyNameDerived, worldCheckIndividuals.familyNameDerived) &&
-        Objects.equals(nameType, worldCheckIndividuals.nameType) &&
-        Objects.equals(nameQuality, worldCheckIndividuals.nameQuality) &&
-        Objects.equals(primaryName, worldCheckIndividuals.primaryName) &&
-        Objects.equals(originalScriptName, worldCheckIndividuals.originalScriptName) &&
-        Objects.equals(gender, worldCheckIndividuals.gender) &&
-        Objects.equals(genderDerivedFlag, worldCheckIndividuals.genderDerivedFlag) &&
-        Objects.equals(dateOfBirth, worldCheckIndividuals.dateOfBirth) &&
-        Objects.equals(yearOfBirth, worldCheckIndividuals.yearOfBirth) &&
-        Objects.equals(deceasedFlag, worldCheckIndividuals.deceasedFlag) &&
-        Objects.equals(deceasedDate, worldCheckIndividuals.deceasedDate) &&
-        Objects.equals(occupation, worldCheckIndividuals.occupation) &&
-        Objects.equals(address, worldCheckIndividuals.address) &&
-        Objects.equals(city, worldCheckIndividuals.city) &&
-        Objects.equals(state, worldCheckIndividuals.state) &&
-        Objects.equals(postalCode, worldCheckIndividuals.postalCode) &&
-        Objects.equals(addressCountry, worldCheckIndividuals.addressCountry) &&
-        Objects.equals(residencyCountry, worldCheckIndividuals.residencyCountry) &&
-        Objects.equals(countryOfBirth, worldCheckIndividuals.countryOfBirth) &&
-        Objects.equals(nationalities, worldCheckIndividuals.nationalities) &&
-        Objects.equals(countryCodesAll, worldCheckIndividuals.countryCodesAll) &&
-        Objects.equals(countriesAll, worldCheckIndividuals.countriesAll) &&
-        Objects.equals(profileHyperlink, worldCheckIndividuals.profileHyperlink) &&
-        Objects.equals(searchHyperlink, worldCheckIndividuals.searchHyperlink) &&
-        Objects.equals(linkedProfiles, worldCheckIndividuals.linkedProfiles) &&
-        Objects.equals(linkedRelationships, worldCheckIndividuals.linkedRelationships) &&
-        Objects.equals(riskScore, worldCheckIndividuals.riskScore) &&
-        Objects.equals(pepRiskScore, worldCheckIndividuals.pepRiskScore) &&
-        Objects.equals(dataConfidenceScore, worldCheckIndividuals.dataConfidenceScore) &&
-        Objects.equals(dataConfidenceComment, worldCheckIndividuals.dataConfidenceComment) &&
-        Objects.equals(inactiveFlag, worldCheckIndividuals.inactiveFlag) &&
-        Objects.equals(inactiveSinceDate, worldCheckIndividuals.inactiveSinceDate) &&
-        Objects.equals(pepClassification, worldCheckIndividuals.pepClassification) &&
-        Objects.equals(category, worldCheckIndividuals.category) &&
-        Objects.equals(externalSources, worldCheckIndividuals.externalSources) &&
-        Objects.equals(linkedTo, worldCheckIndividuals.linkedTo) &&
-        Objects.equals(companies, worldCheckIndividuals.companies) &&
-        Objects.equals(dateOfBirthOriginal, worldCheckIndividuals.dateOfBirthOriginal) &&
-        Objects.equals(yearOfBirthApproximated, worldCheckIndividuals.yearOfBirthApproximated) &&
-        Objects.equals(placeOfBirthOriginal, worldCheckIndividuals.placeOfBirthOriginal) &&
-        Objects.equals(furtherInformation, worldCheckIndividuals.furtherInformation) &&
-        Objects.equals(countriesOriginal, worldCheckIndividuals.countriesOriginal) &&
-        Objects.equals(socialSecurityNumber, worldCheckIndividuals.socialSecurityNumber) &&
-        Objects.equals(passportCountry, worldCheckIndividuals.passportCountry) &&
-        Objects.equals(subCategoryDescription, worldCheckIndividuals.subCategoryDescription) &&
-        Objects.equals(updateCategory, worldCheckIndividuals.updateCategory) &&
-        Objects.equals(nativeAliasLanguageName, worldCheckIndividuals.nativeAliasLanguageName) &&
-        Objects.equals(nativeAliasLanguageCountry, worldCheckIndividuals.nativeAliasLanguageCountry)
-        &&
-        Objects.equals(cachedExternalSources, worldCheckIndividuals.cachedExternalSources) &&
-        Objects.equals(addedDate, worldCheckIndividuals.addedDate) &&
-        Objects.equals(lastUpdatedDate, worldCheckIndividuals.lastUpdatedDate) &&
-        Objects.equals(edqOwsWatchlistName, worldCheckIndividuals.edqOwsWatchlistName) &&
-        Objects.equals(dobs, worldCheckIndividuals.dobs) &&
-        Objects.equals(idNumbers, worldCheckIndividuals.idNumbers) &&
-        Objects.equals(recordType, worldCheckIndividuals.recordType) &&
-        Objects.equals(dummy, worldCheckIndividuals.dummy);
+    PrivateListIndividuals privateListIndividuals = (PrivateListIndividuals) o;
+    return Objects.equals(caseId, privateListIndividuals.caseId) &&
+        Objects.equals(recordId, privateListIndividuals.recordId) &&
+        Objects.equals(inputStream, privateListIndividuals.inputStream) &&
+        Objects.equals(listKey, privateListIndividuals.listKey) &&
+        Objects.equals(listSubKey, privateListIndividuals.listSubKey) &&
+        Objects.equals(listRecordType, privateListIndividuals.listRecordType) &&
+        Objects.equals(listRecordOrigin, privateListIndividuals.listRecordOrigin) &&
+        Objects.equals(listRecordId, privateListIndividuals.listRecordId) &&
+        Objects.equals(listRecordSubId, privateListIndividuals.listRecordSubId) &&
+        Objects.equals(passportNumber, privateListIndividuals.passportNumber) &&
+        Objects.equals(nationalId, privateListIndividuals.nationalId) &&
+        Objects.equals(title, privateListIndividuals.title) &&
+        Objects.equals(fullNameOriginal, privateListIndividuals.fullNameOriginal) &&
+        Objects.equals(givenNamesOriginal, privateListIndividuals.givenNamesOriginal) &&
+        Objects.equals(familyNameOriginal, privateListIndividuals.familyNameOriginal) &&
+        Objects.equals(fullNameDerived, privateListIndividuals.fullNameDerived) &&
+        Objects.equals(givenNamesDerived, privateListIndividuals.givenNamesDerived) &&
+        Objects.equals(familyNameDerived, privateListIndividuals.familyNameDerived) &&
+        Objects.equals(nameType, privateListIndividuals.nameType) &&
+        Objects.equals(nameQuality, privateListIndividuals.nameQuality) &&
+        Objects.equals(primaryName, privateListIndividuals.primaryName) &&
+        Objects.equals(originalScriptName, privateListIndividuals.originalScriptName) &&
+        Objects.equals(gender, privateListIndividuals.gender) &&
+        Objects.equals(genderDerivedFlag, privateListIndividuals.genderDerivedFlag) &&
+        Objects.equals(dateOfBirth, privateListIndividuals.dateOfBirth) &&
+        Objects.equals(yearOfBirth, privateListIndividuals.yearOfBirth) &&
+        Objects.equals(deceasedFlag, privateListIndividuals.deceasedFlag) &&
+        Objects.equals(deceasedDate, privateListIndividuals.deceasedDate) &&
+        Objects.equals(occupation, privateListIndividuals.occupation) &&
+        Objects.equals(address, privateListIndividuals.address) &&
+        Objects.equals(city, privateListIndividuals.city) &&
+        Objects.equals(placeOfBirth, privateListIndividuals.placeOfBirth) &&
+        Objects.equals(postalCode, privateListIndividuals.postalCode) &&
+        Objects.equals(addressCountry, privateListIndividuals.addressCountry) &&
+        Objects.equals(residencyCountry, privateListIndividuals.residencyCountry) &&
+        Objects.equals(countryOfBirth, privateListIndividuals.countryOfBirth) &&
+        Objects.equals(nationalities, privateListIndividuals.nationalities) &&
+        Objects.equals(countryCodesAll, privateListIndividuals.countryCodesAll) &&
+        Objects.equals(countriesAll, privateListIndividuals.countriesAll) &&
+        Objects.equals(profileHyperlink, privateListIndividuals.profileHyperlink) &&
+        Objects.equals(searchHyperlink, privateListIndividuals.searchHyperlink) &&
+        Objects.equals(linkedProfiles, privateListIndividuals.linkedProfiles) &&
+        Objects.equals(linkedRelationships, privateListIndividuals.linkedRelationships) &&
+        Objects.equals(riskScore, privateListIndividuals.riskScore) &&
+        Objects.equals(pepRiskScore, privateListIndividuals.pepRiskScore) &&
+        Objects.equals(dataConfidenceScore, privateListIndividuals.dataConfidenceScore) &&
+        Objects.equals(dataConfidenceComment, privateListIndividuals.dataConfidenceComment) &&
+        Objects.equals(inactiveFlag, privateListIndividuals.inactiveFlag) &&
+        Objects.equals(inactiveSinceDate, privateListIndividuals.inactiveSinceDate) &&
+        Objects.equals(pEPClassification, privateListIndividuals.pEPClassification) &&
+        Objects.equals(addedDate, privateListIndividuals.addedDate) &&
+        Objects.equals(lastUpdatedDate, privateListIndividuals.lastUpdatedDate) &&
+        Objects.equals(edqAddressType, privateListIndividuals.edqAddressType) &&
+        Objects.equals(edqCurrentAddress, privateListIndividuals.edqCurrentAddress) &&
+        Objects.equals(edqTelephoneNumber, privateListIndividuals.edqTelephoneNumber) &&
+        Objects.equals(edqCellNumberBusiness, privateListIndividuals.edqCellNumberBusiness) &&
+        Objects.equals(edqCellNumberPersonal, privateListIndividuals.edqCellNumberPersonal) &&
+        Objects.equals(edqTaxNumber, privateListIndividuals.edqTaxNumber) &&
+        Objects.equals(edqDrivingLicence, privateListIndividuals.edqDrivingLicence) &&
+        Objects.equals(edqEmailAddress, privateListIndividuals.edqEmailAddress) &&
+        Objects.equals(edqNiNumber, privateListIndividuals.edqNiNumber) &&
+        Objects.equals(edqScionRef, privateListIndividuals.edqScionRef) &&
+        Objects.equals(edqListCustomerType, privateListIndividuals.edqListCustomerType) &&
+        Objects.equals(edqSuffix, privateListIndividuals.edqSuffix) &&
+        Objects.equals(edqRole, privateListIndividuals.edqRole) &&
+        Objects.equals(edqListCategory, privateListIndividuals.edqListCategory) &&
+        Objects.equals(edqFurtherInfo, privateListIndividuals.edqFurtherInfo) &&
+        Objects.equals(edqSsn, privateListIndividuals.edqSsn) &&
+        Objects.equals(edqCustomerId, privateListIndividuals.edqCustomerId) &&
+        Objects.equals(edqListName, privateListIndividuals.edqListName) &&
+        Objects.equals(edqWatchListType, privateListIndividuals.edqWatchListType) &&
+        Objects.equals(middleName1Derived, privateListIndividuals.middleName1Derived) &&
+        Objects.equals(middleName2Derived, privateListIndividuals.middleName2Derived) &&
+        Objects.equals(middleName1Original, privateListIndividuals.middleName1Original) &&
+        Objects.equals(middleName2Original, privateListIndividuals.middleName2Original) &&
+        Objects.equals(currentAddress, privateListIndividuals.currentAddress) &&
+        Objects.equals(recordType, privateListIndividuals.recordType) &&
+        Objects.equals(dummy, privateListIndividuals.dummy);
   }
 
   @Override
@@ -1204,21 +1282,22 @@ public class WorldCheckIndividuals {
         givenNamesOriginal, familyNameOriginal, fullNameDerived, givenNamesDerived,
         familyNameDerived, nameType, nameQuality, primaryName, originalScriptName, gender,
         genderDerivedFlag, dateOfBirth, yearOfBirth, deceasedFlag, deceasedDate, occupation,
-        address, city, state, postalCode, addressCountry, residencyCountry, countryOfBirth,
+        address, city, placeOfBirth, postalCode, addressCountry, residencyCountry, countryOfBirth,
         nationalities, countryCodesAll, countriesAll, profileHyperlink, searchHyperlink,
         linkedProfiles, linkedRelationships, riskScore, pepRiskScore, dataConfidenceScore,
-        dataConfidenceComment, inactiveFlag, inactiveSinceDate, pepClassification, category,
-        externalSources, linkedTo, companies, dateOfBirthOriginal, yearOfBirthApproximated,
-        placeOfBirthOriginal, furtherInformation, countriesOriginal, socialSecurityNumber,
-        passportCountry, subCategoryDescription, updateCategory, nativeAliasLanguageName,
-        nativeAliasLanguageCountry, cachedExternalSources, addedDate, lastUpdatedDate,
-        edqOwsWatchlistName, dobs, idNumbers, recordType, dummy);
+        dataConfidenceComment, inactiveFlag, inactiveSinceDate, pEPClassification, addedDate,
+        lastUpdatedDate, edqAddressType, edqCurrentAddress, edqTelephoneNumber,
+        edqCellNumberBusiness, edqCellNumberPersonal, edqTaxNumber, edqDrivingLicence,
+        edqEmailAddress, edqNiNumber, edqScionRef, edqListCustomerType, edqSuffix, edqRole,
+        edqListCategory, edqFurtherInfo, edqSsn, edqCustomerId, edqListName, edqWatchListType,
+        middleName1Derived, middleName2Derived, middleName1Original, middleName2Original,
+        currentAddress, recordType, dummy);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class WorldCheckIndividuals {\n");
+    sb.append("class PrivateListIndividuals {\n");
 
     sb.append("    caseId: ").append(toIndentedString(caseId)).append("\n");
     sb.append("    recordId: ").append(toIndentedString(recordId)).append("\n");
@@ -1251,7 +1330,7 @@ public class WorldCheckIndividuals {
     sb.append("    occupation: ").append(toIndentedString(occupation)).append("\n");
     sb.append("    address: ").append(toIndentedString(address)).append("\n");
     sb.append("    city: ").append(toIndentedString(city)).append("\n");
-    sb.append("    state: ").append(toIndentedString(state)).append("\n");
+    sb.append("    placeOfBirth: ").append(toIndentedString(placeOfBirth)).append("\n");
     sb.append("    postalCode: ").append(toIndentedString(postalCode)).append("\n");
     sb.append("    addressCountry: ").append(toIndentedString(addressCountry)).append("\n");
     sb.append("    residencyCountry: ").append(toIndentedString(residencyCountry)).append("\n");
@@ -1278,55 +1357,48 @@ public class WorldCheckIndividuals {
         .append("\n");
     sb.append("    inactiveFlag: ").append(toIndentedString(inactiveFlag)).append("\n");
     sb.append("    inactiveSinceDate: ").append(toIndentedString(inactiveSinceDate)).append("\n");
-    sb.append("    pepClassification: ").append(toIndentedString(pepClassification)).append("\n");
-    sb.append("    category: ").append(toIndentedString(category)).append("\n");
-    sb.append("    externalSources: ").append(toIndentedString(externalSources)).append("\n");
-    sb.append("    linkedTo: ").append(toIndentedString(linkedTo)).append("\n");
-    sb.append("    companies: ").append(toIndentedString(companies)).append("\n");
-    sb
-        .append("    dateOfBirthOriginal: ")
-        .append(toIndentedString(dateOfBirthOriginal))
-        .append("\n");
-    sb
-        .append("    yearOfBirthApproximated: ")
-        .append(toIndentedString(yearOfBirthApproximated))
-        .append("\n");
-    sb
-        .append("    placeOfBirthOriginal: ")
-        .append(toIndentedString(placeOfBirthOriginal))
-        .append("\n");
-    sb.append("    furtherInformation: ").append(toIndentedString(furtherInformation)).append("\n");
-    sb.append("    countriesOriginal: ").append(toIndentedString(countriesOriginal)).append("\n");
-    sb
-        .append("    socialSecurityNumber: ")
-        .append(toIndentedString(socialSecurityNumber))
-        .append("\n");
-    sb.append("    passportCountry: ").append(toIndentedString(passportCountry)).append("\n");
-    sb
-        .append("    subCategoryDescription: ")
-        .append(toIndentedString(subCategoryDescription))
-        .append("\n");
-    sb.append("    updateCategory: ").append(toIndentedString(updateCategory)).append("\n");
-    sb
-        .append("    nativeAliasLanguageName: ")
-        .append(toIndentedString(nativeAliasLanguageName))
-        .append("\n");
-    sb
-        .append("    nativeAliasLanguageCountry: ")
-        .append(toIndentedString(nativeAliasLanguageCountry))
-        .append("\n");
-    sb
-        .append("    cachedExternalSources: ")
-        .append(toIndentedString(cachedExternalSources))
-        .append("\n");
+    sb.append("    pEPClassification: ").append(toIndentedString(pEPClassification)).append("\n");
     sb.append("    addedDate: ").append(toIndentedString(addedDate)).append("\n");
     sb.append("    lastUpdatedDate: ").append(toIndentedString(lastUpdatedDate)).append("\n");
+    sb.append("    edqAddressType: ").append(toIndentedString(edqAddressType)).append("\n");
+    sb.append("    edqCurrentAddress: ").append(toIndentedString(edqCurrentAddress)).append("\n");
+    sb.append("    edqTelephoneNumber: ").append(toIndentedString(edqTelephoneNumber)).append("\n");
     sb
-        .append("    edqOwsWatchlistName: ")
-        .append(toIndentedString(edqOwsWatchlistName))
+        .append("    edqCellNumberBusiness: ")
+        .append(toIndentedString(edqCellNumberBusiness))
         .append("\n");
-    sb.append("    dobs: ").append(toIndentedString(dobs)).append("\n");
-    sb.append("    idNumbers: ").append(toIndentedString(idNumbers)).append("\n");
+    sb
+        .append("    edqCellNumberPersonal: ")
+        .append(toIndentedString(edqCellNumberPersonal))
+        .append("\n");
+    sb.append("    edqTaxNumber: ").append(toIndentedString(edqTaxNumber)).append("\n");
+    sb.append("    edqDrivingLicence: ").append(toIndentedString(edqDrivingLicence)).append("\n");
+    sb.append("    edqEmailAddress: ").append(toIndentedString(edqEmailAddress)).append("\n");
+    sb.append("    edqNiNumber: ").append(toIndentedString(edqNiNumber)).append("\n");
+    sb.append("    edqScionRef: ").append(toIndentedString(edqScionRef)).append("\n");
+    sb
+        .append("    edqListCustomerType: ")
+        .append(toIndentedString(edqListCustomerType))
+        .append("\n");
+    sb.append("    edqSuffix: ").append(toIndentedString(edqSuffix)).append("\n");
+    sb.append("    edqRole: ").append(toIndentedString(edqRole)).append("\n");
+    sb.append("    edqListCategory: ").append(toIndentedString(edqListCategory)).append("\n");
+    sb.append("    edqFurtherInfo: ").append(toIndentedString(edqFurtherInfo)).append("\n");
+    sb.append("    edqSsn: ").append(toIndentedString(edqSsn)).append("\n");
+    sb.append("    edqCustomerId: ").append(toIndentedString(edqCustomerId)).append("\n");
+    sb.append("    edqListName: ").append(toIndentedString(edqListName)).append("\n");
+    sb.append("    edqWatchListType: ").append(toIndentedString(edqWatchListType)).append("\n");
+    sb.append("    middleName1Derived: ").append(toIndentedString(middleName1Derived)).append("\n");
+    sb.append("    middleName2Derived: ").append(toIndentedString(middleName2Derived)).append("\n");
+    sb
+        .append("    middleName1Original: ")
+        .append(toIndentedString(middleName1Original))
+        .append("\n");
+    sb
+        .append("    middleName2Original: ")
+        .append(toIndentedString(middleName2Original))
+        .append("\n");
+    sb.append("    currentAddress: ").append(toIndentedString(currentAddress)).append("\n");
     sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
     sb.append("    dummy: ").append(toIndentedString(dummy)).append("\n");
     sb.append("}");

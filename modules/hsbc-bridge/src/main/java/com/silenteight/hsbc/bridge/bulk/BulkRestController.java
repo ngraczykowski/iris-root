@@ -1,13 +1,12 @@
-package com.silenteight.hsbc.bridge.rest;
+package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.bulk.*;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest;
-import com.silenteight.hsbc.bridge.rest.model.output.*;
+import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
+import com.silenteight.hsbc.bridge.bulk.rest.output.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

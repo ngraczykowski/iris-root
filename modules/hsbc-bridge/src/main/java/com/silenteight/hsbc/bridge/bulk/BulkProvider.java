@@ -3,8 +3,8 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository;
-import com.silenteight.hsbc.bridge.rest.model.input.Alert;
-import com.silenteight.hsbc.bridge.rest.model.input.HsbcRecommendationRequest;
+import com.silenteight.hsbc.bridge.bulk.rest.input.Alert;
+import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;

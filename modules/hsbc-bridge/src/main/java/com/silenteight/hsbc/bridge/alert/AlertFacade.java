@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.Builder;
 
-import com.silenteight.hsbc.bridge.rest.model.input.Alert;
+import com.silenteight.hsbc.bridge.bulk.rest.input.Alert;
 
 import java.util.Collection;
 import java.util.List;

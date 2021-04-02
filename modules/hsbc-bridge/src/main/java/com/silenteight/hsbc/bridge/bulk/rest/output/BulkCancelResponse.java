@@ -1,33 +1,27 @@
-package com.silenteight.hsbc.bridge.rest.model.output;
+package com.silenteight.hsbc.bridge.bulk.rest.output;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 /**
- * BulkStatusResponse
+ * BulkCancelResponse
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
 
 
-public class BulkStatusResponse   {
+public class BulkCancelResponse   {
   @JsonProperty("bulkId")
   private UUID bulkId = null;
 
   @JsonProperty("bulkStatus")
   private BulkStatus bulkStatus = null;
 
-  @JsonProperty("requestedAlerts")
-  @Valid
-  private List<BulkAlertItem> requestedAlerts = null;
-
-  public BulkStatusResponse bulkId(UUID bulkId) {
+  public BulkCancelResponse bulkId(UUID bulkId) {
     this.bulkId = bulkId;
     return this;
   }
@@ -47,7 +41,7 @@ public class BulkStatusResponse   {
     this.bulkId = bulkId;
   }
 
-  public BulkStatusResponse bulkStatus(BulkStatus bulkStatus) {
+  public BulkCancelResponse bulkStatus(BulkStatus bulkStatus) {
     this.bulkStatus = bulkStatus;
     return this;
   }
@@ -67,33 +61,6 @@ public class BulkStatusResponse   {
     this.bulkStatus = bulkStatus;
   }
 
-  public BulkStatusResponse requestedAlerts(List<BulkAlertItem> requestedAlerts) {
-    this.requestedAlerts = requestedAlerts;
-    return this;
-  }
-
-  public BulkStatusResponse addRequestedAlertsItem(BulkAlertItem requestedAlertsItem) {
-    if (this.requestedAlerts == null) {
-      this.requestedAlerts = new ArrayList<BulkAlertItem>();
-    }
-    this.requestedAlerts.add(requestedAlertsItem);
-    return this;
-  }
-
-  /**
-   * Get requestedAlerts
-   * @return requestedAlerts
-   **/
-  @Schema(description = "")
-      @Valid
-    public List<BulkAlertItem> getRequestedAlerts() {
-    return requestedAlerts;
-  }
-
-  public void setRequestedAlerts(List<BulkAlertItem> requestedAlerts) {
-    this.requestedAlerts = requestedAlerts;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -103,25 +70,23 @@ public class BulkStatusResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkStatusResponse bulkStatusResponse = (BulkStatusResponse) o;
-    return Objects.equals(this.bulkId, bulkStatusResponse.bulkId) &&
-        Objects.equals(this.bulkStatus, bulkStatusResponse.bulkStatus) &&
-        Objects.equals(this.requestedAlerts, bulkStatusResponse.requestedAlerts);
+    BulkCancelResponse bulkCancelResponse = (BulkCancelResponse) o;
+    return Objects.equals(this.bulkId, bulkCancelResponse.bulkId) &&
+        Objects.equals(this.bulkStatus, bulkCancelResponse.bulkStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bulkId, bulkStatus, requestedAlerts);
+    return Objects.hash(bulkId, bulkStatus);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BulkStatusResponse {\n");
+    sb.append("class BulkCancelResponse {\n");
     
     sb.append("    bulkId: ").append(toIndentedString(bulkId)).append("\n");
     sb.append("    bulkStatus: ").append(toIndentedString(bulkStatus)).append("\n");
-    sb.append("    requestedAlerts: ").append(toIndentedString(requestedAlerts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,13 +1,13 @@
 package com.silenteight.hsbc.bridge.match
 
-import com.silenteight.hsbc.bridge.rest.model.input.AlertSystemInformation
-import com.silenteight.hsbc.bridge.rest.model.input.CasesWithAlertURL
-import com.silenteight.hsbc.bridge.rest.model.input.CountryCtrpScreeningEntities
-import com.silenteight.hsbc.bridge.rest.model.input.CountryCtrpScreeningIndividuals
-import com.silenteight.hsbc.bridge.rest.model.input.CustomerEntities
-import com.silenteight.hsbc.bridge.rest.model.input.CustomerIndividuals
-import com.silenteight.hsbc.bridge.rest.model.input.WorldCheckEntities
-import com.silenteight.hsbc.bridge.rest.model.input.WorldCheckIndividuals
+import com.silenteight.hsbc.bridge.bulk.rest.input.AlertSystemInformation
+import com.silenteight.hsbc.bridge.bulk.rest.input.CasesWithAlertURL
+import com.silenteight.hsbc.bridge.bulk.rest.input.CountryCtrpScreeningEntities
+import com.silenteight.hsbc.bridge.bulk.rest.input.CountryCtrpScreeningIndividuals
+import com.silenteight.hsbc.bridge.bulk.rest.input.CustomerEntities
+import com.silenteight.hsbc.bridge.bulk.rest.input.CustomerIndividuals
+import com.silenteight.hsbc.bridge.bulk.rest.input.WorldCheckEntities
+import com.silenteight.hsbc.bridge.bulk.rest.input.WorldCheckIndividuals
 
 import spock.lang.Specification
 
