@@ -73,9 +73,9 @@ def test_partial_abbreviation(first, second):
 @pytest.mark.parametrize(
     ("first", "second"),
     (
-        ("Aa Ii Oo Cc", "AIOC"),
-        ("Aa Ii Oo Cc", "A I O C"),
-        ("Aa Ii Oo Cc", "A\tI  O \tC"),
+        ("Aa Ii Oooo Ccccc", "AIOC"),
+        ("Aa Ii Oooo Ccccc", "A I O C"),
+        ("Aa Ii Oooo Ccccc", "A\tI  O \tC"),
     ),
 )
 def test_whitespaces(first, second):

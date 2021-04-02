@@ -7,8 +7,20 @@ from ..compare import compare
     ("name", "expected_legal_term"),
     (
         ("Google", ()),
-        ("EISOO Information Technology Corp.", ("corp",)),
+        ("EISOO Information Technology Corp.", ("corp.",)),
         ("Atlassian Corporation Plc", ("corporation", "plc")),
+        ("RENDEZ Rail CZ s. r. o.", ("s. r. o.", )),
+        ("Nejdecká česárna vlny, a. s.", ("a. s.", )),
+        ("AIRSTAL SP Z O O", ("sp z o o", )),
+        ("AGB Señalización y Publicidad, S.A. de C.V.", ("s.a.", "de c.v.")),
+        ("SIGNCRAFT PTY. LIMITED", ("pty.", "limited")),
+        ("C S Central America Sociedad Anonima de Capital Variable", ("sociedad anonima", "de capital variable")),
+        ("DIM TU TAC TRADING SERVICE JOINT STOCK COMPANY", ("joint stock company", )),
+        ("Ster - Planungs- u. Bau Gesellschaft m.b.H.", ("gesellschaft m.b.h.", )),
+        ("Agentur Effect Ges.m.b.H.", ("ges.m.b.h.", )),
+        ("ML ABUNDANCE PTE. LTD.", ("pte.", "ltd.")),
+        ("YOU CONSULT e.U.", ("e.u.", )),
+        ("Edelmann Hungary Packaging Zártkörűen Működő Részvénytársaság", ('zartkoruen mukodo reszvenytarsasag',))
     ),
 )
 def test_legal_term(name, expected_legal_term):
@@ -74,3 +86,31 @@ def test_country(name, expected_country):
 def test_parenthesis(name, expected_parenthesis):
     _, (information, _) = compare(name, "AAAA")
     assert set(information["parenthesis"]) == set(expected_parenthesis)
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    (
+            ("THOMAS J. COLEMAN AND COMPANY LIMITED", {"base": ("thomas", "j.", "coleman", "and", "company"), "legal": ("limited", )}),
+            ("MS DESIGN & CONSTRUCTIONS", {"base": ("ms", "design", "&", "constructions")}),
+            ("group and AAAAAAAA", {"common_prefixes": (), "base": ("group", "and", "aaaaaaaa")})
+    )
+)
+def test_do_not_divide_when_and(name, expected):
+    _, (information, _) = compare(name, "AAAA")
+    print(information)
+    for key, value in expected.items():
+        assert set(information[key]) == set(value)
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    (
+            ("TONTINE ROOMS HOLDING COMPANY LIMITED - THE", {"legal": ("company", "limited")}),
+    )
+)
+def test_the_on_the_end_do_not_destroy_cutting_other_information(name, expected):
+    _, (information, _) = compare(name, "AAAA")
+    print(information)
+    for key, value in expected.items():
+        assert set(information[key]) == set(value)

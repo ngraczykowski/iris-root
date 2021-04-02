@@ -1,8 +1,8 @@
-import collections
+import dataclasses
 import itertools
 import re
 import string
-from typing import Mapping, Set, Sequence, Tuple
+from typing import Mapping, Set, Sequence, Tuple, Iterable
 
 import fuzzywuzzy.fuzz as fuzz
 import phonetics
@@ -10,89 +10,48 @@ import unidecode
 
 try:
     from .countries import COUNTRY_MAPPING
+    from .legal_terms import ALL_LEGAL_TERMS, legal_score
 except ImportError:
     from countries import COUNTRY_MAPPING
+    from legal_terms import ALL_LEGAL_TERMS, legal_score
 
 
 BLACKLIST = {"gazprom", "vtb"}
 BLACKLIST_REGEX = re.compile(r"\b(" + "|".join(BLACKLIST) + r")\b", re.IGNORECASE)
 
-LEGAL_TERMS = {
-    "co": "company",
-    "lp": "limited partnership",
-    "llp": "limited liability partnership",
-    "lllp": "limited liability limited partnership",
-    "ltd": "limited liability company",
-    "lc": "limited liability company",
-    "llc": "limited liability company",
-    "tld co": "limited liability company",
-    "pplc": "professional limited liability company",
-    "plc": "public limited company",
-    "limited": "limited liability company",
-    "corp": "corporation",
-    "pc": "professional corporation",
-    "pvt": "private",
-    "inc": "incorporated",
-    "incorporation": "incorporated",
-    "pty": "unlimited proprietary",
-    "ilp": "incorporated limited partnership",
-    "gmbh": "gesellschaft mit beschrankter haftung",
-    "ag": "aktiengesellschaft",
-    "ab": "aktiebolag",
-    "as": "aksjeselskap",
-    "ans": "ansvarlig selskap",
-    "nv": "naamloze vennootschap",
-    "kk": "kabushiki gaisha",
-    "ek": "ekonomisk forening",
-    "hb": "handelsbolag",
-    "kb": "kommanditbolag",
-    "bv": "besloten vennootschap",
-    "cv": "commanditaire vennootschap",
-    "sa": "societe anonyme",
-    "sociedad anonima": "societe anonyme",
-    "de cv": "capital variable",
-    "ltda": "limited liability company",
-    "ooo": "obschestvo s ogranichennoy otvetstvennostyu",
-    "pao": "publichnoye aktsionernoye obschestvo",
-    "oao": "otkrytoye aktsionernoye obschestvo",
-    "sas": "sociedad por acciones simplificada",
-    "srl": "sociedad de responsabilidad limitada",
-    "sci": "sociedad de capital e industria",
-    "sc": "sociedad colectiva",
-    "sarl": "societe a responsabilite limitee",
-    "cic": "community interest company",
-    "cio": "charitable incorporated organisation",
-    "jsc": "joint-stock company",
-    "ojsc": "open joint-stock company",
-    "pjsc": "public joint-stock company",
-    "fze": "free zone establishment",
-    "fzco": "free zone company",
-    "soe": "state-owned enterprise",
-    "goe": "government-owned enterprise",
-    "sdn bhd": "sendirian berhad",
-    "bhd": "berhad",
+JOINING_WORDS = ("and", "&", "e", "y", "und", "ve")
+WEAK_WORDS = {"of", "the", "for", "de", *JOINING_WORDS}
+
+COMMON_PREFIXES = {
+    "company",
+    "group",
+    "grup",
+    "grupo",
+    *WEAK_WORDS,
 }
-
-TERMS = {*LEGAL_TERMS.keys(), *LEGAL_TERMS.values()}
-
-WEAK_WORDS = {"of", "the", "for", "and"}
 
 COMMON_SUFFIXES = {
     "asset",
     "association",
+    "authorised distributor",
     "bank",
     "banking",
     "brothers",
     "capital",
+    "comercio",
     "commercial",
     "communication",
     "communications",
-    "construction",
-    "consulting",
     "computer",
+    "construction",
+    "consultancy",
+    "consultants",
+    "consulting",
+    "contracting",
     "credit",
     "development",
     "devices",
+    "energia",
     "energy",
     "engineering",
     "enterprise",
@@ -100,15 +59,22 @@ COMMON_SUFFIXES = {
     "equity",
     "export",
     "exports",
+    "factory",
     "finance",
     "financial",
     "fund",
     "general",
     "global",
     "group",
+    "grup",
+    "grupo",
     "holding",
     "holdings",
+    "import",
+    "industria",
+    "industrial",
     "industries",
+    "industry",
     "information",
     "international",
     "invest",
@@ -122,78 +88,104 @@ COMMON_SUFFIXES = {
     "media",
     "partners",
     "pharmaceuticals",
+    "products",
     "regional",
+    "sanayi",
     "securities",
+    "service",
     "services",
     "shipping",
+    "solutions",
     "stock",
+    "studio",
     "support",
+    "systems",
     "tech",
     "technologies",
     "technology",
+    "ticaret",
     "trade",
     "trading",
     "trust",
+    "universal",
     *WEAK_WORDS
 }
 
-COMMON_PREFIXES = COMMON_SUFFIXES
 
-NameInformation = collections.namedtuple(
-    "NameInformation",
-    ("common_prefixes", "base", "common_suffixes", "legal", "countries", "parenthesis")
-)
+@dataclasses.dataclass
+class NameInformation:
+    common_prefixes: Tuple[str, ...]
+    base: Tuple[str, ...]
+    common_suffixes: Tuple[str, ...]
+    legal: Tuple[str, ...]
+    countries: Tuple[str, ...]
+    parenthesis: Tuple[str, ...]
 
 
 def clear_name(name: str) -> str:
-    name = unidecode.unidecode(name.lower()).replace(",", " ").strip()
+    name = unidecode.unidecode(name.lower()).replace(",", " ").replace(" -", " ").replace("- ", " ").replace("  ", " ").strip()
     return re.sub(r"\.\w{2,3}\b", "", name)  # .net, .com, .org, .de
 
 
-def term_variants(term: str) -> Set[str]:
-    return {
-        term,
-        term + ".",
-        *(
-            " ".join(w).strip()
-            for w in itertools.product(
-                *[
-                    (" ".join(t), "".join(t), ". ".join(t) + ".", ".".join(t) + ".")
-                    for t in term.split()
-                ]
-            )
-        ),
-    }
-
-
-def cut_from_end(name: str, terms_to_cut):
+def cut_from_end(name: str, terms_to_cut: Iterable[str]):
     possibilities = []
     for term in terms_to_cut:
-        for term_variant in term_variants(term):
-            if name.endswith(" " + term_variant):
-                possibilities.append((term_variant, term))
+        if name.endswith(" " + term):
+            possibilities.append(term)
     if not possibilities:
         return name, ()
-    best_one = sorted([(len(x[0]), x) for x in possibilities])[-1][1]
-    base, other_terms = cut_from_end(name[: -len(best_one[0])].strip(), terms_to_cut)
-    return base.strip(), (*other_terms, best_one[1])
+    best_one = sorted([(len(x), x) for x in possibilities])[-1][1]
+    base, other_terms = cut_from_end(name[: -len(best_one)].strip(), terms_to_cut)
+    return base.strip(), (*other_terms, best_one)
 
 
-def cut_from_start(name: str, terms_to_cut):
+def cut_from_start(name: str, terms_to_cut: Iterable[str]):
     possibilities = []
     for term in terms_to_cut:
-        for term_variant in term_variants(term):
-            if name.startswith(term_variant + " "):
-                possibilities.append((term_variant, term))
+        if name.startswith(term + " "):
+            possibilities.append(term)
     if not possibilities:
         return (), name
     best_one = sorted([(len(x[0]), x) for x in possibilities])[-1][1]
-    other_terms, base = cut_from_start(name[len(best_one[0]):].strip(), terms_to_cut)
-    return (best_one[1], *other_terms), base.strip()
+    other_terms, base = cut_from_start(name[len(best_one):].strip(), terms_to_cut)
+    return (best_one, *other_terms), base.strip()
+
+
+def fix_expression_divided(information: NameInformation) -> NameInformation:
+    # handle common prefixes separately - words move right, not left as in other cases
+    if information.common_prefixes and information.common_prefixes[-1] in JOINING_WORDS:
+        information.base = tuple((*information.common_prefixes[-2:], *information.base))
+        information.common_prefixes = information.common_prefixes[:-2]
+
+    data = [information.base, information.common_suffixes, information.legal]
+    # move "and" to previous part, if at the beginning
+    for joining_index, joining_data in enumerate(data):
+        if joining_index and joining_data and joining_data[0] in JOINING_WORDS:
+            new_index = [i for i in reversed(range(joining_index)) if data[i]][0]
+            data[new_index] = [*data[new_index], joining_data[0]]
+            data[joining_index] = joining_data[1:]
+
+    # move word after "and" to part with "and"
+    for joining_index, joining_data in enumerate(data):
+        if joining_data and joining_data[-1] in JOINING_WORDS:
+            for j, second_word_data in enumerate(data[joining_index+1:]):
+                if second_word_data:
+                    second_word_index = j + joining_index + 1
+                    second_word = second_word_data[0]
+                    data[second_word_index] = data[second_word_index][1:]
+                    break
+            else:
+                second_word = None
+
+            if second_word:
+                data[joining_index] = [*joining_data, second_word]
+
+    information.base, information.common_suffixes, information.legal = data
+    return information
 
 
 def cut_legal_terms(name):
-    return cut_from_end(name, TERMS)
+    return cut_from_end(name, ALL_LEGAL_TERMS)
 
 
 def cut_common(name):
@@ -213,17 +205,21 @@ def cut_extra(name):
 
 
 def cut_all(name) -> NameInformation:
+    if name.endswith(" the"):
+        name = "the " + name[:-4]
     extra_base, extra = cut_extra(name)
     legal_base, legal = cut_legal_terms(extra_base)
     common_prefixes, common_base, common_suffixes = cut_common(legal_base)
-    return NameInformation(
+    base = tuple(common_base.split())
+    information = NameInformation(
         common_prefixes=common_prefixes,
-        base=tuple(common_base.split()),
+        base=base,
         common_suffixes=common_suffixes,
         legal=legal,
         countries=tuple(c for c in extra if c in COUNTRY_MAPPING),
         parenthesis=tuple(c for c in extra if c not in COUNTRY_MAPPING),
     )
+    return fix_expression_divided(information)
 
 
 def _without_whitespaces(*names):
@@ -315,20 +311,6 @@ def check_abbreviation(information, abbreviation, length_of_all: int) -> float:
         ),
         default=0,
     )
-
-
-def legal_score(first, second) -> float:
-    if not first or not second:
-        return 0.5
-    norm_first = [LEGAL_TERMS.get(t, t) for t in first]
-    norm_second = [LEGAL_TERMS.get(t, t) for t in second]
-    if norm_first == norm_second:
-        return 1
-    if set(norm_first).issuperset(norm_second):
-        return 0.5 * (1 + len(norm_second) / len(norm_first))
-    if set(norm_second).issuperset(norm_first):
-        return 0.5 * (1 + len(norm_first) / len(norm_second))
-    return 0
 
 
 def abbreviation_score(information: NameInformation, abbreviation: str) -> float:
@@ -440,4 +422,4 @@ def compare(
         "phonetics": phonetic_score(first, second),
     }
 
-    return scores, (first_information._asdict(), second_information._asdict())
+    return scores, (dataclasses.asdict(first_information), dataclasses.asdict(second_information))
