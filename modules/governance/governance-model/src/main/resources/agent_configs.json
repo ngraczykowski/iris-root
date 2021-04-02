@@ -3,11 +3,8 @@
     { "name": "agents/nameAgent/versions/1.0.0/config/1" },
     { "name": "agents/dateAgent/versions/1.0.0/config/1" },
     { "name": "agents/documentAgent/versions/1.0.0/config/1" },
-    { "name": "agents/nationalIdAgent/versions/1.0.0/config/1" },
-    { "name": "agents/passportAgent/versions/1.0.0/config/1" },
     { "name": "agents/genderAgent/versions/1.0.0/config/1" },
-    { "name": "agents/nationalityAgent/versions/1.0.0/config/1" },
-    { "name": "agents/residencyAgent/versions/1.0.0/config/1" }
+    { "name": "agents/countryAgent/versions/1.0.0/config/1" }
   ]
 }
 

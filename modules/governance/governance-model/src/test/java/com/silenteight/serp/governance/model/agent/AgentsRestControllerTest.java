@@ -29,8 +29,8 @@ class AgentsRestControllerTest extends BaseRestControllerTest {
     given(agentMappingService.getFeaturesListDto()).willReturn(prepareMockData());
 
     get(ALL_AGENTS_URL).statusCode(OK.value())
-        .body("agents[0].name", is("features/gender"))
-        .body("agents[0].solutions", is(FEATURE_VALUE));
+        .body("features[0].name", is("features/gender"))
+        .body("features[0].solutions", is(FEATURE_VALUE));
   }
 
   @TestWithRole(roles = {APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR})
@@ -46,7 +46,7 @@ class AgentsRestControllerTest extends BaseRestControllerTest {
         .build();
 
     return FeaturesListDto.builder()
-        .agents(asList(agent1))
+        .features(asList(agent1))
         .build();
   }
 }
