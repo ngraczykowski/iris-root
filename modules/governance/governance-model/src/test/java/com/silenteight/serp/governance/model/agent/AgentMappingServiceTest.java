@@ -42,7 +42,7 @@ class AgentMappingServiceTest {
 
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();
 
-    assertThat(allAgents.getAgents().size()).isEqualTo(5);
+    assertThat(allAgents.getFeatures().size()).isEqualTo(5);
   }
 
   @Test
@@ -51,7 +51,7 @@ class AgentMappingServiceTest {
 
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();
 
-    assertThat(allAgents.getAgents()).isEmpty();
+    assertThat(allAgents.getFeatures()).isEmpty();
   }
 
   @Test
@@ -63,12 +63,12 @@ class AgentMappingServiceTest {
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();
 
     //then
-    assertThat(allAgents.getAgents().size()).isEqualTo(2);
+    assertThat(allAgents.getFeatures().size()).isEqualTo(2);
 
     List<String> nationalitySolutions =
-        allAgents.getAgents().get(FEATURE_NATIONALITY_INDEX).getSolutions();
+        allAgents.getFeatures().get(FEATURE_NATIONALITY_INDEX).getSolutions();
     List<String> residencySolutions =
-        allAgents.getAgents().get(FEATURE_RESIDENCY_INDEX).getSolutions();
+        allAgents.getFeatures().get(FEATURE_RESIDENCY_INDEX).getSolutions();
 
     assertThat(nationalitySolutions).isEqualTo(residencySolutions);
   }
@@ -82,7 +82,7 @@ class AgentMappingServiceTest {
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();
 
     //then
-    assertThat(allAgents.getAgents().get(0).getSolutions())
+    assertThat(allAgents.getFeatures().get(0).getSolutions())
         .hasSize(DOCUMENT_AGENT.getSolutions().size())
         .containsAll(DOCUMENT_AGENT.getSolutions());
   }

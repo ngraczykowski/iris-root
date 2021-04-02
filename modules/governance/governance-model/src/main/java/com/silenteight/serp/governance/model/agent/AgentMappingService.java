@@ -24,7 +24,7 @@ class AgentMappingService {
         .collect(toList());
 
     return FeaturesListDto.builder()
-        .agents(featuresDto)
+        .features(featuresDto)
         .build();
   }
 

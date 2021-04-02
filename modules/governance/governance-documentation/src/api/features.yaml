@@ -37,7 +37,7 @@ components:
     FeaturesListDto:
       type: object
       properties:
-        agents:
+        features:
           type: array
           items:
             $ref: '#/components/schemas/FeatureDto'

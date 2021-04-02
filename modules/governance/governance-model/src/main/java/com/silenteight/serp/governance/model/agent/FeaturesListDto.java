@@ -13,5 +13,5 @@ import java.util.List;
 public class FeaturesListDto {
 
   @NonNull
-  List<FeatureDto> agents;
+  List<FeatureDto> features;
 }
