@@ -41,6 +41,7 @@ libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '4
 // APIs
 libraries.javax_validation_api = [group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final']
 libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30']
+libraries.commons_csv = [group: 'org.apache.commons', name: 'commons-csv', version: '1.8']
 
 // OpenAPI & Swagger
 libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version: '3.0.0']
@@ -83,6 +84,7 @@ configurations.all {
 dependencies {
   annotationProcessor libraries.lombok
   annotationProcessor libraries.spring_boot_configuration_processor
+  compile libraries.commons_csv
   compile libraries.javax_validation_api
   compile libraries.springfox_oas
   compileOnly libraries.lombok

@@ -8,15 +8,27 @@ import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedExce
 import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
 import com.silenteight.hsbc.bridge.bulk.rest.output.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
+
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @RestController
 @RequestMapping("/async/bulk/v1")
@@ -28,8 +40,13 @@ public class BulkRestController {
   private final GetBulkStatusUseCase getBulkStatusUseCase;
   private final CancelBulkUseCase cancelBulkUseCase;
 
+  private static final String[] OWS_HEADER =
+      { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
+  private static final String OWS_FILE_NAME = "owsResponse.ows";
+
   @PostMapping("/recommendAlerts")
-  public ResponseEntity<BulkAcceptedResponse> recommendAlerts(@Valid @RequestBody HsbcRecommendationRequest request) {
+  public ResponseEntity<BulkAcceptedResponse> recommendAlerts(
+      @Valid @RequestBody HsbcRecommendationRequest request) {
     return ResponseEntity.ok(createBulkUseCase.createBulk(request));
   }
 
@@ -38,12 +55,46 @@ public class BulkRestController {
     return ResponseEntity.ok(getBulkResultsUseCase.getResults(id));
   }
 
-  @GetMapping(value = "/{id}/result/file", produces = "application/x-octet-stream")
-  public @ResponseBody byte[] getResultFile(@PathVariable UUID id) throws JsonProcessingException {
+  @GetMapping(value = "/{id}/result/owsFile", produces = "text/csv")
+  public ResponseEntity<Resource> getResultFile(@PathVariable UUID id) {
     var result = getBulkResultsUseCase.getResults(id);
 
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.writeValueAsBytes(result);
+    var owsBody = result.getAlerts().stream()
+        .map(this::createOwsRow)
+        .collect(Collectors.toList());
+
+    ByteArrayInputStream byteArrayOutputStream;
+
+    try (
+        var out = new ByteArrayOutputStream();
+        var printer = new CSVPrinter(
+            new PrintWriter(out),
+            CSVFormat.DEFAULT.withHeader(OWS_HEADER))) {
+
+      for (List<String> record : owsBody) {
+        printer.printRecord(record);
+      }
+
+      printer.flush();
+
+      byteArrayOutputStream = new ByteArrayInputStream(out.toByteArray());
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+
+    var fileInputStream = new InputStreamResource(byteArrayOutputStream);
+
+    var headers = new HttpHeaders();
+    headers.set(CONTENT_DISPOSITION, "attachment; filename=" + OWS_FILE_NAME);
+    headers.set(CONTENT_TYPE, "text/csv");
+
+    return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
+  }
+
+  private List<String> createOwsRow(com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlert a) {
+    // TODO fill it with proper data
+    return List.of(a.getId() + "", a.getRecommendation().name(), a.getComment(), "Code",
+        "Description");
   }
 
   @GetMapping("/processingStatus")
