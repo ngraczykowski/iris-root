@@ -35,9 +35,10 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 public class BulkRestController {
 
   private final CreateBulkUseCase createBulkUseCase;
-  private final GetBulkResultsUseCase getBulkResultsUseCase;
-  private final GetBulkStatusUseCase getBulkStatusUseCase;
   private final CancelBulkUseCase cancelBulkUseCase;
+  private final GetBulkStatusUseCase getBulkStatusUseCase;
+  private final GetBulkResultsUseCase getBulkResultsUseCase;
+  private final AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase;
 
   private static final String[] OWS_HEADER =
       { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
@@ -47,6 +48,11 @@ public class BulkRestController {
   public ResponseEntity<BulkAcceptedResponse> recommendAlerts(
       @Valid @RequestBody HsbcRecommendationRequest request) {
     return ResponseEntity.ok(createBulkUseCase.createBulk(request));
+  }
+
+  @PutMapping("/{id}/ack")
+  public ResponseEntity<BulkStatusResponse> acknowledgeDelivery(@PathVariable String id) {
+    return ResponseEntity.ok(acknowledgeBulkDeliveryUseCase.apply(id));
   }
 
   @GetMapping("/{id}/result")

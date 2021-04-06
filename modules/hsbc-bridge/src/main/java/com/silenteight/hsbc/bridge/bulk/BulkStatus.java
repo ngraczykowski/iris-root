@@ -6,5 +6,6 @@ public enum BulkStatus {
   PROCESSING,
   ERROR,
   COMPLETED,
+  DELIVERED,
   CANCELLED
 }

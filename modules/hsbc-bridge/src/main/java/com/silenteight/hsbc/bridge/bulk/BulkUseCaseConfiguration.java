@@ -37,6 +37,11 @@ class BulkUseCaseConfiguration {
   }
 
   @Bean
+  AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase() {
+    return new AcknowledgeBulkDeliveryUseCase(bulkRepository);
+  }
+
+  @Bean
   CancelBulkUseCase cancelBulkUseCase() {
     return new CancelBulkUseCase(bulkRepository);
   }

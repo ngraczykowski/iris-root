@@ -41,6 +41,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/BulkStatusResponse'
 
+  /async/bulk/v1/{bulkId}/ack:
+    put:
+      summary: Update bulk status for given ID
+      parameters:
+        - name: bulkId
+          in: path
+          required: true
+          description: The id bulk job.
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of requested alerts with status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkStatusResponse'
+
   /async/bulk/v1/processingStatus:
     get:
       summary: Status of bulk processing for all bulks
@@ -2038,6 +2056,7 @@ components:
         - PROCESSING
         - ERROR
         - COMPLETED
+        - DELIVERED
         - CANCELLED
         - STORED
 
