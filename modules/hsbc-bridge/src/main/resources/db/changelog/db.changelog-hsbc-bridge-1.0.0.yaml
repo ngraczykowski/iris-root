@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: UUID
+                  type: varchar(50)
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -35,7 +35,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: bulk_id
-                  type: uuid
+                  type: varchar(50)
                   constraints:
                     nullable: false
                     foreignKeyName: fk_bulk_id

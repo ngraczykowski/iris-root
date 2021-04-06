@@ -9,22 +9,19 @@ paths:
     post:
       summary: Submit bulk of alerts for async recommendations.
       requestBody:
-        description: List of alerts to recommend.
+        description: BulkId and list of alerts to recommend.
         required: true
         content:
           application/json:
             schema:
-              $ref:
-                '#/components/schemas/Alerts'
-
+              $ref: '#/components/schemas/BulkIdWithAlerts'
       responses:
         '200':
           description: Confirmation of accepting bulk.
           content:
             application/json:
               schema:
-                $ref:
-                  '#/components/schemas/BulkAcceptedResponse'
+                $ref: '#/components/schemas/BulkAcceptedResponse'
 
   /async/bulk/v1/{bulkId}/status:
     get:
@@ -36,7 +33,6 @@ paths:
           description: The id bulk job.
           schema:
             type: string
-            format: uuid
       responses:
         200:
           description: List of requested alerts with status.
@@ -54,9 +50,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: "#/components/schemas/BulkProcessingStatusResponse"
+                $ref: "#/components/schemas/BulkProcessingStatusResponse"
 
   /async/bulk/v1/{bulkId}/result:
     get:
@@ -68,7 +62,6 @@ paths:
           description: The id bulk job.
           schema:
             type: string
-            format: uuid
       responses:
         200:
           description: List of alerts with recommendation.
@@ -87,7 +80,6 @@ paths:
           description: The id bulk job.
           schema:
             type: string
-            format: uuid
       responses:
         200:
           description: Bulk with given has been canceled.
@@ -2018,6 +2010,7 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/CasesWithAlertURL'
+
     SolvedAlert:
       type: object
       properties:
@@ -2029,9 +2022,11 @@ components:
         comment:
           type: string
 
-    Alerts:
+    BulkIdWithAlerts:
       type: object
       properties:
+        bulkId:
+          type: string
         alerts:
           type: array
           items:
@@ -2068,7 +2063,6 @@ components:
       properties:
         bulkId:
           type: string
-          format: uuid
         requestedAlerts:
           type: array
           items:
@@ -2079,7 +2073,6 @@ components:
       properties:
         bulkId:
           type: string
-          format: uuid
         bulkStatus:
           $ref: '#/components/schemas/BulkStatus'
         requestedAlerts:
@@ -2098,7 +2091,6 @@ components:
       properties:
         bulkId:
           type: string
-          format: uuid
         bulkStatus:
           $ref: '#/components/schemas/BulkStatus'
 
@@ -2107,7 +2099,6 @@ components:
       properties:
         bulkId:
           type: string
-          format: uuid
         bulkStatus:
           $ref: '#/components/schemas/BulkStatus'
         alerts:

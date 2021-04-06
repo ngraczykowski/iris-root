@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
@@ -51,12 +50,13 @@ public class BulkRestController {
   }
 
   @GetMapping("/{id}/result")
-  public ResponseEntity<BulkSolvedAlertsResponse> getResult(@PathVariable UUID id) {
+  public ResponseEntity<BulkSolvedAlertsResponse> getResult(@PathVariable String id) {
     return ResponseEntity.ok(getBulkResultsUseCase.getResults(id));
   }
 
   @GetMapping(value = "/{id}/result/owsFile", produces = "text/csv")
-  public ResponseEntity<Resource> getResultFile(@PathVariable UUID id) {
+  public ResponseEntity<Resource> getResultFile(@PathVariable String id) {
+
     var result = getBulkResultsUseCase.getResults(id);
 
     var owsBody = result.getAlerts().stream()
@@ -103,12 +103,12 @@ public class BulkRestController {
   }
 
   @GetMapping("/{id}/status")
-  public ResponseEntity<BulkStatusResponse> getBulkStatus(@PathVariable UUID id) {
+  public ResponseEntity<BulkStatusResponse> getBulkStatus(@PathVariable String id) {
     return ResponseEntity.ok(getBulkStatusUseCase.getStatus(id));
   }
 
   @GetMapping("/{id}/cancel")
-  public ResponseEntity<BulkCancelResponse> cancelBulk(@PathVariable UUID id) {
+  public ResponseEntity<BulkCancelResponse> cancelBulk(@PathVariable String id) {
     return ResponseEntity.ok(cancelBulkUseCase.cancel(id));
   }
 

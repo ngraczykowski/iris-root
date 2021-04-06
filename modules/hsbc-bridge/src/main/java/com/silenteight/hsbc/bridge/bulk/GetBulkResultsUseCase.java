@@ -6,15 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
 import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
 import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlert;
 import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkSolvedAlertsResponse;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
@@ -27,7 +26,7 @@ public class GetBulkResultsUseCase {
   private final BulkQueryRepository queryRepository;
   private final RecommendationFacade recommendationFacade;
 
-  public BulkSolvedAlertsResponse getResults(UUID id) {
+  public BulkSolvedAlertsResponse getResults(String id) {
     var bulk = queryRepository.findById(id);
 
     if (bulk.getStatus() != COMPLETED) {

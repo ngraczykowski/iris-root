@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.bridge.bulk.repository.BulkWriteRepository;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkCancelResponse;
 
-import java.util.UUID;
 import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
@@ -14,7 +13,7 @@ public class CancelBulkUseCase {
   private final BulkWriteRepository writeRepository;
 
   @Transactional
-  public BulkCancelResponse cancel(UUID id) {
+  public BulkCancelResponse cancel(String id) {
     //check if in ERROR / INPROCESS
     writeRepository.updateStatusById(id, BulkStatus.CANCELLED);
 

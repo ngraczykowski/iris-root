@@ -4,7 +4,6 @@ import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
-import java.util.UUID;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -30,7 +29,7 @@ class BulkItem extends BaseEntity {
 
   @Setter
   @Column(name = "bulk_id")
-  UUID bulkId;
+  String bulkId;
 
   private int alertExternalId;
   private byte[] payload;

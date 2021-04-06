@@ -2,9 +2,9 @@ package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade
 import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository
+import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade
-import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus
 
 import spock.lang.Specification
 
@@ -42,20 +42,25 @@ class GetBulkResultsUseCaseSpec extends Specification {
 
   class Fixtures {
 
-    BulkItem bulkItem = new BulkItem(id: 1, alertExternalId: 200)
-    long bulkItemId = bulkItem.id
-    Bulk bulk = new Bulk(status: BulkStatus.COMPLETED, items: [bulkItem])
-    UUID bulkId = bulk.id;
-
-    String alert = 'alert/1'
-    String recommendationComment = 'Comment'
-    String recommendedAction = 'FALSE_POSITIVE'
-
-    RecommendationDto recommendation = RecommendationDto.builder()
+    def bulkItem = new BulkItem(id: 1, alertExternalId: 200)
+    def bulkItemId = bulkItem.id
+    def bulk = createBulk()
+    def bulkId = bulk.id;
+    def alert = 'alert/1'
+    def recommendationComment = 'Comment'
+    def recommendedAction = 'FALSE_POSITIVE'
+    def recommendation = RecommendationDto.builder()
         .alert(alert)
         .recommendationComment(recommendationComment)
         .recommendedAction(recommendedAction)
         .name('recommendation/alert/1')
         .build()
+
+    def createBulk() {
+      def bulk = new Bulk('20210101-1111')
+      bulk.setStatus(BulkStatus.COMPLETED)
+      bulk.addItem(bulkItem)
+      bulk
+    }
   }
 }

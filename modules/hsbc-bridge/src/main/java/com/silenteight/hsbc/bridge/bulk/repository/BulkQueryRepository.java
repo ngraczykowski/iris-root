@@ -4,11 +4,10 @@ import com.silenteight.hsbc.bridge.bulk.Bulk;
 import com.silenteight.hsbc.bridge.bulk.BulkStatus;
 
 import java.util.Collection;
-import java.util.UUID;
 
 public interface BulkQueryRepository {
 
-  Bulk findById(UUID id);
+  Bulk findById(String id);
 
   Boolean existsByStatusIn(Collection<BulkStatus> bulkStatuses);
 }

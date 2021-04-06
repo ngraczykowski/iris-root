@@ -10,7 +10,6 @@ import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatusResponse;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
@@ -21,7 +20,7 @@ public class GetBulkStatusUseCase {
 
   private final BulkQueryRepository bulkQueryRepository;
 
-  public BulkStatusResponse getStatus(UUID id) {
+  public BulkStatusResponse getStatus(String id) {
     var result = bulkQueryRepository.findById(id);
 
     var response = new BulkStatusResponse();

@@ -20,11 +20,11 @@ public class BulkProvider {
   Bulk getBulk(HsbcRecommendationRequest request) {
     var bulkItems = processAlertsToBulkItems(request.getAlerts());
 
-    return createBulk(bulkItems);
+    return createBulk(request.getBulkId(), bulkItems);
   }
 
-  private Bulk createBulk(List<BulkItem> bulkItems) {
-    Bulk bulk = new Bulk();
+  private Bulk createBulk(String id, List<BulkItem> bulkItems) {
+    Bulk bulk = new Bulk(id);
     bulkItems.forEach(bulk::addItem);
     return writeRepository.save(bulk);
   }

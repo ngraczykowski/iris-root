@@ -774,23 +774,11 @@
     }
   }
 };
-            defs["Alerts"] = {
-  "type" : "object",
-  "properties" : {
-    "alerts" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/Alert"
-      }
-    }
-  }
-};
             defs["BulkAcceptedResponse"] = {
   "type" : "object",
   "properties" : {
     "bulkId" : {
-      "type" : "string",
-      "format" : "uuid"
+      "type" : "string"
     },
     "requestedAlerts" : {
       "type" : "array",
@@ -818,11 +806,24 @@
   "type" : "object",
   "properties" : {
     "bulkId" : {
-      "type" : "string",
-      "format" : "uuid"
+      "type" : "string"
     },
     "bulkStatus" : {
       "$ref" : "#/components/schemas/BulkStatus"
+    }
+  }
+};
+            defs["BulkIdWithAlerts"] = {
+  "type" : "object",
+  "properties" : {
+    "bulkId" : {
+      "type" : "string"
+    },
+    "alerts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Alert"
+      }
     }
   }
 };
@@ -838,8 +839,7 @@
   "type" : "object",
   "properties" : {
     "bulkId" : {
-      "type" : "string",
-      "format" : "uuid"
+      "type" : "string"
     },
     "bulkStatus" : {
       "$ref" : "#/components/schemas/BulkStatus"
@@ -860,8 +860,7 @@
   "type" : "object",
   "properties" : {
     "bulkId" : {
-      "type" : "string",
-      "format" : "uuid"
+      "type" : "string"
     },
     "bulkStatus" : {
       "$ref" : "#/components/schemas/BulkStatus"
@@ -3476,7 +3475,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+        String bulkId = bulkId_example; // String | The id bulk job.
         try {
             BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
             System.out.println(result);
@@ -3495,7 +3494,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+        String bulkId = bulkId_example; // String | The id bulk job.
         try {
             BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
             System.out.println(result);
@@ -3511,7 +3510,7 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">UUID *bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // The id bulk job.
+                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
@@ -3532,7 +3531,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // {{UUID}} The id bulk job.
+var bulkId = bulkId_example; // {{String}} The id bulk job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3563,7 +3562,7 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = new UUID(); // UUID | The id bulk job.
+            var bulkId = bulkId_example;  // String | The id bulk job.
 
             try
             {
@@ -3586,7 +3585,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+$bulkId = bulkId_example; // String | The id bulk job.
 
 try {
     $result = $api_instance->asyncBulkV1BulkIdCancelGet($bulkId);
@@ -3603,7 +3602,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | The id bulk job.
+my $bulkId = bulkId_example; # String | The id bulk job.
 
 eval { 
     my $result = $api_instance->asyncBulkV1BulkIdCancelGet(bulkId => $bulkId);
@@ -3623,7 +3622,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | The id bulk job.
+bulkId = bulkId_example # String | The id bulk job.
 
 try: 
     # Cancel bulk with given id.
@@ -3650,11 +3649,8 @@ except ApiException as e:
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
-                                                      UUID
+                                                      String
                                                   </span>
-                                                      <span class="format">
-                                                          (uuid)
-                                                      </span>
                                   
                                                       <div class="inner description">
                                                           The id bulk job.
@@ -3775,7 +3771,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+        String bulkId = bulkId_example; // String | The id bulk job.
         try {
             BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
             System.out.println(result);
@@ -3794,7 +3790,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+        String bulkId = bulkId_example; // String | The id bulk job.
         try {
             BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
             System.out.println(result);
@@ -3810,7 +3806,7 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">UUID *bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // The id bulk job.
+                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
@@ -3831,7 +3827,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // {{UUID}} The id bulk job.
+var bulkId = bulkId_example; // {{String}} The id bulk job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3862,7 +3858,7 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = new UUID(); // UUID | The id bulk job.
+            var bulkId = bulkId_example;  // String | The id bulk job.
 
             try
             {
@@ -3885,7 +3881,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+$bulkId = bulkId_example; // String | The id bulk job.
 
 try {
     $result = $api_instance->asyncBulkV1BulkIdResultGet($bulkId);
@@ -3902,7 +3898,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | The id bulk job.
+my $bulkId = bulkId_example; # String | The id bulk job.
 
 eval { 
     my $result = $api_instance->asyncBulkV1BulkIdResultGet(bulkId => $bulkId);
@@ -3922,7 +3918,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | The id bulk job.
+bulkId = bulkId_example # String | The id bulk job.
 
 try: 
     # Get results from bulk job.
@@ -3949,11 +3945,8 @@ except ApiException as e:
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
-                                                      UUID
+                                                      String
                                                   </span>
-                                                      <span class="format">
-                                                          (uuid)
-                                                      </span>
                                   
                                                       <div class="inner description">
                                                           The id bulk job.
@@ -4074,7 +4067,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+        String bulkId = bulkId_example; // String | The id bulk job.
         try {
             BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
             System.out.println(result);
@@ -4093,7 +4086,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        UUID bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+        String bulkId = bulkId_example; // String | The id bulk job.
         try {
             BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
             System.out.println(result);
@@ -4109,7 +4102,7 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">UUID *bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // The id bulk job.
+                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
@@ -4130,7 +4123,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // {{UUID}} The id bulk job.
+var bulkId = bulkId_example; // {{String}} The id bulk job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -4161,7 +4154,7 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = new UUID(); // UUID | The id bulk job.
+            var bulkId = bulkId_example;  // String | The id bulk job.
 
             try
             {
@@ -4184,7 +4177,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // UUID | The id bulk job.
+$bulkId = bulkId_example; // String | The id bulk job.
 
 try {
     $result = $api_instance->asyncBulkV1BulkIdStatusGet($bulkId);
@@ -4201,7 +4194,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; # UUID | The id bulk job.
+my $bulkId = bulkId_example; # String | The id bulk job.
 
 eval { 
     my $result = $api_instance->asyncBulkV1BulkIdStatusGet(bulkId => $bulkId);
@@ -4221,7 +4214,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = 38400000-8cf0-11bd-b23e-10b96e4ef00d # UUID | The id bulk job.
+bulkId = bulkId_example # String | The id bulk job.
 
 try: 
     # Status of bulk processing for given ID
@@ -4248,11 +4241,8 @@ except ApiException as e:
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
-                                                      UUID
+                                                      String
                                                   </span>
-                                                      <span class="format">
-                                                          (uuid)
-                                                      </span>
                                   
                                                       <div class="inner description">
                                                           The id bulk job.
@@ -4374,7 +4364,7 @@ public class DefaultApiExample {
         
         DefaultApi apiInstance = new DefaultApi();
         try {
-            array[BulkProcessingStatusResponse] result = apiInstance.asyncBulkV1ProcessingStatusGet();
+            BulkProcessingStatusResponse result = apiInstance.asyncBulkV1ProcessingStatusGet();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#asyncBulkV1ProcessingStatusGet");
@@ -4392,7 +4382,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
         try {
-            array[BulkProcessingStatusResponse] result = apiInstance.asyncBulkV1ProcessingStatusGet();
+            BulkProcessingStatusResponse result = apiInstance.asyncBulkV1ProcessingStatusGet();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#asyncBulkV1ProcessingStatusGet");
@@ -4411,7 +4401,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Status of bulk processing for all bulks
 [apiInstance asyncBulkV1ProcessingStatusGetWithCompletionHandler: 
-              ^(array[BulkProcessingStatusResponse] output, NSError* error) {
+              ^(BulkProcessingStatusResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -4459,7 +4449,7 @@ namespace Example
             try
             {
                 // Status of bulk processing for all bulks
-                array[BulkProcessingStatusResponse] result = apiInstance.asyncBulkV1ProcessingStatusGet();
+                BulkProcessingStatusResponse result = apiInstance.asyncBulkV1ProcessingStatusGet();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4549,11 +4539,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/BulkProcessingStatusResponse"
-        },
-        "x-content-type" : "application/json"
+        "$ref" : "#/components/schemas/BulkProcessingStatusResponse"
       }
     }
   }
@@ -4636,7 +4622,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        Alerts body = ; // Alerts | List of alerts to recommend.
+        BulkIdWithAlerts body = ; // BulkIdWithAlerts | BulkId and list of alerts to recommend.
         try {
             BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
             System.out.println(result);
@@ -4655,7 +4641,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        Alerts body = ; // Alerts | List of alerts to recommend.
+        BulkIdWithAlerts body = ; // BulkIdWithAlerts | BulkId and list of alerts to recommend.
         try {
             BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
             System.out.println(result);
@@ -4671,7 +4657,7 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Alerts *body = ; // List of alerts to recommend.
+                              <pre class="prettyprint"><code class="language-cpp">BulkIdWithAlerts *body = ; // BulkId and list of alerts to recommend.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
@@ -4692,7 +4678,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
 
 var api = new HscbBridgeBulkApi.DefaultApi()
-var body = ; // {{Alerts}} List of alerts to recommend.
+var body = ; // {{BulkIdWithAlerts}} BulkId and list of alerts to recommend.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -4723,7 +4709,7 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var body = new Alerts(); // Alerts | List of alerts to recommend.
+            var body = new BulkIdWithAlerts(); // BulkIdWithAlerts | BulkId and list of alerts to recommend.
 
             try
             {
@@ -4746,7 +4732,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // Alerts | List of alerts to recommend.
+$body = ; // BulkIdWithAlerts | BulkId and list of alerts to recommend.
 
 try {
     $result = $api_instance->asyncBulkV1RecommendPost($body);
@@ -4763,7 +4749,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::Alerts->new(); # Alerts | List of alerts to recommend.
+my $body = WWW::SwaggerClient::Object::BulkIdWithAlerts->new(); # BulkIdWithAlerts | BulkId and list of alerts to recommend.
 
 eval { 
     my $result = $api_instance->asyncBulkV1RecommendPost(body => $body);
@@ -4783,7 +4769,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # Alerts | List of alerts to recommend.
+body =  # BulkIdWithAlerts | BulkId and list of alerts to recommend.
 
 try: 
     # Submit bulk of alerts for async recommendations.
@@ -4811,11 +4797,11 @@ except ApiException as e:
                                 <script>
                                 $(document).ready(function() {
                                   var schemaWrapper = {
-  "description" : "List of alerts to recommend.",
+  "description" : "BulkId and list of alerts to recommend.",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Alerts"
+        "$ref" : "#/components/schemas/BulkIdWithAlerts"
       }
     }
   },

@@ -9,6 +9,8 @@ import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED
+
 class CreateBulkUseCaseSpec extends Specification {
 
   def eventPublisher = Mock(ApplicationEventPublisher)
@@ -22,8 +24,7 @@ class CreateBulkUseCaseSpec extends Specification {
             casesWithAlertURL: [new CasesWithAlertURL(id: 100)]
         ))
     def request = new HsbcRecommendationRequest(alerts: [alert])
-    var bulkItem = new BulkItem(100, "".getBytes())
-    def bulk = new Bulk(items: [bulkItem])
+    def bulk = createBulk()
 
     when:
     bulkProvider.getBulk(request) >> bulk
@@ -33,5 +34,13 @@ class CreateBulkUseCaseSpec extends Specification {
     1 * eventPublisher.publishEvent(_ as BulkStoredEvent)
     result.bulkId
     result.requestedAlerts.size() == 1
+  }
+
+  def createBulk() {
+    def bulkItem = new BulkItem(100, "".getBytes())
+    def bulk = new Bulk('20210101-1111')
+    bulk.setStatus(COMPLETED)
+    bulk.addItem(bulkItem)
+    bulk
   }
 }

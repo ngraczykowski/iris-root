@@ -35,7 +35,7 @@ class BulkStatusUpdater {
   private Optional<BulkStatus> determineNewBulkStatus(Collection<BulkItem> items) {
     if (atLeastOneProcessing(items)) {
       return of(PROCESSING);
-    } else if (allCompletedOrClosed(items)) {
+    } else if (notEmptyAndAllCompletedOrClosed(items)) {
       return of(COMPLETED);
     } else {
       return empty();
@@ -47,9 +47,13 @@ class BulkStatusUpdater {
         .anyMatch(status -> status == PROCESSING);
   }
 
-  private boolean allCompletedOrClosed(Collection<BulkItem> items) {
-    return items.stream().map(BulkItem::getStatus)
-        .allMatch(status -> status == COMPLETED || status == ERROR);
+  private boolean notEmptyAndAllCompletedOrClosed(Collection<BulkItem> items) {
+    if (items.isEmpty()) {
+      return false;
+    } else {
+      return items.stream().map(BulkItem::getStatus)
+          .allMatch(status -> status == COMPLETED || status == ERROR);
+    }
   }
 
   private void updateBulkStatus(Bulk bulk, BulkStatus bulkStatus) {

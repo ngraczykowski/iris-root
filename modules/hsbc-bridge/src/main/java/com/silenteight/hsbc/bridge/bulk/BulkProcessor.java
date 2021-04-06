@@ -16,7 +16,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ class BulkProcessor {
     processBulk(bulkId);
   }
 
-  void processBulk(@NonNull UUID bulkId) {
+  void processBulk(@NonNull String bulkId) {
     log.info("Bulk processing started, bulkId={}", bulkId);
 
     var bulk = bulkQueryRepository.findById(bulkId);

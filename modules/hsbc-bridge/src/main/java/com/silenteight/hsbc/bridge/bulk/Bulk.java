@@ -9,7 +9,6 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -23,7 +22,7 @@ import static lombok.AccessLevel.NONE;
 public class Bulk extends BaseEntity {
 
   @Id
-  private UUID id;
+  private String id;
 
   @Setter
   @Enumerated(value = EnumType.STRING)
@@ -33,8 +32,8 @@ public class Bulk extends BaseEntity {
   @JoinColumn(name = "bulk_id")
   private Collection<BulkItem> items = new ArrayList<>();
 
-  Bulk() {
-    this.id = UUID.randomUUID();
+  Bulk(String id) {
+    this.id = id;
   }
 
   public void addItem(BulkItem bulkItem) {

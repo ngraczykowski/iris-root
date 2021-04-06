@@ -11,14 +11,15 @@ class GetBulkStatusUseCaseSpec extends Specification {
 
   def 'should get bulk status'() {
     given:
-    var bulkItem = new BulkItem(100, "".getBytes())
-    def bulk = new Bulk(items: [bulkItem])
+    def bulkItem = new BulkItem(100, "".getBytes())
+    def bulk = new Bulk('20210101-1111')
+    bulk.addItem(bulkItem)
 
     when:
     def result = underTest.getStatus(bulk.id)
 
     then:
-    1 * bulkRepository.findById(_ as UUID) >> bulk
+    1 * bulkRepository.findById(_ as String) >> bulk
     with(result) {
       bulkId == bulk.id
       bulkStatus.name() == bulk.status.name()
