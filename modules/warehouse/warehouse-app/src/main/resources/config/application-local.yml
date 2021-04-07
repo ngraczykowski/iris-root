@@ -14,6 +14,12 @@ spring:
     password: dev
     virtual-host: /
 
+  elasticsearch:
+    rest:
+      username: admin
+      password: admin
+      uris: http://localhost:9201,http://localhost:9200
+
 keycloak:
   adapter:
     authServerUrl: http://localhost:24111/auth

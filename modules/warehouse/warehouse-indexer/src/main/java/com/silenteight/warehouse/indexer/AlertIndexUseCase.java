@@ -9,9 +9,14 @@ import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.warehouse.indexer.gateway.IndexedConfirmationGateway;
 import com.silenteight.warehouse.indexer.listener.IndexRequestCommandHandler;
 
-@RequiredArgsConstructor
+import org.elasticsearch.client.RestHighLevelClient;
+
 @Slf4j
+@RequiredArgsConstructor
 public class AlertIndexUseCase implements IndexRequestCommandHandler {
+
+  @NonNull
+  private final RestHighLevelClient restHighLevelClient;
 
   @NonNull
   private final IndexedConfirmationGateway indexedConfirmationGateway;

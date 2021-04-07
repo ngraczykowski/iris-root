@@ -23,7 +23,7 @@ dependencies {
   implementation project(":warehouse-indexer")
 
   implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_commons_app
 
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_undertow
