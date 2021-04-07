@@ -26,4 +26,9 @@ class ManagementTestConfiguration {
   Channel governanceChannel() {
     return Mockito.mock(Channel.class);
   }
+
+  @Bean
+  AnalysisService analysisService() {
+    return new TestAnalysisService();
+  }
 }

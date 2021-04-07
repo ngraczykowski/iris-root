@@ -162,9 +162,9 @@ paths:
 components:
   schemas:
 
-    SimulationStatus:
+    SimulationState:
       type: string
-      enum: [ PENDING, PROCESSING, COMPLETED]
+      enum: [ PENDING, PROCESSING, COMPLETED ]
 
     CreateSimulationRequest:
       type: object
@@ -203,18 +203,21 @@ components:
           type: string
         name:
           type: string
+        state:
+          type: object
+          $ref: '#/components/schemas/SimulationState'
         datasetNames:
           type: array
           items:
             properties:
               datasetName:
                 type: string
-        policyId:
+        modelName:
           type: string
-          description: Policy UUID
-        status:
-          type: object
-          $ref: '#/components/schemas/SimulationStatus'
+          description: Model resource name
+        progressState:
+          type: string
+          description: Progress state of simulation processing
         createdAt:
           type: string
         createdBy:
@@ -226,8 +229,9 @@ components:
         name: 'Simulation name'
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
-        policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
-        status: 'PENDING'
+        modelName: 'solving-models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        progressState: 'RUNNING'
+        state: 'PENDING'
         createdAt: '2004-02-12T15:19:21Z'
         createdBy: 'UserName'
         updatedAt: '2004-02-15T15:19:21Z'
@@ -239,18 +243,18 @@ components:
           type: string
         name:
           type: string
+        state:
+          type: object
+          $ref: '#/components/schemas/SimulationState'
         datasetNames:
           type: array
           items:
             properties:
               datasetName:
                 type: string
-        policyId:
+        modelName:
           type: string
-          description: Policy UUID
-        status:
-          type: object
-          $ref: '#/components/schemas/SimulationStatus'
+          description: Model resource name
         startedAt:
           type: string
         finishedAt:
@@ -267,7 +271,7 @@ components:
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
-        status: 'PENDING'
+        state: 'PENDING'
         createdAt: '2004-02-12T15:09:21Z'
         startedAt: '2004-02-12T16:19:21Z'
         finishedAt: '2004-02-13T09:19:21Z'

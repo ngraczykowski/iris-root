@@ -10,4 +10,6 @@ public interface AnalysisService {
   Analysis createAnalysis(@NonNull SolvingModel model);
 
   void addDatasetToAnalysis(@NonNull String analysisName, @NonNull String datasetName);
+
+  Analysis getAnalysis(@NonNull String analysisName);
 }

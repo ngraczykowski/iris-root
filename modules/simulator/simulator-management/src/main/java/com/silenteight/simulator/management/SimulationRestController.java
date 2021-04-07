@@ -55,6 +55,6 @@ class SimulationRestController {
   @GetMapping(SIMULATIONS_URL)
   @PreAuthorize("isAuthorized('LIST_SIMULATIONS')")
   public ResponseEntity<List<SimulationDto>> listSimulations() {
-    return ok(simulationQuery.listAllSimulations());
+    return ok(simulationQuery.list());
   }
 }

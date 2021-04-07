@@ -4,12 +4,10 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.simulator.management.dto.SimulationDto;
 import com.silenteight.simulator.management.dto.SimulationState;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
@@ -77,16 +75,4 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   @ToString.Include
   @Column(name = "finished_at")
   private OffsetDateTime finishedAt;
-
-  static SimulationDto toDto(SimulationEntity simulationEntity) {
-    return SimulationDto.builder()
-        .id(simulationEntity.getSimulationId())
-        .name(simulationEntity.getName())
-        .status(simulationEntity.getState())
-        .datasetNames(new ArrayList<>(simulationEntity.getDatasetNames()))
-        .modelName(simulationEntity.getModelName())
-        .createdAt(simulationEntity.getCreatedAt())
-        .createdBy(simulationEntity.getCreatedBy())
-        .build();
-  }
 }

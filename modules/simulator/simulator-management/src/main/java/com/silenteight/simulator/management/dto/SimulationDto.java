@@ -19,13 +19,16 @@ public class SimulationDto {
   String name;
 
   @NonNull
+  SimulationState state;
+
+  @NonNull
   List<String> datasetNames;
 
   @NonNull
   String modelName;
 
   @NonNull
-  SimulationState status;
+  String progressState;
 
   @NonNull
   String createdBy;
