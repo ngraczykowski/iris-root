@@ -13,8 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.silenteight.simulator.management.SimulationFixture.*;
-import static com.silenteight.simulator.management.dto.SimulationState.PENDING;
+import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
 
@@ -33,24 +32,25 @@ class SimulationQueryTest extends BaseDataJpaTest {
   void shouldListSimulations() {
     persistSimulation();
 
-    List<SimulationDto> result = underTest.listAllSimulations();
+    List<SimulationDto> result = underTest.list();
 
     assertThat(result).hasSize(1);
     SimulationDto simulationDto = result.get(0);
     assertThat(simulationDto.getId()).isEqualTo(SIMULATION_ID);
     assertThat(simulationDto.getName()).isEqualTo(NAME);
-    assertThat(simulationDto.getStatus()).isEqualTo(PENDING);
-    assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
-    assertThat(simulationDto.getCreatedAt()).isNotNull();
+    assertThat(simulationDto.getState()).isEqualTo(STATE);
     assertThat(simulationDto.getDatasetNames()).isEqualTo(DATASET_NAMES);
     assertThat(simulationDto.getModelName()).isEqualTo(MODEL_NAME);
+    assertThat(simulationDto.getProgressState()).isEqualTo(PROGRESS_STATE);
+    assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
+    assertThat(simulationDto.getCreatedAt()).isNotNull();
   }
 
   private SimulationEntity persistSimulation() {
     SimulationEntity simulationEntity = SimulationEntity.builder()
         .simulationId(SIMULATION_ID)
         .name(NAME)
-        .state(STATUS)
+        .state(STATE)
         .createdBy(USERNAME)
         .datasetNames(of(DATASET_NAME))
         .modelName(MODEL_NAME)

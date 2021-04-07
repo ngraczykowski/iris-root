@@ -29,7 +29,9 @@ class ManagementConfiguration {
   }
 
   @Bean
-  SimulationQuery simulationQuery(SimulationEntityRepository simulationEntityRepository) {
-    return new SimulationQuery(simulationEntityRepository);
+  SimulationQuery simulationQuery(
+      SimulationEntityRepository simulationEntityRepository, AnalysisService analysisService) {
+
+    return new SimulationQuery(simulationEntityRepository, analysisService);
   }
 }

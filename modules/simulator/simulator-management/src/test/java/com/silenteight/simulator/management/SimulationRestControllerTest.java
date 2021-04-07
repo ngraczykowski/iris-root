@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
-import static com.silenteight.simulator.management.SimulationFixture.*;
+import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static com.silenteight.simulator.management.SimulationRestController.SIMULATIONS_URL;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.is;
@@ -66,17 +66,18 @@ class SimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { BUSINESS_OPERATOR })
   void its200_whenSimulationFound() {
-    given(simulationQuery.listAllSimulations()).willReturn(of(SIMULATION_DTO));
+    given(simulationQuery.list()).willReturn(of(SIMULATION_DTO));
     get(SIMULATIONS_URL)
         .statusCode(OK.value())
         .body("size()", is(1))
         .body("[0].id", is(SIMULATION_ID.toString()))
         .body("[0].name", is(NAME))
-        .body("[0].createdAt", notNullValue())
-        .body("[0].createdBy", is(SimulationFixture.USERNAME))
+        .body("[0].state", is(STATE.toString()))
         .body("[0].datasetNames", is(DATASET_NAMES))
         .body("[0].modelName", is(MODEL_NAME))
-        .body("[0].status", is(STATUS.toString()));
+        .body("[0].progressState", is(PROGRESS_STATE))
+        .body("[0].createdAt", notNullValue())
+        .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })

@@ -14,9 +14,9 @@ import java.util.List;
 
 import static com.silenteight.simulator.management.CreateSimulationRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.management.CreateSimulationRequest.PRE_AUDIT_TYPE;
-import static com.silenteight.simulator.management.SimulationFixture.ANALYSIS;
-import static com.silenteight.simulator.management.SimulationFixture.CREATE_SIMULATION_REQUEST;
-import static com.silenteight.simulator.management.SimulationFixture.SOLVING_MODEL;
+import static com.silenteight.simulator.management.SimulationFixtures.ANALYSIS;
+import static com.silenteight.simulator.management.SimulationFixtures.CREATE_SIMULATION_REQUEST;
+import static com.silenteight.simulator.management.SimulationFixtures.SOLVING_MODEL;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;

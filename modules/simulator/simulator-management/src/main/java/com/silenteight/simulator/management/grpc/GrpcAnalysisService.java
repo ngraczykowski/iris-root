@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
+import com.silenteight.adjudication.api.v1.GetAnalysisRequest;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.simulator.management.AnalysisService;
 
@@ -66,6 +67,17 @@ class GrpcAnalysisService implements AnalysisService {
     return AddDatasetRequest.newBuilder()
         .setAnalysis(analysisName)
         .setDataset(datasetName)
+        .build();
+  }
+
+  @Override
+  public Analysis getAnalysis(String analysisName) {
+    return analysisStub.getAnalysis(toGetAnalysisRequest(analysisName));
+  }
+
+  private static GetAnalysisRequest toGetAnalysisRequest(String analysisName) {
+    return GetAnalysisRequest.newBuilder()
+        .setAnalysis(analysisName)
         .build();
   }
 }
