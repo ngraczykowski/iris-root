@@ -11,11 +11,11 @@ serp:
 server:
   ssl:
     enabled: true
-    key-store: ${serp.keystore.path}
-    key-store-password: ${serp.keystore.password}
+    key-store: ${simulator.keystore.path}
+    key-store-password: ${simulator.keystore.password}
     key-alias: serp ${spring.application.name}
-    trust-store: ${serp.truststore.path}
-    trust-store-password: ${serp.truststore.password}
+    trust-store: ${simulator.truststore.path}
+    trust-store-password: ${simulator.truststore.password}
 
 grpc:
   server:
