@@ -1,9 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
@@ -12,12 +9,14 @@ import java.util.Collection;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @Setter(NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
+@NoArgsConstructor(access = PRIVATE)
 @Table(name = "hsbc_bridge_bulk")
 public class Bulk extends BaseEntity {
 
