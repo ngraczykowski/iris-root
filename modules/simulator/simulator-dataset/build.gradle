@@ -24,6 +24,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
+  implementation libraries.silenteight_audit_bs
 
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
-import static com.silenteight.simulator.dataset.list.ListDatasetFixtures.*;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -28,12 +28,12 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
   private DatasetQuery datasetQuery;
 
   @TestWithRole(roles = { BUSINESS_OPERATOR })
-  void its200_whenSimulationFoundWithoutState() {
+  void its200_whenDatasetsFoundWithoutState() {
     given(datasetQuery.list(null)).willReturn(of(DATASET_DTO));
     get("/v1/datasets")
         .statusCode(OK.value())
         .body("size()", is(1))
-        .body("[0].datasetName", is(DATASET_NAME))
+        .body("[0].id", is(DATASET_ID.toString()))
         .body("[0].name", is(NAME))
         .body("[0].description", is(DESCRIPTION))
         .body("[0].state", is(STATE.toString()))
@@ -44,12 +44,12 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
   }
 
   @TestWithRole(roles = { BUSINESS_OPERATOR })
-  void its200_whenSimulationFoundWitState() {
+  void its200_whenDatasetsFoundWitState() {
     given(datasetQuery.list(CURRENT)).willReturn(of(DATASET_DTO));
     get("/v1/datasets?state=CURRENT")
         .statusCode(OK.value())
         .body("size()", is(1))
-        .body("[0].datasetName", is(DATASET_NAME))
+        .body("[0].id", is(DATASET_ID.toString()))
         .body("[0].name", is(NAME))
         .body("[0].description", is(DESCRIPTION))
         .body("[0].state", is(STATE.toString()))
@@ -60,7 +60,7 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
-  void its403_whenNotPermittedRoleForListing() {
+  void its403_whenNotPermittedRole() {
     get("/v1/datasets").statusCode(FORBIDDEN.value());
   }
 }

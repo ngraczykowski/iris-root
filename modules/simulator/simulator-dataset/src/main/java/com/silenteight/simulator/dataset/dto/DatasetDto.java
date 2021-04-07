@@ -7,13 +7,14 @@ import lombok.Value;
 import com.silenteight.simulator.dataset.domain.DatasetState;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Value
 @Builder
 public class DatasetDto {
 
   @NonNull
-  String datasetName;
+  UUID id;
 
   @NonNull
   String name;

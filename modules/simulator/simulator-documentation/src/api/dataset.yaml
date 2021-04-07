@@ -57,7 +57,7 @@ components:
     Dataset:
       type: object
       properties:
-        datasetName:
+        id:
           type: string
         name:
           type: string
@@ -75,7 +75,7 @@ components:
         createdBy:
           type: string
       example:
-        datasetName: 'datasets/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'Dataset name'
         description: 'Dataset description'
         query:
@@ -90,9 +90,12 @@ components:
     CreateDatasetRequest:
       type: object
       required:
+        - id
         - name
         - query
       properties:
+        id:
+          type: string
         name:
           type: string
         description:
@@ -101,6 +104,7 @@ components:
           type: object
           $ref: '#/components/schemas/Query'
       example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'New dataset'
         description: 'Dataset description'
         query:

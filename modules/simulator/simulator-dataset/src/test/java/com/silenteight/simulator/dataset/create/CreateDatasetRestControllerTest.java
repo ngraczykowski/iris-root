@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
-import static com.silenteight.simulator.dataset.create.CreateDatasetFixtures.CREATE_DATASET_REQUEST;
+import static com.silenteight.simulator.dataset.create.CreateDatasetFixtures.CREATE_DATASET_REQUEST_DTO;
 import static io.restassured.http.ContentType.JSON;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -28,8 +28,8 @@ class CreateDatasetRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its201_whenDatasetCreated() {
-    doNothing().when(createDatasetUseCase).activate(any(), any());
-    post("/v1/datasets", CREATE_DATASET_REQUEST)
+    doNothing().when(createDatasetUseCase).activate(any());
+    post("/v1/datasets", CREATE_DATASET_REQUEST_DTO)
         .statusCode(CREATED.value());
   }
 
@@ -38,7 +38,7 @@ class CreateDatasetRestControllerTest extends BaseRestControllerTest {
       username = USERNAME,
       authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
   void its403_whenNotPermittedRoleForCreating() {
-    post("/v1/datasets", CREATE_DATASET_REQUEST)
+    post("/v1/datasets", CREATE_DATASET_REQUEST_DTO)
         .contentType(JSON)
         .statusCode(FORBIDDEN.value());
   }

@@ -93,4 +93,17 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="simulator-1.0.0-3" author="mmastylo">
+    <addColumn tableName="simulator_dataset">
+      <column name="dataset_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+
+    <renameColumn
+        tableName="simulator_dataset"
+        oldColumnName="dataset_name"
+        newColumnName="external_resource_name"/>
+  </changeSet>
+
 </databaseChangeLog>

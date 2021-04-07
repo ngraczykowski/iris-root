@@ -19,7 +19,7 @@ import static java.util.UUID.randomUUID;
 @Builder
 public class CreateSimulationRequest implements AuditableRequest {
 
-  static final String PRE_AUDIT_TYPE = "CreateSimulationRequest";
+  static final String PRE_AUDIT_TYPE = "CreateSimulationRequested";
   static final String POST_AUDIT_TYPE = "SimulationCreated";
 
   @NonNull

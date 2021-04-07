@@ -12,20 +12,21 @@ import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
 public class DatasetMetadataService {
 
   @NonNull
-  private final DatasetEntityRepository datasetEntityRepository;
+  private final DatasetEntityRepository repository;
 
-  public void createMetadata(CreateDatasetRequest request, Dataset dataset, String username) {
+  public void createMetadata(CreateDatasetRequest request, Dataset dataset) {
     DatasetEntity datasetEntity = DatasetEntity.builder()
-        .datasetName(dataset.getName())
-        .createdBy(username)
+        .datasetId(request.getId())
         .name(request.getName())
         .description(request.getDescription())
+        .externalResourceName(dataset.getName())
+        .createdBy(request.getCreatedBy())
         .initialAlertCount(dataset.getAlertCount())
         .state(CURRENT)
         .generationDateFrom(request.getRangeFrom())
         .generationDateTo(request.getRangeTo())
         .build();
 
-    datasetEntityRepository.save(datasetEntity);
+    repository.save(datasetEntity);
   }
 }

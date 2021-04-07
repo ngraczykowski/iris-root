@@ -3,6 +3,8 @@ package com.silenteight.simulator.dataset.domain;
 import org.springframework.data.repository.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 interface DatasetEntityRepository extends Repository<DatasetEntity, Long> {
 
@@ -11,4 +13,6 @@ interface DatasetEntityRepository extends Repository<DatasetEntity, Long> {
   Collection<DatasetEntity> findAll();
 
   Collection<DatasetEntity> findAllByState(DatasetState state);
+
+  Optional<DatasetEntity> findByDatasetId(UUID datasetId);
 }

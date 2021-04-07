@@ -9,6 +9,7 @@ import com.silenteight.simulator.dataset.dto.RangeQueryDto;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -32,9 +33,16 @@ public class DatasetQuery {
       return repository.findAll();
   }
 
+  public DatasetDto get(@NonNull UUID datasetId) {
+    return repository
+        .findByDatasetId(datasetId)
+        .map(DatasetQuery::toDto)
+        .orElseThrow(() -> new DatasetNotFoundException(datasetId));
+  }
+
   private static DatasetDto toDto(DatasetEntity datasetEntity) {
     return DatasetDto.builder()
-        .datasetName(datasetEntity.getDatasetName())
+        .id(datasetEntity.getDatasetId())
         .name(datasetEntity.getName())
         .description(datasetEntity.getDescription())
         .state(datasetEntity.getState())
