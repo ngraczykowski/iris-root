@@ -6,33 +6,28 @@ serp.messaging.error-queue.enabled: true
 #---------------------------------------------------------------------------------------------------
 # SERVER
 #---------------------------------------------------------------------------------------------------
-serp.web.threads.io: 4
-serp.web.threads.worker: 16
-serp.server.protocol: http
+simulator.web.threads.io: 4
+simulator.web.threads.worker: 16
+simulator.server.protocol: http
 
 #---------------------------------------------------------------------------------------------------
 # GENERAL
 #---------------------------------------------------------------------------------------------------
-serp.execution.threads: 8
-serp.execution.threads.max: 16
-serp.execution.queue: 10000
+simulator.execution.threads: 8
+simulator.execution.threads.max: 16
+simulator.execution.queue: 10000
 
-serp.scheduling.threads: 2
+simulator.scheduling.threads: 2
 
 # XXX(ahaczewski): Temporarily set to true, until we're sure customer correctly configured SERP.
 serp.show-env: true
 
 #---------------------------------------------------------------------------------------------------
-# SERVICE DISCOVERY
-#---------------------------------------------------------------------------------------------------
-serp.consul.discovery.enabled: ${serp.consul.enabled}
-
-#---------------------------------------------------------------------------------------------------
 # mTLS - enabled by default
 #---------------------------------------------------------------------------------------------------
-serp.tls.enabled: false
-serp.consul.traefik.passTLSCert: ${serp.tls.enabled}
-serp.consul.traefik.entryPoints: unprotectedGateway
+simulator.tls.enabled: false
+simulator.consul.traefik.passTLSCert: ${simulator.tls.enabled}
+simulator.consul.traefik.entryPoints: unprotectedGateway
 
 ####################################################################################################
 # CONFIGURATION
@@ -46,8 +41,8 @@ server:
   port: 24890
   forward-headers-strategy: native
   undertow:
-    io-threads: ${serp.web.threads.io}
-    worker-threads: ${serp.web.threads.worker}
+    io-threads: ${simulator.web.threads.io}
+    worker-threads: ${simulator.web.threads.worker}
 
   servlet:
     context-path: /rest/${spring.application.name}
@@ -91,18 +86,88 @@ spring:
   aop:
     auto: false
 
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${simulator.db.url}
+    username: ${simulator.db.user}
+    password: ${simulator.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: 1
+      maximum-pool-size: 10
+      auto-commit: false
+      schema: ${simulator.db.schema}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${simulator.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: ${spring.application.name}
+
+    # Database migrations
+    liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.xml
+      default-schema: ${simulator.db.schema}
+      contexts: default
+
+    # Spring Data JPA
+    jpa:
+      database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+      database: POSTGRESQL
+      show-sql: false
+      open-in-view: false
+
+      hibernate:
+        ddl-auto: none
+        use-new-id-generator-mappings: true
+
+      properties:
+        hibernate.cache.use_query_cache: false
+        hibernate.connection.provider_disables_autocommit: true
+        hibernate.generate_statistics: false
+        hibernate.jdbc.lob.non_contextual_creation: true
+        hibernate.jdbc.time_zone: UTC
+        hibernate.temp.use_jdbc_metadata_defaults: false
+        org.hibernate.envers.audit_table_suffix: _audit
+        org.hibernate.envers.store_data_at_delete: true
+
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    ssl:
+      enabled: false
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: 2
+        prefetch: 10
+      simple:
+        concurrency: 1
+        max-concurrency: 2
+        prefetch: 10
+
   # Task execution and scheduling
   task:
     execution:
       pool:
-        core-size: ${serp.execution.threads}
-        max-size: ${serp.execution.threads.max}
-        queue-capacity: ${serp.execution.queue}
+        core-size: ${simulator.execution.threads}
+        max-size: ${simulator.execution.threads.max}
+        queue-capacity: ${simulator.execution.queue}
         keep-alive: 10s
       thread-name-prefix: pool-task-
 
     scheduling:
-      pool.size: ${serp.scheduling.threads}
+      pool.size: ${simulator.scheduling.threads}
       thread-name-prefix: pool-scheduling-
 
   main:

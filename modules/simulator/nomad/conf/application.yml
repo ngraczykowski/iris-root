@@ -1,18 +1,33 @@
 server:
   port: {{ env "NOMAD_PORT_http" }}
 
+simulator:
+  db:
+    name: simulator
+{{- with service "simulator-db-service-postgres" }}
+    host: {{ (index . 0).Address }}
+    port: {{ (index . 0).Port }}
+{{ end -}}
+
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
 grpc:
   server:
     port: {{ env "NOMAD_PORT_grpc" }}
 
 keycloak:
   adapter:
-    auth-server-url: https://auth.dev.silenteight.com
+    auth-server-url: https://auth.silenteight.com
     realm: sens-webapp
     public-client: false
     confidential-port: 0
     principal-attribute: preferred_username
-    resource: backend
     ssl-required: external
-    credentials:
-      secret: a9392d5f-db39-4bbe-b36e-96aecdbfd9d0

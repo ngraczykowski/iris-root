@@ -12,6 +12,11 @@ variable "memory" {
   default = 1500
 }
 
+variable "namespace" {
+  type    = string
+  default = "dev"
+}
+
 variable "http_tags" {
   type = list(string)
   default = []
@@ -24,6 +29,8 @@ locals {
 
 job "simulator" {
   type = "service"
+
+  namespace = "${var.namespace}"
 
   datacenters = [
     "dc1"
@@ -42,7 +49,7 @@ job "simulator" {
     }
 
     service {
-      name = "simulator"
+      name = "${var.namespace}-simulator"
       port = "http"
       tags = concat([
         "http",
@@ -79,7 +86,7 @@ job "simulator" {
       }
 
       template {
-        data = "{{ key \"simulator/secrets\" }}"
+        data = "{{ key \"${var.namespace}/simulator/secrets\" }}"
         destination = "secrets/simulator.env"
         env = true
       }
@@ -87,18 +94,6 @@ job "simulator" {
       template {
         data = file("./conf/application.yml")
         destination = "local/conf/application.yml"
-        change_mode = "noop"
-      }
-
-      template {
-        data = file("./conf/application-database.yml")
-        destination = "local/conf/application-database.yml"
-        change_mode = "noop"
-      }
-
-      template {
-        data = file("./conf/application-messaging.yml")
-        destination = "local/conf/application-messaging.yml"
         change_mode = "noop"
       }
 
@@ -114,7 +109,7 @@ job "simulator" {
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
           "-jar",
           "local/simulator-app.jar",
-          "--spring.profiles.active=linux,simulator,database,rabbitmq,messaging",
+          "--spring.profiles.active=linux,simulator",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }
