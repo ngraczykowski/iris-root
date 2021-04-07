@@ -189,3 +189,14 @@ sep.auth:
     BUSINESS_OPERATOR:
       - "DATASET_MANAGEMENT"
       - "SIMULATION_MANAGEMENT"
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+simulator.db.host: localhost
+simulator.db.port: 24290
+simulator.db.schema: public
+simulator.db.name: serp
+simulator.db.user: serp
+simulator.db.password: serp
+simulator.db.url: jdbc:postgresql://${simulator.db.host}:${simulator.db.port}/${simulator.db.name}?currentSchema=${simulator.db.schema}
