@@ -10,6 +10,12 @@ spring:
     # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+  elasticsearch:
+    rest:
+      uris: {{ range $index, es := service "http.elasticsearch" -}}
+        {{ if $index }},{{ end -}}
+        {{ es.Address }}:{{ es.Port -}}
+{{- end }}
 
 warehouse:
   messaging:
