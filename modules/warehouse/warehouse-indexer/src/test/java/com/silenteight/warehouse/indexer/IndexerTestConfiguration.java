@@ -6,6 +6,8 @@ import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexerClientIntegrationProperties;
 
 import org.springframework.amqp.core.*;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,9 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 @ComponentScan(basePackageClasses = {
     IndexerModule.class,
     AmqpCommonModule.class
+})
+@ImportAutoConfiguration({
+    ElasticsearchRestClientAutoConfiguration.class
 })
 @EnableIntegration
 @EnableIntegrationManagement

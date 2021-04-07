@@ -5,9 +5,9 @@ ext {
   // Silent Eight
   //***********************************
   silenteightAuditBsVersion = "1.2.0"
-  silenteightCommonsVersion = "2.0.0"
+  silenteightCommonsVersion = "2.1.0"
   silenteightSepAuthVersion = "1.0.0"
-  silenteightSepBaseVersion = "1.10.0"
+  silenteightSepBaseVersion = "1.10.1"
   silenteightDataApiVersion = "1.0.0"
   silenteightSepUsermanagementApiVersion = "1.4.0"
   silenteightSepUsermanagementKeycloakVersion = "1.3.0"
@@ -17,6 +17,7 @@ ext {
 
 // Silent Eight
 libraries.silenteight_audit_bs = [group: 'com.silenteight.auditing.bs', name: 'silenteight-audit-bs', version: silenteightAuditBsVersion]
+libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
 libraries.silenteight_sep_auth = [group: "com.silenteight.sep.auth", name: "sep-auth", version: silenteightSepAuthVersion]
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
@@ -133,6 +134,7 @@ libraries.commons_codec = [group: 'commons-codec', name: 'commons-codec']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3']
 libraries.commons_text = [group: 'org.apache.commons', name: 'commons-text']
 libraries.consul_client = [group: "com.orbitz.consul", name: "consul-client"]
+libraries.elasticsearch_rest_client = [group:'org.elasticsearch.client', name: 'elasticsearch-rest-client', version: '7.10.2']
 libraries.fastutil = [group: 'it.unimi.dsi', name: 'fastutil']
 libraries.freemarker = [group: 'org.freemarker', name: 'freemarker']
 libraries.grpc_api = [group: 'io.grpc', name: 'grpc-api']

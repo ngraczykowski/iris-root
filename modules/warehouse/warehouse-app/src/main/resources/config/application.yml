@@ -101,11 +101,12 @@ serp:
 # REST API AUTH
 #-------------------------------------------------------------------------------------------------
 
-sep.auth:
-  permissionMethodsMappings:
-    REPORTS_MANAGEMENT:
-      - "GENERATE_REPORT"
+sep:
+  auth:
+    permissionMethodsMappings:
+      REPORTS_MANAGEMENT:
+        - "GENERATE_REPORT"
 
-  rolePermissionsMappings:
-    BUSINESS_OPERATOR:
-      - "REPORTS_MANAGEMENT"
+    rolePermissionsMappings:
+      BUSINESS_OPERATOR:
+        - "REPORTS_MANAGEMENT"

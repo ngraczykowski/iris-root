@@ -5,6 +5,7 @@ services:
     image: amazon/opendistro-for-elasticsearch:1.13.1
     container_name: warehouse-es1
     environment:
+      - opendistro_security.ssl.http.enabled=false
       - cluster.name=odfe-cluster
       - node.name=odfe-node1
       - discovery.seed_hosts=odfe-node1,odfe-node2
@@ -29,6 +30,7 @@ services:
     image: amazon/opendistro-for-elasticsearch:1.13.1
     container_name: warehouse-es2
     environment:
+      - opendistro_security.ssl.http.enabled=false
       - cluster.name=odfe-cluster
       - node.name=odfe-node2
       - discovery.seed_hosts=odfe-node1,odfe-node2
@@ -44,6 +46,9 @@ services:
         hard: 65536
     volumes:
       - warehouse-es2:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
+      - 9601:9600 # required for Performance Analyzer
     networks:
       - odfe-net
   kibana:
@@ -54,8 +59,8 @@ services:
     expose:
       - "5601"
     environment:
-      ELASTICSEARCH_URL: https://odfe-node1:9200
-      ELASTICSEARCH_HOSTS: https://odfe-node1:9200
+      ELASTICSEARCH_URL: http://odfe-node1:9200
+      ELASTICSEARCH_HOSTS: http://odfe-node1:9200
     networks:
       - odfe-net
 
