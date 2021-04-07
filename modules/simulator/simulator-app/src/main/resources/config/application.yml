@@ -1,48 +1,13 @@
-####################################################################################################
-# Error Queue Configuration
-####################################################################################################
-serp.messaging.error-queue.enabled: true
-
 #---------------------------------------------------------------------------------------------------
 # SERVER
 #---------------------------------------------------------------------------------------------------
-simulator.web.threads.io: 4
-simulator.web.threads.worker: 16
-simulator.server.protocol: http
 
-#---------------------------------------------------------------------------------------------------
-# GENERAL
-#---------------------------------------------------------------------------------------------------
-simulator.execution.threads: 8
-simulator.execution.threads.max: 16
-simulator.execution.queue: 10000
-
-simulator.scheduling.threads: 2
-
-# XXX(ahaczewski): Temporarily set to true, until we're sure customer correctly configured SERP.
-serp.show-env: true
-
-#---------------------------------------------------------------------------------------------------
-# mTLS - enabled by default
-#---------------------------------------------------------------------------------------------------
-simulator.tls.enabled: false
-simulator.consul.traefik.passTLSCert: ${simulator.tls.enabled}
-simulator.consul.traefik.entryPoints: unprotectedGateway
-
-####################################################################################################
-# CONFIGURATION
-####################################################################################################
-
-#---------------------------------------------------------------------------------------------------
-# SERVER
-#---------------------------------------------------------------------------------------------------
-# Embedded server configuration
 server:
   port: 24890
   forward-headers-strategy: native
   undertow:
-    io-threads: ${simulator.web.threads.io}
-    worker-threads: ${simulator.web.threads.worker}
+    io-threads: 4
+    worker-threads: 16
 
   servlet:
     context-path: /rest/${spring.application.name}
@@ -55,7 +20,6 @@ server:
 # MANAGEMENT
 #---------------------------------------------------------------------------------------------------
 
-# Management HTTP server
 management:
   health:
     mail:
@@ -79,6 +43,7 @@ management:
 #---------------------------------------------------------------------------------------------------
 # GENERAL
 #---------------------------------------------------------------------------------------------------
+
 spring:
   application:
     name: simulator
@@ -113,32 +78,32 @@ spring:
       data-source-properties:
         ApplicationName: ${spring.application.name}
 
-    # Database migrations
-    liquibase:
-      change-log: classpath:db/changelog/db.changelog-master.xml
-      default-schema: ${simulator.db.schema}
-      contexts: default
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${simulator.db.schema}
+    contexts: default
 
-    # Spring Data JPA
-    jpa:
-      database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
-      database: POSTGRESQL
-      show-sql: false
-      open-in-view: false
+  # Spring Data JPA
+  jpa:
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
 
-      hibernate:
-        ddl-auto: none
-        use-new-id-generator-mappings: true
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
 
-      properties:
-        hibernate.cache.use_query_cache: false
-        hibernate.connection.provider_disables_autocommit: true
-        hibernate.generate_statistics: false
-        hibernate.jdbc.lob.non_contextual_creation: true
-        hibernate.jdbc.time_zone: UTC
-        hibernate.temp.use_jdbc_metadata_defaults: false
-        org.hibernate.envers.audit_table_suffix: _audit
-        org.hibernate.envers.store_data_at_delete: true
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
 
   #-------------------------------------------------------------------------------------------------
   # MESSAGING
@@ -160,14 +125,14 @@ spring:
   task:
     execution:
       pool:
-        core-size: ${simulator.execution.threads}
-        max-size: ${simulator.execution.threads.max}
-        queue-capacity: ${simulator.execution.queue}
+        core-size: 8
+        max-size: 16
+        queue-capacity: 10000
         keep-alive: 10s
       thread-name-prefix: pool-task-
 
     scheduling:
-      pool.size: ${simulator.scheduling.threads}
+      pool.size: 2
       thread-name-prefix: pool-scheduling-
 
   main:
@@ -177,15 +142,13 @@ spring:
     template:
       check-template-location: false
 
-  cloud:
-    service-registry:
-      enabled: ${serp.consul.enabled}
-      auto-registration:
-        enabled: ${serp.consul.enabled}
-
   servlet:
     multipart.max-file-size: 10MB
     multipart.max-request-size: 10MB
+
+#---------------------------------------------------------------------------------------------------
+# WEB CONFIGURATION
+#---------------------------------------------------------------------------------------------------
 
 simulator:
   web:
@@ -196,6 +159,21 @@ simulator:
       exposed-headers: "Authorization,Link,X-Total-Count"
       allow-credentials: true
       max-age: 1800
+
+#---------------------------------------------------------------------------------------------------
+# SEP BASE CONFIGURATION
+#---------------------------------------------------------------------------------------------------
+
+serp:
+  show-env: true
+
+  messaging:
+    error-queue:
+      enabled: true
+
+#---------------------------------------------------------------------------------------------------
+# REST API AUTH
+#---------------------------------------------------------------------------------------------------
 
 sep.auth:
   permissionMethodsMappings:
