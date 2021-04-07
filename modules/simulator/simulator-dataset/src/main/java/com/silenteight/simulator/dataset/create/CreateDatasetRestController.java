@@ -28,9 +28,17 @@ class CreateDatasetRestController {
   @PostMapping("/v1/datasets")
   @PreAuthorize("isAuthorized('CREATE_DATASET')")
   public ResponseEntity<Void> create(
-      @RequestBody @Valid CreateDatasetRequest request, Authentication authentication) {
+      @RequestBody @Valid CreateDatasetRequestDto dto, Authentication authentication) {
 
-    useCase.activate(request, authentication.getName());
+    final CreateDatasetRequest request = CreateDatasetRequest.builder()
+        .id(dto.getId())
+        .name(dto.getName())
+        .description(dto.getDescription())
+        .query(dto.getQuery())
+        .createdBy(authentication.getName())
+        .build();
+
+    useCase.activate(request);
     return status(CREATED).build();
   }
 }

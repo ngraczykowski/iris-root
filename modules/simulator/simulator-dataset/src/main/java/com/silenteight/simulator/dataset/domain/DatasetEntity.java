@@ -7,6 +7,7 @@ import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
@@ -35,17 +36,8 @@ class DatasetEntity extends BaseEntity implements Serializable {
 
   @NonNull
   @ToString.Include
-  @Column(name = "dataset_name", nullable = false)
-  private String datasetName;
-
-  @NonNull
-  @ToString.Include
-  @Column(name = "created_by", nullable = false)
-  private String createdBy;
-
-  @ToString.Include
-  @Column(name = "initial_alert_count", nullable = false)
-  private long initialAlertCount;
+  @Column(name = "dataset_id", nullable = false)
+  private UUID datasetId;
 
   @NonNull
   @ToString.Include
@@ -55,6 +47,20 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @ToString.Include
   @Column(name = "description")
   private String description;
+
+  @NonNull
+  @ToString.Include
+  @Column(name = "external_resource_name", nullable = false)
+  private String externalResourceName;
+
+  @NonNull
+  @ToString.Include
+  @Column(name = "created_by", nullable = false)
+  private String createdBy;
+
+  @ToString.Include
+  @Column(name = "initial_alert_count", nullable = false)
+  private long initialAlertCount;
 
   @Builder.Default
   @ToString.Include

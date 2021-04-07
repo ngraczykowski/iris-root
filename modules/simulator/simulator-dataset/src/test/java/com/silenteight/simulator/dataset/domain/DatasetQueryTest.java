@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.silenteight.simulator.dataset.domain.DatasetFixtures.*;
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -34,7 +34,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
 
     assertThat(result).hasSize(1);
     DatasetDto datasetDto = result.get(0);
-    assertThat(datasetDto.getDatasetName()).isEqualTo(DATASET_NAME);
+    assertThat(datasetDto.getId()).isEqualTo(DATASET_ID);
     assertThat(datasetDto.getName()).isEqualTo(NAME);
     assertThat(datasetDto.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(datasetDto.getAlertsCount()).isEqualTo(ALERTS_COUNT);
@@ -42,12 +42,27 @@ class DatasetQueryTest extends BaseDataJpaTest {
     assertThat(datasetDto.getQuery()).isNotNull();
   }
 
+  @Test
+  void shouldGetDataset() {
+    persistDataset();
+
+    DatasetDto result = underTest.get(DATASET_ID);
+
+    assertThat(result.getId()).isEqualTo(DATASET_ID);
+    assertThat(result.getName()).isEqualTo(NAME);
+    assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
+    assertThat(result.getAlertsCount()).isEqualTo(ALERTS_COUNT);
+    assertThat(result.getCreatedBy()).isEqualTo(CREATED_BY);
+    assertThat(result.getQuery()).isNotNull();
+  }
+
   private void persistDataset() {
     DatasetEntity datasetEntity = DatasetEntity.builder()
-        .datasetName(DATASET_NAME)
+        .datasetId(DATASET_ID)
         .createdBy(CREATED_BY)
         .name(NAME)
         .description(DESCRIPTION)
+        .externalResourceName(EXTERNAL_RESOURCE_NAME)
         .initialAlertCount(ALERTS_COUNT)
         .state(CURRENT)
         .generationDateFrom(FROM)

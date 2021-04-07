@@ -58,15 +58,17 @@ class CreateSimulationUseCaseTest {
     assertThat(postAudit.getType()).isEqualTo(POST_AUDIT_TYPE);
   }
 
-  private AuditDataDto getPreAudit(ArgumentCaptor<AuditDataDto> logCaptor) {
-    List<AuditDataDto> logs = logCaptor.getAllValues();
-    assertThat(logs).hasSizeGreaterThanOrEqualTo(1);
-    return logs.get(0);
+  private static AuditDataDto getPreAudit(ArgumentCaptor<AuditDataDto> logCaptor) {
+    return getAudit(logCaptor, 0);
   }
 
-  private AuditDataDto getPostAudit(ArgumentCaptor<AuditDataDto> logCaptor) {
+  private static AuditDataDto getPostAudit(ArgumentCaptor<AuditDataDto> logCaptor) {
+    return getAudit(logCaptor, 1);
+  }
+
+  private static AuditDataDto getAudit(ArgumentCaptor<AuditDataDto> logCaptor, int index) {
     List<AuditDataDto> logs = logCaptor.getAllValues();
-    assertThat(logs).hasSizeGreaterThanOrEqualTo(2);
-    return logs.get(1);
+    assertThat(logs).hasSizeGreaterThanOrEqualTo(index + 1);
+    return logs.get(index);
   }
 }
