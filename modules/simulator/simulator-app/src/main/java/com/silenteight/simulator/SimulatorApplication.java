@@ -34,7 +34,6 @@ public class SimulatorApplication {
 
   public static void main(String[] args) {
     new SerpApplicationTemplate("simulator", args, SimulatorApplication.class)
-        .profiles("database", "rabbitmq", "messaging")
         .contextCallback(new SerpApplicationContextCallback())
         .runAndExit();
   }
