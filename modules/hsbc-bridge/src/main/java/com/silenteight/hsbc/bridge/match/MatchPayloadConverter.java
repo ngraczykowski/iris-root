@@ -34,7 +34,7 @@ class MatchPayloadConverter {
     }
   }
 
-  class PayloadConversionException extends RuntimeException {
+  static class PayloadConversionException extends RuntimeException {
 
     public PayloadConversionException(String message, Exception exception) {
       super(message, exception);

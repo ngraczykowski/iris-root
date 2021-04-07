@@ -4,24 +4,34 @@ import lombok.*;
 
 import com.silenteight.hsbc.bridge.domain.*;
 
-import org.springframework.util.CollectionUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import static java.util.Objects.isNull;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class MatchRawData {
 
-  CasesWithAlertURL caseWithAlertURL;
-  List<CountryCtrpScreening> countryCtrpScreeningEntities;
-  List<CountryCtrpScreening> countryCtrpScreeningIndividuals;
-  List<CustomerEntities> customerEntities;
-  List<CustomerIndividuals> customerIndividuals;
-  List<WorldCheckEntities> worldCheckEntities;
-  List<WorldCheckIndividuals> worldCheckIndividuals;
+  private int caseId;
+  private CasesWithAlertURL caseWithAlertURL;
+  private EntityComposite entityComposite;
+  private IndividualComposite individualComposite;
 
+  MatchRawData(int caseId, CasesWithAlertURL caseWithAlertURL, EntityComposite composite) {
+    this.caseId = caseId;
+    this.caseWithAlertURL = caseWithAlertURL;
+    this.entityComposite = composite;
+  }
+
+  MatchRawData(int caseId, CasesWithAlertURL caseWithAlertURL, IndividualComposite composite) {
+    this.caseId = caseId;
+    this.caseWithAlertURL = caseWithAlertURL;
+    this.individualComposite = composite;
+  }
+
+  @JsonIgnore
   public boolean isIndividual() {
-    return CollectionUtils.isEmpty(customerEntities);
+    return isNull(entityComposite);
   }
 }

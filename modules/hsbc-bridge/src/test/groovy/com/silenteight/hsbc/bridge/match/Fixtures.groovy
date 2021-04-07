@@ -1,4 +1,15 @@
-package com.silenteight.hsbc.bridge.domain
+package com.silenteight.hsbc.bridge.match
+
+import com.silenteight.hsbc.bridge.alert.AlertRawData
+import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
+import com.silenteight.hsbc.bridge.domain.CountryCtrpScreening
+import com.silenteight.hsbc.bridge.domain.CustomerEntities
+import com.silenteight.hsbc.bridge.domain.CustomerIndividuals
+import com.silenteight.hsbc.bridge.domain.PrivateListEntities
+import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals
+import com.silenteight.hsbc.bridge.domain.Relationships
+import com.silenteight.hsbc.bridge.domain.WorldCheckEntities
+import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals
 
 class Fixtures {
 
@@ -61,7 +72,15 @@ class Fixtures {
       recordId: entitiesRelatedRecordId
   )
 
-  def alertSystemInformation = new AlertSystemInformation(
+  def caseWithAlertUrlEntity = new CasesWithAlertURL(
+      id: entitiesCaseId
+  )
+
+  def caseWithAlertUrlIndividual = new CasesWithAlertURL(
+      id: individualCaseId
+  )
+
+  def alertRawData = new AlertRawData(
       relationships: [individualRelationship, entitiesRelationship],
       customerEntities: [customerEntities],
       worldCheckEntities: [worldCheckEntities],
@@ -70,10 +89,11 @@ class Fixtures {
       customerIndividuals: [customerIndividuals],
       worldCheckIndividuals: [worldCheckIndividual],
       privateListIndividuals: [privateListIndividuals],
-      countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals]
+      countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
+      casesWithAlertURL: [caseWithAlertUrlEntity, caseWithAlertUrlIndividual]
   )
 
-  def alertSystemInformationWithoutCustomer = new AlertSystemInformation(
+  def alertRawDataWithoutCustomer = new AlertRawData(
       relationships: [individualRelationship, entitiesRelationship],
       customerEntities: [],
       worldCheckEntities: [worldCheckEntities],
@@ -82,6 +102,7 @@ class Fixtures {
       customerIndividuals: [],
       worldCheckIndividuals: [worldCheckIndividual],
       privateListIndividuals: [privateListIndividuals],
-      countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals]
+      countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
+      casesWithAlertURL: [caseWithAlertUrlEntity, caseWithAlertUrlIndividual]
   )
 }

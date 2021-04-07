@@ -8,8 +8,10 @@ import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
@@ -18,7 +20,6 @@ public class MatchFacade {
 
   private final MatchPayloadConverter matchPayloadConverter;
   private final MatchRepository matchRepository;
-  private final MatchRawMapper matchRawMapper;
   private final ApplicationEventPublisher eventPublisher;
 
   public MatchComposite getMatch(long id) {
@@ -38,16 +39,35 @@ public class MatchFacade {
 
   @Transactional
   public Collection<Long> prepareAndSaveMatches(@NonNull AlertComposite alertComposite) {
-    var matchName = alertComposite.getCaseId() + "";
-    var matchRawData = matchRawMapper.map(alertComposite.getAlertSystemInformation());
-    byte[] payload = getPayload(matchRawData);
-    var matchEntity = new MatchEntity(alertComposite.getId(), matchName, payload);
+    var matches = new RelationshipsProcessor(alertComposite.getAlertRawData()).process();
+    var matchComposites = saveMatches(alertComposite.getId(), matches);
 
-    matchRepository.save(matchEntity);
+    eventPublisher.publishEvent(new StoredMatchesEvent(matchComposites));
 
-    eventPublisher.publishEvent(new StoredMatchesEvent(List.of(toMatchComposite(matchEntity))));
+    return matchComposites.stream()
+        .map(MatchComposite::getId)
+        .collect(Collectors.toList());
+  }
 
-    return List.of(matchEntity.getId());
+  private List<MatchComposite> saveMatches(long alertId, List<MatchRawData> matches) {
+    var matchComposites = new ArrayList<MatchComposite>();
+    for (MatchRawData matchRawData : matches) {
+      byte[] payload = getPayload(matchRawData);
+      var matchEntity = new MatchEntity(alertId, payload);
+
+      //TODO(bmartofel): fixme
+      matchEntity.setName(UUID.randomUUID().toString());
+
+      matchRepository.save(matchEntity);
+
+      matchComposites.add(MatchComposite.builder()
+          .id(matchEntity.getId())
+          .name(matchEntity.getName())
+          .rawData(matchRawData)
+          .build());
+    }
+
+    return matchComposites;
   }
 
   private byte[] getPayload(MatchRawData matchRawData) {
@@ -64,11 +84,7 @@ public class MatchFacade {
 
   private List<MatchComposite> toMatchComposites(List<MatchEntity> matchEntities) {
     return matchEntities.stream()
-        .map(matchEntity -> MatchComposite.builder()
-            .id(matchEntity.getId())
-            .name(matchEntity.getName())
-            .rawData(matchPayloadConverter.convert(matchEntity.getPayload()))
-            .build())
+        .map(this::toMatchComposite)
         .collect(Collectors.toList());
   }
 

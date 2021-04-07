@@ -2,8 +2,6 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.Builder;
 
-import com.silenteight.hsbc.bridge.bulk.rest.input.Alert;
-
 import java.util.Collection;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -13,21 +11,20 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class AlertFacade {
 
-  private final AlertMapper alertMapper;
   private final AlertRawMapper alertRawMapper;
   private final AlertRepository alertRepository;
 
   @Transactional
   public AlertComposite prepareAndSaveAlert(long bulkItemId, byte[] payload) {
-    var alert = alertMapper.map(payload);
-    var alertEntity = prepareAlertEntity(bulkItemId, alert);
+    var alertRawData = alertRawMapper.mapBulkPayload(payload);
+    var alertEntity = prepareAlertEntity(bulkItemId, alertRawData);
 
     alertRepository.save(alertEntity);
 
     return AlertComposite.builder()
         .id(alertEntity.getId())
         .caseId(alertEntity.getCaseId())
-        .alert(alert)
+        .alertRawData(alertRawData)
         .build();
   }
 
@@ -41,12 +38,12 @@ public class AlertFacade {
 
   private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
     return alertEntities.stream().map(a -> {
-      AlertRawData alertRawData = alertRawMapper.map(a.getPayload());
+      AlertRawData alertRawData = alertRawMapper.mapAlertPayload(a.getPayload());
 
       return new AlertInfo(
           a.getId(),
           a.getCaseId(),
-          alertRawData.getCasesWithAlertURL());
+          alertRawData.getFirstCaseWithAlertURL());
     }).collect(toList());
   }
 
@@ -56,11 +53,10 @@ public class AlertFacade {
         .getName();
   }
 
-  private AlertEntity prepareAlertEntity(long bulkItemId, Alert alert) {
-    var alertRawData = alertRawMapper.map(alert);
-    var caseId = alertRawData.getCasesWithAlertURL().getId();
+  private AlertEntity prepareAlertEntity(long bulkItemId, AlertRawData alertRawData) {
+    var caseId = alertRawData.getFirstCaseWithAlertURL().getId();
 
-    var payload = alertMapper.map(alertRawData);
+    var payload = alertRawMapper.map(alertRawData);
     return new AlertEntity(caseId, bulkItemId, payload);
   }
 }

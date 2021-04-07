@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 @Data
@@ -23,4 +25,9 @@ public class AlertSystemInformation {
   private List<CaseHistory> caseHistory;
   private List<CountryCtrpScreening> countryCtrpScreeningEntities;
   private List<CasesWithAlertURL> casesWithAlertURL;
+
+  @JsonIgnore
+  public CasesWithAlertURL getFirstCaseWithAlertURL() {
+    return getCasesWithAlertURL().get(0);
+  }
 }

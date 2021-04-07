@@ -1,10 +1,12 @@
 package com.silenteight.hsbc.bridge.match
 
 import com.silenteight.hsbc.bridge.alert.AlertComposite
+import com.silenteight.hsbc.bridge.alert.AlertRawData
+import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
+import com.silenteight.hsbc.bridge.domain.CustomerIndividuals
+import com.silenteight.hsbc.bridge.domain.Relationships
+import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals
 import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent
-import com.silenteight.hsbc.bridge.bulk.rest.input.Alert
-import com.silenteight.hsbc.bridge.bulk.rest.input.AlertSystemInformation
-import com.silenteight.hsbc.bridge.bulk.rest.input.CasesWithAlertURL
 
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
@@ -19,7 +21,6 @@ class MatchFacadeSpec extends Specification {
       .eventPublisher(eventPublisher)
       .matchPayloadConverter(new MatchPayloadConverter())
       .matchRepository(matchRepository)
-      .matchRawMapper(new MatchRawMapper())
       .build()
 
   def fixtures = new Fixtures()
@@ -33,14 +34,14 @@ class MatchFacadeSpec extends Specification {
 
     then:
     result.rawData == fixtures.matchRawData
-    1 * matchRepository.findById(id) >> of(new MatchEntity(2, "", fixtures.matchPayload))
+    1 * matchRepository.findById(id) >> of(new MatchEntity(2, fixtures.matchPayload))
   }
 
   def 'should prepare and save matches'() {
     given:
     def alertComposite = AlertComposite.builder()
         .id(1)
-        .alert(fixtures.alert)
+        .alertRawData(fixtures.alertRawData)
         .build()
 
     when:
@@ -57,10 +58,37 @@ class MatchFacadeSpec extends Specification {
     MatchRawData matchRawData = new MatchRawData()
     byte[] matchPayload = new MatchPayloadConverter().convert(matchRawData)
 
-    Alert alert = new Alert(
-        systemInformation: new AlertSystemInformation(
-            casesWithAlertURL: [new CasesWithAlertURL()]
-        )
+    Relationships individualRelationship = new Relationships(
+        caseId: 1,
+        recordId: 2,
+        relatedRecordId: 3
+    )
+
+    CustomerIndividuals customerIndividual = new CustomerIndividuals(
+        caseId: 1,
+        recordId: 2
+    )
+
+    WorldCheckIndividuals worldCheckIndividual = new WorldCheckIndividuals(
+        caseId: 1,
+        recordId: 3
+    )
+
+    CasesWithAlertURL caseWithAlertURL = new CasesWithAlertURL(
+        id: 1
+    )
+
+    AlertRawData alertRawData = new AlertRawData(
+        casesWithAlertURL: [caseWithAlertURL],
+        relationships: [individualRelationship],
+        customerIndividuals: [customerIndividual],
+        worldCheckIndividuals: [worldCheckIndividual],
+        customerEntities: [],
+        worldCheckEntities: [],
+        privateListEntities: [],
+        privateListIndividuals: [],
+        countryCtrpScreeningEntities: [],
+        countryCtrpScreeningIndividuals: []
     )
   }
 }

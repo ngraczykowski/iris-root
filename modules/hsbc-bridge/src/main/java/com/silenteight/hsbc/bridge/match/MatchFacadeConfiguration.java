@@ -17,7 +17,6 @@ class MatchFacadeConfiguration {
   MatchFacade matchFacade() {
     return MatchFacade.builder()
         .matchPayloadConverter(new MatchPayloadConverter())
-        .matchRawMapper(new MatchRawMapper())
         .matchRepository(matchRepository)
         .eventPublisher(eventPublisher)
         .build();

@@ -1,16 +1,16 @@
 package com.silenteight.hsbc.bridge.domain;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import java.util.List;
 
-@Builder
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EntityComposite {
 
-  CustomerEntities customerEntities;
-  List<WorldCheckEntities> worldCheckEntities;
-  List<PrivateListEntities> privateListEntities;
-  List<CountryCtrpScreening> countryCtrpScreeningEntities;
+  private CustomerEntities customerEntities;
+  private List<WorldCheckEntities> worldCheckEntities;
+  private List<PrivateListEntities> privateListEntities;
+  private List<CountryCtrpScreening> countryCtrpScreeningEntities;
 }

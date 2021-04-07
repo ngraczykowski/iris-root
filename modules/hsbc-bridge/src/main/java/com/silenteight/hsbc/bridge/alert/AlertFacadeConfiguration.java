@@ -14,7 +14,6 @@ class AlertFacadeConfiguration {
   @Bean
   AlertFacade alertFacade() {
     return AlertFacade.builder()
-        .alertMapper(new AlertMapper())
         .alertRawMapper(new AlertRawMapper())
         .alertRepository(alertRepository)
         .build();

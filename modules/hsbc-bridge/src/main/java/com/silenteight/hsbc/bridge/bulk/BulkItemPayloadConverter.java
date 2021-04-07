@@ -26,6 +26,8 @@ class BulkItemPayloadConverter {
 
   class BulkPayloadConversionException extends RuntimeException {
 
+    private static final long serialVersionUID = 5247713011783492378L;
+
     BulkPayloadConversionException(Exception exception) {
       super(exception);
     }

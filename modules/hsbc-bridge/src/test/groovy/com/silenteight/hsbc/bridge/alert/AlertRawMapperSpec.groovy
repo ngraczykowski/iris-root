@@ -1,7 +1,5 @@
 package com.silenteight.hsbc.bridge.alert
 
-import com.silenteight.hsbc.bridge.bulk.rest.input.Alert
-import com.silenteight.hsbc.bridge.bulk.rest.input.AlertSystemInformation
 import com.silenteight.hsbc.bridge.bulk.rest.input.CasesWithAlertURL
 
 import spock.lang.Specification
@@ -10,23 +8,17 @@ class AlertRawMapperSpec extends Specification {
 
   def underTest = new AlertRawMapper()
 
-  def 'should map alert to alertRawData'() {
+  def 'should map alertRawData to byte[]'() {
     given:
     def caseWithAlertUrl = new CasesWithAlertURL(id: 1)
-    def alert = createAlert(caseWithAlertUrl)
+    def alert = new AlertRawData(
+        casesWithAlertURL: [caseWithAlertUrl]
+    )
 
     when:
     def result = underTest.map(alert)
 
     then:
-    with (result.casesWithAlertURL) {
-      id == caseWithAlertUrl.id
-    }
-  }
-
-  def createAlert(CasesWithAlertURL casesWithAlertURL) {
-    new Alert(systemInformation: new AlertSystemInformation(
-        casesWithAlertURL: [casesWithAlertURL]
-    ))
+    result.length == 1301
   }
 }
