@@ -16,6 +16,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,25 +29,24 @@ class BulkProcessor {
   private final MatchFacade matchFacade;
 
   @EventListener
-  @Transactional
   @Async
   public void onBulkStoredEvent(BulkStoredEvent bulkStoredEvent) {
     var bulkId = bulkStoredEvent.getBulkId();
     log.info("Received bulkStoredEvent, bulkId: {}", bulkId);
 
-    processBulk(bulkId);
+    var alertMatchIds = processBulk(bulkId);
+    log.info("Bulk processing finished, bulkId={}", bulkId);
+    eventPublisher.publishEvent(new BulkPreProcessingFinishedEvent(alertMatchIds));
   }
 
-  void processBulk(@NonNull String bulkId) {
+  @Transactional
+  public List<AlertMatchIdComposite> processBulk(@NonNull String bulkId) {
     log.info("Bulk processing started, bulkId={}", bulkId);
 
     var bulk = bulkQueryRepository.findById(bulkId);
-    var alertMatchIds = bulk.getItems().stream()
+    return bulk.getItems().stream()
         .map(this::saveAndCollectAlertAndMatches)
         .collect(Collectors.toList());
-
-    log.info("Bulk processing finished, bulkId={}", bulkId);
-    eventPublisher.publishEvent(new BulkPreProcessingFinishedEvent(alertMatchIds));
   }
 
   private AlertMatchIdComposite saveAndCollectAlertAndMatches(BulkItem bulkItem) {

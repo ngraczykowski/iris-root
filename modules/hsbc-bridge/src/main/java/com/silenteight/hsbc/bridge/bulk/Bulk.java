@@ -27,7 +27,7 @@ public class Bulk extends BaseEntity {
   @Enumerated(value = EnumType.STRING)
   private BulkStatus status = BulkStatus.STORED;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "bulk_id")
   private Collection<BulkItem> items = new ArrayList<>();
 

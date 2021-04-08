@@ -2,9 +2,10 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BulkIdAlreadyUsedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
 import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
 import com.silenteight.hsbc.bridge.bulk.rest.output.*;
 
@@ -60,6 +61,21 @@ public class BulkRestController {
     return ResponseEntity.ok(getBulkResultsUseCase.getResults(id));
   }
 
+  @GetMapping("/processingStatus")
+  public ResponseEntity<BulkProcessingStatusResponse> checkProcessingStatus() {
+    return ResponseEntity.ok(getBulkStatusUseCase.isProcessing());
+  }
+
+  @GetMapping("/{id}/status")
+  public ResponseEntity<BulkStatusResponse> getBulkStatus(@PathVariable String id) {
+    return ResponseEntity.ok(getBulkStatusUseCase.getStatus(id));
+  }
+
+  @GetMapping("/{id}/cancel")
+  public ResponseEntity<BulkCancelResponse> cancelBulk(@PathVariable String id) {
+    return ResponseEntity.ok(cancelBulkUseCase.cancel(id));
+  }
+
   @GetMapping(value = "/{id}/result/owsFile", produces = "text/csv")
   public ResponseEntity<Resource> getResultFile(@PathVariable String id) {
 
@@ -103,39 +119,18 @@ public class BulkRestController {
         "Description");
   }
 
-  @GetMapping("/processingStatus")
-  public ResponseEntity<BulkProcessingStatusResponse> checkProcessingStatus() {
-    return ResponseEntity.ok(getBulkStatusUseCase.isProcessing());
-  }
-
-  @GetMapping("/{id}/status")
-  public ResponseEntity<BulkStatusResponse> getBulkStatus(@PathVariable String id) {
-    return ResponseEntity.ok(getBulkStatusUseCase.getStatus(id));
-  }
-
-  @GetMapping("/{id}/cancel")
-  public ResponseEntity<BulkCancelResponse> cancelBulk(@PathVariable String id) {
-    return ResponseEntity.ok(cancelBulkUseCase.cancel(id));
-  }
-
-  @ExceptionHandler(BulkIdNotFoundException.class)
+  @ExceptionHandler({ BulkIdNotFoundException.class, BulkProcessingNotCompletedException.class })
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleBulkIdNotFoundException(
       BulkIdNotFoundException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(BulkProcessingNotCompletedException.class)
-  @ResponseStatus(value = HttpStatus.NOT_FOUND)
-  public ResponseEntity<ErrorResponse> handleBulkProcessingNotCompletedException(
-      BulkProcessingNotCompletedException exception) {
-    return getErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
-  }
-
-  @ExceptionHandler(BulkAlreadyCompletedException.class)
+  @ExceptionHandler({
+      BulkWithGivenIdAlreadyCreatedException.class, BulkIdAlreadyUsedException.class })
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  public ResponseEntity<ErrorResponse> handleBulkAlreadyCompletedException(
-      BulkAlreadyCompletedException exception) {
+  public ResponseEntity<ErrorResponse> handleBulkAlreadyExistException(
+      BulkWithGivenIdAlreadyCreatedException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST);
   }
 

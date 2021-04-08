@@ -25,7 +25,6 @@ class BulkStatusUpdater {
 
   @EventListener
   @Async
-  @Transactional
   public void onBulkStatusEvent(UpdateBulkStatusEvent event) {
     var bulk = bulkRepository.findById(event.getBulkId());
     determineNewBulkStatus(bulk.getItems())
@@ -56,7 +55,8 @@ class BulkStatusUpdater {
     }
   }
 
-  private void updateBulkStatus(Bulk bulk, BulkStatus bulkStatus) {
+  @Transactional
+  void updateBulkStatus(Bulk bulk, BulkStatus bulkStatus) {
     bulk.setStatus(bulkStatus);
     bulkRepository.save(bulk);
   }

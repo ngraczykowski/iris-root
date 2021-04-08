@@ -9,5 +9,7 @@ public interface BulkQueryRepository {
 
   Bulk findById(String id);
 
+  boolean existsById(String id);
+
   Boolean existsByStatusIn(Collection<BulkStatus> bulkStatuses);
 }
