@@ -1,0 +1,26 @@
+features:
+  base:
+    desc: "base names"
+    score_name: fuzzy_on_base
+    low_thr: 0.8
+    high_thr: 0.8
+  legal:
+    desc: "legal extensions"
+    score_name: legal_terms
+    low_thr: 0.8
+    high_thr: 0.8
+  #common_suffixes:
+  #  desc: "common suffixes"
+   # score_name:
+   # low_thr: 0.8
+   # high_thr: 0.8
+  #blacklisted:
+  #  desc: "blacklisted"
+  #  score_name: blacklisted
+  #  low_thr: 0.99
+  #  high_thr 0.99
+  #abbreviation:
+ #  desc: "abbreviations"
+ #   score_name: abbreviation
+ #   low_thr: 0.99
+ #   high_thr: 0.99
