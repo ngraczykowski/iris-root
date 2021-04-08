@@ -10,18 +10,18 @@ class NationalityIdFeatureSpec extends Specification {
 
   def 'should retrieve nationality id feature values'() {
     given:
-    def matchRawData = new MatchRawData()
+    def matchRawData = Mock(MatchRawData)
 
     when:
     def result = underTest.retrieve(matchRawData)
 
     then:
+    matchRawData.isIndividual() >> false
+
     with(result) {
       feature == Feature.NATIONALITY_ID.name
-      alertedPartyCountry == 'AP'
-      watchlistCountry == 'PL'
-      alertedPartyDocumentNumbers == ['123']
-      watchlistDocumentNumbers == ['321']
+      alertedPartyDocumentNumbers == null
+      watchlistDocumentNumbers == null
     }
   }
 }

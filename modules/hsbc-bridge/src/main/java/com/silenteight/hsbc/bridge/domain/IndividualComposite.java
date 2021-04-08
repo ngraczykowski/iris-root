@@ -1,12 +1,12 @@
 package com.silenteight.hsbc.bridge.domain;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import java.util.List;
 
-@Builder
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class IndividualComposite {
 
   CustomerIndividuals customerIndividuals;

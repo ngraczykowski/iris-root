@@ -151,12 +151,11 @@ class RelationshipsProcessor {
 
   private IndividualComposite createIndividualComposite(
       CustomerIndividuals relatedCustomerIndividual, IndividualsResolver individualsResolver) {
-    return IndividualComposite.builder()
-        .customerIndividuals(relatedCustomerIndividual)
-        .worldCheckIndividuals(individualsResolver.getWorkCheckIndividuals())
-        .privateListIndividuals(individualsResolver.getPrivateListIndividuals())
-        .countryCtrpScreeningIndividuals(individualsResolver.getCtrpScreeningIndividuals())
-        .build();
+    return new IndividualComposite(
+        relatedCustomerIndividual,
+        individualsResolver.getWorkCheckIndividuals(),
+        individualsResolver.getPrivateListIndividuals(),
+        individualsResolver.getCtrpScreeningIndividuals());
   }
 
   private MatchRawData createEntitiesPair(int caseId, EntityComposite entityComposite) {
