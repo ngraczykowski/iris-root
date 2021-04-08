@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.bulk.exception.BulkIdAlreadyUsedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
@@ -121,16 +121,16 @@ public class BulkRestController {
 
   @ExceptionHandler({ BulkIdNotFoundException.class, BulkProcessingNotCompletedException.class })
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
-  public ResponseEntity<ErrorResponse> handleBulkIdNotFoundException(
-      BulkIdNotFoundException exception) {
+  public ResponseEntity<ErrorResponse> handleExceptionWithNotFoundStatus(
+      RuntimeException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler({
-      BulkWithGivenIdAlreadyCreatedException.class, BulkIdAlreadyUsedException.class })
+      BulkWithGivenIdAlreadyCreatedException.class, BulkAlreadyCompletedException.class })
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  public ResponseEntity<ErrorResponse> handleBulkAlreadyExistException(
-      BulkWithGivenIdAlreadyCreatedException exception) {
+  public ResponseEntity<ErrorResponse> handleExceptionWithBadRequestStatus(
+      RuntimeException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
