@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.model.api.v1.ModelRequest;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
 import com.silenteight.serp.governance.model.NonResolvableResourceException;
@@ -65,4 +66,9 @@ class ModelGrpcService
     }
   }
 
+  @Override
+  public void getSolvingModel(ModelRequest request, StreamObserver<SolvingModel> responseObserver) {
+    // FIXME(kdzieciol): implement me
+    getDefaultSolvingModel(Empty.newBuilder().build(), responseObserver);
+  }
 }
