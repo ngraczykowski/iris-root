@@ -46,8 +46,17 @@ class CreateDatasetUseCase {
         .build();
   }
 
+  @Transactional
   Dataset createDataset(FilteredAlerts filteredAlerts) {
-    throw new UnsupportedOperationException("This operation is not yet implemented");
+    // TODO(kdzieciol): Implement creating dataset using filters.
+    var dataset = datasetRepository.save(DatasetEntity.builder().build());
+
+    return Dataset
+        .newBuilder()
+        .setName(NAME_PREFIX + dataset.getId())
+        .setCreateTime(TimestampConverter.fromOffsetDateTime(dataset.getCreatedAt()))
+        .setAlertCount(0)
+        .build();
   }
 
   Dataset getDataset(String name) {
