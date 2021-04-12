@@ -11,10 +11,6 @@ simulator.truststore.password: ${simulator.keystore.password}
 # CONFIGURATION
 ####################################################################################################
 
-serp:
-  consul:
-    protocol: https
-
 spring:
   cloud:
     consul:
