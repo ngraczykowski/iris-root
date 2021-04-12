@@ -7,10 +7,12 @@ import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexClientGate
 import com.silenteight.warehouse.indexer.indextestclient.listener.IndexedEventListener;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.DATA_INDEX_REQUEST_WITH_ALERTS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -18,7 +20,6 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest(classes = IndexerTestConfiguration.class)
 class IndexerIT extends BaseIntegrationTest {
 
-  private static final String REQUEST_ID = "TEST_123";
 
   @BeforeEach
   void init() {
@@ -31,11 +32,11 @@ class IndexerIT extends BaseIntegrationTest {
   @Autowired
   IndexedEventListener indexedEventListener;
 
+  @Disabled("Requires Elasticsearch")
   @Test
   void shouldReturnConfirmationWhenDataIndexRequested() {
-    DataIndexRequest request = DataIndexRequest.newBuilder()
-        .setRequestId(REQUEST_ID)
-        .build();
+
+    DataIndexRequest request = DATA_INDEX_REQUEST_WITH_ALERTS;
 
     indexClientGateway.indexRequest(request);
 
@@ -45,6 +46,6 @@ class IndexerIT extends BaseIntegrationTest {
     assertThat(indexedEventListener.getLastEvent())
         .get()
         .extracting(DataIndexResponse::getRequestId)
-        .isEqualTo(REQUEST_ID);
+        .isEqualTo(request.getRequestId());
   }
 }
