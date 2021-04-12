@@ -71,6 +71,7 @@ dependencies {
   implementation libraries.spring_integration_core
 
   // GRPC
+  implementation libraries.brave_instrumentation_grpc
   implementation libraries.grpc_server_spring_boot_starter
 
   // AspectJ

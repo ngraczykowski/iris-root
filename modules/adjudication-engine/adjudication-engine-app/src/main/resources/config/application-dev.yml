@@ -48,3 +48,7 @@ spring:
   jackson:
     serialization:
       indent-output: true
+
+grpc:
+  logging:
+    enabled: true

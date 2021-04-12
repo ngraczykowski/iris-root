@@ -16,6 +16,10 @@ To test application with mocked dependencies activate following Spring Profiles:
 
     mock-governance
 
+### Tracing gRPC calls
+
+To enable tracing of gRPC calls, enable the `tracegrpc` Spring profile.
+
 ## Developing validation
 
 The Adjudication Engine validates incoming gRPC requests.
