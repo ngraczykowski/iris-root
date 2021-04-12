@@ -1,19 +1,9 @@
-serp:
-  tls:
-    enabled: true
-  server:
-    protocol: https
-  consul:
-    traefik:
-      passTLSCert: false
-      entryPoints: gateway,unprotectedGateway
-
 server:
   ssl:
     enabled: true
     key-store: ${simulator.keystore.path}
     key-store-password: ${simulator.keystore.password}
-    key-alias: serp ${spring.application.name}
+    key-alias: ${spring.application.name}
     trust-store: ${simulator.truststore.path}
     trust-store-password: ${simulator.truststore.password}
 
