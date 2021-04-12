@@ -18,13 +18,10 @@ class MatchEventHandler {
   @EventListener
   @Transactional
   public void onUpdateMatchWithNameEvent(UpdateMatchWithNameEvent updateMatchWithNameEvent) {
-    log.info("Received updateMatchWithNameEvent.");
+    log.debug("Received updateMatchWithNameEvent.");
 
-    updateMatchWithNameEvent.getNames().forEach(n -> {
-      String[] splitName = n.split("/");
-      matchRepository.updateNameById(Long.parseLong(splitName[0]), n);
-    });
+    updateMatchWithNameEvent.getMatchIdsWithNames().forEach(matchRepository::updateNameById);
 
-    log.info("End processing updateMatchWithNameEvent.");
+    log.debug("End processing updateMatchWithNameEvent.");
   }
 }

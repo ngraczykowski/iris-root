@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatusResponse;
 

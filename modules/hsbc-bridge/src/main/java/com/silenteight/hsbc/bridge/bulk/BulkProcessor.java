@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.event.BulkPreProcessingFinishedEvent;
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
-import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 class BulkProcessor {
 
   private final AlertFacade alertFacade;
-  private final BulkQueryRepository bulkQueryRepository;
+  private final BulkRepository bulkRepository;
   private final ApplicationEventPublisher eventPublisher;
   private final MatchFacade matchFacade;
 
@@ -43,7 +42,7 @@ class BulkProcessor {
   public List<AlertMatchIdComposite> processBulk(@NonNull String bulkId) {
     log.info("Bulk processing started, bulkId={}", bulkId);
 
-    var bulk = bulkQueryRepository.findById(bulkId);
+    var bulk = bulkRepository.findById(bulkId);
     return bulk.getItems().stream()
         .map(this::saveAndCollectAlertAndMatches)
         .collect(Collectors.toList());
@@ -54,8 +53,8 @@ class BulkProcessor {
     var matchIds = matchFacade.prepareAndSaveMatches(alertComposite);
 
     return AlertMatchIdComposite.builder()
-        .alertId(alertComposite.getId())
-        .caseId(alertComposite.getCaseId())
+        .alertInternalId(alertComposite.getId())
+        .alertExternalId(alertComposite.getAlertExternalId())
         .matchIds(matchIds)
         .build();
   }

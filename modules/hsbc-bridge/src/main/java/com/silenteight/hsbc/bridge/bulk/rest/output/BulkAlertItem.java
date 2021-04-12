@@ -19,7 +19,7 @@ import javax.validation.Valid;
 public class BulkAlertItem {
 
   @JsonProperty("id")
-  private Integer id = null;
+  private String id = null;
 
   @JsonProperty("status")
   private BulkStatus status = null;
@@ -27,7 +27,7 @@ public class BulkAlertItem {
   @JsonProperty("errorMessage")
   private String errorMessage = null;
 
-  public BulkAlertItem id(Integer id) {
+  public BulkAlertItem id(String id) {
     this.id = id;
     return this;
   }
@@ -39,11 +39,11 @@ public class BulkAlertItem {
    **/
   @Schema(description = "")
 
-  public Integer getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(String id) {
     this.id = id;
   }
 

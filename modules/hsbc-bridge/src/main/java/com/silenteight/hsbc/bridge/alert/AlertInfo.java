@@ -10,6 +10,5 @@ import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL;
 public class AlertInfo {
 
   Long id;
-  int caseId;
   CasesWithAlertURL casesWithAlertURL;
 }

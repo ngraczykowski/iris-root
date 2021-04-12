@@ -23,7 +23,6 @@ public class AlertFacade {
 
     return AlertComposite.builder()
         .id(alertEntity.getId())
-        .caseId(alertEntity.getCaseId())
         .alertRawData(alertRawData)
         .build();
   }
@@ -38,12 +37,10 @@ public class AlertFacade {
 
   private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
     return alertEntities.stream().map(a -> {
-      AlertRawData alertRawData = alertRawMapper.mapAlertPayload(a.getPayload());
+      var alertRawData = alertRawMapper.mapAlertPayload(a.getPayload());
+      var caseWithAlertUrl = alertRawData.getFirstCaseWithAlertURL();
 
-      return new AlertInfo(
-          a.getId(),
-          a.getCaseId(),
-          alertRawData.getFirstCaseWithAlertURL());
+      return new AlertInfo(a.getId(), caseWithAlertUrl);
     }).collect(toList());
   }
 
@@ -54,9 +51,9 @@ public class AlertFacade {
   }
 
   private AlertEntity prepareAlertEntity(long bulkItemId, AlertRawData alertRawData) {
-    var caseId = alertRawData.getFirstCaseWithAlertURL().getId();
+    var externalId = alertRawData.getAlertExternalId();
 
     var payload = alertRawMapper.map(alertRawData);
-    return new AlertEntity(caseId, bulkItemId, payload);
+    return new AlertEntity(externalId, bulkItemId, payload);
   }
 }

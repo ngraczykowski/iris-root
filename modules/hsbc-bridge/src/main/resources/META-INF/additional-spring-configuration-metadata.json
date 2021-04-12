@@ -4,6 +4,21 @@
       "name": "silenteight.bridge.recommendations.queue",
       "type": "java.lang.String",
       "description": "Bridge recommendation queue name."
+    },
+    {
+      "name": "silenteight.bridge.alert.service.api.grpc-address",
+      "type": "java.lang.String",
+      "description": "Grpc address of Alert Service API."
+    },
+    {
+      "name": "silenteight.bridge.analysis.service.api.grpc-address",
+      "type": "java.lang.String",
+      "description": "Grpc address of Analysis Service API."
+    },
+    {
+      "name": "silenteight.bridge.dataset.service.api.grpc-address",
+      "type": "java.lang.String",
+      "description": "Grpc address of Dataset Service API."
     }
   ]
 }

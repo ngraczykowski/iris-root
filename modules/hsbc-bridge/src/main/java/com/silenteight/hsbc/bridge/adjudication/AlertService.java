@@ -1,10 +1,15 @@
 package com.silenteight.hsbc.bridge.adjudication;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.*;
+import com.silenteight.hsbc.bridge.alert.AlertServiceApi;
+import com.silenteight.hsbc.bridge.alert.dto.AlertDto;
+import com.silenteight.hsbc.bridge.alert.dto.BatchCreateAlertMatchesRequestDto;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
+import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 import com.silenteight.hsbc.bridge.match.event.UpdateMatchWithNameEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,110 +17,118 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class AlertService {
 
-  private final AdjudicationApi adjudicationApi;
+  private final AlertServiceApi alertServiceApi;
   private final ApplicationEventPublisher eventPublisher;
 
-  List<String> createBatchAlertsWithMatches(
-      Collection<AlertMatchIdComposite> alertMatchIdComposites) {
+  void registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
+    var alerts = registerAlerts(alertMatchIds.keySet());
+    var matches = registerMatches(alertMatchIds, alerts);
 
-    var alertIdsToMatches = convertToMap(alertMatchIdComposites);
-    var batchCreateAlertsResponse = registerAlerts(alertMatchIdComposites);
-    registerMatches(alertIdsToMatches, batchCreateAlertsResponse);
+    publishUpdateAlertsWithNameEvent(alerts, alertMatchIds);
+    publishUpdateMatchesWithNameEvent(matches, alertMatchIds);
+  }
 
-    publishUpdateAlertWithNameEvent(batchCreateAlertsResponse);
+  private List<AlertDto> registerAlerts(Collection<String> alertIds) {
+    return alertServiceApi.batchCreateAlerts(alertIds).getAlerts();
+  }
 
-    return batchCreateAlertsResponse
-        .getAlertsList()
+  private List<MatchWithAlert> registerMatches(
+      Map<String, AlertMatchIdComposite> alertMatchIds, List<AlertDto> alerts) {
+
+    return alerts.stream().map(a -> {
+      var alertId = a.getAlertId();
+      var alertMatchIdComposite = alertMatchIds.get(alertId);
+      var matchExternalIds = alertMatchIdComposite.getMatchExternalIds();
+      return registerMatchesForAlert(alertId, matchExternalIds);
+    }).flatMap(Collection::stream).collect(Collectors.toList());
+  }
+
+  private List<MatchWithAlert> registerMatchesForAlert(
+      String alertId, Collection<String> matchIds) {
+    var request = BatchCreateAlertMatchesRequestDto.builder()
+        .alert(alertId)
+        .matchIds(matchIds)
+        .build();
+
+    var response = alertServiceApi.batchCreateAlertMatches(request);
+
+    return response.getAlertMatches().stream()
+        .map(a -> new MatchWithAlert(alertId, a.getMatchId(), a.getName()))
+        .collect(Collectors.toList());
+  }
+
+  private void publishUpdateAlertsWithNameEvent(
+      List<AlertDto> alerts, Map<String, AlertMatchIdComposite> alertMatchIds) {
+    var alertIdsWithNames = alerts
         .stream()
-        .map(Alert::getName)
-        .collect(Collectors.toList());
+        .map(a -> toAlertIdWithName(alertMatchIds, a))
+        .collect(Collectors.toMap(AlertIdWithName::getAlertInternalId, AlertIdWithName::getName));
+
+    eventPublisher.publishEvent(new UpdateAlertWithNameEvent(alertIdsWithNames));
   }
 
-
-  private BatchCreateAlertsResponse registerAlerts(
-      Collection<AlertMatchIdComposite> alertMatchIdComposites) {
-    var alerts = alertMatchIdComposites.stream().map(a ->
-        Alert.newBuilder()
-            .setAlertId(String.valueOf(a.getAlertId()))
-            .setName(String.valueOf(a.getCaseId()))
-            .build())
-        .collect(Collectors.toList());
-
-    var batchCreateAlertsRequest =
-        BatchCreateAlertsRequest.newBuilder().addAllAlerts(alerts).build();
-
-    return adjudicationApi.batchCreateAlerts(batchCreateAlertsRequest);
+  private AlertIdWithName toAlertIdWithName(
+      Map<String, AlertMatchIdComposite> alertMatchIds, AlertDto alert) {
+    var alertExternalId = alert.getAlertId();
+    var id = alertMatchIds.get(alertExternalId).getAlertInternalId();
+    return new AlertIdWithName(id, alert.getName());
   }
 
-  private void registerMatches(
-      Map<Long, AlertMatchIdComposite> alertIdsToMatches,
-      BatchCreateAlertsResponse batchCreateAlertsResponse) {
-
-    var result = batchCreateAlertsResponse.getAlertsList().stream().map(a -> {
-      String alertId = a.getAlertId();
-
-      var matches = alertIdsToMatches
-          .get(Long.valueOf(alertId))
-          .getMatchIds()
-          .stream()
-          .map(m -> Match.newBuilder()
-              .setName(m.toString())
-              .setMatchId(alertId)
-              .build())
-          .collect(Collectors.toList());
-
-      return BatchCreateAlertMatchesRequest
-          .newBuilder()
-          .setAlert(alertId)
-          .addAllMatches(matches)
-          .build();
-
-    }).map(adjudicationApi::batchCreateAlertMatches)
-        .map(BatchCreateAlertMatchesResponse::getMatchesList)
-        .flatMap(List::stream)
-        .collect(Collectors.toList());
-
-    publishUpdateMatchWithNameEvent(result);
-  }
-
-  private void publishUpdateAlertWithNameEvent(
-      BatchCreateAlertsResponse batchCreateAlertsResponse) {
-    var updateAlertWithNameEvent =
-        new UpdateAlertWithNameEvent(batchCreateAlertsResponse
-            .getAlertsList()
-            .stream()
-            .collect(Collectors.toMap(getAlertId(), Alert::getName)));
-
-    eventPublisher.publishEvent(updateAlertWithNameEvent);
-  }
-
-  private Function<Alert, Long> getAlertId() {
-    return alert -> Long.parseLong(alert.getAlertId());
-  }
-
-  private void publishUpdateMatchWithNameEvent(List<Match> matches) {
-    var updateMatchWithNameEvent = new UpdateMatchWithNameEvent(
-        matches
-            .stream()
-            .map(Match::getName)
-            .collect(Collectors.toList()));
-
-    eventPublisher.publishEvent(updateMatchWithNameEvent);
-  }
-
-  private Map<Long, AlertMatchIdComposite> convertToMap(
-      Collection<AlertMatchIdComposite> alertMatchIdComposites) {
-    return alertMatchIdComposites
+  private void publishUpdateMatchesWithNameEvent(
+      List<MatchWithAlert> registeredMatches, Map<String, AlertMatchIdComposite> alertIdsWithMatches) {
+    var matchIdsWithNames = registeredMatches
         .stream()
-        .collect(Collectors.toMap(
-            AlertMatchIdComposite::getAlertId, Function.identity()
-        ));
+        .map(a -> {
+          var matchIds = alertIdsWithMatches.get(a.getAlertExternalId()).getMatchIds();
+          return toMatchIdWithName(matchIds, a);
+        })
+        .collect(Collectors.toMap(MatchIdWithName::getMatchInternalId, MatchIdWithName::getName));
+
+    eventPublisher.publishEvent(new UpdateMatchWithNameEvent(matchIdsWithNames));
   }
 
+  private MatchIdWithName toMatchIdWithName(Collection<MatchIdComposite> matchIds, MatchWithAlert matchWithAlert) {
+    var matchExternalId = matchWithAlert.getMatchExternalId();
+    var id = findMatchInternalIdByExternalId(matchIds, matchExternalId);
+    return new MatchIdWithName(id, matchWithAlert.getName());
+  }
+
+  private long findMatchInternalIdByExternalId(Collection<MatchIdComposite> matchIds, String matchExternalId) {
+    return matchIds
+        .stream()
+        .filter(m -> m.getExternalId().equals(matchExternalId))
+        .map(MatchIdComposite::getInternalId)
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("Match id not found: " + matchExternalId));
+  }
+
+  @AllArgsConstructor
+  @Getter
+  private class AlertIdWithName {
+
+    private long alertInternalId;
+    private String name;
+  }
+
+  @AllArgsConstructor
+  @Getter
+  private class MatchIdWithName {
+
+    private long matchInternalId;
+    private String name;
+  }
+
+  @AllArgsConstructor
+  @Getter
+  private class MatchWithAlert {
+
+    private String alertExternalId;
+    private String matchExternalId;
+    private String name;
+  }
 }

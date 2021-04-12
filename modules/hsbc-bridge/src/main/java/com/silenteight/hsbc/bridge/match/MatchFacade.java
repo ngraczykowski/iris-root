@@ -38,31 +38,36 @@ public class MatchFacade {
   }
 
   @Transactional
-  public Collection<Long> prepareAndSaveMatches(@NonNull AlertComposite alertComposite) {
+  public Collection<MatchIdComposite> prepareAndSaveMatches(
+      @NonNull AlertComposite alertComposite) {
     var matches = new RelationshipsProcessor(alertComposite.getAlertRawData()).process();
     var matchComposites = saveMatches(alertComposite.getId(), matches);
 
     eventPublisher.publishEvent(new StoredMatchesEvent(matchComposites));
 
     return matchComposites.stream()
-        .map(MatchComposite::getId)
+        .map(m -> new MatchIdComposite(m.getId(), m.getExternalId()))
+        .collect(Collectors.toList());
+  }
+
+  public Collection<Long> getMatchIdsByNames(@NonNull List<String> matchValues) {
+    return matchRepository.findByNameIn(matchValues).stream()
+        .map(MatchEntity::getId)
         .collect(Collectors.toList());
   }
 
   private List<MatchComposite> saveMatches(long alertId, List<MatchRawData> matches) {
     var matchComposites = new ArrayList<MatchComposite>();
     for (MatchRawData matchRawData : matches) {
-      byte[] payload = getPayload(matchRawData);
-      var matchEntity = new MatchEntity(alertId, payload);
-
-      //TODO(bmartofel): fixme
-      matchEntity.setName(UUID.randomUUID().toString());
+      var payload = getPayload(matchRawData);
+      var externalId = matchRawData.getCaseId() + "";
+      var matchEntity = new MatchEntity(externalId, alertId, payload);
 
       matchRepository.save(matchEntity);
 
       matchComposites.add(MatchComposite.builder()
           .id(matchEntity.getId())
-          .name(matchEntity.getName())
+          .externalId(matchEntity.getExternalId())
           .rawData(matchRawData)
           .build());
     }

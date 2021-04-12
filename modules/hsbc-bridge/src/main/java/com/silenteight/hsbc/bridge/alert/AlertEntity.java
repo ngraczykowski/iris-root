@@ -22,7 +22,7 @@ class AlertEntity extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private int caseId;
+  private String externalId;
 
   @Setter
   private String name;
@@ -31,8 +31,8 @@ class AlertEntity extends BaseEntity {
 
   private byte[] payload;
 
-  public AlertEntity(int caseId, long bulkItemId, byte[] payload) {
-    this.caseId = caseId;
+  public AlertEntity(String externalId, long bulkItemId, byte[] payload) {
+    this.externalId = externalId;
     this.bulkItemId = bulkItemId;
     this.payload = payload;
   }

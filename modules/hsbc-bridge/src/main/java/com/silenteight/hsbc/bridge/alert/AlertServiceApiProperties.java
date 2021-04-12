@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.analysis;
+package com.silenteight.hsbc.bridge.alert;
 
 import lombok.Data;
 
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties("silenteight.bridge.analysis.service.api")
-class AnalysisServiceApiProperties {
+@ConfigurationProperties("silenteight.bridge.alert.service.api")
+class AlertServiceApiProperties {
 
   private String grpcAddress;
 }

@@ -1,7 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkStatusEvent
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -72,7 +71,7 @@ class BulkStatusUpdaterSpec extends Specification {
     } else {
       itemStatuses.forEach(
           status -> {
-            def item = new BulkItem(1, ''.getBytes())
+            def item = new BulkItem('1', ''.getBytes())
             item.setBulkId(bulk.getId())
             item.setStatus(status)
             bulk.setStatus(STORED)

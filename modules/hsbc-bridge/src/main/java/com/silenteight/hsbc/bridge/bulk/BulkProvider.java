@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository;
 import com.silenteight.hsbc.bridge.bulk.rest.input.Alert;
 import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
 
@@ -41,8 +40,8 @@ public class BulkProvider {
   }
 
   private BulkItem mapToBulkItem(Alert a) {
-    var alertId = a.getSystemInformation().getCaseWithAlertURL().getId();
+    var alertExternalId = a.getSystemInformation().getCaseWithAlertURL().getKeyLabel();
     var payload = bulkItemPayloadConverter.map(a);
-    return new BulkItem(alertId, payload);
+    return new BulkItem(alertExternalId, payload);
   }
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties("grpc.adjudication")
-class AdjudicationProperties {
+@ConfigurationProperties("silenteight.bridge.dataset.service.api")
+class DatasetServiceApiProperties {
 
-  private String address;
+  private String grpcAddress;
 }

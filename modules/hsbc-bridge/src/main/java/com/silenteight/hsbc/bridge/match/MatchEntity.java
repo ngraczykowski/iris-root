@@ -25,12 +25,15 @@ class MatchEntity extends BaseEntity {
 
   private byte[] payload;
 
+  private String externalId;
+
   private long alertId;
 
   @Setter
   private String name;
 
-  MatchEntity(long alertId, byte[] payload) {
+  MatchEntity(String externalId, long alertId, byte[] payload) {
+    this.externalId = externalId;
     this.alertId = alertId;
     this.payload = payload;
   }

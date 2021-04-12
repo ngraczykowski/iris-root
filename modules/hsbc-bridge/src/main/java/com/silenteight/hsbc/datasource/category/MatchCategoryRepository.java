@@ -7,7 +7,7 @@ import java.util.Collection;
 @org.springframework.stereotype.Repository
 interface MatchCategoryRepository extends Repository<MatchCategoryEntity, Long> {
 
-  Collection<MatchCategoryEntity> findByMatchValueIn(Collection<String> matchValues);
+  Collection<MatchCategoryEntity> findByMatchIdIn(Collection<Long> matchIds);
 
   void save(MatchCategoryEntity matchCategory);
 }

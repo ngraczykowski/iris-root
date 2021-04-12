@@ -18,7 +18,7 @@ class AlertEventHandlerSpec extends Specification {
 
   def 'should handle alert update name event'() {
     given:
-    def someAlertEntity = new AlertEntity(1, 2, "".getBytes())
+    def someAlertEntity = new AlertEntity('1', 2, "".getBytes())
     def event = new UpdateAlertWithNameEvent([1L: "alert/1"] as Map)
 
     when:
@@ -35,7 +35,7 @@ class AlertEventHandlerSpec extends Specification {
   def 'should handle alert recommendation ready event'() {
     given:
     def alertName = "alert/1"
-    def someAlertEntity = new AlertEntity(1, 2, "".getBytes())
+    def someAlertEntity = new AlertEntity('1', 2, "".getBytes())
     def event = new AlertRecommendationReadyEvent(alertName)
 
     when:

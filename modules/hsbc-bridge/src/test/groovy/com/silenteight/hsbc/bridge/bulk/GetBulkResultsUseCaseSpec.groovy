@@ -1,7 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade
-import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository
 import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade
@@ -13,7 +12,7 @@ class GetBulkResultsUseCaseSpec extends Specification {
   def fixtures = new Fixtures()
   def alertFacade = Mock(AlertFacade)
   def recommendationFacade = Mock(RecommendationFacade)
-  def bulkRepository = Mock(BulkQueryRepository)
+  def bulkRepository = Mock(BulkRepository)
   def underTest = new GetBulkResultsUseCase(alertFacade, bulkRepository, recommendationFacade)
 
   def 'should get bulk results'() {

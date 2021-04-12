@@ -8,6 +8,9 @@ import lombok.Value;
 public class AlertComposite {
 
   long id;
-  int caseId;
   AlertRawData alertRawData;
+
+  public String getAlertExternalId() {
+    return alertRawData.getAlertExternalId();
+  }
 }

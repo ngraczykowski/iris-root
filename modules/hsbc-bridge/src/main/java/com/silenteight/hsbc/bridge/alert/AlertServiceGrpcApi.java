@@ -1,0 +1,73 @@
+package com.silenteight.hsbc.bridge.alert;
+
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
+import com.silenteight.adjudication.api.v1.Match;
+import com.silenteight.hsbc.bridge.alert.dto.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+
+@RequiredArgsConstructor
+public class AlertServiceGrpcApi implements AlertServiceApi {
+
+  private final AlertServiceBlockingStub alertServiceBlockingStub;
+
+  @Override
+  public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
+    var gprcRequest = BatchCreateAlertsRequest.newBuilder()
+        .addAllAlerts(alertIds.stream()
+            .map(a -> Alert.newBuilder().setAlertId(a).build())
+            .collect(toList()))
+        .build();
+
+    var response = alertServiceBlockingStub.batchCreateAlerts(gprcRequest);
+
+    return BatchCreateAlertsResponseDto.builder()
+        .alerts(mapAlerts(response.getAlertsList()))
+        .build();
+  }
+
+  @Override
+  public BatchCreateAlertMatchesResponseDto batchCreateAlertMatches(
+      BatchCreateAlertMatchesRequestDto request) {
+    var matches = request.getMatchIds().stream()
+        .map(m -> Match.newBuilder().setMatchId(m).build())
+        .collect(toList());
+    var gprcRequest = BatchCreateAlertMatchesRequest.newBuilder()
+        .setAlert(request.getAlert())
+        .addAllMatches(matches)
+        .build();
+
+    var response = alertServiceBlockingStub.batchCreateAlertMatches(gprcRequest);
+
+    return BatchCreateAlertMatchesResponseDto.builder()
+        .alertMatches(mapAlertMatches(response.getMatchesList()))
+        .build();
+  }
+
+  private List<AlertMatchDto> mapAlertMatches(List<Match> matchesList) {
+    return matchesList.stream()
+        .map(m -> AlertMatchDto.builder()
+            .matchId(m.getMatchId())
+            .name(m.getName())
+            .build())
+        .collect(toList());
+  }
+
+  private List<AlertDto> mapAlerts(List<Alert> alertsList) {
+    return alertsList.stream()
+        .map(a -> AlertDto.builder()
+            .alertId(a.getAlertId())
+            .name(a.getName())
+            .build())
+        .collect(toList());
+  }
+}

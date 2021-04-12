@@ -7,6 +7,7 @@ import com.silenteight.hsbc.bridge.analysis.dto.AddDatasetRequestDto;
 import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisRequestDto;
 import com.silenteight.hsbc.bridge.analysis.dto.FeatureDto;
 import com.silenteight.hsbc.bridge.analysis.event.CreateAnalysisEvent;
+import com.silenteight.hsbc.bridge.model.ModelUseCase;
 import com.silenteight.hsbc.bridge.model.SolvingModelDto;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,12 +19,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class AnalysisService {
 
+  private final ModelUseCase modelUseCase;
   private final AnalysisServiceApi analysisServiceApi;
   private final ApplicationEventPublisher eventPublisher;
 
-  String createAnalysisWithDataset(SolvingModelDto solvingModel, String datasetId) {
-
+  void createAnalysisWithDataset(String datasetId) {
+    var solvingModel = modelUseCase.getSolvingModel();
     var analysisName = createAnalysis(solvingModel);
+
     addDataset(analysisName, datasetId);
 
     eventPublisher.publishEvent(CreateAnalysisEvent.builder()
@@ -31,8 +34,6 @@ class AnalysisService {
         .datasetName(datasetId)
         .solvingModelName(solvingModel.getName())
         .build());
-
-    return analysisName;
   }
 
   private String createAnalysis(SolvingModelDto solvingModel) {

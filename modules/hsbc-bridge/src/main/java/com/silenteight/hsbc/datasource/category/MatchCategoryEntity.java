@@ -22,7 +22,7 @@ class MatchCategoryEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String matchValue;
+  private long matchId;
 
   @ManyToOne
   @JoinColumn(name = "category_id")
@@ -40,8 +40,8 @@ class MatchCategoryEntity {
     return category.getName();
   }
 
-  MatchCategoryEntity(String matchValue, CategoryEntity category, List<String> values) {
-    this.matchValue = matchValue;
+  MatchCategoryEntity(long matchId, CategoryEntity category, List<String> values) {
+    this.matchId = matchId;
     this.category = category;
     this.values = values;
   }

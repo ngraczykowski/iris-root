@@ -31,11 +31,11 @@ class BulkItem extends BaseEntity {
   @Column(name = "bulk_id")
   String bulkId;
 
-  private int alertExternalId;
+  private String alertExternalId;
   private byte[] payload;
 
-  public BulkItem(int alertId, byte[] payload) {
-    this.alertExternalId = alertId;
+  public BulkItem(String alertExternalId, byte[] payload) {
+    this.alertExternalId = alertExternalId;
     this.payload = payload;
   }
 }

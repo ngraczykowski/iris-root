@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
 

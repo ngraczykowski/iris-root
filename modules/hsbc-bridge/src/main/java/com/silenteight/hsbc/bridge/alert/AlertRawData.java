@@ -30,4 +30,9 @@ public class AlertRawData {
   public CasesWithAlertURL getFirstCaseWithAlertURL() {
     return getCasesWithAlertURL().get(0);
   }
+
+  @JsonIgnore
+  public String getAlertExternalId() {
+    return getFirstCaseWithAlertURL().getKeyLabel();
+  }
 }

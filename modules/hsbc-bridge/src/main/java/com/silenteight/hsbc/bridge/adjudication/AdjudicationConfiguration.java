@@ -2,9 +2,9 @@ package com.silenteight.hsbc.bridge.adjudication;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
-import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
+import com.silenteight.hsbc.bridge.alert.AlertServiceApi;
 import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
+import com.silenteight.hsbc.bridge.model.ModelUseCase;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -15,63 +15,15 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 class AdjudicationConfiguration {
 
+  private final AlertServiceApi alertServiceApi;
+  private final DatasetServiceApi datasetServiceApi;
+  private final ModelUseCase modelUseCase;
   private final AnalysisServiceApi analysisServiceApi;
   private final ApplicationEventPublisher eventPublisher;
 
   @Bean
-  AdjudicationFacade adjudicationFacade(
-      AlertService alertService, DatasetService dataService, AnalysisService analysisService) {
-    return new AdjudicationFacade(
-        alertService, dataService, analysisService);
-  }
-
-  @Profile("!dev")
-  @Bean
-  AlertService alertService(AdjudicationApi adjudicationApiGrpc) {
-    return new AlertService(adjudicationApiGrpc, eventPublisher);
-  }
-
-  @Profile("dev")
-  @Bean
-  AlertService alertServiceMock(AdjudicationApi adjudicationApiMock) {
-    return new AlertService(adjudicationApiMock, eventPublisher);
-  }
-
-  @Profile("!dev")
-  @Bean
-  DatasetService datasetService(AdjudicationApi adjudicationApiGrpc) {
-    return new DatasetService(adjudicationApiGrpc);
-  }
-
-  @Profile("dev")
-  @Bean
-  DatasetService datasetServiceMock(AdjudicationApi adjudicationApiMock) {
-    return new DatasetService(adjudicationApiMock);
-  }
-
-  @Profile("!dev")
-  @Bean
-  AnalysisService analysisService() {
-    return new AnalysisService(analysisServiceApi, eventPublisher);
-  }
-
-  @Profile("dev")
-  @Bean
-  AnalysisService analysisServiceMock() {
-    return new AnalysisService(analysisServiceApi, eventPublisher);
-  }
-
-  @Bean
-  AdjudicationApi adjudicationApiGrpc(
-      AlertServiceBlockingStub alertServiceBlockingStub,
-      DatasetServiceBlockingStub datasetServiceBlockingStub) {
-    return new AdjudicationApiGrpc(
-        alertServiceBlockingStub, datasetServiceBlockingStub);
-  }
-
-  @Bean
-  AdjudicationApi adjudicationApiMock() {
-    return new AdjudicationApiMock();
+  AdjudicationEventHandler adjudicationEventHandler() {
+    return new AdjudicationEventHandler(alertService(), datasetServiceApi, analysisService());
   }
 
   @Profile("!dev")
@@ -79,5 +31,13 @@ class AdjudicationConfiguration {
   AdjudicationRecommendationListener adjudicationRecommendationListener(
       ApplicationEventPublisher eventPublisher) {
     return new AdjudicationRecommendationListener(eventPublisher);
+  }
+
+  private AlertService alertService() {
+    return new AlertService(alertServiceApi, eventPublisher);
+  }
+
+  private AnalysisService analysisService() {
+    return new AnalysisService(modelUseCase, analysisServiceApi, eventPublisher);
   }
 }

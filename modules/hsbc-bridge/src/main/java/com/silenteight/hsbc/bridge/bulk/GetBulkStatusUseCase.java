@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.bulk.repository.BulkQueryRepository;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkProcessingStatusResponse;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus;
@@ -18,10 +17,10 @@ import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
 @RequiredArgsConstructor
 public class GetBulkStatusUseCase {
 
-  private final BulkQueryRepository bulkQueryRepository;
+  private final BulkRepository bulkRepository;
 
   public BulkStatusResponse getStatus(String id) {
-    var result = bulkQueryRepository.findById(id);
+    var result = bulkRepository.findById(id);
 
     var response = new BulkStatusResponse();
     response.setBulkId(id);
@@ -32,7 +31,7 @@ public class GetBulkStatusUseCase {
   }
 
   public BulkProcessingStatusResponse isProcessing() {
-    var result = bulkQueryRepository.existsByStatusIn(List.of(STORED, PROCESSING));
+    var result = bulkRepository.existsByStatusIn(List.of(STORED, PROCESSING));
 
     var response = new BulkProcessingStatusResponse();
     response.setIsAdjudicationEngineProcessing(result);

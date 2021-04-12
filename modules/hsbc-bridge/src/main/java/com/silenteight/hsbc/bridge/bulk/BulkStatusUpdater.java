@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkStatusEvent;
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;

@@ -1,7 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository
 
 import spock.lang.Specification
 
@@ -14,7 +13,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
 
   def 'should update bulk status to DELIVERY'() {
     given:
-    def bulkItem = new BulkItem(100, "".getBytes())
+    def bulkItem = new BulkItem('100', "".getBytes())
     def bulk = new Bulk('20210101-1111')
     bulk.setStatus(COMPLETED)
     bulk.addItem(bulkItem)
@@ -41,7 +40,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
 
   def 'should not update bulk status to DELIVERY and throw BulkProcessingNotCompletedException'() {
     given:
-    def bulkItem = new BulkItem(100, "".getBytes())
+    def bulkItem = new BulkItem('100', "".getBytes())
     def bulk = new Bulk('20210101-1111')
     bulk.setStatus(PROCESSING)
     bulk.addItem(bulkItem)

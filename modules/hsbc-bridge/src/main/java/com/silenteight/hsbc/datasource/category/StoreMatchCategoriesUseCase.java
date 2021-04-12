@@ -21,11 +21,11 @@ class StoreMatchCategoriesUseCase {
 
     CategoryModelHolder.getCategories()
         .forEach(categoryModel -> matchComposites.stream().forEach(match -> {
-          var matchValue = match.getName();
+          var matchId = match.getId();
           var category = categoryRepository.findByName(categoryModel.getName());
           var values = categoryModel.getValueRetriever().retrieve(match.getRawData());
 
-          var matchCategory = new MatchCategoryEntity(matchValue, category, values);
+          var matchCategory = new MatchCategoryEntity(matchId, category, values);
           matchCategoryRepository.save(matchCategory);
         }));
 

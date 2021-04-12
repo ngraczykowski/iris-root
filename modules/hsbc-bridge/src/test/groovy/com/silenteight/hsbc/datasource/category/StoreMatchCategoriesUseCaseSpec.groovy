@@ -24,12 +24,11 @@ class StoreMatchCategoriesUseCaseSpec extends Specification {
         )
     )
     def matchComposite = MatchComposite.builder()
+        .id(1L)
         .name('matchName')
         .rawData(matchRawData)
         .build()
-    def command = StoreMatchCategoriesCommand.builder()
-        .matchComposites([matchComposite])
-        .build()
+    def command = new StoreMatchCategoriesCommand([matchComposite])
 
     when:
     underTest.storeMatchCategories(command)

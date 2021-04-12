@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class MatchComposite {
 
   Long id;
-  @NotNull
+  String externalId;
   String name;
   MatchRawData rawData;
 }

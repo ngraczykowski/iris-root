@@ -34,7 +34,7 @@ class MatchFacadeSpec extends Specification {
 
     then:
     result.rawData == fixtures.matchRawData
-    1 * matchRepository.findById(id) >> of(new MatchEntity(2, fixtures.matchPayload))
+    1 * matchRepository.findById(id) >> of(new MatchEntity('match', 2, fixtures.matchPayload))
   }
 
   def 'should prepare and save matches'() {
@@ -50,7 +50,10 @@ class MatchFacadeSpec extends Specification {
     then:
     1 * matchRepository.save(_ as MatchEntity) >> {MatchEntity entity -> entity.id = 2}
     1 * eventPublisher.publishEvent(_ as StoredMatchesEvent)
-    result == [2]
+    result.size() == 1
+    with(result.first()) {
+      internalId == 2
+    }
   }
 
   class Fixtures {

@@ -46,7 +46,7 @@ class AlertEventHandler {
     }
   }
 
-  private void updateAlertAndPublishStatusChangeEvent(Long id, String name) {
+  private void updateAlertAndPublishStatusChangeEvent(long id, String name) {
     var findResult = alertRepository.findById(id);
 
     findResult.ifPresent(alert -> {

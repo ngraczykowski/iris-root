@@ -23,7 +23,7 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
 public class SolvedAlert {
   @SerializedName("id")
-  private Integer id = null;
+  private String id = null;
 
   @SerializedName("recommendation")
   private SolvedAlertStatus recommendation = null;
@@ -31,7 +31,7 @@ public class SolvedAlert {
   @SerializedName("comment")
   private String comment = null;
 
-  public SolvedAlert id(Integer id) {
+  public SolvedAlert id(String id) {
     this.id = id;
     return this;
   }
@@ -41,11 +41,11 @@ public class SolvedAlert {
    * @return id
   **/
   @Schema(description = "")
-  public Integer getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(String id) {
     this.id = id;
   }
 

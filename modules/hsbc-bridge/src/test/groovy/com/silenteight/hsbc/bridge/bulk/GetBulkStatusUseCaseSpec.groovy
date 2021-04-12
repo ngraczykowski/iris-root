@@ -1,7 +1,5 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.bulk.repository.BulkRepository
-
 import spock.lang.Specification
 
 class GetBulkStatusUseCaseSpec extends Specification {
@@ -11,7 +9,7 @@ class GetBulkStatusUseCaseSpec extends Specification {
 
   def 'should get bulk status'() {
     given:
-    def bulkItem = new BulkItem(100, "".getBytes())
+    def bulkItem = new BulkItem('100', "".getBytes())
     def bulk = new Bulk('20210101-1111')
     bulk.addItem(bulkItem)
 
