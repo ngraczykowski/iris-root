@@ -34,9 +34,9 @@ server:
 
 spring:
   liquibase:
-    # NOTE(tbozek): This property controls whether liquibase drops whole schema before applying changesets,
-    #  and it defaults to `false`. For development purposes you can set it to `true` for a single run, to clean
-    #  your local database.
+    # NOTE(tbozek): This property controls whether liquibase drops whole schema before applying
+    #  changesets, and it defaults to `false`. For development purposes you can set it to
+    #  `true` for a single run, to clean your local database.
     drop-first: false
   jpa:
     hibernate:

@@ -205,7 +205,7 @@ job "adjudication-engine" {
           "-jar",
           "local/adjudication-engine-app.jar",
           "--spring.profiles.active=linux,adjudication-engine,database,rabbitmq,messaging",
-          "--spring.config.additional-location=file:local/conf/"
+          "--spring.config.additional-location=file:local/conf/",
         ]
       }
 

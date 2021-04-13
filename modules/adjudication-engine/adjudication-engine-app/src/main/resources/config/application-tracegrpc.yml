@@ -1,5 +1,4 @@
 # Enables tracing of gRPC calls
-
 logging:
   level:
     com.silenteight.adjudication.engine.common.grpc.logging.LoggingServerInterceptor: TRACE

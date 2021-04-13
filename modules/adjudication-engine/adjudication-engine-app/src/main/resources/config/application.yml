@@ -1,4 +1,12 @@
 #---------------------------------------------------------------------------------------------------
+# MESSAGING CONCURRENCY
+#---------------------------------------------------------------------------------------------------
+ae:
+  messaging:
+    concurrency: 4
+    prefetch: 25
+
+#---------------------------------------------------------------------------------------------------
 # SERVER
 #---------------------------------------------------------------------------------------------------
 
@@ -7,8 +15,8 @@ server:
   forward-headers-strategy: native
   undertow:
     threads:
-      io: ${ae.web.threads.io}
-      worker: ${ae.web.threads.worker}
+      io: ${ae.web.threads.io:4}
+      worker: ${ae.web.threads.worker:16}
 
   error:
     include-exception: true
@@ -28,20 +36,12 @@ management:
       base-path: /management
       exposure:
         include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
-    # loggers endpoint is secured with mTLS
     loggers:
       sensitive: false
 
   metrics:
     tags:
       application: ${spring.application.name}
-
-#-------------------------------------------------------------------------------------------------
-# SPRING INTEGRATION
-#-------------------------------------------------------------------------------------------------
-integration:
-  start-delay-seconds: 15
-  poll-period-millis: 1000
 
 spring:
   #-------------------------------------------------------------------------------------------------
@@ -73,18 +73,18 @@ spring:
   datasource:
     # Postgres database
     type: com.zaxxer.hikari.HikariDataSource
-    url: ${ae.db.url}
-    username: ${ae.db.user}
+    url: jdbc:postgresql://${ae.db.host}:${ae.db.port}/${ae.db.name}?currentSchema=${ae.db.schema:public}
+    username: ${ae.db.username}
     password: ${ae.db.password}
     initialization-mode: never
 
     # Hikari pool configuration
     hikari:
       pool-name: Database-Pool
-      minimum-idle: ${ae.db.connections.min}
-      maximum-pool-size: ${ae.db.connections.max}
+      minimum-idle: ${ae.db.connections.min:1}
+      maximum-pool-size: ${ae.db.connections.max:10}
       auto-commit: false
-      schema: ${ae.db.schema}
+      schema: ${ae.db.schema:public}
       isolate-internal-queries: true
       # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
@@ -97,7 +97,7 @@ spring:
   # Database migrations
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
-    default-schema: ${ae.db.schema}
+    default-schema: ${ae.db.schema:public}
     contexts: default
 
   # Spring Data JPA
@@ -122,24 +122,18 @@ spring:
       org.hibernate.envers.store_data_at_delete: true
 
   #-------------------------------------------------------------------------------------------------
-  # MESSAGING
+  # RABBITMQ
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
-    # addresses: ${ae.rabbitmq.addresses}
-    host: ${ae.rabbitmq.host}
-    port: ${ae.rabbitmq.port}
-    username: ${ae.rabbitmq.user}
-    password: ${ae.rabbitmq.password}
-    virtual-host: ${ae.rabbitmq.vhost}
     listener:
       type: simple
       direct:
-        consumers-per-queue: ${ae.messaging.concurrency}
-        prefetch: ${ae.messaging.prefetch}
+        consumers-per-queue: ${ae.messaging.concurrency:4}
+        prefetch: ${ae.messaging.prefetch:25}
       simple:
         concurrency: 1
-        max-concurrency: ${ae.messaging.concurrency}
-        prefetch: ${ae.messaging.prefetch}
+        max-concurrency: ${ae.messaging.concurrency:4}
+        prefetch: ${ae.messaging.prefetch:25}
 
   jackson:
     default-property-inclusion: NON_NULL
