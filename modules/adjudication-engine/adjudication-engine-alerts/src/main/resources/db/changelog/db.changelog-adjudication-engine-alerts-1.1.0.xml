@@ -45,4 +45,10 @@
         columnNames="alert_id, sort_index"
         constraintName="uq_ae_match_alert_id_sort_index"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.1.0-5" author="tkleszcz">
+    <createIndex tableName="ae_alert" indexName="ix_ae_alert_priority">
+      <column name="priority"></column>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

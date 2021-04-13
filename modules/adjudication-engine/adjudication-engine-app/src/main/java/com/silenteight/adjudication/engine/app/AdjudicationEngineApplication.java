@@ -20,6 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import reactor.core.scheduler.Schedulers;
 
@@ -33,6 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableIntegration
 @EnableIntegrationManagement
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
+@EnableScheduling
 @EnableJpaRepositories(basePackageClasses = AdjudicationEngineModule.class)
 @EntityScan(basePackageClasses = AdjudicationEngineModule.class)
 @IntegrationComponentScan(basePackageClasses = AdjudicationEngineModule.class)

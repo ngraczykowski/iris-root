@@ -1,0 +1,25 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":adjudication-engine-common")
+  implementation libraries.adjudication_engine_api
+  implementation libraries.grpc_spring_boot_starter
+  implementation libraries.protobuf_java_util
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.spring_data_jpa
+  implementation libraries.agents_api
+  implementation libraries.guava
+  implementation libraries.spring_integration_amqp
+
+  // NOTE(ahaczewski): This enables aspects for validating classes. Spring Web and Tx are required
+  //  for correctly compiling aspects.
+  aspect libraries.silenteight_sep_base_aspects
+  compileOnly libraries.spring_web
+  compileOnly libraries.spring_tx
+
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libraries.silenteight_sep_base_testing
+}
