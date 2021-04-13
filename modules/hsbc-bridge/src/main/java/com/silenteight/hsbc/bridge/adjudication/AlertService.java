@@ -25,12 +25,14 @@ class AlertService {
   private final AlertServiceApi alertServiceApi;
   private final ApplicationEventPublisher eventPublisher;
 
-  void registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
+  Collection<String> registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
     var alerts = registerAlerts(alertMatchIds.keySet());
     var matches = registerMatches(alertMatchIds, alerts);
 
-    publishUpdateAlertsWithNameEvent(alerts, alertMatchIds);
+    var alertsWithName = publishUpdateAlertsWithNameEvent(alerts, alertMatchIds);
     publishUpdateMatchesWithNameEvent(matches, alertMatchIds);
+
+    return alertsWithName.values();
   }
 
   private List<AlertDto> registerAlerts(Collection<String> alertIds) {
@@ -44,25 +46,25 @@ class AlertService {
       var alertId = a.getAlertId();
       var alertMatchIdComposite = alertMatchIds.get(alertId);
       var matchExternalIds = alertMatchIdComposite.getMatchExternalIds();
-      return registerMatchesForAlert(alertId, matchExternalIds);
+      return registerMatchesForAlert(alertId, a.getName(), matchExternalIds);
     }).flatMap(Collection::stream).collect(Collectors.toList());
   }
 
   private List<MatchWithAlert> registerMatchesForAlert(
-      String alertId, Collection<String> matchIds) {
+      String alertInternalId, String alertName, Collection<String> matchIds) {
     var request = BatchCreateAlertMatchesRequestDto.builder()
-        .alert(alertId)
+        .alert(alertName)
         .matchIds(matchIds)
         .build();
 
     var response = alertServiceApi.batchCreateAlertMatches(request);
 
     return response.getAlertMatches().stream()
-        .map(a -> new MatchWithAlert(alertId, a.getMatchId(), a.getName()))
+        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(), a.getName()))
         .collect(Collectors.toList());
   }
 
-  private void publishUpdateAlertsWithNameEvent(
+  private Map<Long, String> publishUpdateAlertsWithNameEvent(
       List<AlertDto> alerts, Map<String, AlertMatchIdComposite> alertMatchIds) {
     var alertIdsWithNames = alerts
         .stream()
@@ -70,6 +72,8 @@ class AlertService {
         .collect(Collectors.toMap(AlertIdWithName::getAlertInternalId, AlertIdWithName::getName));
 
     eventPublisher.publishEvent(new UpdateAlertWithNameEvent(alertIdsWithNames));
+
+    return alertIdsWithNames;
   }
 
   private AlertIdWithName toAlertIdWithName(
@@ -128,6 +132,7 @@ class AlertService {
   private class MatchWithAlert {
 
     private String alertExternalId;
+    private String alertName;
     private String matchExternalId;
     private String name;
   }

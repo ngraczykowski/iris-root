@@ -33,15 +33,15 @@ class AdjudicationEventHandler {
   private void createAnalysis(Collection<AlertMatchIdComposite> alertMatchIdComposites) {
     var alertIdCompositeMap = toCompositeByAlertId(alertMatchIdComposites);
 
-    alertService.registerAlertsWithMatches(alertIdCompositeMap);
-    var datasetName = createDataset(alertIdCompositeMap.keySet());
+    var alerts = alertService.registerAlertsWithMatches(alertIdCompositeMap);
+    var datasetName = createDataset(alerts);
     analysisService.createAnalysisWithDataset(datasetName);
 
     log.debug("Analysis created");
   }
 
-  private String createDataset(Collection<String> alertIds) {
-    return datasetServiceApi.createDataset(alertIds).getName();
+  private String createDataset(Collection<String> alertNames) {
+    return datasetServiceApi.createDataset(alertNames).getName();
   }
 
   private Map<String, AlertMatchIdComposite> toCompositeByAlertId(
