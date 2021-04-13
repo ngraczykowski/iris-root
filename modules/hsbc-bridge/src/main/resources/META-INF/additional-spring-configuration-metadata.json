@@ -19,6 +19,16 @@
       "name": "silenteight.bridge.dataset.service.api.grpc-address",
       "type": "java.lang.String",
       "description": "Grpc address of Dataset Service API."
+    },
+    {
+      "name": "silenteight.bridge.security",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable JWT security."
+    },
+    {
+      "name": "silenteight.bridge.security.endpoints",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Endpoints secured by configuration."
     }
   ]
 }

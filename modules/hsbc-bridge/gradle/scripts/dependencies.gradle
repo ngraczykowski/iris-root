@@ -29,6 +29,7 @@ libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springVersion]
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springVersion]
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springVersion]
+libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springVersion]
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springVersion]
 libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
@@ -46,11 +47,15 @@ libraries.commons_csv = [group: 'org.apache.commons', name: 'commons-csv', versi
 // OpenAPI & Swagger
 libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version: '3.0.0']
 
+// JWT
+libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1']
+
 // GRPC
 libraries.grpc_spring_boot_starter = [group: 'io.github.lognet', name: 'grpc-spring-boot-starter', version: '4.4.5']
 libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.15.6']
 
 // Others
+libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 
 // Messaging
@@ -69,6 +74,7 @@ libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', ver
 libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit', version: springVersion]
 libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springVersion]
 libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion]
+libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: '5.3.5']
 
 
 configurations.all {
@@ -89,10 +95,12 @@ dependencies {
   compile libraries.springfox_oas
   compileOnly libraries.lombok
   implementation libraries.adjudication_engine_api
+  implementation libraries.commons_lang3
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
   implementation libraries.grpc_spring_boot_starter
+  implementation libraries.jjwt
   implementation libraries.liquibase_core
   implementation libraries.postgresql
   implementation libraries.protobuf_util
@@ -102,6 +110,7 @@ dependencies {
   implementation libraries.spring_amqp_starter
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator
+  implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
@@ -117,6 +126,7 @@ dependencies {
   testImplementation libraries.mockito_junit_jupiter
   testImplementation libraries.spock_spring
   testImplementation libraries.spring_starter_test
+  testImplementation libraries.spring_test
   testRuntimeOnly libraries.junit_jupiter_engine
 }
 
