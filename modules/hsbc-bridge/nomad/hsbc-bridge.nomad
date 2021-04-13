@@ -127,7 +127,7 @@ job "hsbc-bridge" {
       check {
         name     = "HSBC Bridge HTTP Health Check"
         type     = "http"
-        path     = "/actuator/health"
+        path     = "/rest/hsbc-bridge/management/health"
         method   = "GET"
         interval = "10s"
         timeout  = "2s"
@@ -205,7 +205,10 @@ job "hsbc-bridge" {
           "-jar",
           "local/hsbc-bridge.jar",
           "--spring.profiles.active=linux",
-          "--spring.config.additional-location=file:local/conf/"
+          "--spring.config.additional-location=file:local/conf/",
+          "--server.servlet.context-path=/rest/hsbc-bridge",
+          "--spring.webflux.base-path=/rest/hsbc-bridge",
+          "--management.endpoints.web.base-path=/management",
         ]
       }
 
