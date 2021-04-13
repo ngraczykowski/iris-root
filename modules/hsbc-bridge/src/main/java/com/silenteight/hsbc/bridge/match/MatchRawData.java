@@ -1,12 +1,16 @@
 package com.silenteight.hsbc.bridge.match;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.*;
+import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL;
+import com.silenteight.hsbc.bridge.domain.EntityComposite;
+import com.silenteight.hsbc.bridge.domain.IndividualComposite;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +36,6 @@ public class MatchRawData {
 
   @JsonIgnore
   public boolean isIndividual() {
-    return isNull(entityComposite);
+    return nonNull(individualComposite);
   }
 }
