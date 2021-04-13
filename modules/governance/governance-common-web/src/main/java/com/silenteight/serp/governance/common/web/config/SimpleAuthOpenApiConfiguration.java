@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Profile;
     in = SecuritySchemeIn.DEFAULT
 )
 @Configuration
-@Profile("swagger & simple-auth")
+@Profile("swagger & basic-auth")
 class SimpleAuthOpenApiConfiguration {
 
   static final String APP_SECURITY_SCHEMA = "basic-security";
