@@ -33,6 +33,14 @@ subprojects {Project subproject ->
 
     subproject.dependencies {
       implementation libraries.jaxb_api
+
+      aspect libraries.spring_aspects
+      aspect libraries.silenteight_sep_base_aspects
+
+      // Required by aspects
+      aspect libraries.spring_web
+      aspect libraries.spring_tx
+
       annotationProcessor libraries.spring_boot_configuration_processor
     }
 
