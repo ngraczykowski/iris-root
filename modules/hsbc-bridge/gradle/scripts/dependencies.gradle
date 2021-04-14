@@ -14,6 +14,7 @@ ext {
   junitJupiterVersion = "5.6.0"
   mockitoVersion = "3.8.0"
   spockVersion = "2.0-M5-groovy-3.0"
+  springCloudVersion = "3.0.2"
   springRabbitVersion = "2.3.6"
   springVersion = "2.4.2"
 }
@@ -34,6 +35,9 @@ libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', nam
 libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
 libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
+
+// Spring Cloud
+libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: springCloudVersion]
 
 // Database
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '4.3.1']
@@ -114,6 +118,7 @@ dependencies {
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_data_jpa
   implementation libraries.spring_rabbit
 
