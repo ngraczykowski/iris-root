@@ -41,7 +41,7 @@ class NameWord:
         return self.cleaned.__hash__()
 
 
-class NameSequence(collections.UserList[NameWord]):
+class NameSequence(collections.UserList):
     @property
     def original_name(self) -> str:
         return " ".join((w.original for w in self.data))
