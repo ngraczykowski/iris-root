@@ -10,6 +10,7 @@ import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyFeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyMatchConditionValueException;
+import com.silenteight.serp.governance.policy.domain.exception.WrongBasePolicyException;
 import com.silenteight.serp.governance.policy.domain.exception.WrongToFulfillValue;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
@@ -306,5 +307,60 @@ public class PolicyService {
     policy.setUpdatedBy(deleteStepRequest.getDeletedBy());
     policyRepository.save(policy);
     deleteStepRequest.postAudit(auditingLogger::log);
+  }
+
+  @Transactional
+  public UUID clonePolicy(ClonePolicyRequest clonePolicyRequest) {
+    clonePolicyRequest.preAudit(auditingLogger::log);
+    Policy origin = validateAndReturnPolicy(clonePolicyRequest.getBasePolicyId());
+    Policy policy = new Policy(clonePolicyRequest.getPolicyId(), origin.getName(),
+        origin.getDescription(), origin.getCreatedBy());
+    policy.setSteps(cloneSteps(origin.getSteps()));
+    Policy savedPolicy = policyRepository.save(policy);
+    clonePolicyRequest.postAudit(auditingLogger::log);
+    return savedPolicy.getPolicyId();
+  }
+
+  public Policy validateAndReturnPolicy(UUID policyId) {
+    Policy policy = policyRepository.findByPolicyId(policyId)
+        .orElseThrow(() -> new WrongBasePolicyException(policyId));
+
+    return policy;
+  }
+
+  private Collection<Step> cloneSteps(Collection<Step> steps) {
+    return steps
+        .stream()
+        .map(this::cloneStep)
+        .collect(toList());
+  }
+
+  private Step cloneStep(Step origin) {
+    Step step = new Step(origin.getSolution(), UUID.randomUUID(), origin.getName(),
+        origin.getDescription(), origin.getType(), origin.getSortOrder(), origin.getCreatedBy());
+    step.setFeatureLogics(cloneFeatureLogics(origin.getFeatureLogics()));
+    return step;
+  }
+
+  private Collection<FeatureLogic> cloneFeatureLogics(Collection<FeatureLogic> featureLogics) {
+    return featureLogics
+        .stream()
+        .map(this::cloneFeatureLogic)
+        .collect(toList());
+  }
+
+  private FeatureLogic cloneFeatureLogic(FeatureLogic origin) {
+    return new FeatureLogic(origin.getCount(), cloneFeatures(origin.getFeatures()));
+  }
+
+  private Collection<MatchCondition> cloneFeatures(Collection<MatchCondition> features) {
+    return features
+        .stream()
+        .map(this::cloneFeature)
+        .collect(toList());
+  }
+
+  private MatchCondition cloneFeature(MatchCondition origin) {
+    return new MatchCondition(origin.getName(), origin.getCondition(), origin.getValues());
   }
 }
