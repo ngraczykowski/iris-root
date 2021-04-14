@@ -2,7 +2,7 @@
   <configuration default="false" name="WarehouseApplication ES-TLS" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="warehouse.warehouse-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.WarehouseApplication" />
-    <option name="ACTIVE_PROFILES" value="swagger,local,debug" />
+    <option name="ACTIVE_PROFILES" value="swagger,debug" />
     <option name="VM_PARAMETERS" value="-Xms1g -Xmx1g -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Djava.io.tmpdir=./tmp -Djavax.net.debug=all -Dspring.elasticsearch.rest.uris=https://localhost:9201,https://localhost:9200" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
