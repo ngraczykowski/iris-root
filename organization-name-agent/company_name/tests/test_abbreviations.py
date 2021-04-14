@@ -8,41 +8,73 @@ from company_name.compare import compare
     (
         ("ACLU", "American Civil Liberties Union"),
         ("HUD", "Housing and Urban Development"),
-        ("M&M", "Mars & Murrie’s"),
+        ("M&M", "Mars & Murrie's"),
         ("Agricultural Bank of China", "ABC"),
-        ("Dalian Hi-Think Computer Technology Corporation", "DHC"),
         ("The Kraft Heinz Company", "KHC"),
     ),
 )
 def test_simple_abbreviation(first, second):
     print(repr(first), repr(second), compare(first, second))
-    score, _ = compare(first, second)
-    assert score["abbreviation"] == 1
+    score = compare(first, second)
+    assert score["abbreviation"].value == 1
+    assert score["abbreviation"].compared == ((first, ), (second,))
+
+
+@pytest.mark.parametrize(
+    ("first", "first_source", "second"),
+    (
+        (
+            "Dalian Hi-Think Computer Technology Corporation",
+            "Dalian Hi-Think Computer",
+            "DHC",
+        ),
+        ("Jiangling Motors Corporation Limited", "Jiangling Motors Corporation", "JMC"),
+    ),
+)
+def test_abbreviation_without_suffix_or_legal(first, first_source, second):
+    print(repr(first), repr(second), compare(first, second))
+    score = compare(first, second)
+    assert score["abbreviation"].value == 1
+    assert score["abbreviation"].compared == ((first_source,), (second,))
 
 
 @pytest.mark.parametrize(
     ("first", "second"),
-    (("REI", "Recreational Equipment, Inc."),),
+    (("REI", "Recreational Equipment Inc."),),
 )
 def test_abbreviation_with_legal(first, second):
     print(repr(first), repr(second), compare(first, second))
-    score, _ = compare(first, second)
-    assert score["abbreviation"] == 1
+    score = compare(first, second)
+    assert score["abbreviation"].value == 1
+    assert score["abbreviation"].compared == ((first, ), (second, ))
 
 
 @pytest.mark.parametrize(
-    ("first", "second"),
+    ("first", "first_source", "second"),
     (
-        ("China Medical Technologies, Inc.", "CMED"),
-        ("Commercial Aircraft Corporation of China, Ltd.", "COMAC"),
-        ("China Ocean Shipping Company, Limited", "COSCO"),
-        ("China Ocean Shipping Company, Limited", "COSCO Limited"),
+        ("China Medical Technologies, Inc.", "China Medical", "CMED"),
+        (
+            "Commercial Aircraft Corporation of China, Ltd.",
+            "Commercial Aircraft Corporation",
+            "COMAC",
+        ),
+        (
+            "China Ocean Shipping Company, Limited",
+            "China Ocean Shipping Company",
+            "COSCO",
+        ),
+        (
+            "China Ocean Shipping Company, Limited",
+            "China Ocean Shipping Company",
+            "COSCO Limited",
+        ),
     ),
 )
-def test_abbreviation_more_than_one_letter(first, second):
+def test_abbreviation_more_than_one_letter(first, first_source, second):
     print(repr(first), repr(second), compare(first, second))
-    score, _ = compare(first, second)
-    assert 0.7 < score["abbreviation"] < 1
+    score = compare(first, second)
+    assert 0.7 < score["abbreviation"].value < 1
+    assert score["abbreviation"].compared[0] == (first_source,)
 
 
 @pytest.mark.parametrize(
@@ -51,8 +83,9 @@ def test_abbreviation_more_than_one_letter(first, second):
 )
 def test_abbreviation_with_duplicates(first, second):
     print(repr(first), repr(second), compare(first, second))
-    score, _ = compare(first, second)
-    assert score["abbreviation"] == 1
+    score = compare(first, second)
+    assert score["abbreviation"].value == 1
+    assert score["abbreviation"].compared == ((first, ), (second.replace(",", ""), ))
 
 
 @pytest.mark.parametrize(
@@ -66,8 +99,8 @@ def test_abbreviation_with_duplicates(first, second):
 )
 def test_partial_abbreviation(first, second):
     print(repr(first), repr(second), compare(first, second))
-    score, _ = compare(first, second)
-    assert score["abbreviation"] > 0.7
+    score = compare(first, second)
+    assert score["abbreviation"].value > 0.7
 
 
 @pytest.mark.parametrize(
@@ -80,5 +113,6 @@ def test_partial_abbreviation(first, second):
 )
 def test_whitespaces(first, second):
     print(repr(first), repr(second), compare(first, second))
-    score, _ = compare(first, second)
-    assert score["abbreviation"] == 1
+    score = compare(first, second)
+    assert score["abbreviation"].value == 1
+    assert score["abbreviation"].compared == ((first, ), (" ".join(second.split()), ))

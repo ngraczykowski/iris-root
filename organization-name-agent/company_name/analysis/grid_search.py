@@ -46,7 +46,7 @@ def compute_scores(
                 writer.writerow({**row, **scored})
 
 
-COMPANY_FILE = "./data/company_pairs_with_results.csv"
+COMPANY_FILE = "../data/company_pairs_with_results.csv"
 with open(COMPANY_FILE, "rt") as f:
     companies_columns = {name: i for i, name in enumerate(next(f).rstrip().split(",")[2:])}
 companies_df = numpy.genfromtxt(COMPANY_FILE, delimiter=",")[1:].transpose()[2:]
@@ -113,7 +113,7 @@ def main():
             result.append(r)
         print_top(result)
 
-        with open("./data/thresholds_scores.csv", "wt") as f:
+        with open("../data/thresholds_scores.csv", "wt") as f:
             writer = csv.writer(f)
             writer.writerow(([*[k[0] for k in scores_all_keys], "accuracy", "precision", "recall"]))
             for r in result:

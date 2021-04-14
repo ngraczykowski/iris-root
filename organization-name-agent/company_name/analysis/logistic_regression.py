@@ -4,7 +4,7 @@ from sklearn.metrics import recall_score, precision_score, accuracy_score
 from sklearn.linear_model import LogisticRegressionCV, LogisticRegression
 
 
-df = pandas.read_csv("./data/company_pairs_with_results.csv")
+df = pandas.read_csv("../data/company_pairs_with_results.csv")
 
 
 def correlation():
