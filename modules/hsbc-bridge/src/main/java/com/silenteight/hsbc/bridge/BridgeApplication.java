@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.http.security.SecurityModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.model.Model;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
+import com.silenteight.hsbc.bridge.retention.DataRetentionModule;
 import com.silenteight.hsbc.datasource.category.DataSourceCategoryModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
 import com.silenteight.hsbc.datasource.provider.DataSourceProviderModule;
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableAutoConfiguration
@@ -25,11 +27,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories("com.silenteight.hsbc")
 @EntityScan(basePackages = {"com.silenteight.hsbc"})
 @EnableTransactionManagement
+@EnableScheduling
 @ComponentScan(basePackageClasses = {
     AlertModule.class,
     AdjudicationModule.class,
     AnalysisModule.class,
     BulkModule.class,
+    DataRetentionModule.class,
     MatchModule.class,
     Model.class,
     RecommendationModule.class,

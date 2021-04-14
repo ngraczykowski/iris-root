@@ -2,6 +2,8 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.retention.DataCleaner;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,5 +19,10 @@ class AlertFacadeConfiguration {
         .alertRawMapper(new AlertRawMapper())
         .alertRepository(alertRepository)
         .build();
+  }
+
+  @Bean
+  DataCleaner alertDataCleaner() {
+    return new AlertDataCleaner(alertRepository);
   }
 }

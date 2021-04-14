@@ -2,6 +2,8 @@ package com.silenteight.hsbc.bridge.match;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.retention.DataCleaner;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,5 +22,10 @@ class MatchFacadeConfiguration {
         .matchRepository(matchRepository)
         .eventPublisher(eventPublisher)
         .build();
+  }
+
+  @Bean
+  DataCleaner matchDataCleaner() {
+    return new MatchDataCleaner(matchRepository);
   }
 }
