@@ -1,6 +1,9 @@
 package com.silenteight.serp.governance.policy.details.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 import com.silenteight.serp.governance.policy.domain.PolicyState;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
@@ -15,9 +18,10 @@ public class PolicyDetailsDto {
 
   @NonNull
   UUID id;
-  long policyId;
   @NonNull
   String name;
+  @NonNull
+  String policyName;
   String description;
   @NonNull
   PolicyState state;
@@ -32,8 +36,8 @@ public class PolicyDetailsDto {
 
   public PolicyDetailsDto(PolicyDto policyDto, long count) {
     this(policyDto.getId(),
-         policyDto.getPolicyId(),
          policyDto.getName(),
+         policyDto.getPolicyName(),
          policyDto.getDescription(),
          policyDto.getState(),
          policyDto.getCreatedAt(),

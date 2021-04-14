@@ -354,9 +354,9 @@ components:
       properties:
         id:
           type: string
-        policyId:
-          type: long
         name:
+          type: string
+        policyName:
           type: string
         description:
           type: string
@@ -374,14 +374,13 @@ components:
           type: string
       example:
         id: 'c9fc3fc3-383d-484d-bb91-2966a0e5b846'
-        policyId: long
-        name: 'New Prod policy'
+        name: 'policies/c9fc3fc3-383d-484d-bb91-2966a0e5b846'
+        policyName: 'New Prod policy'
         state: 'draft'
         updatedAt: '2004-02-12T15:19:21Z'
         updatedBy: 'UserName'
         createdAt: '2004-02-15T15:19:21Z'
         createdBy: 'UserName2'
-
 
     PolicyCreation:
       type: object

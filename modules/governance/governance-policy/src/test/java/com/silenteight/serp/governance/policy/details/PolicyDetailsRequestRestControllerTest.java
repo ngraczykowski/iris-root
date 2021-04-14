@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -27,19 +28,19 @@ import static org.springframework.http.HttpStatus.OK;
 class PolicyDetailsRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final String POLICY_URL = "/v1/policies/";
+  private static final String RESOURCE_NAME = "policies/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
   private static final String POLICY_NAME = "TEST_POLICY";
   private static final OffsetDateTime CREATED_AT = OffsetDateTime.now().minusHours(1);
   private static final OffsetDateTime UPDATED_AT = OffsetDateTime.now();
   private static final String CREATED_BY = "USER";
   private static final String UPDATED_BY = "USER2";
-  private static final UUID POLICY_UUID = UUID.randomUUID();
+  private static final UUID POLICY_UUID = randomUUID();
   private static final int STEPS_COUNT = 2;
-  private static final PolicyDetailsDto POLICY_DTO = PolicyDetailsDto
-      .builder()
-      .policyId(1)
-      .name(POLICY_NAME)
-      .state(PolicyState.SAVED)
+  private static final PolicyDetailsDto POLICY_DTO = PolicyDetailsDto.builder()
       .id(POLICY_UUID)
+      .name(RESOURCE_NAME)
+      .policyName(POLICY_NAME)
+      .state(PolicyState.SAVED)
       .createdAt(CREATED_AT)
       .updatedAt(UPDATED_AT)
       .createdBy(CREATED_BY)
@@ -72,7 +73,8 @@ class PolicyDetailsRequestRestControllerTest extends BaseRestControllerTest {
     get(getPolicyMapper(POLICY_UUID))
         .statusCode(OK.value())
         .body("id", equalTo(POLICY_UUID.toString()))
-        .body("policyId", equalTo(1))
+        .body("name", equalTo(RESOURCE_NAME))
+        .body("policyName", equalTo(POLICY_NAME))
         .body("state", equalTo(SAVED.name()))
         .body("createdBy", equalTo(CREATED_BY))
         .body("createdAt", notNullValue())

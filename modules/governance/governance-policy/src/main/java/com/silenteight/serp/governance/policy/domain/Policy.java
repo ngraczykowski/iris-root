@@ -27,6 +27,8 @@ import static javax.persistence.CascadeType.ALL;
 @ToString(onlyExplicitlyIncluded = true)
 class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
+  private static final String RESOURCE_NAME_PREFIX = "policies/";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
@@ -72,16 +74,20 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
   PolicyDto toDto() {
     return PolicyDto.builder()
-        .policyId(getId())
-        .name(getName())
         .id(getPolicyId())
-        .state(getState())
+        .name(asResourceName())
+        .policyName(getName())
         .description(getDescription())
+        .state(getState())
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
         .updatedAt(getLastModifyAt())
         .updatedBy(getUpdatedBy())
         .build();
+  }
+
+  private String asResourceName() {
+    return RESOURCE_NAME_PREFIX + getId().toString();
   }
 
   public void addStep(Step step) {

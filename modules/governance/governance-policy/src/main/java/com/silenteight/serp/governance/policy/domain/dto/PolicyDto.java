@@ -15,9 +15,10 @@ public class PolicyDto {
 
   @NonNull
   private UUID id;
-  private long policyId;
   @NonNull
   private String name;
+  @NonNull
+  private String policyName;
   private String description;
   @NonNull
   private OffsetDateTime createdAt;
