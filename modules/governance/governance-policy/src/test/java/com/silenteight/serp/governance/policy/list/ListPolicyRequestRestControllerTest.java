@@ -16,6 +16,7 @@ import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static java.util.List.of;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -35,20 +36,21 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
   private static final OffsetDateTime UPDATED_AT = OffsetDateTime.now();
   private static final String CREATED_BY = "USER";
   private static final String UPDATED_BY = "USER2";
-  private static final UUID FIRST_POLICY_UUID = UUID.randomUUID();
-  private static final UUID SECOND_POLICY_UUID = UUID.randomUUID();
-  private static final PolicyDto FIRST_POLICY_DTO = getPolicyDto(
-      1, SAVED, FIRST_POLICY_UUID);
+  private static final UUID FIRST_POLICY_UUID = randomUUID();
+  private static final UUID SECOND_POLICY_UUID = randomUUID();
+  private static final String FIRST_RESOURCE_NAME = "policies/" + FIRST_POLICY_UUID.toString();
+  private static final String SECOND_RESOURCE_NAME = "policies/" + SECOND_POLICY_UUID.toString();
+  private static final PolicyDto FIRST_POLICY_DTO =
+      makePolicyDto(FIRST_RESOURCE_NAME, SAVED, FIRST_POLICY_UUID);
   private static final PolicyDto SECOND_POLICY_DTO =
-      getPolicyDto(2, DRAFT, SECOND_POLICY_UUID);
+      makePolicyDto(SECOND_RESOURCE_NAME, DRAFT, SECOND_POLICY_UUID);
 
-  private static PolicyDto getPolicyDto(int id, PolicyState saved, UUID policyUuid) {
-    return PolicyDto
-        .builder()
-        .policyId(id)
-        .name(POLICY_NAME)
-        .state(saved)
+  private static PolicyDto makePolicyDto(String resourceName, PolicyState saved, UUID policyUuid) {
+    return PolicyDto.builder()
         .id(policyUuid)
+        .name(resourceName)
+        .policyName(POLICY_NAME)
+        .state(saved)
         .createdAt(CREATED_AT)
         .updatedAt(UPDATED_AT)
         .createdBy(CREATED_BY)
@@ -82,7 +84,8 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .statusCode(OK.value())
         .body("size()", is(1))
         .body("[0].id", equalTo(FIRST_POLICY_UUID.toString()))
-        .body("[0].policyId", equalTo(1))
+        .body("[0].name", equalTo(FIRST_RESOURCE_NAME))
+        .body("[0].policyName", equalTo(POLICY_NAME))
         .body("[0].state", equalTo(SAVED.name()))
         .body("[0].createdBy", equalTo(CREATED_BY))
         .body("[0].createdAt", notNullValue())
@@ -98,7 +101,8 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .statusCode(OK.value())
         .body("size()", is(1))
         .body("[0].id", equalTo(FIRST_POLICY_UUID.toString()))
-        .body("[0].policyId", equalTo(1))
+        .body("[0].name", equalTo(FIRST_RESOURCE_NAME))
+        .body("[0].policyName", equalTo(POLICY_NAME))
         .body("[0].state", equalTo(SAVED.name()))
         .body("[0].createdBy", equalTo(CREATED_BY))
         .body("[0].createdAt", notNullValue())
@@ -115,14 +119,16 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .statusCode(OK.value())
         .body("size()", is(2))
         .body("[0].id", equalTo(FIRST_POLICY_UUID.toString()))
-        .body("[0].policyId", equalTo(1))
+        .body("[0].name", equalTo(FIRST_RESOURCE_NAME))
+        .body("[0].policyName", equalTo(POLICY_NAME))
         .body("[0].state", equalTo(PolicyState.SAVED.name()))
         .body("[0].createdBy", equalTo(CREATED_BY))
         .body("[0].createdAt", notNullValue())
         .body("[0].updatedBy", equalTo(UPDATED_BY))
         .body("[0].updatedAt", notNullValue())
-        .body("[1].policyId", equalTo(2))
         .body("[1].id", equalTo(SECOND_POLICY_UUID.toString()))
+        .body("[1].name", equalTo(SECOND_RESOURCE_NAME))
+        .body("[1].policyName", equalTo(POLICY_NAME))
         .body("[1].state", equalTo(PolicyState.DRAFT.name()))
         .body("[1].createdBy", equalTo(CREATED_BY))
         .body("[1].createdAt", notNullValue())

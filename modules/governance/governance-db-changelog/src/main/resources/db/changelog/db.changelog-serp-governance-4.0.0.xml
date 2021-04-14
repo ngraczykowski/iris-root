@@ -250,4 +250,31 @@
   <changeSet id="serp-governance-4.0.0-8" author="kdzieciol">
     <addUniqueConstraint tableName="governance_policy_step" columnNames="step_id"/>
   </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-9" author="mmastylo">
+    <createTable tableName="governance_model">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="model_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="policy_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_model"
+        indexName="ix_governance_model_model_id">
+      <column name="model_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
