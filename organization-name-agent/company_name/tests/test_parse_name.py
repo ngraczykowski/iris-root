@@ -1,6 +1,6 @@
 import pytest
 
-from ..compare import compare
+from company_name.names.parse_name import parse_name
 
 
 @pytest.mark.parametrize(
@@ -24,20 +24,8 @@ from ..compare import compare
     ),
 )
 def test_legal_term(name, expected_legal_term):
-    _, (information, _) = compare(name, "AAAA")
-    assert information["legal"] == expected_legal_term
-
-
-@pytest.mark.parametrize(
-    ("name", "expected_common_suffixes"),
-    (
-        ("Google", ()),
-        ("EISOO Information Technology Corp.", ("information", "technology")),
-    ),
-)
-def test_common_suffixes(name, expected_common_suffixes):
-    _, (information, _) = compare(name, "AAAA")
-    assert information["common_suffixes"] == expected_common_suffixes
+    information = parse_name(name)
+    assert information.legal == list(expected_legal_term)
 
 
 @pytest.mark.parametrize(
@@ -52,26 +40,8 @@ def test_common_suffixes(name, expected_common_suffixes):
     ),
 )
 def test_base(name, expected_base):
-    _, (information, _) = compare(name, "AAAA")
-    assert information["base"] == expected_base
-
-
-@pytest.mark.parametrize(
-    ("name", "expected_country"),
-    (
-        ("Google", ()),
-        ("Google (UK)", ("uk",)),
-        ("(UK) Google", ("uk",)),
-        ("Google (UK) Facebook", ("uk",)),
-        ("Google (United Kingdom)", ("united kingdom",)),
-        ("(UK) Google (China)", ("uk", "china")),
-        ("(Facebook) Google", ()),
-        ("(France) (Facebook) Google", ("france",)),
-    ),
-)
-def test_country(name, expected_country):
-    _, (information, _) = compare(name, "AAAA")
-    assert set(information["countries"]) == set(expected_country)
+    information = parse_name(name)
+    assert information.base == expected_base
 
 
 @pytest.mark.parametrize(
@@ -84,8 +54,8 @@ def test_country(name, expected_country):
     ),
 )
 def test_parenthesis(name, expected_parenthesis):
-    _, (information, _) = compare(name, "AAAA")
-    assert set(information["parenthesis"]) == set(expected_parenthesis)
+    information = parse_name(name)
+    assert set(information.parenthesis) == set(expected_parenthesis)
 
 
 @pytest.mark.parametrize(
@@ -97,10 +67,10 @@ def test_parenthesis(name, expected_parenthesis):
     )
 )
 def test_do_not_divide_when_and(name, expected):
-    _, (information, _) = compare(name, "AAAA")
+    information = parse_name(name)
     print(information)
     for key, value in expected.items():
-        assert set(information[key]) == set(value)
+        assert set(getattr(information, key)) == set(value)
 
 
 @pytest.mark.parametrize(
@@ -110,7 +80,7 @@ def test_do_not_divide_when_and(name, expected):
     )
 )
 def test_the_on_the_end_do_not_destroy_cutting_other_information(name, expected):
-    _, (information, _) = compare(name, "AAAA")
+    information = parse_name(name)
     print(information)
     for key, value in expected.items():
-        assert set(information[key]) == set(value)
+        assert set(getattr(information, key)) == set(value)

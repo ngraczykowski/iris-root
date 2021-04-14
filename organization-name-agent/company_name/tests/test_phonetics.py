@@ -13,6 +13,6 @@ from company_name.compare import compare
 )
 def test_phonetic_names(first, second):
     print(repr(first), repr(second), compare(first, second))
-    scored, _ = compare(first, second)
-    assert scored["fuzzy_on_base"] < 1
-    assert scored["phonetics_on_base"] == 1
+    scored = compare(first, second)
+    assert scored["fuzzy_on_base"].value < 1
+    assert scored["phonetics_on_base"].value == 1
