@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  title: Report
+  description: Report API
+  version: 0.1.0
+servers:
+  - url: '{environment}/rest/warehouse/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24291
+          - https://localhost:24111
+        default: http://localhost:24291
+
+paths:
+  /reports?analysis={analysis/id}:
+    get:
+      description: Returns a list of reports for specific analysis
+      parameters:
+        - in: query
+          name: analysis/id
+          required: true
+          schema:
+            type: string
+          description: 'Analysis resource Id'
+          example: 'analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns a list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+
+  /reports/{id}:
+    get:
+      description: Returns simulation report
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Report UUID'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns a report
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        createdAt:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        fileName: 'rbScorer_2004-02-15.csv'
+        createdAt: '2004-02-15T15:19:21Z'
