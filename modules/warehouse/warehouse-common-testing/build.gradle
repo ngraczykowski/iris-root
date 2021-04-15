@@ -15,6 +15,8 @@ dependencies {
 
   implementation project(":warehouse-common")
 
+  implementation libraries.silenteight_sep_base_testing
+
   implementation libraries.spring_jdbc
   implementation libraries.spring_test
   implementation libraries.spring_tx
@@ -26,31 +28,23 @@ dependencies {
 
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_elasticsearch
 
   implementation libraries.spring_security_web
   implementation libraries.spring_security_config
-  implementation libraries.spring_security_cas
+  implementation libraries.spring_security_test
 
   implementation libraries.junit_jupiter_api
 
   implementation libraries.test_containers
   implementation libraries.test_containers_elasticsearch
-  implementation libraries.test_containers_junit_jupiter
   implementation libraries.test_containers_postgresql
   implementation libraries.test_containers_spock
 
   implementation libraries.protobuf_java_util
-
-  implementation libraries.bouncycastle_bcprov
-
   implementation libraries.reactor_test
 
   implementation libraries.spring_amqp
-
   implementation libraries.rest_assured
   implementation libraries.rest_assured_spring_mock_mvc
-
-  implementation libraries.rest_assured
-  implementation libraries.rest_assured_spring_mock_mvc
-  implementation libraries.spring_security_test
 }

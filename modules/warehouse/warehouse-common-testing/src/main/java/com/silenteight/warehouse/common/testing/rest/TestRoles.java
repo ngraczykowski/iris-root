@@ -1,4 +1,4 @@
-package com.silenteight.sens.governance.common.testing.rest;
+package com.silenteight.warehouse.common.testing.rest;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

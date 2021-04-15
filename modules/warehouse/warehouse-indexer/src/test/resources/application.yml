@@ -1,13 +1,3 @@
-#-------------------------------------------------------------------------------------
-# KEYCLOAK
-#-------------------------------------------------------------------------------------------------
-spring:
-  elasticsearch:
-    rest:
-      username: admin
-      password: admin
-      uris: http://localhost:9201,http://localhost:9200
-
 keycloak:
   adapter:
     authServerUrl: fakeAuthHost:8000
