@@ -1,6 +1,6 @@
-package com.silenteight.sens.governance.common.testing.rest;
+package com.silenteight.warehouse.common.testing.rest;
 
-import com.silenteight.sens.governance.common.testing.rest.testwithrole.SecurityContextRoleSetter;
+import com.silenteight.warehouse.common.testing.rest.testwithrole.SecurityContextRoleSetter;
 
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

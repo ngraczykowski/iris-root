@@ -3,7 +3,7 @@ gradle.ext.sepDependenciesVersion = '1.12.1'
 
 include 'warehouse-app'
 include 'warehouse-common'
-include 'warehouse-common-web-testing'
+include 'warehouse-common-testing'
 include 'warehouse-documentation'
 include 'warehouse-indexer'
 include 'warehouse-report'

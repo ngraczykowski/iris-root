@@ -40,7 +40,7 @@ dependencies {
 
   implementation libraries.protobuf_java_util
 
-  testImplementation project(":warehouse-common-web-testing")
+  testImplementation project(":warehouse-common-testing")
 
   testImplementation libraries.spock_spring
   testImplementation libraries.spring_integration_test

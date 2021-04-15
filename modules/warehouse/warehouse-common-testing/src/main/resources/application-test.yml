@@ -2,9 +2,9 @@ spring.cloud.consul.enabled: false
 
 sep.auth:
   permissionMethodsMappings:
-    SIMULATION_MANAGEMENT:
-      - "CREATE_SIMULATION"
+    REPORTS_MANAGEMENT:
+      - "GENERATE_REPORT"
 
   rolePermissionsMappings:
     BUSINESS_OPERATOR:
-      - "SIMULATION_MANAGEMENT"
+      - "REPORTS_MANAGEMENT"

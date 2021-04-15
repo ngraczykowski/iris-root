@@ -22,6 +22,10 @@ dependencies {
   implementation libraries.silenteight_data_api
   implementation libraries.spring_boot_starter_elasticsearch
 
+  testImplementation project(":warehouse-common-testing")
+
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.awaitility
+  testImplementation libraries.test_containers
+  testImplementation libraries.test_containers_elasticsearch
 }

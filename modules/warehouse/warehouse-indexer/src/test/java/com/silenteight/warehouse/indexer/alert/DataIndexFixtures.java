@@ -15,57 +15,69 @@ import static java.util.List.of;
 
 public class DataIndexFixtures {
 
+  public static final String MATCH_ID_1 = "35";
+  public static final String MATCH_ID_2 = "36";
+  public static final String ALERT_ID_1 = "44";
+  public static final String ALERT_ID_2 = "45";
+  public static final String ANALYSIS_ID = "33";
+  public static final String MATCH_PAYLOAD_SOLUTION_KEY = "solution";
+  public static final String MATCH_PAYLOAD_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
+  public static final String MATCH_PAYLOAD_SOLUTION_NO_DECISION = "NO_DECISION";
+  public static final String ALERT_PAYLOAD_RECOMMENDATION_KEY = "recommendation";
+  public static final String ALERT_PAYLOAD_RECOMMENDATION_FP = "FALSE_POSITIVE";
+  public static final String ALERT_PAYLOAD_RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
+
+  private static final String MATCH_RESOURCE_PREFIX = "matches/";
+  private static final String ALERT_RESOURCE_PREFIX = "alerts/";
+  private static final String ANALYSIS_RESOURCE_PREFIX = "analysis/";
+
   static final String REQUEST_ID = "TEST_123";
   static final String NO_DATA = "NO_DATA";
-  static final String MANUAL_INVESTIGATION = "MANUAL_INVESTIGATION";
-  static final String FALSE_POSITIVE = "FALSE_POSITIVE";
-  static final String EXACT_MATCH = "EXACT_MATCH";
-  static final String WEAK_MATCH = "WEAK_MATCH";
-  static final String NO_DECISION = "NO_DECISION";
-  static final String SOLUTION = "solution";
-  static final String RECOMMENDATION = "recommendation";
-  static final String MATCH_NAME_35 = "matches/35";
-  static final String MATCH_NAME_36 = "matches/36";
-  static final String ALERT_NAME_44 = "alerts/44";
-  static final String ALERT_NAME_45 = "alerts/45";
-  static final String ANALYSIS_NAME_35 = "analysis/35";
+  static final String MATCH_NAME_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_1;
+  static final String MATCH_NAME_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2;
+  static final String ALERT_NAME_1 = ALERT_RESOURCE_PREFIX + ALERT_ID_1;
+  static final String ALERT_NAME_2 = ALERT_RESOURCE_PREFIX + ALERT_ID_2;
+  static final String ANALYSIS_NAME = ANALYSIS_RESOURCE_PREFIX + ANALYSIS_ID;
 
-  static final Alert ALERT_WITH_MATCHES = Alert.newBuilder()
-      .setName(ALERT_NAME_44)
-      .setPayload(structWithValue(RECOMMENDATION, FALSE_POSITIVE))
+  static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
+      .setName(ALERT_NAME_1)
+      .setPayload(structWithValue(
+          ALERT_PAYLOAD_RECOMMENDATION_KEY,
+          ALERT_PAYLOAD_RECOMMENDATION_MI))
+      .addAllMatches(emptyList())
+      .build();
+
+  static final Alert ALERT_WITH_MATCHES_1 = Alert.newBuilder()
+      .setName(ALERT_NAME_1)
+      .setPayload(structWithValue(
+          ALERT_PAYLOAD_RECOMMENDATION_KEY,
+          ALERT_PAYLOAD_RECOMMENDATION_FP))
       .addAllMatches(of(
-          createMatch(MATCH_NAME_35, SOLUTION, NO_DECISION),
-          createMatch(MATCH_NAME_36, SOLUTION, NO_DATA)))
+          createMatch(MATCH_NAME_1, MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION),
+          createMatch(MATCH_NAME_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
+      .build();
+
+  static final Alert ALERT_WITH_MATCHES_2 = Alert.newBuilder()
+      .setName(ALERT_NAME_2)
+      .setPayload(structWithValue(
+          ALERT_PAYLOAD_RECOMMENDATION_KEY,
+          ALERT_PAYLOAD_RECOMMENDATION_MI))
+      .addAllMatches(of(
+          createMatch(MATCH_NAME_1, MATCH_PAYLOAD_SOLUTION_KEY,
+              MATCH_PAYLOAD_SOLUTION_EXACT_MATCH),
+          createMatch(MATCH_NAME_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
       .build();
 
   static final List<Alert> ALERTS_WITH_MATCHES = of(
-      Alert.newBuilder()
-          .setName(ALERT_NAME_44)
-          .setPayload(structWithValue(RECOMMENDATION, FALSE_POSITIVE))
-          .addAllMatches(of(
-              createMatch(MATCH_NAME_35, SOLUTION, WEAK_MATCH),
-              createMatch(MATCH_NAME_36, SOLUTION, NO_DATA)))
-          .build(),
-      Alert.newBuilder()
-          .setName(ALERT_NAME_45)
-          .setPayload(structWithValue(RECOMMENDATION, MANUAL_INVESTIGATION))
-          .addAllMatches(of(
-              createMatch(MATCH_NAME_35, SOLUTION, EXACT_MATCH),
-              createMatch(MATCH_NAME_36, SOLUTION, NO_DATA)))
-          .build());
+      ALERT_WITH_MATCHES_1,
+      ALERT_WITH_MATCHES_2);
 
   public static final DataIndexRequest DATA_INDEX_REQUEST_WITH_ALERTS =
       DataIndexRequest.newBuilder()
           .setRequestId(REQUEST_ID)
-          .setAnalysisName(ANALYSIS_NAME_35)
+          .setAnalysisName(ANALYSIS_NAME)
           .addAllAlerts(ALERTS_WITH_MATCHES)
           .build();
-
-  static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
-      .setName(ALERT_NAME_44)
-      .setPayload(structWithValue(RECOMMENDATION, MANUAL_INVESTIGATION))
-      .addAllMatches(emptyList())
-      .build();
 
   static Builder structWithValue(String key, String value) {
     return Struct.newBuilder()

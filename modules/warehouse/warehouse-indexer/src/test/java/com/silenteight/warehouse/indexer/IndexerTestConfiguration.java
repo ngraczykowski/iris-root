@@ -2,11 +2,15 @@ package com.silenteight.warehouse.indexer;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
+import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
+import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexerClientIntegrationProperties;
 
 import org.springframework.amqp.core.*;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,9 +21,13 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 @Configuration
 @ComponentScan(basePackageClasses = {
     IndexerModule.class,
-    AmqpCommonModule.class
+    AmqpCommonModule.class,
+    TestElasticSearchModule.class
 })
 @ImportAutoConfiguration({
+    IntegrationConfiguration.class,
+    MessagingConfiguration.class,
+    RabbitAutoConfiguration.class,
     ElasticsearchRestClientAutoConfiguration.class
 })
 @EnableIntegration
