@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AddDatasetsToAnalysisUseCaseTest {
+class AddAndListDatasetsToAnalysisUseCaseTest {
 
   private static final String[] IGNORED_PROTO_FIELDS = { "memoizedHashCode" };
 
@@ -28,12 +28,12 @@ class AddDatasetsToAnalysisUseCaseTest {
   private final InMemoryAnalysisDatasetRepository analysisDatasetRepository
       = new InMemoryAnalysisDatasetRepository();
 
-  private AddDatasetsToAnalysisUseCase useCase;
+  private AddAndListDatasetsInAnalysisUseCase useCase;
 
   @BeforeEach
   void setUp() {
-    useCase =
-        new AddDatasetsToAnalysisUseCase(analysisDatasetRepository, listAnalysisDatasetUseCase);
+    var addUseCase = new AddDatasetsToAnalysisUseCase(analysisDatasetRepository);
+    useCase = new AddAndListDatasetsInAnalysisUseCase(addUseCase, listAnalysisDatasetUseCase);
   }
 
   @Test
@@ -49,7 +49,7 @@ class AddDatasetsToAnalysisUseCaseTest {
             .build()));
 
     List<String> datasets = Collections.singletonList("datasets/1");
-    List<AnalysisDataset> result = useCase.addDatasets("analysis/1", datasets);
+    List<AnalysisDataset> result = useCase.addAndListDatasets("analysis/1", datasets);
 
     assertThat(result).hasSize(1);
 
@@ -88,7 +88,7 @@ class AddDatasetsToAnalysisUseCaseTest {
             .build()));
 
     List<String> datasets = asList("datasets/1", "datasets/2");
-    List<AnalysisDataset> result = useCase.addDatasets("analysis/1", datasets);
+    List<AnalysisDataset> result = useCase.addAndListDatasets("analysis/1", datasets);
 
     assertThat(result).hasSize(2);
 

@@ -18,13 +18,13 @@ public class AnalysisFacade {
   private final CreateAnalysisUseCase createAnalysisUseCase;
 
   @NonNull
-  private final AddDatasetsToAnalysisUseCase addDatasetsToAnalysisUseCase;
+  private final AddAndListDatasetsInAnalysisUseCase addAndListDatasetsInAnalysisUseCase;
 
   public Analysis createAnalysis(Analysis analysis) {
     return createAnalysisUseCase.createAnalysis(analysis);
   }
 
   public List<AnalysisDataset> addDatasets(String analysis, List<String> datasets) {
-    return addDatasetsToAnalysisUseCase.addDatasets(analysis, datasets);
+    return addAndListDatasetsInAnalysisUseCase.addAndListDatasets(analysis, datasets);
   }
 }
