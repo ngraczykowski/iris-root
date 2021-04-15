@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.google.protobuf.ByteString;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -20,6 +21,8 @@ public class CanonicalFeatureVectorFactory {
   public CanonicalFeatureVector fromNamesAndValues(
       List<String> featureNames, List<String> featureValues) {
 
+    checkIfInputIsValid(featureNames, featureValues);
+
     Iterator<String> keyIterator = featureNames.iterator();
     Iterator<String> valueIterator = featureValues.iterator();
 
@@ -34,7 +37,7 @@ public class CanonicalFeatureVectorFactory {
     return asCanonicalFeatureVector(sortedMap);
   }
 
-  private CanonicalFeatureVector asCanonicalFeatureVector(TreeMap<String,String> sortedMap) {
+  private CanonicalFeatureVector asCanonicalFeatureVector(TreeMap<String, String> sortedMap) {
     List<String> names = getSortedNames(sortedMap);
     List<String> values = getSortedValues(sortedMap);
     Signature signature = calculateSignature(names, values);
@@ -59,5 +62,43 @@ public class CanonicalFeatureVectorFactory {
     ByteString vectorSignature = signatureCalculator
         .calculateVectorSignature(featuresSignature, values);
     return new Signature(vectorSignature);
+  }
+
+  private void checkIfInputIsValid(List<String> featureNames, List<String> featureValues) {
+    checkIfInputHasData(featureNames, featureValues);
+    checkIfInputHasEmptyFields(featureNames);
+    checkIfInputHasEmptyFields(featureValues);
+    checkIfFeatureNameIsCorrect(featureNames);
+    checkIfCorrectAgentNameAndFeatureCount(featureNames, featureValues);
+  }
+
+  private void checkIfFeatureNameIsCorrect(List<String> agentsList) {
+    HashSet<String> uniqueNames = new HashSet<>();
+    uniqueNames.addAll(agentsList);
+    if (agentsList.size() != uniqueNames.size())
+      throw new InvalidInputException("Duplicated agents names");
+  }
+
+  private void checkIfCorrectAgentNameAndFeatureCount(
+      List<String> featureNames, List<String> featureValues) {
+    if (!(featureNames.size() == featureValues.size()))
+      throw new InvalidInputException(
+          "Mismatch between agents name count and feature vectors count");
+  }
+
+  private void checkIfInputHasEmptyFields(List<String> featureFields) {
+    boolean isAnyFieldEmpty = isAnyFieldEmpty(featureFields);
+    if (isAnyFieldEmpty)
+      throw new InvalidInputException("Some fields are empty");
+  }
+
+  private void checkIfInputHasData(List<String> featureName, List<String> featureValues) {
+    if (featureName.isEmpty() || featureValues.isEmpty())
+      throw new InvalidInputException("Missing data");
+  }
+
+  private boolean isAnyFieldEmpty(List<String> featureFields) {
+    return featureFields.stream()
+        .anyMatch(String::isBlank);
   }
 }
