@@ -12,7 +12,11 @@ def test_parse_common_prefixes(value, prefixes):
 
 @pytest.mark.parametrize(
     ("first", "second"),
-    (("Group Grant", "Grant"), ("the al", "al")),
+    (
+        ("Group Grant", "Grant"),
+        ("the al", "al"),
+        ("The Kraft Heinz Company", "Kraft Heinz"),
+    ),
 )
 def test_common_prefixes(first, second):
     print(repr(first), repr(second))

@@ -88,15 +88,13 @@ def test_country_as_company(first, second):
 @pytest.mark.parametrize(
     ("first", "second"),
     (
-        ("The Walt Disney Company", "Disney"),
         ("AMAZON", "Amazon.com, Inc."),
-        ("The Kraft Heinz Company", "Kraft Heinz"),
     ),
 )
-def test_not_obvious_cases(first, second):
+def test_name_with_domains(first, second):
     print(repr(first), repr(second), compare(first, second))
     result = compare(first, second)
-    assert result["fuzzy_on_base"].value > 0.6
+    assert result["fuzzy_on_base"].value == 1
 
 
 @pytest.mark.parametrize(

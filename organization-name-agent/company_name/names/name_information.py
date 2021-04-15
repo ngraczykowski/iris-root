@@ -32,7 +32,7 @@ class NameWord:
         )
 
     def __repr__(self) -> str:
-        if self.original == self.cleaned:
+        if self.original.lower() == self.cleaned:
             return self.original
         else:
             return f"{self.original} ({self.cleaned})"
