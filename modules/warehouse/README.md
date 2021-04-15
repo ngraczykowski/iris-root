@@ -32,16 +32,16 @@ To start RabbitMQ, follow the steps:
     
        docker-compose up -d rabbitmq
 
-### Starting ElasticSearch
+### Starting ElasticSearch and MinIO
 Warehouse uses elastic search as a persistence store.
 
-To start elasticsearch run:
+To start elasticsearch and minio run:
 
-        ./dev-elk/start.sh
+        .scripts/run-services.sh
         
 If you need to run elasticsearch with TLS enabled:
 
-        ./dev-elk/start-https.sh
+        .scripts/run-service-https.sh
               
 ## Testing
 
@@ -56,9 +56,9 @@ Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openap
 ### Setting-up HTTPS for ES connection in dev environment 
 
 #### Truststore
-There is a test truststore in `./dev-elk`. You can re-create it by following the steps below:
+There is a test truststore in `./scripts`. You can re-create it by following the steps below:
 
-        cd dev-elk
+        cd scripts
         keytool -import -file root-ca.pem -alias esCA -keystore myTrustStore
         
 This creates a truststore with a root-ca that is used by default in OpenDistro docker.
