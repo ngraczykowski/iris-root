@@ -18,6 +18,7 @@ from company_name.scores.parenthesis_match import parenthesis_score
 from company_name.scores.tokenization import tokenization_score
 from company_name.scores.country import country_score
 from company_name.scores.legal import legal_score
+from company_name.scores.token_inclusion import token_inclusion_score
 
 
 def compare_names(
@@ -44,6 +45,7 @@ def compare_names(
         "phonetics_on_base": phonetic_score(first.base, second.base),
         "phonetics": phonetic_score(first.name(), second.name()),
         "potential_subsidiary": potential_subsidiary_score(first, second),
+        "token_inclusion": token_inclusion_score(first, second),
     }
 
     return scores

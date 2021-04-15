@@ -1,21 +1,18 @@
 import re
-from typing import Sequence
+from typing import Tuple
 
 import unidecode
 
+UNNECESSARY_CHARS_REGEX = re.compile(r",|( -)|(- )")
+DOMAIN_REGEX = re.compile(r"\.\w{2,3}\b")  # .net, .com, .org, .de
 
-def divide(name: str) -> Sequence[str]:
-    divided = (
-        name.replace(",", " ")
-        .replace(" -", " ")
-        .replace("- ", " ")
-        .replace("  ", " ")
-        .strip()
-        .split()
+
+def divide(name: str) -> Tuple[str]:
+    return tuple(
+        UNNECESSARY_CHARS_REGEX.sub(' ', name).strip().split()
     )
-    return divided
 
 
 def clear_name(name: str) -> str:
     name = unidecode.unidecode(name.lower()).strip()
-    return re.sub(r"\.\w{2,3}\b", "", name)  # .net, .com, .org, .de
+    return DOMAIN_REGEX.sub("", name)
