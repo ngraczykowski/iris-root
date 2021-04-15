@@ -96,7 +96,7 @@ job "hsbc-bridge" {
   }
 
   group "hsbc-bridge" {
-    count = 2
+    count = 1
 
     network {
       port "http" {
