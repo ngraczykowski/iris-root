@@ -7,11 +7,13 @@ import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceB
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
+@EnableConfigurationProperties(SolvingModelGrpcProperties.class)
 @RequiredArgsConstructor
 class SolvingModelConfiguration {
 
@@ -26,7 +28,7 @@ class SolvingModelConfiguration {
   @Profile("!dev")
   @Bean
   ModelUseCase getDefaultModelUseCase() {
-    return new GetDefaultModelUseCase(getStub());
+    return new GetDefaultModelUseCase(getStub(), solvingModelGrpcProperties.getDeadlineInSeconds());
   }
 
   private SolvingModelServiceBlockingStub getStub() {
@@ -35,7 +37,7 @@ class SolvingModelConfiguration {
   }
 
   private ManagedChannel createChannel() {
-    return ManagedChannelBuilder.forTarget(solvingModelGrpcProperties.getAddress())
+    return ManagedChannelBuilder.forTarget(solvingModelGrpcProperties.getGrpcAddress())
         .usePlaintext()
         .build();
   }

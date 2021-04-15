@@ -4,5 +4,5 @@ import java.util.Collection;
 
 public interface DatasetServiceApi {
 
-  DatasetDto createDataset(Collection<String> alerts);
+  String createDataset(Collection<String> alerts);
 }

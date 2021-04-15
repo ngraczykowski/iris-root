@@ -4,9 +4,9 @@ import com.silenteight.model.api.v1.SolvingModel;
 
 import java.util.stream.Collectors;
 
-public final class SolvingModelMapper {
+class SolvingModelMapper {
 
-  public static SolvingModelDto mapToSolvingModelDto(SolvingModel solvingModel) {
+  static SolvingModelDto mapToSolvingModelDto(SolvingModel solvingModel) {
     return SolvingModelDto.builder()
         .name(solvingModel.getName())
         .policyName(solvingModel.getPolicyName())

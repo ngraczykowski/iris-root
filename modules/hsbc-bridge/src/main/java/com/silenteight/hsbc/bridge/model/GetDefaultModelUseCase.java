@@ -2,22 +2,24 @@ package com.silenteight.hsbc.bridge.model;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
-import com.google.protobuf.Empty;
-
+import static com.google.protobuf.Empty.getDefaultInstance;
 import static com.silenteight.hsbc.bridge.model.SolvingModelMapper.mapToSolvingModelDto;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
-public class GetDefaultModelUseCase implements ModelUseCase {
+class GetDefaultModelUseCase implements ModelUseCase {
 
   private final SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
+  private final long deadlineInSeconds;
 
   @Override
   public SolvingModelDto getSolvingModel() {
-    SolvingModel defaultSolvingModel =
-        solvingModelServiceBlockingStub.getDefaultSolvingModel(Empty.getDefaultInstance());
-    return mapToSolvingModelDto(defaultSolvingModel);
+    var solvingModel = solvingModelServiceBlockingStub
+        .withDeadlineAfter(deadlineInSeconds, SECONDS)
+        .getDefaultSolvingModel(getDefaultInstance());
+
+    return mapToSolvingModelDto(solvingModel);
   }
 }

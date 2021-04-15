@@ -8,22 +8,28 @@ import com.silenteight.adjudication.api.v1.NamedAlerts;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.*;
 
 @RequiredArgsConstructor
 class DatasetServiceApiGrpc implements DatasetServiceApi {
 
   private final DatasetServiceBlockingStub datasetServiceBlockingStub;
+  private final long deadlineInSeconds;
 
   @Override
-  public DatasetDto createDataset(Collection<String> alerts) {
+  public String createDataset(Collection<String> alerts) {
     var grpcRequest = CreateDatasetRequest.newBuilder()
         .setNamedAlerts(NamedAlerts.newBuilder()
             .addAllAlerts(alerts)
             .build())
         .build();
 
-    var response = datasetServiceBlockingStub.createDataset(grpcRequest);
+    var response = datasetServiceBlockingStub
+        .withDeadlineAfter(deadlineInSeconds, SECONDS)
+        .createDataset(grpcRequest);
 
-    return new DatasetDto(response.getName());
+    return response.getName();
   }
 }

@@ -29,10 +29,12 @@ class AlertService {
     var alerts = registerAlerts(alertMatchIds.keySet());
     var matches = registerMatches(alertMatchIds, alerts);
 
-    var alertsWithName = publishUpdateAlertsWithNameEvent(alerts, alertMatchIds);
+    publishUpdateAlertsWithNameEvent(alerts, alertMatchIds);
     publishUpdateMatchesWithNameEvent(matches, alertMatchIds);
 
-    return alertsWithName.values();
+    return alerts.stream()
+        .map(AlertDto::getName)
+        .collect(Collectors.toList());
   }
 
   private List<AlertDto> registerAlerts(Collection<String> alertIds) {
@@ -64,7 +66,7 @@ class AlertService {
         .collect(Collectors.toList());
   }
 
-  private Map<Long, String> publishUpdateAlertsWithNameEvent(
+  private void publishUpdateAlertsWithNameEvent(
       List<AlertDto> alerts, Map<String, AlertMatchIdComposite> alertMatchIds) {
     var alertIdsWithNames = alerts
         .stream()
@@ -72,8 +74,6 @@ class AlertService {
         .collect(Collectors.toMap(AlertIdWithName::getAlertInternalId, AlertIdWithName::getName));
 
     eventPublisher.publishEvent(new UpdateAlertWithNameEvent(alertIdsWithNames));
-
-    return alertIdsWithNames;
   }
 
   private AlertIdWithName toAlertIdWithName(

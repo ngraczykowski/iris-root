@@ -9,7 +9,7 @@ import java.util.UUID;
 class DatasetServiceApiMock implements DatasetServiceApi {
 
   @Override
-  public DatasetDto createDataset(Collection<String> alerts) {
-    return new DatasetDto("datasets/" + UUID.randomUUID());
+  public String createDataset(Collection<String> alerts) {
+    return "datasets/" + UUID.randomUUID();
   }
 }

@@ -1,14 +1,15 @@
 package com.silenteight.hsbc.bridge.adjudication;
 
-import lombok.Data;
+import lombok.Value;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-@Data
-@Component
+@ConstructorBinding
 @ConfigurationProperties("silenteight.bridge.dataset.service.api")
+@Value
 class DatasetServiceApiProperties {
 
-  private String grpcAddress;
+  String grpcAddress;
+  long deadlineInSeconds;
 }

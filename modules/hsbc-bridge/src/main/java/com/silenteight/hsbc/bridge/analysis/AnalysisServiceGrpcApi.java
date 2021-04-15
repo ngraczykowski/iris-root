@@ -9,13 +9,16 @@ import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
 class AnalysisServiceGrpcApi implements AnalysisServiceApi {
 
   private final AnalysisServiceBlockingStub analysisServiceBlockingStub;
+  private final long deadlineInSeconds;
 
   @Override
   public AnalysisDatasetDto addDataset(AddDatasetRequestDto request) {
@@ -24,7 +27,7 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
         .setDataset(request.getDataset())
         .build();
 
-    var result = analysisServiceBlockingStub.addDataset(grpcRequest);
+    var result = getStub().addDataset(grpcRequest);
     return AnalysisDatasetDto.builder()
         .name(result.getName())
         .build();
@@ -44,7 +47,7 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
             .build())
         .build();
 
-    var result = analysisServiceBlockingStub.createAnalysis(grpcRequest);
+    var result = getStub().createAnalysis(grpcRequest);
     return AnalysisDto.builder()
         .name(result.getName())
         // get more if needed
@@ -57,7 +60,7 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
         .setAnalysis(request.getAnalysis())
         .setDataset(request.getDataset())
         .build();
-    var result = analysisServiceBlockingStub.streamRecommendations(gprcRequest);
+    var result = getStub().streamRecommendations(gprcRequest);
 
     var recommendations = new ArrayList<RecommendationDto>();
     result.forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
@@ -73,5 +76,9 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
         .recommendedAction(recommendation.getRecommendedAction())
         .recommendationComment(recommendation.getRecommendationComment())
         .build();
+  }
+
+  private AnalysisServiceBlockingStub getStub() {
+    return analysisServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
   }
 }

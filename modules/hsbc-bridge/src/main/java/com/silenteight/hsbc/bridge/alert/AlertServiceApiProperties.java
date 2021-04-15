@@ -1,14 +1,15 @@
 package com.silenteight.hsbc.bridge.alert;
 
-import lombok.Data;
+import lombok.Value;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-@Data
-@Component
+@ConstructorBinding
 @ConfigurationProperties("silenteight.bridge.alert.service.api")
+@Value
 class AlertServiceApiProperties {
 
-  private String grpcAddress;
+  String grpcAddress;
+  long deadlineInSeconds;
 }

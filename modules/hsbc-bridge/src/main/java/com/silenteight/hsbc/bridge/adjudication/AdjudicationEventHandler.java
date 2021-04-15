@@ -41,7 +41,7 @@ class AdjudicationEventHandler {
   }
 
   private String createDataset(Collection<String> alertNames) {
-    return datasetServiceApi.createDataset(alertNames).getName();
+    return datasetServiceApi.createDataset(alertNames);
   }
 
   private Map<String, AlertMatchIdComposite> toCompositeByAlertId(

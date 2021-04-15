@@ -11,14 +11,17 @@ import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public class AlertServiceGrpcApi implements AlertServiceApi {
 
   private final AlertServiceBlockingStub alertServiceBlockingStub;
+  private final long deadlineInSeconds;
 
   @Override
   public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
@@ -28,7 +31,7 @@ public class AlertServiceGrpcApi implements AlertServiceApi {
             .collect(toList()))
         .build();
 
-    var response = alertServiceBlockingStub.batchCreateAlerts(gprcRequest);
+    var response = getStub().batchCreateAlerts(gprcRequest);
 
     return BatchCreateAlertsResponseDto.builder()
         .alerts(mapAlerts(response.getAlertsList()))
@@ -46,7 +49,7 @@ public class AlertServiceGrpcApi implements AlertServiceApi {
         .addAllMatches(matches)
         .build();
 
-    var response = alertServiceBlockingStub.batchCreateAlertMatches(gprcRequest);
+    var response = getStub().batchCreateAlertMatches(gprcRequest);
 
     return BatchCreateAlertMatchesResponseDto.builder()
         .alertMatches(mapAlertMatches(response.getMatchesList()))
@@ -69,5 +72,9 @@ public class AlertServiceGrpcApi implements AlertServiceApi {
             .name(a.getName())
             .build())
         .collect(toList());
+  }
+
+  private AlertServiceBlockingStub getStub() {
+    return alertServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
   }
 }

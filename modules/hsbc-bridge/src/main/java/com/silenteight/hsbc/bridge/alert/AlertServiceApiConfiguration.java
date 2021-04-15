@@ -6,11 +6,17 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 
 import io.grpc.ManagedChannelBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 @Configuration
+@EnableConfigurationProperties(AlertServiceApiProperties.class)
 @RequiredArgsConstructor
 class AlertServiceApiConfiguration {
 
@@ -19,7 +25,8 @@ class AlertServiceApiConfiguration {
   @Bean
   @Profile("!dev")
   AlertServiceApi alertServiceGrpcApi() {
-    return new AlertServiceGrpcApi(alertServiceBlockingStub());
+    return new AlertServiceGrpcApi(
+        alertServiceBlockingStub(), alertServiceApiProperties.getDeadlineInSeconds());
   }
 
   @Bean

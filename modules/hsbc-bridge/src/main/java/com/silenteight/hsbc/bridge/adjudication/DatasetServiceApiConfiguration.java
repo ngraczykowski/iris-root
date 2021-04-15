@@ -6,12 +6,18 @@ import com.silenteight.adjudication.api.v1.DatasetServiceGrpc;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 
 import io.grpc.ManagedChannelBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 @Configuration
 @RequiredArgsConstructor
+@EnableConfigurationProperties(DatasetServiceApiProperties.class)
 class DatasetServiceApiConfiguration {
 
   private final DatasetServiceApiProperties datasetServiceApiProperties;
@@ -19,7 +25,8 @@ class DatasetServiceApiConfiguration {
   @Profile("!dev")
   @Bean
   DatasetServiceApi datasetServiceApiGrpc() {
-    return new DatasetServiceApiGrpc(datasetServiceBlockingStub());
+    return new DatasetServiceApiGrpc(
+        datasetServiceBlockingStub(), datasetServiceApiProperties.getDeadlineInSeconds());
   }
 
   @Profile("dev")

@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.model;
 
 import java.util.List;
 
-public class GetDefaultModelUseCaseMock implements ModelUseCase {
+class GetDefaultModelUseCaseMock implements ModelUseCase {
 
   @Override
   public SolvingModelDto getSolvingModel() {
