@@ -65,12 +65,12 @@ public class SolveUseCase {
 
     List<String> featureNames = asFeatureNames(featureCollection.getFeatureList());
     List<String> featureValues = new ArrayList<>(featureVector.getFeatureValueList());
-    Map<String, String> featureValuesByName = asFeatureValues(featureNames, featureValues);
-    SolveResponse response = solvingService.solve(stepsSupplier, featureValuesByName);
 
-    // TODO(anowicki): WEB-500: hide this behind service or use canonical form in solvingService
     CanonicalFeatureVector canonicalFeatureVector =
         canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
+
+    Map<String, String> featureValuesByName = asFeatureValues(featureNames, featureValues);
+    SolveResponse response = solvingService.solve(stepsSupplier, featureValuesByName);
 
     emitEvent(featureCollection, featureVector,
         canonicalFeatureVector.getVectorSignature(), response);
@@ -85,7 +85,6 @@ public class SolveUseCase {
         .collect(toList());
   }
 
-  // TODO(anowicki): WEB-500-Duplicate(CanonicalFeatureVectorFactory).
   private static Map<String, String> asFeatureValues(
       List<String> featureNames, List<String> featureValues) {
 
