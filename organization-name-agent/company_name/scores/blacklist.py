@@ -13,9 +13,9 @@ def _blacklisted(name: str) -> List[str]:
     return BLACKLIST_REGEX.findall(name)
 
 
-def blacklist_score(first: NameInformation, second: NameInformation) -> Score:
-    first_blacklisted, second_blacklisted = _blacklisted(first.original.cleaned), _blacklisted(second.original.cleaned)
+def blacklist_score(name: NameInformation) -> Score:
+    first_blacklisted = _blacklisted(name.source.cleaned)
     return Score(
-        value=float(bool(first_blacklisted or second_blacklisted)),
-        compared=(tuple(first_blacklisted), tuple(second_blacklisted))
+        value=float(bool(first_blacklisted)),
+        compared=(tuple(first_blacklisted), ()),
     )

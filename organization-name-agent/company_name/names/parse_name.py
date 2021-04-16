@@ -126,7 +126,7 @@ def _cut_all(name: str) -> NameInformation:
     legal_base, legal = _cut_legal_terms(words)
     common_prefixes, common_base, common_suffixes = _cut_common(legal_base)
     information = NameInformation(
-        original=NameWord(original, clear_name(original)),
+        source=NameWord(original=original, cleaned=clear_name(original)),
         common_prefixes=common_prefixes,
         base=common_base,
         common_suffixes=common_suffixes,

@@ -14,12 +14,8 @@ def _normalized_legal_terms(values: NameSequence) -> Generator[Sequence[str], No
 
 
 def legal_score(first: NameSequence, second: NameSequence) -> Score:
-    if not first or not second:
-        # not enough information - maybe should return None?
-        return Score(
-            value=0.5,
-            compared=(first.original_tuple, second.original_tuple)
-        )
+    if not first and not second:
+        return Score()
 
     normalized_first = list(_normalized_legal_terms(first))
     normalized_second = list(_normalized_legal_terms(second))
@@ -30,11 +26,11 @@ def legal_score(first: NameSequence, second: NameSequence) -> Score:
     first_coverage: float = statistics.mean(
         any(possible_name in appeared_in_second for possible_name in legal_term)
         for legal_term in normalized_first
-    )
+    ) if normalized_first else 0
     second_coverage: float = statistics.mean(
         any(possible_name in appeared_in_first for possible_name in legal_term)
         for legal_term in normalized_second
-    )
+    ) if normalized_second else 0
 
     return Score(
         value=(first_coverage + second_coverage) / 2,

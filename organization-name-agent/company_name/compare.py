@@ -22,34 +22,34 @@ from company_name.scores.token_inclusion import token_inclusion_score
 
 
 def compare_names(
-    first: NameInformation, second: NameInformation
+    alerted_name: NameInformation, watchlist_name: NameInformation
 ) -> Mapping[str, Score]:
     scores = {
-        "parenthesis_match": parenthesis_score(first, second),
-        "abbreviation": abbreviation_score(first, second),
-        "fuzzy_on_base": fuzzy_score(first.base, second.base),
-        "fuzzy_on_suffix": fuzzy_score(first.common_suffixes, second.common_suffixes),
-        "fuzzy": fuzzy_score(first.name(), second.name()),
-        "partial_fuzzy": partial_fuzzy_score(first.name(), second.name()),
-        "sorted_fuzzy": sorted_fuzzy_score(first.name(), second.name()),
-        "legal_terms": legal_score(first.legal, second.legal),
-        "tokenization": tokenization_score(first.name(), second.name()),
+        "parenthesis_match": parenthesis_score(alerted_name, watchlist_name),
+        "abbreviation": abbreviation_score(alerted_name, watchlist_name),
+        "fuzzy_on_base": fuzzy_score(alerted_name.base, watchlist_name.base),
+        "fuzzy_on_suffix": fuzzy_score(alerted_name.common_suffixes, watchlist_name.common_suffixes),
+        "fuzzy": fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "partial_fuzzy": partial_fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "sorted_fuzzy": sorted_fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "legal_terms": legal_score(alerted_name.legal, watchlist_name.legal),
+        "tokenization": tokenization_score(alerted_name.name(), watchlist_name.name()),
         "absolute_tokenization": tokenization_score(
-            first.name(), second.name(), absolute=True
+            alerted_name.name(), watchlist_name.name(), absolute=True
         ),
-        "blacklisted": blacklist_score(first, second),
+        "blacklisted": blacklist_score(alerted_name),
         "country": country_score(
-            first.countries,
-            second.countries,
+            alerted_name.countries,
+            watchlist_name.countries,
         ),
-        "phonetics_on_base": phonetic_score(first.base, second.base),
-        "phonetics": phonetic_score(first.name(), second.name()),
-        "potential_subsidiary": potential_subsidiary_score(first, second),
-        "token_inclusion": token_inclusion_score(first, second),
+        "phonetics_on_base": phonetic_score(alerted_name.base, watchlist_name.base),
+        "phonetics": phonetic_score(alerted_name.name(), watchlist_name.name()),
+        "potential_subsidiary": potential_subsidiary_score(alerted_name, watchlist_name),
+        "token_inclusion": token_inclusion_score(alerted_name, watchlist_name),
     }
 
     return scores
 
 
-def compare(first: str, second: str) -> Mapping[str, Score]:
-    return compare_names(parse_name(first), parse_name(second))
+def compare(alerted_name: str, watchlist_name: str) -> Mapping[str, Score]:
+    return compare_names(parse_name(alerted_name), parse_name(watchlist_name))
