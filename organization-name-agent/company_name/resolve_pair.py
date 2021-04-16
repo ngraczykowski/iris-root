@@ -25,8 +25,8 @@ if __name__ == '__main__':
         ('BANK VTB 24 CJSC RE FX SPOT', 'VTB REGISTRAR CJSC'),
         ('UNIVERSAL ISLAMIC MEAT FZCO', 'UNIVERSAL'),
         ('SINO OCEAN TRADING LTD', 'SINO OCEAN SHIPPING CO LTD'),
-        ('GRAND ENTERPRISES GROUP LIMITED', 'GROUP GRAND LIMITED')
-
+        ('GRAND ENTERPRISES GROUP LIMITED', 'GROUP GRAND LIMITED'),
+        ('Jiangling Motors Corporation Limited', 'JMC'),
     ]
     for pair in pairs:
         resolve_pair(*pair)
