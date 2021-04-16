@@ -7,20 +7,30 @@ features:
   legal:
     desc: "legal extensions"
     score_name: legal_terms
+    low_thr: 0.6
+    high_thr: 0.8
+  suffixes:
+    desc: "common suffixes"
+    score_name: fuzzy_on_suffix
     low_thr: 0.8
     high_thr: 0.8
-  #common_suffixes:
-  #  desc: "common suffixes"
-   # score_name:
-   # low_thr: 0.8
-   # high_thr: 0.8
-  #blacklisted:
-  #  desc: "blacklisted"
-  #  score_name: blacklisted
-  #  low_thr: 0.99
-  #  high_thr 0.99
-  #abbreviation:
- #  desc: "abbreviations"
- #   score_name: abbreviation
- #   low_thr: 0.99
- #   high_thr: 0.99
+  blacklisted:
+    desc: "blacklisted"
+    score_name: blacklisted
+    low_thr: 0.99
+    high_thr: 0.99
+  abbreviation:
+    desc: "abbreviations"
+    score_name: abbreviation
+    low_thr: 0.99
+    high_thr: 0.99
+  single_token:
+    desc: ''
+    score_name: token_inclusion
+    low_thr: 0.99
+    high_thr: 0.99
+  potential_subsidiary:
+    desc: ''
+    score_name: potential_subsidiary
+    low_thr: 0.99
+    high_thr: 0.99
