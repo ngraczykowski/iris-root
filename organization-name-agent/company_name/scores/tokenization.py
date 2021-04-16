@@ -21,10 +21,8 @@ def _different(first: Counter[str], second: Counter[str]) -> List[str]:
 def tokenization_score(
     first_name: NameSequence, second_name: NameSequence, absolute: bool = False
 ) -> Score:
-    if not first_name or not second_name:
-        return Score(
-            value=0, compared=(first_name.original_tuple, second_name.original_tuple)
-        )
+    if not first_name and not second_name:
+        return Score()
 
     first_tokens: Counter[str] = collections.Counter(first_name.cleaned_tuple)
     second_tokens: Counter[str] = collections.Counter(second_name.cleaned_tuple)

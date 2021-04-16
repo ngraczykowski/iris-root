@@ -15,6 +15,9 @@ def _to_compared(*names):
 
 
 def fuzzy_score(first: NameSequence, second: NameSequence) -> Score:
+    if not first and not second:
+        return Score()
+
     return Score(
         value=fuzzywuzzy.fuzz.ratio(*_without_whitespaces(first, second)) / 100,
         compared=_to_compared(first, second)
@@ -22,6 +25,9 @@ def fuzzy_score(first: NameSequence, second: NameSequence) -> Score:
 
 
 def partial_fuzzy_score(first: NameSequence, second: NameSequence) -> Score:
+    if not first and not second:
+        return Score()
+
     return Score(
         value=fuzzywuzzy.fuzz.partial_ratio(*_without_whitespaces(first, second)) / 100,
         compared=_to_compared(first, second)
@@ -29,6 +35,9 @@ def partial_fuzzy_score(first: NameSequence, second: NameSequence) -> Score:
 
 
 def sorted_fuzzy_score(first: NameSequence, second: NameSequence) -> Score:
+    if not first and not second:
+        return Score()
+
     return Score(
         value=fuzzywuzzy.fuzz.token_sort_ratio(first, second) / 100,
         compared=_to_compared(first, second)

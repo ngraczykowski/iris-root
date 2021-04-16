@@ -36,4 +36,4 @@ def phonetic_score(first_name: NameSequence, second_name: NameSequence) -> Score
             compared=_compared(first_name, second_name, *max_score[1]),
         )
     else:
-        return Score(value=0, compared=((), ()))
+        return Score()

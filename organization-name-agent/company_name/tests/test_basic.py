@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.compare import compare
+from company_name.compare import compare, Score
 
 
 @pytest.mark.parametrize(
@@ -81,7 +81,7 @@ def test_parenthesis_match(first, second):
 def test_country_as_company(first, second):
     print(repr(first), repr(second), compare(first, second))
     result = compare(first, second)
-    assert result["country"].value == 0.5
+    assert not result["country"].value
     assert result["fuzzy_on_base"] < 0.3
 
 
@@ -149,7 +149,6 @@ def test_whitespaces(first, second):
     (
         ("International", "International"),
         ("pplc", "pplc"),
-        ("", ""),
     ),
 )
 def test_empty_names(first, second):
@@ -158,3 +157,9 @@ def test_empty_names(first, second):
     assert result["fuzzy_on_base"].value == 1
     if first and second:
         assert result["fuzzy_on_base"].compared == ((first, ), (second, ))
+
+
+def test_empty_name():
+    result = compare("", "")
+    for score_name in ("fuzzy", "fuzzy_on_base", "partial_fuzzy", "sorted_fuzzy", "country"):
+        assert result[score_name] == Score()

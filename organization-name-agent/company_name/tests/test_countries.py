@@ -66,4 +66,4 @@ def test_no_countries(first, second):
     print(repr(first), repr(second))
     scored = compare(first, second)
     print(scored)
-    assert scored['country'].value == 0.5
+    assert not scored['country'].value

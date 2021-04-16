@@ -3,6 +3,9 @@ from .score import Score
 
 
 def parenthesis_score(first: NameInformation, second: NameInformation) -> Score:
+    if not first.parenthesis.cleaned_tuple and not second.parenthesis.cleaned_tuple:
+        return Score()
+
     second_base_appeared, first_base_appeared = (
         second.base.cleaned_name in first.parenthesis.cleaned_tuple,
         first.base.cleaned_name in second.parenthesis.cleaned_tuple,

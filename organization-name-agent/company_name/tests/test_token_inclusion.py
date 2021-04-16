@@ -24,8 +24,6 @@ def test_token_inclusion(first, second):
     (
         ("Thermo Fisher Scientific", "her"),
         ("Bristol-Myers Squibb", "Myers"),
-        ("Bank of New York Mellon", "Bank of America"),
-        ("Mandarin ooo", "Mandarins Centre LTD")
     ),
 )
 def test_not_token_inclusion(first, second):
@@ -33,3 +31,17 @@ def test_not_token_inclusion(first, second):
     print(score)
     assert score['token_inclusion'].value == 0
     assert score['token_inclusion'].compared == (tuple(first.split()), tuple(second.split()))
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("Bank of New York Mellon", "Bank of America"),
+        ("Mandarin ooo", "Mandarins Centre LTD")
+    ),
+)
+def test_no_one_token_word(first, second):
+    score = compare(first, second)
+    print(score)
+    assert score['token_inclusion'].value == None
+    assert score['token_inclusion'].compared == ((), ())

@@ -17,12 +17,13 @@ def test_no_blacklist(first, second):
     assert score['blacklisted'].value == 0
     assert score['blacklisted'].compared == ((), ())
 
+
 @pytest.mark.parametrize(
     ("first", "second", "blacklisted"),
     (
         ("Gazprom International School of Currency", "amazing company", (("gazprom", ), ())),
-        ("amazing company",  "VTB KAPITAL ZHILAYA NEDVIZHIMOST OOO", ((), ("vtb", ))),
-        ("VTB-company", "company-something_very-vtb-serious-gazprom", (("vtb", ), ("vtb", "gazprom")))
+        ("VTB KAPITAL ZHILAYA NEDVIZHIMOST OOO", "amazing company", (("vtb", ), ())),
+        ("company-something_very-vtb-serious-gazprom", "VTB-kapital", (("vtb", "gazprom"), ()))
     )
 )
 def test_simple_blacklist(first, second, blacklisted):
@@ -40,6 +41,21 @@ def test_simple_blacklist(first, second, blacklisted):
     )
 )
 def test_blacklist_as_part_of_other_word(first, second):
+    print(repr(first), repr(second))
+    score = compare(first, second)
+    print(score)
+    assert score['blacklisted'].value == 0
+    assert score['blacklisted'].compared == ((), ())
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        ("amazing company", "Gazprom International School of Currency"),
+        ("amazing company", "company-something_very-vtb-serious-gazprom")
+    )
+)
+def test_no_blacklist_on_watchlist_name(first, second):
     print(repr(first), repr(second))
     score = compare(first, second)
     print(score)

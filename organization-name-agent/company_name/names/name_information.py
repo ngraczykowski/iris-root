@@ -91,7 +91,7 @@ class NameSequence(collections.UserList):
 
 @dataclasses.dataclass
 class NameInformation:
-    original: NameWord
+    source: NameWord
 
     common_prefixes: NameSequence
     base: NameSequence
@@ -105,7 +105,7 @@ class NameInformation:
 
     def __str__(self) -> str:
         return (
-            self.original.original
+            self.source.original
             + " ("
             + ", ".join((
                 f"prefixes: {self.common_prefixes!r}",
