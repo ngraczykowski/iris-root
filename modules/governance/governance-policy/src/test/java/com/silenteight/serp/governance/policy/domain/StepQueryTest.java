@@ -62,7 +62,7 @@ class StepQueryTest extends BaseDataJpaTest {
 
   @Test
   void listStepsOrderShouldReturnEmpty_whenNoStepsInPolicy() {
-    policyService.addPolicy(
+    policyService.createPolicy(
         POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
     List<UUID> result = underTest.listStepsOrder(POLICY_UID);
 
@@ -71,7 +71,7 @@ class StepQueryTest extends BaseDataJpaTest {
 
   @Test
   void listStepsShouldReturnEmpty_whenNoStepsInPolicy() {
-    policyService.addPolicy(
+    policyService.createPolicy(
         POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
 
     Collection<StepDto> result = underTest.listSteps(POLICY_UID);
@@ -137,7 +137,7 @@ class StepQueryTest extends BaseDataJpaTest {
   @Test
   void getStepsCount_whenNoStepsInPolicy() {
     // given
-    policyService.addPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+    policyService.createPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
 
     // when
     long stepsCount = underTest.getStepsCount(POLICY_UID);
@@ -202,7 +202,7 @@ class StepQueryTest extends BaseDataJpaTest {
   }
 
   private void createPolicyWithTwoSteps() {
-    policyService.addPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+    policyService.createPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
     CreateStepRequest firstRequest = CreateStepRequest.of(
         POLICY_UID,
         SOLUTION_NO_DECISION,

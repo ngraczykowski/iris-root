@@ -96,14 +96,13 @@ public class PolicyService {
         policy, stepId, configuration.getFeatureLogicConfigurations(), createdBy);
   }
 
-  public UUID addPolicy(
+  public UUID createPolicy(
       @NonNull UUID policyId,
       @NonNull String policyName,
       @NonNull String createdBy) {
+
     AddPolicyRequest addPolicyRequest = AddPolicyRequest.of(policyId, policyName, null, createdBy);
-    addPolicyRequest.preAudit(auditingLogger::log);
     Policy policy = addPolicyInternal(addPolicyRequest);
-    addPolicyRequest.postAudit(auditingLogger::log);
     return policy.getPolicyId();
   }
 

@@ -98,7 +98,7 @@ class PolicyQueryTest extends BaseDataJpaTest {
   @NotNull
   private Policy createDraftPolicy(
       UUID policyId, String name, String description, String createdBy) {
-    UUID uuid = policyService.addPolicy(policyId, name, createdBy);
+    UUID uuid = policyService.createPolicy(policyId, name, createdBy);
     policyService.updatePolicy(UpdatePolicyRequest.of(policyId, null, description, createdBy));
     return policyRepository.getByPolicyId(uuid);
   }

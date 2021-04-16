@@ -21,6 +21,7 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
   @Column(updatable = false)
   private Long id;
 
+  @NonNull
   @ToString.Include
   @Column(name = "model_id", nullable = false)
   private UUID modelId;
@@ -29,4 +30,9 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
   @ToString.Include
   @Column(name = "policy_name", nullable = false)
   private String policyName;
+
+  Model(UUID modelId, String policyName) {
+    this.modelId = modelId;
+    this.policyName = policyName;
+  }
 }

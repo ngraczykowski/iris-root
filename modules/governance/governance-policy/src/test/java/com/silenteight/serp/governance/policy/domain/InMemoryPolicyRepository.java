@@ -8,7 +8,8 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
-public class InMemoryPolicyRepository extends BasicInMemoryRepository<Policy>
+class InMemoryPolicyRepository
+    extends BasicInMemoryRepository<Policy>
     implements PolicyRepository {
 
   @Override

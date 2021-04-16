@@ -200,7 +200,7 @@ class PolicyServiceTest {
 
   @NotNull
   private Policy createPolicyWithSteps(Collection<Step> steps) {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     steps.forEach(policy::addStep);
     policyRepository.save(policy);
@@ -226,7 +226,7 @@ class PolicyServiceTest {
 
   @Test
   void savePolicyOnDraftWillChangeState() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
 
     assertThat(policy.getState()).isEqualTo(DRAFT);
@@ -240,7 +240,7 @@ class PolicyServiceTest {
 
   @Test
   void savePolicyOnNonDraftWillThrowException() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -250,7 +250,7 @@ class PolicyServiceTest {
 
   @Test
   void usePolicyOnSaveWillChangeState() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -263,7 +263,7 @@ class PolicyServiceTest {
 
   @Test
   void usePolicyOnNonSaveWillThrowException() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
@@ -273,7 +273,7 @@ class PolicyServiceTest {
 
   @Test
   void updatePolicyOnDraftWillUpdatePolicy() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
@@ -288,7 +288,7 @@ class PolicyServiceTest {
 
   @Test
   void updatePolicyOnNonDraftWillThrowException() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -328,7 +328,7 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnNonDraftWillThrowException() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -340,7 +340,7 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnDraftWithWrongStepsSizeWillThrowException() {
-    UUID uuid = underTest.addPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(DRAFT);
 

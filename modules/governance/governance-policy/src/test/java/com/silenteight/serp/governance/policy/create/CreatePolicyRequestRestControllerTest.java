@@ -40,7 +40,7 @@ class CreatePolicyRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(ACCEPTED.value());
 
-    verify(policyService).addPolicy(POLICY_ID, POLICY_NAME, USERNAME);
+    verify(policyService).createPolicy(POLICY_ID, POLICY_NAME, USERNAME);
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
