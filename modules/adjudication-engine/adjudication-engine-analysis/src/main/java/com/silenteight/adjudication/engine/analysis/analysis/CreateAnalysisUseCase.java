@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
-import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.Analysis.State;
 
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ class CreateAnalysisUseCase {
 
   @Transactional
   Analysis createAnalysis(Analysis analysis) {
-    return repository.save(createEntity(analysis)).toAnalysis();
+    return repository.save(createEntity(analysis)).updateBuilder(analysis.toBuilder()).build();
   }
 
   private AnalysisEntity createEntity(Analysis analysis) {
@@ -36,34 +35,34 @@ class CreateAnalysisUseCase {
     }
 
     if (analysis.getCategoriesCount() > 0) {
-      builder.categories(createCategories(analysis.getCategoriesList()));
+//      builder.categories(createCategories(analysis.getCategoriesList()));
     }
 
     if (analysis.getFeaturesCount() > 0) {
-      builder.features(createFeatures(analysis.getFeaturesList()));
+//      builder.features(createFeatures(analysis.getFeaturesList()));
     }
 
     return builder.build();
   }
 
-  private List<AnalysisCategoryEntity> createCategories(List<String> categories) {
-    return categories
-        .stream()
-        .map(c -> AnalysisCategoryEntity
-            .builder()
-            .category(c)
-            .build())
-        .collect(Collectors.toList());
-  }
+//  private List<AnalysisCategory> createCategories(List<String> categories) {
+//    return categories
+//        .stream()
+//        .map(c -> AnalysisCategory
+//            .builder()
+//            .category(c)
+//            .build())
+//        .collect(Collectors.toList());
+//  }
 
-  private List<AnalysisFeatureEntity> createFeatures(List<Feature> features) {
-    return features
-        .stream()
-        .map(f -> AnalysisFeatureEntity
-            .builder()
-            .agentConfig(f.getAgentConfig())
-            .feature(f.getFeature())
-            .build())
-        .collect(Collectors.toList());
-  }
+//  private List<AnalysisFeatureEntity> createFeatures(List<Feature> features) {
+//    return features
+//        .stream()
+//        .map(f -> AnalysisFeatureEntity
+//            .builder()
+//            .agentConfig(f.getAgentConfig())
+//            .feature(f.getFeature())
+//            .build())
+//        .collect(Collectors.toList());
+//  }
 }

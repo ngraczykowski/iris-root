@@ -1,14 +1,14 @@
-package com.silenteight.adjudication.engine.solve;
+package com.silenteight.adjudication.engine.solve.feature;
 
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.Type;
+import com.silenteight.sep.base.common.entity.BaseEntity;
 
-import java.util.UUID;
+import org.hibernate.annotations.Immutable;
+
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -24,21 +24,15 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Immutable
-@javax.persistence.Entity(name = "AgentExchange")
+@Entity
 @Builder(access = PACKAGE)
-class AgentExchangeEntity {
+public class AgentConfigFeature extends BaseEntity {
 
   @Id
-  @Column(name = "agent_exchange_id", updatable = false, nullable = false)
+  @Column(name = "agent_config_feature_id", insertable = false, updatable = false, nullable = false)
+  @GeneratedValue(strategy = IDENTITY)
   @Include
-  @GenericGenerator(name = "uuid-gen", strategy = "uuid2")
-  @GeneratedValue(strategy = IDENTITY, generator = "uuid-gen")
-  @Type(type = "pg-uuid")
-  private UUID id;
-
-  @Column(updatable = false, nullable = false)
-  @NonNull
-  private String feature;
+  private Long id;
 
   @Column(updatable = false, nullable = false)
   @NonNull
@@ -46,5 +40,5 @@ class AgentExchangeEntity {
 
   @Column(updatable = false, nullable = false)
   @NonNull
-  private Integer priority;
+  private String feature;
 }

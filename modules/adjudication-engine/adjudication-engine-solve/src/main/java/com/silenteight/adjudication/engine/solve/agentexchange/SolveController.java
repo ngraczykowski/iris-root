@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.solve;
+package com.silenteight.adjudication.engine.solve.agentexchange;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 class SolveController {
-  private final SolveGateway solveGateway;
+
+//  private final SolveGateway solveGateway;
 
   @PostMapping("/solve")
   void solve() {
-    solveGateway.startSolve();
+//    solveGateway.startSolve();
   }
 }

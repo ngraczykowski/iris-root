@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
 import com.silenteight.adjudication.api.v1.Analysis;
-import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
@@ -12,7 +11,6 @@ import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.persistence.*;
 
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromOffsetDateTime;
@@ -26,7 +24,7 @@ import static org.hibernate.annotations.FetchMode.SUBSELECT;
 @NoArgsConstructor(access = PROTECTED)
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-@Entity(name = "Analysis")
+@Entity
 @Builder(access = PACKAGE)
 class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
 
@@ -61,40 +59,24 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "analysis_id", referencedColumnName = "analysis_id", nullable = false)
   @OrderBy("id")
+  @Fetch(SUBSELECT)
   @Singular
-  private List<AnalysisCategoryEntity> categories;
+  private List<AnalysisCategory> categories;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "analysis_id", referencedColumnName = "analysis_id", nullable = false)
   @OrderBy("id")
+  @Fetch(SUBSELECT)
   @Singular
-  private List<AnalysisFeatureEntity> features;
+  private List<AnalysisFeature> agentConfigFeatures;
 
-  Analysis toAnalysis() {
-    return Analysis
-        .newBuilder()
+  Analysis.Builder updateBuilder(Analysis.Builder builder) {
+    return builder
         .setName("analysis/" + getId())
         .setPolicy(getPolicy())
         .setStrategy(getStrategy())
         .setState(getState())
         .setCreateTime(fromOffsetDateTime(getCreatedAt()))
-        .putAllLabels(getLabels())
-        .addAllCategories(getCategoriesForProto())
-        .addAllFeatures(getFeaturesForProto())
-        .build();
-  }
-
-  private List<String> getCategoriesForProto() {
-    return getCategories()
-        .stream()
-        .map(AnalysisCategoryEntity::getCategory)
-        .collect(Collectors.toList());
-  }
-
-  private List<Feature> getFeaturesForProto() {
-    return getFeatures()
-        .stream()
-        .map(AnalysisFeatureEntity::toFeature)
-        .collect(Collectors.toList());
+        .putAllLabels(getLabels());
   }
 }

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.solve;
+package com.silenteight.adjudication.engine.solve.agentexchange;
 
 import org.springframework.messaging.handler.annotation.Payload;
 

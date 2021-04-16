@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.solve;
+package com.silenteight.adjudication.engine.solve.agentexchange;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,12 +21,12 @@ import static org.springframework.integration.dsl.IntegrationFlows.from;
 @Configuration
 @RequiredArgsConstructor
 class IntegrationGatewaysConfiguration {
-
-  private final AmqpInboundFactory inboundFactory;
-  private final AmqpOutboundFactory outboundFactory;
-  private final RequestMissingFeatureValuesUseCase requestMissingFeatureValuesUseCase;
-  static final String AGENT_REQUEST_OUTBOUND_CHANNEL = "agentRequestOutboundChannel";
-  static final String SOLVE_GATEWAY_OUTBOUND_CHANNEL = "solveOutboundChannel";
+//
+//  private final AmqpInboundFactory inboundFactory;
+//  private final AmqpOutboundFactory outboundFactory;
+//  private final RequestMissingFeatureValuesUseCase requestMissingFeatureValuesUseCase;
+//  static final String AGENT_REQUEST_OUTBOUND_CHANNEL = "agentRequestOutboundChannel";
+//  static final String SOLVE_GATEWAY_OUTBOUND_CHANNEL = "solveOutboundChannel";
 
 //  @Bean
 //  public GatewayProxyFactoryBean agentRequestGateway() {
@@ -35,52 +35,52 @@ class IntegrationGatewaysConfiguration {
 //    factoryBean.setDefaultRequestChannelName(AGENT_REQUEST_OUTBOUND_CHANNEL);
 //    return factoryBean;
 //  }
-
-  @Bean
-  public GatewayProxyFactoryBean solveGateway() {
-    GatewayProxyFactoryBean factoryBean = new GatewayProxyFactoryBean(SolveGateway.class);
-    factoryBean.setDefaultRequestChannel(new DirectChannel());
-    factoryBean.setDefaultRequestChannelName(SOLVE_GATEWAY_OUTBOUND_CHANNEL);
-    return factoryBean;
-  }
-
-  @Bean
-  IntegrationFlow startSolveIntegrationFlow() {
-    return IntegrationFlows
-        .from(SOLVE_GATEWAY_OUTBOUND_CHANNEL)
-        .handle(m -> requestMissingFeatureValuesUseCase.invoke())
-        .get();
-  }
-
-  @Bean
-  IntegrationFlow agentRequestGatewayIntegrationFlow() {
-    return from(AGENT_REQUEST_OUTBOUND_CHANNEL)
-        .transform(new AgentExchangeEntityTransformer())
-        .handle(outboundFactory
-            .outboundAdapter()
-            .exchangeName("agent.request")
-            .routingKey("TODO"))
-        .get();
-  }
-
-  private static class AgentExchangeEntityTransformer
-      implements GenericTransformer<AgentExchangeEntity, AgentExchangeRequest> {
-
-    @Override
-    public AgentExchangeRequest transform(AgentExchangeEntity e) {
-      AgentExchangeRequest r = AgentExchangeRequest
-          .newBuilder()
-          .addFeatures(e.getMatchFeatures().get(0).getFeature())
-          .addAllMatches(e
-              .getMatchFeatures()
-              .stream()
-              .map(AgentExchangeMatchFeaturesEntity::getMatchId)
-              .map(String::valueOf)
-              .collect(Collectors.toList()))
-          .build();
-      return r;
-    }
-  }
+//
+//  @Bean
+//  public GatewayProxyFactoryBean solveGateway() {
+//    GatewayProxyFactoryBean factoryBean = new GatewayProxyFactoryBean(SolveGateway.class);
+//    factoryBean.setDefaultRequestChannel(new DirectChannel());
+//    factoryBean.setDefaultRequestChannelName(SOLVE_GATEWAY_OUTBOUND_CHANNEL);
+//    return factoryBean;
+//  }
+//
+//  @Bean
+//  IntegrationFlow startSolveIntegrationFlow() {
+//    return IntegrationFlows
+//        .from(SOLVE_GATEWAY_OUTBOUND_CHANNEL)
+//        .handle(m -> requestMissingFeatureValuesUseCase.invoke())
+//        .get();
+//  }
+//
+//  @Bean
+//  IntegrationFlow agentRequestGatewayIntegrationFlow() {
+//    return from(AGENT_REQUEST_OUTBOUND_CHANNEL)
+//        .transform(new AgentExchangeEntityTransformer())
+//        .handle(outboundFactory
+//            .outboundAdapter()
+//            .exchangeName("agent.request")
+//            .routingKey("TODO"))
+//        .get();
+//  }
+//
+//  private static class AgentExchangeEntityTransformer
+//      implements GenericTransformer<AgentExchange, AgentExchangeRequest> {
+//
+//    @Override
+//    public AgentExchangeRequest transform(AgentExchange e) {
+//      AgentExchangeRequest r = AgentExchangeRequest
+//          .newBuilder()
+//          .addFeatures(e.getMatchFeatures().get(0).getFeature())
+//          .addAllMatches(e
+//              .getMatchFeatures()
+//              .stream()
+//              .map(AgentExchangeMatchFeature::getMatchId)
+//              .map(String::valueOf)
+//              .collect(Collectors.toList()))
+//          .build();
+//      return r;
+//    }
+//  }
 //
 //  @Bean
 //  IntegrationFlow alertOutboundIntegrationFlow() {

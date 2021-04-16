@@ -3,7 +3,10 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.*;
@@ -14,17 +17,16 @@ import static lombok.AccessLevel.*;
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Builder(access = PACKAGE)
-@Entity(name = "AnalysisCategories")
-class AnalysisCategoryEntity {
+@Entity
+class AnalysisFeature {
 
   @Id
-  @Column(name = "analysis_category_id", insertable = false, updatable = false, nullable = false)
+  @Column(name = "analysis_feature_id", insertable = false, updatable = false, nullable = false)
   @GeneratedValue(strategy = IDENTITY)
-  @Setter(PUBLIC)
   @Include
   private Long id;
 
   @Column(updatable = false, nullable = false)
   @NonNull
-  private String category;
+  private Long agentConfigFeatureId;
 }

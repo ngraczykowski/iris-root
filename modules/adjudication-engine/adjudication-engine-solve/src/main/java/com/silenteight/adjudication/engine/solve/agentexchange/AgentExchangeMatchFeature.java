@@ -1,9 +1,12 @@
-package com.silenteight.adjudication.engine.solve;
+package com.silenteight.adjudication.engine.solve.agentexchange;
 
 import lombok.*;
 
+import com.silenteight.sep.base.common.entity.BaseEntity;
+
 import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
@@ -18,10 +21,14 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Immutable
-@Entity(name = "MissingFeatureValueMatchesQuery")
+@Entity
 @Builder(access = PACKAGE)
-class MissingFeatureValueMatchesQueryEntity {
+class AgentExchangeMatchFeature extends BaseEntity {
 
   @EmbeddedId
-  private MissingFeatureValueMatchesKey id;
+  private AgentExchangeMatchFeatureKey id;
+
+  @Column(updatable = false, nullable = false)
+  @NonNull
+  private String feature;
 }

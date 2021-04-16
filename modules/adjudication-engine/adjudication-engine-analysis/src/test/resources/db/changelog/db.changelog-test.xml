@@ -8,4 +8,7 @@
   <include file="db/changelog/db.changelog-adjudication-engine-alerts-master.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-dataset-master.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-analysis-master.xml"/>
+
+  <include file="db/changelog/db.changelog-adjudication-engine-solve-master.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-analysis-master-1.2.xml"/>
 </databaseChangeLog>

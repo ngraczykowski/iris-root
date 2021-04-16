@@ -21,17 +21,18 @@ class AnalysisFixtures {
   }
 
   static Analysis randomAnalysis() {
-    return randomAnalysisEntity().toAnalysis();
+    return randomAnalysisEntity().updateBuilder(Analysis.newBuilder()).build();
   }
 
   static Analysis randomAnalysisWithoutLabelsCategoriesAndFeatures() {
-    return randomAnalysisEntityWithoutLabelsCategoriesAndFeatures().toAnalysis();
+    return randomAnalysisEntityWithoutLabelsCategoriesAndFeatures()
+        .updateBuilder(Analysis.newBuilder()).build();
   }
 
   static List<Analysis> randomAnalysisList() {
     List<Analysis> analysisList = new ArrayList<>();
     for (int i = 0; i < current().nextInt(10, 100); i++) {
-      analysisList.add(randomAnalysisEntity().toAnalysis());
+      analysisList.add(randomAnalysisEntity().updateBuilder(Analysis.newBuilder()).build());
     }
     return analysisList;
   }
@@ -42,8 +43,8 @@ class AnalysisFixtures {
         .strategy("strategies/" + STRATEGIES[current().nextInt(0, STRATEGIES.length)])
         .policy("policies/" + UUID.randomUUID())
         .labels(getRandomLabels())
-        .categories(getRandomCategories())
-        .features(getRandomFeatures())
+        //.categories(getRandomCategories())
+        //.features(getRandomFeatures())
         .build();
   }
 
@@ -71,25 +72,25 @@ class AnalysisFixtures {
     return labels;
   }
 
-  static List<AnalysisCategoryEntity> getRandomCategories() {
-    List<AnalysisCategoryEntity> categories = new ArrayList<>();
-    for (int i = 0; i < current().nextInt(10, 100); i++) {
-      String category = CATEGORIES[current().nextInt(0, CATEGORIES.length)];
-      categories.add(AnalysisCategoryEntity.builder().category("categories/" + category).build());
-    }
-    return categories;
-  }
+//  static List<AnalysisCategory> getRandomCategories() {
+//    List<AnalysisCategory> categories = new ArrayList<>();
+//    for (int i = 0; i < current().nextInt(10, 100); i++) {
+//      String category = CATEGORIES[current().nextInt(0, CATEGORIES.length)];
+//      categories.add(AnalysisCategory.builder().category("categories/" + category).build());
+//    }
+//    return categories;
+//  }
 
-  static List<AnalysisFeatureEntity> getRandomFeatures() {
-    List<AnalysisFeatureEntity> features = new ArrayList<>();
-    for (int i = 0; i < current().nextInt(10, 100); i++) {
-      features.add(AnalysisFeatureEntity.builder()
-          .feature("feature" + i)
-          .agentConfig("agent" + i)
-          .build());
-    }
-    return features;
-  }
+//  static List<AnalysisFeature> getRandomFeatures() {
+//    List<AnalysisFeature> features = new ArrayList<>();
+//    for (int i = 0; i < current().nextInt(10, 100); i++) {
+//      features.add(AnalysisFeature.builder()
+//          .feature("feature" + i)
+//          .agentConfig("agent" + i)
+//          .build());
+//    }
+//    return features;
+//  }
 
   static Analysis.State getRandomAnalysisState() {
     // subtract 1 to exclude UNSPECIFIED

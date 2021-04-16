@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_1" author="ahaczewski">
+    <renameTable oldTableName="ae_analysis_categories" newTableName="ae_analysis_category"/>
+    <renameSequence
+        oldSequenceName="ae_analysis_categories_analysis_category_id_seq"
+        newSequenceName="ae_analysis_category_analysis_category_id_seq"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_2" author="ahaczewski">
+    <renameTable oldTableName="ae_analysis_features" newTableName="ae_analysis_features_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_3" author="ahaczewski">
+    <createTable tableName="ae_analysis_feature">
+      <column name="analysis_feature_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="agent_config_feature_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="ae_analysis_feature"
+        indexName="ix_ae_analysis_feature_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_feature"
+        indexName="ix_ae_analysis_feature_agent_config_feature_id">
+      <column name="agent_config_feature_id"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        tableName="ae_analysis_feature"
+        columnNames="analysis_id, agent_config_feature_id"
+        constraintName="uq_ae_analysis_feature_analysis_id_agent_config_feature_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_4" author="ahaczewski">
+    <sqlFile
+        path="sql/migrate_analysis_feature.sql"
+        relativeToChangelogFile="true"/>
+    <rollback>
+      <sqlFile path="sql/revert_analysis_feature.sql" relativeToChangelogFile="true"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_5" author="ahaczewski">
+    <dropTable tableName="ae_analysis_features_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_6" author="ahaczewski">
+    <renameTable oldTableName="ae_analysis_category" newTableName="ae_analysis_category_migration"/>
+    <renameSequence
+        oldSequenceName="ae_analysis_category_analysis_category_id_seq"
+        newSequenceName="ae_analysis_category_analysis_category_id_seq_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_7" author="ahaczewski">
+    <createTable tableName="ae_analysis_category">
+      <column name="analysis_category_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="ae_analysis_category"
+        indexName="ix_ae_analysis_category_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_category"
+        indexName="ix_ae_analysis_category_category_id">
+      <column name="category_id"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        tableName="ae_analysis_category"
+        columnNames="analysis_id, category_id"
+        constraintName="uq_ae_analysis_category_analysis_id_category_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_8" author="ahaczewski">
+    <sqlFile
+        path="sql/migrate_analysis_category.sql"
+        relativeToChangelogFile="true"/>
+    <rollback>
+      <sqlFile path="sql/revert_analysis_category.sql" relativeToChangelogFile="true"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_9" author="ahaczewski">
+    <dropTable tableName="ae_analysis_category_migration"/>
+  </changeSet>
+</databaseChangeLog>

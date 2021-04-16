@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.solve;
+package com.silenteight.adjudication.engine.solve.agentexchange;
 
 import lombok.*;
 
@@ -15,16 +15,16 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Setter(NONE)
 @Builder(access = PACKAGE)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-class MissingFeatureAgentConfigKey implements Serializable {
+@EqualsAndHashCode
+class AgentExchangeMatchFeatureKey implements Serializable {
 
-  private static final long serialVersionUID = 8159383389765171059L;
+  private static final long serialVersionUID = 5302211907329455680L;
 
-  @Column(nullable = false)
+  @Column(updatable = false, nullable = false)
   @NonNull
-  private String feature;
+  private Long agentExchangeId;
 
-  @Column(nullable = false)
+  @Column(updatable = false, nullable = false)
   @NonNull
-  private String agentConfig;
+  private Long matchId;
 }
