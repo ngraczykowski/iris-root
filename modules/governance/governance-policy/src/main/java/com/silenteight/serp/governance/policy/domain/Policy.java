@@ -87,7 +87,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   }
 
   private String asResourceName() {
-    return RESOURCE_NAME_PREFIX + getId().toString();
+    return RESOURCE_NAME_PREFIX + getPolicyId().toString();
   }
 
   public void addStep(Step step) {

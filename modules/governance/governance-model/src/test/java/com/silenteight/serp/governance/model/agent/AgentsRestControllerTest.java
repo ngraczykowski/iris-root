@@ -38,7 +38,6 @@ class AgentsRestControllerTest extends BaseRestControllerTest {
     get(ALL_AGENTS_URL).statusCode(FORBIDDEN.value());
   }
 
-
   private FeaturesListDto prepareMockData() {
     FeatureDto agent1 = FeatureDto.builder()
         .name(AGENT_FEATURE_GENDER)

@@ -211,6 +211,8 @@ sep.auth:
       - "LIST_CATEGORIES"
     IMPORT_POLICY:
       - "IMPORT_POLICY"
+    MANAGE_MODEL:
+      - "CREATE_MODEL"
     MANAGE_POLICY:
       - "CREATE_POLICY"
       - "EDIT_POLICY"
@@ -225,5 +227,6 @@ sep.auth:
     BUSINESS_OPERATOR:
       - "VIEW_POLICIES"
       - "IMPORT_POLICY"
+      - "MANAGE_MODEL"
       - "MANAGE_POLICY"
       - "MANAGE_STEPS"

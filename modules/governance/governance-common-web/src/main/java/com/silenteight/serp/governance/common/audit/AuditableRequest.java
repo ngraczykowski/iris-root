@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.domain.dto;
+package com.silenteight.serp.governance.common.audit;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 

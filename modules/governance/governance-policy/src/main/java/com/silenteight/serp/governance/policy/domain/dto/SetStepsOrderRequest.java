@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
+import com.silenteight.serp.governance.common.audit.AuditableRequest;
 
 import java.sql.Timestamp;
 import java.time.Instant;

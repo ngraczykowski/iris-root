@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.model;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
+import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.model.defaultmodel.grpc.DefaultModelQuery;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
@@ -10,7 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
@@ -22,10 +24,11 @@ import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = { ModelTestConfiguration.class })
+@ContextConfiguration(classes = { ModelTestConfiguration.class })
+@TestPropertySource("classpath:data-test.properties")
 @ExtendWith({ SpringExtension.class })
 @AutoConfigureJsonTesters
-class ModelTest {
+class ModelTest extends BaseDataJpaTest {
 
   private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 

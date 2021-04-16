@@ -1,10 +1,10 @@
-package com.silenteight.serp.governance.policy.create;
+package com.silenteight.serp.governance.model.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.serp.governance.policy.create.dto.CreatePolicyDto;
+import com.silenteight.serp.governance.model.create.dto.CreateModelDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,23 +23,22 @@ import static org.springframework.http.ResponseEntity.accepted;
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
-class CreatePolicyRequestRestController {
+class CreateModelRestController {
 
   @NonNull
-  private final CreatePolicyUseCase createPolicyUseCase;
+  private final CreateModelUseCase createModelUseCase;
 
-  @PostMapping(value = "/v1/policies")
-  @PreAuthorize("isAuthorized('CREATE_POLICY')")
+  @PostMapping(value = "/v1/models")
+  @PreAuthorize("isAuthorized('CREATE_MODEL')")
   public ResponseEntity<Void> create(
-      @Valid @RequestBody CreatePolicyDto createPolicyDto, Authentication authentication) {
+      @Valid @RequestBody CreateModelDto request, Authentication authentication) {
 
-    CreatePolicyCommand command = CreatePolicyCommand
-        .builder()
-        .id(createPolicyDto.getId())
-        .name(createPolicyDto.getName())
+    CreateModelCommand command = CreateModelCommand.builder()
+        .id(request.getId())
+        .policyName(request.getPolicyName())
         .createdBy(authentication.getName())
         .build();
-    createPolicyUseCase.activate(command);
+    createModelUseCase.activate(command);
     return accepted().build();
   }
 }
