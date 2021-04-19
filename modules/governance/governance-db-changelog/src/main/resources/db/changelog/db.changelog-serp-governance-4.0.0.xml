@@ -277,4 +277,49 @@
       <column name="model_id"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-10" author="mmastylo">
+    <addUniqueConstraint tableName="governance_model" columnNames="model_id"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-11" author="mmastylo">
+    <createTable tableName="governance_change_request">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="change_request_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="model_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="creator_comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decided_by" type="VARCHAR(64)"/>
+      <column name="decider_comment" type="TEXT"/>
+      <column name="decided_at" type="TIMESTAMP"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_change_request"
+        indexName="ix_governance_change_request_change_request_id">
+      <column name="change_request_id"/>
+    </createIndex>
+
+    <addUniqueConstraint tableName="governance_change_request" columnNames="change_request_id"/>
+  </changeSet>
 </databaseChangeLog>

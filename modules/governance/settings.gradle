@@ -3,6 +3,7 @@ gradle.ext.sepDependenciesVersion = '1.12.0'
 
 include 'governance-analytics'
 include 'governance-app'
+include 'governance-change-request'
 include 'governance-common-web'
 include 'governance-common-web-testing'
 include 'governance-db-changelog'

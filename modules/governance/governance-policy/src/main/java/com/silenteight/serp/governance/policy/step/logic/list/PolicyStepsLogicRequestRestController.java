@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.policy.step.logic.list;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
 
@@ -17,7 +16,6 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
 
-@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor

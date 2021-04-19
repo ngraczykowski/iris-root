@@ -201,6 +201,8 @@ serp.governance:
 
 sep.auth:
   permissionMethodsMappings:
+    CREATE_CHANGE_REQUESTS:
+      - "CREATE_CHANGE_REQUEST"
     VIEW_POLICIES:
       - "LIST_POLICIES"
       - "LIST_STEPS_LOGIC"
@@ -225,6 +227,7 @@ sep.auth:
   rolePermissionsMappings:
 #    POLICY_MANAGER:
     BUSINESS_OPERATOR:
+      - "CREATE_CHANGE_REQUESTS"
       - "VIEW_POLICIES"
       - "IMPORT_POLICY"
       - "MANAGE_MODEL"

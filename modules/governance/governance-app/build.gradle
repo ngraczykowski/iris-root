@@ -24,6 +24,7 @@ configurations {
 }
 
 dependencies {
+  implementation project(":governance-change-request")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
   implementation project(":governance-db-changelog")
