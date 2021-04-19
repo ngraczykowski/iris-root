@@ -1,8 +1,11 @@
 @Library('pipeline-shared-library@master') _
 
-gradleBuild(jdkVersion: 'jdk-11',
- sonarEnabled: true,
- additionalParams: [booleanParam(name: 'deployOnTest',
+gradleBuild(
+  jdkVersion: 'jdk-11',
+  sonarEnabled: true,
+  dependencyCheckEnabled: true,
+  includeBuildNumberInSnapshotVersion: true,
+  additionalParams: [booleanParam(name: 'deployOnTest',
          description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
      additionalStages: {
        stage('Deploy On Nomad Dev') {
