@@ -2,6 +2,8 @@ spring.cloud.consul.enabled: false
 
 sep.auth:
   permissionMethodsMappings:
+    CREATE_CHANGE_REQUESTS:
+      - "CREATE_CHANGE_REQUEST"
     VIEW_POLICIES:
       - "LIST_POLICIES"
       - "LIST_STEPS_LOGIC"
@@ -22,6 +24,8 @@ sep.auth:
       - "REMOVE_STEP"
 
   rolePermissionsMappings:
+    BUSINESS_OPERATOR:
+      - "CREATE_CHANGE_REQUESTS"
     POLICY_MANAGER:
       - "VIEW_POLICIES"
       - "IMPORT_POLICY"

@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.policy.step.edit;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.step.edit.dto.EditStepDto;
 
@@ -16,7 +15,6 @@ import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
 
-@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor

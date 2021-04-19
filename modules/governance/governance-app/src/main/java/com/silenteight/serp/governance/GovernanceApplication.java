@@ -6,6 +6,7 @@ import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
 import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 import com.silenteight.serp.governance.analytics.AnalyticsModule;
 import com.silenteight.serp.governance.branch.BranchModule;
+import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
 import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
 import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
@@ -27,6 +28,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     // Domain modules
     AnalyticsModule.class,
     BranchModule.class,
+    ChangeRequestModule.class,
     ModelModule.class,
     NotifierModule.class,
     PolicyModule.class,
