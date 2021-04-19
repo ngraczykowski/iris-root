@@ -13,7 +13,6 @@ keycloak:
     sslRequired: external
     credentials.secret: 55555555-4444-3333-2222-000111000111
 
-
 warehouse:
   messaging:
     integration:
@@ -27,3 +26,7 @@ warehouse:
         routing-key: alert.new
       alert-indexed-event-test-listener-inbound:
         queue-name: client.index-response
+  minio:
+    minio-url: http://localhost:9000
+    access-key: admin
+    private-key: admin123

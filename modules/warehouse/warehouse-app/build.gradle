@@ -21,6 +21,7 @@ configurations {
 dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-indexer")
+  implementation project(":warehouse-report")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app

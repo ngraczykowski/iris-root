@@ -10,20 +10,17 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
 @ConfigurationProperties(prefix = "warehouse.messaging.integration")
 public class IndexerIntegrationProperties {
 
-  @NestedConfigurationProperty
   @Valid
-  @NotNull
-  AmqpOutboundProperties alertIndexedOutbound = new AmqpOutboundProperties();
+  @NestedConfigurationProperty
+  private AmqpOutboundProperties alertIndexedOutbound;
 
-  @NestedConfigurationProperty
   @Valid
-  @NotNull
-  AmqpInboundProperties alertIndexingInbound = new AmqpInboundProperties();
+  @NestedConfigurationProperty
+  private AmqpInboundProperties alertIndexingInbound;
 }
