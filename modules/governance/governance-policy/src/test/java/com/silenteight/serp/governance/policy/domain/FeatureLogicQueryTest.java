@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +20,7 @@ import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_D
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
+@Transactional
 @TestPropertySource("classpath:data-test.properties")
 @ContextConfiguration(classes = { PolicyRepositoryTestConfiguration.class })
 class FeatureLogicQueryTest extends BaseDataJpaTest {

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,13 +23,13 @@ import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
+@Transactional
 @TestPropertySource("classpath:data-test.properties")
 @ContextConfiguration(classes = { PolicyRepositoryTestConfiguration.class })
 class StepQueryTest extends BaseDataJpaTest {
 
   private static final UUID POLICY_UID = randomUUID();
   private static final String POLICY_NAME = "POLICY_1";
-  private static final String POLICY_DESC = "FIRST_POLICY_DESCRIPTION";
   private static final String POLICY_CREATED_BY = "USER_1";
 
   private static final UUID FIRST_STEP_ID = randomUUID();

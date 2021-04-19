@@ -4,6 +4,8 @@ sep.auth:
   permissionMethodsMappings:
     CREATE_CHANGE_REQUESTS:
       - "CREATE_CHANGE_REQUEST"
+    VIEW_CHANGE_REQUESTS:
+      - "LIST_PENDING_CHANGE_REQUESTS"
     VIEW_POLICIES:
       - "LIST_POLICIES"
       - "LIST_STEPS_LOGIC"
@@ -24,8 +26,11 @@ sep.auth:
       - "REMOVE_STEP"
 
   rolePermissionsMappings:
+    APPROVER:
+      - "VIEW_CHANGE_REQUESTS"
     BUSINESS_OPERATOR:
       - "CREATE_CHANGE_REQUESTS"
+      - "VIEW_CHANGE_REQUESTS"
     POLICY_MANAGER:
       - "VIEW_POLICIES"
       - "IMPORT_POLICY"

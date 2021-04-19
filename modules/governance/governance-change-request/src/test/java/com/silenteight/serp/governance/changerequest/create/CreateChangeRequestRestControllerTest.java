@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 })
 class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
 
-  private static final String CREATE_CHANGE_REQEUST_URL = "/v1/changeRequests";
+  private static final String CREATE_CHANGE_REQUEST_URL = "/v1/changeRequests";
 
   @MockBean
   private CreateChangeRequestUseCase createChangeRequestUseCase;
@@ -33,7 +33,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its202_whenChangeRequestCreated() {
-    post(CREATE_CHANGE_REQEUST_URL, makeCreateChangeRequestDto())
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto())
         .contentType(anything())
         .statusCode(ACCEPTED.value());
 
@@ -49,7 +49,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
   void its403_whenNotPermittedRole() {
-    post(CREATE_CHANGE_REQEUST_URL, makeCreateChangeRequestDto())
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto())
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
   }

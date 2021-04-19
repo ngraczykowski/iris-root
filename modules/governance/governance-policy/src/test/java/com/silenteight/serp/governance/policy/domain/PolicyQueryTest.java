@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
+@Transactional
 @TestPropertySource("classpath:data-test.properties")
 @ContextConfiguration(classes = { PolicyRepositoryTestConfiguration.class })
 class PolicyQueryTest extends BaseDataJpaTest {

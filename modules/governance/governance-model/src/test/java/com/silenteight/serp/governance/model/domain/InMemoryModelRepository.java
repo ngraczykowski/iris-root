@@ -11,7 +11,7 @@ class InMemoryModelRepository
   @Override
   public Optional<Model> findByPolicyName(String policyName) {
     return stream()
-        .filter(model -> model.getPolicyName().equals(policyName))
+        .filter(model -> model.hasPolicyName(policyName))
         .findFirst();
   }
 }

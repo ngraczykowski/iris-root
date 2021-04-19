@@ -64,4 +64,8 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
     this.createdBy = createdBy;
     this.creatorComment = creatorComment;
   }
+
+  boolean isInState(ChangeRequestState state) {
+    return getState() == state;
+  }
 }

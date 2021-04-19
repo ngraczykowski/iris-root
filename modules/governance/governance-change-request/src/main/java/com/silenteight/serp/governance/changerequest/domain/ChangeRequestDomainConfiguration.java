@@ -18,4 +18,9 @@ class ChangeRequestDomainConfiguration {
 
     return new ChangeRequestService(changeRequestRepository, auditingLogger);
   }
+
+  @Bean
+  ChangeRequestQuery changeRequestQuery(ChangeRequestRepository changeRequestRepository) {
+    return new ChangeRequestQuery(changeRequestRepository);
+  }
 }

@@ -35,4 +35,8 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
     this.modelId = modelId;
     this.policyName = policyName;
   }
+
+  boolean hasPolicyName(String policyName) {
+    return getPolicyName().equals(policyName);
+  }
 }
