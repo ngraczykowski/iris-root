@@ -39,3 +39,7 @@ warehouse:
       alert-indexed-outbound:
         exchange-name: alert-indexed
         routing-key: alert.indexed
+  minio:
+    minio-url: http://localhost:9000
+    access-key: admin
+    private-key: admin123

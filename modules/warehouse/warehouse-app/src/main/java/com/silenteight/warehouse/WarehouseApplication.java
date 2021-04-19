@@ -9,6 +9,7 @@ import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.IndexerModule;
+import com.silenteight.warehouse.report.storage.StorageModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,6 +31,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    StorageModule.class,
     WebModule.class,
 })
 @EnableIntegration
