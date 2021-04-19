@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.*;
@@ -12,7 +13,6 @@ import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
-@Setter(NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
@@ -21,15 +21,19 @@ import static lombok.AccessLevel.PRIVATE;
 public class Bulk extends BaseEntity {
 
   @Id
+  @Setter(NONE)
   private String id;
 
-  @Setter
   @Enumerated(value = EnumType.STRING)
   private BulkStatus status = BulkStatus.STORED;
 
+  @Setter(NONE)
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "bulk_id")
   private Collection<BulkItem> items = new ArrayList<>();
+
+  private String errorMessage;
+  private OffsetDateTime errorTimestamp;
 
   Bulk(String id) {
     this.id = id;

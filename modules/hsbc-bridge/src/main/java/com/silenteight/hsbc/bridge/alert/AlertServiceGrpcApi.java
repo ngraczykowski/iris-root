@@ -9,10 +9,11 @@ import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
 import com.silenteight.adjudication.api.v1.Match;
 import com.silenteight.hsbc.bridge.alert.dto.*;
 
+import io.grpc.StatusRuntimeException;
+import org.springframework.retry.annotation.Retryable;
+
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
@@ -24,6 +25,7 @@ public class AlertServiceGrpcApi implements AlertServiceApi {
   private final long deadlineInSeconds;
 
   @Override
+  @Retryable(value = StatusRuntimeException.class)
   public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alertIds.stream()
@@ -39,6 +41,7 @@ public class AlertServiceGrpcApi implements AlertServiceApi {
   }
 
   @Override
+  @Retryable(value = StatusRuntimeException.class)
   public BatchCreateAlertMatchesResponseDto batchCreateAlertMatches(
       BatchCreateAlertMatchesRequestDto request) {
     var matches = request.getMatchIds().stream()

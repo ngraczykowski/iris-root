@@ -31,17 +31,19 @@ class BulkProcessor {
   @Async
   public void onBulkStoredEvent(BulkStoredEvent bulkStoredEvent) {
     var bulkId = bulkStoredEvent.getBulkId();
-    log.info("Received bulkStoredEvent, bulkId: {}", bulkId);
+    log.debug("Received bulkStoredEvent, bulkId: {}", bulkId);
 
     var alertMatchIds = processBulk(bulkId);
-    log.info("Bulk processing finished, bulkId={}", bulkId);
-    eventPublisher.publishEvent(new BulkPreProcessingFinishedEvent(alertMatchIds));
+    log.debug("Bulk processing finished, bulkId={}", bulkId);
+
+    eventPublisher.publishEvent(BulkPreProcessingFinishedEvent.builder()
+        .bulkId(bulkId)
+        .alertMatchIdComposites(alertMatchIds)
+        .build());
   }
 
   @Transactional
-  public List<AlertMatchIdComposite> processBulk(@NonNull String bulkId) {
-    log.info("Bulk processing started, bulkId={}", bulkId);
-
+  List<AlertMatchIdComposite> processBulk(@NonNull String bulkId) {
     var bulk = bulkRepository.findById(bulkId);
     return bulk.getItems().stream()
         .map(this::saveAndCollectAlertAndMatches)

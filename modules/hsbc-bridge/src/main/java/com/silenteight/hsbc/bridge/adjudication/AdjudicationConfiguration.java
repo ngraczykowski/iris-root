@@ -23,7 +23,12 @@ class AdjudicationConfiguration {
 
   @Bean
   AdjudicationEventHandler adjudicationEventHandler() {
-    return new AdjudicationEventHandler(alertService(), datasetServiceApi, analysisService());
+    return AdjudicationEventHandler.builder()
+        .alertService(alertService())
+        .analysisService(analysisService())
+        .datasetServiceApi(datasetServiceApi)
+        .eventPublisher(eventPublisher)
+        .build();
   }
 
   @Profile("!dev")

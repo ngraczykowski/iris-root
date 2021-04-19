@@ -27,6 +27,7 @@ libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-a
 libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceModelApiVersion]
 
 // Spring
+libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: '5.3.5']
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springVersion]
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springVersion]
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springVersion]
@@ -35,6 +36,7 @@ libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', nam
 libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
 libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
+libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retry', version: '1.3.1']
 
 // Spring Cloud
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: springCloudVersion]
@@ -112,6 +114,7 @@ dependencies {
   implementation libraries.slf4j_api
   implementation libraries.spring_amqp
   implementation libraries.spring_amqp_starter
+  implementation libraries.spring_aspects
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_boot_starter_security
@@ -121,6 +124,7 @@ dependencies {
   implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_data_jpa
   implementation libraries.spring_rabbit
+  implementation libraries.spring_retry
 
   testAnnotationProcessor libraries.lombok
   testCompile libraries.groovy_all

@@ -7,6 +7,9 @@ import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBl
 import com.silenteight.hsbc.bridge.analysis.dto.*;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 
+import io.grpc.StatusRuntimeException;
+import org.springframework.retry.annotation.Retryable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +24,7 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
   private final long deadlineInSeconds;
 
   @Override
+  @Retryable(value = StatusRuntimeException.class)
   public AnalysisDatasetDto addDataset(AddDatasetRequestDto request) {
     var grpcRequest = AddDatasetRequest.newBuilder()
         .setAnalysis(request.getAnalysis())
@@ -34,6 +38,7 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
   }
 
   @Override
+  @Retryable(value = StatusRuntimeException.class)
   public AnalysisDto createAnalysis(CreateAnalysisRequestDto request) {
     var grpcRequest = CreateAnalysisRequest.newBuilder()
         .setAnalysis(Analysis.newBuilder()

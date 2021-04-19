@@ -23,6 +23,12 @@ databaseChangeLog:
               - column:
                   name: status
                   type: varchar(30)
+              - column:
+                  name: error_message
+                  type: text
+              - column:
+                  name: error_timestamp
+                  type: timestamp
         - createTable:
             tableName: hsbc_bridge_bulk_item
             columns:
