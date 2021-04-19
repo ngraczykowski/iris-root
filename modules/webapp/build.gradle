@@ -1,7 +1,7 @@
 plugins {
   id "idea"
   id "maven-publish"
-  id "com.silenteight.gradle.convention" version "1.18.0"
+  id "com.silenteight.gradle.convention" version "1.19.1"
   id "com.silenteight.gradle.release" version "1.2.0"
   id "com.silenteight.gradle.wrapper" version "1.0.25"
   id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
