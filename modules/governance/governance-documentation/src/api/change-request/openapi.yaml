@@ -1,14 +1,20 @@
 openapi: 3.0.3
 info:
   title: Change Request
-  description: Maker/Approver flow to approve or reject simulation and apply changes in the production model
+  description: Maker/Approver flow to approve or reject using the model on a production
   version: 1.0.0
+
 servers:
-  - url: 'https'
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
 
 paths:
-
-  /api/v1/change-requests:
+  /api/v1/changeRequests:
     post:
       tags:
         - change-request
@@ -22,18 +28,7 @@ paths:
         '200':
           description: default response
 
-    get:
-      tags:
-        - change-request
-      responses:
-        '200':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChangeRequestDto'
-
-  /api/v1/change-requests?state={state}:
+  /api/v1/changeRequests?state={state}:
     get:
       tags:
         - change-request
@@ -52,7 +47,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ChangeRequestDto'
 
-  /api/v1/change-requests/{id}:
+  /api/v1/changeRequests/{id}:
     get:
       tags:
         - change-request
@@ -69,9 +64,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChangeRequestDto'
+                $ref: '#/components/schemas/ChangeRequestDetailsDto'
 
-  '/api/v1/change-requests/{id}:approve':
+  '/api/v1/changeRequests/{id}:approve':
     post:
       tags:
         - change-request
@@ -93,7 +88,7 @@ paths:
         '200':
           description: default response
 
-  '/api/v1/change-requests/{id}:cancel':
+  '/api/v1/changeRequests/{id}:cancel':
     post:
       tags:
         - change-request
@@ -115,7 +110,7 @@ paths:
         '200':
           description: default response
 
-  '/api/v1/change-requests/{id}:reject':
+  '/api/v1/changeRequests/{id}:reject':
     post:
       tags:
         - change-request
@@ -141,16 +136,21 @@ components:
   schemas:
     CreateChangeRequestDto:
       required:
-        - simulationName
+        - id
+        - modelName
         - comment
       type: object
       properties:
-        simulationName:
+        id:
+          type: string
+          format: uuid
+        modelName:
           type: string
         comment:
           type: string
       example:
-        simulationName: simulations/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
+        id: f0a23955-b63c-480c-8941-d9d6d9bf2fc1
+        modelName: models/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
         comment: Maker comment
 
     ChangeRequestState:
@@ -164,9 +164,49 @@ components:
     ChangeRequestDto:
       type: object
       properties:
-        changeRequestName:
+        id:
           type: string
-        simulationName:
+          format: uuid
+        name:
+          type: string
+        modelName:
+          type: string
+        state:
+          $ref: '#/components/schemas/ChangeRequestState'
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        decidedBy:
+          type: string
+        decidedAt:
+          type: string
+          format: date-time
+        decision:
+          $ref: '#/components/schemas/ChangeRequestDecision'
+      example:
+        id: f0a23955-b63c-480c-8941-d9d6d9bf2fc1
+        name: changeRequests/f0a23955-b63c-480c-8941-d9d6d9bf2fc1
+        modelName: models/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
+        state: ARCHIVED
+        createdBy: Maker
+        createdAt: '2004-02-12T15:19:21Z'
+        comment: Maker comment
+        decidedBy: Approver
+        decidedAt: '2004-02-12T17:19:21Z'
+        deciderComment: Approver comment
+        decision: ACCEPTED
+
+    ChangeRequestDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        modelName:
           type: string
         state:
           $ref: '#/components/schemas/ChangeRequestState'
@@ -187,8 +227,9 @@ components:
         decision:
           $ref: '#/components/schemas/ChangeRequestDecision'
       example:
-        changeRequestName: change-requests/f0a23955-b63c-480c-8941-d9d6d9bf2fc1
-        simulationName: simulations/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
+        id: f0a23955-b63c-480c-8941-d9d6d9bf2fc1
+        name: changeRequests/f0a23955-b63c-480c-8941-d9d6d9bf2fc1
+        modelName: models/38ff6acd-b8e4-47ad-86f1-1e6349fa2360
         state: ARCHIVED
         createdBy: Maker
         createdAt: '2004-02-12T15:19:21Z'
