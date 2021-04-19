@@ -1,18 +1,36 @@
-def format_feature(features, feature):
-    frmt_features = []
-    for f in features:
-        frmt_features.append(' '.join(f[feature]).upper() if f[feature] else '<NO_DATA>')
-    return frmt_features
+from company_name.score_outcomes import Outcomes
 
 
-def comment_on_feature(evaluation, frmt_features, feature_desc):
-    ap_features, wl_features = frmt_features
-    return f'{evaluation.value} on {feature_desc} ({ap_features} vs. {wl_features})'
+def format_contents(compared):
+    frmt_contents = []
+    for content in compared:
+        frmt_content = ' '.join(content) if content else '<NO_DATA>'
+        frmt_contents.append(frmt_content)
+    return frmt_contents
 
 
-def generate_comment(features, evals, feature_cfg):
+def blacklist_comment(company_name):
+    return f'{company_name} has been blacklisted'
+
+
+def generic_comment(outcome, frmt_contents, feature_desc):
+    ap_features, wl_features = frmt_contents
+    return f'{outcome.value} on {feature_desc} ({ap_features} vs. {wl_features})'
+
+
+def generate_comment(ap_name, evals: dict, feature_cfg: dict):
     comment = []
+
     for feature, evaluation in evals.items():
-        frmt_features = format_feature(features, feature)
-        comment.append(comment_on_feature(evaluation, frmt_features, feature_cfg[feature]['desc']))
+        outcome = evaluation[0]
+        compared = evaluation[1]
+        frmt_contents = format_contents(compared)
+
+        if feature == 'blacklisted' and outcome == Outcomes.MATCH:
+            return blacklist_comment(ap_name)
+        elif feature == 'single_token' and outcome == Outcomes.MATCH:
+            return generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc'])
+        elif feature == 'potential_subsidiary' and outcome == Outcomes.MATCH:
+            return generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc'])
+        comment.append(generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc']))
     return '. '.join(comment)
