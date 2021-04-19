@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: Agents
+  description: Agents browser
+  version: 0.1.0
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24160
+
+paths:
+  /agents:
+    get:
+      description: Returns a list of agents
+      responses:
+        200:
+          description: Model details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentsDto'
+
+  /agents/{id}:
+    get:
+      description: Returns agent's details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: We don't know what value agents will provide as their id. From our point of view this just a string
+          examples:
+            agentName:
+              value: 'date'
+            uuid:
+              description: We don't know what value agents will provide as their id. From our point of view this just a string
+              value: '98cfd77c-41ac-4882-ab2a-d766891b92f7'
+      responses:
+        200:
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetailsDto'
+        404:
+          description: No agent with provided Id
+
+
+  /agents/{id}/configuration/{configurationId}:
+    get:
+      description: Returns agent's details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          examples:
+            agentName:
+              value: 'date'
+            uuid:
+              value: '98cfd77c-41ac-4882-ab2a-d766891b92f7'
+        - name: configurationId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 'date-entity-normal'
+      responses:
+        200:
+          description: Agent's configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentConfigurationDto'
+        404:
+          description: No agent with provided Id
+
+components:
+  schemas:
+    AgentsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the Agent. We don't know what value agents will provide as their id. From our point of view this just a string
+          example: 'name' # it can be UUID as well (98cfd77c-41ac-4882-ab2a-d766891b92f7)
+        name:
+          type: string
+          description: Resource name of the Agent
+          example: 'agents/name' # 'agents/98cfd77c-41ac-4882-ab2a-d766891b92f7'
+        agentName:
+          type: string
+          description: Name of the Agent
+          example: 'date' # not necessarily a formatted name
+        agentVersion:
+          type: string
+          description: Version of the Agent
+          example: '1.3.4'
+        features:
+          type: array
+          items:
+            type: string
+            example: 'features/dob'
+      example:
+        id: '98cfd77c-41ac-4882-ab2a-d766891b92f7'
+        name: 'agents/98cfd77c-41ac-4882-ab2a-d766891b92f7'
+        agentName: 'country'
+        agentVersion: '3.3.2'
+        features: [
+          "features/nationality",
+          "features/residency"
+        ]
+
+    AgentDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the Agent
+          example: 'name' # it can be UUID as well (98cfd77c-41ac-4882-ab2a-d766891b92f7)
+        name:
+          type: string
+          description: Resource name of the Agent
+          example: 'agents/name' # 'agents/98cfd77c-41ac-4882-ab2a-d766891b92f7'
+        agentName:
+          type: string
+          description: Name of the Agent
+          example: 'date' # not necessarily a formatted name
+        agentVersion:
+          type: string
+          description: Version of the Agent
+          example: '1.3.4'
+        features:
+          type: array
+          items:
+            type: string
+            example: 'features/dob'
+        responses:
+          type: array
+          items:
+            type: string
+            example: 'EXACT'
+        configurations:
+          type: array
+          items:
+            type: string
+            example: 'date-entity-normal'
+      example:
+        id: 'a9fbb313-b9f8-4792-99ad-6fdd74b9e629'
+        name: 'agents/a9fbb313-b9f8-4792-99ad-6fdd74b9e629'
+        agentName: 'date'
+        agentVersion: '2.1.2'
+        features: [
+           "features/dob",
+           "features/doi"
+        ]
+        responses: [
+           "EXACT",
+           "NEAR",
+           "OUT_OF_RANGE"
+        ]
+        configurations: [
+           "date-entity-normal",
+           "date-entity-strict",
+           "date-indiv-normal",
+           "date-indiv-strict",
+           "date-org-normal",
+           "date-org-strict"
+        ]
+
+    AgentConfigurationDto:
+      type: object
+      example:
+        solvers:
+          date:
+            generation:
+              min-year: 1800
+              max-year: 2100
+            boundary:
+              min-year: 1800
+              max-year: 2100
+            delimiters: [ ' ', ',' ]
+            inconclusivePatterns:
+              - " to "
+              - "approx"
+              - "between"
+              - "circa"
+              - " - "
+            result-definitions:
+              - name: EXACT
+                dates:
+                  - 0-0-0
+                  - 0-0-X
+                  - X-0-0
+                  - 0-B-B
+              - name: NEAR
+                dates:
+                  - 0-X-0
+                  - 0-X-X
+                  - 1-X-X
+                  - 1-0-0
+                  - 0-11-0
+                  - 0-0-30
+              - name: OUT_OF_RANGE
+            custom-formats:
+              - 'MMMM, yyyy'
+              - 'MMMM,yyyy'
+              - 'MMM, yyyy'
+              - 'MMM,yyyy'
+              - 'yyyyMMdd'
+              - 'yyyyddMM'
+              - 'ddMMyyyy'
+              - 'MMddyyyy'
+              - 'yyyyMM'
+              - 'MMyyyy'
+              - 'MMM dd, yyyy'
+              - 'MMM dd,yyyy'
+              - 'MMMM dd, yyyy'
+              - 'MMMM dd,yyyy'
+
