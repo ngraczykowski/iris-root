@@ -37,4 +37,11 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
     responseObserver.onNext(analysisService.batchAddDatasets(request));
     responseObserver.onCompleted();
   }
+
+  @Override
+  public void getAnalysis(
+      GetAnalysisRequest request, StreamObserver<Analysis> responseObserver) {
+    responseObserver.onNext(analysisService.getAnalysis(request));
+    responseObserver.onCompleted();
+  }
 }

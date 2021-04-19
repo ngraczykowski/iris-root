@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.adjudication.engine.solve.feature;
+package com.silenteight.adjudication.engine.solve.agentconfigfeature.dto;
 
 import javax.annotation.ParametersAreNonnullByDefault;

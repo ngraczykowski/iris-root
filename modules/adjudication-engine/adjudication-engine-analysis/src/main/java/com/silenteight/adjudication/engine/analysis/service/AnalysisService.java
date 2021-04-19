@@ -20,7 +20,7 @@ class AnalysisService {
   private final AnalysisFacade analysisFacade;
 
   Analysis createAnalysis(CreateAnalysisRequest request) {
-    return analysisFacade.createAnalysis(request.getAnalysis());
+    return analysisFacade.createAndGetAnalysis(request.getAnalysis());
   }
 
   AnalysisDataset addDataset(AddDatasetRequest request) {
@@ -32,5 +32,9 @@ class AnalysisService {
     List<AnalysisDataset> datasets = analysisFacade.addDatasets(
         request.getAnalysis(), request.getDatasetsList());
     return BatchAddDatasetsResponse.newBuilder().addAllAnalysisDatasets(datasets).build();
+  }
+
+  public Analysis getAnalysis(GetAnalysisRequest request) {
+    return analysisFacade.getAnalysis(request.getAnalysis());
   }
 }

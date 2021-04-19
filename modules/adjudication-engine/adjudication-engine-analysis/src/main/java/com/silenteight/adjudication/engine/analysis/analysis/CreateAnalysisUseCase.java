@@ -20,8 +20,8 @@ class CreateAnalysisUseCase {
   private final AnalysisRepository repository;
 
   @Transactional
-  Analysis createAnalysis(Analysis analysis) {
-    return repository.save(createEntity(analysis)).updateBuilder(analysis.toBuilder()).build();
+  String createAnalysis(Analysis analysis) {
+    return repository.save(createEntity(analysis)).getName();
   }
 
   private AnalysisEntity createEntity(Analysis analysis) {

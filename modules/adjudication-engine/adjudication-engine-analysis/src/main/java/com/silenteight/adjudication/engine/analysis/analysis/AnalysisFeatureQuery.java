@@ -1,18 +1,14 @@
-package com.silenteight.adjudication.engine.solve.feature;
+package com.silenteight.adjudication.engine.analysis.analysis;
 
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
-
-import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
@@ -26,19 +22,16 @@ import static lombok.AccessLevel.PROTECTED;
 @Immutable
 @Entity
 @Builder(access = PACKAGE)
-public class AgentConfigFeature extends BaseEntity {
+public class AnalysisFeatureQuery {
 
   @Id
-  @Column(name = "agent_config_feature_id", insertable = false, updatable = false, nullable = false)
-  @GeneratedValue(strategy = IDENTITY)
+  @Column(name = "analysis_feature_id")
   @Include
   private Long id;
 
-  @Column(updatable = false, nullable = false)
-  @NonNull
+  private Long agentConfigFeatureId;
+
   private String agentConfig;
 
-  @Column(updatable = false, nullable = false)
-  @NonNull
   private String feature;
 }

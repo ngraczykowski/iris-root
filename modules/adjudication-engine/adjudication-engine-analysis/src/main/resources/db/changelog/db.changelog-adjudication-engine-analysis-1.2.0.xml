@@ -108,4 +108,37 @@
   <changeSet id="adjudication-engine-analysis-1.2.0_9" author="ahaczewski">
     <dropTable tableName="ae_analysis_category_migration"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_10" author="ahaczewski">
+    <createView
+        viewName="ae_analysis_feature_query"
+        path="sql/view_ae_analysis_feature_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_11" author="ahaczewski">
+    <createView
+        viewName="ae_analysis_category_query"
+        path="sql/view_ae_analysis_category_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_12" author="ahaczewski">
+    <createView
+      viewName="ae_analysis_query"
+      path="sql/view_ae_analysis_query"
+      relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_13" author="ahaczewski">
+    <comment>Create an indexes on ae_analysis_alert_query materialized view</comment>
+    <createIndex
+        tableName="ae_analysis_alert_query"
+        indexName="ix_ae_analysis_alert_query_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+  </changeSet>
+
+<!--  <changeSet id="adjudication-engine-analysis-1.2.0_14" author="ahaczewski">-->
+<!--  </changeSet>-->
 </databaseChangeLog>

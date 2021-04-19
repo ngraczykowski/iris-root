@@ -31,7 +31,7 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
   @Id
   @Column(name = "analysis_id", insertable = false, updatable = false, nullable = false)
   @GeneratedValue(strategy = IDENTITY)
-  @Setter(PUBLIC)
+  @Setter(PACKAGE)
   @Include
   private Long id;
 
@@ -68,11 +68,16 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
   @OrderBy("id")
   @Fetch(SUBSELECT)
   @Singular
-  private List<AnalysisFeature> agentConfigFeatures;
+  private List<AnalysisFeature> features;
+
+  @Transient
+  String getName() {
+    return "analysis/" + getId();
+  }
 
   Analysis.Builder updateBuilder(Analysis.Builder builder) {
     return builder
-        .setName("analysis/" + getId())
+        .setName(getName())
         .setPolicy(getPolicy())
         .setStrategy(getStrategy())
         .setState(getState())

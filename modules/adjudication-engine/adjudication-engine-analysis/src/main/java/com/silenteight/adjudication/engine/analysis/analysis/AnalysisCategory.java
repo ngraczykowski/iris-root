@@ -25,6 +25,7 @@ class AnalysisCategory {
   private Long id;
 
   @Column(updatable = false, nullable = false)
+  @Include
   @NonNull
   private Long categoryId;
 }
