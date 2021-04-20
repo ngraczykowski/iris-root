@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.model.domain;
 
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,9 @@ class ModelDomainConfiguration {
   }
 
   @Bean
-  ModelQuery modelQuery(ModelRepository modelRepository) {
-    return new ModelQuery(modelRepository);
+  ModelQuery modelQuery(
+      ModelRepository modelRepository,
+      CurrentPolicyProvider currentPolicyProvider) {
+    return new ModelQuery(modelRepository, currentPolicyProvider);
   }
 }

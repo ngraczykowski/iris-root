@@ -8,6 +8,9 @@ import com.silenteight.model.api.v1.ModelRequest;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
 import com.silenteight.serp.governance.model.NonResolvableResourceException;
+import com.silenteight.serp.governance.model.domain.ModelQuery;
+import com.silenteight.serp.governance.model.domain.dto.ModelDto;
+import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 
 import com.google.protobuf.Empty;
 import com.google.rpc.Status;
@@ -31,13 +34,39 @@ class ModelGrpcService
           + "Make sure all services are running";
 
   @NonNull
-  private final DefaultModelQuery defaultModelQuery;
+  private final ModelQuery modelQuery;
+
+  @NonNull
+  private final SolvingModelProvider solvingModelProvider;
 
   @Override
   public void getDefaultSolvingModel(
       Empty request, StreamObserver<SolvingModel> responseObserver) {
     try {
-      responseObserver.onNext(defaultModelQuery.get());
+      setSolvingModelOnResponseObserver(responseObserver, modelQuery.getDefault());
+     } catch (ModelMisconfiguredException e) {
+      Status status = Status.newBuilder()
+          .setCode(FAILED_PRECONDITION_VALUE)
+          .setMessage(MODEL_NOT_CONFIGURED_ERROR)
+          .build();
+
+      log.error(MODEL_NOT_CONFIGURED_ERROR, e);
+      responseObserver.onError(StatusProto.toStatusRuntimeException(status));
+    }
+  }
+
+  @Override
+  public void getSolvingModel(ModelRequest request, StreamObserver<SolvingModel> responseObserver) {
+    ModelDto modelDto = modelQuery.get(request.getModel());
+    setSolvingModelOnResponseObserver(responseObserver, modelDto);
+  }
+
+  private void setSolvingModelOnResponseObserver(
+      StreamObserver<SolvingModel> responseObserver,
+      ModelDto modelDto) {
+    try {
+      SolvingModel solvingModel = solvingModelProvider.get(modelDto);
+      responseObserver.onNext(solvingModel);
       responseObserver.onCompleted();
     } catch (NonResolvableResourceException e) {
       Status status = Status.newBuilder()
@@ -64,11 +93,5 @@ class ModelGrpcService
       log.error(GET_DEFAULT_SOLVING_MODEL_ERROR, e);
       responseObserver.onError(StatusProto.toStatusRuntimeException(status));
     }
-  }
-
-  @Override
-  public void getSolvingModel(ModelRequest request, StreamObserver<SolvingModel> responseObserver) {
-    // FIXME(kdzieciol): implement me
-    getDefaultSolvingModel(Empty.newBuilder().build(), responseObserver);
   }
 }

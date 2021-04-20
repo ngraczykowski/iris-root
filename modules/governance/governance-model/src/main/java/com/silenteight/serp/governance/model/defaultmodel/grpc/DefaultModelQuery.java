@@ -6,6 +6,8 @@ import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.serp.governance.model.category.CategoryDto;
 import com.silenteight.serp.governance.model.category.CategoryRegistry;
+import com.silenteight.serp.governance.model.domain.dto.ModelDto;
+import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.featureset.CurrentFeatureSetProvider;
 import com.silenteight.serp.governance.model.featureset.FeatureDto;
 import com.silenteight.serp.governance.model.featureset.FeatureSetDto;
@@ -26,45 +28,52 @@ public class DefaultModelQuery {
   private final CurrentFeatureSetProvider currentFeatureSetProvider;
   private final CategoryRegistry categoryRegistry;
 
-  public SolvingModel get() throws ModelMisconfiguredException {
-    return SolvingModel.newBuilder()
-        .setName(DEFAULT_MODEL_NAME)
-        .setStrategyName(getStrategyName())
-        .setPolicyName(getPolicyName())
-        .addAllFeatures(getFeatures())
-        .addAllCategories(getCategories())
+//  public SolvingModel get() throws ModelMisconfiguredException {
+//    return SolvingModel.newBuilder()
+//        .setName(DEFAULT_MODEL_NAME)
+//        .setStrategyName(getStrategyName())
+//        .setPolicyName(getPolicyName())
+//        .addAllFeatures(getFeatures())
+//        .addAllCategories(getCategories())
+//        .build();
+//  }
+
+  public ModelDto get() throws ModelMisconfiguredException {
+    return ModelDto.builder()
+        .name(DEFAULT_MODEL_NAME)
+        .policyName(getPolicyName())
         .build();
   }
 
-  private String getStrategyName() throws ModelMisconfiguredException {
-    return currentStrategyProvider.getCurrentStrategy()
-        .orElseThrow(() -> new ModelMisconfiguredException(DEFAULT_MODEL_NAME, "strategyName"));
-  }
+//  private String getStrategyName() throws ModelMisconfiguredException {
+//    return currentStrategyProvider.getCurrentStrategy()
+//        .orElseThrow(() -> new ModelMisconfiguredException(DEFAULT_MODEL_NAME, "strategyName"));
+//  }
 
   private String getPolicyName() throws ModelMisconfiguredException {
     return currentPolicyProvider.getCurrentPolicy()
         .orElseThrow(() -> new ModelMisconfiguredException(DEFAULT_MODEL_NAME, "policyName"));
   }
 
-  private List<Feature> getFeatures() {
-    FeatureSetDto currentFeatureSet = currentFeatureSetProvider.getCurrentFeatureSet();
-
-    return currentFeatureSet.getFeatures().stream()
-        .map(DefaultModelQuery::toFeature)
-        .collect(toList());
-  }
-
-  private static Feature toFeature(FeatureDto featureDto) {
-    return Feature.newBuilder()
-        .setName(featureDto.getName())
-        .setAgentConfig(featureDto.getAgentConfig())
-        .build();
-  }
-
-  private List<String> getCategories() {
-    List<CategoryDto> allCategories = categoryRegistry.getAllCategories();
-    return allCategories.stream()
-        .map(CategoryDto::getName)
-        .collect(toList());
-  }
+//  private List<Feature> getFeatures() {
+//    FeatureSetDto currentFeatureSet = currentFeatureSetProvider.getCurrentFeatureSet();
+//
+//    return currentFeatureSet.getFeatures().stream()
+//        .map(DefaultModelQuery::toFeature)
+//        .collect(toList());
+//  }
+//
+//  private static Feature toFeature(FeatureDto featureDto) {
+//    return Feature.newBuilder()
+//        .setName(featureDto.getName())
+//        .setAgentConfig(featureDto.getAgentConfig())
+//        .build();
+//  }
+//
+//  private List<String> getCategories() {
+//    List<CategoryDto> allCategories = categoryRegistry.getAllCategories();
+//    return allCategories.stream()
+//        .map(CategoryDto::getName)
+//        .collect(toList());
+//  }
 }
