@@ -16,16 +16,14 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.model.domain.dto.AddModelRequest.POST_AUDIT_TYPE;
 import static com.silenteight.serp.governance.model.domain.dto.AddModelRequest.PRE_AUDIT_TYPE;
-import static java.util.UUID.fromString;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.CREATED_BY;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ModelServiceTest {
-
-  private static final UUID MODEL_ID = fromString("d6fb8ae1-ab37-4622-935a-706ea6c53800");
-  private static final String POLICY_NAME = "policies/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
-  private static final String USERNAME = "asmith";
 
   private final ModelRepository modelRepository = new InMemoryModelRepository();
   @Mock
@@ -42,7 +40,7 @@ class ModelServiceTest {
   @Test
   void createModel() {
     // when
-    UUID modelId = underTest.createModel(MODEL_ID, POLICY_NAME, USERNAME);
+    UUID modelId = underTest.createModel(MODEL_ID, POLICY_NAME, CREATED_BY);
 
     // then
     assertThat(modelId).isEqualTo(MODEL_ID);
@@ -69,7 +67,7 @@ class ModelServiceTest {
     saveModel(MODEL_ID, POLICY_NAME);
 
     // when, then
-    assertThatThrownBy(() -> underTest.createModel(MODEL_ID, POLICY_NAME, USERNAME))
+    assertThatThrownBy(() -> underTest.createModel(MODEL_ID, POLICY_NAME, CREATED_BY))
         .isInstanceOf(ModelAlreadyExistsException.class);
   }
 
