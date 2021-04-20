@@ -63,6 +63,7 @@ libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-ut
 // Others
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
+libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
 
 // Messaging
 libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
@@ -125,6 +126,7 @@ dependencies {
   implementation libraries.spring_data_jpa
   implementation libraries.spring_rabbit
   implementation libraries.spring_retry
+  implementation libraries.streamex
 
   testAnnotationProcessor libraries.lombok
   testCompile libraries.groovy_all

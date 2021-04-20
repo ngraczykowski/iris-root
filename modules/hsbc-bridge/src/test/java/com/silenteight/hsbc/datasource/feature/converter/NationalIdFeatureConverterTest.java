@@ -74,7 +74,6 @@ class NationalIdFeatureConverterTest {
         List.of("987456"));
   }
 
-
   @Test
   void shouldExtractMatchedPartyDocumentNumbers() {
     //given
@@ -85,6 +84,7 @@ class NationalIdFeatureConverterTest {
         nationalIdFeatureConverter.convertMatchedPartyDocumentNumbers(
             matchRawData.getIndividualComposite());
 
+    System.out.println(document);
     //then
     assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(
         List.of("KJ0114578", "KJ4514578", "A501245", "K45R78986", "T3GD45689"));
@@ -93,6 +93,8 @@ class NationalIdFeatureConverterTest {
     assertThat(document.getOtherDocumentNumbers()).containsOnlyOnceElementsOf(
         List.of("BC 78845", "ID78845", "GOHA784512R12", "sadasdas76@hotmail.com",
             "ID42342"));
+    assertThat(document.getAllCountries())
+        .contains("VIET NAM", "IRAN", "UNK UNKW");
   }
 
 }

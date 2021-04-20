@@ -4,6 +4,8 @@ import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
 import com.silenteight.hsbc.bridge.domain.IndividualComposite;
 import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
 import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
+import com.silenteight.hsbc.datasource.feature.converter.country.NationalIdNumberFieldCountryExtractor;
+import com.silenteight.hsbc.datasource.feature.converter.country.PassportNumberFieldCountryExtractor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,13 +18,13 @@ import java.util.stream.Stream;
 public class NationalIdFeatureConverter {
 
   //FIXE (mmrowka) this should be configurable from properties
-  private final static String PASSPORT_CODE = "\"P\"";
-  private final static String NATIONAL_ID_CODE = "\"NID\"";
-  private final static Pattern DOCUMENT_ID_PATTERN = Pattern.compile(".*ID$");
-  private final static Pattern OTHER_DOCUMENT_ID_PATTERN = Pattern.compile(".*(?<!ID)$");
-  private final static Pattern BASE_PATTERN = Pattern.compile("\"(.*)\"");
-  private final static Pattern DOCUMENT_GROUP = Pattern.compile("^(.*) \\((.*)\\)$");
-  private final static Pattern EDQ_SUFFIX = Pattern.compile("\"^\\s*[^0-9]+\\s*$\"");
+  private static final String PASSPORT_CODE = "\"P\"";
+  private static final String NATIONAL_ID_CODE = "\"NID\"";
+  private static final Pattern DOCUMENT_ID_PATTERN = Pattern.compile(".*ID$");
+  private static final Pattern OTHER_DOCUMENT_ID_PATTERN = Pattern.compile(".*(?<!ID)$");
+  private static final Pattern BASE_PATTERN = Pattern.compile("\"(.*)\"");
+  private static final Pattern DOCUMENT_GROUP = Pattern.compile("^(.*) \\((.*)\\)$");
+  private static final Pattern EDQ_SUFFIX = Pattern.compile("\"^\\s*[^0-9]+\\s*$\"");
 
   public Document convertAlertedPartyDocumentNumbers(CustomerIndividuals customerIndividuals) {
     var document = new Document();
@@ -87,10 +89,24 @@ public class NationalIdFeatureConverter {
       var splitPassportNumbers = w.getPassportNumber().split(";");
 
       Arrays.stream(splitPassportNumbers)
+          .map(PassportNumberFieldCountryExtractor::new)
+          .map(SimpleRegexBasedExtractor::extract)
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(document::addPassportCountry);
+
+      Arrays.stream(splitPassportNumbers)
           .map(this::extractDocumentId)
           .forEach(document::addPassportNumber);
 
       var splitIdNumbers = w.getIdNumbers().split("\\|");
+
+      Arrays.stream(splitIdNumbers)
+          .map(NationalIdNumberFieldCountryExtractor::new)
+          .map(SimpleRegexBasedExtractor::extract)
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(document::addNationalIdCountry);
 
       var extractedIdNumbers = Arrays.stream(splitIdNumbers)
           .map(this::extractDocumentId)

@@ -11,7 +11,9 @@ import java.util.stream.Stream;
 public enum Feature {
 
   GENDER("gender"),
-  NATIONALITY_ID("nationalityId");
+  NATIONALITY_ID("nationalityId"),
+  NATIONALITY_COUNTRY("nationality"),
+  COUNTRY("country");
 
   private String name;
 
@@ -23,6 +25,8 @@ public enum Feature {
   }
 
   static class FeatureNotFoundException extends RuntimeException {
+
+    private static final long serialVersionUID = 5623696698660542440L;
 
     public FeatureNotFoundException(String featureName) {
       super("Feature not found: " + featureName);
