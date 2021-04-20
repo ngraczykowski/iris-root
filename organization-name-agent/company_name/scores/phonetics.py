@@ -15,8 +15,8 @@ def _compared(
     second_phonetic: str,
 ) -> Tuple[Tuple[str, ...], Tuple[str, ...]]:
     return (
-        (f"{first_phonetic} ({first_name})",),
-        (f"{second_phonetic} ({second_name})",)
+        (f"{first_phonetic} ({first_name.original_name})",),
+        (f"{second_phonetic} ({second_name.original_name})",)
     )
 
 

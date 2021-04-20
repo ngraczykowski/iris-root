@@ -161,5 +161,5 @@ def test_empty_names(first, second):
 
 def test_empty_name():
     result = compare("", "")
-    for score_name in ("fuzzy", "fuzzy_on_base", "partial_fuzzy", "sorted_fuzzy", "country"):
-        assert result[score_name] == Score()
+    for key, score in result.items():
+        assert score == Score()

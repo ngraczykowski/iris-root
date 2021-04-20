@@ -56,8 +56,8 @@ def test_basic_legal_terms():
     terms = LegalTerms()
     assert ("corporation",) in terms.all_legal_terms
     assert ("corp",) in terms.all_legal_terms
-    assert ("corp.",) in terms.all_legal_terms
-    assert terms.legal_terms_mapping[("corp",)] == terms.legal_terms_mapping[("corp.",)]
+    assert ("corp.",) not in terms.all_legal_terms
+    assert terms.legal_terms_mapping[("corp",)] == terms.legal_terms_mapping[("corporation",)]
 
 
 def _get_legal_terms_result(first_legal: str, second_legal: str) -> float:

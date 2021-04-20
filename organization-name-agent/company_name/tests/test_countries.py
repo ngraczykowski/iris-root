@@ -14,12 +14,12 @@ from company_name.compare import compare, parse_name
         ("(UK) Google (China)", ("uk", "china")),
         ("(Facebook) Google", ()),
         ("(France) (Facebook) Google", ("france",)),
-        ("(U.K.) Google", ("u.k.",)),
+        ("(U.K.) Google", ("uk",)),
     ),
 )
 def test_parse_country(name, expected_country):
     information = parse_name(name)
-    assert set(information.countries) == set(expected_country)
+    assert set(information.countries.cleaned_tuple) == set(expected_country)
 
 
 @pytest.mark.parametrize(

@@ -67,26 +67,13 @@ class LegalTerms:
 
     @staticmethod
     def _legal_term_variants(term: str) -> Set[str]:
-        # TODO - it is probably way to complicated
-        if "." in term:
-            variants = {
-                term,
-                term.strip("."),
-                term.replace(".", "") + ".",
-                term.replace(".", " ").replace("  ", " ").strip(),
-                term.replace(".", ""),
-                term.replace(".", ". ").replace("  ", " ").strip(),
-            }
-            return variants
-
         return {
             term,
-            term + ".",
             *(
                 " ".join(w).strip()
                 for w in itertools.product(
                     *[
-                        (" ".join(t), "".join(t), ". ".join(t) + ".", ".".join(t) + ".")
+                        (" ".join(t), "".join(t))
                         for t in term.split()
                     ]
                 )

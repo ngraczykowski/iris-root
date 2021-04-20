@@ -93,7 +93,7 @@ def _check_abbreviation_when_no_abbreviation(
     if words[0] == "of":
         left_words -= 1
     return Score(
-        value=(1 - left_words / len(result.source)), compared=result.compared()
+        value=max(1 - left_words / len(result.source), 0), compared=result.compared()
     )
 
 
@@ -123,7 +123,7 @@ def _check_abbreviation_when_no_words(
                 )
 
     yield Score(
-        value=1 - len(abbreviation) / len(result.abbreviated),
+        value=max(1 - len(abbreviation) / len(result.abbreviated), 0),
         compared=result.compared(),
     )
 
@@ -135,9 +135,13 @@ def check_abbreviation(
 ) -> Score:
     words, *rest = information
 
-    while abbreviation and abbreviation[0].cleaned in ("", " ", "."):
+    while abbreviation and not abbreviation[0].cleaned:
         result.abbreviated = result.abbreviated + abbreviation[:1]
         abbreviation = abbreviation[1:]
+    
+    while words and not words[0].cleaned:
+        result.source = result.source + words[:1]
+        words = words[1:]
 
     if not abbreviation:
         return _check_abbreviation_when_no_abbreviation(words, result)
@@ -161,11 +165,10 @@ def _abbreviation_score(
 ) -> Score:
     words = NameSequence([*information.common_prefixes, *information.base])
     if (
-        len(abbreviation) >= len("".join(information.base.cleaned_tuple))
+        len("".join(abbreviation.cleaned_tuple)) >= len("".join(information.name().cleaned_name))
         or len(abbreviation) < 2
-        or not words
     ):
-        return Score(0, ((), ()))
+        return Score(None, ((), ()))
 
     return check_abbreviation(
         [

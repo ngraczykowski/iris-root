@@ -114,7 +114,7 @@ def _cut_all(name: str) -> NameInformation:
     extra_base, extra = _cut_extra(name)
 
     words = NameSequence(
-        [NameWord(original=w, cleaned=clear_name(w)) for w in divide(extra_base)]
+        [NameWord(original=w, cleaned=clear_name(w)) for w in divide(extra_base) if clear_name(w)]
     )
     extra_words = NameSequence(
         [NameWord(original=w, cleaned=clear_name(w)) for w in extra]

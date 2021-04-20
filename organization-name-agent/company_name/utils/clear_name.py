@@ -15,4 +15,4 @@ def divide(name: str) -> Tuple[str]:
 
 def clear_name(name: str) -> str:
     name = unidecode.unidecode(name.lower()).strip()
-    return DOMAIN_REGEX.sub("", name)
+    return DOMAIN_REGEX.sub("", name).replace(".", "")
