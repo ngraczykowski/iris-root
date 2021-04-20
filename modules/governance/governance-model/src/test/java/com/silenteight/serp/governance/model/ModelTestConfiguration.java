@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackageClasses = {
     ModelModule.class
 })
-class ModelTestConfiguration {
+public class ModelTestConfiguration {
 
   @MockBean
   AuditingLogger auditingLogger;

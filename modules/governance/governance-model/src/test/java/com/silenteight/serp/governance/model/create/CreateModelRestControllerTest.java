@@ -11,10 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.UUID;
-
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
-import static java.util.UUID.fromString;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -29,9 +28,6 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 class CreateModelRestControllerTest extends BaseRestControllerTest {
 
   private static final String CREATE_MODEL_URL = "/v1/models";
-
-  private static final UUID MODEL_ID = fromString("d6fb8ae1-ab37-4622-935a-706ea6c53800");
-  private static final String POLICY_NAME = "policies/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
 
   @MockBean
   private CreateModelUseCase createModelUseCase;
