@@ -95,7 +95,7 @@ class SolvingModelProviderTest {
   void shouldThrowIfStrategyIsNotSet() {
     when(currentStrategyProvider.getCurrentStrategy()).thenReturn(empty());
 
-    assertThatThrownBy(() -> underTest.get(modelQuery.getDefault()))
+    assertThatThrownBy(() -> underTest.get(DEFAULT_MODEL_DTO))
         .isInstanceOf(ModelMisconfiguredException.class)
         .hasMessageContaining("strategyName");
   }
