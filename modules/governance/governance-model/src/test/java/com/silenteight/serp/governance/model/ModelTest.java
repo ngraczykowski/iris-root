@@ -3,7 +3,6 @@ package com.silenteight.serp.governance.model;
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.serp.governance.model.defaultmodel.grpc.DefaultModelQuery;
 import com.silenteight.serp.governance.model.defaultmodel.grpc.SolvingModelProvider;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
@@ -33,8 +32,6 @@ class ModelTest extends BaseDataJpaTest {
 
   private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 
-  @Autowired
-  DefaultModelQuery defaultModelQuery;
 
   @Autowired
   CurrentStrategyProvider currentStrategyProviderMock;

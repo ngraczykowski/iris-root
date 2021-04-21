@@ -23,7 +23,7 @@ import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFi
 import static com.silenteight.serp.governance.model.agentconfigset.FeatureSetFixture.FEATURE_CONFIG_SET;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
-import static com.silenteight.serp.governance.model.defaultmodel.grpc.DefaultModelQuery.DEFAULT_MODEL_NAME;
+import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.*;
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
 import static java.time.OffsetDateTime.now;

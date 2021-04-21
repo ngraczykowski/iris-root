@@ -11,9 +11,10 @@ import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 
 import java.util.UUID;
 
+import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_ID;
+import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_NAME;
 import static java.time.OffsetDateTime.now;
 import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
 @RequiredArgsConstructor
@@ -24,9 +25,6 @@ public class ModelQuery implements GetModelDetailsQuery {
 
   @NonNull
   private final CurrentPolicyProvider currentPolicyProvider;
-
-  static final String DEFAULT_MODEL_NAME = "models/default";
-  static final UUID DEFAULT_MODEL_ID = randomUUID();
 
   private static final String MODEL_NAME_RESOURCE_PREFIX = "models/";
 

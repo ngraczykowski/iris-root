@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.serp.governance.model.domain.ModelQuery.DEFAULT_MODEL_ID;
-import static com.silenteight.serp.governance.model.domain.ModelQuery.DEFAULT_MODEL_NAME;
+import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_ID;
+import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_RESOURCE_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
