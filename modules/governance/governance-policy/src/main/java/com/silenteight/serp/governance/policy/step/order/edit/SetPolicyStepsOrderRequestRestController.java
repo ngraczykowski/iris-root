@@ -24,7 +24,7 @@ class SetPolicyStepsOrderRequestRestController {
   @NonNull
   private final SetPolicyStepsUseCase setPolicyStepsUseCase;
 
-  @PutMapping(value = "/v1/policies/{id}/steps-order")
+  @PutMapping("/v1/policies/{id}/steps-order")
   @PreAuthorize("isAuthorized('EDIT_POLICY')")
   public ResponseEntity<Void> setStepsOrder(
       @PathVariable UUID id,

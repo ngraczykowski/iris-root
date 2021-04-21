@@ -24,7 +24,7 @@ class CreateStepRequestRestController {
   @NonNull
   private final CreateStepUseCase createStepUseCase;
 
-  @PostMapping(value = "/v1/policies/{id}/steps")
+  @PostMapping("/v1/policies/{id}/steps")
   @PreAuthorize("isAuthorized('CREATE_STEP')")
   public ResponseEntity<Void> create(
       @PathVariable UUID id,

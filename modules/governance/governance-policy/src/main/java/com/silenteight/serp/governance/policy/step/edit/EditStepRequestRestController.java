@@ -23,7 +23,7 @@ class EditStepRequestRestController {
   @NonNull
   private final EditStepUseCase editStepUseCase;
 
-  @PatchMapping(value = "/v1/steps/{id}")
+  @PatchMapping("/v1/steps/{id}")
   @PreAuthorize("isAuthorized('EDIT_STEP')")
   public ResponseEntity<Void> edit(
       @PathVariable UUID id,

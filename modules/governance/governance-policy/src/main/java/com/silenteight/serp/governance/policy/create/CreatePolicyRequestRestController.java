@@ -28,7 +28,7 @@ class CreatePolicyRequestRestController {
   @NonNull
   private final CreatePolicyUseCase createPolicyUseCase;
 
-  @PostMapping(value = "/v1/policies")
+  @PostMapping("/v1/policies")
   @PreAuthorize("isAuthorized('CREATE_POLICY')")
   public ResponseEntity<Void> create(
       @Valid @RequestBody CreatePolicyDto createPolicyDto, Authentication authentication) {
