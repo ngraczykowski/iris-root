@@ -340,7 +340,8 @@ public class PolicyService {
     return step;
   }
 
-  private static Collection<FeatureLogic> cloneFeatureLogics(Collection<FeatureLogic> featureLogics) {
+  private static Collection<FeatureLogic> cloneFeatureLogics(
+      Collection<FeatureLogic> featureLogics) {
     return featureLogics
         .stream()
         .map(PolicyService::cloneFeatureLogic)
