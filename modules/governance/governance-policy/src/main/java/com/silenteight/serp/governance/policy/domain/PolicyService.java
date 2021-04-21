@@ -322,45 +322,43 @@ public class PolicyService {
   }
 
   public Policy validateAndReturnPolicy(UUID policyId) {
-    Policy policy = policyRepository.findByPolicyId(policyId)
+    return policyRepository.findByPolicyId(policyId)
         .orElseThrow(() -> new WrongBasePolicyException(policyId));
-
-    return policy;
   }
 
-  private Collection<Step> cloneSteps(Collection<Step> steps) {
+  private static Collection<Step> cloneSteps(Collection<Step> steps) {
     return steps
         .stream()
-        .map(this::cloneStep)
+        .map(PolicyService::cloneStep)
         .collect(toList());
   }
 
-  private Step cloneStep(Step origin) {
+  private static Step cloneStep(Step origin) {
     Step step = new Step(origin.getSolution(), UUID.randomUUID(), origin.getName(),
         origin.getDescription(), origin.getType(), origin.getSortOrder(), origin.getCreatedBy());
     step.setFeatureLogics(cloneFeatureLogics(origin.getFeatureLogics()));
     return step;
   }
 
-  private Collection<FeatureLogic> cloneFeatureLogics(Collection<FeatureLogic> featureLogics) {
+  private static Collection<FeatureLogic> cloneFeatureLogics(Collection<FeatureLogic> featureLogics) {
     return featureLogics
         .stream()
-        .map(this::cloneFeatureLogic)
+        .map(PolicyService::cloneFeatureLogic)
         .collect(toList());
   }
 
-  private FeatureLogic cloneFeatureLogic(FeatureLogic origin) {
+  private static FeatureLogic cloneFeatureLogic(FeatureLogic origin) {
     return new FeatureLogic(origin.getCount(), cloneFeatures(origin.getFeatures()));
   }
 
-  private Collection<MatchCondition> cloneFeatures(Collection<MatchCondition> features) {
+  private static Collection<MatchCondition> cloneFeatures(Collection<MatchCondition> features) {
     return features
         .stream()
-        .map(this::cloneFeature)
+        .map(PolicyService::cloneFeature)
         .collect(toList());
   }
 
-  private MatchCondition cloneFeature(MatchCondition origin) {
+  private static MatchCondition cloneFeature(MatchCondition origin) {
     return new MatchCondition(origin.getName(), origin.getCondition(), origin.getValues());
   }
 }
