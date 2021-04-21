@@ -29,6 +29,7 @@ import static java.time.OffsetDateTime.now;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 @Transactional
 @ContextConfiguration(classes = { ModelTestConfiguration.class })
 @TestPropertySource("classpath:data-test.properties")

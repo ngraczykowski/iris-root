@@ -54,8 +54,6 @@ class SolvingModelProviderTest {
 
   private SolvingModelProvider underTest;
 
-  private OffsetDateTime CURRENT_DATETIME = now();
-
   @BeforeEach
   void init() throws ModelMisconfiguredException {
     underTest = new SolvingModelProvider(
