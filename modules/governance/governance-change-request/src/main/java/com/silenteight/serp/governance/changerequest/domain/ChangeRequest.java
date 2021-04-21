@@ -4,12 +4,18 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
+import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.REJECTED;
+import static java.time.OffsetDateTime.now;
 
 @Entity
 @Data
@@ -67,5 +73,49 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
 
   boolean isInState(ChangeRequestState state) {
     return getState() == state;
+  }
+
+  void approve(String username, String comment) {
+    if (isNotInPendingState())
+      throw new ChangeRequestNotInPendingStateException(getChangeRequestId());
+
+    if (isCreatedBy(username))
+      throw new ChangeRequestOperationNotAllowedException(getChangeRequestId());
+
+    state = APPROVED;
+    decidedBy = username;
+    deciderComment = comment;
+    decidedAt = now();
+  }
+
+  void reject(String username, String comment) {
+    if (isNotInPendingState())
+      throw new ChangeRequestNotInPendingStateException(getChangeRequestId());
+
+    if (isCreatedBy(username))
+      throw new ChangeRequestOperationNotAllowedException(getChangeRequestId());
+
+    state = REJECTED;
+    decidedBy = username;
+    deciderComment = comment;
+    decidedAt = now();
+  }
+
+  void cancel(String username, String comment) {
+    if (isNotInPendingState())
+      throw new ChangeRequestNotInPendingStateException(getChangeRequestId());
+
+    state = CANCELLED;
+    decidedBy = username;
+    deciderComment = comment;
+    decidedAt = now();
+  }
+
+  private boolean isNotInPendingState() {
+    return state != PENDING;
+  }
+
+  private boolean isCreatedBy(String username) {
+    return createdBy.equals(username);
   }
 }
