@@ -23,20 +23,21 @@ public class AnalysisFacade {
   private final ModelUseCase modelUseCase;
 
   @Transactional
-  public AnalysisDto createAnalysisWithDataset(String datasetId) {
+  public AnalysisDto createAnalysisWithDataset(String dataset) {
     var analysis = createAnalysis();
-    addDatasetToAnalysis(analysis.getName(), datasetId);
+    addDatasetToAnalysis(analysis.getName(), dataset);
 
-    saveAnalysis(analysis, datasetId);
+    var entity = new AnalysisEntity(analysis, dataset);
+    analysisRepository.save(entity);
 
-    log.info("Analysis: {} created", analysis);
-    return analysis;
+    log.info("Analysis: {} created", entity);
+    return entity.toAnalysisDto();
   }
 
-  private void saveAnalysis(AnalysisDto analysis, String datasetId) {
-    var analysisEntity = new AnalysisEntity(analysis, datasetId);
-
-    analysisRepository.save(analysisEntity);
+  public AnalysisDto getById(long id) {
+    return analysisRepository.findById(id)
+        .map(AnalysisEntity::toAnalysisDto)
+        .orElseThrow(() -> new AnalysisNotFoundException(id));
   }
 
   private AnalysisDto createAnalysis() {

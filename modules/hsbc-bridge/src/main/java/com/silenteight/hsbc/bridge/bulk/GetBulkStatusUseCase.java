@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkProcessingStatusResponse;
 import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus;
@@ -17,16 +18,21 @@ import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
 @RequiredArgsConstructor
 public class GetBulkStatusUseCase {
 
+  private final AnalysisFacade analysisFacade;
   private final BulkRepository bulkRepository;
 
   public BulkStatusResponse getStatus(String id) {
-    var result = bulkRepository.findById(id);
+    var bulk = bulkRepository.findById(id);
 
     var response = new BulkStatusResponse();
     response.setBulkId(id);
-    response.setBulkStatus(BulkStatus.fromValue(result.getStatus().name()));
-    response.setRequestedAlerts(getRequestedAlerts(result.getItems()));
-    response.setPolicyName(result.getPolicyName());
+    response.setBulkStatus(BulkStatus.fromValue(bulk.getStatus().name()));
+    response.setRequestedAlerts(getRequestedAlerts(bulk.getItems()));
+
+    if (bulk.hasAnalysisId()) {
+      var analysis = analysisFacade.getById(bulk.getAnalysisId());
+      response.setPolicyName(analysis.getPolicy());
+    }
 
     return response;
   }

@@ -11,5 +11,5 @@ import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 public class BulkProcessingStartedEvent {
 
   @NonNull String bulkId;
-  @NonNull AnalysisDto analysis;
+  long analysisId;
 }

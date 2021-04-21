@@ -7,8 +7,10 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.*;
 
+import static java.util.Objects.nonNull;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -32,7 +34,7 @@ public class Bulk extends BaseEntity {
   @JoinColumn(name = "bulk_id")
   private Collection<BulkItem> items = new ArrayList<>();
 
-  private String policyName;
+  private Long analysisId;
 
   private String errorMessage;
   private OffsetDateTime errorTimestamp;
@@ -44,5 +46,10 @@ public class Bulk extends BaseEntity {
   public void addItem(BulkItem bulkItem) {
     bulkItem.setBulkId(this.getId());
     items.add(bulkItem);
+  }
+
+  @Transient
+  boolean hasAnalysisId() {
+    return nonNull(analysisId);
   }
 }

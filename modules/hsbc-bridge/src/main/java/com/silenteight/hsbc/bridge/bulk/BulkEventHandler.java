@@ -31,13 +31,13 @@ class BulkEventHandler {
   @Transactional
   public void onBulkProcessingStartedEvent(BulkProcessingStartedEvent event) {
     var bulk = bulkRepository.findById(event.getBulkId());
-    updateBulkWithAnalysis(bulk, event.getAnalysis());
+    updateBulkWithAnalysis(bulk, event.getAnalysisId());
 
     log.debug("BulkProcessingStartedEvent handled successfully, bulkId =  {}", event.getBulkId());
   }
 
-  private void updateBulkWithAnalysis(Bulk bulk, AnalysisDto analysis) {
-    bulk.setPolicyName(analysis.getPolicy());
+  private void updateBulkWithAnalysis(Bulk bulk, long analysisId) {
+    bulk.setAnalysisId(analysisId);
     bulkRepository.save(bulk);
   }
 

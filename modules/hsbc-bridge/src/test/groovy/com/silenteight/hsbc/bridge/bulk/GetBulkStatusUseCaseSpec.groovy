@@ -1,11 +1,14 @@
 package com.silenteight.hsbc.bridge.bulk
 
+import com.silenteight.hsbc.bridge.analysis.AnalysisFacade
+
 import spock.lang.Specification
 
 class GetBulkStatusUseCaseSpec extends Specification {
 
+  def analysisFacade = Mock(AnalysisFacade)
   def bulkRepository = Mock(BulkRepository)
-  def underTest = new GetBulkStatusUseCase(bulkRepository)
+  def underTest = new GetBulkStatusUseCase(analysisFacade, bulkRepository)
 
   def 'should get bulk status'() {
     given:
@@ -18,6 +21,8 @@ class GetBulkStatusUseCaseSpec extends Specification {
 
     then:
     1 * bulkRepository.findById(_ as String) >> bulk
+    0 * analysisFacade.getById(_)
+
     with(result) {
       bulkId == bulk.id
       bulkStatus.name() == bulk.status.name()

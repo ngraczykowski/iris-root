@@ -30,7 +30,11 @@ class AnalysisFacadeSpec extends Specification {
     1 * repository.save({AnalysisEntity entity -> entity.name == fixtures.analysisName})
     1 * modelUseCase.getSolvingModel() >> fixtures.solvingModel
 
-    result == fixtures.analysis
+    with(result) {
+      policy == fixtures.policy
+      strategy == fixtures.strategy
+      name == fixtures.analysisName
+    }
   }
 
   class Fixtures {

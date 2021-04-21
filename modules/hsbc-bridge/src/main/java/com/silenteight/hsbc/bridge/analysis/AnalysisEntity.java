@@ -25,14 +25,24 @@ class AnalysisEntity extends BaseEntity {
   private Long id;
 
   private String name;
-  private String datasetName;
+  private String dataset;
   private String policy;
   private String strategy;
 
-  AnalysisEntity(AnalysisDto analysis, String datasetName) {
+  AnalysisEntity(AnalysisDto analysis, String dataset) {
     this.name = analysis.getName();
     this.policy = analysis.getPolicy();
     this.strategy = analysis.getStrategy();
-    this.datasetName = datasetName;
+    this.dataset = dataset;
+  }
+
+  AnalysisDto toAnalysisDto() {
+    return AnalysisDto.builder()
+        .id(this.id)
+        .name(this.name)
+        .policy(this.policy)
+        .strategy(this.strategy)
+        .dataset(this.dataset)
+        .build();
   }
 }

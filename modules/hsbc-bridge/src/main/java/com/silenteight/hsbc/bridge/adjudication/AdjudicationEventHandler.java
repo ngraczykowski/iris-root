@@ -43,7 +43,7 @@ class AdjudicationEventHandler {
       var alerts = alertService.registerAlertsWithMatches(alertIdCompositeMap);
       var analysis = adjudicateAlerts(alerts);
 
-      eventPublisher.publishEvent(new BulkProcessingStartedEvent(bulkId, analysis));
+      eventPublisher.publishEvent(new BulkProcessingStartedEvent(bulkId, analysis.getId()));
     } catch (RuntimeException exception) {
       handleRuntimeException(bulkId, exception);
     }

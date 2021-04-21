@@ -9,10 +9,12 @@ import java.util.List;
 @Value
 public class AnalysisDto {
 
+  Long id;
   String name;
   String policy;
   String strategy;
   int pendingAlerts;
   int alertCount;
   List<FeatureDto> features;
+  String dataset;
 }
