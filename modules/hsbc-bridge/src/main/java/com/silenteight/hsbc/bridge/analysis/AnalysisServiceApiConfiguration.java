@@ -12,10 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-import java.util.concurrent.TimeUnit;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(AnalysisServiceApiProperties.class)

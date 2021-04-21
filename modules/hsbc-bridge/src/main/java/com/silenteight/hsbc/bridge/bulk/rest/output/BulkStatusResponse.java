@@ -30,6 +30,9 @@ public class BulkStatusResponse {
   @SerializedName("bulkStatus")
   private BulkStatus bulkStatus = null;
 
+  @SerializedName("policyName")
+  private String policyName = null;
+
   @SerializedName("requestedAlerts")
   private List<BulkAlertItem> requestedAlerts = null;
 
@@ -67,6 +70,24 @@ public class BulkStatusResponse {
 
   public void setBulkStatus(BulkStatus bulkStatus) {
     this.bulkStatus = bulkStatus;
+  }
+
+  public BulkStatusResponse policyName(String policyName) {
+    this.policyName = policyName;
+    return this;
+  }
+
+  /**
+   * Get solvingModelName
+   * @return solvingModelName
+   **/
+  @Schema(description = "")
+  public String getPolicyName() {
+    return policyName;
+  }
+
+  public void setPolicyName(String policyName) {
+    this.policyName = policyName;
   }
 
   public BulkStatusResponse requestedAlerts(List<BulkAlertItem> requestedAlerts) {
@@ -107,12 +128,13 @@ public class BulkStatusResponse {
     BulkStatusResponse bulkStatusResponse = (BulkStatusResponse) o;
     return Objects.equals(this.bulkId, bulkStatusResponse.bulkId) &&
         Objects.equals(this.bulkStatus, bulkStatusResponse.bulkStatus) &&
-        Objects.equals(this.requestedAlerts, bulkStatusResponse.requestedAlerts);
+        Objects.equals(this.requestedAlerts, bulkStatusResponse.requestedAlerts) &&
+        Objects.equals(this.policyName, bulkStatusResponse.policyName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bulkId, bulkStatus, requestedAlerts);
+    return Objects.hash(bulkId, bulkStatus, requestedAlerts, policyName);
   }
 
 
@@ -124,6 +146,7 @@ public class BulkStatusResponse {
     sb.append("    bulkId: ").append(toIndentedString(bulkId)).append("\n");
     sb.append("    bulkStatus: ").append(toIndentedString(bulkStatus)).append("\n");
     sb.append("    requestedAlerts: ").append(toIndentedString(requestedAlerts)).append("\n");
+    sb.append("    policyName: ").append(toIndentedString(policyName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -27,9 +27,7 @@ class CategoryModelHolder {
         .type(CategoryType.ANY_STRING)
         .multiValue(true)
         .allowedValues(List.of())
-        .valueRetriever(matchRawData -> {
-          return List.of("GB");
-        })
+        .valueRetriever(matchRawData -> List.of("GB"))
         .build();
 
     var customerType = CategoryModel.builder()

@@ -20,7 +20,7 @@ class StoreMatchCategoriesUseCase {
     var matchComposites = command.getMatchComposites();
 
     CategoryModelHolder.getCategories()
-        .forEach(categoryModel -> matchComposites.stream().forEach(match -> {
+        .forEach(categoryModel -> matchComposites.forEach(match -> {
           var matchId = match.getId();
           var category = categoryRepository.findByName(categoryModel.getName());
           var values = categoryModel.getValueRetriever().retrieve(match.getRawData());

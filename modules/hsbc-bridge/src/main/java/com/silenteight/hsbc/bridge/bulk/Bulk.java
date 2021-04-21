@@ -32,6 +32,8 @@ public class Bulk extends BaseEntity {
   @JoinColumn(name = "bulk_id")
   private Collection<BulkItem> items = new ArrayList<>();
 
+  private String policyName;
+
   private String errorMessage;
   private OffsetDateTime errorTimestamp;
 

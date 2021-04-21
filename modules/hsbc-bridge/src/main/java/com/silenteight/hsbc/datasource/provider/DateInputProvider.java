@@ -11,9 +11,6 @@ import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
-import com.silenteight.hsbc.datasource.dto.name.NameFeatureInputDto;
-import com.silenteight.hsbc.datasource.dto.name.NameInputDto;
-import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

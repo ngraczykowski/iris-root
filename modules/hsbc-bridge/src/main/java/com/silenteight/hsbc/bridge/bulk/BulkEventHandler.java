@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicateFailedEvent;
+import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
+import com.silenteight.hsbc.bridge.bulk.event.BulkProcessingStartedEvent;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,7 @@ import java.time.OffsetDateTime;
 
 @RequiredArgsConstructor
 @Slf4j
-class BulkErrorHandler {
+class BulkEventHandler {
 
   private final BulkRepository bulkRepository;
 
@@ -23,6 +25,20 @@ class BulkErrorHandler {
     updateBulkWithError(bulk, event.getErrorMessage());
 
     log.debug("AdjudicateFailedEvent handled successfully, bulkId =  {}", event.getBulkId());
+  }
+
+  @EventListener
+  @Transactional
+  public void onBulkProcessingStartedEvent(BulkProcessingStartedEvent event) {
+    var bulk = bulkRepository.findById(event.getBulkId());
+    updateBulkWithAnalysis(bulk, event.getAnalysis());
+
+    log.debug("BulkProcessingStartedEvent handled successfully, bulkId =  {}", event.getBulkId());
+  }
+
+  private void updateBulkWithAnalysis(Bulk bulk, AnalysisDto analysis) {
+    bulk.setPolicyName(analysis.getPolicy());
+    bulkRepository.save(bulk);
   }
 
   private void updateBulkWithError(Bulk bulk, String errorMessage) {

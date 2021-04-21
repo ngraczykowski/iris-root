@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-class BulkErrorHandlerConfiguration {
+class BulkEventHandlerConfiguration {
 
   private final BulkRepository bulkRepository;
 
   @Bean
-  BulkErrorHandler bulkErrorHandler() {
-    return new BulkErrorHandler(bulkRepository);
+  BulkEventHandler bulkEventHandler() {
+    return new BulkEventHandler(bulkRepository);
   }
 }

@@ -12,7 +12,6 @@ import org.springframework.retry.annotation.Retryable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -55,7 +54,8 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
     var result = getStub().createAnalysis(grpcRequest);
     return AnalysisDto.builder()
         .name(result.getName())
-        // get more if needed
+        .policy(result.getPolicy())
+        .strategy(result.getStrategy())
         .build();
   }
 

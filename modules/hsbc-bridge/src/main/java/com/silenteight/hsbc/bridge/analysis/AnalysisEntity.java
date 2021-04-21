@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge.analysis;
 
 import lombok.*;
 
+import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -16,20 +17,22 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "hsbc_bridge_analysis")
-public class AnalysisEntity extends BaseEntity {
+class AnalysisEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String analysisName;
+  private String name;
   private String datasetName;
-  private String solvingModelName;
+  private String policy;
+  private String strategy;
 
-  AnalysisEntity(String analysisName, String datasetName, String solvingModelName) {
-    this.analysisName = analysisName;
+  AnalysisEntity(AnalysisDto analysis, String datasetName) {
+    this.name = analysis.getName();
+    this.policy = analysis.getPolicy();
+    this.strategy = analysis.getStrategy();
     this.datasetName = datasetName;
-    this.solvingModelName = solvingModelName;
   }
 }

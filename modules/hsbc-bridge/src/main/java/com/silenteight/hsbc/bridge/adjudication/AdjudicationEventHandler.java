@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
+import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 import com.silenteight.hsbc.bridge.bulk.event.BulkPreProcessingFinishedEvent;
+import com.silenteight.hsbc.bridge.bulk.event.BulkProcessingStartedEvent;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -14,8 +17,9 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 @Builder
 @Slf4j
@@ -23,41 +27,42 @@ class AdjudicationEventHandler {
 
   private final AlertService alertService;
   private final DatasetServiceApi datasetServiceApi;
-  private final AnalysisService analysisService;
+  private final AnalysisFacade analysisFacade;
   @Getter(AccessLevel.PROTECTED)
   private final ApplicationEventPublisher eventPublisher;
 
   @EventListener
   @Async
   public void onBulkPreProcessingFinishedEvent(BulkPreProcessingFinishedEvent event) {
-    log.debug("Received bulkPreProcessingFinishedEvent, bulkId={}", event.getBulkId());
+    var bulkId = event.getBulkId();
+    log.debug("Received bulkPreProcessingFinishedEvent, bulkId={}", bulkId);
 
     var alertIdCompositeMap = toCompositeByAlertId(event.getAlertMatchIdComposites());
 
     try {
-      registerAlertsAndCreateAnalysis(alertIdCompositeMap);
+      var alerts = alertService.registerAlertsWithMatches(alertIdCompositeMap);
+      var analysis = adjudicateAlerts(alerts);
+
+      eventPublisher.publishEvent(new BulkProcessingStartedEvent(bulkId, analysis));
     } catch (RuntimeException exception) {
-      handleRuntimeException(event, exception);
+      handleRuntimeException(bulkId, exception);
     }
   }
 
-  private void handleRuntimeException(BulkPreProcessingFinishedEvent event, RuntimeException exception) {
-    var bulkId = event.getBulkId();
+  private void handleRuntimeException(String bulkId, RuntimeException exception) {
     log.error("Error on handling adjudication event, bulkId={}", bulkId, exception);
 
     eventPublisher.publishEvent(new AdjudicateFailedEvent(bulkId, exception.getMessage()));
   }
 
-  private void registerAlertsAndCreateAnalysis(Map<String, AlertMatchIdComposite> alertMatchIds) {
-    var alerts = alertService.registerAlertsWithMatches(alertMatchIds);
+  private AnalysisDto adjudicateAlerts(Collection<String> alerts) {
     var datasetName = datasetServiceApi.createDataset(alerts);
-    analysisService.createAnalysisWithDataset(datasetName);
+    return analysisFacade.createAnalysisWithDataset(datasetName);
   }
 
   private Map<String, AlertMatchIdComposite> toCompositeByAlertId(
       Collection<AlertMatchIdComposite> alertMatchIds) {
-    return alertMatchIds
-        .stream()
-        .collect(Collectors.toMap(AlertMatchIdComposite::getAlertExternalId, Function.identity()));
+    return alertMatchIds.stream()
+        .collect(toMap(AlertMatchIdComposite::getAlertExternalId, identity()));
   }
 }

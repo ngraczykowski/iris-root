@@ -2,8 +2,6 @@ package com.silenteight.hsbc.bridge.recommendation;
 
 import lombok.*;
 
-import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
-
 import java.time.OffsetDateTime;
 import javax.persistence.*;
 

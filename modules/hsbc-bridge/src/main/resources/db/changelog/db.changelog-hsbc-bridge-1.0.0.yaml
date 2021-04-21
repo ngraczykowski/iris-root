@@ -24,6 +24,9 @@ databaseChangeLog:
                   name: status
                   type: varchar(30)
               - column:
+                  name: policy_name
+                  type: varchar(100)
+              - column:
                   name: error_message
                   type: text
               - column:
@@ -152,14 +155,17 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: analysis_name
+                  name: name
                   type: varchar(256)
               - column:
                   name: dataset_name
-                  type: varchar(256)
+                  type: varchar(50)
               - column:
-                  name: solving_model_name
-                  type: varchar(256)
+                  name: policy
+                  type: varchar(100)
+              - column:
+                  name: strategy
+                  type: varchar(100)
               - column:
                   name: created_at
                   type: timestamp

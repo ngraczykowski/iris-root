@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.util.List;
-import javax.validation.constraints.NotNull;
 
 @Builder
 @Value

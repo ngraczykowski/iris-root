@@ -20,7 +20,7 @@ class MatchPayloadConverter {
     try {
       return objectMapper.writeValueAsBytes(matchRawData);
     } catch (JsonProcessingException e) {
-      log.error("Match data conversion error, {}", e);
+      log.error("Match data conversion error", e);
       throw new PayloadConversionException("Cannot convert class to payload", e);
     }
   }
@@ -29,7 +29,7 @@ class MatchPayloadConverter {
     try {
       return objectMapper.readValue(payload, MatchRawData.class);
     } catch (IOException e) {
-      log.error("Match data conversion error, {}", e);
+      log.error("Match data conversion error", e);
       throw new PayloadConversionException("Cannot convert payload to class", e);
     }
   }

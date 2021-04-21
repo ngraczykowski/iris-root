@@ -1,50 +1,53 @@
-package com.silenteight.hsbc.bridge.adjudication;
+package com.silenteight.hsbc.bridge.analysis;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
 import com.silenteight.hsbc.bridge.analysis.dto.AddDatasetRequestDto;
+import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisRequestDto;
 import com.silenteight.hsbc.bridge.analysis.dto.FeatureDto;
-import com.silenteight.hsbc.bridge.analysis.event.CreateAnalysisEvent;
 import com.silenteight.hsbc.bridge.model.ModelUseCase;
-import com.silenteight.hsbc.bridge.model.SolvingModelDto;
 
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-class AnalysisService {
+@Slf4j
+public class AnalysisFacade {
 
-  private final ModelUseCase modelUseCase;
+  private final AnalysisRepository analysisRepository;
   private final AnalysisServiceApi analysisServiceApi;
-  private final ApplicationEventPublisher eventPublisher;
+  private final ModelUseCase modelUseCase;
 
-  void createAnalysisWithDataset(String datasetId) {
-    var solvingModel = modelUseCase.getSolvingModel();
-    var analysisName = createAnalysis(solvingModel);
+  @Transactional
+  public AnalysisDto createAnalysisWithDataset(String datasetId) {
+    var analysis = createAnalysis();
+    addDatasetToAnalysis(analysis.getName(), datasetId);
 
-    addDataset(analysisName, datasetId);
+    saveAnalysis(analysis, datasetId);
 
-    eventPublisher.publishEvent(CreateAnalysisEvent.builder()
-        .analysisName(analysisName)
-        .datasetName(datasetId)
-        .solvingModelName(solvingModel.getName())
-        .build());
+    log.info("Analysis: {} created", analysis);
+    return analysis;
   }
 
-  private String createAnalysis(SolvingModelDto solvingModel) {
+  private void saveAnalysis(AnalysisDto analysis, String datasetId) {
+    var analysisEntity = new AnalysisEntity(analysis, datasetId);
+
+    analysisRepository.save(analysisEntity);
+  }
+
+  private AnalysisDto createAnalysis() {
+    var solvingModel = modelUseCase.getSolvingModel();
     var request = CreateAnalysisRequestDto.builder()
-        .name(UUID.randomUUID().toString())
         .policy(solvingModel.getPolicyName())
         .strategy(solvingModel.getStrategyName())
         .features(map(solvingModel.getFeatures()))
         .build();
 
-    return analysisServiceApi.createAnalysis(request).getName();
+    return analysisServiceApi.createAnalysis(request);
   }
 
   private static List<FeatureDto> map(List<com.silenteight.hsbc.bridge.model.FeatureDto> features) {
@@ -56,7 +59,7 @@ class AnalysisService {
         .collect(Collectors.toList());
   }
 
-  private void addDataset(String analysis, String dataset) {
+  private void addDatasetToAnalysis(String analysis, String dataset) {
     var request = AddDatasetRequestDto.builder()
         .analysis(analysis)
         .dataset(dataset)

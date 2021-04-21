@@ -26,6 +26,7 @@ public class GetBulkStatusUseCase {
     response.setBulkId(id);
     response.setBulkStatus(BulkStatus.fromValue(result.getStatus().name()));
     response.setRequestedAlerts(getRequestedAlerts(result.getItems()));
+    response.setPolicyName(result.getPolicyName());
 
     return response;
   }
