@@ -63,9 +63,4 @@ public class SolvingModelProvider {
         .map(CategoryDto::getName)
         .collect(toList());
   }
-
-//  private String getPolicyName() throws ModelMisconfiguredException {
-//    return currentPolicyProvider.getCurrentPolicy()
-//        .orElseThrow(() -> new ModelMisconfiguredException(DEFAULT_MODEL_NAME, "policyName"));
-//  }
 }

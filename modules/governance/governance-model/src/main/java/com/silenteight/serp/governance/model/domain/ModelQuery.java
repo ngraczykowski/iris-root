@@ -3,8 +3,8 @@ package com.silenteight.serp.governance.model.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
+import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.domain.exception.ModelNotFoundException;
 import com.silenteight.serp.governance.model.get.GetModelDetailsQuery;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;

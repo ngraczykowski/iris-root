@@ -44,7 +44,7 @@ class ModelGrpcService
       Empty request, StreamObserver<SolvingModel> responseObserver) {
     try {
       setSolvingModelOnResponseObserver(responseObserver, modelQuery.getDefault());
-     } catch (ModelMisconfiguredException e) {
+    } catch (ModelMisconfiguredException e) {
       Status status = Status.newBuilder()
           .setCode(FAILED_PRECONDITION_VALUE)
           .setMessage(MODEL_NOT_CONFIGURED_ERROR)
