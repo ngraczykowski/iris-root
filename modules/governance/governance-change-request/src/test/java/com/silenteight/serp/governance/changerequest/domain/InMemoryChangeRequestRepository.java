@@ -4,9 +4,7 @@ import com.silenteight.sep.base.common.support.persistence.BasicInMemoryReposito
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,13 +19,19 @@ class InMemoryChangeRequestRepository
         .collect(toList());
   }
 
-  @Override
   public List<ChangeRequest> findAllByStateIn(
       Set<ChangeRequestState> states, Pageable pageable) {
 
     return stream()
         .filter(changeRequest -> isInState(changeRequest, states))
         .collect(toList());
+  }
+
+  @Override
+  public Optional<ChangeRequest> findByChangeRequestId(UUID changeRequestId) {
+    return stream()
+        .filter(changeRequest -> changeRequest.hasChangeRequestId(changeRequestId))
+        .findFirst();
   }
 
   private static boolean isInState(ChangeRequest changeRequest, Set<ChangeRequestState> states) {

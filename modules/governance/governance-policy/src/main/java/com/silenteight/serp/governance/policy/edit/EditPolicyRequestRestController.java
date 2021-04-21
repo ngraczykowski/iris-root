@@ -30,7 +30,7 @@ class EditPolicyRequestRestController {
   @NonNull
   private final UsePolicyUseCase usePolicyUseCase;
 
-  @PatchMapping(value = "/v1/policies/{id}")
+  @PatchMapping("/v1/policies/{id}")
   @PreAuthorize("isAuthorized('EDIT_POLICY')")
   public ResponseEntity<Void> edit(
       @PathVariable UUID id,

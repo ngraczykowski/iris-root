@@ -26,7 +26,7 @@ class PolicyDetailsRequestRestController {
   @NonNull
   private final PolicyDetailsUseCase policyDetailsUseCase;
 
-  @GetMapping(value = "/v1/policies/{id}")
+  @GetMapping("/v1/policies/{id}")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
   public ResponseEntity<PolicyDetailsDto> details(@PathVariable UUID id) {
     return ResponseEntity.ok(policyDetailsUseCase.activate(id));

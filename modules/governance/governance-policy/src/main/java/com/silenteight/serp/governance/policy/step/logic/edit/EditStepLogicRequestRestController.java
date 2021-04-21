@@ -29,7 +29,7 @@ class EditStepLogicRequestRestController {
   @NonNull
   private final EditStepLogicUseCase editStepLogicUseCase;
 
-  @PutMapping(value = "/v1/steps/{id}/logic")
+  @PutMapping("/v1/steps/{id}/logic")
   @PreAuthorize("isAuthorized('EDIT_STEPS_LOGIC')")
   public ResponseEntity<Void> edit(
       @PathVariable UUID id,

@@ -13,7 +13,7 @@ class CreateChangeRequestUseCase {
   @NonNull
   private final ChangeRequestService changeRequestService;
 
-  public UUID activate(@NonNull CreateChangeRequestCommand command) {
+  UUID activate(@NonNull CreateChangeRequestCommand command) {
     return changeRequestService.addChangeRequest(
         command.getId(),
         command.getModelName(),

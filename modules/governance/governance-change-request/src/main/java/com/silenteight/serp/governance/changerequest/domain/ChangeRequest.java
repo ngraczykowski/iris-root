@@ -75,6 +75,10 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
     return getState() == state;
   }
 
+  boolean hasChangeRequestId(UUID changeRequestId) {
+    return getChangeRequestId() == changeRequestId;
+  }
+
   void approve(String username, String comment) {
     if (isNotInPendingState())
       throw new ChangeRequestNotInPendingStateException(getChangeRequestId());
