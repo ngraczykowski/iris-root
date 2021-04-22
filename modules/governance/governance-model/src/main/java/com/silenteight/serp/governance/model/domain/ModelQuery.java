@@ -28,7 +28,7 @@ public class ModelQuery
   private final CurrentPolicyProvider currentPolicyProvider;
 
   private static final String MODEL_NAME_RESOURCE_PREFIX = "models/";
-  public static final String DEFAULT_MODEL_NAME = "models/default";
+  private static final String DEFAULT_MODEL_NAME = "models/default";
 
   public ModelDto get(@NonNull UUID modelId) {
     return modelRepository
