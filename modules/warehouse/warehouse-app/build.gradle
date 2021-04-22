@@ -13,6 +13,8 @@ configurations {
   implementation.extendsFrom starterSpringApp
   implementation.extendsFrom starterMessaging
   implementation.extendsFrom starterIntegration
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
 
   testImplementation.extendsFrom starterSpringTest
   testImplementation.extendsFrom starterSpockTest

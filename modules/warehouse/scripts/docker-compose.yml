@@ -65,6 +65,7 @@ services:
       - odfe-net
   minio:
     image: minio/minio:RELEASE.2021-03-10T05-11-33Z
+    container_name: warehouse-minio
     volumes:
       - minio-fs:/data1
     ports:
@@ -91,11 +92,31 @@ services:
       /usr/bin/mc policy download myminio/reports;
       exit 0;
       "
+  db:
+    image: docker.io/library/postgres:12
+    container_name: warehouse-db
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-24910}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-warehouse}"
+      POSTGRES_USER: "${POSTGRES_USER:-warehouse}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-warehouse}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - warehouse-storage:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
 volumes:
   warehouse-es1:
   warehouse-es2:
   minio-fs:
+  warehouse-storage:
 
 networks:
   odfe-net:

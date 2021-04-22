@@ -84,6 +84,61 @@ spring:
         max-concurrency: ${warehouse.messaging.concurrency}
         prefetch: ${warehouse.messaging.prefetch}
 
+
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${warehouse.db.host}:${warehouse.db.port}/${warehouse.db.name}?currentSchema=${warehouse.db.schema:public}
+    username: ${warehouse.db.username}
+    password: ${warehouse.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${warehouse.db.connections.min:1}
+      maximum-pool-size: ${warehouse.db.connections.max:10}
+      auto-commit: false
+      schema: ${warehouse.db.schema:public}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: Warehouse
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${warehouse.db.schema:public}
+    contexts: default
+
+  # Spring Data JPA
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
 #---------------------------------------------------------------------------------------------------
 # SEP BASE CONFIGURATION
 #---------------------------------------------------------------------------------------------------
