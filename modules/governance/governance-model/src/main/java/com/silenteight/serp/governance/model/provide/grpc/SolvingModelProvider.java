@@ -36,8 +36,8 @@ class SolvingModelProvider {
 
   private String getStrategyName(String modelName) throws ModelMisconfiguredException {
     return currentStrategyProvider.getCurrentStrategy()
-                                  .orElseThrow(() -> new ModelMisconfiguredException(modelName,
-                                                                                     "strategyName"));
+                                  .orElseThrow(() -> new ModelMisconfiguredException(
+                                      modelName, "strategyName"));
   }
 
   private List<Feature> getFeatures() {
