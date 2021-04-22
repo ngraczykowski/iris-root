@@ -2,6 +2,8 @@ spring.cloud.consul.enabled: false
 
 sep.auth:
   permissionMethodsMappings:
+    CANCEL_CHANGE_REQUESTS:
+      - "CANCEL_CHANGE_REQUEST"
     APPROVE_CHANGE_REQUESTS:
       - "APPROVE_CHANGE_REQUEST"
     CREATE_CHANGE_REQUESTS:
@@ -38,6 +40,7 @@ sep.auth:
       - "REJECT_CHANGE_REQUESTS"
       - "VIEW_CHANGE_REQUESTS"
     BUSINESS_OPERATOR:
+      - "CANCEL_CHANGE_REQUESTS"
       - "CREATE_CHANGE_REQUESTS"
       - "VIEW_CHANGE_REQUESTS"
     POLICY_MANAGER:

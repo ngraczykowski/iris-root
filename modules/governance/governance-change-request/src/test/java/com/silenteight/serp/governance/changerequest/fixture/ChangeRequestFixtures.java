@@ -18,4 +18,6 @@ public final class ChangeRequestFixtures {
   public static final String APPROVER_COMMENT = "Change Request approved";
   public static final String REJECTED_BY = "pallen";
   public static final String REJECTOR_COMMENT = "Change Request rejected";
+  public static final String CANCELLED_BY = "rtaylor";
+  public static final String CANCELLER_COMMENT = "Change Request cancelled";
 }

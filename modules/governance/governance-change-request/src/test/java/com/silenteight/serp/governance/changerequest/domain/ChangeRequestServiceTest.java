@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.REJECTED;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -113,6 +114,37 @@ class ChangeRequestServiceTest {
   @Test
   void throwExceptionWhenRejectingNotExistingChangeRequest() {
     assertThatThrownBy(() -> underTest.reject(CHANGE_REQUEST_ID, REJECTED_BY, REJECTOR_COMMENT))
+        .isInstanceOf(ChangeRequestNotFoundException.class);
+  }
+
+  @Test
+  void cancelChanngeRequest() {
+    // given
+    persistChangeRequest();
+
+    // when
+    underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY, CANCELLER_COMMENT);
+
+    // then
+    Optional<ChangeRequest> changeRequestOpt = repository.findByChangeRequestId(CHANGE_REQUEST_ID);
+    assertThat(changeRequestOpt).isNotEmpty();
+    ChangeRequest changeRequest = changeRequestOpt.get();
+    assertThat(changeRequest.getState()).isEqualTo(CANCELLED);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(CANCELLED_BY);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(CANCELLER_COMMENT);
+
+    var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
+
+    verify(auditingLogger, times(2)).log(logCaptor.capture());
+    AuditDataDto preAudit = getPreAudit(logCaptor);
+    assertThat(preAudit.getType()).isEqualTo(CancelChangeRequestRequest.PRE_AUDIT_TYPE);
+    AuditDataDto postAudit = getPostAudit(logCaptor);
+    assertThat(postAudit.getType()).isEqualTo(CancelChangeRequestRequest.POST_AUDIT_TYPE);
+  }
+
+  @Test
+  void throwExceptionWhenCancellingNotExistingChangeRequest() {
+    assertThatThrownBy(() -> underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY, CANCELLER_COMMENT))
         .isInstanceOf(ChangeRequestNotFoundException.class);
   }
 

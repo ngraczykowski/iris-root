@@ -92,6 +92,28 @@ public class ChangeRequestService {
     request.postAudit(auditingLogger::log);
   }
 
+  public void cancel(
+      @NonNull UUID changeRequestId,
+      @NonNull String cancelledBy,
+      @NonNull String cancellerComment) {
+
+    CancelChangeRequestRequest request = CancelChangeRequestRequest.builder()
+        .correlationId(randomUUID())
+        .changeRequestId(changeRequestId)
+        .cancelledBy(cancelledBy)
+        .cancellerComment(cancellerComment)
+        .build();
+    cancelInternal(request);
+  }
+
+  private void cancelInternal(CancelChangeRequestRequest request) {
+    request.preAudit(auditingLogger::log);
+    ChangeRequest changeRequest = getByChangeRequestId(request.getChangeRequestId());
+    changeRequest.cancel(request.getCancelledBy(), request.getCancellerComment());
+    repository.save(changeRequest);
+    request.postAudit(auditingLogger::log);
+  }
+
   private ChangeRequest getByChangeRequestId(@NonNull UUID changeRequestId) {
     return repository
         .findByChangeRequestId(changeRequestId)

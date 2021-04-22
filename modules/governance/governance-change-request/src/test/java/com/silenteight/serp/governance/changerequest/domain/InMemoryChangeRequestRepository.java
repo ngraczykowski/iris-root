@@ -27,16 +27,16 @@ class InMemoryChangeRequestRepository
         .collect(toList());
   }
 
+  private static boolean isInState(ChangeRequest changeRequest, Set<ChangeRequestState> states) {
+    return states
+        .stream()
+        .anyMatch(changeRequest::isInState);
+  }
+
   @Override
   public Optional<ChangeRequest> findByChangeRequestId(UUID changeRequestId) {
     return stream()
         .filter(changeRequest -> changeRequest.hasChangeRequestId(changeRequestId))
         .findFirst();
-  }
-
-  private static boolean isInState(ChangeRequest changeRequest, Set<ChangeRequestState> states) {
-    return states
-        .stream()
-        .anyMatch(changeRequest::isInState);
   }
 }
