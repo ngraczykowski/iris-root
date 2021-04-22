@@ -41,6 +41,8 @@ warehouse:
   messaging:
     concurrency: 4
     prefetch: 25
+  kibana:
+    timezone: Europe/Warsaw
 
 spring:
   #-------------------------------------------------------------------------------------------------

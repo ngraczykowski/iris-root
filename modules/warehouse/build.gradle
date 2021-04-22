@@ -38,17 +38,14 @@ subprojects {Project subproject ->
       version = libraries.aspectjtools.version
     }
 
-    subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
-      def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
-
-      java.dependsOn processResources
-    }
-
     def ajcArgs = [
         "-Xlintfile", "${rootProject.projectDir}/Xlint.properties".toString(),
     ]
 
-    subproject.tasks.withType(JavaCompile).configureEach {JavaCompile java ->
+    subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
+      def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
+
+      java.dependsOn processResources
       java.ajc.options.compilerArgs = ajcArgs
       java.options.fork = true
       java.options.compilerArgs << "-parameters"

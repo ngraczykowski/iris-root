@@ -1,5 +1,6 @@
 plugins {
   id "java-library"
+  id "java-test-fixtures"
 }
 
 description = "Warehouse Indexer"
@@ -12,18 +13,12 @@ configurations {
 }
 
 dependencies {
-  // API dependencies
-  api libraries.jakarta_validation_api
-  api libraries.silenteight_sep_base_common
-
   implementation project(":warehouse-common")
-
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_data_api
   implementation libraries.spring_boot_starter_elasticsearch
 
   testImplementation project(":warehouse-common-testing")
-
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.awaitility
   testImplementation libraries.test_containers

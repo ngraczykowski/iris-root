@@ -3,7 +3,7 @@ package com.silenteight.warehouse.indexer;
 import com.silenteight.data.api.v1.DataIndexRequest;
 import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpenDistroContainer.OpenDistroContainerInitializer;
+import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexClientGateway;
 import com.silenteight.warehouse.indexer.indextestclient.listener.IndexedEventListener;
@@ -15,11 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.integration.test.context.SpringIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_ALERT;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_MATCH;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_NAME;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.*;
-import static java.util.Map.of;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.DATA_INDEX_REQUEST_WITH_ALERTS;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ANALYSIS_ID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -28,7 +27,7 @@ import static org.awaitility.Awaitility.await;
 @SpringIntegrationTest
 @ContextConfiguration(initializers = {
     RabbitTestInitializer.class,
-    OpenDistroContainerInitializer.class
+    OpendistroElasticContainerInitializer.class
 })
 class IndexerIT {
 
@@ -61,11 +60,6 @@ class IndexerIT {
         .isEqualTo(request.getRequestId());
 
     var source = simpleElasticTestClient.getSource(ANALYSIS_ID, ALERT_ID_1);
-    assertThat(source.get(KEY_ALERT)).isEqualTo(of(
-        ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_FP,
-        KEY_NAME, ALERT_ID_1));
-    assertThat(source.get(KEY_MATCH)).isEqualTo(of(
-        MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION,
-        KEY_NAME, MATCH_ID_1));
+    assertThat(source).isEqualTo(ALERT_WITH_MATCHES_1_MAP);
   }
 }
