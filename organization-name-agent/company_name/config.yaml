@@ -1,42 +1,42 @@
 features:
   base:
-    status: on
+    active: True
     desc: "base names"
     score_name: fuzzy_on_base
     low_thr: 0.8
     high_thr: 0.8
   legal:
-    status: on
+    active: True
     desc: "legal extensions"
     score_name: legal_terms
     low_thr: 0.6
     high_thr: 0.8
   suffixes:
-    status: on
+    active: True
     desc: "common suffixes"
     score_name: fuzzy_on_suffix
     low_thr: 0.8
     high_thr: 0.8
   blacklisted:
-    status: on
+    active: True
     desc: "blacklisted"
     score_name: blacklisted
     low_thr: 0.99
     high_thr: 0.99
   abbreviation:
-    status: on
+    active: True
     desc: "abbreviations"
     score_name: abbreviation
     low_thr: 0.99
     high_thr: 0.99
   single_token:
-    status: on
+    active: True
     desc: ''
     score_name: token_inclusion
     low_thr: 0.99
     high_thr: 0.99
   potential_subsidiary:
-    status: on
+    active: True
     desc: 'potentially related entities'
     score_name: potential_subsidiary
     low_thr: 0.99
