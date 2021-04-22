@@ -32,13 +32,14 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
 
     var result = getStub().addDataset(grpcRequest);
     return AnalysisDatasetDto.builder()
+        .alertsCount(result.getAlertCount())
         .name(result.getName())
         .build();
   }
 
   @Override
   @Retryable(value = StatusRuntimeException.class)
-  public AnalysisDto createAnalysis(CreateAnalysisRequestDto request) {
+  public CreateAnalysisResponseDto createAnalysis(CreateAnalysisRequestDto request) {
     var grpcRequest = CreateAnalysisRequest.newBuilder()
         .setAnalysis(Analysis.newBuilder()
             .setName(request.getName())
@@ -52,7 +53,7 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
         .build();
 
     var result = getStub().createAnalysis(grpcRequest);
-    return AnalysisDto.builder()
+    return CreateAnalysisResponseDto.builder()
         .name(result.getName())
         .policy(result.getPolicy())
         .strategy(result.getStrategy())

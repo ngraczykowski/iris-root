@@ -1,19 +1,19 @@
 package com.silenteight.hsbc.bridge.analysis
 
-import com.silenteight.hsbc.bridge.analysis.dto.AddDatasetRequestDto
 import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto
-import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisRequestDto
-import com.silenteight.hsbc.bridge.model.ModelUseCase
-import com.silenteight.hsbc.bridge.model.SolvingModelDto
 
 import spock.lang.Specification
+
+import java.time.Duration
+
+import static java.util.Objects.nonNull
 
 class AnalysisFacadeSpec extends Specification {
 
   def repository = Mock(AnalysisRepository)
-  def analysisServiceApi = Mock(AnalysisServiceApi)
-  def modelUseCase = Mock(ModelUseCase)
-  def underTest = new AnalysisFacade(repository, analysisServiceApi, modelUseCase)
+  def registerer = Mock(Registerer)
+  def timeoutDuration = Duration.ofMinutes(1)
+  def underTest = new AnalysisFacade(repository, registerer, timeoutDuration)
 
   def fixtures = new Fixtures()
 
@@ -25,10 +25,9 @@ class AnalysisFacadeSpec extends Specification {
     var result = underTest.createAnalysisWithDataset(dataset)
 
     then:
-    1 * analysisServiceApi.createAnalysis(_ as CreateAnalysisRequestDto) >> fixtures.analysis
-    1 * analysisServiceApi.addDataset({AddDatasetRequestDto req -> req.dataset == dataset})
-    1 * repository.save({AnalysisEntity entity -> entity.name == fixtures.analysisName})
-    1 * modelUseCase.getSolvingModel() >> fixtures.solvingModel
+    1 * registerer.registerAnalysis(dataset) >> fixtures.analysis
+    1 * repository.save({AnalysisEntity entity ->
+              entity.name == fixtures.analysisName && nonNull(entity.timeoutAt)})
 
     with(result) {
       policy == fixtures.policy
@@ -41,13 +40,6 @@ class AnalysisFacadeSpec extends Specification {
 
     String policy = 'policy-1'
     String strategy = 'strategy-1'
-
-    SolvingModelDto solvingModel = SolvingModelDto.builder()
-        .name('model/1')
-        .policyName(policy)
-        .strategyName(strategy)
-        .features([])
-        .build()
 
     String analysisName = 'analysis/1'
     AnalysisDto analysis = AnalysisDto.builder()

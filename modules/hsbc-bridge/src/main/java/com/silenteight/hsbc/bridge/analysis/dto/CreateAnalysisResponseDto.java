@@ -5,8 +5,9 @@ import lombok.Value;
 
 @Builder
 @Value
-public class AnalysisDatasetDto {
+public class CreateAnalysisResponseDto {
 
   String name;
-  long alertsCount;
+  String policy;
+  String strategy;
 }

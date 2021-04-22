@@ -8,6 +8,6 @@ import java.util.List;
 public interface AnalysisServiceApi {
 
   AnalysisDatasetDto addDataset(AddDatasetRequestDto request);
-  AnalysisDto createAnalysis(CreateAnalysisRequestDto request);
+  CreateAnalysisResponseDto createAnalysis(CreateAnalysisRequestDto request);
   List<RecommendationDto> getRecommendations(GetRecommendationsDto request);
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -28,21 +29,34 @@ class AnalysisEntity extends BaseEntity {
   private String dataset;
   private String policy;
   private String strategy;
+  private long alertsCount;
+  private OffsetDateTime timeoutAt;
+  @Enumerated(EnumType.STRING)
+  private Status status = Status.IN_PROGRESS;
 
-  AnalysisEntity(AnalysisDto analysis, String dataset) {
+  AnalysisEntity(AnalysisDto analysis, OffsetDateTime timeout) {
+    this.alertsCount = analysis.getAlertCount();
+    this.dataset = analysis.getDataset();
     this.name = analysis.getName();
     this.policy = analysis.getPolicy();
     this.strategy = analysis.getStrategy();
-    this.dataset = dataset;
+    this.timeoutAt = timeout;
   }
 
   AnalysisDto toAnalysisDto() {
     return AnalysisDto.builder()
         .id(this.id)
+        .alertCount(this.alertsCount)
         .name(this.name)
         .policy(this.policy)
         .strategy(this.strategy)
         .dataset(this.dataset)
         .build();
+  }
+
+  enum Status {
+    IN_PROGRESS,
+    COMPLETED,
+    ERROR
   }
 }

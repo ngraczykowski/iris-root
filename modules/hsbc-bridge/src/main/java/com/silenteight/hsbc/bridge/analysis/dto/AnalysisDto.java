@@ -13,8 +13,6 @@ public class AnalysisDto {
   String name;
   String policy;
   String strategy;
-  int pendingAlerts;
-  int alertCount;
-  List<FeatureDto> features;
+  long alertCount;
   String dataset;
 }

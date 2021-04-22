@@ -9,27 +9,22 @@ import java.util.Random;
 
 class AnalysisServiceApiMock implements AnalysisServiceApi {
 
+  private final Random random = new Random();
+
   @Override
   public AnalysisDatasetDto addDataset(AddDatasetRequestDto request) {
     return AnalysisDatasetDto.builder()
-        .name("dataset-" + new Random().nextInt())
+        .alertsCount(random.nextInt(5))
+        .name("dataset-" + random.nextInt(1000))
         .build();
   }
 
   @Override
-  public AnalysisDto createAnalysis(CreateAnalysisRequestDto request) {
-    return AnalysisDto.builder()
-        .alertCount(1)
-        .pendingAlerts(1)
+  public CreateAnalysisResponseDto createAnalysis(CreateAnalysisRequestDto request) {
+    return CreateAnalysisResponseDto.builder()
         .strategy("strategy")
         .policy("policy_" + OffsetDateTime.now())
-        .name("analysis/" + new Random().nextInt(1000))
-        .features(List.of(
-            FeatureDto.builder()
-                .name("nationalityId")
-                .agentConfig("/agents/document/config/1")
-                .build()
-        ))
+        .name("analysis/" + random.nextInt(1000))
         .build();
   }
 

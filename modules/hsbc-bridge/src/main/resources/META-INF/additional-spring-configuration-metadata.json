@@ -26,6 +26,11 @@
       "description": "Grpc address of Analysis Service API."
     },
     {
+      "name": "silenteight.bridge.analysis.alert-timeout-duration",
+      "type": "java.time.Duration",
+      "description": "Duration of analysis timeout for single alert."
+    },
+    {
       "name": "silenteight.bridge.dataset.service.api.deadline-in-seconds",
       "type": "java.lang.Long",
       "description": "Deadline (in seconds) of Dataset Service API."
@@ -54,6 +59,21 @@
       "name": "silenteight.bridge.security.endpoints",
       "type": "java.util.List<java.lang.String>",
       "description": "Endpoints secured by configuration."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable data retention."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.rate",
+      "type": "java.time.Duration",
+      "description": "Execution rate of data retention job."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.duration",
+      "type": "java.time.Duration",
+      "description": "Duration of data retention."
     }
   ]
 }

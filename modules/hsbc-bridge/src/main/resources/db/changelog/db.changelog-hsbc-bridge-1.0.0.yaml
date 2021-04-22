@@ -17,14 +17,25 @@ databaseChangeLog:
                   name: name
                   type: varchar(256)
               - column:
-                  name: dataset_name
-                  type: varchar(50)
-              - column:
                   name: policy
                   type: varchar(100)
               - column:
                   name: strategy
                   type: varchar(100)
+              - column:
+                  name: timeout_at
+                  type: timestamp
+              - column:
+                  name: alerts_count
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dataset
+                  type: varchar(100)
+              - column:
+                  name: status
+                  type: varchar(30)
               - column:
                   name: created_at
                   type: timestamp
@@ -33,6 +44,7 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: timestamp
+
         - createTable:
             tableName: hsbc_bridge_bulk
             columns:
