@@ -13,15 +13,13 @@ import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 
 import java.util.UUID;
 
-import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_ID;
-import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_NAME;
 import static java.time.OffsetDateTime.now;
 import static java.util.UUID.fromString;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
 @RequiredArgsConstructor
-public class ModelQuery implements GetModelDetailsQuery, DefaultModelQuery,
-    SolvingModelDetailsQuery {
+public class ModelQuery
+    implements GetModelDetailsQuery, DefaultModelQuery, SolvingModelDetailsQuery {
 
   @NonNull
   private final ModelRepository modelRepository;
@@ -30,7 +28,7 @@ public class ModelQuery implements GetModelDetailsQuery, DefaultModelQuery,
   private final CurrentPolicyProvider currentPolicyProvider;
 
   private static final String MODEL_NAME_RESOURCE_PREFIX = "models/";
-
+  public static final String DEFAULT_MODEL_NAME = "models/default";
 
   public ModelDto get(@NonNull UUID modelId) {
     return modelRepository
@@ -45,7 +43,6 @@ public class ModelQuery implements GetModelDetailsQuery, DefaultModelQuery,
 
   public ModelDto getDefault() {
     return ModelDto.builder()
-        .id(DEFAULT_MODEL_ID)
         .name(DEFAULT_MODEL_NAME)
         .policyName(getPolicyName())
         .createdAt(now())

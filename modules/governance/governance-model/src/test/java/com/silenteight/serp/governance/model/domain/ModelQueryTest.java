@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_ID;
-import static com.silenteight.serp.governance.model.domain.dto.ModelDto.DEFAULT_MODEL_NAME;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.DEFAULT_MODEL_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_RESOURCE_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
@@ -51,7 +50,7 @@ class ModelQueryTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldGetModelDto() {
+  void shouldGetModel() {
     // given
     OffsetDateTime beforePersist = now();
     persistModel();
@@ -60,14 +59,13 @@ class ModelQueryTest extends BaseDataJpaTest {
     // when
     ModelDto result = underTest.get(MODEL_RESOURCE_NAME);
     // then
-    assertThat(result.getId()).isEqualTo(MODEL_ID);
     assertThat(result.getName()).isEqualTo(MODEL_RESOURCE_NAME);
     assertThat(result.getPolicyName()).isEqualTo(POLICY_NAME);
     assertThat(result.getCreatedAt()).isAfter(beforePersist);
   }
 
   @Test
-  void shouldGetDefaultModelDto() throws ModelMisconfiguredException {
+  void shouldGetDefaultModel() throws ModelMisconfiguredException {
     // given
     OffsetDateTime beforePersist = now();
     Mockito.when(currentPolicyProvider.getCurrentPolicy())
@@ -75,7 +73,6 @@ class ModelQueryTest extends BaseDataJpaTest {
     // when
     ModelDto result = underTest.getDefault();
     // then
-    assertThat(result.getId()).isEqualTo(DEFAULT_MODEL_ID);
     assertThat(result.getName()).isEqualTo(DEFAULT_MODEL_NAME);
     assertThat(result.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
     assertThat(result.getCreatedAt()).isAfter(beforePersist);

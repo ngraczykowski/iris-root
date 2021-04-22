@@ -17,6 +17,7 @@ import io.grpc.protobuf.StatusProto;
 import io.grpc.stub.StreamObserver;
 
 import static com.google.rpc.Code.FAILED_PRECONDITION_VALUE;
+import static com.google.rpc.Code.INTERNAL_VALUE;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -59,20 +60,28 @@ class SolvingModelGrpcService
       responseObserver.onNext(solvingModel);
       responseObserver.onCompleted();
     } catch (NonResolvableResourceException e) {
-      handleException(responseObserver, e, MODEL_CANNOT_BE_RESOLVED_ERROR);
+      handleException(
+          responseObserver,
+          e,
+          FAILED_PRECONDITION_VALUE,
+          MODEL_CANNOT_BE_RESOLVED_ERROR
+      );
     } catch (ModelMisconfiguredException e) {
-      handleException(responseObserver, e, MODEL_NOT_CONFIGURED_ERROR);
+      handleException(responseObserver, e, FAILED_PRECONDITION_VALUE, MODEL_NOT_CONFIGURED_ERROR);
     } catch (RuntimeException e) {
-      handleException(responseObserver, e, GET_DEFAULT_SOLVING_MODEL_ERROR);
+      handleException(responseObserver, e, INTERNAL_VALUE, GET_DEFAULT_SOLVING_MODEL_ERROR);
     }
   }
 
   private void handleException(
-      StreamObserver<SolvingModel> responseObserver, RuntimeException e, String message) {
+      StreamObserver<SolvingModel> responseObserver,
+      RuntimeException e,
+      Integer code,
+      String message) {
 
     Status status = Status
         .newBuilder()
-        .setCode(FAILED_PRECONDITION_VALUE)
+        .setCode(code)
         .setMessage(message)
         .build();
 

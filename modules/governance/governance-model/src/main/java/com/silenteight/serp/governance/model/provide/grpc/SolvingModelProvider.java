@@ -25,40 +25,45 @@ class SolvingModelProvider {
   private final CategoryRegistry categoryRegistry;
 
   public SolvingModel get(ModelDto modelDto) {
-    return SolvingModel.newBuilder()
-                       .setName(modelDto.getName())
-                       .setStrategyName(getStrategyName(modelDto.getName()))
-                       .setPolicyName(modelDto.getPolicyName())
-                       .addAllFeatures(getFeatures())
-                       .addAllCategories(getCategories())
-                       .build();
+    return SolvingModel
+        .newBuilder()
+        .setName(modelDto.getName())
+        .setStrategyName(getStrategyName(modelDto.getName()))
+        .setPolicyName(modelDto.getPolicyName())
+        .addAllFeatures(getFeatures())
+        .addAllCategories(getCategories())
+        .build();
   }
 
   private String getStrategyName(String modelName) {
-    return currentStrategyProvider.getCurrentStrategy()
-                                  .orElseThrow(() -> new ModelMisconfiguredException(
-                                      modelName, "strategyName"));
+    return currentStrategyProvider
+        .getCurrentStrategy()
+        .orElseThrow(() -> new ModelMisconfiguredException(modelName, "strategyName"));
   }
 
   private List<Feature> getFeatures() {
     FeatureSetDto currentFeatureSet = currentFeatureSetProvider.getCurrentFeatureSet();
 
-    return currentFeatureSet.getFeatures().stream()
-                            .map(SolvingModelProvider::toFeature)
-                            .collect(toList());
+    return currentFeatureSet
+        .getFeatures()
+        .stream()
+        .map(SolvingModelProvider::toFeature)
+        .collect(toList());
   }
 
   private static Feature toFeature(FeatureDto featureDto) {
-    return Feature.newBuilder()
-                  .setName(featureDto.getName())
-                  .setAgentConfig(featureDto.getAgentConfig())
-                  .build();
+    return Feature
+        .newBuilder()
+        .setName(featureDto.getName())
+        .setAgentConfig(featureDto.getAgentConfig())
+        .build();
   }
 
   private List<String> getCategories() {
     List<CategoryDto> allCategories = categoryRegistry.getAllCategories();
-    return allCategories.stream()
-                        .map(CategoryDto::getName)
-                        .collect(toList());
+    return allCategories
+        .stream()
+        .map(CategoryDto::getName)
+        .collect(toList());
   }
 }

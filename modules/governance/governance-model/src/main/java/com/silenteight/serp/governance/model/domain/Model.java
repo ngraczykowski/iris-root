@@ -41,7 +41,6 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
 
   ModelDto toDto() {
     return ModelDto.builder()
-        .id(getModelId())
         .name(asResourceName())
         .policyName(getPolicyName())
         .createdAt(getCreatedAt())
