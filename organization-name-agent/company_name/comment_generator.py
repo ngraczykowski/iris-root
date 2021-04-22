@@ -26,11 +26,17 @@ def generate_comment(ap_name, evals: dict, feature_cfg: dict):
         compared = evaluation[1]
         frmt_contents = format_contents(compared)
 
-        if feature == 'blacklisted' and outcome == Outcomes.MATCH:
+        if outcome in [Outcomes.NO_DATA, Outcomes.DISABLED]:
+            continue
+        elif feature == 'blacklisted' and outcome == Outcomes.MATCH:
             return blacklist_comment(ap_name)
-        elif feature == 'single_token' and outcome == Outcomes.MATCH:
-            return generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc'])
+        elif feature == 'single_token':
+            if outcome == Outcomes.MATCH:
+                return generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc'])
+            else:
+                continue
         elif feature == 'potential_subsidiary' and outcome == Outcomes.MATCH:
             return generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc'])
+
         comment.append(generic_comment(outcome, frmt_contents, feature_cfg[feature]['desc']))
     return '. '.join(comment)
