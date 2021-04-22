@@ -18,10 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
@@ -34,23 +32,27 @@ import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALS
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PolicyServiceTest {
 
-  private static final UUID POLICY_ID = UUID.randomUUID();
+  private static final UUID POLICY_ID = randomUUID();
+  private static final UUID POLICY_ID_CLONED = randomUUID();
   private static final String POLICY_NAME = "policy_name";
   private static final String USER = "username";
   private static final String OTHER_USER = "username2";
   private static final String NEW_POLICY_NAME = "new name";
   private static final String NEW_DESCRIPTION = "new description name";
 
-  private static final UUID FIRST_STEP = UUID.randomUUID();
-  private static final UUID SECOND_STEP = UUID.randomUUID();
-  private static final UUID THIRD_STEP = UUID.randomUUID();
-  private static final UUID OTHER_STEP = UUID.randomUUID();
+  private static final UUID FIRST_STEP = randomUUID();
+  private static final UUID SECOND_STEP = randomUUID();
+  private static final UUID THIRD_STEP = randomUUID();
+  private static final UUID OTHER_STEP = randomUUID();
   private static final String STEP_NAME = "step name";
   private static final String STEP_DESCRIPTION = "step description";
   private static final String OTHER_STEP_NAME = "other step name";
@@ -457,5 +459,56 @@ class PolicyServiceTest {
         .extracting(Step::getStepId)
         .containsExactly(FIRST_STEP, THIRD_STEP);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  @Test
+  void clonePolicyWillMakeDeepCopy() {
+    MatchCondition matchCondition = new MatchCondition("IS", IS, of("TRUE"));
+    FeatureLogic featureLogic = new FeatureLogic(1, of(matchCondition));
+    Step firstStep = createStep(FIRST_STEP, 0);
+    firstStep.setName(STEP_NAME);
+    firstStep.setFeatureLogics(of(featureLogic));
+    firstStep.setSolution(SOLUTION_NO_DECISION);
+
+    Policy originPolicy = createPolicyWithSteps(of(firstStep));
+    UUID clonedPolicyId = underTest.clonePolicy(
+        ClonePolicyRequest.of(POLICY_ID_CLONED, POLICY_ID, USER));
+    Policy clonedPolicy = policyRepository.getByPolicyId(clonedPolicyId);
+
+    assertThat(clonedPolicyId).isNotEqualTo(POLICY_ID);
+    assertThat(clonedPolicy.getId()).isNotEqualTo(originPolicy.getId());
+    assertThat(clonedPolicy.getName()).isEqualTo(POLICY_NAME);
+    assertThat(clonedPolicy.getDescription()).isEqualTo(originPolicy.getDescription());
+    assertThat(clonedPolicy.getCreatedBy()).isEqualTo(originPolicy.getCreatedBy());
+    assertThat(clonedPolicy.getState()).isEqualTo(DRAFT);
+    assertThat(clonedPolicy.getSteps()).containsAll(originPolicy.getSteps());
+    Step originStep = originPolicy.getSteps().stream().findFirst().orElseThrow();
+    Step clonedStep = clonedPolicy.getSteps().stream().findFirst().orElseThrow();
+
+    assertNotEquals(originStep.getStepId(), clonedStep.getStepId());
+    assertEquals(originStep.getName(), clonedStep.getName());
+    assertEquals(originStep.getDescription(), clonedStep.getDescription());
+    assertEquals(originStep.getSolution(), clonedStep.getSolution());
+    assertEquals(originStep.getSortOrder(), clonedStep.getSortOrder());
+    assertEquals(originStep.getType(), clonedStep.getType());
+    assertEquals(originStep.getFeatureLogics().size(),
+        clonedStep.getFeatureLogics().size());
+    assertEquals(1, originStep.getFeatureLogics().size());
+
+    FeatureLogic originFeatureLogic = originStep.getFeatureLogics().stream().findFirst()
+        .orElseThrow();
+    FeatureLogic clonedFeatureLogic = clonedStep.getFeatureLogics().stream().findFirst()
+        .orElseThrow();
+    assertEquals(originFeatureLogic.getCount(), clonedFeatureLogic.getCount());
+    assertEquals(originFeatureLogic.getFeatures().size(),
+        clonedFeatureLogic.getFeatures().size());
+
+    MatchCondition originFeature = originFeatureLogic.getFeatures().stream().findFirst()
+        .orElseThrow();
+    MatchCondition clonedFeature = clonedFeatureLogic.getFeatures().stream().findFirst()
+        .orElseThrow();
+    assertEquals(originFeature.getName(), clonedFeature.getName());
+    assertEquals(originFeature.getCondition(), clonedFeature.getCondition());
+    assertEquals(originFeature.getValues(), clonedFeature.getValues());
   }
 }

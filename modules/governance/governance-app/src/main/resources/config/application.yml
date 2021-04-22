@@ -224,8 +224,9 @@ sep.auth:
       - "CREATE_MODEL"
       - "LIST_MODELS"
     MANAGE_POLICY:
-      - "CREATE_POLICY"
       - "EDIT_POLICY"
+      - "CLONE_POLICY"
+      - "CREATE_POLICY"
     MANAGE_STEPS:
       - "EDIT_STEPS_LOGIC"
       - "CREATE_STEP"

@@ -322,4 +322,14 @@
 
     <addUniqueConstraint tableName="governance_change_request" columnNames="change_request_id"/>
   </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-12" author="tbiedrzycki">
+    <dropIndex indexName="ix_governance_policy_policy_id" tableName="governance_policy"/>
+    <createIndex
+        tableName="governance_policy"
+        indexName="ix_governance_policy_policy_id"
+        unique="true">
+      <column name="policy_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
