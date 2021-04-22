@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.indexer.alert;
 
+import com.silenteight.sep.base.common.time.TimeSource;
+
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 class AlertConfiguration {
 
   @Bean
-  AlertService alertService(RestHighLevelClient restHighLevelClient) {
-    AlertMapper alertMapper = new AlertMapper();
+  AlertService alertService(RestHighLevelClient restHighLevelClient, TimeSource timeSource) {
+    AlertMapper alertMapper = new AlertMapper(timeSource);
     return new AlertService(restHighLevelClient, alertMapper);
   }
 }

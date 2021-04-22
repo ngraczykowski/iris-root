@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
+import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexerClientIntegrationProperties;
@@ -17,6 +19,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
+
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
+import static java.time.Instant.parse;
 
 @Configuration
 @ComponentScan(basePackageClasses = {
@@ -72,5 +77,10 @@ public class IndexerTestConfiguration {
     return ExchangeBuilder
         .topicExchange(properties.getAlertIndexedOutbound().getExchangeName())
         .build();
+  }
+
+  @Bean
+  TimeSource timeSource() {
+    return new MockTimeSource(parse(PROCESSING_TIMESTAMP));
   }
 }

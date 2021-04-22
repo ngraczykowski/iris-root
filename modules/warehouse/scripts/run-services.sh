@@ -3,4 +3,4 @@ set -e -o pipefail
 PROJECTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P )"
 
 cd "${PROJECTDIR}"
-docker-compose --compatibility -f docker-compose.yml -f docker-compose.https.yml up -d
+docker-compose --compatibility -f docker-compose.yml up -d

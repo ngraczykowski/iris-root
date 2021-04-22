@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.indexer;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertService;
 import com.silenteight.warehouse.indexer.gateway.IndexedConfirmationGateway;
 
@@ -14,7 +15,8 @@ class IndexerConfiguration {
   @Bean
   AlertIndexUseCase alertIndexUseCase(
       IndexedConfirmationGateway indexedConfirmationGateway,
-      AlertService alertService) {
-    return new AlertIndexUseCase(indexedConfirmationGateway, alertService);
+      AlertService alertService,
+      TimeSource timeSource) {
+    return new AlertIndexUseCase(indexedConfirmationGateway, alertService, timeSource);
   }
 }

@@ -32,3 +32,7 @@ warehouse:
     private-key: admin123
   report:
     default-bucket: reports
+  kibana:
+    url: http://localhost:5601
+    username: admin
+    password: admin

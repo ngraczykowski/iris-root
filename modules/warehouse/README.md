@@ -15,13 +15,14 @@ such as logging, pretty-print, etc.
 
 ## Development Setup
 
-Before you can run Warehouse, you have to have a few infrastructural services running:
+Before you can run Warehouse, you need to have a few infrastructural services running:
 
 1. RabbitMQ - the message broker for communicating between components and with outside services.
+2. ElasticSearch - NoSQL database optimized for searches
+3. Kibana - an open source reporting tool
+4. MinIO - a S3 compliant storage service
 
 ### Starting RabbitMQ 
-Warehouse uses RabbitMQ message broker to communicate with other components.
-
 To start RabbitMQ, follow the steps:
 
 1. Clone [Common Docker Infrastructure]:
@@ -32,17 +33,21 @@ To start RabbitMQ, follow the steps:
     
        docker-compose up -d rabbitmq
 
-### Starting ElasticSearch and MinIO
-Warehouse uses elastic search as a persistence store.
+### Starting ElasticSearch, Kibana and MinIO
+To start the services run:
 
-To start elasticsearch and minio run:
-
-        .scripts/run-services.sh
+        ./scripts/run-services.sh
         
-If you need to run elasticsearch with TLS enabled:
+If you need to run services with TLS enabled:
 
-        .scripts/run-service-https.sh
-              
+        ./scripts/run-service-https.sh
+
+### Initializing ElasticSearch and Kibana
+If you wish to play with ElasticSearch and Kibana you need to populate these with some data first.
+You may want to use the following convenience script that:
+
+        ./scripts/init.sh
+
 ## Testing
 
 ### Swagger-ui
@@ -61,7 +66,7 @@ There is a test truststore in `./scripts`. You can re-create it by following the
         cd scripts
         keytool -import -file root-ca.pem -alias esCA -keystore myTrustStore
         
-This creates a truststore with a root-ca that is used by default in OpenDistro docker.
+This creates a truststore with a root-ca that is used by default in Opendistro docker.
 The path to truststore and password needs to be provided via environment variables as explained below.
 
 #### SSL setup

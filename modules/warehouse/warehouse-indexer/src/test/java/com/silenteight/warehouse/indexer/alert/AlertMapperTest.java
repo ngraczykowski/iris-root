@@ -1,51 +1,42 @@
 package com.silenteight.warehouse.indexer.alert;
 
+import com.silenteight.sep.base.testing.time.MockTimeSource;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
-
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_ALERT;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_MATCH;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_NAME;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.*;
-import static java.util.Map.of;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITH_MATCHES_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITHOUT_MATCHES_MAP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
+import static java.time.Instant.parse;
 import static org.assertj.core.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 class AlertMapperTest {
 
-  @InjectMocks
   AlertMapper alertMapper;
+
+  @BeforeEach
+  public void init() {
+    alertMapper = new AlertMapper(new MockTimeSource(parse(PROCESSING_TIMESTAMP)));
+  }
 
   @Test
   void shouldReturnAlertMapWithMatch() {
     //when
-    Map<String, Object> preparedMap = alertMapper.convertAlertToAttributes(ALERT_WITH_MATCHES_1);
+    var preparedMap = alertMapper.convertAlertToAttributes(ALERT_WITH_MATCHES_1);
 
     //then
-    assertThat(preparedMap).isEqualTo(of(
-        KEY_ALERT, of(
-            KEY_NAME, ALERT_ID_1,
-            ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_FP),
-        KEY_MATCH, of(
-            KEY_NAME, MATCH_ID_1,
-            MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION)
-    ));
+    assertThat(preparedMap).isEqualTo(ALERT_WITH_MATCHES_1_MAP);
   }
 
   @Test
   void shouldReturnAlertMapWithoutMatches() {
     //when
-    Map<String, Object> preparedMap =
-        alertMapper.convertAlertToAttributes(ALERT_WITHOUT_MATCHES);
+    var preparedMap = alertMapper.convertAlertToAttributes(ALERT_WITHOUT_MATCHES);
 
     //then
-    assertThat(preparedMap).isEqualTo(of(
-        KEY_ALERT, of(
-            KEY_NAME, ALERT_ID_1,
-            ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_MI)));
+    assertThat(preparedMap).isEqualTo(ALERT_WITHOUT_MATCHES_MAP);
   }
 }
