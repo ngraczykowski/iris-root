@@ -61,11 +61,7 @@ class SolvingModelGrpcService
       responseObserver.onCompleted();
     } catch (NonResolvableResourceException e) {
       handleException(
-          responseObserver,
-          e,
-          FAILED_PRECONDITION_VALUE,
-          MODEL_CANNOT_BE_RESOLVED_ERROR
-      );
+          responseObserver, e, FAILED_PRECONDITION_VALUE, MODEL_CANNOT_BE_RESOLVED_ERROR);
     } catch (ModelMisconfiguredException e) {
       handleException(responseObserver, e, FAILED_PRECONDITION_VALUE, MODEL_NOT_CONFIGURED_ERROR);
     } catch (RuntimeException e) {
