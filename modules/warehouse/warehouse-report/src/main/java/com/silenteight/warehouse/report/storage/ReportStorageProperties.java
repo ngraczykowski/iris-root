@@ -9,15 +9,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.minio")
-class MinioClientProperties {
+@ConfigurationProperties(prefix = "warehouse.report")
+class ReportStorageProperties {
 
   @NotBlank
-  String minioUrl;
-
-  @NotBlank
-  String accessKey;
-
-  @NotBlank
-  String privateKey;
+  private String defaultBucket;
 }
