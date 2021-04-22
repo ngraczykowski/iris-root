@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.defaultmodel.grpc;
+package com.silenteight.serp.governance.model.provide.grpc;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
@@ -6,7 +6,6 @@ import com.silenteight.serp.governance.model.category.CategoryRegistry;
 import com.silenteight.serp.governance.model.domain.ModelQuery;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.featureset.CurrentFeatureSetProvider;
-import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,9 +35,6 @@ class SolvingModelProviderTest {
   private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 
   @Mock
-  private CurrentPolicyProvider currentPolicyProvider;
-
-  @Mock
   private CurrentStrategyProvider currentStrategyProvider;
 
   @Mock
@@ -54,7 +50,7 @@ class SolvingModelProviderTest {
 
   @BeforeEach
   void init() throws ModelMisconfiguredException {
-    underTest = new SolvingModelProvider(
+    underTest = new SolvingModelProviderConfiguration().solvingModelProvider(
         currentStrategyProvider,
         currentFeatureSetProvider,
         categoryRegistry);

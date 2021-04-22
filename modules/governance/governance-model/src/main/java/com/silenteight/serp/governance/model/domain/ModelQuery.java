@@ -3,6 +3,8 @@ package com.silenteight.serp.governance.model.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.serp.governance.model.provide.grpc.DefaultModelQuery;
+import com.silenteight.serp.governance.model.provide.grpc.SolvingModelDetailsQuery;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.domain.exception.ModelNotFoundException;
@@ -18,7 +20,8 @@ import static java.util.UUID.fromString;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
 @RequiredArgsConstructor
-public class ModelQuery implements GetModelDetailsQuery {
+public class ModelQuery implements GetModelDetailsQuery, DefaultModelQuery,
+    SolvingModelDetailsQuery {
 
   @NonNull
   private final ModelRepository modelRepository;

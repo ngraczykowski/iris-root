@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.model.domain.exception;
 
-public class ModelMisconfiguredException extends Exception {
+public class ModelMisconfiguredException extends RuntimeException {
 
   private static final long serialVersionUID = 7078175203285168490L;
 

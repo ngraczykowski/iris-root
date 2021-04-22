@@ -1,12 +1,13 @@
-package com.silenteight.serp.governance.model;
+package com.silenteight.serp.governance.model.provide.grpc;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.serp.governance.model.defaultmodel.grpc.SolvingModelProvider;
+import com.silenteight.serp.governance.model.ModelTestConfiguration;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -32,7 +33,6 @@ class ModelTest extends BaseDataJpaTest {
 
   private static final String CURRENT_STRATEGY_NAME = "strategies/USE_ANALYST_SOLUTION";
 
-
   @Autowired
   CurrentStrategyProvider currentStrategyProviderMock;
 
@@ -52,7 +52,8 @@ class ModelTest extends BaseDataJpaTest {
     assertThat(solvingModel.getStrategyName()).isEqualTo(CURRENT_STRATEGY_NAME);
     assertThat(solvingModel.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
     assertThat(solvingModel.getFeaturesList()).extracting(Feature::getName)
-        .containsExactlyInAnyOrder(AGENT_FEATURE_NAME, AGENT_FEATURE_DATE);
+                                              .containsExactlyInAnyOrder(AGENT_FEATURE_NAME,
+                                                                         AGENT_FEATURE_DATE);
     assertThat(solvingModel.getCategoriesList())
         .containsExactlyInAnyOrder(APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME);
   }

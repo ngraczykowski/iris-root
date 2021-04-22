@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 @RequiredArgsConstructor
 public class FeatureSetRegistry implements CurrentFeatureSetProvider {
 
-  public static final String DEFAULT_FEATURE_SET = "feature-sets/1";
+  public static final String DEFAULT_FEATURE_SET = "featureSets/1";
 
   @NonNull
   private final String source;
