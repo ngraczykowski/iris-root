@@ -2,9 +2,14 @@ spring.cloud.consul.enabled: false
 
 sep.auth:
   permissionMethodsMappings:
+    APPROVE_CHANGE_REQUESTS:
+      - "APPROVE_CHANGE_REQUEST"
     CREATE_CHANGE_REQUESTS:
       - "CREATE_CHANGE_REQUEST"
+    REJECT_CHANGE_REQUESTS:
+      - "REJECT_CHANGE_REQUEST"
     VIEW_CHANGE_REQUESTS:
+      - "LIST_CLOSED_CHANGE_REQUESTS"
       - "LIST_PENDING_CHANGE_REQUESTS"
     VIEW_POLICIES:
       - "LIST_POLICIES"
@@ -16,6 +21,7 @@ sep.auth:
       - "LIST_CATEGORIES"
     MANAGE_MODEL:
       - "CREATE_MODEL"
+      - "LIST_MODELS"
     MANAGE_POLICY:
       - "EDIT_POLICY"
       - "CLONE_POLICY"
@@ -28,6 +34,8 @@ sep.auth:
 
   rolePermissionsMappings:
     APPROVER:
+      - "APPROVE_CHANGE_REQUESTS"
+      - "REJECT_CHANGE_REQUESTS"
       - "VIEW_CHANGE_REQUESTS"
     BUSINESS_OPERATOR:
       - "CREATE_CHANGE_REQUESTS"

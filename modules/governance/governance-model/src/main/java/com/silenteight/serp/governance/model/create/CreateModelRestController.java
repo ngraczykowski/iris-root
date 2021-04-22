@@ -2,7 +2,6 @@ package com.silenteight.serp.governance.model.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.model.create.dto.CreateModelDto;
 
@@ -19,7 +18,6 @@ import javax.validation.Valid;
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.accepted;
 
-@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ class CreateModelRestController {
   @NonNull
   private final CreateModelUseCase createModelUseCase;
 
-  @PostMapping(value = "/v1/models")
+  @PostMapping("/v1/models")
   @PreAuthorize("isAuthorized('CREATE_MODEL')")
   public ResponseEntity<Void> create(
       @Valid @RequestBody CreateModelDto request, Authentication authentication) {

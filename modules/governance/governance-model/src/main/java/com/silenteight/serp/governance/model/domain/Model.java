@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 
 import java.util.UUID;
 import javax.persistence.*;
@@ -14,6 +15,8 @@ import javax.persistence.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 class Model extends BaseAggregateRoot implements IdentifiableEntity {
+
+  private static final String RESOURCE_NAME_PREFIX = "models/";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +37,22 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
   Model(UUID modelId, String policyName) {
     this.modelId = modelId;
     this.policyName = policyName;
+  }
+
+  ModelDto toDto() {
+    return ModelDto.builder()
+        .id(getModelId())
+        .name(asResourceName())
+        .createdAt(getCreatedAt())
+        .build();
+  }
+
+  private String asResourceName() {
+    return RESOURCE_NAME_PREFIX + getModelId().toString();
+  }
+
+  boolean hasModelId(UUID modelId) {
+    return getModelId() == modelId;
   }
 
   boolean hasPolicyName(String policyName) {

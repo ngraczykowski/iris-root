@@ -16,4 +16,9 @@ class ModelDomainConfiguration {
   ModelService modelService(ModelRepository modelRepository, AuditingLogger auditingLogger) {
     return new ModelService(modelRepository, auditingLogger);
   }
+
+  @Bean
+  ModelQuery modelQuery(ModelRepository modelRepository) {
+    return new ModelQuery(modelRepository);
+  }
 }

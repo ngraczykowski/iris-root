@@ -23,7 +23,7 @@ class DeleteStepRequestRestController {
   @NonNull
   private final DeleteStepUseCase removeStepUseCase;
 
-  @DeleteMapping(value = "/v1/steps/{id}")
+  @DeleteMapping("/v1/steps/{id}")
   @PreAuthorize("isAuthorized('REMOVE_STEP')")
   public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
 

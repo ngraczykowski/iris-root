@@ -25,7 +25,7 @@ class PolicyStepsRequestRestController {
   @NonNull
   private final PolicyStepsRequestQuery policyStepsRequestQuery;
 
-  @GetMapping(value = "/v1/policies/{id}/steps")
+  @GetMapping("/v1/policies/{id}/steps")
   @PreAuthorize("isAuthorized('LIST_STEPS')")
   public ResponseEntity<Collection<StepDto>> steps(@PathVariable UUID id) {
     return ResponseEntity.ok(policyStepsRequestQuery.listSteps(id));

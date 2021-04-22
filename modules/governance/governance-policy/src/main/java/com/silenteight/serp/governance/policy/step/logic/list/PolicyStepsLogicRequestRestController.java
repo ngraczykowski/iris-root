@@ -24,7 +24,7 @@ class PolicyStepsLogicRequestRestController {
   @NonNull
   private final FeatureLogicRequestQuery policyStepsLogicRequestQuery;
 
-  @GetMapping(value = "/v1/steps/{id}/logic")
+  @GetMapping("/v1/steps/{id}/logic")
   @PreAuthorize("isAuthorized('LIST_STEPS_LOGIC')")
   public ResponseEntity<FeaturesLogicDto> steps(@PathVariable UUID id) {
     return ResponseEntity.ok(policyStepsLogicRequestQuery.listStepsFeaturesLogic(id));

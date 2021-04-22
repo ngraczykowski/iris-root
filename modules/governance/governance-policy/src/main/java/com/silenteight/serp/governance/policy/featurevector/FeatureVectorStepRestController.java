@@ -27,7 +27,7 @@ class FeatureVectorStepRestController {
   @NonNull
   private final FindMatchingFeatureVectorsUseCase findMatchingFeatureVectorsUseCase;
 
-  @GetMapping(value = "/v1/steps/{id}/vectors")
+  @GetMapping("/v1/steps/{id}/vectors")
   @PreAuthorize("isAuthorized('LIST_STEP_FEATURE_VECTORS')")
   public ResponseEntity<FeatureVectorsDto> featureVectors(@PathVariable UUID id) {
     return ok(findMatchingFeatureVectorsUseCase.activate(id));

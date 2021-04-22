@@ -22,7 +22,7 @@ class CategoryRestController {
   @NonNull
   private final CategoryRegistry registry;
 
-  @GetMapping(value = "/v1/categories")
+  @GetMapping("/v1/categories")
   @PreAuthorize("isAuthorized('LIST_CATEGORIES')")
   public ResponseEntity<CategoriesListDto> list() {
     CategoriesListDto result = new CategoriesListDto(registry.getAllCategories());

@@ -4,8 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.auditing.bs.AuditingLogger;
-
-import org.jetbrains.annotations.NotNull;
+import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotFoundException;
 
 import java.util.UUID;
 
@@ -15,7 +14,7 @@ import static java.util.UUID.randomUUID;
 public class ChangeRequestService {
 
   @NonNull
-  private final ChangeRequestRepository changeRequestRepository;
+  private final ChangeRequestRepository repository;
 
   @NonNull
   private final AuditingLogger auditingLogger;
@@ -37,16 +36,65 @@ public class ChangeRequestService {
     return changeRequest.getChangeRequestId();
   }
 
-  @NotNull
-  ChangeRequest addChangeRequestInternal(AddChangeRequestRequest request) {
+  private ChangeRequest addChangeRequestInternal(AddChangeRequestRequest request) {
     request.preAudit(auditingLogger::log);
     ChangeRequest changeRequest = new ChangeRequest(
         request.getChangeRequestId(),
         request.getModelName(),
         request.getCreatedBy(),
         request.getCreatorComment());
-    changeRequest = changeRequestRepository.save(changeRequest);
+    changeRequest = repository.save(changeRequest);
     request.postAudit(auditingLogger::log);
     return changeRequest;
+  }
+
+  public void approve(
+      @NonNull UUID changeRequestId,
+      @NonNull String approvedBy,
+      @NonNull String approverComment) {
+
+    ApproveChangeRequestRequest request = ApproveChangeRequestRequest.builder()
+        .correlationId(randomUUID())
+        .changeRequestId(changeRequestId)
+        .approvedBy(approvedBy)
+        .approverComment(approverComment)
+        .build();
+    approveInternal(request);
+  }
+
+  private void approveInternal(ApproveChangeRequestRequest request) {
+    request.preAudit(auditingLogger::log);
+    ChangeRequest changeRequest = getByChangeRequestId(request.getChangeRequestId());
+    changeRequest.approve(request.getApprovedBy(), request.getApproverComment());
+    repository.save(changeRequest);
+    request.postAudit(auditingLogger::log);
+  }
+
+  public void reject(
+      @NonNull UUID changeRequestId,
+      @NonNull String rejectedBy,
+      @NonNull String rejectorComment) {
+
+    RejectChangeRequestRequest request = RejectChangeRequestRequest.builder()
+        .correlationId(randomUUID())
+        .changeRequestId(changeRequestId)
+        .rejectedBy(rejectedBy)
+        .rejectorComment(rejectorComment)
+        .build();
+    rejectInternal(request);
+  }
+
+  private void rejectInternal(RejectChangeRequestRequest request) {
+    request.preAudit(auditingLogger::log);
+    ChangeRequest changeRequest = getByChangeRequestId(request.getChangeRequestId());
+    changeRequest.reject(request.getRejectedBy(), request.getRejectorComment());
+    repository.save(changeRequest);
+    request.postAudit(auditingLogger::log);
+  }
+
+  private ChangeRequest getByChangeRequestId(@NonNull UUID changeRequestId) {
+    return repository
+        .findByChangeRequestId(changeRequestId)
+        .orElseThrow(() -> new ChangeRequestNotFoundException(changeRequestId));
   }
 }
