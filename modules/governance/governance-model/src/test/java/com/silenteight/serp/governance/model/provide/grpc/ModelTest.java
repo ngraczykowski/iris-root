@@ -7,7 +7,6 @@ import com.silenteight.serp.governance.model.ModelTestConfiguration;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
