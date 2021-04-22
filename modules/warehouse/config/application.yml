@@ -49,3 +49,9 @@ warehouse:
     url: http://localhost:5601
     username: admin
     password: admin
+  db:
+    host: localhost
+    port: 24910
+    name: warehouse
+    username: warehouse
+    password: warehouse

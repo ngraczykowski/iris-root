@@ -20,6 +20,7 @@ logging:
     org.springframework.data.elasticsearch.client.WIRE: TRACE
     org.springframework.integration: DEBUG
     org.springframework.amqp: DEBUG
+    jdk.internal.httpclient.debug: INFO
 
 management:
   info:

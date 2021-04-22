@@ -247,6 +247,8 @@ dependencies {
 
 configurations {
   starterCommon
+  starterDatabase
+  starterDatabaseRuntime
   // Includes both GRPC Server and Client
   // GRPC Server will listen for incoming GRPC requests on TCP socket
   starterGrpc
@@ -273,6 +275,7 @@ configurations {
 }
 
 apply from: "${gradleScriptDir}/starterCommon.gradle"
+apply from: "${gradleScriptDir}/starterDatabase.gradle"
 apply from: "${gradleScriptDir}/starterGrpcClient.gradle"
 apply from: "${gradleScriptDir}/starterGrpcServer.gradle"
 apply from: "${gradleScriptDir}/starterGrpcTest.gradle"

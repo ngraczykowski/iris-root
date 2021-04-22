@@ -5,13 +5,17 @@
 There are multiple yml configuration files in the `warehouse-app/src/main/resources/config`:
 
 - `application.yml` contains all application-related configuration
-- `application-local.yml` contains all deployment-related configuration required to run
-the application locally. This file can be considered to be a base for creating *.yml configuration
-for any other deployments, e.g. nomad deployment stored in `nomad/conf/application.yml`  
 - `application-dev.yml` contains configuration convenient for development 
 such as logging, pretty-print, etc.
 - `application-swagger.yml` enables and configures swagger
 - `application-tls.yml` enables and configures tls
+
+Additionally, there are two more `application.yml`:
+- `${projectDir}/config/application.yml` - contains all deployment-related configuration required 
+  to run the application locally. This file can be considered to be a base for creating *.yml configuration
+  for any other deployments, e.g. nomad deployment stored in `nomad/conf/application.yml`  
+- `nomad/conf/application.yml` - a template rendered by Nomad that results in a deployment
+  configuration that targets hosted environments.
 
 ## Development Setup
 
@@ -21,6 +25,7 @@ Before you can run Warehouse, you need to have a few infrastructural services ru
 2. ElasticSearch - NoSQL database optimized for searches
 3. Kibana - an open source reporting tool
 4. MinIO - a S3 compliant storage service
+5. PostgreSQL - SQL database
 
 ### Starting RabbitMQ 
 To start RabbitMQ, follow the steps:
@@ -33,7 +38,7 @@ To start RabbitMQ, follow the steps:
     
        docker-compose up -d rabbitmq
 
-### Starting ElasticSearch, Kibana and MinIO
+### Starting ElasticSearch, Kibana, MinIO and PostgreSQL
 To start the services run:
 
         ./scripts/run-services.sh
