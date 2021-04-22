@@ -24,7 +24,7 @@ class SolvingModelProvider {
   private final CurrentFeatureSetProvider currentFeatureSetProvider;
   private final CategoryRegistry categoryRegistry;
 
-  public SolvingModel get(ModelDto modelDto) throws ModelMisconfiguredException {
+  public SolvingModel get(ModelDto modelDto) {
     return SolvingModel.newBuilder()
                        .setName(modelDto.getName())
                        .setStrategyName(getStrategyName(modelDto.getName()))
@@ -34,7 +34,7 @@ class SolvingModelProvider {
                        .build();
   }
 
-  private String getStrategyName(String modelName) throws ModelMisconfiguredException {
+  private String getStrategyName(String modelName) {
     return currentStrategyProvider.getCurrentStrategy()
                                   .orElseThrow(() -> new ModelMisconfiguredException(
                                       modelName, "strategyName"));

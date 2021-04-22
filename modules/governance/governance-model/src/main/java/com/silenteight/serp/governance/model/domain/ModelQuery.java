@@ -43,7 +43,7 @@ public class ModelQuery implements GetModelDetailsQuery, DefaultModelQuery,
     return get(retrieveModelId(model));
   }
 
-  public ModelDto getDefault() throws ModelMisconfiguredException {
+  public ModelDto getDefault() {
     return ModelDto.builder()
         .id(DEFAULT_MODEL_ID)
         .name(DEFAULT_MODEL_NAME)
@@ -56,7 +56,7 @@ public class ModelQuery implements GetModelDetailsQuery, DefaultModelQuery,
     return fromString(substringAfter(modelId, MODEL_NAME_RESOURCE_PREFIX));
   }
 
-  private String getPolicyName() throws ModelMisconfiguredException {
+  private String getPolicyName() {
     return currentPolicyProvider.getCurrentPolicy()
         .orElseThrow(() -> new ModelMisconfiguredException(DEFAULT_MODEL_NAME, "policyName"));
   }
