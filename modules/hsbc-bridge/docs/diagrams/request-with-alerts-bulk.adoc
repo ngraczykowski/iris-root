@@ -1,3 +1,5 @@
+[plantuml,importing-steps,svg]
+-----
 @startuml
 participant HSBC
 participant "SERP Bridge"
@@ -32,3 +34,4 @@ loop each alert
   end
 end
 @enduml
+-----

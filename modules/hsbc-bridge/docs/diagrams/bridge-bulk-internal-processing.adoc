@@ -1,3 +1,5 @@
+[plantuml,importing-steps,svg]
+-----
 @startuml
 
 participant HSBC as a
@@ -68,3 +70,4 @@ l -> j: retrieve CountryInputData for "other countries" feature
 
 
 @enduml
+-----

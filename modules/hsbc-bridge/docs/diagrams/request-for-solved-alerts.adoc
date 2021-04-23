@@ -1,3 +1,5 @@
+[plantuml,importing-steps,svg]
+-----
 @startuml
 participant HSBC
 participant "SERP Bridge"
@@ -12,3 +14,4 @@ HSBC -> "SERP Bridge": Http request for results of bulk processing
 "SERP Bridge" <- PostgresDB: Retrieve recommendations for given bulk id
 "SERP Bridge" --> HSBC: Http response
 @enduml
+-----

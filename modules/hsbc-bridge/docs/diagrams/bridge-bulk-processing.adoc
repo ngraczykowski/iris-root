@@ -1,3 +1,5 @@
+[plantuml,importing-steps,svg]
+-----
 @startuml
 participant HSBC as a
 participant "SERP Bridge" as b
@@ -23,3 +25,4 @@ b -> b: create OWS output
 b -> a: Return recommendations as a file
 
 @enduml
+-----
