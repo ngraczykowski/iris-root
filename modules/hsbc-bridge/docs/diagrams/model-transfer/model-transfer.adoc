@@ -1,3 +1,5 @@
+[plantuml,importing-steps,svg]
+-----
 @startuml
 participant "Simulation env" as a
 participant Jenkins as b
@@ -52,3 +54,4 @@ e -> b: success
 b -> e: check status (version of model)
 b -> a: update successful
 @enduml
+-----

@@ -1,3 +1,5 @@
+[plantuml,importing-steps,svg]
+-----
 @startuml
 box "Simulation env" #LightBlue
 participant Governance as a
@@ -68,3 +70,4 @@ d12 -> m11: Start processing
 d12 -> c: update successful
 c -> a: update successful
 @enduml
+-----
