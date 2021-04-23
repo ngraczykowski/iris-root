@@ -14,5 +14,3 @@ keycloak:
     principal-attribute: preferred_username
     ssl-required: external
 
-#Temporary settings until stable db structure
-spring.liquibase.drop-first: true
