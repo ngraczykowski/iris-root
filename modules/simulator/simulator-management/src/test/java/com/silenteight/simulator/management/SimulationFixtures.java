@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.adjudication.api.v1.Analysis.State.RUNNING;
+import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
 import static com.silenteight.simulator.management.dto.SimulationState.PENDING;
 import static java.time.ZoneOffset.UTC;
 import static java.util.UUID.fromString;
@@ -23,7 +23,7 @@ class SimulationFixtures {
   static final String MODEL_NAME = "solving-models/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   static final String DATASET_NAME = "datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
   static final List<String> DATASET_NAMES = List.of(DATASET_NAME);
-  static final State ANALYSIS_STATE = RUNNING;
+  static final State ANALYSIS_STATE = DONE;
   static final String PROGRESS_STATE = ANALYSIS_STATE.toString();
   static final String USERNAME = "USERNAME";
   static final SimulationState STATE = PENDING;
