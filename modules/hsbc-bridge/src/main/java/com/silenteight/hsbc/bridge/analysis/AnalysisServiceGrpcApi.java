@@ -61,6 +61,19 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
   }
 
   @Override
+  public GetAnalysisResponseDto getAnalysis(String analysis) {
+    var request = GetAnalysisRequest.newBuilder()
+        .setAnalysis(analysis)
+        .build();
+
+    var result = getStub().getAnalysis(request);
+    return GetAnalysisResponseDto.builder()
+        .alertsCount(result.getAlertCount())
+        .pendingAlerts(result.getPendingAlerts())
+        .build();
+  }
+
+  @Override
   public List<RecommendationDto> getRecommendations(GetRecommendationsDto request) {
     var gprcRequest = StreamRecommendationsRequest.newBuilder()
         .setAnalysis(request.getAnalysis())

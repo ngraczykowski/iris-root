@@ -32,6 +32,7 @@ class AnalysisEntity extends BaseEntity {
   private long alertsCount;
   private OffsetDateTime timeoutAt;
   @Enumerated(EnumType.STRING)
+  @Setter
   private Status status = Status.IN_PROGRESS;
 
   AnalysisEntity(AnalysisDto analysis, OffsetDateTime timeout) {

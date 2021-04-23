@@ -9,5 +9,6 @@ public interface AnalysisServiceApi {
 
   AnalysisDatasetDto addDataset(AddDatasetRequestDto request);
   CreateAnalysisResponseDto createAnalysis(CreateAnalysisRequestDto request);
+  GetAnalysisResponseDto getAnalysis(String analysis);
   List<RecommendationDto> getRecommendations(GetRecommendationsDto request);
 }

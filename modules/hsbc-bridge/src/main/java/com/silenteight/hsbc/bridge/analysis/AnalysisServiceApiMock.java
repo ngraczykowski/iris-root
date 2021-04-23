@@ -29,6 +29,14 @@ class AnalysisServiceApiMock implements AnalysisServiceApi {
   }
 
   @Override
+  public GetAnalysisResponseDto getAnalysis(String analysis) {
+    return GetAnalysisResponseDto.builder()
+        .alertsCount(2)
+        .pendingAlerts(random.nextInt(2))
+        .build();
+  }
+
+  @Override
   public List<RecommendationDto> getRecommendations(GetRecommendationsDto request) {
     return List.of();
   }
