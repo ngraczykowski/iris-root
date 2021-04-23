@@ -1,6 +1,6 @@
 [
   {
-    "name" : "feature-sets/1",
+    "name" : "featureSets/1",
     "features": [
       {
         "name": "features/name",
