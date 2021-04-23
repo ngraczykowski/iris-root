@@ -15,4 +15,4 @@ keycloak:
     ssl-required: external
 
 #Temporary settings until stable db structure
-spring.liquibase.drop-first=true
+spring.liquibase.drop-first: true
