@@ -1,0 +1,70 @@
+@startuml
+box "Simulation env" #LightBlue
+participant Governance as a
+
+queue "model-queue" as q
+participant "HSCB Bridge" as c
+end box
+
+participant Jenkins as d
+
+box "Verification env" #LightGreen
+participant "HSBC Bridge" as c1
+participant "Nexus Dev Repo" as d1
+participant Governance as a1
+end box
+
+participant Jenkins as d12
+
+box "Production env" #Red
+participant "Control-M " as m11
+participant "HSBC Bridge" as c11
+participant "Nexus Prod Repo" as d11
+participant Governance as a11
+end box
+
+autonumber
+
+'b -> a: get models URL
+a -> q: send model info
+note left
+{
+    "id" : "4234-6543-gdf4-fgdf"
+    "modelName" : "models/4234-6543-gdf4-fgdf",
+    "url" : "http://10.2.3.4/models/4234-6543-gdf4-fgdf/export"
+}
+end note
+q -> c: get model info
+c -> d: get jenkins-crumb
+c -> d: [POST] model/update
+d -> a: get model
+
+d -> c1: check status
+d -> c1: model/update
+note left
+{
+    "version" : "4234-6543-gdf4-fgdf-SNAPSHOT",
+    "url" : "https://nexus.hsbc.com/maven2/com/silenteight/hsbc/
+    model/4234-6543-gdf4-fgdf/model-4234-6543-gdf4-fgdf-SNAPSHOT.JSON"
+}
+end note
+c1 -> d1: get model
+c1 -> a1: [GRPC] update model
+a1 -> a1: mark model as default
+
+c1 -> d: update successful
+d -> c: update successful
+c -> a: [GRPC] update successful
+
+hnote over d12: Ready for Prod
+d12 -> m11: Stop processing
+d12 -> c11: check status
+d12 -> c11: model/update
+c11 -> d11: get model
+c11 -> a11: [GRPC] update model
+a11 -> a11: mark model as default
+d12 -> c11: check status (model version)
+d12 -> m11: Start processing
+d12 -> c: update successful
+c -> a: update successful
+@enduml

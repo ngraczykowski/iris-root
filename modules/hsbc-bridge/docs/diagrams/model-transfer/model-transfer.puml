@@ -1,0 +1,54 @@
+@startuml
+participant "Simulation env" as a
+participant Jenkins as b
+participant Nexus as c
+participant "Verification env" as d
+participant "Production env" as e
+
+autonumber
+
+a -> b: get Jenkins-Crumb
+a -> b: [POST] model/update
+note left
+{
+    "id" : "4234-6543-gdf4-fgdf"
+    "version" : "4234-6543-gdf4-fgdf",
+    "url" : "http://10.2.3.4/models/4234-6543-gdf4-fgdf/export"
+}
+end note
+b -> a: [GET] call url "http://10.2.3.4/model/1.3.4"\n get JSON with version, config, evidence
+b -> c: upload model-1.3.4-SNAPSHOT to Nexus
+loop
+b -> d: check if AE is processing
+end look
+b -> d: [POST] model/update
+note left
+{
+    "id" : "4234-6543-gdf4-fgdf"
+    "version" : "4234-6543-gdf4-fgdf-SNAPSHOT",
+    "url" : "https://nexus.hsbc.com/maven2/com/silenteight/hsbc/
+    model/4234-6543-gdf4-fgdf/model-4234-6543-gdf4-fgdf-SNAPSHOT.JSON"
+}
+end note
+d -> c: get model-4234-6543-gdf4-fgdf-SNAPSHOT.JSON
+d -> d: update model
+d -> b: success
+b -> c: move model to Prod Nexus\nwith version model-4234-6543-gdf4-fgdf.JSON
+loop
+b -> e: check if AE is processing
+end look
+b -> e: trigger model update with \nversion model-4234-6543-gdf4-fgdf
+b -> e: [POST] model/update
+note left
+{
+    "id" : "4234-6543-gdf4-fgdf"
+    "version" : "4234-6543-gdf4-fgdf",
+    "url" : "https://nexus.hsbc.com/maven2/com/silenteight/hsbc/
+    model/4234-6543-gdf4-fgdf/model-4234-6543-gdf4-fgdf.JSON"
+}
+end note
+e -> e: update model
+e -> b: success
+b -> e: check status (version of model)
+b -> a: update successful
+@enduml
