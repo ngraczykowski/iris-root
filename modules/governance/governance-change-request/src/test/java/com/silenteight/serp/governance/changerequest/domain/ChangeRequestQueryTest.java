@@ -1,6 +1,8 @@
 package com.silenteight.serp.governance.changerequest.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.changerequest.closed.dto.ClosedChangeRequestDto;
+import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
 import com.silenteight.serp.governance.changerequest.pending.dto.PendingChangeRequestDto;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CHANGE_REQUEST_ID;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATED_BY;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATOR_COMMENT;
@@ -47,7 +51,54 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(changeRequest.getComment()).isEqualTo(CREATOR_COMMENT);
   }
 
-  private void persistChangeRequest() {
-    repository.save(new ChangeRequest(CHANGE_REQUEST_ID, MODEL_NAME, CREATED_BY, CREATOR_COMMENT));
+  @Test
+  void shouldListClosedChangeRequests() {
+    // given
+    String decider = "jdoe";
+    String deciderComment = "Wrongly created";
+    ChangeRequest changeRequest = persistChangeRequest();
+    changeRequest.cancel(decider, deciderComment);
+
+    // when
+    List<ClosedChangeRequestDto> result = underTest.listClosed();
+
+    // then
+    assertThat(result.size()).isEqualTo(1);
+    ClosedChangeRequestDto closedChangeRequest = result.get(0);
+    assertThat(closedChangeRequest.getId()).isEqualTo(CHANGE_REQUEST_ID);
+    assertThat(closedChangeRequest.getCreatedAt()).isNotNull();
+    assertThat(closedChangeRequest.getCreatedBy()).isEqualTo(CREATED_BY);
+    assertThat(closedChangeRequest.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
+    assertThat(closedChangeRequest.getDecidedBy()).isEqualTo(decider);
+    assertThat(closedChangeRequest.getDecidedAt()).isNotNull();
+    assertThat(closedChangeRequest.getDeciderComment()).isEqualTo(deciderComment);
+    assertThat(closedChangeRequest.getState()).isEqualTo(CANCELLED.name());
+  }
+
+  @Test
+  void shouldGetChangeRequestDetails() {
+    // given
+    String decider = "jdoe";
+    String deciderComment = "Looks good";
+    ChangeRequest changeRequest = persistChangeRequest();
+    changeRequest.approve(decider, deciderComment);
+
+    // when
+    ChangeRequestDetailsDto result = underTest.details(CHANGE_REQUEST_ID);
+
+    // then
+    assertThat(result.getId()).isEqualTo(CHANGE_REQUEST_ID);
+    assertThat(result.getCreatedAt()).isNotNull();
+    assertThat(result.getCreatedBy()).isEqualTo(CREATED_BY);
+    assertThat(result.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
+    assertThat(result.getDecidedBy()).isEqualTo(decider);
+    assertThat(result.getDecidedAt()).isNotNull();
+    assertThat(result.getDeciderComment()).isEqualTo(deciderComment);
+    assertThat(result.getState()).isEqualTo(APPROVED.name());
+  }
+
+  private ChangeRequest persistChangeRequest() {
+    return repository.save(
+        new ChangeRequest(CHANGE_REQUEST_ID, MODEL_NAME, CREATED_BY, CREATOR_COMMENT));
   }
 }

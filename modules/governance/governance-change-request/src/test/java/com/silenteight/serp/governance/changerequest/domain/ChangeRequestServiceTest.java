@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.domain;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,14 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import static com.silenteight.serp.governance.changerequest.domain.AddChangeRequestRequest.POST_AUDIT_TYPE;
-import static com.silenteight.serp.governance.changerequest.domain.AddChangeRequestRequest.PRE_AUDIT_TYPE;
-import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CHANGE_REQUEST_ID;
-import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATED_BY;
-import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATOR_COMMENT;
-import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.REJECTED;
+import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -50,9 +50,106 @@ class ChangeRequestServiceTest {
 
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);
-    assertThat(preAudit.getType()).isEqualTo(PRE_AUDIT_TYPE);
+    assertThat(preAudit.getType()).isEqualTo(AddChangeRequestRequest.PRE_AUDIT_TYPE);
     AuditDataDto postAudit = getPostAudit(logCaptor);
-    assertThat(postAudit.getType()).isEqualTo(POST_AUDIT_TYPE);
+    assertThat(postAudit.getType()).isEqualTo(AddChangeRequestRequest.POST_AUDIT_TYPE);
+  }
+
+  @Test
+  void approveChangeRequest() {
+    // given
+    persistChangeRequest();
+
+    // when
+    underTest.approve(CHANGE_REQUEST_ID, APPROVED_BY, APPROVER_COMMENT);
+
+    // then
+    Optional<ChangeRequest> changeRequestOpt = repository.findByChangeRequestId(CHANGE_REQUEST_ID);
+    assertThat(changeRequestOpt).isNotEmpty();
+    ChangeRequest changeRequest = changeRequestOpt.get();
+    assertThat(changeRequest.getState()).isEqualTo(APPROVED);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVED_BY);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+
+    var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
+
+    verify(auditingLogger, times(2)).log(logCaptor.capture());
+    AuditDataDto preAudit = getPreAudit(logCaptor);
+    assertThat(preAudit.getType()).isEqualTo(ApproveChangeRequestRequest.PRE_AUDIT_TYPE);
+    AuditDataDto postAudit = getPostAudit(logCaptor);
+    assertThat(postAudit.getType()).isEqualTo(ApproveChangeRequestRequest.POST_AUDIT_TYPE);
+  }
+
+  @Test
+  void throwExceptionWhenApprovingNotExistingChangeRequest() {
+    assertThatThrownBy(() -> underTest.approve(CHANGE_REQUEST_ID, APPROVED_BY, APPROVER_COMMENT))
+        .isInstanceOf(ChangeRequestNotFoundException.class);
+  }
+
+  @Test
+  void rejectChangeRequest() {
+    // given
+    persistChangeRequest();
+
+    // when
+    underTest.reject(CHANGE_REQUEST_ID, REJECTED_BY, REJECTOR_COMMENT);
+
+    // then
+    Optional<ChangeRequest> changeRequestOpt = repository.findByChangeRequestId(CHANGE_REQUEST_ID);
+    assertThat(changeRequestOpt).isNotEmpty();
+    ChangeRequest changeRequest = changeRequestOpt.get();
+    assertThat(changeRequest.getState()).isEqualTo(REJECTED);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(REJECTED_BY);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(REJECTOR_COMMENT);
+
+    var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
+
+    verify(auditingLogger, times(2)).log(logCaptor.capture());
+    AuditDataDto preAudit = getPreAudit(logCaptor);
+    assertThat(preAudit.getType()).isEqualTo(RejectChangeRequestRequest.PRE_AUDIT_TYPE);
+    AuditDataDto postAudit = getPostAudit(logCaptor);
+    assertThat(postAudit.getType()).isEqualTo(RejectChangeRequestRequest.POST_AUDIT_TYPE);
+  }
+
+  @Test
+  void throwExceptionWhenRejectingNotExistingChangeRequest() {
+    assertThatThrownBy(() -> underTest.reject(CHANGE_REQUEST_ID, REJECTED_BY, REJECTOR_COMMENT))
+        .isInstanceOf(ChangeRequestNotFoundException.class);
+  }
+
+  @Test
+  void cancelChanngeRequest() {
+    // given
+    persistChangeRequest();
+
+    // when
+    underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY, CANCELLER_COMMENT);
+
+    // then
+    Optional<ChangeRequest> changeRequestOpt = repository.findByChangeRequestId(CHANGE_REQUEST_ID);
+    assertThat(changeRequestOpt).isNotEmpty();
+    ChangeRequest changeRequest = changeRequestOpt.get();
+    assertThat(changeRequest.getState()).isEqualTo(CANCELLED);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(CANCELLED_BY);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(CANCELLER_COMMENT);
+
+    var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
+
+    verify(auditingLogger, times(2)).log(logCaptor.capture());
+    AuditDataDto preAudit = getPreAudit(logCaptor);
+    assertThat(preAudit.getType()).isEqualTo(CancelChangeRequestRequest.PRE_AUDIT_TYPE);
+    AuditDataDto postAudit = getPostAudit(logCaptor);
+    assertThat(postAudit.getType()).isEqualTo(CancelChangeRequestRequest.POST_AUDIT_TYPE);
+  }
+
+  @Test
+  void throwExceptionWhenCancellingNotExistingChangeRequest() {
+    assertThatThrownBy(() -> underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY, CANCELLER_COMMENT))
+        .isInstanceOf(ChangeRequestNotFoundException.class);
+  }
+
+  private void persistChangeRequest() {
+    repository.save(new ChangeRequest(CHANGE_REQUEST_ID, MODEL_NAME, CREATED_BY, CREATOR_COMMENT));
   }
 
   private static AuditDataDto getPreAudit(ArgumentCaptor<AuditDataDto> logCaptor) {

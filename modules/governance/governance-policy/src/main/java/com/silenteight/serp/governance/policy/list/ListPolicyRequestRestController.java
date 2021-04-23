@@ -28,7 +28,7 @@ public class ListPolicyRequestRestController {
   @NonNull
   private final ListPoliciesRequestQuery listPolicyRequestQuery;
 
-  @GetMapping(value = "/v1/policies")
+  @GetMapping("/v1/policies")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
   public ResponseEntity<Collection<PolicyDto>> list() {
     return ResponseEntity.ok(listPolicyRequestQuery.listAll());

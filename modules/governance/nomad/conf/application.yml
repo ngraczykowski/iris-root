@@ -13,3 +13,4 @@ keycloak:
     confidential-port: 0
     principal-attribute: preferred_username
     ssl-required: external
+

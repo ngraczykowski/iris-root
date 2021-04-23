@@ -21,7 +21,7 @@ class AgentsRestController {
   @NonNull
   private final AgentMappingService agentMappingService;
 
-  @GetMapping(value = "/v1/features")
+  @GetMapping("/v1/features")
   @PreAuthorize("isAuthorized('LIST_AGENTS')")
   public ResponseEntity<FeaturesListDto> getFeaturesListDto() {
     return ResponseEntity.ok().body(agentMappingService.getFeaturesListDto());
