@@ -3,6 +3,7 @@ package com.silenteight.hsbc.datasource.feature
 import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
 import com.silenteight.hsbc.bridge.match.MatchRawData
 import com.silenteight.hsbc.datasource.MatchRawDataFixtures
+import com.silenteight.hsbc.datasource.feature.gender.GenderFeature
 
 import spock.lang.Specification
 

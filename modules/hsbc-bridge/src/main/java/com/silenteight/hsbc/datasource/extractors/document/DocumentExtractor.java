@@ -1,11 +1,12 @@
-package com.silenteight.hsbc.datasource.feature.converter;
+package com.silenteight.hsbc.datasource.extractors.document;
 
 import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
 import com.silenteight.hsbc.bridge.domain.IndividualComposite;
 import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
 import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
-import com.silenteight.hsbc.datasource.feature.converter.country.NationalIdNumberFieldCountryExtractor;
-import com.silenteight.hsbc.datasource.feature.converter.country.PassportNumberFieldCountryExtractor;
+import com.silenteight.hsbc.datasource.extractors.common.SimpleRegexBasedExtractor;
+import com.silenteight.hsbc.datasource.extractors.country.NationalIdNumberFieldCountryExtractor;
+import com.silenteight.hsbc.datasource.extractors.country.PassportNumberFieldCountryExtractor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NationalIdFeatureConverter {
+public class DocumentExtractor {
 
   //FIXE (mmrowka) this should be configurable from properties
   private static final String PASSPORT_CODE = "\"P\"";

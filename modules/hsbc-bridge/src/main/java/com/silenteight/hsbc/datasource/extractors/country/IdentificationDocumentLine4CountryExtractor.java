@@ -1,11 +1,11 @@
-package com.silenteight.hsbc.datasource.feature.converter.country;
+package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class IdentificationDocumentLine4CountryExtractor {
+class IdentificationDocumentLine4CountryExtractor {
 
   private final String fieldValue;
 

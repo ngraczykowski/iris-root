@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.converter.country;
+package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,7 +7,7 @@ import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-public class CustomerIndividualCountriesExtractor {
+class CustomerIndividualCountriesExtractor {
 
   private final CustomerIndividuals customerIndividuals;
 

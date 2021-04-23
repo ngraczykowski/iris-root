@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature;
+package com.silenteight.hsbc.datasource.feature.gender;
 
 import com.silenteight.hsbc.bridge.domain.IndividualComposite;
 import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
@@ -6,6 +6,8 @@ import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
 import com.silenteight.hsbc.bridge.match.MatchRawData;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto.GenderFeatureInputDtoBuilder;
+import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import io.micrometer.core.instrument.util.StringUtils;
 
@@ -18,7 +20,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputDto> {
+public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputDto> {
 
   @Override
   public GenderFeatureInputDto retrieve(MatchRawData matchRawData) {

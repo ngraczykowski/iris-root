@@ -1,10 +1,11 @@
-package com.silenteight.hsbc.datasource.feature.converter;
+package com.silenteight.hsbc.datasource.extractor.document;
 
 import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
 import com.silenteight.hsbc.bridge.domain.IndividualComposite;
 import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
 import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
 import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.extractors.document.DocumentExtractor;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-class NationalIdFeatureConverterTest {
+class DocumentExtractorTest {
 
   private MatchRawData matchRawData;
 
@@ -58,7 +59,7 @@ class NationalIdFeatureConverterTest {
   @Test
   void shouldExtractAlertedPartyDocumentNumbers() {
     //given
-    var nationalIdFeatureConverter = new NationalIdFeatureConverter();
+    var nationalIdFeatureConverter = new DocumentExtractor();
 
     //when
     var document =
@@ -77,7 +78,7 @@ class NationalIdFeatureConverterTest {
   @Test
   void shouldExtractMatchedPartyDocumentNumbers() {
     //given
-    var nationalIdFeatureConverter = new NationalIdFeatureConverter();
+    var nationalIdFeatureConverter = new DocumentExtractor();
 
     //when
     var document =

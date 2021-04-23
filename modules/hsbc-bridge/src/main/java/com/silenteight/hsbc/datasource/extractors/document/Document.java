@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.converter;
+package com.silenteight.hsbc.datasource.extractors.document;
 
 import lombok.AccessLevel;
 import lombok.Data;

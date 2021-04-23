@@ -1,6 +1,6 @@
-package com.silenteight.hsbc.datasource.feature.converter.country;
+package com.silenteight.hsbc.datasource.extractors.country;
 
-import com.silenteight.hsbc.datasource.feature.converter.SimpleRegexBasedExtractor;
+import com.silenteight.hsbc.datasource.extractors.common.SimpleRegexBasedExtractor;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
