@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkStatusEvent
+import com.silenteight.hsbc.bridge.bulk.event.RecalculateBulkStatusEvent
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -16,10 +16,10 @@ class BulkStatusUpdaterSpec extends Specification {
   def 'should update BulkStatus to #expectedResult when #itemStatuses'() {
     given:
     def bulk = createBulkwithBulkItemCombination(itemStatuses)
-    def event = new UpdateBulkStatusEvent(bulk.getId())
+    def event = new RecalculateBulkStatusEvent(bulk.getId())
 
     when:
-    underTest.onBulkStatusEvent(event)
+    underTest.onRecalculateBulkStatusEvent(event)
 
     then:
     1 * bulkRepository.findById(bulk.getId()) >> bulk
@@ -42,10 +42,10 @@ class BulkStatusUpdaterSpec extends Specification {
   def 'should not update BulkStatus when itemStatuses = #itemStatuses'() {
     given:
     def bulk = createBulkwithBulkItemCombination(itemStatuses)
-    def event = new UpdateBulkStatusEvent(bulk.getId())
+    def event = new RecalculateBulkStatusEvent(bulk.getId())
 
     when:
-    underTest.onBulkStatusEvent(event)
+    underTest.onRecalculateBulkStatusEvent(event)
 
     then:
     1 * bulkRepository.findById(bulk.getId()) >> bulk

@@ -9,4 +9,6 @@ interface RecommendationRepository extends Repository<RecommendationEntity, Long
   void save(RecommendationEntity entity);
 
   Optional<RecommendationEntity> findByAlert(String alert);
+
+  boolean existsByName(String name);
 }

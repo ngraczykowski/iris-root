@@ -7,9 +7,9 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 import javax.persistence.*;
 
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.*;
 import static java.util.Objects.nonNull;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
@@ -51,5 +51,10 @@ public class Bulk extends BaseEntity {
   @Transient
   boolean hasAnalysisId() {
     return nonNull(analysisId);
+  }
+
+  @Transient
+  boolean hasNonFinalStatus() {
+    return status == STORED || status == PROCESSING;
   }
 }

@@ -58,6 +58,6 @@ class AnalysisEntity extends BaseEntity {
   enum Status {
     IN_PROGRESS,
     COMPLETED,
-    ERROR
+    TIMEOUT_ERROR
   }
 }

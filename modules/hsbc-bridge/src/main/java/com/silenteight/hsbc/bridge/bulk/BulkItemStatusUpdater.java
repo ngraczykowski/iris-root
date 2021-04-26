@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkItemStatusEvent;
-import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkStatusEvent;
+import com.silenteight.hsbc.bridge.bulk.event.RecalculateBulkStatusEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -26,7 +26,7 @@ class BulkItemStatusUpdater {
     if (findResult.isPresent()) {
       var bulkItem = findResult.get();
       updateBulkItemStatus(bulkItem, event.getNewStatus());
-      eventPublisher.publishEvent(new UpdateBulkStatusEvent(bulkItem.getBulkId()));
+      eventPublisher.publishEvent(new RecalculateBulkStatusEvent(bulkItem.getBulkId()));
     } else {
       log.error("BulkItem has not been found, id={}", event.getBulkItemId());
     }

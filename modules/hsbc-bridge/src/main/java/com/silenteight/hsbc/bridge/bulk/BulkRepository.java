@@ -6,11 +6,14 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 interface BulkRepository extends Repository<Bulk, UUID> {
 
   Bulk findById(String id);
+
+  Optional<Bulk> findByAnalysisId(long analysisId);
 
   Boolean existsByStatusIn(Collection<BulkStatus> bulkStatuses);
 

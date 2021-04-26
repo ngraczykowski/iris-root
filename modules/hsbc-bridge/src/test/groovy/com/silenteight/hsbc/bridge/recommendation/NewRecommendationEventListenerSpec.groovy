@@ -26,7 +26,27 @@ class NewRecommendationEventListenerSpec extends Specification {
     underTest.onNewRecommendationEvent(event)
 
     then:
+    1 * repository.existsByName(event.recommendation.name) >> false
     1 * repository.save(_ as RecommendationEntity) >> {RecommendationEntity entity -> entity.id = 2}
     1 * eventPublisher.publishEvent({AlertRecommendationReadyEvent e -> e.alertName == 'alert'})
+  }
+
+  def 'should not store recommendation when already exist'() {
+    given:
+    def event = new NewRecommendationEvent(
+        RecommendationDto.builder()
+            .alert("alert")
+            .name("alerts/1/recommendation/1")
+            .recommendedAction("FALSE POSITIVE")
+            .recommendationComment("False positive comment")
+            .build())
+
+    when:
+    underTest.onNewRecommendationEvent(event)
+
+    then:
+    1 * repository.existsByName(event.recommendation.name) >> true
+    0 * repository.save(_ as RecommendationEntity)
+    0 * eventPublisher.publishEvent(_ as AlertRecommendationReadyEvent)
   }
 }

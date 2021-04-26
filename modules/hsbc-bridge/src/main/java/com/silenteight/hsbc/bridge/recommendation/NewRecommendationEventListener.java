@@ -24,10 +24,20 @@ class NewRecommendationEventListener {
     var recommendation = event.getRecommendation();
     var alert = recommendation.getAlert();
 
+    if (doesNotExist(recommendation)) {
+      save(recommendation);
+
+      log.info("Recommendation for an alert:{} has been stored", alert);
+
+      eventPublisher.publishEvent(new AlertRecommendationReadyEvent(alert));
+    }
+  }
+
+  private void save(RecommendationDto recommendation) {
     repository.save(new RecommendationEntity(recommendation));
+  }
 
-    log.info("Recommendation for an alert:{} has been stored", alert);
-
-    eventPublisher.publishEvent(new AlertRecommendationReadyEvent(alert));
+  private boolean doesNotExist(RecommendationDto recommendation) {
+    return !repository.existsByName(recommendation.getName());
   }
 }

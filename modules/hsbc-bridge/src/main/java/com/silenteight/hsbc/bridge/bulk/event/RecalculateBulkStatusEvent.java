@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.bulk.event;
 import lombok.Value;
 
 @Value
-public class UpdateBulkStatusEvent {
+public class RecalculateBulkStatusEvent {
 
   String bulkId;
 }

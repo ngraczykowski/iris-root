@@ -2,12 +2,14 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.bulk.event.UpdateBulkStatusEvent;
+import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent;
+import com.silenteight.hsbc.bridge.bulk.event.RecalculateBulkStatusEvent;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -24,10 +26,23 @@ class BulkStatusUpdater {
 
   @EventListener
   @Async
-  public void onBulkStatusEvent(UpdateBulkStatusEvent event) {
+  public void onRecalculateBulkStatusEvent(RecalculateBulkStatusEvent event) {
     var bulk = bulkRepository.findById(event.getBulkId());
-    determineNewBulkStatus(bulk.getItems())
-        .ifPresent(status -> updateBulkStatus(bulk, status));
+
+    if (bulk.hasNonFinalStatus()) {
+      determineNewBulkStatus(bulk.getItems())
+          .ifPresent(status -> updateBulkStatus(bulk, status));
+    }
+  }
+
+  @EventListener
+  @Transactional
+  public void onAnalysisTimeoutEvent(AnalysisTimeoutEvent event) {
+    bulkRepository.findByAnalysisId(event.getAnalysisId()).ifPresent(bulk -> {
+      bulk.setStatus(ERROR);
+      bulk.setErrorTimestamp(OffsetDateTime.now());
+      bulk.setErrorMessage("Analysis timeout exception");
+    });
   }
 
   private Optional<BulkStatus> determineNewBulkStatus(Collection<BulkItem> items) {
