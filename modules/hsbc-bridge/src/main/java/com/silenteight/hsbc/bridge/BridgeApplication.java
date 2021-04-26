@@ -23,16 +23,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableAutoConfiguration
-@EnableAsync
-@EnableJpaRepositories("com.silenteight.hsbc")
-@EntityScan(basePackages = {"com.silenteight.hsbc"})
-@EnableTransactionManagement
-@EnableRetry
-@EnableScheduling
 @ComponentScan(basePackageClasses = {
-    AlertModule.class,
     AdjudicationModule.class,
+    AlertModule.class,
     AnalysisModule.class,
     BulkModule.class,
     DataRetentionModule.class,
@@ -42,9 +35,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     SecurityModule.class,
 
     DataSourceApiGrpcModule.class,
+    DataSourceCategoryModule.class,
     DataSourceProviderModule.class,
-    DataSourceCategoryModule.class
 })
+@EnableAsync
+@EnableAutoConfiguration
+@EnableJpaRepositories("com.silenteight.hsbc")
+@EnableRetry
+@EnableScheduling
+@EnableTransactionManagement
+@EntityScan(basePackages = { "com.silenteight.hsbc" })
 public class BridgeApplication {
 
   public static void main(String[] args) {

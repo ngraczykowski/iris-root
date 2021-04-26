@@ -14,9 +14,10 @@ ext {
   junitJupiterVersion = "5.6.0"
   mockitoVersion = "3.8.0"
   spockVersion = "2.0-M5-groovy-3.0"
+  springBootVersion = "2.4.2"
   springCloudVersion = "3.0.2"
   springRabbitVersion = "2.3.6"
-  springVersion = "2.4.2"
+  springVersion = "5.3.5"
 }
 
 // Silent Eight
@@ -27,15 +28,15 @@ libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-a
 libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceModelApiVersion]
 
 // Spring
-libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: '5.3.5']
-libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springVersion]
-libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springVersion]
-libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springVersion]
-libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springVersion]
-libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springVersion]
-libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion]
-libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion]
-libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion]
+libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
+libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springBootVersion]
+libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion]
+libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion]
+libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion]
+libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springBootVersion]
+libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion]
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion]
+libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion]
 libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retry', version: '1.3.1']
 
 // Spring Cloud
@@ -67,7 +68,7 @@ libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
 
 // Messaging
 libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
-libraries.spring_amqp_starter = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: springVersion]
+libraries.spring_amqp_starter = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: springBootVersion]
 libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
 
 // Testing
@@ -78,10 +79,10 @@ libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: m
 libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
 libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
 libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockVersion]
-libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit', version: springVersion]
-libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springVersion]
-libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion]
-libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: '5.3.5']
+libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit', version: springBootVersion]
+libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springBootVersion]
+libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion]
+libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
 
 
 configurations.all {
