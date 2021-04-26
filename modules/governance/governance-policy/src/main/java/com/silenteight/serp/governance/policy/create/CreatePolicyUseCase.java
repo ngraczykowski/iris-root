@@ -15,6 +15,6 @@ class CreatePolicyUseCase {
 
   UUID activate(@NonNull CreatePolicyCommand command) {
     return policyService.createPolicy(
-        command.getId(), command.getName(), command.getCreatedBy());
+        command.getId(), command.getPolicyName(), command.getCreatedBy());
   }
 }

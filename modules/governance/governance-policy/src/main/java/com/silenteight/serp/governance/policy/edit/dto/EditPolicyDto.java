@@ -11,7 +11,7 @@ import com.silenteight.serp.governance.policy.domain.PolicyState;
 @AllArgsConstructor
 public class EditPolicyDto {
 
-  private String name;
+  private String policyName;
   private String description;
   private PolicyState state;
 }

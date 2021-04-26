@@ -6,14 +6,14 @@ import lombok.NonNull;
 
 import java.util.UUID;
 
-@Builder
 @Data
+@Builder
 class CreatePolicyCommand {
 
   @NonNull
   private final UUID id;
   @NonNull
-  private final String name;
+  private final String policyName;
   @NonNull
   private final String createdBy;
 }

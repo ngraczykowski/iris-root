@@ -12,7 +12,7 @@ class EditPolicyCommand {
 
   @NonNull
   private final UUID id;
-  private final String name;
+  private final String policyName;
   private final String description;
   @NonNull
   private final String updatedBy;

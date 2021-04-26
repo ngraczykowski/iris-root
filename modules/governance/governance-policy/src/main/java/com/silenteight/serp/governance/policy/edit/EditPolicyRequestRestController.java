@@ -37,21 +37,18 @@ class EditPolicyRequestRestController {
       @Valid @RequestBody EditPolicyDto editPolicyDto,
       Authentication authentication) {
 
-    editPolicy(id, editPolicyDto, authentication.getName());
-    changePolicyState(id, editPolicyDto.getState(), authentication.getName());
-
-    return ResponseEntity.ok().build();
-  }
-
-  private void editPolicy(UUID id, EditPolicyDto editPolicyDto, String userName) {
+    String userName = authentication.getName();
     EditPolicyCommand command = EditPolicyCommand
         .builder()
         .id(id)
-        .name(editPolicyDto.getName())
+        .policyName(editPolicyDto.getPolicyName())
         .description(editPolicyDto.getDescription())
         .updatedBy(userName)
         .build();
     editPolicyUseCase.activate(command);
+    changePolicyState(id, editPolicyDto.getState(), authentication.getName());
+
+    return ResponseEntity.ok().build();
   }
 
   private void changePolicyState(UUID id, PolicyState state, String userName) {

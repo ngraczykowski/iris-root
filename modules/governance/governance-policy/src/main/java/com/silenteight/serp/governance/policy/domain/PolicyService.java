@@ -111,7 +111,7 @@ public class PolicyService {
   Policy addPolicyInternal(AddPolicyRequest addPolicyRequest) {
     addPolicyRequest.preAudit(auditingLogger::log);
     Policy policy = new Policy(
-        addPolicyRequest.getPolicyId(),
+        addPolicyRequest.getId(),
         addPolicyRequest.getPolicyName(),
         addPolicyRequest.getDescription(),
         addPolicyRequest.getCreatedBy());
@@ -267,8 +267,8 @@ public class PolicyService {
   @Transactional
   public void updatePolicy(UpdatePolicyRequest updatePolicyRequest) {
     updatePolicyRequest.preAudit(auditingLogger::log);
-    Policy policy = policyRepository.getByPolicyId(updatePolicyRequest.getPolicyId());
-    ofNullable(updatePolicyRequest.getName()).ifPresent(policy::setName);
+    Policy policy = policyRepository.getByPolicyId(updatePolicyRequest.getId());
+    ofNullable(updatePolicyRequest.getPolicyName()).ifPresent(policy::setName);
     ofNullable(updatePolicyRequest.getDescription()).ifPresent(policy::setDescription);
     policy.setUpdatedBy(updatePolicyRequest.getUpdatedBy());
     updatePolicyRequest.postAudit(auditingLogger::log);
