@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.adjudication;
 
+import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.alert.AlertServiceApi;
@@ -32,8 +33,9 @@ class AdjudicationConfiguration {
   @Profile("!dev")
   @Bean
   AdjudicationRecommendationListener adjudicationRecommendationListener(
-      ApplicationEventPublisher eventPublisher) {
-    return new AdjudicationRecommendationListener(eventPublisher);
+          ApplicationEventPublisher eventPublisher,
+          AnalysisServiceApi analysisServiceApi) {
+    return new AdjudicationRecommendationListener(eventPublisher, analysisServiceApi);
   }
 
   private AlertService alertService() {
