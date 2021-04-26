@@ -12,8 +12,8 @@ class EditPolicyUseCase {
   private final PolicyService policyService;
 
   void activate(@NonNull EditPolicyCommand command) {
-    UpdatePolicyRequest request = UpdatePolicyRequest
-        .of(command.getId(), command.getName(), command.getDescription(), command.getUpdatedBy());
+    UpdatePolicyRequest request = UpdatePolicyRequest.of(
+        command.getId(), command.getPolicyName(), command.getDescription(), command.getUpdatedBy());
     policyService.updatePolicy(request);
   }
 }

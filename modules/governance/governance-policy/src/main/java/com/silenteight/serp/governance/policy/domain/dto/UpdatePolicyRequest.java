@@ -20,9 +20,9 @@ public class UpdatePolicyRequest {
 
   UUID correlationId = UUID.randomUUID();
   @NonNull
-  UUID policyId;
+  UUID id;
   @Nullable
-  String name;
+  String policyName;
   @Nullable
   String description;
   @Nullable
@@ -42,11 +42,11 @@ public class UpdatePolicyRequest {
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(Timestamp.from(Instant.now()))
-        .type(this.getClass().getSimpleName())
-        .entityId(policyId.toString())
+        .type(getClass().getSimpleName())
+        .entityId(id.toString())
         .entityClass("Policy")
         .entityAction("UPDATE")
-        .details(this.toString())
+        .details(toString())
         .principal(updatedBy)
         .build();
   }

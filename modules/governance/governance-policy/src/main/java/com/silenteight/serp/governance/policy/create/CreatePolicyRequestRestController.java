@@ -36,7 +36,7 @@ class CreatePolicyRequestRestController {
     CreatePolicyCommand command = CreatePolicyCommand
         .builder()
         .id(createPolicyDto.getId())
-        .name(createPolicyDto.getName())
+        .policyName(createPolicyDto.getPolicyName())
         .createdBy(authentication.getName())
         .build();
     createPolicyUseCase.activate(command);

@@ -22,7 +22,7 @@ public class AddPolicyRequest implements AuditableRequest {
   @NonNull
   UUID correlationId;
   @NonNull
-  UUID policyId;
+  UUID id;
   @NonNull
   String policyName;
   @Nullable
@@ -51,11 +51,11 @@ public class AddPolicyRequest implements AuditableRequest {
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(Timestamp.from(Instant.now()))
-        .type(this.getClass().getSimpleName())
-        .entityId(policyId.toString())
+        .type(getClass().getSimpleName())
+        .entityId(id.toString())
         .entityClass("Policy")
         .entityAction("CREATE")
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }

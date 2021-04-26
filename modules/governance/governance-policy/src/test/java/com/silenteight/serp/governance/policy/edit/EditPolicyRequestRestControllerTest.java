@@ -54,8 +54,8 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
     ArgumentCaptor<UpdatePolicyRequest> captor = ArgumentCaptor.forClass(UpdatePolicyRequest.class);
     verify(policyService).updatePolicy(captor.capture());
-    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
-    assertThat(captor.getValue().getName()).isEqualTo(POLICY_NAME);
+    assertThat(captor.getValue().getId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getPolicyName()).isEqualTo(POLICY_NAME);
     assertThat(captor.getValue().getDescription()).isEqualTo(POLICY_DESCRIPTION);
     assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
@@ -70,7 +70,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   @NotNull
   private EditPolicyDto getEditPolicyDto() {
     EditPolicyDto editPolicyDto = new EditPolicyDto();
-    editPolicyDto.setName(POLICY_NAME);
+    editPolicyDto.setPolicyName(POLICY_NAME);
     editPolicyDto.setDescription(POLICY_DESCRIPTION);
     return editPolicyDto;
   }

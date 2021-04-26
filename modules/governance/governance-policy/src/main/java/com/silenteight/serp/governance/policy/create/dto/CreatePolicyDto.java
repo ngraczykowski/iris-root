@@ -17,7 +17,7 @@ public class CreatePolicyDto {
   @NonNull
   private UUID id;
   @NonNull
-  private String name;
+  private String policyName;
   @NonNull
   private PolicyState state;
 }
