@@ -23,6 +23,10 @@ simulator:
 simulator.consul.enabled: true
 simulator.consul.config.enabled: false
 
+#Temporary settings until stable db structure
+spring.liquibase.drop-first: true
+
+
 grpc:
   client:
     adjudication-engine:
