@@ -20,7 +20,7 @@ public class ReportStorageService {
   @NonNull
   private final String bucketName;
 
-  void saveReport(Report report) {
+  public void saveReport(Report report) {
     try {
       client.putObject(prepareReportObjectToSave(report));
     } catch (Exception e) {

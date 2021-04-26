@@ -5,12 +5,18 @@ import lombok.SneakyThrows;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
+import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
 import com.silenteight.warehouse.report.reporting.ReportingService;
+import com.silenteight.warehouse.report.storage.InMemoryReport;
+import com.silenteight.warehouse.report.storage.ReportStorageService;
 
+import io.minio.*;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,9 +33,23 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest(classes = ReportTestConfiguration.class)
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class,
-    OpendistroKibanaContainerInitializer.class
+    OpendistroKibanaContainerInitializer.class,
+    MinioContainerInitializer.class
 })
 class ReportIT {
+
+  private static final String REPORT_NAME = "test-report";
+  private static final String TEST_BUCKET = "reports";
+
+  @BeforeEach
+  void setUp() {
+    createMinioBucket();
+  }
+
+  @AfterEach
+  void tearDown() {
+    clearMinioBucket();
+  }
 
   @Autowired
   private ReportingService reportingService;
@@ -39,6 +59,12 @@ class ReportIT {
 
   @Autowired
   private OpendistroKibanaTestClient kibanaTestClient;
+
+  @Autowired
+  MinioClient minioClient;
+
+  @Autowired
+  ReportStorageService reportStorageService;
 
   @SneakyThrows
   @Test
@@ -63,6 +89,44 @@ class ReportIT {
 
     indexRequest.setRefreshPolicy(RefreshPolicy.WAIT_UNTIL);
     restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldDownloadCorrectData() {
+    //given
+    byte[] testBytes = { 116, 101, 115, 116, 32, 100, 97, 116, 97 };
+    InMemoryReport report = new InMemoryReport(REPORT_NAME, testBytes);
+
+    //when
+    reportStorageService.saveReport(report);
+
+    //then
+    byte[] responseBytes = minioClient.getObject(
+        GetObjectArgs.builder().bucket(TEST_BUCKET).object(REPORT_NAME).build()).readAllBytes();
+
+    assertThat(responseBytes).isEqualTo(testBytes);
+  }
+
+  @SneakyThrows
+  private void createMinioBucket() {
+    minioClient.makeBucket(MakeBucketArgs.builder().bucket(TEST_BUCKET).build());
+  }
+
+  void clearMinioBucket() {
+    removeReportFromBucket();
+    removeMinioBucket();
+  }
+
+  @SneakyThrows
+  private void removeReportFromBucket() {
+    minioClient.removeObject(
+        RemoveObjectArgs.builder().bucket(TEST_BUCKET).object(REPORT_NAME).build());
+  }
+
+  @SneakyThrows
+  private void removeMinioBucket() {
+    minioClient.removeBucket(RemoveBucketArgs.builder().bucket(TEST_BUCKET).build());
   }
 
   private void createKibanaIndex() {

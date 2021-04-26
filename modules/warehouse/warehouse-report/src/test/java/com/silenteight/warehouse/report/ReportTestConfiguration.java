@@ -7,6 +7,7 @@ import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
+import com.silenteight.warehouse.report.storage.StorageModule;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
@@ -21,6 +22,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 @ComponentScan(basePackageClasses = {
     OpendistroModule.class,
     ReportingModule.class,
+    StorageModule.class,
     TestElasticSearchModule.class,
 })
 @ImportAutoConfiguration({
