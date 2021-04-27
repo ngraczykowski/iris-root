@@ -172,7 +172,7 @@ components:
         - id
         - name
         - datasetNames
-        - policyId
+        - modelName
       properties:
         id:
           type: string
@@ -186,15 +186,15 @@ components:
             properties:
               datasetName:
                 type: string
-        policyId:
+        modelName:
           type: string
-          description: Policy UUID
+          description: Model resource name
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'New simulation'
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
-        policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
 
     SimulationListQuery:
       type: object
@@ -229,7 +229,7 @@ components:
         name: 'Simulation name'
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
-        modelName: 'solving-models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
         progressState: 'RUNNING'
         state: 'PENDING'
         createdAt: '2004-02-12T15:19:21Z'
@@ -270,7 +270,7 @@ components:
         name: 'Simulation name'
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
-        policyId: 'd17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
         state: 'PENDING'
         createdAt: '2004-02-12T15:09:21Z'
         startedAt: '2004-02-12T16:19:21Z'
