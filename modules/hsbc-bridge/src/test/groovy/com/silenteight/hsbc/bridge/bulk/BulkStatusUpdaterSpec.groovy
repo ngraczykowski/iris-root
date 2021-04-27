@@ -1,7 +1,5 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.bulk.event.RecalculateBulkStatusEvent
-
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -15,11 +13,11 @@ class BulkStatusUpdaterSpec extends Specification {
   @Unroll
   def 'should update BulkStatus to #expectedResult when #itemStatuses'() {
     given:
-    def bulk = createBulkwithBulkItemCombination(itemStatuses)
-    def event = new RecalculateBulkStatusEvent(bulk.getId())
+    def bulk = createBulkWithBulkItemCombination(itemStatuses)
+    def bulkId = bulk.getId()
 
     when:
-    underTest.onRecalculateBulkStatusEvent(event)
+    underTest.recalculateBulkStatus(bulkId)
 
     then:
     1 * bulkRepository.findById(bulk.getId()) >> bulk
@@ -41,11 +39,11 @@ class BulkStatusUpdaterSpec extends Specification {
   @Unroll
   def 'should not update BulkStatus when itemStatuses = #itemStatuses'() {
     given:
-    def bulk = createBulkwithBulkItemCombination(itemStatuses)
-    def event = new RecalculateBulkStatusEvent(bulk.getId())
+    def bulk = createBulkWithBulkItemCombination(itemStatuses)
+    def bulkId = bulk.getId()
 
     when:
-    underTest.onRecalculateBulkStatusEvent(event)
+    underTest.recalculateBulkStatus(bulkId)
 
     then:
     1 * bulkRepository.findById(bulk.getId()) >> bulk
@@ -62,7 +60,7 @@ class BulkStatusUpdaterSpec extends Specification {
     ]
   }
 
-  def createBulkwithBulkItemCombination(itemStatuses) {
+  def createBulkWithBulkItemCombination(itemStatuses) {
     def bulk = new Bulk('20210101-1111')
 
     if (itemStatuses.isEmpty()) {

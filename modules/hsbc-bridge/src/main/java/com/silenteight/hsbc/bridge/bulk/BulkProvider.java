@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
@@ -11,13 +12,13 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
-public class BulkProvider {
+class BulkProvider {
 
   private final BulkItemPayloadConverter bulkItemPayloadConverter;
   private final BulkRepository bulkRepository;
 
   @Transactional
-  Bulk getBulk(HsbcRecommendationRequest request) {
+  Bulk getBulk(@NonNull HsbcRecommendationRequest request) {
     var bulkItems = processAlertsToBulkItems(request.getAlerts());
 
     return createBulk(request.getBulkId(), bulkItems);

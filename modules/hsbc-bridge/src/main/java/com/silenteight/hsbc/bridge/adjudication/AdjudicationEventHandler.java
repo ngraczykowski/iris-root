@@ -13,7 +13,6 @@ import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.Collection;
 import java.util.Map;
@@ -32,7 +31,6 @@ class AdjudicationEventHandler {
   private final ApplicationEventPublisher eventPublisher;
 
   @EventListener
-  @Async
   public void onBulkPreProcessingFinishedEvent(BulkPreProcessingFinishedEvent event) {
     var bulkId = event.getBulkId();
     log.debug("Received bulkPreProcessingFinishedEvent, bulkId={}", bulkId);

@@ -57,4 +57,11 @@ public class Bulk extends BaseEntity {
   boolean hasNonFinalStatus() {
     return status == STORED || status == PROCESSING;
   }
+
+  @Transient
+  void markError(String errorMessage) {
+    this.status = ERROR;
+    this.errorMessage = errorMessage;
+    this.errorTimestamp = OffsetDateTime.now();
+  }
 }

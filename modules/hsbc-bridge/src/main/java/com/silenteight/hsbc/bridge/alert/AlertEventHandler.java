@@ -23,7 +23,7 @@ class AlertEventHandler {
   @EventListener
   @Transactional
   public void onUpdateAlertEventWithNameEvent(UpdateAlertWithNameEvent updateAlertWithNameEvent) {
-    log.debug("Received updateAlertEventWithNameEvent.");
+    log.debug("Received updateAlertEventWithNameEvent, {}", updateAlertWithNameEvent);
 
     updateAlertWithNameEvent.getAlertIdToName()
         .forEach(this::updateAlertAndPublishStatusChangeEvent);

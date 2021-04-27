@@ -2,27 +2,31 @@
 -----
 @startuml
 participant HSBC as a
-participant "SERP Bridge" as b
-participant "Bridge Database" as c
-participant "Adjudication Engine" as d
+participant "Bridge" as b
+participant "Bridge DB" as c
+participant "Adjudication Engine API" as d
+participant "Governance API" as e
 
-
+== **1) Bulk creation** ==
 a -> b: Http request with data (list of alerts)
-b -> c: Store raw alerts (save bulk)
+b -> c: Store bulk with payload and bulk items
+b --> b: BulkStoredEvent
 b -> a: Response to HSBC
-b -> c: get Alert
-b -> b: convert Alert to matches
-b -> c: store matches in database
-b -> d: register Alert
-b -> d: register Matches
-b -> d: Create dataset for (save bulk)
-b -> d: Get Default Model
-b -> d: Create Analysis
-b -> d: ?? Add Dataset ??
-d -> b: Recommendations Generated
-b -> d: Get Recommendations
-b -> b: create OWS output
-b -> a: Return recommendations as a file
+
+== **2) Bulk pre-processing** ==
+b -> c: Create and store alerts
+b -> c: Create and store matches
+b --> b: BulkPreProcessingFinishedEvent
+
+== **3) Adjudication** ==
+b -> d: Register alerts
+b -> d: Register matches
+b -> d: Create dataset
+b -> e: Get solving model
+b -> d: Create analysis
+b -> d: Add dataset to analysis
+b -> c: Store analysis
+b --> b: BulkProcessingStartedEvent
 
 @enduml
 -----
