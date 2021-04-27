@@ -7,7 +7,7 @@ import lombok.Value;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.simulator.common.audit.AuditableRequest;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -26,7 +26,7 @@ public class CreateSimulationRequest implements AuditableRequest {
   UUID id;
 
   @NonNull
-  String name;
+  String simulationName;
 
   String description;
 
@@ -34,7 +34,7 @@ public class CreateSimulationRequest implements AuditableRequest {
   String createdBy;
 
   @NonNull
-  List<String> datasetNames;
+  Set<String> datasetNames;
 
   @NonNull
   String modelName;

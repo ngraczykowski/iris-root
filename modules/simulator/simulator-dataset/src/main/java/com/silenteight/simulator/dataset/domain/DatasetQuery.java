@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.simulator.dataset.common.DatasetResource.toResourceName;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -41,9 +42,11 @@ public class DatasetQuery {
   }
 
   private static DatasetDto toDto(DatasetEntity datasetEntity) {
-    return DatasetDto.builder()
+    return DatasetDto
+        .builder()
         .id(datasetEntity.getDatasetId())
-        .name(datasetEntity.getName())
+        .name(toResourceName(datasetEntity.getDatasetId()))
+        .datasetName(datasetEntity.getName())
         .description(datasetEntity.getDescription())
         .state(datasetEntity.getState())
         .alertsCount(datasetEntity.getInitialAlertCount())
@@ -64,5 +67,12 @@ public class DatasetQuery {
         .from(datasetEntity.getGenerationDateFrom())
         .to(datasetEntity.getGenerationDateTo())
         .build();
+  }
+
+  public String getExternalResourceName(@NonNull UUID datasetId) {
+    return repository
+        .findByDatasetId(datasetId)
+        .map(DatasetEntity::getExternalResourceName)
+        .orElseThrow(() -> new DatasetNotFoundException(datasetId));
   }
 }

@@ -61,6 +61,8 @@ components:
           type: string
         name:
           type: string
+        datasetName:
+          type: string
         description:
           type: string
         state:
@@ -76,7 +78,8 @@ components:
           type: string
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        name: 'Dataset name'
+        name: 'datasets/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        datasetName: 'Dataset name'
         description: 'Dataset description'
         query:
           alertGenerationDate:
@@ -96,7 +99,7 @@ components:
       properties:
         id:
           type: string
-        name:
+        datasetName:
           type: string
         description:
           type: string
@@ -105,7 +108,7 @@ components:
           $ref: '#/components/schemas/Query'
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        name: 'New dataset'
+        datasetName: 'New dataset'
         description: 'Dataset description'
         query:
           alertGenerationDate:

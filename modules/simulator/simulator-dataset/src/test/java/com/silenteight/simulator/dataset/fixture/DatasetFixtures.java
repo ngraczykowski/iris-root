@@ -19,9 +19,11 @@ import static java.util.UUID.fromString;
 public final class DatasetFixtures {
 
   public static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  public static final String RESOURCE_NAME = "datasets/" + DATASET_ID.toString();
   public static final String NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
-  public static final String EXTERNAL_RESOURCE_NAME = "datasets/" + DATASET_ID.toString();
+  public static final UUID EXTERNAL_DATASET_ID = fromString("b6855a6f-fc63-422f-84a7-677a0c8f9a9a");
+  public static final String EXTERNAL_RESOURCE_NAME = "datasets/" + EXTERNAL_DATASET_ID.toString();
   public static final DatasetState STATE = CURRENT;
   public static final long ALERTS_COUNT = 5L;
   public static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);
@@ -30,9 +32,11 @@ public final class DatasetFixtures {
       OffsetDateTime.of(2021, 03, 12, 11, 25, 10, 0, UTC);
   public static final String CREATED_BY = "asmith";
 
-  public static final DatasetDto DATASET_DTO = DatasetDto.builder()
+  public static final DatasetDto DATASET_DTO = DatasetDto
+      .builder()
       .id(DATASET_ID)
-      .name(NAME)
+      .name(RESOURCE_NAME)
+      .datasetName(NAME)
       .description(DESCRIPTION)
       .state(STATE)
       .alertsCount(ALERTS_COUNT)

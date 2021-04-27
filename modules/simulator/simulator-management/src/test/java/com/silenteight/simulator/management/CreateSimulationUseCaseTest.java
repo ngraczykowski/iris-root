@@ -2,6 +2,7 @@ package com.silenteight.simulator.management;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.simulator.dataset.domain.DatasetQuery;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,9 +15,7 @@ import java.util.List;
 
 import static com.silenteight.simulator.management.CreateSimulationRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.management.CreateSimulationRequest.PRE_AUDIT_TYPE;
-import static com.silenteight.simulator.management.SimulationFixtures.ANALYSIS;
-import static com.silenteight.simulator.management.SimulationFixtures.CREATE_SIMULATION_REQUEST;
-import static com.silenteight.simulator.management.SimulationFixtures.SOLVING_MODEL;
+import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
@@ -34,6 +33,9 @@ class CreateSimulationUseCaseTest {
   private AnalysisService analysisService;
 
   @Mock
+  private DatasetQuery datasetQuery;
+
+  @Mock
   private SimulationService simulationService;
 
   @Mock
@@ -44,12 +46,15 @@ class CreateSimulationUseCaseTest {
     // given
     when(modelService.getModel(CREATE_SIMULATION_REQUEST.getModelName())).thenReturn(SOLVING_MODEL);
     when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(ANALYSIS);
+    when(datasetQuery.getExternalResourceName(DATASET_ID)).thenReturn(DATASET_NAME);
 
     // when
     underTest.activate(CREATE_SIMULATION_REQUEST);
 
     // then
-    verify(simulationService).createSimulation(CREATE_SIMULATION_REQUEST, ANALYSIS.getName());
+    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME);
+    verify(simulationService).createSimulation(
+        CREATE_SIMULATION_REQUEST, DATASET_NAMES, ANALYSIS.getName());
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);
