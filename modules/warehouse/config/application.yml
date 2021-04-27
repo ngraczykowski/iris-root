@@ -3,11 +3,11 @@ server:
 
 spring:
   rabbitmq:
-#   If multiple brokers required:
-#   host: <must be empty>
-#   addresses: host1:port1,host2:port2,...
+    #   If multiple brokers required:
+    #   host: <must be empty>
+    #   addresses: host1:port1,host2:port2,...
 
-#   configuration for common-docker-infrastructure
+    #   configuration for common-docker-infrastructure
     host: localhost
     port: 24160
     username: dev
@@ -19,17 +19,6 @@ spring:
       username: admin
       password: admin
       uris: http://localhost:9201,http://localhost:9200
-
-keycloak:
-  adapter:
-    authServerUrl: http://localhost:24111/auth
-    realm: sens-webapp
-    publicClient: false
-    confidentialPort: 0
-    principalAttribute: preferred_username
-    resource: backend
-    sslRequired: external
-    credentials.secret: change-me
 
 warehouse:
   messaging:
