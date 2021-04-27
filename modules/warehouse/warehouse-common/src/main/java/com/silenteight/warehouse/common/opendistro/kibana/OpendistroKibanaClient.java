@@ -87,7 +87,7 @@ public class OpendistroKibanaClient {
     HttpResponse<String> response = client.send(httpRequest, ofString());
     T parsedResponse = objectMapper.readValue(response.body(), typeRef);
 
-    log.info("OpendistroKibanaClient method={}, endpoint={}, statusCode={}, body={}",
+    log.debug("OpendistroKibanaClient method={}, endpoint={}, statusCode={}, body={}",
         httpRequest.method(), httpRequest.uri(), response.statusCode(), parsedResponse);
 
     return parsedResponse;

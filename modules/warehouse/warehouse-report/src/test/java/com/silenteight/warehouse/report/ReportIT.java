@@ -4,17 +4,16 @@ import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
-import com.silenteight.warehouse.common.opendistro.kibana.dto.KibanaReportDto;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
 import com.silenteight.warehouse.report.reporting.ReportingService;
-import com.silenteight.warehouse.report.storage.InMemoryReport;
-import com.silenteight.warehouse.report.storage.ReportStorageService;
 import com.silenteight.warehouse.report.synchronization.ReportDto;
 import com.silenteight.warehouse.report.synchronization.ReportSynchronizationService;
+import com.silenteight.warehouse.report.synchronization.ReportSynchronizationUseCase;
 
 import io.minio.*;
+import io.minio.messages.Item;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import org.elasticsearch.client.RequestOptions;
@@ -30,14 +29,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.TENANT;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
 
@@ -53,7 +53,6 @@ import static org.awaitility.Awaitility.await;
 @AutoConfigureTestEntityManager
 class ReportIT {
 
-  private static final String REPORT_NAME = "test-report";
   private static final String TEST_BUCKET = "reports";
 
   @BeforeEach
@@ -79,45 +78,38 @@ class ReportIT {
   private OpendistroKibanaTestClient kibanaTestClient;
 
   @Autowired
-  MinioClient minioClient;
+  private MinioClient minioClient;
 
   @Autowired
-  ReportStorageService reportStorageService;
+  private ReportSynchronizationUseCase reportSynchronizationUseCase;
 
   @Autowired
   private ReportSynchronizationService reportSynchronizationService;
 
-  @SneakyThrows
   @Test
-  void shouldDownloadGeneratedReport() {
+  @SneakyThrows
+  void shouldStoreNewKibanaReportsInMinio() {
+    // given
     storeData();
     createKibanaIndex();
     createSavedSearch();
     generateReport(createReportDefinition());
     waitForReports();
 
-    Set<String> allReportInstanceIds = reportingService.getReportList(TENANT);
-    Set<String> newReportInstanceIds = reportSynchronizationService.filterNew(allReportInstanceIds);
+    //when
+    reportSynchronizationUseCase.activate();
 
-    for (String newReportInstanceId : newReportInstanceIds) {
-      KibanaReportDto kibanaReportDto = reportingService.getReport(TENANT, newReportInstanceId);
-      String content = kibanaReportDto.getContent();
-      String filename = kibanaReportDto.getFilename();
-      reportSynchronizationService.markAsStored(newReportInstanceId, TENANT, filename);
+    //then
+    List<ReportDto> synchronizedReports = getSynchronizedReports();
+    assertThat(synchronizedReports).hasSize(1);
 
-      assertThat(content).contains(ALERT_ID_1);
-    }
-
-    Set<String> storedKibanaReportInstanceIds = reportSynchronizationService
-        .getAllReportsForTenant(TENANT)
-        .stream()
-        .map(ReportDto::getKibanaReportInstanceId)
-        .collect(toSet());
-    assertThat(storedKibanaReportInstanceIds).isEqualTo(allReportInstanceIds);
+    String reportFilename = synchronizedReports.get(0).getFilename();
+    String reportContent = getReportContentFromMinio(reportFilename);
+    assertThat(reportContent).contains(ALERT_ID_1);
   }
 
   @SneakyThrows
-  private void storeData() {
+  private void  storeData() {
     IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
     indexRequest.id(ALERT_ID_1);
     indexRequest.source(ALERT_WITH_MATCHES_1_MAP);
@@ -126,42 +118,9 @@ class ReportIT {
     restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
   }
 
-  @Test
-  @SneakyThrows
-  void shouldDownloadCorrectData() {
-    //given
-    byte[] testBytes = { 116, 101, 115, 116, 32, 100, 97, 116, 97 };
-    InMemoryReport report = new InMemoryReport(REPORT_NAME, testBytes);
-
-    //when
-    reportStorageService.saveReport(report);
-
-    //then
-    byte[] responseBytes = minioClient.getObject(
-        GetObjectArgs.builder().bucket(TEST_BUCKET).object(REPORT_NAME).build()).readAllBytes();
-
-    assertThat(responseBytes).isEqualTo(testBytes);
-  }
-
   @SneakyThrows
   private void createMinioBucket() {
     minioClient.makeBucket(MakeBucketArgs.builder().bucket(TEST_BUCKET).build());
-  }
-
-  void clearMinioBucket() {
-    removeReportFromBucket();
-    removeMinioBucket();
-  }
-
-  @SneakyThrows
-  private void removeReportFromBucket() {
-    minioClient.removeObject(
-        RemoveObjectArgs.builder().bucket(TEST_BUCKET).object(REPORT_NAME).build());
-  }
-
-  @SneakyThrows
-  private void removeMinioBucket() {
-    minioClient.removeBucket(RemoveBucketArgs.builder().bucket(TEST_BUCKET).build());
   }
 
   private void createKibanaIndex() {
@@ -192,5 +151,41 @@ class ReportIT {
   @SneakyThrows
   private byte[] getJson(String resourcePath) {
     return getClass().getClassLoader().getResourceAsStream(resourcePath).readAllBytes();
+  }
+
+  private List<ReportDto> getSynchronizedReports() {
+    return new ArrayList<>(reportSynchronizationService.getAllReportsForTenant(TENANT));
+  }
+
+  @SneakyThrows
+  private String getReportContentFromMinio(String filename) {
+    byte[] responseBytes = minioClient.getObject(GetObjectArgs.builder()
+        .bucket(TEST_BUCKET)
+        .object(filename)
+        .build())
+        .readAllBytes();
+    return new String(responseBytes, UTF_8);
+  }
+
+  void clearMinioBucket() {
+    removeAllReportsFromBucket();
+    removeMinioBucket();
+  }
+
+  @SneakyThrows
+  private void removeAllReportsFromBucket() {
+    Iterable<Result<Item>> objects = minioClient.listObjects(
+        ListObjectsArgs.builder().bucket(TEST_BUCKET).build());
+
+    for (Result<Item> obj : objects) {
+      String objectName = obj.get().objectName();
+      minioClient.removeObject(
+          RemoveObjectArgs.builder().bucket(TEST_BUCKET).object(objectName).build());
+    }
+  }
+
+  @SneakyThrows
+  private void removeMinioBucket() {
+    minioClient.removeBucket(RemoveBucketArgs.builder().bucket(TEST_BUCKET).build());
   }
 }

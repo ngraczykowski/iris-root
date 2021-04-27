@@ -16,3 +16,12 @@ warehouse:
     timezone: Europe/Warsaw
   report:
     default-bucket: reports
+    synchronization:
+      production-tenant: admin_tenant
+      cron: "0 */1 * * * ?"
+
+logging:
+  level:
+    com.silenteight.warehouse.report: DEBUG
+    com.silenteight.warehouse.common.opendistro.elastic: DEBUG
+    com.silenteight.warehouse.common.opendistro.kibana: DEBUG

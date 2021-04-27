@@ -21,6 +21,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
@@ -44,6 +45,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 })
 @EnableIntegration
 @EnableIntegrationManagement
+@EnableScheduling
 public class WarehouseApplication {
 
   public static void main(String[] args) {

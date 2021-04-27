@@ -13,7 +13,7 @@ public class ReportSynchronizationService {
 
   private final ReportRepository reportRepository;
 
-  public void markAsStored(String kibanaReportId, String tenant, String filename) {
+  public ReportDto markAsStored(String kibanaReportId, String tenant, String filename) {
     ReportEntity report = ReportEntity.builder()
         .kibanaReportInstanceId(kibanaReportId)
         .reportId(randomUUID())
@@ -21,7 +21,7 @@ public class ReportSynchronizationService {
         .tenant(tenant)
         .build();
 
-    reportRepository.save(report);
+    return reportRepository.save(report).toDto();
   }
 
   public Set<String> filterNew(Set<String> allKibanaReportInstanceIds) {

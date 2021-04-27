@@ -56,7 +56,9 @@ class ReportEntity extends BaseEntity implements IdentifiableEntity {
   ReportDto toDto() {
     return ReportDto.builder()
         .reportId(getReportId())
+        .tenant(getTenant())
         .kibanaReportInstanceId(getKibanaReportInstanceId())
+        .filename(getFilename())
         .build();
   }
 }
