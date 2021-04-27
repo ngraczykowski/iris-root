@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class Registerer {
 
-  private final AnalysisServiceApi analysisServiceApi;
+  private final AnalysisServiceClient analysisServiceClient;
   private final ModelUseCase modelUseCase;
 
   AnalysisDto registerAnalysis(@NonNull String dataset) {
@@ -33,7 +33,7 @@ class Registerer {
         .features(map(solvingModel.getFeatures()))
         .build();
 
-    return analysisServiceApi.createAnalysis(request);
+    return analysisServiceClient.createAnalysis(request);
   }
 
   private static List<FeatureDto> map(List<com.silenteight.hsbc.bridge.model.FeatureDto> features) {
@@ -46,7 +46,7 @@ class Registerer {
   }
 
   private AnalysisDto addDatasetToAnalysis(CreateAnalysisResponseDto response, String dataset) {
-    var addDatasetResponse = analysisServiceApi.addDataset(
+    var addDatasetResponse = analysisServiceClient.addDataset(
         AddDatasetRequestDto.builder()
             .analysis(response.getName())
             .dataset(dataset)

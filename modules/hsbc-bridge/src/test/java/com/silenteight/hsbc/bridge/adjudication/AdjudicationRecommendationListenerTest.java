@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.bridge.adjudication;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
-import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
 import com.silenteight.hsbc.bridge.analysis.dto.GetRecommendationsDto;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationEvent;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class AdjudicationRecommendationListenerTest {
   private ApplicationEventPublisher applicationEventPublisher;
 
   @Mock
-  private AnalysisServiceApi analysisServiceApi;
+  private RecommendationServiceClient recommendationServiceClient;
 
   @InjectMocks
   private AdjudicationRecommendationListener underTest;
@@ -39,7 +39,7 @@ class AdjudicationRecommendationListenerTest {
     String analysisString = recommendationsGenerated.getAnalysis();
     var analysis = GetRecommendationsDto.builder().analysis(analysisString).build();
 
-    given(analysisServiceApi.getRecommendations(analysis)).willReturn(
+    given(recommendationServiceClient.getRecommendations(analysis)).willReturn(
             List.of(RECOMMENDATION_INFO_1.asRecommendationDto())
     );
 
@@ -56,7 +56,7 @@ class AdjudicationRecommendationListenerTest {
     String analysisString = recommendationsGenerated.getAnalysis();
     var analysis = GetRecommendationsDto.builder().analysis(analysisString).build();
 
-    given(analysisServiceApi.getRecommendations(analysis)).willReturn(
+    given(recommendationServiceClient.getRecommendations(analysis)).willReturn(
             List.of(RECOMMENDATION_INFO_1.asRecommendationDto(), RECOMMENDATION_INFO_2.asRecommendationDto())
     );
 

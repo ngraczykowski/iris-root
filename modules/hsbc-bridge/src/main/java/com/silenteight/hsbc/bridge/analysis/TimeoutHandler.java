@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.analysis;
 
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status;
@@ -20,7 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 class TimeoutHandler {
   
-  private final AnalysisServiceApi analysisServiceApi;
+  private final AnalysisServiceClient analysisServiceClient;
+  private final RecommendationServiceClient recommendationServiceClient;
   private final AnalysisRepository repository;
   private final ApplicationEventPublisher eventPublisher;
 
@@ -51,7 +53,7 @@ class TimeoutHandler {
         .analysis(name)
         .build();
 
-    analysisServiceApi.getRecommendations(request).forEach(this::publishRecommendation);
+    recommendationServiceClient.getRecommendations(request).forEach(this::publishRecommendation);
   }
 
   private List<AnalysisEntity> findInProgressTimeoutAnalyses() {
@@ -59,7 +61,7 @@ class TimeoutHandler {
   }
 
   private boolean hasPendingAlerts(String analysis) {
-    return analysisServiceApi.getAnalysis(analysis).hasPendingAlerts();
+    return analysisServiceClient.getAnalysis(analysis).hasPendingAlerts();
   }
 
   private void publishRecommendation(RecommendationDto recommendation) {

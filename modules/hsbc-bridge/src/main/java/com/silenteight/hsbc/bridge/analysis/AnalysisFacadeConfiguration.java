@@ -15,7 +15,7 @@ class AnalysisFacadeConfiguration {
 
   private final AnalysisProperties analysisProperties;
   private final AnalysisRepository analysisRepository;
-  private final AnalysisServiceApi analysisServiceApi;
+  private final AnalysisServiceClient analysisServiceClient;
   private final ModelUseCase modelUseCase;
 
   @Bean
@@ -25,6 +25,6 @@ class AnalysisFacadeConfiguration {
   }
 
   private Registerer registerer() {
-    return new Registerer(analysisServiceApi, modelUseCase);
+    return new Registerer(analysisServiceClient, modelUseCase);
   }
 }

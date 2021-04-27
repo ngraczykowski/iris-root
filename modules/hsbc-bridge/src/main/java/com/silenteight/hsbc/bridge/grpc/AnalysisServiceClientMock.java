@@ -1,13 +1,12 @@
-package com.silenteight.hsbc.bridge.analysis;
+package com.silenteight.hsbc.bridge.grpc;
 
+import com.silenteight.hsbc.bridge.analysis.AnalysisServiceClient;
 import com.silenteight.hsbc.bridge.analysis.dto.*;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Random;
 
-class AnalysisServiceApiMock implements AnalysisServiceApi {
+class AnalysisServiceClientMock implements AnalysisServiceClient {
 
   private final Random random = new Random();
 
@@ -36,8 +35,4 @@ class AnalysisServiceApiMock implements AnalysisServiceApi {
         .build();
   }
 
-  @Override
-  public List<RecommendationDto> getRecommendations(GetRecommendationsDto request) {
-    return List.of();
-  }
 }

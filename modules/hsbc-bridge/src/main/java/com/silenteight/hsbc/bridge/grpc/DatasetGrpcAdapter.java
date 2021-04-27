@@ -1,4 +1,6 @@
-package com.silenteight.hsbc.bridge.adjudication;
+package com.silenteight.hsbc.bridge.grpc;
+
+import com.silenteight.hsbc.bridge.adjudication.DatasetServiceClient;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +16,7 @@ import java.util.Collection;
 import static java.util.concurrent.TimeUnit.*;
 
 @RequiredArgsConstructor
-class DatasetServiceApiGrpc implements DatasetServiceApi {
+class DatasetGrpcAdapter implements DatasetServiceClient {
 
   private final DatasetServiceBlockingStub datasetServiceBlockingStub;
   private final long deadlineInSeconds;

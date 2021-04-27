@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.alert;
+package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.Value;
 
@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties("silenteight.bridge.alert.service.api")
+@ConfigurationProperties("silenteight.bridge.dataset.service.api")
 @Value
-class AlertServiceApiProperties {
+class DatasetGrpcAdapterProperties {
 
   String grpcAddress;
   long deadlineInSeconds;

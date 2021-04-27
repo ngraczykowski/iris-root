@@ -6,7 +6,7 @@ import com.silenteight.hsbc.bridge.alert.dto.BatchCreateAlertsResponseDto;
 
 import java.util.Collection;
 
-public interface AlertServiceApi {
+public interface AlertServiceClient {
 
   BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alerts);
 

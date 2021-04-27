@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.alert.AlertServiceApi;
+import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDto;
 import com.silenteight.hsbc.bridge.alert.dto.BatchCreateAlertMatchesRequestDto;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class AlertService {
 
-  private final AlertServiceApi alertServiceApi;
+  private final AlertServiceClient alertServiceClient;
   private final ApplicationEventPublisher eventPublisher;
 
   Collection<String> registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
@@ -38,7 +38,7 @@ class AlertService {
   }
 
   private List<AlertDto> registerAlerts(Collection<String> alertIds) {
-    return alertServiceApi.batchCreateAlerts(alertIds).getAlerts();
+    return alertServiceClient.batchCreateAlerts(alertIds).getAlerts();
   }
 
   private List<MatchWithAlert> registerMatches(
@@ -59,7 +59,7 @@ class AlertService {
         .matchIds(matchIds)
         .build();
 
-    var response = alertServiceApi.batchCreateAlertMatches(request);
+    var response = alertServiceClient.batchCreateAlertMatches(request);
 
     return response.getAlertMatches().stream()
         .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(), a.getName()))

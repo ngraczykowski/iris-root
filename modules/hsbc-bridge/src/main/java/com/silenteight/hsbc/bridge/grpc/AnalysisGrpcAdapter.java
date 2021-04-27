@@ -1,4 +1,7 @@
-package com.silenteight.hsbc.bridge.analysis;
+package com.silenteight.hsbc.bridge.grpc;
+
+import com.silenteight.hsbc.bridge.analysis.AnalysisServiceClient;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +20,7 @@ import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDate
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
-class AnalysisServiceGrpcApi implements AnalysisServiceApi {
+class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServiceClient {
 
   private final AnalysisServiceBlockingStub analysisServiceBlockingStub;
   private final long deadlineInSeconds;

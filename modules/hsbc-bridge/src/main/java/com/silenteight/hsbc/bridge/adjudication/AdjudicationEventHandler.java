@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toMap;
 class AdjudicationEventHandler {
 
   private final AlertService alertService;
-  private final DatasetServiceApi datasetServiceApi;
+  private final DatasetServiceClient datasetServiceClient;
   private final AnalysisFacade analysisFacade;
   @Getter(AccessLevel.PROTECTED)
   private final ApplicationEventPublisher eventPublisher;
@@ -54,7 +54,7 @@ class AdjudicationEventHandler {
   }
 
   private AnalysisDto adjudicateAlerts(Collection<String> alerts) {
-    var datasetName = datasetServiceApi.createDataset(alerts);
+    var datasetName = datasetServiceClient.createDataset(alerts);
     return analysisFacade.createAnalysisWithDataset(datasetName);
   }
 

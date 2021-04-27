@@ -1,5 +1,6 @@
-package com.silenteight.hsbc.bridge.alert;
+package com.silenteight.hsbc.bridge.grpc;
 
+import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import java.util.Collection;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class AlertServiceApiMock implements AlertServiceApi {
+class AlertServiceClientMock implements AlertServiceClient {
 
   @Override
   public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alerts) {

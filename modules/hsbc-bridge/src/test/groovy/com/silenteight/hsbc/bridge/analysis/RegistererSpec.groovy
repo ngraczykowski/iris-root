@@ -11,7 +11,7 @@ import spock.lang.Specification
 
 class RegistererSpec extends Specification {
 
-  def analysisServiceApi = Mock(AnalysisServiceApi)
+  def analysisServiceApi = Mock(AnalysisServiceClient)
   def modelUseCase = Mock(ModelUseCase)
   def underTest = new Registerer(analysisServiceApi, modelUseCase)
 

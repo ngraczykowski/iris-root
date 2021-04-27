@@ -4,6 +4,7 @@ import com.silenteight.hsbc.bridge.analysis.dto.GetAnalysisResponseDto
 import com.silenteight.hsbc.bridge.analysis.dto.GetRecommendationsDto
 import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient
 import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationEvent
 
 import org.springframework.context.ApplicationEventPublisher
@@ -11,11 +12,12 @@ import spock.lang.Specification
 
 class TimeoutHandlerSpec extends Specification {
 
-  def analysisServiceApi = Mock(AnalysisServiceApi)
+  def analysisServiceClient = Mock(AnalysisServiceClient)
+  def recommendationServiceClient = Mock(RecommendationServiceClient)
   def repository = Mock(AnalysisRepository)
   def eventPublisher = Mock(ApplicationEventPublisher)
   def underTest = new TimeoutHandler(
-      analysisServiceApi, repository, eventPublisher)
+      analysisServiceClient, recommendationServiceClient, repository, eventPublisher)
 
   def 'should process analysis after timeout'() {
     given:
@@ -31,9 +33,10 @@ class TimeoutHandlerSpec extends Specification {
     then:
     1 * repository.findByTimeoutAtBeforeAndStatus(_, _) >> [completedAnalysis, inCompletedAnalysis]
 
-    1 * analysisServiceApi.getAnalysis(completedAnalysis.name) >> completedAnalysisDto
-    1 * analysisServiceApi.getAnalysis(inCompletedAnalysis.name) >> inCompletedAnalysisDto
-    1 * analysisServiceApi.getRecommendations(
+    1 * analysisServiceClient.getAnalysis(completedAnalysis.name) >> completedAnalysisDto
+    1 * analysisServiceClient.getAnalysis(inCompletedAnalysis.name) >> inCompletedAnalysisDto
+
+    1 * recommendationServiceClient.getRecommendations(
         {GetRecommendationsDto request -> request.analysis == inCompletedAnalysis.name}) >>
         [createRecommendation()]
 

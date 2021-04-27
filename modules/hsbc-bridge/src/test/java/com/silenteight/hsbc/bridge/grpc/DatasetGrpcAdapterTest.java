@@ -1,11 +1,10 @@
-package com.silenteight.hsbc.bridge.adjudication;
+package com.silenteight.hsbc.bridge.grpc;
 
 import com.silenteight.adjudication.api.v1.CreateDatasetRequest;
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceImplBase;
 import com.silenteight.hsbc.bridge.common.GrpcServerExtension;
-
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,14 +12,14 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class DatasetServiceApiGrpcTest {
+class DatasetGrpcAdapterTest {
 
   @RegisterExtension
   GrpcServerExtension grpcServerExtension = new GrpcServerExtension();
 
-  private DatasetServiceApiGrpc underTest;
+  private DatasetGrpcAdapter underTest;
 
   @BeforeEach
   public void setup() {
@@ -28,7 +27,7 @@ class DatasetServiceApiGrpcTest {
 
     var stub = DatasetServiceGrpc.newBlockingStub(grpcServerExtension.getChannel());
 
-    underTest = new DatasetServiceApiGrpc(stub, 1L);
+    underTest = new DatasetGrpcAdapter(stub, 1L);
   }
 
   @Test

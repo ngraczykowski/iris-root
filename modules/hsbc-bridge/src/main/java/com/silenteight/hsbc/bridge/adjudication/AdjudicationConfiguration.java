@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.bridge.adjudication;
 
-import com.silenteight.hsbc.bridge.analysis.AnalysisServiceApi;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.alert.AlertServiceApi;
+import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 class AdjudicationConfiguration {
 
-  private final AlertServiceApi alertServiceApi;
+  private final AlertServiceClient alertServiceClient;
   private final AnalysisFacade analysisFacade;
-  private final DatasetServiceApi datasetServiceApi;
+  private final DatasetServiceClient datasetServiceClient;
   private final ApplicationEventPublisher eventPublisher;
 
   @Bean
@@ -25,7 +25,7 @@ class AdjudicationConfiguration {
     return AdjudicationEventHandler.builder()
         .alertService(alertService())
         .analysisFacade(analysisFacade)
-        .datasetServiceApi(datasetServiceApi)
+        .datasetServiceClient(datasetServiceClient)
         .eventPublisher(eventPublisher)
         .build();
   }
@@ -34,11 +34,11 @@ class AdjudicationConfiguration {
   @Bean
   AdjudicationRecommendationListener adjudicationRecommendationListener(
           ApplicationEventPublisher eventPublisher,
-          AnalysisServiceApi analysisServiceApi) {
-    return new AdjudicationRecommendationListener(eventPublisher, analysisServiceApi);
+          RecommendationServiceClient recommendationServiceClient) {
+    return new AdjudicationRecommendationListener(eventPublisher, recommendationServiceClient);
   }
 
   private AlertService alertService() {
-    return new AlertService(alertServiceApi, eventPublisher);
+    return new AlertService(alertServiceClient, eventPublisher);
   }
 }

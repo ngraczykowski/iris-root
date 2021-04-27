@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.alert;
+package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,11 +7,12 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlocking
 import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
 import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
 import com.silenteight.adjudication.api.v1.Match;
+
+import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class AlertServiceGrpcApi implements AlertServiceApi {
+public class AlertGrpcAdapter implements AlertServiceClient {
 
   private final AlertServiceBlockingStub alertServiceBlockingStub;
   private final long deadlineInSeconds;
