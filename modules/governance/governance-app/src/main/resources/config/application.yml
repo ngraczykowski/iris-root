@@ -198,6 +198,8 @@ serp.governance:
     allow-credentials: true
     max-age: 1800
 
+  policy-step-solution:
+    hinted-enabled: false
 
 sep.auth:
   permissionMethodsMappings:
