@@ -15,26 +15,18 @@ public class DatasetDto {
 
   @NonNull
   UUID id;
-
   @NonNull
   String name;
-
   @NonNull
   String datasetName;
-
   String description;
-
   @NonNull
   DatasetState state;
-
   long alertsCount;
-
   @NonNull
   AlertSelectionCriteriaDto query;
-
   @NonNull
   OffsetDateTime createdAt;
-
   @NonNull
   String createdBy;
 }

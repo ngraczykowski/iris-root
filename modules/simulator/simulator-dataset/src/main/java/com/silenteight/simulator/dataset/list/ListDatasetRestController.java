@@ -29,9 +29,7 @@ class ListDatasetRestController {
 
   @GetMapping("/v1/datasets")
   @PreAuthorize("isAuthorized('LIST_DATASETS')")
-  public ResponseEntity<List<DatasetDto>> list(
-      @RequestParam(required = false) DatasetState state) {
-
+  public ResponseEntity<List<DatasetDto>> list(@RequestParam(required = false) DatasetState state) {
     return ok(datasetQuery.list(state));
   }
 }

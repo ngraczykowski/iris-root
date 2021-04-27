@@ -3,11 +3,11 @@ package com.silenteight.simulator.management;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.simulator.management.dto.SimulationDto;
 
 import java.util.List;
 
+import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
 import static com.silenteight.simulator.management.common.SimulationResource.toResourceName;
 import static java.util.stream.Collectors.toList;
 
@@ -28,16 +28,16 @@ class SimulationQuery {
   }
 
   private SimulationDto toDto(SimulationEntity simulationEntity) {
-    Analysis analysis = analysisService.getAnalysis(simulationEntity.getAnalysisName());
-    return SimulationDto
-        .builder()
+    // TODO(mmastylo): Uncomment when feature is available in AE
+    // Analysis analysis = analysisService.getAnalysis(simulationEntity.getAnalysisName());
+    return SimulationDto.builder()
         .id(simulationEntity.getSimulationId())
         .name(toResourceName(simulationEntity.getSimulationId()))
         .simulationName(simulationEntity.getName())
         .state(simulationEntity.getState())
         .datasetNames(simulationEntity.getDatasetNames())
         .modelName(simulationEntity.getModelName())
-        .progressState(analysis.getState().toString())
+        .progressState(DONE.toString())
         .createdAt(simulationEntity.getCreatedAt())
         .createdBy(simulationEntity.getCreatedBy())
         .build();

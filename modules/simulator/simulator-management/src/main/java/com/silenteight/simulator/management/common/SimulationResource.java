@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SimulationResource {
+public final class SimulationResource {
 
-  private static final String SIMULATION_RESOURCE_NAME = "simulations/";
+  private static final String RESOURCE_NAME_PREFIX = "simulations/";
 
-  public static String toResourceName(UUID datasetId) {
-    return SIMULATION_RESOURCE_NAME + datasetId.toString();
+  public static String toResourceName(UUID id) {
+    return RESOURCE_NAME_PREFIX + id.toString();
   }
 }

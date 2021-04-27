@@ -36,7 +36,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
     DatasetDto datasetDto = result.get(0);
     assertThat(datasetDto.getId()).isEqualTo(EXTERNAL_DATASET_ID);
     assertThat(datasetDto.getName()).isEqualTo("datasets/" + EXTERNAL_DATASET_ID.toString());
-    assertThat(datasetDto.getDatasetName()).isEqualTo(NAME);
+    assertThat(datasetDto.getDatasetName()).isEqualTo(DATASET_NAME);
     assertThat(datasetDto.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(datasetDto.getAlertsCount()).isEqualTo(ALERTS_COUNT);
     assertThat(datasetDto.getCreatedBy()).isEqualTo(CREATED_BY);
@@ -51,7 +51,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
 
     assertThat(result.getId()).isEqualTo(EXTERNAL_DATASET_ID);
     assertThat(result.getName()).isEqualTo("datasets/" + EXTERNAL_DATASET_ID.toString());
-    assertThat(result.getDatasetName()).isEqualTo(NAME);
+    assertThat(result.getDatasetName()).isEqualTo(DATASET_NAME);
     assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(result.getAlertsCount()).isEqualTo(ALERTS_COUNT);
     assertThat(result.getCreatedBy()).isEqualTo(CREATED_BY);
@@ -71,7 +71,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
     DatasetEntity datasetEntity = DatasetEntity.builder()
         .datasetId(EXTERNAL_DATASET_ID)
         .createdBy(CREATED_BY)
-        .name(NAME)
+        .name(DATASET_NAME)
         .description(DESCRIPTION)
         .externalResourceName(EXTERNAL_RESOURCE_NAME)
         .initialAlertCount(ALERTS_COUNT)

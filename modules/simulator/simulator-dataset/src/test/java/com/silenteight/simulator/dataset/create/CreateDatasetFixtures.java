@@ -3,6 +3,7 @@ package com.silenteight.simulator.dataset.create;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 import com.silenteight.simulator.dataset.dto.RangeQueryDto;
 
@@ -15,7 +16,7 @@ import static java.util.UUID.fromString;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class CreateDatasetFixtures {
 
-  static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  static final UUID ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
   static final String DATASET_NAME = "Dataset name";
   static final String DESCRIPTION = "Dataset description";
   static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);
@@ -23,17 +24,12 @@ final class CreateDatasetFixtures {
   static final String CREATED_BY = "asmith";
 
   static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
-      CreateDatasetRequestDto.builder()
-          .id(DATASET_ID)
-          .datasetName(DATASET_NAME)
-          .description(DESCRIPTION)
-          .query(query(FROM, TO))
-          .build();
+      new CreateDatasetRequestDto(ID, DATASET_NAME, DESCRIPTION, query(FROM, TO));
 
   static final CreateDatasetRequest CREATE_DATASET_REQUEST =
       CreateDatasetRequest.builder()
-          .id(DATASET_ID)
-          .name(DATASET_NAME)
+          .id(ID)
+          .datasetName(DATASET_NAME)
           .description(DESCRIPTION)
           .query(query(FROM, TO))
           .createdBy(CREATED_BY)

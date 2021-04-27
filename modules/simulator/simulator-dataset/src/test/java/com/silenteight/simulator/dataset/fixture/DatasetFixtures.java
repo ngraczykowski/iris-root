@@ -18,9 +18,9 @@ import static java.util.UUID.fromString;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DatasetFixtures {
 
-  public static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
-  public static final String RESOURCE_NAME = "datasets/" + DATASET_ID.toString();
-  public static final String NAME = "Dataset name";
+  public static final UUID ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  public static final String RESOURCE_NAME = "datasets/" + ID.toString();
+  public static final String DATASET_NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
   public static final UUID EXTERNAL_DATASET_ID = fromString("b6855a6f-fc63-422f-84a7-677a0c8f9a9a");
   public static final String EXTERNAL_RESOURCE_NAME = "datasets/" + EXTERNAL_DATASET_ID.toString();
@@ -34,9 +34,9 @@ public final class DatasetFixtures {
 
   public static final DatasetDto DATASET_DTO = DatasetDto
       .builder()
-      .id(DATASET_ID)
+      .id(ID)
       .name(RESOURCE_NAME)
-      .datasetName(NAME)
+      .datasetName(DATASET_NAME)
       .description(DESCRIPTION)
       .state(STATE)
       .alertsCount(ALERTS_COUNT)
