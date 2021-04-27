@@ -43,6 +43,11 @@ warehouse:
     prefetch: 25
   kibana:
     timezone: Europe/Warsaw
+  report:
+    default-bucket: reports
+    synchronization:
+      production-tenant: admin_tenant
+      cron: "0 */1 * * * ?"
 
 spring:
   #-------------------------------------------------------------------------------------------------

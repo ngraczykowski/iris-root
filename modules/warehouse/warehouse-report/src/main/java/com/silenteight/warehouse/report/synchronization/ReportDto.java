@@ -13,5 +13,9 @@ public class ReportDto {
   @NonNull
   UUID reportId;
   @NonNull
+  String tenant;
+  @NonNull
   String kibanaReportInstanceId;
+  @NonNull
+  String filename;
 }
