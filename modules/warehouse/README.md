@@ -63,13 +63,20 @@ Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openap
 
 ## Other
 
-### Setting-up HTTPS for ES connection in dev environment 
+### Setting-up HTTPS for dev environment 
+
+#### Generating keys for minio
+
+        cd scripts/minio
+        openssl genrsa -out private.key 2048
+        openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config openssl.conf
 
 #### Truststore
 There is a test truststore in `./scripts`. You can re-create it by following the steps below:
 
         cd scripts
-        keytool -import -file root-ca.pem -alias esCA -keystore myTrustStore
+        keytool -import -file es/root-ca.pem -alias esCA -keystore myTrustStore
+        keytool -import -file minio/public.crt -alias minioCA -keystore myTrustStore
         
 This creates a truststore with a root-ca that is used by default in Opendistro docker.
 The path to truststore and password needs to be provided via environment variables as explained below.
@@ -77,7 +84,7 @@ The path to truststore and password needs to be provided via environment variabl
 #### SSL setup
 Set the following environment variables:
 
-        TRUSTSTORE_PATH=dev-elk/myTrustStore     # use ralative or absolute path
+        TRUSTSTORE_PATH=scripts/myTrustStore     # use ralative or absolute path
         TRUSTSTORE_PASSWORD=password
 
 Note: The application binds these environment variables to system properties. 
