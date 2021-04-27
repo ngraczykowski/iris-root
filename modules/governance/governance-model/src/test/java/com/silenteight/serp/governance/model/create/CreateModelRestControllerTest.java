@@ -27,7 +27,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 })
 class CreateModelRestControllerTest extends BaseRestControllerTest {
 
-  private static final String CREATE_MODEL_URL = "/v1/models";
+  private static final String CREATE_MODEL_URL = "/v1/solvingModels";
 
   @MockBean
   private CreateModelUseCase createModelUseCase;
