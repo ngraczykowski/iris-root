@@ -1,5 +1,7 @@
 spring.cloud.consul.enabled: false
 
+serp.governance.policy-step-solution.hinted-enabled: false
+
 sep.auth:
   permissionMethodsMappings:
     CANCEL_CHANGE_REQUESTS:
