@@ -10,7 +10,7 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 public interface DataSourceInputProvider<R> {
 
   default R provideInput(@NonNull DataSourceInputRequest request) {
-    var matches = getMatchFacade().getMatches(request.getMatchIds());
+    var matches = getMatchFacade().getMatches(request.getMatches());
 
     return toResponse(
         DataSourceInputCommand.builder()

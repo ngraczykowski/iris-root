@@ -21,17 +21,6 @@ public class MatchFacade {
   private final MatchRepository matchRepository;
   private final ApplicationEventPublisher eventPublisher;
 
-  public MatchComposite getMatch(long id) {
-    var matchResult = matchRepository.findById(id);
-
-    if (matchResult.isEmpty()) {
-      throw new MatchNotFoundException(id);
-    }
-
-    var matchEntity = matchResult.get();
-    return toMatchComposite(matchEntity);
-  }
-
   public List<MatchComposite> getMatchesByAlertId(long alertId) {
     return toMatchComposites(matchRepository.findMatchEntitiesByAlertId(alertId));
   }
@@ -92,9 +81,20 @@ public class MatchFacade {
         .collect(Collectors.toList());
   }
 
-  public List<MatchComposite> getMatches(@NonNull List<Long> matchIds) {
-    return matchIds.stream()
+  public List<MatchComposite> getMatches(@NonNull List<String> matchNames) {
+    return matchNames.stream()
         .map(this::getMatch)
         .collect(Collectors.toList());
+  }
+
+  private MatchComposite getMatch(String name) {
+    var matchResult = matchRepository.findByName(name);
+
+    if (matchResult.isEmpty()) {
+      throw new MatchNotFoundException(name);
+    }
+
+    var matchEntity = matchResult.get();
+    return toMatchComposite(matchEntity);
   }
 }

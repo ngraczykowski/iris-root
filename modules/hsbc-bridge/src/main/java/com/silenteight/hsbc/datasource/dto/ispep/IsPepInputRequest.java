@@ -12,10 +12,4 @@ public class IsPepInputRequest {
 
   List<String> matches;
   List<RegionModelFieldDto> regionModelFields;
-
-  public List<Long> getMatchIds() {
-    return matches.stream()
-        .map(Long::parseLong)
-        .collect(Collectors.toList());
-  }
 }

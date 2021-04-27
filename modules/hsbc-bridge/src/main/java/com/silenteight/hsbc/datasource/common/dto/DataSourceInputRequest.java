@@ -15,11 +15,4 @@ public class DataSourceInputRequest {
 
   @NotNull List<String> matches;
   @NotNull List<String> features;
-
-  public List<Long> getMatchIds() {
-    return matches.stream()
-        .filter(not(String::isEmpty))
-        .map(Long::parseLong)
-        .collect(Collectors.toList());
-  }
 }

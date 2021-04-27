@@ -17,7 +17,6 @@ public class IsPepInputProvider {
   private final MatchFacade matchFacade;
 
   public IsPepInputResponse provideInput(@NonNull IsPepInputRequest request) {
-    var matches = getMatchFacade().getMatches(request.getMatchIds());
 
     return IsPepInputResponse.builder()
         .inputs(List.of()) //TODO

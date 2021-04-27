@@ -25,18 +25,6 @@ class MatchFacadeSpec extends Specification {
 
   def fixtures = new Fixtures()
 
-  def 'should get match by id'() {
-    given:
-    def id = 1
-
-    when:
-    def result = underTest.getMatch(id)
-
-    then:
-    result.rawData == fixtures.matchRawData
-    1 * matchRepository.findById(id) >> of(new MatchEntity('match', 2, fixtures.matchPayload))
-  }
-
   def 'should prepare and save matches'() {
     given:
     def alertComposite = AlertComposite.builder()

@@ -27,4 +27,6 @@ interface MatchRepository extends Repository<MatchEntity, Long> {
   @Modifying
   @Query("update MatchEntity m set m.payload = null where m.createdAt < :expireDate")
   void deletePayloadByCreatedAtBefore(@Param("expireDate") OffsetDateTime expireDate);
+
+  Optional<MatchEntity> findByName(String name);
 }
