@@ -1,13 +1,9 @@
-keycloak:
-  adapter:
-    authServerUrl: fakeAuthHost:8000
-    realm: sens-webapp
-    publicClient: false
-    confidentialPort: 0
-    principalAttribute: preferred_username
-    resource: backend
-    sslRequired: external
-    credentials.secret: 55555555-4444-3333-2222-000111000111
+spring:
+  elasticsearch:
+    rest:
+      username: admin
+      password: admin
+      uris: http://localhost:9201,http://localhost:9200
 
 warehouse:
   kibana:

@@ -6,7 +6,7 @@ ext {
   //***********************************
   silenteightAuditBsVersion = "1.2.0"
   silenteightCommonsVersion = "2.1.0"
-  silenteightSepAuthVersion = "1.0.0"
+  silenteightSepAuthVersion = "1.1.0"
   silenteightSepBaseVersion = "1.10.1"
   silenteightDataApiVersion = "1.0.0"
   silenteightSepUsermanagementApiVersion = "1.4.0"
