@@ -6,10 +6,11 @@ import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesR
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesResponse.ReportInstanceList;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
+import com.silenteight.warehouse.common.opendistro.kibana.dto.KibanaReportDto;
 
-import java.util.List;
+import java.util.Set;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @RequiredArgsConstructor
 public class ReportingService {
@@ -17,7 +18,7 @@ public class ReportingService {
   private final OpendistroElasticClient opendistroElasticClient;
   private final OpendistroKibanaClient opendistroKibanaClient;
 
-  public List<String> getReportList(String tenant) {
+  public Set<String> getReportList(String tenant) {
     ListReportsInstancesRequest listReportsInstancesRequest = ListReportsInstancesRequest.builder()
         .tenant(tenant)
         .build();
@@ -26,10 +27,10 @@ public class ReportingService {
         .getReportInstanceList()
         .stream()
         .map(ReportInstanceList::getId)
-        .collect(toList());
+        .collect(toSet());
   }
 
-  public String getReportContent(String tenant, String reportInstanceId) {
+  public KibanaReportDto getReport(String tenant, String reportInstanceId) {
     return opendistroKibanaClient.getReportContent(tenant, reportInstanceId);
   }
 }

@@ -1,9 +1,15 @@
 spring:
-  elasticsearch:
-    rest:
-      username: admin
-      password: admin
-      uris: http://localhost:9201,http://localhost:9200
+  application:
+    name: warehouse
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${warehouse.db.schema:public}
+    contexts: default
 
 warehouse:
   kibana:
