@@ -10,4 +10,6 @@ configurations {
 
 dependencies {
   implementation libraries.silenteight_audit_bs
+
+  implementation libraries.liquibase_sessionlock
 }
