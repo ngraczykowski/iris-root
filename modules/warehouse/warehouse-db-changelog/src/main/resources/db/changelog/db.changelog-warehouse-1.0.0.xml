@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="warehouse-1.0.0-1" author="anowicki">
+    <createTable tableName="warehouse_report">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="filename" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="kibana_report_instance_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report"
+        indexName="ix_warehouse_report_id"
+        unique="true">
+      <column name="report_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_report"
+        indexName="ix_warehouse_kibana_report_instance_id"
+        unique="true">
+      <column name="kibana_report_instance_id"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

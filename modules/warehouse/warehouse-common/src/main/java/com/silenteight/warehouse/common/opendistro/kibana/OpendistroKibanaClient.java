@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.opendistro.kibana.dto.KibanaReportDto;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,7 +35,7 @@ public class OpendistroKibanaClient {
   private final Supplier<Builder> defaultHttpRequestBuilder;
   private final String timezone;
 
-  public String getReportContent(String tenant, String reportInstanceId) {
+  public KibanaReportDto getReportContent(String tenant, String reportInstanceId) {
     TypeReference<ReportContentResponse> typeRef = new TypeReference<>() {};
 
     ReportContentResponse report = this.get(GetHttpRequest.builder()
@@ -41,8 +43,15 @@ public class OpendistroKibanaClient {
         .tenant(tenant)
         .build(), typeRef);
 
-    return ofNullable(report.getData())
+    String data = ofNullable(report.getData())
         .orElseThrow(() -> new KibanaReportGenerationFailedException(reportInstanceId));
+    String filename = ofNullable(report.getFilename())
+        .orElseThrow(() -> new KibanaReportGenerationFailedException(reportInstanceId));
+
+    return KibanaReportDto.builder()
+        .content(data)
+        .filename(filename)
+        .build();
   }
 
   @SneakyThrows

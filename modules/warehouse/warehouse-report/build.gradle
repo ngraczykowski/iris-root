@@ -1,17 +1,22 @@
 plugins {
   id "java-library"
+  id "java-test-fixtures"
 }
 
 description = "Warehouse Report"
 
 configurations {
   implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
   testImplementation.extendsFrom starterCommon
   testImplementation.extendsFrom starterSpringTest
 }
 
 dependencies {
   implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
   implementation libraries.silenteight_commons_core
   implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.minio

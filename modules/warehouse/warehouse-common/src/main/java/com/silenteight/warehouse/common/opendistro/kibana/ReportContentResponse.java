@@ -9,4 +9,6 @@ class ReportContentResponse {
 
   @Nullable
   private String data;
+  @Nullable
+  private String filename;
 }
