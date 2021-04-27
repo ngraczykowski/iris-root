@@ -16,7 +16,7 @@ public class CreateDatasetRequestDto {
   UUID id;
 
   @NonNull
-  String name;
+  String datasetName;
 
   String description;
 

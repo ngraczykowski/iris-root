@@ -32,7 +32,7 @@ class CreateDatasetRestController {
 
     final CreateDatasetRequest request = CreateDatasetRequest.builder()
         .id(dto.getId())
-        .name(dto.getName())
+        .name(dto.getDatasetName())
         .description(dto.getDescription())
         .query(dto.getQuery())
         .createdBy(authentication.getName())

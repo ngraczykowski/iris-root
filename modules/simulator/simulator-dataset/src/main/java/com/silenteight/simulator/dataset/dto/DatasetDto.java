@@ -19,6 +19,9 @@ public class DatasetDto {
   @NonNull
   String name;
 
+  @NonNull
+  String datasetName;
+
   String description;
 
   @NonNull

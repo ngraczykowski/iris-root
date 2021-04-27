@@ -24,7 +24,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SimulationListQuery'
+                  $ref: '#/components/schemas/SimulationListDto'
 
     post:
       description: Create a new simulation
@@ -55,7 +55,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/SimulationQuery'
+                $ref: '#/components/schemas/SimulationDto'
 
   /simulations/{id}/statistics/efficiency:
     get:
@@ -170,38 +170,40 @@ components:
       type: object
       required:
         - id
-        - name
-        - datasetNames
+        - simulationName
+        - datasetIds
         - modelName
       properties:
         id:
           type: string
-        name:
+        simulationName:
           type: string
         description:
           type: string
-        datasetNames:
+        datasetIds:
           type: array
           items:
             properties:
-              datasetName:
+              datasetId:
                 type: string
         modelName:
           type: string
           description: Model resource name
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        name: 'New simulation'
+        simulationName: 'New simulation'
         description: 'Simulation description'
-        datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
+        datasetIds: ['b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
 
-    SimulationListQuery:
+    SimulationListDto:
       type: object
       properties:
         id:
           type: string
         name:
+          type: string
+        simulationName:
           type: string
         state:
           type: object
@@ -226,7 +228,8 @@ components:
           type: string
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        name: 'Simulation name'
+        name: 'simulations/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        simulationName: 'Simulation name'
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
@@ -236,12 +239,14 @@ components:
         createdBy: 'UserName'
         updatedAt: '2004-02-15T15:19:21Z'
 
-    SimulationQuery:
+    SimulationDto:
       type: object
       properties:
         id:
           type: string
         name:
+          type: string
+        simulationName:
           type: string
         state:
           type: object
@@ -267,7 +272,8 @@ components:
           type: string
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        name: 'Simulation name'
+        name: 'simulations/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        simulationName: 'Simulation name'
         description: 'Simulation description'
         datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'

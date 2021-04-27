@@ -34,8 +34,9 @@ class DatasetQueryTest extends BaseDataJpaTest {
 
     assertThat(result).hasSize(1);
     DatasetDto datasetDto = result.get(0);
-    assertThat(datasetDto.getId()).isEqualTo(DATASET_ID);
-    assertThat(datasetDto.getName()).isEqualTo(NAME);
+    assertThat(datasetDto.getId()).isEqualTo(EXTERNAL_DATASET_ID);
+    assertThat(datasetDto.getName()).isEqualTo("datasets/" + EXTERNAL_DATASET_ID.toString());
+    assertThat(datasetDto.getDatasetName()).isEqualTo(NAME);
     assertThat(datasetDto.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(datasetDto.getAlertsCount()).isEqualTo(ALERTS_COUNT);
     assertThat(datasetDto.getCreatedBy()).isEqualTo(CREATED_BY);
@@ -46,19 +47,29 @@ class DatasetQueryTest extends BaseDataJpaTest {
   void shouldGetDataset() {
     persistDataset();
 
-    DatasetDto result = underTest.get(DATASET_ID);
+    DatasetDto result = underTest.get(EXTERNAL_DATASET_ID);
 
-    assertThat(result.getId()).isEqualTo(DATASET_ID);
-    assertThat(result.getName()).isEqualTo(NAME);
+    assertThat(result.getId()).isEqualTo(EXTERNAL_DATASET_ID);
+    assertThat(result.getName()).isEqualTo("datasets/" + EXTERNAL_DATASET_ID.toString());
+    assertThat(result.getDatasetName()).isEqualTo(NAME);
     assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(result.getAlertsCount()).isEqualTo(ALERTS_COUNT);
     assertThat(result.getCreatedBy()).isEqualTo(CREATED_BY);
     assertThat(result.getQuery()).isNotNull();
   }
 
+  @Test
+  void shouldGetExternalResourceName() {
+    persistDataset();
+
+    String result = underTest.getExternalResourceName(EXTERNAL_DATASET_ID);
+
+    assertThat(result).isEqualTo(EXTERNAL_RESOURCE_NAME);
+  }
+
   private void persistDataset() {
     DatasetEntity datasetEntity = DatasetEntity.builder()
-        .datasetId(DATASET_ID)
+        .datasetId(EXTERNAL_DATASET_ID)
         .createdBy(CREATED_BY)
         .name(NAME)
         .description(DESCRIPTION)

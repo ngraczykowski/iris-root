@@ -15,6 +15,7 @@ import static com.silenteight.simulator.management.SimulationRestController.SIMU
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,9 @@ class SimulationRestControllerTest extends BaseRestControllerTest {
         .body("size()", is(1))
         .body("[0].id", is(SIMULATION_ID.toString()))
         .body("[0].name", is(NAME))
+        .body("[0].simulationName", is(SIMULATION_NAME))
         .body("[0].state", is(STATE.toString()))
-        .body("[0].datasetNames", is(DATASET_NAMES))
+        .body("[0].datasetNames", hasItems(DATASET_NAME))
         .body("[0].modelName", is(MODEL_NAME))
         .body("[0].progressState", is(PROGRESS_STATE))
         .body("[0].createdAt", notNullValue())

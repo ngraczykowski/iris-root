@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import static com.silenteight.simulator.management.dto.SimulationState.PENDING;
 
@@ -15,15 +15,20 @@ class SimulationService {
   @NonNull
   private final SimulationEntityRepository repository;
 
-  void createSimulation(CreateSimulationRequest request, String analysisName) {
-    SimulationEntity simulationEntity = SimulationEntity.builder()
+  void createSimulation(
+      CreateSimulationRequest request,
+      Set<String> datasetNames,
+      String analysisName) {
+
+    SimulationEntity simulationEntity = SimulationEntity
+        .builder()
         .simulationId(request.getId())
         .createdBy(request.getCreatedBy())
-        .name(request.getName())
+        .name(request.getSimulationName())
         .description(request.getDescription())
         .modelName(request.getModelName())
         .analysisName(analysisName)
-        .datasetNames(new HashSet<>(request.getDatasetNames()))
+        .datasetNames(datasetNames)
         .state(PENDING)
         .build();
 

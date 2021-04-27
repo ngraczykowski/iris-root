@@ -16,7 +16,7 @@ import static java.util.UUID.fromString;
 final class CreateDatasetFixtures {
 
   static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
-  static final String NAME = "Dataset name";
+  static final String DATASET_NAME = "Dataset name";
   static final String DESCRIPTION = "Dataset description";
   static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);
   static final OffsetDateTime TO = OffsetDateTime.of(2020, 10, 10, 23, 59, 59, 0, UTC);
@@ -25,7 +25,7 @@ final class CreateDatasetFixtures {
   static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
       CreateDatasetRequestDto.builder()
           .id(DATASET_ID)
-          .name(NAME)
+          .datasetName(DATASET_NAME)
           .description(DESCRIPTION)
           .query(query(FROM, TO))
           .build();
@@ -33,7 +33,7 @@ final class CreateDatasetFixtures {
   static final CreateDatasetRequest CREATE_DATASET_REQUEST =
       CreateDatasetRequest.builder()
           .id(DATASET_ID)
-          .name(NAME)
+          .name(DATASET_NAME)
           .description(DESCRIPTION)
           .query(query(FROM, TO))
           .createdBy(CREATED_BY)

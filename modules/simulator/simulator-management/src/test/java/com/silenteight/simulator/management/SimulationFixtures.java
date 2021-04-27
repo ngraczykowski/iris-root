@@ -8,22 +8,27 @@ import com.silenteight.simulator.management.dto.SimulationState;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
+import static com.silenteight.simulator.dataset.common.DatasetResource.toResourceName;
 import static com.silenteight.simulator.management.dto.SimulationState.PENDING;
 import static java.time.ZoneOffset.UTC;
+import static java.util.Set.of;
 import static java.util.UUID.fromString;
 
 class SimulationFixtures {
 
   static final UUID SIMULATION_ID = fromString("a9b45451-6fde-4832-8dc0-d17b4708d8ca");
-  static final String NAME = "New simulation";
+  static final String NAME = "simulations/" + SIMULATION_ID;
+  static final String SIMULATION_NAME = "New simulation";
   static final String DESCRIPTION = "Simulation description";
   static final String MODEL_NAME = "solving-models/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
-  static final String DATASET_NAME = "datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
-  static final List<String> DATASET_NAMES = List.of(DATASET_NAME);
   static final State ANALYSIS_STATE = DONE;
+  static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  static final String DATASET_NAME = toResourceName(DATASET_ID);
+  static final Set<String> DATASET_NAMES = of(DATASET_NAME);
   static final String PROGRESS_STATE = ANALYSIS_STATE.toString();
   static final String USERNAME = "USERNAME";
   static final SimulationState STATE = PENDING;
@@ -36,17 +41,19 @@ class SimulationFixtures {
   static final CreateSimulationRequest CREATE_SIMULATION_REQUEST =
       CreateSimulationRequest.builder()
           .id(SIMULATION_ID)
-          .name(NAME)
+          .simulationName(SIMULATION_NAME)
           .description(DESCRIPTION)
           .modelName(MODEL_NAME)
-          .datasetNames(DATASET_NAMES)
+          .datasetNames(of(DATASET_NAME))
           .createdBy(USERNAME)
           .build();
 
   static final SimulationDto SIMULATION_DTO =
-      SimulationDto.builder()
+      SimulationDto
+          .builder()
           .id(SIMULATION_ID)
           .name(NAME)
+          .simulationName(SIMULATION_NAME)
           .state(STATE)
           .modelName(MODEL_NAME)
           .datasetNames(DATASET_NAMES)
