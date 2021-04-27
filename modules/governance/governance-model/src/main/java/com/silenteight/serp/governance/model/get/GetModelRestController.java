@@ -25,7 +25,7 @@ class GetModelRestController {
   @NonNull
   private final GetModelDetailsQuery getModelDetailsQuery;
 
-  @GetMapping("/v1/models/{id}")
+  @GetMapping("/v1/solvingModels/{id}")
   @PreAuthorize("isAuthorized('LIST_MODELS')")
   public ResponseEntity<ModelDto> get(@PathVariable UUID id) {
     return ok(getModelDetailsQuery.get(id));

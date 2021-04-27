@@ -26,7 +26,7 @@ class CreateModelRestController {
   @NonNull
   private final CreateModelUseCase createModelUseCase;
 
-  @PostMapping("/v1/models")
+  @PostMapping("/v1/solvingModels")
   @PreAuthorize("isAuthorized('CREATE_MODEL')")
   public ResponseEntity<Void> create(
       @Valid @RequestBody CreateModelDto request, Authentication authentication) {
