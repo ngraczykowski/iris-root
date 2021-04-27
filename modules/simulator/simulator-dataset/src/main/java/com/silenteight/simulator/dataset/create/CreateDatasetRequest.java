@@ -25,18 +25,13 @@ public class CreateDatasetRequest implements AuditableRequest {
 
   @NonNull
   UUID id;
-  
   @NonNull
-  String name;
-
+  String datasetName;
   String description;
-
   @NonNull
   String createdBy;
-
   @NonNull
   AlertSelectionCriteriaDto query;
-
   @Builder.Default
   UUID correlationId = randomUUID();
 
@@ -59,8 +54,7 @@ public class CreateDatasetRequest implements AuditableRequest {
   }
 
   private AuditDataDto getAuditDataDto(String type) {
-    return AuditDataDto
-        .builder()
+    return AuditDataDto.builder()
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(from(now()))

@@ -33,9 +33,9 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
     given(datasetQuery.get(EXTERNAL_DATASET_ID)).willReturn(DATASET_DTO);
     get(GET_DATASET_URL)
         .statusCode(OK.value())
-        .body("id", is(DATASET_ID.toString()))
+        .body("id", is(ID.toString()))
         .body("name", is(RESOURCE_NAME))
-        .body("datasetName", is(NAME))
+        .body("datasetName", is(DATASET_NAME))
         .body("description", is(DESCRIPTION))
         .body("state", is(STATE.toString()))
         .body("alertsCount", is((int) ALERTS_COUNT))

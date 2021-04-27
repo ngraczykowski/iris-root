@@ -3,6 +3,8 @@ package com.silenteight.simulator.dataset.create;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
+import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -30,14 +32,13 @@ class CreateDatasetRestController {
   public ResponseEntity<Void> create(
       @RequestBody @Valid CreateDatasetRequestDto dto, Authentication authentication) {
 
-    final CreateDatasetRequest request = CreateDatasetRequest.builder()
+    CreateDatasetRequest request = CreateDatasetRequest.builder()
         .id(dto.getId())
-        .name(dto.getDatasetName())
+        .datasetName(dto.getDatasetName())
         .description(dto.getDescription())
         .query(dto.getQuery())
         .createdBy(authentication.getName())
         .build();
-
     useCase.activate(request);
     return status(CREATED).build();
   }

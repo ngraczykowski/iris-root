@@ -17,7 +17,7 @@ public class DatasetMetadataService {
   public void createMetadata(CreateDatasetRequest request, Dataset dataset) {
     DatasetEntity datasetEntity = DatasetEntity.builder()
         .datasetId(request.getId())
-        .name(request.getName())
+        .name(request.getDatasetName())
         .description(request.getDescription())
         .externalResourceName(dataset.getName())
         .createdBy(request.getCreatedBy())
@@ -26,7 +26,6 @@ public class DatasetMetadataService {
         .generationDateFrom(request.getRangeFrom())
         .generationDateTo(request.getRangeTo())
         .build();
-
     repository.save(datasetEntity);
   }
 }

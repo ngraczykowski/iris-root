@@ -12,7 +12,6 @@ public class RangeQueryDto {
 
   @NonNull
   OffsetDateTime from;
-
   @NonNull
   OffsetDateTime to;
 }

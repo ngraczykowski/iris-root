@@ -9,15 +9,15 @@ import static java.util.UUID.fromString;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DatasetResource {
+public final class DatasetResource {
 
-  private static final String DATASET_RESOURCE_NAME = "datasets/";
+  private static final String RESOURCE_NAME_PREFIX = "datasets/";
 
-  public static String toResourceName(UUID datasetId) {
-    return DATASET_RESOURCE_NAME + datasetId.toString();
+  public static String toResourceName(UUID id) {
+    return RESOURCE_NAME_PREFIX + id.toString();
   }
 
-  public static UUID fromResourceName(String datasetName) {
-    return fromString(removeStart(datasetName, DATASET_RESOURCE_NAME));
+  public static UUID fromResourceName(String resourceName) {
+    return fromString(removeStart(resourceName, RESOURCE_NAME_PREFIX));
   }
 }

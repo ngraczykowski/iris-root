@@ -19,10 +19,8 @@ public class CreateDatasetUseCase {
 
   public void activate(CreateDatasetRequest request) {
     request.preAudit(auditingLogger::log);
-
     Dataset dataset = createDatasetService.createDataset(request);
     datasetMetadataService.createMetadata(request, dataset);
-
     request.postAudit(auditingLogger::log);
   }
 }
