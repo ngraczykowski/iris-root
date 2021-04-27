@@ -20,5 +20,12 @@ message CompareLocationsRequest {
 }
 
 message CompareLocationsResponse {
-  string solution = 1;
+  GeoComparerSolution solution = 1;
+  GeoComparerReason reason = 2;
+  IdentifiedLocations identified_inputs = 3;
+}
+
+message IdentifiedLocations {
+  repeated IdentifiedLocation alerted_party_identified_locations = 1;
+  repeated IdentifiedLocation watchlist_party_identified_locations = 2;
 }

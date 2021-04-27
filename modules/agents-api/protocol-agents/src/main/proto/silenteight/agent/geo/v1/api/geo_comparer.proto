@@ -20,5 +20,6 @@ message CompareGeoLocationsRequest {
 }
 
 message CompareGeoLocationsResponse {
-  string solution = 1;
+  GeoComparerSolution solution = 1;
+  GeoComparerReason reason = 2;
 }
