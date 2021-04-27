@@ -42,13 +42,10 @@ class AnalysisServiceGrpcApi implements AnalysisServiceApi {
   public CreateAnalysisResponseDto createAnalysis(CreateAnalysisRequestDto request) {
     var grpcRequest = CreateAnalysisRequest.newBuilder()
         .setAnalysis(Analysis.newBuilder()
-            .setName(request.getName())
             .setStrategy(request.getStrategy())
             .setPolicy(request.getPolicy())
-            .setAlertCount(request.getAlertCount())
-            .setPendingAlerts(request.getPendingAlerts())
-            .addAllFeatures(List.of())
-            .addAllCategories(List.of())
+            .addAllFeatures(List.of())//TODO fill it
+            .addAllCategories(List.of())//TODO fill it
             .build())
         .build();
 
