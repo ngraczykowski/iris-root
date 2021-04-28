@@ -15,5 +15,5 @@ public class CreateModelDto {
   @NonNull
   private UUID id;
   @NonNull
-  private String policyName;
+  private String policy;
 }

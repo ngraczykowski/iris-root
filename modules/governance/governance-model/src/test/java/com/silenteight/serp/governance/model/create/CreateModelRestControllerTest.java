@@ -13,7 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
-import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -43,7 +43,7 @@ class CreateModelRestControllerTest extends BaseRestControllerTest {
         CreateModelCommand
             .builder()
             .id(MODEL_ID)
-            .policyName(POLICY_NAME)
+            .policy(POLICY)
             .createdBy(USERNAME)
             .build());
   }
@@ -65,6 +65,6 @@ class CreateModelRestControllerTest extends BaseRestControllerTest {
   }
 
   private static CreateModelDto makeCreateModelDto() {
-    return new CreateModelDto(MODEL_ID, POLICY_NAME);
+    return new CreateModelDto(MODEL_ID, POLICY);
   }
 }

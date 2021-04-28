@@ -13,7 +13,7 @@ public class ModelDto {
   @NonNull
   String name;
   @NonNull
-  String policyName;
+  String policy;
   @NonNull
   OffsetDateTime createdAt;
 }

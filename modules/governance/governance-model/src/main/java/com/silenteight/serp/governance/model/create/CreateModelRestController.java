@@ -33,7 +33,7 @@ class CreateModelRestController {
 
     CreateModelCommand command = CreateModelCommand.builder()
         .id(request.getId())
-        .policyName(request.getPolicyName())
+        .policy(request.getPolicy())
         .createdBy(authentication.getName())
         .build();
     createModelUseCase.activate(command);

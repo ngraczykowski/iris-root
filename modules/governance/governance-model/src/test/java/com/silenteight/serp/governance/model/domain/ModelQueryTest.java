@@ -22,7 +22,7 @@ import java.time.OffsetDateTime;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.DEFAULT_MODEL_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_RESOURCE_NAME;
-import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY;
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
 import static java.time.OffsetDateTime.now;
 import static java.util.Optional.of;
@@ -56,11 +56,13 @@ class ModelQueryTest extends BaseDataJpaTest {
     persistModel();
     lenient().when(currentPolicyProvider.getCurrentPolicy())
         .thenReturn(of(CURRENT_POLICY_NAME));
+
     // when
     ModelDto result = underTest.get(MODEL_RESOURCE_NAME);
+
     // then
     assertThat(result.getName()).isEqualTo(MODEL_RESOURCE_NAME);
-    assertThat(result.getPolicyName()).isEqualTo(POLICY_NAME);
+    assertThat(result.getPolicy()).isEqualTo(POLICY);
     assertThat(result.getCreatedAt()).isAfter(beforePersist);
   }
 
@@ -70,16 +72,18 @@ class ModelQueryTest extends BaseDataJpaTest {
     OffsetDateTime beforePersist = now();
     Mockito.when(currentPolicyProvider.getCurrentPolicy())
         .thenReturn(of(CURRENT_POLICY_NAME));
+
     // when
     ModelDto result = underTest.getDefault();
+
     // then
     assertThat(result.getName()).isEqualTo(DEFAULT_MODEL_NAME);
-    assertThat(result.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
+    assertThat(result.getPolicy()).isEqualTo(CURRENT_POLICY_NAME);
     assertThat(result.getCreatedAt()).isAfter(beforePersist);
   }
 
   private void persistModel() {
-    repository.save(new Model(MODEL_ID, POLICY_NAME));
+    repository.save(new Model(MODEL_ID, POLICY));
   }
 
   @Test
