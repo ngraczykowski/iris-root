@@ -53,10 +53,10 @@ class ModelServiceTest {
     AuditDataDto postAudit = getPostAudit(logCaptor);
     assertThat(postAudit.getType()).isEqualTo(POST_AUDIT_TYPE);
 
-    var modelOpt = modelRepository.findByPolicyName(POLICY);
-    assertThat(modelOpt).isNotEmpty();
+    var models = modelRepository.findAllByPolicyName(POLICY);
+    assertThat(models).isNotEmpty();
 
-    var model = modelOpt.get();
+    var model = models.iterator().next();
     assertThat(model.getModelId()).isEqualTo(MODEL_ID);
     assertThat(model.getPolicyName()).isEqualTo(POLICY);
   }

@@ -4,9 +4,9 @@ import lombok.NonNull;
 
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 
-import java.util.UUID;
+import java.util.List;
 
 public interface GetModelDetailsQuery {
 
-  ModelDto get(@NonNull UUID modelId);
+  List<ModelDto> getByPolicy(@NonNull String policy);
 }

@@ -10,15 +10,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.util.List;
+
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_DTO;
-import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_RESOURCE_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -30,7 +30,7 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class GetModelRestControllerTest extends BaseRestControllerTest {
 
-  private static final String GET_MODEL_URL = "/v1/solvingModels/" + MODEL_ID.toString();
+  private static final String GET_MODEL_URL = "/v1/solvingModels?policy=" + POLICY;
 
   @MockBean
   private GetModelDetailsQuery getModelDetailsQuery;
@@ -38,17 +38,19 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
   void its200_whenModelFound() {
-    given(getModelDetailsQuery.get(MODEL_ID)).willReturn(MODEL_DTO);
+    given(getModelDetailsQuery.getByPolicy(POLICY))
+        .willReturn(List.of(MODEL_DTO));
+
     get(GET_MODEL_URL)
         .statusCode(OK.value())
-        .body("name", is(MODEL_RESOURCE_NAME))
-        .body("policy", is(POLICY))
-        .body("createdAt", notNullValue());
+        .body("[0].name", is(MODEL_RESOURCE_NAME))
+        .body("[0].policy", is(POLICY))
+        .body("[0].createdAt", notNullValue());
   }
 
   @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
-  void its404_whenModelAlreadyExists() {
-    when(getModelDetailsQuery.get(MODEL_ID)).thenThrow(ModelNotFoundException.class);
+  void its404_whenModelDoesNotExist() {
+    given(getModelDetailsQuery.getByPolicy(POLICY)).willThrow(ModelNotFoundException.class);
 
     get(GET_MODEL_URL).statusCode(NOT_FOUND.value());
   }
