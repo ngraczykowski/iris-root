@@ -12,7 +12,6 @@ public class CreateAnalysisRequestDto {
   String name;
   String policy;
   String strategy;
-  int pendingAlerts;
-  int alertCount;
+  List<String> categories;
   List<FeatureDto> features;
 }

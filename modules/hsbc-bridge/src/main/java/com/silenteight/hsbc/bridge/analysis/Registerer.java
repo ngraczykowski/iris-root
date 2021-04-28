@@ -28,6 +28,7 @@ class Registerer {
   private CreateAnalysisResponseDto createAnalysis() {
     var solvingModel = modelUseCase.getSolvingModel();
     var request = CreateAnalysisRequestDto.builder()
+        .categories(solvingModel.getCategories())
         .policy(solvingModel.getPolicyName())
         .strategy(solvingModel.getStrategyName())
         .features(map(solvingModel.getFeatures()))

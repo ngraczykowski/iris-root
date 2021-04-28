@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.grpc;
 
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.hsbc.bridge.analysis.AnalysisServiceClient;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 
@@ -15,6 +16,7 @@ import org.springframework.retry.annotation.Retryable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -47,8 +49,8 @@ class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServic
         .setAnalysis(Analysis.newBuilder()
             .setStrategy(request.getStrategy())
             .setPolicy(request.getPolicy())
-            .addAllFeatures(List.of())//TODO fill it
-            .addAllCategories(List.of())//TODO fill it
+            .addAllCategories(request.getCategories())
+            .addAllFeatures(mapFeatures(request.getFeatures()))
             .build())
         .build();
 
@@ -58,6 +60,15 @@ class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServic
         .policy(result.getPolicy())
         .strategy(result.getStrategy())
         .build();
+  }
+
+  private List<Feature> mapFeatures(List<FeatureDto> features) {
+    return features.stream()
+        .map(f -> Feature.newBuilder()
+            .setAgentConfig(f.getAgentConfig())
+            .setFeature(f.getName())
+            .build())
+        .collect(Collectors.toList());
   }
 
   @Override
