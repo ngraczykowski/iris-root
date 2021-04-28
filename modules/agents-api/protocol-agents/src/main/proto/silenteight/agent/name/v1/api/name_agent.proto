@@ -65,6 +65,8 @@ message NameAgentReason {
     repeated MatchedNameValueGroup matched_value_groups = 2;
     // Duration which has been elapsed to compare names
     google.protobuf.Duration execution_duration = 3;
+    // Names written in chinese script
+    ChineseScriptSolution chinese_script_solution = 6;
 }
 
 message MatchedNameValueGroup {
@@ -100,4 +102,11 @@ message NameAgentDescriptor {
     string description = 2;
     // Possible results returned by Agent in CompareNamesResponse
     repeated string value_names = 3;
+}
+
+message ChineseScriptSolution {
+  // Alerted party values - filtered only those written in chinese original script
+  repeated string alerted_party_names = 1;
+  // Watchlist name values - filtered only those written in chinese original script
+  repeated string watchlist_names = 2;
 }
