@@ -29,7 +29,7 @@ class SolvingModelProvider {
         .newBuilder()
         .setName(modelDto.getName())
         .setStrategyName(getStrategyName(modelDto.getName()))
-        .setPolicyName(modelDto.getPolicyName())
+        .setPolicyName(modelDto.getPolicy())
         .addAllFeatures(getFeatures())
         .addAllCategories(getCategories())
         .build();

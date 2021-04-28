@@ -18,7 +18,7 @@ import static com.silenteight.serp.governance.model.domain.dto.AddModelRequest.P
 import static com.silenteight.serp.governance.model.domain.dto.AddModelRequest.PRE_AUDIT_TYPE;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.CREATED_BY;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
-import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,7 +40,7 @@ class ModelServiceTest {
   @Test
   void createModel() {
     // when
-    UUID modelId = underTest.createModel(MODEL_ID, POLICY_NAME, CREATED_BY);
+    UUID modelId = underTest.createModel(MODEL_ID, POLICY, CREATED_BY);
 
     // then
     assertThat(modelId).isEqualTo(MODEL_ID);
@@ -53,21 +53,21 @@ class ModelServiceTest {
     AuditDataDto postAudit = getPostAudit(logCaptor);
     assertThat(postAudit.getType()).isEqualTo(POST_AUDIT_TYPE);
 
-    var modelOpt = modelRepository.findByPolicyName(POLICY_NAME);
+    var modelOpt = modelRepository.findByPolicyName(POLICY);
     assertThat(modelOpt).isNotEmpty();
 
     var model = modelOpt.get();
     assertThat(model.getModelId()).isEqualTo(MODEL_ID);
-    assertThat(model.getPolicyName()).isEqualTo(POLICY_NAME);
+    assertThat(model.getPolicyName()).isEqualTo(POLICY);
   }
 
   @Test
   void addModelThrowsExceptionWhenModelExists() {
     //given
-    saveModel(MODEL_ID, POLICY_NAME);
+    saveModel(MODEL_ID, POLICY);
 
     // when, then
-    assertThatThrownBy(() -> underTest.createModel(MODEL_ID, POLICY_NAME, CREATED_BY))
+    assertThatThrownBy(() -> underTest.createModel(MODEL_ID, POLICY, CREATED_BY))
         .isInstanceOf(ModelAlreadyExistsException.class);
   }
 

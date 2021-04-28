@@ -14,7 +14,7 @@ import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_DTO;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_ID;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.MODEL_RESOURCE_NAME;
-import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.model.fixture.ModelFixtures.POLICY;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
@@ -42,7 +42,7 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
     get(GET_MODEL_URL)
         .statusCode(OK.value())
         .body("name", is(MODEL_RESOURCE_NAME))
-        .body("policyName", is(POLICY_NAME))
+        .body("policy", is(POLICY))
         .body("createdAt", notNullValue());
   }
 

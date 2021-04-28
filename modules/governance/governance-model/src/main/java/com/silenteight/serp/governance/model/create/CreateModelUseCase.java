@@ -15,6 +15,6 @@ class CreateModelUseCase {
 
   UUID activate(@NonNull CreateModelCommand command) {
     return modelService.createModel(
-        command.getId(), command.getPolicyName(), command.getCreatedBy());
+        command.getId(), command.getPolicy(), command.getCreatedBy());
   }
 }

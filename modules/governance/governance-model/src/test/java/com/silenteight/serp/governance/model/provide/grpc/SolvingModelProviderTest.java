@@ -76,7 +76,7 @@ class SolvingModelProviderTest {
     SolvingModel solvingModel = underTest.get(modelQuery.get(MODEL_RESOURCE_NAME));
 
     assertThat(solvingModel.getName()).isEqualTo(MODEL_RESOURCE_NAME);
-    assertThat(solvingModel.getPolicyName()).isEqualTo(POLICY_NAME);
+    assertThat(solvingModel.getPolicyName()).isEqualTo(POLICY);
     assertThat(solvingModel.getStrategyName()).isEqualTo(CURRENT_STRATEGY_NAME);
     assertThat(solvingModel.getFeaturesList()).containsExactlyInAnyOrder(
         Feature.newBuilder()

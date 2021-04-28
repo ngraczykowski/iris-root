@@ -13,7 +13,7 @@ public class CreateModelCommand {
   @NonNull
   UUID id;
   @NonNull
-  String policyName;
+  String policy;
   @NonNull
   String createdBy;
 }

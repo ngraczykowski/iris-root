@@ -9,14 +9,14 @@ import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.serp.governance.model.common.ModelResource.toResourceName;
+
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 class Model extends BaseAggregateRoot implements IdentifiableEntity {
-
-  private static final String RESOURCE_NAME_PREFIX = "models/";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,14 +41,10 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
 
   ModelDto toDto() {
     return ModelDto.builder()
-        .name(asResourceName())
-        .policyName(getPolicyName())
+        .name(toResourceName(getModelId()))
+        .policy(getPolicyName())
         .createdAt(getCreatedAt())
         .build();
-  }
-
-  private String asResourceName() {
-    return RESOURCE_NAME_PREFIX + getModelId().toString();
   }
 
   boolean hasModelId(UUID modelId) {

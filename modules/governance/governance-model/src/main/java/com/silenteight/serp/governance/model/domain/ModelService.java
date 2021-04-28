@@ -24,13 +24,13 @@ public class ModelService {
 
   public UUID createModel(
       @NonNull UUID modelId,
-      @NonNull String policyName,
+      @NonNull String policy,
       @NonNull String createdBy) {
 
     AddModelRequest request = AddModelRequest
         .builder()
-        .modelId(modelId)
-        .policyName(policyName)
+        .id(modelId)
+        .policy(policy)
         .createdBy(createdBy)
         .correlationId(randomUUID())
         .build();
@@ -41,8 +41,8 @@ public class ModelService {
   @NotNull
   Model addModelInternal(AddModelRequest request) {
     request.preAudit(auditingLogger::log);
-    validateModelExistence(request.getPolicyName());
-    Model model = new Model(request.getModelId(), request.getPolicyName());
+    validateModelExistence(request.getPolicy());
+    Model model = new Model(request.getId(), request.getPolicy());
     model = modelRepository.save(model);
     request.postAudit(auditingLogger::log);
     return model;

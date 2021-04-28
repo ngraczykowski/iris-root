@@ -24,9 +24,9 @@ public class AddModelRequest implements AuditableRequest {
   @NonNull
   UUID correlationId;
   @NonNull
-  UUID modelId;
+  UUID id;
   @NonNull
-  String policyName;
+  String policy;
   @NonNull
   String createdBy;
 
@@ -47,7 +47,7 @@ public class AddModelRequest implements AuditableRequest {
         .eventId(randomUUID())
         .timestamp(Timestamp.from(Instant.now()))
         .type(type)
-        .entityId(modelId.toString())
+        .entityId(id.toString())
         .entityClass("Model")
         .entityAction("CREATE")
         .details(this.toString())
