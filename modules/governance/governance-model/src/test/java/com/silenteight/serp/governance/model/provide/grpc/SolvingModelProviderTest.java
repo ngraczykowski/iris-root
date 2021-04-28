@@ -73,7 +73,7 @@ class SolvingModelProviderTest {
 
   @Test
   void shouldReturnModel() throws ModelMisconfiguredException {
-    SolvingModel solvingModel = underTest.get(modelQuery.get(MODEL_RESOURCE_NAME));
+    SolvingModel solvingModel = underTest.get(MODEL_DTO);
 
     assertThat(solvingModel.getName()).isEqualTo(MODEL_RESOURCE_NAME);
     assertThat(solvingModel.getPolicyName()).isEqualTo(POLICY);
@@ -102,8 +102,8 @@ class SolvingModelProviderTest {
         .thenReturn(FEATURE_CONFIG_SET);
     lenient().when(categoryRegistry.getAllCategories())
         .thenReturn(List.of(APTYPE_CATEGORY));
-    lenient().when(modelQuery.get(MODEL_RESOURCE_NAME))
-        .thenReturn(MODEL_DTO);
+    lenient().when(modelQuery.getByPolicy(MODEL_RESOURCE_NAME))
+        .thenReturn(List.of(MODEL_DTO));
     lenient().when(modelQuery.getDefault())
         .thenReturn(DEFAULT_MODEL_DTO);
   }

@@ -2,8 +2,11 @@ package com.silenteight.serp.governance.model.domain;
 
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 class InMemoryModelRepository
     extends BasicInMemoryRepository<Model>
@@ -17,9 +20,9 @@ class InMemoryModelRepository
   }
 
   @Override
-  public Optional<Model> findByPolicyName(String policyName) {
+  public Collection<Model> findAllByPolicyName(String policyName) {
     return stream()
         .filter(model -> model.hasPolicyName(policyName))
-        .findFirst();
+        .collect(toList());
   }
 }

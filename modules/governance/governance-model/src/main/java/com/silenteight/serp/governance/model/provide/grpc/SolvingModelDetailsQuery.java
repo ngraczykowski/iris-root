@@ -6,5 +6,5 @@ import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 
 public interface SolvingModelDetailsQuery {
 
-  ModelDto get(@NonNull  String model);
+  ModelDto get(@NonNull String model);
 }

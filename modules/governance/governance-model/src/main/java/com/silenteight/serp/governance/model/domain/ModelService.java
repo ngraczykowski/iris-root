@@ -50,9 +50,11 @@ public class ModelService {
 
   private void validateModelExistence(String policyName) {
     modelRepository
-        .findByPolicyName(policyName)
-        .ifPresent(s -> {
-          throw new ModelAlreadyExistsException(s.getModelId(), policyName);
+        .findAllByPolicyName(policyName)
+        .stream()
+        .findAny()
+        .ifPresent(model -> {
+          throw new ModelAlreadyExistsException(model.getModelId(), policyName);
         });
   }
 }
