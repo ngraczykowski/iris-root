@@ -164,7 +164,7 @@ sep:
   auth:
     permissionMethodsMappings:
       REPORTS_MANAGEMENT:
-        - "GENERATE_REPORT"
+        - "SYNCHRONIZE_REPORTS"
 
     rolePermissionsMappings:
       BUSINESS_OPERATOR:
