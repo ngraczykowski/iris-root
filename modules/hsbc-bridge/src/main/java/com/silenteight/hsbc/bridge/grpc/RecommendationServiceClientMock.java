@@ -16,7 +16,7 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
         .alert("SomeAlert")
         .recommendationComment("SomeComment")
         .recommendedAction("SomeAction")
-        .date(OffsetDateTime.MAX)
+        .date(OffsetDateTime.now())
         .build());
   }
 }
