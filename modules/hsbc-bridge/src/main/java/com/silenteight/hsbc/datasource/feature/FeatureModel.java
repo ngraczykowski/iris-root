@@ -1,14 +1,17 @@
 package com.silenteight.hsbc.datasource.feature;
 
+import com.silenteight.hsbc.datasource.extractors.country.LocationFeatureQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.DocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
+import com.silenteight.hsbc.datasource.feature.location.LocationFeature;
 import com.silenteight.hsbc.datasource.feature.nationalityid.NationalityIdFeature;
 
 import java.util.Map;
 
 import static com.silenteight.hsbc.datasource.feature.Feature.GENDER;
+import static com.silenteight.hsbc.datasource.feature.Feature.LOCATION;
 import static com.silenteight.hsbc.datasource.feature.Feature.NATIONALITY_COUNTRY;
 import static com.silenteight.hsbc.datasource.feature.Feature.NATIONALITY_ID;
 
@@ -27,6 +30,9 @@ public class FeatureModel {
         ),
         NATIONALITY_COUNTRY, new NationalityCountryFeature(
             new NationalityCountryQueryConfigurer().create()
+        ),
+        LOCATION, new LocationFeature(
+            new LocationFeatureQueryConfigurer().getFactory()
         )
     );
     // TODO add remaining features;

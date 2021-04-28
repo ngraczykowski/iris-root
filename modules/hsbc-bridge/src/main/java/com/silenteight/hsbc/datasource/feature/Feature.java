@@ -13,7 +13,8 @@ public enum Feature {
   GENDER("gender"),
   NATIONALITY_ID("nationalityId"),
   NATIONALITY_COUNTRY("nationality"),
-  COUNTRY("country");
+  COUNTRY("country"),
+  LOCATION("location");
 
   private String name;
 

@@ -1,13 +1,13 @@
-package com.silenteight.hsbc.datasource.feature
+package com.silenteight.hsbc.datasource.feature.gender
 
 import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
 import com.silenteight.hsbc.bridge.match.MatchRawData
-import com.silenteight.hsbc.datasource.MatchRawDataFixtures
-import com.silenteight.hsbc.datasource.feature.gender.GenderFeature
+import com.silenteight.hsbc.datasource.feature.Feature
+import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
 import spock.lang.Specification
 
-class GenderFeatureSpec extends Specification implements MatchRawDataFixtures {
+class GenderFeatureSpec extends Specification implements FullMatch {
 
   def underTest = new GenderFeature()
 

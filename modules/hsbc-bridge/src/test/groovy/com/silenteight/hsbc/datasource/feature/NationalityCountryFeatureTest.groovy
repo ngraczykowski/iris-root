@@ -1,14 +1,14 @@
 package com.silenteight.hsbc.datasource.feature
 
-import com.silenteight.hsbc.datasource.MatchRawDataFixtures
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature
+import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
 import spock.lang.Specification
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class NationalityCountryFeatureTest extends Specification implements MatchRawDataFixtures {
+class NationalityCountryFeatureTest extends Specification implements FullMatch {
 
   def underTest = new NationalityCountryFeature(new NationalityCountryQueryConfigurer().create())
 
