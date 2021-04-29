@@ -24,21 +24,15 @@ public class CreateSimulationRequest implements AuditableRequest {
 
   @NonNull
   UUID id;
-
   @NonNull
   String simulationName;
-
   String description;
-
   @NonNull
   String createdBy;
-
   @NonNull
-  Set<String> datasetNames;
-
+  Set<String> datasets;
   @NonNull
-  String modelName;
-
+  String model;
   @Builder.Default
   UUID correlationId = randomUUID();
 

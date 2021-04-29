@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
-import static com.silenteight.simulator.dataset.common.DatasetResource.toResourceName;
 import static com.silenteight.simulator.management.dto.SimulationState.PENDING;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Set.of;
@@ -24,16 +23,15 @@ class SimulationFixtures {
   static final String NAME = "simulations/" + SIMULATION_ID;
   static final String SIMULATION_NAME = "New simulation";
   static final String DESCRIPTION = "Simulation description";
-  static final String MODEL_NAME = "solving-models/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
+  static final String MODEL = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   static final State ANALYSIS_STATE = DONE;
-  static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
-  static final String DATASET_NAME = toResourceName(DATASET_ID);
-  static final Set<String> DATASET_NAMES = of(DATASET_NAME);
+  static final String DATASET = "datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
+  static final Set<String> DATASETS = of(DATASET);
   static final String PROGRESS_STATE = ANALYSIS_STATE.toString();
   static final String USERNAME = "USERNAME";
   static final SimulationState STATE = PENDING;
   static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
-  static final String POLICY_NAME = "policies/de1afe98-0b58-4941-9791-4e081f9b8139";
+  static final String POLICY = "policies/de1afe98-0b58-4941-9791-4e081f9b8139";
   static final String STRATEGY_NAME = "UNSOLVED_ALERTS";
   static final List<String> CATEGORIES = List.of("category-1", "category-2");
   static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
@@ -43,8 +41,8 @@ class SimulationFixtures {
           .id(SIMULATION_ID)
           .simulationName(SIMULATION_NAME)
           .description(DESCRIPTION)
-          .modelName(MODEL_NAME)
-          .datasetNames(of(DATASET_NAME))
+          .model(MODEL)
+          .datasets(of(DATASET))
           .createdBy(USERNAME)
           .build();
 
@@ -55,8 +53,8 @@ class SimulationFixtures {
           .name(NAME)
           .simulationName(SIMULATION_NAME)
           .state(STATE)
-          .modelName(MODEL_NAME)
-          .datasetNames(DATASET_NAMES)
+          .model(MODEL)
+          .datasets(DATASETS)
           .progressState(PROGRESS_STATE)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
@@ -65,7 +63,7 @@ class SimulationFixtures {
   static final SolvingModel SOLVING_MODEL =
       SolvingModel.newBuilder()
           .setStrategyName(STRATEGY_NAME)
-          .setPolicyName(POLICY_NAME)
+          .setPolicyName(POLICY)
           .addAllCategories(CATEGORIES)
           .build();
 

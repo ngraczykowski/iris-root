@@ -13,12 +13,12 @@ class TestAnalysisService implements AnalysisService {
   }
 
   @Override
-  public void addDatasetToAnalysis(String analysisName, String datasetName) {
+  public void addDatasetToAnalysis(String analysis, String dataset) {
 
   }
 
   @Override
-  public Analysis getAnalysis(String analysisName) {
+  public Analysis getAnalysis(String analysis) {
     return ANALYSIS;
   }
 }

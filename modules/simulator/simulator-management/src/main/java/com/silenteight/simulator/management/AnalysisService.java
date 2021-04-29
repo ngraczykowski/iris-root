@@ -9,7 +9,7 @@ public interface AnalysisService {
 
   Analysis createAnalysis(@NonNull SolvingModel model);
 
-  void addDatasetToAnalysis(@NonNull String analysisName, @NonNull String datasetName);
+  void addDatasetToAnalysis(@NonNull String analysis, @NonNull String dataset);
 
-  Analysis getAnalysis(@NonNull String analysisName);
+  Analysis getAnalysis(@NonNull String analysis);
 }

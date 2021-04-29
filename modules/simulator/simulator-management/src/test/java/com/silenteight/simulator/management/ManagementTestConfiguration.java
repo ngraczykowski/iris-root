@@ -1,7 +1,6 @@
 package com.silenteight.simulator.management;
 
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.simulator.dataset.domain.DatasetQuery;
 
 import io.grpc.Channel;
 import org.mockito.Mockito;
@@ -31,10 +30,5 @@ class ManagementTestConfiguration {
   @Bean
   AnalysisService analysisService() {
     return new TestAnalysisService();
-  }
-
-  @Bean
-  DatasetQuery datasetQuery() {
-    return Mockito.mock(DatasetQuery.class);
   }
 }
