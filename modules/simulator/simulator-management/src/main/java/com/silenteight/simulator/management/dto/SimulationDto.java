@@ -14,30 +14,21 @@ public class SimulationDto {
 
   @NonNull
   UUID id;
-
   @NonNull
   String name;
-
   @NonNull
   String simulationName;
-
   @NonNull
   SimulationState state;
-
   @NonNull
-  Set<String> datasetNames;
-
+  Set<String> datasets;
   @NonNull
-  String modelName;
-
+  String model;
   @NonNull
   String progressState;
-
   @NonNull
   String createdBy;
-
   @NonNull
   OffsetDateTime createdAt;
-
   OffsetDateTime updatedAt;
 }

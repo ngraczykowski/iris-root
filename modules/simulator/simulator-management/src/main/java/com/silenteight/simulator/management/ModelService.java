@@ -6,5 +6,5 @@ import com.silenteight.model.api.v1.SolvingModel;
 
 public interface ModelService {
 
-  SolvingModel getModel(@NonNull String modelName);
+  SolvingModel getModel(@NonNull String model);
 }

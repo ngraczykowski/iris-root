@@ -60,27 +60,27 @@ class GrpcAnalysisService implements AnalysisService {
   }
 
   @Override
-  public void addDatasetToAnalysis(String analysisName, String datasetName) {
-    analysisStub.addDataset(toAddDatasetRequest(analysisName, datasetName));
+  public void addDatasetToAnalysis(String analysis, String dataset) {
+    analysisStub.addDataset(toAddDatasetRequest(analysis, dataset));
   }
 
-  private static AddDatasetRequest toAddDatasetRequest(String analysisName, String datasetName) {
+  private static AddDatasetRequest toAddDatasetRequest(String analysis, String dataset) {
     return AddDatasetRequest.newBuilder()
-        .setAnalysis(analysisName)
-        .setDataset(datasetName)
+        .setAnalysis(analysis)
+        .setDataset(dataset)
         .build();
   }
 
   @Override
-  public Analysis getAnalysis(String analysisName) {
+  public Analysis getAnalysis(String analysis) {
     return Analysis.newBuilder().setState(State.DONE).build();
     // TODO(mmastylo): Uncomment when feature is available in AE
-    // return analysisStub.getAnalysis(toGetAnalysisRequest(analysisName));
+    // return analysisStub.getAnalysis(toGetAnalysisRequest(analysis));
   }
 
-  private static GetAnalysisRequest toGetAnalysisRequest(String analysisName) {
+  private static GetAnalysisRequest toGetAnalysisRequest(String analysis) {
     return GetAnalysisRequest.newBuilder()
-        .setAnalysis(analysisName)
+        .setAnalysis(analysis)
         .build();
   }
 }

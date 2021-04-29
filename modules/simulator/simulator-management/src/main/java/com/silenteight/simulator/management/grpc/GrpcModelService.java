@@ -15,13 +15,13 @@ class GrpcModelService implements ModelService {
   private final SolvingModelServiceBlockingStub solvingModelStub;
 
   @Override
-  public SolvingModel getModel(String modelName) {
-    return solvingModelStub.getSolvingModel(toGrpcRequest(modelName));
+  public SolvingModel getModel(String model) {
+    return solvingModelStub.getSolvingModel(toGrpcRequest(model));
   }
 
-  private static ModelRequest toGrpcRequest(String modelName) {
+  private static ModelRequest toGrpcRequest(String model) {
     return ModelRequest.newBuilder()
-        .setModel(modelName)
+        .setModel(model)
         .build();
   }
 }

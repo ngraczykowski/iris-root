@@ -1,27 +1,22 @@
 package com.silenteight.simulator.management.dto;
 
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Value
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateSimulationRequestDto {
 
   @NonNull
-  UUID id;
-
+  private UUID id;
   @NonNull
-  String simulationName;
-
-  String description;
-
+  private String simulationName;
+  private String description;
   @NonNull
-  Set<String> datasetNames;
-
+  private Set<String> datasets;
   @NonNull
-  String modelName;
+  private String model;
 }

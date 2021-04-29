@@ -36,8 +36,8 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDto.getId()).isEqualTo(SIMULATION_ID);
     assertThat(simulationDto.getSimulationName()).isEqualTo(SIMULATION_NAME);
     assertThat(simulationDto.getState()).isEqualTo(STATE);
-    assertThat(simulationDto.getDatasetNames()).isEqualTo(DATASET_NAMES);
-    assertThat(simulationDto.getModelName()).isEqualTo(MODEL_NAME);
+    assertThat(simulationDto.getDatasets()).isEqualTo(DATASETS);
+    assertThat(simulationDto.getModel()).isEqualTo(MODEL);
     assertThat(simulationDto.getProgressState()).isEqualTo(PROGRESS_STATE);
     assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(simulationDto.getCreatedAt()).isNotNull();
@@ -50,8 +50,8 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .name(SIMULATION_NAME)
         .state(STATE)
         .createdBy(USERNAME)
-        .datasetNames(DATASET_NAMES)
-        .modelName(MODEL_NAME)
+        .datasetNames(DATASETS)
+        .modelName(MODEL)
         .analysisName(ANALYSIS_NAME)
         .build();
 

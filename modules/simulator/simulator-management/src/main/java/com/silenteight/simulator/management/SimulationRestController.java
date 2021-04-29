@@ -38,17 +38,16 @@ class SimulationRestController {
       @RequestBody @Valid CreateSimulationRequestDto createSimulationRequestDto,
       Authentication authentication) {
 
-    CreateSimulationRequest createSimulationRequest = CreateSimulationRequest
+    CreateSimulationRequest request = CreateSimulationRequest
         .builder()
         .id(createSimulationRequestDto.getId())
         .simulationName(createSimulationRequestDto.getSimulationName())
         .description(createSimulationRequestDto.getDescription())
         .createdBy(authentication.getName())
-        .datasetNames(createSimulationRequestDto.getDatasetNames())
-        .modelName(createSimulationRequestDto.getModelName())
+        .datasets(createSimulationRequestDto.getDatasets())
+        .model(createSimulationRequestDto.getModel())
         .build();
-
-    useCase.activate(createSimulationRequest);
+    useCase.activate(request);
     return status(CREATED).build();
   }
 

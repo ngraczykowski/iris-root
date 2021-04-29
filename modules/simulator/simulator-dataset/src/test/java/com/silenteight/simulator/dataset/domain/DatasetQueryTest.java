@@ -58,15 +58,6 @@ class DatasetQueryTest extends BaseDataJpaTest {
     assertThat(result.getQuery()).isNotNull();
   }
 
-  @Test
-  void shouldGetExternalResourceName() {
-    persistDataset();
-
-    String result = underTest.getExternalResourceName(EXTERNAL_DATASET_ID);
-
-    assertThat(result).isEqualTo(EXTERNAL_RESOURCE_NAME);
-  }
-
   private void persistDataset() {
     DatasetEntity datasetEntity = DatasetEntity.builder()
         .datasetId(EXTERNAL_DATASET_ID)
