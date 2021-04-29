@@ -6,6 +6,8 @@ import lombok.NonNull;
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.model.api.v1.SolvingModel;
+import com.silenteight.simulator.dataset.common.DatasetResource;
+import com.silenteight.simulator.dataset.domain.DatasetQuery;
 
 import java.util.Set;
 
@@ -17,6 +19,9 @@ public class CreateSimulationUseCase {
 
   @NonNull
   private final AnalysisService analysisService;
+
+  @NonNull
+  private final DatasetQuery datasetQuery;
 
   @NonNull
   private final SimulationService simulationService;
@@ -36,7 +41,12 @@ public class CreateSimulationUseCase {
 
   private Analysis runAnalysis(@NonNull SolvingModel model, @NonNull Set<String> datasets) {
     Analysis analysis = analysisService.createAnalysis(model);
-    datasets.forEach(dataset -> analysisService.addDatasetToAnalysis(analysis.getName(), dataset));
+    datasets
+        .stream()
+        .map(DatasetResource::fromResourceName)
+        .map(datasetQuery::getExternalResourceName)
+        .forEach(resourceName -> analysisService.addDatasetToAnalysis(
+            analysis.getName(), resourceName));
     return analysis;
   }
 

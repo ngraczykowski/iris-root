@@ -68,4 +68,11 @@ public class DatasetQuery {
         .to(datasetEntity.getGenerationDateTo())
         .build();
   }
+
+  public String getExternalResourceName(@NonNull UUID datasetId) {
+    return repository
+        .findByDatasetId(datasetId)
+        .map(DatasetEntity::getExternalResourceName)
+        .orElseThrow(() -> new DatasetNotFoundException(datasetId));
+  }
 }
