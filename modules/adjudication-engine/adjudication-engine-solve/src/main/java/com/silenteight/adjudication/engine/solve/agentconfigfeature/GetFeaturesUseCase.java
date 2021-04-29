@@ -6,18 +6,18 @@ import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentCon
 import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureName;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-class GetOrCreateFeaturesUseCase {
+class GetFeaturesUseCase {
 
-  private final CreateUniqueFeaturesUseCase createUniqueFeaturesUseCase;
-  private final GetFeaturesUseCase getFeaturesUseCase;
+  private final AgentConfigFeatureDataAccess dataAccess;
 
-  List<AgentConfigFeatureDto> getOrCreateFeatures(List<AgentConfigFeatureName> names) {
-    createUniqueFeaturesUseCase.createUniqueFeatures(names);
-    return getFeaturesUseCase.getFeatures(names);
+  @Transactional(readOnly = true)
+  List<AgentConfigFeatureDto> getFeatures(List<AgentConfigFeatureName> names) {
+    return dataAccess.getFeatures(names);
   }
 }

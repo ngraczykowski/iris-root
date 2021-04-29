@@ -1,11 +1,10 @@
-package com.silenteight.adjudication.engine.solve.agentconfigfeature;
+package com.silenteight.adjudication.engine.solve.category;
 
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureDto;
+import com.silenteight.adjudication.engine.solve.category.dto.CategoryDto;
 import com.silenteight.sep.base.common.entity.BaseEntity;
-import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import org.hibernate.annotations.Immutable;
 
@@ -28,10 +27,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Immutable
 @Entity
 @Builder(access = PACKAGE)
-class AgentConfigFeature extends BaseEntity implements IdentifiableEntity {
+class Category extends BaseEntity {
 
   @Id
-  @Column(name = "agent_config_feature_id", insertable = false, updatable = false, nullable = false)
+  @Column(name = "category_id", insertable = false, updatable = false, nullable = false)
   @GeneratedValue(strategy = IDENTITY)
   @Setter(PACKAGE)
   @Include
@@ -39,17 +38,9 @@ class AgentConfigFeature extends BaseEntity implements IdentifiableEntity {
 
   @Column(updatable = false, nullable = false)
   @NonNull
-  private String agentConfig;
+  private String category;
 
-  @Column(updatable = false, nullable = false)
-  @NonNull
-  private String feature;
-
-  AgentConfigFeatureDto toDto() {
-    return AgentConfigFeatureDto.builder()
-        .id(getId())
-        .agentConfig(getAgentConfig())
-        .feature(getFeature())
-        .build();
+  CategoryDto toDto() {
+    return new CategoryDto(getId(), getCategory());
   }
 }
