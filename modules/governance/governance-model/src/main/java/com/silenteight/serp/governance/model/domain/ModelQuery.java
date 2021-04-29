@@ -31,6 +31,13 @@ public class ModelQuery
 
   private static final String DEFAULT_MODEL_NAME = "solvingModels/default";
 
+  public ModelDto get(@NonNull UUID modelId) {
+    return modelRepository
+        .findByModelId(modelId)
+        .map(Model::toDto)
+        .orElseThrow(() -> new ModelNotFoundException(modelId));
+  }
+
   @Override
   public List<ModelDto> getByPolicy(@NonNull String policy) {
     List<ModelDto> models = modelRepository
@@ -57,13 +64,6 @@ public class ModelQuery
   @Override
   public ModelDto get(@NonNull String model) {
     return get(fromResourceName(model));
-  }
-
-  private ModelDto get(@NonNull UUID modelId) {
-    return modelRepository
-        .findByModelId(modelId)
-        .map(Model::toDto)
-        .orElseThrow(() -> new ModelNotFoundException(modelId));
   }
 
   private String getPolicyName() {
