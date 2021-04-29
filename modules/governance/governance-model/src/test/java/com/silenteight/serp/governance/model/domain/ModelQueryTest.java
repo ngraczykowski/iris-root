@@ -56,6 +56,21 @@ class ModelQueryTest extends BaseDataJpaTest {
   }
 
   @Test
+  void shouldGetModel() {
+    // given
+    OffsetDateTime beforePersist = now();
+    persistModel();
+
+    // when
+    ModelDto result = underTest.get(MODEL_ID);
+
+    // then
+    assertThat(result.getName()).isEqualTo(MODEL_RESOURCE_NAME);
+    assertThat(result.getPolicy()).isEqualTo(POLICY);
+    assertThat(result.getCreatedAt()).isAfter(beforePersist);
+  }
+
+  @Test
   void shouldGetModelByPolicy() {
     // given
     OffsetDateTime beforePersist = now();
@@ -100,7 +115,7 @@ class ModelQueryTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldGetModel() {
+  void shouldGetModelByResourceName() {
     // given
     OffsetDateTime beforePersist = now();
     persistModel();
