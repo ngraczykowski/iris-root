@@ -4,6 +4,7 @@ import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTes
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.model.domain.exception.ModelNotFoundException;
+import com.silenteight.serp.governance.model.domain.exception.TooManyModelsException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -73,6 +75,13 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
     given(getModelDetailsQuery.getByPolicy(POLICY)).willThrow(ModelNotFoundException.class);
 
     get(GET_MODEL_BY_POLICY_URL).statusCode(NOT_FOUND.value());
+  }
+
+  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  void its500_whenMultipleModelsForPolicyExist() {
+    given(getModelDetailsQuery.getByPolicy(POLICY)).willThrow(TooManyModelsException.class);
+
+    get(GET_MODEL_URL).statusCode(INTERNAL_SERVER_ERROR.value());
   }
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
