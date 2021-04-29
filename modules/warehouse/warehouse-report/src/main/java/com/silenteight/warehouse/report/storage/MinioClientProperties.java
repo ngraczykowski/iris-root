@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 class MinioClientProperties {
 
   @NotBlank
-  String minioUrl;
+  String url;
 
   @NotBlank
   String accessKey;

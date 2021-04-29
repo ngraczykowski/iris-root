@@ -29,7 +29,7 @@ warehouse:
       alert-indexed-event-test-listener-inbound:
         queue-name: client.index-response
   minio:
-    minio-url: http://localhost:9000
+    url: http://localhost:9000
     access-key: admin
     private-key: admin123
   report:
