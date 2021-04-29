@@ -10,13 +10,14 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Feature {
 
+  REGISTRATION_COUNTRY("registrationCountry"),
   GENDER("gender"),
-  NATIONALITY_ID("nationalityId"),
+  INCORPORATION_COUNTRY("incorporationCountry"),
+  LOCATION("location"),
   NATIONALITY_COUNTRY("nationality"),
-  COUNTRY("country"),
-  LOCATION("location");
+  NATIONALITY_ID("nationalityId");
 
-  private String name;
+  private final String name;
 
   public static Feature getByName(@NonNull String featureName) {
     return Stream.of(values())
