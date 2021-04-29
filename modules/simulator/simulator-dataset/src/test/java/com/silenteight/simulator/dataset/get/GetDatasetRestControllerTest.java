@@ -23,14 +23,14 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class GetDatasetRestControllerTest extends BaseRestControllerTest {
 
-  private static final String GET_DATASET_URL = "/v1/datasets/" + EXTERNAL_DATASET_ID.toString();
+  private static final String GET_DATASET_URL = "/v1/datasets/" + ID.toString();
 
   @MockBean
   private DatasetQuery datasetQuery;
 
   @TestWithRole(roles = { BUSINESS_OPERATOR })
   void its200_whenDatasetFoundWithoutState() {
-    given(datasetQuery.get(EXTERNAL_DATASET_ID)).willReturn(DATASET_DTO);
+    given(datasetQuery.get(ID)).willReturn(DATASET_DTO);
     get(GET_DATASET_URL)
         .statusCode(OK.value())
         .body("id", is(ID.toString()))

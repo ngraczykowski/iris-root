@@ -22,8 +22,8 @@ public final class DatasetFixtures {
   public static final String RESOURCE_NAME = "datasets/" + ID.toString();
   public static final String DATASET_NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
-  public static final UUID EXTERNAL_DATASET_ID = fromString("b6855a6f-fc63-422f-84a7-677a0c8f9a9a");
-  public static final String EXTERNAL_RESOURCE_NAME = "datasets/" + EXTERNAL_DATASET_ID.toString();
+  public static final String EXTERNAL_RESOURCE_NAME =
+      "datasets/b6855a6f-fc63-422f-84a7-677a0c8f9a9a";
   public static final DatasetState STATE = CURRENT;
   public static final long ALERTS_COUNT = 5L;
   public static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);

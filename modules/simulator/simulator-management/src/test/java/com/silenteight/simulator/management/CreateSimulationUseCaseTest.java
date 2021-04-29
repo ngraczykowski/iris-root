@@ -2,6 +2,7 @@ package com.silenteight.simulator.management;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.simulator.dataset.domain.DatasetQuery;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,9 @@ class CreateSimulationUseCaseTest {
   private AnalysisService analysisService;
 
   @Mock
+  private DatasetQuery datasetQuery;
+
+  @Mock
   private SimulationService simulationService;
 
   @Mock
@@ -42,12 +46,13 @@ class CreateSimulationUseCaseTest {
     // given
     when(modelService.getModel(CREATE_SIMULATION_REQUEST.getModel())).thenReturn(SOLVING_MODEL);
     when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(ANALYSIS);
+    when(datasetQuery.getExternalResourceName(DATASET_ID)).thenReturn(DATASET_EXTERNAL_NAME);
 
     // when
     underTest.activate(CREATE_SIMULATION_REQUEST);
 
     // then
-    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET);
+    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_EXTERNAL_NAME);
     verify(simulationService).createSimulation(
         CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS.getName());
     var logCaptor = forClass(AuditDataDto.class);

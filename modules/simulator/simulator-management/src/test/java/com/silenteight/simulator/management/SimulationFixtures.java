@@ -25,7 +25,9 @@ class SimulationFixtures {
   static final String DESCRIPTION = "Simulation description";
   static final String MODEL = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   static final State ANALYSIS_STATE = DONE;
-  static final String DATASET = "datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
+  static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  static final String DATASET = "datasets/" + DATASET_ID.toString();
+  static final String DATASET_EXTERNAL_NAME = "datasets/b6855a6f-fc63-422f-84a7-677a0c8f9a9a";
   static final Set<String> DATASETS = of(DATASET);
   static final String PROGRESS_STATE = ANALYSIS_STATE.toString();
   static final String USERNAME = "USERNAME";
