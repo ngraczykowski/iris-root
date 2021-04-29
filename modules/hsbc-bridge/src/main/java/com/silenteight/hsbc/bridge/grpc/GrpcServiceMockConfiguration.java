@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.grpc;
 
 import com.silenteight.hsbc.bridge.adjudication.DatasetServiceClient;
+import com.silenteight.hsbc.bridge.transfer.TransferClient;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,5 +29,10 @@ class GrpcServiceMockConfiguration {
   @Bean
   DatasetServiceClient datasetServiceApiMock() {
     return new DatasetServiceClientMock();
+  }
+
+  @Bean
+  TransferClient transferModelGrpcMock() {
+    return new TransferClientMock();
   }
 }

@@ -1,6 +1,11 @@
 {
   "properties": [
     {
+      "name": "silenteight.governance.model_promoted.queue",
+      "type": "java.lang.String",
+      "description": "Governance promoted model queue name."
+    },
+    {
       "name": "silenteight.bridge.recommendations.queue",
       "type": "java.lang.String",
       "description": "Bridge recommendation queue name."
