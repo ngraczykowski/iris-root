@@ -42,7 +42,7 @@ public class MinioContainer {
     @Override
     public void initialize(ConfigurableApplicationContext context) {
       TestPropertyValues propertyValues = TestPropertyValues.of(
-          "warehouse.minio.minio-url=http://" + getTransportAddress(),
+          "warehouse.minio.url=http://" + getTransportAddress(),
           "warehouse.minio.access-key=" + ADMIN_ACCESS_KEY,
           "warehouse.minio.private-key=" + ADMIN_SECRET_KEY
       );

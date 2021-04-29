@@ -25,5 +25,4 @@ set -x
 mkdir -p artifacts/
 cp ../warehouse-app/build/libs/"$warehouse_artifact" artifacts/
 mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/warehouse
-mcli mb --ignore-existing "$MINIO_ALIAS"/reports
 nomad job run "$@" warehouse.nomad
