@@ -10,7 +10,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.Immutable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.*;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
