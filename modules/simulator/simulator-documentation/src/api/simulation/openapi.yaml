@@ -164,7 +164,11 @@ components:
 
     SimulationState:
       type: string
-      enum: [ PENDING, PROCESSING, COMPLETED ]
+      enum: [ PENDING ]
+
+    AnalysisState:
+      type: string
+      enum: [ NEW, PLANNING, RUNNING, DONE, OUTDATED ]
 
     CreateSimulationRequest:
       type: object
@@ -208,6 +212,10 @@ components:
         state:
           type: object
           $ref: '#/components/schemas/SimulationState'
+        progressState:
+          type: object
+          $ref: '#/components/schemas/AnalysisState'
+          description: Progress state of simulation processing. This field is fetched directly from the AE by the Simulator and will have the same values as the analysis state in the proto file.
         datasetNames:
           type: array
           items:
@@ -217,9 +225,6 @@ components:
         modelName:
           type: string
           description: Model resource name
-        progressState:
-          type: string
-          description: Progress state of simulation processing
         createdAt:
           type: string
         createdBy:
@@ -251,6 +256,10 @@ components:
         state:
           type: object
           $ref: '#/components/schemas/SimulationState'
+        progressState:
+          type: object
+          $ref: '#/components/schemas/AnalysisState'
+          description: Progress state of simulation processing. This field is fetched directly from the AE by the Simulator and will have the same values as the analysis state in the proto file.
         datasetNames:
           type: array
           items:
