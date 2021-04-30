@@ -10,6 +10,6 @@ interface AgentExchangeRepository extends Repository<AgentExchange, UUID> {
   @Nonnull
   AgentExchange save(AgentExchange agentExchange);
 
-//  AgentExchange findByFeatureAndAgentConfigAndPriority(
-//      String feature, String agentConfig, String priority);
+  //  AgentExchange findByFeatureAndAgentConfigAndPriority(
+  //      String feature, String agentConfig, String priority);
 }

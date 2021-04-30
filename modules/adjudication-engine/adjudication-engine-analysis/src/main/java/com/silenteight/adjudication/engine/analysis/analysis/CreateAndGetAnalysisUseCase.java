@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CreateAndGetAnalysisUseCase {
+class CreateAndGetAnalysisUseCase {
 
   @NonNull
   private final CreateAnalysisUseCase createAnalysisUseCase;

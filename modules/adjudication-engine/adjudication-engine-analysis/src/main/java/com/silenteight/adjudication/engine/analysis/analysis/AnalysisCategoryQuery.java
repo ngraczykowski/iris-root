@@ -31,5 +31,8 @@ public class AnalysisCategoryQuery {
 
   private Long categoryId;
 
-  private String category;
+  // NOTE(ahaczewsk): For the reasoning why the column is called "category" and the field "name",
+  //  see comment in the `com.silenteight.adjudication.engine.solve.category.Category` class.
+  @Column(name = "category")
+  private String name;
 }

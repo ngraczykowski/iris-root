@@ -36,11 +36,13 @@ class Category extends BaseEntity {
   @Include
   private Long id;
 
-  @Column(updatable = false, nullable = false)
+  // NOTE(ahaczewski): Sonar does not like a field named "category" in class "Category", PostgreSQL
+  //  doesn't like column named "name". So: the column is named "category", the field "name".
+  @Column(name = "category", updatable = false, nullable = false)
   @NonNull
-  private String category;
+  private String name;
 
   CategoryDto toDto() {
-    return new CategoryDto(getId(), getCategory());
+    return new CategoryDto(getId(), getName());
   }
 }

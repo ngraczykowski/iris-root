@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.solve.agentconfigfeature;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureName;
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ class CreateUniqueFeaturesUseCase {
   private final AgentConfigFeatureDataAccess dataAccess;
 
   @Transactional
-  int createUniqueFeatures(List<AgentConfigFeatureName> names) {
-    return dataAccess.addFeatures(names);
+  int createUniqueFeatures(List<Feature> features) {
+    return dataAccess.addUnique(features);
   }
 }

@@ -126,7 +126,7 @@
   <changeSet id="adjudication-engine-analysis-1.2.0_12" author="ahaczewski">
     <createView
       viewName="ae_analysis_query"
-      path="sql/view_ae_analysis_query"
+      path="sql/view_ae_analysis_query.sql"
       relativeToChangelogFile="true"/>
   </changeSet>
 

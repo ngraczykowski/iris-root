@@ -18,12 +18,12 @@ class CleanTimedOutAgentExchangesUseCase implements Runnable {
   @Override
   @Transactional
   public void run() {
-//    long timeoutSeconds = solveProperties.getAgentTimeout().getSeconds();
-//    OffsetDateTime cleanBefore = OffsetDateTime.now().minusSeconds(timeoutSeconds);
-//    long cleanCount = agentExchangeRepository.countAllByCreatedAtBefore(cleanBefore);
-//    log.debug(
-//        "Cleaning timed out agent exchanges: {} with timeout: {} seconds",
-//        cleanCount, timeoutSeconds);
-//    agentExchangeRepository.deleteAllByCreatedAtBefore(cleanBefore);
+    //    long timeoutSeconds = solveProperties.getAgentTimeout().getSeconds();
+    //    OffsetDateTime cleanBefore = OffsetDateTime.now().minusSeconds(timeoutSeconds);
+    //    long cleanCount = agentExchangeRepository.countAllByCreatedAtBefore(cleanBefore);
+    //    log.debug(
+    //        "Cleaning timed out agent exchanges: {} with timeout: {} seconds",
+    //        cleanCount, timeoutSeconds);
+    //    agentExchangeRepository.deleteAllByCreatedAtBefore(cleanBefore);
   }
 }

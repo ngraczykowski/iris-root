@@ -31,7 +31,7 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
   @Id
   @Column(name = "analysis_id", insertable = false, updatable = false, nullable = false)
   @GeneratedValue(strategy = IDENTITY)
-  @Setter(PACKAGE)
+  @Setter(PUBLIC)
   @Include
   private Long id;
 

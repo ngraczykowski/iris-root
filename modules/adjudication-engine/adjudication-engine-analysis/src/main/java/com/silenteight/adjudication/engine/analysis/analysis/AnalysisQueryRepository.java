@@ -6,5 +6,5 @@ import java.util.Optional;
 
 interface AnalysisQueryRepository extends Repository<AnalysisQuery, Long> {
 
-  Optional<AnalysisQuery> findById(Long id);
+  Optional<AnalysisQuery> findById(long id);
 }

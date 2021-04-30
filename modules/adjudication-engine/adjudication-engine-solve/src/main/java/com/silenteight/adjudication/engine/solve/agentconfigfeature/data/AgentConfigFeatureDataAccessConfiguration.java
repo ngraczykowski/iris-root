@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.solve.agentconfigfeature.infrastructure;
+package com.silenteight.adjudication.engine.solve.agentconfigfeature.data;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,12 +14,7 @@ class AgentConfigFeatureDataAccessConfiguration {
 
   @Bean
   InsertAgentConfigFeatureQuery insertAgentConfigFeatureSqlUpdate() {
-    var sqlUpdate = new InsertAgentConfigFeatureQuery();
-
-    sqlUpdate.setJdbcTemplate(jdbcTemplate);
-    sqlUpdate.afterPropertiesSet();
-
-    return sqlUpdate;
+    return new InsertAgentConfigFeatureQuery(jdbcTemplate);
   }
 
   @Bean

@@ -1,9 +1,9 @@
-package com.silenteight.adjudication.engine.solve.agentconfigfeature.infrastructure;
+package com.silenteight.adjudication.engine.solve.agentconfigfeature.data;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.engine.solve.agentconfigfeature.AgentConfigFeatureDataAccess;
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureName;
 import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureDto;
 
 import org.springframework.stereotype.Repository;
@@ -19,8 +19,8 @@ class JdbcAgentConfigFeatureDataAccess implements AgentConfigFeatureDataAccess {
   private final SelectAgentConfigFeatureQuery selectAgentConfigFeatureQuery;
 
   @Override
-  public int addFeatures(List<AgentConfigFeatureName> names) {
-    names.forEach(acf -> insertAgentConfigFeatureQuery.execute(
+  public int addUnique(List<Feature> features) {
+    features.forEach(acf -> insertAgentConfigFeatureQuery.execute(
         acf.getAgentConfig(), acf.getFeature()));
 
     var rowsAffected = insertAgentConfigFeatureQuery.flush();
@@ -29,7 +29,7 @@ class JdbcAgentConfigFeatureDataAccess implements AgentConfigFeatureDataAccess {
   }
 
   @Override
-  public List<AgentConfigFeatureDto> getFeatures(List<AgentConfigFeatureName> names) {
-    return selectAgentConfigFeatureQuery.findAllByNamesIn(names);
+  public List<AgentConfigFeatureDto> findAll(List<Feature> features) {
+    return selectAgentConfigFeatureQuery.findAllByNamesIn(features);
   }
 }

@@ -1,6 +1,6 @@
-package com.silenteight.adjudication.engine.solve.agentconfigfeature.infrastructure;
+package com.silenteight.adjudication.engine.solve.agentconfigfeature.data;
 
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureName;
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.engine.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
 
-import static com.silenteight.adjudication.engine.solve.agentconfigfeature.infrastructure.Fixtures.dateAgentFeature;
-import static com.silenteight.adjudication.engine.solve.agentconfigfeature.infrastructure.Fixtures.nameAgentFeature;
+import static com.silenteight.adjudication.engine.solve.agentconfigfeature.data.Fixtures.dateAgentFeature;
+import static com.silenteight.adjudication.engine.solve.agentconfigfeature.data.Fixtures.nameAgentFeature;
 import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = {
@@ -48,7 +47,7 @@ class JdbcAgentConfigFeatureDataAccessIT extends BaseJdbcTest {
         "SELECT count(1) FROM ae_agent_config_feature", Integer.class);
   }
 
-  private int addFeatures(AgentConfigFeatureName... features) {
-    return dataAccess.addFeatures(List.of(features));
+  private int addFeatures(Feature... features) {
+    return dataAccess.addUnique(List.of(features));
   }
 }

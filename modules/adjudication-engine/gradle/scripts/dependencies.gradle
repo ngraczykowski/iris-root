@@ -120,6 +120,14 @@ libraries.aspectjrt = [group: 'org.aspectj', name: 'aspectjrt', version: '1.9.6'
 libraries.aspectjtools = [group: 'org.aspectj', name: 'aspectjtools', version: libraries.aspectjrt.version]
 libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver']
 libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
+libraries.blaze_persistence_core_api = [group: 'com.blazebit', name: 'blaze-persistence-core-api']
+libraries.blaze_persistence_core_impl = [group: 'com.blazebit', name: 'blaze-persistence-core-impl']
+libraries.blaze_persistence_entity_view_api = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-api']
+libraries.blaze_persistence_entity_view_impl = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-impl']
+libraries.blaze_persistence_entity_view_processor = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-processor']
+libraries.blaze_persistence_entity_view_spring = [group: 'com.blazebit', name: 'blaze-persistence-integration-entity-view-spring']
+libraries.blaze_persistence_integration_hibernate_5_4 = [group: 'com.blazebit', name: 'blaze-persistence-integration-hibernate-5.4']
+libraries.blaze_persistence_integration_spring_data_2_3 = [group: 'com.blazebit', name: 'blaze-persistence-integration-spring-data-2.3']
 libraries.bouncycastle_bcmail = [group: 'org.bouncycastle', name: 'bcmail-jdk15on']
 libraries.bouncycastle_bcpg = [group: 'org.bouncycastle', name: 'bcpg-jdk15on']
 libraries.bouncycastle_bcpkix = [group: 'org.bouncycastle', name: 'bcpkix-jdk15on']
@@ -243,9 +251,12 @@ configurations.all {
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-  implementation platform('org.testcontainers:testcontainers-bom:1.15.2')
+  implementation platform("org.testcontainers:testcontainers-bom:1.15.2")
   annotationProcessor platform(
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+
+  implementation platform("com.blazebit:blaze-persistence-bom:1.6.0")
+  annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")
 
   implementation libraries.slf4j_api
 }

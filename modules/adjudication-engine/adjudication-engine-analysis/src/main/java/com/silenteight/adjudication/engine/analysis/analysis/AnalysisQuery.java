@@ -12,10 +12,7 @@ import org.hibernate.annotations.Immutable;
 import java.util.List;
 import javax.persistence.*;
 
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PACKAGE;
-import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.*;
 import static org.hibernate.annotations.FetchMode.SUBSELECT;
 
 @Data
@@ -30,7 +27,7 @@ class AnalysisQuery implements IdentifiableEntity {
 
   @Id
   @Column(name = "analysis_id")
-  @Setter(PACKAGE)
+  @Setter(PUBLIC)
   @Include
   private Long id;
 

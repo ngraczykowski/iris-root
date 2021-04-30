@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class SolveController {
 
-//  private final SolveGateway solveGateway;
+  //  private final SolveGateway solveGateway;
 
   @PostMapping("/solve")
   void solve() {
-//    solveGateway.startSolve();
+    //    solveGateway.startSolve();
   }
 }

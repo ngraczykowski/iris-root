@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 
 import java.util.*;
 
@@ -16,12 +17,24 @@ class AnalysisFixtures {
   private static final String[] CATEGORIES = {
       "source_system", "country", "customer_type", "hit_category" };
 
-  static CreateAnalysisUseCase inMemoryAnalysisUseCase() {
-    return new CreateAnalysisUseCase(new InMemoryAnalysisRepository());
+  static CreateAndGetAnalysisUseCase inMemoryAnalysisUseCase() {
+    var repository = new InMemoryAnalysisRepository();
+    var createAnalysisUseCase = new CreateAnalysisUseCase(
+        repository.getRepository(), new FakeCategoryProvider(), new FakeFeatureProvider());
+    var getAnalysisUseCase = new GetAnalysisUseCase(repository.getQueryRepository());
+
+    return new CreateAndGetAnalysisUseCase(createAnalysisUseCase, getAnalysisUseCase);
   }
 
   static Analysis randomAnalysis() {
-    return randomAnalysisEntity().updateBuilder(Analysis.newBuilder()).build();
+    var builder = Analysis.newBuilder();
+    var analysisEntity = randomAnalysisEntity();
+    analysisEntity.updateBuilder(builder);
+
+    builder.addAllCategories(getRandomCategories(analysisEntity.getCategories().size()));
+    builder.addAllFeatures(getRandomFeatures(analysisEntity.getFeatures().size()));
+
+    return builder.build();
   }
 
   static Analysis randomAnalysisWithoutLabelsCategoriesAndFeatures() {
@@ -43,8 +56,8 @@ class AnalysisFixtures {
         .strategy("strategies/" + STRATEGIES[current().nextInt(0, STRATEGIES.length)])
         .policy("policies/" + UUID.randomUUID())
         .labels(getRandomLabels())
-        //.categories(getRandomCategories())
-        //.features(getRandomFeatures())
+        .categories(getRandomAnalysisCategories())
+        .features(getRandomAnalysisFeatures())
         .build();
   }
 
@@ -72,25 +85,43 @@ class AnalysisFixtures {
     return labels;
   }
 
-//  static List<AnalysisCategory> getRandomCategories() {
-//    List<AnalysisCategory> categories = new ArrayList<>();
-//    for (int i = 0; i < current().nextInt(10, 100); i++) {
-//      String category = CATEGORIES[current().nextInt(0, CATEGORIES.length)];
-//      categories.add(AnalysisCategory.builder().category("categories/" + category).build());
-//    }
-//    return categories;
-//  }
+  static List<AnalysisCategory> getRandomAnalysisCategories() {
+    long id = current().nextLong(100, 1000);
+    List<AnalysisCategory> categories = new ArrayList<>();
+    for (int i = 0; i < current().nextInt(10, 100); i++) {
+      categories.add(AnalysisCategory.builder().categoryId(id++).build());
+    }
+    return categories;
+  }
 
-//  static List<AnalysisFeature> getRandomFeatures() {
-//    List<AnalysisFeature> features = new ArrayList<>();
-//    for (int i = 0; i < current().nextInt(10, 100); i++) {
-//      features.add(AnalysisFeature.builder()
-//          .feature("feature" + i)
-//          .agentConfig("agent" + i)
-//          .build());
-//    }
-//    return features;
-//  }
+  static List<String> getRandomCategories(int count) {
+    List<String> categories = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+      String category = CATEGORIES[current().nextInt(0, CATEGORIES.length)];
+      categories.add("categories/" + category);
+    }
+    return categories;
+  }
+
+  static List<AnalysisFeature> getRandomAnalysisFeatures() {
+    long id = current().nextLong(100, 1000);
+    List<AnalysisFeature> features = new ArrayList<>();
+    for (int i = 0; i < current().nextInt(10, 100); i++) {
+      features.add(AnalysisFeature.builder().agentConfigFeatureId(id++).build());
+    }
+    return features;
+  }
+
+  static List<Feature> getRandomFeatures(int count) {
+    List<Feature> features = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+      features.add(Feature.newBuilder()
+          .setFeature("features/" + i)
+          .setAgentConfig("agents/" + i + "/versions/1.2.3/configs/1")
+          .build());
+    }
+    return features;
+  }
 
   static Analysis.State getRandomAnalysisState() {
     // subtract 1 to exclude UNSPECIFIED

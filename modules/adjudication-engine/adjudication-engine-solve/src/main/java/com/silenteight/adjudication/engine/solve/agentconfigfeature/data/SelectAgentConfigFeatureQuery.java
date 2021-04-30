@@ -1,8 +1,8 @@
-package com.silenteight.adjudication.engine.solve.agentconfigfeature.infrastructure;
+package com.silenteight.adjudication.engine.solve.agentconfigfeature.data;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureName;
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureDto;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -19,7 +19,7 @@ class SelectAgentConfigFeatureQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
-  List<AgentConfigFeatureDto> findAllByNamesIn(List<AgentConfigFeatureName> names) {
+  List<AgentConfigFeatureDto> findAllByNamesIn(List<Feature> names) {
     jdbcTemplate.execute(
         "CREATE TEMP TABLE IF NOT EXISTS tmp_features (name VARCHAR(300))"
             + " ON COMMIT DELETE ROWS");
@@ -40,11 +40,15 @@ class SelectAgentConfigFeatureQuery {
           }
         });
 
-    return jdbcTemplate.query(
+    var agentConfigFeatures = jdbcTemplate.query(
         "SELECT agent_config_feature_id, agent_config, feature"
             + " FROM ae_agent_config_feature"
             + " WHERE concat(agent_config, '/', feature) IN (SELECT name FROM tmp_features)",
         new AgentConfigFeatureDtoRowMapper());
+
+    jdbcTemplate.execute("DELETE FROM tmp_features");
+
+    return agentConfigFeatures;
   }
 
   private static final class AgentConfigFeatureDtoRowMapper
