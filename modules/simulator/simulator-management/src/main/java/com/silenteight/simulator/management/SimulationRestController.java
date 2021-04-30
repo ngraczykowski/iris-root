@@ -38,8 +38,7 @@ class SimulationRestController {
       @RequestBody @Valid CreateSimulationRequestDto createSimulationRequestDto,
       Authentication authentication) {
 
-    CreateSimulationRequest request = CreateSimulationRequest
-        .builder()
+    CreateSimulationRequest request = CreateSimulationRequest.builder()
         .id(createSimulationRequestDto.getId())
         .simulationName(createSimulationRequestDto.getSimulationName())
         .description(createSimulationRequestDto.getDescription())

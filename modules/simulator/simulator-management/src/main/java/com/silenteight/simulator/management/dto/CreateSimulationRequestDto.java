@@ -14,6 +14,7 @@ public class CreateSimulationRequestDto {
   private UUID id;
   @NonNull
   private String simulationName;
+  @NonNull
   private String description;
   @NonNull
   private Set<String> datasets;

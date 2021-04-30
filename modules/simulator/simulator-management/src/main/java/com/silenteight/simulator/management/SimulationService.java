@@ -16,8 +16,7 @@ class SimulationService {
   private final SimulationEntityRepository repository;
 
   void createSimulation(CreateSimulationRequest request, Set<String> datasets, String analysis) {
-    SimulationEntity simulationEntity = SimulationEntity
-        .builder()
+    SimulationEntity simulationEntity = SimulationEntity.builder()
         .simulationId(request.getId())
         .createdBy(request.getCreatedBy())
         .name(request.getSimulationName())
