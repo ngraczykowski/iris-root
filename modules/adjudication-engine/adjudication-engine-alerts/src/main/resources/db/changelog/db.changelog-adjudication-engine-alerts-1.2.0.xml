@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_1" author="ahaczewski">
+    <dropUniqueConstraint
+        tableName="ae_alert"
+        constraintName="uq_ae_alert_alert_id_client_alert_identifier"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_2" author="ahaczewski">
+    <dropUniqueConstraint
+        tableName="ae_match"
+        constraintName="uq_ae_match_match_id_alert_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_3" author="ahaczewski">
+    <addUniqueConstraint
+        tableName="ae_match"
+        columnNames="alert_id, client_match_identifier"
+        constraintName="uq_ae_match_alert_id_client_match_identifier"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_4" author="ahaczewski">
+    <createIndex
+        tableName="ae_alert"
+        indexName="ix_ae_alert_client_alert_identifier">
+      <column name="client_alert_identifier"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

@@ -3,6 +3,8 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
+import com.silenteight.adjudication.api.v1.Analysis.Feature;
+
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
@@ -34,4 +36,8 @@ public class AnalysisFeatureQuery {
   private String agentConfig;
 
   private String feature;
+
+  Feature toFeature() {
+    return Feature.newBuilder().setAgentConfig(agentConfig).setFeature(feature).build();
+  }
 }

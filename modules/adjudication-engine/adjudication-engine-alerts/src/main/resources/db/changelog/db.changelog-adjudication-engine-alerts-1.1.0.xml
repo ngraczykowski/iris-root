@@ -48,7 +48,7 @@
 
   <changeSet id="adjudication-engine-alerts-1.1.0-5" author="tkleszcz">
     <createIndex tableName="ae_alert" indexName="ix_ae_alert_priority">
-      <column name="priority"></column>
+      <column name="priority"/>
     </createIndex>
   </changeSet>
 </databaseChangeLog>

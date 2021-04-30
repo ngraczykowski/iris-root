@@ -10,8 +10,10 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.Immutable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 
+import static java.util.stream.Collectors.toUnmodifiableList;
 import static lombok.AccessLevel.*;
 import static org.hibernate.annotations.FetchMode.SUBSELECT;
 
@@ -57,9 +59,15 @@ class AnalysisQuery implements IdentifiableEntity {
   private List<AnalysisFeatureQuery> featureQueries;
 
   Analysis toAnalysis() {
-    return analysis.updateBuilder(Analysis.newBuilder())
+    var builder = analysis.updateBuilder(Analysis.newBuilder())
         .setAlertCount(alertCount)
-        .setPendingAlerts(pendingAlerts)
-        .build();
+        .setPendingAlerts(pendingAlerts);
+
+    builder.addAllCategories(
+        categoryQueries.stream().map(AnalysisCategoryQuery::getName).collect(toUnmodifiableList()));
+    builder.addAllFeatures(
+        featureQueries.stream().map(AnalysisFeatureQuery::toFeature).collect(toUnmodifiableList()));
+
+    return builder.build();
   }
 }
