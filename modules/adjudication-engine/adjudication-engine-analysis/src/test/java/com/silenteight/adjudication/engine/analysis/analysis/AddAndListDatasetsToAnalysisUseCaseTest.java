@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,9 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
   @Mock
   private ListAnalysisDatasetUseCase listAnalysisDatasetUseCase;
 
+  @Mock
+  private ApplicationEventPublisher applicationEventPublisher;
+
   private final InMemoryAnalysisDatasetRepository analysisDatasetRepository
       = new InMemoryAnalysisDatasetRepository();
 
@@ -32,7 +36,8 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
 
   @BeforeEach
   void setUp() {
-    var addUseCase = new AddDatasetsToAnalysisUseCase(analysisDatasetRepository);
+    var addUseCase = new AddDatasetsToAnalysisUseCase(
+        analysisDatasetRepository, applicationEventPublisher);
     useCase = new AddAndListDatasetsInAnalysisUseCase(addUseCase, listAnalysisDatasetUseCase);
   }
 

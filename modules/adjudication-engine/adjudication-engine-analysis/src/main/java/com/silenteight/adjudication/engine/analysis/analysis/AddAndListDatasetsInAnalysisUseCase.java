@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,15 +20,12 @@ class AddAndListDatasetsInAnalysisUseCase {
   @NonNull
   private final ListAnalysisDatasetUseCase listAnalysisDatasetUseCase;
 
-  @Transactional
   List<AnalysisDataset> addAndListDatasets(String analysis, List<String> datasets) {
-    List<AnalysisDatasetEntity> saved = addDatasetsToAnalysisUseCase.addDatasets(
-        analysis, datasets);
+    var saved = addDatasetsToAnalysisUseCase.addDatasets(analysis, datasets);
 
-    return listAnalysisDatasetUseCase.listAnalysisDatasets(
-        saved
-            .stream()
-            .map(AnalysisDatasetEntity::getId)
-            .collect(Collectors.toList()));
+    return listAnalysisDatasetUseCase.listAnalysisDatasets(saved
+        .stream()
+        .map(AnalysisDatasetEntity::getId)
+        .collect(Collectors.toList()));
   }
 }
