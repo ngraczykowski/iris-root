@@ -49,8 +49,7 @@ class SimulationFixtures {
           .build();
 
   static final SimulationDto SIMULATION_DTO =
-      SimulationDto
-          .builder()
+      SimulationDto.builder()
           .id(SIMULATION_ID)
           .name(NAME)
           .simulationName(SIMULATION_NAME)

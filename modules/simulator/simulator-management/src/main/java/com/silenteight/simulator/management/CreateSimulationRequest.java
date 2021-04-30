@@ -26,6 +26,7 @@ public class CreateSimulationRequest implements AuditableRequest {
   UUID id;
   @NonNull
   String simulationName;
+  @NonNull
   String description;
   @NonNull
   String createdBy;
