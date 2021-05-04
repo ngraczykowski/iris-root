@@ -4,6 +4,7 @@ import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.State;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
+import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationState;
 import com.silenteight.simulator.management.list.dto.SimulationDto;
 
@@ -20,8 +21,8 @@ import static java.util.UUID.fromString;
 
 public class SimulationFixtures {
 
-  public static final UUID SIMULATION_ID = fromString("a9b45451-6fde-4832-8dc0-d17b4708d8ca");
-  public static final String NAME = "simulations/" + SIMULATION_ID;
+  public static final UUID ID = fromString("a9b45451-6fde-4832-8dc0-d17b4708d8ca");
+  public static final String NAME = "simulations/" + ID;
   public static final String SIMULATION_NAME = "New simulation";
   public static final String DESCRIPTION = "Simulation description";
   public static final String MODEL = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
@@ -42,7 +43,7 @@ public class SimulationFixtures {
 
   public static final CreateSimulationRequest CREATE_SIMULATION_REQUEST =
       CreateSimulationRequest.builder()
-          .id(SIMULATION_ID)
+          .id(ID)
           .simulationName(SIMULATION_NAME)
           .description(DESCRIPTION)
           .model(MODEL)
@@ -52,7 +53,7 @@ public class SimulationFixtures {
 
   public static final SimulationDto SIMULATION_DTO =
       SimulationDto.builder()
-          .id(SIMULATION_ID)
+          .id(ID)
           .name(NAME)
           .simulationName(SIMULATION_NAME)
           .state(STATE)
@@ -74,5 +75,18 @@ public class SimulationFixtures {
       Analysis.newBuilder()
           .setName(ANALYSIS_NAME)
           .setState(ANALYSIS_STATE)
+          .build();
+
+  public static final SimulationDetailsDto DETAILS_DTO =
+      SimulationDetailsDto.builder()
+          .id(ID)
+          .name(NAME)
+          .simulationName(SIMULATION_NAME)
+          .state(STATE)
+          .model(MODEL)
+          .datasets(DATASETS)
+          .progressState(PROGRESS_STATE)
+          .createdAt(NOW.atOffset(UTC))
+          .createdBy(USERNAME)
           .build();
 }

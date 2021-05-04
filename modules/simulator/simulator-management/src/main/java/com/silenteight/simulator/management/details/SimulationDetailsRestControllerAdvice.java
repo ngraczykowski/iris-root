@@ -1,8 +1,8 @@
-package com.silenteight.simulator.dataset.get;
+package com.silenteight.simulator.management.details;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
+import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,10 +12,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @ControllerAdvice
-class GetDatasetRestControllerAdvice {
+class SimulationDetailsRestControllerAdvice {
 
-  @ExceptionHandler(DatasetNotFoundException.class)
-  public ResponseEntity<String> handle(DatasetNotFoundException e) {
+  @ExceptionHandler(SimulationNotFoundException.class)
+  public ResponseEntity<String> handle(SimulationNotFoundException e) {
     log(e);
     return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
   }

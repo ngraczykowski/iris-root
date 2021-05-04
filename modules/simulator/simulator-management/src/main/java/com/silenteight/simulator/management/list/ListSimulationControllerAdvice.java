@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @ControllerAdvice
-public class ListSimulationControllerAdvice {
+class ListSimulationControllerAdvice {
 
   @ExceptionHandler(InvalidModelNameException.class)
   public ResponseEntity<String> handle(InvalidModelNameException e) {

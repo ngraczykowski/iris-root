@@ -3,6 +3,7 @@ package com.silenteight.simulator.dataset.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
 import com.silenteight.simulator.dataset.dto.RangeQueryDto;
