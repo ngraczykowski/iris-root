@@ -62,6 +62,7 @@ dependencies {
   runtimeOnly libraries.hibernate_jcache
   runtimeOnly libraries.caffeine
   runtimeOnly libraries.caffeine_jcache
+  runtimeOnly libraries.liquibase_sessionlock
 
   // Messaging
   implementation libraries.amqp_client
