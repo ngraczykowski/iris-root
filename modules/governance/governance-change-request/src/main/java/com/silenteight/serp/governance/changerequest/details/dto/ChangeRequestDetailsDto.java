@@ -15,17 +15,17 @@ public class ChangeRequestDetailsDto {
   @NonNull
   UUID id;
   @NonNull
+  String state;
+  @NonNull
   String createdBy;
   @NonNull
   OffsetDateTime createdAt;
   @NonNull
   String creatorComment;
-  @NonNull
+  @Nullable
   String decidedBy;
-  @NonNull
+  @Nullable
   OffsetDateTime decidedAt;
   @Nullable
   String deciderComment;
-  @NonNull
-  String state;
 }
