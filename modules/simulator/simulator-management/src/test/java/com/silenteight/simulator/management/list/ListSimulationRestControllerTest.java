@@ -3,7 +3,7 @@ package com.silenteight.simulator.management.list;
 import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.simulator.management.*;
+import com.silenteight.simulator.management.SimulationFixtures;
 import com.silenteight.simulator.management.domain.InvalidModelNameException;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,7 +17,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     ListSimulationRestController.class,
@@ -39,7 +41,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
     get(SIMULATIONS_URL)
         .statusCode(OK.value())
         .body("size()", is(1))
-        .body("[0].id", is(SIMULATION_ID.toString()))
+        .body("[0].id", is(ID.toString()))
         .body("[0].name", is(NAME))
         .body("[0].simulationName", is(SIMULATION_NAME))
         .body("[0].state", is(STATE.toString()))
@@ -61,7 +63,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
     get(SIMULATIONS_BY_MODEL_NAME_URL)
         .statusCode(OK.value())
         .body("size()", is(1))
-        .body("[0].id", is(SIMULATION_ID.toString()))
+        .body("[0].id", is(ID.toString()))
         .body("[0].name", is(NAME))
         .body("[0].simulationName", is(SIMULATION_NAME))
         .body("[0].state", is(STATE.toString()))

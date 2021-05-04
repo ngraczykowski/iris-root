@@ -1,6 +1,8 @@
 package com.silenteight.simulator.management.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
+import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 import com.silenteight.simulator.management.list.dto.SimulationDto;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
     assertThat(result).hasSize(1);
     SimulationDto simulationDto = result.get(0);
-    assertThat(simulationDto.getId()).isEqualTo(SIMULATION_ID);
+    assertThat(simulationDto.getId()).isEqualTo(ID);
     assertThat(simulationDto.getSimulationName()).isEqualTo(SIMULATION_NAME);
     assertThat(simulationDto.getState()).isEqualTo(STATE);
     assertThat(simulationDto.getDatasets()).isEqualTo(DATASETS);
@@ -43,10 +45,33 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDto.getCreatedAt()).isNotNull();
   }
 
+  @Test
+  void shouldGetSimulationDetails() {
+    persistSimulation();
+
+    SimulationDetailsDto result = underTest.get(ID);
+
+    assertThat(result.getId()).isEqualTo(ID);
+    assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
+    assertThat(result.getState()).isEqualTo(STATE);
+    assertThat(result.getDatasets()).isEqualTo(DATASETS);
+    assertThat(result.getModel()).isEqualTo(MODEL);
+    assertThat(result.getProgressState()).isEqualTo(PROGRESS_STATE);
+    assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
+    assertThat(result.getCreatedAt()).isNotNull();
+  }
+
+  @Test
+  void shouldThrowIfSimulationNotFound() {
+    assertThatThrownBy(() -> underTest.get(ID))
+        .isInstanceOf(SimulationNotFoundException.class)
+        .hasMessageContaining("simulationId");
+  }
+
   private void persistSimulation() {
     SimulationEntity simulationEntity = SimulationEntity
         .builder()
-        .simulationId(SIMULATION_ID)
+        .simulationId(ID)
         .name(SIMULATION_NAME)
         .state(STATE)
         .createdBy(USERNAME)
