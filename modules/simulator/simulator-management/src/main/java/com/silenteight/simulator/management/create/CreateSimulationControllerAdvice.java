@@ -1,6 +1,8 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.create;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.simulator.management.domain.NonUniqueSimulationException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +12,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Slf4j
 @ControllerAdvice
-class SimulationControllerAdvice {
+class CreateSimulationControllerAdvice {
 
   @ExceptionHandler(NonUniqueSimulationException.class)
   public ResponseEntity<String> handle(NonUniqueSimulationException e) {

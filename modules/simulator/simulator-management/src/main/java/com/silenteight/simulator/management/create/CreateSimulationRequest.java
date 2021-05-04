@@ -1,4 +1,4 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.create;
 
 import lombok.Builder;
 import lombok.NonNull;

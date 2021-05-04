@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.model.api.v1.ModelRequest;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
-import com.silenteight.simulator.management.ModelService;
+import com.silenteight.simulator.management.create.ModelService;
 
 @RequiredArgsConstructor
 class GrpcModelService implements ModelService {

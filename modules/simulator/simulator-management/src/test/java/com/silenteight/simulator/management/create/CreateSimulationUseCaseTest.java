@@ -1,8 +1,9 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.create;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.management.domain.SimulationService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.simulator.management.CreateSimulationRequest.POST_AUDIT_TYPE;
-import static com.silenteight.simulator.management.CreateSimulationRequest.PRE_AUDIT_TYPE;
 import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static com.silenteight.simulator.management.create.CreateSimulationRequest.POST_AUDIT_TYPE;
+import static com.silenteight.simulator.management.create.CreateSimulationRequest.PRE_AUDIT_TYPE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;

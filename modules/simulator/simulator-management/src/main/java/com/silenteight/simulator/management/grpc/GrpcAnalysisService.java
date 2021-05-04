@@ -11,7 +11,7 @@ import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBl
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.adjudication.api.v1.GetAnalysisRequest;
 import com.silenteight.model.api.v1.SolvingModel;
-import com.silenteight.simulator.management.AnalysisService;
+import com.silenteight.simulator.management.create.AnalysisService;
 
 import java.util.List;
 

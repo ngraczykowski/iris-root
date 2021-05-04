@@ -1,7 +1,6 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.domain;
 
-import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.management.create.AnalysisService;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -11,19 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EntityScan
 @EnableJpaRepositories
-class ManagementConfiguration {
-
-  @Bean
-  CreateSimulationUseCase createSimulationUseCase(
-      ModelService modelService,
-      AnalysisService analysisService,
-      DatasetQuery datasetQuery,
-      SimulationService simulationService,
-      AuditingLogger auditingLogger) {
-
-    return new CreateSimulationUseCase(
-        modelService, analysisService, datasetQuery, simulationService, auditingLogger);
-  }
+class SimulationConfiguration {
 
   @Bean
   SimulationService simulationService(SimulationEntityRepository simulationEntityRepository) {

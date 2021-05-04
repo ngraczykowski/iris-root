@@ -1,4 +1,4 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.domain;
 
 import org.springframework.data.repository.Repository;
 
@@ -9,4 +9,6 @@ interface SimulationEntityRepository extends Repository<SimulationEntity, Long> 
   SimulationEntity save(SimulationEntity simulationEntity);
 
   Collection<SimulationEntity> findAll();
+
+  Collection<SimulationEntity> findAllByModelName(String modelName);
 }
