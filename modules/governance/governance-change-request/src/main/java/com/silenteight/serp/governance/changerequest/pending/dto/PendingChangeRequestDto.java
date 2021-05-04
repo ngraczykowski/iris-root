@@ -12,11 +12,13 @@ import java.util.UUID;
 public class PendingChangeRequestDto {
 
   @NonNull
-  private UUID id;
+  UUID id;
   @NonNull
-  private String createdBy;
+  String createdBy;
   @NonNull
-  private OffsetDateTime createdAt;
+  OffsetDateTime createdAt;
   @NonNull
-  private String comment;
+  String modelName;
+  @NonNull
+  String comment;
 }

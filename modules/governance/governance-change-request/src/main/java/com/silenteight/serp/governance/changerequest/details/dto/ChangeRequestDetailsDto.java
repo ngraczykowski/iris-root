@@ -28,4 +28,6 @@ public class ChangeRequestDetailsDto {
   OffsetDateTime decidedAt;
   @Nullable
   String deciderComment;
+  @NonNull
+  String modelName;
 }
