@@ -53,6 +53,10 @@ You may want to use the following convenience script that:
 
         ./scripts/init.sh
 
+or in the case of https setup:
+
+        ./scripts/init-https.sh
+
 ## Testing
 
 ### Swagger-ui
