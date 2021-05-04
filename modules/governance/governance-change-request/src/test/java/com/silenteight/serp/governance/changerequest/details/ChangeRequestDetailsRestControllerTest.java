@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.UUID.fromString;
@@ -45,7 +46,8 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
         .body("decidedBy", equalTo("Approver 1"))
         .body("deciderComment", equalTo("All good!"))
         .body("decidedAt", notNullValue())
-        .body("state", equalTo("APPROVED"));
+        .body("state", equalTo("APPROVED"))
+        .body("modelName", equalTo(MODEL_NAME));
   }
 
   @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
@@ -68,6 +70,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
         .deciderComment("All good!")
         .decidedAt(parse("2020-04-15T10:16:40+01:00", ISO_OFFSET_DATE_TIME))
         .state("APPROVED")
+        .modelName(MODEL_NAME)
         .build();
   }
 }

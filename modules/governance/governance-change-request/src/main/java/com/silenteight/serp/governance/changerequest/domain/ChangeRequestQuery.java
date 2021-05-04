@@ -70,6 +70,7 @@ class ChangeRequestQuery
         .createdBy(changeRequest.getCreatedBy())
         .createdAt(changeRequest.getCreatedAt())
         .comment(changeRequest.getCreatorComment())
+        .modelName(changeRequest.getModelName())
         .build();
   }
 
@@ -83,6 +84,7 @@ class ChangeRequestQuery
         .deciderComment(changeRequest.getDeciderComment())
         .decidedAt(changeRequest.getDecidedAt())
         .state(changeRequest.getState().name())
+        .modelName(changeRequest.getModelName())
         .build();
   }
 
@@ -96,6 +98,7 @@ class ChangeRequestQuery
         .deciderComment(changeRequest.getDeciderComment())
         .decidedAt(changeRequest.getDecidedAt())
         .state(changeRequest.getState().name())
+        .modelName(changeRequest.getModelName())
         .build();
   }
 }

@@ -28,4 +28,6 @@ public class ClosedChangeRequestDto {
   String deciderComment;
   @NonNull
   String state;
+  @NonNull
+  String modelName;
 }

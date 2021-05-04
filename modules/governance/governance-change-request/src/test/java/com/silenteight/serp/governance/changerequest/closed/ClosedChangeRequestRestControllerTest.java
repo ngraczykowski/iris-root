@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.emptyList;
@@ -61,6 +62,7 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].deciderComment", equalTo("All good!"))
         .body("[0].decidedAt", notNullValue())
         .body("[0].state", equalTo("APPROVED"))
+        .body("[0].modelName", equalTo(MODEL_NAME))
         .body("[1].id", equalTo("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
         .body("[1].createdBy", equalTo("Business Operator #2"))
         .body("[1].createdAt", notNullValue())
@@ -68,7 +70,8 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("[1].decidedBy", equalTo("Approver 2"))
         .body("[1].deciderComment", equalTo("Not good!"))
         .body("[1].decidedAt", notNullValue())
-        .body("[1].state", equalTo("REJECTED"));
+        .body("[1].state", equalTo("REJECTED"))
+        .body("[1].modelName", equalTo(MODEL_NAME));
   }
 
   @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
@@ -87,6 +90,7 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
         .deciderComment("All good!")
         .decidedAt(parse("2020-04-15T10:16:40+01:00", ISO_OFFSET_DATE_TIME))
         .state("APPROVED")
+        .modelName(MODEL_NAME)
         .build();
 
     ClosedChangeRequestDto secondChangeRequest = ClosedChangeRequestDto.builder()
@@ -98,6 +102,7 @@ class ClosedChangeRequestRestControllerTest extends BaseRestControllerTest {
         .deciderComment("Not good!")
         .decidedAt(parse("2020-05-04T08:16:40+01:00", ISO_OFFSET_DATE_TIME))
         .state("REJECTED")
+        .modelName(MODEL_NAME)
         .build();
   }
 }

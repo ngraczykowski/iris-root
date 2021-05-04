@@ -49,6 +49,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(changeRequest.getCreatedAt()).isNotNull();
     assertThat(changeRequest.getCreatedBy()).isEqualTo(CREATED_BY);
     assertThat(changeRequest.getComment()).isEqualTo(CREATOR_COMMENT);
+    assertThat(changeRequest.getModelName()).isEqualTo(MODEL_NAME);
   }
 
   @Test
@@ -91,6 +92,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(result.getCreatedAt()).isNotNull();
     assertThat(result.getCreatedBy()).isEqualTo(CREATED_BY);
     assertThat(result.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
+    assertThat(result.getModelName()).isEqualTo(MODEL_NAME);
     assertThat(result.getDecidedBy()).isEqualTo(decider);
     assertThat(result.getDecidedAt()).isNotNull();
     assertThat(result.getDeciderComment()).isEqualTo(deciderComment);

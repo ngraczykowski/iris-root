@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.emptyList;
@@ -57,10 +58,12 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", equalTo("Business Operator #1"))
         .body("[0].createdAt", notNullValue())
         .body("[0].comment", equalTo("Increase efficiency by 20% on Asia markets"))
+        .body("[1].modelName", equalTo(MODEL_NAME))
         .body("[1].id", equalTo("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
         .body("[1].createdBy", equalTo("Business Operator #2"))
         .body("[1].createdAt", notNullValue())
-        .body("[1].comment", equalTo("Disable redundant RBs based on analyses from 2020.04.02"));
+        .body("[1].comment", equalTo("Disable redundant RBs based on analyses from 2020.04.02"))
+        .body("[1].modelName", equalTo(MODEL_NAME));
   }
 
   @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
@@ -75,6 +78,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
         .createdBy("Business Operator #1")
         .createdAt(parse("2020-04-15T10:15:30+01:00", ISO_OFFSET_DATE_TIME))
         .comment("Increase efficiency by 20% on Asia markets")
+        .modelName(MODEL_NAME)
         .build();
 
     PendingChangeRequestDto secondChangeRequest = PendingChangeRequestDto.builder()
@@ -82,6 +86,7 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
         .createdBy("Business Operator #2")
         .createdAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
         .comment("Disable redundant RBs based on analyses from 2020.04.02")
+        .modelName(MODEL_NAME)
         .build();
   }
 }
