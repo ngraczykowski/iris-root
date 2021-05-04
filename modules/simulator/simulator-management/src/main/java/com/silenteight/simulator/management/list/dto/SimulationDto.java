@@ -1,8 +1,10 @@
-package com.silenteight.simulator.management.dto;
+package com.silenteight.simulator.management.list.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+
+import com.silenteight.simulator.management.domain.SimulationState;
 
 import java.time.OffsetDateTime;
 import java.util.Set;

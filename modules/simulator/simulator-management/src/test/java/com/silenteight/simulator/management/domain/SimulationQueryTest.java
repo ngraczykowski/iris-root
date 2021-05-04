@@ -1,7 +1,7 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.simulator.management.dto.SimulationDto;
+import com.silenteight.simulator.management.list.dto.SimulationDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
-@ContextConfiguration(classes = { ManagementTestConfiguration.class })
+@ContextConfiguration(classes = { SimulationTestConfiguration.class })
 class SimulationQueryTest extends BaseDataJpaTest {
 
   @Autowired

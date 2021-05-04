@@ -1,10 +1,9 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.domain;
 
 import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.simulator.management.dto.SimulationState;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;

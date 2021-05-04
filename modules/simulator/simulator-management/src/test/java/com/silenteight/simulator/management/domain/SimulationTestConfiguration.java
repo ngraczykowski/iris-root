@@ -1,7 +1,10 @@
-package com.silenteight.simulator.management;
+package com.silenteight.simulator.management.domain;
 
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.management.ManagementModule;
+import com.silenteight.simulator.management.create.AnalysisService;
+import com.silenteight.simulator.management.create.TestAnalysisService;
 
 import io.grpc.Channel;
 import org.mockito.Mockito;
@@ -11,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(basePackageClasses = ManagementModule.class)
-class ManagementTestConfiguration {
+class SimulationTestConfiguration {
 
   @Bean
   AuditingLogger auditingLogger() {

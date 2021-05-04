@@ -1,4 +1,4 @@
-package com.silenteight.simulator.management.dto;
+package com.silenteight.simulator.management.create.dto;
 
 import lombok.*;
 
