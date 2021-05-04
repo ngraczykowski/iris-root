@@ -2,54 +2,57 @@ package com.silenteight.adjudication.engine.common.resource;
 
 import org.junit.jupiter.api.Test;
 
+import static com.silenteight.adjudication.engine.common.resource.ResourceName.create;
 import static org.assertj.core.api.Assertions.*;
 
-public class ResourceNameTest {
+class ResourceNameTest {
 
-  String name = "alerts/1/datasets/3";
-
+  private static final String NAME = "alerts/1/datasets/3";
 
   @Test
   void shouldGetAndCreatePathFromResource() {
-    var path = ResourceName.getResource(name).getPath();
-    assertThat(path).isEqualTo(name);
+    var path = create(NAME).getPath();
+    assertThat(path).isEqualTo(NAME);
   }
 
   @Test
   void shouldGetAlertIdFromToken() {
-    var alertId = ResourceName.getResource(name).getId("alerts");
+    var alertId = create(NAME).getLong("alerts");
     assertThat(alertId).isEqualTo(1);
   }
 
   @Test
   void shouldReplaceId() {
-    var resource = ResourceName.getResource(name).replaceId("datasets", 5);
-    assertThat(resource.getId("datasets")).isEqualTo(5);
+    var resource = create(NAME).replaceLong("datasets", 5);
+    assertThat(resource.getLong("datasets")).isEqualTo(5);
   }
 
   @Test
   void shouldReplaceToken() {
-    var resource = ResourceName.getResource(name).replaceName("datasets", "matches", 7);
-    assertThat(resource.getId("matches")).isEqualTo(7);
-    assertThatThrownBy(() -> resource.getId("datasets"))
-        .hasMessage("ResourceName could not find token for name: datasets");
+    var resource = create(NAME).replaceName("datasets", "matches", "7");
+    assertThat(resource.getLong("matches")).isEqualTo(7);
+    assertThatThrownBy(() -> resource.getLong("datasets"))
+        .hasMessage("Resource name has no part 'datasets'.");
     assertThat(resource.getPath()).isEqualTo("alerts/1/matches/7");
-
   }
 
   @Test
   void shouldRemoveToken() {
-    var resource = ResourceName.getResource(name).remove("datasets");
+    var resource = create(NAME).remove("datasets");
     assertThat(resource.getPath()).isEqualTo("alerts/1");
   }
 
-
   @Test
-  void shouldCopyAndReplaceWithoutImpactOnOryginal() {
-    var resource1 = ResourceName.getResource(name);
+  void shouldCopyAndReplaceWithoutImpactOnOriginal() {
+    var resource1 = create(NAME);
     var resource2 = resource1.copy();
 
-    assertThat(resource2.replaceId("alerts", 2).getId("alerts")).isEqualTo(2);
-    assertThat(resource1.getId("alerts")).isEqualTo(1);
+    assertThat(resource2.replaceLong("alerts", 2).getLong("alerts")).isEqualTo(2);
+    assertThat(resource1.getLong("alerts")).isEqualTo(1);
+  }
+
+  @Test
+  void shouldNotFailForOddNumberOfTokens() {
+    assertThatNoException().isThrownBy(() -> create("odd/number/of/name/tokens"));
   }
 }

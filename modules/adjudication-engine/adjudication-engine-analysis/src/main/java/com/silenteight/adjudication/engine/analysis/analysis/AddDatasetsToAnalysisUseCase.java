@@ -27,13 +27,13 @@ class AddDatasetsToAnalysisUseCase {
 
   @Transactional
   List<AnalysisDatasetEntity> addDatasets(String analysis, List<String> datasets) {
-    long analysisId = ResourceName.getResource(analysis).getId("analysis");
+    long analysisId = ResourceName.create(analysis).getLong("analysis");
 
     long[] datasetIds = new long[datasets.size()];
 
     var datasetEntities = IntStream.range(0, datasets.size())
         .mapToObj(idx -> {
-          var datasetId = ResourceName.getResource(datasets.get(idx)).getId("datasets");
+          var datasetId = ResourceName.create(datasets.get(idx)).getLong("datasets");
           datasetIds[idx] = datasetId;
           var entity = createEntity(analysisId, datasetId);
           return repository.save(entity);

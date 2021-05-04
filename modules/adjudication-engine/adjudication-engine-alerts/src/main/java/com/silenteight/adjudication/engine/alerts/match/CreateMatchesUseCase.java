@@ -37,7 +37,7 @@ class CreateMatchesUseCase {
   private Stream<Match> createAlertMatches(String parentAlert, List<Match> matches) {
     validateMatchIndexes(matches);
 
-    var alertId = ResourceName.getResource(parentAlert).getId("alerts");
+    var alertId = ResourceName.create(parentAlert).getLong("alerts");
     var lastSortIndex = repository
         .findFirstByAlertIdOrderBySortIndexDesc(alertId)
         .map(SortIndexOnly::getSortIndex)

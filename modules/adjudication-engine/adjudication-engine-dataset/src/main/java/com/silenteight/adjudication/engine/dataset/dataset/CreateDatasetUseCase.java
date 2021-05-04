@@ -60,7 +60,7 @@ class CreateDatasetUseCase {
   }
 
   Dataset getDataset(String name) {
-    var datasetId = ResourceName.getResource(name).getId("datasets");
+    var datasetId = ResourceName.create(name).getLong("datasets");
     var dataset = datasetRepository.findById(datasetId);
     if (dataset.isEmpty()) {
       throw new EntityNotFoundException(datasetId);
@@ -101,7 +101,7 @@ class CreateDatasetUseCase {
     return DatasetAlertEntity
         .builder()
         .id(DatasetAlertKey.builder()
-            .alertId(ResourceName.getResource(alertName).getId("alerts"))
+            .alertId(ResourceName.create(alertName).getLong("alerts"))
             .datasetId(dataset.getId())
             .build())
         .build();

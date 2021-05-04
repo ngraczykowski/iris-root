@@ -2,7 +2,6 @@ package com.silenteight.adjudication.engine.common.resource;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,23 +12,25 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class ResourceName {
 
   private static final String NAME_SPLITTER = "/";
-  private Map<String, Long> pathTokens;
+  private final Map<String, String> pathTokens;
 
-  public static final ResourceName getResource(@NonNull String path) {
+  public static ResourceName create(@NonNull String path) {
     return new ResourceName(tokenize(path));
   }
 
-  private static Map<String, Long> tokenize(String path) {
-    Map<String, Long> tokenized = new LinkedHashMap<>();
-    var tokens = Splitter.on(NAME_SPLITTER).trimResults().splitToList(path);
-    for (int i = 0; i < tokens.size(); i = i + 2) {
-      tokenized.put(tokens.get(i), Long.parseLong(tokens.get(i + 1)));
+  private static Map<String, String> tokenize(String path) {
+    Map<String, String> tokenized = new LinkedHashMap<>();
+    var tokens = Splitter.on(NAME_SPLITTER).trimResults().split(path).iterator();
+    while (tokens.hasNext()) {
+      var name = tokens.next();
+      if (tokens.hasNext()) {
+        tokenized.put(name, tokens.next());
+      }
     }
     return tokenized;
   }
@@ -43,37 +44,46 @@ public class ResourceName {
     return this;
   }
 
-  public ResourceName replaceId(@NonNull String name, long value) {
-    pathTokens.replace(name, value);
+  public ResourceName replaceLong(@NonNull String name, long value) {
+    pathTokens.replace(name, Long.toString(value));
     return this;
   }
 
-  public ResourceName replaceName(@NonNull String name, String withName, long value) {
-    Map<String, Long> tokens = new LinkedHashMap<>();
-    pathTokens.keySet().forEach(s -> {
-      if (s.equals(name)) {
+  public ResourceName replaceName(@NonNull String name, String withName, String value) {
+    Map<String, String> tokens = new LinkedHashMap<>();
+    pathTokens.forEach((prevName, prevValue) -> {
+      if (prevName.equals(name)) {
         tokens.put(withName, value);
       } else {
-        tokens.put(s, pathTokens.get(s));
+        tokens.put(prevName, prevValue);
       }
     });
     return new ResourceName(tokens);
   }
 
-  public ResourceName add(@NonNull String name, long value) {
+  public ResourceName add(@NonNull String name, String value) {
     pathTokens.put(name, value);
     return this;
   }
 
-  public long getId(@NonNull String name) {
-    if (pathTokens.containsKey(name)) {
+  public String get(@NonNull String name) {
+    if (pathTokens.containsKey(name))
       return pathTokens.get(name);
+    throw partNotExists(name);
+  }
+
+  public long getLong(@NonNull String name) {
+    if (pathTokens.containsKey(name)) {
+      return Long.parseLong(pathTokens.get(name));
     }
-    throw new NoSuchElementException(
-        String.format("ResourceName could not find token for name: %s", name));
+    throw partNotExists(name);
   }
 
   public ResourceName copy() {
     return new ResourceName(new LinkedHashMap<>(pathTokens));
+  }
+
+  private static NoSuchElementException partNotExists(@NonNull String name) {
+    return new NoSuchElementException("Resource name has no part '" + name + "'.");
   }
 }

@@ -17,7 +17,7 @@ class GetAnalysisUseCase {
 
   @Transactional(readOnly = true)
   Analysis getAnalysis(String analysisName) {
-    long analysisId = ResourceName.getResource(analysisName).getId("analysis");
+    long analysisId = ResourceName.create(analysisName).getLong("analysis");
 
     return repository
         .findById(analysisId)

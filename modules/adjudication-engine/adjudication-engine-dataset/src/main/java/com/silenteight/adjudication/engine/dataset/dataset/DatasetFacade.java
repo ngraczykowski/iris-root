@@ -41,8 +41,8 @@ public class DatasetFacade {
 
   public ListDatasetAlertsResponse listDatasetAlerts(Pageable pageable, String datasetName) {
     var page =
-        createDatasetUseCase.listDatasetAlerts(pageable, ResourceName.getResource(datasetName)
-            .getId("datasets"));
+        createDatasetUseCase.listDatasetAlerts(pageable, ResourceName.create(datasetName)
+            .getLong("datasets"));
     String pageToken = page.hasNext() ? String.valueOf(page.nextPageable().getPageNumber()) : "";
     return ListDatasetAlertsResponse.newBuilder()
         .addAllDatasetAlertNames(page.toList())
