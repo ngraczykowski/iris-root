@@ -24,7 +24,7 @@ class CancelChangeRequestRestController {
   @NonNull
   private final CancelChangeRequestUseCase cancelChangeRequestUseCase;
 
-  @PatchMapping("/changeRequests/{id}:cancel")
+  @PostMapping("/changeRequests/{id}:cancel")
   @PreAuthorize("isAuthorized('CANCEL_CHANGE_REQUEST')")
   public ResponseEntity<Void> cancel(
       @PathVariable UUID id,

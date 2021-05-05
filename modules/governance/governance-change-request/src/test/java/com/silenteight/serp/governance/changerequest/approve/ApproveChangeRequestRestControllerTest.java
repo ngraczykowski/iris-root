@@ -37,14 +37,14 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its202_whenApproverCallsEndpoint() {
-    patch(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
+    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
         .statusCode(ACCEPTED.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void callsApproveUseCase() {
-    patch(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto());
+    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto());
 
     ArgumentCaptor<ApproveChangeRequestCommand> commandCaptor =
         ArgumentCaptor.forClass(ApproveChangeRequestCommand.class);
@@ -58,14 +58,14 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR, POLICY_MANAGER })
   void its403_whenNotPermittedRole() {
-    patch(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
+    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
         .statusCode(FORBIDDEN.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its400_ifNoApproverCommentInRequestBody() {
-    patch(
+    post(
         mappingForApproval(CHANGE_REQUEST_ID), new ApproveChangeRequestDto(null))
         .statusCode(BAD_REQUEST.value())
         .body("extras.errors", hasItem("approverComment must not be blank"));

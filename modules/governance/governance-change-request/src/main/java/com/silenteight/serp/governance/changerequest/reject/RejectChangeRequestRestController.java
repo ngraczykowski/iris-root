@@ -24,7 +24,7 @@ class RejectChangeRequestRestController {
   @NonNull
   private final RejectChangeRequestUseCase rejectChangeRequestUseCase;
 
-  @PatchMapping("/v1/changeRequests/{id}:reject")
+  @PostMapping("/v1/changeRequests/{id}:reject")
   @PreAuthorize("isAuthorized('REJECT_CHANGE_REQUEST')")
   public ResponseEntity<Void> reject(
       @PathVariable UUID id,
@@ -37,7 +37,6 @@ class RejectChangeRequestRestController {
         .rejectorComment(request.getRejectorComment())
         .build();
     rejectChangeRequestUseCase.activate(command);
-
     return accepted().build();
   }
 }
