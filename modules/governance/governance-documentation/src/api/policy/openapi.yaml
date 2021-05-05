@@ -343,9 +343,13 @@ paths:
 components:
   schemas:
 
+    StepType:
+      type: string
+      enum: [ NARROW, NORMAL ]
+
     PolicyState:
       type: string
-      enum: [ draft, saved, used, archived ]
+      enum: [ PROPOSAL, DISCARDED, DRAFT, SAVED, IN_USE, TO_BE_USED, OBSOLETE, ARCHIVED ]
 
     Policy:
       type: object
@@ -427,11 +431,14 @@ components:
           type: string
         solution:
           type: string
+        type:
+          $ref: '#/components/schemas/StepType'
       example:
         id: 'd55619c0-74c8-4ea8-8c6d-036d3db6f069'
         name: 'New step'
         description: 'Step description'
         solution: 'FALSE_POSITIVE'
+        type: NARROW
 
     StepEdit:
       type: object
