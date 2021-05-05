@@ -8,7 +8,7 @@ class TransferModelConfiguration {
 
   @Bean
   ProcessManager transferModelProcessManager(
-      ModelClient modelClient, TransferClient transferClient) {
-    return new TransferModelProcessManager(modelClient, transferClient);
+      ModelClient modelClient, TransferServiceClient transferServiceClient) {
+    return new TransferModelProcessManager(modelClient, transferServiceClient);
   }
 }

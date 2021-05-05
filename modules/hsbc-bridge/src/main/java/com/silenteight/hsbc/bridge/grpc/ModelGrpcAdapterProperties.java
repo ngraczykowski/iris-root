@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model;
+package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.Value;
 
@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConstructorBinding
 @ConfigurationProperties("silenteight.bridge.solving.model.service.api")
 @Value
-class SolvingModelGrpcProperties {
+class ModelGrpcAdapterProperties {
 
   String grpcAddress;
   long deadlineInSeconds;

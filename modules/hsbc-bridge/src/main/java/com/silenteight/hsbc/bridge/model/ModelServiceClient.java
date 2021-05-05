@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.bridge.model;
 
-public interface ModelUseCase {
+public interface ModelServiceClient {
 
   SolvingModelDto getSolvingModel();
 }

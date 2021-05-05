@@ -8,8 +8,8 @@ class TransferModelProcessManagerSpec extends Specification {
 
   def fixtures = new Fixtures()
   def modelClient = Mock(ModelClient)
-  def transferClient = Mock(TransferClient)
-  def underTest = new TransferModelProcessManager(modelClient, transferClient)
+  def transferServiceClient = Mock(TransferServiceClient)
+  def underTest = new TransferModelProcessManager(modelClient, transferServiceClient)
 
   def 'should execute process of transferring model to Governance'() {
     given:
@@ -21,6 +21,6 @@ class TransferModelProcessManagerSpec extends Specification {
 
     then:
     1 * modelClient.getModel(modelInfo) >> model
-    1 * transferClient.transfer(model)
+    1 * transferServiceClient.transfer(model)
   }
 }

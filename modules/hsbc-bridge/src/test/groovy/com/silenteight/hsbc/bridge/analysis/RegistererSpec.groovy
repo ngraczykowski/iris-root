@@ -4,7 +4,7 @@ import com.silenteight.hsbc.bridge.analysis.dto.AddDatasetRequestDto
 import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDatasetDto
 import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisRequestDto
 import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisResponseDto
-import com.silenteight.hsbc.bridge.model.ModelUseCase
+import com.silenteight.hsbc.bridge.model.ModelServiceClient
 import com.silenteight.hsbc.bridge.model.SolvingModelDto
 
 import spock.lang.Specification
@@ -12,8 +12,8 @@ import spock.lang.Specification
 class RegistererSpec extends Specification {
 
   def analysisServiceApi = Mock(AnalysisServiceClient)
-  def modelUseCase = Mock(ModelUseCase)
-  def underTest = new Registerer(analysisServiceApi, modelUseCase)
+  def modelClient = Mock(ModelServiceClient)
+  def underTest = new Registerer(analysisServiceApi, modelClient)
 
   def fixtures = new Fixtures()
 
@@ -28,7 +28,7 @@ class RegistererSpec extends Specification {
     1 * analysisServiceApi.createAnalysis(_ as CreateAnalysisRequestDto) >> fixtures.analysis
     1 * analysisServiceApi.addDataset({AddDatasetRequestDto req -> req.dataset == dataset}) >>
         fixtures.datasetDto
-    1 * modelUseCase.getSolvingModel() >> fixtures.solvingModel
+    1 * modelClient.getSolvingModel() >> fixtures.solvingModel
 
     with(result) {
       policy == fixtures.policy

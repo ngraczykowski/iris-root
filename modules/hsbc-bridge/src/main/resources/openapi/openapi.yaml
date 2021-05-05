@@ -106,6 +106,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/BulkCancelResponse'
 
+  /model:
+    get:
+      summary: Get current model version
+      responses:
+        200:
+          description: Current model version which is used for processing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleModelResponse"
+
 components:
   schemas:
     CountryCtrpScreeningIndividuals:
@@ -2127,6 +2138,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SolvedAlert'
+
+    SimpleModelResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        policyName:
+          type: string
+
 servers:
   # Added by API Auto Mocking Plugin
   - description: SILENT EIGHT HSBC REST API

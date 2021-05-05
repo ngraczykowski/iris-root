@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.analysis.dto.*;
-import com.silenteight.hsbc.bridge.model.ModelUseCase;
+import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 class Registerer {
 
   private final AnalysisServiceClient analysisServiceClient;
-  private final ModelUseCase modelUseCase;
+  private final ModelServiceClient modelServiceClient;
 
   AnalysisDto registerAnalysis(@NonNull String dataset) {
     var createAnalysisResponse = createAnalysis();
@@ -26,7 +26,7 @@ class Registerer {
   }
 
   private CreateAnalysisResponseDto createAnalysis() {
-    var solvingModel = modelUseCase.getSolvingModel();
+    var solvingModel = modelServiceClient.getSolvingModel();
     var request = CreateAnalysisRequestDto.builder()
         .categories(solvingModel.getCategories())
         .policy(solvingModel.getPolicyName())

@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.bridge.grpc;
 
 import com.silenteight.hsbc.bridge.transfer.ModelClient.Model;
-import com.silenteight.hsbc.bridge.transfer.TransferClient;
+import com.silenteight.hsbc.bridge.transfer.TransferServiceClient;
 
-public class TransferClientMock implements TransferClient {
+public class TransferModelServiceClientMock implements TransferServiceClient {
 
   @Override
   public void transfer(Model model) {

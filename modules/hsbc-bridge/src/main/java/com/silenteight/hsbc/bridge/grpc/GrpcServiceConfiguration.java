@@ -7,7 +7,10 @@ import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc;
 import com.silenteight.hsbc.bridge.adjudication.DatasetServiceClient;
-import com.silenteight.hsbc.bridge.transfer.TransferClient;
+import com.silenteight.hsbc.bridge.model.ModelServiceClient;
+import com.silenteight.hsbc.bridge.transfer.TransferServiceClient;
+import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
+import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -23,16 +26,18 @@ import org.springframework.context.annotation.Profile;
     AlertGrpcAdapterProperties.class,
     AnalysisGrpcAdapterProperties.class,
     DatasetGrpcAdapterProperties.class,
+    ModelGrpcAdapterProperties.class,
     TransferModelGrpcAdapterProperties.class })
 class GrpcServiceConfiguration {
 
   private final AlertGrpcAdapterProperties alertGrpcAdapterProperties;
   private final AnalysisGrpcAdapterProperties analysisGrpcAdapterProperties;
   private final DatasetGrpcAdapterProperties datasetGrpcAdapterProperties;
+  private final ModelGrpcAdapterProperties modelGrpcAdapterProperties;
   private final TransferModelGrpcAdapterProperties transferModelGrpcAdapterProperties;
 
   @Bean
-  AnalysisGrpcAdapter analysisServiceApi() {
+  AnalysisGrpcAdapter analysisServiceGrpcApi() {
     return new AnalysisGrpcAdapter(
         analysisServiceBlockingStub(), analysisGrpcAdapterProperties.getDeadlineInSeconds());
   }
@@ -58,7 +63,7 @@ class GrpcServiceConfiguration {
   }
 
   @Bean
-  DatasetServiceClient datasetServiceApiGrpc() {
+  DatasetServiceClient datasetServiceGrpcApi() {
     return new DatasetGrpcAdapter(
         datasetServiceBlockingStub(), datasetGrpcAdapterProperties.getDeadlineInSeconds());
   }
@@ -70,15 +75,28 @@ class GrpcServiceConfiguration {
         .withWaitForReady();
   }
 
+  @Bean
+  ModelServiceClient modelServiceGrpcApi() {
+    return new ModelGrpcAdapter(
+        solvingModelServiceBlockingStub(), modelGrpcAdapterProperties.getDeadlineInSeconds());
+  }
+
+  private SolvingModelServiceBlockingStub solvingModelServiceBlockingStub() {
+    return SolvingModelServiceGrpc.newBlockingStub(
+        getManagedChannel(modelGrpcAdapterProperties.getGrpcAddress()))
+        .withWaitForReady();
+  }
+
+  @Bean
+  TransferServiceClient transferModelGrpcApi() {
+    // TODO waiting for .proto file from Governance !
+    return new TransferModelGrpcAdapter(
+        transferModelGrpcAdapterProperties.getDeadlineInSeconds());
+  }
+
   private ManagedChannel getManagedChannel(String address) {
     return ManagedChannelBuilder.forTarget(address)
         .usePlaintext()
         .build();
-  }
-
-  @Bean
-  TransferClient transferModelGrpcApi() {
-    // TODO waiting for .proto file from Governance !
-    return new TransferModelGrpcAdapter(transferModelGrpcAdapterProperties.getDeadlineInSeconds());
   }
 }

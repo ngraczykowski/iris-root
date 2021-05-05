@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 public class TransferModelProcessManager implements ProcessManager {
 
   private final ModelClient modelClient;
-  private final TransferClient transferClient;
+  private final TransferServiceClient transferServiceClient;
 
   @Override
   public void execute(ModelInfo modelInfo) {
     var model = modelClient.getModel(modelInfo);
-    transferClient.transfer(model);
+    transferServiceClient.transfer(model);
   }
 }

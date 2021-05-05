@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.analysis;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.model.ModelUseCase;
+import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ class AnalysisFacadeConfiguration {
   private final AnalysisProperties analysisProperties;
   private final AnalysisRepository analysisRepository;
   private final AnalysisServiceClient analysisServiceClient;
-  private final ModelUseCase modelUseCase;
+  private final ModelServiceClient modelServiceClient;
 
   @Bean
   AnalysisFacade analysisFacade() {
@@ -25,6 +25,6 @@ class AnalysisFacadeConfiguration {
   }
 
   private Registerer registerer() {
-    return new Registerer(analysisServiceClient, modelUseCase);
+    return new Registerer(analysisServiceClient, modelServiceClient);
   }
 }
