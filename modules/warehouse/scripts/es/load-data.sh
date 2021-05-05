@@ -10,7 +10,7 @@ curl -X POST 'http://localhost:9200/alerts/_doc' \
   -H 'Content-Type: application/json' \
   -d '
 {
-  "indexTimestamp": "2021-04-15T12:17:37.098Z",
+  "index_timestamp": "2021-04-15T12:17:37.098Z",
   "alert": {
      "name":"1234",
      "recommendation":"FALSE_POSITIVE"

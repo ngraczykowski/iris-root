@@ -2,10 +2,7 @@ package com.silenteight.warehouse.indexer.alert;
 
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_ALERT;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_MATCH;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.KEY_NAME;
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
 
 public class MappedAlertFixtures {
 
@@ -14,6 +11,7 @@ public class MappedAlertFixtures {
   public static final String ALERT_ID_1 = "44";
   public static final String ALERT_ID_2 = "45";
   public static final String ANALYSIS_ID = "33";
+  public static final String DOCUMENT_ID = "44:35";
   public static final String MATCH_PAYLOAD_SOLUTION_KEY = "solution";
   public static final String MATCH_PAYLOAD_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
   public static final String MATCH_PAYLOAD_SOLUTION_NO_DECISION = "NO_DECISION";
@@ -36,17 +34,9 @@ public class MappedAlertFixtures {
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_1_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
-      KEY_ALERT, Map.of(
-          KEY_NAME, ALERT_ID_1,
-          ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_FP),
-      KEY_MATCH, Map.of(
-          KEY_NAME, MATCH_ID_1,
-          MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION)
+      ALERT_ID_KEY, ALERT_ID_1,
+      ALERT_PREFIX + ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_FP,
+      MATCH_ID_KEY, MATCH_ID_1,
+      MATCH_PREFIX + MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION
   );
-
-  static final Map<String, Object> ALERT_WITHOUT_MATCHES_MAP = Map.of(
-      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
-      KEY_ALERT, Map.of(
-          KEY_NAME, ALERT_ID_1,
-          ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_MI));
 }

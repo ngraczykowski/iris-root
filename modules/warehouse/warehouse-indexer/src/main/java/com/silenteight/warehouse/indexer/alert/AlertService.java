@@ -5,13 +5,17 @@ import lombok.NonNull;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.DataIndexRequest;
+import com.silenteight.data.api.v1.Match;
 
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.indexer.alert.NameResource.getId;
 
@@ -25,24 +29,38 @@ public class AlertService {
   private final AlertMapper alertMapper;
 
   public void indexAlert(DataIndexRequest dataIndexRequest) {
+    BulkRequest bulkRequest = new BulkRequest();
+    String indexName = getId(dataIndexRequest.getAnalysisName());
+
     dataIndexRequest
         .getAlertsList()
         .stream()
-        .map(alert -> prepareRequest(alert, getId(dataIndexRequest.getAnalysisName())))
-        .forEach(this::attemptToSaveAlert);
+        .flatMap(alert -> convertAlertToDocument(indexName, alert))
+        .forEach(bulkRequest::add);
+
+    attemptToSaveAlert(bulkRequest);
   }
 
-  private IndexRequest prepareRequest(Alert alert, String indexName) {
+  private Stream<IndexRequest> convertAlertToDocument(String indexName, Alert alert) {
+    List<Match> matchesList = alert.getMatchesList();
+    if (matchesList.isEmpty()) {
+      throw new ZeroMatchesException("There are no matches in this alert.");
+    }
+    return matchesList.stream()
+        .map(match -> prepareDocument(alert, indexName, match));
+  }
+
+  @NotNull
+  private IndexRequest prepareDocument(Alert alert, String indexName, Match match) {
     IndexRequest indexRequest = new IndexRequest(indexName);
-    indexRequest.id(getId(alert.getName()));
-    indexRequest.source(alertMapper.convertAlertToAttributes(alert));
-    indexRequest.setRefreshPolicy(RefreshPolicy.WAIT_UNTIL);
+    indexRequest.id(getId(alert.getName() + ":" + getId(match.getName())));
+    indexRequest.source(alertMapper.convertAlertAndMatchToAttributes(alert, match));
     return indexRequest;
   }
 
-  private void attemptToSaveAlert(IndexRequest indexRequest) {
+  private void attemptToSaveAlert(BulkRequest indexRequest) {
     try {
-      restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+      restHighLevelClient.bulk(indexRequest, RequestOptions.DEFAULT);
     } catch (IOException e) {
       throw new AlertNotIndexedExceptions("Alert has not been indexed", e);
     }

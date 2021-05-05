@@ -2,8 +2,9 @@ package com.silenteight.warehouse.indexer.alert;
 
 public class AlertMapperConstants {
 
-  public static final String KEY_ALERT = "alert";
-  public static final String KEY_NAME = "name";
-  public static final String KEY_MATCH = "match";
-  public static final String INDEX_TIMESTAMP = "indexTimestamp";
+  public static final String MATCH_PREFIX = "match_";
+  public static final String ALERT_PREFIX = "alert_";
+  public static final String ALERT_ID_KEY = "alert_id";
+  public static final String MATCH_ID_KEY = "match_id";
+  public static final String INDEX_TIMESTAMP = "index_timestamp";
 }

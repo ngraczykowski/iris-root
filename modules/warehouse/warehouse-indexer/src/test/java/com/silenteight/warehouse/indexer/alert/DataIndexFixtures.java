@@ -16,13 +16,6 @@ import static java.util.List.of;
 
 public class DataIndexFixtures {
 
-  static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
-      .setName(ALERT_NAME_1)
-      .setPayload(structWithValue(
-          ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_MI))
-      .addAllMatches(emptyList())
-      .build();
-
   static final Alert ALERT_WITH_MATCHES_1 = Alert.newBuilder()
       .setName(ALERT_NAME_1)
       .setPayload(structWithValue(
@@ -45,11 +38,25 @@ public class DataIndexFixtures {
       ALERT_WITH_MATCHES_1,
       ALERT_WITH_MATCHES_2);
 
+  static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
+      .setName(ALERT_NAME_1)
+      .setPayload(structWithValue(
+          ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_MI))
+      .addAllMatches(emptyList())
+      .build();
+
   public static final DataIndexRequest DATA_INDEX_REQUEST_WITH_ALERTS =
       DataIndexRequest.newBuilder()
           .setRequestId(REQUEST_ID)
           .setAnalysisName(ANALYSIS_NAME)
           .addAllAlerts(ALERTS_WITH_MATCHES)
+          .build();
+
+  public static final DataIndexRequest DATA_INDEX_REQUEST_WITHOUT_MATCHES =
+      DataIndexRequest.newBuilder()
+          .setRequestId(REQUEST_ID)
+          .setAnalysisName(ANALYSIS_NAME)
+          .addAlerts(0, ALERT_WITHOUT_MATCHES)
           .build();
 
   static Builder structWithValue(String key, String value) {
