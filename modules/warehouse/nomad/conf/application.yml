@@ -34,6 +34,8 @@ warehouse:
 {{ end -}}
   minio:
     url: https://minio.silenteight.com
+  kibana:
+    url: https://kibana.dev.silenteight.com
 
 keycloak:
   adapter:
