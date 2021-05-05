@@ -9,6 +9,7 @@ sep.auth:
       - "CREATE_SIMULATION"
       - "LIST_DATASETS"
       - "LIST_SIMULATIONS"
+      - "SIMULATION_STATISTICS"
 
   rolePermissionsMappings:
     BUSINESS_OPERATOR:
