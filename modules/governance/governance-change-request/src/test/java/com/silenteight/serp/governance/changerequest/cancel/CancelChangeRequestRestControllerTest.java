@@ -38,14 +38,14 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its202_whenBusinessOperatorCallsEndpoint() {
-    patch(mappingForCancellation(CHANGE_REQUEST_ID), makeCancelChangeRequestDto())
+    post(mappingForCancellation(CHANGE_REQUEST_ID), makeCancelChangeRequestDto())
         .statusCode(ACCEPTED.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void callsCancelUseCase() {
-    patch(mappingForCancellation(CHANGE_REQUEST_ID), makeCancelChangeRequestDto());
+    post(mappingForCancellation(CHANGE_REQUEST_ID), makeCancelChangeRequestDto());
 
     ArgumentCaptor<CancelChangeRequestCommand> commandCaptor =
         ArgumentCaptor.forClass(CancelChangeRequestCommand.class);
@@ -59,15 +59,14 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
   void its403_whenNotPermittedRole() {
-
-    patch(mappingForCancellation(CHANGE_REQUEST_ID), makeCancelChangeRequestDto())
+    post(mappingForCancellation(CHANGE_REQUEST_ID), makeCancelChangeRequestDto())
         .statusCode(FORBIDDEN.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
   void its400_ifNoCancellerCommentInRequestBody() {
-    patch(mappingForCancellation(CHANGE_REQUEST_ID), new CancelChangeRequestDto(null))
+    post(mappingForCancellation(CHANGE_REQUEST_ID), new CancelChangeRequestDto(null))
         .statusCode(BAD_REQUEST.value())
         .body("key", equalTo("MethodArgumentNotValid"))
         .body("extras.errors", hasItem("cancellerComment must not be blank"));

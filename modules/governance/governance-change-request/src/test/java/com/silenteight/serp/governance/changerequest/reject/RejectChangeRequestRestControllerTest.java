@@ -36,14 +36,14 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its202_whenApproverCallsEndpoint() {
-    patch(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto())
+    post(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto())
         .statusCode(ACCEPTED.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void callsRejectUseCase() {
-    patch(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto());
+    post(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto());
 
     ArgumentCaptor<RejectChangeRequestCommand> commandCaptor =
         ArgumentCaptor.forClass(RejectChangeRequestCommand.class);
@@ -57,14 +57,14 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR, POLICY_MANAGER })
   void its403_whenNotPermittedRole() {
-    patch(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto()).statusCode(
+    post(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto()).statusCode(
         FORBIDDEN.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its400_ifNoRejectorCommentInRequestBody() {
-    patch(
+    post(
         mappingForRejection(CHANGE_REQUEST_ID), new RejectChangeRequestDto(null))
         .statusCode(BAD_REQUEST.value())
         .body("key", equalTo("MethodArgumentNotValid"))

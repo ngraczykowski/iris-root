@@ -24,7 +24,7 @@ class ApproveChangeRequestRestController {
   @NonNull
   private final ApproveChangeRequestUseCase approveChangeRequestUseCase;
 
-  @PatchMapping("/v1/changeRequests/{id}:approve")
+  @PostMapping("/v1/changeRequests/{id}:approve")
   @PreAuthorize("isAuthorized('APPROVE_CHANGE_REQUEST')")
   public ResponseEntity<Void> approve(
       @PathVariable UUID id,
