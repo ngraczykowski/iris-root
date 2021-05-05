@@ -1,0 +1,70 @@
+= HLD #27
+
+== Governance - transfer a model from sim to prod
+
+- Reference ticket: TBA
+- Reason: We need to have a mechanism to transfer a model from the simulation environment to the production environment
+
+== Diagram
+[plantuml,governance-transfarter-model,svg]
+-----
+@startuml
+header Governance - transfer a model from sim to prod
+
+box "Simulation env"
+participant Governance as sg
+participant Bridge as sb
+endbox
+
+participant "HSBC env tools" as hsbc
+
+box "Verification env"
+participant Bridge as vb
+participant Governance as vg
+endbox
+
+box "Production env"
+participant Bridge as pb
+participant Governance as pg
+endbox
+
+autonumber
+
+sg -> sg : Change Request approved
+sg -> sb : Model promoted message
+note over sg,sb
+**modelName**: //models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06//
+**url**: __//https://10.0.0.5/models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06/export__
+end note
+
+sb -> hsbc : New model available
+hsbc -> sg : Get a model
+sg -> hsbc : New model serialized to json
+hsbc -> vb : Update model
+vb -> hsbc : Get model json
+hsbc -> vb : A new model json
+vb -> vg : Import new model
+note over vb, vg
+**modelName**: //models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06//
+**model**: //model.json//
+end note
+vg -> vg : Set policy state to `IN_USE`
+vg ---> vb : Properly imported
+
+...HSBC will make some tests on the verification environment...
+
+hsbc -> pb : Update model
+pb -> hsbc : Get model json
+hsbc -> pb : A new model json
+pb -> pg : Import new model
+pg -> pg : Set policy state to `IN_USE`
+pg ---> pb : Properly imported
+pb -> hsbc : Successfully imported
+hsbc -> sb : Successfully deployed model on a prod
+sb -> sg : Model applied on a prod
+note over sb, sg
+**modelName**: //models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06//
+end note
+
+@enduml
+-----
