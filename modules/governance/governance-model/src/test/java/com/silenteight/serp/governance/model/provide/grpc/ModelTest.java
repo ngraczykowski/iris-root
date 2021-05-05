@@ -14,6 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
 import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
@@ -39,12 +42,18 @@ class ModelTest extends BaseDataJpaTest {
   CurrentPolicyProvider currentPolicyProviderMock;
 
   @Autowired
+  PolicyFeatureProvider policyFeatureProviderMock;
+
+  @Autowired
   SolvingModelProvider solvingModelProvider;
 
   @Test
-  void shouldReturnCurrentModel() throws Exception {
+  void shouldReturnCurrentModel() {
     when(currentStrategyProviderMock.getCurrentStrategy()).thenReturn(of(CURRENT_STRATEGY_NAME));
     when(currentPolicyProviderMock.getCurrentPolicy()).thenReturn(of(CURRENT_POLICY_NAME));
+    when(policyFeatureProviderMock.resolveFeatures(any())).thenReturn(List.of(
+        getFeature(AGENT_FEATURE_NAME, NAME_AGENT_CONFIG_NAME),
+        getFeature(AGENT_FEATURE_DATE, AGENT_FEATURE_DATE)));
 
     SolvingModel solvingModel = solvingModelProvider.get(DEFAULT_MODEL_DTO);
 
@@ -55,5 +64,12 @@ class ModelTest extends BaseDataJpaTest {
                                                                          AGENT_FEATURE_DATE);
     assertThat(solvingModel.getCategoriesList())
         .containsExactlyInAnyOrder(APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME);
+  }
+
+  private static Feature getFeature(String featureName, String agentConfigName) {
+    return Feature.newBuilder()
+        .setName(featureName)
+        .setAgentConfig(agentConfigName)
+        .build();
   }
 }

@@ -43,7 +43,9 @@ class PolicyDomainConfiguration {
 
   @Bean
   FeaturesLogicQuery featuresLogicQuery(
-      StepRepository stepRepository, FeatureLogicRepository featureLogicRepository) {
+      StepRepository stepRepository,
+      FeatureLogicRepository featureLogicRepository) {
+
     return new FeaturesLogicQuery(stepRepository, featureLogicRepository);
   }
 }

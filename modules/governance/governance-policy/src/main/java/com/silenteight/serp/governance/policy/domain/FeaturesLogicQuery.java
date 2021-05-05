@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
 import com.silenteight.serp.governance.policy.step.logic.list.FeatureLogicRequestQuery;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class FeaturesLogicQuery implements FeatureLogicRequestQuery {
+class FeaturesLogicQuery implements FeatureLogicRequestQuery, PolicyStepsFeaturesProvider {
 
   private final StepRepository stepRepository;
   private final FeatureLogicRepository featureLogicRepository;
@@ -32,5 +33,10 @@ class FeaturesLogicQuery implements FeatureLogicRequestQuery {
     return FeaturesLogicDto.builder()
         .featuresLogic(featureLogicDtos)
         .build();
+  }
+
+  @Override
+  public List<String> getFeatures(UUID policyId) {
+    return featureLogicRepository.findAllDistinctFeaturesByPolicyId(policyId);
   }
 }

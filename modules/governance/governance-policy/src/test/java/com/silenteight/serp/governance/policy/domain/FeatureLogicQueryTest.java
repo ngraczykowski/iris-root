@@ -57,7 +57,6 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   @Autowired
   private StepRepository stepRepository;
 
-
   @BeforeEach
   void setUp() {
     underTest = new PolicyDomainConfiguration().featuresLogicQuery(
@@ -79,10 +78,50 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
 
   @Test
   void listLogicShouldReturnLogic_whenLogicIsSaved() {
+    savePolicyWithConfiguredStepsLogic();
+
+    FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
+
+    assertThat(result).isEqualTo(
+        FeaturesLogicDto
+            .builder()
+            .featuresLogic(of(
+                getFeaturesDto(1, of(getFeatureDto(FEATURE_NAME_1, of(INDIVIDUAL)))),
+                getFeaturesDto(2, of(
+                    getFeatureDto(FEATURE_NAME_2, of(MATCH, HQ_NO_MATCH)),
+                    getFeatureDto(FEATURE_NAME_3, of(MATCH)),
+                    getFeatureDto(FEATURE_NAME_4, of(MATCH))
+                ))))
+            .build()
+    );
+  }
+
+  @Test
+  void getFeaturesShouldReturnFeatures() {
+    savePolicyWithConfiguredStepsLogic();
+
+    List<String> featuresNames = underTest.getFeatures(POLICY_UID);
+    assertThat(featuresNames).containsExactlyInAnyOrder(
+        FEATURE_NAME_1, FEATURE_NAME_2, FEATURE_NAME_3, FEATURE_NAME_4);
+  }
+
+  private FeatureConfiguration getFeatureConfiguration(String featureName2, List<String> match) {
+    return FeatureConfiguration.builder().name(featureName2).condition(IS).values(match).build();
+  }
+
+  private FeatureLogicDto getFeaturesDto(int count, List<MatchConditionDto> featureDtos) {
+    return FeatureLogicDto.builder().toFulfill(count).features(featureDtos).build();
+  }
+
+  private MatchConditionDto getFeatureDto(String featureName, List<String> values) {
+    return MatchConditionDto.builder().name(featureName).condition(IS).values(values).build();
+  }
+
+  private void savePolicyWithConfiguredStepsLogic() {
     UUID uuid = policyService.createPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
     Policy policy = policyRepository.getByPolicyId(uuid);
     CreateStepRequest createStepRequest = CreateStepRequest.of(
-        POLICY_UID, SOLUTION_NO_DECISION, STEP_ID, STEP_NAME, STEP_DESC, STEP_TYPE, "user");
+        POLICY_UID, SOLUTION_NO_DECISION, STEP_ID, STEP_NAME, STEP_DESC, STEP_TYPE,"user");
     policyService.addStepToPolicy(createStepRequest);
     FeatureLogicConfiguration firstLogic = FeatureLogicConfiguration
         .builder()
@@ -101,32 +140,5 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
         .of(policy.getId(), STEP_ID, of(firstLogic, secondLogic), USER_NAME);
     policyService.configureStepLogic(request);
-
-    FeaturesLogicDto result = underTest.listStepsFeaturesLogic(STEP_ID);
-
-    assertThat(result).isEqualTo(
-        FeaturesLogicDto
-            .builder()
-            .featuresLogic(of(
-                getFeaturesDto(1, of(getFeatureDto(FEATURE_NAME_1, of(INDIVIDUAL)))),
-                getFeaturesDto(2, of(
-                    getFeatureDto(FEATURE_NAME_2, of(MATCH, HQ_NO_MATCH)),
-                    getFeatureDto(FEATURE_NAME_3, of(MATCH)),
-                    getFeatureDto(FEATURE_NAME_4, of(MATCH))
-                ))))
-            .build()
-    );
-  }
-
-  private FeatureConfiguration getFeatureConfiguration(String featureName2, List<String> match) {
-    return FeatureConfiguration.builder().name(featureName2).condition(IS).values(match).build();
-  }
-
-  private FeatureLogicDto getFeaturesDto(int count, List<MatchConditionDto> featureDtos) {
-    return FeatureLogicDto.builder().toFulfill(count).features(featureDtos).build();
-  }
-
-  private MatchConditionDto getFeatureDto(String featureName, List<String> values) {
-    return MatchConditionDto.builder().name(featureName).condition(IS).values(values).build();
   }
 }

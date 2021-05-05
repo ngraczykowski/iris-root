@@ -5,7 +5,7 @@ import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.serp.governance.model.category.CategoryRegistry;
 import com.silenteight.serp.governance.model.domain.ModelQuery;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
-import com.silenteight.serp.governance.model.featureset.CurrentFeatureSetProvider;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,6 @@ import java.util.List;
 
 import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
-import static com.silenteight.serp.governance.model.agentconfigset.FeatureSetFixture.FEATURE_CONFIG_SET;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.*;
@@ -37,10 +36,13 @@ class SolvingModelProviderTest {
   private CurrentStrategyProvider currentStrategyProvider;
 
   @Mock
-  private CurrentFeatureSetProvider currentFeatureSetProvider;
+  private CategoryRegistry categoryRegistry;
 
   @Mock
-  private CategoryRegistry categoryRegistry;
+  private PolicyFeatureProvider policyFeatureProvider;
+
+  @Mock
+  private PolicyStepsFeaturesProvider policyStepsFeaturesProvider;
 
   @Mock
   private ModelQuery modelQuery;
@@ -51,8 +53,9 @@ class SolvingModelProviderTest {
   void init() throws ModelMisconfiguredException {
     underTest = new SolvingModelConfiguration().solvingModelProvider(
         currentStrategyProvider,
-        currentFeatureSetProvider,
-        categoryRegistry);
+        policyFeatureProvider,
+        categoryRegistry,
+        policyStepsFeaturesProvider);
     setCorrectConfiguration();
   }
 
@@ -98,13 +101,19 @@ class SolvingModelProviderTest {
   private void setCorrectConfiguration() throws ModelMisconfiguredException {
     lenient().when(currentStrategyProvider.getCurrentStrategy())
         .thenReturn(of(CURRENT_STRATEGY_NAME));
-    lenient().when(currentFeatureSetProvider.getCurrentFeatureSet())
-        .thenReturn(FEATURE_CONFIG_SET);
     lenient().when(categoryRegistry.getAllCategories())
         .thenReturn(List.of(APTYPE_CATEGORY));
     lenient().when(modelQuery.getByPolicy(MODEL_RESOURCE_NAME))
         .thenReturn(List.of(MODEL_DTO));
     lenient().when(modelQuery.getDefault())
         .thenReturn(DEFAULT_MODEL_DTO);
+    lenient().when(policyFeatureProvider.resolveFeatures(any())).thenReturn(List.of(getFeature()));
+  }
+
+  private Feature getFeature() {
+    return Feature.newBuilder()
+        .setName(AGENT_FEATURE_NAME)
+        .setAgentConfig(NAME_AGENT_CONFIG_NAME)
+        .build();
   }
 }
