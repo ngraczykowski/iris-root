@@ -73,7 +73,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   private String mappingForCancellation(UUID changeRequestId) {
-    return "/changeRequests/" + changeRequestId.toString() + ":cancel";
+    return "/v1/changeRequests/" + changeRequestId.toString() + ":cancel";
   }
 
   private static CancelChangeRequestDto makeCancelChangeRequestDto() {
