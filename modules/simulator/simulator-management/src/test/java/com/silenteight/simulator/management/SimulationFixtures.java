@@ -7,6 +7,8 @@ import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationState;
 import com.silenteight.simulator.management.list.dto.SimulationDto;
+import com.silenteight.simulator.management.statistics.dto.EffectivenessDto;
+import com.silenteight.simulator.management.statistics.dto.EfficiencyDto;
 
 import java.time.Instant;
 import java.util.List;
@@ -40,6 +42,10 @@ public class SimulationFixtures {
   public static final String STRATEGY_NAME = "UNSOLVED_ALERTS";
   public static final List<String> CATEGORIES = List.of("category-1", "category-2");
   public static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
+  public static final long SOLVED_ALERTS = 3632L;
+  public static final long ALL_ALERTS = 10000L;
+  public static final long AI_SOLVED_AS_FALSE_POSITIVE = 3632L;
+  public static final long ANALYSTS_SOLVED_AS_FALSE_POSITIVE = 3632L;
 
   public static final CreateSimulationRequest CREATE_SIMULATION_REQUEST =
       CreateSimulationRequest.builder()
@@ -88,5 +94,17 @@ public class SimulationFixtures {
           .progressState(PROGRESS_STATE)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
+          .build();
+
+  public static final EfficiencyDto SIMULATION_STATISTICS_EFFICIENCY =
+      EfficiencyDto.builder()
+          .solvedAlerts(SOLVED_ALERTS)
+          .allAlerts(ALL_ALERTS)
+          .build();
+
+  public static final EffectivenessDto SIMULATION_STATISTICS_EFFECTIVENESS =
+      EffectivenessDto.builder()
+          .aiSolvedAsFalsePositive(AI_SOLVED_AS_FALSE_POSITIVE)
+          .analystSolvedAsFalsePositive(ANALYSTS_SOLVED_AS_FALSE_POSITIVE)
           .build();
 }
