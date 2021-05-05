@@ -4,9 +4,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.model.api.v1.Feature;
 import com.silenteight.serp.governance.model.NonResolvableResourceException;
 import com.silenteight.serp.governance.model.agent.AgentDto;
 import com.silenteight.serp.governance.model.agent.AgentsRegistry;
+import com.silenteight.serp.governance.model.provide.grpc.PolicyFeatureProvider;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,12 +24,14 @@ import javax.annotation.PostConstruct;
 
 import static java.lang.String.format;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @Slf4j
 @RequiredArgsConstructor
-public class FeatureSetRegistry implements CurrentFeatureSetProvider {
+public class FeatureSetRegistry
+    implements CurrentFeatureSetProvider, PolicyFeatureProvider {
 
   public static final String DEFAULT_FEATURE_SET = "featureSets/1";
 
@@ -109,5 +113,23 @@ public class FeatureSetRegistry implements CurrentFeatureSetProvider {
 
     return featureSetsWrapper.stream()
         .collect(toUnmodifiableMap(FeatureSetJson::getName, identity()));
+  }
+
+  @Override
+  public List<Feature> resolveFeatures(List<String> features) {
+    return getCurrentFeatureSet()
+        .getFeatures()
+        .stream()
+        .filter(feature -> features.contains(feature.getName()))
+        .map(FeatureSetRegistry::toFeature)
+        .collect(toList());
+  }
+
+  private static Feature toFeature(FeatureDto featureDto) {
+    return Feature
+        .newBuilder()
+        .setName(featureDto.getName())
+        .setAgentConfig(featureDto.getAgentConfig())
+        .build();
   }
 }

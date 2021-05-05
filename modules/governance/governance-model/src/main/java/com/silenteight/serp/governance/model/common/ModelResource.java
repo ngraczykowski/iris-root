@@ -3,13 +3,12 @@ package com.silenteight.serp.governance.model.common;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.serp.governance.common.web.request.AbstractResourceExtractor;
+
 import java.util.UUID;
 
-import static java.util.UUID.fromString;
-import static org.apache.commons.lang3.StringUtils.removeStart;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ModelResource {
+public final class ModelResource extends AbstractResourceExtractor {
 
   private static final String RESOURCE_NAME_PREFIX = "solvingModels/";
 
@@ -18,6 +17,6 @@ public final class ModelResource {
   }
 
   public static UUID fromResourceName(String resourceName) {
-    return fromString(removeStart(resourceName, RESOURCE_NAME_PREFIX));
+    return fromResourceName(resourceName, RESOURCE_NAME_PREFIX);
   }
 }

@@ -1,7 +1,9 @@
 package com.silenteight.serp.governance.model;
 
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.model.provide.grpc.PolicyFeatureProvider;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,4 +24,10 @@ public class ModelTestConfiguration {
 
   @MockBean
   CurrentPolicyProvider currentPolicyProviderMock;
+
+  @MockBean
+  PolicyStepsFeaturesProvider policyStepsFeaturesProvider;
+
+  @MockBean
+  PolicyFeatureProvider policyFeatureProvider;
 }
