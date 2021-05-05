@@ -22,3 +22,9 @@ warehouse:
         routing-key: alert.new
       alert-indexed-event-test-listener-inbound:
         queue-name: client.index-response
+spring:
+  elasticsearch:
+    rest:
+      username: admin
+      password: admin
+      uris: http://localhost:9201,http://localhost:9200

@@ -11,52 +11,38 @@ import com.google.protobuf.Struct;
 import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
 import static com.silenteight.warehouse.indexer.alert.NameResource.getId;
+import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 class AlertMapper {
 
-  private static final Integer FIRST_MATCH = 0;
-
   private final TimeSource timeSource;
 
-  Map<String, Object> convertAlertToAttributes(Alert alert) {
-    OffsetDateTime now = timeSource.offsetDateTime();
-    Map<String, Object> documentAttributes = new LinkedHashMap<>();
-    documentAttributes.put(KEY_ALERT, convertAlertToMap(alert));
+  Map<String, String> convertAlertAndMatchToAttributes(Alert alert, Match match) {
+    OffsetDateTime now = timeSource.now().atOffset(UTC);
+
+    Map<String, String> documentAttributes = new LinkedHashMap<>();
+
     documentAttributes.put(INDEX_TIMESTAMP, now.format(ISO_DATE_TIME));
-    int matchesCount = alert.getMatchesCount();
-    if (matchesCount < 1) {
-      return documentAttributes;
-    }
-    Match match = alert.getMatchesList().get(FIRST_MATCH);
-    documentAttributes.put(KEY_MATCH, convertMatchToMap(match));
+    documentAttributes.put(ALERT_ID_KEY, getId(alert.getName()));
+    documentAttributes.putAll(convertPayloadToMap(alert.getPayload(), ALERT_PREFIX));
+    documentAttributes.put(MATCH_ID_KEY, getId(match.getName()));
+    documentAttributes.putAll(convertPayloadToMap(match.getPayload(), MATCH_PREFIX));
+
     return documentAttributes;
   }
 
-  private Map<String, String> convertMatchToMap(Match match) {
-    Map<String, String> matchAttributes =
-        new LinkedHashMap<>(convertPayloadToMap(match.getPayload()));
-    matchAttributes.put(KEY_NAME, getId(match.getName()));
-    return matchAttributes;
-  }
-
-  private Map<String, String> convertAlertToMap(Alert alert) {
-    Map<String, String> alertAttributes =
-        new LinkedHashMap<>(convertPayloadToMap(alert.getPayload()));
-    alertAttributes.put(KEY_NAME, getId(alert.getName()));
-    return alertAttributes;
-  }
-
-  private Map<String, String> convertPayloadToMap(Struct struct) {
+  private Map<String, String> convertPayloadToMap(Struct struct, String prefix) {
     return struct.getFieldsMap()
         .keySet()
         .stream()
-        .collect(toMap(identity(), key -> struct.getFieldsMap().get(key).getStringValue()));
+        .collect(Collectors.toMap(
+            key -> prefix + key,
+            key -> struct.getFieldsMap().get(key).getStringValue()));
   }
 }

@@ -16,9 +16,9 @@ import org.springframework.integration.test.context.SpringIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.DATA_INDEX_REQUEST_WITH_ALERTS;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ANALYSIS_ID;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -59,7 +59,7 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    var source = simpleElasticTestClient.getSource(ANALYSIS_ID, ALERT_ID_1);
+    var source = simpleElasticTestClient.getSource(ANALYSIS_ID, DOCUMENT_ID);
     assertThat(source).isEqualTo(ALERT_WITH_MATCHES_1_MAP);
   }
 }
