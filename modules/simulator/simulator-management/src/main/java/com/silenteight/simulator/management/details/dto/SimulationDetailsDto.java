@@ -19,6 +19,8 @@ public class SimulationDetailsDto {
   @NonNull
   String name;
   @NonNull
+  String description;
+  @NonNull
   String simulationName;
   @NonNull
   SimulationState state;

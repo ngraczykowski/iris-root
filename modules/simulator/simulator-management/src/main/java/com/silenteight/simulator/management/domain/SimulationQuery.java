@@ -79,6 +79,7 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
     return SimulationDetailsDto.builder()
         .id(simulationEntity.getSimulationId())
         .name(toResourceName(simulationEntity.getSimulationId()))
+        .description(simulationEntity.getDescription())
         .simulationName(simulationEntity.getName())
         .state(simulationEntity.getState())
         .datasets(simulationEntity.getDatasetNames())

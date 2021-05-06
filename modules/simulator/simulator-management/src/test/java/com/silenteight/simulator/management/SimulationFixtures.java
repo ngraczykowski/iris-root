@@ -88,6 +88,7 @@ public class SimulationFixtures {
           .id(ID)
           .name(NAME)
           .simulationName(SIMULATION_NAME)
+          .description(DESCRIPTION)
           .state(STATE)
           .model(MODEL)
           .datasets(DATASETS)
