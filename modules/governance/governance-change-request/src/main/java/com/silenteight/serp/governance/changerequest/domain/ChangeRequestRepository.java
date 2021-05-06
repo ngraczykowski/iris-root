@@ -1,17 +1,17 @@
 package com.silenteight.serp.governance.changerequest.domain;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
 
   ChangeRequest save(ChangeRequest changeRequest);
 
-  Collection<ChangeRequest> findAllByState(ChangeRequestState state);
-
-  List<ChangeRequest> findAllByStateIn(Set<ChangeRequestState> states, Pageable pageable);
+  Collection<ChangeRequest> findAllByStateInOrderByDecidedAtDesc(Set<ChangeRequestState> states);
 
   Optional<ChangeRequest> findByChangeRequestId(UUID changeRequestId);
 }

@@ -3,79 +3,35 @@ package com.silenteight.serp.governance.changerequest.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.changerequest.closed.ClosedChangeRequestQuery;
-import com.silenteight.serp.governance.changerequest.closed.dto.ClosedChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.details.ChangeRequestDetailsQuery;
 import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotFoundException;
-import com.silenteight.serp.governance.changerequest.pending.PendingChangeRequestQuery;
-import com.silenteight.serp.governance.changerequest.pending.dto.PendingChangeRequestDto;
-
-import org.springframework.data.domain.PageRequest;
+import com.silenteight.serp.governance.changerequest.list.ListChangeRequestsQuery;
+import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
-import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
-import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
-import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.REJECTED;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RequiredArgsConstructor
-class ChangeRequestQuery
-    implements PendingChangeRequestQuery, ClosedChangeRequestQuery, ChangeRequestDetailsQuery {
-
-  private static final int CLOSED_MAX_PAGE_SIZE = 20;
-  private static final String SORT_CLOSED_BY_FIELD = "decidedAt";
+class ChangeRequestQuery implements ListChangeRequestsQuery, ChangeRequestDetailsQuery {
 
   @NonNull
   private final ChangeRequestRepository repository;
 
   @Override
-  public List<PendingChangeRequestDto> listPending() {
+  public Collection<ChangeRequestDto> list(Set<ChangeRequestState> states) {
     return repository
-        .findAllByState(PENDING)
+        .findAllByStateInOrderByDecidedAtDesc(states)
         .stream()
-        .map(ChangeRequestQuery::mapPending)
+        .map(ChangeRequestQuery::toDto)
         .collect(toList());
   }
 
-  @Override
-  public List<ClosedChangeRequestDto> listClosed() {
-    Collection<ChangeRequest> changeRequests = repository.findAllByStateIn(
-        Set.of(APPROVED, REJECTED, CANCELLED),
-        PageRequest.of(0, CLOSED_MAX_PAGE_SIZE, DESC, SORT_CLOSED_BY_FIELD));
-
-    return changeRequests
-        .stream()
-        .map(ChangeRequestQuery::mapClosed)
-        .collect(toList());
-  }
-
-  @Override
-  public ChangeRequestDetailsDto details(@NonNull UUID changeRequestId) {
-    return repository
-        .findByChangeRequestId(changeRequestId)
-        .map(ChangeRequestQuery::mapDetails)
-        .orElseThrow(() -> new ChangeRequestNotFoundException(changeRequestId));
-  }
-
-  private static PendingChangeRequestDto mapPending(ChangeRequest changeRequest) {
-    return PendingChangeRequestDto.builder()
-        .id(changeRequest.getChangeRequestId())
-        .createdBy(changeRequest.getCreatedBy())
-        .createdAt(changeRequest.getCreatedAt())
-        .comment(changeRequest.getCreatorComment())
-        .modelName(changeRequest.getModelName())
-        .build();
-  }
-
-  private static ClosedChangeRequestDto mapClosed(ChangeRequest changeRequest) {
-    return ClosedChangeRequestDto.builder()
+  private static ChangeRequestDto toDto(ChangeRequest changeRequest) {
+    return ChangeRequestDto.builder()
         .id(changeRequest.getChangeRequestId())
         .createdBy(changeRequest.getCreatedBy())
         .createdAt(changeRequest.getCreatedAt())
@@ -88,7 +44,15 @@ class ChangeRequestQuery
         .build();
   }
 
-  private static ChangeRequestDetailsDto mapDetails(ChangeRequest changeRequest) {
+  @Override
+  public ChangeRequestDetailsDto details(@NonNull UUID changeRequestId) {
+    return repository
+        .findByChangeRequestId(changeRequestId)
+        .map(ChangeRequestQuery::toDetailsDto)
+        .orElseThrow(() -> new ChangeRequestNotFoundException(changeRequestId));
+  }
+
+  private static ChangeRequestDetailsDto toDetailsDto(ChangeRequest changeRequest) {
     return ChangeRequestDetailsDto.builder()
         .id(changeRequest.getChangeRequestId())
         .createdBy(changeRequest.getCreatedBy())

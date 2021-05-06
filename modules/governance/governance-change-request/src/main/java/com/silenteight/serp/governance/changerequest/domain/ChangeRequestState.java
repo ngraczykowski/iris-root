@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.changerequest.domain;
 
-enum ChangeRequestState {
+public enum ChangeRequestState {
 
   PENDING,
   APPROVED,
