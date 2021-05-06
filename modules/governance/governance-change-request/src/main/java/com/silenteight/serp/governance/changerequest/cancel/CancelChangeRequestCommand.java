@@ -14,6 +14,4 @@ class CancelChangeRequestCommand {
   UUID id;
   @NonNull
   String cancellerUsername;
-  @NonNull
-  String cancellerComment;
 }

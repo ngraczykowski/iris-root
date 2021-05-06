@@ -123,7 +123,7 @@ class ChangeRequestServiceTest {
     persistChangeRequest();
 
     // when
-    underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY, CANCELLER_COMMENT);
+    underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY);
 
     // then
     Optional<ChangeRequest> changeRequestOpt = repository.findByChangeRequestId(CHANGE_REQUEST_ID);
@@ -131,7 +131,6 @@ class ChangeRequestServiceTest {
     ChangeRequest changeRequest = changeRequestOpt.get();
     assertThat(changeRequest.getState()).isEqualTo(CANCELLED);
     assertThat(changeRequest.getDecidedBy()).isEqualTo(CANCELLED_BY);
-    assertThat(changeRequest.getDeciderComment()).isEqualTo(CANCELLER_COMMENT);
 
     var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
 
@@ -144,7 +143,7 @@ class ChangeRequestServiceTest {
 
   @Test
   void throwExceptionWhenCancellingNotExistingChangeRequest() {
-    assertThatThrownBy(() -> underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY, CANCELLER_COMMENT))
+    assertThatThrownBy(() -> underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY))
         .isInstanceOf(ChangeRequestNotFoundException.class);
   }
 

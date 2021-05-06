@@ -56,9 +56,8 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
   void shouldListClosedChangeRequests() {
     // given
     String decider = "jdoe";
-    String deciderComment = "Wrongly created";
     ChangeRequest changeRequest = persistChangeRequest();
-    changeRequest.cancel(decider, deciderComment);
+    changeRequest.cancel(decider);
 
     // when
     List<ClosedChangeRequestDto> result = underTest.listClosed();
@@ -72,7 +71,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(closedChangeRequest.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
     assertThat(closedChangeRequest.getDecidedBy()).isEqualTo(decider);
     assertThat(closedChangeRequest.getDecidedAt()).isNotNull();
-    assertThat(closedChangeRequest.getDeciderComment()).isEqualTo(deciderComment);
+    assertThat(closedChangeRequest.getDeciderComment()).isNull();
     assertThat(closedChangeRequest.getState()).isEqualTo(CANCELLED.name());
   }
 

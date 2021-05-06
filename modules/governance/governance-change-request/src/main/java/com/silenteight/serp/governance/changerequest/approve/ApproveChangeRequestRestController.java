@@ -14,7 +14,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
-import static org.springframework.http.ResponseEntity.accepted;
+import static org.springframework.http.ResponseEntity.noContent;
 
 @RestController
 @RequestMapping(ROOT)
@@ -37,7 +37,6 @@ class ApproveChangeRequestRestController {
         .approverComment(request.getApproverComment())
         .build();
     approveChangeRequestUseCase.activate(command);
-
-    return accepted().build();
+    return noContent().build();
   }
 }

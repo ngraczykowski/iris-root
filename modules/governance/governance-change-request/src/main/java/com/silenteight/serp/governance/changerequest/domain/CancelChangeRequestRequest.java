@@ -27,8 +27,6 @@ public class CancelChangeRequestRequest implements AuditableRequest {
   UUID changeRequestId;
   @NonNull
   String cancelledBy;
-  @NonNull
-  String cancellerComment;
 
   @Override
   public void preAudit(Consumer<AuditDataDto> logger) {

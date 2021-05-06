@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @Import({
     RejectChangeRequestRestController.class,
@@ -35,9 +35,9 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
-  void its202_whenApproverCallsEndpoint() {
+  void its204_whenApproverCallsEndpoint() {
     post(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto())
-        .statusCode(ACCEPTED.value());
+        .statusCode(NO_CONTENT.value());
   }
 
   @Test
