@@ -12,9 +12,6 @@ class CancelChangeRequestUseCase {
   private final ChangeRequestService changeRequestService;
 
   void activate(@NonNull CancelChangeRequestCommand command) {
-    changeRequestService.cancel(
-        command.getId(),
-        command.getCancellerUsername(),
-        command.getCancellerComment());
+    changeRequestService.cancel(command.getId(), command.getCancellerUsername());
   }
 }

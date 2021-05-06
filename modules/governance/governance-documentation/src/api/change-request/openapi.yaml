@@ -100,12 +100,6 @@ paths:
           schema:
             type: string
             format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CancelChangeRequestDto'
-        required: true
       responses:
         '200':
           description: default response
@@ -253,12 +247,4 @@ components:
       type: object
       properties:
         rejectorComment:
-          type: string
-
-    CancelChangeRequestDto:
-      required:
-        - cancellerComment
-      type: object
-      properties:
-        cancellerComment:
           type: string

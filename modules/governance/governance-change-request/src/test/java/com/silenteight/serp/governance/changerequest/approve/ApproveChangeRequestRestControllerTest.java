@@ -19,9 +19,9 @@ import static com.silenteight.serp.governance.changerequest.fixture.ChangeReques
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @Import({
     ApproveChangeRequestRestController.class,
@@ -36,9 +36,9 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
-  void its202_whenApproverCallsEndpoint() {
+  void its204_whenApproverCallsEndpoint() {
     post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
-        .statusCode(ACCEPTED.value());
+        .statusCode(NO_CONTENT.value());
   }
 
   @Test

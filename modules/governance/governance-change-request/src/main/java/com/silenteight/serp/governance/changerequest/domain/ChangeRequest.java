@@ -105,13 +105,12 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
     decidedAt = now();
   }
 
-  void cancel(String username, String comment) {
+  void cancel(String username) {
     if (isNotInPendingState())
       throw new ChangeRequestNotInPendingStateException(getChangeRequestId());
 
     state = CANCELLED;
     decidedBy = username;
-    deciderComment = comment;
     decidedAt = now();
   }
 

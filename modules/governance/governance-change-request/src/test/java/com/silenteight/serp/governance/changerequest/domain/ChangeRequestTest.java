@@ -18,8 +18,8 @@ class ChangeRequestTest {
   private static final String MODEL_NAME = "solving-models/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
   private static final String BUSINESS_OPERATOR_USERNAME = "business_operator";
   private static final String BUSINESS_OPERATOR_COMMENT = "This is comment from Business Operator";
-  private static final String APPROVER_USERNAME = "approver";
-  private static final String APPROVER_COMMENT = "approver comment 1234";
+  private static final String DECIDER_USERNAME = "decider";
+  private static final String DECIDER_COMMENT = "decider comment 1234";
 
   @Test
   void changeRequestApproved_stateIsChangedToApproved() {
@@ -32,12 +32,12 @@ class ChangeRequestTest {
         BUSINESS_OPERATOR_COMMENT);
 
     // when
-    changeRequest.approve(APPROVER_USERNAME, APPROVER_COMMENT);
+    changeRequest.approve(DECIDER_USERNAME, DECIDER_COMMENT);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(APPROVED);
-    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
-    assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(DECIDER_USERNAME);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(DECIDER_COMMENT);
     assertThat(changeRequest.getDecidedAt()).isAfter(now);
   }
 
@@ -52,17 +52,17 @@ class ChangeRequestTest {
         BUSINESS_OPERATOR_COMMENT);
 
     // when
-    changeRequest.reject(APPROVER_USERNAME, APPROVER_COMMENT);
+    changeRequest.reject(DECIDER_USERNAME, DECIDER_COMMENT);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(REJECTED);
-    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
-    assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(DECIDER_USERNAME);
+    assertThat(changeRequest.getDeciderComment()).isEqualTo(DECIDER_COMMENT);
     assertThat(changeRequest.getDecidedAt()).isAfter(now);
   }
 
   @Test
-  void changeRequestRejected_stateIsChangedToCancelled() {
+  void changeRequestCancelled_stateIsChangedToCancelled() {
     // give
     OffsetDateTime now = now();
     ChangeRequest changeRequest = new ChangeRequest(
@@ -72,12 +72,12 @@ class ChangeRequestTest {
         BUSINESS_OPERATOR_COMMENT);
 
     // when
-    changeRequest.cancel(APPROVER_USERNAME, APPROVER_COMMENT);
+    changeRequest.cancel(DECIDER_USERNAME);
 
     // then
     assertThat(changeRequest.getState()).isEqualTo(CANCELLED);
-    assertThat(changeRequest.getDecidedBy()).isEqualTo(APPROVER_USERNAME);
-    assertThat(changeRequest.getDeciderComment()).isEqualTo(APPROVER_COMMENT);
+    assertThat(changeRequest.getDecidedBy()).isEqualTo(DECIDER_USERNAME);
+    assertThat(changeRequest.getDeciderComment()).isNull();
     assertThat(changeRequest.getDecidedAt()).isAfter(now);
   }
 }
