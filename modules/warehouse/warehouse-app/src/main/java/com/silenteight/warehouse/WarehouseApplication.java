@@ -14,6 +14,7 @@ import com.silenteight.warehouse.indexer.IndexerModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
+import com.silenteight.warehouse.report.tenant.TenantModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -34,6 +35,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     IndexerModule.class,
     ReportingModule.class,
     SynchronizationModule.class,
+    TenantModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,

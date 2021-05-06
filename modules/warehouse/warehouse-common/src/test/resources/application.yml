@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: warehouse
+
+warehouse:
+  kibana:
+    timezone: Europe/Warsaw
+
+logging:
+  level:
+    com.silenteight.warehouse.report: DEBUG
+    com.silenteight.warehouse.common.opendistro.elastic: DEBUG
+    com.silenteight.warehouse.common.opendistro.kibana: DEBUG

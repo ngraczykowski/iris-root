@@ -3,7 +3,9 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
+import com.silenteight.warehouse.common.opendistro.kibana.dto.SavedObjectDto;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
@@ -11,6 +13,7 @@ import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.synchronization.ReportDto;
 import com.silenteight.warehouse.report.synchronization.ReportSynchronizationService;
 import com.silenteight.warehouse.report.synchronization.ReportSynchronizationUseCase;
+import com.silenteight.warehouse.report.tenant.TenantService;
 
 import io.minio.*;
 import io.minio.messages.Item;
@@ -31,7 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.INDEX_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.KIBANA_INDEX_PATTERN_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.OTHER_TENANT;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.TENANT;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
@@ -53,6 +59,7 @@ import static org.awaitility.Awaitility.await;
 class ReportIT {
 
   private static final String TEST_BUCKET = "reports";
+  private static final String NEW_ELASTIC_INDEX = "analysis-2";
 
   @BeforeEach
   void setUp() {
@@ -82,12 +89,36 @@ class ReportIT {
   @Autowired
   private ReportSynchronizationService reportSynchronizationService;
 
+  @Autowired
+  private TenantService tenantService;
+
+  @Autowired
+  private OpendistroKibanaClient opendistroKibanaClient;
+
+  @BeforeEach
+  public void init() {
+    storeData();
+    createKibanaIndex();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldCopyKibanaReports() {
+    var indexMapping = tenantService.copyKibanaIndices(TENANT, OTHER_TENANT, NEW_ELASTIC_INDEX);
+
+    var tenants = opendistroKibanaClient
+        .listSavedObjects(OTHER_TENANT, KIBANA_INDEX_PATTERN, 10);
+
+    assertThat(tenants).hasSize(1);
+    SavedObjectDto kibanaIndex = tenants.get(0);
+    assertThat(kibanaIndex.getId()).isEqualTo(indexMapping.get(KIBANA_INDEX_PATTERN_NAME));
+    assertThat(kibanaIndex.getAttributes()).containsEntry("title", NEW_ELASTIC_INDEX);
+  }
+
   @Test
   @SneakyThrows
   void shouldStoreNewKibanaReportsInMinio() {
     // given
-    storeData();
-    createKibanaIndex();
     createSavedSearch();
     generateReport(createReportDefinition());
     waitForReports();
@@ -105,7 +136,7 @@ class ReportIT {
   }
 
   @SneakyThrows
-  private void  storeData() {
+  private void storeData() {
     IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
     indexRequest.id(ALERT_ID_1);
     indexRequest.source(ALERT_WITH_MATCHES_1_MAP);
