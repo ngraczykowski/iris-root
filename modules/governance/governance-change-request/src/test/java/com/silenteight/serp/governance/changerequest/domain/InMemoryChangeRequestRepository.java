@@ -2,8 +2,6 @@ package com.silenteight.serp.governance.changerequest.domain;
 
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
-import org.springframework.data.domain.Pageable;
-
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -12,18 +10,12 @@ class InMemoryChangeRequestRepository
     extends BasicInMemoryRepository<ChangeRequest>
     implements ChangeRequestRepository {
 
-  @Override
-  public Collection<ChangeRequest> findAllByState(ChangeRequestState state) {
-    return stream()
-        .filter(changeRequest -> changeRequest.isInState(state))
-        .collect(toList());
-  }
-
-  public List<ChangeRequest> findAllByStateIn(
-      Set<ChangeRequestState> states, Pageable pageable) {
+  public Collection<ChangeRequest> findAllByStateInOrderByDecidedAtDesc(
+      Set<ChangeRequestState> states) {
 
     return stream()
         .filter(changeRequest -> isInState(changeRequest, states))
+        .sorted(Comparator.comparing(ChangeRequest::getDecidedAt).reversed())
         .collect(toList());
   }
 

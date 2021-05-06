@@ -1,19 +1,22 @@
-package com.silenteight.serp.governance.changerequest.pending;
+package com.silenteight.serp.governance.changerequest.list;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.serp.governance.changerequest.pending.dto.PendingChangeRequestDto;
+import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
+import java.util.Set;
+
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.util.Collections.emptyList;
-import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -24,21 +27,21 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
-    PendingChangeRequestRestController.class,
+    ListChangeRequestRestController.class,
     GenericExceptionControllerAdvice.class
 })
-class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
+class ListChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final String PENDING_CHANGE_REQUESTS_URL = "/v1/changeRequests?state=PENDING";
 
   private final Fixtures fixtures = new Fixtures();
 
   @MockBean
-  private PendingChangeRequestQuery pendingChangeRequestsQuery;
+  private ListChangeRequestsQuery changeRequestsQuery;
 
   @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
   void its200_whenNoPendingChangeRequest() {
-    given(pendingChangeRequestsQuery.listPending()).willReturn(emptyList());
+    given(changeRequestsQuery.list(Set.of(PENDING))).willReturn(emptyList());
 
     get(PENDING_CHANGE_REQUESTS_URL)
         .contentType(anything())
@@ -48,8 +51,8 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
   void its200WithCorrectBody_whenFound() {
-    given(pendingChangeRequestsQuery.listPending()).willReturn(
-        of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
+    given(changeRequestsQuery.list(Set.of(PENDING))).willReturn(
+        List.of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
 
     get(PENDING_CHANGE_REQUESTS_URL)
         .statusCode(OK.value())
@@ -57,12 +60,13 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].id", equalTo("05bf9714-b1ee-4778-a733-6151df70fca3"))
         .body("[0].createdBy", equalTo("Business Operator #1"))
         .body("[0].createdAt", notNullValue())
-        .body("[0].comment", equalTo("Increase efficiency by 20% on Asia markets"))
+        .body("[0].creatorComment", equalTo("Increase efficiency by 20% on Asia markets"))
         .body("[1].modelName", equalTo(MODEL_NAME))
         .body("[1].id", equalTo("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
         .body("[1].createdBy", equalTo("Business Operator #2"))
         .body("[1].createdAt", notNullValue())
-        .body("[1].comment", equalTo("Disable redundant RBs based on analyses from 2020.04.02"))
+        .body("[1].creatorComment",
+            equalTo("Disable redundant RBs based on analyses from 2020.04.02"))
         .body("[1].modelName", equalTo(MODEL_NAME));
   }
 
@@ -73,20 +77,22 @@ class PendingChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   private class Fixtures {
 
-    PendingChangeRequestDto firstChangeRequest = PendingChangeRequestDto.builder()
+    ChangeRequestDto firstChangeRequest = ChangeRequestDto.builder()
         .id(fromString("05bf9714-b1ee-4778-a733-6151df70fca3"))
         .createdBy("Business Operator #1")
         .createdAt(parse("2020-04-15T10:15:30+01:00", ISO_OFFSET_DATE_TIME))
-        .comment("Increase efficiency by 20% on Asia markets")
+        .creatorComment("Increase efficiency by 20% on Asia markets")
         .modelName(MODEL_NAME)
+        .state(PENDING.name())
         .build();
 
-    PendingChangeRequestDto secondChangeRequest = PendingChangeRequestDto.builder()
+    ChangeRequestDto secondChangeRequest = ChangeRequestDto.builder()
         .id(fromString("2e9f8302-12e3-47c0-ae6c-2c9313785d1d"))
         .createdBy("Business Operator #2")
         .createdAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
-        .comment("Disable redundant RBs based on analyses from 2020.04.02")
+        .creatorComment("Disable redundant RBs based on analyses from 2020.04.02")
         .modelName(MODEL_NAME)
+        .state(PENDING.name())
         .build();
   }
 }

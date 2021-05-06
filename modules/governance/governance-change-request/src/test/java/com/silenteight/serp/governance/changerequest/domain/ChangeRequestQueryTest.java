@@ -1,9 +1,8 @@
 package com.silenteight.serp.governance.changerequest.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.serp.governance.changerequest.closed.dto.ClosedChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
-import com.silenteight.serp.governance.changerequest.pending.dto.PendingChangeRequestDto;
+import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +11,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
 
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
-import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.REJECTED;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CHANGE_REQUEST_ID;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATED_BY;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATOR_COMMENT;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
+import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -40,39 +41,40 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     persistChangeRequest();
 
     // when
-    List<PendingChangeRequestDto> result = underTest.listPending();
+    Collection<ChangeRequestDto> result = underTest.list(of(PENDING));
 
     // then
     assertThat(result.size()).isEqualTo(1);
-    PendingChangeRequestDto changeRequest = result.get(0);
-    assertThat(changeRequest.getId()).isEqualTo(CHANGE_REQUEST_ID);
-    assertThat(changeRequest.getCreatedAt()).isNotNull();
-    assertThat(changeRequest.getCreatedBy()).isEqualTo(CREATED_BY);
-    assertThat(changeRequest.getComment()).isEqualTo(CREATOR_COMMENT);
-    assertThat(changeRequest.getModelName()).isEqualTo(MODEL_NAME);
+    ChangeRequestDto pendingChangeRequest = result.iterator().next();
+    assertThat(pendingChangeRequest.getId()).isEqualTo(CHANGE_REQUEST_ID);
+    assertThat(pendingChangeRequest.getCreatedAt()).isNotNull();
+    assertThat(pendingChangeRequest.getCreatedBy()).isEqualTo(CREATED_BY);
+    assertThat(pendingChangeRequest.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
+    assertThat(pendingChangeRequest.getModelName()).isEqualTo(MODEL_NAME);
   }
 
   @Test
   void shouldListClosedChangeRequests() {
     // given
     String decider = "jdoe";
+    String deciderComment = "Not correct";
     ChangeRequest changeRequest = persistChangeRequest();
-    changeRequest.cancel(decider);
+    changeRequest.reject(decider, deciderComment);
 
     // when
-    List<ClosedChangeRequestDto> result = underTest.listClosed();
+    Collection<ChangeRequestDto> result = underTest.list(of(APPROVED, REJECTED));
 
     // then
     assertThat(result.size()).isEqualTo(1);
-    ClosedChangeRequestDto closedChangeRequest = result.get(0);
+    ChangeRequestDto closedChangeRequest = result.iterator().next();
     assertThat(closedChangeRequest.getId()).isEqualTo(CHANGE_REQUEST_ID);
     assertThat(closedChangeRequest.getCreatedAt()).isNotNull();
     assertThat(closedChangeRequest.getCreatedBy()).isEqualTo(CREATED_BY);
     assertThat(closedChangeRequest.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
     assertThat(closedChangeRequest.getDecidedBy()).isEqualTo(decider);
     assertThat(closedChangeRequest.getDecidedAt()).isNotNull();
-    assertThat(closedChangeRequest.getDeciderComment()).isNull();
-    assertThat(closedChangeRequest.getState()).isEqualTo(CANCELLED.name());
+    assertThat(closedChangeRequest.getDeciderComment()).isEqualTo(deciderComment);
+    assertThat(closedChangeRequest.getState()).isEqualTo(REJECTED.name());
   }
 
   @Test

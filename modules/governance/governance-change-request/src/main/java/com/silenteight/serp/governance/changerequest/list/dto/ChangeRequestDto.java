@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.changerequest.closed.dto;
+package com.silenteight.serp.governance.changerequest.list.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 
 @Value
 @Builder
-public class ClosedChangeRequestDto {
+public class ChangeRequestDto {
 
   @NonNull
   UUID id;
@@ -20,9 +20,9 @@ public class ClosedChangeRequestDto {
   OffsetDateTime createdAt;
   @NonNull
   String creatorComment;
-  @NonNull
+  @Nullable
   String decidedBy;
-  @NonNull
+  @Nullable
   OffsetDateTime decidedAt;
   @Nullable
   String deciderComment;
