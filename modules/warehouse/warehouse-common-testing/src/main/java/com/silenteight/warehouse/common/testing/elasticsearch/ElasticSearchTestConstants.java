@@ -6,10 +6,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ElasticSearchTestConstants {
 
-  // The tenant that is created by default in opendistro images.
+  // The tenants that are created by default in opendistro images.
   public static final String TENANT = "admin_tenant";
+  public static final String OTHER_TENANT = "global_tenant";
 
   // Elasticsearch index that is referenced by kibana index
   // created via '1-create-kibana-index.json'
   public static final String INDEX_NAME = "alerts";
+
+  // Kibana index-pattern that is created via
+  // '1-create-kibana-index.json`
+  public static final String KIBANA_INDEX_PATTERN_NAME = "alerts-index";
 }

@@ -5,12 +5,19 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
+import static com.fasterxml.jackson.databind.PropertyNamingStrategy.LOWER_CAMEL_CASE;
+
 @Configuration
 class OpendistroElasticConfiguration {
 
   @Bean
-  OpendistroElasticClient opendistroElasticClient(
-      RestClient restLowLevelClient, ObjectMapper objectMapper) {
+  OpendistroElasticClient opendistroElasticClient(RestClient restLowLevelClient) {
+
+    ObjectMapper objectMapper = new ObjectMapper()
+        .setPropertyNamingStrategy(LOWER_CAMEL_CASE)
+        .configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     return new OpendistroElasticClient(restLowLevelClient, objectMapper);
   }
 }

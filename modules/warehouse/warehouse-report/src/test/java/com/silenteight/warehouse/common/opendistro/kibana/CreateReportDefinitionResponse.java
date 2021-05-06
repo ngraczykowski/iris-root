@@ -13,6 +13,7 @@ class CreateReportDefinitionResponse {
   @Data
   static class SchedulerResponse {
 
+    @JsonProperty("reportDefinitionId")
     private String reportDefinitionId;
   }
 }

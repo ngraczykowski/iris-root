@@ -39,7 +39,6 @@ public class OpendistroElasticClient {
           objectMapper.readValue(
               response.getEntity().getContent(),
               ListReportsInstancesResponse.class);
-
       log.debug("OpendistroElasticClient method=GET, endpoint={}, statusCode={}, parsedBody={}",
           request.getEndpoint(), response.getStatusLine(), listReportsInstancesResponse);
 

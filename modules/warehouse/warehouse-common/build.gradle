@@ -4,6 +4,10 @@ plugins {
 
 description = "Warehouse Common"
 
+configurations {
+  testImplementation.extendsFrom starterSpringTest
+}
+
 dependencies {
   // API dependencies
   api libraries.jakarta_validation_api
@@ -23,4 +27,6 @@ dependencies {
   implementation libraries.springdoc_data_rest
   implementation libraries.springdoc_security
   implementation libraries.protobuf_java_util
+
+  testImplementation project(":warehouse-common-testing")
 }
