@@ -28,8 +28,10 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
 
     return CountryFeatureInputDto.builder()
         .feature(getFeature().getName())
-        .alertedPartyCountries(concat(apIdDocumentCountry, apFieldsCountries).collect(toList()))
-        .watchlistCountries(concat(mpDocument, mpWorldCheckCountries).collect(toList()))
+        .alertedPartyCountries(
+            concat(apIdDocumentCountry, apFieldsCountries).distinct().collect(toList()))
+        .watchlistCountries(
+            concat(mpDocument, mpWorldCheckCountries).distinct().collect(toList()))
         .build();
   }
 

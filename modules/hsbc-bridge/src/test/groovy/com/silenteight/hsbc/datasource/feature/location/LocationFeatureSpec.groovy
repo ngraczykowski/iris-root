@@ -23,8 +23,8 @@ class LocationFeatureSpec extends Specification implements FullMatch {
 
     then:
     actual.with {
-      alertedPartyLocations.containsAll(["PL", "Polska", "IRN", "Iran", "UK"])
-      watchlistLocations.containsAll(["PL", "Polska"])
+      alertedPartyCountries.containsAll(["PL", "Polska", "IRN", "Iran", "UK"])
+      watchlistCountries.containsAll(["PL", "Polska"])
     }
   }
 }
