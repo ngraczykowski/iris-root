@@ -4,6 +4,7 @@ import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
 import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
+import com.silenteight.serp.governance.agent.AgentModule;
 import com.silenteight.serp.governance.analytics.AnalyticsModule;
 import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
@@ -26,6 +27,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 @ComponentScan(basePackageClasses = {
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
+    AgentModule.class,
     AnalyticsModule.class,
     BranchModule.class,
     ChangeRequestModule.class,

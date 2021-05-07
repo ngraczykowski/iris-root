@@ -16,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.*;

@@ -1,9 +1,9 @@
 package com.silenteight.serp.governance.model.featureset;
 
 import com.silenteight.model.api.v1.Feature;
+import com.silenteight.serp.governance.agent.AgentDto;
+import com.silenteight.serp.governance.agent.AgentsRegistry;
 import com.silenteight.serp.governance.model.TestResourceLoader;
-import com.silenteight.serp.governance.model.agent.AgentDto;
-import com.silenteight.serp.governance.model.agent.AgentsRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,12 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.serp.governance.model.agent.AgentFixture.DATE_AGENT;
-import static com.silenteight.serp.governance.model.agent.AgentFixture.NAME_AGENT;
-import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.DATE_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
-import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.agent.AgentFixture.DATE_AGENT;
+import static com.silenteight.serp.governance.agent.AgentFixture.NAME_AGENT;
+import static com.silenteight.serp.governance.agent.config.AgentConfigFixture.DATE_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
+import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
 import static com.silenteight.serp.governance.model.featureset.FeatureSetRegistry.DEFAULT_FEATURE_SET;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;

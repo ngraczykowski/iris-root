@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.model.featureset;
 
+import com.silenteight.serp.governance.agent.AgentsRegistry;
 import com.silenteight.serp.governance.model.ModelProperties;
-import com.silenteight.serp.governance.model.agent.AgentsRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

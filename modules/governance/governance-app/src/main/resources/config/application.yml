@@ -10,18 +10,19 @@ serp:
       mail:
         inbound-queue-name: notifier.send-mail
   governance:
+    agent:
+      agentConfigurationSource: classpath:agent_configs.json
+      agentDetailsSource: classpath:agent_details.json
     integration:
       solution-discrepancy:
         inbound-queue-name: governance.solution-discrepancy
         outbound-exchange-name: notification
         reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
     model:
-      agentConfigurationSource: classpath:agent_configs.json
-      featureSetSource: classpath:feature_sets.json
-      agentDetailsSource: classpath:agent_details.json
       categorySource: classpath:categories.json
+      featureSetSource: classpath:feature_sets.json
 
-####################################################################################################
+  ####################################################################################################
 # Error Queue Configuration
 ####################################################################################################
   messaging:
