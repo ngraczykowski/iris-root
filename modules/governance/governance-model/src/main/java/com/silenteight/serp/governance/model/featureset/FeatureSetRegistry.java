@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.Feature;
+import com.silenteight.serp.governance.agent.AgentDto;
+import com.silenteight.serp.governance.agent.AgentsRegistry;
 import com.silenteight.serp.governance.model.NonResolvableResourceException;
-import com.silenteight.serp.governance.model.agent.AgentDto;
-import com.silenteight.serp.governance.model.agent.AgentsRegistry;
 import com.silenteight.serp.governance.model.provide.grpc.PolicyFeatureProvider;
 
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.silenteight.serp.governance.model.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
-import static com.silenteight.serp.governance.model.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
+import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.ISDENY_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.DEFAULT_MODEL_DTO;

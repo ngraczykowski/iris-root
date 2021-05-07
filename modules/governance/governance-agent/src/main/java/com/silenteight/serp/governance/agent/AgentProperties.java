@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model;
+package com.silenteight.serp.governance.agent;
 
 import lombok.Value;
 
@@ -8,12 +8,12 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import javax.validation.constraints.NotNull;
 
 @Value
-@ConfigurationProperties("serp.governance.model")
+@ConfigurationProperties("serp.governance.agent")
 @ConstructorBinding
-public class ModelProperties {
+public class AgentProperties {
 
   @NotNull
-  String featureSetSource;
+  String agentConfigurationSource;
   @NotNull
-  String categorySource;
+  String agentDetailsSource;
 }
