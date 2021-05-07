@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static org.springframework.http.ResponseEntity.accepted;
 
 @RestController
 @RequestMapping(ROOT)
@@ -30,14 +31,12 @@ class ClonePolicyRestController {
       @PathVariable UUID newId,
       Authentication authentication) {
 
-    ClonePolicyCommand command = ClonePolicyCommand
-        .builder()
+    ClonePolicyCommand command = ClonePolicyCommand.builder()
         .id(newId)
         .createdBy(authentication.getName())
         .basePolicyId(id)
         .build();
     clonePolicyUseCase.activate(command);
-
-    return ResponseEntity.accepted().build();
+    return accepted().build();
   }
 }

@@ -313,8 +313,11 @@ public class PolicyService {
   public UUID clonePolicy(ClonePolicyRequest clonePolicyRequest) {
     clonePolicyRequest.preAudit(auditingLogger::log);
     Policy origin = validateAndReturnPolicy(clonePolicyRequest.getBasePolicyId());
-    Policy policy = new Policy(clonePolicyRequest.getPolicyId(), origin.getName(),
-        origin.getDescription(), origin.getCreatedBy());
+    Policy policy = new Policy(
+        clonePolicyRequest.getPolicyId(),
+        origin.getName(),
+        origin.getDescription(),
+        clonePolicyRequest.getCreatedBy());
     policy.setSteps(cloneSteps(origin.getSteps()));
     Policy savedPolicy = policyRepository.save(policy);
     clonePolicyRequest.postAudit(auditingLogger::log);
