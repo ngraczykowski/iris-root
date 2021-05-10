@@ -7,14 +7,12 @@ import javax.persistence.Column;
 
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PACKAGE;
-import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Data
-@AllArgsConstructor(access = PRIVATE)
+@AllArgsConstructor(access = PACKAGE)
 @NoArgsConstructor(access = PROTECTED)
 @Setter(NONE)
-@Builder(access = PACKAGE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 class AnalysisDatasetKey implements Serializable {
 

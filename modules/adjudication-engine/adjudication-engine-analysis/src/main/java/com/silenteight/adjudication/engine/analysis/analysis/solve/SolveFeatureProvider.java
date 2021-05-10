@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.solve;
+package com.silenteight.adjudication.engine.analysis.analysis.solve;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class SolveFeatureProvider implements FeatureProvider {
+class SolveFeatureProvider implements FeatureProvider {
 
   private final AgentConfigFeatureFacade facade;
 

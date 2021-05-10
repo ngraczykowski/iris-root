@@ -34,7 +34,7 @@ class AnalysisService {
     return BatchAddDatasetsResponse.newBuilder().addAllAnalysisDatasets(datasets).build();
   }
 
-  public Analysis getAnalysis(GetAnalysisRequest request) {
+  Analysis getAnalysis(GetAnalysisRequest request) {
     return analysisFacade.getAnalysis(request.getAnalysis());
   }
 }

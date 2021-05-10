@@ -10,6 +10,7 @@ dependencies {
   implementation project(":adjudication-engine-alerts")
   implementation project(":adjudication-engine-dataset")
   implementation project(":adjudication-engine-solve")
+  implementation project(":proto-adjudication-engine-internal-protos")
   implementation libraries.adjudication_engine_api
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.protobuf_java_util

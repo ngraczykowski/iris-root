@@ -4,9 +4,9 @@ import lombok.*;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -16,9 +16,17 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity(name = "AnalysisDataset")
-@Builder(access = PACKAGE)
 class AnalysisDatasetEntity {
 
   @EmbeddedId
   private AnalysisDatasetKey id;
+
+  AnalysisDatasetEntity(long analysisId, long datasetId) {
+    id = new AnalysisDatasetKey(analysisId, datasetId);
+  }
+
+  @Transient
+  String getName() {
+    return "analysis/" + id.getAnalysisId() + "/datasets/" + id.getDatasetId();
+  }
 }

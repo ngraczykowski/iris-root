@@ -89,6 +89,7 @@ libraries.spring_data_elasticsearch = [group: 'org.springframework.data', name: 
 
 libraries.spring_integration_amqp = [group: 'org.springframework.integration', name: 'spring-integration-amqp']
 libraries.spring_integration_core = [group: 'org.springframework.integration', name: 'spring-integration-core']
+libraries.spring_integration_http = [group: 'org.springframework.integration', name: 'spring-integration-http']
 libraries.spring_integration_mail = [group: 'org.springframework.integration', name: 'spring-integration-mail']
 libraries.spring_integration_test = [group: 'org.springframework.integration', name: 'spring-integration-test']
 

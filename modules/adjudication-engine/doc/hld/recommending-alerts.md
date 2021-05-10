@@ -57,36 +57,36 @@ This will trigger re-evaluation of analysis and its alerts that are missing reco
 The list of integration flows that would result in solving alerts:
 
 ```
-AddDatasetRequest (grpc) -> DatasetsAddedToAnalysisEvent (rabbit)
+AddDatasetRequest (grpc) -> AnalysisDatasetsAdded (rabbit)
 
-BatchAddDatasetsRequest (grpc) -> DatasetsAddedToAnalysisEvent (rabbit)
+BatchAddDatasetsRequest (grpc) -> AnalysisDatasetsAdded (rabbit)
 
-DatasetsAddedToAnalysisEvent (rabbit) -> List<PendingRecommendation> (db) -> RecommendationsPendingEvent (rabbit)
+AnalysisDatasetsAdded (rabbit) -> List<PendingRecommendation> (db) -> PendingRecommendations (rabbit)
 
-RecommendationsPendingEvent (rabbit) -> List<AgentExchange> (db) -> List<AgentExchangeRequest> (rabbit)
+PendingRecommendations (rabbit) -> List<AgentExchange> (db) -> List<AgentExchangeRequest> (rabbit)
 
-RecommendationsPendingEvent (rabbit) -> BatchGetMatchCategoryValuesRequest: BatchGetMatchCategoryValuesResponse (grpc) -> List<MatchCategoryValue> (db) -> MatchCategoriesUpdatedEvent (spring)
+PendingRecommendations (rabbit) -> BatchGetMatchCategoryValuesRequest: BatchGetMatchCategoryValuesResponse (grpc) -> List<MatchCategoryValue> (db) -> MatchCategoriesUpdated (spring)
 
-RecommendationsPendingEvent (rabbit) -> StreamCommentInputsRequest: List<CommentInput> (grpc) -> List<AlertCommentInput> (db) -> CommentInputsUpdatedEvent (spring)
+PendingRecommendations (rabbit) -> StreamCommentInputsRequest: List<CommentInput> (grpc) -> List<AlertCommentInput> (db) -> CommentInputsUpdated (spring)
 
-AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdatedEvent (spring)
+AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdated (spring)
 
-MatchCategoriesUpdatedEvent (spring) -> SolveMatchesCommand (spring)
+MatchCategoriesUpdated (spring) -> SolveMatchesCommand (spring)
 
-MatchFeaturesUpdatedEvent (spring) -> SolveMatchesCommand (spring)
+MatchFeaturesUpdated (spring) -> SolveMatchesCommand (spring)
 
-SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolvedEvent (rabbit)
+SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolved (rabbit)
 
-MatchesSolvedEvent (spring) -> RecommendAlertsCommand (spring)
+MatchesSolved (spring) -> RecommendAlertsCommand (spring)
 
 CommentInputsUpdatedEvent (spring) -> RecommendAlertsCommand (spring)
 
-RecommendationsPendingEvent (spring) -> RecommendAlertsCommand (spring)
+PendingRecommendations (rabbit) -> RecommendAlertsCommand (spring)
 
-RecommendAlertsCommand (spring) -> BatchSolveAlertsRequest: BatchSolveAlertsResponse (grpc) -> List<Recommendation> (db) -> RecommendationsGenerated (rabbit)
+RecommendAlertsCommand (spring) -> BatchSolveAlertsRequest: BatchSolveAlertsResponse (grpc) -> List<Recommendation> + delete PendingRecommendation (db) -> RecommendationsGenerated (rabbit)
 ```
 
 > **TODO**
 >
-> The missing part might be PendingMatchSolution.
+> The missing part **might be** the PendingMatchSolution.
 >

@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.adjudication.engine.analysis.analysis.event;
+package com.silenteight.adjudication.engine.analysis.pendingrecommendation;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.solve;
+package com.silenteight.adjudication.engine.analysis.analysis.solve;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class SolveCategoryProvider implements CategoryProvider {
+class SolveCategoryProvider implements CategoryProvider {
 
   private final CategoryFacade categoryFacade;
 

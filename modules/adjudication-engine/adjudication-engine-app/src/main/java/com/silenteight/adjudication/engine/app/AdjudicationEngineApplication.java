@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.config.EnableIntegration;
-import org.springframework.integration.config.EnableIntegrationManagement;
+import org.springframework.integration.http.config.EnableIntegrationGraphController;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import reactor.core.scheduler.Schedulers;
@@ -32,7 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = AdjudicationEngineModule.class)
 @EnableIntegration
-@EnableIntegrationManagement
+@EnableIntegrationGraphController
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableScheduling
 @EnableJpaRepositories(basePackageClasses = AdjudicationEngineModule.class)
@@ -53,7 +53,7 @@ class AdjudicationEngineApplication {
 
   private static void setUpSystemProperties() {
     // NOTE(ahaczewski): Force use of fast random source.
-    setProperty("java.security.egd", "file:/dev/./urandom");
+    setProperty("java.security.egd", "file:/dev/urandom");
   }
 
   private static void setUpSecuritySystemProperties() {

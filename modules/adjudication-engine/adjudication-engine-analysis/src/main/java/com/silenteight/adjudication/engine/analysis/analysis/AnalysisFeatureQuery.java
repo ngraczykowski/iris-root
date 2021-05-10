@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Immutable
 @Entity
 @Builder(access = PACKAGE)
-public class AnalysisFeatureQuery {
+class AnalysisFeatureQuery {
 
   @Id
   @Column(name = "analysis_feature_id")

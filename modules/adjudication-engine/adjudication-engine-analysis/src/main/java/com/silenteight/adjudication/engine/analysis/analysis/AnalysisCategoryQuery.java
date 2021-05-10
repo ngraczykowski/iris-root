@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Immutable
 @Entity
 @Builder(access = PACKAGE)
-public class AnalysisCategoryQuery {
+class AnalysisCategoryQuery {
 
   @Id
   @Column(name = "analysis_category_id")

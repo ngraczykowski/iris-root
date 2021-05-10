@@ -38,22 +38,22 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
   void setUp() {
     var addUseCase = new AddDatasetsToAnalysisUseCase(
         analysisDatasetRepository, applicationEventPublisher);
+
     useCase = new AddAndListDatasetsInAnalysisUseCase(addUseCase, listAnalysisDatasetUseCase);
   }
 
   @Test
   void addDataset() {
-    when(listAnalysisDatasetUseCase.listAnalysisDatasets(
-        Collections.singletonList(
-            AnalysisDatasetKey.builder().analysisId(1L).datasetId(1L).build())))
-        .thenReturn(Collections.singletonList(AnalysisDataset
-            .newBuilder()
-            .setName("analysis/1/datasets/1")
-            .setAlertCount(10)
-            .setPendingAlerts(0)
-            .build()));
+    var analysisDataset = AnalysisDataset.newBuilder()
+        .setName("analysis/1/datasets/1")
+        .setAlertCount(10)
+        .setPendingAlerts(0)
+        .build();
 
-    List<String> datasets = Collections.singletonList("datasets/1");
+    when(listAnalysisDatasetUseCase.listAnalysisDatasets(List.of(new AnalysisDatasetKey(1L, 1L))))
+        .thenReturn(Collections.singletonList(analysisDataset));
+
+    List<String> datasets = List.of("datasets/1");
     List<AnalysisDataset> result = useCase.addAndListDatasets("analysis/1", datasets);
 
     assertThat(result).hasSize(1);
@@ -61,38 +61,32 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
     assertThat(result.get(0))
         .usingRecursiveComparison()
         .ignoringFields(IGNORED_PROTO_FIELDS)
-        .isEqualTo(AnalysisDataset.newBuilder()
-            .setName("analysis/1/datasets/1")
-            .setAlertCount(10)
-            .setPendingAlerts(0)
-            .build());
+        .isEqualTo(analysisDataset);
 
     assertThat(analysisDatasetRepository
         .getAnalysisDatasetList())
-        .containsExactly(AnalysisDatasetEntity.builder()
-            .id(AnalysisDatasetKey.builder().analysisId(1L).datasetId(1L).build()).build());
+        .containsExactly(new AnalysisDatasetEntity(1L, 1L));
   }
 
   @MockitoSettings(strictness = Strictness.LENIENT)
   @Test
   void addMultipleDatasets() {
-    when(listAnalysisDatasetUseCase.listAnalysisDatasets(
-        asList(
-            AnalysisDatasetKey.builder().analysisId(1L).datasetId(1L).build(),
-            AnalysisDatasetKey.builder().analysisId(1L).datasetId(2L).build())))
-        .thenReturn(asList(AnalysisDataset
-            .newBuilder()
-            .setName("analysis/1/datasets/1")
-            .setAlertCount(10)
-            .setPendingAlerts(0)
-            .build(), AnalysisDataset
-            .newBuilder()
-            .setName("analysis/1/datasets/2")
-            .setAlertCount(20)
-            .setPendingAlerts(0)
-            .build()));
+    var analysisDataset1 = AnalysisDataset.newBuilder()
+        .setName("analysis/1/datasets/1")
+        .setAlertCount(10)
+        .setPendingAlerts(0)
+        .build();
+    var analysisDataset2 = AnalysisDataset.newBuilder()
+        .setName("analysis/1/datasets/2")
+        .setAlertCount(20)
+        .setPendingAlerts(0)
+        .build();
 
-    List<String> datasets = asList("datasets/1", "datasets/2");
+    when(listAnalysisDatasetUseCase.listAnalysisDatasets(
+        List.of(new AnalysisDatasetKey(1L, 1L), new AnalysisDatasetKey(1L, 2L))))
+        .thenReturn(asList(analysisDataset1, analysisDataset2));
+
+    List<String> datasets = List.of("datasets/1", "datasets/2");
     List<AnalysisDataset> result = useCase.addAndListDatasets("analysis/1", datasets);
 
     assertThat(result).hasSize(2);
@@ -100,27 +94,11 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
     assertThat(result.get(0))
         .usingRecursiveComparison()
         .ignoringFields(IGNORED_PROTO_FIELDS)
-        .isEqualTo(AnalysisDataset.newBuilder()
-            .setName("analysis/1/datasets/1")
-            .setAlertCount(10)
-            .setPendingAlerts(0)
-            .build());
+        .isEqualTo(analysisDataset1);
 
     assertThat(result.get(1))
         .usingRecursiveComparison()
         .ignoringFields(IGNORED_PROTO_FIELDS)
-        .isEqualTo(AnalysisDataset.newBuilder()
-            .setName("analysis/1/datasets/2")
-            .setAlertCount(20)
-            .setPendingAlerts(0)
-            .build());
-
-    assertThat(analysisDatasetRepository
-        .getAnalysisDatasetList())
-        .containsExactly(
-            AnalysisDatasetEntity.builder().id(
-                AnalysisDatasetKey.builder().analysisId(1L).datasetId(1L).build()).build(),
-            AnalysisDatasetEntity.builder().id(
-                AnalysisDatasetKey.builder().analysisId(1L).datasetId(2L).build()).build());
+        .isEqualTo(analysisDataset2);
   }
 }
