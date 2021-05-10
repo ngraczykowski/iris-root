@@ -1,8 +1,8 @@
 package com.silenteight.hsbc.datasource.feature.registrationcountry;
 
-import com.silenteight.hsbc.bridge.domain.CustomerEntities;
-import com.silenteight.hsbc.bridge.domain.WorldCheckEntities;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.datamodel.CustomerEntity;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
@@ -15,11 +15,11 @@ import static java.util.stream.Collectors.toList;
 public class RegistrationCountryFeature implements FeatureValuesRetriever<CountryFeatureInputDto> {
 
   @Override
-  public CountryFeatureInputDto retrieve(MatchRawData matchRawData) {
+  public CountryFeatureInputDto retrieve(MatchData matchData) {
     var mpRegistrationCountries =
-        worldCheckEntityCountries(matchRawData.getEntityComposite().getWorldCheckEntities());
+        worldCheckEntityCountries(matchData.getWorldCheckEntities());
     var apRegistrationCountries = customerEntityRegistrationCountries(
-        matchRawData.getEntityComposite().getCustomerEntities());
+        matchData.getCustomerEntity());
 
     return CountryFeatureInputDto.builder()
         .feature(getFeatureName())
@@ -29,17 +29,17 @@ public class RegistrationCountryFeature implements FeatureValuesRetriever<Countr
   }
 
   private static Stream<String> customerEntityRegistrationCountries(
-      CustomerEntities customerEntities) {
+      CustomerEntity customerEntity) {
     return Stream.of(
-        customerEntities.getRegistrationCountry(),
-        customerEntities.getCountriesOfRegistrationOriginal(),
-        customerEntities.getEdqRegiistrationCountriesCodes()
+        customerEntity.getRegistrationCountry(),
+        customerEntity.getCountriesOfRegistrationOriginal(),
+        customerEntity.getEdqRegistrationCountriesCodes()
     );
   }
 
   private static Stream<String> worldCheckEntityCountries(
-      List<WorldCheckEntities> worldCheckEntities) {
-    return worldCheckEntities.stream().map(WorldCheckEntities::getRegistrationCountry);
+      List<WorldCheckEntity> worldCheckEntities) {
+    return worldCheckEntities.stream().map(WorldCheckEntity::getRegistrationCountry);
   }
 
   @Override

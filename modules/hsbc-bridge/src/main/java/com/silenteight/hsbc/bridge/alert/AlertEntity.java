@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "hsbc_bridge_alert")
-class AlertEntity extends BaseEntity {
+public class AlertEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
@@ -27,13 +27,15 @@ class AlertEntity extends BaseEntity {
   @Setter
   private String name;
 
-  private long bulkItemId;
+  @Column(name = "bulk_id")
+  private String bulkId;
 
-  private byte[] payload;
+  @Setter
+  @Enumerated(EnumType.STRING)
+  private AlertStatus status = AlertStatus.STORED;
 
-  public AlertEntity(String externalId, long bulkItemId, byte[] payload) {
+  public AlertEntity(String externalId, String bulkId) {
     this.externalId = externalId;
-    this.bulkItemId = bulkItemId;
-    this.payload = payload;
+    this.bulkId = bulkId;
   }
 }

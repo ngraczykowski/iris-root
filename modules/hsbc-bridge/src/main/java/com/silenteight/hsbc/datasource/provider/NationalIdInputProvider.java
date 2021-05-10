@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputDto;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
@@ -35,16 +35,16 @@ class NationalIdInputProvider implements DataSourceInputProvider<NationalIdInput
     return matches.stream()
         .map(match -> NationalIdInputDto.builder()
             .match(match.getName())
-            .featureInputs(getFeatureInputs(features, match.getRawData()))
+            .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
         .collect(Collectors.toList());
   }
 
   private List<NationalIdFeatureInputDto> getFeatureInputs(
-      List<String> features, MatchRawData matchRawData) {
+      List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (NationalIdFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchRawData))
+            getFeatureRetriever(featureName).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

@@ -11,11 +11,11 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 class BulkDataCleaner implements DataCleaner {
 
-  private final BulkItemRepository bulkItemRepository;
+  private final BulkPayloadRepository bulkPayloadRepository;
 
   @Override
   @Transactional
   public void clean(OffsetDateTime expireDate) {
-    bulkItemRepository.deletePayloadByCreatedAtBefore(expireDate);
+    bulkPayloadRepository.deletePayloadByCreatedAtBefore(expireDate);
   }
 }

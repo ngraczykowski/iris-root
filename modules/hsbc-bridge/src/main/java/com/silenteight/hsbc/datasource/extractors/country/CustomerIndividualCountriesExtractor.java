@@ -2,24 +2,24 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
+import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class CustomerIndividualCountriesExtractor {
 
-  private final CustomerIndividuals customerIndividuals;
+  private final CustomerIndividual customerIndividual;
 
   public Stream<String> extract() {
     return Stream.of(
-        customerIndividuals.getNationalityCitizenshipCountries(),
-        customerIndividuals.getNationalityOrCitizenship(),
-        customerIndividuals.getNationalityCountries(),
-        customerIndividuals.getPassportIssueCountry(),
-        customerIndividuals.getCountryOfBirthOriginal(),
-        customerIndividuals.getCountryOfBirth(),
-        customerIndividuals.getEdqBirthCountryCode()
+        customerIndividual.getNationalityCitizenshipCountries(),
+        customerIndividual.getNationalityOrCitizenship(),
+        customerIndividual.getNationalityCountries(),
+        customerIndividual.getPassportIssueCountry(),
+        customerIndividual.getCountryOfBirthOriginal(),
+        customerIndividual.getCountryOfBirth(),
+        customerIndividual.getEdqBirthCountryCode()
     );
   }
 }

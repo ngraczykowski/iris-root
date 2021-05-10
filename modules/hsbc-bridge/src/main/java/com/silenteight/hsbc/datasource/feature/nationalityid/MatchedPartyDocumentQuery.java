@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.feature.nationalityid;
 
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 
 import java.util.List;
 

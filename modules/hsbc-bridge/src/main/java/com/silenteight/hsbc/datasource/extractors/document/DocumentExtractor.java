@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.datasource.extractors.document;
 
-import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
-import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
+import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import com.silenteight.hsbc.datasource.extractors.common.SimpleRegexBasedExtractor;
 import com.silenteight.hsbc.datasource.extractors.country.NationalIdNumberFieldCountryExtractor;
 import com.silenteight.hsbc.datasource.extractors.country.PassportNumberFieldCountryExtractor;
@@ -27,11 +27,11 @@ public class DocumentExtractor {
   private static final Pattern DOCUMENT_GROUP = Pattern.compile("^(.*) \\((.*)\\)$");
   private static final Pattern EDQ_SUFFIX = Pattern.compile("\"^\\s*[^0-9]+\\s*$\"");
 
-  public Document convertAlertedPartyDocumentNumbers(CustomerIndividuals customerIndividuals) {
+  public Document convertAlertedPartyDocumentNumbers(CustomerIndividual customerIndividual) {
     var document = new Document();
 
     extractCustomerIndividualsIdentificationDocument(
-        customerIndividuals, document);
+        customerIndividual, document);
 
     return document;
   }
@@ -49,19 +49,19 @@ public class DocumentExtractor {
   }
 
   private void extractCustomerIndividualsIdentificationDocument(
-      CustomerIndividuals customerIndividuals, Document document) {
+      CustomerIndividual customerIndividual, Document document) {
 
     Stream.of(
-        customerIndividuals.getIdentificationDocument1(),
-        customerIndividuals.getIdentificationDocument2(),
-        customerIndividuals.getIdentificationDocument3(),
-        customerIndividuals.getIdentificationDocument4(),
-        customerIndividuals.getIdentificationDocument5(),
-        customerIndividuals.getIdentificationDocument6(),
-        customerIndividuals.getIdentificationDocument7(),
-        customerIndividuals.getIdentificationDocument8(),
-        customerIndividuals.getIdentificationDocument9(),
-        customerIndividuals.getIdentificationDocument10())
+        customerIndividual.getIdentificationDocument1(),
+        customerIndividual.getIdentificationDocument2(),
+        customerIndividual.getIdentificationDocument3(),
+        customerIndividual.getIdentificationDocument4(),
+        customerIndividual.getIdentificationDocument5(),
+        customerIndividual.getIdentificationDocument6(),
+        customerIndividual.getIdentificationDocument7(),
+        customerIndividual.getIdentificationDocument8(),
+        customerIndividual.getIdentificationDocument9(),
+        customerIndividual.getIdentificationDocument10())
         .filter(Objects::nonNull)
         .forEach(i -> extractCustomerIndividualsDocuments(document, i));
   }
@@ -84,7 +84,7 @@ public class DocumentExtractor {
   }
 
   private void extractWorldCheckIndividualsDocuments(
-      List<WorldCheckIndividuals> worldCheckIndividuals, Document document) {
+      List<WorldCheckIndividual> worldCheckIndividuals, Document document) {
 
     worldCheckIndividuals.forEach(w -> {
       var splitPassportNumbers = w.getPassportNumber().split(";");
@@ -126,12 +126,12 @@ public class DocumentExtractor {
   }
 
   private void extractPrivateListIndividualsDocument(
-      List<PrivateListIndividuals> privateListIndividuals, Document document) {
+      List<PrivateListIndividual> privateListIndividuals, Document document) {
     privateListIndividuals.forEach(x -> extractPrivateIndividual(x, document));
   }
 
   private void extractPrivateIndividual(
-      PrivateListIndividuals individual, Document document) {
+      PrivateListIndividual individual, Document document) {
 
     var edqSuffix = extractEdqSuffix(individual.getEdqSuffix());
 

@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.feature.nationalityid;
 
-import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
+import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ public interface AlertedPartyDocumentQuery {
 
   interface Factory {
 
-    AlertedPartyDocumentQuery create(CustomerIndividuals customerIndividuals);
+    AlertedPartyDocumentQuery create(CustomerIndividual customerIndividual);
   }
 }

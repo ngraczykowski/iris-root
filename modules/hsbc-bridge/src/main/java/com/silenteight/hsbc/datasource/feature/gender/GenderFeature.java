@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.datasource.feature.gender;
 
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
-import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
+import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto.GenderFeatureInputDtoBuilder;
 import com.silenteight.hsbc.datasource.feature.Feature;
@@ -23,25 +23,23 @@ import static java.util.stream.Collectors.toList;
 public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputDto> {
 
   @Override
-  public GenderFeatureInputDto retrieve(MatchRawData matchRawData) {
+  public GenderFeatureInputDto retrieve(MatchData matchData) {
     GenderFeatureInputDtoBuilder genderFeatureInputDtoBuilder = GenderFeatureInputDto.builder()
         .feature(getFeatureName())
         .alertedPartyGenders(emptyList())
         .watchlistGenders(emptyList());
 
-    if (matchRawData.isIndividual()) {
-      var individualComposite = matchRawData.getIndividualComposite();
-
+    if (matchData.isIndividual()) {
       var worldCheckIndividualsGenders =
-          getWorldCheckIndividualsGenders(individualComposite.getWorldCheckIndividuals());
+          getWorldCheckIndividualsGenders(matchData.getWorldCheckIndividuals());
       var privateListIndividualsGenders =
-          getPrivateListIndividualsGenders(individualComposite.getPrivateListIndividuals());
+          getPrivateListIndividualsGenders(matchData.getPrivateListIndividuals());
 
       var wlGenders = mergeLists(
           worldCheckIndividualsGenders,
           privateListIndividualsGenders);
 
-      var apGender = getCustomerIndividualsGender(individualComposite);
+      var apGender = getCustomerIndividualsGender(matchData);
 
       genderFeatureInputDtoBuilder
           .alertedPartyGenders(createValidGenderAlertPartyListForAgents(apGender))
@@ -57,7 +55,7 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
   }
 
   private Optional<String> getCustomerIndividualsGender(IndividualComposite individualComposite) {
-    return ofNullable(individualComposite.getCustomerIndividuals().getGender());
+    return ofNullable(individualComposite.getCustomerIndividual().getGender());
   }
 
   private List<String> mergeLists(
@@ -68,16 +66,16 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
   }
 
   private Stream<String> getPrivateListIndividualsGenders(
-      List<PrivateListIndividuals> privateListIndividuals) {
+      List<PrivateListIndividual> privateListIndividuals) {
     return privateListIndividuals.stream()
-        .map(PrivateListIndividuals::getGender)
+        .map(PrivateListIndividual::getGender)
         .filter(StringUtils::isNotEmpty);
   }
 
   private Stream<String> getWorldCheckIndividualsGenders(
-      List<WorldCheckIndividuals> worldCheckIndividuals) {
+      List<WorldCheckIndividual> worldCheckIndividuals) {
     return worldCheckIndividuals.stream()
-        .map(WorldCheckIndividuals::getGender)
+        .map(WorldCheckIndividual::getGender)
         .filter(StringUtils::isNotEmpty);
   }
 

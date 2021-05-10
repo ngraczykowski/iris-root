@@ -3,6 +3,8 @@ package com.silenteight.hsbc.datasource.category;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 class CategoryModelHolder {
 
   private static final List<CategoryModel> CATEGORIES = createCategories();
@@ -15,9 +17,9 @@ class CategoryModelHolder {
         .type(CategoryType.ANY_STRING)
         .multiValue(false)
         .allowedValues(List.of())
-        .valueRetriever(matchRawData -> {
-          var alertWithCaseUrl = matchRawData.getCaseWithAlertURL();
-          return List.of(alertWithCaseUrl.getSourceName());
+        .valueRetriever(matchData -> {
+          var caseInformation = matchData.getCaseInformation();
+          return List.of(ofNullable(caseInformation.getSourceName()).orElse(""));
         })
         .build();
 
@@ -27,7 +29,7 @@ class CategoryModelHolder {
         .type(CategoryType.ANY_STRING)
         .multiValue(true)
         .allowedValues(List.of())
-        .valueRetriever(matchRawData -> List.of("GB"))
+        .valueRetriever(matchData -> List.of("GB"))
         .build();
 
     var customerType = CategoryModel.builder()
@@ -36,7 +38,7 @@ class CategoryModelHolder {
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
         .allowedValues(List.of("I", "C"))
-        .valueRetriever(matchRawData -> List.of(matchRawData.isIndividual() ? "I" : "C"))
+        .valueRetriever(matchData -> List.of(matchData.isIndividual() ? "I" : "C"))
         .build();
 
     var hitType = CategoryModel.builder()
@@ -45,9 +47,9 @@ class CategoryModelHolder {
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
         .allowedValues(List.of("SAN", "PEP", "AM"))
-        .valueRetriever(matchRawData -> {
-          var alertWithCaseUrl = matchRawData.getCaseWithAlertURL();
-          return List.of(alertWithCaseUrl.getExtendedAttribute3());
+        .valueRetriever(matchData -> {
+          var caseInformation = matchData.getCaseInformation();
+          return List.of(ofNullable(caseInformation.getExtendedAttribute3()).orElse(""));
         })
         .build();
 

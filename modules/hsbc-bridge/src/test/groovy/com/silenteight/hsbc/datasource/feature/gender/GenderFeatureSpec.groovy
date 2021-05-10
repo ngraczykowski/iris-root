@@ -1,7 +1,6 @@
 package com.silenteight.hsbc.datasource.feature.gender
 
-import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
-import com.silenteight.hsbc.bridge.match.MatchRawData
+
 import com.silenteight.hsbc.datasource.feature.Feature
 import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
@@ -24,14 +23,8 @@ class GenderFeatureSpec extends Specification implements FullMatch {
   }
 
   def 'should retrieve empty gender feature values'() {
-    given:
-    def matchRawData = new MatchRawData(
-        caseId: 1,
-        caseWithAlertURL: new CasesWithAlertURL(id: 1)
-    )
-
     when:
-    def result = underTest.retrieve(matchRawData)
+    def result = underTest.retrieve(FULL_MATCH_2)
 
     then:
     with(result) {

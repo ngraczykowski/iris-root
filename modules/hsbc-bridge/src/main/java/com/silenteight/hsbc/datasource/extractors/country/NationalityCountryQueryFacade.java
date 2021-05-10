@@ -2,7 +2,7 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 import com.silenteight.hsbc.datasource.extractors.document.DocumentExtractor;
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryQuery;
 
@@ -15,7 +15,7 @@ class NationalityCountryQueryFacade implements NationalityCountryQuery {
 
   @Override
   public Stream<String> apLine4DocumentCountry() {
-    var documentFieldWithPossibleCountry = individualComposite.getCustomerIndividuals()
+    var documentFieldWithPossibleCountry = individualComposite.getCustomerIndividual()
         .getIdentificationDocument4();
 
     return new IdentificationDocumentLine4CountryExtractor(documentFieldWithPossibleCountry)
@@ -25,7 +25,7 @@ class NationalityCountryQueryFacade implements NationalityCountryQuery {
 
   @Override
   public Stream<String> apFieldsIndividualCountries() {
-    return new CustomerIndividualCountriesExtractor(individualComposite.getCustomerIndividuals())
+    return new CustomerIndividualCountriesExtractor(individualComposite.getCustomerIndividual())
         .extract();
   }
 

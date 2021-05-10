@@ -23,8 +23,6 @@ class MatchEntity extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private byte[] payload;
-
   private String externalId;
 
   private long alertId;
@@ -32,9 +30,13 @@ class MatchEntity extends BaseEntity {
   @Setter
   private String name;
 
-  MatchEntity(String externalId, long alertId, byte[] payload) {
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "match_payload_id")
+  private MatchPayloadEntity payload;
+
+  MatchEntity(String externalId, long alertId) {
     this.externalId = externalId;
     this.alertId = alertId;
-    this.payload = payload;
   }
 }

@@ -2,9 +2,9 @@ package com.silenteight.hsbc.datasource.feature.incorporationcountry;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.CustomerEntities;
-import com.silenteight.hsbc.bridge.domain.WorldCheckEntities;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.datamodel.CustomerEntity;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
@@ -17,11 +17,11 @@ import java.util.stream.Stream;
 public class IncorporationCountryFeature implements FeatureValuesRetriever<CountryFeatureInputDto> {
 
   @Override
-  public CountryFeatureInputDto retrieve(MatchRawData matchRawData) {
+  public CountryFeatureInputDto retrieve(MatchData matchData) {
     var apIncorporationCountries = customerEntitiesIncorporationCountries(
-        matchRawData.getEntityComposite().getCustomerEntities());
+        matchData.getCustomerEntity());
     var mpIncorporationCountries = worldCheckEntitiesIncorporationCountries(
-        matchRawData.getEntityComposite().getWorldCheckEntities());
+        matchData.getWorldCheckEntities());
 
     return CountryFeatureInputDto.builder()
         .feature(getFeatureName())
@@ -31,7 +31,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
   }
 
   private static Stream<String> worldCheckEntitiesIncorporationCountries(
-      List<WorldCheckEntities> worldCheckEntities) {
+      List<WorldCheckEntity> worldCheckEntities) {
     return worldCheckEntities.stream()
         .flatMap(wce -> Stream.of(
             wce.getCountryCodesAll(),
@@ -40,11 +40,11 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
   }
 
   private static Stream<String> customerEntitiesIncorporationCountries(
-      CustomerEntities customerEntities) {
+      CustomerEntity customerEntity) {
     return Stream.of(
-        customerEntities.getCountriesOfIncorporation(),
-        customerEntities.getEdqIncorporationCountries(),
-        customerEntities.getEdqIncorporationCountriesCodes()
+        customerEntity.getCountriesOfIncorporation(),
+        customerEntity.getEdqIncorporationCountries(),
+        customerEntity.getEdqIncorporationCountriesCodes()
     );
   }
 

@@ -46,6 +46,28 @@ databaseChangeLog:
                   type: timestamp
 
         - createTable:
+            tableName: hsbc_bridge_bulk_payload
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: payload
+                  type: bytea
+
+        - createTable:
             tableName: hsbc_bridge_bulk
             columns:
               - column:
@@ -78,42 +100,14 @@ databaseChangeLog:
               - column:
                   name: error_timestamp
                   type: timestamp
-        - createTable:
-            tableName: hsbc_bridge_bulk_item
-            columns:
               - column:
-                  name: id
+                  name: bulk_payload_id
                   type: bigint
-                  autoIncrement: true
                   constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: bulk_id
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_bulk_id
-                    references: hsbc_bridge_bulk(id)
-              - column:
-                  name: alert_external_id
-                  type: varchar(60)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: payload
-                  type: bytea
-              - column:
-                  name: created_at
-                  type: timestamp
-                  constraints:
-                    nullable: false
-              - column:
-                  name: updated_at
-                  type: timestamp
-              - column:
-                  name: status
-                  type: varchar(30)
+                    nullable: true
+                    foreignKeyName: fk_bulk_payload_id
+                    references: hsbc_bridge_bulk_payload(id)
+
   - changeSet:
       id: 1.0.0-2
       author: bmartofel
@@ -134,15 +128,18 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: bulk_item_id
-                  type: bigint
+                  name: bulk_id
+                  type: varchar(50)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_bulk_item_id
-                    references: hsbc_bridge_bulk_item(id)
+                    foreignKeyName: fk_alert_bulk_id
+                    references: hsbc_bridge_bulk(id)
               - column:
                   name: name
                   type: varchar(256)
+              - column:
+                  name: status
+                  type: varchar(30)
               - column:
                   name: created_at
                   type: timestamp
@@ -154,6 +151,30 @@ databaseChangeLog:
               - column:
                   name: payload
                   type: bytea
+
+        - createTable:
+            tableName: hsbc_bridge_match_payload
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: payload
+                  type: bytea
+
+
         - createTable:
             tableName: hsbc_bridge_match
             columns:
@@ -173,9 +194,6 @@ databaseChangeLog:
                   name: name
                   type: varchar(256)
               - column:
-                  name: payload
-                  type: bytea
-              - column:
                   name: created_at
                   type: timestamp
                   constraints:
@@ -190,6 +208,13 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_alert_id
                     references: hsbc_bridge_alert(id)
+              - column:
+                  name: match_payload_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_match_payload_id
+                    references: hsbc_bridge_match_payload(id)
 
   - changeSet:
       id: 1.0.0-3

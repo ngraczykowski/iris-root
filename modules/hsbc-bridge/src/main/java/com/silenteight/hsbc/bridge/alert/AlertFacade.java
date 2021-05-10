@@ -1,59 +1,50 @@
 package com.silenteight.hsbc.bridge.alert;
 
 import lombok.Builder;
+import lombok.NonNull;
 
-import java.util.Collection;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
-import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
 @Builder
 public class AlertFacade {
 
-  private final AlertRawMapper alertRawMapper;
-  private final AlertRepository alertRepository;
+  private final AlertPayloadConverter alertPayloadConverter;
+  private final AlertRepository repository;
+  private final RelationshipProcessor relationshipProcessor;
+
+  //TODO - verify if we really need to store the whole payload.
+  // We need either to limit the max number of alert or use direct streaming
 
   @Transactional
-  public AlertComposite prepareAndSaveAlert(long bulkItemId, byte[] payload) {
-    var alertRawData = alertRawMapper.mapBulkPayload(payload);
-    var alertEntity = prepareAlertEntity(bulkItemId, alertRawData);
+  public List<AlertComposite> createAndSaveAlerts(@NonNull String bulkId, byte[] bulkPayload) {
+    var alertsData = alertPayloadConverter.convert(bulkPayload);
+    var processedAlerts = relationshipProcessor.process(alertsData);
 
-    alertRepository.save(alertEntity);
-
-    return AlertComposite.builder()
-        .id(alertEntity.getId())
-        .alertRawData(alertRawData)
-        .build();
-  }
-
-  public List<AlertInfo> getAlertsByIds(Collection<Long> alertIds) {
-    return mapToAlertInfo(alertRepository.findByIdIn(alertIds));
+    return processedAlerts.stream().map(p -> {
+      var externalId = p.getExternalId();
+      var id = saveAlert(bulkId, externalId);
+      return new AlertComposite(id, externalId, p.getMatches());
+    }).collect(Collectors.toList());
   }
 
   public List<AlertInfo> getAlertByName(String name) {
-    return mapToAlertInfo(alertRepository.findByName(name).stream().collect(toList()));
+    return mapToAlertInfo(repository.findByName(name).stream().collect(toList()));
   }
 
   private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
-    return alertEntities.stream().map(a -> {
-      var alertRawData = alertRawMapper.mapAlertPayload(a.getPayload());
-      var caseWithAlertUrl = alertRawData.getFirstCaseWithAlertURL();
-
-      return new AlertInfo(a.getId(), caseWithAlertUrl);
-    }).collect(toList());
+    return alertEntities.stream().map(a -> new AlertInfo(a.getId())).collect(toList());
   }
 
-  public String getAlertNameByBulkId(long bulkItemId) {
-    return alertRepository.findByBulkItemId(bulkItemId)
-        .orElseThrow(() -> new AlertNotFoundException(bulkItemId))
-        .getName();
-  }
+  private long saveAlert(String bulkId, String externalId) {
+    var alertEntity = new AlertEntity(externalId, bulkId);
 
-  private AlertEntity prepareAlertEntity(long bulkItemId, AlertRawData alertRawData) {
-    var externalId = alertRawData.getAlertExternalId();
+    repository.save(alertEntity);
 
-    var payload = alertRawMapper.map(alertRawData);
-    return new AlertEntity(externalId, bulkItemId, payload);
+    return alertEntity.getId();
   }
 }

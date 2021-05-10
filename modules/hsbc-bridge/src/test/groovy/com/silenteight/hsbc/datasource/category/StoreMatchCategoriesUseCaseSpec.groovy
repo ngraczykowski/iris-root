@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.datasource.category
 
-import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
 import com.silenteight.hsbc.bridge.match.MatchComposite
-import com.silenteight.hsbc.bridge.match.MatchRawData
 import com.silenteight.hsbc.datasource.category.command.StoreMatchCategoriesCommand
+import com.silenteight.hsbc.datasource.datamodel.CaseInformation
+import com.silenteight.hsbc.datasource.datamodel.MatchData
 
 import spock.lang.Specification
 
@@ -17,16 +17,19 @@ class StoreMatchCategoriesUseCaseSpec extends Specification {
 
   def 'should store match categories'() {
     given:
-    def matchRawData = new MatchRawData(
-        caseWithAlertURL: new CasesWithAlertURL(
-            extendedAttribute3: 'AM',
-            sourceName: 'sourceName'
-        )
-    )
+    def matchData = [
+        getCaseInformation: {
+          [
+              getExtendedAttribute3: {'AM'},
+              getSourceName        : {'sourceName'}
+          ] as CaseInformation
+        },
+        isIndividual      : {true}
+    ] as MatchData
     def matchComposite = MatchComposite.builder()
         .id(1L)
         .name('matchName')
-        .rawData(matchRawData)
+        .matchData(matchData)
         .build()
     def command = new StoreMatchCategoriesCommand([matchComposite])
 

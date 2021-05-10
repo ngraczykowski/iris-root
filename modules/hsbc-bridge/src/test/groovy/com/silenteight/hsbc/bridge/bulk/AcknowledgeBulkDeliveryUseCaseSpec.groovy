@@ -13,13 +13,10 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
 
   def 'should update bulk status to DELIVERY'() {
     given:
-    def bulkItem = new BulkItem('100', "".getBytes())
     def bulk = new Bulk('20210101-1111')
     bulk.setStatus(COMPLETED)
-    bulk.addItem(bulkItem)
     def updatedBulk = new Bulk('20210101-1111')
     updatedBulk.setStatus(DELIVERED)
-    updatedBulk.addItem(bulkItem)
 
     when:
     def result = underTest.apply(bulk.id)
@@ -31,19 +28,15 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
       bulkId == bulk.id
       bulkStatus.name() == updatedBulk.getStatus().name()
       with(requestedAlerts) {
-        size() == bulk.items.size()
-        first().id == bulk.items[0].alertExternalId
-        first().status.name() == bulk.items[0].status.name()
+
       }
     }
   }
 
   def 'should not update bulk status to DELIVERY and throw BulkProcessingNotCompletedException'() {
     given:
-    def bulkItem = new BulkItem('100', "".getBytes())
     def bulk = new Bulk('20210101-1111')
     bulk.setStatus(PROCESSING)
-    bulk.addItem(bulkItem)
 
     when:
     def result = underTest.apply(bulk.id)

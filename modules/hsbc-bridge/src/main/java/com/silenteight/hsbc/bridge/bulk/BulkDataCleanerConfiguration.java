@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class BulkDataCleanerConfiguration {
 
-  private final BulkItemRepository bulkItemRepository;
+  private final BulkPayloadRepository bulkPayloadRepository;
 
   @Bean
   DataCleaner bulkDataCleaner() {
-    return new BulkDataCleaner(bulkItemRepository);
+    return new BulkDataCleaner(bulkPayloadRepository);
   }
 }

@@ -2,8 +2,7 @@ package com.silenteight.hsbc.datasource.feature.nationalityid;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
@@ -15,7 +14,7 @@ public class NationalityIdFeature implements FeatureValuesRetriever<NationalIdFe
   private final MatchedPartyDocumentQuery.Factory matchedPartyDocumentQueryFactory;
 
   @Override
-  public NationalIdFeatureInputDto retrieve(MatchRawData matchRawData) {
+  public NationalIdFeatureInputDto retrieve(MatchData matchData) {
     var nationalIdFeatureInputDtoBuilder =
         NationalIdFeatureInputDto.builder()
             //FIXME mmrowka which country to choose if there is many IDs?
@@ -23,16 +22,13 @@ public class NationalityIdFeature implements FeatureValuesRetriever<NationalIdFe
             //.watchlistCountry("PL")
             .feature(getFeatureName());
 
-    if (matchRawData.isIndividual()) {
-      IndividualComposite individualComposite = matchRawData.getIndividualComposite();
-
+    if (matchData.isIndividual()) {
       var apDocumentQuery = alertedPartyDocumentQueryFactory.create(
-          individualComposite.getCustomerIndividuals());
+          matchData.getCustomerIndividual());
       nationalIdFeatureInputDtoBuilder.alertedPartyDocumentNumbers(
           apDocumentQuery.allDocumentsNumbers());
 
-      var mpDocumentQuery = matchedPartyDocumentQueryFactory.create(
-          individualComposite);
+      var mpDocumentQuery = matchedPartyDocumentQueryFactory.create(matchData);
       nationalIdFeatureInputDtoBuilder.watchlistDocumentNumbers(
           mpDocumentQuery.allDocumentsNumbers());
     }

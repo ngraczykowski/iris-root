@@ -11,11 +11,11 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 class MatchDataCleaner implements DataCleaner {
 
-  private final MatchRepository matchRepository;
+  private final MatchPayloadRepository payloadRepository;
 
   @Override
   @Transactional
   public void clean(OffsetDateTime expireDate) {
-    matchRepository.deletePayloadByCreatedAtBefore(expireDate);
+    payloadRepository.deletePayloadByCreatedAtBefore(expireDate);
   }
 }

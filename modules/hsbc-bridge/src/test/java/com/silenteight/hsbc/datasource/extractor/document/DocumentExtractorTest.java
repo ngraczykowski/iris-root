@@ -1,30 +1,37 @@
 package com.silenteight.hsbc.datasource.extractor.document;
 
-import com.silenteight.hsbc.bridge.domain.CustomerIndividuals;
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
-import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals;
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.bridge.json.internal.model.CustomerIndividual;
+import com.silenteight.hsbc.bridge.json.internal.model.PrivateListIndividual;
+import com.silenteight.hsbc.bridge.json.internal.model.WorldCheckIndividual;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.extractors.document.DocumentExtractor;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
+@Ignore
+@ExtendWith(MockitoExtension.class)
 class DocumentExtractorTest {
 
-  private MatchRawData matchRawData;
+  @Mock
+  private MatchData matchData;
+
+  private CustomerIndividual customerIndividuals;
+  private WorldCheckIndividual worldCheckIndividuals;
+  private PrivateListIndividual privateListIndividuals;
 
   @BeforeEach
   void setUp() {
-    matchRawData = new MatchRawData();
-
-    var customerIndividuals = new CustomerIndividuals();
-
+    customerIndividuals = new CustomerIndividual();
     customerIndividuals.setIdentificationDocument1("\"P\",\"ZS12398745\",\"\",\"\",\"PASSPORT\"");
     customerIndividuals.setIdentificationDocument2("###### THE PASSPORT POLICE OF IRAN");
     customerIndividuals.setIdentificationDocument3("Iran, Islamic Republic Of");
@@ -36,24 +43,18 @@ class DocumentExtractorTest {
     customerIndividuals.setIdentificationDocument8("");
     customerIndividuals.setIdentificationDocument9(null);
 
-    var worldCheckIndividuals = new WorldCheckIndividuals();
+    worldCheckIndividuals = new WorldCheckIndividual();
+    var worldCheckIndividuals = this.worldCheckIndividuals;
     worldCheckIndividuals.setPassportNumber("KJ0114578 (VIET NAM);KJ4514578 (IRAN);A501245");
     worldCheckIndividuals.setIdNumbers("BC 78845 (UNK-UNKW)|ID78845 (UNK-UNKW)|78845ID (UNK-UNKW)");
 
-    var privateListIndividuals = new PrivateListIndividuals();
+    privateListIndividuals = new PrivateListIndividual();
+    var privateListIndividuals = this.privateListIndividuals;
     privateListIndividuals.setEdqTaxNumber("GOHA784512R12");
     privateListIndividuals.setPassportNumber("K45R78986,T3GD45689");
     privateListIndividuals.setNationalId("4568795132,5465498756");
     privateListIndividuals.setEdqDrivingLicence("sadasdas76@hotmail.com");
     privateListIndividuals.setEdqSuffix("ID42342");
-
-    var individualComposite = new IndividualComposite(
-        customerIndividuals,
-        List.of(worldCheckIndividuals),
-        List.of(privateListIndividuals),
-        Collections.emptyList());
-
-    matchRawData.setIndividualComposite(individualComposite);
   }
 
   @Test
@@ -63,8 +64,7 @@ class DocumentExtractorTest {
 
     //when
     var document =
-        nationalIdFeatureConverter.convertAlertedPartyDocumentNumbers(
-            matchRawData.getIndividualComposite().getCustomerIndividuals());
+        nationalIdFeatureConverter.convertAlertedPartyDocumentNumbers(customerIndividuals);
 
     //then
     assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(
@@ -79,11 +79,12 @@ class DocumentExtractorTest {
   void shouldExtractMatchedPartyDocumentNumbers() {
     //given
     var nationalIdFeatureConverter = new DocumentExtractor();
+    given(matchData.getWorldCheckIndividuals()).willReturn(List.of(worldCheckIndividuals));
+    given(matchData.getPrivateListIndividuals()).willReturn(List.of(privateListIndividuals));
 
     //when
     var document =
-        nationalIdFeatureConverter.convertMatchedPartyDocumentNumbers(
-            matchRawData.getIndividualComposite());
+        nationalIdFeatureConverter.convertMatchedPartyDocumentNumbers(matchData);
 
     System.out.println(document);
     //then

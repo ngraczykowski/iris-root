@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.bridge.match
 
-import com.silenteight.hsbc.bridge.alert.AlertRawData
 import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
 import com.silenteight.hsbc.bridge.domain.CountryCtrpScreening
 import com.silenteight.hsbc.bridge.domain.CustomerEntities
@@ -8,8 +7,8 @@ import com.silenteight.hsbc.bridge.domain.CustomerIndividuals
 import com.silenteight.hsbc.bridge.domain.PrivateListEntities
 import com.silenteight.hsbc.bridge.domain.PrivateListIndividuals
 import com.silenteight.hsbc.bridge.domain.Relationships
-import com.silenteight.hsbc.bridge.domain.WorldCheckEntities
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals
+import com.silenteight.hsbc.bridge.domain.WorldCheckEntitiesOld
+import com.silenteight.hsbc.bridge.domain.WorldCheckIndividualsOld
 
 class Fixtures {
 
@@ -31,7 +30,7 @@ class Fixtures {
       recordId: individualRecordId
   )
 
-  def worldCheckIndividual = new WorldCheckIndividuals(
+  def worldCheckIndividual = new WorldCheckIndividualsOld(
       caseId: individualCaseId,
       recordId: individualRelatedRecordId
   )
@@ -57,7 +56,7 @@ class Fixtures {
       recordId: entitiesRecordId
   )
 
-  def worldCheckEntities = new WorldCheckEntities(
+  def worldCheckEntities = new WorldCheckEntitiesOld(
       caseId: entitiesCaseId,
       recordId: entitiesRelatedRecordId
   )
@@ -78,31 +77,5 @@ class Fixtures {
 
   def caseWithAlertUrlIndividual = new CasesWithAlertURL(
       id: individualCaseId
-  )
-
-  def alertRawData = new AlertRawData(
-      relationships: [individualRelationship, entitiesRelationship],
-      customerEntities: [customerEntities],
-      worldCheckEntities: [worldCheckEntities],
-      privateListEntities: [privateListEntities],
-      countryCtrpScreeningEntities: [countryCtrpScreeningEntities],
-      customerIndividuals: [customerIndividuals],
-      worldCheckIndividuals: [worldCheckIndividual],
-      privateListIndividuals: [privateListIndividuals],
-      countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
-      casesWithAlertURL: [caseWithAlertUrlEntity, caseWithAlertUrlIndividual]
-  )
-
-  def alertRawDataWithoutCustomer = new AlertRawData(
-      relationships: [individualRelationship, entitiesRelationship],
-      customerEntities: [],
-      worldCheckEntities: [worldCheckEntities],
-      privateListEntities: [privateListEntities],
-      countryCtrpScreeningEntities: [countryCtrpScreeningEntities],
-      customerIndividuals: [],
-      worldCheckIndividuals: [worldCheckIndividual],
-      privateListIndividuals: [privateListIndividuals],
-      countryCtrpScreeningIndividuals: [countryCtrpScreeningIndividuals],
-      casesWithAlertURL: [caseWithAlertUrlEntity, caseWithAlertUrlIndividual]
   )
 }

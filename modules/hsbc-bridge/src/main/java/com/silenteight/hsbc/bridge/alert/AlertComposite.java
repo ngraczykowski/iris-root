@@ -1,16 +1,15 @@
 package com.silenteight.hsbc.bridge.alert;
 
-import lombok.Builder;
 import lombok.Value;
 
-@Builder
+import com.silenteight.hsbc.bridge.match.Match;
+
+import java.util.List;
+
 @Value
 public class AlertComposite {
 
   long id;
-  AlertRawData alertRawData;
-
-  public String getAlertExternalId() {
-    return alertRawData.getAlertExternalId();
-  }
+  String externalId;
+  List<Match> matches;
 }

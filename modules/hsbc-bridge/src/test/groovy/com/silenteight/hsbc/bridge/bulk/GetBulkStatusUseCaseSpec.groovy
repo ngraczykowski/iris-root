@@ -12,9 +12,7 @@ class GetBulkStatusUseCaseSpec extends Specification {
 
   def 'should get bulk status'() {
     given:
-    def bulkItem = new BulkItem('100', "".getBytes())
     def bulk = new Bulk('20210101-1111')
-    bulk.addItem(bulkItem)
 
     when:
     def result = underTest.getStatus(bulk.id)
@@ -27,9 +25,6 @@ class GetBulkStatusUseCaseSpec extends Specification {
       bulkId == bulk.id
       bulkStatus.name() == bulk.status.name()
       with(requestedAlerts) {
-        size() == bulk.items.size()
-        first().id == bulk.items[0].alertExternalId
-        first().status.name() == bulk.items[0].status.name()
       }
     }
   }

@@ -13,7 +13,7 @@ class BulkUpdater {
   @Transactional
   public void updateWithError(@NonNull String id, String errorMessage) {
     var bulk = bulkRepository.findById(id);
-    bulk.markError(errorMessage);
+    bulk.error(errorMessage);
     bulkRepository.save(bulk);
   }
 
@@ -27,6 +27,6 @@ class BulkUpdater {
   @Transactional
   public void updateWithAnalysisTimeout(long analysisId) {
     bulkRepository.findByAnalysisId(analysisId)
-        .ifPresent(bulk -> bulk.markError("Analysis timeout exception"));
+        .ifPresent(bulk -> bulk.error("Analysis timeout exception"));
   }
 }

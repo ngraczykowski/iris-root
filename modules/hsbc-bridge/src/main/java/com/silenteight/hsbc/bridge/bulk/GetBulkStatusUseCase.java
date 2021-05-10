@@ -3,10 +3,10 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkProcessingStatusResponse;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatusResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkAlertItem;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkProcessingStatusResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkStatusResponse;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +27,7 @@ public class GetBulkStatusUseCase {
     var response = new BulkStatusResponse();
     response.setBulkId(id);
     response.setBulkStatus(BulkStatus.fromValue(bulk.getStatus().name()));
-    response.setRequestedAlerts(getRequestedAlerts(bulk.getItems()));
+    response.setRequestedAlerts(getRequestedAlerts(bulk.getAlerts()));
 
     if (bulk.hasAnalysisId()) {
       var analysis = analysisFacade.getById(bulk.getAnalysisId());
@@ -46,10 +46,11 @@ public class GetBulkStatusUseCase {
     return response;
   }
 
-  private List<BulkAlertItem> getRequestedAlerts(Collection<BulkItem> bulkItems) {
-    return bulkItems.stream().map(r -> {
+  //FIXME do not use entity
+  private List<BulkAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
+    return alerts.stream().map(r -> {
       var bulkItem = new BulkAlertItem();
-      bulkItem.setId(r.getAlertExternalId());
+      bulkItem.setId(r.getExternalId());
       bulkItem.setStatus(BulkStatus.fromValue(r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());

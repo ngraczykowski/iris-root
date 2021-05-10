@@ -5,15 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlert;
-import com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlertStatus;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkSolvedAlertsResponse;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
+import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlertStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkSolvedAlertsResponse;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 
@@ -34,9 +28,9 @@ public class GetBulkResultsUseCase {
 
     var response = new BulkSolvedAlertsResponse();
     response.setBulkId(bulk.getId());
-    response.setBulkStatus(com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus.valueOf(
+    response.setBulkStatus(com.silenteight.hsbc.bridge.bulk.rest.BulkStatus.valueOf(
         bulk.getStatus().name()));
-    response.setAlerts(getSolvedAlerts(bulk.getItems()));
+    //response.setAlerts(getSolvedAlerts(bulk.getItems()));
     return response;
   }
 
@@ -50,7 +44,7 @@ public class GetBulkResultsUseCase {
         return SolvedAlertStatus.MANUAL_INVESTIGATION;
     }
   }
-
+/*
   private List<SolvedAlert> getSolvedAlerts(Collection<BulkItem> items) {
     return items.stream().map(bulkItem -> {
       var recommendation = getRecommendation(bulkItem.getId());
@@ -66,5 +60,5 @@ public class GetBulkResultsUseCase {
   private RecommendationDto getRecommendation(long bulkItemId) {
     var alert = alertFacade.getAlertNameByBulkId(bulkItemId);
     return recommendationFacade.getRecommendation(alert);
-  }
+  }*/
 }

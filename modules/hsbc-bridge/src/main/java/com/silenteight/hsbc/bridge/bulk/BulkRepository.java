@@ -24,4 +24,6 @@ interface BulkRepository extends Repository<Bulk, UUID> {
   void updateStatusById(@Param("id") String id, @Param("status") BulkStatus status);
 
   boolean existsById(String id);
+
+  Collection<Bulk> findByStatus(BulkStatus status);
 }

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.*;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.*;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.DELIVERED;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.ERROR;
 import static java.util.Objects.nonNull;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
@@ -28,24 +29,21 @@ public class Bulk extends BaseEntity {
 
   @Enumerated(value = EnumType.STRING)
   private BulkStatus status = BulkStatus.STORED;
-
-  @Setter(NONE)
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-  @JoinColumn(name = "bulk_id")
-  private Collection<BulkItem> items = new ArrayList<>();
-
   private Long analysisId;
-
   private String errorMessage;
   private OffsetDateTime errorTimestamp;
 
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "bulk_payload_id")
+  private BulkPayloadEntity payload;
+
+  @Setter(NONE)
+  @OneToMany
+  @JoinColumn(name = "bulk_id")
+  private Collection<BulkAlertEntity> alerts = new ArrayList<>();
+
   Bulk(String id) {
     this.id = id;
-  }
-
-  public void addItem(BulkItem bulkItem) {
-    bulkItem.setBulkId(this.getId());
-    items.add(bulkItem);
   }
 
   @Transient
@@ -54,12 +52,12 @@ public class Bulk extends BaseEntity {
   }
 
   @Transient
-  boolean hasNonFinalStatus() {
-    return status == STORED || status == PROCESSING;
+  void delivered() {
+    this.status = DELIVERED;
   }
 
   @Transient
-  void markError(String errorMessage) {
+  void error(String errorMessage) {
     this.status = ERROR;
     this.errorMessage = errorMessage;
     this.errorTimestamp = OffsetDateTime.now();

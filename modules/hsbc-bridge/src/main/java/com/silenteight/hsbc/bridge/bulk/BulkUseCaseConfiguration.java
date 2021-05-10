@@ -23,8 +23,8 @@ class BulkUseCaseConfiguration {
   private final ApplicationEventPublisher eventPublisher;
 
   @Bean
-  CreateBulkUseCase createBulkUseCase(BulkProvider bulkProvider) {
-    return new CreateBulkUseCase(bulkProvider, eventPublisher);
+  StoreBulkUseCase storeBulkUseCase() {
+    return new StoreBulkUseCase(bulkIdRetriever(), bulkRepository);
   }
 
   @Bean
@@ -52,8 +52,7 @@ class BulkUseCaseConfiguration {
     return new BulkProcessor(alertFacade, bulkRepository, eventPublisher, matchFacade);
   }
 
-  @Bean
-  BulkProvider bulkProvider() {
-    return new BulkProvider(new BulkItemPayloadConverter(), bulkRepository);
+  private BulkIdRetriever bulkIdRetriever() {
+    return new BulkIdRetriever();
   }
 }

@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.grpc.GrpcModule;
 import com.silenteight.hsbc.bridge.http.security.SecurityModule;
 import com.silenteight.hsbc.bridge.jenkins.JenkinsModule;
+import com.silenteight.hsbc.bridge.json.JsonModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.model.Model;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
@@ -36,6 +37,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     BulkModule.class,
     DataRetentionModule.class,
     JenkinsModule.class,
+    JsonModule.class,
     MatchModule.class,
     Model.class,
     RecommendationModule.class,

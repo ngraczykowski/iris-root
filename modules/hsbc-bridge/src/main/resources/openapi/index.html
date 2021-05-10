@@ -692,81 +692,73 @@
             defs["Alert"] = {
   "type" : "object",
   "properties" : {
-    "systemInformation" : {
-      "$ref" : "#/components/schemas/Alert_systemInformation"
-    }
-  }
-};
-            defs["Alert_systemInformation"] = {
-  "type" : "object",
-  "properties" : {
-    "countryCtrpScreeningIndividuals" : {
+    "CTRPPRHBListIndividuals" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CountryCtrpScreeningIndividuals"
       }
     },
-    "customerEntities" : {
+    "CustomerEntities" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CustomerEntities"
       }
     },
-    "worldCheckEntities" : {
+    "WorldCheckEntities" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/WorldCheckEntities"
       }
     },
-    "customerIndividuals" : {
+    "CustomerIndividuals" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CustomerIndividuals"
       }
     },
-    "worldCheckIndividuals" : {
+    "WorldCheckIndividuals" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/WorldCheckIndividuals"
       }
     },
-    "caseComments" : {
+    "DN_CASECOMMENT" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CaseComments"
       }
     },
-    "relationships" : {
+    "Relationships" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/Relationships"
       }
     },
-    "privateListIndividuals" : {
+    "PrivateListIndividuals" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/PrivateListIndividuals"
       }
     },
-    "privateListEntities" : {
+    "PrivateListEntities" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/PrivateListEntities"
       }
     },
-    "caseHistory" : {
+    "DN_CASEHISTORY" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CaseHistory"
       }
     },
-    "countryCtrpScreeningEntities" : {
+    "CTRPPRHBListEntities" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CountryCtrpScreeningEntities"
       }
     },
-    "casesWithAlertURL" : {
+    "DN_CASE" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/CasesWithAlertURL"
@@ -878,1966 +870,1474 @@
   }
 };
             defs["CaseComments"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
+    "DN_CASECOMMENT.commentId" : {
+      "type" : "string"
     },
-    "commentId" : {
-      "type" : "integer",
-      "description" : "Unique identifier assigned to a comment"
+    "DN_CASECOMMENT.commentedBy" : {
+      "type" : "string"
     },
-    "commentedBy" : {
-      "type" : "integer",
-      "description" : "Which User was the author of the comment"
+    "DN_CASECOMMENT.commentDateTime" : {
+      "type" : "string"
     },
-    "commentDateTime" : {
-      "type" : "string",
-      "description" : "Date and time the comment was made"
+    "DN_CASECOMMENT.caseComment" : {
+      "type" : "string"
     },
-    "caseComment" : {
-      "type" : "string",
-      "description" : "Displays the comment"
+    "DN_CASECOMMENT.deletedFlag" : {
+      "type" : "string"
     },
-    "deletedFlag" : {
-      "type" : "integer",
-      "description" : "Marks if the comment has been deleted from view in Case Management. The comment will not be deleted from the audit trail of the Case or Alert. Capability to delete comments may not be granted to all Users."
-    },
-    "restrictingPermission" : {
-      "type" : "string",
-      "description" : "Will display if access to the comment has been restricted, for example, Level 3 Only. If the comment has not been restricted, this field will be displayed as blank."
+    "DN_CASECOMMENT.restrictingPermission" : {
+      "type" : "string"
     }
   }
 };
             defs["CaseHistory"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
+    "DN_CASEHISTORY.modifiedBy" : {
+      "type" : "string"
     },
-    "modifiedBy" : {
-      "type" : "integer",
-      "description" : "Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or Attachments constitute a modification"
+    "DN_CASEHISTORY.modifiedDateTime" : {
+      "type" : "string"
     },
-    "modifiedDateTime" : {
-      "type" : "string",
-      "description" : "Date and time of the modification"
+    "DN_CASEHISTORY.attribute" : {
+      "type" : "string"
     },
-    "attribute" : {
-      "type" : "string",
-      "description" : "Records what has changed within the Case or Alert"
+    "DN_CASEHISTORY.oldValue" : {
+      "type" : "string"
     },
-    "oldValue" : {
-      "type" : "string",
-      "description" : "Records the previous state of the Case or Alert, for example&#58; Level 1 Review"
+    "DN_CASEHISTORY.newValue" : {
+      "type" : "string"
     },
-    "newValue" : {
-      "type" : "string",
-      "description" : "Records the new state of the Case or Alert, for example&#58; Discount False Positive"
-    },
-    "transition" : {
-      "type" : "string",
-      "description" : "Records the transition used to move the alert through the workflow"
+    "DN_CASEHISTORY.transition" : {
+      "type" : "string"
     }
   }
 };
             defs["CasesWithAlertURL"] = {
-  "required" : [ "id" ],
   "type" : "object",
   "properties" : {
-    "id" : {
-      "type" : "integer",
-      "description" : "Internal unique Identifier assigned to the Case or Alert within Case Management . Used to link to other tables."
+    "DN_CASE.ID" : {
+      "type" : "string"
     },
-    "caseGroup" : {
-      "type" : "string",
-      "description" : "Records an associated group to the Case or Alert, for example&#58; Match"
+    "DN_CASE.caseGroup" : {
+      "type" : "string"
     },
-    "caseType" : {
-      "type" : "string",
-      "description" : "Denotes if this is a Case (\"Case\") or an Alert (\"Issue\")"
+    "DN_CASE.caseType" : {
+      "type" : "string"
     },
-    "externalId" : {
-      "type" : "string",
-      "description" : "A unique ID of the alerts as it appears in Case Management."
+    "DN_CASE.externalId" : {
+      "type" : "string"
     },
-    "externalIdSort" : {
-      "type" : "string",
-      "description" : "A unique ID of the alert that is used in reporting. The value of the code is padded with zeros"
+    "DN_CASE.externalIdSort" : {
+      "type" : "string"
     },
-    "caseKey" : {
-      "type" : "string",
-      "description" : "Unique internal Hash which identifies an alert."
+    "DN_CASE.caseKey" : {
+      "type" : "string"
     },
-    "keyLabel" : {
-      "type" : "string",
-      "description" : "A Unique Identifier for the Case or Alert, composed of \"Customer ID&#58; Watchlist Alert Generated Against&#58; Watch Person ID\""
+    "DN_CASE.keyLabel" : {
+      "type" : "string"
     },
-    "parentId" : {
-      "type" : "integer",
-      "description" : "ID number for the parent Case of the Alert. If viewing at Case Level; the field will display \"-1\""
+    "DN_CASE.parentId" : {
+      "type" : "string"
     },
-    "supplementaryKey" : {
-      "type" : "string",
-      "description" : "Hash of the supplementary data held against an alert, used by the system to identify if any supplementary data has changed."
+    "DN_CASE.supplementaryKey" : {
+      "type" : "string"
     },
-    "supplementaryType" : {
-      "type" : "string",
-      "description" : "Identifies and provides grouping by type of supplementary data"
+    "DN_CASE.supplementaryType" : {
+      "type" : "string"
     },
-    "flagKey" : {
-      "type" : "string",
-      "description" : "Hash of the flag key data held against an alert, used by the system to identify if any flag key data has changed. If a change is identified the caseMaker is updated."
+    "DN_CASE.flagKey" : {
+      "type" : "string"
     },
-    "description" : {
-      "type" : "string",
-      "description" : "Name of the Customer when initially provided or if updated by a user."
+    "DN_CASE.description" : {
+      "type" : "string"
     },
-    "createdBy" : {
-      "type" : "integer",
-      "description" : "Records how the Case was created, for example&#58; Batch, Manual or Real-Time Screening"
+    "DN_CASE.createdBy" : {
+      "type" : "string"
     },
-    "createdDateTime" : {
-      "type" : "string",
-      "description" : "Date the Case or Alert was created"
+    "DN_CASE.createdDateTime" : {
+      "type" : "string"
     },
-    "modifiedBy" : {
-      "type" : "integer",
-      "description" : "Last User to modify the Case or Alert. Changes to the Case or Alert State, Comments or Attachments constitute a modification"
+    "DN_CASE.modifiedBy" : {
+      "type" : "string"
     },
-    "modifiedDateTime" : {
-      "type" : "string",
-      "description" : "Date and time of the modification"
+    "DN_CASE.modifiedDateTime" : {
+      "type" : "string"
     },
-    "assignedUser" : {
-      "type" : "integer",
-      "description" : "ID of the user to whom the Case or Alert is assigned"
+    "DN_CASE.assignedUser" : {
+      "type" : "string"
     },
-    "assignedBy" : {
-      "type" : "integer",
-      "description" : "ID of the user who assigned the Case or Alert to the User"
+    "DN_CASE.assignedBy" : {
+      "type" : "string"
     },
-    "assignedDateTime" : {
-      "type" : "string",
-      "description" : "Date and time the Case or Alert was assigned"
+    "DN_CASE.assignedDateTime" : {
+      "type" : "string"
     },
-    "priority" : {
-      "type" : "integer",
-      "description" : "Records the alert priority level (250=Low, 500=Medium, 750=High)"
+    "DN_CASE.priority" : {
+      "type" : "string"
     },
-    "permission" : {
-      "type" : "string",
-      "description" : "Permission assigned to the Case or Alert"
+    "DN_CASE.permission" : {
+      "type" : "string"
     },
-    "currentState" : {
-      "type" : "string",
-      "description" : "Workflow state in which the Alert currently resides, for example&#58; Level 1 Review"
+    "DN_CASE.currentState" : {
+      "type" : "string"
     },
-    "derivedState" : {
-      "type" : "string",
-      "description" : "Workflow state in which the Case currently resides. Case state is controlled by the system and is derived from the activity associated with the Alerts within the Case. A Case cannot be closed until all of the Alerts within it have been closed."
+    "DN_CASE.derivedState" : {
+      "type" : "string"
     },
-    "stateExpiry" : {
-      "type" : "string",
-      "description" : "Date when the current state of the Alert will expire"
+    "DN_CASE.stateExpiry" : {
+      "type" : "string"
     },
-    "stateChangeBy" : {
-      "type" : "integer",
-      "description" : "Which User undertook the last transition of the Alert through the Workflow"
+    "DN_CASE.stateChangeBy" : {
+      "type" : "string"
     },
-    "stateChangeDateTime" : {
-      "type" : "string",
-      "description" : "Date and time the state of the Case or Alert was changed"
+    "DN_CASE.stateChangeDateTime" : {
+      "type" : "string"
     },
-    "sourceId" : {
-      "type" : "integer",
-      "description" : "Case Source System ID"
+    "DN_CASE.sourceId" : {
+      "type" : "string"
     },
-    "sourceName" : {
-      "type" : "string",
-      "description" : "Case Source System Name"
+    "DN_CASE.sourceName" : {
+      "type" : "string"
     },
-    "caseMarker" : {
-      "type" : "integer",
-      "description" : "this is the review flag which if  indicates if customer data in any of the review flag fields has been updated. This is used to signify a change or trigger a realert. 0 indicates no review flag set."
+    "DN_CASE.caseMarker" : {
+      "type" : "string"
     },
-    "updatedBy" : {
-      "type" : "integer",
-      "description" : "User ID of the account that updated the case."
+    "DN_CASE.updatedBy" : {
+      "type" : "string"
     },
-    "updatedDateTime" : {
-      "type" : "string",
-      "description" : "Date and time the alert was updated."
+    "DN_CASE.updatedDateTime" : {
+      "type" : "string"
     },
-    "groupId" : {
-      "type" : "string",
-      "description" : "ID number of the associated permission or grouping to which the Case or Alert belongs, for example&#58; Country or Regional Group."
+    "DN_CASE.groupId" : {
+      "type" : "string"
     },
-    "groupLevel" : {
-      "type" : "integer",
-      "description" : "Where the group sits within the permission or grouping structure"
+    "DN_CASE.groupLevel" : {
+      "type" : "string"
     },
-    "extendedAttribute1" : {
-      "type" : "integer",
-      "description" : "Escalation. Indicates if the alert has been escalated."
+    "DN_CASE.ExtendedAttribute1" : {
+      "type" : "string"
     },
-    "extendedAttribute2" : {
-      "type" : "integer",
-      "description" : "Priority Score. Indicates how accurate the match is between the customer and the list record scored 0 to 100. It is not a percentage."
+    "DN_CASE.ExtendedAttribute2" : {
+      "type" : "string"
     },
-    "extendedAttribute3" : {
-      "type" : "string",
-      "description" : "Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100"
+    "DN_CASE.ExtendedAttribute3" : {
+      "type" : "string"
     },
-    "extendedAttribute4" : {
-      "type" : "string",
-      "description" : "PEP Risk Score. Indicates, if provided with the list data, how much of a risk the individual or entity is. 0 to 100"
+    "DN_CASE.ExtendedAttribute4" : {
+      "type" : "string"
     },
-    "extendedAttribute5" : {
-      "type" : "string",
-      "description" : "List Record Type. Describes the type of list record the match is against."
+    "DN_CASE.ExtendedAttribute5" : {
+      "type" : "string"
     },
-    "extendedAttribute6" : {
-      "type" : "string",
-      "description" : "Screening Mode. Indicate the type of screening that created the alert."
+    "DN_CASE.ExtendedAttribute6" : {
+      "type" : "string"
     },
-    "extendedAttribute7" : {
-      "type" : "string",
-      "description" : "is the QA Flag which indicates if an alert has been subject to a QA review."
+    "DN_CASE.ExtendedAttribute7" : {
+      "type" : "string"
     },
-    "extendedAttribute8" : {
-      "type" : "string",
-      "description" : "Day 1 Spike Flag. Indicates if an alert was created on day 1. \"Day 1 Spike\" = created on Day 1, \"BAU\" = createdon Day 1 but has ben work to closure."
+    "DN_CASE.ExtendedAttribute8" : {
+      "type" : "string"
     },
-    "extendedAttribute9" : {
-      "type" : "string",
-      "description" : "BAU Spike Flag. Indicates if the alert was created as part of an influx of alert i.e. a spike, after day 1. \"Yes\" indicates this is a BAU spike"
+    "DN_CASE.ExtendedAttribute9" : {
+      "type" : "string"
     },
-    "extendedAttribute10" : {
-      "type" : "string",
-      "description" : "OWS Watchlist Name, describe the specific type of list the matching record came from."
+    "DN_CASE.ExtendedAttribute10" : {
+      "type" : "string"
     },
-    "extendedAttribute11" : {
-      "type" : "string",
-      "description" : "Line of Business, describes the Line of business the alert is related to."
+    "DN_CASE.ExtendedAttribute11" : {
+      "type" : "string"
     },
-    "extendedAttribute12" : {
-      "type" : "string",
-      "description" : "HSBC priority Flag, indicates the HSBC priority of an alert."
+    "DN_CASE.ExtendedAttribute12" : {
+      "type" : "string"
     },
-    "extendedAttribute13" : {
-      "type" : "integer",
-      "description" : "SLA Flag, a marker to define when an alert was created, closed or re-opened"
+    "DN_CASE.ExtendedAttribute13" : {
+      "type" : "string"
     },
-    "alertUrl" : {
-      "type" : "string",
-      "description" : "URL, which take you directly to the system where this alert resides and open the alert."
+    "DN_CASE.ExtendedAttribute14" : {
+      "type" : "string"
+    },
+    "DN_CASE.ExtendedAttribute15" : {
+      "type" : "string"
+    },
+    "DN_CASE.AlertURL" : {
+      "type" : "string"
     }
   }
 };
             defs["CountryCtrpScreeningEntities"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
+    "CTRPPRHBListEntities.Record Id" : {
+      "type" : "string"
     },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID."
+    "CTRPPRHBListEntities.Input Stream" : {
+      "type" : "string"
     },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Describe where the alert was generated"
+    "CTRPPRHBListEntities.Country Code" : {
+      "type" : "string"
     },
-    "countryCode" : {
-      "type" : "string",
-      "description" : "The field provides the country code which raised the alert. This will always be a two character code"
+    "CTRPPRHBListEntities.Type of Match" : {
+      "type" : "string"
     },
-    "typeOfMatch" : {
-      "type" : "string",
-      "description" : "Describes the type of country match, this will currently be&#58; Country Match or CTRP Match"
+    "CTRPPRHBListEntities.Country Name" : {
+      "type" : "string"
     },
-    "countryName" : {
-      "type" : "string",
-      "description" : "The field provides the country name which raised the alert."
+    "CTRPPRHBListEntities.Match Type" : {
+      "type" : "string"
     },
-    "matchType" : {
-      "type" : "string",
-      "description" : "This list one of three match types&#58; Trading, Registration or Operation."
+    "CTRPPRHBListEntities.OWS Watchlist Name" : {
+      "type" : "string"
     },
-    "owsWatchlistName" : {
-      "type" : "string",
-      "description" : "This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Entities this will always be ESSC."
+    "CTRPPRHBListEntities.PRB List Type" : {
+      "type" : "string"
     },
-    "prbListType" : {
-      "type" : "string",
-      "description" : "This is the type of match that has been found it is parent group of OWS Watchlist Name, currently it will always be SSC"
+    "CTRPPRHBListEntities.CTRP Value" : {
+      "type" : "string"
     },
-    "ctrpValue" : {
-      "type" : "string",
-      "description" : "List the specific CTRP value that triggered the alert. For example if this is Havana, Country Name will be CUBA"
+    "CTRPPRHBListEntities.CTRP Level" : {
+      "type" : "string"
     },
-    "ctrpLevel" : {
-      "type" : "integer",
-      "description" : "Type of CTRP Record e.g. 1 =Country, 2=Postcode"
+    "CTRPPRHBListEntities.CTRP Commonality" : {
+      "type" : "string"
     },
-    "ctrpCommonality" : {
-      "type" : "integer",
-      "description" : "The number of countries in the world that feature a place of this name"
+    "CTRPPRHBListEntities.CTRP Source" : {
+      "type" : "string"
     },
-    "ctrpSource" : {
-      "type" : "integer",
-      "description" : "This provides a description of the CTRP Source element."
+    "CTRPPRHBListEntities.CTRP Name Type" : {
+      "type" : "string"
     },
-    "ctrpNameType" : {
-      "type" : "string",
-      "description" : "describes the CTRP type that matched"
+    "CTRPPRHBListEntities.CTRP Rule Narrative" : {
+      "type" : "string"
     },
-    "ctrpRuleNarrative" : {
-      "type" : "string",
-      "description" : "Provides a description of what the rule was raised against"
-    },
-    "alertKeyFragment" : {
-      "type" : "string",
-      "description" : "Provides the full code for the match type that will be used to create the Alert Key."
+    "CTRPPRHBListEntities.AlertKeyFragment" : {
+      "type" : "string"
     }
   }
 };
             defs["CountryCtrpScreeningIndividuals"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
-    },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID."
-    },
-    "inputStream" : {
+    "CTRPPRHBListIndividuals.Record Id" : {
+      "title" : "Record id",
       "type" : "string",
-      "description" : "Describe where the alert was generated"
+      "description" : "recordId",
+      "example" : "recordId"
     },
-    "countryCode" : {
-      "type" : "string",
-      "description" : "The field provides the country code which raised the alert. This will always be a two character code"
+    "CTRPPRHBListIndividuals.Input Stream" : {
+      "type" : "string"
     },
-    "typeOfMatch" : {
-      "type" : "string",
-      "description" : "Describes the type of country match, this will currently be&#58; Country Match or CTRP Match"
+    "CTRPPRHBListIndividuals.Country Code" : {
+      "type" : "string"
     },
-    "countryName" : {
-      "type" : "string",
-      "description" : "The field provides the country name which raised the alert."
+    "CTRPPRHBListIndividuals.Type of Match" : {
+      "type" : "string"
     },
-    "matchType" : {
-      "type" : "string",
-      "description" : "This list one of three match types&#58; Nationality or Residency"
+    "CTRPPRHBListIndividuals.Country Name" : {
+      "type" : "string"
     },
-    "owsWatchlistName" : {
-      "type" : "string",
-      "description" : "This is the specific type of match that has ben identified, it is a sub-type of PRB List Type. Currently for Individuals this will always be ISSC."
+    "CTRPPRHBListIndividuals.Match Type" : {
+      "type" : "string"
     },
-    "prbListType" : {
-      "type" : "string",
-      "description" : "This is the type of match that has been found it is parent group of OWS Watchlist Name, currently it will always be SSC"
+    "CTRPPRHBListIndividuals.OWS Watchlist Name" : {
+      "type" : "string"
     },
-    "ctrpValue" : {
-      "type" : "string",
-      "description" : "List the specific CTRP value that triggered the alert. For example if this is Havana, Country Name will be CUBA"
+    "CTRPPRHBListIndividuals.PRB List Type" : {
+      "type" : "string"
     },
-    "ctrpLevel" : {
-      "type" : "integer",
-      "description" : "Type of CTRP Record e.g. 1 =Country, 2=Postcode"
+    "CTRPPRHBListIndividuals.CTRP Value" : {
+      "type" : "string"
     },
-    "ctrpCommonality" : {
-      "type" : "integer",
-      "description" : "The number of countries in the world that feature a place of this name"
+    "CTRPPRHBListIndividuals.CTRP Level" : {
+      "type" : "string"
     },
-    "ctrpSource" : {
-      "type" : "integer",
-      "description" : "This provides a description of the CTRP Source element."
+    "CTRPPRHBListIndividuals.CTRP Commonality" : {
+      "type" : "string"
     },
-    "ctrpNameType" : {
-      "type" : "string",
-      "description" : "describes the CTRP type that matched"
+    "CTRPPRHBListIndividuals.CTRP Source" : {
+      "type" : "string"
     },
-    "ctrpRuleNarrative" : {
-      "type" : "string",
-      "description" : "Provides a description of what the rule was raised against"
+    "CTRPPRHBListIndividuals.CTRP Name Type" : {
+      "type" : "string"
     },
-    "alertKeyFragment" : {
-      "type" : "string",
-      "description" : "Provides the full code for the match type that will be used to create the Alert Key."
+    "CTRPPRHBListIndividuals.CTRP Rule Narrative" : {
+      "type" : "string"
+    },
+    "CTRPPRHBListIndividuals.AlertKeyFragment" : {
+      "type" : "string"
     }
   }
 };
             defs["CustomerEntities"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
-    },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a Customer name record (relationship) within an alert where there are multiple Customer name records within the same alert. This is the working record ID."
-    },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Denotes the type of data, for example&#58; Customer Data"
-    },
-    "sourceSystemHistoryId" : {
-      "type" : "integer",
-      "description" : "Identifier used during reconciliation to store customer information"
-    },
-    "closeOfBusinessDate" : {
-      "type" : "string",
-      "description" : "The date the business ceased trading"
-    },
-    "partitionNumber" : {
-      "type" : "integer",
-      "description" : "Where a customer feed is larger than a certain threshold it will be partitioned into sections. The partion number denotes which partition this record has come from."
-    },
-    "sourceSystemIdentifier" : {
-      "type" : "string",
-      "description" : "The Identifier used to identify where the feed originated from"
-    },
-    "externalProfileId" : {
-      "type" : "string",
-      "description" : "Customer ID from source system"
-    },
-    "concatenatedProfileId" : {
-      "type" : "string",
-      "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique."
-    },
-    "profileType" : {
-      "type" : "string",
-      "description" : "Party type code"
-    },
-    "partyRoleTypeCode" : {
-      "type" : "string",
-      "description" : "Provides the ID relating to the customer type"
-    },
-    "profileStatus" : {
-      "type" : "string",
-      "description" : "Partyy status code"
-    },
-    "profileSegment" : {
-      "type" : "string",
-      "description" : "Line of Business customer segment."
-    },
-    "lobName" : {
-      "type" : "string",
-      "description" : "Line of Business name"
-    },
-    "lobRegion" : {
-      "type" : "string",
-      "description" : "Line of Business region"
-    },
-    "lobCountry" : {
-      "type" : "string",
-      "description" : "Line of Business Country Code"
-    },
-    "hsbcLegalEntityCode" : {
-      "type" : "string",
-      "description" : "HSBC legal entity code"
-    },
-    "nameCategoryCode" : {
-      "type" : "string",
-      "description" : "Customer name category code"
-    },
-    "nameTypeCode" : {
-      "type" : "string",
-      "description" : "Name Type Code"
-    },
-    "nameLanguageTypeCode" : {
-      "type" : "string",
-      "description" : "The language associated to the name type code"
-    },
-    "entityNameOriginal" : {
-      "type" : "string",
-      "description" : "The Entity name as originally provided"
-    },
-    "pepIndicator" : {
-      "type" : "string",
-      "description" : "Indicates if the record is regarded as a PEP or not in the source system"
-    },
-    "specialCategoryCustomer" : {
-      "type" : "string",
-      "description" : "Indicates if the record is regarded as a Special Chategory Person or not in the source system"
-    },
-    "sourceAddressType" : {
-      "type" : "string",
-      "description" : "The Address Type provided for this customer record"
-    },
-    "addressFormatCode" : {
-      "type" : "string",
-      "description" : "Indicates if the address is provided in a structured or unstructured format"
-    },
-    "addressLanguageTypeCode" : {
-      "type" : "string",
-      "description" : "Indicates if the address is provided in the primary or secondary language"
-    },
-    "sourceAddressLine1" : {
-      "type" : "string",
-      "description" : "Address Line 1 as provided in the customer record"
-    },
-    "sourceAddressLine2" : {
-      "type" : "string",
-      "description" : "Address Line 2 as provided in the customer record"
-    },
-    "sourceAddressLine3" : {
-      "type" : "string",
-      "description" : "Address Line 3 as provided in the customer record"
-    },
-    "sourceAddressLine4" : {
-      "type" : "string",
-      "description" : "Address Line 4 as provided in the customer record"
-    },
-    "sourceAddressLine5" : {
-      "type" : "string",
-      "description" : "Address Line 5 as provided in the customer record"
-    },
-    "sourceAddressLine6" : {
-      "type" : "string",
-      "description" : "Address Line 6 as provided in the customer record"
-    },
-    "sourceAddressLine7" : {
-      "type" : "string",
-      "description" : "Address Line 7 as provided in the customer record"
-    },
-    "sourceAddressLine8" : {
-      "type" : "string",
-      "description" : "Address Line 8 as provided in the customer record"
-    },
-    "sourceAddressLine9" : {
-      "type" : "string",
-      "description" : "Address Line 9 as provided in the customer record"
-    },
-    "sourceAddressLine10" : {
-      "type" : "string",
-      "description" : "Address Line 10 as provided in the customer record"
-    },
-    "sourcePostalCode" : {
-      "type" : "string",
-      "description" : "Address Postcode as provided in the customer record"
-    },
-    "sourceAddressCountry" : {
-      "type" : "string",
-      "description" : "Address Country as provided in the customer record"
-    },
-    "identificationDocument1" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument2" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument3" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument4" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument5" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument6" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument7" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument8" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument9" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "identificationDocument10" : {
-      "type" : "string",
-      "description" : "Identification document"
-    },
-    "tradesWithCountries" : {
-      "type" : "string",
-      "description" : "List of countries the customer trades with"
-    },
-    "subsidiariesOperatesInCountries" : {
-      "type" : "string",
-      "description" : "List of countries the customer's subsidiaries operate in"
-    },
-    "exportCountries" : {
-      "type" : "string",
-      "description" : "List of countries the customer exports to"
-    },
-    "importCountries" : {
-      "type" : "string",
-      "description" : "List of countries the customer imports from"
-    },
-    "countriesOfIncorporation" : {
-      "type" : "string",
-      "description" : "List of countires where the customer was/is incorporated"
-    },
-    "countriesOfRegistrationOriginal" : {
-      "type" : "string",
-      "description" : "List of countries where the customer is registered"
-    },
-    "countriesOfBusiness" : {
-      "type" : "string",
-      "description" : "List of countries where the customer conducts business"
-    },
-    "countriesOfHeadOffice" : {
-      "type" : "string",
-      "description" : "List of countries where the customer has a head office"
-    },
-    "edqCustId" : {
-      "type" : "string",
-      "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique"
-    },
-    "edqCustSubId" : {
-      "type" : "string",
-      "description" : "Customer ID from the source system"
-    },
-    "edqLobCountryCode" : {
-      "type" : "string",
-      "description" : "The ISO country code the the Line of Business this record is associated to"
-    },
-    "addressCountry" : {
-      "type" : "string",
-      "description" : "The refined and or Derived country names associated to the customer record"
-    },
-    "edqAddressCountryCode" : {
-      "type" : "string",
-      "description" : "The ISO country code Derived from the customer's address"
-    },
-    "edqTradesWithCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countries the customer trades with"
-    },
-    "edqExportsCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countries the customer exports to"
-    },
-    "edqImportsCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countries the customer imports from"
-    },
-    "edqIncorporationCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countires where the customer was/is incorporated"
-    },
-    "edqIncorporationCountriesCodes" : {
-      "type" : "string",
-      "description" : "A standardised list of country codes where the customer was/is incorporated"
-    },
-    "registrationCountry" : {
-      "type" : "string",
-      "description" : "A standardised list of countries where the customer is registered"
-    },
-    "edqRegiistrationCountriesCodes" : {
-      "type" : "string",
-      "description" : "A standardised list of country codes where the customer is registered"
-    },
-    "edqBusinessCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countries where the customer conducts business"
-    },
-    "edqHeadOfficeCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countries where the customer has a head office"
-    },
-    "countriesAll" : {
-      "type" : "string",
-      "description" : "A standardised list of all country names associated to the customer record. All standardised names will ISO names."
-    },
-    "countriesAllCodes" : {
-      "type" : "string",
-      "description" : "A standardised list of all country names in ISO 2 character code format associated to the customer record."
-    },
-    "edqLob" : {
-      "type" : "string",
-      "description" : "The standardised Line of Business name"
-    },
-    "edqPermission" : {
-      "type" : "string",
-      "description" : "Record permission allows user visibility depending on permissions granted"
-    },
-    "taxId" : {
-      "type" : "string",
-      "description" : "Derived TAX ID"
-    },
-    "city" : {
-      "type" : "string",
-      "description" : "Derived City name"
-    },
-    "profileHyperlink" : {
-      "type" : "string",
-      "description" : "Not currently used."
-    },
-    "searchHyperlink" : {
-      "type" : "string",
-      "description" : "Provides a google hyperlink for the customer record."
-    },
-    "edqListKey" : {
-      "type" : "string",
-      "description" : "Indicates the record  type"
-    },
-    "address" : {
-      "type" : "string",
-      "description" : "Full concatenated address post refinement"
-    },
-    "entityName" : {
-      "type" : "string",
-      "description" : "Standardised Entity name"
-    },
-    "postalCode" : {
-      "type" : "string",
-      "description" : "Standardise Postal code"
-    },
-    "personOrBusinessIndicator" : {
-      "type" : "string",
-      "description" : "Standardised indicator used to identify the customer as a Person or Business"
-    },
-    "edqCloseOfBusinessDate" : {
-      "type" : "string",
-      "description" : "Standardised Close of Business date"
-    },
-    "operatingCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of countries where the customer is operates"
-    },
-    "edqOperatingCountriesCodes" : {
-      "type" : "string",
-      "description" : "A standardsied list of ISO country codes where the customer operates"
-    },
-    "registrationNumber" : {
-      "type" : "string",
-      "description" : "A standardised version of the customer registration number"
-    },
-    "profileNameType" : {
-      "type" : "string",
-      "description" : "The description of the name type code"
-    },
-    "edqPartyRoleTypeDescription" : {
-      "type" : "string",
-      "description" : "The description of the customer role type"
-    },
-    "edqPartyStatusCodeDescription" : {
-      "type" : "string",
-      "description" : "The description of the customer status"
-    },
-    "edqDay1SpikeFlag" : {
-      "type" : "string",
-      "description" : "This should not be used see extended attributes in the CaseWithURL table for the edqDay1Spike value to use."
-    },
-    "originalScriptName" : {
-      "type" : "string",
-      "description" : "Entity name as originally provided"
-    },
-    "profileFullAddress" : {
-      "type" : "string",
-      "description" : "Original address data concatenated together"
-    },
-    "edqScreeningMode" : {
-      "type" : "string",
-      "description" : "This will always be \"Batch\" until realtime screening is provided."
-    },
-    "edqCaseKey" : {
-      "type" : "string",
-      "description" : "The element of the CaseKey from the customer side. This is joined with the elements from the list to form the KeyLabel"
-    },
-    "addressType" : {
-      "type" : "string",
-      "description" : "The standardise address type value"
-    },
-    "sscCodes" : {
-      "type" : "string",
-      "description" : "For development use only"
-    },
-    "ctrpFragment" : {
-      "type" : "string",
-      "description" : "For development use only"
-    },
-    "requestUserName" : {
-      "type" : "string",
-      "description" : "N/A - For Day 1"
-    },
-    "requestDateTime" : {
-      "type" : "string",
-      "description" : "N/A - For Day 1"
+    "CustomerEntities.Record Id" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Input Stream" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source System History ID" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Close Of Business Date" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Partition Number" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source System Identifier" : {
+      "type" : "string"
+    },
+    "CustomerEntities.External Profile ID" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Concatenated Profile ID" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Profile Type" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Party Role Type Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Profile Status" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Profile Segment" : {
+      "type" : "string"
+    },
+    "CustomerEntities.LoB Name" : {
+      "type" : "string"
+    },
+    "CustomerEntities.LoB Region" : {
+      "type" : "string"
+    },
+    "CustomerEntities.LoB Country" : {
+      "type" : "string"
+    },
+    "CustomerEntities.HSBC Legal Entity Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Name Category Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.NameTypeCode" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Name Language Type Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Entity Name (Original)" : {
+      "type" : "string"
+    },
+    "CustomerEntities.PEP Indicator" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Special Category Customer" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Type" : {
+      "type" : "string"
+    },
+    "CustomerEntities.AddressFormatCode" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Address Language Type Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 1" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 2" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 3" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 4" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 5" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 6" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 7" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 8" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 9" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Line 10" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Postal Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Source Address Country" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 1" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 2" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 3" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 4" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 5" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 6" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 7" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 8" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 9" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Identification Document 10" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Trades With Countries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Subsidiaries Operates in Countries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Export Countries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Import Countries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Countries of Incorporation" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Countries of Registration (Original)" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Countries of Business" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Countries of Head Office" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqCustID" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqCustSubID" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqLoBCountryCode" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Address Country" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqAddressCountryCode" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqTradesWithCountries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqExportsCountries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqImportsCountries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqIncorporationCountries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqIncorporationCountriesCodes" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Registration Country" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqRegiistrationCountriesCodes" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqBusinessCountries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqHeadOfficeCountries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Countries (All)" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Countries (All) Codes" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqLoB" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqPermission" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Tax ID" : {
+      "type" : "string"
+    },
+    "CustomerEntities.City" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Profile Hyperlink" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Search Hyperlink" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqListKey" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Address" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Entity Name" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Postal Code" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Person or Business Indicator" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqCloseOfBusinessDate" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Operating Countries" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqOperatingCountriesCodes" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Registration Number" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Profile Name Type" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqPartyRoleTypeDescription" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqPartyStatusCodeDescription" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqDay1SpikeFlag" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Original Script Name" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Profile Full Address" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqScreeningMode" : {
+      "type" : "string"
+    },
+    "CustomerEntities.edqCaseKey" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Address Type" : {
+      "type" : "string"
+    },
+    "CustomerEntities.SSC Codes" : {
+      "type" : "string"
+    },
+    "CustomerEntities.CTRP Fragment" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Request User Name" : {
+      "type" : "string"
+    },
+    "CustomerEntities.Request Date/Time" : {
+      "type" : "string"
     }
   }
 };
             defs["CustomerIndividuals"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
-    },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a Customer name record (relationship) within an alert where there are multiple Customer name records within the same alert. This is the working record ID."
-    },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Denotes the type of data, for example&#58; Customer Data"
-    },
-    "sourceSystemHistoryId" : {
-      "type" : "number",
-      "description" : "Identifier used during reconciliation to store customer information"
-    },
-    "closeOfBusinessDate" : {
-      "type" : "string",
-      "description" : "The date the business ceased trading"
-    },
-    "partitionNumber" : {
-      "type" : "number",
-      "description" : "Where a customer feed is larger than a certain threshold it will be partitioned into sections. The partion number denotes which partition this record has come from."
-    },
-    "sourceSystemIdentifier" : {
-      "type" : "number",
-      "description" : "The Identifier used to identify where the feed originated from"
-    },
-    "externalProfileId" : {
-      "type" : "string",
-      "description" : "Customer ID from source system"
-    },
-    "concatenatedProfileId" : {
-      "type" : "string",
-      "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique."
-    },
-    "profileType" : {
-      "type" : "string",
-      "description" : "Party type code"
-    },
-    "partyRoleTypeCode" : {
-      "type" : "string",
-      "description" : "Provides the ID relating to the customer type"
-    },
-    "profileStatus" : {
-      "type" : "string",
-      "description" : "Partyy status code"
-    },
-    "profileSegment" : {
-      "type" : "string",
-      "description" : "Line of Business customer segment."
-    },
-    "lobName" : {
-      "type" : "string",
-      "description" : "Line of Business name"
-    },
-    "lobRegion" : {
-      "type" : "string",
-      "description" : "Line of Business region"
-    },
-    "lobCountry" : {
-      "type" : "string",
-      "description" : "Line of Business Country Code"
-    },
-    "hsbcLegalEntityCode" : {
-      "type" : "string",
-      "description" : "HSBC legal entity code"
-    },
-    "nameCategoryCode" : {
-      "type" : "string",
-      "description" : "Customer name category code"
-    },
-    "nameTypeCode" : {
-      "type" : "string",
-      "description" : "Name Type Code"
-    },
-    "nameLanguageTypeCode" : {
-      "type" : "string",
-      "description" : "The language associated to the name type code"
-    },
-    "givenName" : {
-      "type" : "string",
-      "description" : "Customer Given Name"
-    },
-    "middleName" : {
-      "type" : "string",
-      "description" : "Customer Middle Name"
-    },
-    "familyNameOriginal" : {
-      "type" : "string",
-      "description" : "Customer Family Name (Original)"
-    },
-    "initialsOriginal" : {
-      "type" : "string",
-      "description" : "Initials (Original)"
-    },
-    "profileFullName" : {
-      "type" : "string",
-      "description" : "Original Unstructured Name"
-    },
-    "pepIndicator" : {
-      "type" : "string",
-      "description" : "Indicates if the record is regarded as a PEP or not in the source system"
-    },
-    "specialCategoryCustomerIndicator" : {
-      "type" : "string",
-      "description" : "Indicates if the record is regarded as a Special Chategory Person or not in the source system"
-    },
-    "genderCode" : {
-      "type" : "string",
-      "description" : "Original Customer Gender Code"
-    },
-    "birthDate" : {
-      "type" : "string",
-      "description" : "Original Customer Birth Date"
-    },
-    "placeOfBirth" : {
-      "type" : "string",
-      "description" : "Original Country Of Birth Name"
-    },
-    "townOfBirth" : {
-      "type" : "string",
-      "description" : "Original Town Of Birth"
-    },
-    "stateProvinceOrCountyOfBirth" : {
-      "type" : "string",
-      "description" : "Original State, Province or County of Birth"
-    },
-    "countryOfBirthOriginal" : {
-      "type" : "string",
-      "description" : "Original Country Of Birth Code"
-    },
-    "sourceAddressType" : {
-      "type" : "string",
-      "description" : "The Address Type provided for this customer record"
-    },
-    "addressFormatCode" : {
-      "type" : "string",
-      "description" : "Indicates if the address is provided in a structured or unstructured format"
-    },
-    "addressLanguageTypeCode" : {
-      "type" : "string",
-      "description" : "Indicates if the address is provided in the primary or secondary language"
-    },
-    "sourceAddressLine1" : {
-      "type" : "string",
-      "description" : "Address Line 1 as provided in the customer record"
-    },
-    "sourceAddressLine2" : {
-      "type" : "string",
-      "description" : "Address Line 2 as provided in the customer record"
-    },
-    "sourceAddressLine3" : {
-      "type" : "string",
-      "description" : "Address Line 3 as provided in the customer record"
-    },
-    "sourceAddressLine4" : {
-      "type" : "string",
-      "description" : "Address Line 4 as provided in the customer record"
-    },
-    "sourceAddressLine5" : {
-      "type" : "string",
-      "description" : "Address Line 5 as provided in the customer record"
-    },
-    "sourceAddressLine6" : {
-      "type" : "string",
-      "description" : "Address Line 6 as provided in the customer record"
-    },
-    "sourceAddressLine7" : {
-      "type" : "string",
-      "description" : "Address Line 7 as provided in the customer record"
-    },
-    "sourceAddressLine8" : {
-      "type" : "string",
-      "description" : "Address Line 8 as provided in the customer record"
-    },
-    "sourceAddressLine9" : {
-      "type" : "string",
-      "description" : "Address Line 9 as provided in the customer record"
-    },
-    "sourceAddressLine10" : {
-      "type" : "string",
-      "description" : "Address Line 10 as provided in the customer record"
-    },
-    "sourcePostalCode" : {
-      "type" : "string",
-      "description" : "Address Postal Code as provided in the customer record"
-    },
-    "sourceCountry" : {
-      "type" : "string",
-      "description" : "Address Country as provided in the customer record"
-    },
-    "identificationDocument1" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument2" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument3" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument4" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument5" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument6" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument7" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument8" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument9" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "identificationDocument10" : {
-      "type" : "string",
-      "description" : "Identification document."
-    },
-    "residenceCountries" : {
-      "type" : "string",
-      "description" : "List of countries where the customer has been resident"
-    },
-    "nationalityCitizenshipCountries" : {
-      "type" : "string",
-      "description" : "Original List of countries where the customer has nationality"
-    },
-    "employer1Details" : {
-      "type" : "string",
-      "description" : "Customer Employer 1 Name"
-    },
-    "employer1Address1" : {
-      "type" : "string",
-      "description" : "Customer Employer 1 Address 1"
-    },
-    "employer1Address2" : {
-      "type" : "string",
-      "description" : "Customer Employer 1 Address 2"
-    },
-    "employer1Address3" : {
-      "type" : "string",
-      "description" : "Customer Employer 1 Address 3"
-    },
-    "employer2Details" : {
-      "type" : "string",
-      "description" : "Customer Employer 2 Name"
-    },
-    "employer2Address1" : {
-      "type" : "string",
-      "description" : "Customer Employer 2 Address 1"
-    },
-    "employer2Address2" : {
-      "type" : "string",
-      "description" : "Customer Employer 2 Address 2"
-    },
-    "employer2Address3" : {
-      "type" : "string",
-      "description" : "Customer Employer 2 Address 3"
-    },
-    "employer3Details" : {
-      "type" : "string",
-      "description" : "Customer Employer 3 Name"
-    },
-    "employer3Address1" : {
-      "type" : "string",
-      "description" : "Customer Employer 3 Address 1"
-    },
-    "employer3Address2" : {
-      "type" : "string",
-      "description" : "Customer Employer 3 Address 2"
-    },
-    "employer3Address3" : {
-      "type" : "string",
-      "description" : "Customer Employer 3 Address 3"
-    },
-    "edqCustId" : {
-      "type" : "string",
-      "description" : "Customer ID from source system concatenated with the source system name to ensure the customer ID is unique"
-    },
-    "edqCustSubId" : {
-      "type" : "string",
-      "description" : "Customer ID from the source system"
-    },
-    "titleDerived" : {
-      "type" : "string",
-      "description" : "Title as derived by OWS"
-    },
-    "givenNamesDerived" : {
-      "type" : "string",
-      "description" : "Given Name as derived by OWS"
-    },
-    "fullNameDerived" : {
-      "type" : "string",
-      "description" : "Full Name as derived by OWS"
-    },
-    "familyNameDerived" : {
-      "type" : "string",
-      "description" : "Family Name as derived by OWS"
-    },
-    "initials" : {
-      "type" : "string",
-      "description" : "Customer Initials"
-    },
-    "edqLobCountryCode" : {
-      "type" : "string",
-      "description" : "The ISO country code the the Line of Business this record is associated to"
-    },
-    "countryOfBirth" : {
-      "type" : "string",
-      "description" : "A standardised list of all birth country names associated to the customer record. All standardised names will ISO names."
-    },
-    "addressCountry" : {
-      "type" : "string",
-      "description" : "A standardised list of all address country names associated to the customer record. All standardised names will ISO names."
-    },
-    "edqAddressCountryCode" : {
-      "type" : "string",
-      "description" : "A standardised list of all address country names in ISO 2 character code format associated to the customer record."
-    },
-    "countryOfResidence" : {
-      "type" : "string",
-      "description" : "A standardised list of all residency country names associated to the customer record. All standardised names will ISO names."
-    },
-    "edqBirthCountryCode" : {
-      "type" : "string",
-      "description" : "A standardised list of all birth country names in ISO 2 character code format associated to the customer record."
-    },
-    "edqResidenceCountriesCode" : {
-      "type" : "string",
-      "description" : "A standardised list of all residency country names in ISO 2 character code format associated to the customer record."
-    },
-    "nationalityOrCitizenship" : {
-      "type" : "string",
-      "description" : "A standardised list of all country names associated to the customer record. All standardised names will ISO names."
-    },
-    "nationalityCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of all country names in ISO 2 character code format associated to the customer record."
-    },
-    "countriesAll" : {
-      "type" : "string",
-      "description" : "A standardised list of all country names associated to the customer record. All standardised names will ISO names."
-    },
-    "edqCountriesAllCodes" : {
-      "type" : "string",
-      "description" : "A standardised list of all country names in iso 2 character code format associated to the customer record."
-    },
-    "edqEmployerAllCountries" : {
-      "type" : "string",
-      "description" : "A standardised list of all employer country names associated to the customer record.. All standardised names will ISO names."
-    },
-    "edqEmployerAllCountriesCodes" : {
-      "type" : "string",
-      "description" : "A standardised list of all employer country names in ISO 2 character code format associated to the customer record."
-    },
-    "edqLob" : {
-      "type" : "string",
-      "description" : "The standardised Line of Business name"
-    },
-    "edqPermission" : {
-      "type" : "string",
-      "description" : "For development use only"
-    },
-    "taxId" : {
-      "type" : "string",
-      "description" : "Derived TAX ID"
-    },
-    "dateOfBirth" : {
-      "type" : "string",
-      "description" : "Standardised Date Of Birth"
-    },
-    "dobOriginal" : {
-      "type" : "string",
-      "description" : "Original Date Of Birth"
-    },
-    "edqDobString" : {
-      "type" : "string",
-      "description" : "Standardised Date Of Birth in alternate format"
-    },
-    "yearOfBirth" : {
-      "type" : "string",
-      "description" : "Year Of Birth"
-    },
-    "city" : {
-      "type" : "string",
-      "description" : "Standardised City"
-    },
-    "postalCode" : {
-      "type" : "string",
-      "description" : "Standardised Postal Code"
-    },
-    "profileFullAddress" : {
-      "type" : "string",
-      "description" : "Original address data concatenated together"
-    },
-    "gender" : {
-      "type" : "string",
-      "description" : "Standardised Gender"
-    },
-    "genderDerivedFlag" : {
-      "type" : "string",
-      "description" : "Is Gender Derived?"
-    },
-    "profileHyperlink" : {
-      "type" : "string",
-      "description" : "Not currently used."
-    },
-    "searchHyperlink" : {
-      "type" : "string",
-      "description" : "Provides a google hyperlink for the customer record."
-    },
-    "edqListKey" : {
-      "type" : "string",
-      "description" : "Indicates the record  type"
-    },
-    "passportNumber" : {
-      "type" : "string",
-      "description" : "Customer Passport Number"
-    },
-    "passportIssueCountry" : {
-      "type" : "string",
-      "description" : "Customer Passport Issue Country"
-    },
-    "socialSecurityNumber" : {
-      "type" : "string",
-      "description" : "Customer Social Security Number"
-    },
-    "edqCloseOfBusinessDate" : {
-      "type" : "string",
-      "description" : "Customer Close Of Business Date"
-    },
-    "profileOccupation" : {
-      "type" : "string",
-      "description" : "Customer Occupation"
-    },
-    "personOrBusinessIndicator" : {
-      "type" : "string",
-      "description" : "Standardised indicator used to identify the customer as a Person or Business"
-    },
-    "profileNameType" : {
-      "type" : "string",
-      "description" : "The description of the name type code"
-    },
-    "edqPartyRoleTypeDescription" : {
-      "type" : "string",
-      "description" : "The description of the customer role type"
-    },
-    "edqPartyStatusCodeDescription" : {
-      "type" : "string",
-      "description" : "The description of the customer status"
-    },
-    "edqDay1SpikeFlag" : {
-      "type" : "string",
-      "description" : "This should not be used see extended attributes in the CaseWithURL table for the edqDay1Spike value to use."
-    },
-    "originalScriptName" : {
-      "type" : "string",
-      "description" : "Full name as originally provided"
-    },
-    "address" : {
-      "type" : "string",
-      "description" : "Full concatenated address post refinement"
-    },
-    "givenNamesOriginal" : {
-      "type" : "string",
-      "description" : "Original Customer Given Name"
-    },
-    "surname" : {
-      "type" : "string",
-      "description" : "Original Family name"
-    },
-    "edqScreeningMode" : {
-      "type" : "string",
-      "description" : "This will always be \"Batch\" until realtime screening is provided."
-    },
-    "edqCaseKey" : {
-      "type" : "string",
-      "description" : "The element of the CaseKey from the customer side. This is joined with the elements from the list to form the KeyLabel"
-    },
-    "addressType" : {
-      "type" : "string",
-      "description" : "The standardise address type value"
-    },
-    "sscCodes" : {
-      "type" : "string",
-      "description" : "For development use only"
-    },
-    "ctrpFragment" : {
-      "type" : "string",
-      "description" : "For development use only"
-    },
-    "requestUserName" : {
-      "type" : "string",
-      "description" : "N/A - For Day 1"
-    },
-    "requestDateTimeDDMMYYYY0000" : {
-      "type" : "string",
-      "description" : "N/A - For Day 1"
-    },
-    "autoDiscountDecision" : {
-      "type" : "string",
-      "description" : "List ID&#58;List Record Type&#58;=3 digit result code from Auto Discounting process"
-    },
-    "recordType" : {
-      "type" : "string",
-      "description" : "Indicates the type of record"
-    },
-    "dummy" : {
-      "type" : "string",
-      "description" : "For development use only"
+    "CustomerIndividuals.Record Id" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Input Stream" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source System History ID" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Close Of Business Date" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Partition Number" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source System Identifier" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.External Profile ID" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Concatenated Profile ID" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Type" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Party Role Type Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Status" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Segment" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.LoB Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.LoB Region" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.LoB Country" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.HSBC Legal Entity Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Name Category Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.NameTypeCode" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Name Language Type Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Given Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Middle Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Family Name (Original)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Initials (Original)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Full Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.PEP Indicator" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Special Category Customer Indicator" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Gender Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Birth Date" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Place of Birth" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Town of Birth" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.State Province or County of Birth" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Country of Birth (Original)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Type" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Address Format Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Address Language Type Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 1" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 2" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 3" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 4" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 5" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 6" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 7" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 8" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 9" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Address Line 10" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Postal Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Source Country" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 1" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 2" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 3" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 4" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 5" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 6" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 7" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 8" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 9" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Identification Document 10" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Residence Countries" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.NationalityCitizenshipCountries" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 1 Details" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 1 Address 1" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 1 Address 2" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 1 Address 3" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 2 Details" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 2 Address 1" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 2 Address 2" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 2 Address 3" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 3 Details" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 3 Address 1" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 3 Address 2" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Employer 3 Address 3" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqCustID" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqCustSubID" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Title (Derived)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Given Names (Derived)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Full Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Family Name (Derived)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Initials" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqLoBCountryCode" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Country of Birth" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Address Country" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqAddressCountryCode" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Country of Residence" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqBirthCountryCode" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqResidenceCountriesCode" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Nationality or Citizenship" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Nationality Countries" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Countries (All)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqCountriesAllCodes" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqEmployerAllCountries" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqEmployerAllCountriesCodes" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqLoB" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqPermission" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Tax ID" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Date of Birth" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.DOB (Original)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqDOBString" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Year of Birth" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.City" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Postal Code" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Full Address" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Gender" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Gender Derived Flag" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Hyperlink" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Search Hyperlink" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqListKey" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Passport Number" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Passport Issue Country" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Social Security Number" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqCloseOfBusinessDate" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Occupation" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Person or Business Indicator" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Profile Name Type" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqPartyRoleTypeDescription" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqPartyStatusCodeDescription" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqDay1SpikeFlag" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Original Script Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Address" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Given Names (Original)" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Surname" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqScreeningMode" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.edqCaseKey" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Address Type" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.SSC Codes" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.CTRP Fragment" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Request User Name" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.ReqDT" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Auto Discount Decision" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.RecordType" : {
+      "type" : "string"
+    },
+    "CustomerIndividuals.Dummy" : {
+      "type" : "string"
     }
   }
 };
             defs["PrivateListEntities"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
+    "PrivateListEntities.Record Id" : {
+      "type" : "string"
     },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
+    "PrivateListEntities.Input Stream" : {
+      "type" : "string"
     },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Denotes the type of data, for example&#58; Private List Data"
+    "PrivateListEntities.List Key" : {
+      "type" : "string"
     },
-    "listKey" : {
-      "type" : "string",
-      "description" : "Indicates list origin e.g. WC for world check list"
+    "PrivateListEntities.List Sub Key" : {
+      "type" : "string"
     },
-    "listSubKey" : {
-      "type" : "string",
-      "description" : "Indicates the origin of a record and its type e.g. WC-SAN"
+    "PrivateListEntities.List Record Type" : {
+      "type" : "string"
     },
-    "listRecordType" : {
-      "type" : "string",
-      "description" : "Indicates the type of matching record e.g. SAN"
+    "PrivateListEntities.List Record Origin" : {
+      "type" : "string"
     },
-    "listRecordOrigin" : {
-      "type" : "string",
-      "description" : "List the origin where the Private List record was derived e.g. OFAC"
+    "PrivateListEntities.List Record Id" : {
+      "type" : "string"
     },
-    "listRecordId" : {
-      "type" : "string",
-      "description" : "Unique Identifier assigned to the Private List record"
+    "PrivateListEntities.List Record Sub Id" : {
+      "type" : "string"
     },
-    "listRecordSubId" : {
-      "type" : "string",
-      "description" : "ID for the sub records within a Private List record"
+    "PrivateListEntities.Registration Number" : {
+      "type" : "string"
     },
-    "registrationNumber" : {
-      "type" : "string",
-      "description" : "Entity Registration Number"
+    "PrivateListEntities.Entity Name (Original)" : {
+      "type" : "string"
     },
-    "entityNameOriginal" : {
-      "type" : "string",
-      "description" : "Entity Name"
+    "PrivateListEntities.Entity Name (Derived)" : {
+      "type" : "string"
     },
-    "entityNameDerived" : {
-      "type" : "string",
-      "description" : "Records the Entity Name where it has been derived by OWS"
+    "PrivateListEntities.Name Type" : {
+      "type" : "string"
     },
-    "nameType" : {
-      "type" : "string",
-      "description" : "Records the type of name in use, for example&#58; Primary Name"
+    "PrivateListEntities.Name Quality" : {
+      "type" : "string"
     },
-    "nameQuality" : {
-      "type" : "string",
-      "description" : "Indicates the accuracy of the name information, Low, Medium or High"
+    "PrivateListEntities.Primary Name" : {
+      "type" : "string"
     },
-    "primaryName" : {
-      "type" : "string",
-      "description" : "Primary Name of the Watchlist Entry"
+    "PrivateListEntities.Original Script Name" : {
+      "type" : "string"
     },
-    "originalScriptName" : {
-      "type" : "string",
-      "description" : "Watchlist original script name"
+    "PrivateListEntities.Alias is Acronym" : {
+      "type" : "string"
     },
-    "aliasIsAcronym" : {
-      "type" : "string",
-      "description" : "Indicates is the name is an alias or primary name"
+    "PrivateListEntities.Vessel Indicator" : {
+      "type" : "string"
     },
-    "vesselIndicator" : {
-      "type" : "string",
-      "description" : "Marks if the Watchlist Entry is a Vessel"
+    "PrivateListEntities.Vessel Info" : {
+      "type" : "string"
     },
-    "vesselInfo" : {
-      "type" : "string",
-      "description" : "Information relating to the Vessel"
+    "PrivateListEntities.Address" : {
+      "type" : "string"
     },
-    "address" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address (if known)"
+    "PrivateListEntities.City" : {
+      "type" : "string"
     },
-    "city" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's city (if known)"
+    "PrivateListEntities.State" : {
+      "type" : "string"
     },
-    "state" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's state (if known)"
+    "PrivateListEntities.Postal Code" : {
+      "type" : "string"
     },
-    "postalCode" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's postal code (if known)"
+    "PrivateListEntities.Address Country" : {
+      "type" : "string"
     },
-    "addressCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address country (if known)"
+    "PrivateListEntities.Registration Country" : {
+      "type" : "string"
     },
-    "registrationCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's registration country (if known)"
+    "PrivateListEntities.Operating Countries" : {
+      "type" : "string"
     },
-    "operatingCountries" : {
-      "type" : "string",
-      "description" : "Watchlist Entry operating country (if known)"
+    "PrivateListEntities.Country Codes (All)" : {
+      "type" : "string"
     },
-    "countryCodesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format"
+    "PrivateListEntities.Countries (All)" : {
+      "type" : "string"
     },
-    "countriesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries within the Customer record that will be screened for Prohibitions"
+    "PrivateListEntities.Profile Hyperlink" : {
+      "type" : "string"
     },
-    "profileHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
+    "PrivateListEntities.Search Hyperlink" : {
+      "type" : "string"
     },
-    "searchHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
+    "PrivateListEntities.Linked Profiles" : {
+      "type" : "string"
     },
-    "linkedProfiles" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry profiles"
+    "PrivateListEntities.Linked Relationships" : {
+      "type" : "string"
     },
-    "linkedRelationships" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry relationships"
+    "PrivateListEntities.Risk Score" : {
+      "type" : "string"
     },
-    "riskScore" : {
-      "type" : "number",
-      "description" : "Private List assigned risk score"
+    "PrivateListEntities.PEP Risk Score" : {
+      "type" : "string"
     },
-    "pepRiskScore" : {
-      "type" : "number",
-      "description" : "Private List assigned PEP risk score"
+    "PrivateListEntities.Data Confidence Score" : {
+      "type" : "string"
     },
-    "dataConfidenceScore" : {
-      "type" : "number",
-      "description" : "Not Provided"
+    "PrivateListEntities.Data Confidence Comment" : {
+      "type" : "string"
     },
-    "dataConfidenceComment" : {
-      "type" : "string",
-      "description" : "Not Provided"
+    "PrivateListEntities.Inactive Flag" : {
+      "type" : "string"
     },
-    "inactiveFlag" : {
-      "type" : "string",
-      "description" : "Denotes if the record is considered inactive in the Private List"
+    "PrivateListEntities.Inactive Since Date" : {
+      "type" : "string"
     },
-    "inactiveSinceDate" : {
-      "type" : "string",
-      "description" : "Date since the record was marked inactive"
+    "PrivateListEntities.PEP Classification" : {
+      "type" : "string"
     },
-    "pepClassification" : {
-      "type" : "string",
-      "description" : "Type of PEP, for example&#58; Local Counsellor"
+    "PrivateListEntities.Added Date" : {
+      "type" : "string"
     },
-    "addedDate" : {
-      "type" : "string",
-      "description" : "Date data source was added"
+    "PrivateListEntities.Last Updated Date" : {
+      "type" : "string"
     },
-    "lastUpdatedDate" : {
-      "type" : "string",
-      "description" : "Data since the Watchlist Entry was last updated"
+    "PrivateListEntities.Address Type" : {
+      "type" : "string"
     },
-    "addressType" : {
-      "type" : "string",
-      "description" : "Address label as provided by the private list"
+    "PrivateListEntities.Current Address" : {
+      "type" : "string"
     },
-    "currentAddress" : {
-      "type" : "string",
-      "description" : "Address"
+    "PrivateListEntities.Telephone Number" : {
+      "type" : "string"
     },
-    "telephoneNumber" : {
-      "type" : "string",
-      "description" : "Telephone number"
+    "PrivateListEntities.edqBusinessTelephoneNumber" : {
+      "type" : "string"
     },
-    "edqBusinessTelephoneNumber" : {
-      "type" : "string",
-      "description" : "Business Telephone Number that has been normalised"
+    "PrivateListEntities.Telephone Number (Business)" : {
+      "type" : "string"
     },
-    "telephoneNumberBusiness" : {
-      "type" : "string",
-      "description" : "Business Telephone Number"
+    "PrivateListEntities.edqCellNumberPersonal" : {
+      "type" : "string"
     },
-    "edqCellNumberPersonal" : {
-      "type" : "string",
-      "description" : "Mobile phone number (normalised)"
+    "PrivateListEntities.edqTaxNumber" : {
+      "type" : "string"
     },
-    "edqTaxNumber" : {
-      "type" : "string",
-      "description" : "Tax Number (Normalised)"
+    "PrivateListEntities.edqEmailAddress" : {
+      "type" : "string"
     },
-    "edqEmailAddress" : {
-      "type" : "string",
-      "description" : "Email address"
+    "PrivateListEntities.SCION Reference Number" : {
+      "type" : "string"
     },
-    "scionReferenceNumber" : {
-      "type" : "string",
-      "description" : "SCION Reference Number"
+    "PrivateListEntities.Role" : {
+      "type" : "string"
     },
-    "role" : {
-      "type" : "string",
-      "description" : "The role the person has within a business"
+    "PrivateListEntities.List Category" : {
+      "type" : "string"
     },
-    "listCategory" : {
-      "type" : "string",
-      "description" : "Indicates the list record's category."
+    "PrivateListEntities.Further Info" : {
+      "type" : "string"
     },
-    "furtherInfo" : {
-      "type" : "string",
-      "description" : "Any further information as deemed useful"
+    "PrivateListEntities.edqBusinessType" : {
+      "type" : "string"
     },
-    "edqBusinessType" : {
-      "type" : "string",
-      "description" : "Indicates the business sector"
+    "PrivateListEntities.Date of Incorporation" : {
+      "type" : "string"
     },
-    "dateOfIncorporation" : {
-      "type" : "string",
-      "description" : "Date of incorporation from a date format attribute"
+    "PrivateListEntities.edqDataOfIncorporationSTRING" : {
+      "type" : "string"
     },
-    "edqDataOfIncorporationString" : {
-      "type" : "string",
-      "description" : "Date of Incorporation from a string format attribute"
+    "PrivateListEntities.External Customer ID" : {
+      "type" : "string"
     },
-    "externalCustomerId" : {
-      "type" : "string",
-      "description" : "Customer ID the record relates to"
+    "PrivateListEntities.List Customer Type" : {
+      "type" : "string"
     },
-    "listCustomerType" : {
-      "type" : "string",
-      "description" : "Indicates if the record is a Person or Business, P or B respectively."
+    "PrivateListEntities.edqListName" : {
+      "type" : "string"
     },
-    "edqListName" : {
-      "type" : "string",
-      "description" : "Full name of the SCION list"
+    "PrivateListEntities.edqWatchlistLstType" : {
+      "type" : "string"
     },
-    "edqWatchlistLstType" : {
-      "type" : "string",
-      "description" : "SCION List short form  name"
+    "PrivateListEntities.Primary Name.1" : {
+      "type" : "string"
     },
-    "primaryName1" : {
-      "type" : "string",
-      "description" : "Customers primary name"
+    "PrivateListEntities.Entity Name" : {
+      "type" : "string"
     },
-    "entityName" : {
-      "type" : "string",
-      "description" : "Entity name, place holder 1"
+    "PrivateListEntities.Entity Name.1" : {
+      "type" : "string"
     },
-    "entityName1" : {
-      "type" : "string",
-      "description" : "Entity name place holder 2"
+    "PrivateListEntities.Entity Name.2" : {
+      "type" : "string"
     },
-    "entityName2" : {
-      "type" : "string",
-      "description" : "Entity name place holder 3"
+    "PrivateListEntities.Case Country of Origin" : {
+      "type" : "string"
+    },
+    "PrivateListEntities.LOB" : {
+      "type" : "string"
     }
   }
 };
             defs["PrivateListIndividuals"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
-    },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
-    },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Denotes the type of data, for example&#58; Customer Data"
-    },
-    "listKey" : {
-      "type" : "string",
-      "description" : "Indicates list origin e.g. WC for world check list"
-    },
-    "listSubKey" : {
-      "type" : "string",
-      "description" : "Indicates the origin of a record and its type e.g. WC-SAN"
-    },
-    "listRecordType" : {
-      "type" : "string",
-      "description" : "Indicates the type of matching record e.g. SAN"
-    },
-    "listRecordOrigin" : {
-      "type" : "string",
-      "description" : "List the origin where the Private List record was derived e.g. OFAC"
-    },
-    "listRecordId" : {
-      "type" : "string",
-      "description" : "Unique Identifier assigned to the Private List record"
-    },
-    "listRecordSubId" : {
-      "type" : "string",
-      "description" : "ID for the sub records within a Private List record"
-    },
-    "passportNumber" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Passport Number (if known)"
-    },
-    "nationalId" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's National Identification Number (if known)"
-    },
-    "title" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's title (if known)"
-    },
-    "fullNameOriginal" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Full Name"
-    },
-    "givenNamesOriginal" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Given Name"
-    },
-    "familyNameOriginal" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Family Name"
-    },
-    "fullNameDerived" : {
-      "type" : "string",
-      "description" : "Records a Family Name where it has been derived by OWS"
-    },
-    "givenNamesDerived" : {
-      "type" : "string",
-      "description" : "Records a Given Name where it has been derived by OWS"
-    },
-    "familyNameDerived" : {
-      "type" : "string",
-      "description" : "Records a Family Name where it has been derived by OWS"
-    },
-    "nameType" : {
-      "type" : "string",
-      "description" : "Records the type of name in use, for example&#58; Primary Name"
-    },
-    "nameQuality" : {
-      "type" : "string",
-      "description" : "Indicates the accuracy of the name information, Low, Medium or High"
-    },
-    "primaryName" : {
-      "type" : "string",
-      "description" : "Primary Name of the Watchlist Entry"
-    },
-    "originalScriptName" : {
-      "type" : "string",
-      "description" : "Watchlist original script name"
-    },
-    "gender" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's gender (if known)"
-    },
-    "genderDerivedFlag" : {
-      "type" : "string",
-      "description" : "Denotes if the Watchlist Entry's gender has been derived by OWS"
-    },
-    "dateOfBirth" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's date of birth (if known)"
-    },
-    "yearOfBirth" : {
-      "type" : "integer",
-      "description" : "Watchlist Entry's year of birth (if known)"
-    },
-    "deceasedFlag" : {
-      "type" : "string",
-      "description" : "Watchlist Entry is known or believed to be deceased"
-    },
-    "deceasedDate" : {
-      "type" : "string",
-      "description" : "Date the Watchlist Entry is known or believed to have become deceased"
-    },
-    "occupation" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's occupation (if known)"
-    },
-    "address" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address (if known)"
-    },
-    "city" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's city (if known)"
-    },
-    "placeOfBirth" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Place Of Birth (if known)"
-    },
-    "postalCode" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's postal code (if known)"
-    },
-    "addressCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address country (if known)"
-    },
-    "residencyCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's country of residence (if known)"
-    },
-    "countryOfBirth" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's country of birth (if known)"
-    },
-    "nationalities" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's nationality (if known)"
-    },
-    "countryCodesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format"
-    },
-    "countriesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries within the Customer record that will be screened for Prohibitions"
-    },
-    "profileHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
-    },
-    "searchHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
-    },
-    "linkedProfiles" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry profiles"
-    },
-    "linkedRelationships" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry relationships"
-    },
-    "riskScore" : {
-      "type" : "number",
-      "description" : "Private List assigned risk score"
-    },
-    "pepRiskScore" : {
-      "type" : "number",
-      "description" : "Private List assigned PEP risk score"
-    },
-    "dataConfidenceScore" : {
-      "type" : "number",
-      "description" : "Not Provided"
-    },
-    "dataConfidenceComment" : {
-      "type" : "string",
-      "description" : "Not Provided"
-    },
-    "inactiveFlag" : {
-      "type" : "string",
-      "description" : "Denotes if the record is considered inactive in the Private List"
-    },
-    "inactiveSinceDate" : {
-      "type" : "string",
-      "description" : "Date since the record was marked inactive"
-    },
-    "pEPClassification" : {
-      "type" : "string",
-      "description" : "Type of PEP, for example&#58; Local Counsellor"
-    },
-    "addedDate" : {
-      "type" : "string",
-      "description" : "Date data source was added"
-    },
-    "lastUpdatedDate" : {
-      "type" : "string",
-      "description" : "Data since the Watchlist Entry was last updated"
-    },
-    "edqAddressType" : {
-      "type" : "string",
-      "description" : "Address label as provided by the private list"
-    },
-    "edqCurrentAddress" : {
-      "type" : "string",
-      "description" : "Indicates with a yes or no if this is a current address"
-    },
-    "edqTelephoneNumber" : {
-      "type" : "string",
-      "description" : "Telephone number"
-    },
-    "edqCellNumberBusiness" : {
-      "type" : "string",
-      "description" : "Telephone number"
-    },
-    "edqCellNumberPersonal" : {
-      "type" : "string",
-      "description" : "Telephone number"
-    },
-    "edqTaxNumber" : {
-      "type" : "string",
-      "description" : "Individuals TAX Number"
-    },
-    "edqDrivingLicence" : {
-      "type" : "string",
-      "description" : "Individuals Driving Licence Number"
-    },
-    "edqEmailAddress" : {
-      "type" : "string",
-      "description" : "Email Address"
-    },
-    "edqNiNumber" : {
-      "type" : "string",
-      "description" : "Individuals National Insurance Number"
-    },
-    "edqScionRef" : {
-      "type" : "string",
-      "description" : "SCION reference indicator"
-    },
-    "edqListCustomerType" : {
-      "type" : "string",
-      "description" : "Indicates if the record is a Person or Business, P or B respectively."
-    },
-    "edqSuffix" : {
-      "type" : "string",
-      "description" : "Name suffix"
-    },
-    "edqRole" : {
-      "type" : "string",
-      "description" : "Individuals role"
-    },
-    "edqListCategory" : {
-      "type" : "string",
-      "description" : "Indicates the list record's category."
-    },
-    "edqFurtherInfo" : {
-      "type" : "string",
-      "description" : "Any further information as deemed useful"
-    },
-    "edqSsn" : {
-      "type" : "string",
-      "description" : "Individuals Social Security Number"
-    },
-    "edqCustomerId" : {
-      "type" : "string",
-      "description" : "Customer ID the record relates to"
-    },
-    "edqListName" : {
-      "type" : "string",
-      "description" : "Full name of the SCION list"
-    },
-    "edqWatchListType" : {
-      "type" : "string",
-      "description" : "SCION List short form  name"
-    },
-    "middleName1Derived" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Derived Middle Name 1"
-    },
-    "middleName2Derived" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Derived Middle Name 2"
-    },
-    "middleName1Original" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Original Middle Name 1"
-    },
-    "middleName2Original" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Original Middle Name 2"
-    },
-    "currentAddress" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's current address (if known)"
-    },
-    "recordType" : {
-      "type" : "string",
-      "description" : "Indicates the type of record"
-    },
-    "dummy" : {
-      "type" : "string",
-      "description" : "For development use only"
+    "PrivateListIndividuals.Record Id" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Input Stream" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Key" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Sub Key" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Record Type" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Record Origin" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Record Id" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Record Sub Id" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Passport Number" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.National ID" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Title" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Full Name (Original)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Given Names (Original)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Family Name (Original)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Full Name" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Given Names (Derived)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Family Name (Derived)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Name Type" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Name Quality" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Primary Name" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Original Script Name" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Gender" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Gender Derived Flag" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Date of Birth" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.YOB" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Deceased Flag" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Deceased Date" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Customer Occupation" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Address" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.City" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Place of Birth" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Postal Code" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Address Country" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Country of Residence" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.<Country> of Birth" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Nationalities" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Country Codes (All)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Countries (All)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Profile Hyperlink" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Search Hyperlink" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Linked Profiles" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Linked Relationships" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Risk Score" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.PEP Risk Score" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Data Confidence Score" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Data Confidence Comment" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Inactive Flag" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Inactive Since Date" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.PEP Classification" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Added Date" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Last Updated Date" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Address Type" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.edqCurrentAddress" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Telephone Number" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Cell Number (Business)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Cell Number (Personal)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Tax Number" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Email Address" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.SCION Reference Number" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Role" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Category" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Further Info" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.External Customer ID" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.List Customer Type" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.edqListName" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.edqWatchlistListType" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Middle Name 1 (Derived)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Middle Name 2 (Derived)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Middle Name 1 (Original)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Middle Name 2 (Original)" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Social Security Number" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Current Address" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Suffix" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Driving Licence" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.National Insurance Number" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.RecordType" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Dummy" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.Case Country of Origin" : {
+      "type" : "string"
+    },
+    "PrivateListIndividuals.LOB" : {
+      "type" : "string"
     }
   }
 };
             defs["Relationships"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique identifier assigned to the Case or Alert within Case Management"
+    "Relationships.Input Id" : {
+      "type" : "string"
     },
-    "inputId" : {
-      "type" : "number",
-      "description" : "Identifier for the type of data inputted from the Screening Subject"
+    "Relationships.Input Name" : {
+      "type" : "string"
     },
-    "inputName" : {
-      "type" : "string",
-      "description" : "Describes the source of the input data, for example&#58; Customer Data"
+    "Relationships.Record Id" : {
+      "type" : "string"
     },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a Customer name record within an Alert where there are multiple Customer name records within the same Alert. This is the working record ID."
+    "Relationships.Related Input Id" : {
+      "type" : "string"
     },
-    "relatedInputId" : {
-      "type" : "number",
-      "description" : "Identifier for the type of data input from the Watchlist"
+    "Relationships.Related Input Name" : {
+      "type" : "string"
     },
-    "relatedInputName" : {
-      "type" : "string",
-      "description" : "Describes the source of the input data, for example&#58; WorldCheck_Entities"
+    "Relationships.Related Record Id" : {
+      "type" : "string"
     },
-    "relatedRecordId" : {
-      "type" : "number",
-      "description" : "Refers to a Watchlist record within an Alert where there are multiple Watchlist records within the same Alert."
+    "Relationships.Rule Name" : {
+      "type" : "string"
     },
-    "ruleName" : {
-      "type" : "string",
-      "description" : "Denotes the Match Rule the Alert was generated against"
+    "Relationships.Priority Score" : {
+      "type" : "string"
     },
-    "priorityScore" : {
-      "type" : "number",
-      "description" : "Records the associated Match Rule priority score"
-    },
-    "relationshipHash" : {
-      "type" : "string",
-      "description" : "Hash of the relationship value"
+    "Relationships.Relationship Hash" : {
+      "type" : "string"
     }
   }
 };
@@ -2872,518 +2372,385 @@
   "enum" : [ "POTENTIAL_TRUE_POSITIVE", "FALSE_POSITIVE", "MANUAL_INVESTIGATION" ]
 };
             defs["WorldCheckEntities"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
+    "WorldCheckEntities.Record Id" : {
+      "type" : "string"
     },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
+    "WorldCheckEntities.Input Stream" : {
+      "type" : "string"
     },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Denotes the type of data, for example&#58; Customer Data"
+    "WorldCheckEntities.List Key" : {
+      "type" : "string"
     },
-    "listKey" : {
-      "type" : "string",
-      "description" : "Indicates list origin e.g. WC for world check list"
+    "WorldCheckEntities.List Sub Key" : {
+      "type" : "string"
     },
-    "listSubKey" : {
-      "type" : "string",
-      "description" : "Indicates the origin of a record and its type e.g. WC-SAN"
+    "WorldCheckEntities.List Record Type" : {
+      "type" : "string"
     },
-    "listRecordType" : {
-      "type" : "string",
-      "description" : "Indicates the type of matching record e.g. SAN"
+    "WorldCheckEntities.List Record Origin" : {
+      "type" : "string"
     },
-    "listRecordOrigin" : {
-      "type" : "string",
-      "description" : "List the origin where the World-Check record was derived e.g. OFAC"
+    "WorldCheckEntities.List Record Id" : {
+      "type" : "string"
     },
-    "listRecordId" : {
-      "type" : "string",
-      "description" : "Unique Identifier assigned to the World-Check record"
+    "WorldCheckEntities.List Record Sub Id" : {
+      "type" : "string"
     },
-    "listRecordSubId" : {
-      "type" : "string",
-      "description" : "ID for the sub records within a World-Check record"
+    "WorldCheckEntities.Registration Number" : {
+      "type" : "string"
     },
-    "registrationNumber" : {
-      "type" : "string",
-      "description" : "Entity Registration Number"
+    "WorldCheckEntities.Entity Name (Original)" : {
+      "type" : "string"
     },
-    "entityNameOriginal" : {
-      "type" : "string",
-      "description" : "Entity Name"
+    "WorldCheckEntities.Entity Name (Derived)" : {
+      "type" : "string"
     },
-    "entityNameDerived" : {
-      "type" : "string",
-      "description" : "Records the Entity Name where it has been derived by OWS"
+    "WorldCheckEntities.Name Type" : {
+      "type" : "string"
     },
-    "nameType" : {
-      "type" : "string",
-      "description" : "Records the type of name in use, for example&#58; Primary Name"
+    "WorldCheckEntities.Name Quality" : {
+      "type" : "string"
     },
-    "nameQuality" : {
-      "type" : "string",
-      "description" : "Indicates the accuracy of the name information, Low, Medium or High"
+    "WorldCheckEntities.Primary Name" : {
+      "type" : "string"
     },
-    "primaryName" : {
-      "type" : "string",
-      "description" : "Primary Name of the Watchlist Entry"
+    "WorldCheckEntities.Original Script Name" : {
+      "type" : "string"
     },
-    "originalScriptName" : {
-      "type" : "string",
-      "description" : "Watchlist original script name"
+    "WorldCheckEntities.Alias is Acronym" : {
+      "type" : "string"
     },
-    "aliasIsAcronym" : {
-      "type" : "string",
-      "description" : "Indicates is the name is an alias or primary name"
+    "WorldCheckEntities.Vessel Indicator" : {
+      "type" : "string"
     },
-    "vesselIndicator" : {
-      "type" : "string",
-      "description" : "Marks if the Watchlist Entry is a Vessel"
+    "WorldCheckEntities.Vessel Info" : {
+      "type" : "string"
     },
-    "vesselInfo" : {
-      "type" : "string",
-      "description" : "Information relating to the Vessel"
+    "WorldCheckEntities.Address" : {
+      "type" : "string"
     },
-    "address" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address (if known)"
+    "WorldCheckEntities.City" : {
+      "type" : "string"
     },
-    "city" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's city (if known)"
+    "WorldCheckEntities.State" : {
+      "type" : "string"
     },
-    "state" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's state (if known)"
+    "WorldCheckEntities.Postal Code" : {
+      "type" : "string"
     },
-    "postalCode" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's postal code (if known)"
+    "WorldCheckEntities.Address Country" : {
+      "type" : "string"
     },
-    "addressCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address country (if known)"
+    "WorldCheckEntities.Registration Country" : {
+      "type" : "string"
     },
-    "registrationCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's registration country (if known)"
+    "WorldCheckEntities.Operating Countries" : {
+      "type" : "string"
     },
-    "operatingCountries" : {
-      "type" : "string",
-      "description" : "Watchlist Entry operating country (if known)"
+    "WorldCheckEntities.Country Codes (All)" : {
+      "type" : "string"
     },
-    "countryCodesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format"
+    "WorldCheckEntities.Countries (All)" : {
+      "type" : "string"
     },
-    "countriesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries within the Customer record that will be screened for Prohibitions"
+    "WorldCheckEntities.Profile Hyperlink" : {
+      "type" : "string"
     },
-    "profileHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
+    "WorldCheckEntities.Search Hyperlink" : {
+      "type" : "string"
     },
-    "searchHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
+    "WorldCheckEntities.Linked Profiles" : {
+      "type" : "string"
     },
-    "linkedProfiles" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry profiles"
+    "WorldCheckEntities.Linked Relationships" : {
+      "type" : "string"
     },
-    "linkedRelationships" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry relationships"
+    "WorldCheckEntities.Risk Score" : {
+      "type" : "string"
     },
-    "riskScore" : {
-      "type" : "number",
-      "description" : "World-Check assigned risk score"
+    "WorldCheckEntities.PEP Risk Score" : {
+      "type" : "string"
     },
-    "pepRiskScore" : {
-      "type" : "number",
-      "description" : "World-Check assigned PEP risk score"
+    "WorldCheckEntities.Data Confidence Score" : {
+      "type" : "string"
     },
-    "dataConfidenceScore" : {
-      "type" : "number",
-      "description" : "Not Provided"
+    "WorldCheckEntities.Data Confidence Comment" : {
+      "type" : "string"
     },
-    "dataConfidenceComment" : {
-      "type" : "string",
-      "description" : "Not Provided"
+    "WorldCheckEntities.Inactive Flag" : {
+      "type" : "string"
     },
-    "inactiveFlag" : {
-      "type" : "string",
-      "description" : "Denotes if the record is considered inactive on World-Check"
+    "WorldCheckEntities.Inactive Since Date" : {
+      "type" : "string"
     },
-    "inactiveSinceDate" : {
-      "type" : "string",
-      "description" : "Date since the record was marked inactive"
+    "WorldCheckEntities.PEP Classification" : {
+      "type" : "string"
     },
-    "pepClassification" : {
-      "type" : "string",
-      "description" : "Type of PEP, for example&#58; Local Counsellor"
+    "WorldCheckEntities.Category" : {
+      "type" : "string"
     },
-    "category" : {
-      "type" : "string",
-      "description" : "Category of PEP, for example&#58; Local Government"
+    "WorldCheckEntities.External Sources" : {
+      "type" : "string"
     },
-    "externalSources" : {
-      "type" : "string",
-      "description" : "Records any external sources used to collate information about the Watchlist Entry"
+    "WorldCheckEntities.Linked to" : {
+      "type" : "string"
     },
-    "linkedTo" : {
-      "type" : "string",
-      "description" : "Associated parties ID"
+    "WorldCheckEntities.Companies" : {
+      "type" : "string"
     },
-    "companies" : {
-      "type" : "string",
-      "description" : "Companies associated with the Watchlist Entry (if known)"
+    "WorldCheckEntities.Further Information" : {
+      "type" : "string"
     },
-    "furtherInformation" : {
-      "type" : "string",
-      "description" : "Any further information as deemed useful by World-Check"
+    "WorldCheckEntities.Sub-Category Description" : {
+      "type" : "string"
     },
-    "subCategoryDescription" : {
-      "type" : "string",
-      "description" : "Groups PEPs according to predefined categories"
+    "WorldCheckEntities.Update Category" : {
+      "type" : "string"
     },
-    "updateCategory" : {
-      "type" : "string",
-      "description" : "Indicates the type ofchange last made, highlighting the significance of each update."
+    "WorldCheckEntities.Native Alias Language Name" : {
+      "type" : "string"
     },
-    "nativeAliasLanguageName" : {
-      "type" : "string",
-      "description" : "Name in non-Latin character set"
+    "WorldCheckEntities.Native Alias Language Country" : {
+      "type" : "string"
     },
-    "nativeAliasLanguageCountry" : {
-      "type" : "string",
-      "description" : "Country in non-Latin character set"
+    "WorldCheckEntities.Cached External Sources" : {
+      "type" : "string"
     },
-    "cachedExternalSources" : {
-      "type" : "string",
-      "description" : "Records any external sources used to collate information about the Watchlist Entry"
+    "WorldCheckEntities.Added Date" : {
+      "type" : "string"
     },
-    "addedDate" : {
-      "type" : "string",
-      "description" : "Date data source was added"
+    "WorldCheckEntities.Last Updated Date" : {
+      "type" : "string"
     },
-    "lastUpdatedDate" : {
-      "type" : "string",
-      "description" : "Data since the Watchlist Entry was last updated"
+    "WorldCheckEntities.edqWCListType" : {
+      "type" : "string"
     },
-    "edqWcListType" : {
-      "type" : "string",
-      "description" : "Indicates the watchlist origin using the HSBC name specification"
-    },
-    "edqOwsWatchlistName" : {
-      "type" : "string",
-      "description" : "The world check watchlist name is transposed into a HSBC equivalent."
+    "WorldCheckEntities.edqOWSWatchlistName" : {
+      "type" : "string"
     }
   }
 };
             defs["WorldCheckIndividuals"] = {
-  "required" : [ "caseId" ],
   "type" : "object",
   "properties" : {
-    "caseId" : {
-      "type" : "integer",
-      "description" : "Unique Identifier assigned to the Case or Alert within Case Management"
-    },
-    "recordId" : {
-      "type" : "number",
-      "description" : "Refers to a record within an Alert where there are multiple Customer name records within the same Alert"
-    },
-    "inputStream" : {
-      "type" : "string",
-      "description" : "Denotes the type of data, for example&#58; Customer Data"
+    "WorldCheckIndividuals.Record Id" : {
+      "type" : "string"
     },
-    "listKey" : {
-      "type" : "string",
-      "description" : "Indicates list origin e.g. WC for world check list"
+    "WorldCheckIndividuals.Input Stream" : {
+      "type" : "string"
     },
-    "listSubKey" : {
-      "type" : "string",
-      "description" : "Indicates the origin of a record and its type e.g. WC-SAN"
+    "WorldCheckIndividuals.List Key" : {
+      "type" : "string"
     },
-    "listRecordType" : {
-      "type" : "string",
-      "description" : "Indicates the type of matching record e.g. SAN"
+    "WorldCheckIndividuals.List Sub Key" : {
+      "type" : "string"
     },
-    "listRecordOrigin" : {
-      "type" : "string",
-      "description" : "List the origin where the World-Check record was derived e.g. OFAC"
+    "WorldCheckIndividuals.List Record Type" : {
+      "type" : "string"
     },
-    "listRecordId" : {
-      "type" : "string",
-      "description" : "Unique Identifier assigned to the World-Check record"
+    "WorldCheckIndividuals.List Record Origin" : {
+      "type" : "string"
     },
-    "listRecordSubId" : {
-      "type" : "string",
-      "description" : "ID for the sub records within a World-Check record"
+    "WorldCheckIndividuals.List Record Id" : {
+      "type" : "string"
     },
-    "passportNumber" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Passport Number (if known)"
+    "WorldCheckIndividuals.List Record Sub Id" : {
+      "type" : "string"
     },
-    "nationalId" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's National Identification Number (if known)"
+    "WorldCheckIndividuals.Passport Number" : {
+      "type" : "string"
     },
-    "title" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's title (if known)"
+    "WorldCheckIndividuals.National Id" : {
+      "type" : "string"
     },
-    "fullNameOriginal" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Full Name"
+    "WorldCheckIndividuals.Title" : {
+      "type" : "string"
     },
-    "givenNamesOriginal" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Given Name"
+    "WorldCheckIndividuals.Full Name (Original)" : {
+      "type" : "string"
     },
-    "familyNameOriginal" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's Family Name"
+    "WorldCheckIndividuals.Given Names (Original)" : {
+      "type" : "string"
     },
-    "fullNameDerived" : {
-      "type" : "string",
-      "description" : "Records a Family Name where it has been derived by OWS"
+    "WorldCheckIndividuals.Family Name (Original)" : {
+      "type" : "string"
     },
-    "givenNamesDerived" : {
-      "type" : "string",
-      "description" : "Records a Given Name where it has been derived by OWS"
+    "WorldCheckIndividuals.Full Name (Derived)" : {
+      "type" : "string"
     },
-    "familyNameDerived" : {
-      "type" : "string",
-      "description" : "Records a Family Name where it has been derived by OWS"
+    "WorldCheckIndividuals.Given Name (Derived)" : {
+      "type" : "string"
     },
-    "nameType" : {
-      "type" : "string",
-      "description" : "Records the type of name in use, for example&#58; Primary Name"
+    "WorldCheckIndividuals.Family Name (Derived)" : {
+      "type" : "string"
     },
-    "nameQuality" : {
-      "type" : "string",
-      "description" : "Indicates the accuracy of the name information, Low, Medium or High"
+    "WorldCheckIndividuals.Name Type" : {
+      "type" : "string"
     },
-    "primaryName" : {
-      "type" : "string",
-      "description" : "Primary Name of the Watchlist Entry"
+    "WorldCheckIndividuals.Name Quality" : {
+      "type" : "string"
     },
-    "originalScriptName" : {
-      "type" : "string",
-      "description" : "Watchlist original script name"
+    "WorldCheckIndividuals.Primary Name" : {
+      "type" : "string"
     },
-    "gender" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's gender (if known)"
+    "WorldCheckIndividuals.Original Script Name" : {
+      "type" : "string"
     },
-    "genderDerivedFlag" : {
-      "type" : "string",
-      "description" : "Denotes if the Watchlist Entry's gender has been derived by OWS"
+    "WorldCheckIndividuals.Gender" : {
+      "type" : "string"
     },
-    "dateOfBirth" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's date of birth (if known)"
+    "WorldCheckIndividuals.Gender Derived Flag" : {
+      "type" : "string"
     },
-    "yearOfBirth" : {
-      "type" : "integer",
-      "description" : "Watchlist Entry's year of birth (if known)"
-    },
-    "deceasedFlag" : {
-      "type" : "string",
-      "description" : "Watchlist Entry is known or believed to be deceased"
+    "WorldCheckIndividuals.Date of Birth" : {
+      "type" : "string"
     },
-    "deceasedDate" : {
-      "type" : "string",
-      "description" : "Date the Watchlist Entry is known or believed to have become deceased"
+    "WorldCheckIndividuals.Year of Birth" : {
+      "type" : "string"
     },
-    "occupation" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's occupation (if known)"
+    "WorldCheckIndividuals.Deceased Flag" : {
+      "type" : "string"
     },
-    "address" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address (if known)"
+    "WorldCheckIndividuals.Deceased Date" : {
+      "type" : "string"
     },
-    "city" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's city (if known)"
+    "WorldCheckIndividuals.Occupation" : {
+      "type" : "string"
     },
-    "state" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's state (if known)"
+    "WorldCheckIndividuals.Address" : {
+      "type" : "string"
     },
-    "postalCode" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's postal code (if known)"
+    "WorldCheckIndividuals.City" : {
+      "type" : "string"
     },
-    "addressCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's address country (if known)"
+    "WorldCheckIndividuals.State" : {
+      "type" : "string"
     },
-    "residencyCountry" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's country of residence (if known)"
+    "WorldCheckIndividuals.Postal Code" : {
+      "type" : "string"
     },
-    "countryOfBirth" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's country of birth (if known)"
+    "WorldCheckIndividuals.Address Country" : {
+      "type" : "string"
     },
-    "nationalities" : {
-      "type" : "string",
-      "description" : "Watchlist Entry's nationality (if known)"
+    "WorldCheckIndividuals.Residency Country" : {
+      "type" : "string"
     },
-    "countryCodesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries associated with the Watchlist Entry (if known)in the ISO Country Code format"
+    "WorldCheckIndividuals.Country of Birth" : {
+      "type" : "string"
     },
-    "countriesAll" : {
-      "type" : "string",
-      "description" : "Records all of the Countries within the Customer record that will be screened for Prohibitions"
+    "WorldCheckIndividuals.Nationalities" : {
+      "type" : "string"
     },
-    "profileHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
+    "WorldCheckIndividuals.Country Codes (All)" : {
+      "type" : "string"
     },
-    "searchHyperlink" : {
-      "type" : "string",
-      "description" : "Watchlist Entry address (if known)"
+    "WorldCheckIndividuals.Countries (All)" : {
+      "type" : "string"
     },
-    "linkedProfiles" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry profiles"
+    "WorldCheckIndividuals.Profile Hyperlink" : {
+      "type" : "string"
     },
-    "linkedRelationships" : {
-      "type" : "string",
-      "description" : "Any known associated Watchlist Entry relationships"
+    "WorldCheckIndividuals.Search Hyperlink" : {
+      "type" : "string"
     },
-    "riskScore" : {
-      "type" : "number",
-      "description" : "World-Check assigned risk score"
+    "WorldCheckIndividuals.Linked Profiles" : {
+      "type" : "string"
     },
-    "pepRiskScore" : {
-      "type" : "number",
-      "description" : "World-Check assigned PEP risk score"
+    "WorldCheckIndividuals.Linked Relationships" : {
+      "type" : "string"
     },
-    "dataConfidenceScore" : {
-      "type" : "number",
-      "description" : "Not Provided"
+    "WorldCheckIndividuals.Risk Score" : {
+      "type" : "string"
     },
-    "dataConfidenceComment" : {
-      "type" : "string",
-      "description" : "Not Provided"
+    "WorldCheckIndividuals.PEP Risk Score" : {
+      "type" : "string"
     },
-    "inactiveFlag" : {
-      "type" : "string",
-      "description" : "Denotes if the record is considered inactive on World-Check"
+    "WorldCheckIndividuals.Data Confidence Score" : {
+      "type" : "string"
     },
-    "inactiveSinceDate" : {
-      "type" : "string",
-      "description" : "Date since the record was marked inactive"
+    "WorldCheckIndividuals.Data Confidence Comment" : {
+      "type" : "string"
     },
-    "pepClassification" : {
-      "type" : "string",
-      "description" : "Type of PEP, for example&#58; Local Counsellor"
+    "WorldCheckIndividuals.Inactive Flag" : {
+      "type" : "string"
     },
-    "category" : {
-      "type" : "string",
-      "description" : "Category of PEP, for example&#58; Local Government"
+    "WorldCheckIndividuals.Inactive Since Date" : {
+      "type" : "string"
     },
-    "externalSources" : {
-      "type" : "string",
-      "description" : "Records any external sources used to collate information about the Watchlist Entry"
+    "WorldCheckIndividuals.PEP Classification" : {
+      "type" : "string"
     },
-    "linkedTo" : {
-      "type" : "string",
-      "description" : "Associated parties ID"
+    "WorldCheckIndividuals.Category" : {
+      "type" : "string"
     },
-    "companies" : {
-      "type" : "string",
-      "description" : "Companies associated with the Watchlist Entry (if known)"
+    "WorldCheckIndividuals.External Sources" : {
+      "type" : "string"
     },
-    "dateOfBirthOriginal" : {
-      "type" : "string",
-      "description" : "The date of birth as originally provided"
+    "WorldCheckIndividuals.Linked to" : {
+      "type" : "string"
     },
-    "yearOfBirthApproximated" : {
-      "type" : "string",
-      "description" : "Year of birth approximation"
+    "WorldCheckIndividuals.Companies" : {
+      "type" : "string"
     },
-    "placeOfBirthOriginal" : {
-      "type" : "string",
-      "description" : "Place of birth details as originally provided"
+    "WorldCheckIndividuals.Date of Birth (Original)" : {
+      "type" : "string"
     },
-    "furtherInformation" : {
-      "type" : "string",
-      "description" : "Any further information as deemed useful by World-Check"
+    "WorldCheckIndividuals.Year of Birth (Approximated)" : {
+      "type" : "string"
     },
-    "countriesOriginal" : {
-      "type" : "string",
-      "description" : "Associated country information as originally provided"
+    "WorldCheckIndividuals.Place of Birth (Original)" : {
+      "type" : "string"
     },
-    "socialSecurityNumber" : {
-      "type" : "string",
-      "description" : "Social Security number"
+    "WorldCheckIndividuals.Further Information" : {
+      "type" : "string"
     },
-    "passportCountry" : {
-      "type" : "string",
-      "description" : "Passport country"
+    "WorldCheckIndividuals.Countries (Original)" : {
+      "type" : "string"
     },
-    "subCategoryDescription" : {
-      "type" : "string",
-      "description" : "Groups PEPs according to predefined categories"
+    "WorldCheckIndividuals.Social Security Number" : {
+      "type" : "string"
     },
-    "updateCategory" : {
-      "type" : "string",
-      "description" : "Indicates the type ofchange last made, highlighting the significance of each update."
+    "WorldCheckIndividuals.Passport Country" : {
+      "type" : "string"
     },
-    "nativeAliasLanguageName" : {
-      "type" : "string",
-      "description" : "Name in non-Latin character set"
+    "WorldCheckIndividuals.Sub-Category Description" : {
+      "type" : "string"
     },
-    "nativeAliasLanguageCountry" : {
-      "type" : "string",
-      "description" : "Country in non-Latin character set"
+    "WorldCheckIndividuals.Update Category" : {
+      "type" : "string"
     },
-    "cachedExternalSources" : {
-      "type" : "string",
-      "description" : "Records any external sources used to collate information about the Watchlist Entry"
+    "WorldCheckIndividuals.Native Alias Language Name" : {
+      "type" : "string"
     },
-    "addedDate" : {
-      "type" : "string",
-      "description" : "Date data source was added"
+    "WorldCheckIndividuals.Native Alias Language Country" : {
+      "type" : "string"
     },
-    "lastUpdatedDate" : {
-      "type" : "string",
-      "description" : "Data since the Watchlist Entry was last updated"
+    "WorldCheckIndividuals.Cached External Sources" : {
+      "type" : "string"
     },
-    "edqOwsWatchlistName" : {
-      "type" : "string",
-      "description" : "Indicates the watchlist origin using the HSBC name specification"
+    "WorldCheckIndividuals.Added Date" : {
+      "type" : "string"
     },
-    "dobs" : {
-      "type" : "string",
-      "description" : "List of DOBs. This is used where the DOB is not certain or there are multiple DOBs associated to a record."
+    "WorldCheckIndividuals.Last Updated Date" : {
+      "type" : "string"
     },
-    "idNumbers" : {
-      "type" : "string",
-      "description" : "Identification Numbers"
+    "WorldCheckIndividuals.edqOWSWatchlistName" : {
+      "type" : "string"
     },
-    "recordType" : {
+    "WorldCheckIndividuals.DOBs" : {
       "type" : "string",
-      "description" : "Indicates the type of record"
+      "format" : "date"
     },
-    "dummy" : {
-      "type" : "string",
-      "description" : "For development use only"
+    "WorldCheckIndividuals.ID Numbers" : {
+      "type" : "string"
+    },
+    "WorldCheckIndividuals.RecordType" : {
+      "type" : "string"
+    },
+    "WorldCheckIndividuals.Dummy" : {
+      "type" : "string"
     }
   }
 };
@@ -3438,7 +2805,7 @@
         <div id="header">
           <div id="api-_">
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
-              <div class="app-desc">Version: 1.0.0</div>
+              <div class="app-desc">Version: 1.0.0-oas3</div>
             <hr>
             <div>HSCB-Bridge-bulk API</div>
           </div>
@@ -3480,7 +2847,7 @@
                           <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdAckPut-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/ack"</code></pre>
+"//async/bulk/v1/{bulkId}/ack"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3776,7 +3143,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/cancel"</code></pre>
+"//async/bulk/v1/{bulkId}/cancel"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4072,7 +3439,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdResultGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/result"</code></pre>
+"//async/bulk/v1/{bulkId}/result"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4368,7 +3735,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/{bulkId}/status"</code></pre>
+"//async/bulk/v1/{bulkId}/status"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4664,7 +4031,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/processingStatus"</code></pre>
+"//async/bulk/v1/processingStatus"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4923,7 +4290,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/bulk/v1/recommend"</code></pre>
+"//async/bulk/v1/recommend"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;

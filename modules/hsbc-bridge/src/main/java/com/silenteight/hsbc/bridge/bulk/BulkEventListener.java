@@ -15,7 +15,6 @@ import org.springframework.context.event.EventListener;
 class BulkEventListener {
 
   private final BulkUpdater bulkUpdater;
-  private final BulkItemStatusUpdater bulkItemStatusUpdater;
 
   @EventListener
   public void onAdjudicateFailedEvent(AdjudicateFailedEvent event) {
@@ -36,12 +35,5 @@ class BulkEventListener {
     bulkUpdater.updateWithAnalysis(event.getBulkId(), event.getAnalysisId());
 
     log.debug("BulkProcessingStartedEvent handled successfully, bulkId =  {}", event.getBulkId());
-  }
-
-  @EventListener
-  public void onUpdateBulkStatusEvent(UpdateBulkItemStatusEvent event) {
-    bulkItemStatusUpdater.update(event.getBulkItemId(), event.getNewStatus());
-
-    log.debug("UpdateBulkItemStatusEvent handled, bulkItemId={}", event.getBulkItemId());
   }
 }

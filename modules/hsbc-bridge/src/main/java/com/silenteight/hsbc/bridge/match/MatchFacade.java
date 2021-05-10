@@ -3,21 +3,22 @@ package com.silenteight.hsbc.bridge.match;
 import lombok.Builder;
 import lombok.NonNull;
 
-import com.silenteight.hsbc.bridge.alert.AlertComposite;
+import com.silenteight.hsbc.bridge.json.ObjectConverter;
+import com.silenteight.hsbc.bridge.json.external.model.HsbcMatch;
 import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 
 @Builder
 public class MatchFacade {
 
-  private final MatchPayloadConverter matchPayloadConverter;
+  private final ObjectConverter objectConverter;
   private final MatchRepository matchRepository;
   private final ApplicationEventPublisher eventPublisher;
 
@@ -26,10 +27,8 @@ public class MatchFacade {
   }
 
   @Transactional
-  public Collection<MatchIdComposite> prepareAndSaveMatches(
-      @NonNull AlertComposite alertComposite) {
-    var matches = new RelationshipsProcessor(alertComposite.getAlertRawData()).process();
-    var matchComposites = saveMatches(alertComposite.getId(), matches);
+  public Collection<MatchIdComposite> prepareAndSaveMatches(long alertId, List<Match> matches) {
+    var matchComposites = saveMatches(alertId, matches);
 
     eventPublisher.publishEvent(new StoredMatchesEvent(matchComposites));
 
@@ -44,34 +43,36 @@ public class MatchFacade {
         .collect(Collectors.toList());
   }
 
-  private List<MatchComposite> saveMatches(long alertId, List<MatchRawData> matches) {
+  private List<MatchComposite> saveMatches(long alertId, List<Match> matches) {
     var matchComposites = new ArrayList<MatchComposite>();
-    for (MatchRawData matchRawData : matches) {
-      var payload = getPayload(matchRawData);
-      var externalId = matchRawData.getCaseId() + "";
-      var matchEntity = new MatchEntity(externalId, alertId, payload);
+    for (Match match : matches) {
+      var matchData = match.getMatchData();
+      var payload = getPayload(matchData);
+      var matchEntity = new MatchEntity(match.getExternalId(), alertId);
+      matchEntity.setPayload(new MatchPayloadEntity(payload));
 
       matchRepository.save(matchEntity);
 
       matchComposites.add(MatchComposite.builder()
           .id(matchEntity.getId())
           .externalId(matchEntity.getExternalId())
-          .rawData(matchRawData)
+          .matchData(objectConverter.convert(matchData, MatchRawData.class))
           .build());
     }
 
     return matchComposites;
   }
 
-  private byte[] getPayload(MatchRawData matchRawData) {
-    return matchPayloadConverter.convert(matchRawData);
+  private byte[] getPayload(HsbcMatch matchData) {
+    return objectConverter.convert(matchData);
   }
 
   private MatchComposite toMatchComposite(MatchEntity matchEntity) {
+    var payload = matchEntity.getPayload();
     return MatchComposite.builder()
         .id(matchEntity.getId())
         .name(matchEntity.getName())
-        .rawData(matchPayloadConverter.convert(matchEntity.getPayload()))
+        .matchData(objectConverter.convert(payload.getPayload(), MatchRawData.class))
         .build();
   }
 
@@ -81,6 +82,7 @@ public class MatchFacade {
         .collect(Collectors.toList());
   }
 
+  @Transactional(readOnly = true)
   public List<MatchComposite> getMatches(@NonNull List<String> matchNames) {
     return matchNames.stream()
         .map(this::getMatch)

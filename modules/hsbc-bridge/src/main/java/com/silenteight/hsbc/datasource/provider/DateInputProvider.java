@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
 import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
@@ -35,16 +35,15 @@ class DateInputProvider implements DataSourceInputProvider<DateInputResponse> {
     return matches.stream()
         .map(match -> DateInputDto.builder()
             .match(match.getName())
-            .featureInputs(getFeatureInputs(features, match.getRawData()))
+            .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
         .collect(Collectors.toList());
   }
 
-  private List<DateFeatureInputDto> getFeatureInputs(
-      List<String> features, MatchRawData matchRawData) {
+  private List<DateFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (DateFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchRawData))
+            getFeatureRetriever(featureName).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

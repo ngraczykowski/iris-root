@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
-import com.silenteight.hsbc.bridge.match.MatchRawData;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputDto;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
@@ -35,16 +35,16 @@ class TransactionInputProvider implements DataSourceInputProvider<TransactionInp
     return matches.stream()
         .map(match -> TransactionInputDto.builder()
             .match(match.getName())
-            .featureInputs(getFeatureInputs(features, match.getRawData()))
+            .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
         .collect(Collectors.toList());
   }
 
   private List<TransactionFeatureInputDto> getFeatureInputs(
-      List<String> features, MatchRawData matchRawData) {
+      List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (TransactionFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchRawData))
+            getFeatureRetriever(featureName).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

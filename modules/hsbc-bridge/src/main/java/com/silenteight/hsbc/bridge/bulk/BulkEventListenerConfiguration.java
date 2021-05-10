@@ -9,23 +9,14 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class BulkEventListenerConfiguration {
 
-  private final BulkItemRepository bulkItemRepository;
   private final BulkRepository bulkRepository;
 
   @Bean
   BulkEventListener bulkEventListener() {
-    return new BulkEventListener(bulkUpdater(), bulkItemStatusUpdater());
+    return new BulkEventListener(bulkUpdater());
   }
 
   private BulkUpdater bulkUpdater() {
     return new BulkUpdater(bulkRepository);
-  }
-
-  private BulkItemStatusUpdater bulkItemStatusUpdater() {
-    return new BulkItemStatusUpdater(bulkItemRepository, bulkStatusUpdater());
-  }
-
-  private BulkStatusUpdater bulkStatusUpdater() {
-    return new BulkStatusUpdater(bulkRepository);
   }
 }

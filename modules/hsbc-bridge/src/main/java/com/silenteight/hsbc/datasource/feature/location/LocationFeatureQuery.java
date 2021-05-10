@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.feature.location;
 
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 
 import java.util.stream.Stream;
 

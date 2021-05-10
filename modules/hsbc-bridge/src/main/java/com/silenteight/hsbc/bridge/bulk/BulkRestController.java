@@ -6,13 +6,13 @@ import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
-import com.silenteight.hsbc.bridge.bulk.rest.input.HsbcRecommendationRequest;
-import com.silenteight.hsbc.bridge.bulk.rest.output.*;
+import com.silenteight.hsbc.bridge.bulk.rest.*;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,6 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -35,20 +34,22 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @RequiredArgsConstructor
 public class BulkRestController {
 
-  private final CreateBulkUseCase createBulkUseCase;
   private final CancelBulkUseCase cancelBulkUseCase;
   private final GetBulkStatusUseCase getBulkStatusUseCase;
   private final GetBulkResultsUseCase getBulkResultsUseCase;
   private final AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase;
+  private final StoreBulkUseCase storeBulkUseCase;
 
   private static final String[] OWS_HEADER =
       { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
   private static final String OWS_FILE_NAME = "owsResponse.ows";
 
-  @PostMapping("/recommendAlerts")
-  public ResponseEntity<BulkAcceptedResponse> recommendAlerts(
-      @Valid @RequestBody HsbcRecommendationRequest request) {
-    return ResponseEntity.ok(createBulkUseCase.createBulk(request));
+  @PostMapping("/recommend")
+  public ResponseEntity<BulkAcceptedResponse> receiveAlerts(HttpEntity<String> entity) {
+    var bulkId = storeBulkUseCase.handle(entity.getBody());
+
+    return ResponseEntity.ok(new BulkAcceptedResponse()
+        .bulkId(bulkId));
   }
 
   @PutMapping("/{id}/ack")
@@ -113,7 +114,7 @@ public class BulkRestController {
     return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
   }
 
-  private List<String> createOwsRow(com.silenteight.hsbc.bridge.bulk.rest.input.SolvedAlert a) {
+  private List<String> createOwsRow(SolvedAlert a) {
     // TODO fill it with proper data
     return List.of(a.getId() + "", a.getRecommendation().name(), a.getComment(), "Code",
         "Description");

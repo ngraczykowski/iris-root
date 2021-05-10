@@ -23,7 +23,7 @@ class StoreMatchCategoriesUseCase {
         .forEach(categoryModel -> matchComposites.forEach(match -> {
           var matchId = match.getId();
           var category = categoryRepository.findByName(categoryModel.getName());
-          var values = categoryModel.getValueRetriever().retrieve(match.getRawData());
+          var values = categoryModel.getValueRetriever().retrieve(match.getMatchData());
 
           var matchCategory = new MatchCategoryEntity(matchId, category, values);
           matchCategoryRepository.save(matchCategory);

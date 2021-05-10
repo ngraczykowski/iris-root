@@ -1,10 +1,10 @@
 package com.silenteight.hsbc.datasource.category;
 
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 
 import java.util.List;
 
 interface CategoryValueRetriever {
 
-  List<String> retrieve(MatchRawData matchRawData);
+  List<String> retrieve(MatchData matchData);
 }

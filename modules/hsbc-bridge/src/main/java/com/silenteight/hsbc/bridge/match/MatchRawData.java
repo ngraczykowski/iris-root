@@ -1,41 +1,55 @@
 package com.silenteight.hsbc.bridge.match;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL;
-import com.silenteight.hsbc.bridge.domain.EntityComposite;
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.util.List;
 
 import static java.util.Objects.nonNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class MatchRawData {
+class MatchRawData implements MatchData {
 
-  private int caseId;
-  private CasesWithAlertURL caseWithAlertURL;
-  private EntityComposite entityComposite;
-  private IndividualComposite individualComposite;
+  @JsonDeserialize(as = com.silenteight.hsbc.bridge.json.internal.model.CaseInformation.class)
+  private CaseInformation caseInformation;
 
-  MatchRawData(int caseId, CasesWithAlertURL caseWithAlertURL, EntityComposite composite) {
-    this.caseId = caseId;
-    this.caseWithAlertURL = caseWithAlertURL;
-    this.entityComposite = composite;
-  }
+  @JsonDeserialize(as = com.silenteight.hsbc.bridge.json.internal.model.CustomerEntity.class)
+  private CustomerEntity customerEntity;
 
-  MatchRawData(int caseId, CasesWithAlertURL caseWithAlertURL, IndividualComposite composite) {
-    this.caseId = caseId;
-    this.caseWithAlertURL = caseWithAlertURL;
-    this.individualComposite = composite;
-  }
+  @JsonDeserialize(as = com.silenteight.hsbc.bridge.json.internal.model.CustomerIndividual.class)
+  private CustomerIndividual customerIndividual;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.CtrpScreening.class)
+  private List<CtrpScreening> ctrpScreeningEntities;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.PrivateListEntity.class)
+  private List<PrivateListEntity> privateListEntities;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.WorldCheckEntity.class)
+  private List<WorldCheckEntity> worldCheckEntities;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.CtrpScreening.class)
+  private List<CtrpScreening> ctrpScreeningIndividuals;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.PrivateListIndividual.class)
+  private List<PrivateListIndividual> privateListIndividuals;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.WorldCheckIndividual.class)
+  private List<WorldCheckIndividual> worldCheckIndividuals;
 
   @JsonIgnore
   public boolean isIndividual() {
-    return nonNull(individualComposite);
+    return nonNull(getCustomerIndividual());
+  }
+
+  @JsonIgnore
+  public Integer getCaseId() {
+    return caseInformation.getId();
   }
 }

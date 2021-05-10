@@ -2,8 +2,8 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.IndividualComposite;
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import com.silenteight.hsbc.datasource.feature.location.LocationFeatureQuery;
 
 import java.util.stream.Stream;
@@ -21,16 +21,16 @@ class LocationFeatureQueryFacade implements LocationFeatureQuery {
   }
 
   private static Stream<String> extractWorldCheckResidencies(
-      WorldCheckIndividuals worldCheckIndividuals) {
+      WorldCheckIndividual worldCheckIndividual) {
     return Stream.of(
-        worldCheckIndividuals.getAddressCountry(),
-        worldCheckIndividuals.getResidencyCountry()
+        worldCheckIndividual.getAddressCountry(),
+        worldCheckIndividual.getResidencyCountry()
     );
   }
 
   @Override
   public Stream<String> customerIndividualResidencies() {
-    var customerIndividuals = individualComposite.getCustomerIndividuals();
+    var customerIndividuals = individualComposite.getCustomerIndividual();
 
     return Stream.of(
         customerIndividuals.getResidenceCountries(),

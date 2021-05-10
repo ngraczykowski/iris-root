@@ -2,21 +2,21 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividuals;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class WorldCheckIndividualsCountriesExtractor {
 
-  private final WorldCheckIndividuals worldCheckIndividuals;
+  private final WorldCheckIndividual worldCheckIndividual;
 
   public Stream<String> extract() {
     return Stream.of(
-        worldCheckIndividuals.getCountryOfBirth(),
-        worldCheckIndividuals.getNationalities(),
-        worldCheckIndividuals.getPassportCountry(),
-        worldCheckIndividuals.getNativeAliasLanguageCountry()
+        worldCheckIndividual.getCountryOfBirth(),
+        worldCheckIndividual.getNationalities(),
+        worldCheckIndividual.getPassportCountry(),
+        worldCheckIndividual.getNativeAliasLanguageCountry()
     );
   }
 }

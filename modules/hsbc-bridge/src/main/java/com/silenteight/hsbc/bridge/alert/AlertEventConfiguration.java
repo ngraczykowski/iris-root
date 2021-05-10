@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,10 +10,13 @@ import org.springframework.context.annotation.Configuration;
 class AlertEventConfiguration {
 
   private final AlertRepository alertRepository;
-  private final ApplicationEventPublisher eventPublisher;
 
   @Bean
-  AlertEventHandler alertEventHandler() {
-    return new AlertEventHandler(alertRepository, eventPublisher);
+  AlertEventListener alertEventHandler() {
+    return new AlertEventListener(alertUpdater());
+  }
+
+  private AlertUpdater alertUpdater() {
+    return new AlertUpdater(alertRepository);
   }
 }

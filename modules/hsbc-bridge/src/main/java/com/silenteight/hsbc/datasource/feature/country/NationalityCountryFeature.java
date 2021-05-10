@@ -2,7 +2,7 @@ package com.silenteight.hsbc.datasource.feature.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.match.MatchRawData;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
@@ -17,8 +17,8 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
   private final NationalityCountryQuery.Factory nationalityCountryQueryFactory;
 
   @Override
-  public CountryFeatureInputDto retrieve(MatchRawData matchRawData) {
-    var query = nationalityCountryQueryFactory.create(matchRawData.getIndividualComposite());
+  public CountryFeatureInputDto retrieve(MatchData matchData) {
+    var query = nationalityCountryQueryFactory.create(matchData);
 
     var apIdDocumentCountry = query.apLine4DocumentCountry();
     var apFieldsCountries = query.apFieldsIndividualCountries();

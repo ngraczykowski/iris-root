@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkAlertItem;
-import com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatusResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkAlertItem;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkStatusResponse;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.DELIVERED;
 
 @RequiredArgsConstructor
 public class AcknowledgeBulkDeliveryUseCase {
@@ -29,25 +28,26 @@ public class AcknowledgeBulkDeliveryUseCase {
       throw new BulkProcessingNotCompletedException(id);
     }
 
-    result.setStatus(DELIVERED);
+    result.delivered();
     var bulk = bulkRepository.save(result);
 
     var response = new BulkStatusResponse();
     response.setBulkId(id);
     response.setBulkStatus(
-        com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus.fromValue(
+        com.silenteight.hsbc.bridge.bulk.rest.BulkStatus.fromValue(
             bulk.getStatus().name()));
-    response.setRequestedAlerts(getRequestedAlerts(result.getItems()));
+    response.setRequestedAlerts(getRequestedAlerts(result.getAlerts()));
 
     return response;
   }
 
-  private List<BulkAlertItem> getRequestedAlerts(Collection<BulkItem> bulkItems) {
-    return bulkItems.stream().map(r -> {
+  //FIXME do not use entity here, map statuses
+  private List<BulkAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
+    return alerts.stream().map(r -> {
       var bulkItem = new BulkAlertItem();
-      bulkItem.setId(r.getAlertExternalId());
+      bulkItem.setId(r.getExternalId());
       bulkItem.setStatus(
-          com.silenteight.hsbc.bridge.bulk.rest.output.BulkStatus.fromValue(
+          com.silenteight.hsbc.bridge.bulk.rest.BulkStatus.fromValue(
               r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());
