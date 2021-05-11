@@ -10,25 +10,35 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-
 @RequiredArgsConstructor
 @Service
 class HandleAddedAnalysisDatasetsUseCase {
 
   private final CreatePendingRecommendationsUseCase createPendingRecommendationsUseCase;
 
-  // TODO(ahaczewski): Implement creating pending recommendations.
   Optional<PendingRecommendations> handleAddedAnalysisDatasets(
       AddedAnalysisDatasets addedAnalysisDatasets) {
 
-    var analysisIds = addedAnalysisDatasets
+    var builder = PendingRecommendations.newBuilder();
+
+    addedAnalysisDatasets
         .getAnalysisDatasetsList()
         .stream()
-        .map(name -> ResourceName.create(name).getLong("analysis"))
+        .mapToLong(name -> ResourceName.create(name).getLong("analysis"))
         .distinct()
-        .collect(toList());
+        .forEach(analysisId -> {
+          var pending =
+              createPendingRecommendationsUseCase.createPendingRecommendations(analysisId);
 
-    return Optional.empty();
+          if (pending) {
+            builder.addAnalysis("analysis/" + analysisId);
+          }
+        });
+
+    if (builder.getAnalysisCount() == 0) {
+      return Optional.empty();
+    }
+
+    return Optional.of(builder.build());
   }
 }

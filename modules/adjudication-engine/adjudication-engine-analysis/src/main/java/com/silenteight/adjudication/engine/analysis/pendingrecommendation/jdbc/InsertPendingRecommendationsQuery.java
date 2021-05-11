@@ -2,28 +2,40 @@ package com.silenteight.adjudication.engine.analysis.pendingrecommendation.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.SqlUpdate;
-import org.springframework.util.ResourceUtils;
+import org.springframework.stereotype.Component;
 
-import java.util.ResourceBundle;
+import java.sql.Types;
 
 @RequiredArgsConstructor
+@Component
 class InsertPendingRecommendationsQuery {
 
   private final SqlUpdate query;
 
-  InsertPendingRecommendationsQuery(JdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
+  InsertPendingRecommendationsQuery(JdbcTemplate jdbcTemplate) {
     query = new SqlUpdate();
 
     query.setJdbcTemplate(jdbcTemplate);
-    query.setSql(resourceLoader.getResource("classpath:" + getClass().getName() + ".sql").);
+    query.setSql("INSERT INTO ae_pending_recommendation\n"
+        + "SELECT aaaq.analysis_id, aaaq.alert_id, now()\n"
+        + "FROM ae_analysis_alert_query aaaq\n"
+        + "         LEFT JOIN ae_recommendation ar\n"
+        + "                   on aaaq.alert_id = ar.alert_id\n"
+        + "                          and aaaq.analysis_id = ar.analysis_id\n"
+        + "         LEFT JOIN ae_pending_recommendation apr\n"
+        + "                   on aaaq.alert_id = apr.alert_id\n"
+        + "                          and aaaq.analysis_id = ar.analysis_id\n"
+        + "WHERE aaaq.analysis_id = ?\n"
+        + "  AND ar.analysis_id IS NULL\n"
+        + "  AND apr.analysis_id IS NULL\n"
+        + "ON CONFLICT DO NOTHING");
+    query.setParameters(new SqlParameter("analysis_id", Types.BIGINT));
   }
 
   int execute(long analysisId) {
-    jdbcTemplate.execute((PreparedStatementCreator) con -> con.prepareStatement(query), )
+    return query.update(analysisId);
   }
-
 }

@@ -9,9 +9,6 @@ import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.stereotype.Component;
 
-/*
-AnalysisDatasetsAdded (rabbit) -> List<PendingRecommendation> (db) -> RecommendationsPending (rabbit)
- */
 @RequiredArgsConstructor
 @Component
 class PendingRecommendationsIntegrationFlow extends IntegrationFlowAdapter {
