@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.ConfigurePolicyRequestBuilder;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration.StepConfigurationBuilder;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,13 +34,17 @@ public class ImportPolicyUseCase {
   private static ConfigurePolicyRequest createRequest(
       @NonNull ImportedPolicy importedPolicy, @NonNull String createdBy) {
 
-    return ConfigurePolicyRequest
+    ConfigurePolicyRequestBuilder builder = ConfigurePolicyRequest
         .builder()
         .policyName(importedPolicy.getName())
         .description(importedPolicy.getDescription())
         .createdBy(createdBy)
-        .stepConfigurations(mapToStepConfigurations(importedPolicy.getSteps()))
-        .build();
+        .stepConfigurations(mapToStepConfigurations(importedPolicy.getSteps()));
+
+    if (importedPolicy.getPolicyId() != null)
+      builder.policyId(importedPolicy.getPolicyId());
+
+    return builder.build();
   }
 
   private static List<StepConfiguration> mapToStepConfigurations(
@@ -51,15 +57,19 @@ public class ImportPolicyUseCase {
   }
 
   private static StepConfiguration mapToStepConfiguration(ImportedStep importedStep) {
-    return StepConfiguration
+    StepConfigurationBuilder builder = StepConfiguration
         .builder()
         .solution(importedStep.getSolution())
         .stepName(importedStep.getName())
         .stepDescription(importedStep.getDescription())
         .stepType(importedStep.getType())
         .featureLogicConfigurations(
-            mapToFeatureLogicConfigurations(importedStep.getFeatureLogics()))
-        .build();
+            mapToFeatureLogicConfigurations(importedStep.getFeatureLogics()));
+
+    if (importedStep.getStepId() != null)
+      builder.stepId(importedStep.getStepId());
+
+    return builder.build();
   }
 
   private static Collection<FeatureLogicConfiguration> mapToFeatureLogicConfigurations(

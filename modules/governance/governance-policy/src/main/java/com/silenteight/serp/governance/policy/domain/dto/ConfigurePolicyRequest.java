@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.policy.domain.dto;
 
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -23,7 +24,8 @@ import static java.util.UUID.randomUUID;
 @Builder
 public class ConfigurePolicyRequest implements AuditableRequest {
 
-  UUID correlationId = UUID.randomUUID();
+  UUID correlationId = randomUUID();
+  @Default
   UUID policyId = randomUUID();
   @NonNull
   String policyName;
@@ -39,6 +41,10 @@ public class ConfigurePolicyRequest implements AuditableRequest {
   @Value
   @Builder
   public static class StepConfiguration {
+
+    @Default
+    @NonNull
+    UUID stepId = randomUUID();
 
     @NonNull
     FeatureVectorSolution solution;

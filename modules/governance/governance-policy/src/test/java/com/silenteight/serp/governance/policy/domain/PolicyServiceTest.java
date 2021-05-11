@@ -75,7 +75,84 @@ class PolicyServiceTest {
   }
 
   @Test
-  void importPolicy() {
+  void importPolicyWithUuids() {
+    // given
+    String featureName = "nameAgent";
+    Collection<String> featureValues = of("EXACT_MATCH", "NEAR_MATCH");
+    int logicCount = 1;
+    FeatureVectorSolution stepSolution = SOLUTION_FALSE_POSITIVE;
+    String stepName = "step-1";
+    String stepDescription = "This is test description";
+    StepType stepType = BUSINESS_LOGIC;
+    String policyName = "policy-name";
+    String creator = "asmith";
+    List<FeatureConfiguration> featureConfiguration = getFeatureConfiguration(
+        featureName, featureValues);
+    FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
+        .builder()
+        .toFulfill(logicCount)
+        .featureConfigurations(featureConfiguration)
+        .build();
+    StepConfiguration stepConfiguration = StepConfiguration
+        .builder()
+        .solution(stepSolution)
+        .stepName(stepName)
+        .stepId(FIRST_STEP)
+        .stepDescription(stepDescription)
+        .stepType(stepType)
+        .featureLogicConfigurations(singletonList(featureLogicConfiguration))
+        .build();
+    ConfigurePolicyRequest request = ConfigurePolicyRequest
+        .builder()
+        .policyName(policyName)
+        .policyId(POLICY_ID)
+        .createdBy(creator)
+        .stepConfigurations(singletonList(stepConfiguration))
+        .build();
+
+    // when
+    UUID policyId = underTest.doImport(request);
+
+    // then
+    var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
+
+    verify(auditingLogger, times(8)).log(logCaptor.capture());
+
+    assertThat(policyId).isEqualTo(POLICY_ID);
+    var policy = policyRepository.getByPolicyId(POLICY_ID);
+    assertThat(policy.getName()).isEqualTo(policyName);
+    assertThat(policy.getState()).isEqualTo(IN_USE);
+    assertThat(policy.getPolicyId()).isEqualTo(policyId);
+    assertThat(policy.getCreatedBy()).isEqualTo(creator);
+    assertThat(policy.getUpdatedBy()).isEqualTo(creator);
+    assertThat(policy.getSteps()).hasSize(1);
+
+    var step = policy.getSteps().iterator().next();
+    assertThat(step.getSolution()).isEqualTo(stepSolution);
+    assertThat(step.getName()).isEqualTo(stepName);
+    assertThat(step.getStepId()).isEqualTo(FIRST_STEP);
+    assertThat(step.getDescription()).isEqualTo(stepDescription);
+    assertThat(step.getType()).isEqualTo(stepType);
+    assertThat(step.getFeatureLogics()).hasSize(1);
+
+    var featureLogic = step.getFeatureLogics().iterator().next();
+    assertThat(featureLogic.getCount()).isEqualTo(logicCount);
+    assertThat(featureLogic.getFeatures()).hasSize(1);
+
+    var feature = featureLogic.getFeatures().iterator().next();
+    assertThat(feature.getName()).isEqualTo(featureName);
+    assertThat(feature.getValues()).isEqualTo(featureValues);
+
+    var eventCaptor = ArgumentCaptor.forClass(PolicyImportedEvent.class);
+
+    verify(eventPublisher).publishEvent(eventCaptor.capture());
+
+    var event = eventCaptor.getValue();
+    assertThat(event.getPolicyId()).isEqualTo(policyId);
+  }
+
+  @Test
+  void importPolicyWithoutUuids() {
     // given
     String featureName = "nameAgent";
     Collection<String> featureValues = of("EXACT_MATCH", "NEAR_MATCH");

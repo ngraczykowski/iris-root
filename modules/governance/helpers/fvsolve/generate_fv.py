@@ -1,7 +1,9 @@
 import itertools
 
+# policy_name used in this example indicates the policy imported from solid-steps.json file
 template = """
 {
+  "policy_name": "policies/2e6a6390-7089-4821-8611-1843c3e2f8ab",
   "feature_collection": {
     "feature": [
       %s

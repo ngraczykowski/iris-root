@@ -82,19 +82,21 @@ public class PolicyService {
       int sortOrder,
       String createdBy) {
 
-    UUID stepId = UUID.randomUUID();
     addStep(
         correlationId,
         policy,
         configuration.getSolution(),
-        stepId,
+        configuration.getStepId(),
         configuration.getStepName(),
         configuration.getStepDescription(),
         configuration.getStepType(),
         sortOrder,
         createdBy);
     doConfigureStepLogic(
-        policy, stepId, configuration.getFeatureLogicConfigurations(), createdBy);
+        policy,
+        configuration.getStepId(),
+        configuration.getFeatureLogicConfigurations(),
+        createdBy);
   }
 
   public UUID createPolicy(

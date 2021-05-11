@@ -17,7 +17,6 @@ import java.util.UUID;
 @JsonPropertyOrder({ "policyId", "policyName", "steps" })
 class ImportedPolicy {
 
-  @NonNull
   private UUID policyId;
 
   @NonNull
