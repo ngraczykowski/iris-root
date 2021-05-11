@@ -7,6 +7,8 @@ import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
+import java.util.List;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
@@ -18,21 +20,28 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
 
   @Override
   public CountryFeatureInputDto retrieve(MatchData matchData) {
-    var query = nationalityCountryQueryFactory.create(matchData);
+    var inputBuilder = CountryFeatureInputDto.builder()
+        .feature(getFeature().getName());
 
-    var apIdDocumentCountry = query.apLine4DocumentCountry();
-    var apFieldsCountries = query.apFieldsIndividualCountries();
+    if (matchData.isIndividual()) {
+      var query = nationalityCountryQueryFactory.create(matchData);
 
-    var mpDocument = query.mpDocumentCountries();
-    var mpWorldCheckCountries = query.mpWorldCheckCountries();
+      var apIdDocumentCountry = query.apLine4DocumentCountry();
+      var apFieldsCountries = query.apFieldsIndividualCountries();
 
-    return CountryFeatureInputDto.builder()
-        .feature(getFeature().getName())
-        .alertedPartyCountries(
-            concat(apIdDocumentCountry, apFieldsCountries).distinct().collect(toList()))
-        .watchlistCountries(
-            concat(mpDocument, mpWorldCheckCountries).distinct().collect(toList()))
-        .build();
+      var mpDocument = query.mpDocumentCountries();
+      var mpWorldCheckCountries = query.mpWorldCheckCountries();
+
+      inputBuilder.alertedPartyCountries(
+          concat(apIdDocumentCountry, apFieldsCountries).distinct().collect(toList()));
+      inputBuilder.watchlistCountries(
+          concat(mpDocument, mpWorldCheckCountries).distinct().collect(toList()));
+    } else {
+      inputBuilder.alertedPartyCountries(List.of());
+      inputBuilder.watchlistCountries(List.of());
+    }
+
+    return inputBuilder.build();
   }
 
   @Override

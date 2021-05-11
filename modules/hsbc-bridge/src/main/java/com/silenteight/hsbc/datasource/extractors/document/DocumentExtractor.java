@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public class DocumentExtractor {
 
   //FIXE (mmrowka) this should be configurable from properties
@@ -39,11 +41,15 @@ public class DocumentExtractor {
   public Document convertMatchedPartyDocumentNumbers(IndividualComposite individualComposite) {
     var document = new Document();
 
-    extractWorldCheckIndividualsDocuments(
-        individualComposite.getWorldCheckIndividuals(), document);
+    if (individualComposite.hasWorldCheckIndividuals()) {
+      extractWorldCheckIndividualsDocuments(
+          individualComposite.getWorldCheckIndividuals(), document);
+    }
 
-    extractPrivateListIndividualsDocument(
-        individualComposite.getPrivateListIndividuals(), document);
+    if (individualComposite.hasPrivateListIndividuals()) {
+      extractPrivateListIndividualsDocument(
+          individualComposite.getPrivateListIndividuals(), document);
+    }
 
     return document;
   }
@@ -87,42 +93,57 @@ public class DocumentExtractor {
       List<WorldCheckIndividual> worldCheckIndividuals, Document document) {
 
     worldCheckIndividuals.forEach(w -> {
-      var splitPassportNumbers = w.getPassportNumber().split(";");
-
-      Arrays.stream(splitPassportNumbers)
-          .map(PassportNumberFieldCountryExtractor::new)
-          .map(SimpleRegexBasedExtractor::extract)
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .forEach(document::addPassportCountry);
-
-      Arrays.stream(splitPassportNumbers)
-          .map(this::extractDocumentId)
-          .forEach(document::addPassportNumber);
-
-      var splitIdNumbers = w.getIdNumbers().split("\\|");
-
-      Arrays.stream(splitIdNumbers)
-          .map(NationalIdNumberFieldCountryExtractor::new)
-          .map(SimpleRegexBasedExtractor::extract)
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .forEach(document::addNationalIdCountry);
-
-      var extractedIdNumbers = Arrays.stream(splitIdNumbers)
-          .map(this::extractDocumentId)
-          .collect(Collectors.toList());
-
-      extractedIdNumbers
-          .stream()
-          .filter(i -> DOCUMENT_ID_PATTERN.matcher(i).find())
-          .forEach(document::addNationalIdNumber);
-
-      extractedIdNumbers
-          .stream()
-          .filter(i -> OTHER_DOCUMENT_ID_PATTERN.matcher(i).find())
-          .forEach(document::addOtherDocumentNumber);
+      extractPassportNumbers(document, w.getPassportNumber());
+      extractIdNumbers(document, w.getIdNumbers());
     });
+  }
+
+  private void extractIdNumbers(Document document, String idNumbers) {
+    if (isEmpty(idNumbers)) {
+      return;
+    }
+
+    var splitIdNumbers = idNumbers.split("\\|");
+
+    Arrays.stream(splitIdNumbers)
+        .map(NationalIdNumberFieldCountryExtractor::new)
+        .map(SimpleRegexBasedExtractor::extract)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(document::addNationalIdCountry);
+
+    var extractedIdNumbers = Arrays.stream(splitIdNumbers)
+        .map(this::extractDocumentId)
+        .collect(Collectors.toList());
+
+    extractedIdNumbers
+        .stream()
+        .filter(i -> DOCUMENT_ID_PATTERN.matcher(i).find())
+        .forEach(document::addNationalIdNumber);
+
+    extractedIdNumbers
+        .stream()
+        .filter(i -> OTHER_DOCUMENT_ID_PATTERN.matcher(i).find())
+        .forEach(document::addOtherDocumentNumber);
+  }
+
+  private void extractPassportNumbers(Document document, String passportNumber) {
+    if (isEmpty(passportNumber)) {
+      return;
+    }
+
+    var splitPassportNumbers = passportNumber.split(";");
+
+    Arrays.stream(splitPassportNumbers)
+        .map(PassportNumberFieldCountryExtractor::new)
+        .map(SimpleRegexBasedExtractor::extract)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(document::addPassportCountry);
+
+    Arrays.stream(splitPassportNumbers)
+        .map(this::extractDocumentId)
+        .forEach(document::addPassportNumber);
   }
 
   private void extractPrivateListIndividualsDocument(

@@ -1,10 +1,10 @@
-package com.silenteight.hsbc.datasource.feature.location;
+package com.silenteight.hsbc.datasource.feature.country;
 
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 
 import java.util.stream.Stream;
 
-public interface LocationFeatureQuery {
+public interface ResidencyCountryFeatureQuery {
 
   Stream<String> worldCheckIndividualsResidencies();
 
@@ -12,6 +12,6 @@ public interface LocationFeatureQuery {
 
   interface Factory {
 
-    LocationFeatureQuery create(IndividualComposite individualComposite);
+    ResidencyCountryFeatureQuery create(IndividualComposite individualComposite);
   }
 }

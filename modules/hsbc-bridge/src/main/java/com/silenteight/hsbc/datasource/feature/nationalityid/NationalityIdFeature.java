@@ -7,6 +7,8 @@ import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class NationalityIdFeature implements FeatureValuesRetriever<NationalIdFeatureInputDto> {
 
@@ -15,8 +17,7 @@ public class NationalityIdFeature implements FeatureValuesRetriever<NationalIdFe
 
   @Override
   public NationalIdFeatureInputDto retrieve(MatchData matchData) {
-    var nationalIdFeatureInputDtoBuilder =
-        NationalIdFeatureInputDto.builder()
+    var inputBuilder = NationalIdFeatureInputDto.builder()
             //FIXME mmrowka which country to choose if there is many IDs?
             //.alertedPartyCountry("AP")
             //.watchlistCountry("PL")
@@ -25,15 +26,16 @@ public class NationalityIdFeature implements FeatureValuesRetriever<NationalIdFe
     if (matchData.isIndividual()) {
       var apDocumentQuery = alertedPartyDocumentQueryFactory.create(
           matchData.getCustomerIndividual());
-      nationalIdFeatureInputDtoBuilder.alertedPartyDocumentNumbers(
-          apDocumentQuery.allDocumentsNumbers());
+      inputBuilder.alertedPartyDocumentNumbers(apDocumentQuery.allDocumentsNumbers());
 
       var mpDocumentQuery = matchedPartyDocumentQueryFactory.create(matchData);
-      nationalIdFeatureInputDtoBuilder.watchlistDocumentNumbers(
-          mpDocumentQuery.allDocumentsNumbers());
+      inputBuilder.watchlistDocumentNumbers(mpDocumentQuery.allDocumentsNumbers());
+    } else {
+      inputBuilder.alertedPartyDocumentNumbers(List.of());
+      inputBuilder.watchlistDocumentNumbers(List.of());
     }
 
-    return nationalIdFeatureInputDtoBuilder.build();
+    return inputBuilder.build();
   }
 
   @Override

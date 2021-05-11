@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
-import com.silenteight.hsbc.datasource.feature.location.LocationFeatureQuery;
+import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQuery;
 
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-class LocationFeatureQueryFacade implements LocationFeatureQuery {
+class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatureQuery {
 
   private final IndividualComposite individualComposite;
 
@@ -17,7 +17,7 @@ class LocationFeatureQueryFacade implements LocationFeatureQuery {
   public Stream<String> worldCheckIndividualsResidencies() {
     return individualComposite.getWorldCheckIndividuals()
         .stream()
-        .flatMap(LocationFeatureQueryFacade::extractWorldCheckResidencies);
+        .flatMap(ResidencyCountryFeatureQueryFacade::extractWorldCheckResidencies);
   }
 
   private static Stream<String> extractWorldCheckResidencies(

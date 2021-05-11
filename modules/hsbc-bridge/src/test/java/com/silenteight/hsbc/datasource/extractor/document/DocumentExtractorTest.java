@@ -11,12 +11,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @Ignore
 @ExtendWith(MockitoExtension.class)
@@ -83,10 +85,11 @@ class DocumentExtractorTest {
     given(matchData.getPrivateListIndividuals()).willReturn(List.of(privateListIndividuals));
 
     //when
+    when(matchData.hasPrivateListIndividuals()).thenReturn(true);
+    when(matchData.hasWorldCheckIndividuals()).thenReturn(true);
     var document =
         nationalIdFeatureConverter.convertMatchedPartyDocumentNumbers(matchData);
 
-    System.out.println(document);
     //then
     assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(
         List.of("KJ0114578", "KJ4514578", "A501245", "K45R78986", "T3GD45689"));
