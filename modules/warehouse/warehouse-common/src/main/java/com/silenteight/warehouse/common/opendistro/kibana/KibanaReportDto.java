@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.common.opendistro.kibana.dto;
+package com.silenteight.warehouse.common.opendistro.kibana;
 
 import lombok.Builder;
 import lombok.NonNull;

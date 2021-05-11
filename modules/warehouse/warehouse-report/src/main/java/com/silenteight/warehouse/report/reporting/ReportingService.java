@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesRequest;
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesResponse.ReportInstanceList;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.common.opendistro.kibana.dto.KibanaReportDto;
 
 import java.util.Set;
 
