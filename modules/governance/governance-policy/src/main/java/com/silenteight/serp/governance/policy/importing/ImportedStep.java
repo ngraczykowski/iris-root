@@ -30,7 +30,6 @@ class ImportedStep {
   @NonNull
   private FeatureVectorSolution solution;
 
-  @NonNull
   private UUID stepId;
 
   @NonNull

@@ -1,0 +1,160 @@
+{
+  "metadata": {
+    "exportedAt": "2021-01-18 08:55:04.000"
+  },
+  "policy": {
+    "policyId": "eb42e5bb-e13b-4e51-b403-960f1a253a4d",
+    "policyName": "Solid rules",
+    "steps": [
+      {
+        "solution": "SOLUTION_POTENTIAL_TRUE_POSITIVE",
+        "stepId": "04ec7296-d6b4-45d7-8c89-49b0a90cc92b",
+        "stepName": "Name, DOB, doc and nat id match",
+        "stepDescription": "When any combination of DOC number is PERFECT_MATCH or DIGIT_MATCH but National ID is NOT a NO_MATCH, NAME is WEAK_MATCH or above and DOB is EXACT, then PTP. This will ensure using at least 3 factors to reflect PTP",
+        "stepType": "BUSINESS_LOGIC",
+        "featuresLogic": [
+          {
+            "toFulfill": 4,
+            "matchConditions": [
+              {
+                "name": "features/name",
+                "condition": "is_not",
+                "values": [
+                  "NO_MATCH"
+                ]
+              },
+              {
+                "name": "features/dob",
+                "condition": "is",
+                "values": [
+                  "EXACT"
+                ]
+              },
+              {
+                "name": "features/document",
+                "condition": "is",
+                "values": [
+                  "PERFECT_MATCH",
+                  "DIGIT_MATCH"
+                ]
+              },
+              {
+                "name": "features/nationalId",
+                "condition": "is_not",
+                "values": [
+                  "NO_MATCH"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "solution": "SOLUTION_FALSE_POSITIVE",
+        "stepId": "ee5b2754-1fc6-4c08-9540-7dd09df35adf",
+        "stepName": "Gender no match is a reliable value",
+        "stepDescription": "Gender information are taken directly from customer and WL data, they are supposed to be 100% reliable. Thus this rule is only after rule 1 (a PTP rule) and excluding the cases having DOC enty-all PERFECT_MATCH",
+        "stepType": "BUSINESS_LOGIC",
+        "featuresLogic": [
+          {
+            "toFulfill": 2,
+            "matchConditions": [
+              {
+                "name": "features/document",
+                "condition": "is",
+                "values": [
+                  "NO_MATCH"
+                ]
+              },
+              {
+                "name": "features/gender",
+                "condition": "is",
+                "values": [
+                  "INCONCLUSIVE"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "solution": "SOLUTION_FALSE_POSITIVE",
+        "stepId": "851b4744-16a5-44ce-a29b-edd986dc5a16",
+        "stepName": "DOB is not match",
+        "stepDescription": "When DOB is OUT_OF_RANGE, no need to check other data points, for individual only. There are few alerts having digits match on document numbers (PERFECT_MATCH already applied in Rule 1), exclude them as well.",
+        "stepType": "BUSINESS_LOGIC",
+        "featuresLogic": [
+          {
+            "toFulfill": 3,
+            "matchConditions": [
+              {
+                "name": "apType",
+                "condition": "is",
+                "values": [
+                  "I"
+                ]
+              },
+              {
+                "name": "features/dob",
+                "condition": "is",
+                "values": [
+                  "OUT_OF_RANGE"
+                ]
+              },
+              {
+                "name": "features/document",
+                "condition": "is_not",
+                "values": [
+                  "DIGIT_MATCH"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "solution": "SOLUTION_FALSE_POSITIVE",
+        "stepId": "192cf3e7-5fe8-4e54-9871-bac3f9adef03",
+        "stepName": "National Ids not match",
+        "stepDescription": "When an individual has national IDs NO_MATCH, it’s a good candidate of FP, to play it safe, additional conditions of NAME cannot be EXACT_MATCH and DOB cannot be EXACT at the same time",
+        "stepType": "BUSINESS_LOGIC",
+        "featuresLogic": [
+          {
+            "toFulfill": 4,
+            "matchConditions": [
+              {
+                "name": "apType",
+                "condition": "is",
+                "values": [
+                  "I"
+                ]
+              },
+              {
+                "name": "features/name",
+                "condition": "is_not",
+                "values": [
+                  "EXACT_MATCH"
+                ]
+              },
+              {
+                "name": "features/dob",
+                "condition": "is_not",
+                "values": [
+                  "EXACT"
+                ]
+              },
+              {
+                "name": "features/nationalId",
+                "condition": "is",
+                "values": [
+                  "NO_MATCH"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

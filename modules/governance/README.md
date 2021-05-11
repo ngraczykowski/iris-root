@@ -67,3 +67,27 @@ UI available under [link](https://localhost:24204/rest/governance/openapi/swagge
 In order to make authenticated requests
 click the key lock icon, type in desired client id (normally this would be `frontend`)
 and click the `Authorize` button. 
+
+
+## Helpers
+
+### Import policy
+
+Policy example is available in the `helpers/policy/example/solid-steps.json` file.
+This example reflects solid steps created by Victor.
+
+You can run `Governance - development environment` configuration and use [Swagger](http://localhost:24204/rest/governance/openapi/swagger-ui/index.html?configUrl=/rest/governance/openapi/api-docs/swagger-config#/import-policy-rest-controller/importPolicy) to make a test call.
+You have to use `/api/v1/policies/import` endpoint and JSON file as an input.
+In the `development environment`, you have configured basic auth with an user (`bo`) and password (`bodev`). 
+
+The policy is imported in `in_use` state, which means it will be used to solve any request made by GRPC API.
+
+You can import a policy from JSON file with or without UUIDs in steps and in the policy.
+If you provide UUIDs in the `policyId` and the `stepId` fields, then those ids will be used when saving the policy in the database, otherwise, those ids will be generated.
+
+### Solve Feature Vector GRPC call
+
+You can use BloomRPC to make a test call to the Governance to solve Feature Vector.
+![img.png](governance-documentation/src/img/img.png)
+
+You can use `helpers/fvsolve/example/1023-fv.json` file as an input in the editor.

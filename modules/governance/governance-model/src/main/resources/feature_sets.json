@@ -14,6 +14,18 @@
       }, {
         "name": "features/nationalId",
         "agentConfig": "agents/documentAgent/versions/1.0.0/config/1"
+      }, {
+        "name": "features/passport",
+        "agentConfig": "agents/documentAgent/versions/1.0.0/config/1"
+      }, {
+        "name": "features/gender",
+        "agentConfig": "agents/genderAgent/versions/1.0.0/config/1"
+      }, {
+        "name": "features/residency",
+        "agentConfig": "agents/countryAgent/versions/1.0.0/config/1"
+      }, {
+        "name": "features/nationality",
+        "agentConfig": "agents/countryAgent/versions/1.0.0/config/1"
       }
     ]
   }

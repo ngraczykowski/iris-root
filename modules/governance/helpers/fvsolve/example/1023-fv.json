@@ -1,5 +1,6 @@
 
 {
+  "policy_name": "policies/2e6a6390-7089-4821-8611-1843c3e2f8ab",
   "feature_collection": {
     "feature": [
       {"name": "apType"},{"name": "isDeny"},{"name": "nameAgent"},{"name": "dateAgent"},{"name": "nationalIdAgent"},{"name": "passportAgent"},{"name": "documentAgent"},{"name": "genderAgent"},{"name": "nationalityAgent"},{"name": "residencyAgent"}
