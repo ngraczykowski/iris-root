@@ -1414,6 +1414,18 @@ components:
           $ref: '#/components/schemas/SolvedAlertStatus'
         comment:
           type: string
+        alertMetada:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+
+    KeyValue:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
 
     BulkIdWithAlerts:
       type: object
