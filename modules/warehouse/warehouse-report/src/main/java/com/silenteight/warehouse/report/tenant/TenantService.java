@@ -2,10 +2,9 @@ package com.silenteight.warehouse.report.tenant;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaIndexPatternDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.common.opendistro.kibana.SavedObject;
-import com.silenteight.warehouse.common.opendistro.kibana.dto.SavedObjectDto;
-import com.silenteight.warehouse.common.opendistro.kibana.dto.SavedObjectDto.SavedObjectAttributes;
+import com.silenteight.warehouse.common.opendistro.kibana.SearchDto;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,35 +16,39 @@ import static java.util.UUID.randomUUID;
 @RequiredArgsConstructor
 public class TenantService {
 
-  private static final Integer MAX_ELEMENT_COUNT = 100;
   private final OpendistroKibanaClient opendistroKibanaClient;
+  private static final Integer MAX_ELEMENT_COUNT = 100;
 
   public Map<String, String> copyKibanaIndices(
-      String sourceTenant, String targetTenant, String elasticIndex) {
+      String sourceTenant, String targetTenant, String newElasticIndex) {
 
-    List<SavedObjectDto> sourceObjects = opendistroKibanaClient.listSavedObjects(
-        sourceTenant, KIBANA_INDEX_PATTERN, MAX_ELEMENT_COUNT);
+    List<KibanaIndexPatternDto> kibanaIndexPatterns = opendistroKibanaClient
+        .listKibanaIndexPattern(sourceTenant, MAX_ELEMENT_COUNT);
 
     Map<String, String> idMapping = new HashMap<>();
-    for (SavedObjectDto sourceObject : sourceObjects) {
-      SavedObject targetObject = copyAttributesWithUpdatedElasticIndex(sourceObject, elasticIndex);
+    for (KibanaIndexPatternDto kibanaIndexPattern : kibanaIndexPatterns) {
+      String sourceId = kibanaIndexPattern.getId();
       String targetId = randomUUID().toString();
-      opendistroKibanaClient.createSavedObjects(
-          targetTenant, KIBANA_INDEX_PATTERN, targetId, targetObject);
-      idMapping.put(sourceObject.getId(), targetId);
+      kibanaIndexPattern.setId(targetId);
+      kibanaIndexPattern.setElasticIndexName(newElasticIndex);
+      opendistroKibanaClient.createKibanaIndexPattern(targetTenant, kibanaIndexPattern);
+      idMapping.put(sourceId, targetId);
     }
 
     return idMapping;
   }
 
-  private static SavedObject copyAttributesWithUpdatedElasticIndex(
-      SavedObjectDto sourceObject, String elasticIndex) {
+  public void copySearchDefinition(
+      String sourceTenant, String targetTenant, Map<String, String> kibanaIndexMapping) {
 
-    SavedObjectAttributes attributes = sourceObject.getAttributes();
-    attributes.setElasticIndex(elasticIndex);
+    List<SearchDto> searches = opendistroKibanaClient
+        .listSavedSearchDefinitions(sourceTenant, MAX_ELEMENT_COUNT);
 
-    return SavedObject.builder()
-        .attributes(attributes)
-        .build();
+    for (SearchDto search : searches) {
+      String targetId = randomUUID().toString();
+      search.setId(targetId);
+      search.substituteReferences(KIBANA_INDEX_PATTERN, kibanaIndexMapping);
+      opendistroKibanaClient.createSavedSearchObjects(targetTenant, search);
+    }
   }
 }

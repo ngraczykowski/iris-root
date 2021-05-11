@@ -3,9 +3,9 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaIndexPatternDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
-import com.silenteight.warehouse.common.opendistro.kibana.dto.SavedObjectDto;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
@@ -34,11 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ADMIN_TENANT;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.KIBANA_INDEX_PATTERN_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.OTHER_TENANT;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.TENANT;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -60,6 +59,7 @@ class ReportIT {
 
   private static final String TEST_BUCKET = "reports";
   private static final String NEW_ELASTIC_INDEX = "analysis-2";
+  private static final String ALERTS_INDEX = "alerts-index";
 
   @BeforeEach
   void setUp() {
@@ -99,27 +99,37 @@ class ReportIT {
   public void init() {
     storeData();
     createKibanaIndex();
+    createSavedSearch();
   }
 
+  // TODO: This test is going to be simplified when entire use case is ready (WEB-976)
   @Test
   @SneakyThrows
-  void shouldCopyKibanaReports() {
-    var indexMapping = tenantService.copyKibanaIndices(TENANT, OTHER_TENANT, NEW_ELASTIC_INDEX);
+  void shouldCopyKibanaIndexAndSearch() {
+    //when
+    var indexMapping =
+        tenantService.copyKibanaIndices(ADMIN_TENANT, OTHER_TENANT, NEW_ELASTIC_INDEX);
 
-    var tenants = opendistroKibanaClient
-        .listSavedObjects(OTHER_TENANT, KIBANA_INDEX_PATTERN, 10);
+    tenantService.copySearchDefinition(ADMIN_TENANT, OTHER_TENANT, indexMapping);
 
+    //then
+    var tenants = opendistroKibanaClient.listKibanaIndexPattern(OTHER_TENANT, 10);
     assertThat(tenants).hasSize(1);
-    SavedObjectDto kibanaIndex = tenants.get(0);
+    KibanaIndexPatternDto kibanaIndex = tenants.get(0);
     assertThat(kibanaIndex.getId()).isEqualTo(indexMapping.get(KIBANA_INDEX_PATTERN_NAME));
-    assertThat(kibanaIndex.getAttributes()).containsEntry("title", NEW_ELASTIC_INDEX);
+    assertThat(kibanaIndex.getElasticIndexName()).isEqualTo(NEW_ELASTIC_INDEX);
+
+    var clonedSearchObjects = opendistroKibanaClient.listSavedSearchDefinitions(OTHER_TENANT, 20);
+
+    assertThat(clonedSearchObjects).hasSize(1);
   }
 
   @Test
   @SneakyThrows
   void shouldStoreNewKibanaReportsInMinio() {
     // given
-    createSavedSearch();
+    storeData();
+    createKibanaIndex();
     generateReport(createReportDefinition());
     waitForReports();
 
@@ -152,27 +162,27 @@ class ReportIT {
 
   private void createKibanaIndex() {
     byte[] payload = getJson("json/1-create-kibana-index.json");
-    kibanaTestClient.createKibanaIndex(TENANT, payload);
+    kibanaTestClient.createKibanaIndex(ADMIN_TENANT, payload);
   }
 
   private void createSavedSearch() {
     byte[] payload = getJson("json/2-create-saved-search.json");
-    kibanaTestClient.createSavedSearch(TENANT, payload);
+    kibanaTestClient.createSavedSearch(ADMIN_TENANT, payload);
   }
 
   private String createReportDefinition() {
     byte[] payload = getJson("json/3-create-report-definition.json");
-    return kibanaTestClient.createReportDefinition(TENANT, payload);
+    return kibanaTestClient.createReportDefinition(ADMIN_TENANT, payload);
   }
 
   private void generateReport(String reportDefinitionId) {
-    kibanaTestClient.generateReport(TENANT, reportDefinitionId);
+    kibanaTestClient.generateReport(ADMIN_TENANT, reportDefinitionId);
   }
 
   private void waitForReports() {
     await()
         .atMost(5, SECONDS)
-        .until(() -> reportingService.getReportList(TENANT).size() > 0);
+        .until(() -> reportingService.getReportList(ADMIN_TENANT).size() > 0);
   }
 
   @SneakyThrows
@@ -181,7 +191,7 @@ class ReportIT {
   }
 
   private List<ReportDto> getSynchronizedReports() {
-    return new ArrayList<>(reportSynchronizationService.getAllReportsForTenant(TENANT));
+    return new ArrayList<>(reportSynchronizationService.getAllReportsForTenant(ADMIN_TENANT));
   }
 
   @SneakyThrows

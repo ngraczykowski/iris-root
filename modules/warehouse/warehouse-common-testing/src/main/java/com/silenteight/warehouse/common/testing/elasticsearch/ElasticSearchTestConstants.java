@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 public class ElasticSearchTestConstants {
 
   // The tenants that are created by default in opendistro images.
-  public static final String TENANT = "admin_tenant";
+  public static final String ADMIN_TENANT = "admin_tenant";
   public static final String OTHER_TENANT = "global_tenant";
 
   // Elasticsearch index that is referenced by kibana index
