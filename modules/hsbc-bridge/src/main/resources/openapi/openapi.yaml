@@ -22,6 +22,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkAcceptedResponse'
+
   '/async/bulk/v1/{bulkId}/status':
     get:
       summary: Status of bulk processing for given ID
@@ -57,6 +58,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkStatusResponse'
+
   /async/bulk/v1/processingStatus:
     get:
       summary: Status of bulk processing for all bulks
@@ -121,7 +123,6 @@ components:
       type: object
       properties:
         CTRPPRHBListIndividuals.Record Id:
-
           title: 'Record id'
           example: 'recordId'
           description: 'recordId'
@@ -1501,3 +1502,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SolvedAlert'
+
+    SimpleModelResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        policyName:
+          type: string
