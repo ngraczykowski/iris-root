@@ -53,3 +53,11 @@ message Feature {
   // e.g. `agents/name_agent/version/4.35/configs/345`.
   string agent_config = 2 [(google.api.field_behavior) = REQUIRED];
 }
+
+// Provides information about new model available for production
+message ModelPromotedForProduction {
+  // The unique name of the model. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // URL where model is available as json file
+  string export_url = 2 [(google.api.field_behavior) = REQUIRED];
+}
