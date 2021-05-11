@@ -34,7 +34,7 @@ message BatchGetMatchLocationInputsResponse {
  */
 message LocationInput {
   string match = 1;
-  repeated LocationFeatureInput lcoation_feature_inputs = 2;
+  repeated LocationFeatureInput location_feature_inputs = 2;
 }
 
 message LocationFeatureInput {
