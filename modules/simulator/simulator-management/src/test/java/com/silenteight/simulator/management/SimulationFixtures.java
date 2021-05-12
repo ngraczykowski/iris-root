@@ -91,6 +91,7 @@ public class SimulationFixtures {
           .description(DESCRIPTION)
           .state(STATE)
           .model(MODEL)
+          .analysis(ANALYSIS_NAME)
           .datasets(DATASETS)
           .progressState(PROGRESS_STATE)
           .createdAt(NOW.atOffset(UTC))

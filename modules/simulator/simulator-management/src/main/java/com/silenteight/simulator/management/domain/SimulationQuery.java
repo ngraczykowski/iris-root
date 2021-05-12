@@ -88,6 +88,7 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
         .simulationName(simulationEntity.getName())
         .state(simulationEntity.getState())
         .datasets(simulationEntity.getDatasetNames())
+        .analysis(simulationEntity.getAnalysisName())
         .model(simulationEntity.getModelName())
         .progressState(progressState.toString())
         .createdAt(simulationEntity.getCreatedAt())
