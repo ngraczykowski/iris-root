@@ -31,4 +31,10 @@
       <column name="client_alert_identifier"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_5" author="ahaczewski">
+    <createIndex tableName="ae_match" indexName="ix_ae_match_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
