@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
+import static java.util.function.Predicate.not;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -38,7 +39,14 @@ class BulkProcessor {
 
     try {
       var alertMatchIds = processItems(bulk);
-      bulk.setStatus(BulkStatus.PRE_PROCESSED);
+
+      if (alertMatchIds.isEmpty()) {
+        bulk.error("No valid alerts to be processed!");
+        bulkRepository.save(bulk);
+        return;
+      }
+
+      saveWithPreProcessedStatus(bulk);
 
       log.debug("Bulk processing finished, bulkId={}", bulkId);
       publishPreProcessingFinishedEvent(bulkId, alertMatchIds);
@@ -48,11 +56,17 @@ class BulkProcessor {
     }
   }
 
+  private void saveWithPreProcessedStatus(Bulk bulk) {
+    bulk.setStatus(BulkStatus.PRE_PROCESSED);
+    bulkRepository.save(bulk);
+  }
+
   private List<AlertMatchIdComposite> processItems(Bulk bulk) {
     var payloadEntity = bulk.getPayload();
     var alerts = alertFacade.createAndSaveAlerts(bulk.getId(), payloadEntity.getPayload());
 
     return alerts.stream()
+        .filter(not(AlertComposite::isInvalid))
         .map(this::saveAlertMatches)
         .collect(Collectors.toList());
   }

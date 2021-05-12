@@ -23,13 +23,29 @@ public class AlertFacade {
   @Transactional
   public List<AlertComposite> createAndSaveAlerts(@NonNull String bulkId, byte[] bulkPayload) {
     var alertsData = alertPayloadConverter.convert(bulkPayload);
-    var processedAlerts = relationshipProcessor.process(alertsData);
+    var processingResult = relationshipProcessor.process(alertsData);
 
-    return processedAlerts.stream().map(p -> {
-      var externalId = p.getExternalId();
-      var id = saveAlert(bulkId, externalId);
-      return new AlertComposite(id, externalId, p.getMatches());
-    }).collect(Collectors.toList());
+    return processingResult.getProcessedAlerts().stream()
+        .map(alert -> saveAlert(bulkId, alert))
+        .collect(Collectors.toList());
+  }
+
+  private AlertComposite saveAlert(String bulkId, ProcessingResult.ProcessedAlert processedAlert) {
+    var externalId = processedAlert.getExternalId();
+    var alertComposite = AlertComposite.builder()
+        .externalId(externalId)
+        .matches(processedAlert.getMatches());
+    var alertEntity = new AlertEntity(externalId, bulkId);
+
+    processedAlert.getErrorMessage().ifPresent(errorMessage -> {
+      alertEntity.error(errorMessage);
+      alertComposite.invalid(true);
+    });
+
+    repository.save(alertEntity);
+    return alertComposite
+        .id(alertEntity.getId())
+        .build();
   }
 
   public List<AlertInfo> getAlertByName(String name) {
@@ -38,13 +54,5 @@ public class AlertFacade {
 
   private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
     return alertEntities.stream().map(a -> new AlertInfo(a.getId())).collect(toList());
-  }
-
-  private long saveAlert(String bulkId, String externalId) {
-    var alertEntity = new AlertEntity(externalId, bulkId);
-
-    repository.save(alertEntity);
-
-    return alertEntity.getId();
   }
 }

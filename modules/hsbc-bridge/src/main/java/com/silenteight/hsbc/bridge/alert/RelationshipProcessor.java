@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.alert.ProcessingResult.ProcessedAlert;
 import com.silenteight.hsbc.bridge.json.external.model.*;
 import com.silenteight.hsbc.bridge.match.Match;
 
@@ -11,21 +12,20 @@ import io.jsonwebtoken.lang.Collections;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 class RelationshipProcessor {
 
-  List<ProcessedAlert> process(@NonNull List<AlertData> alertsData) {
-    return alertsData.stream()
+  ProcessingResult process(@NonNull List<AlertData> alertsData) {
+    var processedAlerts = alertsData.stream()
         .map(a -> new CaseIdAlertProcessor(a).process())
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.toList());
+        .collect(toList());
+
+    return new ProcessingResult(processedAlerts);
   }
 
   @AllArgsConstructor
@@ -33,16 +33,22 @@ class RelationshipProcessor {
 
     final AlertData alertData;
 
-    Optional<ProcessedAlert> process() {
-      try {
-        validateRelationships();
+    ProcessedAlert process() {
+      var processedAlert = ProcessedAlert.builder().externalId(alertData.getId());
 
-        var match = createMatch();
-        return of(new ProcessedAlert(alertData.getId(), List.of(match)));
-      } catch (InvalidAlertDataException ex) {
-        log.error("Invalid alert data, alert={}", alertData.getId());
-        return empty();
+      var validationError = validateRelationships();
+      if (validationError.isPresent()) {
+        processedAlert.errorMessage(validationError.get());
+        processedAlert.matches(List.of());
+      } else {
+        processedAlert.matches(getMatches());
       }
+
+      return processedAlert.build();
+    }
+
+    private List<Match> getMatches() {
+      return List.of(createMatch());
     }
 
     private Match createMatch() {
@@ -80,18 +86,20 @@ class RelationshipProcessor {
       return alertData.getCustomerEntities().stream().findFirst();
     }
 
-    private void validateRelationships() {
+    private Optional<String> validateRelationships() {
       if (getRelationships().isEmpty()) {
-        throw new InvalidAlertDataException("No relationships defined!");
+        return Optional.of("No relationships defined!");
       }
 
       if (existCustomerEntityOrIndividualWithoutRelationship()) {
-        throw new InvalidAlertDataException("Customer data without relationships!");
+        return Optional.of("Customer data without relationships!");
       }
 
       if (existWatchlistDataWithoutRelationship()) {
-        throw new InvalidAlertDataException("Watchlist data without relationships!");
+        return Optional.of("Watchlist data without relationships!");
       }
+
+      return Optional.empty();
     }
 
     private boolean existWatchlistDataWithoutRelationship() {

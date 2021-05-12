@@ -27,6 +27,8 @@ public class AlertEntity extends BaseEntity {
   @Setter
   private String name;
 
+  private String errorMessage;
+
   @Column(name = "bulk_id")
   private String bulkId;
 
@@ -37,5 +39,11 @@ public class AlertEntity extends BaseEntity {
   public AlertEntity(String externalId, String bulkId) {
     this.externalId = externalId;
     this.bulkId = bulkId;
+  }
+
+  @Transient
+  void error(String errorMessage) {
+    this.errorMessage = errorMessage;
+    this.status = AlertStatus.ERROR;
   }
 }
