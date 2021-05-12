@@ -1,0 +1,58 @@
+package com.silenteight.adjudication.engine.analysis.service.integration;
+
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.adjudication.engine.analysis.analysis.integration.AnalysisChannels;
+import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
+import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
+
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.StandardIntegrationFlow;
+
+import static org.springframework.integration.dsl.IntegrationFlows.from;
+
+@Configuration
+@EnableConfigurationProperties(AnalysisOutboundAmqpIntegrationProperties.class)
+@RequiredArgsConstructor
+class AnalysisOutboundAmqpIntegrationConfiguration {
+
+  private final AmqpOutboundFactory outboundFactory;
+  private final AnalysisOutboundAmqpIntegrationProperties properties;
+
+  @Bean
+  IntegrationFlow addedAnalysisDatasetsOutboundIntegrationFlow() {
+    return createOutboundFlow(
+        AnalysisChannels.ADDED_ANALYSIS_DATASETS_OUTBOUND_CHANNEL,
+        properties.getInternalEvents().getOutboundExchangeName(),
+        properties.getInternalEvents().getAddedAnalysisDatasetsRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow pendingRecommendationsOutboundIntegrationFlow() {
+    return createOutboundFlow(
+        PendingRecommendationChannels.PENDING_RECOMMENDATIONS_OUTBOUND_CHANNEL,
+        properties.getInternalEvents().getOutboundExchangeName(),
+        properties.getInternalEvents().getPendingRecommendationsRoutingKey());
+  }
+
+  private StandardIntegrationFlow createOutboundFlow(
+      String outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
+
+    return from(outboundChannel)
+        .handle(createOutboundAdapter(outboundExchangeName, outboundRoutingKey))
+        .get();
+  }
+
+  private AmqpBaseOutboundEndpointSpec<?, ?> createOutboundAdapter(
+      String outboundExchangeName, String outboundRoutingKey) {
+
+    return outboundFactory
+        .outboundAdapter()
+        .exchangeName(outboundExchangeName)
+        .routingKey(outboundRoutingKey);
+  }
+}

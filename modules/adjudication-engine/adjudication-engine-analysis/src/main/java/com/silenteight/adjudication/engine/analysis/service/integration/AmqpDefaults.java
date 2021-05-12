@@ -1,0 +1,37 @@
+package com.silenteight.adjudication.engine.analysis.service.integration;
+
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
+class AmqpDefaults {
+
+  private static final String PREFIX = "ae.";
+  private static final String COMMAND_PREFIX = PREFIX + "command.";
+  private static final String EVENT_PREFIX = PREFIX + "event.";
+
+  static final String EVENTS_EXCHANGE_NAME = PREFIX + "event";
+  static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
+      EVENT_PREFIX + "recommendations-generated";
+
+  static final String INTERNAL_EVENTS_EXCHANGE_NAME = PREFIX + "internal-event";
+  static final String ADDED_ANALYSIS_DATASETS_ROUTING_KEY =
+      EVENT_PREFIX + "added-analysis-datasets";
+  static final String PENDING_RECOMMENDATIONS_ROUTING_KEY =
+      EVENT_PREFIX + "pending-recommendations";
+  static final String MATCH_CATEGORIES_UPDATED_ROUTING_KEY =
+      EVENT_PREFIX + "match-categories-updated";
+  static final String COMMENT_INPUTS_UPDATED_ROUTING_KEY =
+      EVENT_PREFIX + "comment-inputs-updated";
+  static final String MATCH_FEATURES_UPDATED_ROUTING_KEY =
+      EVENT_PREFIX + "match-features-updated";
+  static final String MATCHES_SOLVED_ROUTING_KEY =
+      EVENT_PREFIX + "matches-solved-updated";
+
+  static final String PENDING_RECOMMENDATIONS_QUEUE_NAME = PREFIX + "pending-recommendations";
+  static final String AGENT_EXCHANGE_QUEUE_NAME = PREFIX + "agent-exchange";
+  static final String CATEGORY_QUEUE_NAME = PREFIX + "category";
+  static final String COMMENT_INPUT_QUEUE_NAME = PREFIX + "comment-input";
+  static final String MATCH_FEATURE_QUEUE_NAME = PREFIX + "match-feature";
+}

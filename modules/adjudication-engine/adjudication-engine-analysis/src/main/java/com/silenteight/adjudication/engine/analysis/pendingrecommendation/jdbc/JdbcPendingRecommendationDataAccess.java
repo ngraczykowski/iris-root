@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 class JdbcPendingRecommendationDataAccess implements PendingRecommendationDataAccess {
 
-  private final InsertPendingRecommendationsQuery insertPendingRecommendationsQuery;
+  private final CreatePendingRecommendationsQuery createPendingRecommendationsQuery;
 
   @Override
   public int createPendingRecommendations(long analysisId) {
-    return insertPendingRecommendationsQuery.execute(analysisId);
+    return createPendingRecommendationsQuery.execute(analysisId);
   }
 }

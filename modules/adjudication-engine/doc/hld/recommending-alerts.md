@@ -79,7 +79,7 @@ SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesRes
 
 MatchesSolved (spring) -> RecommendAlertsCommand (spring)
 
-CommentInputsUpdatedEvent (spring) -> RecommendAlertsCommand (spring)
+CommentInputsUpdated (spring) -> RecommendAlertsCommand (spring)
 
 PendingRecommendations (rabbit) -> RecommendAlertsCommand (spring)
 

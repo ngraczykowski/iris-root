@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.analysis.pendingrecommendation.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.SqlUpdate;
@@ -11,11 +12,12 @@ import java.sql.Types;
 
 @RequiredArgsConstructor
 @Component
-class InsertPendingRecommendationsQuery {
+class CreatePendingRecommendationsQuery {
 
   private final SqlUpdate query;
 
-  InsertPendingRecommendationsQuery(JdbcTemplate jdbcTemplate) {
+  @Autowired
+  CreatePendingRecommendationsQuery(JdbcTemplate jdbcTemplate) {
     query = new SqlUpdate();
 
     query.setJdbcTemplate(jdbcTemplate);
