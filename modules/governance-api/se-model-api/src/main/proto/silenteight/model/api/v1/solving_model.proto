@@ -22,11 +22,29 @@ service SolvingModelService {
       get: "/v1/{model=solving-models/*}"
     };
   }
+
+  rpc ImportModel(ImportNewModelRequest) returns (ImportNewModelResponse) {
+      option (google.api.http) = {
+      post: "/v1/solving-models:import"
+    };
+  }
+
+  rpc UseModel(UseModelRequest) returns (google.protobuf.Empty) {
+      option (google.api.http) = {
+      post: "/v1/{model=solving-models/*}:use"
+    };
+  }
+
+  rpc ModelDeployedOnProduction(ModelName) returns (google.protobuf.Empty) {
+      option (google.api.http) = {
+      post: "/v1/{model=solving-models/*}:deployed"
+    };
+  }
 }
 
 message ModelRequest {
-    // Name of solving model
-    string model = 1 [(google.api.field_behavior) = REQUIRED];
+  // Name of solving model
+  string model = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Binds together configurations of different part of the system required for solving set of alerts
@@ -60,4 +78,28 @@ message ModelPromotedForProduction {
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
   // URL where model is available as json file
   string export_url = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request with new model to import
+message ImportNewModelRequest {
+  // Json with model to be used
+  bytes model_json = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with imported model
+message ImportNewModelResponse {
+  // The unique name of the model. This is always system-assigned.
+  string model = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// Request to use the specific model for solving alerts
+message UseModelRequest {
+  // Name of the model to use for solving alerts
+  string model = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Model name
+message ModelName {
+  // The unique name of the model. This is always system-assigned.
+  string model = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
