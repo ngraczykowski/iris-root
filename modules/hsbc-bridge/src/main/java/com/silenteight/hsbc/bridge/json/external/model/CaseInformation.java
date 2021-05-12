@@ -22,7 +22,7 @@ public class CaseInformation {
   @JsonProperty("DN_CASE.keyLabel")
   private String keyLabel;
   @JsonProperty("DN_CASE.parentId")
-  private Integer parentId;
+  private String parentId;
   @JsonProperty("DN_CASE.supplementaryKey")
   private String supplementaryKey;
   @JsonProperty("DN_CASE.supplementaryType")
@@ -32,21 +32,21 @@ public class CaseInformation {
   @JsonProperty("DN_CASE.description")
   private String description;
   @JsonProperty("DN_CASE.createdBy")
-  private Integer createdBy;
+  private String createdBy;
   @JsonProperty("DN_CASE.createdDateTime")
   private String createdDateTime;
   @JsonProperty("DN_CASE.modifiedBy")
-  private Integer modifiedBy;
+  private String modifiedBy;
   @JsonProperty("DN_CASE.modifiedDateTime")
   private String modifiedDateTime;
   @JsonProperty("DN_CASE.assignedUser")
-  private Integer assignedUser;
+  private String assignedUser;
   @JsonProperty("DN_CASE.assignedBy")
-  private Integer assignedBy;
+  private String assignedBy;
   @JsonProperty("DN_CASE.assignedDateTime")
   private String assignedDateTime;
   @JsonProperty("DN_CASE.priority")
-  private Integer priority;
+  private String priority;
   @JsonProperty("DN_CASE.permission")
   private String permission;
   @JsonProperty("DN_CASE.currentState")
@@ -56,7 +56,7 @@ public class CaseInformation {
   @JsonProperty("DN_CASE.stateExpiry")
   private String stateExpiry;
   @JsonProperty("DN_CASE.stateChangeBy")
-  private Integer stateChangeBy;
+  private String stateChangeBy;
   @JsonProperty("DN_CASE.stateChangeDateTime")
   private String stateChangeDateTime;
   @JsonProperty("DN_CASE.sourceId")
@@ -64,19 +64,19 @@ public class CaseInformation {
   @JsonProperty("DN_CASE.sourceName")
   private String sourceName;
   @JsonProperty("DN_CASE.caseMarker")
-  private Integer caseMarker;
+  private String caseMarker;
   @JsonProperty("DN_CASE.updatedBy")
-  private Integer updatedBy;
+  private String updatedBy;
   @JsonProperty("DN_CASE.updatedDateTime")
   private String updatedDateTime;
   @JsonProperty("DN_CASE.groupId")
   private String groupId;
   @JsonProperty("DN_CASE.groupLevel")
-  private Integer groupLevel;
+  private String groupLevel;
   @JsonProperty("DN_CASE.ExtendedAttribute1")
   private String extendedAttribute1;
   @JsonProperty("DN_CASE.ExtendedAttribute2")
-  private Integer extendedAttribute2;
+  private String extendedAttribute2;
   @JsonProperty("DN_CASE.ExtendedAttribute3")
   private String extendedAttribute3;
   @JsonProperty("DN_CASE.ExtendedAttribute4")
@@ -98,7 +98,7 @@ public class CaseInformation {
   @JsonProperty("DN_CASE.ExtendedAttribute12")
   private String extendedAttribute12;
   @JsonProperty("DN_CASE.ExtendedAttribute13")
-  private Integer extendedAttribute13;
+  private String extendedAttribute13;
   @JsonProperty("DN_CASE.ExtendedAttribute14")
   private String extendedAttribute14;
   @JsonProperty("DN_CASE.ExtendedAttribute15")

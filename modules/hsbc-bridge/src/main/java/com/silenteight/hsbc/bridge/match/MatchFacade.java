@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class MatchFacade {
 
   private final ObjectConverter objectConverter;
+  private final MatchDataMapper matchDataMapper;
   private final MatchRepository matchRepository;
   private final ApplicationEventPublisher eventPublisher;
 
@@ -46,8 +47,8 @@ public class MatchFacade {
   private List<MatchComposite> saveMatches(long alertId, List<Match> matches) {
     var matchComposites = new ArrayList<MatchComposite>();
     for (Match match : matches) {
-      var matchData = match.getMatchData();
-      var payload = getPayload(matchData);
+      var matchRawData = toMatchRawData(match.getMatchData());
+      var payload = getPayload(matchRawData);
       var matchEntity = new MatchEntity(match.getExternalId(), alertId);
       matchEntity.setPayload(new MatchPayloadEntity(payload));
 
@@ -56,14 +57,18 @@ public class MatchFacade {
       matchComposites.add(MatchComposite.builder()
           .id(matchEntity.getId())
           .externalId(matchEntity.getExternalId())
-          .matchData(objectConverter.convert(matchData, MatchRawData.class))
+          .matchData(matchRawData)
           .build());
     }
 
     return matchComposites;
   }
 
-  private byte[] getPayload(HsbcMatch matchData) {
+  private MatchRawData toMatchRawData(HsbcMatch hsbcMatch) {
+    return matchDataMapper.map(hsbcMatch);
+  }
+
+  private byte[] getPayload(MatchRawData matchData) {
     return objectConverter.convert(matchData);
   }
 

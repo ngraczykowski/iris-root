@@ -4,8 +4,6 @@ import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
-
 @Data
 public class CustomerIndividual {
 
@@ -14,13 +12,13 @@ public class CustomerIndividual {
   @JsonProperty("CustomerIndividuals.Input Stream")
   private String inputStream;
   @JsonProperty("CustomerIndividuals.Source System History ID")
-  private BigDecimal sourceSystemHistoryId;
+  private String sourceSystemHistoryId;
   @JsonProperty("CustomerIndividuals.Close Of Business Date")
   private String closeOfBusinessDate;
   @JsonProperty("CustomerIndividuals.Partition Number")
-  private BigDecimal partitionNumber;
+  private String partitionNumber;
   @JsonProperty("CustomerIndividuals.Source System Identifier")
-  private BigDecimal sourceSystemIdentifier;
+  private String sourceSystemIdentifier;
   @JsonProperty("CustomerIndividuals.External Profile ID")
   private String externalProfileId;
   @JsonProperty("CustomerIndividuals.Concatenated Profile ID")

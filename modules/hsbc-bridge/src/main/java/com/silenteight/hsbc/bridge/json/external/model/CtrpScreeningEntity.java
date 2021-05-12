@@ -26,11 +26,11 @@ public class CtrpScreeningEntity {
   @JsonProperty("CTRPPRHBListEntities.CTRP Value")
   private String ctrpValue;
   @JsonProperty("CTRPPRHBListEntities.CTRP Level")
-  private Integer ctrpLevel;
+  private String ctrpLevel;
   @JsonProperty("CTRPPRHBListEntities.CTRP Commonality")
-  private Integer ctrpCommonality;
+  private String ctrpCommonality;
   @JsonProperty("CTRPPRHBListEntities.CTRP Source")
-  private Integer ctrpSource;
+  private String ctrpSource;
   @JsonProperty("CTRPPRHBListEntities.CTRP Name Type")
   private String ctrpNameType;
   @JsonProperty("CTRPPRHBListEntities.CTRP Rule Narrative")

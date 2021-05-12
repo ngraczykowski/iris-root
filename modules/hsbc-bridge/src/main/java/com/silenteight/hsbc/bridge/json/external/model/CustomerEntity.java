@@ -12,11 +12,11 @@ public class CustomerEntity {
   @JsonProperty("CustomerEntities.Input Stream")
   private String inputStream;
   @JsonProperty("CustomerEntities.Source System History ID")
-  private Integer sourceSystemHistoryId;
+  private String sourceSystemHistoryId;
   @JsonProperty("CustomerEntities.Close Of Business Date")
   private String closeOfBusinessDate;
   @JsonProperty("CustomerEntities.Partition Number")
-  private Integer partitionNumber;
+  private String partitionNumber;
   @JsonProperty("CustomerEntities.Source System Identifier")
   private String sourceSystemIdentifier;
   @JsonProperty("CustomerEntities.External Profile ID")

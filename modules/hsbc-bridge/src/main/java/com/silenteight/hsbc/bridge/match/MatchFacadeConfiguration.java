@@ -24,6 +24,7 @@ class MatchFacadeConfiguration {
         .objectConverter(objectConverter)
         .matchRepository(matchRepository)
         .eventPublisher(eventPublisher)
+        .matchDataMapper(new OrikaMatchDataMapper())
         .build();
   }
 

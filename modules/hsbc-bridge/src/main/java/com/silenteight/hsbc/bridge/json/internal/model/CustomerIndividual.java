@@ -2,18 +2,16 @@ package com.silenteight.hsbc.bridge.json.internal.model;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class CustomerIndividual
     implements com.silenteight.hsbc.datasource.datamodel.CustomerIndividual {
 
   private String recordId;
   private String inputStream;
-  private BigDecimal sourceSystemHistoryId;
+  private String sourceSystemHistoryId;
   private String closeOfBusinessDate;
-  private BigDecimal partitionNumber;
-  private BigDecimal sourceSystemIdentifier;
+  private String partitionNumber;
+  private String sourceSystemIdentifier;
   private String externalProfileId;
   private String concatenatedProfileId;
   private String profileType;

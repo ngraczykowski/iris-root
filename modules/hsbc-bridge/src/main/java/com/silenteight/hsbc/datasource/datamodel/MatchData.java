@@ -9,8 +9,4 @@ public interface MatchData extends EntityComposite, IndividualComposite {
   default boolean isIndividual() {
     return nonNull(getCustomerIndividual());
   }
-
-  default Integer getCaseId() {
-    return getCaseInformation().getId();
-  }
 }

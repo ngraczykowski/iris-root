@@ -4,8 +4,6 @@ import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
-
 @Data
 public class WorldCheckIndividual {
 
@@ -94,11 +92,11 @@ public class WorldCheckIndividual {
   @JsonProperty("WorldCheckIndividuals.Linked Relationships")
   private String linkedRelationships;
   @JsonProperty("WorldCheckIndividuals.Risk Score")
-  private BigDecimal riskScore;
+  private String riskScore;
   @JsonProperty("WorldCheckIndividuals.PEP Risk Score")
-  private BigDecimal pepRiskScore;
+  private String pepRiskScore;
   @JsonProperty("WorldCheckIndividuals.Data Confidence Score")
-  private BigDecimal dataConfidenceScore;
+  private String dataConfidenceScore;
   @JsonProperty("WorldCheckIndividuals.Data Confidence Comment")
   private String dataConfidenceComment;
   @JsonProperty("WorldCheckIndividuals.Inactive Flag")

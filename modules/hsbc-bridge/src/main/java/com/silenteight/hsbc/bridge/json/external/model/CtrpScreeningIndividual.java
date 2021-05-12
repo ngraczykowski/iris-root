@@ -26,11 +26,11 @@ public class CtrpScreeningIndividual {
   @JsonProperty("CTRPPRHBListIndividuals.CTRP Value")
   private String ctrpValue;
   @JsonProperty("CTRPPRHBListIndividuals.CTRP Level")
-  private Integer ctrpLevel;
+  private String ctrpLevel;
   @JsonProperty("CTRPPRHBListIndividuals.CTRP Commonality")
-  private Integer ctrpCommonality;
+  private String ctrpCommonality;
   @JsonProperty("CTRPPRHBListIndividuals.CTRP Source")
-  private Integer ctrpSource;
+  private String ctrpSource;
   @JsonProperty("CTRPPRHBListIndividuals.CTRP Name Type")
   private String ctrpNameType;
   @JsonProperty("CTRPPRHBListIndividuals.CTRP Rule Narrative")

@@ -47,9 +47,4 @@ class MatchRawData implements MatchData {
   public boolean isIndividual() {
     return nonNull(getCustomerIndividual());
   }
-
-  @JsonIgnore
-  public Integer getCaseId() {
-    return caseInformation.getId();
-  }
 }

@@ -14,9 +14,9 @@ public class CtrpScreening implements com.silenteight.hsbc.datasource.datamodel.
   private String owsWatchlistName;
   private String prbListType;
   private String ctrpValue;
-  private Integer ctrpLevel;
-  private Integer ctrpCommonality;
-  private Integer ctrpSource;
+  private String ctrpLevel;
+  private String ctrpCommonality;
+  private String ctrpSource;
   private String ctrpNameType;
   private String ctrpRuleNarrative;
   private String alertKeyFragment;

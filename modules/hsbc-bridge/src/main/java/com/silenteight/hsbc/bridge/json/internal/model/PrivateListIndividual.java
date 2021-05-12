@@ -2,8 +2,6 @@ package com.silenteight.hsbc.bridge.json.internal.model;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class PrivateListIndividual implements
     com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual {
@@ -32,7 +30,7 @@ public class PrivateListIndividual implements
   private String gender;
   private String genderDerivedFlag;
   private String dateOfBirth;
-  private Integer yearOfBirth;
+  private String yearOfBirth;
   private String deceasedFlag;
   private String deceasedDate;
   private String occupation;
@@ -50,9 +48,9 @@ public class PrivateListIndividual implements
   private String searchHyperlink;
   private String linkedProfiles;
   private String linkedRelationships;
-  private BigDecimal riskScore;
-  private BigDecimal pepRiskScore;
-  private BigDecimal dataConfidenceScore;
+  private String riskScore;
+  private String pepRiskScore;
+  private String dataConfidenceScore;
   private String dataConfidenceComment;
   private String inactiveFlag;
   private String inactiveSinceDate;

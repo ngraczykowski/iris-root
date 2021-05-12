@@ -42,11 +42,6 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   }
 
   @Override
-  public <T> T convert(Object fromValue, Class<T> toValueType) {
-    return objectMapper.convertValue(fromValue, toValueType);
-  }
-
-  @Override
   public List<AlertData> convert(byte[] payload) {
     var alerts = convert(payload, Alerts.class);
     return alerts.getAlerts();

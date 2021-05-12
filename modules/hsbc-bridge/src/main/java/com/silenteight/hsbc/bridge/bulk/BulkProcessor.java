@@ -41,6 +41,7 @@ class BulkProcessor {
       var alertMatchIds = processItems(bulk);
 
       if (alertMatchIds.isEmpty()) {
+        log.error("Bulk: {} does not contain valid alerts", bulkId);
         bulk.error("No valid alerts to be processed!");
         bulkRepository.save(bulk);
         return;

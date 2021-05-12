@@ -2,8 +2,6 @@ package com.silenteight.hsbc.bridge.json.internal.model;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class WorldCheckEntity implements
     com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity {
@@ -39,9 +37,9 @@ public class WorldCheckEntity implements
   private String searchHyperlink;
   private String linkedProfiles;
   private String linkedRelationships;
-  private BigDecimal riskScore;
-  private BigDecimal pepRiskScore;
-  private BigDecimal dataConfidenceScore;
+  private String riskScore;
+  private String pepRiskScore;
+  private String dataConfidenceScore;
   private String dataConfidenceComment;
   private String inactiveFlag;
   private String inactiveSinceDate;

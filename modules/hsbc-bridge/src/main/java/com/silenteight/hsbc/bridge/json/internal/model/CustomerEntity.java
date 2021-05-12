@@ -7,9 +7,9 @@ public class CustomerEntity implements com.silenteight.hsbc.datasource.datamodel
 
   private String recordId;
   private String inputStream;
-  private Integer sourceSystemHistoryId;
+  private String sourceSystemHistoryId;
   private String closeOfBusinessDate;
-  private Integer partitionNumber;
+  private String partitionNumber;
   private String sourceSystemIdentifier;
   private String externalProfileId;
   private String concatenatedProfileId;
