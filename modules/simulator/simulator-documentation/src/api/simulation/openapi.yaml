@@ -216,13 +216,13 @@ components:
           type: object
           $ref: '#/components/schemas/AnalysisState'
           description: Progress state of simulation processing. This field is fetched directly from the AE by the Simulator and will have the same values as the analysis state in the proto file.
-        datasetNames:
+        datasets:
           type: array
           items:
             properties:
               datasetName:
                 type: string
-        modelName:
+        model:
           type: string
           description: Model resource name
         createdAt:
@@ -236,8 +236,8 @@ components:
         name: 'simulations/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         simulationName: 'Simulation name'
         description: 'Simulation description'
-        datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
-        modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        datasets: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
+        model: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
         progressState: 'RUNNING'
         state: 'PENDING'
         createdAt: '2004-02-12T15:19:21Z'
@@ -260,15 +260,18 @@ components:
           type: object
           $ref: '#/components/schemas/AnalysisState'
           description: Progress state of simulation processing. This field is fetched directly from the AE by the Simulator and will have the same values as the analysis state in the proto file.
-        datasetNames:
+        datasets:
           type: array
           items:
             properties:
               datasetName:
                 type: string
-        modelName:
+        model:
           type: string
           description: Model resource name
+        analysis:
+          type: string
+          description: Analysis resource name
         startedAt:
           type: string
         finishedAt:
@@ -284,8 +287,9 @@ components:
         name: 'simulations/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         simulationName: 'Simulation name'
         description: 'Simulation description'
-        datasetNames: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
-        modelName: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        datasets: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
+        model: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
+        analysis: 'analysis/b4708d8c-4832-8dc0-4832-d17b4708d8ca'
         state: 'PENDING'
         createdAt: '2004-02-12T15:09:21Z'
         startedAt: '2004-02-12T16:19:21Z'
