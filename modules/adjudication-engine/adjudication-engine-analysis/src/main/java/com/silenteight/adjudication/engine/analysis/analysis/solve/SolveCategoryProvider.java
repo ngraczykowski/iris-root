@@ -3,8 +3,8 @@ package com.silenteight.adjudication.engine.analysis.analysis.solve;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.CategoryProvider;
-import com.silenteight.adjudication.engine.solve.category.CategoryFacade;
-import com.silenteight.adjudication.engine.solve.category.dto.CategoryDto;
+import com.silenteight.adjudication.engine.features.category.CategoryFacade;
+import com.silenteight.adjudication.engine.features.category.dto.CategoryDto;
 
 import org.springframework.stereotype.Component;
 

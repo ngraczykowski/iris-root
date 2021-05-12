@@ -178,6 +178,20 @@
         referencedColumnNames="alert_id"/>
   </changeSet>
 
-  <!--  <changeSet id="adjudication-engine-analysis-1.2.0_15" author="ahaczewski">-->
+  <changeSet id="adjudication-engine-analysis-1.2.0_15" author="ahaczewski">
+    <createView
+        viewName="ae_pending_match_feature_query"
+        path="sql/view_ae_pending_match_feature_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_16" author="ahaczewski">
+    <createView
+        viewName="ae_missing_match_feature_query"
+        path="sql/view_ae_missing_match_feature_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <!--  <changeSet id="adjudication-engine-analysis-1.2.0_17" author="ahaczewski">-->
   <!--  </changeSet>-->
 </databaseChangeLog>

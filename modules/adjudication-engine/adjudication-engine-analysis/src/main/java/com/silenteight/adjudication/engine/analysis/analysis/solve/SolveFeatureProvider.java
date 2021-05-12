@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.engine.analysis.analysis.FeatureProvider;
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.AgentConfigFeatureFacade;
-import com.silenteight.adjudication.engine.solve.agentconfigfeature.dto.AgentConfigFeatureDto;
+import com.silenteight.adjudication.engine.features.agentconfigfeature.AgentConfigFeatureFacade;
+import com.silenteight.adjudication.engine.features.agentconfigfeature.dto.AgentConfigFeatureDto;
 
 import org.springframework.stereotype.Component;
 
