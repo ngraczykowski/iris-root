@@ -79,6 +79,11 @@
       "name": "silenteight.bridge.data.retention.duration",
       "type": "java.time.Duration",
       "description": "Duration of data retention."
+    },
+    {
+      "name": "silenteight.bridge.file.directory",
+      "type": "java.lang.String",
+      "description": "Directory where files will be saved."
     }
   ]
 }
