@@ -17,29 +17,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GetMatchCategoryValuesUseCase {
 
-  private final MatchFacade matchFacade;
-  private final MatchCategoryRepository matchCategoryRepository;
+  private final MatchCategoryViewRepository matchCategoryViewRepository;
 
   @Transactional(readOnly = true)
   public List<CategoryValueDto> activate(@NonNull GetMatchCategoryValuesCommand command) {
+    var matchCategoryValues = findMatchCategoryValues(command.getMatchValues());
 
-    var matchIds = findMatchIds(command.getMatchValues());
-    var categoryValues =
-        matchCategoryRepository.findByMatchIdIn(matchIds);
-
-    return categoryValues.stream()
-        .map(this::mapMatchCategory)
+    return matchCategoryValues.stream()
+        .map(this::mapMatchCategoryValue)
         .collect(Collectors.toList());
   }
 
-  private Collection<Long> findMatchIds(List<String> matchValues) {
-    return matchFacade.getMatchIdsByNames(matchValues);
+  private List<MatchCategoryView> findMatchCategoryValues(List<String> matchValues) {
+    return matchCategoryViewRepository.findByNameIn(matchValues);
   }
 
-  private CategoryValueDto mapMatchCategory(MatchCategoryEntity matchCategory) {
+  private CategoryValueDto mapMatchCategoryValue(MatchCategoryView matchCategory) {
     return CategoryValueDto.builder()
-        .multiValue(matchCategory.getCategory().isMultiValue())
-        .name(matchCategory.getCategoryName())
+        .multiValue(matchCategory.isMultiValue())
+        .name(matchCategory.getName())
         .values(new ArrayList<>(matchCategory.getValues()))
         .build();
   }

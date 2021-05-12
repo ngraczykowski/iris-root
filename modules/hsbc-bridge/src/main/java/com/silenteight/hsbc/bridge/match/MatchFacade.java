@@ -38,12 +38,6 @@ public class MatchFacade {
         .collect(Collectors.toList());
   }
 
-  public Collection<Long> getMatchIdsByNames(@NonNull List<String> matchValues) {
-    return matchRepository.findByNameIn(matchValues).stream()
-        .map(MatchEntity::getId)
-        .collect(Collectors.toList());
-  }
-
   private List<MatchComposite> saveMatches(long alertId, List<Match> matches) {
     var matchComposites = new ArrayList<MatchComposite>();
     for (Match match : matches) {

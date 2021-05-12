@@ -2,8 +2,6 @@ package com.silenteight.hsbc.datasource.category;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.match.MatchFacade;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class CategoryUseCaseConfiguration {
 
-  private final MatchFacade matchFacade;
   private final CategoryRepository categoryRepository;
   private final MatchCategoryRepository matchCategoryRepository;
+  private final MatchCategoryViewRepository matchCategoryViewRepository;
 
   @Bean
   ListCategoriesUseCase listCategoriesUseCase() {
@@ -22,7 +20,7 @@ class CategoryUseCaseConfiguration {
 
   @Bean
   GetMatchCategoryValuesUseCase getMatchCategoryValuesUseCase() {
-    return new GetMatchCategoryValuesUseCase(matchFacade, matchCategoryRepository);
+    return new GetMatchCategoryValuesUseCase(matchCategoryViewRepository);
   }
 
   @Bean
