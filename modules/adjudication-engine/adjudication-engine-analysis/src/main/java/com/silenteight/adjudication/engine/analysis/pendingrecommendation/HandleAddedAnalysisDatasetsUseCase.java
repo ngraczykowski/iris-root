@@ -21,24 +21,15 @@ class HandleAddedAnalysisDatasetsUseCase {
 
     var builder = PendingRecommendations.newBuilder();
 
-    addedAnalysisDatasets
+    var pendingCount = addedAnalysisDatasets
         .getAnalysisDatasetsList()
         .stream()
         .mapToLong(name -> ResourceName.create(name).getLong("analysis"))
         .distinct()
-        .forEach(analysisId -> {
-          var pending =
-              createPendingRecommendationsUseCase.createPendingRecommendations(analysisId);
+        .filter(createPendingRecommendationsUseCase::createPendingRecommendations)
+        .mapToObj(analysisId -> builder.addAnalysis("analysis/" + analysisId))
+        .count();
 
-          if (pending) {
-            builder.addAnalysis("analysis/" + analysisId);
-          }
-        });
-
-    if (builder.getAnalysisCount() == 0) {
-      return Optional.empty();
-    }
-
-    return Optional.of(builder.build());
+    return pendingCount != 0 ? Optional.of(builder.build()) : Optional.empty();
   }
 }
