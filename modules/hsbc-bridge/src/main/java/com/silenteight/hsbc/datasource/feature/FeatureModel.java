@@ -1,12 +1,14 @@
 package com.silenteight.hsbc.datasource.feature;
 
-import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatureQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryConfigurer;
+import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatureQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.DocumentQueryConfigurer;
+import com.silenteight.hsbc.datasource.extractors.document.DocumentQueryFacade;
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature;
+import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
+import com.silenteight.hsbc.datasource.feature.document.DocumentFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
 import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
-import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
 import com.silenteight.hsbc.datasource.feature.nationalityid.NationalityIdFeature;
 import com.silenteight.hsbc.datasource.feature.registrationcountry.RegistrationCountryFeature;
 
@@ -27,6 +29,7 @@ public class FeatureModel {
             documentQueryConfigurer.alertedPartyDocumentQuery(),
             documentQueryConfigurer.matchPartyDocumentQuery()
         ),
+        DOCUMENT, new DocumentFeature(DocumentQueryFacade::new),
         NATIONALITY_COUNTRY, new NationalityCountryFeature(
             new NationalityCountryQueryConfigurer().create()
         ),

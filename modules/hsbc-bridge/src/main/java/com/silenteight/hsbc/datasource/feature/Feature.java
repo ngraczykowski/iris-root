@@ -12,6 +12,7 @@ public enum Feature {
 
   REGISTRATION_COUNTRY("registrationCountry"),
   GENDER("gender"),
+  DOCUMENT("document"),
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),
   NATIONALITY_COUNTRY("nationality"),

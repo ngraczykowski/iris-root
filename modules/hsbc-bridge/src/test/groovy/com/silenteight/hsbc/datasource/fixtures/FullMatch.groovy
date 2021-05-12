@@ -52,9 +52,9 @@ trait FullMatch {
   ] as MatchData
 
   static MatchData FULL_MATCH_2 = [
-      getCaseInformation: {new CaseInformation(id: 1)},
-      getCustomerIndividual: {new CustomerIndividual()},
-      getWorldCheckIndividuals: {[]},
+      getCaseInformation       : {new CaseInformation(id: 1)},
+      getCustomerIndividual    : {new CustomerIndividual()},
+      getWorldCheckIndividuals : {[]},
       getPrivateListIndividuals: {[]}
-  ]as MatchData
+  ] as MatchData
 }
