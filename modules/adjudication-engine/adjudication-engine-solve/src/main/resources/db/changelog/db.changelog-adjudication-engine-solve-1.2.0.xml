@@ -220,6 +220,58 @@
         referencedColumnNames="category_id"/>
   </changeSet>
 
+<!--  <changeSet id="adjudication-engine-solve-1.2.0_7" author="ahaczewski">-->
+<!--    <createTable tableName="ae_pending_match_feature">-->
+<!--      <column name="match_id" type="BIGINT">-->
+<!--        <constraints nullable="false"/>-->
+<!--      </column>-->
+<!--      <column name="agent_config_feature_id" type="BIGINT">-->
+<!--        <constraints nullable="false"/>-->
+<!--      </column>-->
+<!--      <column name="created_at" type="TIMESTAMP">-->
+<!--        <constraints nullable="false"/>-->
+<!--      </column>-->
+<!--    </createTable>-->
+
+<!--    <addForeignKeyConstraint-->
+<!--        baseTableName="ae_pending_match_feature"-->
+<!--        baseColumnNames="match_id"-->
+<!--        constraintName="fk_ae_pending_match_feature_match_id"-->
+<!--        referencedTableName="ae_match"-->
+<!--        referencedColumnNames="match_id"/>-->
+<!--    <createIndex-->
+<!--        tableName="ae_pending_match_feature"-->
+<!--        indexName="ix_ae_pending_match_feature_match_id">-->
+<!--      <column name="match_id"/>-->
+<!--    </createIndex>-->
+
+<!--    <addForeignKeyConstraint-->
+<!--        baseTableName="ae_pending_match_feature"-->
+<!--        baseColumnNames="agent_config_feature_id"-->
+<!--        constraintName="fk_ae_pending_match_feature_agent_config_feature_id"-->
+<!--        referencedTableName="ae_agent_config_feature"-->
+<!--        referencedColumnNames="agent_config_feature_id"/>-->
+
+<!--    <addUniqueConstraint-->
+<!--        tableName="ae_pending_match_feature"-->
+<!--        columnNames="match_id, agent_config_feature_id"-->
+<!--        constraintName="uq_ae_pending_match_feature_match_id_agent_config_feature_id"/>-->
+<!--  </changeSet>-->
+
+  <changeSet id="adjudication-engine-solve-1.2.0_7" author="ahaczewski">
+    <createView
+        viewName="ae_pending_match_feature_query"
+        path="sql/view_ae_pending_match_feature_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-solve-1.2.0_8" author="ahaczewski">
+    <createView
+        viewName="ae_missing_match_feature_query"
+        path="sql/view_ae_missing_match_feature_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
 <!--  <changeSet id="adjudication-engine-solve-1.2.0_8" author="ahaczewski">-->
 <!--  </changeSet>-->
 </databaseChangeLog>
