@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.AddDatasetRequest;
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
-import com.silenteight.adjudication.api.v1.Analysis.State;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.adjudication.api.v1.GetAnalysisRequest;
@@ -73,9 +72,7 @@ class GrpcAnalysisService implements AnalysisService {
 
   @Override
   public Analysis getAnalysis(String analysis) {
-    return Analysis.newBuilder().setState(State.DONE).build();
-    // TODO(mmastylo): Uncomment when feature is available in AE
-    // return analysisStub.getAnalysis(toGetAnalysisRequest(analysis));
+    return analysisStub.getAnalysis(toGetAnalysisRequest(analysis));
   }
 
   private static GetAnalysisRequest toGetAnalysisRequest(String analysis) {
