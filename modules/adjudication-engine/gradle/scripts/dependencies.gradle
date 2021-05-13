@@ -199,6 +199,7 @@ libraries.micrometer_influx = [group: 'io.micrometer', name: 'micrometer-registr
 libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus']
 libraries.oracle = [group: 'com.oracle', name: 'ojdbc8']
 libraries.paranamer = [group: 'com.thoughtworks.paranamer', name: 'paranamer']
+libraries.pebble = [group: 'io.pebbletemplates', name: 'pebble-spring-boot-starter',version: '3.1.5']
 libraries.picocli = [group: 'info.picocli', name: 'picocli']
 libraries.postgresql = [group: 'org.postgresql', name: 'postgresql']
 libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java']
