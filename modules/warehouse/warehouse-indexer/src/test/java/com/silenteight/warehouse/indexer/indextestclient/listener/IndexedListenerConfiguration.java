@@ -24,12 +24,12 @@ class IndexedListenerConfiguration {
   @NonNull
   private final AmqpInboundFactory inboundFactory;
   @NonNull
-  private final IndexedEventIntegrationProperties properties;
+  private final IndexedEventIntegrationProperties testProperties;
 
   @Bean
   Queue alertIndexedQueue() {
     return QueueBuilder
-        .durable(properties.getAlertIndexedEventTestListenerInbound().getQueueName())
+        .durable(testProperties.getAlertIndexedEventTestListenerInbound().getQueueName())
         .build();
   }
 
@@ -48,7 +48,7 @@ class IndexedListenerConfiguration {
   IntegrationFlow alertIndexedQueueToChannelIntegrationFlow() {
     return createInputFlow(
         ALERT_INDEXED_INBOUND_CHANNEL,
-        properties.getAlertIndexedEventTestListenerInbound().getQueueName());
+        testProperties.getAlertIndexedEventTestListenerInbound().getQueueName());
   }
 
   private IntegrationFlow createInputFlow(String channel, String queue) {

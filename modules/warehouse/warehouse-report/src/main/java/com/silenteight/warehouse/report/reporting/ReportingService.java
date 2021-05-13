@@ -24,7 +24,7 @@ public class ReportingService {
         .build();
 
     return opendistroElasticClient.getReportInstance(listReportsInstancesRequest)
-        .getReportInstanceList()
+        .getReportInstance()
         .stream()
         .map(ReportInstanceList::getId)
         .collect(toSet());

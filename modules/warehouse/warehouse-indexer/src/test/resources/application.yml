@@ -12,19 +12,34 @@ keycloak:
 warehouse:
   messaging:
     integration:
-      alert-indexing-inbound:
-        queue-name: warehouse.index-request
-      alert-indexed-outbound:
+      production-indexing-inbound:
+        queue-name: warehouse.production-index-request
+      production-indexed-outbound:
         exchange-name: alert-indexed
-        routing-key: alert.indexed
-      alert-indexing-test-client-outbound:
-        exchange-name: alert-indexing
-        routing-key: alert.new
-      alert-indexed-event-test-listener-inbound:
-        queue-name: client.index-response
+        routing-key: alert.production
+      simulation-indexing-inbound:
+        queue-name: warehouse.simulation-index-request
+      simulation-indexed-outbound:
+        exchange-name: alert-indexed
+        routing-key: alert.simulation
+  indexing:
+    environment-prefix: 'itest'
+
 spring:
   elasticsearch:
     rest:
       username: admin
       password: admin
       uris: http://localhost:9201,http://localhost:9200
+
+test:
+  messaging:
+    integration:
+      production-indexing-test-client-outbound:
+        exchange-name: alert-indexing
+        routing-key: alert.production
+      simulation-indexing-test-client-outbound:
+        exchange-name: alert-indexing
+        routing-key: alert.simulation
+      alert-indexed-event-test-listener-inbound:
+        queue-name: client.index-response

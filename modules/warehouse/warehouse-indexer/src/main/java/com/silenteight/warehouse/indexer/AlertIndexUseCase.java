@@ -8,7 +8,9 @@ import com.silenteight.data.api.v1.DataIndexRequest;
 import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertService;
-import com.silenteight.warehouse.indexer.gateway.IndexedConfirmationGateway;
+import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
+import com.silenteight.warehouse.indexer.analysis.AnalysisService;
+import com.silenteight.warehouse.indexer.analysis.NamingStrategy;
 import com.silenteight.warehouse.indexer.listener.IndexRequestCommandHandler;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
@@ -18,28 +20,32 @@ import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
 public class AlertIndexUseCase implements IndexRequestCommandHandler {
 
   @NonNull
-  private final IndexedConfirmationGateway indexedConfirmationGateway;
+  private final AlertService alertService;
 
   @NonNull
-  private final AlertService alertService;
+  private final AnalysisService analysisService;
 
   @NonNull
   private final TimeSource timeSource;
 
-  public void activate(DataIndexRequest dataIndexRequest) {
-    log.debug("DataIndexRequestReceived, requestId={}", dataIndexRequest.getRequestId());
+  @Override
+  public DataIndexResponse handle(
+      DataIndexRequest dataIndexRequest, NamingStrategy namingStrategy) {
 
-    alertService.indexAlert(dataIndexRequest);
+    log.debug("DataIndexRequest received, requestId={}, strategy={}",
+        dataIndexRequest.getRequestId(), namingStrategy);
 
-    DataIndexResponse response = DataIndexResponse.newBuilder()
+    AnalysisMetadataDto analysisMetadataDto = analysisService
+        .getAnalysisMetadata(dataIndexRequest.getAnalysisName(), namingStrategy);
+
+    alertService.indexAlert(dataIndexRequest, analysisMetadataDto.getElasticIndexName());
+
+    log.trace("DataIndexRequest processed, requestId={}, strategy={}, analysis={}",
+        dataIndexRequest.getRequestId(), namingStrategy, analysisMetadataDto);
+
+    return DataIndexResponse.newBuilder()
         .setRequestId(dataIndexRequest.getRequestId())
         .setIndexTime(toTimestamp(timeSource.now()))
         .build();
-    indexedConfirmationGateway.alertIndexed(response);
-  }
-
-  @Override
-  public void handle(DataIndexRequest dataIndexRequest) {
-    this.activate(dataIndexRequest);
   }
 }

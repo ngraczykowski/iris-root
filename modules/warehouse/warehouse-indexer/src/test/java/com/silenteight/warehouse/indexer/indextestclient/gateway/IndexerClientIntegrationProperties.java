@@ -12,10 +12,13 @@ import javax.validation.Valid;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.messaging.integration")
+@ConfigurationProperties(prefix = "test.messaging.integration")
 public class IndexerClientIntegrationProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmqpOutboundProperties alertIndexingTestClientOutbound;
+  private AmqpOutboundProperties productionIndexingTestClientOutbound;
+  @Valid
+  @NestedConfigurationProperty
+  private AmqpOutboundProperties simulationIndexingTestClientOutbound;
 }

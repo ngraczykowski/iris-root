@@ -28,9 +28,8 @@ public class AlertService {
   @NonNull
   private final AlertMapper alertMapper;
 
-  public void indexAlert(DataIndexRequest dataIndexRequest) {
+  public void indexAlert(DataIndexRequest dataIndexRequest, String indexName) {
     BulkRequest bulkRequest = new BulkRequest();
-    String indexName = getId(dataIndexRequest.getAnalysisName());
 
     dataIndexRequest
         .getAlertsList()

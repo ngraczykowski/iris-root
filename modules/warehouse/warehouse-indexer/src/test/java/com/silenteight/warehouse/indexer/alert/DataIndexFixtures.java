@@ -16,6 +16,8 @@ import static java.util.List.of;
 
 public class DataIndexFixtures {
 
+  static final String INDEX_NAME = "test-index-name";
+
   static final Alert ALERT_WITH_MATCHES_1 = Alert.newBuilder()
       .setName(ALERT_NAME_1)
       .setPayload(structWithValue(
@@ -34,7 +36,7 @@ public class DataIndexFixtures {
           match(MATCH_NAME_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
       .build();
 
-  static final List<Alert> ALERTS_WITH_MATCHES = of(
+  public static final List<Alert> ALERTS_WITH_MATCHES = of(
       ALERT_WITH_MATCHES_1,
       ALERT_WITH_MATCHES_2);
 
@@ -48,14 +50,14 @@ public class DataIndexFixtures {
   public static final DataIndexRequest DATA_INDEX_REQUEST_WITH_ALERTS =
       DataIndexRequest.newBuilder()
           .setRequestId(REQUEST_ID)
-          .setAnalysisName(ANALYSIS_NAME)
+          .setAnalysisName(ANALYSIS)
           .addAllAlerts(ALERTS_WITH_MATCHES)
           .build();
 
   public static final DataIndexRequest DATA_INDEX_REQUEST_WITHOUT_MATCHES =
       DataIndexRequest.newBuilder()
           .setRequestId(REQUEST_ID)
-          .setAnalysisName(ANALYSIS_NAME)
+          .setAnalysisName(ANALYSIS)
           .addAlerts(0, ALERT_WITHOUT_MATCHES)
           .build();
 

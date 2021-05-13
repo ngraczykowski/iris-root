@@ -2,8 +2,10 @@ package com.silenteight.warehouse.indexer;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
+import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
@@ -33,7 +35,9 @@ import static java.time.Instant.parse;
     IntegrationConfiguration.class,
     MessagingConfiguration.class,
     RabbitAutoConfiguration.class,
-    ElasticsearchRestClientAutoConfiguration.class
+    ElasticsearchRestClientAutoConfiguration.class,
+    HibernateCacheAutoConfiguration.class,
+    SilentEightNamingConventionConfiguration.class,
 })
 @EnableIntegration
 @EnableIntegrationManagement
@@ -44,38 +48,67 @@ public class IndexerTestConfiguration {
   private final IndexerClientIntegrationProperties testProperties;
 
   @Bean
-  Binding alertIndexExchangeToQueueBinding(
-      Exchange alertIndexExchange,
-      Queue alertIndexingQueue) {
+  Binding productionIndexExchangeToQueueBinding(
+      Exchange commonIndexExchange,
+      Queue productionIndexingQueue) {
     return BindingBuilder
-        .bind(alertIndexingQueue)
-        .to(alertIndexExchange)
-        .with(testProperties.getAlertIndexingTestClientOutbound().getRoutingKey())
+        .bind(productionIndexingQueue)
+        .to(commonIndexExchange)
+        .with(testProperties.getProductionIndexingTestClientOutbound().getRoutingKey())
         .noargs();
   }
 
   @Bean
-  Binding alertIndexedExchangeToQueueBinding(
+  Binding simulationIndexExchangeToQueueBinding(
+      Exchange commonIndexExchange,
+      Queue simulationIndexingQueue) {
+    return BindingBuilder
+        .bind(simulationIndexingQueue)
+        .to(commonIndexExchange)
+        .with(testProperties.getSimulationIndexingTestClientOutbound().getRoutingKey())
+        .noargs();
+  }
+
+  @Bean
+  Binding productionIndexedExchangeToQueueBinding(
       Exchange alertIndexedExchange,
       Queue alertIndexedQueue) {
     return BindingBuilder
         .bind(alertIndexedQueue)
         .to(alertIndexedExchange)
-        .with(properties.getAlertIndexedOutbound().getRoutingKey())
+        .with(properties.getProductionIndexedOutbound().getRoutingKey())
         .noargs();
   }
 
   @Bean
-  Queue alertIndexingQueue() {
+  Binding simulationIndexedExchangeToQueueBinding(
+      Exchange alertIndexedExchange,
+      Queue alertIndexedQueue) {
+    return BindingBuilder
+        .bind(alertIndexedQueue)
+        .to(alertIndexedExchange)
+        .with(properties.getSimulationIndexedOutbound().getRoutingKey())
+        .noargs();
+  }
+
+  @Bean
+  Queue productionIndexingQueue() {
     return QueueBuilder
-        .durable(properties.getAlertIndexingInbound().getQueueName())
+        .durable(properties.getProductionIndexingInbound().getQueueName())
+        .build();
+  }
+
+  @Bean
+  Queue simulationIndexingQueue() {
+    return QueueBuilder
+        .durable(properties.getSimulationIndexingInbound().getQueueName())
         .build();
   }
 
   @Bean
   TopicExchange alertIndexedExchange() {
     return ExchangeBuilder
-        .topicExchange(properties.getAlertIndexedOutbound().getExchangeName())
+        .topicExchange(properties.getProductionIndexedOutbound().getExchangeName())
         .build();
   }
 
