@@ -20,11 +20,18 @@ spring:
 warehouse:
   messaging:
     integration:
-      alert-indexing-inbound:
-        queue-name: warehouse.index-request
-      alert-indexed-outbound:
+      production-indexing-inbound:
+        queue-name: warehouse.production-index-request
+      production-indexed-outbound:
         exchange-name: alert-indexed
-        routing-key: alert.indexed
+        routing-key: alert.production
+      simulation-indexing-inbound:
+        queue-name: warehouse.simulation-index-request
+      simulation-indexed-outbound:
+        exchange-name: alert-indexed
+        routing-key: alert.simulation
+  indexing:
+    environment-prefix: 'dev'
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-warehouse
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
@@ -35,7 +42,7 @@ warehouse:
   minio:
     url: https://minio.silenteight.com
   kibana:
-    url: https://kibana.dev.silenteight.com
+    url: https://kibana.silenteight.com
 
 keycloak:
   adapter:

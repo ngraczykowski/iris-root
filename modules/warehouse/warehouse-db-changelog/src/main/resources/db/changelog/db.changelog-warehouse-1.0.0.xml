@@ -41,4 +41,49 @@
       <column name="kibana_report_instance_id"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="warehouse-1.0.0-2" author="anowicki">
+    <createTable tableName="warehouse_analysis_metadata">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="analysis_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="elastic_index_pattern" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_analysis_metadata"
+        indexName="ix_warehouse_metadata_analysis_id"
+        unique="true">
+      <column name="id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_analysis_metadata"
+        indexName="ix_warehouse_analysis_metadata_analysis_id"
+        unique="true">
+      <column name="analysis_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_analysis_metadata"
+        indexName="ix_warehouse_analysis_metadata_analysis"
+        unique="true">
+      <column name="analysis"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

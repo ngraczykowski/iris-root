@@ -13,7 +13,7 @@ public class ListReportsInstancesResponse {
   @JsonProperty("totalHits")
   Long totalHits;
   @JsonProperty("reportInstanceList")
-  List<ReportInstanceList> reportInstanceList = new ArrayList<>();
+  List<ReportInstanceList> reportInstance = new ArrayList<>();
 
   @Data
   public static class ReportInstanceList {

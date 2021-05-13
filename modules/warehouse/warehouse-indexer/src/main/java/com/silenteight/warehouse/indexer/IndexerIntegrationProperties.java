@@ -18,9 +18,17 @@ public class IndexerIntegrationProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmqpOutboundProperties alertIndexedOutbound;
+  private AmqpOutboundProperties productionIndexedOutbound;
 
   @Valid
   @NestedConfigurationProperty
-  private AmqpInboundProperties alertIndexingInbound;
+  private AmqpInboundProperties productionIndexingInbound;
+
+  @Valid
+  @NestedConfigurationProperty
+  private AmqpOutboundProperties simulationIndexedOutbound;
+
+  @Valid
+  @NestedConfigurationProperty
+  private AmqpInboundProperties simulationIndexingInbound;
 }

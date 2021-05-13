@@ -10,10 +10,17 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: ${warehouse.db.schema:public}
     contexts: default
-
+  elasticsearch:
+    rest:
+      username: admin
+      password: admin
+      uris: http://localhost:9201,http://localhost:9200
 warehouse:
   kibana:
     timezone: Europe/Warsaw
+    url: http://localhost:5601
+    username: admin
+    password: admin
   report:
     default-bucket: reports
     synchronization:

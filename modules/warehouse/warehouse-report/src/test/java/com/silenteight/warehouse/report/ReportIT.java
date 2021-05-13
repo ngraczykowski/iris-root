@@ -59,7 +59,6 @@ class ReportIT {
 
   private static final String TEST_BUCKET = "reports";
   private static final String NEW_ELASTIC_INDEX = "analysis-2";
-  private static final String ALERTS_INDEX = "alerts-index";
 
   @BeforeEach
   void setUp() {

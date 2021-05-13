@@ -10,7 +10,7 @@ public class MappedAlertFixtures {
   public static final String MATCH_ID_2 = "36";
   public static final String ALERT_ID_1 = "44";
   public static final String ALERT_ID_2 = "45";
-  public static final String ANALYSIS_ID = "33";
+  public static final String ANALYSIS_ID = "bc685176-2c39-4934-b450-88795bc8249f";
   public static final String DOCUMENT_ID = "44:35";
   public static final String MATCH_PAYLOAD_SOLUTION_KEY = "solution";
   public static final String MATCH_PAYLOAD_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
@@ -22,7 +22,7 @@ public class MappedAlertFixtures {
 
   private static final String MATCH_RESOURCE_PREFIX = "matches/";
   private static final String ALERT_RESOURCE_PREFIX = "alerts/";
-  private static final String ANALYSIS_RESOURCE_PREFIX = "analysis/";
+  public static final String ANALYSIS_RESOURCE_PREFIX = "analysis/";
 
   static final String REQUEST_ID = "TEST_123";
   static final String NO_DATA = "NO_DATA";
@@ -30,7 +30,7 @@ public class MappedAlertFixtures {
   static final String MATCH_NAME_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2;
   static final String ALERT_NAME_1 = ALERT_RESOURCE_PREFIX + ALERT_ID_1;
   static final String ALERT_NAME_2 = ALERT_RESOURCE_PREFIX + ALERT_ID_2;
-  static final String ANALYSIS_NAME = ANALYSIS_RESOURCE_PREFIX + ANALYSIS_ID;
+  static final String ANALYSIS = ANALYSIS_RESOURCE_PREFIX + ANALYSIS_ID;
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_1_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,

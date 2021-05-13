@@ -7,6 +7,7 @@ import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,10 @@ import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 @EnableConfigurationProperties(IndexerClientIntegrationProperties.class)
 public class IndexerClientConfiguration {
 
-  public static final String ALERT_INDEXING_OUTBOUND_CHANNEL =
-      "alertIndexingOutboundChannel";
+  public static final String PRODUCTION_INDEXING_OUTBOUND_CHANNEL =
+      "productionIndexingOutboundChannel";
+  public static final String SIMULATION_INDEXING_OUTBOUND_CHANNEL =
+      "simulationIndexingOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
@@ -28,27 +31,45 @@ public class IndexerClientConfiguration {
   private final IndexerClientIntegrationProperties properties;
 
   @Bean
-  GatewayProxyFactoryBean indexClientGateway() {
+  GatewayProxyFactoryBean productionIndexClientGateway() {
     GatewayProxyFactoryBean factoryBean =
         new GatewayProxyFactoryBean(IndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
-    factoryBean.setDefaultRequestChannelName(ALERT_INDEXING_OUTBOUND_CHANNEL);
+    factoryBean.setDefaultRequestChannelName(PRODUCTION_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;
   }
 
   @Bean
-  TopicExchange alertIndexExchange() {
+  @Qualifier("simulation")
+  GatewayProxyFactoryBean simulationIndexClientGateway() {
+    GatewayProxyFactoryBean factoryBean =
+        new GatewayProxyFactoryBean(IndexClientGateway.class);
+    factoryBean.setDefaultRequestChannel(new DirectChannel());
+    factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
+    return factoryBean;
+  }
+
+  @Bean
+  TopicExchange commonIndexExchange() {
     return ExchangeBuilder
-        .topicExchange(properties.getAlertIndexingTestClientOutbound().getExchangeName())
+        .topicExchange(properties.getProductionIndexingTestClientOutbound().getExchangeName())
         .build();
   }
 
   @Bean
-  IntegrationFlow alertIndexChannelToExchangeIntegrationFlow() {
+  IntegrationFlow productionIndexChannelToExchangeIntegrationFlow() {
     return createOutputFlow(
-        ALERT_INDEXING_OUTBOUND_CHANNEL,
-        properties.getAlertIndexingTestClientOutbound().getExchangeName(),
-        properties.getAlertIndexingTestClientOutbound().getRoutingKey());
+        PRODUCTION_INDEXING_OUTBOUND_CHANNEL,
+        properties.getProductionIndexingTestClientOutbound().getExchangeName(),
+        properties.getProductionIndexingTestClientOutbound().getRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow simulationIndexChannelToExchangeIntegrationFlow() {
+    return createOutputFlow(
+        SIMULATION_INDEXING_OUTBOUND_CHANNEL,
+        properties.getSimulationIndexingTestClientOutbound().getExchangeName(),
+        properties.getSimulationIndexingTestClientOutbound().getRoutingKey());
   }
 
   private IntegrationFlow createOutputFlow(String channel, String exchange, String routingKey) {

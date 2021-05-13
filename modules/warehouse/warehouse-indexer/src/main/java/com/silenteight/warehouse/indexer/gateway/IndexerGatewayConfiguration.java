@@ -8,16 +8,16 @@ import com.silenteight.warehouse.indexer.IndexerIntegrationProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 
 @Configuration
 @RequiredArgsConstructor
-class IndexerGatewayConfiguration {
+public class IndexerGatewayConfiguration {
 
-  public static final String ALERT_INDEXED_OUTBOUND_CHANNEL =
-      "alertIndexedOutboundChannel";
+  public static final String PRODUCTION_INDEXED_OUTBOUND_CHANNEL =
+      "productionIndexedOutboundChannel";
+  public static final String SIMULATION_INDEXED_OUTBOUND_CHANNEL =
+      "simulationIndexedOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
@@ -25,11 +25,19 @@ class IndexerGatewayConfiguration {
   private final IndexerIntegrationProperties properties;
 
   @Bean
-  IntegrationFlow alertIndexedOutboundChannelToExchangeIntegrationFlow() {
+  IntegrationFlow productionIndexedOutboundChannelToExchangeIntegrationFlow() {
     return createOutputFlow(
-        ALERT_INDEXED_OUTBOUND_CHANNEL,
-        properties.getAlertIndexedOutbound().getExchangeName(),
-        properties.getAlertIndexedOutbound().getRoutingKey());
+        PRODUCTION_INDEXED_OUTBOUND_CHANNEL,
+        properties.getProductionIndexedOutbound().getExchangeName(),
+        properties.getProductionIndexedOutbound().getRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow simulationIndexedOutboundChannelToExchangeIntegrationFlow() {
+    return createOutputFlow(
+        SIMULATION_INDEXED_OUTBOUND_CHANNEL,
+        properties.getSimulationIndexedOutbound().getExchangeName(),
+        properties.getSimulationIndexedOutbound().getRoutingKey());
   }
 
   private IntegrationFlow createOutputFlow(String channel, String exchange, String routingKey) {
@@ -39,14 +47,5 @@ class IndexerGatewayConfiguration {
             .outboundAdapter()
             .exchangeName(exchange)
             .routingKey(routingKey));
-  }
-
-  @Bean
-  GatewayProxyFactoryBean indexingConfirmationGateway() {
-    GatewayProxyFactoryBean factoryBean =
-        new GatewayProxyFactoryBean(IndexedConfirmationGateway.class);
-    factoryBean.setDefaultRequestChannel(new DirectChannel());
-    factoryBean.setDefaultRequestChannelName(ALERT_INDEXED_OUTBOUND_CHANNEL);
-    return factoryBean;
   }
 }

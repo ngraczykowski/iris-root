@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.messaging.integration")
+@ConfigurationProperties(prefix = "test.messaging.integration")
 class IndexedEventIntegrationProperties {
 
   @Valid
