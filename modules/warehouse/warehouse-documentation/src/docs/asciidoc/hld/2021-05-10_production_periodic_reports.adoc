@@ -1,0 +1,104 @@
+= HLD 4
+
+- Created at: *10.05.2021*
+- Reference ticket: *https://silent8.atlassian.net/browse/WEB-774[WEB-774]*
+- Reason: Production periodic reports processing
+
+
+== Assumptions
+
+In the diagram, we assume that:
+
+- Elastic already contains all the data required to generate reports,
+- Kibana already has defined reports in a master tenant.
+
+== Generating and storing periodic reports (Reports stored in Minio with all countries' data)
+
+[plantuml, production-periodic-reports-generating-and-storing-reports, svg]
+-----
+@startuml
+header Production periodic reports - Generating and storing reports
+
+title  Production periodic reports - Generating and storing reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+database DB as db
+
+participant MinIO
+
+participant Kibana
+participant Elastic
+
+--> Kibana : Prepare reports in a master tenant
+...
+--> Elastic : Update/Create index for production data
+
+...
+
+autonumber
+Kibana -> Kibana : Generate reports based on definitions \nin master tenant - scheduled/on demand
+Kibana -> Elastic : Generate reports
+note over Kibana
+Generating those reports is controlled by Kibana.
+The user defines a cron job, when a report should be generated,
+and this report is generated automatically by Kibana.
+end note
+...
+
+Warehouse -> Warehouse : Scheduled event
+Warehouse -> Kibana : List reports
+Warehouse -> db : Check missing reports
+Warehouse -> Kibana : Download new reports
+Kibana -> Warehouse : Reports data
+Warehouse -> MinIO : Store reports
+Warehouse -> db : Store downloaded report metadata \n(name, index, tenant, analysis, minio URL [relative])
+
+@enduml
+-----
+
+== Downloading periodic reports (Reports stored in Minio with all countries' data)
+
+This part is already designed but does not have a clear use case to download those reports from Minio.
+
+Those reports are needed just for the audit.
+Reports contain personal data related to all countries, and we do not have a user with permission to access data from all countries.
+
+[plantuml, production-periodic-reports-downloading-reports, svg]
+-----
+@startuml
+header Production periodic reports - Downloading reports
+
+title  Production periodic reports - Downloading reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+database DB as db
+
+participant MinIO
+
+autonumber 1
+
+User -> Frontend : List production reports
+Frontend -> Warehouse : List production reports
+Warehouse -> db : List production reports
+db -> Warehouse : List of reports
+Warehouse -> Frontend: List of reports \n(download report URL leads to Warehouse)
+
+User -> Frontend : Download specific report
+Frontend -> Warehouse : Download report
+Warehouse -> db : Get report URL
+db -> Warehouse : MinIO report URL
+Warehouse -> MinIO : Download report
+MinIO -> Warehouse : Report data (no redirect directly to MinIO)
+Warehouse -> Frontend : Report data
+Frontend -> User : Save report
+
+@enduml
+-----

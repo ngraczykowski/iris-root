@@ -1,4 +1,4 @@
-= HLD 1
+= HLD 2
 
 - Created at: *10.04.2021*
 - Reference ticket: *https://silent8.atlassian.net/browse/WEB-774[WEB-774]*
