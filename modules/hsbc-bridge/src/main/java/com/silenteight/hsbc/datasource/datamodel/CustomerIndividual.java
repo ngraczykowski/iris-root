@@ -43,6 +43,10 @@ public interface CustomerIndividual {
   String getPassportIssueCountry();
 
   String getCountryOfBirthOriginal();
+  String getDateOfBirth();
+  String getDobOriginal();
+  String getYearOfBirth();
+  String getBirthDate();
 
   String getCountryOfBirth();
 

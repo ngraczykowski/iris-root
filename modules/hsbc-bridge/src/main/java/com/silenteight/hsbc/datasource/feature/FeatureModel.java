@@ -7,6 +7,7 @@ import com.silenteight.hsbc.datasource.extractors.document.DocumentQueryFacade;
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature;
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
 import com.silenteight.hsbc.datasource.feature.document.DocumentFeature;
+import com.silenteight.hsbc.datasource.feature.dob.DateOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
 import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
 import com.silenteight.hsbc.datasource.feature.nationalityid.NationalityIdFeature;
@@ -37,7 +38,8 @@ public class FeatureModel {
             new ResidencyCountryFeatureQueryConfigurer().getFactory()
         ),
         INCORPORATION_COUNTRY, new IncorporationCountryFeature(),
-        REGISTRATION_COUNTRY, new RegistrationCountryFeature()
+        REGISTRATION_COUNTRY, new RegistrationCountryFeature(),
+        DATE_OF_BIRTH, new DateOfBirthFeature()
     );
     // TODO add remaining features;
   }

@@ -19,4 +19,10 @@ public interface WorldCheckIndividual {
   String getPassportCountry();
 
   String getNativeAliasLanguageCountry();
+
+  String getDobs();
+
+  String getDateOfBirth();
+
+  String getYearOfBirth();
 }

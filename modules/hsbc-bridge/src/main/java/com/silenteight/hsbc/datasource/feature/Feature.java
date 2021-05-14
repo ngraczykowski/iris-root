@@ -16,7 +16,8 @@ public enum Feature {
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),
   NATIONALITY_COUNTRY("nationality"),
-  NATIONALITY_ID("nationalityId");
+  NATIONALITY_ID("nationalityId"),
+  DATE_OF_BIRTH("dateOfBirth");
 
   private final String name;
 

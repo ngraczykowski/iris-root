@@ -13,4 +13,8 @@ public interface PrivateListIndividual {
   String getEdqDrivingLicence();
 
   String getEdqTaxNumber();
+
+  String getDateOfBirth();
+
+  String getYearOfBirth();
 }
