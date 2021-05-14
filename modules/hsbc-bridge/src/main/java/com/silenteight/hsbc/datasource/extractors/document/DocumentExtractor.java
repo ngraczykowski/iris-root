@@ -32,8 +32,7 @@ public class DocumentExtractor {
   public Document convertAlertedPartyDocumentNumbers(CustomerIndividual customerIndividual) {
     var document = new Document();
 
-    extractCustomerIndividualsIdentificationDocument(
-        customerIndividual, document);
+    extractCustomerIndividualsIdentificationDocument(customerIndividual, document);
 
     return document;
   }
@@ -76,7 +75,6 @@ public class DocumentExtractor {
     var matcher = BASE_PATTERN.matcher(i);
     if (matcher.find()) {
       var group = matcher.group(0);
-
       var split = group.split(",");
 
       if (split[0].equals(PASSPORT_CODE)) {
@@ -94,6 +92,7 @@ public class DocumentExtractor {
 
     worldCheckIndividuals.forEach(w -> {
       extractPassportNumbers(document, w.getPassportNumber());
+      extractPassportCountries(document, w.getPassportCountry());
       extractIdNumbers(document, w.getIdNumbers());
     });
   }
@@ -135,28 +134,63 @@ public class DocumentExtractor {
     var splitPassportNumbers = passportNumber.split(";");
 
     Arrays.stream(splitPassportNumbers)
+        .map(this::extractDocumentId)
+        .forEach(document::addPassportNumber);
+  }
+
+  private void extractPassportCountries(Document document, String passportCountry) {
+    if (isEmpty(passportCountry)) {
+      return;
+    }
+
+    var splitPassportNumbers = passportCountry.split(";");
+
+    Arrays.stream(splitPassportNumbers)
         .map(PassportNumberFieldCountryExtractor::new)
         .map(SimpleRegexBasedExtractor::extract)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .forEach(document::addPassportCountry);
-
-    Arrays.stream(splitPassportNumbers)
-        .map(this::extractDocumentId)
-        .forEach(document::addPassportNumber);
   }
 
   private void extractPrivateListIndividualsDocument(
       List<PrivateListIndividual> privateListIndividuals, Document document) {
-    privateListIndividuals.forEach(x -> extractPrivateIndividual(x, document));
+    privateListIndividuals.forEach(p -> {
+      var suffix = extractEdqSuffix(p.getEdqSuffix());
+      extractPassportNumberFromPrivateListIndividual(p.getPassportNumber(), document, suffix);
+      extractNationalIdFromPrivateListIndividual(p.getNationalId(), document, suffix);
+      extractEdqDocument(document, p.getEdqDrivingLicence());
+      extractEdqDocument(document, p.getEdqTaxNumber());
+      suffix.ifPresent(document::addOtherDocumentNumber);
+    });
   }
 
-  private void extractPrivateIndividual(
-      PrivateListIndividual individual, Document document) {
+  private void extractEdqDocument(Document document, String edqDocument) {
+    if (isEmpty(edqDocument)) {
+      return;
+    }
+    document.addOtherDocumentNumber(edqDocument);
+  }
 
-    var edqSuffix = extractEdqSuffix(individual.getEdqSuffix());
+  private void extractNationalIdFromPrivateListIndividual(
+      String nationalId, Document document, Optional<String> edqSuffix) {
+    if (isEmpty(nationalId)) {
+      return;
+    }
 
-    Stream.of(individual.getPassportNumber()
+    Stream.of(nationalId
+        .split(","))
+        .filter(e -> edqSuffix.isPresent() && !edqSuffix.get().equals(e))
+        .forEach(document::addNationalIdNumber);
+  }
+
+  private void extractPassportNumberFromPrivateListIndividual(
+      String passportNumber, Document document, Optional<String> edqSuffix) {
+    if (isEmpty(passportNumber)) {
+      return;
+    }
+
+    Stream.of(passportNumber
         .split("[,;]"))
         .map(v -> v.split("[,;]"))
         .flatMap(Stream::of)
@@ -164,16 +198,6 @@ public class DocumentExtractor {
         .map(k -> k.split(";")[0])
         .filter(e -> edqSuffix.isPresent() && !edqSuffix.get().equals(e))
         .forEach(document::addPassportNumber);
-
-    Stream.of(individual.getNationalId()
-        .split(","))
-        .filter(e -> edqSuffix.isPresent() && !edqSuffix.get().equals(e))
-        .forEach(document::addNationalIdNumber);
-
-    document.addOtherDocumentNumber(individual.getEdqDrivingLicence());
-    document.addOtherDocumentNumber(individual.getEdqTaxNumber());
-    edqSuffix.ifPresent(document::addOtherDocumentNumber);
-
   }
 
   private String extractDocumentId(String documentId) {
@@ -185,6 +209,9 @@ public class DocumentExtractor {
   }
 
   private Optional<String> extractEdqSuffix(String documentId) {
+    if (isEmpty(documentId)){
+      return Optional.empty();
+    }
     var matcher = EDQ_SUFFIX.matcher(documentId);
     if (!matcher.find()) {
       return Optional.of(documentId);
@@ -192,5 +219,3 @@ public class DocumentExtractor {
     return Optional.empty();
   }
 }
-
-

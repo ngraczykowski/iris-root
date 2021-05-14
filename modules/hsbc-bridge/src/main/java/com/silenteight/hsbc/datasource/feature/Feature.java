@@ -12,11 +12,12 @@ public enum Feature {
 
   REGISTRATION_COUNTRY("registrationCountry"),
   GENDER("gender"),
-  DOCUMENT("document"),
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),
-  NATIONALITY_COUNTRY("nationality"),
-  NATIONALITY_ID("nationalityId"),
+  NATIONALITY_COUNTRY("nationalityCountry"),
+  NATIONAL_ID_DOCUMENT("nationalIdDocument"),
+  PASSPORT_NUMBER_DOCUMENT("passportNumberDocument"),
+  OTHER_DOCUMENT("otherDocument"),
   DATE_OF_BIRTH("dateOfBirth");
 
   private final String name;

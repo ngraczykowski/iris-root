@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.document;
+package com.silenteight.hsbc.datasource.feature.passportnumberdocument;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,9 +11,9 @@ import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static java.util.Collections.emptyList;
 
 @RequiredArgsConstructor
-public class DocumentFeature implements FeatureValuesRetriever<DocumentFeatureInputDto> {
+public class PassportNumberFeature implements FeatureValuesRetriever<DocumentFeatureInputDto> {
 
-  private final DocumentQuery.Factory documentQueryFactory;
+  private final PassportNumberDocumentQuery.Factory documentQueryFactory;
 
   @Override
   public DocumentFeatureInputDto retrieve(MatchData matchData) {
@@ -21,9 +21,8 @@ public class DocumentFeature implements FeatureValuesRetriever<DocumentFeatureIn
     var inputBuilder = DocumentFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {
-      inputBuilder.alertedPartyDocuments(toDistinctList(query.apDocumentNumbers()));
-      inputBuilder.watchlistDocuments(
-          toDistinctList(query.mpDocumentNumbers(), query.mpEdqTaxNumber()));
+      inputBuilder.alertedPartyDocuments(toDistinctList(query.apPassportNumbers()));
+      inputBuilder.watchlistDocuments(toDistinctList(query.mpPassportNumbers()));
     } else {
       inputBuilder.alertedPartyDocuments(emptyList());
       inputBuilder.watchlistDocuments(emptyList());
@@ -36,6 +35,6 @@ public class DocumentFeature implements FeatureValuesRetriever<DocumentFeatureIn
 
   @Override
   public Feature getFeature() {
-    return Feature.DOCUMENT;
+    return Feature.PASSPORT_NUMBER_DOCUMENT;
   }
 }

@@ -16,13 +16,13 @@ import static java.util.stream.Collectors.toList;
 public class Document {
 
   private final List<String> passportNumbers = new ArrayList<>();
-  private final List<String> nationalIdNumbers = new ArrayList<>();
-  private final List<String> otherDocumentNumbers = new ArrayList<>();
+  private final List<String> nationalIds = new ArrayList<>();
+  private final List<String> otherDocuments = new ArrayList<>();
   private final List<String> nationalIdsCountries = new ArrayList<>();
   private final List<String> passportCountries = new ArrayList<>();
 
   public void addOtherDocumentNumber(String documentNumber) {
-    this.otherDocumentNumbers.add(documentNumber);
+    this.otherDocuments.add(documentNumber);
   }
 
   void addPassportNumber(String passportNumber) {
@@ -30,21 +30,21 @@ public class Document {
   }
 
   void addNationalIdNumber(String nationalIdNumber) {
-    this.nationalIdNumbers.add(nationalIdNumber);
+    this.nationalIds.add(nationalIdNumber);
   }
 
   public List<String> getAllDocumentsNumbers() {
-    return Stream.of(passportNumbers, nationalIdNumbers, otherDocumentNumbers)
+    return Stream.of(passportNumbers, nationalIds, otherDocuments)
         .flatMap(Collection::stream)
         .collect(toList());
   }
 
-  void addNationalIdCountry(String country) {
-    this.nationalIdsCountries.add(country);
+  void addNationalIdCountry(String nationalIdsCountry) {
+    this.nationalIdsCountries.add(nationalIdsCountry);
   }
 
-  void addPassportCountry(String country) {
-    this.passportCountries.add(country);
+  void addPassportCountry(String passportCountry) {
+    this.passportCountries.add(passportCountry);
   }
 
   public List<String> getAllCountries() {

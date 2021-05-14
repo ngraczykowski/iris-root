@@ -32,7 +32,8 @@ trait FullMatch {
       getWorldCheckIndividuals : {
         [new WorldCheckIndividual(
             gender: "M",
-            passportNumber: "KJ0114578 (VIET NAM);KJ4514578 (IRAN);A501245",
+            passportNumber: "KZ0212573 (UNK-UNKW);KW4444587 (GB);A52345",
+            passportCountry: "KJ0114578 (VIET NAM);KJ4514578 (IRAN);A501245",
             idNumbers: "BC 78845 (UNK-UNKW)|ID78845 (UNK-UNKW)|78845ID (UNK-UNKW)",
             addressCountry: "PL",
             residencyCountry: "Polska"
