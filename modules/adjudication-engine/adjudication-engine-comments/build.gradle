@@ -12,5 +12,9 @@ dependencies {
   aspect libraries.silenteight_sep_base_aspects
   compileOnly libraries.spring_tx
 
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libraries.hibernate_validator
   testImplementation libraries.protobuf_java_util
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.tomcat_embed_el
 }

@@ -1,18 +1,30 @@
 package com.silenteight.adjudication.engine.comments.comment;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.mitchellbosecke.pebble.loader.Loader;
 
 import java.io.Reader;
+import java.io.StringReader;
 
 @Slf4j
-public class PebbleDbLoader implements Loader<String> {
+@RequiredArgsConstructor
+class CommentTemplateLoader implements Loader<String> {
+
+  private final CommentTemplateRepository repository;
 
   @Override
   public Reader getReader(String cacheKey) {
-    log.info("Loading Pebble cacheKey {} from Database", cacheKey);
-    throw new UnsupportedOperationException("Fetching template from database required");
+    log.debug("Load template from database using templateName:{}", cacheKey);
+    var commentTemplate =
+        repository.findFirstByTemplateNameOrderByRevisionDesc(cacheKey);
+    if (commentTemplate.isPresent()) {
+      log.info(
+          "Got template:{} with revision:{}", cacheKey, commentTemplate.get().getRevision());
+      return new StringReader(commentTemplate.get().getTemplate());
+    }
+    throw new TemplateNotFoundException(cacheKey);
   }
 
   @Override
@@ -42,7 +54,6 @@ public class PebbleDbLoader implements Loader<String> {
 
   @Override
   public boolean resourceExists(String templateName) {
-    log.info("Checking Pebble cacheKey {} from Database", templateName);
-    throw new UnsupportedOperationException("Checking template from database required");
+    throw new UnsupportedOperationException();
   }
 }

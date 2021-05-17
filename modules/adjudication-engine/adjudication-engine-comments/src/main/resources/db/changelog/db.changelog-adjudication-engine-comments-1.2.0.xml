@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-comments-1.2.0_1" author="tbozek">
+    <createTable tableName="ae_comment_template">
+      <column name="comment_template_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="template_name" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revision" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="template" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex tableName="ae_comment_template" indexName="ix_ae_comment_template_template_name">
+      <column name="template_name"/>
+    </createIndex>
+
+    <createIndex tableName="ae_comment_template" indexName="ix_ae_comment_template_revision">
+      <column name="revision"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        tableName="ae_comment_template"
+        columnNames="template_name, revision"
+        constraintName="uq_ae_comment_template_template_name_revision"/>
+
+  </changeSet>
+
+</databaseChangeLog>
