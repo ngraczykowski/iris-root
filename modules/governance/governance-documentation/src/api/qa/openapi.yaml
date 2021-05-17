@@ -1,0 +1,423 @@
+openapi: 3.0.3
+info:
+  title: QA Alerts Process
+  description: Quality Assurance process over alerts
+  version: 0.1.0
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+tags:
+  - name: qa
+    description: QA endpoints
+  - name: validation
+    description: QA validation endpoints
+
+paths:
+  /api/v1/qa/alerts:
+    get:
+      tags:
+        - qa
+      parameters:
+        - in: query
+          name: state
+          required: true
+          description: QA Alerts State filter
+          schema:
+            $ref: '#/components/schemas/QaAlertState'
+        - in: query
+          name: limit
+          required: true
+          description: Pagination limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: id
+          required: false
+          description: Show QA Alerts that follow the provided alertName
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      responses:
+        '200':
+          description: A list of QA Alerts sorted by creation time ascending (oldest on top)
+          headers:
+            X-Total-Items:
+              schema:
+                type: integer
+                description: Total items count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaAlerts'
+
+  /api/v1/qa/alerts/{id}:
+    get:
+      tags:
+        - qa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      responses:
+        '200':
+          description: A list of QA Alerts sorted by creation time ascending (oldest on top)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaAlert'
+
+    patch:
+      tags:
+        - qa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QaAlertDecisionDto'
+      description: Quality Assurance Passed/Failed
+      responses:
+        '202':
+          description: Accepted
+
+  /api/v1/qa/alerts/{id}:viewing:
+    post:
+      tags:
+        - qa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      description: Heartbeat
+      responses:
+        '202':
+          description: Accepted
+
+  /api/v1/qa/validation/alerts:
+    get:
+      tags:
+        - validation
+      parameters:
+        - in: query
+          name: state
+          required: true
+          description: QA Alerts State filter
+          schema:
+            $ref: '#/components/schemas/QaAlertState'
+        - in: query
+          name: limit
+          required: true
+          description: Pagination limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: id
+          required: false
+          description: Show QA Alerts that follow the provided alertName
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      responses:
+        '200':
+          description: A list of QA Alerts sorted by creation time ascending (oldest on top)
+          headers:
+            X-Total-Items:
+              schema:
+                type: integer
+                description: Total items count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaValidationAlerts'
+
+  /api/v1/qa/validation/alerts/{id}:
+    get:
+      tags:
+        - validation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      responses:
+        '200':
+          description: A list of QA Alerts sorted by creation time ascending (oldest on top)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaValidationAlert'
+
+    patch:
+      tags:
+        - validation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QaAlertDecisionDto'
+      description: Quality Assurance Passed/Failed
+      responses:
+        '202':
+          description: Accepted
+
+
+  /api/v1/qa/validation/alerts/{id}:viewing:
+    post:
+      tags:
+        - validation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      description: Heartbeat
+      responses:
+        '202':
+          description: Accepted
+
+components:
+  schemas:
+    QaAlerts:
+      type: array
+      items:
+        $ref: '#/components/schemas/QaAlert'
+      example:
+        [
+          {
+            'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+            'state': 'NEW',
+            'decision': '',
+            'decision_by': '',
+            'decision_at': '',
+            'decision_comment': '',
+            'added_at': '2004-02-12T15:19:21Z'
+          },
+          {
+            'alertName': 'alerts/998bbb9d-db03-49a5-ba4c-e8f069154964',
+            'state': 'VIEWING',
+            'decision': '',
+            'decision_by': '',
+            'decision_at': '',
+            'decision_comment': '',
+            'added_at': '2004-01-12T15:19:21Z'
+          },
+          {
+            'alertName': 'alerts/25603ed9-31ec-44bf-8263-f0ff6ddcc3d6',
+            'state': 'CLOSED',
+            'decision': 'FAILED',
+            'decision_by': 'user',
+            'decision_at': '2005-01-11T15:19:21Z',
+            'decision_comment': 'comment',
+            'added_at': '2004-01-11T15:19:21Z'
+          }
+        ]
+
+
+    QaAlert:
+      type: object
+      properties:
+        alertName:
+          description: Technical field
+          $ref: '#/components/schemas/AlertName'
+        state:
+          description: QA Alerts -> Queue -> Status
+          $ref: '#/components/schemas/QaAlertState'
+        decision:
+          description:
+            QA Alerts -> Closed -> QA Decision,
+            QA Alerts -> Reviewed -> QA Analyst Decision
+          $ref: '#/components/schemas/QaAlertDecision'
+        decision_by:
+          description: QA Alerts -> Closed -> Reviewed, QA Alerts -> Reviewed -> QA Analyst
+          type: string
+        decision_at:
+          description: QA Alerts -> Closed -> Reviewed, QA Alerts -> Reviewed -> Review date
+          type: string
+        decision_comment:
+          description: QA Alerts -> Reviewed -> Decision Comment
+          type: string
+        added_at:
+          type: string
+      example:
+        {
+          'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+          'state': 'NEW',
+          'decision': 'PASSED',
+          'decision_by': 'user',
+          'decision_at': '2005-01-11T15:19:21Z',
+          'decision_comment': 'comment',
+          'added_at': '2004-01-11T15:19:21Z'
+        }
+
+
+    QaValidationAlerts:
+      type: array
+      items:
+        $ref: '#/components/schemas/QaValidationAlert'
+      example:
+        [
+          {
+            'alertName':'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+            'state':'NEW',
+            'decision': 'FAILED',
+            'decision_by': 'user',
+            'decision_at': '2005-01-11T15:19:21Z',
+            'validated_by': '',
+            'validated_at': '',
+            'validation_comment': '',
+            'added_at': '2004-02-12T15:19:21Z'
+          },
+          {
+            'alertName': 'alerts/998bbb9d-db03-49a5-ba4c-e8f069154964',
+            'state': 'VIEWING',
+            'decision': 'FAILED',
+            'decision_by': 'user',
+            'decision_at': '2005-01-11T15:19:21Z',
+            'validated_by': '',
+            'validated_at': '',
+            'validation_comment': '',
+            'added_at': '2004-01-12T15:19:21Z'
+          },
+          {
+            'alertName': 'alerts/25603ed9-31ec-44bf-8263-f0ff6ddcc3d6',
+            'state': 'CLOSED',
+            'decision': 'FAILED',
+            'decision_by': 'user',
+            'decision_at': '2005-01-11T15:19:21Z',
+            'validated_by': 'user2',
+            'validated_at': '2005-01-12T15:19:21Z',
+            'validation_comment': 'comment',
+            'added_at': '2004-01-11T15:19:21Z'
+          }
+        ]
+
+
+    QaValidationAlert:
+      type: object
+      properties:
+        alertName:
+          $ref: '#/components/schemas/AlertName'
+        state:
+          $ref: '#/components/schemas/QaAlertState'
+        decision:
+          $ref: '#/components/schemas/QaAlertDecision'
+        decision_by:
+          description: QA Validation -> Closed QA Alert -> QA Analyst Decision -> QA Analyst
+          type: string
+        decision_at:
+          description: QA Validation -> Closed QA Alert -> QA Analyst Decision -> Review Date
+          type: string
+        decision_comment:
+          description: QA Validation -> Closed QA Alert -> QA Analyst Decision -> Decision Comment
+          type: string
+        validated_by:
+          description: QA Validation -> Closed QA Alert -> QA Validation Comment -> QA Analyst
+          type: string
+        validated_at:
+          description: QA Validation -> Closed QA Alert -> QA Validation Comment -> Review Date
+          type: string
+        validation_comment:
+          description: QA Validation -> Closed QA Alert -> QA Validation Comment -> Decision Comment
+          type: string
+        added_at:
+          type: string
+      example:
+        {
+          'alertName':'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+          'state':'NEW',
+          'decision':'PASSED',
+          'decision_by': 'user',
+          'decision_at': '2005-01-11T15:19:21Z',
+          'decision_comment': 'comment',
+          'validated_by': '',
+          'validated_at': '',
+          'validation_comment': '',
+          'added_at': '2004-01-11T15:19:21Z'
+        }
+
+
+    QaAlertDecisionDto:
+      type: object
+      description: Request to send
+      properties:
+        decision:
+          $ref: '#/components/schemas/QaAlertDecision'
+        comment:
+          type: string
+      example:
+        {
+          'decision': 'FAILED',
+          'comment': 'QA comment'
+        }
+
+    QaAlertState:
+      type: string
+      description: NEW -> To Review, VIEWING -> In Progress, CLOSED -> Closed Tab
+      enum: [ NEW, VIEWING, CLOSED ]
+
+
+    QaAlertDecision:
+      type: string
+      enum: [ PASSED, FAILED ]
+
+    QAValidationDecision:
+      type: string
+      enum: [ PASSED, FAILED ]
+
+    AlertName:
+      type: string
+      description: Name of the alert. This field contains `resourceName` and `alertId` (UUID) generated by S8 system.
+      example: 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a'
+
+    AlertId:
+      type: string
+      description: The UUID value available in the `AlertName` field.
+      example: 'c01e5d49-a72d-4e6a-b634-265165916c9a'
+
+    MatchName:
+      type: string
+      description: Name of the match. This field contains `resourceName` and `alertId` (UUID) generated by S8 system.
+      example: 'matches/23dbd750-fbd4-4461-bd1a-85ce721760e4'
+
+    MatchId:
+      type: string
+      description: The UUID value available in the `MatchName` field.
+      example: '23dbd750-fbd4-4461-bd1a-85ce721760e4'
+
+
