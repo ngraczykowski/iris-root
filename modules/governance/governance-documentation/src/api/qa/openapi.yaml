@@ -20,7 +20,7 @@ tags:
     description: QA validation endpoints
 
 paths:
-  /api/v1/qa/alerts:
+  /qa/alerts:
     get:
       tags:
         - qa
@@ -59,7 +59,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/QaAlerts'
 
-  /api/v1/qa/alerts/{id}:
+  /qa/alerts/{id}:
     get:
       tags:
         - qa
@@ -99,7 +99,7 @@ paths:
         '202':
           description: Accepted
 
-  /api/v1/qa/alerts/{id}:viewing:
+  /qa/alerts/{id}:viewing:
     post:
       tags:
         - qa
@@ -115,7 +115,7 @@ paths:
         '202':
           description: Accepted
 
-  /api/v1/qa/validation/alerts:
+  /qa/validation/alerts:
     get:
       tags:
         - validation
@@ -154,7 +154,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/QaValidationAlerts'
 
-  /api/v1/qa/validation/alerts/{id}:
+  /qa/validation/alerts/{id}:
     get:
       tags:
         - validation
@@ -195,7 +195,7 @@ paths:
           description: Accepted
 
 
-  /api/v1/qa/validation/alerts/{id}:viewing:
+  /qa/validation/alerts/{id}:viewing:
     post:
       tags:
         - validation
