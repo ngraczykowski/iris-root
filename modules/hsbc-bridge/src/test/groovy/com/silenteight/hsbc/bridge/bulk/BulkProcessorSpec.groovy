@@ -1,30 +1,38 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade
-import com.silenteight.hsbc.bridge.match.MatchFacade
+import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade
+import com.silenteight.hsbc.bridge.report.WarehouseClient
 
-import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 class BulkProcessorSpec extends Specification {
 
-  def alertFacade = Mock(AlertFacade)
-  def eventPublisher = Mock(ApplicationEventPublisher)
+  def adjudicationFacade = Mock(AdjudicationFacade)
   def bulkRepository = Mock(BulkRepository)
-  def matchFacade = Mock(MatchFacade)
+  def warehouseClient = Mock(WarehouseClient)
 
   def fixtures = new Fixtures()
 
-  def underTest = new BulkProcessor(alertFacade, bulkRepository, eventPublisher, matchFacade)
+  def underTest = new BulkProcessor(adjudicationFacade, bulkRepository, warehouseClient)
 
-  def 'should process stored bulks and mark error when no alerts has been found'() {
+  def 'should process learning bulk'() {
     when:
-    underTest.processStoredBulks()
+    underTest.processPreProcessedBulks()
 
     then:
-    1 * bulkRepository.findByStatus(BulkStatus.STORED) >> [fixtures.bulk]
-    1 * alertFacade.createAndSaveAlerts(fixtures.bulkId, fixtures.getSomePayload()) >> []
-    1 * bulkRepository.save({ Bulk bulk -> bulk.status == BulkStatus.ERROR })
+    1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.learningBulk]
+    1 * adjudicationFacade.registerAlertWithMatches(_ as Map)
+    1 * warehouseClient.sendAlerts(_ as Collection)
+  }
+
+  def 'should process solving bulk'() {
+    when:
+    underTest.processPreProcessedBulks()
+
+    then:
+    1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.solvingBulk]
+    1 * adjudicationFacade.registerAlertWithMatchesAndAnalysis(_ as Map) >> 1L
+    0 * warehouseClient.sendAlerts(_ as Collection)
   }
 
   class Fixtures {
@@ -33,10 +41,11 @@ class BulkProcessorSpec extends Specification {
     byte[] somePayload = 'somePayload'.getBytes()
     BulkPayloadEntity bulkPayload = new BulkPayloadEntity(somePayload)
 
-    Bulk bulk = createBulk(bulkId, bulkPayload)
+    Bulk learningBulk = createBulk(bulkId, bulkPayload, true)
+    Bulk solvingBulk = createBulk(bulkId, bulkPayload, false)
 
-    def createBulk(bulkId, bulkPayload) {
-      var bulk = new Bulk(bulkId)
+    def createBulk(String bulkId, bulkPayload, boolean learning) {
+      var bulk = new Bulk(bulkId, learning)
       bulk.setPayload(bulkPayload)
       bulk
     }

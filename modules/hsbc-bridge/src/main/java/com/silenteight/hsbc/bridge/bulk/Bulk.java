@@ -7,6 +7,7 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.DELIVERED;
@@ -21,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @NoArgsConstructor(access = PRIVATE)
 @Table(name = "hsbc_bridge_bulk")
-public class Bulk extends BaseEntity {
+class Bulk extends BaseEntity {
 
   @Id
   @Setter(NONE)
@@ -32,6 +33,7 @@ public class Bulk extends BaseEntity {
   private Long analysisId;
   private String errorMessage;
   private OffsetDateTime errorTimestamp;
+  private boolean learning;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "bulk_payload_id")
@@ -44,6 +46,11 @@ public class Bulk extends BaseEntity {
 
   Bulk(String id) {
     this.id = id;
+  }
+
+  Bulk(String id, boolean learning) {
+    this.id = id;
+    this.learning = learning;
   }
 
   @Transient
@@ -61,5 +68,10 @@ public class Bulk extends BaseEntity {
     this.status = ERROR;
     this.errorMessage = errorMessage;
     this.errorTimestamp = OffsetDateTime.now();
+  }
+
+  @Transient
+  Collection<BulkAlertEntity> getValidAlerts() {
+    return alerts.stream().filter(BulkAlertEntity::isValid).collect(Collectors.toList());
   }
 }

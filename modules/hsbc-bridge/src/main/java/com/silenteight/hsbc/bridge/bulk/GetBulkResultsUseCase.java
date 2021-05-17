@@ -3,11 +3,16 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlertStatus;
 import com.silenteight.hsbc.bridge.bulk.rest.BulkSolvedAlertsResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlert;
+import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlertStatus;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 
@@ -15,7 +20,6 @@ import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 @Slf4j
 public class GetBulkResultsUseCase {
 
-  private final AlertFacade alertFacade;
   private final BulkRepository bulkRepository;
   private final RecommendationFacade recommendationFacade;
 
@@ -30,7 +34,7 @@ public class GetBulkResultsUseCase {
     response.setBulkId(bulk.getId());
     response.setBulkStatus(com.silenteight.hsbc.bridge.bulk.rest.BulkStatus.valueOf(
         bulk.getStatus().name()));
-    //response.setAlerts(getSolvedAlerts(bulk.getItems()));
+    response.setAlerts(getSolvedAlerts(bulk.getValidAlerts()));
     return response;
   }
 
@@ -44,21 +48,20 @@ public class GetBulkResultsUseCase {
         return SolvedAlertStatus.MANUAL_INVESTIGATION;
     }
   }
-/*
-  private List<SolvedAlert> getSolvedAlerts(Collection<BulkItem> items) {
-    return items.stream().map(bulkItem -> {
-      var recommendation = getRecommendation(bulkItem.getId());
+
+  private List<SolvedAlert> getSolvedAlerts(Collection<BulkAlertEntity> items) {
+    return items.stream().map(alert -> {
+      var recommendation = getRecommendation(alert.getName());
 
       var solvedAlert = new SolvedAlert();
-      solvedAlert.setId(bulkItem.getAlertExternalId());
+      solvedAlert.setId(alert.getExternalId());
       solvedAlert.setRecommendation(mapRecommendation(recommendation.getRecommendedAction()));
       solvedAlert.setComment(recommendation.getRecommendationComment());
       return solvedAlert;
     }).collect(Collectors.toList());
   }
 
-  private RecommendationDto getRecommendation(long bulkItemId) {
-    var alert = alertFacade.getAlertNameByBulkId(bulkItemId);
+  private RecommendationDto getRecommendation(String alert) {
     return recommendationFacade.getRecommendation(alert);
-  }*/
+  }
 }

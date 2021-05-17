@@ -6,6 +6,11 @@
       "description": "Governance promoted model queue name."
     },
     {
+      "name": "silenteight.bridge.amqp.warehouse-exchange-name",
+      "type": "java.lang.String",
+      "description": "Bridge warehouse exchange name."
+    },
+    {
       "name": "silenteight.bridge.recommendations.queue",
       "type": "java.lang.String",
       "description": "Bridge recommendation queue name."

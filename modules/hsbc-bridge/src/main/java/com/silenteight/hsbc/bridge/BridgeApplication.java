@@ -13,12 +13,14 @@ import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.model.Model;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
 import com.silenteight.hsbc.bridge.file.FileModule;
+import com.silenteight.hsbc.bridge.report.ReportModule;
 import com.silenteight.hsbc.bridge.retention.DataRetentionModule;
 import com.silenteight.hsbc.bridge.transfer.TransferModule;
 import com.silenteight.hsbc.datasource.category.DataSourceCategoryModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
 import com.silenteight.hsbc.datasource.provider.DataSourceProviderModule;
 
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -43,6 +45,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     MatchModule.class,
     Model.class,
     RecommendationModule.class,
+    ReportModule.class,
     SecurityModule.class,
     TransferModule.class,
 
@@ -53,6 +56,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @EnableAutoConfiguration
 @EnableJpaRepositories("com.silenteight.hsbc")
+@EnableRabbit
 @EnableRetry
 @EnableScheduling
 @EnableTransactionManagement

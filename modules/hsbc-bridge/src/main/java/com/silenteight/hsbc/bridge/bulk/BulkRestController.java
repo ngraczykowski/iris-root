@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.bulk.StoreBulkUseCase.StoreBulkUseCaseCommand;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
@@ -44,9 +45,24 @@ public class BulkRestController {
       { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
   private static final String OWS_FILE_NAME = "owsResponse.ows";
 
+  // TODO use multipart here!
   @PostMapping("/recommend")
   public ResponseEntity<BulkAcceptedResponse> receiveAlerts(HttpEntity<String> entity) {
-    var bulkId = storeBulkUseCase.handle(entity.getBody());
+    var bulkId = storeBulkUseCase.handle(StoreBulkUseCaseCommand.builder()
+        .content(entity.getBody())
+        .learning(false)
+        .build());
+
+    return ResponseEntity.ok(new BulkAcceptedResponse()
+        .bulkId(bulkId));
+  }
+
+  @PostMapping("/learning")
+  public ResponseEntity<BulkAcceptedResponse> receiveLearningAlerts(HttpEntity<String> entity) {
+    var bulkId = storeBulkUseCase.handle(StoreBulkUseCaseCommand.builder()
+        .content(entity.getBody())
+        .learning(true)
+        .build());
 
     return ResponseEntity.ok(new BulkAcceptedResponse()
         .bulkId(bulkId));

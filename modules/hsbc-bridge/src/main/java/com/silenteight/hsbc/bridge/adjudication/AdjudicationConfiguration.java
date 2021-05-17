@@ -21,13 +21,8 @@ class AdjudicationConfiguration {
   private final ApplicationEventPublisher eventPublisher;
 
   @Bean
-  AdjudicationEventHandler adjudicationEventHandler() {
-    return AdjudicationEventHandler.builder()
-        .alertService(alertService())
-        .analysisFacade(analysisFacade)
-        .datasetServiceClient(datasetServiceClient)
-        .eventPublisher(eventPublisher)
-        .build();
+  AdjudicationFacade adjudicationFacade() {
+    return new AdjudicationFacade(alertService(), analysisFacade, datasetServiceClient);
   }
 
   @Profile("!dev")

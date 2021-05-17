@@ -1,7 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
 
@@ -16,11 +15,11 @@ public class StoreBulkUseCase {
   private final BulkRepository bulkRepository;
 
   @Transactional
-  public String handle(@NonNull String json) {
-    var bulkId = getBulkIdFromJson(json);
+  public String handle(@NonNull StoreBulkUseCaseCommand command) {
+    var bulkId = getBulkIdFromJson(command.getContent());
     validateBulkId(bulkId);
 
-    createBulk(bulkId, json);
+    createBulk(bulkId, command.isLearning(), command.getContent());
 
     return bulkId;
   }
@@ -36,17 +35,25 @@ public class StoreBulkUseCase {
         .orElseThrow(() -> new StoreBulkException("Cannot locate the bulk Id!"));
   }
 
-  private void createBulk(String bulkId, String json) {
-    var bulk = new Bulk(bulkId);
+  private void createBulk(String bulkId, boolean learning, String json) {
+    var bulk = new Bulk(bulkId, learning);
     var bulkPayload = new BulkPayloadEntity(json.getBytes(StandardCharsets.UTF_8));
     bulk.setPayload(bulkPayload);
     bulkRepository.save(bulk);
   }
 
-  class StoreBulkException extends RuntimeException {
+  static class StoreBulkException extends RuntimeException {
 
     public StoreBulkException(String message) {
       super(message);
     }
+  }
+
+  @Builder
+  @Value
+  static class StoreBulkUseCaseCommand {
+
+    String content;
+    boolean learning;
   }
 }

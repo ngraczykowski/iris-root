@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
-import com.silenteight.hsbc.bridge.match.MatchFacade;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,12 +13,9 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class BulkUseCaseConfiguration {
 
-  private final AlertFacade alertFacade;
   private final AnalysisFacade analysisFacade;
-  private final MatchFacade matchFacade;
   private final BulkRepository bulkRepository;
   private final RecommendationFacade recommendationFacade;
-  private final ApplicationEventPublisher eventPublisher;
 
   @Bean
   StoreBulkUseCase storeBulkUseCase() {
@@ -34,7 +29,7 @@ class BulkUseCaseConfiguration {
 
   @Bean
   GetBulkResultsUseCase getBulkResultsUseCase() {
-    return new GetBulkResultsUseCase(alertFacade, bulkRepository, recommendationFacade);
+    return new GetBulkResultsUseCase(bulkRepository, recommendationFacade);
   }
 
   @Bean
@@ -45,11 +40,6 @@ class BulkUseCaseConfiguration {
   @Bean
   CancelBulkUseCase cancelBulkUseCase() {
     return new CancelBulkUseCase(bulkRepository);
-  }
-
-  @Bean
-  BulkProcessor bulkProcessor() {
-    return new BulkProcessor(alertFacade, bulkRepository, eventPublisher, matchFacade);
   }
 
   private BulkIdRetriever bulkIdRetriever() {

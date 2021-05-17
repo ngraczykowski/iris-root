@@ -101,6 +101,11 @@ databaseChangeLog:
                   name: error_timestamp
                   type: timestamp
               - column:
+                  name: learning
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
                   name: bulk_payload_id
                   type: bigint
                   constraints:

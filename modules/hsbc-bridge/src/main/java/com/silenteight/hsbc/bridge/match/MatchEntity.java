@@ -25,6 +25,7 @@ class MatchEntity extends BaseEntity {
 
   private String externalId;
 
+  @Column(name = "alert_id")
   private long alertId;
 
   @Setter

@@ -3,95 +3,90 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.alert.AlertComposite;
-import com.silenteight.hsbc.bridge.alert.AlertFacade;
-import com.silenteight.hsbc.bridge.bulk.event.BulkPreProcessingFinishedEvent;
+import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
-import com.silenteight.hsbc.bridge.match.MatchFacade;
+import com.silenteight.hsbc.bridge.match.MatchIdComposite;
+import com.silenteight.hsbc.bridge.report.WarehouseClient;
+import com.silenteight.hsbc.bridge.report.WarehouseClient.Alert;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
-import static java.util.function.Predicate.not;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 @Slf4j
 class BulkProcessor {
 
-  private final AlertFacade alertFacade;
+  private final AdjudicationFacade adjudicationFacade;
   private final BulkRepository bulkRepository;
-  private final ApplicationEventPublisher eventPublisher;
-  private final MatchFacade matchFacade;
+  private final WarehouseClient warehouseClient;
 
   @Scheduled(fixedDelay = 15 * 1000, initialDelay = 2000)
   @Transactional
-  public void processStoredBulks() {
-    bulkRepository.findByStatus(STORED).forEach(this::processBulk);
+  public void processPreProcessedBulks() {
+    bulkRepository.findByStatus(PRE_PROCESSED).forEach(this::tryToProcessBulk);
   }
 
-  private void processBulk(Bulk bulk) {
-    var bulkId = bulk.getId();
+  private void tryToProcessBulk(Bulk bulk) {
+    log.info("Processing bulk: {}", bulk.getId());
 
     try {
-      var alertMatchIds = processItems(bulk);
-
-      if (alertMatchIds.isEmpty()) {
-        log.error("Bulk: {} does not contain valid alerts", bulkId);
-        bulk.error("No valid alerts to be processed!");
-        bulkRepository.save(bulk);
-        return;
+      if (bulk.isLearning()) {
+        processLearningBulk(bulk);
+      } else {
+        processSolvingBulk(bulk);
       }
-
-      saveWithPreProcessedStatus(bulk);
-
-      log.debug("Bulk processing finished, bulkId={}", bulkId);
-      publishPreProcessingFinishedEvent(bulkId, alertMatchIds);
-    } catch (RuntimeException ex) {
-      log.debug("Bulk processing failed, bulkId={}", bulkId, ex);
-      updateBulkWithError(bulk, ex.getMessage());
+    } catch (RuntimeException exception) {
+      bulk.error("Bulk processing failed due to: " + exception.getMessage());
     }
   }
 
-  private void saveWithPreProcessedStatus(Bulk bulk) {
-    bulk.setStatus(BulkStatus.PRE_PROCESSED);
-    bulkRepository.save(bulk);
+  private void processSolvingBulk(Bulk bulk) {
+    var compositeById = bulk.getValidAlerts()
+        .stream()
+        .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
+
+    var analysisId =
+        adjudicationFacade.registerAlertWithMatchesAndAnalysis(compositeById);
+
+    bulk.setAnalysisId(analysisId);
+    bulk.setStatus(PROCESSING);
   }
 
-  private List<AlertMatchIdComposite> processItems(Bulk bulk) {
-    var payloadEntity = bulk.getPayload();
-    var alerts = alertFacade.createAndSaveAlerts(bulk.getId(), payloadEntity.getPayload());
+  private void processLearningBulk(Bulk bulk) {
+    var alerts = bulk.getValidAlerts();
+    var compositeById = alerts.stream()
+        .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
 
-    return alerts.stream()
-        .filter(not(AlertComposite::isInvalid))
-        .map(this::saveAlertMatches)
-        .collect(Collectors.toList());
+    adjudicationFacade.registerAlertWithMatches(compositeById);
+    sendToWarehouse(alerts);
+
+    bulk.setStatus(COMPLETED);
   }
 
-  private void publishPreProcessingFinishedEvent(String id, List<AlertMatchIdComposite> alerts) {
-    eventPublisher.publishEvent(BulkPreProcessingFinishedEvent.builder()
-        .bulkId(id)
-        .alertMatchIdComposites(alerts)
-        .build());
-  }
-
-  private void updateBulkWithError(Bulk bulk, String message) {
-    bulk.error(message);
-    bulkRepository.save(bulk);
-  }
-
-  private AlertMatchIdComposite saveAlertMatches(AlertComposite alertComposite) {
-    var matchIds =
-        matchFacade.prepareAndSaveMatches(alertComposite.getId(), alertComposite.getMatches());
-
+  private static AlertMatchIdComposite toComposite(BulkAlertEntity alert) {
     return AlertMatchIdComposite.builder()
-        .alertInternalId(alertComposite.getId())
-        .alertExternalId(alertComposite.getExternalId())
-        .matchIds(matchIds)
+        .alertExternalId(alert.getExternalId())
+        .alertInternalId(alert.getId())
+        .matchIds(getMatchIds(alert.getMatches()))
         .build();
+  }
+
+  private void sendToWarehouse(Collection<BulkAlertEntity> alerts) {
+    warehouseClient.sendAlerts(
+        alerts.stream().map(a -> (Alert) a::getExternalId).collect(toList()));
+  }
+
+  private static Collection<MatchIdComposite> getMatchIds(Collection<BulkAlertMatchEntity> matches) {
+    return matches.stream()
+        .map(m-> new MatchIdComposite(m.getId(), m.getExternalId()))
+        .collect(toList());
   }
 }
