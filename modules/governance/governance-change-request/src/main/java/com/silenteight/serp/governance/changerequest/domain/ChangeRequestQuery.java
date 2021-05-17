@@ -3,11 +3,11 @@ package com.silenteight.serp.governance.changerequest.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.serp.governance.changerequest.approve.ChangeRequestModelQuery;
 import com.silenteight.serp.governance.changerequest.details.ChangeRequestDetailsQuery;
-import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotFoundException;
 import com.silenteight.serp.governance.changerequest.list.ListChangeRequestsQuery;
-import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
 
 import java.util.Collection;
 import java.util.Set;
@@ -16,7 +16,8 @@ import java.util.UUID;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class ChangeRequestQuery implements ListChangeRequestsQuery, ChangeRequestDetailsQuery {
+class ChangeRequestQuery implements
+    ListChangeRequestsQuery, ChangeRequestDetailsQuery, ChangeRequestModelQuery {
 
   @NonNull
   private final ChangeRequestRepository repository;
@@ -26,43 +27,21 @@ class ChangeRequestQuery implements ListChangeRequestsQuery, ChangeRequestDetail
     return repository
         .findAllByStateInOrderByDecidedAtDesc(states)
         .stream()
-        .map(ChangeRequestQuery::toDto)
+        .map(ChangeRequest::toDto)
         .collect(toList());
   }
 
-  private static ChangeRequestDto toDto(ChangeRequest changeRequest) {
-    return ChangeRequestDto.builder()
-        .id(changeRequest.getChangeRequestId())
-        .createdBy(changeRequest.getCreatedBy())
-        .createdAt(changeRequest.getCreatedAt())
-        .creatorComment(changeRequest.getCreatorComment())
-        .decidedBy(changeRequest.getDecidedBy())
-        .deciderComment(changeRequest.getDeciderComment())
-        .decidedAt(changeRequest.getDecidedAt())
-        .state(changeRequest.getState().name())
-        .modelName(changeRequest.getModelName())
-        .build();
-  }
-
   @Override
-  public ChangeRequestDetailsDto details(@NonNull UUID changeRequestId) {
+  public ChangeRequestDto details(@NonNull UUID changeRequestId) {
     return repository
         .findByChangeRequestId(changeRequestId)
-        .map(ChangeRequestQuery::toDetailsDto)
+        .map(ChangeRequest::toDto)
         .orElseThrow(() -> new ChangeRequestNotFoundException(changeRequestId));
   }
 
-  private static ChangeRequestDetailsDto toDetailsDto(ChangeRequest changeRequest) {
-    return ChangeRequestDetailsDto.builder()
-        .id(changeRequest.getChangeRequestId())
-        .createdBy(changeRequest.getCreatedBy())
-        .createdAt(changeRequest.getCreatedAt())
-        .creatorComment(changeRequest.getCreatorComment())
-        .decidedBy(changeRequest.getDecidedBy())
-        .deciderComment(changeRequest.getDeciderComment())
-        .decidedAt(changeRequest.getDecidedAt())
-        .state(changeRequest.getState().name())
-        .modelName(changeRequest.getModelName())
-        .build();
+
+  @Override
+  public String getModel(@NonNull UUID changeRequestId) {
+    return details(changeRequestId).getModelName();
   }
 }

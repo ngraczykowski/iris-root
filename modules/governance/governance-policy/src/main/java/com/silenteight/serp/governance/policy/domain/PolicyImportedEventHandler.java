@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
+import com.silenteight.serp.governance.policy.domain.events.PolicyImportedEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -16,7 +18,7 @@ import java.util.UUID;
 import static java.util.UUID.randomUUID;
 
 @RequiredArgsConstructor
-class PolicyCreatedEventHandler {
+class PolicyImportedEventHandler {
 
   @NonNull
   private final AuditingLogger auditingLogger;
@@ -27,8 +29,11 @@ class PolicyCreatedEventHandler {
   @EventListener
   public void handle(PolicyImportedEvent event) {
     logPolicyCreated(event.getPolicyId(), event.getCorrelationId());
-    eventPublisher.publishEvent(
-        new PolicyPromotedEvent(event.getPolicyId(), event.getCorrelationId()));
+    NewPolicyInUseEvent promotedEvent = NewPolicyInUseEvent.builder()
+        .policyId(event.getPolicyId())
+        .correlationId(event.getCorrelationId())
+        .build();
+    eventPublisher.publishEvent(promotedEvent);
   }
 
   private void logPolicyCreated(UUID policyId, UUID correlationId) {

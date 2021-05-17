@@ -7,7 +7,7 @@ import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import java.util.List;
 import java.util.UUID;
 
-public interface GetModelDetailsQuery {
+public interface ModelDetailsQuery {
 
   ModelDto get(@NonNull UUID id);
 

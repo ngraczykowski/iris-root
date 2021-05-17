@@ -1,10 +1,10 @@
 package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.serp.governance.policy.domain.Condition;
-import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
+import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ class PolicyPromotedEventHandlerTest {
     // given
     UUID policyId = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
     List<StepConfigurationDto> steps = createSteps();
-    PolicyPromotedEvent event = PolicyPromotedEvent
+    NewPolicyInUseEvent event = NewPolicyInUseEvent
         .builder()
         .policyId(policyId)
         .correlationId(CORRELATION_ID)
@@ -54,7 +54,7 @@ class PolicyPromotedEventHandlerTest {
     when(stepsConfigurationQuery.listStepsConfiguration(policyId)).thenReturn(steps);
 
     // when
-    underTest.handle(event);
+    underTest.handleNewPolicy(event);
 
     // then
     verify(stepsConfigurationQuery).listStepsConfiguration(policyId);

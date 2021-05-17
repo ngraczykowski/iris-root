@@ -20,8 +20,8 @@ class ModelDomainConfiguration {
 
   @Bean
   ModelQuery modelQuery(
-      ModelRepository modelRepository,
-      CurrentPolicyProvider currentPolicyProvider) {
+      ModelRepository modelRepository, CurrentPolicyProvider currentPolicyProvider) {
+
     return new ModelQuery(modelRepository, currentPolicyProvider);
   }
 }

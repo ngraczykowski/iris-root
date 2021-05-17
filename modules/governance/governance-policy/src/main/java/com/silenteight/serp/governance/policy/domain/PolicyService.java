@@ -8,6 +8,7 @@ import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
+import com.silenteight.serp.governance.policy.domain.events.PolicyImportedEvent;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyFeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.exception.EmptyMatchConditionValueException;
 import com.silenteight.serp.governance.policy.domain.exception.WrongBasePolicyException;
@@ -59,9 +60,13 @@ public class PolicyService {
         request.getCreatedBy());
     Policy savedPolicy = policyRepository.save(policy);
     savePolicy(SavePolicyRequest.of(request.getPolicyId(), request.getCreatedBy()));
+    //TODO(kdzieciol): After the import, the policy should stay in the `SAVED` state. (WEB-1092)
     usePolicy(UsePolicyRequest.of(request.getPolicyId(), request.getCreatedBy()));
-    eventPublisher.publishEvent(new PolicyImportedEvent(
-        savedPolicy.getPolicyId(), request.getCorrelationId()));
+    PolicyImportedEvent importedEvent = PolicyImportedEvent.builder()
+        .policyId(savedPolicy.getPolicyId())
+        .correlationId(request.getCorrelationId())
+        .build();
+    eventPublisher.publishEvent(importedEvent);
     request.postAudit(auditingLogger::log);
     return savedPolicy.getPolicyId();
   }
@@ -248,20 +253,24 @@ public class PolicyService {
   public void usePolicy(UsePolicyRequest usePolicyRequest) {
     usePolicyRequest.preAudit(auditingLogger::log);
     stopUsingOtherPolicies(usePolicyRequest.getActivatedBy());
-    useSelectedPolicy(usePolicyRequest.getPolicyId(), usePolicyRequest.getActivatedBy());
+    Policy policy = policyRepository.getByPolicyId(usePolicyRequest.getPolicyId());
+    policy.use();
+    policy.setUpdatedBy(usePolicyRequest.getActivatedBy());
     usePolicyRequest.postAudit(auditingLogger::log);
+  }
+
+  @Transactional
+  public void promotePolicy(PromotePolicyRequest toBeUsePolicyRequest) {
+    toBeUsePolicyRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(toBeUsePolicyRequest.getPolicyId());
+    policy.publish();
+    policy.setUpdatedBy(toBeUsePolicyRequest.getActivatedBy());
+    toBeUsePolicyRequest.postAudit(auditingLogger::log);
   }
 
   private void stopUsingOtherPolicies(String activatedBy) {
     policyRepository.findAllByStateIn(of(IN_USE)).forEach(policy -> {
       policy.stopUsing();
-      policy.setUpdatedBy(activatedBy);
-    });
-  }
-
-  private void useSelectedPolicy(UUID policyId, String activatedBy) {
-    policyRepository.findByPolicyId(policyId).ifPresent(policy -> {
-      policy.use();
       policy.setUpdatedBy(activatedBy);
     });
   }

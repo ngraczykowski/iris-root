@@ -3,8 +3,8 @@ package com.silenteight.serp.governance.model.provide.grpc;
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.serp.governance.model.category.CategoryRegistry;
-import com.silenteight.serp.governance.model.domain.ModelQuery;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
+import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
 import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
@@ -45,7 +45,10 @@ class SolvingModelProviderTest {
   private PolicyStepsFeaturesProvider policyStepsFeaturesProvider;
 
   @Mock
-  private ModelQuery modelQuery;
+  private DefaultModelQuery defaultModelQuery;
+
+  @Mock
+  private ModelDetailsQuery modelDetailsQuery;
 
   private SolvingModelProvider underTest;
 
@@ -61,7 +64,7 @@ class SolvingModelProviderTest {
 
   @Test
   void shouldReturnDefaultModel() throws ModelMisconfiguredException {
-    SolvingModel solvingModel = underTest.get(modelQuery.getDefault());
+    SolvingModel solvingModel = underTest.get(defaultModelQuery.getDefault());
 
     assertThat(solvingModel.getName()).isEqualTo(DEFAULT_MODEL_NAME);
     assertThat(solvingModel.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
@@ -103,9 +106,9 @@ class SolvingModelProviderTest {
         .thenReturn(of(CURRENT_STRATEGY_NAME));
     lenient().when(categoryRegistry.getAllCategories())
         .thenReturn(List.of(APTYPE_CATEGORY));
-    lenient().when(modelQuery.getByPolicy(MODEL_RESOURCE_NAME))
+    lenient().when(modelDetailsQuery.getByPolicy(MODEL_RESOURCE_NAME))
         .thenReturn(List.of(MODEL_DTO));
-    lenient().when(modelQuery.getDefault())
+    lenient().when(defaultModelQuery.getDefault())
         .thenReturn(DEFAULT_MODEL_DTO);
     lenient().when(policyFeatureProvider.resolveFeatures(any())).thenReturn(List.of(getFeature()));
   }

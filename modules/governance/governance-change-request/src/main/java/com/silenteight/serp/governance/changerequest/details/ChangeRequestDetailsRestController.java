@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.changerequest.details;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +27,7 @@ class ChangeRequestDetailsRestController {
 
   @GetMapping(value = "/v1/changeRequests/{id}")
   @PreAuthorize("isAuthorized('GET_CHANGE_REQUEST')")
-  public ResponseEntity<ChangeRequestDetailsDto> details(@PathVariable UUID id) {
+  public ResponseEntity<ChangeRequestDto> details(@PathVariable UUID id) {
     return ok(changeRequestQuery.details(id));
   }
 }

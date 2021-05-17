@@ -6,10 +6,14 @@ import lombok.Value;
 
 import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
+
 @Value
 @Builder
 class ApproveChangeRequestCommand {
 
+  @NonNull
+  UUID correlationId = randomUUID();
   @NonNull
   UUID id;
   @NonNull

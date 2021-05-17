@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
+import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
 import org.springframework.context.event.EventListener;
@@ -76,7 +76,7 @@ class PolicyStepsSupplierFactory implements StepsSupplierProvider {
   }
 
   @EventListener
-  public void handle(PolicyPromotedEvent event) {
+  public void handleNewPolicy(NewPolicyInUseEvent event) {
     loadInUsePolicy(event.getPolicyId());
   }
 

@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 
@@ -120,5 +121,19 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
 
   private boolean isCreatedBy(String username) {
     return createdBy.equals(username);
+  }
+
+  ChangeRequestDto toDto() {
+    return ChangeRequestDto.builder()
+        .id(getChangeRequestId())
+        .createdBy(getCreatedBy())
+        .createdAt(getCreatedAt())
+        .creatorComment(getCreatorComment())
+        .decidedBy(getDecidedBy())
+        .deciderComment(getDeciderComment())
+        .decidedAt(getDecidedAt())
+        .state(getState())
+        .modelName(getModelName())
+        .build();
   }
 }

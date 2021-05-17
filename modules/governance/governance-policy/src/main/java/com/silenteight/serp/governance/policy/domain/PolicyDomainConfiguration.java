@@ -25,10 +25,10 @@ class PolicyDomainConfiguration {
   }
 
   @Bean
-  PolicyCreatedEventHandler policyCreatedEventHandler(
+  PolicyImportedEventHandler policyCreatedEventHandler(
       AuditingLogger auditingLogger, ApplicationEventPublisher eventPublisher) {
 
-    return new PolicyCreatedEventHandler(auditingLogger, eventPublisher);
+    return new PolicyImportedEventHandler(auditingLogger, eventPublisher);
   }
 
   @Bean

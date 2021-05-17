@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.domain;
+package com.silenteight.serp.governance.policy.domain.events;
 
 import lombok.*;
 

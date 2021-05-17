@@ -21,7 +21,7 @@ import static org.springframework.http.ResponseEntity.ok;
 class GetModelRestController {
 
   @NonNull
-  private final GetModelDetailsQuery getModelDetailsQuery;
+  private final ModelDetailsQuery getModelDetailsQuery;
 
   @GetMapping("/v1/solvingModels/{id}")
   @PreAuthorize("isAuthorized('LIST_MODELS')")

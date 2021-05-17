@@ -37,7 +37,7 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
   private static final String GET_MODEL_BY_POLICY_URL = "/v1/solvingModels?policy=" + POLICY;
 
   @MockBean
-  private GetModelDetailsQuery getModelDetailsQuery;
+  private ModelDetailsQuery getModelDetailsQuery;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)

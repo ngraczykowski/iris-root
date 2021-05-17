@@ -2,7 +2,8 @@ package com.silenteight.serp.governance.changerequest.details;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
+import com.silenteight.serp.governance.changerequest.domain.ChangeRequestState;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -61,7 +62,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
 
   private class Fixtures {
 
-    ChangeRequestDetailsDto changeRequest = ChangeRequestDetailsDto.builder()
+    ChangeRequestDto changeRequest = ChangeRequestDto.builder()
         .id(fromString("05bf9714-b1ee-4778-a733-6151df70fca3"))
         .createdBy("Business Operator #1")
         .createdAt(parse("2020-04-15T10:15:30+01:00", ISO_OFFSET_DATE_TIME))
@@ -69,7 +70,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
         .decidedBy("Approver 1")
         .deciderComment("All good!")
         .decidedAt(parse("2020-04-15T10:16:40+01:00", ISO_OFFSET_DATE_TIME))
-        .state("APPROVED")
+        .state(ChangeRequestState.APPROVED)
         .modelName(MODEL_NAME)
         .build();
   }

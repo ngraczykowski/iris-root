@@ -16,6 +16,8 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 
 @Slf4j
 @RestController
@@ -52,9 +54,10 @@ class EditPolicyRequestRestController {
   }
 
   private void changePolicyState(UUID id, PolicyState state, String userName) {
-    if (PolicyState.SAVED.equals(state))
+    if (SAVED == state)
       savePolicyUseCase.activate(id, userName);
-    if (PolicyState.IN_USE.equals(state))
+    // TODO(kdzieciol): Remove this. (WEB-1092)
+    if (IN_USE == state)
       usePolicyUseCase.activate(id, userName);
   }
 }

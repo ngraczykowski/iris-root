@@ -6,18 +6,19 @@ import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static java.sql.Timestamp.from;
+import static java.time.Instant.*;
 import static java.util.UUID.randomUUID;
 
 @RequiredArgsConstructor(staticName = "of")
 @Value
-public class UsePolicyRequest {
+public class PromotePolicyRequest {
 
-  UUID correlationId = UUID.randomUUID();
+  @NonNull
+  UUID correlationId;
   @NonNull
   UUID policyId;
   @NonNull
@@ -32,11 +33,11 @@ public class UsePolicyRequest {
   }
 
   public void preAudit(Consumer<AuditDataDto> logger) {
-    logger.accept(getAuditDataDto("Changing state to IN_USE"));
+    logger.accept(getAuditDataDto("Changing state to TO_BE_USED"));
   }
 
   public void postAudit(Consumer<AuditDataDto> logger) {
-    logger.accept(getAuditDataDto("Changed state to IN_USE"));
+    logger.accept(getAuditDataDto("Changed state to TO_BE_USED"));
   }
 
   private AuditDataDto getAuditDataDto(String type) {
@@ -44,12 +45,12 @@ public class UsePolicyRequest {
         .builder()
         .correlationId(correlationId)
         .eventId(randomUUID())
-        .timestamp(Timestamp.from(Instant.now()))
+        .timestamp(from(now()))
         .type(type)
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("UPDATE")
-        .details(this.toString())
+        .details(toString())
         .principal(activatedBy)
         .build();
   }

@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.domain;
+package com.silenteight.serp.governance.policy.domain.events;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class PolicyPromotedEvent extends BaseEvent {
+public class NewPolicyInUseEvent extends BaseEvent {
 
   private static final long serialVersionUID = 5429401906070764168L;
 
