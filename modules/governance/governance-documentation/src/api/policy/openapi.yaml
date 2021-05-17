@@ -2,15 +2,11 @@ openapi: 3.0.3
 info:
   title: Policy versions and steps
   description: Policy versions and policy steps API
-  version: 0.2.0
+  version: 0.3.0
 servers:
   - url: 'https'
 
 tags:
-  - name: 1st iteration
-    description: Endpoints created during the first iteration
-  - name: 2nd iteration
-    description: Endpoints created during the second iteration
   - name: policies
     description: Endpoints related to policies
   - name: steps
@@ -26,7 +22,6 @@ paths:
   /policies?state={state}:
     get:
       tags:
-        - 1st iteration
         - policies
       description: Returns a list of all policies versions
       parameters:
@@ -49,7 +44,6 @@ paths:
   /policies:
     post:
       tags:
-        - 2nd iteration
         - policies
       description: Create a new policy
       requestBody:
@@ -64,7 +58,6 @@ paths:
   /policies/{id}:
     patch:
       tags:
-        - 2nd iteration
         - policies
       description: Edit policy
       parameters:
@@ -87,7 +80,6 @@ paths:
   /policies/import:
     post:
       tags:
-        - 1st iteration
         - policies
       requestBody:
         required: true
@@ -142,7 +134,6 @@ paths:
   /policies/{id}/steps:
     get:
       tags:
-        - 1st iteration
         - steps      
       parameters:
         - in: path
@@ -165,7 +156,6 @@ paths:
 
     post:
       tags:
-        - 2nd iteration
         - steps
       description: 'Create a new step'
       requestBody:
@@ -177,10 +167,45 @@ paths:
         201:
           description: Created
 
+  /policies/{id}/steps/search:
+    post:
+      tags:
+        - steps
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: 'Policy Id'
+        example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  feature:
+                    type: string
+                  values:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        200:
+          description: 'A list of step''s logic'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Step'
+
   /policies/{id}/steps-order:
     get:
       tags:
-        - 1st iteration
         - steps
       description: 'Return an ordered list of steps'
       parameters:
@@ -208,7 +233,6 @@ paths:
 
     put:
       tags:
-        - 2nd iteration
         - steps
       description: 'Set an order of steps for policy'
       parameters:
@@ -235,7 +259,6 @@ paths:
   /steps/{id}:
     patch:
       tags:
-        - 2nd iteration
         - steps
       description: 'Edit step'
       parameters:
@@ -257,7 +280,6 @@ paths:
 
     delete:
       tags:
-        - 2nd iteration
         - steps
       description: 'Remove step'
       parameters:
@@ -275,7 +297,6 @@ paths:
   /steps/{id}/logic:
     get:
       tags:
-        - 1st iteration
         - steps logic
       description: 'Return a step logic'
       parameters:
@@ -296,7 +317,6 @@ paths:
 
     put:
       tags:
-        - 2nd iteration
         - steps logic
       description: 'Set a step logic'
       parameters:
@@ -319,7 +339,6 @@ paths:
   /steps/{id}/vectors:
     get:
       tags:
-        - 1st iteration
         - feature vectors
       description: 'Return a list of feature vectors'
       parameters:
