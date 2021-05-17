@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.changerequest.list;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -66,7 +66,7 @@ class ListChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("[1].createdBy", equalTo("Business Operator #2"))
         .body("[1].createdAt", notNullValue())
         .body("[1].creatorComment",
-            equalTo("Disable redundant RBs based on analyses from 2020.04.02"))
+              equalTo("Disable redundant RBs based on analyses from 2020.04.02"))
         .body("[1].modelName", equalTo(MODEL_NAME));
   }
 
@@ -83,7 +83,7 @@ class ListChangeRequestRestControllerTest extends BaseRestControllerTest {
         .createdAt(parse("2020-04-15T10:15:30+01:00", ISO_OFFSET_DATE_TIME))
         .creatorComment("Increase efficiency by 20% on Asia markets")
         .modelName(MODEL_NAME)
-        .state(PENDING.name())
+        .state(PENDING)
         .build();
 
     ChangeRequestDto secondChangeRequest = ChangeRequestDto.builder()
@@ -92,7 +92,7 @@ class ListChangeRequestRestControllerTest extends BaseRestControllerTest {
         .createdAt(parse("2020-04-10T09:20:30+01:00", ISO_OFFSET_DATE_TIME))
         .creatorComment("Disable redundant RBs based on analyses from 2020.04.02")
         .modelName(MODEL_NAME)
-        .state(PENDING.name())
+        .state(PENDING)
         .build();
   }
 }

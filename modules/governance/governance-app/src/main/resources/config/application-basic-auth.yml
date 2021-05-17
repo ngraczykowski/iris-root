@@ -7,3 +7,7 @@ sep.auth.basic.users:
     password: bodev
     roles:
       - BUSINESS_OPERATOR
+  - username: ap
+    password: apdev
+    roles:
+      - APPROVER

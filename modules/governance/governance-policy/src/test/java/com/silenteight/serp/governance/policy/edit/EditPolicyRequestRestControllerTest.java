@@ -3,12 +3,12 @@ package com.silenteight.serp.governance.policy.edit;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.PolicyState;
 import com.silenteight.serp.governance.policy.domain.dto.SavePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.UpdatePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.UsePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
 import com.silenteight.serp.governance.policy.edit.dto.EditPolicyDto;
 
 import org.jetbrains.annotations.NotNull;
@@ -96,8 +96,8 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   void its200_whenUseStatusChanged() {
     EditPolicyDto editPolicyDto = new EditPolicyDto();
     editPolicyDto.setState(PolicyState.IN_USE);
-    ArgumentCaptor<PolicyPromotedEvent> eventHandled = ArgumentCaptor
-        .forClass(PolicyPromotedEvent.class);
+    ArgumentCaptor<NewPolicyInUseEvent> eventHandled = ArgumentCaptor
+        .forClass(NewPolicyInUseEvent.class);
 
     patch(EDIT_URL, editPolicyDto)
         .contentType(anything())
@@ -113,7 +113,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   static class UsePolicyEventHandler {
     @EventListener
-    public void handle(PolicyPromotedEvent event) {
+    public void handle(NewPolicyInUseEvent event) {
     }
   }
 }

@@ -2,6 +2,8 @@ package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
+import com.silenteight.serp.governance.policy.domain.events.PolicyImportedEvent;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,7 @@ class PolicyCreatedEventHandlerTest {
   private ApplicationEventPublisher eventPublisher;
 
   @InjectMocks
-  private PolicyCreatedEventHandler underTest;
+  private PolicyImportedEventHandler underTest;
 
   @Test
   void handlePolicyCreatedEvent() {
@@ -34,7 +36,11 @@ class PolicyCreatedEventHandlerTest {
     var correlationId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
 
     // when
-    underTest.handle(new PolicyImportedEvent(policyId, correlationId));
+    PolicyImportedEvent importedEvent = PolicyImportedEvent.builder()
+        .policyId(policyId)
+        .correlationId(correlationId)
+        .build();
+    underTest.handle(importedEvent);
 
     // then
     var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
@@ -48,7 +54,7 @@ class PolicyCreatedEventHandlerTest {
     assertThat(log.getEntityClass()).isEqualTo("Policy");
     assertThat(log.getEntityAction()).isEqualTo("CREATE");
 
-    var policyPromotedEventCaptor = ArgumentCaptor.forClass(PolicyPromotedEvent.class);
+    var policyPromotedEventCaptor = ArgumentCaptor.forClass(NewPolicyInUseEvent.class);
 
     verify(eventPublisher).publishEvent(policyPromotedEventCaptor.capture());
 

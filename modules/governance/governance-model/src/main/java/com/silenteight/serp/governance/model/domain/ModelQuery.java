@@ -7,7 +7,7 @@ import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.domain.exception.ModelNotFoundException;
 import com.silenteight.serp.governance.model.domain.exception.TooManyModelsException;
-import com.silenteight.serp.governance.model.get.GetModelDetailsQuery;
+import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
 import com.silenteight.serp.governance.model.provide.grpc.DefaultModelQuery;
 import com.silenteight.serp.governance.model.provide.grpc.SolvingModelDetailsQuery;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
@@ -20,8 +20,8 @@ import static java.time.OffsetDateTime.now;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class ModelQuery
-    implements GetModelDetailsQuery, DefaultModelQuery, SolvingModelDetailsQuery {
+class ModelQuery
+    implements ModelDetailsQuery, DefaultModelQuery, SolvingModelDetailsQuery {
 
   @NonNull
   private final ModelRepository modelRepository;

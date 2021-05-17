@@ -8,15 +8,11 @@ import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.domain.exception.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import javax.persistence.*;
 
-import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
+import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
 import static javax.persistence.CascadeType.ALL;
 
@@ -113,21 +109,27 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   }
 
   public void save() {
-    assertAllowedStateChange(DRAFT, SAVED);
+    assertAllowedStateChange(SAVED, DRAFT);
     setState(SAVED);
   }
 
+  public void publish() {
+    assertAllowedStateChange(TO_BE_USED, SAVED);
+    setState(TO_BE_USED);
+  }
+
   public void use() {
-    assertAllowedStateChange(SAVED, IN_USE);
+    // TODO(kdzieciol): Remove `SAVED` state from the allowed states list (WEB-1092)
+    assertAllowedStateChange(IN_USE, SAVED, TO_BE_USED, OBSOLETE);
     setState(IN_USE);
   }
 
   public void stopUsing() {
-    assertAllowedStateChange(IN_USE, SAVED);
-    setState(SAVED);
+    assertAllowedStateChange(OBSOLETE, IN_USE);
+    setState(OBSOLETE);
   }
 
-  private void assertAllowedStateChange(PolicyState state, PolicyState desirable) {
+  private void assertAllowedStateChange(PolicyState desirable, PolicyState... state) {
     if (notInState(state))
       throw new WrongPolicyStateChangeException(getPolicyId(), getState(), desirable);
   }
@@ -147,8 +149,8 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
       throw new WrongPolicyStateException(getPolicyId(), getState());
   }
 
-  private boolean notInState(PolicyState state) {
-    return getState() != state;
+  private boolean notInState(PolicyState... allowedStates) {
+    return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
   }
 
   public void updateStep(

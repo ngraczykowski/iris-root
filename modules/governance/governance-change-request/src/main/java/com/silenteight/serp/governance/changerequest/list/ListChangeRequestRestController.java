@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.changerequest.domain.ChangeRequestState;
-import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

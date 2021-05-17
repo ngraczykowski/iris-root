@@ -1,8 +1,10 @@
-package com.silenteight.serp.governance.changerequest.details.dto;
+package com.silenteight.serp.governance.changerequest.domain.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+
+import com.silenteight.serp.governance.changerequest.domain.ChangeRequestState;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -10,12 +12,12 @@ import javax.annotation.Nullable;
 
 @Value
 @Builder
-public class ChangeRequestDetailsDto {
+public class ChangeRequestDto {
 
   @NonNull
   UUID id;
   @NonNull
-  String state;
+  ChangeRequestState state;
   @NonNull
   String createdBy;
   @NonNull

@@ -3,9 +3,9 @@ package com.silenteight.serp.governance.policy.edit;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.policy.domain.PolicyPromotedEvent;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.dto.UsePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -22,7 +22,7 @@ class UsePolicyUseCase {
   void activate(@NonNull UUID id, @NonNull String user) {
     UsePolicyRequest request = UsePolicyRequest.of(id, user);
     policyService.usePolicy(request);
-    PolicyPromotedEvent event = PolicyPromotedEvent
+    NewPolicyInUseEvent event = NewPolicyInUseEvent
         .builder()
         .policyId(id)
         .correlationId(request.getCorrelationId())

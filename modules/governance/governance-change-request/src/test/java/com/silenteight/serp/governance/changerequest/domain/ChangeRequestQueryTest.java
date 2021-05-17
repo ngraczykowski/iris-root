@@ -1,8 +1,7 @@
 package com.silenteight.serp.governance.changerequest.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.serp.governance.changerequest.details.dto.ChangeRequestDetailsDto;
-import com.silenteight.serp.governance.changerequest.list.dto.ChangeRequestDto;
+import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +73,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(closedChangeRequest.getDecidedBy()).isEqualTo(decider);
     assertThat(closedChangeRequest.getDecidedAt()).isNotNull();
     assertThat(closedChangeRequest.getDeciderComment()).isEqualTo(deciderComment);
-    assertThat(closedChangeRequest.getState()).isEqualTo(REJECTED.name());
+    assertThat(closedChangeRequest.getState()).isEqualTo(REJECTED);
   }
 
   @Test
@@ -86,7 +85,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     changeRequest.approve(decider, deciderComment);
 
     // when
-    ChangeRequestDetailsDto result = underTest.details(CHANGE_REQUEST_ID);
+    ChangeRequestDto result = underTest.details(CHANGE_REQUEST_ID);
 
     // then
     assertThat(result.getId()).isEqualTo(CHANGE_REQUEST_ID);
@@ -97,7 +96,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(result.getDecidedBy()).isEqualTo(decider);
     assertThat(result.getDecidedAt()).isNotNull();
     assertThat(result.getDeciderComment()).isEqualTo(deciderComment);
-    assertThat(result.getState()).isEqualTo(APPROVED.name());
+    assertThat(result.getState()).isEqualTo(APPROVED);
   }
 
   private ChangeRequest persistChangeRequest() {
