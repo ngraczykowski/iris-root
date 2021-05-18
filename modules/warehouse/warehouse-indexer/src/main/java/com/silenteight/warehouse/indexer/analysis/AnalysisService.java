@@ -21,6 +21,13 @@ public class AnalysisService {
         .toDto();
   }
 
+  public String getTenantIdByAnalysis(String analysisName) {
+    return analysisMetadataRepository.getByAnalysis(analysisName)
+        .map(AnalysisMetadataEntity::getTenant)
+        .orElseThrow(() -> new AnalysisDoesNotExistException(
+            String.format("Analysis with name %s does not exist.", analysisName)));
+  }
+
   private Optional<AnalysisMetadataEntity> getExistingMetadata(String analysis) {
     return analysisMetadataRepository.getByAnalysis(analysis);
   }

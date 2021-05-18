@@ -54,6 +54,37 @@ public class OpendistroElasticClient {
     }
   }
 
+  public ListReportsInstancesResponse getReportInstances(
+      ListReportsInstancesRequest listReportsInstancesRequest) {
+
+    Request request = new Request(METHOD_NAME, LIST_REPORTS_INSTANCES_ENDPOINT);
+    String securityTenant = listReportsInstancesRequest.getTenant();
+    request.setOptions(getRequestOptions(securityTenant));
+
+    try {
+      ListReportsInstancesResponse
+          listReportsInstancesResponse = getListReportsInstancesResponse(request);
+
+      return listReportsInstancesResponse;
+    } catch (IOException e) {
+      throw new OpendistroElasticClientException("Method getReportInstance failed, request="
+          + listReportsInstancesRequest, e);
+    }
+  }
+
+  private ListReportsInstancesResponse getListReportsInstancesResponse(Request request) throws
+      IOException {
+    Response response = restLowLevelClient.performRequest(request);
+
+    ListReportsInstancesResponse listReportsInstancesResponse =
+        objectMapper.readValue(
+            response.getEntity().getContent(),
+            ListReportsInstancesResponse.class);
+    log.debug("OpendistroElasticClient method=GET, endpoint={}, statusCode={}, parsedBody={}",
+        request.getEndpoint(), response.getStatusLine(), listReportsInstancesResponse);
+    return listReportsInstancesResponse;
+  }
+
   private void doCreateTenant(String name, String description) throws IOException {
     Request request = createRequest(name, description);
     Response response = restLowLevelClient.performRequest(request);
@@ -92,30 +123,6 @@ public class OpendistroElasticClient {
 
   private RequestOptions.Builder getRequestOptions() {
     return DEFAULT.toBuilder().addHeader(CONTENT_TYPE, APPLICATION_JSON);
-  }
-
-  public ListReportsInstancesResponse getReportInstance(
-      ListReportsInstancesRequest listReportsInstancesRequest) {
-
-    Request request = new Request(METHOD_NAME, LIST_REPORTS_INSTANCES_ENDPOINT);
-    String securityTenant = listReportsInstancesRequest.getTenant();
-    request.setOptions(getRequestOptions(securityTenant));
-
-    try {
-      Response response = restLowLevelClient.performRequest(request);
-
-      ListReportsInstancesResponse listReportsInstancesResponse =
-          objectMapper.readValue(
-              response.getEntity().getContent(),
-              ListReportsInstancesResponse.class);
-      log.debug("OpendistroElasticClient method=GET, endpoint={}, statusCode={}, parsedBody={}",
-          request.getEndpoint(), response.getStatusLine(), listReportsInstancesResponse);
-
-      return listReportsInstancesResponse;
-    } catch (IOException e) {
-      throw new OpendistroElasticClientException("Method getReportInstance failed, request="
-          + listReportsInstancesRequest, e);
-    }
   }
 
   RequestOptions.Builder getRequestOptions(String tenant) {

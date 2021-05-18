@@ -17,6 +17,7 @@ configurations {
 dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-indexer")
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_sep_auth
   implementation libraries.spring_boot_starter_elasticsearch

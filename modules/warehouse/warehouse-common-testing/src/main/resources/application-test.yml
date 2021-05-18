@@ -1,10 +1,22 @@
 spring.cloud.consul.enabled: false
 
-sep.auth:
-  permissionMethodsMappings:
-    REPORTS_MANAGEMENT:
-      - "SYNCHRONIZE_REPORTS"
+sep:
+  auth:
+    permissionMethodsMappings:
+      REPORTS_MANAGEMENT:
+        - "SYNCHRONIZE_REPORTS"
 
-  rolePermissionsMappings:
-    BUSINESS_OPERATOR:
-      - "REPORTS_MANAGEMENT"
+      PRODUCTION_PERIODIC_REPORTS:
+        - "SYNCHRONIZE_REPORTS"
+
+      PRODUCTION_ON_DEMAND_REPORTS:
+        - "LIST_PRODUCTION_ON_DEMAND_REPORTS"
+
+      SIMULATION_REPORTS:
+        - "LIST_SIMULATION_REPORTS"
+        - "GET_SIMULATION_TENANT"
+
+    rolePermissionsMappings:
+      BUSINESS_OPERATOR:
+        - "REPORTS_MANAGEMENT"
+        - "SIMULATION_REPORTS"

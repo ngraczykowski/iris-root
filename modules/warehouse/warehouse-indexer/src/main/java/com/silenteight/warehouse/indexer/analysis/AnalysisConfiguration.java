@@ -11,7 +11,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 class AnalysisConfiguration {
 
   @Bean
-  AnalysisService analysisService(AnalysisMetadataRepository analysisMetadataRepository) {
+  AnalysisService analysisService(
+      AnalysisMetadataRepository analysisMetadataRepository) {
     return new AnalysisService(analysisMetadataRepository);
   }
 }

@@ -18,6 +18,7 @@ class AnalysisServiceTest extends BaseDataJpaTest {
 
   private static final String ANALYSIS_ID = "07fdee7c-9a66-416d-b835-32aebcb63013";
   private static final String ANALYSIS = "analysis/" + ANALYSIS_ID;
+  private static final String ENVIRONMENT_PREFIX_2 = "env2";
 
   @Autowired
   AnalysisService analysisService;
@@ -53,5 +54,15 @@ class AnalysisServiceTest extends BaseDataJpaTest {
     assertThat(analysisMetadataEntity.getAnalysisId()).isEqualTo(ANALYSIS_ID);
     assertThat(analysisMetadataEntity.getElasticIndexPattern()).isEqualTo("env2_production");
     assertThat(analysisMetadataEntity.getTenant()).isEqualTo("env2_production");
+  }
+
+  @Test
+  void shouldReturnCorrectTenantId() {
+    NamingStrategy env2 = new ProductionNamingStrategy(ENVIRONMENT_PREFIX_2);
+
+    analysisService.getAnalysisMetadata(ANALYSIS, env2);
+
+    assertThat(analysisService.getTenantIdByAnalysis(ANALYSIS))
+        .isEqualTo(env2.getTenantName(ENVIRONMENT_PREFIX_2));
   }
 }
