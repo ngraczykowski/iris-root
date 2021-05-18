@@ -23,7 +23,7 @@ class SynchronizationController {
   @NonNull
   private final ReportSynchronizationUseCase reportSynchronizationUseCase;
 
-  @PostMapping("/v1/reports:synchronize")
+  @PostMapping(REPORT_SYNCHRONIZATION_URL)
   @PreAuthorize("isAuthorized('SYNCHRONIZE_REPORTS')")
   public ResponseEntity<Void> triggerReportSynchronization() {
     reportSynchronizationUseCase.activate();

@@ -184,7 +184,7 @@ class ReportIT {
   private void waitForReports() {
     await()
         .atMost(5, SECONDS)
-        .until(() -> reportingService.getReportList(ADMIN_TENANT).size() > 0);
+        .until(() -> reportingService.getReportsId(ADMIN_TENANT).size() > 0);
   }
 
   @SneakyThrows
