@@ -17,4 +17,8 @@ public class ElasticSearchTestConstants {
   // Kibana index-pattern that is created via
   // '1-create-kibana-index.json`
   public static final String KIBANA_INDEX_PATTERN_NAME = "alerts-index";
+
+  // Save search that is created via
+  // '2-create-saved-search.json"
+  public static final String SAVE_SEARCH_NAME = "all-alerts-search";
 }

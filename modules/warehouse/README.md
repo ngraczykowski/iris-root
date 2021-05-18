@@ -67,6 +67,24 @@ Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openap
 
 ## Other
 
+### Running integration test against local environment
+
+1. start infrastructure:
+    
+        ./scripts/run-services.sh
+    
+2. Remove initialization of TestContainers by commenting/ removing ContextConfiguration initializers:
+
+        @ContextConfiguration(initializers = {
+        //    OpendistroElasticContainerInitializer.class,
+        //    OpendistroKibanaContainerInitializer.class
+        })
+        
+3. Activate local profile which provides connection setup for local environment.
+   You may want to enable debug profile.
+
+        @ActiveProfiles({ "local", "debug" })
+
 ### Setting-up HTTPS for dev environment 
 
 #### Generating keys for minio
