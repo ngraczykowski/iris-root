@@ -34,10 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ADMIN_TENANT;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.INDEX_NAME;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.KIBANA_INDEX_PATTERN_NAME;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.OTHER_TENANT;
+import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
+import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -101,6 +100,12 @@ class ReportIT {
     createSavedSearch();
   }
 
+  @AfterEach
+  public void cleanup() {
+    removeSavedSearch();
+    removeKibanaIndex();
+  }
+
   // TODO: This test is going to be simplified when entire use case is ready (WEB-976)
   @Test
   @SneakyThrows
@@ -127,8 +132,6 @@ class ReportIT {
   @SneakyThrows
   void shouldStoreNewKibanaReportsInMinio() {
     // given
-    storeData();
-    createKibanaIndex();
     generateReport(createReportDefinition());
     waitForReports();
 
@@ -203,7 +206,7 @@ class ReportIT {
     return new String(responseBytes, UTF_8);
   }
 
-  void clearMinioBucket() {
+  private void clearMinioBucket() {
     removeAllReportsFromBucket();
     removeMinioBucket();
   }
@@ -223,5 +226,14 @@ class ReportIT {
   @SneakyThrows
   private void removeMinioBucket() {
     minioClient.removeBucket(RemoveBucketArgs.builder().bucket(TEST_BUCKET).build());
+  }
+
+  private void removeKibanaIndex() {
+    opendistroKibanaClient.deleteSavedObjects(
+        ADMIN_TENANT, KIBANA_INDEX_PATTERN, KIBANA_INDEX_PATTERN_NAME);
+  }
+
+  private void removeSavedSearch() {
+    opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVE_SEARCH_NAME);
   }
 }

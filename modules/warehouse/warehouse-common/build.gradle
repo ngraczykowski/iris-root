@@ -29,4 +29,5 @@ dependencies {
   implementation libraries.protobuf_java_util
 
   testImplementation project(":warehouse-common-testing")
+  testImplementation libraries.awaitility
 }
