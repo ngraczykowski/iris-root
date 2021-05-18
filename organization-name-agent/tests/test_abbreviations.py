@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.compare import compare
+from company_name.compare import compare, Score
 
 
 @pytest.mark.parametrize(
@@ -16,8 +16,9 @@ from company_name.compare import compare
 def test_simple_abbreviation(first, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+    assert score["abbreviation"].status.name == "OK"
     assert score["abbreviation"].value == 1
-    assert score["abbreviation"].compared == ((first, ), (second,))
+    assert score["abbreviation"].compared == ((first,), (second,))
 
 
 @pytest.mark.parametrize(
@@ -34,6 +35,7 @@ def test_simple_abbreviation(first, second):
 def test_abbreviation_without_suffix_or_legal(first, first_source, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+    assert score["abbreviation"].status.name == "OK"
     assert score["abbreviation"].value == 1
     assert score["abbreviation"].compared == ((first_source,), (second,))
 
@@ -45,8 +47,9 @@ def test_abbreviation_without_suffix_or_legal(first, first_source, second):
 def test_abbreviation_with_legal(first, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+    assert score["abbreviation"].status.name == "OK"
     assert score["abbreviation"].value == 1
-    assert score["abbreviation"].compared == ((first, ), (second, ))
+    assert score["abbreviation"].compared == ((first,), (second,))
 
 
 @pytest.mark.parametrize(
@@ -73,6 +76,7 @@ def test_abbreviation_with_legal(first, second):
 def test_abbreviation_more_than_one_letter(first, first_source, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+    assert score["abbreviation"].status.name == "OK"
     assert 0.7 < score["abbreviation"].value < 1
     assert score["abbreviation"].compared[0] == (first_source,)
 
@@ -84,8 +88,9 @@ def test_abbreviation_more_than_one_letter(first, first_source, second):
 def test_abbreviation_with_duplicates(first, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+    assert score["abbreviation"].status.name == "OK"
     assert score["abbreviation"].value == 1
-    assert score["abbreviation"].compared == ((first, ), (second.replace(",", ""), ))
+    assert score["abbreviation"].compared == ((first,), (second.replace(",", ""),))
 
 
 @pytest.mark.parametrize(
@@ -100,6 +105,7 @@ def test_abbreviation_with_duplicates(first, second):
 def test_partial_abbreviation(first, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+    assert score["abbreviation"].status.name == "OK"
     assert score["abbreviation"].value > 0.7
 
 
@@ -114,5 +120,32 @@ def test_partial_abbreviation(first, second):
 def test_whitespaces(first, second):
     print(repr(first), repr(second), compare(first, second))
     score = compare(first, second)
+
+    assert score["abbreviation"].status.name == "OK"
     assert score["abbreviation"].value == 1
-    assert score["abbreviation"].compared == ((first, ), (" ".join(second.split()), ))
+    assert score["abbreviation"].compared == ((first,), (" ".join(second.split()),))
+
+
+@pytest.mark.parametrize(("first", "second"), (("HEWLETT-PACKARD COMPANY", "HP"),))
+def test_separators(first, second):
+    print(repr(first), repr(second), compare(first, second))
+    score = compare(first, second)
+
+    assert score["abbreviation"].status.name == "OK"
+    assert score["abbreviation"].value == 1
+
+
+@pytest.mark.parametrize(
+    ("first", "second", "status"),
+    (
+        ("", "", Score.ScoreStatus.NO_DATA),
+        ("COMPANY", "", Score.ScoreStatus.NO_MATCHED_PARTY_DATA),
+        ("", "COMPANY", Score.ScoreStatus.NO_ALERTED_PARTY_DATA),
+        ("COMPANY", "COMPANY", Score.ScoreStatus.OK),
+    ),
+)
+def test_when_no_acceptable_data(first, second, status):
+    print(repr(first), repr(second), compare(first, second))
+    score = compare(first, second)
+    assert score["abbreviation"].status == status
+    assert score["abbreviation"].value == 0

@@ -47,7 +47,7 @@ def test_legal_aliases(main_name, aliases, results):
     with legal_terms({main_name: aliases}) as terms:
         assert set(results).issubset(terms.all_legal_terms)
 
-        identifier = set(terms.legal_terms_mapping[r][0] for r in results)
+        identifier = {terms.legal_terms_mapping[r][0] for r in results}
         assert len(identifier) == 1
         assert identifier.issubset(results)
 
@@ -57,7 +57,10 @@ def test_basic_legal_terms():
     assert ("corporation",) in terms.all_legal_terms
     assert ("corp",) in terms.all_legal_terms
     assert ("corp.",) not in terms.all_legal_terms
-    assert terms.legal_terms_mapping[("corp",)] == terms.legal_terms_mapping[("corporation",)]
+    assert (
+        terms.legal_terms_mapping[("corp",)]
+        == terms.legal_terms_mapping[("corporation",)]
+    )
 
 
 def _get_legal_terms_result(first_legal: str, second_legal: str) -> float:
@@ -70,7 +73,12 @@ def _get_legal_terms_result(first_legal: str, second_legal: str) -> float:
 
 @pytest.mark.parametrize(
     ("first", "second", "value"),
-    (("A corp", "A corporation", 1), ("A corp", "A", 0), ("A plc", "A limited", 0), ("A", "A", None)),
+    (
+        ("A corp", "A corporation", 1),
+        ("A corp", "A", 0),
+        ("A plc", "A limited", 0),
+        ("A", "A", 0),
+    ),
 )
 def test_compare_legal_terms(first, second, value):
     print(repr(first), repr(second), compare(first, second))
@@ -101,8 +109,14 @@ def test_compare_legal_on_one_side(first, second):
         ("Nejdecká česárna vlny, a. s.", "Nejdecká česárna vlny AS"),
         ("BULLDOG SPORTS S A S", "BULLDOG SPORTS SAS"),
         ("COMPLEXICA PTY LTD", "COMPLEXICA PTY. LTD."),
-        ("FLORAL MANUFACTURING GROUP COMPANY LIMITED", "FLORAL MANUFACTURING GROUP COMPANY LTD."),
-        ("AGENSI PEKERJAAN PERTAMA SENDIRIAN BERHAD", "AGENSI PEKERJAAN PERTAMA SDN. BHD."),
+        (
+            "FLORAL MANUFACTURING GROUP COMPANY LIMITED",
+            "FLORAL MANUFACTURING GROUP COMPANY LTD.",
+        ),
+        (
+            "AGENSI PEKERJAAN PERTAMA SENDIRIAN BERHAD",
+            "AGENSI PEKERJAAN PERTAMA SDN. BHD.",
+        ),
     ),
 )
 def test_compare_same_legal_terms(first, second):
@@ -113,9 +127,7 @@ def test_compare_same_legal_terms(first, second):
 
 @pytest.mark.parametrize(
     ("first_legal", "second_legal"),
-    (
-        ("GmbH & Co KG", "GmbH"),
-    ),
+    (("GmbH & Co KG", "GmbH"),),
 )
 def test_partial_legal_terms(first_legal, second_legal):
     assert _get_legal_terms_result(first_legal, second_legal) > 0
@@ -123,9 +135,7 @@ def test_partial_legal_terms(first_legal, second_legal):
 
 @pytest.mark.parametrize(
     ("first_legal", "second_legal"),
-    (
-        ("Co., Ltd.", "Ltd Company"),
-    ),
+    (("Co., Ltd.", "Ltd Company"),),
 )
 def test_compare_multiple_legal_terms(first_legal, second_legal):
     assert _get_legal_terms_result(first_legal, second_legal) == 1

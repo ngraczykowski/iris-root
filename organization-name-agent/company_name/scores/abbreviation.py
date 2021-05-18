@@ -4,7 +4,7 @@ from typing import Tuple, Generator, Sequence
 
 from company_name.names.special_words import WEAK_WORDS
 from company_name.names.name_information import NameInformation, NameWord, NameSequence
-from company_name.utils.clear_name import clear_name
+from company_name.utils.clear_name import clear_name, POSSIBLE_SEPARATORS
 from .score import Score
 
 
@@ -14,7 +14,9 @@ class Abbreviation:
     abbreviated: NameSequence
 
     def compared(self) -> Tuple[Tuple[str, ...], Tuple[str, ...]]:
-        return (self.source.original_name,), ("".join(self.abbreviated.original_tuple),)
+        return (self.source.original_name,) if self.source else (), (
+            "".join(self.abbreviated.original_tuple),
+        ) if self.abbreviated else ()
 
 
 def _check_abbreviation_for_next_word(
@@ -43,18 +45,32 @@ def _check_abbreviation_for_next_word(
         )
 
         # sometimes, for nicer abbreviation, more than one character from each word is taken
-        for i, w in zip(range(5), word.cleaned):
+        for i, w in enumerate(word.cleaned):
             if len(abbreviation) > i and w == abbreviation[i].cleaned:
                 yield check_abbreviation(
                     rest_of_information,
-                    abbreviation[i + 1:],
+                    abbreviation[i + 1 :],
                     Abbreviation(
                         source=result.source + [word],
-                        abbreviated=result.abbreviated + abbreviation[:i + 1],
+                        abbreviated=result.abbreviated + abbreviation[: i + 1],
                     ),
                 ) * (1 - 0.5 / len((*result.source, word, *rest_of_information)))
             else:
                 break
+
+        separated = POSSIBLE_SEPARATORS.split(word.cleaned, maxsplit=1)
+        if len(separated) > 1:
+            yield check_abbreviation(
+                (
+                    (NameWord(original="", cleaned=separated[1]), *rest_of_information[0]),
+                    *rest_of_information[1:],
+                ),
+                abbreviation[1:],
+                Abbreviation(
+                    source=result.source + [word],
+                    abbreviated=result.abbreviated + [abbreviation[0]],
+                ),
+            )
 
     # 4H - Head, Heart, Hands, Health type of abbreviation
     if (
@@ -134,50 +150,29 @@ def check_abbreviation(
     result: Abbreviation,
 ) -> Score:
     words, *rest = information
-
     while abbreviation and not abbreviation[0].cleaned:
         result.abbreviated = result.abbreviated + abbreviation[:1]
         abbreviation = abbreviation[1:]
-    
+
     while words and not words[0].cleaned:
         result.source = result.source + words[:1]
         words = words[1:]
 
     if not abbreviation:
-        return _check_abbreviation_when_no_abbreviation(words, result)
+        t = _check_abbreviation_when_no_abbreviation(words, result)
+        return t
 
     if not words:
         return max(
             _check_abbreviation_when_no_words(rest, abbreviation, result),
-            default=Score(0, ((), ())),
+            default=Score(),
         )
 
     return max(
         _check_abbreviation_for_next_word(
             words[0], (words[1:], *rest), abbreviation, result
         ),
-        default=Score(0, ((), ())),
-    )
-
-
-def _abbreviation_score(
-    information: NameInformation, abbreviation: NameSequence
-) -> Score:
-    words = NameSequence([*information.common_prefixes, *information.base])
-    if (
-        len("".join(abbreviation.cleaned_tuple)) >= len("".join(information.name().cleaned_name))
-        or len(abbreviation) < 2
-    ):
-        return Score(None, ((), ()))
-
-    return check_abbreviation(
-        [
-            words,
-            information.common_suffixes,
-            information.legal,
-        ],
-        abbreviation,
-        Abbreviation(source=NameSequence(), abbreviated=NameSequence()),
+        default=Score(),
     )
 
 
@@ -187,14 +182,39 @@ def _create_possible_abbreviation(name: str) -> NameSequence:
     )
 
 
+def _abbreviation_score(
+    information: NameInformation, abbreviation_name: NameInformation
+) -> Score:
+    abbreviation = _create_possible_abbreviation(abbreviation_name.base.original_name)
+    words = NameSequence([*information.common_prefixes, *information.base])
+    base_score = Score(compared=Abbreviation(words, abbreviation).compared())
+
+    if (
+        len("".join(abbreviation.cleaned_tuple))
+        >= len("".join(information.name().cleaned_name))
+        or len(abbreviation) < 2
+    ):
+        return base_score
+
+    if set(abbreviation_name.base.cleaned_tuple).issubset(
+        information.base.cleaned_tuple
+    ):
+        return base_score
+
+    abbreviation_score = check_abbreviation(
+        [
+            words,
+            information.common_suffixes,
+            information.legal,
+        ],
+        abbreviation,
+        Abbreviation(source=NameSequence(), abbreviated=NameSequence()),
+    )
+    return abbreviation_score if abbreviation_score.compared else base_score
+
+
 def abbreviation_score(first: NameInformation, second: NameInformation) -> Score:
     return max(
-        _abbreviation_score(
-            first, _create_possible_abbreviation(second.base.original_name)
-        ),
-        reversed(
-            _abbreviation_score(
-                second, _create_possible_abbreviation(first.base.original_name)
-            )
-        ),
+        _abbreviation_score(first, second),
+        reversed(_abbreviation_score(second, first)),
     )

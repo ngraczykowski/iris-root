@@ -1,8 +1,12 @@
 __pycache__
-.idea
 .ipynb_checkpoints
 .mypy_cache
 .pytest_cache
 *.egg-info
+.tox
+.coverage
+
+.idea
+.vscode
 
 venv

@@ -35,5 +35,8 @@ def phonetic_score(first_name: NameSequence, second_name: NameSequence) -> Score
             value=max_score[0],
             compared=_compared(first_name, second_name, *max_score[1]),
         )
+    elif first_name and second_name:
+        # some alphabets are not supported by library
+        return Score(status=Score.ScoreStatus.NOT_APPLICABLE)
     else:
-        return Score()
+        return Score(compared=(first_name.original_tuple, second_name.original_tuple))

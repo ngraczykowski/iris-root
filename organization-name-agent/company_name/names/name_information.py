@@ -40,15 +40,18 @@ class NameWord:
     def __hash__(self) -> int:
         return self.cleaned.__hash__()
 
+    def __bool__(self) -> bool:
+        return bool(self.cleaned)
+
 
 class NameSequence(collections.UserList):
     @property
     def original_name(self) -> str:
-        return " ".join((w.original for w in self.data))
+        return " ".join((w.original for w in self.data if w.original))
 
     @property
     def cleaned_name(self) -> str:
-        return " ".join((w.cleaned for w in self.data))
+        return " ".join((w.cleaned for w in self.data if w.cleaned))
 
     @property
     def cleaned_tuple(self) -> Tuple[str, ...]:
@@ -65,7 +68,7 @@ class NameSequence(collections.UserList):
         if len(self) < len(seq):
             return False
 
-        return self.data[-len(seq):] == list(seq)
+        return self.data[-len(seq) :] == list(seq)
 
     def startswith(self, seq: Sequence[str]) -> bool:
         if not isinstance(seq, Sequence):
@@ -88,6 +91,9 @@ class NameSequence(collections.UserList):
     def __repr__(self) -> str:
         return repr(list(map(repr, self.data)))
 
+    def __bool__(self) -> bool:
+        return any(self.data)
+
 
 @dataclasses.dataclass
 class NameInformation:
@@ -99,6 +105,7 @@ class NameInformation:
     legal: NameSequence
     countries: NameSequence
     parenthesis: NameSequence
+    other: NameSequence
 
     def name(self) -> NameSequence:
         return NameSequence(self.common_prefixes + self.base + self.common_suffixes)
@@ -107,13 +114,19 @@ class NameInformation:
         return (
             self.source.original
             + " ("
-            + ", ".join((
-                f"prefixes: {self.common_prefixes!r}",
-                f"base: {self.base!r}",
-                f"suffixes: {self.common_suffixes!r}",
-                f"legal: {self.legal!r}",
-                f"countries: {self.countries!r}",
-                f"parenthesis: {self.parenthesis!r}",
-            ))
+            + ", ".join(
+                (
+                    f"prefixes: {self.common_prefixes!r}",
+                    f"base: {self.base!r}",
+                    f"suffixes: {self.common_suffixes!r}",
+                    f"legal: {self.legal!r}",
+                    f"countries: {self.countries!r}",
+                    f"parenthesis: {self.parenthesis!r}",
+                    f"other: {self.other!r}",
+                )
+            )
             + ")"
         )
+
+    def __bool__(self) -> bool:
+        return bool(self.source)

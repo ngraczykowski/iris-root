@@ -11,6 +11,7 @@ def parenthesis_score(first: NameInformation, second: NameInformation) -> Score:
         first.base.cleaned_name in second.parenthesis.cleaned_tuple,
     )
     return Score(
+        status=Score.ScoreStatus.OK,
         value=float(first_base_appeared or second_base_appeared),
         compared=(
             (second.base.original_name, ) if second_base_appeared else (),

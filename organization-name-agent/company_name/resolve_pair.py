@@ -6,10 +6,10 @@ from company_name.comment_generator import generate_comment
 
 def resolve_pair(name1, name2):
     scores = compare(name1, name2)
-    #print('SCORES\n', scores)
+    # print('SCORES\n', scores)
 
     evals = evaluate_scores(scores, cfg['features'])
-    #print('EVALUATIONS\n', evals)
+    # print('EVALUATIONS\n', evals)
 
     comment = generate_comment(name1, evals, cfg['features'])
     print('COMMENT\n', comment)
