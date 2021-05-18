@@ -12,16 +12,29 @@ from .special_words import JOINING_WORDS, WEAK_WORDS
 from .name_information import NameInformation, NameWord, NameSequence
 
 
-def _find_last_occurence(name: NameSequence, terms: Iterable[Sequence[str]]):
+def _find_occurrences(name: NameSequence, terms: Iterable[Sequence[str]]):
     words = set(name)
-    last_occurence = 0
-    for term in terms:
-        if all(word in words for word in term):
-            for i in reversed(range(len(name) - len(term) + 1)):
+    possible_terms = {term for term in terms if all(word in words for word in term)}
+
+    last_occurrence = -1
+    for term in possible_terms:
+        for i in reversed(range(len(name) - len(term) + 1)):
+            if name[i : (i + len(term))] == term:
+                last_occurrence = max(i + len(term) - 1, last_occurrence)
+                break
+
+    first_occurrence = last_occurrence
+    if first_occurrence != -1:
+        for term in possible_terms:
+            for i in range(last_occurrence + 1):
                 if name[i : (i + len(term))] == term:
-                    last_occurence = max(i + len(term) - 1, last_occurence)
+                    first_occurrence = min(i, first_occurrence)
                     break
-    return last_occurence
+
+    return (
+        first_occurrence if first_occurrence != -1 else None,
+        last_occurrence if last_occurrence != -1 else None,
+    )
 
 
 def _cut_from_end(
@@ -105,9 +118,16 @@ def _cut_legal_terms(
     name: NameSequence,
 ) -> Tuple[NameSequence, NameSequence, NameSequence]:
     legal_terms = LEGAL_TERMS.all_legal_terms
-    last_occurence = _find_last_occurence(name, legal_terms)
-    if last_occurence:
-        name, insignificant = name[: last_occurence + 1], name[last_occurence + 1 :]
+    first_occurrence, last_occurrence = _find_occurrences(name, legal_terms)
+    if last_occurrence is not None:
+        if len(name) - last_occurrence - 1 <= first_occurrence:
+            name, insignificant = (
+                name[: last_occurrence + 1],
+                name[last_occurrence + 1 :],
+            )
+        else:
+            insignificant = []
+
         return (*_cut_from_end(name, {*legal_terms, *WEAK_WORDS}), insignificant)
     else:
         return name, NameSequence(), NameSequence()

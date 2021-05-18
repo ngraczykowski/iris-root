@@ -316,6 +316,7 @@
     "srl",
     "Societate cu răspundere limitată",
     "Societatea cu răspundere limitată",
+    "sociedad comercial de responsabilidad limitada",
     "s. de r.l."
   ],
   "sociedad en nombre colectivo": [
@@ -344,6 +345,9 @@
     "sociedad anonima",
     "s.a.",
     "s/a"
+  ],
+  "société coopérative": [
+    "società cooperativa"
   ],
   "Sole Proprietorship": [
     "SP"
