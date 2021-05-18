@@ -14,16 +14,21 @@ package com.silenteight.hsbc.bridge.bulk.rest;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * BulkSolvedAlertsResponse
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
-public class BulkSolvedAlertsResponse {
+@Validated
+public class BulkSolvedAlerts {
   @SerializedName("bulkId")
   private String bulkId = null;
 
@@ -31,9 +36,11 @@ public class BulkSolvedAlertsResponse {
   private BulkStatus bulkStatus = null;
 
   @SerializedName("alerts")
+  @NotNull
+  @Size(min = 1)
   private List<SolvedAlert> alerts = null;
 
-  public BulkSolvedAlertsResponse bulkId(String bulkId) {
+  public BulkSolvedAlerts bulkId(String bulkId) {
     this.bulkId = bulkId;
     return this;
   }
@@ -51,7 +58,7 @@ public class BulkSolvedAlertsResponse {
     this.bulkId = bulkId;
   }
 
-  public BulkSolvedAlertsResponse bulkStatus(BulkStatus bulkStatus) {
+  public BulkSolvedAlerts bulkStatus(BulkStatus bulkStatus) {
     this.bulkStatus = bulkStatus;
     return this;
   }
@@ -69,12 +76,12 @@ public class BulkSolvedAlertsResponse {
     this.bulkStatus = bulkStatus;
   }
 
-  public BulkSolvedAlertsResponse alerts(List<SolvedAlert> alerts) {
+  public BulkSolvedAlerts alerts(List<SolvedAlert> alerts) {
     this.alerts = alerts;
     return this;
   }
 
-  public BulkSolvedAlertsResponse addAlertsItem(SolvedAlert alertsItem) {
+  public BulkSolvedAlerts addAlertsItem(SolvedAlert alertsItem) {
     if (this.alerts == null) {
       this.alerts = new ArrayList<SolvedAlert>();
     }
@@ -104,10 +111,10 @@ public class BulkSolvedAlertsResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkSolvedAlertsResponse bulkSolvedAlertsResponse = (BulkSolvedAlertsResponse) o;
-    return Objects.equals(this.bulkId, bulkSolvedAlertsResponse.bulkId) &&
-        Objects.equals(this.bulkStatus, bulkSolvedAlertsResponse.bulkStatus) &&
-        Objects.equals(this.alerts, bulkSolvedAlertsResponse.alerts);
+    BulkSolvedAlerts bulkSolvedAlerts = (BulkSolvedAlerts) o;
+    return Objects.equals(this.bulkId, bulkSolvedAlerts.bulkId) &&
+        Objects.equals(this.bulkStatus, bulkSolvedAlerts.bulkStatus) &&
+        Objects.equals(this.alerts, bulkSolvedAlerts.alerts);
   }
 
   @Override

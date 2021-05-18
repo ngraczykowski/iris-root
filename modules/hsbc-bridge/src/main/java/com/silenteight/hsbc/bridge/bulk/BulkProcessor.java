@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
-import com.silenteight.hsbc.bridge.report.WarehouseClient;
-import com.silenteight.hsbc.bridge.report.WarehouseClient.Alert;
+import com.silenteight.hsbc.bridge.report.AlertSender;
+import com.silenteight.hsbc.bridge.report.AlertSender.Alert;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +25,8 @@ import static java.util.stream.Collectors.toMap;
 class BulkProcessor {
 
   private final AdjudicationFacade adjudicationFacade;
+  private final AlertSender alertSender;
   private final BulkRepository bulkRepository;
-  private final WarehouseClient warehouseClient;
 
   @Scheduled(fixedDelay = 15 * 1000, initialDelay = 2000)
   @Transactional
@@ -80,7 +80,7 @@ class BulkProcessor {
   }
 
   private void sendToWarehouse(Collection<BulkAlertEntity> alerts) {
-    warehouseClient.sendAlerts(
+    alertSender.sendAlerts(
         alerts.stream().map(a -> (Alert) a::getExternalId).collect(toList()));
   }
 

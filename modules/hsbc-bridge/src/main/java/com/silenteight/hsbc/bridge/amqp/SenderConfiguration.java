@@ -2,8 +2,6 @@ package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.report.WarehouseClient;
-
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +18,7 @@ class SenderConfiguration {
   private final RabbitTemplate rabbitTemplate;
 
   @Bean
-  WarehouseClient warehouseClient() {
+  MessageSender messageSender() {
     return new MessageSender(rabbitTemplate, amqpProperties.getWarehouseExchangeName());
   }
 }

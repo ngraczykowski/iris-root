@@ -12,6 +12,8 @@
 
 package com.silenteight.hsbc.bridge.bulk.rest;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -21,6 +23,7 @@ import java.util.Objects;
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
+@JsonInclude(Include.NON_NULL)
 public class SolvedAlert {
   @SerializedName("id")
   private String id = null;

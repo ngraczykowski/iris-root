@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.report;
 
 import java.util.Collection;
 
-public interface WarehouseClient {
+public interface AlertSender {
 
   void sendAlerts(Collection<Alert> alerts);
 

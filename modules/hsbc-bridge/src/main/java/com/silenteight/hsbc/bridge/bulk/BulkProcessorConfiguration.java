@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
-import com.silenteight.hsbc.bridge.report.WarehouseClient;
+import com.silenteight.hsbc.bridge.report.AlertSender;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Configuration;
 class BulkProcessorConfiguration {
 
   private final AlertFacade alertFacade;
+  private final AlertSender alertSender;
   private final AdjudicationFacade adjudicationFacade;
   private final BulkRepository bulkRepository;
   private final MatchFacade matchFacade;
-  private final WarehouseClient warehouseClient;
 
   @Bean
   BulkPreProcessor bulkPreProcessor() {
@@ -27,6 +27,6 @@ class BulkProcessorConfiguration {
 
   @Bean
   BulkProcessor bulkProcessor() {
-    return new BulkProcessor(adjudicationFacade, bulkRepository, warehouseClient);
+    return new BulkProcessor(adjudicationFacade, alertSender, bulkRepository);
   }
 }

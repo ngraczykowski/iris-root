@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.rest.BulkSolvedAlertsResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.BulkSolvedAlerts;
 import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlert;
 import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlertStatus;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
@@ -23,14 +23,14 @@ public class GetBulkResultsUseCase {
   private final BulkRepository bulkRepository;
   private final RecommendationFacade recommendationFacade;
 
-  public BulkSolvedAlertsResponse getResults(String id) {
+  public BulkSolvedAlerts getResults(String id) {
     var bulk = bulkRepository.findById(id);
 
     if (bulk.getStatus() != COMPLETED) {
       throw new BulkProcessingNotCompletedException(id);
     }
 
-    var response = new BulkSolvedAlertsResponse();
+    var response = new BulkSolvedAlerts();
     response.setBulkId(bulk.getId());
     response.setBulkStatus(com.silenteight.hsbc.bridge.bulk.rest.BulkStatus.valueOf(
         bulk.getStatus().name()));
@@ -51,14 +51,20 @@ public class GetBulkResultsUseCase {
 
   private List<SolvedAlert> getSolvedAlerts(Collection<BulkAlertEntity> items) {
     return items.stream().map(alert -> {
-      var recommendation = getRecommendation(alert.getName());
-
       var solvedAlert = new SolvedAlert();
       solvedAlert.setId(alert.getExternalId());
-      solvedAlert.setRecommendation(mapRecommendation(recommendation.getRecommendedAction()));
-      solvedAlert.setComment(recommendation.getRecommendationComment());
+
+      if (alert.isCompleted()) {
+        getAndFillWithRecommendation(alert.getName(), solvedAlert);
+      }
       return solvedAlert;
     }).collect(Collectors.toList());
+  }
+
+  private void getAndFillWithRecommendation(String alert, SolvedAlert solvedAlert) {
+    var recommendation = getRecommendation(alert);
+    solvedAlert.setRecommendation(mapRecommendation(recommendation.getRecommendedAction()));
+    solvedAlert.setComment(recommendation.getRecommendationComment());
   }
 
   private RecommendationDto getRecommendation(String alert) {

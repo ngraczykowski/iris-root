@@ -2,9 +2,9 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
+import com.silenteight.hsbc.bridge.report.AlertWithRecommendationSender;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 class BulkUseCaseConfiguration {
 
   private final AnalysisFacade analysisFacade;
+  private final AlertWithRecommendationSender alertWithRecommendationSender;
   private final BulkRepository bulkRepository;
   private final RecommendationFacade recommendationFacade;
 
@@ -40,6 +41,11 @@ class BulkUseCaseConfiguration {
   @Bean
   CancelBulkUseCase cancelBulkUseCase() {
     return new CancelBulkUseCase(bulkRepository);
+  }
+
+  @Bean
+  IngestRecommendationsUseCase ingestRecommendationsUseCase() {
+    return new IngestRecommendationsUseCase(alertWithRecommendationSender);
   }
 
   private BulkIdRetriever bulkIdRetriever() {

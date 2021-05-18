@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.StoreBulkUseCase.StoreBulkUseCaseCommand;
-import com.silenteight.hsbc.bridge.bulk.exception.BulkAlreadyCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
@@ -27,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
@@ -35,10 +36,11 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @RequiredArgsConstructor
 public class BulkRestController {
 
+  private final AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase;
   private final CancelBulkUseCase cancelBulkUseCase;
   private final GetBulkStatusUseCase getBulkStatusUseCase;
   private final GetBulkResultsUseCase getBulkResultsUseCase;
-  private final AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase;
+  private final IngestRecommendationsUseCase ingestRecommendationsUseCase;
   private final StoreBulkUseCase storeBulkUseCase;
 
   private static final String[] OWS_HEADER =
@@ -68,19 +70,30 @@ public class BulkRestController {
         .bulkId(bulkId));
   }
 
+  @PostMapping("/ingestRecommendations")
+  public ResponseEntity ingestRecommendations(
+      @RequestBody @Valid BulkSolvedAlerts recommendations) {
+    ingestRecommendationsUseCase.ingest(recommendations.getAlerts());
+
+    return ResponseEntity.ok().build();
+  }
+
   @PutMapping("/{id}/ack")
   public ResponseEntity<BulkStatusResponse> acknowledgeDelivery(@PathVariable String id) {
     return ResponseEntity.ok(acknowledgeBulkDeliveryUseCase.apply(id));
   }
 
   @GetMapping("/{id}/result")
-  public ResponseEntity<BulkSolvedAlertsResponse> getResult(@PathVariable String id) {
+  public ResponseEntity<BulkSolvedAlerts> getResult(@PathVariable String id) {
     return ResponseEntity.ok(getBulkResultsUseCase.getResults(id));
   }
 
   @GetMapping("/processingStatus")
   public ResponseEntity<BulkProcessingStatusResponse> checkProcessingStatus() {
-    return ResponseEntity.ok(getBulkStatusUseCase.isProcessing());
+    var isProcessing = getBulkStatusUseCase.isProcessing();
+
+    return ResponseEntity.ok(new BulkProcessingStatusResponse()
+        .isAdjudicationEngineProcessing(isProcessing));
   }
 
   @GetMapping("/{id}/status")
@@ -143,8 +156,7 @@ public class BulkRestController {
     return getErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler({
-      BulkWithGivenIdAlreadyCreatedException.class, BulkAlreadyCompletedException.class })
+  @ExceptionHandler({ BulkWithGivenIdAlreadyCreatedException.class })
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleExceptionWithBadRequestStatus(
       RuntimeException exception) {

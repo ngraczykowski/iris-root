@@ -1,7 +1,7 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade
-import com.silenteight.hsbc.bridge.report.WarehouseClient
+import com.silenteight.hsbc.bridge.report.AlertSender
 
 import spock.lang.Specification
 
@@ -9,11 +9,11 @@ class BulkProcessorSpec extends Specification {
 
   def adjudicationFacade = Mock(AdjudicationFacade)
   def bulkRepository = Mock(BulkRepository)
-  def warehouseClient = Mock(WarehouseClient)
+  def alertSender = Mock(AlertSender)
 
   def fixtures = new Fixtures()
 
-  def underTest = new BulkProcessor(adjudicationFacade, bulkRepository, warehouseClient)
+  def underTest = new BulkProcessor(adjudicationFacade, alertSender, bulkRepository)
 
   def 'should process learning bulk'() {
     when:
@@ -22,7 +22,7 @@ class BulkProcessorSpec extends Specification {
     then:
     1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.learningBulk]
     1 * adjudicationFacade.registerAlertWithMatches(_ as Map)
-    1 * warehouseClient.sendAlerts(_ as Collection)
+    1 * alertSender.sendAlerts(_ as Collection)
   }
 
   def 'should process solving bulk'() {
@@ -32,7 +32,7 @@ class BulkProcessorSpec extends Specification {
     then:
     1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.solvingBulk]
     1 * adjudicationFacade.registerAlertWithMatchesAndAnalysis(_ as Map) >> 1L
-    0 * warehouseClient.sendAlerts(_ as Collection)
+    0 * alertSender.sendAlerts(_ as Collection)
   }
 
   class Fixtures {

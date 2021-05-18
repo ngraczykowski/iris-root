@@ -12,8 +12,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 public class GetBulkStatusUseCase {
@@ -37,16 +39,10 @@ public class GetBulkStatusUseCase {
     return response;
   }
 
-  public BulkProcessingStatusResponse isProcessing() {
-    var result = bulkRepository.existsByStatusIn(List.of(STORED, PROCESSING));
-
-    var response = new BulkProcessingStatusResponse();
-    response.setIsAdjudicationEngineProcessing(result);
-
-    return response;
+  public boolean isProcessing() {
+    return bulkRepository.existsByStatusIn(of(STORED, PRE_PROCESSED, PROCESSING));
   }
 
-  //FIXME do not use entity
   private List<BulkAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
     return alerts.stream().map(r -> {
       var bulkItem = new BulkAlertItem();

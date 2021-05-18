@@ -44,4 +44,9 @@ class BulkAlertEntity {
   boolean isValid() {
     return isNull(errorMessage) && status != AlertStatus.ERROR;
   }
+
+  @Transient
+  boolean isCompleted() {
+    return status == AlertStatus.COMPLETED;
+  }
 }
