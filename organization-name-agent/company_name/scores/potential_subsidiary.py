@@ -11,7 +11,7 @@ def potential_subsidiary_score(
 ) -> Score:
     values = _potential_subsidiary_parent(first), _potential_subsidiary_parent(second)
     return Score(
-        value=1.0 if any(values) else None,
+        value=float(any(values)),
         compared=(
             (first.source.original,) if values[0] else (),
             (second.source.original,) if values[1] else (),

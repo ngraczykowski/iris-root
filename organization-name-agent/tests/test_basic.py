@@ -87,9 +87,7 @@ def test_country_as_company(first, second):
 
 @pytest.mark.parametrize(
     ("first", "second"),
-    (
-        ("AMAZON", "Amazon.com, Inc."),
-    ),
+    (("AMAZON", "Amazon.com, Inc."),),
 )
 def test_name_with_domains(first, second):
     print(repr(first), repr(second), compare(first, second))
@@ -118,7 +116,7 @@ def test_diacritic(first, second):
     print(repr(first), repr(second), compare(first, second))
     result = compare(first, second)
     assert result["fuzzy_on_base"].value == 1
-    assert result["fuzzy"].compared == ((first, ), (second, ))
+    assert result["fuzzy"].compared == ((first,), (second,))
 
 
 @pytest.mark.parametrize(
@@ -151,15 +149,30 @@ def test_whitespaces(first, second):
         ("pplc", "pplc"),
     ),
 )
-def test_empty_names(first, second):
+def test_only_legal_in_names(first, second):
     print(repr(first), repr(second), compare(first, second))
     result = compare(first, second)
     assert result["fuzzy_on_base"].value == 1
-    if first and second:
-        assert result["fuzzy_on_base"].compared == ((first, ), (second, ))
+    assert result["fuzzy_on_base"].compared == ((first,), (second,))
 
 
 def test_empty_name():
     result = compare("", "")
-    for key, score in result.items():
+    print(result)
+    for score in result.values():
         assert score == Score()
+
+
+@pytest.mark.parametrize(
+    ("first", "second", "status"),
+    (
+        ("", "", Score.ScoreStatus.NO_DATA),
+        ("COMPANY", "", Score.ScoreStatus.NO_MATCHED_PARTY_DATA),
+        ("", "COMPANY", Score.ScoreStatus.NO_ALERTED_PARTY_DATA),
+    ),
+)
+def test_empty_names(first, second, status):
+    print(repr(first), repr(second), compare(first, second))
+    result = compare(first, second)
+    for score in result.values():
+        assert score.status == status or Score.ScoreStatus.NO_DATA

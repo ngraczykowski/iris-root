@@ -7,9 +7,21 @@ from .legal_terms import LEGAL_TERMS
 from .countries import COUNTRIES
 from .common_prefixes import COMMON_PREFIXES
 from .common_suffixes import COMMON_SUFFIXES
-from .special_words import JOINING_WORDS
+from .special_words import JOINING_WORDS, WEAK_WORDS
 
 from .name_information import NameInformation, NameWord, NameSequence
+
+
+def _find_last_occurence(name: NameSequence, terms: Iterable[Sequence[str]]):
+    words = set(name)
+    last_occurence = 0
+    for term in terms:
+        if all(word in words for word in term):
+            for i in reversed(range(len(name) - len(term) + 1)):
+                if name[i : (i + len(term))] == term:
+                    last_occurence = max(i + len(term) - 1, last_occurence)
+                    break
+    return last_occurence
 
 
 def _cut_from_end(
@@ -26,7 +38,7 @@ def _cut_from_end(
     if not best_one:
         return name, NameSequence()
 
-    found_term = NameWord.join(*name[-len(best_one):])
+    found_term = NameWord.join(*name[-len(best_one) :])
     base, other_terms = _cut_from_end(
         NameSequence(name[: -len(best_one)]), terms_to_cut
     )
@@ -46,7 +58,7 @@ def _cut_from_start(
     best_one = sorted((len(x[0]), x) for x in possibilities)[-1][1]
     found_term = NameWord.join(*name[: len(best_one)])
     other_terms, base = _cut_from_start(
-        NameSequence(name[len(best_one):]), terms_to_cut
+        NameSequence(name[len(best_one) :]), terms_to_cut
     )
     return NameSequence((found_term, *other_terms)), base
 
@@ -75,7 +87,7 @@ def _fix_expression_divided(information: NameInformation) -> NameInformation:
         if joining_data and joining_data[-1].cleaned in JOINING_WORDS:
 
             second_word = None
-            for j, second_word_data in enumerate(data[joining_index + 1:]):
+            for j, second_word_data in enumerate(data[joining_index + 1 :]):
                 if second_word_data:
                     second_word_index = j + joining_index + 1
                     second_word = second_word_data[0]
@@ -89,8 +101,16 @@ def _fix_expression_divided(information: NameInformation) -> NameInformation:
     return information
 
 
-def _cut_legal_terms(name: NameSequence) -> Tuple[NameSequence, NameSequence]:
-    return _cut_from_end(name, LEGAL_TERMS.all_legal_terms)
+def _cut_legal_terms(
+    name: NameSequence,
+) -> Tuple[NameSequence, NameSequence, NameSequence]:
+    legal_terms = LEGAL_TERMS.all_legal_terms
+    last_occurence = _find_last_occurence(name, legal_terms)
+    if last_occurence:
+        name, insignificant = name[: last_occurence + 1], name[last_occurence + 1 :]
+        return (*_cut_from_end(name, {*legal_terms, *WEAK_WORDS}), insignificant)
+    else:
+        return name, NameSequence(), NameSequence()
 
 
 def _cut_common(name: NameSequence) -> Tuple[NameSequence, NameSequence, NameSequence]:
@@ -104,8 +124,8 @@ def _cut_extra(name: str) -> Tuple[str, Sequence[str]]:
     t = []
     for extra_information in reversed(extra):
         pos = extra_information.span()
-        t.append(name[pos[0] + 1: pos[1] - 1].strip())
-        name = name[: pos[0]].strip() + " " + name[pos[1]:].strip()
+        t.append(name[pos[0] + 1 : pos[1] - 1].strip())
+        name = name[: pos[0]].strip() + " " + name[pos[1] :].strip()
     return name.strip(), t
 
 
@@ -114,7 +134,11 @@ def _cut_all(name: str) -> NameInformation:
     extra_base, extra = _cut_extra(name)
 
     words = NameSequence(
-        [NameWord(original=w, cleaned=clear_name(w)) for w in divide(extra_base) if clear_name(w)]
+        [
+            NameWord(original=w, cleaned=clear_name(w))
+            for w in divide(extra_base)
+            if clear_name(w)
+        ]
     )
     extra_words = NameSequence(
         [NameWord(original=w, cleaned=clear_name(w)) for w in extra]
@@ -123,7 +147,7 @@ def _cut_all(name: str) -> NameInformation:
     if words.endswith(("the",)):
         words = NameSequence([words[-1], *words[:-1]])
 
-    legal_base, legal = _cut_legal_terms(words)
+    legal_base, legal, other = _cut_legal_terms(words)
     common_prefixes, common_base, common_suffixes = _cut_common(legal_base)
     information = NameInformation(
         source=NameWord(original=original, cleaned=clear_name(original)),
@@ -137,6 +161,7 @@ def _cut_all(name: str) -> NameInformation:
         parenthesis=NameSequence(
             [c for c in extra_words if c.cleaned not in COUNTRIES.mapping]
         ),
+        other=other,
     )
     return _fix_expression_divided(information)
 

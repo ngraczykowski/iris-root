@@ -1,26 +1,38 @@
+import itertools
 from typing import Sequence
 
-from company_name.names.name_information import NameInformation
+from company_name.names.name_information import NameInformation, NameSequence, NameWord
 from company_name.scores.score import Score
-from company_name.utils.clear_name import divide, clear_name
+from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 
 
-def _token_inclusion(first: Sequence[str], second: Sequence[str]) -> bool:
-    return len(first) == 1 and first[0] in second
+def _tokens(name: NameInformation) -> Sequence[NameSequence]:
+    return (
+        name.name(),
+        NameSequence(list(itertools.chain.from_iterable(
+            [NameWord(original=o, cleaned=clear_name(o)) for o in POSSIBLE_SEPARATORS.split(word)]
+            for word in name.name().original_tuple
+        ))),
+    )
+
+
+def _token_inclusion(name: NameSequence, tokens: NameSequence) -> Score:
+    return Score(
+        value=float(len(name) == 1 and name[0] in tokens),
+        compared=(name.original_tuple, tokens.original_tuple)
+    )
 
 
 def token_inclusion_score(first: NameInformation, second: NameInformation) -> Score:
-    original_words = divide(first.source.original), divide(second.source.original)
-    cleaned_words = [[clear_name(w) for w in word if w] for word in original_words]
+    names = first.name(), second.name()
+    if not all(names):
+        return Score(compared=(names[0].original_tuple, names[1].original_tuple))
 
-    words_length = list(sorted(len(w) for w in cleaned_words))
+    words_length = sorted(len(name.original_tuple) for name in names)
     if words_length[0] != 1 or words_length[1] == 1:
-        return Score()
+        return Score(status=Score.ScoreStatus.NOT_APPLICABLE)
 
-    return Score(
-        value=float(
-            _token_inclusion(*cleaned_words)
-            or _token_inclusion(*reversed(cleaned_words))
-        ),
-        compared=(original_words[0], original_words[1]),
+    return max(
+        *(_token_inclusion(first.name(), tokens) for tokens in _tokens(second)),
+        *(reversed(_token_inclusion(second.name(), tokens)) for tokens in _tokens(first))
     )

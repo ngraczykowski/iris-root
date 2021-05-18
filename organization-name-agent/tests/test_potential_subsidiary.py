@@ -11,5 +11,5 @@ def test_potential_subsidiary():
 def test_not_potential_subsidiary():
     result = compare("NOTARIA DAURA & ROMEO S.C.", "NOTARIA DAURA")
     print(result)
-    assert result["potential_subsidiary"].value is None
+    assert result["potential_subsidiary"].value == 0
     assert result["potential_subsidiary"].compared == ((), ())

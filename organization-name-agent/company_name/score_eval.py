@@ -1,4 +1,5 @@
 from company_name.score_outcomes import Outcomes
+from company_name.scores.score import Score
 
 
 def evaluate_scores(scores, feature_cfg):
@@ -8,7 +9,7 @@ def evaluate_scores(scores, feature_cfg):
 
         if not params['active']:
             outcome = Outcomes.DISABLED
-        elif not score_obj.compared[0] and not score_obj.compared[1]:
+        elif score_obj.status is not Score.ScoreStatus.OK:
             outcome = Outcomes.NO_DATA
         elif scores[params['score_name']].value < params['low_thr']:
             outcome = Outcomes.NO_MATCH

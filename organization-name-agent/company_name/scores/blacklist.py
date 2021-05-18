@@ -6,16 +6,24 @@ from .score import Score
 
 
 BLACKLIST = {"gazprom", "vtb"}
-BLACKLIST_REGEX = re.compile(r"\b(" + "|".join(BLACKLIST) + r")\b", re.IGNORECASE)
+BLACKLIST_REGEX = re.compile(
+    r"\b(" + "|".join(BLACKLIST) + r")\b", re.IGNORECASE
+)
 
 
 def _blacklisted(name: str) -> List[str]:
     return BLACKLIST_REGEX.findall(name)
 
 
-def blacklist_score(name: NameInformation) -> Score:
+def blacklist_score(name: NameInformation, other_name: NameInformation) -> Score:
     first_blacklisted = _blacklisted(name.source.cleaned)
+    status = (
+        Score.ScoreStatus.OK
+        if name.source.cleaned
+        else Score.ScoreStatus.recognize(name, other_name)
+    )
     return Score(
-        value=float(bool(first_blacklisted)) if name.source.cleaned else None,
+        status=status,
+        value=float(bool(first_blacklisted)),
         compared=(tuple(first_blacklisted), ()),
     )
