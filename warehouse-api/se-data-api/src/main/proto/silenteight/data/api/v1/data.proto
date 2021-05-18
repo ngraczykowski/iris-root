@@ -12,19 +12,30 @@ option java_package = "com.silenteight.data.api.v1";
 option java_outer_classname = "DataProto";
 option java_multiple_files = true;
 
-message DataIndexRequest {
+message ProductionDataIndexRequest {
   // Request id, if provided, is returned in the response allowing to match request with
-  // a response on the client side. It is a client responsibility to ensure uniqueness.
+  // a response on the client side. It is a client responsibility to ensure its uniqueness.
   string request_id = 1 [(google.api.field_behavior) = OPTIONAL];
-  // Any two alerts with the same name but different analysis name are considered to be
-  // distinct data
+  // Name of the analysis that alerts are part of.
+  string analysis_name = 2 [(google.api.field_behavior) = OPTIONAL];
+  // Alerts that should be stored. The name of the alerts needs to be unique globally.
+  repeated Alert alerts = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message SimulationDataIndexRequest {
+  // Request id, if provided, is returned in the response allowing to match request with
+  // a response on the client side. It is a client responsibility to ensure its uniqueness.
+  string request_id = 1 [(google.api.field_behavior) = OPTIONAL];
+  // Name of the analysis that alerts are part of.
   string analysis_name = 2 [(google.api.field_behavior) = REQUIRED];
-  // Alerts that should be stored.
+  // Alerts that should be stored. The name of the alert needs to be unique within a specific analysis.
+  // Any two alerts with the same name but different analysis name are considered to be
+  // distinct data.
   repeated Alert alerts = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message Alert {
-  // The unique name o the alert within specific analysis.
+  // Name of the alert
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   // Payload of the alert that should be stored.
   // If an alert with this name is already stored, the payload will be merged into an existing
