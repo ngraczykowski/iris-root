@@ -1,10 +1,13 @@
 {
   "attributes": {
-    "title": "all-alerts-search",
+    "title": "ai-resoning-wl",
     "description": "",
     "hits": 0,
     "columns": [
-      "_source"
+      "_id",
+      "match_id",
+      "match_solution",
+      "index_timestamp"
     ],
     "sort": [],
     "version": 1,
@@ -16,7 +19,7 @@
     {
       "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
       "type": "index-pattern",
-      "id": "alerts-index"
+      "id": "all_itest_simulation"
     }
   ]
 }

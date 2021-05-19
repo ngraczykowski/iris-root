@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.HashMap;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.PostHttpRequest.builder;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.KIBANA_INDEX_PATTERN_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
 
 @RequiredArgsConstructor
 public class OpendistroKibanaTestClient {
@@ -16,7 +18,7 @@ public class OpendistroKibanaTestClient {
 
   public void createKibanaIndex(String tenant, byte[] payload) {
     opendistroKibanaClient.post(builder()
-        .endpoint("/api/saved_objects/index-pattern/alerts-index")
+        .endpoint("/api/saved_objects/index-pattern/" + KIBANA_INDEX_PATTERN_NAME)
         .tenant(tenant)
         .payload(payload)
         .build(), MAP_TYPE);
@@ -24,7 +26,7 @@ public class OpendistroKibanaTestClient {
 
   public void createSavedSearch(String tenant, byte[] payload) {
     opendistroKibanaClient.post(builder()
-        .endpoint("/api/saved_objects/search/all-alerts-search")
+        .endpoint("/api/saved_objects/search/" + SAVED_SEARCH)
         .tenant(tenant)
         .payload(payload)
         .build(), MAP_TYPE);

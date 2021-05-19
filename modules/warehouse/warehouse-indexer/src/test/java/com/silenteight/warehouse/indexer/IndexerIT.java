@@ -36,7 +36,7 @@ import static org.awaitility.Awaitility.await;
     PostgresTestInitializer.class
 })
 @AutoConfigureDataJpa
-@ActiveProfiles({ "jpa-test" })
+@ActiveProfiles("jpa-test")
 class IndexerIT {
 
   private static final String PRODUCTION_ANALYSIS_ID = "ef649029-70e5-49b3-918c-8f5f621cd7bc";

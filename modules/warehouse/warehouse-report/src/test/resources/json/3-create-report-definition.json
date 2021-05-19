@@ -1,13 +1,13 @@
 {
   "report_params":{
-    "report_name":"all-alerts-report",
+    "report_name":"ai-reasoning-wl-report-def",
     "report_source":"Saved search",
     "description":"",
     "core_params":{
-      "base_url":"/app/discover#/view/all-alerts-search",
+      "base_url":"/app/discover#/view/ai-resoning-wl-search-id",
       "report_format":"csv",
       "time_duration":"PT262992H",
-      "saved_search_id":"all-alerts-search",
+      "saved_search_id":"ai-resoning-wl-search-id",
       "limit":10000,
       "excel":true
     }

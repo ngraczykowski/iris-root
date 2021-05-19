@@ -4,7 +4,7 @@ set -e -o pipefail
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P )"
 cd "${CURRENTDIR}/../.."
 
-curl -X POST 'http://localhost:5601/api/saved_objects/index-pattern/alerts-index' \
+curl -X POST 'http://localhost:5601/api/saved_objects/index-pattern/all_itest_simulation' \
      --silent --show-error --fail \
      -u admin:admin \
      -H 'kbn-xsrf: true' \
