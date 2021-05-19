@@ -13,17 +13,42 @@ servers:
         default: http://localhost:24291
 
 paths:
-  /reports?analysis={analysis/id}:
+  /analysis/{analysisId}/tenant:
     get:
-      description: Returns a list of reports for specific analysis
+      description: Returns a name of the tenat in the Kibana.
       parameters:
-        - in: query
-          name: analysis/id
+        - in: path
+          name: analysisId
           required: true
           schema:
             type: string
-          description: 'Analysis resource Id'
-          example: 'analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns a name of the tenat in the Kibana.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+                "sim_simulation_49"
+
+
+  /analysis/{analysisId}/reports:
+    get:
+      description: Returns a list of reports for specific analysis
+      parameters:
+      - in: path
+        name: analysisId
+        required: true
+        schema:
+          type: string
+        allowEmptyValue: false
+        description: 'Analysis Id'
+        example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
       responses:
         200:
           description: Returns a list of reports
@@ -33,11 +58,30 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Report'
+              example:
+                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  title: 'AI Reasoning'
+                  description: 'Ai Reasoning report'
+                  reportType: 'AI_REASONING'
+                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  title: 'Accuracy'
+                  description: 'Accuracy report'
+                  reportType: 'ACCURACY'
 
-  /reports/{id}:
+  /analysis/{analysisId}/reports/{id}:
     get:
-      description: Returns simulation report
+      description: Returns simulation report. You will have this URL in the field `name` on the list of reports.
       parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          allowEmptyValue: false
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         - in: path
           name: id
           required: true
@@ -47,26 +91,144 @@ paths:
           example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
       responses:
         200:
-          description: Returns a report
+          description: Returns a report.
           content:
             text/csv:
               schema:
                 type: string
                 format: binary
 
+  /analysis/production:synchronizePeriodic:
+    post:
+      description: Synchronize production reports.
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        201:
+          description: OK
+
+  /analysis/production/reports:
+    get:
+      description: Return a list of reports based on production data.
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ReportType'
+          style: form
+          explode: false
+          description: Report type
+      responses:
+        200:
+          description: List of reports to download.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+              example:
+                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  name: '/analysis/production/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  title: 'AI Reasoning'
+                  description: 'Last month'
+                  reportType: 'AI_REASONING'
+                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  name: '/analysis/production/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                  title: 'AI Reasoning'
+                  description: 'Last 3 months'
+                  reportType: 'AI_REASONING'
+
+
+  /analysis/production/definitions/{id}/reports:
+    post:
+      description: Generate report instance.
+      parameters:
+        - name: id
+          in: path
+          description: Report definition Id.
+          required: true
+          schema:
+            type: string
+          style: simple
+          explode: false
+          example: a9b45451d17b4708d8ca
+      responses:
+        303:
+          description: Redirect to the report instance.
+          headers:
+            Location:
+              description: The report will be available over an URL address /analysis/production/definitions/a9b45451d17b4708d8ca/reports/20200414T220523
+              schema:
+                type: string
+                example: reports/20200414T220523
+
+
+
+  /analysis/production/definitions/{id}/reports/{timestamp}:
+    get:
+      description: Returns production report
+      parameters:
+        - in: path
+          name: id
+          description: Report definition id.
+          required: true
+          schema:
+            type: string
+          example: a9b45451d17b4708d8ca
+        - in: path
+          name: timestamp
+          description: Report instance timestamp. This value allows downloading a report in a specific time range (e.g. 1h since generating).
+          required: true
+          schema:
+            type: string
+          example: 20200414T220523
+      responses:
+        102:
+          description: Processing. The report is still generating. Try again later.
+        200:
+          description: Returns a report.
+          content:
+            text/csv:
+              schema:
+                format: binary
+                type: string
+        410:
+          description: Report for a specific timestamp is no longer available.
+
 components:
   schemas:
+
+    ReportType:
+      type: string
+      enum:
+        - AI_REASONING
+        - ACCURACY
 
     Report:
       type: object
       properties:
         id:
           type: string
-        fileName:
+        name:
           type: string
-        createdAt:
+        title:
           type: string
-      example:
-        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        fileName: 'rbScorer_2004-02-15.csv'
-        createdAt: '2004-02-15T15:19:21Z'
+        description:
+          type: string
+        reportType:
+          $ref: '#/components/schemas/ReportType'
+      examples:
+        - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          name: '/analysis/7afe9a43-f29c-4752-ba0a-057e5efee616/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          title: 'AI Reasoning'
+          description: 'Last month'
+          reportType: 'AI_REASONING'
+
