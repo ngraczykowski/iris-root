@@ -4,13 +4,16 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.keycloak.admin.client.resource.RolesResource;
+import org.keycloak.admin.client.resource.RoleMappingResource;
+import org.keycloak.admin.client.resource.RoleScopeResource;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,22 +31,29 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class KeycloakRolesValidatorTest {
 
-  @Mock
-  private RolesResource rolesResource;
-
   @InjectMocks
   private KeycloakRolesValidator underTest;
 
+  @Mock
+  private ClientQuery clientQuery;
+  @Mock
+  private RoleMappingResource roleMappingResource;
+  @Mock
+  private RoleScopeResource roleScopeResource;
+
   @Test
   void noRolesInKeycloak_returnsError() {
-    Optional<RolesDontExistError> error = underTest.validate(of(Fixtures.ANALYST));
+    given(clientQuery.getByClientId(Fixtures.SCOPE)).willReturn(clientRepresentation());
+    given(roleMappingResource.clientLevel(Fixtures.CLIENT_ID)).willReturn(roleScopeResource);
+
+    Optional<RolesDontExistError> error = underTest.validate(Fixtures.SCOPE, of(Fixtures.ANALYST));
 
     assertThat(error).isNotEmpty();
   }
 
   @Test
   void emptySetPassed_throwsException() {
-    Executable when = () -> underTest.validate(emptySet());
+    Executable when = () -> underTest.validate(Fixtures.SCOPE, emptySet());
 
     assertThrows(IllegalArgumentException.class, when);
   }
@@ -51,6 +61,8 @@ class KeycloakRolesValidatorTest {
   @NoArgsConstructor(access = AccessLevel.NONE)
   private static final class Fixtures {
 
+    static final String CLIENT_ID = "b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
+    static final String SCOPE = "frontend";
     static final String ANALYST = "Analyst";
     static final String MAKER = "Maker";
     static final String APPROVER = "Approver";
@@ -59,32 +71,44 @@ class KeycloakRolesValidatorTest {
     static final RoleRepresentation MAKER_ROLE = new RoleRepresentation(MAKER, null, false);
   }
 
+  private static ClientRepresentation clientRepresentation() {
+    ClientRepresentation client = new ClientRepresentation();
+    client.setId(Fixtures.CLIENT_ID);
+    client.setClientId(Fixtures.SCOPE);
+    return client;
+  }
+
   @Nested
   class GivenAnalystAndMakerRoleInKeycloak {
 
     @BeforeEach
     void setUp() {
-      given(rolesResource.list()).willReturn(List.of(Fixtures.ANALYST_ROLE, Fixtures.MAKER_ROLE));
+      given(clientQuery.getByClientId(Fixtures.SCOPE)).willReturn(clientRepresentation());
+      given(roleMappingResource.clientLevel(Fixtures.CLIENT_ID)).willReturn(roleScopeResource);
+      given(roleScopeResource.listAll()).willReturn(
+          List.of(Fixtures.ANALYST_ROLE, Fixtures.MAKER_ROLE));
     }
 
     @Test
     void approverAndMakerRolesPassed_returnsError() {
       Optional<RolesDontExistError> error =
-          underTest.validate(of(Fixtures.APPROVER, Fixtures.MAKER));
+          underTest.validate(Fixtures.SCOPE, of(Fixtures.APPROVER, Fixtures.MAKER));
 
       assertThat(error).isNotEmpty();
     }
 
     @Test
     void analystRolePassed_returnsNoError() {
-      Optional<RolesDontExistError> error = underTest.validate(of(Fixtures.ANALYST));
+      Optional<RolesDontExistError> error = underTest.validate(
+          Fixtures.SCOPE, of(Fixtures.ANALYST));
 
       assertThat(error).isEmpty();
     }
 
     @Test
     void approverRolePassed_returnsError() {
-      Optional<RolesDontExistError> error = underTest.validate(of(Fixtures.APPROVER));
+      Optional<RolesDontExistError> error =
+          underTest.validate(Fixtures.SCOPE, of(Fixtures.APPROVER));
 
       assertThat(error).isNotEmpty();
     }
@@ -92,7 +116,7 @@ class KeycloakRolesValidatorTest {
     @Test
     void analystAndMakerRolesPassed_returnsNoError() {
       Optional<RolesDontExistError> error =
-          underTest.validate(of(Fixtures.ANALYST, Fixtures.MAKER));
+          underTest.validate(Fixtures.SCOPE, of(Fixtures.ANALYST, Fixtures.MAKER));
 
       assertThat(error).isEmpty();
     }

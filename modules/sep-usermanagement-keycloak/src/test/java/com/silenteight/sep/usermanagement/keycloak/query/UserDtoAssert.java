@@ -6,7 +6,8 @@ import com.silenteight.sep.usermanagement.api.dto.UserDto;
 import org.assertj.core.api.AbstractAssert;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -20,8 +21,8 @@ class UserDtoAssert extends AbstractAssert<UserDtoAssert, UserDto> {
     return new UserDtoAssert(userDto);
   }
 
-  UserDtoAssert hasRoles(Collection<String> assertedRoles) {
-    assertThat(actual.getRoles()).containsAll(assertedRoles);
+  UserDtoAssert hasRoles(Map<String, List<String>> assertedRoles) {
+    assertThat(actual.getRoles()).isEqualTo(assertedRoles);
 
     return this;
   }

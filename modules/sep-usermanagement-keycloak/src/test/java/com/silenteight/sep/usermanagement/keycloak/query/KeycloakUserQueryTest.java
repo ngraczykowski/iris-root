@@ -4,6 +4,7 @@ import com.silenteight.sep.base.common.time.TimeConverter;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 import com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.KeycloakUser;
+import com.silenteight.sep.usermanagement.keycloak.query.role.InMemoryTestRoleProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,12 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTest.KeycloakUserQueryUserDtoAssert.assertThatUserDto;
+import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.SENS_USER_ROLE_SCOPE;
 import static java.lang.Integer.MAX_VALUE;
 import static java.time.OffsetDateTime.now;
 import static org.assertj.core.api.Assertions.*;
@@ -64,9 +67,9 @@ class KeycloakUserQueryTest {
 
     roleProvider.add(
         KeycloakUserQueryTestFixtures.SENS_USER.getUserId(),
-        KeycloakUserQueryTestFixtures.SENS_USER_ROLES);
+        Map.of(SENS_USER_ROLE_SCOPE, KeycloakUserQueryTestFixtures.SENS_USER_ROLES));
 
-    Collection<UserDto> actual = underTest.listAll();
+    Collection<UserDto> actual = underTest.listAll(Set.of(SENS_USER_ROLE_SCOPE));
 
     assertThat(actual)
         .hasSize(2)
@@ -95,7 +98,7 @@ class KeycloakUserQueryTest {
 
     given(usersResource.list(0, MAX_VALUE)).willReturn(List.of(userRepresentation));
 
-    List<UserDto> usersList = underTest.listAll();
+    List<UserDto> usersList = underTest.listAll(Set.of(SENS_USER_ROLE_SCOPE));
 
     assertThat(usersList).hasSize(1);
 
@@ -120,7 +123,7 @@ class KeycloakUserQueryTest {
     private KeycloakUserQueryUserDtoAssert isEqualTo(KeycloakUser keycloakUser) {
       UserRepresentation userRepresentation = keycloakUser.getUserRepresentation();
       hasUsername(userRepresentation.getUsername());
-      hasRoles(userRepresentation.getRealmRoles());
+      hasRoles(userRepresentation.getClientRoles());
       hasDisplayName(userRepresentation.getFirstName());
       hasOrigin(getOrigin(userRepresentation));
 

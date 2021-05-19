@@ -1,5 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +16,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
@@ -28,31 +30,35 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 @RequiredArgsConstructor
 public class KeycloakUserQuery implements UserQuery {
 
+  @NonNull
   private final UsersResource usersResource;
+  @NonNull
   private final LastLoginTimeProvider lastLoginTimeProvider;
+  @NonNull
   private final RolesProvider userRolesProvider;
+  @NonNull
   private final TimeConverter timeConverter;
 
   @Override
-  public List<UserDto> listAll() {
+  public List<UserDto> listAll(Set<String> roleScopes) {
     log.info("Listing all users");
     return usersResource
         .list(0, MAX_VALUE)
         .stream()
-        .map(this::mapToDto)
+        .map(userRepresentation -> mapToDto(userRepresentation, roleScopes))
         .collect(toUnmodifiableList());
   }
 
   @Override
-  public Optional<UserDto> find(String username) {
+  public Optional<UserDto> find(String username, Set<String> roleScopes) {
     return usersResource
         .search(username)
         .stream()
-        .map(this::mapToDto)
+        .map(userRepresentation -> mapToDto(userRepresentation, roleScopes))
         .findFirst();
   }
 
-  UserDto mapToDto(UserRepresentation userRepresentation) {
+  UserDto mapToDto(UserRepresentation userRepresentation, Set<String> roleClientIds) {
     UserDto userDto = new UserDto();
 
     userDto.setCreatedAt(
@@ -67,7 +73,7 @@ public class KeycloakUserQuery implements UserQuery {
         .getForUserId(userId)
         .ifPresent(userDto::setLastLoginAt);
 
-    userDto.setRoles(userRolesProvider.getForUserId(userId));
+    userDto.setRoles(userRolesProvider.getForUserId(userId, roleClientIds));
     userDto.setOrigin(getOrigin(userRepresentation));
 
     return userDto;

@@ -8,15 +8,16 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
-import com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
+import java.util.Map;
 import java.util.Set;
 
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
+import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sep.usermanagement.keycloak.update.KeycloakUserLocker.unlock;
 import static java.lang.Boolean.FALSE;
 
@@ -32,26 +33,29 @@ class KeycloakUserUpdater {
   private final TimeSource timeSource;
 
   public void update(UpdatedUser updatedUser) {
-    log.info(LogMarkers.USER_MANAGEMENT, "Updating user. updatedUser={}", updatedUser);
+    log.info(USER_MANAGEMENT, "Updating user. updatedUser={}", updatedUser);
 
     UserResource userResource = keycloakUserRetriever.retrieve(updatedUser.getUsername());
     UserRepresentation userRepresentation = userResource.toRepresentation();
-    if (updatedUser.getDisplayName() != null) {
+
+    if (updatedUser.getDisplayName() != null)
       userRepresentation.setFirstName(updatedUser.getDisplayName());
-    }
-    if (updatedUser.getRoles() != null) {
+
+    if (updatedUser.getRoles() != null)
       assignRoles(userRepresentation.getId(), updatedUser.getRoles());
-    }
-    Boolean locked = updatedUser.getLocked();
-    if (locked != null) {
-      if (updatedUser.getLocked()) {
+
+    if (updatedUser.getLocked() != null) {
+      if (updatedUser.getLocked())
         lock(userRepresentation);
-      } else {
+      else
         unlock(userRepresentation);
-      }
     }
 
     userResource.update(userRepresentation);
+  }
+
+  private void assignRoles(String userId, Map<String, Set<String>> roles) {
+    roleAssigner.assignRoles(KeycloakUserId.of(userId), roles);
   }
 
   private void lock(UserRepresentation userRepresentation) {
@@ -61,9 +65,5 @@ class KeycloakUserUpdater {
 
   private String lockedAtTime() {
     return timeSource.offsetDateTime().toString();
-  }
-
-  public void assignRoles(String id, Set<String> roles) {
-    roleAssigner.assignRoles(KeycloakUserId.of(id), roles);
   }
 }
