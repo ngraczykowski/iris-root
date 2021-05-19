@@ -1,31 +1,26 @@
 package com.silenteight.serp.governance.agent.details;
 
-import static java.util.List.of;
+import com.silenteight.serp.governance.agent.details.dto.AgentDetailsDto;
+
+import java.util.List;
+
+import static com.silenteight.serp.governance.agent.domain.file.configuration.AgentConfigurationDetailsFixture.AGENT_CONF_DATE_ENT_NORMAL;
+import static com.silenteight.serp.governance.agent.domain.file.configuration.AgentConfigurationDetailsFixture.AGENT_CONF_DATE_ENT_STRICT;
+import static com.silenteight.serp.governance.agent.domain.file.configuration.AgentConfigurationDetailsFixture.AGENT_CONF_DATE_INDV_NORMAL;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.*;
 
 public class AgentDetailsFixture {
 
-  public static final String AGENT_FEATURE_NAME = "features/name";
-  public static final String AGENT_FEATURE_DATE = "features/dob";
-  public static final String AGENT_FEATURE_DOCUMENT = "features/dob";
-  public static final String AGENT_FEATURE_NATIONALITY = "features/nationality";
-  public static final String AGENT_FEATURE_RESIDENCY = "features/residency";
-  public static final String AGENT_FEATURE_GENDER = "features/gender";
-  public static final String AGENT_RESPONSE_MATCH = "MATCH";
-  public static final String AGENT_RESPONSE_WEAK_MATCH = "WEAK_MATCH";
-  public static final String AGENT_RESPONSE_NO_MATCH = "NO_MATCH";
-  public static final String AGENT_RESPONSE_NO_DATA = "NO_DATA";
-  public static final String AGENT_RESPONSE_PERFECT_MATCH = "PERFECT_MATCH";
-  public static final String AGENT_RESPONSE_DIGIT_MATCH = "DIGIT_MATCH";
-  public static final String AGENT_RESPONSE_WEAK_DIGIT_MATCH = "WEAK_DIGIT_MATCH";
-
-
-  public static final AgentDetailDto NAME_AGENT_DETAIL = AgentDetailDto.builder()
-      .features(of(AGENT_FEATURE_NAME))
-      .responses(of(AGENT_RESPONSE_MATCH, AGENT_RESPONSE_NO_DATA))
-      .build();
-
-  public static final AgentDetailDto DATE_AGENT_DETAIL = AgentDetailDto.builder()
-      .features(of(AGENT_FEATURE_DATE))
-      .responses(of(AGENT_RESPONSE_NO_DATA))
+  public static final AgentDetailsDto DETAILS_DATE_AGENT_DTO = AgentDetailsDto.builder()
+      .id(DATE_AGENT_ID)
+      .agentName(DATE_AGENT_AGENT_NAME)
+      .agentVersion(AGENT_VERSION)
+      .name(DATE_AGENT_NAME)
+      .features(DATE_AGENT_DETAIL_DTO.getFeatures())
+      .configurations(List.of(
+          AGENT_CONF_DATE_ENT_NORMAL,
+          AGENT_CONF_DATE_ENT_STRICT,
+          AGENT_CONF_DATE_INDV_NORMAL))
+      .responses(List.of(AGENT_RESPONSE_MATCH, AGENT_RESPONSE_WEAK_MATCH))
       .build();
 }

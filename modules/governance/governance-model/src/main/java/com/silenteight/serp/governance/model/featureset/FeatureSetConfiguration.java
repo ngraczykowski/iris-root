@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.model.featureset;
 
-import com.silenteight.serp.governance.agent.AgentsRegistry;
+import com.silenteight.serp.governance.agent.domain.AgentsRegistry;
 import com.silenteight.serp.governance.model.ModelProperties;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
