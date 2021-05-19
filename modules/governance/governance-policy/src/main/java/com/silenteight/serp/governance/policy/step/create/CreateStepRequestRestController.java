@@ -3,7 +3,6 @@ package com.silenteight.serp.governance.policy.step.create;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.policy.domain.StepType;
 import com.silenteight.serp.governance.policy.step.create.dto.CreateStepDto;
 
 import org.springframework.http.ResponseEntity;
@@ -39,7 +38,7 @@ class CreateStepRequestRestController {
         .description(createStepDto.getDescription())
         .solution(createStepDto.getSolution())
         .createdBy(authentication.getName())
-        .stepType(StepType.BUSINESS_LOGIC)
+        .stepType(createStepDto.getType())
         .build();
     createStepUseCase.activate(command);
     return ResponseEntity.noContent().build();

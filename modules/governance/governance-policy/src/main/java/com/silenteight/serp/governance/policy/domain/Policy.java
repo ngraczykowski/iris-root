@@ -12,6 +12,8 @@ import java.util.*;
 import javax.persistence.*;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
 import static javax.persistence.CascadeType.ALL;
@@ -186,6 +188,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     assertSameSize(stepsOrder);
     assertSameUuids(stepsOrder);
     getSteps().forEach(step -> updateOrderOfStep(stepsOrder, user, step));
+    assertStepOrderHierarchy();
     setUpdatedBy(user);
   }
 
@@ -221,5 +224,19 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
   boolean hasPolicyId(@NonNull UUID policyId) {
     return policyId.equals(getPolicyId());
+  }
+
+  private void assertStepOrderHierarchy() {
+    int minSortOrderRegular = Integer.MAX_VALUE;
+    int maxSortOrderNarrow = 0;
+    for (Step step : steps) {
+      if (step.isNarrowStep())
+        maxSortOrderNarrow =  max(step.getSortOrder(), maxSortOrderNarrow);
+      else
+        minSortOrderRegular = min(step.getSortOrder(), minSortOrderRegular);
+    }
+
+    if (maxSortOrderNarrow > minSortOrderRegular)
+        throw new NarrowStepsOrderHierarchyMismatch(policyId);
   }
 }

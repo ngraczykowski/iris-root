@@ -345,7 +345,7 @@ components:
 
     StepType:
       type: string
-      enum: [ NARROW, NORMAL ]
+      enum: [ NARROW, BUSINESS_LOGIC ]
 
     PolicyState:
       type: string

@@ -286,13 +286,13 @@ public class PolicyService {
   }
 
   @Transactional
-  public void setStepsOrder(SetStepsOrderRequest setStepsOrderReqest) {
-    setStepsOrderReqest.preAudit(auditingLogger::log);
-    Policy policy = policyRepository.getByPolicyId(setStepsOrderReqest.getPolicyId());
+  public void setStepsOrder(SetStepsOrderRequest setStepsOrderRequest) {
+    setStepsOrderRequest.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(setStepsOrderRequest.getPolicyId());
     policy.updateStepsOrder(
-        setStepsOrderReqest.getStepsOrder(), setStepsOrderReqest.getUpdatedBy());
+        setStepsOrderRequest.getStepsOrder(), setStepsOrderRequest.getUpdatedBy());
     policyRepository.save(policy);
-    setStepsOrderReqest.postAudit(auditingLogger::log);
+    setStepsOrderRequest.postAudit(auditingLogger::log);
   }
 
   @Transactional
