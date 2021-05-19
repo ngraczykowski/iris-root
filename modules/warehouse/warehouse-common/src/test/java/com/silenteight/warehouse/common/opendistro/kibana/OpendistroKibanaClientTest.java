@@ -44,6 +44,7 @@ class OpendistroKibanaClientTest {
   public void cleanup() {
     safeDeleteObject(KIBANA_INDEX_PATTERN, KIBANA_INDEX_ID);
     safeDeleteObject(SEARCH, SEARCH_ID);
+    removeReportDefinitions();
   }
 
   @Test
@@ -121,5 +122,11 @@ class OpendistroKibanaClientTest {
     } catch (OpendistroKibanaClientException e) {
       log.debug("item not present type={}, id={}", type, id);
     }
+  }
+
+  private void removeReportDefinitions() {
+    opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).forEach(
+        report -> opendistroKibanaClient.deleteReportDefinition(ADMIN_TENANT, report.getId())
+    );
   }
 }

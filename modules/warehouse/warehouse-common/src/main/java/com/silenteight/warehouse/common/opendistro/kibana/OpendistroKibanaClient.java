@@ -37,14 +37,20 @@ public class OpendistroKibanaClient {
   private static final String HEADER_ORIGIN = "Origin";
   private static final String URL_REPORT_DEFINITION_LIST =
       "/api/reporting/reportDefinitions";
+  private static final String URL_REPORT_DEFINITION =
+      "/api/reporting/reportDefinitions/{reportDefinitionId}";
   private static final String URL_CREATE_REPORT_DEFINITION =
       "/api/reporting/reportDefinition";
-  private static final String URL_GENERATE_REPORT =
+  private static final String URL_DOWNLOAD_REPORT =
       "/api/reporting/generateReport/{reportInstanceId}";
+  private static final String URL_CREATE_REPORT =
+      "/api/reporting/generateReport/{reportDefinitionId}";
   private static final String URL_FIND_SAVED_OBJECT = "/api/saved_objects/_find";
   private static final String URL_SAVED_OBJECT = "/api/saved_objects/{objectType}/{objectId}";
   private static final String PARAM_OBJECT_TYPE = "objectType";
   private static final String PARAM_OBJECT_ID = "objectId";
+  private static final String PARAM_REPORT_INSTANCE_ID = "reportInstanceId";
+  private static final String PARAM_REPORT_DEFINITION_ID = "reportDefinitionId";
   private static final String QUERY_PARAM_TIMEZONE = "timezone";
   private static final String QUERY_PARAM_TYPE = "type";
   private static final String QUERY_PARAM_PER_PAGE = "per_page";
@@ -58,13 +64,13 @@ public class OpendistroKibanaClient {
   public KibanaReportDto getReportContent(String tenant, String reportInstanceId) {
     TypeReference<ReportContentResponse> typeRef = new TypeReference<>() {};
 
-    String path = fromUriString(URL_GENERATE_REPORT)
+    String path = fromUriString(URL_DOWNLOAD_REPORT)
         .queryParam(QUERY_PARAM_TIMEZONE, timezone)
-        .buildAndExpand(of("reportInstanceId", reportInstanceId))
+        .buildAndExpand(of(PARAM_REPORT_INSTANCE_ID, reportInstanceId))
         .toUriString();
 
     GetHttpRequest request = new GetHttpRequest(path, tenant);
-    ReportContentResponse report = this.get(request, typeRef);
+    ReportContentResponse report = get(request, typeRef);
 
     String data = ofNullable(report.getData())
         .orElseThrow(() -> new KibanaReportGenerationFailedException(reportInstanceId));
@@ -200,18 +206,43 @@ public class OpendistroKibanaClient {
   public String createReportDefinition(String tenant, ReportDefinitionDto reportDefinitionDto) {
     TypeReference<ReportDefinitionCreated> typeRef = new TypeReference<>() {};
 
-    reportDefinitionDto.clearOrigin();
-
     PostHttpRequest request = PostHttpRequest.builder()
         .endpoint(URL_CREATE_REPORT_DEFINITION)
         .tenant(tenant)
-        .origin(reportDefinitionDto.getOrigin())
         .payload(objectMapper.writeValueAsBytes(reportDefinitionDto.getReportDefinitionDetails()))
         .build();
 
     return post(request, typeRef)
         .getSchedulerResponse()
         .getReportDefinitionId();
+  }
+
+  public void createReportInstance(String tenant, String reportDefinitionId) {
+    TypeReference<Void> typeRef = new TypeReference<>() {};
+
+    String path = fromUriString(URL_CREATE_REPORT)
+        .queryParam(QUERY_PARAM_TIMEZONE, timezone)
+        .buildAndExpand(of(PARAM_REPORT_DEFINITION_ID, reportDefinitionId))
+        .toUriString();
+
+    PostHttpRequest request = PostHttpRequest.builder()
+        .endpoint(path)
+        .tenant(tenant)
+        .build();
+
+    post(request, typeRef);
+  }
+
+  public void deleteReportDefinition(String tenant, String reportDefinitionId) {
+    TypeReference<Void> typeRef = new TypeReference<>() {};
+
+    String path = fromUriString(URL_REPORT_DEFINITION)
+        .buildAndExpand(of(
+            PARAM_REPORT_DEFINITION_ID, reportDefinitionId))
+        .toUriString();
+
+    DeleteHttpRequest request = new DeleteHttpRequest(path, tenant);
+    delete(request, typeRef);
   }
 
   public void deleteSavedObjects(String tenant, SavedObjectType type, String objectId) {
@@ -255,9 +286,6 @@ public class OpendistroKibanaClient {
         .header(HEADER_CONTENT_TYPE, APPLICATION_JSON_VALUE)
         .header(HEADER_SECURITY_TENANT, postHttpRequest.getTenant())
         .POST(bodyPublisherInUse);
-
-    ofNullable(postHttpRequest.getOrigin())
-        .ifPresent(origin -> httpRequestBuilder.header(HEADER_ORIGIN, origin));
 
     return execute(httpRequestBuilder.build(), type);
   }

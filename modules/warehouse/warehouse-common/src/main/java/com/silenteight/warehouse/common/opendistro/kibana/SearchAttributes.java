@@ -6,11 +6,14 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS;
 
 @Data
 @Builder
@@ -21,14 +24,17 @@ class SearchAttributes {
   @Nullable
   String title;
   @Nullable
+  @JsonInclude(ALWAYS)
   String description;
   @Nullable
+  @JsonInclude(ALWAYS)
   Integer hits;
   @Nullable
   @Default
   List<String> columns = List.of();
   @Nullable
   @Default
+  @JsonInclude(ALWAYS)
   List<String> sort = List.of();
   @Nullable
   @Default

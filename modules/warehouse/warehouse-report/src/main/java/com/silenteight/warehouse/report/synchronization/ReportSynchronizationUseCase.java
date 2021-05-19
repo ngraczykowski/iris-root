@@ -39,7 +39,7 @@ public class ReportSynchronizationUseCase {
   }
 
   private Set<String> getNewReportIds() {
-    Set<String> allKibanaReportInstanceIds = reportingService.getReportsId(productionTenant);
+    Set<String> allKibanaReportInstanceIds = reportingService.getReportIds(productionTenant);
     return reportSynchronizationService.filterNew(allKibanaReportInstanceIds);
   }
 

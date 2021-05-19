@@ -31,7 +31,7 @@ public class ReportingService {
         .build();
   }
 
-  public Set<String> getReportsId(String tenant) {
+  public Set<String> getReportIds(String tenant) {
     ListReportsInstancesRequest listReportsInstancesRequest = ListReportsInstancesRequest.builder()
         .tenant(tenant)
         .build();

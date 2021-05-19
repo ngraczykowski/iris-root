@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
@@ -104,13 +105,14 @@ class ReportIT {
     createKibanaIndex();
     createSavedSearch();
     generateReport(createReportDefinition());
-    waitForReportInstances(1);
+    waitForReportInstances(1, ADMIN_TENANT);
   }
 
   @AfterEach
   public void cleanup() {
     removeSavedSearch();
     removeKibanaIndex();
+    removeReportDefinitions();
   }
 
   // TODO: This test is going to be simplified when entire use case is ready (WEB-976)
@@ -129,6 +131,13 @@ class ReportIT {
     var reportMapping =
         tenantService.copyReportDefinition(ADMIN_TENANT, OTHER_TENANT, searchMapping);
 
+    waitForReportDefinitions(reportMapping.size(), OTHER_TENANT);
+
+    reportMapping.values().forEach(reportDefinitionId ->
+        opendistroKibanaClient.createReportInstance(OTHER_TENANT, reportDefinitionId));
+
+    waitForReportInstances(reportMapping.size(), OTHER_TENANT);
+
     //then
     var tenants = opendistroKibanaClient.listKibanaIndexPattern(OTHER_TENANT, 10);
     assertThat(tenants).hasSize(1);
@@ -136,12 +145,13 @@ class ReportIT {
     var clonedSearchObjects = opendistroKibanaClient.listSavedSearchDefinitions(OTHER_TENANT, 20);
     assertThat(clonedSearchObjects).hasSize(1);
 
-    waitForReportDefinitions(reportMapping.size(), OTHER_TENANT);
-
     var reportDefinitions = opendistroKibanaClient.listReportDefinitions(OTHER_TENANT);
     assertThat(reportDefinitions)
         .extracting(ReportDefinitionDto::getId)
         .containsAll(reportMapping.values());
+
+    Set<String> reportIds = reportingService.getReportIds(OTHER_TENANT);
+    assertThat(reportIds).hasSize(1);
   }
 
   @Test
@@ -193,10 +203,10 @@ class ReportIT {
     kibanaTestClient.generateReport(ADMIN_TENANT, reportDefinitionId);
   }
 
-  private void waitForReportInstances(int minCount) {
+  private void waitForReportInstances(int minCount, String tenant) {
     await()
         .atMost(5, SECONDS)
-        .until(() -> reportingService.getReportsId(ADMIN_TENANT).size() >= minCount);
+        .until(() -> reportingService.getReportIds(ADMIN_TENANT).size() >= minCount);
   }
 
   private void waitForReportDefinitions(int minCount, String tenant) {
@@ -253,5 +263,11 @@ class ReportIT {
 
   private void removeSavedSearch() {
     opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVED_SEARCH);
+  }
+
+  private void removeReportDefinitions() {
+    opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).forEach(
+        report -> opendistroKibanaClient.deleteReportDefinition(ADMIN_TENANT, report.getId())
+    );
   }
 }
