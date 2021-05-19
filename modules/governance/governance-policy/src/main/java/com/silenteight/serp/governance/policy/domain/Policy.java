@@ -214,4 +214,12 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     assertAllowedStateChange(ARCHIVED, SAVED, OBSOLETE);
     setState(ARCHIVED);
   }
+
+  void assertCanBeDeleted() {
+    assertEditState();
+  }
+
+  boolean hasPolicyId(@NonNull UUID policyId) {
+    return policyId.equals(getPolicyId());
+  }
 }

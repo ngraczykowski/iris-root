@@ -232,6 +232,7 @@ sep.auth:
       - "EDIT_POLICY"
       - "CLONE_POLICY"
       - "CREATE_POLICY"
+      - "DELETE_POLICY"
     MANAGE_STEPS:
       - "EDIT_STEPS_LOGIC"
       - "CREATE_STEP"

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.details.PolicyDetailsRequestQuery;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.exception.PolicyNotFoundException;
 import com.silenteight.serp.governance.policy.featurevector.PolicyByIdQuery;
 import com.silenteight.serp.governance.policy.list.ListPoliciesRequestQuery;
 import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
@@ -58,6 +59,8 @@ class PolicyQuery implements
 
   @Override
   public PolicyDto details(UUID id) {
-    return policyRepository.getByPolicyId(id).toDto();
+    return policyRepository
+        .findByPolicyId(id).orElseThrow(() -> new PolicyNotFoundException(id))
+        .toDto();
   }
 }
