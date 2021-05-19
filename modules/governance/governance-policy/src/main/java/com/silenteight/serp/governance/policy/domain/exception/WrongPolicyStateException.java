@@ -9,6 +9,6 @@ public class WrongPolicyStateException extends RuntimeException {
   private static final long serialVersionUID = -7130488648716277097L;
 
   public WrongPolicyStateException(UUID policyId, PolicyState actual) {
-    super(String.format("Could not edit Policy in state %s in policy %s", actual, policyId));
+    super(String.format("Could not manipulate Policy %s in state %s", policyId, actual));
   }
 }

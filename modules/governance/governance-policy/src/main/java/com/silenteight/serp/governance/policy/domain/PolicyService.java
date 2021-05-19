@@ -377,12 +377,22 @@ public class PolicyService {
     return new MatchCondition(origin.getName(), origin.getCondition(), origin.getValues());
   }
 
+  @Transactional
   public void archivePolicy(ArchivePolicyRequest request) {
     request.preAudit(auditingLogger::log);
     Policy policy = policyRepository.getByPolicyId(request.getPolicyId());
     policy.archive();
     policy.setUpdatedBy(request.getArchivedBy());
     policyRepository.save(policy);
+    request.postAudit(auditingLogger::log);
+  }
+
+  @Transactional
+  public void deletePolicy(DeletePolicyRequest request) {
+    request.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(request.getPolicyId());
+    policy.assertCanBeDeleted();
+    policyRepository.deleteByPolicyId(request.getPolicyId());
     request.postAudit(auditingLogger::log);
   }
 }

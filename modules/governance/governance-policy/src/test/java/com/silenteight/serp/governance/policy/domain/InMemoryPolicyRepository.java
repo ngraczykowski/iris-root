@@ -21,8 +21,7 @@ class InMemoryPolicyRepository
 
   @Override
   public Policy getByPolicyId(UUID policyId) {
-    return findByPolicyId(policyId)
-        .orElseThrow();
+    return findByPolicyId(policyId).orElseThrow();
   }
 
   @Override
@@ -51,5 +50,14 @@ class InMemoryPolicyRepository
         .filter(policy -> policy.getId().equals(policyId))
         .findFirst()
         .orElseThrow();
+  }
+
+  @Override
+  public void deleteByPolicyId(UUID policyId) {
+    Policy policyToDelete = stream()
+        .filter(policy -> policy.hasPolicyId(policyId))
+        .findAny()
+        .orElseThrow();
+    delete(policyToDelete);
   }
 }

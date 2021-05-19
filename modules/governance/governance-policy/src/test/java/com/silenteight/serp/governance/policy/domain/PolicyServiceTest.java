@@ -397,6 +397,29 @@ class PolicyServiceTest {
   }
 
   @Test
+  void deletePolicyOnDraftWillChangeState() {
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    underTest.deletePolicy(DeletePolicyRequest.of(uuid, OTHER_USER));
+
+    assertThat(policyRepository.findByPolicyId(uuid)).isEmpty();
+  }
+
+  @Test
+  void deletePolicyOnNonSaveWillThrowException() {
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.save();
+    assertThat(policy.getState()).isEqualTo(SAVED);
+
+    DeletePolicyRequest deletePolicyRequest = DeletePolicyRequest.of(uuid, USER);
+    assertThatExceptionOfType(WrongPolicyStateException.class)
+        .isThrownBy(() -> underTest.deletePolicy(deletePolicyRequest));
+  }
+
+  @Test
   void updatePolicyOnDraftWillUpdatePolicy() {
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);

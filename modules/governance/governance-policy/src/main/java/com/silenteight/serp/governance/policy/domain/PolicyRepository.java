@@ -25,4 +25,6 @@ interface PolicyRepository extends Repository<Policy, Long> {
   Optional<Policy> findByStateEquals(PolicyState policyState);
 
   Policy getById(Long policyId);
+
+  void deleteByPolicyId(UUID policyId);
 }
