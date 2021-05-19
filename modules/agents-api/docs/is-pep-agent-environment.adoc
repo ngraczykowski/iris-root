@@ -26,7 +26,7 @@ IsPepService -> Worldcheck: IsPepResponse
 Worldcheck -> DataSource: IsPepResponse
 end
 
-DataSource -> Facade: IsPepResponse
+DataSource -> Facade: List<IsPepResponse>
 Facade --> Output: AgentOutput
 note over Output: Feature is a value provided in step 1\nReason is Mapped to the reason struct
 
