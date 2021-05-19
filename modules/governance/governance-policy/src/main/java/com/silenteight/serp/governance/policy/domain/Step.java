@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
+import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
@@ -52,7 +54,7 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
   @ToString.Include
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private StepType type = StepType.MANUAL_RULE;
+  private StepType type = BUSINESS_LOGIC;
 
   @ToString.Include
   @Column(nullable = false)
@@ -127,5 +129,9 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
         .stream()
         .map(FeatureLogic::toConfigurationDto)
         .collect(toList());
+  }
+
+  public boolean isNarrowStep() {
+    return type == NARROW;
   }
 }

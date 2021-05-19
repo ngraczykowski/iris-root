@@ -14,16 +14,16 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.ARCHIVED;
@@ -31,12 +31,14 @@ import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
-import static com.silenteight.serp.governance.policy.domain.StepType.MANUAL_RULE;
+import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -520,7 +522,18 @@ class PolicyServiceTest {
         firstStep,
         STEP_NAME,
         STEP_DESCRIPTION,
-        MANUAL_RULE,
+        BUSINESS_LOGIC,
+        sortOrder,
+        USER);
+  }
+
+  private static Step createStep(UUID firstStep, int sortOrder, StepType type) {
+    return new Step(
+        SOLUTION_FALSE_POSITIVE,
+        firstStep,
+        STEP_NAME,
+        STEP_DESCRIPTION,
+        type,
         sortOrder,
         USER);
   }
@@ -600,7 +613,7 @@ class PolicyServiceTest {
         .getSteps()
         .stream()
         .sorted(Comparator.comparing(Step::getSortOrder))
-        .collect(Collectors.toList());
+        .collect(toList());
     assertThat(sortedSteps)
         .extracting(Step::getStepId)
         .containsExactly(FIRST_STEP, THIRD_STEP);
@@ -668,5 +681,95 @@ class PolicyServiceTest {
         .stream()
         .findFirst()
         .orElseThrow();
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideStepsWithValidOrder")
+  void assertStepOrdersWithNarrowSteps(List<Step> actual, List<Step> expected) {
+    //given
+    Policy policy = createPolicyWithSteps(actual);
+    List<UUID> stepIds = actual.stream().map(Step::getStepId).collect(toList());
+    SetStepsOrderRequest request = SetStepsOrderRequest.of(policy.getPolicyId(), stepIds, USER);
+    //when
+    underTest.setStepsOrder(request);
+    //then
+    assertStepsOrder(policy.getSteps(), expected);
+  }
+
+  private static Stream provideStepsWithValidOrder() {
+    return of(
+        Arguments.of(
+            of(
+                createStep(FIRST_STEP, 1, NARROW),
+                createStep(SECOND_STEP, 2, StepType.BUSINESS_LOGIC)
+            ),
+            of(
+                createStep(FIRST_STEP, 0, NARROW),
+                createStep(SECOND_STEP, 1, StepType.BUSINESS_LOGIC)
+            )),
+        Arguments.of(
+            of(
+                createStep(FIRST_STEP, 1, NARROW)
+            ),
+            of(
+                createStep(FIRST_STEP, 0, NARROW)
+            )),
+        Arguments.of(
+            of(
+                createStep(FIRST_STEP, 1, StepType.BUSINESS_LOGIC)
+            ),
+            of(
+                createStep(FIRST_STEP, 0, StepType.BUSINESS_LOGIC)
+            )),
+        Arguments.of(
+            of(
+                createStep(FIRST_STEP, 0, NARROW),
+                createStep(SECOND_STEP, 1, NARROW),
+                createStep(THIRD_STEP, 2, StepType.BUSINESS_LOGIC)
+            ),
+            of(
+                createStep(FIRST_STEP, 0, NARROW),
+                createStep(SECOND_STEP, 1, NARROW),
+                createStep(THIRD_STEP, 2, StepType.BUSINESS_LOGIC)
+            ))
+
+    ).stream();
+  }
+
+  @Test
+  void invalidNarrowStepOrderWillThrowException() {
+    //given
+    List<Step> steps = of(
+        createStep(FIRST_STEP, 0, NARROW),
+        createStep(SECOND_STEP, 1),
+        createStep(THIRD_STEP, 2)
+    );
+    Policy policy = createPolicyWithSteps(steps);
+
+    assertStepsOrder(policy.getSteps(), steps);
+
+    SetStepsOrderRequest request = SetStepsOrderRequest
+        .of(policy.getPolicyId(), of(SECOND_STEP, THIRD_STEP, FIRST_STEP), USER);
+    //when
+    //then
+    assertThatExceptionOfType(NarrowStepsOrderHierarchyMismatch.class)
+        .isThrownBy(() -> underTest.setStepsOrder(request))
+        .withMessage(format("Could not set steps order. "
+            + "Requested orders steps mismatched order hierarchy. Narrow steps should be primary "
+            + "on the list in policy=%s.", policy.getPolicyId()));
+
+    policy = policyRepository.getById(policy.getId());
+    assertStepsOrder(policy.getSteps(), steps);
+  }
+
+  private void assertStepsOrder(Collection<Step> actualSteps, Collection<Step> expectedSteps) {
+    for (Step step : actualSteps) {
+      Step expectedStep = expectedSteps
+          .stream()
+          .filter(currentStep -> step.hasStepId(currentStep.getStepId()))
+          .findFirst()
+          .orElseThrow(NoSuchElementException::new);
+      assertThat(step.getSortOrder()).isEqualTo(expectedStep.getSortOrder());
+    }
   }
 }

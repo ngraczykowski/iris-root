@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
+import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.List.of;
@@ -35,12 +37,12 @@ class StepQueryTest extends BaseDataJpaTest {
   private static final UUID FIRST_STEP_ID = randomUUID();
   private static final String FIRST_STEP_NAME = "FIRST_STEP_NAME";
   private static final String FIRST_STEP_DESC = "FIRST_STEP_DESC";
-  private static final StepType FIRST_STEP_TYPE = StepType.MANUAL_RULE;
+  private static final StepType FIRST_STEP_TYPE = BUSINESS_LOGIC;
 
   private static final UUID SECOND_STEP_ID = randomUUID();
   private static final String SECOND_STEP_NAME = "SECOND_STEP_NAME";
   private static final String SECOND_STEP_DESC = "SECOND_STEP_DESC";
-  private static final StepType SECOND_STEP_TYPE = StepType.AI_EXCEPTION;
+  private static final StepType SECOND_STEP_TYPE = NARROW;
 
   private static final String USER = "user";
 

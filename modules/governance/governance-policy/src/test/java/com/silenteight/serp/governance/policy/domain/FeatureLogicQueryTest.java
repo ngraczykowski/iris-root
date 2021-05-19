@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -32,7 +33,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   private static final UUID STEP_ID = UUID.randomUUID();
   private static final String STEP_NAME = "FIRST_STEP_NAME";
   private static final String STEP_DESC = "FIRST_STEP_DESC";
-  private static final StepType STEP_TYPE = StepType.MANUAL_RULE;
+  private static final StepType STEP_TYPE = BUSINESS_LOGIC;
 
   private static final String MATCH = "match";
   private static final String HQ_NO_MATCH = "hq_no_match";
