@@ -113,9 +113,9 @@ paths:
         201:
           description: OK
 
-  /analysis/production/reports:
+  /analysis/production/definitions:
     get:
-      description: Return a list of reports based on production data.
+      description: Return a list of reports definitions based on production data.
       parameters:
         - in: query
           name: type
@@ -127,7 +127,7 @@ paths:
           description: Report type
       responses:
         200:
-          description: List of reports to download.
+          description: List of reports available to generate.
           content:
             application/json:
               schema:
@@ -135,13 +135,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/Report'
               example:
-                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-                  name: '/analysis/production/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                - id: 'a9b45451d17b4708d8ca'
+                  name: '/analysis/production/reports/a9b45451d17b4708d8ca'
                   title: 'AI Reasoning'
                   description: 'Last month'
                   reportType: 'AI_REASONING'
-                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-                  name: '/analysis/production/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                - id: 'b9b45451d17b4708d8ch'
+                  name: '/analysis/production/reports/b9b45451d17b4708d8ch'
                   title: 'AI Reasoning'
                   description: 'Last 3 months'
                   reportType: 'AI_REASONING'
