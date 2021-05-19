@@ -26,6 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.ARCHIVED;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
@@ -324,10 +325,52 @@ class PolicyServiceTest {
   void savePolicyOnNonDraftWillThrowException() {
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     Policy policy = policyRepository.getByPolicyId(uuid);
-    policy.setState(SAVED);
+    policy.save();
+
+    assertThat(policy.getState()).isEqualTo(SAVED);
 
     assertThatExceptionOfType(WrongPolicyStateChangeException.class)
         .isThrownBy(() -> underTest.savePolicy(SavePolicyRequest.of(uuid, OTHER_USER)));
+  }
+
+  @Test
+  void archivePolicyOnDraftWillThrowException() {
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+
+    assertThat(policy.getState()).isEqualTo(DRAFT);
+
+    ArchivePolicyRequest archivePolicyRequest = ArchivePolicyRequest.of(uuid, OTHER_USER);
+    assertThatExceptionOfType(WrongPolicyStateChangeException.class)
+        .isThrownBy(() -> underTest.archivePolicy(archivePolicyRequest));
+  }
+
+  @Test
+  void archivePolicyOnInUseWillThrowException() {
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.save();
+    policy.publish();
+    policy.use();
+
+    assertThat(policy.getState()).isEqualTo(IN_USE);
+
+    ArchivePolicyRequest archivePolicyRequest = ArchivePolicyRequest.of(uuid, OTHER_USER);
+    assertThatExceptionOfType(WrongPolicyStateChangeException.class)
+        .isThrownBy(() -> underTest.archivePolicy(archivePolicyRequest));
+  }
+
+  @Test
+  void archivePolicySavedDraftWillChangeState() {
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.save();
+
+    underTest.archivePolicy(ArchivePolicyRequest.of(uuid, OTHER_USER));
+
+    policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(ARCHIVED);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 
   @Test

@@ -5,6 +5,7 @@ import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWith
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.PolicyState;
+import com.silenteight.serp.governance.policy.domain.dto.ArchivePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.SavePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.UpdatePolicyRequest;
 import com.silenteight.serp.governance.policy.domain.dto.UsePolicyRequest;
@@ -89,6 +90,23 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
     verify(policyService).savePolicy(captor.capture());
     assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
     assertThat(captor.getValue().getSavedBy()).isEqualTo(USERNAME);
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  void its200_whenArchivedStatusChanged() {
+    EditPolicyDto editPolicyDto = new EditPolicyDto();
+    editPolicyDto.setState(PolicyState.ARCHIVED);
+
+    patch(EDIT_URL, editPolicyDto)
+        .contentType(anything())
+        .statusCode(OK.value());
+
+    ArgumentCaptor<ArchivePolicyRequest> captor = ArgumentCaptor.forClass(
+        ArchivePolicyRequest.class);
+    verify(policyService).archivePolicy(captor.capture());
+    assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(captor.getValue().getArchivedBy()).isEqualTo(USERNAME);
   }
 
   @Test
