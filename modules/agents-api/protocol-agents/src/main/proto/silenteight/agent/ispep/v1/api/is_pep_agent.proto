@@ -58,7 +58,6 @@ message IsHistoricalPepResponse {
 message IsPepResponse {
   string solution = 1;
   Reason reason = 2;
-  ModelDetails model_details = 3;
 }
 
 message ProceduralReason {
@@ -89,6 +88,7 @@ message Reason {
   uint32 number_of_not_pep_decisions = 6;
   // number of pep decisions in learning store
   uint32 number_of_pep_decisions = 7;
+  ModelDetails model_details = 8;
 }
 
 message ModelDetails {

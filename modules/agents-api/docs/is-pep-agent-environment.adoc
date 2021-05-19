@@ -1,0 +1,34 @@
+= Is Pep Agent Environment
+
+[plantuml]
+----
+@startuml
+
+autonumber
+title Is Pep Agent Environment
+
+queue "Agent Input Queue" as Input
+queue "Agent Output Queue" as Output
+participant "Is PEP Agent Facade" as Facade
+participant "Data Source" as DataSource
+participant "Worldcheck List API" as Worldcheck
+participant "Is PEP Service" as IsPepService
+
+Input --> Facade: AgentExchangeRequest
+note over Input: Feature is an arbitrarily\n selected value
+Facade -> DataSource: AgentExchangeRequest
+
+loop for each match
+DataSource -> DataSource: Get region and required fields based on the match
+DataSource -> Worldcheck: IsPepRequest
+Worldcheck -> IsPepService: IsPepRequest
+IsPepService -> Worldcheck: IsPepResponse
+Worldcheck -> DataSource: IsPepResponse
+end
+
+DataSource -> Facade: IsPepResponse
+Facade --> Output: AgentOutput
+note over Output: Feature is a value provided in step 1\nReason is Mapped to the reason struct
+
+@enduml
+----
