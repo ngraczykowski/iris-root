@@ -3,9 +3,10 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.opendistro.kibana.KibanaIndexPatternDto;
+import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
+import com.silenteight.warehouse.common.opendistro.kibana.ReportDefinitionDto;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
@@ -57,7 +58,7 @@ import static org.awaitility.Awaitility.await;
 class ReportIT {
 
   private static final String TEST_BUCKET = "reports";
-  private static final String NEW_ELASTIC_INDEX = "analysis-2";
+  private static final String OTHER_TENANT = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
 
   @BeforeEach
   void setUp() {
@@ -93,11 +94,17 @@ class ReportIT {
   @Autowired
   private OpendistroKibanaClient opendistroKibanaClient;
 
+  @Autowired
+  private OpendistroElasticClient opendistroElasticClient;
+
   @BeforeEach
   public void init() {
+    // given
     storeData();
     createKibanaIndex();
     createSavedSearch();
+    generateReport(createReportDefinition());
+    waitForReportInstances(1);
   }
 
   @AfterEach
@@ -109,32 +116,37 @@ class ReportIT {
   // TODO: This test is going to be simplified when entire use case is ready (WEB-976)
   @Test
   @SneakyThrows
-  void shouldCopyKibanaIndexAndSearch() {
+  void shouldSetupTenantForNewSimulation() {
     //when
-    var indexMapping =
-        tenantService.copyKibanaIndices(ADMIN_TENANT, OTHER_TENANT, NEW_ELASTIC_INDEX);
+    opendistroElasticClient.createTenant(OTHER_TENANT, "Simulation" + SIMULATION_ANALYSIS_ID);
 
-    tenantService.copySearchDefinition(ADMIN_TENANT, OTHER_TENANT, indexMapping);
+    var indexMapping =
+        tenantService.copyKibanaIndices(ADMIN_TENANT, OTHER_TENANT, ELASTIC_INDEX_NAME);
+
+    var searchMapping =
+        tenantService.copySearchDefinition(ADMIN_TENANT, OTHER_TENANT, indexMapping);
+
+    var reportMapping =
+        tenantService.copyReportDefinition(ADMIN_TENANT, OTHER_TENANT, searchMapping);
 
     //then
     var tenants = opendistroKibanaClient.listKibanaIndexPattern(OTHER_TENANT, 10);
     assertThat(tenants).hasSize(1);
-    KibanaIndexPatternDto kibanaIndex = tenants.get(0);
-    assertThat(kibanaIndex.getId()).isEqualTo(indexMapping.get(KIBANA_INDEX_PATTERN_NAME));
-    assertThat(kibanaIndex.getElasticIndexName()).isEqualTo(NEW_ELASTIC_INDEX);
 
     var clonedSearchObjects = opendistroKibanaClient.listSavedSearchDefinitions(OTHER_TENANT, 20);
-
     assertThat(clonedSearchObjects).hasSize(1);
+
+    waitForReportDefinitions(reportMapping.size(), OTHER_TENANT);
+
+    var reportDefinitions = opendistroKibanaClient.listReportDefinitions(OTHER_TENANT);
+    assertThat(reportDefinitions)
+        .extracting(ReportDefinitionDto::getId)
+        .containsAll(reportMapping.values());
   }
 
   @Test
   @SneakyThrows
   void shouldStoreNewKibanaReportsInMinio() {
-    // given
-    generateReport(createReportDefinition());
-    waitForReports();
-
     //when
     reportSynchronizationUseCase.activate();
 
@@ -149,7 +161,7 @@ class ReportIT {
 
   @SneakyThrows
   private void storeData() {
-    IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
+    IndexRequest indexRequest = new IndexRequest(ELASTIC_INDEX_NAME);
     indexRequest.id(ALERT_ID_1);
     indexRequest.source(ALERT_WITH_MATCHES_1_MAP);
 
@@ -181,10 +193,16 @@ class ReportIT {
     kibanaTestClient.generateReport(ADMIN_TENANT, reportDefinitionId);
   }
 
-  private void waitForReports() {
+  private void waitForReportInstances(int minCount) {
     await()
         .atMost(5, SECONDS)
-        .until(() -> reportingService.getReportsId(ADMIN_TENANT).size() > 0);
+        .until(() -> reportingService.getReportsId(ADMIN_TENANT).size() >= minCount);
+  }
+
+  private void waitForReportDefinitions(int minCount, String tenant) {
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> opendistroKibanaClient.listReportDefinitions(tenant).size() >= minCount);
   }
 
   @SneakyThrows
@@ -234,6 +252,6 @@ class ReportIT {
   }
 
   private void removeSavedSearch() {
-    opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVE_SEARCH_NAME);
+    opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVED_SEARCH);
   }
 }

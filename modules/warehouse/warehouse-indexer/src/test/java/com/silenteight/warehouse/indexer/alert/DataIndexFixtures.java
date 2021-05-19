@@ -23,8 +23,8 @@ public class DataIndexFixtures {
       .setPayload(structWithValue(
           ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_FP))
       .addAllMatches(of(
-          match(MATCH_NAME_1, MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION),
-          match(MATCH_NAME_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
+          match(MATCH_NAME_1_1, MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION),
+          match(MATCH_NAME_1_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
       .build();
 
   static final Alert ALERT_WITH_MATCHES_2 = Alert.newBuilder()
@@ -32,8 +32,8 @@ public class DataIndexFixtures {
       .setPayload(structWithValue(
           ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_MI))
       .addAllMatches(of(
-          match(MATCH_NAME_1, MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_EXACT_MATCH),
-          match(MATCH_NAME_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
+          match(MATCH_NAME_2_1, MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_EXACT_MATCH),
+          match(MATCH_NAME_2_2, MATCH_PAYLOAD_SOLUTION_KEY, NO_DATA)))
       .build();
 
   public static final List<Alert> ALERTS_WITH_MATCHES = of(

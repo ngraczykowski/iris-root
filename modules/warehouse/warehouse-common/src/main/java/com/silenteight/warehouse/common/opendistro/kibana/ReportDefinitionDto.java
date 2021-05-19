@@ -12,7 +12,7 @@ import static java.util.Optional.ofNullable;
 @Value
 @AllArgsConstructor
 @Builder
-class ReportDefinitionDto {
+public class ReportDefinitionDto {
 
   String id;
 
@@ -23,13 +23,24 @@ class ReportDefinitionDto {
     return getReportParams().getReportName();
   }
 
-  public void replaceExistingSearchId(String newSearchId) {
-    CoreParams coreParams = getCoreParams();
-    String currentSearchId = of(coreParams)
+  public String getSearchId() {
+    return of(getCoreParams())
         .map(CoreParams::getSavedSearchId)
         .filter(searchId -> !searchId.isBlank())
-        .orElseThrow(() -> new IllegalStateException(
-            "savedSearchId is empty: id=" + id + ", body=" + reportDefinitionDetails));
+        .orElseThrow(() -> new KibanaObjectEmptyFieldException("savedSearchId", getId(), this));
+  }
+
+  String getOrigin() {
+    return getCoreParams().getOrigin();
+  }
+
+  void clearOrigin() {
+    getCoreParams().setOrigin(null);
+  }
+
+  public void replaceExistingSearchId(String newSearchId) {
+    CoreParams coreParams = getCoreParams();
+    String currentSearchId = getSearchId();
 
     String newBaseUrl = coreParams.getBaseUrl().replace(currentSearchId, newSearchId);
 
@@ -40,22 +51,12 @@ class ReportDefinitionDto {
   private CoreParams getCoreParams() {
     return of(getReportParams())
         .map(ReportParams::getCoreParams)
-        .orElseThrow(() -> new IllegalStateException(
-            "coreParams is empty: id=" + id + ", body=" + reportDefinitionDetails));
+        .orElseThrow(() -> new KibanaObjectEmptyFieldException("coreParams", getId(), this));
   }
 
   private ReportParams getReportParams() {
     return ofNullable(reportDefinitionDetails)
         .map(ReportDefinitionDetails::getReportParams)
-        .orElseThrow(() -> new IllegalStateException(
-            "reportParams is empty: id=" + id + ", body=" + reportDefinitionDetails));
-  }
-
-  String getOrigin() {
-    return getCoreParams().getOrigin();
-  }
-
-  void clearOrigin() {
-    getCoreParams().setOrigin(null);
+        .orElseThrow(() -> new KibanaObjectEmptyFieldException("reportParams", getId(), this));
   }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaIndexPatternDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
+import com.silenteight.warehouse.common.opendistro.kibana.ReportDefinitionDto;
 import com.silenteight.warehouse.common.opendistro.kibana.SearchDto;
 
 import java.util.HashMap;
@@ -38,17 +39,41 @@ public class TenantService {
     return idMapping;
   }
 
-  public void copySearchDefinition(
+  public Map<String, String> copySearchDefinition(
       String sourceTenant, String targetTenant, Map<String, String> kibanaIndexMapping) {
 
     List<SearchDto> searches = opendistroKibanaClient
         .listSavedSearchDefinitions(sourceTenant, MAX_ELEMENT_COUNT);
 
+    Map<String, String> idMapping = new HashMap<>();
     for (SearchDto search : searches) {
+      String sourceId = search.getId();
       String targetId = randomUUID().toString();
       search.setId(targetId);
       search.substituteReferences(KIBANA_INDEX_PATTERN, kibanaIndexMapping);
       opendistroKibanaClient.createSavedSearchObjects(targetTenant, search);
+      idMapping.put(sourceId, targetId);
     }
+
+    return idMapping;
+  }
+
+  public Map<String, String> copyReportDefinition(
+      String sourceTenant, String targetTenant, Map<String, String> searchMapping) {
+
+    List<ReportDefinitionDto> reportDefinitions =
+        opendistroKibanaClient.listReportDefinitions(sourceTenant);
+
+    Map<String, String> idMapping = new HashMap<>();
+    for (ReportDefinitionDto reportDefinition : reportDefinitions) {
+      String sourceId = reportDefinition.getId();
+      String searchId = reportDefinition.getSearchId();
+      reportDefinition.replaceExistingSearchId(searchMapping.get(searchId));
+      String targetId =
+          opendistroKibanaClient.createReportDefinition(targetTenant, reportDefinition);
+      idMapping.put(sourceId, targetId);
+    }
+
+    return idMapping;
   }
 }

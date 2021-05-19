@@ -91,11 +91,13 @@ class OpendistroKibanaClientTest {
         .reportDefinitionDetails(REPORT_DEFINITION)
         .build();
 
-    opendistroKibanaClient.createReportDefinition(ADMIN_TENANT, reportDefinition);
+    String reportDefinitionId =
+        opendistroKibanaClient.createReportDefinition(ADMIN_TENANT, reportDefinition);
 
     await()
         .atMost(5, SECONDS)
-        .until(() -> opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).size() > 0);
+        .until(() -> opendistroKibanaClient.isExistingReportDefinition(
+            ADMIN_TENANT, reportDefinitionId));
 
     List<ReportDefinitionDto> reportDefinitions =
         opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT);

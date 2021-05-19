@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 })
 class OpendistroElasticClientTest {
 
-  private static final String TEST_TENANT_ID = "test_tenant";
+  private static final String TEST_TENANT_ID = "itest_simulation_master";
   private static final String TEST_TENANT_DESCRIPTION = "description";
 
   @Autowired

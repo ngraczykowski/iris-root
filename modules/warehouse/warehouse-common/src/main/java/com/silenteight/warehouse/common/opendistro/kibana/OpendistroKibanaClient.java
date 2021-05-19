@@ -35,7 +35,7 @@ public class OpendistroKibanaClient {
   private static final String HEADER_SECURITY_TENANT = "securitytenant";
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
   private static final String HEADER_ORIGIN = "Origin";
-  private static final String URL_REPORT_DEFINITIONS =
+  private static final String URL_REPORT_DEFINITION_LIST =
       "/api/reporting/reportDefinitions";
   private static final String URL_CREATE_REPORT_DEFINITION =
       "/api/reporting/reportDefinition";
@@ -188,7 +188,7 @@ public class OpendistroKibanaClient {
   public List<ReportDefinitionDto> listReportDefinitions(String tenant) {
     TypeReference<ReportDefinitionList> typeRef = new TypeReference<>() {};
 
-    GetHttpRequest request = new GetHttpRequest(URL_REPORT_DEFINITIONS, tenant);
+    GetHttpRequest request = new GetHttpRequest(URL_REPORT_DEFINITION_LIST, tenant);
     return get(request, typeRef)
         .getData()
         .stream()
@@ -197,7 +197,7 @@ public class OpendistroKibanaClient {
   }
 
   @SneakyThrows
-  public void createReportDefinition(String tenant, ReportDefinitionDto reportDefinitionDto) {
+  public String createReportDefinition(String tenant, ReportDefinitionDto reportDefinitionDto) {
     TypeReference<ReportDefinitionCreated> typeRef = new TypeReference<>() {};
 
     reportDefinitionDto.clearOrigin();
@@ -208,7 +208,10 @@ public class OpendistroKibanaClient {
         .origin(reportDefinitionDto.getOrigin())
         .payload(objectMapper.writeValueAsBytes(reportDefinitionDto.getReportDefinitionDetails()))
         .build();
-    post(request, typeRef);
+
+    return post(request, typeRef)
+        .getSchedulerResponse()
+        .getReportDefinitionId();
   }
 
   public void deleteSavedObjects(String tenant, SavedObjectType type, String objectId) {
@@ -224,6 +227,11 @@ public class OpendistroKibanaClient {
     delete(request, typeRef);
   }
 
+  public boolean isExistingReportDefinition(String tenant, String objectId) {
+    return listReportDefinitions(tenant).stream()
+        .map(ReportDefinitionDto::getId)
+        .anyMatch(id -> id.equals(objectId));
+  }
 
   @SneakyThrows
   <T> T delete(DeleteHttpRequest deleteHttpRequest, TypeReference<T> type) {
@@ -276,7 +284,7 @@ public class OpendistroKibanaClient {
         httpRequest.method(), httpRequest.uri(), response.statusCode(), loggedResponse);
 
     if (isError(response)) {
-      throw new OpendistroKibanaClientException(response.statusCode() + ":" + loggedResponse);
+      throw new OpendistroKibanaClientException(response.statusCode(), loggedResponse);
     }
 
     return parsedResponse;
