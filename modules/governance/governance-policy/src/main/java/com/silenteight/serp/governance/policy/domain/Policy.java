@@ -209,4 +209,9 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     step.setSortOrder(stepsOrder.indexOf(step.getStepId()));
     step.setUpdatedBy(user);
   }
+
+  public void archive() {
+    assertAllowedStateChange(ARCHIVED, SAVED, OBSOLETE);
+    setState(ARCHIVED);
+  }
 }

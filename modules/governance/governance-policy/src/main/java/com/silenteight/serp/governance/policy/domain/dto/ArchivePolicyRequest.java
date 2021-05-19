@@ -15,16 +15,16 @@ import static java.util.UUID.randomUUID;
 
 @RequiredArgsConstructor(staticName = "of")
 @Value
-public class SavePolicyRequest {
+public class ArchivePolicyRequest {
 
-  public static final String PRE_AUDIT_TYPE = "SavePolicyRequestRequested";
-  public static final String POST_AUDIT_TYPE = "PolicySaved";
+  public static final String PRE_AUDIT_TYPE = "ArchivePolicyRequestRequested";
+  public static final String POST_AUDIT_TYPE = "PolicyArchived";
 
-  UUID correlationId = UUID.randomUUID();
+  UUID correlationId = randomUUID();
   @NonNull
   UUID policyId;
   @NonNull
-  String savedBy;
+  String archivedBy;
 
   public void preAudit(Consumer<AuditDataDto> logger) {
     logger.accept(getAuditDataDto(PRE_AUDIT_TYPE));
@@ -44,8 +44,8 @@ public class SavePolicyRequest {
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("UPDATE")
-        .details(this.toString())
-        .principal(savedBy)
+        .details(toString())
+        .principal(archivedBy)
         .build();
   }
 }

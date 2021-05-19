@@ -376,4 +376,13 @@ public class PolicyService {
   private static MatchCondition cloneFeature(MatchCondition origin) {
     return new MatchCondition(origin.getName(), origin.getCondition(), origin.getValues());
   }
+
+  public void archivePolicy(ArchivePolicyRequest request) {
+    request.preAudit(auditingLogger::log);
+    Policy policy = policyRepository.getByPolicyId(request.getPolicyId());
+    policy.archive();
+    policy.setUpdatedBy(request.getArchivedBy());
+    policyRepository.save(policy);
+    request.postAudit(auditingLogger::log);
+  }
 }
