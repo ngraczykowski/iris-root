@@ -20,8 +20,6 @@ class PostHttpRequest {
   String tenant;
   @Nullable
   byte[] payload;
-  @Nullable
-  String origin;
 
   boolean hasPayload() {
     return nonNull(payload);

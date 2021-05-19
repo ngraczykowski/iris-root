@@ -30,14 +30,6 @@ public class ReportDefinitionDto {
         .orElseThrow(() -> new KibanaObjectEmptyFieldException("savedSearchId", getId(), this));
   }
 
-  String getOrigin() {
-    return getCoreParams().getOrigin();
-  }
-
-  void clearOrigin() {
-    getCoreParams().setOrigin(null);
-  }
-
   public void replaceExistingSearchId(String newSearchId) {
     CoreParams coreParams = getCoreParams();
     String currentSearchId = getSearchId();
