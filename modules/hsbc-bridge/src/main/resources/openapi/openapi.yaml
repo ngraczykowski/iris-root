@@ -117,6 +117,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/SimpleModelResponse"
 
+    post:
+      summary: Submit new model.
+      requestBody:
+        description: Model information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfoRequest'
+      responses:
+        '200':
+          description: Model uploaded.
+
+    put:
+      summary: Update status of new model.
+      requestBody:
+        description: Model information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfoStatus'
+      responses:
+        '200':
+          description: Model uploaded.
+
+
   /v1/upload:
     post:
       summary: Upload file with up to 1GB limit.
@@ -1540,3 +1567,46 @@ components:
           type: string
         policyName:
           type: string
+
+    ModelInfoRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ModelType'
+        changeType:
+          $ref: '#/components/schemas/ChangeType'
+        version:
+          type: string
+        url:
+          type: string
+
+    ModelInfoStatus:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ModelType'
+        version:
+          type: string
+        url:
+          type: string
+        status:
+          $ref: '#/components/schemas/ModelChangeStatus'
+
+    ModelType:
+      type: string
+      enum:
+        - MODEL
+        - IS-PEP-MODEL
+        - NAME-ALIASES-MODEL
+
+    ChangeType:
+      type: string
+      enum:
+        - MINOR
+        - MAJOR
+
+    ModelChangeStatus:
+      type: string
+      enum:
+        - SUCCESS
+        - FAILURE
