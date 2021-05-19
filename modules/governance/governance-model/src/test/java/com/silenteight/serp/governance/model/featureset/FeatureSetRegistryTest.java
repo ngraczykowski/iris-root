@@ -1,8 +1,8 @@
 package com.silenteight.serp.governance.model.featureset;
 
 import com.silenteight.model.api.v1.Feature;
-import com.silenteight.serp.governance.agent.AgentDto;
-import com.silenteight.serp.governance.agent.AgentsRegistry;
+import com.silenteight.serp.governance.agent.domain.AgentsRegistry;
+import com.silenteight.serp.governance.agent.domain.dto.AgentDto;
 import com.silenteight.serp.governance.model.TestResourceLoader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,10 +16,11 @@ import java.util.List;
 
 import static com.silenteight.serp.governance.agent.AgentFixture.DATE_AGENT;
 import static com.silenteight.serp.governance.agent.AgentFixture.NAME_AGENT;
-import static com.silenteight.serp.governance.agent.config.AgentConfigFixture.DATE_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.agent.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
-import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.DATE_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.NAME_AGENT_ID;
 import static com.silenteight.serp.governance.model.featureset.FeatureSetRegistry.DEFAULT_FEATURE_SET;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -87,6 +88,7 @@ class FeatureSetRegistryTest {
   @Test
   void shouldEnsureExposedFeatureSetIsValid() {
     AgentDto misconfiguredAgent = AgentDto.builder()
+        .id(NAME_AGENT_ID)
         .name(NAME_AGENT_CONFIG_NAME)
         .features(List.of(AGENT_FEATURE_DATE))
         .solutions(List.of())
