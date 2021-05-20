@@ -20,7 +20,7 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
-  private PendingRecommendations pendingRecommendations = new PendingRecommendations();
+  private PendingRecommendation pendingRecommendation = new PendingRecommendation();
 
   @NestedConfigurationProperty
   @Valid
@@ -37,11 +37,20 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NotNull
   private CommentInput commentInput = new CommentInput();
 
+  String[] getAllInboundQueueNames() {
+    return new String[] {
+        pendingRecommendation.getInboundQueueName(),
+        agentExchange.getInboundQueueName(),
+        category.getInboundQueueName(),
+        commentInput.getInboundQueueName(),
+    };
+  }
+
   @Data
-  static class PendingRecommendations {
+  static class PendingRecommendation {
 
     @NotBlank
-    private String inboundQueueName = PENDING_RECOMMENDATIONS_QUEUE_NAME;
+    private String inboundQueueName = PENDING_RECOMMENDATION_QUEUE_NAME;
   }
 
   @Data

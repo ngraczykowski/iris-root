@@ -1,8 +1,8 @@
 package com.silenteight.adjudication.engine.analysis.agentexchange;
 
-import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage;
 
 public interface AgentExchangeRequestGateway {
 
-  void send(AgentExchangeRequest agentExchangeRequest);
+  void send(AgentExchangeRequestMessage agentExchangeRequest);
 }

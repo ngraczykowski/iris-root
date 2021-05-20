@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
   <changeSet id="adjudication-engine-alerts-1.2.0_1" author="ahaczewski">
     <dropUniqueConstraint
@@ -35,6 +35,16 @@
   <changeSet id="adjudication-engine-alerts-1.2.0_5" author="ahaczewski">
     <createIndex tableName="ae_match" indexName="ix_ae_match_alert_id">
       <column name="alert_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_6" author="ahaczewski">
+    <dropIndex tableName="ae_alert" indexName="ix_ae_alert_priority"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_7" author="ahaczewski">
+    <createIndex tableName="ae_alert" indexName="ix_ae_alert_priority">
+      <column name="priority" descending="true"/>
     </createIndex>
   </changeSet>
 </databaseChangeLog>

@@ -17,9 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 class SelectAgentConfigFeatureQuery {
 
+  private static final AgentConfigFeatureDtoRowMapper ROW_MAPPER =
+      new AgentConfigFeatureDtoRowMapper();
+
   private final JdbcTemplate jdbcTemplate;
 
   List<AgentConfigFeatureDto> findAllByNamesIn(List<Feature> names) {
+    // FIXME(ahaczewski): Replace with NamedParameterized query with list in WHERE IN (...).
     jdbcTemplate.execute(
         "CREATE TEMP TABLE IF NOT EXISTS tmp_features (name VARCHAR(300))"
             + " ON COMMIT DELETE ROWS");
@@ -44,7 +48,7 @@ class SelectAgentConfigFeatureQuery {
         "SELECT agent_config_feature_id, agent_config, feature"
             + " FROM ae_agent_config_feature"
             + " WHERE concat(agent_config, '/', feature) IN (SELECT name FROM tmp_features)",
-        new AgentConfigFeatureDtoRowMapper());
+        ROW_MAPPER);
 
     jdbcTemplate.execute("DELETE FROM tmp_features");
 

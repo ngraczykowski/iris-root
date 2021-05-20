@@ -20,28 +20,33 @@ class AnalysisOutboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
-  private Events events = new Events();
+  private Event event = new Event();
 
   @NestedConfigurationProperty
   @Valid
   @NotNull
-  private InternalEvents internalEvents = new InternalEvents();
+  private EventInternal eventInternal = new EventInternal();
+
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
+  private Agent agent = new Agent();
 
   @Data
-  static class Events {
+  static class Event {
 
     @NotBlank
-    private String outboundExchangeName = EVENTS_EXCHANGE_NAME;
+    private String outboundExchangeName = EVENT_EXCHANGE_NAME;
 
     @NotNull
     private String recommendationsGeneratedRoutingKey = RECOMMENDATIONS_GENERATED_ROUTING_KEY;
   }
 
   @Data
-  static class InternalEvents {
+  static class EventInternal {
 
     @NotBlank
-    private String outboundExchangeName = INTERNAL_EVENTS_EXCHANGE_NAME;
+    private String outboundExchangeName = EVENT_INTERNAL_EXCHANGE_NAME;
 
     @NotNull
     private String addedAnalysisDatasetsRoutingKey = ADDED_ANALYSIS_DATASETS_ROUTING_KEY;
@@ -60,5 +65,12 @@ class AnalysisOutboundAmqpIntegrationProperties {
 
     @NotNull
     private String matchesSolvedRoutingKey = MATCHES_SOLVED_ROUTING_KEY;
+  }
+
+  @Data
+  static class Agent {
+
+    @NotBlank
+    private String outboundExchangeName = AGENT_REQUEST_EXCHANGE_NAME;
   }
 }

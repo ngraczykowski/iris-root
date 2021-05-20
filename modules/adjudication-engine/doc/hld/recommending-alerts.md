@@ -65,11 +65,11 @@ AnalysisDatasetsAdded (rabbit) -> List<PendingRecommendation> (db) -> PendingRec
 
 PendingRecommendations (rabbit) -> List<AgentExchange> (db) -> List<AgentExchangeRequest> (rabbit)
 
+AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdated (spring)
+
 PendingRecommendations (rabbit) -> BatchGetMatchCategoryValuesRequest: BatchGetMatchCategoryValuesResponse (grpc) -> List<MatchCategoryValue> (db) -> MatchCategoriesUpdated (spring)
 
 PendingRecommendations (rabbit) -> StreamCommentInputsRequest: List<CommentInput> (grpc) -> List<AlertCommentInput> (db) -> CommentInputsUpdated (spring)
-
-AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdated (spring)
 
 MatchCategoriesUpdated (spring) -> SolveMatchesCommand (spring)
 

@@ -31,6 +31,8 @@ class AddDatasetsToAnalysisUseCase {
     var eventBuilder = AddedAnalysisDatasets.newBuilder();
     var datasetEntities = datasets.stream()
         .map(dataset -> {
+          // FIXME(ahaczewski): Make this opration idempotent, as it might fail when publishing
+          //  message to RabbitMQ, but after commit has succeeded.
           var datasetId = ResourceName.create(dataset).getLong("datasets");
           var entity = new AnalysisDatasetEntity(analysisId, datasetId);
           eventBuilder.addAnalysisDatasets(entity.getName());

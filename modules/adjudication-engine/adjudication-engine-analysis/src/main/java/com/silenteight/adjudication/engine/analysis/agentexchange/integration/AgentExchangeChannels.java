@@ -18,7 +18,7 @@ public class AgentExchangeChannels {
   /**
    * This channel is for sending AgentExchangeRequest messages to agents.
    */
-  static final String AGENT_EXCHANGE_REQUEST_OUTBOUND_CHANNEL =
+  public static final String AGENT_EXCHANGE_REQUEST_OUTBOUND_CHANNEL =
       "agentExchangeRequestOutboundChannel";
 
   /**

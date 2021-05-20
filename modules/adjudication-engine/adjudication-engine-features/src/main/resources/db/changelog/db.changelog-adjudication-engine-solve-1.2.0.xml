@@ -220,6 +220,6 @@
         referencedColumnNames="category_id"/>
   </changeSet>
 
-<!--  <changeSet id="adjudication-engine-solve-1.2.0_7" author="ahaczewski">-->
+<!--  <changeSet id="adjudication-engine-features-1.2.0_7" author="ahaczewski">-->
 <!--  </changeSet>-->
 </databaseChangeLog>

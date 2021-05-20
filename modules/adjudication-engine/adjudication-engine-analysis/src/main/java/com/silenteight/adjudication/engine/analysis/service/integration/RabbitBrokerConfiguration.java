@@ -1,48 +1,45 @@
 package com.silenteight.adjudication.engine.analysis.service.integration;
 
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import static com.silenteight.adjudication.engine.analysis.service.integration.AmqpDefaults.*;
+import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
 @Configuration
-@RequiredArgsConstructor
 @Profile("rabbitmq-declare")
-public class RabbitBrokerConfiguration {
+class RabbitBrokerConfiguration {
 
-  private static final String DEAD_LETTER_EXCHANGE = "ae.dlx";
-  private static final String DEAD_LETTER_QUEUE = "ae.dlq";
+  private static final String ERROR_QUEUE = "ae.error-queue";
 
   @Bean
   Declarables rabbitBrokerDeclarables() {
-    var dlx = ExchangeBuilder.topicExchange(DEAD_LETTER_EXCHANGE).durable(true).build();
-    var dlq = QueueBuilder.durable(DEAD_LETTER_QUEUE).build();
-    var dlqBinding = BindingBuilder.bind(dlq).to(dlx).with("*").noargs();
+    var errorQueue = queue(ERROR_QUEUE).build();
 
-    var events = ExchangeBuilder.directExchange(EVENTS_EXCHANGE_NAME).durable(true).build();
-    var internalEvents = ExchangeBuilder
-        .directExchange(INTERNAL_EVENTS_EXCHANGE_NAME)
+    var event = topicExchange(EVENT_EXCHANGE_NAME).durable(true).build();
+    var internalEvent = topicExchange(EVENT_INTERNAL_EXCHANGE_NAME)
+        .durable(true)
+        .build();
+    var agentRequest = topicExchange(AGENT_REQUEST_EXCHANGE_NAME)
         .durable(true)
         .build();
 
-    var pendingRecommendations = makeQueue(PENDING_RECOMMENDATIONS_QUEUE_NAME);
-    var pendingRecommendationsBinding = bindQueue(pendingRecommendations, internalEvents,
+    var pendingRecommendation = queue(PENDING_RECOMMENDATION_QUEUE_NAME).build();
+    var pendingRecommendationsBinding = bind(pendingRecommendation, internalEvent,
         ADDED_ANALYSIS_DATASETS_ROUTING_KEY);
 
-    var agentExchange = makeQueue(AGENT_EXCHANGE_QUEUE_NAME);
-    var agentExchangeBinding = bindQueue(agentExchange, internalEvents,
+    var agentExchange = queue(AGENT_EXCHANGE_QUEUE_NAME).build();
+    var agentExchangeBinding = bind(agentExchange, internalEvent,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
-    var category = makeQueue(CATEGORY_QUEUE_NAME);
-    var categoryBinding = bindQueue(category, internalEvents,
+    var category = queue(CATEGORY_QUEUE_NAME).build();
+    var categoryBinding = bind(category, internalEvent,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
-    var commentInput = makeQueue(COMMENT_INPUT_QUEUE_NAME);
-    var commentInputBinding = bindQueue(commentInput, internalEvents,
+    var commentInput = queue(COMMENT_INPUT_QUEUE_NAME).build();
+    var commentInputBinding = bind(commentInput, internalEvent,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
     /* TODO(ahaczewski): Configure queue receiving agent responses.
@@ -51,21 +48,26 @@ public class RabbitBrokerConfiguration {
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
      */
 
+    var tmpAgentRequest = queue(TMP_AGENT_REQUEST_QUEUE_NAME).maxPriority(10).build();
+    var tmpAgentRequestBinding = bind(tmpAgentRequest, agentRequest, "#");
+
     return new Declarables(
-        dlx, dlq, dlqBinding, events, internalEvents, pendingRecommendations,
-        pendingRecommendationsBinding, agentExchange, agentExchangeBinding,
-        category, categoryBinding, commentInput, commentInputBinding);
+        errorQueue,
+        event, internalEvent, agentRequest,
+        pendingRecommendation, pendingRecommendationsBinding,
+        agentExchange, agentExchangeBinding,
+        category, categoryBinding,
+        commentInput, commentInputBinding,
+        tmpAgentRequest, tmpAgentRequestBinding);
   }
 
-  private static Queue makeQueue(String queueName) {
+  private static QueueBuilder queue(String queueName) {
     return QueueBuilder
         .durable(queueName)
-        .deadLetterExchange(DEAD_LETTER_EXCHANGE)
-        .maxPriority(10)
-        .build();
+        .withArgument("x-queue-type", "classic");
   }
 
-  private static Binding bindQueue(Queue queue, Exchange exchange, String routingKey) {
+  private static Binding bind(Queue queue, Exchange exchange, String routingKey) {
     return BindingBuilder
         .bind(queue)
         .to(exchange)

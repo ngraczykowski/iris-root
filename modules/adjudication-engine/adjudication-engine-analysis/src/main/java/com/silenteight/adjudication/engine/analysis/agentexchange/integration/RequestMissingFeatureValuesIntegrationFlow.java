@@ -1,0 +1,26 @@
+package com.silenteight.adjudication.engine.analysis.agentexchange.integration;
+
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFacade;
+import com.silenteight.adjudication.internal.v1.PendingRecommendations;
+
+import org.springframework.integration.dsl.IntegrationFlowAdapter;
+import org.springframework.integration.dsl.IntegrationFlowDefinition;
+import org.springframework.stereotype.Component;
+
+@RequiredArgsConstructor
+@Component
+class RequestMissingFeatureValuesIntegrationFlow extends IntegrationFlowAdapter {
+
+  private final AgentExchangeFacade agentExchangeFacade;
+
+  @Override
+  protected IntegrationFlowDefinition<?> buildFlow() {
+    return from(AgentExchangeChannels.AGENT_EXCHANGE_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
+        .handle(PendingRecommendations.class, (payload, headers) -> {
+          agentExchangeFacade.requestMissingFeatureValues(payload);
+          return null;
+        });
+  }
+}

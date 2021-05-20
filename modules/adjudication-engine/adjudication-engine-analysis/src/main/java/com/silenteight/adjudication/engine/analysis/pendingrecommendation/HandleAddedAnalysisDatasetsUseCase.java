@@ -7,6 +7,7 @@ import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ class HandleAddedAnalysisDatasetsUseCase {
 
   private final CreatePendingRecommendationsUseCase createPendingRecommendationsUseCase;
 
+  @Transactional
   Optional<PendingRecommendations> handleAddedAnalysisDatasets(
       AddedAnalysisDatasets addedAnalysisDatasets) {
 

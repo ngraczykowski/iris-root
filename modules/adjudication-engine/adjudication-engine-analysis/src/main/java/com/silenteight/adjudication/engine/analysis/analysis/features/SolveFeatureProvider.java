@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.analysis.solve;
+package com.silenteight.adjudication.engine.analysis.analysis.features;
 
 import lombok.RequiredArgsConstructor;
 

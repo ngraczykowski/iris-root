@@ -23,6 +23,9 @@ public class AnalysisFacade {
   @NonNull
   private final AddAndListDatasetsInAnalysisUseCase addAndListDatasetsInAnalysisUseCase;
 
+  @NonNull
+  private final GetAnalysisAgentConfigsUseCase getAnalysisAgentConfigsUseCase;
+
   public Analysis createAndGetAnalysis(Analysis analysis) {
     return createAndGetAnalysisUseCase.createAndGetAnalysis(analysis);
   }
@@ -33,5 +36,9 @@ public class AnalysisFacade {
 
   public Analysis getAnalysis(String analysisName) {
     return getAnalysisUseCase.getAnalysis(analysisName);
+  }
+
+  public List<String> getAgentConfigs(String analysisName) {
+    return getAnalysisAgentConfigsUseCase.getAnalysisAgentConfigs(analysisName);
   }
 }

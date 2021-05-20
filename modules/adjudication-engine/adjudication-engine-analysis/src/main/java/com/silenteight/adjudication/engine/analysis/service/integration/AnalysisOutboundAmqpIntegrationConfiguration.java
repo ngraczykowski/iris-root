@@ -13,6 +13,8 @@ import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 
+import javax.validation.Valid;
+
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
@@ -20,25 +22,27 @@ import static org.springframework.integration.dsl.IntegrationFlows.from;
 @RequiredArgsConstructor
 class AnalysisOutboundAmqpIntegrationConfiguration {
 
-  private final AmqpOutboundFactory outboundFactory;
+  @Valid
   private final AnalysisOutboundAmqpIntegrationProperties properties;
+
+  private final AmqpOutboundFactory outboundFactory;
 
   @Bean
   IntegrationFlow addedAnalysisDatasetsOutboundIntegrationFlow() {
     return createOutboundFlow(
         AnalysisChannels.ADDED_ANALYSIS_DATASETS_OUTBOUND_CHANNEL,
-        properties.getInternalEvents().getOutboundExchangeName(),
-        properties.getInternalEvents().getAddedAnalysisDatasetsRoutingKey());
+        properties.getEventInternal().getOutboundExchangeName(),
+        properties.getEventInternal().getAddedAnalysisDatasetsRoutingKey());
   }
 
   @Bean
   IntegrationFlow pendingRecommendationsOutboundIntegrationFlow() {
     return createOutboundFlow(
         PendingRecommendationChannels.PENDING_RECOMMENDATIONS_OUTBOUND_CHANNEL,
-        properties.getInternalEvents().getOutboundExchangeName(),
-        properties.getInternalEvents().getPendingRecommendationsRoutingKey());
+        properties.getEventInternal().getOutboundExchangeName(),
+        properties.getEventInternal().getPendingRecommendationsRoutingKey());
   }
-
+  
   private StandardIntegrationFlow createOutboundFlow(
       String outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
 

@@ -5,7 +5,7 @@ serp:
     error-queue:
       declare: false
       enabled: true
-      name: adjudication-engine.error-queue
+      name: ae.error-queue
 
 logging:
   level:

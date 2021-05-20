@@ -11,11 +11,11 @@ class AmqpDefaults {
   private static final String COMMAND_PREFIX = PREFIX + "command.";
   private static final String EVENT_PREFIX = PREFIX + "event.";
 
-  static final String EVENTS_EXCHANGE_NAME = PREFIX + "event";
+  static final String EVENT_EXCHANGE_NAME = PREFIX + "event";
   static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "recommendations-generated";
 
-  static final String INTERNAL_EVENTS_EXCHANGE_NAME = PREFIX + "internal-event";
+  static final String EVENT_INTERNAL_EXCHANGE_NAME = PREFIX + "event.internal";
   static final String ADDED_ANALYSIS_DATASETS_ROUTING_KEY =
       EVENT_PREFIX + "added-analysis-datasets";
   static final String PENDING_RECOMMENDATIONS_ROUTING_KEY =
@@ -29,9 +29,13 @@ class AmqpDefaults {
   static final String MATCHES_SOLVED_ROUTING_KEY =
       EVENT_PREFIX + "matches-solved-updated";
 
-  static final String PENDING_RECOMMENDATIONS_QUEUE_NAME = PREFIX + "pending-recommendations";
+  static final String AGENT_REQUEST_EXCHANGE_NAME = "agent.request";
+
+  static final String PENDING_RECOMMENDATION_QUEUE_NAME = PREFIX + "pending-recommendation";
   static final String AGENT_EXCHANGE_QUEUE_NAME = PREFIX + "agent-exchange";
   static final String CATEGORY_QUEUE_NAME = PREFIX + "category";
   static final String COMMENT_INPUT_QUEUE_NAME = PREFIX + "comment-input";
   static final String MATCH_FEATURE_QUEUE_NAME = PREFIX + "match-feature";
+
+  static final String TMP_AGENT_REQUEST_QUEUE_NAME = PREFIX + "tmp-agent-request";
 }

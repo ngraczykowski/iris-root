@@ -39,7 +39,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EntityScan(basePackageClasses = AdjudicationEngineModule.class)
 @IntegrationComponentScan(basePackageClasses = AdjudicationEngineModule.class)
 @Slf4j
-class AdjudicationEngineApplication {
+public class AdjudicationEngineApplication {
 
   public static void main(String[] args) {
     setUpSystemProperties();

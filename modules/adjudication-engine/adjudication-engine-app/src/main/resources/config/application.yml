@@ -96,6 +96,7 @@ spring:
       connection-init-sql: SELECT 1
       data-source-properties:
         ApplicationName: Adjudication Engine
+        reWriteBatchedInserts: true
 
   # Database migrations
   liquibase:
@@ -116,11 +117,18 @@ spring:
 
     properties:
       hibernate.cache.use_query_cache: false
+      hibernate.connection.handling_mode: DELAYED_ACQUISITION_AND_HOLD
       hibernate.connection.provider_disables_autocommit: true
       hibernate.generate_statistics: false
+      hibernate.id.optimizer.pooled.preferred: pooled-lo
+      hibernate.jdbc.batch_size: 2048
       hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.use_get_generated_keys: true
       hibernate.jdbc.time_zone: UTC
       hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      #org.hibernate.flushMode: COMMIT
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
 

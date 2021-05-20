@@ -1,0 +1,152 @@
+{
+  "rabbit_version": "3.8.11",
+  "rabbitmq_version": "3.8.11",
+  "policies": [
+  ],
+  "queues": [
+    {
+      "name": "ae.pending-recommendation",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "ae.agent-exchange",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "ae.category",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "ae.comment-input",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "ae.match-feature",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "ae.error-queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "ae.tmp-agent-request",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-max-priority": 10
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "ae.event",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ae.event.internal",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ae.command",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "agent.request",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "ae.event.internal",
+      "vhost": "/",
+      "destination": "ae.pending-recommendation",
+      "destination_type": "queue",
+      "routing_key": "ae.event.added-analysis-datasets",
+      "arguments": {}
+    },
+    {
+      "source": "ae.event.internal",
+      "vhost": "/",
+      "destination": "ae.agent-exchange",
+      "destination_type": "queue",
+      "routing_key": "ae.event.pending-recommendations",
+      "arguments": {}
+    },
+    {
+      "source": "ae.event.internal",
+      "vhost": "/",
+      "destination": "ae.category",
+      "destination_type": "queue",
+      "routing_key": "ae.event.pending-recommendations",
+      "arguments": {}
+    },
+    {
+      "source": "ae.event.internal",
+      "vhost": "/",
+      "destination": "ae.comment-input",
+      "destination_type": "queue",
+      "routing_key": "ae.event.pending-recommendations",
+      "arguments": {}
+    },
+    {
+      "source": "agent.request",
+      "vhost": "/",
+      "destination": "ae.tmp-agent-request",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    }
+  ]
+}

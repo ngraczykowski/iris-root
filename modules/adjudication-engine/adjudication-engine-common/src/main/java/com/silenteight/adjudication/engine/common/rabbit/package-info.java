@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.adjudication.engine.analysis.analysis.solve;
+package com.silenteight.adjudication.engine.common.rabbit;
 
 import javax.annotation.ParametersAreNonnullByDefault;
