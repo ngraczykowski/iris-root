@@ -23,6 +23,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/BulkAcceptedResponse'
 
+  /async/bulk/v1/learning:
+    post:
+      summary: Submit bulk of alerts for learning.
+      requestBody:
+        description: BulkId and list of alerts for learning processes.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkIdWithAlerts'
+      responses:
+        '200':
+          description: Confirmation of accepting bulk.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAcceptedResponse'
+
+  /async/bulk/v1/ingestRecommendations:
+    post:
+      summary: Submit recommendations.
+      requestBody:
+        description: BulkId and list of recommended alerts.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkSolvedAlertsResponse'
+
   '/async/bulk/v1/{bulkId}/status':
     get:
       summary: Status of bulk processing for given ID

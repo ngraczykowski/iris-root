@@ -42,6 +42,11 @@ public class AlertData {
   }
 
   @JsonIgnore
+  public String getFlagKey() {
+    return caseInformation.getFlagKey();
+  }
+
+  @JsonIgnore
   public String getCaseId() {
     return caseInformation.getId() + "";
   }

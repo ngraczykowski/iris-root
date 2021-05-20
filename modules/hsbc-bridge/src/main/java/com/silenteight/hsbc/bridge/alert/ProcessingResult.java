@@ -18,6 +18,7 @@ class ProcessingResult {
   @Value
   static class ProcessedAlert {
 
+    String discriminator;
     String externalId;
     List<Match> matches;
     @Nullable

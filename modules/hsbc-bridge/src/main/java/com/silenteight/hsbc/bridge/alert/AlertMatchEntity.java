@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.bulk;
+package com.silenteight.hsbc.bridge.alert;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table(name = "hsbc_bridge_match")
 @NoArgsConstructor(access = AccessLevel.NONE)
 @Getter
-class BulkAlertMatchEntity {
+class AlertMatchEntity {
 
   @Id
   private Long id;

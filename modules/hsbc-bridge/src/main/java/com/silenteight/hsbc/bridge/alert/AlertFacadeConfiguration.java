@@ -2,13 +2,10 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.json.external.model.AlertData;
-import com.silenteight.hsbc.bridge.json.internal.model.CaseInformation;
+import com.silenteight.hsbc.bridge.report.AlertFinder;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,6 +21,11 @@ class AlertFacadeConfiguration {
         .relationshipProcessor(relationshipProcessor())
         .repository(alertRepository)
         .build();
+  }
+
+  @Bean
+  AlertFinder alertFinder() {
+    return new AlertInfoFinder(alertRepository);
   }
 
   private RelationshipProcessor relationshipProcessor() {

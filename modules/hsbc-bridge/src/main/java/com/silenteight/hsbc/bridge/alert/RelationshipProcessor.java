@@ -34,7 +34,9 @@ class RelationshipProcessor {
     final AlertData alertData;
 
     ProcessedAlert process() {
-      var processedAlert = ProcessedAlert.builder().externalId(alertData.getId());
+      var processedAlert = ProcessedAlert.builder()
+          .discriminator(alertData.getFlagKey())
+          .externalId(alertData.getId());
 
       var validationError = validateRelationships();
       if (validationError.isPresent()) {

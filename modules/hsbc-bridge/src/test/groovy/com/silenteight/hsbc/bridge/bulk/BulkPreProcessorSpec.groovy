@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.bulk
 import com.silenteight.hsbc.bridge.alert.AlertFacade
 import com.silenteight.hsbc.bridge.match.MatchFacade
 
-import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 class BulkPreProcessorSpec extends Specification {

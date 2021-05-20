@@ -11,4 +11,5 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 class AmqpProperties {
 
   String warehouseExchangeName;
+  String warehouseRoutingKey;
 }

@@ -3,6 +3,9 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -27,6 +30,8 @@ public class AlertEntity extends BaseEntity {
   @Setter
   private String name;
 
+  private String discriminator;
+
   private String errorMessage;
 
   @Column(name = "bulk_id")
@@ -36,9 +41,15 @@ public class AlertEntity extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private AlertStatus status = AlertStatus.STORED;
 
-  public AlertEntity(String externalId, String bulkId) {
-    this.externalId = externalId;
+  @Setter(NONE)
+  @OneToMany
+  @JoinColumn(name = "alert_id")
+  private Collection<AlertMatchEntity> matches = new ArrayList<>();
+
+  public AlertEntity(String bulkId, String externalId, String discriminator) {
     this.bulkId = bulkId;
+    this.discriminator = discriminator;
+    this.externalId = externalId;
   }
 
   @Transient

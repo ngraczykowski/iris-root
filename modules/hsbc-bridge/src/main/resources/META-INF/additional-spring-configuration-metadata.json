@@ -11,6 +11,11 @@
       "description": "Bridge warehouse exchange name."
     },
     {
+      "name": "silenteight.bridge.amqp.warehouse-routing-key",
+      "type": "java.lang.String",
+      "description": "Bridge warehouse routing key."
+    },
+    {
       "name": "silenteight.bridge.recommendations.queue",
       "type": "java.lang.String",
       "description": "Bridge recommendation queue name."

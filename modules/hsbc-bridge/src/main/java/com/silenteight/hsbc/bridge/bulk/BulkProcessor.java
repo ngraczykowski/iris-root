@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
-import com.silenteight.hsbc.bridge.report.AlertSender;
-import com.silenteight.hsbc.bridge.report.AlertSender.Alert;
+import com.silenteight.hsbc.bridge.report.WarehouseFacade;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toMap;
 class BulkProcessor {
 
   private final AdjudicationFacade adjudicationFacade;
-  private final AlertSender alertSender;
+  private final WarehouseFacade warehouseFacade;
   private final BulkRepository bulkRepository;
 
   @Scheduled(fixedDelay = 15 * 1000, initialDelay = 2000)
@@ -44,6 +44,7 @@ class BulkProcessor {
         processSolvingBulk(bulk);
       }
     } catch (RuntimeException exception) {
+      log.error("Bulk processing failed!", exception);
       bulk.error("Bulk processing failed due to: " + exception.getMessage());
     }
   }
@@ -79,14 +80,18 @@ class BulkProcessor {
         .build();
   }
 
-  private void sendToWarehouse(Collection<BulkAlertEntity> alerts) {
-    alertSender.sendAlerts(
-        alerts.stream().map(a -> (Alert) a::getExternalId).collect(toList()));
+  private void sendToWarehouse(Collection<BulkAlertEntity> alertEntities) {
+    var alertIds = alertEntities.stream()
+        .map(BulkAlertEntity::getId)
+        .collect(Collectors.toSet());
+
+    warehouseFacade.findAndSendAlerts(alertIds);
   }
 
-  private static Collection<MatchIdComposite> getMatchIds(Collection<BulkAlertMatchEntity> matches) {
+  private static Collection<MatchIdComposite> getMatchIds(
+      Collection<BulkAlertMatchEntity> matches) {
     return matches.stream()
-        .map(m-> new MatchIdComposite(m.getId(), m.getExternalId()))
+        .map(m -> new MatchIdComposite(m.getId(), m.getExternalId()))
         .collect(toList());
   }
 }

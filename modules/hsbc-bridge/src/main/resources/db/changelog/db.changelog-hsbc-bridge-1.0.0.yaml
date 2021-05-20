@@ -140,6 +140,9 @@ databaseChangeLog:
                     foreignKeyName: fk_alert_bulk_id
                     references: hsbc_bridge_bulk(id)
               - column:
+                  name: discriminator
+                  type: varchar(256)
+              - column:
                   name: name
                   type: varchar(256)
               - column:

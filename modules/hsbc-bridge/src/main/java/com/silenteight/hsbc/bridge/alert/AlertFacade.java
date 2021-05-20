@@ -17,8 +17,14 @@ public class AlertFacade {
   private final AlertRepository repository;
   private final RelationshipProcessor relationshipProcessor;
 
-  //TODO - verify if we really need to store the whole payload.
-  // We need either to limit the max number of alert or use direct streaming
+  public List<AlertInfo> getAlertByName(@NonNull String name) {
+    var alerts = repository.findByName(name).stream().collect(toList());
+    return mapToAlertInfo(alerts);
+  }
+
+  private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
+    return alertEntities.stream().map(a -> new AlertInfo(a.getId())).collect(toList());
+  }
 
   @Transactional
   public List<AlertComposite> createAndSaveAlerts(@NonNull String bulkId, byte[] bulkPayload) {
@@ -31,11 +37,11 @@ public class AlertFacade {
   }
 
   private AlertComposite saveAlert(String bulkId, ProcessingResult.ProcessedAlert processedAlert) {
-    var externalId = processedAlert.getExternalId();
     var alertComposite = AlertComposite.builder()
-        .externalId(externalId)
+        .externalId(processedAlert.getExternalId())
         .matches(processedAlert.getMatches());
-    var alertEntity = new AlertEntity(externalId, bulkId);
+    var alertEntity =
+        new AlertEntity(bulkId, processedAlert.getExternalId(), processedAlert.getDiscriminator());
 
     processedAlert.getErrorMessage().ifPresent(errorMessage -> {
       alertEntity.error(errorMessage);
@@ -46,13 +52,5 @@ public class AlertFacade {
     return alertComposite
         .id(alertEntity.getId())
         .build();
-  }
-
-  public List<AlertInfo> getAlertByName(String name) {
-    return mapToAlertInfo(repository.findByName(name).stream().collect(toList()));
-  }
-
-  private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
-    return alertEntities.stream().map(a -> new AlertInfo(a.getId())).collect(toList());
   }
 }
