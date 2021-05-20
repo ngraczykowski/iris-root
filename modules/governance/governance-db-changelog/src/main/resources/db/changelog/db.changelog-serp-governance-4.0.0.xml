@@ -332,4 +332,58 @@
       <column name="policy_id"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-13" author="mmastylo">
+    <createTable tableName="governance_qa_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="alert_name" type="VARCHAR(80)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="governance_qa_decision">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="level" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decided_by" type="VARCHAR(64)"/>
+      <column name="decided_at" type="TIMESTAMP"/>
+      <column name="comment" type="TEXT"/>
+    </createTable>
+
+    <createIndex
+        tableName="governance_qa_decision"
+        indexName="ix_governance_qa_decision_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_qa_decision"
+        baseColumnNames="alert_id"
+        constraintName="fk_governance_qa_decision_alert_id"
+        referencedTableName="governance_qa_alert"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+  </changeSet>
 </databaseChangeLog>
