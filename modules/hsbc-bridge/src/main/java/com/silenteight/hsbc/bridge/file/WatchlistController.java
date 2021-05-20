@@ -3,6 +3,10 @@ package com.silenteight.hsbc.bridge.file;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
+import com.silenteight.hsbc.bridge.file.FileTransferException;
+import com.silenteight.hsbc.bridge.file.NoFileException;
+import com.silenteight.hsbc.bridge.file.SaveFileUseCase;
+import com.silenteight.hsbc.bridge.file.WorldCheckNotifierServiceClient;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +19,19 @@ import java.time.LocalDateTime;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 @RestController
-@RequestMapping("/v1/upload")
+@RequestMapping("/watchlist/v1")
 @RequiredArgsConstructor
-class FileTransferController {
+class WatchlistController {
 
-  private final FileTransferUseCase fileTransferUseCase;
+  private final SaveFileUseCase saveFileUseCase;
+  private final WorldCheckNotifierServiceClient worldCheckNotifier;
 
-  @PostMapping
+  @PostMapping("/upload")
   public void transferFile(@RequestPart("file") MultipartFile file) throws IOException {
     if (isNullOrEmpty(file.getOriginalFilename()))
       throw new NoFileException("No file was specified");
-    fileTransferUseCase.transfer(file.getInputStream(), file.getOriginalFilename());
-  }
-
-  @ExceptionHandler({ FileExistsException.class })
-  @ResponseStatus(value = HttpStatus.CONFLICT)
-  public ResponseEntity<ErrorResponse> handleExceptionWithConflictStatus(
-      RuntimeException exception) {
-    return getErrorResponse(exception.getMessage(), HttpStatus.CONFLICT);
+    var identifier = saveFileUseCase.save(file.getInputStream(), file.getOriginalFilename());
+    worldCheckNotifier.sendUri(identifier);
   }
 
   @ExceptionHandler({ FileTransferException.class })

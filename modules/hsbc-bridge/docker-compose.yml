@@ -20,5 +20,32 @@ services:
         reservations:
           memory: 1G
 
+  minio:
+    image: minio/minio
+    restart: unless-stopped
+    ports:
+      - 9000:9000
+    volumes:
+      - /mnt/data1:/data1
+      - /mnt/data2:/data2
+      - /mnt/data3:/data3
+      - /mnt/data4:/data4
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    command: server /data{1...4}
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc mb myminio/test;
+      /usr/bin/mc policy set public myminio/test;
+      exit 0;
+      "
+
 volumes:
   postgres-storage:

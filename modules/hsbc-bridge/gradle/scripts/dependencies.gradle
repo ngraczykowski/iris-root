@@ -63,6 +63,10 @@ libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1']
 libraries.grpc_spring_boot_starter = [group: 'io.github.lognet', name: 'grpc-spring-boot-starter', version: '4.4.5']
 libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.15.6']
 
+// Amazon
+libraries.amazon_s3 = [group: 'software.amazon.awssdk', name: 's3', version: '2.16.61']
+libraries.amazon_aws = [group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.1017']
+
 // Others
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
@@ -78,6 +82,8 @@ libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabb
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.7']
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
 libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
+libraries.junit_jupiter_testcontainers = [group: 'org.testcontainers', name: 'junit-jupiter', version: '1.15.3']
+libraries.localstack = [group: 'org.testcontainers', name: 'localstack', version: '1.15.3']
 libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
 libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
 libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
@@ -86,6 +92,7 @@ libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'sprin
 libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springBootVersion]
 libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion]
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
+libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: '1.15.3']
 
 
 configurations.all {
@@ -106,6 +113,8 @@ dependencies {
   compile libraries.springfox_oas
   compileOnly libraries.lombok
   implementation libraries.adjudication_engine_api
+  implementation libraries.amazon_aws
+  implementation libraries.amazon_s3
   implementation libraries.commons_lang3
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
@@ -139,11 +148,14 @@ dependencies {
   testCompile libraries.lombok
   testCompile libraries.spock_core
   testImplementation libraries.junit_jupiter_api
+  testImplementation libraries.junit_jupiter_testcontainers
+  testImplementation libraries.localstack
   testImplementation libraries.mockito_core
   testImplementation libraries.mockito_junit_jupiter
   testImplementation libraries.spock_spring
   testImplementation libraries.spring_starter_test
   testImplementation libraries.spring_test
+  testImplementation libraries.testcontainers
   testRuntimeOnly libraries.junit_jupiter_engine
 }
 

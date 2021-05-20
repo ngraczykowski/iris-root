@@ -172,24 +172,23 @@ paths:
         '200':
           description: Model uploaded.
 
-
-  /v1/upload:
+  /watchlist/v1/upload:
     post:
-      summary: Upload file with up to 1GB limit.
+      summary: Upload watchlist file with up to 1GB limit.
       requestBody:
-        description: File to upload.
+        description: Watchlist file.
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
       responses:
         200:
-          description: String message with information if process succeeded.
-          content:
-            text/plain:
-              schema:
-                type: string
+          description: The watchlist file was uploaded successfully.
 
 components:
   schemas:

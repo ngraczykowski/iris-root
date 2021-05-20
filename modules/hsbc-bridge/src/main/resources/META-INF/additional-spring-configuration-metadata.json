@@ -91,9 +91,29 @@
       "description": "Duration of data retention."
     },
     {
-      "name": "silenteight.bridge.file.directory",
+      "name": "silenteight.bridge.aws.uri",
+      "type": "java.net.URI",
+      "description": "Endpoint address for uploading files."
+    },
+    {
+      "name": "silenteight.bridge.aws.accessKey",
       "type": "java.lang.String",
-      "description": "Directory where files will be saved."
+      "description": "AWS access key."
+    },
+    {
+      "name": "silenteight.bridge.aws.secretKey",
+      "type": "java.lang.String",
+      "description": "AWS secret key."
+    },
+    {
+      "name": "silenteight.bridge.aws.bucketName",
+      "type": "java.lang.String",
+      "description": "AWS bucket name."
+    },
+    {
+      "name": "silenteight.bridge.aws.region",
+      "type": "java.lang.String",
+      "description": "AWS region name."
     }
   ]
 }
