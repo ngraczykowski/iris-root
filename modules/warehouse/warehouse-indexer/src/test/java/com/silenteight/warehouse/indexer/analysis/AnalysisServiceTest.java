@@ -10,21 +10,21 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
+import static com.silenteight.warehouse.indexer.analysis.AnalysisMetadataFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ActiveProfiles("jpa-test")
 @ContextConfiguration(classes = AnalysisTestConfiguration.class)
 class AnalysisServiceTest extends BaseDataJpaTest {
 
-  private static final String ANALYSIS_ID = "07fdee7c-9a66-416d-b835-32aebcb63013";
-  private static final String ANALYSIS = "analysis/" + ANALYSIS_ID;
-  private static final String ENVIRONMENT_PREFIX_2 = "env2";
-
   @Autowired
-  AnalysisService analysisService;
+  AnalysisService underTest;
 
   @Autowired
   TestAnalysisMetadataRepository testAnalysisMetadataRepository;
+
+  @Autowired
+  AnalysisMetadataRepository analysisMetadataRepository;
 
   @AfterEach
   public void cleanup() {
@@ -33,7 +33,7 @@ class AnalysisServiceTest extends BaseDataJpaTest {
 
   @Test
   void shouldStoreDevelopmentSimulationAnalysis() {
-    analysisService.getAnalysisMetadata(ANALYSIS, new SimulationNamingStrategy("env1"));
+    underTest.getOrCreateAnalysisMetadata(ANALYSIS, new SimulationNamingStrategy("env1"));
 
     List<AnalysisMetadataEntity> allEntries = testAnalysisMetadataRepository.findAll();
     assertThat(allEntries).hasSize(1);
@@ -46,7 +46,7 @@ class AnalysisServiceTest extends BaseDataJpaTest {
 
   @Test
   void shouldStoreProductionSimulationAnalysis() {
-    analysisService.getAnalysisMetadata(ANALYSIS, new ProductionNamingStrategy("env2"));
+    underTest.getOrCreateAnalysisMetadata(ANALYSIS, new ProductionNamingStrategy("env2"));
 
     List<AnalysisMetadataEntity> allEntries = testAnalysisMetadataRepository.findAll();
     assertThat(allEntries).hasSize(1);
@@ -58,11 +58,18 @@ class AnalysisServiceTest extends BaseDataJpaTest {
 
   @Test
   void shouldReturnCorrectTenantId() {
-    NamingStrategy env2 = new ProductionNamingStrategy(ENVIRONMENT_PREFIX_2);
+    analysisMetadataRepository.save(ANALYSIS_METADATA);
 
-    analysisService.getAnalysisMetadata(ANALYSIS, env2);
+    assertThat(underTest.getTenantIdByAnalysis(ANALYSIS)).isEqualTo(TENANT);
+  }
 
-    assertThat(analysisService.getTenantIdByAnalysis(ANALYSIS))
-        .isEqualTo(env2.getTenantName(ENVIRONMENT_PREFIX_2));
+  @Test
+  void shouldReturnCorrectMetadata() {
+    analysisMetadataRepository.save(ANALYSIS_METADATA);
+
+    AnalysisMetadataDto analysisMetadata = underTest.getAnalysisMetadata(ANALYSIS);
+
+    assertThat(analysisMetadata.getTenant()).isEqualTo(TENANT);
+    assertThat(analysisMetadata.getElasticIndexName()).isEqualTo(ELASTIC_INDEX_PATTERN);
   }
 }

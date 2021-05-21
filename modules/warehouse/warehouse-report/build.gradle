@@ -24,6 +24,7 @@ dependencies {
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
   implementation libraries.minio
+  implementation libraries.dyngr_polling
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-indexer'))

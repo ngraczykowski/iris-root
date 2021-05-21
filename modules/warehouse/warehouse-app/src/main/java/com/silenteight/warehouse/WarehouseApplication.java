@@ -12,9 +12,9 @@ import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.IndexerModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
+import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
-import com.silenteight.warehouse.report.tenant.TenantModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -34,8 +34,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // Domain modules
     IndexerModule.class,
     ReportingModule.class,
+    SimulationModule.class,
     SynchronizationModule.class,
-    TenantModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,

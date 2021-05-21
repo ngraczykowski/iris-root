@@ -17,6 +17,27 @@ Additionally, there are two more `application.yml`:
 - `nomad/conf/application.yml` - a template rendered by Nomad that results in a deployment
   configuration that targets hosted environments.
 
+## Tenants configuration
+
+Warehouse depends heavily on the concept of tenants introduced in Opendistro and uses it
+to separate distinct reports.
+
+Following summarizes the tenants that should be preconfigured in the environment:
+
+- `[env]_production_ai_reasoning` - production flow, 'ai-reasoning' report definitions
+- `[env]_production_rb_scorer` - production flow, 'rb-scorer' report definitions
+- `[env]_production_accuracy` - production flow, 'accuracy' report definitions
+- `[env]_production_periodic` - production flow, reports that should be generated periodically and stored in Minio for auditing 
+- `[env]_simulation_master` - simulation flow, reports definitions blueprint
+
+These are the tenants create by application: 
+- `[env]_simulation_[analysisId]` - simulation flow, tenant created based on `[env]_simulation_master`.
+   Contains all the simulation reports related to a specific `analysisId`.
+
+RFU:
+- `[env]_production_custom` - RFU, production flow, custom report definitions created by user
+- `[env]_simulation_custom` - RFU, simulation flow, custom report definitions created by user
+
 ## Development Setup
 
 Before you can run Warehouse, you need to have a few infrastructural services running:
