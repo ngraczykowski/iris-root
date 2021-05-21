@@ -51,8 +51,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/BulkSolvedAlertsResponse'
+      responses:
+        '200':
+          description: Confirmation of ingesting alerts.
+          content:
+            application/json:
+              example: ''
 
-  '/async/bulk/v1/{bulkId}/status':
+  /async/bulk/v1/{bulkId}/status:
     get:
       summary: Status of bulk processing for given ID
       parameters:
