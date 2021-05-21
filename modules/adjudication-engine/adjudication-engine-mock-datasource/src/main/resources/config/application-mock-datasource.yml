@@ -1,4 +1,5 @@
 grpc:
   client:
-    governance:
+    datasource:
       address: static://localhost:${grpc.server.port}
+      negotiationType: PLAINTEXT

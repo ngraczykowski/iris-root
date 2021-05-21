@@ -1,6 +1,7 @@
 plugins {
   id "java-library"
   id "maven-publish"
+  id "groovy"
 }
 
 description = "Adjudication Engine Analysis"
@@ -14,6 +15,7 @@ dependencies {
 
   implementation libraries.adjudication_engine_api
   implementation libraries.agents_api
+  implementation libraries.data_source_categories_api
   implementation libraries.protobuf_java_util
 
   implementation libraries.grpc_spring_boot_starter

@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.service.integration;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.integration.AnalysisChannels;
+import com.silenteight.adjudication.engine.analysis.categoryrequest.integration.CategoryRequestChannels;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
@@ -42,7 +43,16 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
         properties.getEventInternal().getOutboundExchangeName(),
         properties.getEventInternal().getPendingRecommendationsRoutingKey());
   }
-  
+
+
+  @Bean
+  IntegrationFlow matchCategoriesUpdatedOutboundIntegrationFlow() {
+    return createOutboundFlow(
+        CategoryRequestChannels.MATCH_CATEGORIES_UPDATED_OUTBOUND_CHANNEL,
+        properties.getEventInternal().getOutboundExchangeName(),
+        properties.getEventInternal().getMatchCategoriesUpdatedRoutingKey());
+  }
+
   private StandardIntegrationFlow createOutboundFlow(
       String outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
 

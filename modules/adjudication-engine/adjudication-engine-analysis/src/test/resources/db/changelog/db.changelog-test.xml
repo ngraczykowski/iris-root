@@ -11,4 +11,5 @@
 
   <include file="db/changelog/db.changelog-adjudication-engine-solve-master.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-analysis-master-1.2.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-analysis-master-1.3.xml"/>
 </databaseChangeLog>
