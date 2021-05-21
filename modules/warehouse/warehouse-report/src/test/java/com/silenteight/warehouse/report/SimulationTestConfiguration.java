@@ -9,8 +9,6 @@ import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchM
 import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
-import com.silenteight.warehouse.report.storage.StorageModule;
-import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
@@ -27,8 +25,6 @@ import static org.mockito.Mockito.*;
     OpendistroModule.class,
     ReportingModule.class,
     SimulationModule.class,
-    StorageModule.class,
-    SynchronizationModule.class,
     TestElasticSearchModule.class,
 })
 @ImportAutoConfiguration({
@@ -38,7 +34,7 @@ import static org.mockito.Mockito.*;
     SilentEightNamingConventionConfiguration.class,
 })
 @RequiredArgsConstructor
-public class ReportTestConfiguration {
+public class SimulationTestConfiguration {
 
   @Bean
   @Primary

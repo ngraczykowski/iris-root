@@ -74,4 +74,8 @@ public class ReportingService {
         .title(reportInstance.getReportDefinitionDetails().getReportDefinition().getName())
         .build();
   }
+
+  public void createReport(String reportDefinitionId, String tenant) {
+    opendistroKibanaClient.createReportInstance(tenant, reportDefinitionId);
+  }
 }

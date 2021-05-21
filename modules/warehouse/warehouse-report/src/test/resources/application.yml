@@ -10,17 +10,9 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: ${warehouse.db.schema:public}
     contexts: default
-  elasticsearch:
-    rest:
-      username: admin
-      password: admin
-      uris: http://localhost:9201,http://localhost:9200
 warehouse:
   kibana:
     timezone: Europe/Warsaw
-    url: http://localhost:5601
-    username: admin
-    password: admin
   report:
     default-bucket: reports
     synchronization:
@@ -28,8 +20,6 @@ warehouse:
       cron: "0 */1 * * * ?"
     simulation:
       master-tenant: admin_tenant
-      polling-interval-ms: 500
-      polling-max-attempt-count: 10
   tenant:
     max-object-count: 100
 

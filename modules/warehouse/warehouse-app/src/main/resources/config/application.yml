@@ -50,8 +50,6 @@ warehouse:
       cron: "0 */1 * * * ?"
     simulation:
       master-tenant: ${warehouse.indexing.environment-prefix}_simulation_master
-      polling-interval-ms: 500
-      polling-max-attempt-count: 10
   tenant:
     max-object-count: 100
 

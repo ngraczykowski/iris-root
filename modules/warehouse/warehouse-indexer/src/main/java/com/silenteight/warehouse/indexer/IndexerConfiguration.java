@@ -2,7 +2,7 @@ package com.silenteight.warehouse.indexer;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertService;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
+import com.silenteight.warehouse.indexer.analysis.UniqueAnalysisFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ class IndexerConfiguration {
   @Bean
   AlertIndexUseCase alertIndexUseCase(
       AlertService alertService,
-      AnalysisService analysisService,
+      UniqueAnalysisFactory uniqueAnalysisFactory,
       TimeSource timeSource) {
-    return new AlertIndexUseCase(alertService, analysisService, timeSource);
+    return new AlertIndexUseCase(alertService, uniqueAnalysisFactory, timeSource);
   }
 }

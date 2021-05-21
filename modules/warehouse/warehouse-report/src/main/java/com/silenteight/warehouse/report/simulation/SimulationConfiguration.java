@@ -1,8 +1,6 @@
 package com.silenteight.warehouse.report.simulation;
 
-import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.tenant.TenantService;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,14 +13,12 @@ import javax.validation.Valid;
 class SimulationConfiguration {
 
   @Bean
-  GenerateSimulationReportsUseCase generateSimulationReportsUseCase(
-      AnalysisService analysisService, OpendistroKibanaClient opendistroKibanaClient,
-      TenantService tenantService, @Valid SimulationProperties simulationProperties) {
+  KibanaSetupForSimulationUseCase kibanaSetupForSimulationUseCase(
+      TenantService tenantService,
+      @Valid SimulationProperties simulationProperties) {
 
-    return new GenerateSimulationReportsUseCase(analysisService,
-        opendistroKibanaClient, tenantService,
-        simulationProperties.getMasterTenant(),
-        simulationProperties.getPollingIntervalMs(),
-        simulationProperties.getPollingMaxAttemptCount());
+    return new KibanaSetupForSimulationUseCase(
+        tenantService,
+        simulationProperties.getMasterTenant());
   }
 }
