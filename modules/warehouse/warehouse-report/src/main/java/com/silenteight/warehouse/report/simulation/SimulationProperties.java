@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
@@ -15,8 +14,4 @@ public class SimulationProperties {
 
   @NotBlank
   String masterTenant;
-  @NotNull
-  Integer pollingIntervalMs;
-  @NotNull
-  Integer pollingMaxAttemptCount;
 }

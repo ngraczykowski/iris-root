@@ -9,8 +9,8 @@ import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertService;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 import com.silenteight.warehouse.indexer.analysis.NamingStrategy;
+import com.silenteight.warehouse.indexer.analysis.UniqueAnalysisFactory;
 import com.silenteight.warehouse.indexer.listener.IndexRequestCommandHandler;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
@@ -23,7 +23,7 @@ public class AlertIndexUseCase implements IndexRequestCommandHandler {
   private final AlertService alertService;
 
   @NonNull
-  private final AnalysisService analysisService;
+  private final UniqueAnalysisFactory uniqueAnalysisFactory;
 
   @NonNull
   private final TimeSource timeSource;
@@ -35,8 +35,8 @@ public class AlertIndexUseCase implements IndexRequestCommandHandler {
     log.debug("DataIndexRequest received, requestId={}, strategy={}",
         dataIndexRequest.getRequestId(), namingStrategy);
 
-    AnalysisMetadataDto analysisMetadataDto = analysisService
-        .getOrCreateAnalysisMetadata(dataIndexRequest.getAnalysisName(), namingStrategy);
+    AnalysisMetadataDto analysisMetadataDto = uniqueAnalysisFactory.getUniqueAnalysis(
+        dataIndexRequest.getAnalysisName(), namingStrategy);
 
     alertService.indexAlert(dataIndexRequest, analysisMetadataDto.getElasticIndexName());
 

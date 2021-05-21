@@ -1,37 +1,42 @@
 package com.silenteight.warehouse.indexer.analysis;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static com.silenteight.warehouse.indexer.analysis.NameResource.getId;
+import static java.lang.String.format;
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @RequiredArgsConstructor
 public class AnalysisService {
 
+  @NonNull
   private final AnalysisMetadataRepository analysisMetadataRepository;
 
-  public AnalysisMetadataDto getOrCreateAnalysisMetadata(
-      String analysis, NamingStrategy namingStrategy) {
+  @NonNull
+  private final ApplicationEventPublisher eventPublisher;
 
-    return getExistingMetadata(analysis)
-        .orElseGet(() -> storeMetadata(analysis, namingStrategy))
-        .toDto();
+  public Optional<AnalysisMetadataDto> getAnalysisMetadata(String analysis) {
+    return getExistingMetadata(analysis).map(AnalysisMetadataEntity::toDto);
   }
 
-  public AnalysisMetadataDto getAnalysisMetadata(String analysis) {
-    return getExistingMetadata(analysis)
-        .orElseThrow(() -> new IllegalStateException("Analysis not present " + analysis))
-        .toDto();
+  @Transactional(propagation = REQUIRES_NEW)
+  public AnalysisMetadataDto createAnalysisMetadata(
+      String analysis, NamingStrategy namingStrategy) {
+
+    return storeMetadata(analysis, namingStrategy).toDto();
   }
 
   public String getTenantIdByAnalysis(String analysisName) {
     return analysisMetadataRepository.getByAnalysis(analysisName)
         .map(AnalysisMetadataEntity::getTenant)
         .orElseThrow(() -> new AnalysisDoesNotExistException(
-            String.format("Analysis with name %s does not exist.", analysisName)));
+            format("Analysis with name %s does not exist.", analysisName)));
   }
 
   private Optional<AnalysisMetadataEntity> getExistingMetadata(String analysis) {
@@ -51,17 +56,13 @@ public class AnalysisService {
         .elasticIndexPattern(elasticIndexName)
         .build();
 
-    return saveEntity(analysisMetadataEntity);
-  }
+    NewAnalysisEvent newAnalysisEvent = NewAnalysisEvent.builder()
+        .analysis(analysisName)
+        .simulation(namingStrategy instanceof SimulationNamingStrategy)
+        .analysisMetadataDto(analysisMetadataEntity.toDto())
+        .build();
+    eventPublisher.publishEvent(newAnalysisEvent);
 
-  private AnalysisMetadataEntity saveEntity(AnalysisMetadataEntity analysisMetadataEntity) {
-    try {
-      return analysisMetadataRepository.save(analysisMetadataEntity);
-    } catch (DataIntegrityViolationException e) {
-      String analysis = analysisMetadataEntity.getAnalysis();
-      return getExistingMetadata(analysis)
-          .orElseThrow(() -> new IllegalStateException(
-              "Attempt to retrieve analysis metadata failed: analysis=" + analysis));
-    }
+    return analysisMetadataRepository.save(analysisMetadataEntity);
   }
 }
