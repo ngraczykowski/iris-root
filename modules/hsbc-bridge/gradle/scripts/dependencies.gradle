@@ -46,6 +46,8 @@ libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', nam
 
 // Database
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '4.3.1']
+// fix for database lock on nomad
+libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock', version: '1.4.0']
 libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.18']
 
 // APIs
@@ -122,6 +124,7 @@ dependencies {
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.jjwt
   implementation libraries.liquibase_core
+  implementation libraries.liquibase_sessionlock
   implementation libraries.orika
   implementation libraries.postgresql
   implementation libraries.protobuf_util
