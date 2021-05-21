@@ -12,7 +12,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
@@ -47,27 +47,44 @@ public class BulkRestController {
       { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
   private static final String OWS_FILE_NAME = "owsResponse.ows";
 
-  // TODO use multipart here!
   @PostMapping("/recommend")
-  public ResponseEntity<BulkAcceptedResponse> receiveAlerts(HttpEntity<String> entity) {
-    var bulkId = storeBulkUseCase.handle(StoreBulkUseCaseCommand.builder()
-        .content(entity.getBody())
-        .learning(false)
-        .build());
-
-    return ResponseEntity.ok(new BulkAcceptedResponse()
-        .bulkId(bulkId));
-  }
+  public ResponseEntity<BulkAcceptedResponse> receiveBulk(HttpServletRequest request)
+      throws IOException {
+    //TODO leave as long as it's not confirmed how bulkId will be passed
+    return receiveBulk(generateBulkId(), request);
+}
 
   @PostMapping("/learning")
-  public ResponseEntity<BulkAcceptedResponse> receiveLearningAlerts(HttpEntity<String> entity) {
-    var bulkId = storeBulkUseCase.handle(StoreBulkUseCaseCommand.builder()
-        .content(entity.getBody())
-        .learning(true)
-        .build());
+  public ResponseEntity<BulkAcceptedResponse> receiveLearningBulk(HttpServletRequest request)
+      throws IOException {
+    //TODO leave as long as it's not confirmed how bulkId will be passed
+    return receiveLearningBulk(generateBulkId(), request);
+  }
 
-    return ResponseEntity.ok(new BulkAcceptedResponse()
-        .bulkId(bulkId));
+  @PostMapping("/{bulkId}/recommend")
+  public ResponseEntity<BulkAcceptedResponse> receiveBulk(
+      @PathVariable String bulkId, HttpServletRequest request) throws IOException {
+    storeBulkUseCase.handle(
+        StoreBulkUseCaseCommand.builder()
+            .bulkId(bulkId)
+            .inputStream(request.getInputStream())
+            .learning(false)
+            .build());
+
+    return ResponseEntity.ok(new BulkAcceptedResponse().bulkId(bulkId));
+  }
+
+  @PostMapping("/{bulkId}/learning")
+  public ResponseEntity<BulkAcceptedResponse> receiveLearningBulk(
+      @PathVariable String bulkId, HttpServletRequest request) throws IOException {
+    storeBulkUseCase.handle(
+        StoreBulkUseCaseCommand.builder()
+            .bulkId(bulkId)
+            .inputStream(request.getInputStream())
+            .learning(true)
+            .build());
+
+    return ResponseEntity.ok(new BulkAcceptedResponse().bulkId(bulkId));
   }
 
   @PostMapping("/ingestRecommendations")
@@ -76,6 +93,10 @@ public class BulkRestController {
     ingestRecommendationsUseCase.ingest(recommendations.getAlerts());
 
     return ResponseEntity.ok().build();
+  }
+
+  private String generateBulkId() {
+    return "bulk-" + UUID.randomUUID();
   }
 
   @PutMapping("/{id}/ack")
@@ -160,6 +181,13 @@ public class BulkRestController {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleExceptionWithBadRequestStatus(
       RuntimeException exception) {
+    return getErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({ IOException.class })
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ResponseEntity<ErrorResponse> handleIOExceptionWithBadRequestStatus(
+      IOException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST);
   }
 

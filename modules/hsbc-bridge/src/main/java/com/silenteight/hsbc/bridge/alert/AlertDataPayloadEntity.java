@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.bulk;
+package com.silenteight.hsbc.bridge.alert;
 
 import lombok.*;
 
@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "hsbc_bridge_bulk_payload")
-class BulkPayloadEntity extends BaseEntity {
+@Table(name = "hsbc_bridge_alert_payload")
+class AlertDataPayloadEntity  extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
@@ -21,7 +21,7 @@ class BulkPayloadEntity extends BaseEntity {
   private Long id;
   private byte[] payload;
 
-  BulkPayloadEntity(byte[] payload) {
+  AlertDataPayloadEntity(byte[] payload) {
     this.payload = payload;
   }
 }

@@ -14,7 +14,7 @@ import static java.time.OffsetDateTime.now;
 @Slf4j
 class DataCleanerJob {
 
-  private final DataCleaner bulkDataCleaner;
+  private final DataCleaner alertDataCleaner;
   private final DataCleaner matchDataCleaner;
   private final Duration dataRetentionDuration;
 
@@ -22,18 +22,18 @@ class DataCleanerJob {
   void clean() {
     log.info("Data cleaning has been started.");
 
-    cleanBulkData();
+    cleanAlertData();
     cleanMatchData();
 
     log.info("Data cleaning has been finished.");
   }
 
-  private void cleanMatchData() {
-    matchDataCleaner.clean(getExpireDate());
+  private void cleanAlertData() {
+    alertDataCleaner.clean(getExpireDate());
   }
 
-  private void cleanBulkData() {
-    bulkDataCleaner.clean(getExpireDate());
+  private void cleanMatchData() {
+    matchDataCleaner.clean(getExpireDate());
   }
 
   private OffsetDateTime getExpireDate() {

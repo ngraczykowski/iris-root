@@ -2,10 +2,12 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
 import com.silenteight.hsbc.bridge.report.WarehouseFacade;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,14 +15,16 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class BulkUseCaseConfiguration {
 
+  private final AlertFacade alertFacade;
   private final AnalysisFacade analysisFacade;
+  private final ApplicationEventPublisher eventPublisher;
   private final WarehouseFacade warehouseFacade;
   private final BulkRepository bulkRepository;
   private final RecommendationFacade recommendationFacade;
 
   @Bean
   StoreBulkUseCase storeBulkUseCase() {
-    return new StoreBulkUseCase(bulkIdRetriever(), bulkRepository);
+    return new StoreBulkUseCase(alertFacade, bulkRepository, eventPublisher);
   }
 
   @Bean
@@ -46,9 +50,5 @@ class BulkUseCaseConfiguration {
   @Bean
   IngestRecommendationsUseCase ingestRecommendationsUseCase() {
     return new IngestRecommendationsUseCase(warehouseFacade);
-  }
-
-  private BulkIdRetriever bulkIdRetriever() {
-    return new BulkIdRetriever();
   }
 }

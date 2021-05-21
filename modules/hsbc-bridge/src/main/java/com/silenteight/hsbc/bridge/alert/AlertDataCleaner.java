@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.bulk;
+package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 
 @RequiredArgsConstructor
-class BulkDataCleaner implements DataCleaner {
+class AlertDataCleaner implements DataCleaner {
 
-  private final BulkPayloadRepository bulkPayloadRepository;
+  private final AlertPayloadRepository payloadRepository;
 
   @Override
   @Transactional
   public void clean(OffsetDateTime expireDate) {
-    bulkPayloadRepository.deletePayloadByCreatedAtBefore(expireDate);
+    payloadRepository.deletePayloadByCreatedAtBefore(expireDate);
   }
 }

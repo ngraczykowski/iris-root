@@ -1,27 +1,40 @@
 package com.silenteight.hsbc.bridge.bulk;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.alert.AlertFacade;
+import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
 import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 
 @RequiredArgsConstructor
-public class StoreBulkUseCase {
+@Slf4j
+class StoreBulkUseCase {
 
-  private final BulkIdRetriever bulkIdRetriever;
+  private final AlertFacade alertFacade;
   private final BulkRepository bulkRepository;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
-  public String handle(@NonNull StoreBulkUseCaseCommand command) {
-    var bulkId = getBulkIdFromJson(command.getContent());
+  void handle(@NonNull StoreBulkUseCaseCommand command) {
+    var bulkId = command.getBulkId();
     validateBulkId(bulkId);
 
-    createBulk(bulkId, command.isLearning(), command.getContent());
+    var bulk = new Bulk(bulkId, command.isLearning());
+    bulkRepository.save(bulk);
 
-    return bulkId;
+    alertFacade.createRawAlerts(command.getBulkId(), command.getInputStream());
+    log.info("Bulk has been stored, ID: {}", bulkId);
+
+    eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
   }
 
   private void validateBulkId(String bulkId) {
@@ -30,30 +43,12 @@ public class StoreBulkUseCase {
     }
   }
 
-  private String getBulkIdFromJson(String json) {
-    return bulkIdRetriever.retrieve(json)
-        .orElseThrow(() -> new StoreBulkException("Cannot locate the bulk Id!"));
-  }
-
-  private void createBulk(String bulkId, boolean learning, String json) {
-    var bulk = new Bulk(bulkId, learning);
-    var bulkPayload = new BulkPayloadEntity(json.getBytes(StandardCharsets.UTF_8));
-    bulk.setPayload(bulkPayload);
-    bulkRepository.save(bulk);
-  }
-
-  static class StoreBulkException extends RuntimeException {
-
-    public StoreBulkException(String message) {
-      super(message);
-    }
-  }
-
   @Builder
   @Value
   static class StoreBulkUseCaseCommand {
 
-    String content;
+    @NonNull String bulkId;
+    @NonNull InputStream inputStream;
     boolean learning;
   }
 }

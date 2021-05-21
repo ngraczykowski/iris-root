@@ -1,8 +1,8 @@
 package com.silenteight.hsbc.datasource.fixtures
 
-import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
-import com.silenteight.hsbc.bridge.domain.CustomerIndividuals
-import com.silenteight.hsbc.bridge.domain.WorldCheckIndividualsOld
+import com.silenteight.hsbc.bridge.json.external.model.CasesWithAlertURL
+import com.silenteight.hsbc.bridge.json.external.model.CustomerIndividuals
+import com.silenteight.hsbc.bridge.json.external.model.WorldCheckIndividuals
 import com.silenteight.hsbc.bridge.match.MatchRawData
 
 trait WorldcheckIndividualMatch {
@@ -123,7 +123,7 @@ trait WorldcheckIndividualMatch {
           yearOfBirth: 1950
       ),
       worldCheckIndividuals: [
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "01-Jan-2019",
               address: "Beirut; Blint Jbeil; Beyrouth; Nabatiye; LEBANON",
               addressCountry: "LB",
@@ -175,7 +175,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1966
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "24-Apr-2014",
               address: "Bahir; Dar; Dubai;Khartoum;Juba;London; Osterley;Amara;Dubai;Centar Equatoria;GreaterLondon; UNITED KINGDOM; ETHIOPIA;UNITEDARAB EMIRATES;SOUTH SUDAN;SUDAN",
               addressCountry: "AE ET GB SD SS",
@@ -230,7 +230,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1958
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "01-Jan-2019",
               address: "Beirut; Blint Jbeil; Beyrouth; Nabatiye; LEBANON",
               addressCountry: "LB",
@@ -282,7 +282,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1966
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "01-Jan-2019",
               address: "Beirut; Blint Jbeil; Beyrouth; Nabatiye; LEBANON",
               addressCountry: "LB",
@@ -334,7 +334,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1966
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "24-Apr-2014",
               address: "Bahir; Dar; Dubai;Khartoum;Juba;London; Osterley;Amara;Dubai;Centar Equatoria;GreaterLondon; UNITED KINGDOM; ETHIOPIA;UNITEDARAB EMIRATES;SOUTH SUDAN;SUDAN",
               addressCountry: "AE ET GB SD SS",
@@ -389,7 +389,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1958
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "01-Jan-2019",
               address: "Beirut; Blint Jbeil; Beyrouth; Nabatiye; LEBANON",
               addressCountry: "LB",
@@ -441,7 +441,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1966
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "01-Jan-2019",
               address: "Beirut; Blint Jbeil; Beyrouth; Nabatiye; LEBANON",
               addressCountry: "LB",
@@ -491,7 +491,7 @@ trait WorldcheckIndividualMatch {
               updateCategory: "C1",
               yearOfBirth: 1966
           ),
-          new WorldCheckIndividualsOld(
+          new WorldCheckIndividuals(
               addedDate: "18-Nov-2019",
               address: "Kabul; Kabul; AFGANISTAN;KUWAIT",
               addressCountry: "AF KW",

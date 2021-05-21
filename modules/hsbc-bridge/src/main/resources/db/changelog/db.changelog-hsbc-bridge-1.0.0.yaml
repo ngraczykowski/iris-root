@@ -45,27 +45,6 @@ databaseChangeLog:
                   name: updated_at
                   type: timestamp
 
-        - createTable:
-            tableName: hsbc_bridge_bulk_payload
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: created_at
-                  type: timestamp
-                  constraints:
-                    nullable: false
-              - column:
-                  name: updated_at
-                  type: timestamp
-              - column:
-                  name: payload
-                  type: bytea
 
         - createTable:
             tableName: hsbc_bridge_bulk
@@ -105,18 +84,34 @@ databaseChangeLog:
                   type: boolean
                   constraints:
                     nullable: false
-              - column:
-                  name: bulk_payload_id
-                  type: bigint
-                  constraints:
-                    nullable: true
-                    foreignKeyName: fk_bulk_payload_id
-                    references: hsbc_bridge_bulk_payload(id)
 
   - changeSet:
       id: 1.0.0-2
       author: bmartofel
       changes:
+        - createTable:
+            tableName: hsbc_bridge_alert_payload
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: payload
+                  type: bytea
+
+
         - createTable:
             tableName: hsbc_bridge_alert
             columns:
@@ -130,8 +125,6 @@ databaseChangeLog:
               - column:
                   name: external_id
                   type: varchar(60)
-                  constraints:
-                    nullable: false
               - column:
                   name: bulk_id
                   type: varchar(50)
@@ -159,6 +152,13 @@ databaseChangeLog:
               - column:
                   name: error_message
                   type: text
+              - column:
+                  name: alert_payload_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_alert_payload_id
+                    references: hsbc_bridge_alert_payload(id)
 
         - createTable:
             tableName: hsbc_bridge_match_payload
@@ -371,3 +371,22 @@ databaseChangeLog:
       author: bmartofel
       changes:
         - sql: create or replace view hsbc_bridge_match_category_view(id, multi_value, name) as SELECT mc.id,c.multi_value, (('categories/'::text || c.name::text) || '/'::text) || m.name::text AS name FROM hsbc_bridge_match_category mc, hsbc_bridge_match m, hsbc_bridge_category c WHERE mc.match_id = m.id AND mc.category_id = c.id;
+
+  - changeSet:
+      id: 1.0.0-8
+      author: bmartofel
+      changes:
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: bulk_id
+            indexName: idx_bridge_alert_bulk_id
+            tableName: hsbc_bridge_alert
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: name
+            indexName: idx_bridge_alert_name
+            tableName: hsbc_bridge_alert

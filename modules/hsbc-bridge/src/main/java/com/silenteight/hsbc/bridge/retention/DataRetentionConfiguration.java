@@ -15,7 +15,7 @@ import org.springframework.scheduling.TaskScheduler;
 @Slf4j
 class DataRetentionConfiguration {
 
-  private final DataCleaner bulkDataCleaner;
+  private final DataCleaner alertDataCleaner;
   private final DataCleaner matchDataCleaner;
 
   private final DataRetentionProperties properties;
@@ -36,7 +36,7 @@ class DataRetentionConfiguration {
 
   private DataCleanerJob getPayloadCleanerJob() {
     return DataCleanerJob.builder()
-        .bulkDataCleaner(bulkDataCleaner)
+        .alertDataCleaner(alertDataCleaner)
         .matchDataCleaner(matchDataCleaner)
         .dataRetentionDuration(properties.getDuration())
         .build();

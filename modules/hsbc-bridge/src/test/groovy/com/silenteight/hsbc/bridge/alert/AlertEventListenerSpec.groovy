@@ -3,12 +3,15 @@ package com.silenteight.hsbc.bridge.alert
 import com.silenteight.hsbc.bridge.alert.event.AlertRecommendationReadyEvent
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent
 
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 class AlertEventListenerSpec extends Specification {
 
+  def alertProcessor = Mock(AlertProcessor)
+  def eventPublisher = Mock(ApplicationEventPublisher)
   def updater = Mock(AlertUpdater)
-  def underTest = new AlertEventListener(updater)
+  def underTest = new AlertEventListener(alertProcessor, updater, eventPublisher)
 
   def 'should handle alert update name event'() {
     given:

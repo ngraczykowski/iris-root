@@ -23,26 +23,10 @@ class RelationshipProcessorSpec extends Specification {
     alert1.worldCheckIndividuals.add(new WorldCheckIndividual(recordId: '2'))
     alert1.relationships.add(new Relationship(recordId: '1', relatedRecordId: '2'))
 
-    def alert2 = new AlertData(
-        caseInformation: new CaseInformation(
-            keyLabel: 'invalidAlert'
-        ))
-
     when:
-    def result = underTest.process([alert1, alert2])
+    def result = underTest.process(alert1)
 
     then:
-    def processedAlerts = result.processedAlerts
-    processedAlerts.size() == 2
-
-    with(processedAlerts.first()) {
-      externalId == 'validAlert'
-      !matches.isEmpty()
-    }
-
-    with(processedAlerts[1]) {
-      externalId == 'invalidAlert'
-      errorMessage.get() == 'No relationships defined!'
-    }
+    !result.matches.isEmpty()
   }
 }

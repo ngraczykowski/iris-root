@@ -10,10 +10,10 @@ import static java.time.OffsetDateTime.now
 class DataCleanerJobSpec extends Specification {
 
   def dataRetentionDuration = Duration.ofDays(1)
-  def bulkCleaner = Mock(DataCleaner)
+  def alertCleaner = Mock(DataCleaner)
   def matchCleaner = Mock(DataCleaner)
   def underTest = DataCleanerJob.builder()
-      .bulkDataCleaner(bulkCleaner)
+      .alertDataCleaner(alertCleaner)
       .matchDataCleaner(matchCleaner)
       .dataRetentionDuration(dataRetentionDuration)
       .build()
@@ -28,6 +28,6 @@ class DataCleanerJobSpec extends Specification {
 
     then:
     1 * matchCleaner.clean({OffsetDateTime dateTime -> dateTime <=> expireDate == 1})
-    1 * bulkCleaner.clean({OffsetDateTime dateTime -> dateTime <=> expireDate == 1})
+    1 * alertCleaner.clean({OffsetDateTime dateTime -> dateTime <=> expireDate == 1})
   }
 }

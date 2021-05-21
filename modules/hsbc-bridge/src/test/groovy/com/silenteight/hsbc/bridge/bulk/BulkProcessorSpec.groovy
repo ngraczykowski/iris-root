@@ -38,16 +38,12 @@ class BulkProcessorSpec extends Specification {
   class Fixtures {
 
     String bulkId = 'bulk-1'
-    byte[] somePayload = 'somePayload'.getBytes()
-    BulkPayloadEntity bulkPayload = new BulkPayloadEntity(somePayload)
 
-    Bulk learningBulk = createBulk(bulkId, bulkPayload, true)
-    Bulk solvingBulk = createBulk(bulkId, bulkPayload, false)
+    Bulk learningBulk = createBulk(bulkId, true)
+    Bulk solvingBulk = createBulk(bulkId, false)
 
-    def createBulk(String bulkId, bulkPayload, boolean learning) {
-      var bulk = new Bulk(bulkId, learning)
-      bulk.setPayload(bulkPayload)
-      bulk
+    def createBulk(String bulkId, boolean learning) {
+      new Bulk(bulkId, learning)
     }
   }
 }

@@ -161,4 +161,8 @@ public class PrivateListIndividual {
   private String recordType;
   @JsonProperty("PrivateListIndividuals.Dummy")
   private String dummy;
+  @JsonProperty("PrivateListIndividuals.Case Country of Origin")
+  private String caseCountryOfOrigin;
+  @JsonProperty("PrivateListIndividuals.LOB")
+  private String lob;
 }

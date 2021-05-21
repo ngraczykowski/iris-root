@@ -25,11 +25,13 @@ public class AlertEntity extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Setter
   private String externalId;
 
   @Setter
   private String name;
 
+  @Setter
   private String discriminator;
 
   private String errorMessage;
@@ -46,15 +48,23 @@ public class AlertEntity extends BaseEntity {
   @JoinColumn(name = "alert_id")
   private Collection<AlertMatchEntity> matches = new ArrayList<>();
 
-  public AlertEntity(String bulkId, String externalId, String discriminator) {
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "alert_payload_id")
+  private AlertDataPayloadEntity payload;
+
+  public AlertEntity(String bulkId) {
     this.bulkId = bulkId;
-    this.discriminator = discriminator;
-    this.externalId = externalId;
   }
 
   @Transient
   void error(String errorMessage) {
     this.errorMessage = errorMessage;
     this.status = AlertStatus.ERROR;
+  }
+
+  @Transient
+  byte[] getPayloadAsBytes() {
+    return payload.getPayload();
   }
 }

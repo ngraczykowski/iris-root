@@ -5,6 +5,7 @@ import org.springframework.data.repository.Repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 interface AlertRepository extends Repository<AlertEntity, Long> {
 
@@ -15,4 +16,6 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   Optional<AlertEntity> findByName(String name);
 
   Optional<AlertEntity> findById(Long id);
+
+  Stream<AlertEntity> findByBulkIdAndStatus(String bulkId, AlertStatus status);
 }

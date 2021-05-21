@@ -1,8 +1,8 @@
 package com.silenteight.hsbc.datasource.fixtures
 
-import com.silenteight.hsbc.bridge.domain.CasesWithAlertURL
-import com.silenteight.hsbc.bridge.domain.CountryCtrpScreening
-import com.silenteight.hsbc.bridge.domain.CustomerIndividuals
+import com.silenteight.hsbc.bridge.json.external.model.CasesWithAlertURL
+import com.silenteight.hsbc.bridge.json.external.model.CtrpScreeningIndividual
+import com.silenteight.hsbc.bridge.json.external.model.CustomerIndividuals
 import com.silenteight.hsbc.bridge.match.MatchRawData
 
 trait CountryIndividualMatch {
@@ -48,7 +48,7 @@ trait CountryIndividualMatch {
           updatedDateTime: "2019-11-01 11:08"
       ),
       countryCtrpScreeningIndividuals: [
-          new CountryCtrpScreening(
+          new CtrpScreeningIndividual(
               alertKeyFragment: "GG-ISSC",
               caseId: 1000000,
               countryCode: "IR",
@@ -56,7 +56,7 @@ trait CountryIndividualMatch {
               owsWatchlistName: "ISSC",
               recordId: 113
           ),
-          new CountryCtrpScreening(
+          new CtrpScreeningIndividual(
               alertKeyFragment: "GG-ISSC",
               caseId: 1000000,
               countryCode: "IR",
@@ -72,7 +72,7 @@ trait CountryIndividualMatch {
               prbListType: "SSC",
               recordId: 14
           ),
-          new CountryCtrpScreening(
+          new CtrpScreeningIndividual(
               alertKeyFragment: "GG-ISSC",
               caseId: 1000000,
               countryCode: "IR",
@@ -88,7 +88,7 @@ trait CountryIndividualMatch {
               prbListType: "SSC",
               recordId: 512
           ),
-          new CountryCtrpScreening(
+          new CtrpScreeningIndividual(
               alertKeyFragment: "GG-ISSC",
               caseId: 1000000,
               countryCode: "IR",

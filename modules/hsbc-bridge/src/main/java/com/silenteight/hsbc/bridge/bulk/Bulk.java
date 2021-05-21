@@ -35,10 +35,6 @@ class Bulk extends BaseEntity {
   private OffsetDateTime errorTimestamp;
   private boolean learning;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "bulk_payload_id")
-  private BulkPayloadEntity payload;
-
   @Setter(NONE)
   @OneToMany
   @JoinColumn(name = "bulk_id")

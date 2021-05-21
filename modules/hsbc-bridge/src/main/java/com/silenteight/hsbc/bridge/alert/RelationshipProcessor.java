@@ -20,12 +20,8 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 class RelationshipProcessor {
 
-  ProcessingResult process(@NonNull List<AlertData> alertsData) {
-    var processedAlerts = alertsData.stream()
-        .map(a -> new CaseIdAlertProcessor(a).process())
-        .collect(toList());
-
-    return new ProcessingResult(processedAlerts);
+  ProcessedAlert process(@NonNull AlertData alertData) throws InvalidAlertDataException {
+    return new CaseIdAlertProcessor(alertData).process();
   }
 
   @AllArgsConstructor
@@ -34,19 +30,11 @@ class RelationshipProcessor {
     final AlertData alertData;
 
     ProcessedAlert process() {
-      var processedAlert = ProcessedAlert.builder()
-          .discriminator(alertData.getFlagKey())
-          .externalId(alertData.getId());
+      validateRelationships();
 
-      var validationError = validateRelationships();
-      if (validationError.isPresent()) {
-        processedAlert.errorMessage(validationError.get());
-        processedAlert.matches(List.of());
-      } else {
-        processedAlert.matches(getMatches());
-      }
-
-      return processedAlert.build();
+      return ProcessedAlert.builder()
+          .matches(getMatches())
+          .build();
     }
 
     private List<Match> getMatches() {
@@ -88,20 +76,18 @@ class RelationshipProcessor {
       return alertData.getCustomerEntities().stream().findFirst();
     }
 
-    private Optional<String> validateRelationships() {
+    private void validateRelationships() {
       if (getRelationships().isEmpty()) {
-        return Optional.of("No relationships defined!");
+        throw new InvalidAlertDataException("No relationships defined!");
       }
 
       if (existCustomerEntityOrIndividualWithoutRelationship()) {
-        return Optional.of("Customer data without relationships!");
+        throw new InvalidAlertDataException("Customer data without relationships!");
       }
 
       if (existWatchlistDataWithoutRelationship()) {
-        return Optional.of("Watchlist data without relationships!");
+        throw new InvalidAlertDataException("Watchlist data without relationships!");
       }
-
-      return Optional.empty();
     }
 
     private boolean existWatchlistDataWithoutRelationship() {
