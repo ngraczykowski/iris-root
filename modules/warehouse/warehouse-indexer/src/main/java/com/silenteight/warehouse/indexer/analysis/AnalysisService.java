@@ -13,11 +13,17 @@ public class AnalysisService {
 
   private final AnalysisMetadataRepository analysisMetadataRepository;
 
-  public AnalysisMetadataDto getAnalysisMetadata(
+  public AnalysisMetadataDto getOrCreateAnalysisMetadata(
       String analysis, NamingStrategy namingStrategy) {
 
     return getExistingMetadata(analysis)
         .orElseGet(() -> storeMetadata(analysis, namingStrategy))
+        .toDto();
+  }
+
+  public AnalysisMetadataDto getAnalysisMetadata(String analysis) {
+    return getExistingMetadata(analysis)
+        .orElseThrow(() -> new IllegalStateException("Analysis not present " + analysis))
         .toDto();
   }
 

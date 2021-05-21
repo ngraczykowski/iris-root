@@ -36,7 +36,7 @@ public class AlertIndexUseCase implements IndexRequestCommandHandler {
         dataIndexRequest.getRequestId(), namingStrategy);
 
     AnalysisMetadataDto analysisMetadataDto = analysisService
-        .getAnalysisMetadata(dataIndexRequest.getAnalysisName(), namingStrategy);
+        .getOrCreateAnalysisMetadata(dataIndexRequest.getAnalysisName(), namingStrategy);
 
     alertService.indexAlert(dataIndexRequest, analysisMetadataDto.getElasticIndexName());
 

@@ -26,6 +26,12 @@ warehouse:
     synchronization:
       production-tenant: admin_tenant
       cron: "0 */1 * * * ?"
+    simulation:
+      master-tenant: admin_tenant
+      polling-interval-ms: 500
+      polling-max-attempt-count: 10
+  tenant:
+    max-object-count: 100
 
 logging:
   level:

@@ -8,9 +8,9 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
+import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
-import com.silenteight.warehouse.report.tenant.TenantModule;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
@@ -26,9 +26,9 @@ import static org.mockito.Mockito.*;
 @ComponentScan(basePackageClasses = {
     OpendistroModule.class,
     ReportingModule.class,
+    SimulationModule.class,
     StorageModule.class,
     SynchronizationModule.class,
-    TenantModule.class,
     TestElasticSearchModule.class,
 })
 @ImportAutoConfiguration({

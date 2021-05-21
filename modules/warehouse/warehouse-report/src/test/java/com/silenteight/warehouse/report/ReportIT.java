@@ -3,18 +3,18 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
-import com.silenteight.warehouse.common.opendistro.kibana.ReportDefinitionDto;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
+import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
+import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingService;
+import com.silenteight.warehouse.report.simulation.GenerateSimulationReportsUseCase;
 import com.silenteight.warehouse.report.synchronization.ReportDto;
 import com.silenteight.warehouse.report.synchronization.ReportSynchronizationService;
 import com.silenteight.warehouse.report.synchronization.ReportSynchronizationUseCase;
-import com.silenteight.warehouse.report.tenant.TenantService;
 
 import io.minio.*;
 import io.minio.messages.Item;
@@ -45,6 +45,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.*;
 
 @Transactional
 @SpringBootTest(classes = ReportTestConfiguration.class)
@@ -90,13 +91,13 @@ class ReportIT {
   private ReportSynchronizationService reportSynchronizationService;
 
   @Autowired
-  private TenantService tenantService;
-
-  @Autowired
   private OpendistroKibanaClient opendistroKibanaClient;
 
   @Autowired
-  private OpendistroElasticClient opendistroElasticClient;
+  private GenerateSimulationReportsUseCase generateSimulationReportsUseCase;
+
+  @Autowired
+  private AnalysisService analysisService;
 
   @BeforeEach
   public void init() {
@@ -115,28 +116,16 @@ class ReportIT {
     removeReportDefinitions();
   }
 
-  // TODO: This test is going to be simplified when entire use case is ready (WEB-976)
   @Test
-  @SneakyThrows
   void shouldSetupTenantForNewSimulation() {
-    //when
-    opendistroElasticClient.createTenant(OTHER_TENANT, "Simulation" + SIMULATION_ANALYSIS_ID);
+    when(analysisService.getAnalysisMetadata("analysis/" + SIMULATION_ANALYSIS_ID))
+        .thenReturn(AnalysisMetadataDto.builder()
+            .tenant(OTHER_TENANT)
+            .elasticIndexName(ELASTIC_INDEX_NAME)
+            .build());
+    generateSimulationReportsUseCase.activate("analysis/" + SIMULATION_ANALYSIS_ID);
 
-    var indexMapping =
-        tenantService.copyKibanaIndices(ADMIN_TENANT, OTHER_TENANT, ELASTIC_INDEX_NAME);
-
-    var searchMapping =
-        tenantService.copySearchDefinition(ADMIN_TENANT, OTHER_TENANT, indexMapping);
-
-    var reportMapping =
-        tenantService.copyReportDefinition(ADMIN_TENANT, OTHER_TENANT, searchMapping);
-
-    waitForReportDefinitions(reportMapping.size(), OTHER_TENANT);
-
-    reportMapping.values().forEach(reportDefinitionId ->
-        opendistroKibanaClient.createReportInstance(OTHER_TENANT, reportDefinitionId));
-
-    waitForReportInstances(reportMapping.size(), OTHER_TENANT);
+    waitForReportInstances(1, OTHER_TENANT);
 
     //then
     var tenants = opendistroKibanaClient.listKibanaIndexPattern(OTHER_TENANT, 10);
@@ -146,9 +135,7 @@ class ReportIT {
     assertThat(clonedSearchObjects).hasSize(1);
 
     var reportDefinitions = opendistroKibanaClient.listReportDefinitions(OTHER_TENANT);
-    assertThat(reportDefinitions)
-        .extracting(ReportDefinitionDto::getId)
-        .containsAll(reportMapping.values());
+    assertThat(reportDefinitions).hasSize(1);
 
     Set<String> reportIds = reportingService.getReportIds(OTHER_TENANT);
     assertThat(reportIds).hasSize(1);
@@ -206,13 +193,7 @@ class ReportIT {
   private void waitForReportInstances(int minCount, String tenant) {
     await()
         .atMost(5, SECONDS)
-        .until(() -> reportingService.getReportIds(ADMIN_TENANT).size() >= minCount);
-  }
-
-  private void waitForReportDefinitions(int minCount, String tenant) {
-    await()
-        .atMost(5, SECONDS)
-        .until(() -> opendistroKibanaClient.listReportDefinitions(tenant).size() >= minCount);
+        .until(() -> reportingService.getReportIds(tenant).size() >= minCount);
   }
 
   @SneakyThrows

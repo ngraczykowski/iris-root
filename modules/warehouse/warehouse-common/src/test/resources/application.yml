@@ -5,6 +5,8 @@ spring:
 warehouse:
   kibana:
     timezone: Europe/Warsaw
+  tenant:
+    max-object-count: 100
 
 logging:
   level:

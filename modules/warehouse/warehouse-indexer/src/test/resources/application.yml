@@ -23,7 +23,7 @@ warehouse:
         exchange-name: alert-indexed
         routing-key: alert.simulation
   indexing:
-    environment-prefix: 'itest'
+    environment-prefix: itest
 
 spring:
   elasticsearch:

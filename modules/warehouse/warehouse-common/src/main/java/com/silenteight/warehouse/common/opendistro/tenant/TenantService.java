@@ -1,7 +1,8 @@
-package com.silenteight.warehouse.report.tenant;
+package com.silenteight.warehouse.common.opendistro.tenant;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaIndexPatternDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.ReportDefinitionDto;
@@ -18,13 +19,30 @@ import static java.util.UUID.randomUUID;
 public class TenantService {
 
   private final OpendistroKibanaClient opendistroKibanaClient;
-  private static final Integer MAX_ELEMENT_COUNT = 100;
+  private final OpendistroElasticClient opendistroElasticClient;
+  private final int maxObjectCount;
+
+  public TenantCloningResult cloneTenant(TenantCloningSpecification tenantCloningSpecification) {
+    String targetTenant = tenantCloningSpecification.getTargetTenant();
+    String tenantDescription = tenantCloningSpecification.getTenantDescription();
+    opendistroElasticClient.createTenant(targetTenant, tenantDescription);
+
+    String sourceTenant = tenantCloningSpecification.getSourceTenant();
+    String elasticIndexName = tenantCloningSpecification.getElasticIndexName();
+    var indexMapping = copyKibanaIndices(sourceTenant, targetTenant, elasticIndexName);
+    var searchMapping = copySearchDefinition(sourceTenant, targetTenant, indexMapping);
+    var reportMapping = copyReportDefinition(sourceTenant, targetTenant, searchMapping);
+
+    return TenantCloningResult.builder()
+        .reportMapping(reportMapping)
+        .build();
+  }
 
   public Map<String, String> copyKibanaIndices(
       String sourceTenant, String targetTenant, String newElasticIndex) {
 
     List<KibanaIndexPatternDto> kibanaIndexPatterns = opendistroKibanaClient
-        .listKibanaIndexPattern(sourceTenant, MAX_ELEMENT_COUNT);
+        .listKibanaIndexPattern(sourceTenant, maxObjectCount);
 
     Map<String, String> idMapping = new HashMap<>();
     for (KibanaIndexPatternDto kibanaIndexPattern : kibanaIndexPatterns) {
@@ -43,7 +61,7 @@ public class TenantService {
       String sourceTenant, String targetTenant, Map<String, String> kibanaIndexMapping) {
 
     List<SearchDto> searches = opendistroKibanaClient
-        .listSavedSearchDefinitions(sourceTenant, MAX_ELEMENT_COUNT);
+        .listSavedSearchDefinitions(sourceTenant, maxObjectCount);
 
     Map<String, String> idMapping = new HashMap<>();
     for (SearchDto search : searches) {

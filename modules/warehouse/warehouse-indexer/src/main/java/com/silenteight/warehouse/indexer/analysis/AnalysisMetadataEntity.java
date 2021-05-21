@@ -8,9 +8,11 @@ import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PUBLIC;
 
 @Data
-@Setter(AccessLevel.PRIVATE)
+@Setter(PRIVATE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +28,7 @@ class AnalysisMetadataEntity extends BaseEntity implements IdentifiableEntity {
   @GeneratedValue(strategy = IDENTITY)
   @Column(name = "id", updatable = false)
   @ToString.Include
-  @Setter(AccessLevel.PUBLIC)
+  @Setter(PUBLIC)
   private Long id;
 
   @NonNull
@@ -48,6 +50,7 @@ class AnalysisMetadataEntity extends BaseEntity implements IdentifiableEntity {
   AnalysisMetadataDto toDto() {
     return AnalysisMetadataDto.builder()
         .elasticIndexName(getElasticIndexPattern())
+        .tenant(getTenant())
         .build();
   }
 }
