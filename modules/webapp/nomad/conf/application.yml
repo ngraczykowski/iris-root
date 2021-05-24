@@ -10,3 +10,5 @@ keycloak:
     confidential-port: 0
     principal-attribute: preferred_username
     ssl-required: external
+
+sens.webapp.external.apps.reporting-ui.url: https://kibana.dev.silenteight.com/
