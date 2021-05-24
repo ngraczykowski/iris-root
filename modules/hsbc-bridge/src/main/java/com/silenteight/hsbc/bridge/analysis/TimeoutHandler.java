@@ -44,13 +44,14 @@ class TimeoutHandler {
 
   private void handleTimeoutException(AnalysisEntity entity) {
     entity.setStatus(Status.TIMEOUT_ERROR);
-    callForRecommendations(entity.getName());
+    callForRecommendations(entity.getName(), entity.getDataset());
     eventPublisher.publishEvent(new AnalysisTimeoutEvent(entity.getId()));
   }
 
-  private void callForRecommendations(String name) {
+  private void callForRecommendations(String name, String dataset) {
     var request = GetRecommendationsDto.builder()
         .analysis(name)
+        .dataset(dataset)
         .build();
 
     recommendationServiceClient.getRecommendations(request).forEach(this::publishRecommendation);
