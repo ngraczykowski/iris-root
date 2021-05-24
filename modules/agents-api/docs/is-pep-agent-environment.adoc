@@ -16,7 +16,7 @@ participant "Is PEP Service" as IsPepService
 
 Input --> Facade: AgentExchangeRequest
 note over Input: Feature is an arbitrarily\n selected value
-Facade -> DataSource: AgentExchangeRequest
+Facade -> DataSource: BatchGetMatchIsPepInputsRequest
 
 loop for each match
 DataSource -> DataSource: Get region and required fields based on the match
@@ -26,7 +26,7 @@ IsPepService -> Worldcheck: IsPepResponse
 Worldcheck -> DataSource: IsPepResponse
 end
 
-DataSource -> Facade: List<IsPepResponse>
+DataSource -> Facade: List<BatchGetMatchIsPepInputsResponse>
 Facade --> Output: AgentOutput
 note over Output: Feature is a value provided in step 1\nReason is Mapped to the reason struct
 
