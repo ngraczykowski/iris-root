@@ -13,7 +13,7 @@ class ResidencyCountryFeatureSpec extends Specification implements FullMatch {
   def queryConfigurer = new ResidencyCountryFeatureQueryConfigurer()
 
   @Shared
-  def underTest = new ResidencyCountryFeature(queryConfigurer.getFactory())
+  def underTest = new ResidencyCountryFeature(queryConfigurer.create())
 
   def "should extract locations"() {
     given:

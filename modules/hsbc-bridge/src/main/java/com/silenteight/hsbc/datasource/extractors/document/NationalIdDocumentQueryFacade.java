@@ -8,7 +8,7 @@ import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdDocu
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-public class NationalIdDocumentQueryFacade implements NationalIdDocumentQuery {
+class NationalIdDocumentQueryFacade implements NationalIdDocumentQuery {
 
   private final MatchData matchData;
   private static final DocumentExtractor documentExtractor = new DocumentExtractor();

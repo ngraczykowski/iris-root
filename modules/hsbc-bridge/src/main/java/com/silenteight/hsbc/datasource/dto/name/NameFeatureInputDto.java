@@ -12,5 +12,6 @@ public class NameFeatureInputDto {
   String feature;
   List<AlertedPartyNameDto> alertedPartyNames;
   List<WatchlistNameDto> watchlistNames;
+  EntityType alertedPartyType;
   List<String> matchingTexts;
 }

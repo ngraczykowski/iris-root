@@ -9,7 +9,7 @@ import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQu
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatureQuery {
+public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatureQuery {
 
   private final IndividualComposite individualComposite;
 

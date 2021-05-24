@@ -9,7 +9,7 @@ import com.silenteight.hsbc.datasource.feature.otherdocument.OtherDocumentQuery;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-public class OtherDocumentQueryFacade implements OtherDocumentQuery {
+class OtherDocumentQueryFacade implements OtherDocumentQuery {
 
   private final MatchData matchData;
   private static final DocumentExtractor documentExtractor = new DocumentExtractor();

@@ -11,6 +11,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputResponse;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class CountryInputProvider implements DataSourceInputProvider<CountryInputRespon
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (CountryFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchData))
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

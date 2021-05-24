@@ -8,7 +8,7 @@ import com.silenteight.hsbc.datasource.feature.passportnumberdocument.PassportNu
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-public class PassportNumberDocumentQueryFacade implements PassportNumberDocumentQuery {
+class PassportNumberDocumentQueryFacade implements PassportNumberDocumentQuery {
 
   private final MatchData matchData;
   private static final DocumentExtractor documentExtractor = new DocumentExtractor();

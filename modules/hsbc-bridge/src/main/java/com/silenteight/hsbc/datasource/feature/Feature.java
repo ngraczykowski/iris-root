@@ -10,11 +10,13 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Feature {
 
-  REGISTRATION_COUNTRY("registrationCountry"),
+  NAME("name"),
   GENDER("gender"),
+  REGISTRATION_COUNTRY("registrationCountry"),
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),
   NATIONALITY_COUNTRY("nationalityCountry"),
+  OTHER_COUNTRY("otherCountry"),
   NATIONAL_ID_DOCUMENT("nationalIdDocument"),
   PASSPORT_NUMBER_DOCUMENT("passportNumberDocument"),
   OTHER_DOCUMENT("otherDocument"),

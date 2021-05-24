@@ -13,4 +13,38 @@ public interface CustomerEntity {
   String getCountriesOfRegistrationOriginal();
 
   String getEdqRegistrationCountriesCodes();
+
+  String getEntityNameOriginal();
+
+  String getEntityName();
+
+  String getOriginalScriptName();
+
+  String getTradesWithCountries();
+
+  String getSubsidiariesOperatesInCountries();
+
+  String getCountriesOfBusiness();
+
+  String getCountriesOfHeadOffice();
+
+  String getAddressCountry();
+
+  String getEdqAddressCountryCode();
+
+  String getEdqBusinessCountries();
+
+  String getCountriesAll();
+
+  String getCountriesAllCodes();
+
+  String getSourceAddressCountry();
+
+  String getEdqTradesWithCountries();
+
+  String getEdqHeadOfficeCountries();
+
+  String getOperatingCountries();
+
+  String getEdqOperatingCountriesCodes();
 }

@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
-import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
+import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputDto;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class NationalIdInputProvider implements DataSourceInputProvider<NationalIdInput
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (NationalIdFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchData))
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

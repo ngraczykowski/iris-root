@@ -17,4 +17,16 @@ public interface PrivateListIndividual {
   String getDateOfBirth();
 
   String getYearOfBirth();
+
+  String getCountryCodesAll();
+
+  String getCountriesAll();
+
+  String getFullNameOriginal();
+
+  String getFullNameDerived();
+
+  String getGivenNamesOriginal();
+
+  String getFamilyNameOriginal();
 }

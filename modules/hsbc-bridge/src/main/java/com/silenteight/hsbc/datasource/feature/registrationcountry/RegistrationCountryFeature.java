@@ -28,18 +28,17 @@ public class RegistrationCountryFeature implements FeatureValuesRetriever<Countr
         .build();
   }
 
-  private static Stream<String> customerEntityRegistrationCountries(
-      CustomerEntity customerEntity) {
+  public static Stream<String> worldCheckEntityCountries(
+      List<WorldCheckEntity> worldCheckEntities) {
+    return worldCheckEntities.stream().map(WorldCheckEntity::getRegistrationCountry);
+  }
+
+  private static Stream<String> customerEntityRegistrationCountries(CustomerEntity customerEntity) {
     return Stream.of(
         customerEntity.getRegistrationCountry(),
         customerEntity.getCountriesOfRegistrationOriginal(),
         customerEntity.getEdqRegistrationCountriesCodes()
     );
-  }
-
-  private static Stream<String> worldCheckEntityCountries(
-      List<WorldCheckEntity> worldCheckEntities) {
-    return worldCheckEntities.stream().map(WorldCheckEntity::getRegistrationCountry);
   }
 
   @Override

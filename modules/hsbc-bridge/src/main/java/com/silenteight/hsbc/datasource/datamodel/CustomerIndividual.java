@@ -26,7 +26,25 @@ public interface CustomerIndividual {
 
   String getResidenceCountries();
 
+  String getEdqAddressCountryCode();
+
+  String getCountriesAll();
+
+  String getEdqCountriesAllCodes();
+
   String getAddressCountry();
+
+  String getProfileFullName();
+
+  String getFullNameDerived();
+
+  String getGivenName();
+
+  String getMiddleName();
+
+  String getFamilyNameOriginal();
+
+  String getOriginalScriptName();
 
   String getCountryOfResidence();
 
@@ -43,9 +61,13 @@ public interface CustomerIndividual {
   String getPassportIssueCountry();
 
   String getCountryOfBirthOriginal();
+
   String getDateOfBirth();
+
   String getDobOriginal();
+
   String getYearOfBirth();
+
   String getBirthDate();
 
   String getCountryOfBirth();

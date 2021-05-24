@@ -7,4 +7,18 @@ public interface WorldCheckEntity {
   String getCountriesAll();
 
   String getRegistrationCountry();
+
+  String getAddressCountry();
+
+  String getOperatingCountries();
+
+  String getNativeAliasLanguageCountry();
+
+  String getEntityNameDerived();
+
+  String getOriginalScriptName();
+
+  String getEntityNameOriginal();
+
+  String getListRecordId();
 }

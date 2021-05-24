@@ -53,9 +53,11 @@ class NameInputGrpcService extends NameInputServiceImplBase {
     return inputs.stream()
         .map(i -> NameFeatureInput.newBuilder()
             .setFeature(i.getFeature())
-            .addAllMatchingTexts(i.getMatchingTexts())
             .addAllAlertedPartyNames(mapAlertedPartyNames(i.getAlertedPartyNames()))
             .addAllWatchlistNames(mapWatchlistNames(i.getWatchlistNames()))
+            .setAlertedPartyType(
+                NameFeatureInput.EntityType.valueOf(i.getAlertedPartyType().name()))
+            .addAllMatchingTexts(i.getMatchingTexts())
             .build())
         .collect(Collectors.toList());
   }

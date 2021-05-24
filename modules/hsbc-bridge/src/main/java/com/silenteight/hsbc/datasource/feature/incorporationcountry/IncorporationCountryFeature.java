@@ -30,7 +30,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
         .build();
   }
 
-  private static Stream<String> worldCheckEntitiesIncorporationCountries(
+  public static Stream<String> worldCheckEntitiesIncorporationCountries(
       List<WorldCheckEntity> worldCheckEntities) {
     return worldCheckEntities.stream()
         .flatMap(wce -> Stream.of(

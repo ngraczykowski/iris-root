@@ -11,6 +11,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputResponse;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class GenderInputProvider implements DataSourceInputProvider<GenderInputResponse
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (GenderFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchData))
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

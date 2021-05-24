@@ -13,6 +13,7 @@ import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
+import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 class DataProvidersConfiguration {
 
   private final MatchFacade matchFacade;
+  private final NameInformationServiceClient nameInformationServiceClient;
 
   @Bean
   DataSourceInputProvider<CountryInputResponse> countryInputProvider() {
@@ -60,7 +62,7 @@ class DataProvidersConfiguration {
 
   @Bean
   DataSourceInputProvider<NameInputResponse> nameInputProvider() {
-    return new NameInputProvider(matchFacade);
+    return new NameInputProvider(matchFacade, nameInformationServiceClient);
   }
 
   @Bean

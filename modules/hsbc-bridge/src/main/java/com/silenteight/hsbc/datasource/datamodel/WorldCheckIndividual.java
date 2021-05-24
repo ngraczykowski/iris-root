@@ -18,6 +18,24 @@ public interface WorldCheckIndividual {
 
   String getPassportCountry();
 
+  String getFullNameOriginal();
+
+  String getFullNameDerived();
+
+  String getOriginalScriptName();
+
+  String getGivenNamesOriginal();
+
+  String getFamilyNameOriginal();
+
+  String getListRecordId();
+
+  String getCountryCodesAll();
+
+  String getCountriesAll();
+
+  String getCountriesOriginal();
+
   String getNativeAliasLanguageCountry();
 
   String getDobs();

@@ -11,6 +11,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.document.DocumentFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputDto;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputResponse;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class DocumentInputProvider implements DataSourceInputProvider<DocumentInputResp
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (DocumentFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchData))
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

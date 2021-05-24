@@ -11,6 +11,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.event.EventFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.event.EventInputDto;
 import com.silenteight.hsbc.datasource.dto.event.EventInputResponse;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class EventInputProvider implements DataSourceInputProvider<EventInputResponse> 
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (EventFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchData))
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

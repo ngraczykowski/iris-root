@@ -13,6 +13,10 @@ public interface EntityComposite {
   List<PrivateListEntity> getPrivateListEntities();
   List<CtrpScreening> getCtrpScreeningEntities();
 
+  default boolean hasWorldCheckEntities() {
+    return nonNull(getWorldCheckEntities()) && !getWorldCheckEntities().isEmpty();
+  }
+
   default boolean hasPrivateListEntities() {
     return nonNull(getPrivateListEntities()) && !getPrivateListEntities().isEmpty();
   }

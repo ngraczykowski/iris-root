@@ -5,7 +5,7 @@ import lombok.NonNull;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.feature.FeatureModel;
-import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.Retriever;
 
 public interface DataSourceInputProvider<R> {
 
@@ -21,7 +21,7 @@ public interface DataSourceInputProvider<R> {
 
   R toResponse(DataSourceInputCommand command);
 
-  default FeatureValuesRetriever getFeatureRetriever(String featureName) {
+  default Retriever getFeatureRetriever(String featureName) {
     return FeatureModel.getFeatureRetriever(featureName);
   }
 

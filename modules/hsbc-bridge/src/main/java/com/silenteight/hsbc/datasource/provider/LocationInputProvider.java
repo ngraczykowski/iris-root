@@ -11,6 +11,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.location.LocationFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputDto;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ class LocationInputProvider implements DataSourceInputProvider<LocationInputResp
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (LocationFeatureInputDto)
-            getFeatureRetriever(featureName).retrieve(matchData))
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 }

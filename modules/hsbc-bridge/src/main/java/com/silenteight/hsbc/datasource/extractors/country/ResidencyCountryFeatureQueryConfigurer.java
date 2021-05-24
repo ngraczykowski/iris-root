@@ -4,7 +4,7 @@ import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQu
 
 public class ResidencyCountryFeatureQueryConfigurer {
 
-  public ResidencyCountryFeatureQuery.Factory getFactory() {
+  public ResidencyCountryFeatureQuery.Factory create() {
     return ResidencyCountryFeatureQueryFacade::new;
   }
 }
