@@ -13,6 +13,37 @@ ext {
 
 apply from: "${gradleScriptDir}/dependencies.gradle"
 
+// exec (FatJar task creation configuration). Taken from S8 convention plugin
+project.pluginManager.withPlugin("org.springframework.boot") {
+
+  project.afterEvaluate {
+    project.tasks.named(JavaPlugin.JAR_TASK_NAME).configure {Jar jar ->
+      jar.enabled = true
+    }
+
+    project.tasks.named("bootJar").configure {task ->
+      task.archiveBaseName = 'hsbc-bridge'
+      task.archiveClassifier = "exec"
+      task.archiveVersion = null
+
+      task.exclude {
+        it.name.contains("spring-boot-starter") && it.name.endsWith(".jar")
+      }
+    }
+
+    def springBoot = project.extensions.findByName("springBoot")
+    if (springBoot) {
+      springBoot.buildInfo {
+        properties {
+          artifact = 'hsbc-bridge'
+          name = 'HSBC Bridge'
+          time = null
+        }
+      }
+    }
+  }
+}
+
 jar {
   manifest {
     attributes "Main-Class": "com.silenteight.hsbc.bridge.BridgeApplication"
