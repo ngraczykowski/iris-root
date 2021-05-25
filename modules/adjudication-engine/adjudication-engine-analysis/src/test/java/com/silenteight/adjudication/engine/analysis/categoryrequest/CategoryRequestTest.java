@@ -19,17 +19,17 @@ import static org.mockito.Mockito.*;
 class CategoryRequestTest {
 
   private CategoryRequestFacade categoryRequestFacade;
-  private MissingCategoryValueUseCase missingCategoryValueUseCase;
+  private FetchAllMissingCategoryValuesUseCase fetchAllMissingCategoryValuesUseCase;
   private MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
-  private DatasourceClient datasourceClient;
+  private DataSourceClient datasourceClient;
 
   @BeforeEach
   void setUp() {
     matchCategoryValuesDataAccess = Mockito.mock(MatchCategoryValuesDataAccess.class);
-    datasourceClient = Mockito.mock(DatasourceClient.class);
-    missingCategoryValueUseCase =
-        new MissingCategoryValueUseCase(matchCategoryValuesDataAccess, datasourceClient);
-    categoryRequestFacade = new CategoryRequestFacade(missingCategoryValueUseCase);
+    datasourceClient = Mockito.mock(DataSourceClient.class);
+    fetchAllMissingCategoryValuesUseCase =
+        new FetchAllMissingCategoryValuesUseCase(matchCategoryValuesDataAccess, datasourceClient);
+    categoryRequestFacade = new CategoryRequestFacade(fetchAllMissingCategoryValuesUseCase);
   }
 
   @Test
@@ -44,7 +44,7 @@ class CategoryRequestTest {
         ).thenReturn(new MissingCategoryResult(List.of(), Map.of()));
 
     assertDoesNotThrow(() ->
-        categoryRequestFacade.handlePendingRecommendation(dataset().build())
+        categoryRequestFacade.handlePendingRecommendations(dataset().build())
     );
   }
 

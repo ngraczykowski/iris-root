@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-class DatasourceClient {
+class DataSourceClient {
 
-  @GrpcClient("datasource")
+  @GrpcClient("data-source")
   private CategoryServiceBlockingStub categoryServiceStub;
 
   public BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
     return categoryServiceStub.batchGetMatchCategoryValues(request);
   }
-
 }

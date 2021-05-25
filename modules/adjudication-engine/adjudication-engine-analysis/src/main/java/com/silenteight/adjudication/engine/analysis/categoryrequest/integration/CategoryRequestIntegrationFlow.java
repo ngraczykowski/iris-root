@@ -26,7 +26,7 @@ class CategoryRequestIntegrationFlow extends IntegrationFlowAdapter {
     return from(
         CATEGORY_REQUEST_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
         .handle(PendingRecommendations.class, (payload, headers) -> {
-          categoryRequestFacade.handlePendingRecommendation(payload);
+          categoryRequestFacade.handlePendingRecommendations(payload);
           return MatchCategoriesUpdated
               .builder()
               .analysis(payload.getAnalysisList())

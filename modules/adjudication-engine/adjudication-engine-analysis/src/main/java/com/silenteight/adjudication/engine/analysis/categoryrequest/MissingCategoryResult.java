@@ -21,4 +21,11 @@ public class MissingCategoryResult {
     this.categories.putIfAbsent(categoryKey, categoryId);
   }
 
+  public boolean isEmpty() {
+    return missingMatchCategories.isEmpty();
+  }
+
+  public int getCount() {
+    return missingMatchCategories.size();
+  }
 }
