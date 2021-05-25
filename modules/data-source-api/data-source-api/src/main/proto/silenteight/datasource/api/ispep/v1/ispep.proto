@@ -3,13 +3,14 @@ syntax = "proto3";
 package silenteight.datasource.api.ispep.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
 
 option java_package = "com.silenteight.datasource.api.ispep.v1";
 option java_outer_classname = "IsPepProto";
 option java_multiple_files = true;
 
 service IsPepInputService {
-  rpc BatchGetMatchIsPepInputs (BatchGetMatchIsPepInputsRequest) returns (stream BatchGetMatchIsPepInputsResponse) {
+  rpc BatchGetMatchIsPepSolutions (BatchGetMatchIsPepSolutionsRequest) returns (stream BatchGetMatchIsPepSolutionsResponse) {
     option (google.api.http) = {
       post: "/agent-inputs/ispep/versions/v1/matches:batchGet"
       body: "*"
@@ -17,32 +18,22 @@ service IsPepInputService {
   }
 }
 
-message BatchGetMatchIsPepInputsRequest {
+message BatchGetMatchIsPepSolutionsRequest {
   repeated string matches = 1;
-  repeated RegionModelFields model_configuration = 2;
+  repeated string features = 2;
 }
 
-message RegionModelFields {
-  string region = 1;
-  repeated string required_fields = 2;
-}
-
-message BatchGetMatchIsPepInputsResponse {
-  repeated IsPepInput is_pep_inputs = 1;
-}
-
-message IsPepInput {
+message BatchGetMatchIsPepSolutionsResponse {
   string match = 1;
-  repeated IsPepFeatureInput is_pep_feature_inputs = 2;
-}
+  repeated Feature features = 2;
 
-message IsPepFeatureInput {
-  string feature = 1;
-  string region = 2;
-  repeated ModelFieldValue model_field_values = 3;
-}
+  message Feature {
+    string feature = 1;
+    repeated FeatureSolution feature_solutions = 2;
+  }
 
-message ModelFieldValue {
-  string field_name = 1;
-  string value = 2;
+  message FeatureSolution {
+    string solution = 1;
+    google.protobuf.Struct reason = 2;
+  }
 }
