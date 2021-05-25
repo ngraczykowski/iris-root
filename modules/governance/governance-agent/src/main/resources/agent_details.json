@@ -30,7 +30,7 @@
   "agents/date/versions/1.0.0/configs/1": {
     "agentId": "7bfdc601-06d3-4aa2-a13e-015e2bc8f72f",
     "features": [
-      "features/dob"
+      "features/dateOfBirth"
     ],
     "responses": [
       "EXACT",
@@ -48,9 +48,9 @@
   "agents/document/versions/1.0.0/configs/1": {
     "agentId": "13807c0f-1b88-4043-a32c-dc45b1a9068c",
     "features": [
-      "features/document",
-      "features/nationalId",
-      "features/passport"
+      "features/nationalIdDocument",
+      "features/passportNumberDocument",
+      "features/otherDocument"
     ],
     "responses": [
       "PERFECT_MATCH",
@@ -87,8 +87,11 @@
   "agents/country/versions/1.0.0/configs/1": {
     "agentId": "6d53ff99-2578-4a9e-bfde-9966d4fd31ee",
     "features": [
-      "features/residency",
-      "features/nationality"
+      "features/residencyCountry",
+      "features/registrationCountry",
+      "features/incorporationCountry",
+      "features/nationalityCountry",
+      "features/otherCountry"
     ],
     "responses": [
       "MATCH",
