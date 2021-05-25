@@ -43,10 +43,12 @@ class BulkProcessor {
       } else {
         processSolvingBulk(bulk);
       }
-    } catch (RuntimeException exception) {
+    } catch (Exception exception) {
       log.error("Bulk processing failed!", exception);
       bulk.error("Bulk processing failed due to: " + exception.getMessage());
     }
+
+    bulkRepository.save(bulk);
   }
 
   private void processSolvingBulk(Bulk bulk) {
