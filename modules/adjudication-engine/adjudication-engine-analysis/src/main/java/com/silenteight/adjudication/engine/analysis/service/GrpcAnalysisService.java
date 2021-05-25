@@ -75,7 +75,7 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
     respondWithNotFound(responseObserver);
   }
 
-  private void respondWithNotFound(StreamObserver<?> responseObserver) {
+  private static void respondWithNotFound(StreamObserver<?> responseObserver) {
     // XXX(ahaczewski): Mocked to return something more useful than UNIMPLEMENTED.
     responseObserver.onError(new StatusRuntimeException(Status.NOT_FOUND));
   }
