@@ -25,10 +25,13 @@ public enum Feature {
   private final String name;
 
   public static Feature getByName(@NonNull String featureName) {
+
+    String name = featureName.replace("features/", "");
+
     return Stream.of(values())
-        .filter(n -> n.getName().equalsIgnoreCase(featureName))
+        .filter(n -> n.getName().equalsIgnoreCase(name))
         .findFirst()
-        .orElseThrow(() -> new FeatureNotFoundException(featureName));
+        .orElseThrow(() -> new FeatureNotFoundException(name));
   }
 
   static class FeatureNotFoundException extends RuntimeException {
