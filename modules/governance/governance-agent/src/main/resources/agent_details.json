@@ -1,5 +1,5 @@
 {
-  "agents/nameAgent/versions/1.0.0/config/1": {
+  "agents/name/versions/1.0.0/configs/1": {
     "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
     "features": [
       "features/name"
@@ -27,7 +27,7 @@
         "configFile": "agents/configurations/date-indv-normal.yml"
       }
     ]},
-  "agents/dateAgent/versions/1.0.0/config/1": {
+  "agents/date/versions/1.0.0/configs/1": {
     "agentId": "7bfdc601-06d3-4aa2-a13e-015e2bc8f72f",
     "features": [
       "features/dob"
@@ -45,7 +45,7 @@
       }
     ]
   },
-  "agents/documentAgent/versions/1.0.0/config/1": {
+  "agents/document/versions/1.0.0/configs/1": {
     "agentId": "13807c0f-1b88-4043-a32c-dc45b1a9068c",
     "features": [
       "features/document",
@@ -67,7 +67,7 @@
       }
     ]
   },
-  "agents/genderAgent/versions/1.0.0/config/1": {
+  "agents/gender/versions/1.0.0/configs/1": {
     "agentId": "bf5a2cdd-e797-428d-9657-85a3b241c9ba",
     "features": [
       "features/gender"
@@ -84,7 +84,7 @@
       }
     ]
   },
-  "agents/countryAgent/versions/1.0.0/config/1": {
+  "agents/country/versions/1.0.0/configs/1": {
     "agentId": "6d53ff99-2578-4a9e-bfde-9966d4fd31ee",
     "features": [
       "features/residency",

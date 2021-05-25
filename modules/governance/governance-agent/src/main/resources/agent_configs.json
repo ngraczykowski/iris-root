@@ -1,10 +1,10 @@
 {
   "agentConfigs": [
-    { "name": "agents/nameAgent/versions/1.0.0/config/1" },
-    { "name": "agents/dateAgent/versions/1.0.0/config/1" },
-    { "name": "agents/documentAgent/versions/1.0.0/config/1" },
-    { "name": "agents/genderAgent/versions/1.0.0/config/1" },
-    { "name": "agents/countryAgent/versions/1.0.0/config/1" }
+    { "name": "agents/name/versions/1.0.0/configs/1" },
+    { "name": "agents/date/versions/1.0.0/configs/1" },
+    { "name": "agents/document/versions/1.0.0/configs/1" },
+    { "name": "agents/gender/versions/1.0.0/configs/1" },
+    { "name": "agents/country/versions/1.0.0/configs/1" }
   ]
 }
 
