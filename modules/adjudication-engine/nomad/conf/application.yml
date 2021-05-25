@@ -6,6 +6,14 @@ grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
   logging:
     enabled: true
+  client:
+    data-source:
+      address: static://
+{{- range $index, $bridge := service (print "grpc." (env "NOMAD_NAMESPACE") "-hsbc-bridge") -}}
+  {{ if $index }},{{ end -}}
+  {{ $bridge.Address }}:{{ $bridge.Port -}}
+{{- end }}
+      negotiation-type: PLAINTEXT
 
 ae:
   db:
