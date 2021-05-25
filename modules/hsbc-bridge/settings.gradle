@@ -1,3 +1,2 @@
 rootProject.name = 'hsbc-bridge'
-include 'dist'
-
+//gradle.ext.sepDependenciesVersion = "1.12.1"
