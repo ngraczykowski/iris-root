@@ -187,6 +187,12 @@ job "adjudication-engine" {
       }
 
       template {
+        data        = "{{ keyOrDefault \"${var.namespace}/adjudication-engine/environment\" \"\" }}"
+        destination = "local/adjudication-engine.env"
+        env         = true
+      }
+
+      template {
         data        = file("./conf/application.yml")
         destination = "local/conf/application.yml"
         change_mode = "noop"
