@@ -31,11 +31,17 @@ class NameWord:
             cleaned=" ".join(n.cleaned for n in seq),
         )
 
+    def __str__(self) -> str:
+        return self.original
+
     def __repr__(self) -> str:
-        if self.original.lower() == self.cleaned:
-            return self.original
-        else:
-            return f"{self.original} ({self.cleaned})"
+        return (
+            "NameWord("
+            + ", ".join(
+                f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self)
+            )
+            + ")"
+        )
 
     def __hash__(self) -> int:
         return self.cleaned.__hash__()
@@ -89,7 +95,7 @@ class NameSequence(collections.UserList):
         return " ".join(map(str, self.data))
 
     def __repr__(self) -> str:
-        return repr(list(map(repr, self.data)))
+        return f"NameSequence({self.data!r})"
 
     def __bool__(self) -> bool:
         return any(self.data)
@@ -115,18 +121,23 @@ class NameInformation:
             self.source.original
             + " ("
             + ", ".join(
-                (
-                    f"prefixes: {self.common_prefixes!r}",
-                    f"base: {self.base!r}",
-                    f"suffixes: {self.common_suffixes!r}",
-                    f"legal: {self.legal!r}",
-                    f"countries: {self.countries!r}",
-                    f"parenthesis: {self.parenthesis!r}",
-                    f"other: {self.other!r}",
-                )
+                [
+                    f"{name}: {value}"
+                    for name, value in dataclasses.asdict(self).items()
+                    if value and name != "source"
+                ]
             )
             + ")"
         )
 
     def __bool__(self) -> bool:
         return bool(self.source)
+
+    def __repr__(self) -> str:
+        return (
+            "NameInformation("
+            + ", ".join(
+                f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self)
+            )
+            + ")"
+        )

@@ -14,7 +14,9 @@ class Score:
         OK = "OK"
 
         @classmethod
-        def recognize(cls, alerted_party_data, matched_party_data) -> "Score.ScoreStatus":
+        def recognize(
+            cls, alerted_party_data, matched_party_data
+        ) -> "Score.ScoreStatus":
             return {
                 (True, True): cls.OK,
                 (True, False): cls.NO_MATCHED_PARTY_DATA,
@@ -24,6 +26,9 @@ class Score:
 
         def __lt__(self, other):
             return list(self.__class__).index(self) < list(self.__class__).index(other)
+
+        def __repr__(self):
+            return repr(self.value)
 
     status: ScoreStatus = ScoreStatus.UNKNOWN
     value: float = 0
@@ -65,3 +70,12 @@ class Score:
 
     def __reversed__(self) -> "Score":
         return Score(value=self.value, compared=(self.compared[1], self.compared[0]))
+
+    def __repr__(self):
+        return (
+            "Score("
+            + ", ".join(
+                f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self)
+            )
+            + ")"
+        )
