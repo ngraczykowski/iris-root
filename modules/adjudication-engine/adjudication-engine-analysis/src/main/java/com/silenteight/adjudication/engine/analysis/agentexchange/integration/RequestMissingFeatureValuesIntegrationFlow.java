@@ -19,7 +19,7 @@ class RequestMissingFeatureValuesIntegrationFlow extends IntegrationFlowAdapter 
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(AgentExchangeChannels.AGENT_EXCHANGE_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
         .handle(PendingRecommendations.class, (payload, headers) -> {
-          agentExchangeFacade.requestMissingFeatureValues(payload);
+          payload.getAnalysisList().forEach(agentExchangeFacade::requestMissingFeatureValues);
           return null;
         });
   }

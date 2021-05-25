@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 
 import org.springframework.stereotype.Service;
 
@@ -20,23 +19,22 @@ class RequestMissingFeatureValuesUseCase {
   private final AgentRequestHandler agentRequestHandler;
   private final AgentExchangeRequestGateway gateway;
 
-  void requestMissingFeatureValues(PendingRecommendations pendingRecommendations) {
-    pendingRecommendations.getAnalysisList().forEach(this::doRequestMissingFeatureValues);
-  }
-
-  private void doRequestMissingFeatureValues(String analysisName) {
+  void requestMissingFeatureValues(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
 
-    if (log.isDebugEnabled()) {
-      log.debug("Requesting missing feature values: analysisId={}", analysisId);
-    }
+    log.info("Requesting missing feature values: analysisId={}", analysisId);
 
     // NOTE(ahaczewski): We send requests in batches, handling errors along the way.
+    var totalCount = 0;
     var matchCount = 0;
     do {
       matchCount = missingMatchFeatureReader.read(
           analysisId, agentRequestHandler.createChunkHandler(this::sendRequests));
+      totalCount += matchCount;
     } while (matchCount > 0);
+
+    log.info("Finished requesting missing feature values: analysisId={}, matchCount={}",
+        analysisId, totalCount);
   }
 
   private void sendRequests(List<AgentExchangeRequestMessage> messages) {
