@@ -41,7 +41,7 @@ job "governance" {
   }
 
   group "governance" {
-    count = 1
+    count = 2
 
     network {
       port "http" {
