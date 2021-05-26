@@ -16,6 +16,7 @@ class SenderConfiguration {
 
   private final AmqpProperties amqpProperties;
   private final RabbitTemplate rabbitTemplate;
+  private final MessageRegistry messageRegistry;
 
   @Bean
   MessageSender messageSender() {
@@ -25,7 +26,11 @@ class SenderConfiguration {
             .exchangeName(amqpProperties.getWarehouseExchangeName())
             .routingKey(rabbitTemplate.getRoutingKey())
             .build())
-        .messageConverter(new ProtoMessageConverter())
+        .messageConverter(protoMessageConverter())
         .build();
+  }
+
+  private ProtoMessageConverter protoMessageConverter() {
+    return new ProtoMessageConverter(messageRegistry);
   }
 }
