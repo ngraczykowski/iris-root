@@ -4,6 +4,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.Party;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public interface NameQuery {
@@ -29,6 +30,8 @@ public interface NameQuery {
   Stream<String> mpPrivateListIndividualsExtractNames();
 
   Stream<String> mpPrivateListEntitiesExtractNames();
+
+  Collection<String> applyOriginalScriptEnhancementsForIndividualNamesWithAliases();
 
   Party applyOriginalScriptEnhancementsForIndividualNames();
 

@@ -96,7 +96,7 @@ class NameFeatureSpec extends Specification {
              'Akiaksandr Leanidavich ZIMOUSKI'])
       }
       with(watchlistNames.type) {
-        contains(ALIAS)
+        containsAll([ALIAS, REGULAR, REGULAR, REGULAR])
       }
       alertedPartyType == INDIVIDUAL
       matchingTexts == []
@@ -173,7 +173,7 @@ class NameFeatureSpec extends Specification {
              'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
       }
       with(watchlistNames.type) {
-        contains(REGULAR)
+        containsAll([REGULAR, REGULAR, ALIAS])
       }
       alertedPartyType == ORGANIZATION
       matchingTexts == []

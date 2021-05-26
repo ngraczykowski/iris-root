@@ -8,18 +8,22 @@ import com.silenteight.hsbc.datasource.dto.name.NameFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto;
 import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
+import com.silenteight.hsbc.datasource.extractors.name.Party;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureClientValuesRetriever;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL;
 import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION;
 import static com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType.ALIAS;
 import static com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType.REGULAR;
 import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.empty;
+import static java.util.stream.Stream.concat;
 
 @RequiredArgsConstructor
 public class NameFeature implements FeatureClientValuesRetriever<NameFeatureInputDto> {
@@ -32,36 +36,26 @@ public class NameFeature implements FeatureClientValuesRetriever<NameFeatureInpu
     var inputBuilder = NameFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {
-      extractIndividual(query, inputBuilder);
+      var party = query.applyOriginalScriptEnhancementsForIndividualNames();
+      var watchListIndividual = getWatchListIndividual(query, party);
+
+      inputBuilder.alertedPartyNames(mapToAlertedPartyNames(party.getAlertedPartyIndividuals()));
+      inputBuilder.watchlistNames(watchListIndividual);
+      inputBuilder.alertedPartyType(INDIVIDUAL);
     } else {
-      extractEntity(query, inputBuilder);
+      var watchListEntities = getWatchListEntities(query);
+
+      inputBuilder.alertedPartyNames(mapToAlertedPartyNames(toDistinctList(
+          query.apEntityExtractEntityNameOriginal(),
+          query.apEntityExtractOtherNames())));
+      inputBuilder.watchlistNames(watchListEntities);
+      inputBuilder.alertedPartyType(ORGANIZATION);
     }
+    inputBuilder.matchingTexts(emptyList());
 
     return inputBuilder
         .feature(getFeature().getName())
         .build();
-  }
-
-  private void extractEntity(
-      NameQuery query, NameFeatureInputDto.NameFeatureInputDtoBuilder inputBuilder) {
-    inputBuilder.alertedPartyNames(mapToAlertedPartyNames(toDistinctList(
-        query.apEntityExtractEntityNameOriginal(),
-        query.apEntityExtractOtherNames())));
-    inputBuilder.watchlistNames(mapToWatchlistNames(toDistinctList(
-        query.mpWorldCheckEntitiesExtractNames(),
-        query.mpWorldCheckEntitiesExtractXmlNamesWithCountries(),
-        query.mpPrivateListEntitiesExtractNames()), REGULAR));
-    inputBuilder.alertedPartyType(ORGANIZATION);
-    inputBuilder.matchingTexts(toDistinctList(empty()));
-  }
-
-  private void extractIndividual(
-      NameQuery query, NameFeatureInputDto.NameFeatureInputDtoBuilder inputBuilder) {
-    var party = query.applyOriginalScriptEnhancementsForIndividualNames();
-    inputBuilder.alertedPartyNames(mapToAlertedPartyNames(party.getAlertedPartyIndividuals()));
-    inputBuilder.watchlistNames(mapToWatchlistNames(party.getWatchlistPartyIndividuals(), ALIAS));
-    inputBuilder.alertedPartyType(INDIVIDUAL);
-    inputBuilder.matchingTexts(toDistinctList(empty()));
   }
 
   @Override
@@ -69,7 +63,28 @@ public class NameFeature implements FeatureClientValuesRetriever<NameFeatureInpu
     return Feature.NAME;
   }
 
-  private static List<AlertedPartyNameDto> mapToAlertedPartyNames(List<String> names) {
+  private List<WatchlistNameDto> getWatchListIndividual(NameQuery query, Party party) {
+    var wlIndividualWithoutAliases =
+        mapToWatchlistNames(party.getWatchlistPartyIndividuals(), REGULAR);
+
+    var wlIndividualWithAliases = mapToWatchlistNames(
+        query.applyOriginalScriptEnhancementsForIndividualNamesWithAliases(), ALIAS);
+
+    return concat(wlIndividualWithAliases, wlIndividualWithoutAliases).collect(toList());
+  }
+
+  private List<WatchlistNameDto> getWatchListEntities(NameQuery query) {
+    var wlEntitiesWithAliases = mapToWatchlistNames(
+        toDistinctList(query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()), ALIAS);
+
+    var wlEntitiesWithoutAliases = mapToWatchlistNames(toDistinctList(
+        query.mpWorldCheckEntitiesExtractNames(),
+        query.mpPrivateListEntitiesExtractNames()), REGULAR);
+
+    return concat(wlEntitiesWithAliases, wlEntitiesWithoutAliases).collect(toList());
+  }
+
+  private List<AlertedPartyNameDto> mapToAlertedPartyNames(List<String> names) {
     return names.stream()
         .map(name -> AlertedPartyNameDto.builder()
             .name(name)
@@ -77,12 +92,11 @@ public class NameFeature implements FeatureClientValuesRetriever<NameFeatureInpu
         .collect(toList());
   }
 
-  private static List<WatchlistNameDto> mapToWatchlistNames(List<String> names, NameType nameType) {
+  private Stream<WatchlistNameDto> mapToWatchlistNames(Collection<String> names, NameType type) {
     return names.stream()
         .map(name -> WatchlistNameDto.builder()
             .name(name)
-            .type(nameType)
-            .build())
-        .collect(toList());
+            .type(type)
+            .build());
   }
 }

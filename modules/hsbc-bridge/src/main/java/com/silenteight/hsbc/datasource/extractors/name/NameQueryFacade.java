@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.feature.name.NameQuery;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.applyOriginalScriptEnhancements;
@@ -94,8 +95,16 @@ class NameQueryFacade implements NameQuery {
   }
 
   @Override
+  public Collection<String> applyOriginalScriptEnhancementsForIndividualNamesWithAliases() {
+    return applyOriginalScriptEnhancements(
+        apAllIndividualNames(), mpWorldCheckIndividualsExtractXmlNamesWithCountries())
+        .getWatchlistPartyIndividuals();
+  }
+
+  @Override
   public Party applyOriginalScriptEnhancementsForIndividualNames() {
-    return applyOriginalScriptEnhancements(apAllIndividualNames(), mpAllIndividualNames());
+    return applyOriginalScriptEnhancements(
+        apAllIndividualNames(), mpAllIndividualNamesWithoutXmlAliases());
   }
 
   private Stream<String> apAllIndividualNames() {
@@ -104,9 +113,8 @@ class NameQueryFacade implements NameQuery {
         .append(apIndividualExtractOtherNames());
   }
 
-  private Stream<String> mpAllIndividualNames() {
+  private Stream<String> mpAllIndividualNamesWithoutXmlAliases() {
     return of(mpWorldCheckIndividualsExtractNames())
-        .append(mpWorldCheckIndividualsExtractXmlNamesWithCountries())
         .append(mpPrivateListIndividualsExtractNames());
   }
 }
