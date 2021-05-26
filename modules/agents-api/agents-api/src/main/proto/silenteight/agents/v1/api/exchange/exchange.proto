@@ -23,7 +23,7 @@ message AgentOutput {
 
   message Feature {
     string feature = 1;
-    repeated FeatureSolution feature_solutions = 2;
+    FeatureSolution feature_solution = 2;
   }
 
   message FeatureSolution {
