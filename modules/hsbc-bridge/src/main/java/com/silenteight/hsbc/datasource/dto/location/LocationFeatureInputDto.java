@@ -5,11 +5,15 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class LocationFeatureInputDto {
 
   String feature;
-  List<String> alertedPartyLocations;
-  List<String> watchlistLocations;
+  @Builder.Default
+  List<String> alertedPartyLocations = emptyList();
+  @Builder.Default
+  List<String> watchlistLocations = emptyList();
 }

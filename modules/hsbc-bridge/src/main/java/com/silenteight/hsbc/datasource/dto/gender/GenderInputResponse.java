@@ -5,9 +5,12 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class GenderInputResponse {
 
-  List<GenderInputDto> inputs;
+  @Builder.Default
+  List<GenderInputDto> inputs = emptyList();
 }

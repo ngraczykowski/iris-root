@@ -5,10 +5,13 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class RegionModelFieldDto {
 
   String region;
-  List<String> requiredFields;
+  @Builder.Default
+  List<String> requiredFields = emptyList();
 }

@@ -5,11 +5,14 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class TransactionFeatureInputDto {
 
   String feature;
-  List<String> transactionMessages;
+  @Builder.Default
+  List<String> transactionMessages = emptyList();
   // new proto
 }

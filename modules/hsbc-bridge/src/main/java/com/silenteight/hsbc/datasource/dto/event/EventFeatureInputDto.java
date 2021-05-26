@@ -5,11 +5,15 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class EventFeatureInputDto {
 
   String feature;
-  List<String> alertedPartyDates;
-  List<String> watchlistEvents;
+  @Builder.Default
+  List<String> alertedPartyDates = emptyList();
+  @Builder.Default
+  List<String> watchlistEvents = emptyList();
 }

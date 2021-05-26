@@ -5,8 +5,12 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class DocumentInputResponse {
-  List<DocumentInputDto> inputs;
+
+  @Builder.Default
+  List<DocumentInputDto> inputs = emptyList();
 }

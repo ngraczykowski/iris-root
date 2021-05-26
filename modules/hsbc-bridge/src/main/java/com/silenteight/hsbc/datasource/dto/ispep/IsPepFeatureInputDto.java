@@ -5,11 +5,14 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class IsPepFeatureInputDto {
 
   String feature;
   String region;
-  List<ModelFieldValueDto> modelFieldValues;
+  @Builder.Default
+  List<ModelFieldValueDto> modelFieldValues = emptyList();
 }

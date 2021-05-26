@@ -5,10 +5,14 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class CountryInputDto {
 
   String match;
-  List<CountryFeatureInputDto> featureInputs;
+
+  @Builder.Default
+  List<CountryFeatureInputDto> featureInputs = emptyList();
 }

@@ -4,12 +4,15 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 @Builder
 @Value
 public class IsPepInputRequest {
 
-  List<String> matches;
-  List<RegionModelFieldDto> regionModelFields;
+  @Builder.Default
+  List<String> matches = emptyList();
+  @Builder.Default
+  List<RegionModelFieldDto> regionModelFields = emptyList();
 }

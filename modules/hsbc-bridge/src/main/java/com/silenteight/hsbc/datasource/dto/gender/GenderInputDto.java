@@ -5,10 +5,13 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class GenderInputDto {
 
   String match;
-  List<GenderFeatureInputDto> featureInputs;
+  @Builder.Default
+  List<GenderFeatureInputDto> featureInputs = emptyList();
 }

@@ -5,10 +5,13 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class EventInputDto {
 
   String match;
-  List<EventFeatureInputDto> featureInputs;
+  @Builder.Default
+  List<EventFeatureInputDto> featureInputs = emptyList();
 }

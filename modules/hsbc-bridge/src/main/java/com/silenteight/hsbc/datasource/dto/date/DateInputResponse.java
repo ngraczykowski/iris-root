@@ -5,9 +5,12 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Value
 @Builder
 public class DateInputResponse {
 
-  List<DateInputDto> inputs;
+  @Builder.Default
+  List<DateInputDto> inputs = emptyList();
 }

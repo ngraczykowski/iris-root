@@ -7,10 +7,13 @@ import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceCli
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class NameInputResponse {
 
-  List<NameInputDto> inputs;
+  @Builder.Default
+  List<NameInputDto> inputs = emptyList();
   NameInformationServiceClient client;
 }

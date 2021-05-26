@@ -5,11 +5,15 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class CountryFeatureInputDto {
 
   String feature;
-  List<String> alertedPartyCountries;
-  List<String> watchlistCountries;
+  @Builder.Default
+  List<String> alertedPartyCountries = emptyList();
+  @Builder.Default
+  List<String> watchlistCountries = emptyList();
 }

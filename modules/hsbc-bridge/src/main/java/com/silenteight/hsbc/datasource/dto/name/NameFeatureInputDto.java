@@ -5,13 +5,18 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class NameFeatureInputDto {
 
   String feature;
-  List<AlertedPartyNameDto> alertedPartyNames;
-  List<WatchlistNameDto> watchlistNames;
+  @Builder.Default
+  List<AlertedPartyNameDto> alertedPartyNames = emptyList();
+  @Builder.Default
+  List<WatchlistNameDto> watchlistNames = emptyList();
   EntityType alertedPartyType;
-  List<String> matchingTexts;
+  @Builder.Default
+  List<String> matchingTexts = emptyList();
 }

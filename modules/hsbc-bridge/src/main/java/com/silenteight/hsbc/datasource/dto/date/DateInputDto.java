@@ -5,10 +5,13 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class DateInputDto {
 
   String match;
-  List<DateFeatureInputDto> featureInputs;
+  @Builder.Default
+  List<DateFeatureInputDto> featureInputs = emptyList();
 }

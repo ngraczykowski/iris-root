@@ -5,9 +5,12 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Value
 @Builder
 public class CountryInputResponse {
 
-  List<CountryInputDto> inputs;
+  @Builder.Default
+  List<CountryInputDto> inputs = emptyList();
 }

@@ -5,11 +5,15 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class GenderFeatureInputDto {
 
   String feature;
-  List<String> alertedPartyGenders;
-  List<String> watchlistGenders;
+  @Builder.Default
+  List<String> alertedPartyGenders = emptyList();
+  @Builder.Default
+  List<String> watchlistGenders = emptyList();
 }

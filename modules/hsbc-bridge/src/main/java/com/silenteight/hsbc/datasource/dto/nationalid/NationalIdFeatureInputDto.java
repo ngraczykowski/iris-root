@@ -5,13 +5,17 @@ import lombok.Value;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class NationalIdFeatureInputDto {
 
   String feature;
-  List<String> alertedPartyDocumentNumbers;
-  List<String> watchlistDocumentNumbers;
+  @Builder.Default
+  List<String> alertedPartyDocumentNumbers = emptyList();
+  @Builder.Default
+  List<String> watchlistDocumentNumbers = emptyList();
   String alertedPartyCountry;
   String watchlistCountry;
 }
