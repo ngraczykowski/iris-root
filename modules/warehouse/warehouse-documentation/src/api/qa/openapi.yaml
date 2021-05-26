@@ -14,19 +14,34 @@ servers:
         default: http://localhost:24291
 
 paths:
-  /analysis/production/alerts:
+  /analysis/production/query:
     get:
       tags:
-        - warehouse
+        - single hit alert
+        - multi hit alert
       parameters:
+        - in: query
+          name: fields
+          required: true
+          explode: false
+          description: List of fields to return in a response. This field should be exactly the same as a field name in the Elastic Search, no mappings between those fields should be made on a backend side.
+          schema:
+            type: array
+            items:
+              minItems: 1
+              maxItems: 10
+              type: string
+            example: ["alertId", "alertName", "riskType", "country"]
         - in: query
           name: name
           required: true
+          explode: false
           description: Alert resource name
           schema:
             type: array
             items:
               $ref: '#/components/schemas/AlertName'
+            example: ["alerts/c01e5d49-a72d-4e6a-b634-265165916c9a", "alerts/5d49c01e-4e6a-a72d-34b6-916c9a265165"]
       responses:
         '200':
           description: defauld response
@@ -39,7 +54,39 @@ paths:
   /analysis/production/alerts/{id}:
     get:
       tags:
-        - warehouse
+        - single hit alert
+        - multi hit alert
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id - UUID from the `AlertName` field
+          schema:
+            $ref: '#/components/schemas/AlertId'
+        - in: query
+          name: fields
+          required: true
+          explode: false
+          description: List of fields to return in a response. This field should be exactly the same as a field name in the Elastic Search, no mappings between those fields should be made on a backend side.
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 20
+            items:
+              type: string
+            example: [ "alertName", "alertId", "riskType", "country", "policyName", "aiDecision", "aiComment"]
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetails'
+
+  /analysis/production/alerts/{id}/matches:
+    get:
+      tags:
+        - multi hit alert
       parameters:
         - in: path
           name: id
@@ -49,17 +96,48 @@ paths:
             $ref: '#/components/schemas/AlertId'
       responses:
         '200':
-          description: defauld response
+          description: default response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AlertDetails'
+                $ref: '#/components/schemas/AlertMatches'
 
 
   /analysis/production/matches/{matchId}:
     get:
       tags:
-        - warehouse
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+        - in: query
+          name: field
+          required: true
+          explode: false
+          description: List of fields to return in a response. This field should be exactly the same as a field name in the Elastic Search, no mappings between those fields should be made on a backend side.
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 20
+            items:
+              type: string
+            example: [ "alertName", "alertId", "featureVectorId", "aiSolution"]
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDetails'
+
+  /analysis/production/matches/{matchId}/categories:
+    get:
+      tags:
+        - multi hit alert
       parameters:
         - in: path
           name: matchId
@@ -73,13 +151,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MatchDetails'
+                $ref: '#/components/schemas/MatchCategories'
+
+  /analysis/production/matches/{matchId}/categories/{categoryId}/values:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+        - in: path
+          name: categoryId
+          required: true
+          description: Category Id - UUID from the `CategoryName` field
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: Each category requere inputs related to his needs, so the responce
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+  /analysis/production/matches/{matchId}/features:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchFeatures'
 
 
   /analysis/production/matches/{matchId}/features/{featureId}/inputs:
     get:
       tags:
-        - warehouse
+        - multi hit alert
       parameters:
         - in: path
           name: matchId
@@ -107,7 +231,7 @@ paths:
   /analysis/production/matches/{matchId}/features/{featureId}/solution:
     get:
       tags:
-        - warehouse
+        - multi hit alert
       parameters:
         - in: path
           name: matchId
@@ -130,33 +254,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FeatureSolution'
-
-  /analysis/production/matches/{matchId}/categories/{categoryId}/values:
-    get:
-      tags:
-        - warehouse
-      parameters:
-        - in: path
-          name: matchId
-          required: true
-          description: Match Id - UUID form the `MatchName` field
-          schema:
-            $ref: '#/components/schemas/MatchId'
-        - in: path
-          name: categoryId
-          required: true
-          description: Category Id - UUID from the `CategoryName` field
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: Each category requere inputs related to his needs, so the responce
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Category'
 
 components:
   schemas:
@@ -261,25 +358,15 @@ components:
           type: string
         aiComment:
           type: string
-        matches:
-          type: array
-          items:
-            properties:
-              matchName:
-                type: string
+
+    AlertMatches:
+      type: array
+      items:
+        properties:
+          matchName:
+            type: string
       example:
-        {
-          'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
-          'alertId': 'HK_BTCH_DENY!57535030-D413B044-C999F2CD-075A3457',
-          'riskType': 'PEP',
-          'country': 'UK',
-          'policyName': 'policies/675cda67-93ab-439e-8050-45a90e3b0fb8',
-          'aiDecision': 'FALSE_POSITIVE',
-          'aiComment': 'comment',
-          'matches': [
-            'matches/1f42bba8-da6b-4b47-934e-ebde74327a9b',
-          ]
-        }
+        [ 'matches/1f42bba8-da6b-4b47-934e-ebde74327a9b' ]
 
 
     MatchDetails:
@@ -287,7 +374,6 @@ components:
         - matchName
         - watchlistId
         - featureVectorId
-        - features
       type: object
       properties:
         matchName:
@@ -298,30 +384,34 @@ components:
           type: string
         aiSolution:
           type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryName'
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeatureName'
       example:
         {
           'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
           'alertId': 'HK_BTCH_DENY!57535030-D413B044-C999F2CD-075A3457',
           'featureVectorId': '4e94985e-4f94-4158-9050-a81941b2f45f',
           'aiSolution': 'FALSE_POSITIVE',
-          'categories': [
-              'categories/apType',
-              'categories/isDeny'
-          ],
-          'features': [
-              'features/name',
-              'features/date',
-              'features/nationality',
+         }
+
+    MatchCategories:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryName'
+        example:
+          [
+            'categories/apType',
+            'categories/isDeny'
           ]
-        }
+
+    MatchFeatures:
+      type: array
+      items:
+        $ref: '#/components/schemas/FeatureName'
+      example:
+        [
+          'features/name',
+          'features/date',
+          'features/nationality',
+        ]
 
     CategoryName:
       type: string
