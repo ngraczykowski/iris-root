@@ -5,6 +5,7 @@ import com.silenteight.hsbc.bridge.analysis.AnalysisServiceClient;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
@@ -22,6 +23,7 @@ import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDate
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
+@Slf4j
 class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServiceClient {
 
   private final AnalysisServiceBlockingStub analysisServiceBlockingStub;
@@ -85,15 +87,21 @@ class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServic
   }
 
   @Override
+  @Retryable(value = CannotGetRecommendationsException.class)
   public List<RecommendationDto> getRecommendations(GetRecommendationsDto request) {
+    var recommendations = new ArrayList<RecommendationDto>();
     var gprcRequest = StreamRecommendationsRequest.newBuilder()
         .setAnalysis(request.getAnalysis())
         .setDataset(request.getDataset())
         .build();
-    var result = getStub().streamRecommendations(gprcRequest);
 
-    var recommendations = new ArrayList<RecommendationDto>();
-    result.forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
+    try {
+      getStub().streamRecommendations(gprcRequest)
+          .forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
+    } catch (StatusRuntimeException ex) {
+      log.error("Cannot get recommendations", ex);
+      throw new CannotGetRecommendationsException();
+    }
 
     return recommendations;
   }

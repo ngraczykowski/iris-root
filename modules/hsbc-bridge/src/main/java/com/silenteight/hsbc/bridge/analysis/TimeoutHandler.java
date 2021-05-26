@@ -2,11 +2,13 @@ package com.silenteight.hsbc.bridge.analysis;
 
 import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status;
 import com.silenteight.hsbc.bridge.analysis.dto.GetRecommendationsDto;
 import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient.CannotGetRecommendationsException;
 import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class TimeoutHandler {
   
   private final AnalysisServiceClient analysisServiceClient;
@@ -29,7 +32,18 @@ class TimeoutHandler {
   @Scheduled(fixedRate = 60 * 1000, initialDelay = 2000)
   @Transactional
   void process() {
-    findInProgressTimeoutAnalyses().forEach(this::handleAnalysis);
+    findInProgressTimeoutAnalyses().forEach(this::tryToHandleAnalysis);
+  }
+
+  private void tryToHandleAnalysis(AnalysisEntity entity) {
+    try {
+      handleAnalysis(entity);
+    } catch (RuntimeException ex) {
+      log.error("Error on handling analysis timeout", ex);
+      entity.setStatus(Status.TIMEOUT_ERROR);
+    }
+
+    repository.save(entity);
   }
 
   private void handleAnalysis(AnalysisEntity entity) {
@@ -38,23 +52,25 @@ class TimeoutHandler {
     } else {
       entity.setStatus(Status.COMPLETED);
     }
-
-    repository.save(entity);
   }
 
-  private void handleTimeoutException(AnalysisEntity entity) {
+  private void handleTimeoutException(AnalysisEntity entity)  {
     entity.setStatus(Status.TIMEOUT_ERROR);
-    callForRecommendations(entity.getName(), entity.getDataset());
+    tryToCallForRecommendations(entity.getName(), entity.getDataset());
     eventPublisher.publishEvent(new AnalysisTimeoutEvent(entity.getId()));
   }
 
-  private void callForRecommendations(String name, String dataset) {
+  private void tryToCallForRecommendations(String name, String dataset) {
     var request = GetRecommendationsDto.builder()
         .analysis(name)
         .dataset(dataset)
         .build();
 
-    recommendationServiceClient.getRecommendations(request).forEach(this::publishRecommendation);
+    try {
+      recommendationServiceClient.getRecommendations(request).forEach(this::publishRecommendation);
+    } catch (CannotGetRecommendationsException ex) {
+      log.error("Cannot get remaining recommendations", ex);
+    }
   }
 
   private List<AnalysisEntity> findInProgressTimeoutAnalyses() {
