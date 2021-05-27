@@ -17,7 +17,7 @@ from company_name.scores.abbreviation import abbreviation_score
 from company_name.scores.parenthesis_match import parenthesis_score
 from company_name.scores.tokenization import tokenization_score
 from company_name.scores.country import country_score
-from company_name.scores.legal import legal_score
+from company_name.scores.legal_terms import legal_score
 from company_name.scores.token_inclusion import token_inclusion_score
 
 

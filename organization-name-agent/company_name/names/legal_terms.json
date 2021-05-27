@@ -1,411 +1,1406 @@
 {
-  "Akciová společnost": [
-    "a.s.",
-    "akc. spol."
-  ],
-  "Aksjeselskap": [
-    "AS"
-  ],
-  "aktiebolag": [
-    "ab"
-  ],
-  "aktiengesellschaft": [
-    "ag"
-  ],
-  "Aktieselskab": [
-    "A/S"
-  ],
-  "Aktsionernoye obschestvo": [
-    "AO"
-  ],
-  "Allmennaksjeselskap": [
-    "ASA"
-  ],
-  "Andelsselskab med begrænset ansvar": [
-    "A.M.B.A."
-  ],
-  "anonim şirketi": [
-    "anonim şirket"
-  ],
-  "Anpartsselskab": [
-    "ApS"
-  ],
-  "Ansvarlig selskap": [
-    "ANS"
-  ],
-  "berhad": [
-    "bhd"
-  ],
-  "besloten vennootschap": [
-    "bv"
-  ],
-  "Borettslag": [
-    "BL"
-  ],
-  "charitable incorporated organisation": [
-    "cio"
-  ],
-  "close corporation": [
-    "c.c."
-  ],
-  "commanditaire vennootschap": [
-    "c.v."
-  ],
-  "community interest company": [
-    "cic"
-  ],
-  "Company": [
-    "co."
-  ],
-  "cooperative": [
-    "družstvo"
-  ],
-  "copropiedad": [],
-  "Corporation": [
-    "corp."
-  ],
-  "de capital variable": [
-    "de c.v.",
-    "capital variable"
-  ],
-  "deoničarsko društvo": [
-    "deoničko društvo",
-    "akcionarsko društvo",
-    "d.d.",
-    "a.d."
-  ],
-  "drujestvo s ogranichena otgovornost": [
-    "ood"
-  ],
-  "društvo sa ograničenom odgovornošću": [
-    "друштво са ограниченом одговорношћу",
-    "d.o.o.",
-    "д.о.о."
-  ],
-  "ednolichno druzhestvo s ogranichena otgovornost": [
-    "e.o.o.d."
-  ],
-  "eingetragenes Einzelunternehmen": [
-    "e.U."
-  ],
-  "ekonomisk forening": [
-    "ek"
-  ],
-  "Empresa Individual de Responsabilidad Limitada": [
-    "e.i.r.l."
-  ],
-  "Enkeltmandsvirksomhed": [],
-  "Enkeltpersonforetak": [],
-  "Erhvervsdrivende fond": [],
-  "Forening med begrænset ansvar": [
-    "F.M.B.A."
-  ],
-  "Forening": [],
-  "free zone company": [
-    "fzco",
-    "fzc",
-    "fz-llc",
-    "fz llc",
-    "fz company",
-    "fz co"
-  ],
-  "free zone establishment": [
-    "fze"
-  ],
-  "Fylkeskommunalt foretak": [
-    "FKF"
-  ],
-  "General Partnership": [
-    "GP"
-  ],
-  "Genossenschaft": [
-    "gen"
-  ],
-  "Gensidigt selskab": [
-    "G/S"
-  ],
-  "gesellschaft mit beschrankter haftung": [
-    "gmbh",
-    "gesellschaft m.b.h.",
-    "ges.m.b.h."
-  ],
-  "government owned enterprise": [
-    "goe"
-  ],
-  "handelsbolag": [
-    "hb"
-  ],
-  "helseforetak": [
-    "HF"
-  ],
-  "incorporated limited partnership": [
-    "ilp"
-  ],
-  "Incorporated": [
-    "inc.",
-    "incorporation"
-  ],
-  "Interessentskab": [
-    "I/S"
-  ],
-  "Iværksætterselskab": [
-    "IVS"
-  ],
-  "javno preduzeće": [
-    "j.p."
-  ],
-  "joint stock company": [
-    "jsc"
-  ],
-  "julkinen osakeyhtiö": [
-    "Oyj"
-  ],
-  "kabushiki gaisha": [
-    "k.k."
-  ],
-  "komanditno društvo": [
-    "k.d."
-  ],
-  "komanditní společnost": [
-    "k.s.",
-    "kom. spol."
-  ],
-  "kommanditbolag": [
-    "kb"
-  ],
-  "Kommanditgesellschaft": [
-    "KG"
-  ],
-  "Kommanditselskab": [
-    "K/S"
-  ],
-  "korlátolt felelősségű társaság": [
-    "kft."
-  ],
-  "közhasznú társaság": [
-    "kht."
-  ],
-  "limited liability company": [
-    "limited",
-    "ltd",
-    "lc",
-    "l.l.c.",
-    "ltda",
-    "limitada",
-    "lda"
-  ],
-  "limited liability limited partnership": [
-    "lllp"
-  ],
-  "limited liability partnership": [
-    "llp"
-  ],
-  "Limited Partnership": [
-    "LP"
-  ],
-  "limited şirketi": [
-    "limited şirket"
-  ],
-  "Mažoji bendrija": [
-    "mb"
-  ],
-  "naamloze vennootschap": [
-    "nv"
-  ],
-  "National association": [
-    "NA"
-  ],
-  "nyilvánosan működő részvénytársaság": [
-    "Nyrt."
-  ],
-  "obecně prospěšná společnost": [
-    "o.p.s."
-  ],
-  "obschestvo s ogranichennoy otvetstvennostyu": [
-    "ooo"
-  ],
-  "Občanské sdružení": [
-    "o.s."
-  ],
-  "open joint stock company": [
-    "ojsc"
-  ],
-  "ortačko društvo": [
-    "o.d."
-  ],
-  "osakeyhtiö": [
-    "oy"
-  ],
-  "Osaühing": [
-    "OÜ"
-  ],
-  "osuuskunta": [
-    "osk"
-  ],
-  "otkrytoye aktsionernoye obschestvo": [
-    "oao"
-  ],
-  "Partnerselskab": [
-    "Kommanditaktieselskab",
-    "P/S"
-  ],
-  "Partsrederi": [],
-  "preduzetnik": [],
-  "Private Limited Company": [
-    "pte",
-    "pvt"
-  ],
-  "professional corporation": [
-    "pc"
-  ],
-  "professional limited liability company": [
-    "pplc"
-  ],
-  "przedsiębiorstwo państwowe": [
-    "p.p."
-  ],
-  "Public Establishment with Economic characteristics": [
-    "PEEC"
-  ],
-  "public joint stock company": [
-    "pjsc"
-  ],
-  "Public Limited Company": [
-    "Plc. Ltd.",
-    "plc"
-  ],
-  "publichnoye aktsionernoye obschestvo": [
-    "pao"
-  ],
-  "příspěvková organizace": [],
-  "representative trade office": [
-    "rto"
-  ],
-  "Sabiedrība ar ierobežotu atbildību": [
-    "sia"
-  ],
-  "Selskab med begrænset ansvar": [
-    "S.M.B.A.",
-    "BA"
-  ],
-  "Selskap med delt ansvar": [
-    "DA"
-  ],
-  "sendirian berhad": [
-    "sdn. bhd."
-  ],
-  "Sharikat al-Mossahamah": [
-    "sae"
-  ],
-  "Shoqëri me përgjegjësi të kufizuar": [
-    "Sh.p.k."
-  ],
-  "Single Member": [
-    "SM"
-  ],
-  "Sociedad Anónima Cerrada": [
-    "S.A.C."
-  ],
-  "sociedad colectiva": [
-    "sc"
-  ],
-  "sociedad de capital e industria": [
-    "sci"
-  ],
-  "sociedad de responsabilidad limitada": [
-    "srl",
-    "Societate cu răspundere limitată",
-    "Societatea cu răspundere limitată",
-    "sociedad comercial de responsabilidad limitada",
-    "s. de r.l."
-  ],
-  "sociedad en nombre colectivo": [
-    "Cia."
-  ],
-  "sociedad limitada nueva empresa": [
-    "S.L.N.E."
-  ],
-  "sociedad limitada": [
-    "s.l."
-  ],
-  "sociedad por acciones simplificada": [
-    "sas"
-  ],
-  "Sociedad por acciones": [
-    "SpA"
-  ],
-  "Sociedade Gestora de Participações Sociais": [
-    "SGPS"
-  ],
-  "societe a responsabilite limitee": [
-    "sarl",
-    "s.a r.l."
-  ],
-  "societe anonyme": [
-    "sociedad anonima",
-    "s.a.",
-    "s/a"
-  ],
-  "société coopérative": [
-    "società cooperativa"
-  ],
-  "Sole Proprietorship": [
-    "SP"
-  ],
-  "Společnost s ručením omezeným": [
-    "s.r.o.",
-    "spol. s r.o."
-  ],
-  "spółka jawna": [
-    "sp.j."
-  ],
-  "spółka komandytowa": [
-    "sp.k."
-  ],
-  "spółka partnerska": [
-    "sp.k."
-  ],
-  "spółka z ograniczoną odpowiedzialnością": [
-    "Sp. z o.o."
-  ],
-  "srltda": [],
-  "State Company": [
-    "plc"
-  ],
-  "State Joint Venture Company": [
-    "plc"
-  ],
-  "state owned asset": [
-    "soa"
-  ],
-  "state owned enterprise": [
-    "soe"
-  ],
-  "státní podnik": [
-    "s.p."
-  ],
-  "Tovarystvo z obmezhenoiu vidpovidalnistiu": [
-    "T.O.V."
-  ],
-  "unlimited proprietary": [
-    "pty"
-  ],
-  "Uždaroji akcinė bnendrovė": [
-    "UAB"
-  ],
-  "veřejná obchodní společnost": [
-    "v.o.s",
-    "veř. obch. spol.",
-    "a. spol."
-  ],
-  "Vidkryte aktsionerne tovarystvo": [
-    "VAT"
-  ],
-  "zapsaný spolek": [
-    "z.s."
-  ],
-  "zártkörűen működő részvénytársaság": [
-    "Zrt."
-  ],
-  "živnost": []
+  "legal_terms": {
+    "Akciová společnost": {
+      "abbreviations": [
+        "a.s.",
+        "akc. spol."
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "Aksjeselskap": {
+      "abbreviations": [
+        "AS"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "aktiebolag": {
+      "abbreviations": [
+        "ab"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "aktiengesellschaft": {
+      "abbreviations": [
+        "ag"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "Aktieselskab": {
+      "abbreviations": [
+        "A/S"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "Aktsionernoye obschestvo": {
+      "abbreviations": [
+        "AO"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Allmennaksjeselskap": {
+      "abbreviations": [
+        "ASA"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ],
+      "country": [
+        "Norway"
+      ]
+    },
+    "Andelsselskab med begrænset ansvar": {
+      "abbreviations": [
+        "A.M.B.A."
+      ],
+      "country": [
+        "Denmark"
+      ],
+      "meaning": [
+        "limited liability",
+        "cooperative"
+      ]
+    },
+    "anonim şirketi": {
+      "abbreviations": [
+        "anonim şirket",
+        "Anonim Ortaklık",
+        "A.Ş.",
+        "A.O."
+      ],
+      "country": [
+        "Turkey"
+      ],
+      "meaning": [
+        "joint stock company"
+      ]
+    },
+    "Anpartsselskab": {
+      "abbreviations": [
+        "ApS"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "Ansvarlig selskap": {
+      "abbreviations": [
+        "ANS"
+      ],
+      "country": [
+        "Norway"
+      ],
+      "meaning": [
+        "general partnership",
+        "mutual liability"
+      ]
+    },
+    "berhad": {
+      "abbreviations": [
+        "bhd"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ],
+      "country": [
+        "Singapore",
+        "Brunei",
+        "Malaysia"
+      ]
+    },
+    "besloten vennootschap": {
+      "abbreviations": [
+        "bv"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Belgium",
+        "Netherlands"
+      ]
+    },
+    "beslote korporasie": {
+      "abbreviation": [
+        "BK"
+      ],
+      "country": [
+        "South Africa"
+      ],
+      "meaning": [
+        "close corporation"
+      ]
+    },
+    "Borettslag": {
+      "abbreviations": [
+        "BL"
+      ],
+      "country": [
+        "Norway"
+      ],
+      "meaning": [
+        "housing share company"
+      ]
+    },
+    "charitable incorporated organisation": {
+      "abbreviations": [
+        "cio"
+      ],
+      "country": [
+        "United Kingdom"
+      ]
+    },
+    "close corporation": {
+      "abbreviations": [
+        "c.c."
+      ],
+      "country": [
+        "Namibia",
+        "South Africa"
+      ]
+    },
+    "commanditaire vennootschap": {
+      "abbreviations": [
+        "c.v."
+      ],
+      "country": [
+        "Indonesia",
+        "Netherlands"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
+    "community interest company": {
+      "abbreviations": [
+        "cic"
+      ],
+      "country": [
+        "United Kingdom"
+      ]
+    },
+    "Company": {
+      "abbreviations": [
+        "co."
+      ],
+      "meaning": []
+    },
+    "cooperative": {
+      "abbreviations": []
+    },
+    "copropiedad": {
+      "abbreviations": []
+    },
+    "Corporation": {
+      "abbreviations": [
+        "corp."
+      ]
+    },
+    "de capital variable": {
+      "abbreviations": [
+        "de c.v.",
+        "capital variable"
+      ],
+      "country": [
+        "Mexico"
+      ]
+    },
+    "deoničarsko društvo": {
+      "abbreviations": [
+        "deoničko društvo",
+        "akcionarsko društvo",
+        "d.d.",
+        "a.d."
+      ],
+      "country": [
+        "Serbia"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "drujestvo s ogranichena otgovornost": {
+      "abbreviations": [
+        "ood",
+        "дружество с ограничена отговорност"
+      ],
+      "country": [
+        "Bulgaria"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "društvo sa ograničenom odgovornošću": {
+      "abbreviations": [
+        "друштво са ограниченом одговорношћу",
+        "d.o.o.",
+        "д.о.о."
+      ],
+      "country": [
+        "Serbia"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "ednolichno druzhestvo s ogranichena otgovornost": {
+      "abbreviations": [
+        "e.o.o.d."
+      ],
+      "country": [
+        "Bulgaria"
+      ],
+      "meaning": [
+        "sole proprietorship",
+        "limited liability"
+      ]
+    },
+    "eingetragenes Einzelunternehmen": {
+      "abbreviations": [
+        "e.U."
+      ],
+      "country": [
+        "Austria"
+      ],
+      "meaning": [
+        "sole proprietorship"
+      ]
+    },
+    "ekonomisk forening": {
+      "abbreviations": [
+        "ek"
+      ],
+      "country": [
+        "Sweden"
+      ]
+    },
+    "Empresa Individual de Responsabilidad Limitada": {
+      "abbreviations": [
+        "e.i.r.l."
+      ],
+      "country": [
+        "Chile",
+        "Dominican Republic"
+      ],
+      "meaning": [
+        "sole proprietorship",
+        "limited liability"
+      ]
+    },
+    "Enkeltmandsvirksomhed": {
+      "abbreviations": [],
+      "country": [
+        "Denmark"
+      ],
+      "meaning": [
+        "sole proprietorship"
+      ]
+    },
+    "Enkeltpersonforetak": {
+      "abbreviations": [],
+      "country": [
+        "Norway"
+      ],
+      "meaning": [
+        "sole proprietorship"
+      ]
+    },
+    "Erhvervsdrivende fond": {
+      "abbreviations": [],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "Forening med begrænset ansvar": {
+      "abbreviations": [
+        "F.M.B.A."
+      ],
+      "meaning": [
+        "limited liability",
+        "association"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "Forening": {
+      "abbreviations": [],
+      "meaning": [
+        "association"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "free zone company": {
+      "abbreviations": [
+        "fzco",
+        "fzc",
+        "fz-llc",
+        "fz llc",
+        "fz company",
+        "fz co"
+      ]
+    },
+    "free zone establishment": {
+      "abbreviations": [
+        "fze"
+      ]
+    },
+    "Fylkeskommunalt foretak": {
+      "abbreviations": [
+        "FKF"
+      ],
+      "country": [
+        "Norway"
+      ]
+    },
+    "General Partnership": {
+      "abbreviations": [
+        "GP"
+      ]
+    },
+    "Genossenschaft": {
+      "abbreviations": [
+        "gen"
+      ],
+      "meaning": [
+        "cooperative"
+      ],
+      "country": [
+        "Switzerland",
+        "Austria"
+      ]
+    },
+    "Gensidigt selskab": {
+      "abbreviations": [
+        "G/S"
+      ],
+      "meaning": [
+        "mutual organization"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "gesellschaft mit beschrankter haftung": {
+      "abbreviations": [
+        "gmbh",
+        "gesellschaft m.b.h.",
+        "ges.m.b.h."
+      ],
+      "country": [
+        "Germany"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "government owned enterprise": {
+      "abbreviations": [
+        "goe"
+      ]
+    },
+    "handelsbolag": {
+      "abbreviations": [
+        "hb"
+      ],
+      "country": [
+        "Sweden"
+      ],
+      "meaning": [
+        "general partnership"
+      ]
+    },
+    "helseforetak": {
+      "abbreviations": [
+        "HF"
+      ],
+      "country": [
+        "Norway"
+      ]
+    },
+    "incorporated limited partnership": {
+      "abbreviations": [
+        "ilp"
+      ],
+      "meaning": [
+        "incorporated",
+        "limited partnership"
+      ],
+      "country": [
+        "Australia"
+      ]
+    },
+    "Incorporated": {
+      "abbreviations": [
+        "inc.",
+        "incorporation"
+      ]
+    },
+    "Interessentskab": {
+      "abbreviations": [
+        "I/S"
+      ],
+      "meaning": [
+        "general partnership"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "Iværksætterselskab": {
+      "abbreviations": [
+        "IVS"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "javno preduzeće": {
+      "abbreviations": [
+        "j.p.",
+        "јавно предузеће",
+        "ј.п."
+      ],
+      "meaning": [
+        "state-owned"
+      ],
+      "country": [
+        "Serbia"
+      ]
+    },
+    "jednoosobowa działalność gospodarcza": {
+      "abbreviations": [],
+      "meaning": [
+        "sole proprietorship"
+      ],
+      "country": [
+        "Poland"
+      ]
+    },
+    "joint stock company": {
+      "abbreviations": [
+        "jsc",
+        "joint-stock company"
+      ]
+    },
+    "julkinen osakeyhtiö": {
+      "abbreviations": [
+        "Oyj"
+      ],
+      "country": [
+        "Finland"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "kabushiki gaisha": {
+      "abbreviations": [
+        "k.k."
+      ],
+      "country": [
+        "Japan"
+      ]
+    },
+    "komanditno društvo": {
+      "abbreviations": [
+        "k.d."
+      ],
+      "country": [
+        "Bosnia and Herzegovina"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
+    "komanditní společnost": {
+      "abbreviations": [
+        "k.s.",
+        "kom. spol."
+      ],
+      "country": [
+        "Czech Republic"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
+    "kommanditbolag": {
+      "abbreviations": [
+        "kb"
+      ],
+      "country": [
+        "Sweden"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
+    "Kommanditgesellschaft": {
+      "abbreviations": [
+        "KG"
+      ],
+      "country": [
+        "Switzerland",
+        "Austria",
+        "Germany"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
+    "Kommanditselskab": {
+      "abbreviations": [
+        "K/S"
+      ],
+      "country": [
+        "Denmark"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
+    "korlátolt felelősségű társaság": {
+      "abbreviations": [
+        "kft."
+      ],
+      "country": [
+        "Hungary"
+      ],
+      "meaning": [
+        "limited liability"
+      ]
+    },
+    "közhasznú társaság": {
+      "abbreviations": [
+        "kht."
+      ],
+      "country": [
+        "Hungary"
+      ],
+      "meaning": [
+        "community interest company"
+      ]
+    },
+    "limited liability company": {
+      "abbreviations": [
+        "limited",
+        "ltd",
+        "lc",
+        "l.l.c.",
+        "ltda",
+        "limitada",
+        "lda"
+      ],
+      "meaning": [
+        "limited liability"
+      ]
+    },
+    "limited liability limited partnership": {
+      "abbreviations": [
+        "lllp"
+      ],
+      "meaning": [
+        "limited liability",
+        "limited partnership"
+      ]
+    },
+    "limited liability partnership": {
+      "abbreviations": [
+        "llp"
+      ],
+      "meaning": [
+        "limited liability",
+        "partnership"
+      ]
+    },
+    "Limited Partnership": {
+      "abbreviations": [
+        "LP"
+      ]
+    },
+    "limited şirketi": {
+      "abbreviations": [
+        "limited şirket",
+        "Limited Ortaklık",
+        "Ltd. Şti.",
+        "L.Ş.",
+        "L.O."
+      ],
+      "country": [
+        "Turkey"
+      ],
+      "meaning": [
+        "limited liability"
+      ]
+    },
+    "Mažoji bendrija": {
+      "abbreviations": [
+        "mb"
+      ],
+      "country": [
+        "Lithuania"
+      ],
+      "meaning": [
+        "limited liability",
+        "partnership"
+      ]
+    },
+    "naamloze vennootschap": {
+      "abbreviations": [
+        "nv"
+      ],
+      "country": [
+        "Netherlands",
+        "Belgium"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "National association": {
+      "abbreviations": [
+        "NA"
+      ]
+    },
+    "nyilvánosan működő részvénytársaság": {
+      "abbreviations": [
+        "Nyrt."
+      ],
+      "country": [
+        "Hungary"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "obecně prospěšná společnost": {
+      "abbreviations": [
+        "o.p.s."
+      ],
+      "country": [
+        "Czech Republic"
+      ]
+    },
+    "obschestvo s ogranichennoy otvetstvennostyu": {
+      "abbreviations": [
+        "ooo"
+      ],
+      "meaning": [
+        "limited liability"
+      ],
+      "country": [
+        "Russia"
+      ]
+    },
+    "Občanské sdružení": {
+      "abbreviations": [
+        "o.s."
+      ],
+      "country": [
+        "Czech Republic"
+      ],
+      "meaning": [
+        "association"
+      ]
+    },
+    "open joint stock company": {
+      "abbreviations": [
+        "ojsc"
+      ],
+      "meaning": [
+        "public",
+        "joint stock company"
+      ]
+    },
+    "ortačko društvo": {
+      "abbreviations": [
+        "o.d."
+      ],
+      "country": [
+        "Montenegro",
+        "Serbia"
+      ],
+      "meaning": [
+        "general partnership"
+      ]
+    },
+    "osakeyhtiö": {
+      "abbreviations": [
+        "oy"
+      ],
+      "country": [
+        "Finland"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Osaühing": {
+      "abbreviations": [
+        "OÜ"
+      ],
+      "country": [
+        "Estonia"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "osuuskunta": {
+      "abbreviations": [
+        "osk"
+      ],
+      "country": [
+        "Finland"
+      ],
+      "meaning": [
+        "cooperative"
+      ]
+    },
+    "otkrytoye aktsionernoye obshchestvo": {
+      "abbreviations": [
+        "oao"
+      ],
+      "meaning": [
+        "public",
+        "joint stock company"
+      ],
+      "country": [
+        "Russia"
+      ]
+    },
+    "Partnerselskab": {
+      "abbreviations": [
+        "Kommanditaktieselskab",
+        "P/S"
+      ],
+      "meaning": [
+        "limited partnership"
+      ],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "Partsrederi": {
+      "abbreviations": [],
+      "country": [
+        "Denmark"
+      ]
+    },
+    "Perseroan Terbatas": {
+      "abbreviations": ["PT"],
+      "meaning": ["private","limited liability"],
+      "country": ["Indonesia"]
+    },
+    "Perseroan Terbatas Terbuka": {
+      "abbreviations": ["PT Tbk", "Perseroan Terbuka"],
+      "meaning": ["public","limited liability"],
+      "country": ["Indonesia"]
+    },
+    "preduzetnik": {
+      "abbreviations": [],
+      "meaning": [
+        "sole proprietorship"
+      ],
+      "country": [
+        "Montenegro",
+        "Serbia"
+      ]
+    },
+    "Private limited company": {
+      "abbreviations": [
+        "pte",
+        "pvt"
+      ],
+      "meaning": [
+        "private"
+      ]
+    },
+    "private": {
+      "abbreviations": []
+    },
+    "professional corporation": {
+      "abbreviations": [
+        "pc"
+      ],
+      "meaning": [
+        "professional"
+      ]
+    },
+    "professional limited liability company": {
+      "abbreviations": [
+        "pplc"
+      ],
+      "meaning": [
+        "professional",
+        "limited liability"
+      ]
+    },
+    "przedsiębiorstwo państwowe": {
+      "abbreviations": [
+        "p.p."
+      ],
+      "country": [
+        "Poland"
+      ],
+      "meaning": [
+        "state-owned"
+      ]
+    },
+    "Public Establishment with Economic characteristics": {
+      "abbreviations": [
+        "PEEC"
+      ],
+      "country": [
+        "Cambodia"
+      ]
+    },
+    "public joint stock company": {
+      "abbreviations": [
+        "pjsc"
+      ],
+      "meaning": [
+        "public",
+        "joint stock company"
+      ]
+    },
+    "Public limited company": {
+      "abbreviations": [
+        "plc. ltd.",
+        "plc"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "public": {
+      "abbreviations": []
+    },
+    "publichnoye aktsionernoye obschestvo": {
+      "abbreviations": [
+        "pao"
+      ],
+      "country": [
+        "Russia"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "příspěvková organizace": {
+      "abbreviations": [],
+      "country": [
+        "Czech Republic"
+      ]
+    },
+    "representative trade office": {
+      "abbreviations": [
+        "rto"
+      ]
+    },
+    "Sabiedrība ar ierobežotu atbildību": {
+      "abbreviations": [
+        "sia"
+      ],
+      "country": [
+        "Latvia"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Selskab med begrænset ansvar": {
+      "abbreviations": [
+        "S.M.B.A.",
+        "BA"
+      ],
+      "country": [
+        "Denmark"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Selskap med delt ansvar": {
+      "abbreviations": [
+        "DA"
+      ],
+      "country": [
+        "Norway"
+      ],
+      "meaning": [
+        "general partnership"
+      ]
+    },
+    "sendirian berhad": {
+      "abbreviations": [
+        "sdn. bhd."
+      ],
+      "country": [
+        "Malaysia",
+        "Singapore",
+        "Brunei"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Sharikat al-Mossahamah": {
+      "abbreviations": [
+        "sae"
+      ],
+      "country": [
+        "Egypt"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "Shoqëri me përgjegjësi të kufizuar": {
+      "abbreviations": [
+        "Sh.p.k."
+      ],
+      "country": [
+        "Albania"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Single Member Private Limited Company": {
+      "abbreviations": [
+        "SM Pte Ltd."
+      ],
+      "meaning": [
+        "single member",
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Cambodia"
+      ]
+    },
+    "Single Member Company": {
+      "meaning": [
+        "single member"
+      ]
+    },
+    "Sociedad Anónima Cerrada": {
+      "abbreviations": [
+        "S.A.C."
+      ],
+      "country": [
+        "Peru"
+      ]
+    },
+    "sociedad colectiva": {
+      "abbreviations": [
+        "sc",
+        "y Cía. S. C."
+      ],
+      "meaning": [
+        "general partnership"
+      ],
+      "country": [
+        "Spain",
+        "Colombia",
+        "Guatemala",
+        "Uruguay",
+        "Argentina"
+      ]
+    },
+    "sociedad de capital e industria": {
+      "abbreviations": [
+        "sci",
+        "S.C.e l."
+      ],
+      "country": [
+        "Uruguay",
+        "Argentina"
+      ]
+    },
+    "sociedad de responsabilidad limitada": {
+      "abbreviations": [
+        "srl",
+        "Societate cu răspundere limitată",
+        "Societatea cu răspundere limitată",
+        "sociedad comercial de responsabilidad limitada",
+        "s. de r.l.",
+        "Cía. Ltda."
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Chile",
+        "Colombia",
+        "Costa Rica",
+        "Guatemala",
+        "Mexico",
+        "Uruguay"
+      ]
+    },
+    "sociedad en nombre colectivo": {
+      "abbreviations": [
+        "Cia."
+      ],
+      "country": [
+        "Nicaragua",
+        "Mexico"
+      ],
+      "meaning": [
+        "general partnership"
+      ]
+    },
+    "sociedad limitada nueva empresa": {
+      "abbreviations": [
+        "S.L.N.E."
+      ],
+      "country": [
+        "Spain"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "sociedad limitada": {
+      "abbreviations": [
+        "s.l."
+      ],
+      "country": [
+        "Spain"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "sociedad por acciones simplificada": {
+      "abbreviations": [
+        "sas"
+      ],
+      "county": [
+        "Uruguay"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "Sociedad por acciones": {
+      "abbreviations": [
+        "SpA"
+      ],
+      "country": [
+        "Chile"
+      ]
+    },
+    "Sociedade Gestora de Participações Sociais": {
+      "abbreviations": [
+        "SGPS"
+      ],
+      "country": [
+        "Portugal"
+      ]
+    },
+    "societe a responsabilite limitee": {
+      "abbreviations": [
+        "sarl",
+        "s.a r.l."
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "France",
+        "Lebanon",
+        "Luxembourg",
+        "Monaco",
+        "Morocco",
+        "Switzerland",
+        "Tunisia"
+      ]
+    },
+    "societe anonyme": {
+      "abbreviations": [
+        "sociedad anonima",
+        "s.a.",
+        "s/a"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ],
+      "country": [
+        "Morocco",
+        "Switzerland",
+        "Tunisia",
+        "Belgium",
+        "France",
+        "Morocco"
+      ]
+    },
+    "société coopérative": {
+      "abbreviations": [
+        "società cooperativa"
+      ],
+      "meaning": [
+        "cooperative"
+      ],
+      "country": [
+        "Switzerland"
+      ]
+    },
+    "Sole Proprietorship": {
+      "abbreviations": [
+        "SP"
+      ]
+    },
+    "Společnost s ručením omezeným": {
+      "abbreviations": [
+        "s.r.o.",
+        "spol. s r.o."
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Czech Republic"
+      ]
+    },
+    "spółka jawna": {
+      "abbreviations": [
+        "sp.j."
+      ],
+      "meaning": [
+        "general partnership"
+      ],
+      "country": [
+        "Poland"
+      ]
+    },
+    "spółka komandytowa": {
+      "abbreviations": [
+        "sp.k."
+      ],
+      "meaning": [
+        "limited partnership"
+      ],
+      "country": [
+        "Poland"
+      ]
+    },
+    "spółka partnerska": {
+      "abbreviations": [
+        "sp.k."
+      ],
+      "meaning": [
+        "limited liability",
+        "partnership"
+      ],
+      "country": [
+        "Poland"
+      ]
+    },
+    "spółka z ograniczoną odpowiedzialnością": {
+      "abbreviations": [
+        "Sp. z o.o."
+      ],
+      "country": [
+        "Poland"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "srltda": {},
+    "State Company": {
+      "abbreviations": [
+        "GP",
+        "ГП",
+        "Gosudarstvenoe predpriyatie"
+      ],
+      "meaning": [
+        "state-owned"
+      ]
+    },
+    "State Joint Venture Company": {
+      "abbreviations": [],
+      "country": [
+        "Cambodia"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "state owned asset": {
+      "abbreviations": [
+        "soa"
+      ],
+      "meaning": [
+        "state-owned"
+      ]
+    },
+    "state owned enterprise": {
+      "abbreviations": [
+        "soe"
+      ],
+      "meaning": [
+        "state-owned"
+      ]
+    },
+    "státní podnik": {
+      "abbreviations": [
+        "s.p."
+      ],
+      "country": [
+        "Czech Republic"
+      ],
+      "meaning": [
+        "state-owned"
+      ]
+    },
+    "terbuka": {
+      "abbreviations": ["tbk"],
+      "meaning": ["public"]
+    },
+    "Tovarystvo z obmezhenoiu vidpovidalnistiu": {
+      "abbreviations": [
+        "T.O.V."
+      ],
+      "country": [
+        "Ukraine"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "unlimited proprietary": {
+      "abbreviations": [
+        "pty"
+      ],
+      "meaning": [
+        "private"
+      ],
+      "country": [
+        "Australia"
+      ]
+    },
+    "Uždaroji akcinė bnendrovė": {
+      "abbreviations": [
+        "UAB"
+      ]
+    },
+    "veřejná obchodní společnost": {
+      "abbreviations": [
+        "v.o.s",
+        "veř. obch. spol.",
+        "a. spol."
+      ],
+      "country": [
+        "Czech Republic"
+      ],
+      "meaning": [
+        "general partnership"
+      ]
+    },
+    "Vidkryte aktsionerne tovarystvo": {
+      "abbreviations": [
+        "VAT"
+      ],
+      "country": [
+        "Ukraine"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ]
+    },
+    "zapsaný spolek": {
+      "abbreviations": [
+        "z.s."
+      ],
+      "country": [
+        "Czech Republic"
+      ],
+      "meaning": [
+        "association"
+      ]
+    },
+    "zártkörűen működő részvénytársaság": {
+      "abbreviations": [
+        "Zrt."
+      ],
+      "country": [
+        "Hungary"
+      ],
+      "meaning": [
+        "private"
+      ]
+    },
+    "živnost": {
+      "country": [
+        "Slovakia",
+        "Czech Republic"
+      ],
+      "meaning": [
+        "sole proprietorship"
+      ]
+    }
+  }
 }

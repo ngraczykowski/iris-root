@@ -154,7 +154,7 @@ ANY_COMPARED = (AnyValue(), AnyValue())
                     ),
                 ),
                 "legal_terms": Score(
-                    value=EstimatedValue(lower=0.6),
+                    value=0.75,
                     compared=(("CORPORATION",), ("Corp", "Ltd")),
                 ),
             },

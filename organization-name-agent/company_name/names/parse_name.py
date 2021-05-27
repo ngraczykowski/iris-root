@@ -117,7 +117,7 @@ def _fix_expression_divided(information: NameInformation) -> NameInformation:
 def _cut_legal_terms(
     name: NameSequence,
 ) -> Tuple[NameSequence, NameSequence, NameSequence]:
-    legal_terms = LEGAL_TERMS.all_legal_terms
+    legal_terms = LEGAL_TERMS.legal_term_sources
     first_occurrence, last_occurrence = _find_occurrences(name, legal_terms)
     if last_occurrence is not None:
         if len(name) - last_occurrence - 1 <= first_occurrence:
