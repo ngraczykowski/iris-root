@@ -18,6 +18,7 @@ import com.silenteight.hsbc.bridge.report.ReportModule;
 import com.silenteight.hsbc.bridge.retention.DataRetentionModule;
 import com.silenteight.hsbc.bridge.transfer.TransferModule;
 import com.silenteight.hsbc.datasource.category.DataSourceCategoryModule;
+import com.silenteight.hsbc.datasource.comment.DataSourceCommentModule;
 import com.silenteight.hsbc.datasource.grpc.DataSourceApiGrpcModule;
 import com.silenteight.hsbc.datasource.provider.DataSourceProviderModule;
 
@@ -53,6 +54,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
     DataSourceApiGrpcModule.class,
     DataSourceCategoryModule.class,
+    DataSourceCommentModule.class,
     DataSourceProviderModule.class,
 })
 @EnableAsync
