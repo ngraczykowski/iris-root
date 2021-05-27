@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 class ProtoStructConverterConfiguration {
 
   @Bean
-  ProtoStructConverter protoMessageToObjectNodeConverter() {
+  ProtoStructConverter protoStructConverter() {
     return new ProtoStructConverter();
   }
 }
