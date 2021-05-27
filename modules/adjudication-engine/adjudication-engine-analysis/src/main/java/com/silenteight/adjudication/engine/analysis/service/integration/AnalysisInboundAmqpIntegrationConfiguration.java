@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.analysis.service.integration;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.adjudication.engine.analysis.agentresponse.integration.AgentResponseChannels;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
 import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
@@ -31,8 +32,8 @@ class AnalysisInboundAmqpIntegrationConfiguration {
 
   @Bean
   IntegrationFlow analysisInboundIntegrationFlow() {
-    return from(createInboundAdapter())
-        .log(Level.INFO)
+    return from(createInboundAdapter(properties.getEventInternalInboundQueueNames()))
+        .log(Level.DEBUG, getClass().getName())
         .<Object, Class<?>>route(Object::getClass, m -> m
             .channelMapping(
                 AddedAnalysisDatasets.class,
@@ -44,9 +45,17 @@ class AnalysisInboundAmqpIntegrationConfiguration {
         .get();
   }
 
-  private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter() {
+  @Bean
+  IntegrationFlow agentResponseIntegrationFlow() {
+    return from(createInboundAdapter(properties.getAgentResponse().getInboundQueueName()))
+        .log(Level.DEBUG, getClass().getName())
+        .channel(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
+        .get();
+  }
+
+  private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {
     return inboundFactory
         .simpleAdapter()
-        .configureContainer(c -> c.addQueueNames(properties.getAllInboundQueueNames()));
+        .configureContainer(c -> c.addQueueNames(queueNames));
   }
 }

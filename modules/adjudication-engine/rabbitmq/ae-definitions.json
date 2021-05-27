@@ -59,6 +59,16 @@
       }
     },
     {
+      "name": "ae.agent-response",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-max-priority": 10
+      }
+    },
+    {
       "name": "ae.tmp-agent-request",
       "vhost": "/",
       "durable": true,
@@ -105,6 +115,15 @@
       "auto_delete": false,
       "internal": false,
       "arguments": {}
+    },
+    {
+      "name": "agent.response",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
     }
   ],
   "bindings": [
@@ -138,6 +157,14 @@
       "destination": "ae.comment-input",
       "destination_type": "queue",
       "routing_key": "ae.event.pending-recommendations",
+      "arguments": {}
+    },
+    {
+      "source": "agent.response",
+      "vhost": "/",
+      "destination": "ae.agent-response",
+      "destination_type": "queue",
+      "routing_key": "#",
       "arguments": {}
     },
     {

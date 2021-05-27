@@ -20,10 +20,4 @@ public class AgentExchangeChannels {
    */
   public static final String AGENT_EXCHANGE_REQUEST_OUTBOUND_CHANNEL =
       "agentExchangeRequestOutboundChannel";
-
-  /**
-   * The channel which receives responses from agents.
-   */
-  static final String AGENT_EXCHANGE_RESPONSE_INBOUND_CHANNEL =
-      "agentExchangeResponseInboundChannel";
 }

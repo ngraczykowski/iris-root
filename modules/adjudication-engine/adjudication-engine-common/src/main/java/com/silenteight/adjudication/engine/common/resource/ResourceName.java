@@ -10,7 +10,6 @@ import com.google.common.base.Splitter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -83,7 +82,7 @@ public class ResourceName {
     return new ResourceName(new LinkedHashMap<>(pathTokens));
   }
 
-  private static NoSuchElementException partNotExists(@NonNull String name) {
-    return new NoSuchElementException("Resource name has no part '" + name + "'.");
+  private static InvalidResourceNameException partNotExists(String name) {
+    return new InvalidResourceNameException("Resource name has no part '" + name + "'.");
   }
 }

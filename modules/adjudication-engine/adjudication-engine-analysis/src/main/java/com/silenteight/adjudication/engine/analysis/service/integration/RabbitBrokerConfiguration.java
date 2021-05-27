@@ -18,28 +18,31 @@ class RabbitBrokerConfiguration {
   Declarables rabbitBrokerDeclarables() {
     var errorQueue = queue(ERROR_QUEUE).build();
 
-    var event = topicExchange(EVENT_EXCHANGE_NAME).durable(true).build();
-    var internalEvent = topicExchange(EVENT_INTERNAL_EXCHANGE_NAME)
+    var eventExchange = topicExchange(EVENT_EXCHANGE_NAME).durable(true).build();
+    var eventInternalExchange = topicExchange(EVENT_INTERNAL_EXCHANGE_NAME)
         .durable(true)
         .build();
-    var agentRequest = topicExchange(AGENT_REQUEST_EXCHANGE_NAME)
+    var agentRequestExchange = topicExchange(AGENT_REQUEST_EXCHANGE_NAME)
+        .durable(true)
+        .build();
+    var agentResponseExchange = topicExchange(AGENT_RESPONSE_EXCHANGE_NAME)
         .durable(true)
         .build();
 
     var pendingRecommendation = queue(PENDING_RECOMMENDATION_QUEUE_NAME).build();
-    var pendingRecommendationsBinding = bind(pendingRecommendation, internalEvent,
+    var pendingRecommendationsBinding = bind(pendingRecommendation, eventInternalExchange,
         ADDED_ANALYSIS_DATASETS_ROUTING_KEY);
 
     var agentExchange = queue(AGENT_EXCHANGE_QUEUE_NAME).build();
-    var agentExchangeBinding = bind(agentExchange, internalEvent,
+    var agentExchangeBinding = bind(agentExchange, eventInternalExchange,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
     var category = queue(CATEGORY_QUEUE_NAME).build();
-    var categoryBinding = bind(category, internalEvent,
+    var categoryBinding = bind(category, eventInternalExchange,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
     var commentInput = queue(COMMENT_INPUT_QUEUE_NAME).build();
-    var commentInputBinding = bind(commentInput, internalEvent,
+    var commentInputBinding = bind(commentInput, eventInternalExchange,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
     /* TODO(ahaczewski): Configure queue receiving agent responses.
@@ -48,16 +51,20 @@ class RabbitBrokerConfiguration {
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
      */
 
+    var agentResponse = queue(AGENT_RESPONSE_QUEUE_NAME).maxPriority(10).build();
+    var agentResponseBinding = bind(agentResponse, agentResponseExchange, "#");
+
     var tmpAgentRequest = queue(TMP_AGENT_REQUEST_QUEUE_NAME).maxPriority(10).build();
-    var tmpAgentRequestBinding = bind(tmpAgentRequest, agentRequest, "#");
+    var tmpAgentRequestBinding = bind(tmpAgentRequest, agentRequestExchange, "#");
 
     return new Declarables(
         errorQueue,
-        event, internalEvent, agentRequest,
+        eventExchange, eventInternalExchange, agentRequestExchange, agentResponseExchange,
         pendingRecommendation, pendingRecommendationsBinding,
         agentExchange, agentExchangeBinding,
         category, categoryBinding,
         commentInput, commentInputBinding,
+        agentResponse, agentResponseBinding,
         tmpAgentRequest, tmpAgentRequestBinding);
   }
 

@@ -30,6 +30,11 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
+  private AgentResponse agentResponse = new AgentResponse();
+
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
   private Category category = new Category();
 
   @NestedConfigurationProperty
@@ -37,7 +42,7 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NotNull
   private CommentInput commentInput = new CommentInput();
 
-  String[] getAllInboundQueueNames() {
+  String[] getEventInternalInboundQueueNames() {
     return new String[] {
         pendingRecommendation.getInboundQueueName(),
         agentExchange.getInboundQueueName(),
@@ -58,6 +63,13 @@ class AnalysisInboundAmqpIntegrationProperties {
 
     @NotBlank
     private String inboundQueueName = AGENT_EXCHANGE_QUEUE_NAME;
+  }
+
+  @Data
+  static class AgentResponse {
+
+    @NotBlank
+    private String inboundQueueName = AGENT_RESPONSE_QUEUE_NAME;
   }
 
   @Data

@@ -44,7 +44,6 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
         properties.getEventInternal().getPendingRecommendationsRoutingKey());
   }
 
-
   @Bean
   IntegrationFlow matchCategoriesUpdatedOutboundIntegrationFlow() {
     return createOutboundFlow(
