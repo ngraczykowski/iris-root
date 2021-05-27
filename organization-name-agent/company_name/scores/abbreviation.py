@@ -62,7 +62,10 @@ def _check_abbreviation_for_next_word(
         if len(separated) > 1:
             yield check_abbreviation(
                 (
-                    (NameWord(original="", cleaned=separated[1]), *rest_of_information[0]),
+                    (
+                        NameWord(original="", cleaned=separated[1]),
+                        *rest_of_information[0],
+                    ),
                     *rest_of_information[1:],
                 ),
                 abbreviation[1:],
@@ -139,7 +142,9 @@ def _check_abbreviation_when_no_words(
                 )
 
     yield Score(
-        value=max(1 - len(abbreviation) / len(result.abbreviated), 0),
+        value=max(1 - len(abbreviation) / len(result.abbreviated), 0)
+        if result.abbreviated
+        else 0,
         compared=result.compared(),
     )
 
@@ -210,7 +215,7 @@ def _abbreviation_score(
         abbreviation,
         Abbreviation(source=NameSequence(), abbreviated=NameSequence()),
     )
-    return abbreviation_score if abbreviation_score.compared else base_score
+    return max(abbreviation_score, base_score)
 
 
 def abbreviation_score(first: NameInformation, second: NameInformation) -> Score:
