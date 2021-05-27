@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsRequest;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsResponse;
@@ -12,13 +13,18 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputResponse;
+import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.grpc.Status.INVALID_ARGUMENT;
+
+@Slf4j
 @GRpcService
 @RequiredArgsConstructor
 class CountryInputGrpcService extends CountryInputServiceImplBase {
@@ -29,8 +35,14 @@ class CountryInputGrpcService extends CountryInputServiceImplBase {
   public void batchGetMatchCountryInputs(
       BatchGetMatchCountryInputsRequest request,
       StreamObserver<BatchGetMatchCountryInputsResponse> responseObserver) {
-    responseObserver.onNext(provideInputResponse(request));
-    responseObserver.onCompleted();
+
+    try {
+      responseObserver.onNext(provideInputResponse(request));
+      responseObserver.onCompleted();
+    } catch (FeatureNotAllowedException e) {
+      responseObserver.onError(
+          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
+    }
   }
 
   private BatchGetMatchCountryInputsResponse provideInputResponse(
@@ -58,7 +70,7 @@ class CountryInputGrpcService extends CountryInputServiceImplBase {
 
   private List<CountryFeatureInput> toCountryFeatureInput(List<CountryFeatureInputDto> inputs) {
     return inputs.stream()
-        .map(i-> CountryFeatureInput.newBuilder()
+        .map(i -> CountryFeatureInput.newBuilder()
             .setFeature(i.getFeature())
             .addAllAlertedPartyCountries(i.getAlertedPartyCountries())
             .addAllWatchlistCountries(i.getWatchlistCountries())

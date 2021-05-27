@@ -11,10 +11,14 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputDto;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
+import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.datasource.feature.Feature.NATIONAL_ID_DOCUMENT;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 class NationalIdInputProvider implements DataSourceInputProvider<NationalIdInputResponse> {
@@ -47,5 +51,10 @@ class NationalIdInputProvider implements DataSourceInputProvider<NationalIdInput
         .map(featureName -> (NationalIdFeatureInputDto)
             ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Feature> getAllowedFeatures() {
+    return of(NATIONAL_ID_DOCUMENT);
   }
 }

@@ -11,10 +11,15 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.document.DocumentFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputDto;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputResponse;
+import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.datasource.feature.Feature.OTHER_DOCUMENT;
+import static com.silenteight.hsbc.datasource.feature.Feature.PASSPORT_NUMBER_DOCUMENT;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 class DocumentInputProvider implements DataSourceInputProvider<DocumentInputResponse> {
@@ -47,5 +52,12 @@ class DocumentInputProvider implements DataSourceInputProvider<DocumentInputResp
         .map(featureName -> (DocumentFeatureInputDto)
             ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Feature> getAllowedFeatures() {
+    return of(
+        PASSPORT_NUMBER_DOCUMENT,
+        OTHER_DOCUMENT);
   }
 }

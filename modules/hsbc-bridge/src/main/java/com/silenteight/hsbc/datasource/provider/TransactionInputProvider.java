@@ -11,10 +11,13 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputDto;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
+import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 class TransactionInputProvider implements DataSourceInputProvider<TransactionInputResponse> {
@@ -47,5 +50,10 @@ class TransactionInputProvider implements DataSourceInputProvider<TransactionInp
         .map(featureName -> (TransactionFeatureInputDto)
             ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Feature> getAllowedFeatures() {
+    return of(/*Implement with feature*/);
   }
 }

@@ -5,13 +5,17 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.api.ispep.v1.*;
 import com.silenteight.datasource.api.ispep.v1.IsPepInputServiceGrpc.IsPepInputServiceImplBase;
 import com.silenteight.hsbc.datasource.dto.ispep.*;
+import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 import com.silenteight.hsbc.datasource.provider.IsPepInputProvider;
 
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.grpc.Status.INVALID_ARGUMENT;
 
 @GRpcService
 @RequiredArgsConstructor
@@ -23,13 +27,20 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
   public void batchGetMatchIsPepInputs(
       BatchGetMatchIsPepInputsRequest request,
       StreamObserver<BatchGetMatchIsPepInputsResponse> responseObserver) {
-    responseObserver.onNext(prepareInputs(
-        IsPepInputRequest.builder()
-            .matches(request.getMatchesList())
-            .regionModelFields(map(request.getModelConfigurationList()))
-            .build()
-    ));
-    responseObserver.onCompleted();
+
+    try {
+      responseObserver.onNext(prepareInputs(
+          IsPepInputRequest.builder()
+              .matches(request.getMatchesList())
+              .regionModelFields(map(request.getModelConfigurationList()))
+              .build()
+      ));
+      responseObserver.onCompleted();
+    } catch (
+        FeatureNotAllowedException e) {
+      responseObserver.onError(
+          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
+    }
   }
 
   private List<RegionModelFieldDto> map(List<RegionModelFields> modelConfigurations) {

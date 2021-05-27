@@ -11,10 +11,14 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputResponse;
+import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.datasource.feature.Feature.GENDER;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 class GenderInputProvider implements DataSourceInputProvider<GenderInputResponse> {
@@ -47,5 +51,10 @@ class GenderInputProvider implements DataSourceInputProvider<GenderInputResponse
         .map(featureName -> (GenderFeatureInputDto)
             ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Feature> getAllowedFeatures() {
+    return of(GENDER);
   }
 }

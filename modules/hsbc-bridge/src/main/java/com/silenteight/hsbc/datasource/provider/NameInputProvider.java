@@ -13,10 +13,14 @@ import com.silenteight.hsbc.datasource.dto.name.NameFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.name.NameInputDto;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
+import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureClientValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.datasource.feature.Feature.NAME;
+import static java.util.List.of;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -53,5 +57,10 @@ class NameInputProvider implements DataSourceInputProvider<NameInputResponse> {
         .collect(Collectors.toList());
     log.info("Feature Input:\n\n" + featureInputs);
     return featureInputs;
+  }
+
+  @Override
+  public List<Feature> getAllowedFeatures() {
+    return of(NAME);
   }
 }

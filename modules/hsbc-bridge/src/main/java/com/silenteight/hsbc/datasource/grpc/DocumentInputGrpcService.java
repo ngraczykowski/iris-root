@@ -12,12 +12,16 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.document.DocumentFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputDto;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputResponse;
+import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.grpc.Status.INVALID_ARGUMENT;
 
 @GRpcService
 @RequiredArgsConstructor
@@ -29,11 +33,18 @@ class DocumentInputGrpcService extends DocumentInputServiceImplBase {
   public void batchGetMatchDocumentInputs(
       BatchGetMatchDocumentInputsRequest request,
       StreamObserver<BatchGetMatchDocumentInputsResponse> responseObserver) {
-    responseObserver.onNext(toResponse(DataSourceInputRequest.builder()
-        .features(request.getFeaturesList())
-        .matches(request.getMatchesList())
-        .build()));
-    responseObserver.onCompleted();
+
+    try {
+      responseObserver.onNext(toResponse(DataSourceInputRequest.builder()
+          .features(request.getFeaturesList())
+          .matches(request.getMatchesList())
+          .build()));
+      responseObserver.onCompleted();
+    } catch (
+        FeatureNotAllowedException e) {
+      responseObserver.onError(
+          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
+    }
   }
 
   private BatchGetMatchDocumentInputsResponse toResponse(DataSourceInputRequest request) {
