@@ -33,8 +33,8 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: alert-indexed
         routing-key: alert.simulation
-  indexing:
-    environment-prefix: local
+  environment:
+    prefix: local
   minio:
     url: http://localhost:9000
     access-key: admin

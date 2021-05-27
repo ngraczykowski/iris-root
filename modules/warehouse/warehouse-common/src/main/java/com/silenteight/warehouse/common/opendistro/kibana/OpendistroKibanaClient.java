@@ -191,7 +191,7 @@ public class OpendistroKibanaClient {
     post(request, typeRef);
   }
 
-  public List<ReportDefinitionDto> listReportDefinitions(String tenant) {
+  public List<KibanaReportDefinitionDto> listReportDefinitions(String tenant) {
     TypeReference<ReportDefinitionList> typeRef = new TypeReference<>() {};
 
     GetHttpRequest request = new GetHttpRequest(URL_REPORT_DEFINITION_LIST, tenant);
@@ -203,7 +203,8 @@ public class OpendistroKibanaClient {
   }
 
   @SneakyThrows
-  public String createReportDefinition(String tenant, ReportDefinitionDto reportDefinitionDto) {
+  public String createReportDefinition(
+      String tenant, KibanaReportDefinitionDto reportDefinitionDto) {
     TypeReference<ReportDefinitionCreated> typeRef = new TypeReference<>() {};
 
     PostHttpRequest request = PostHttpRequest.builder()
@@ -260,7 +261,7 @@ public class OpendistroKibanaClient {
 
   public boolean isExistingReportDefinition(String tenant, String objectId) {
     return listReportDefinitions(tenant).stream()
-        .map(ReportDefinitionDto::getId)
+        .map(KibanaReportDefinitionDto::getId)
         .anyMatch(id -> id.equals(objectId));
   }
 

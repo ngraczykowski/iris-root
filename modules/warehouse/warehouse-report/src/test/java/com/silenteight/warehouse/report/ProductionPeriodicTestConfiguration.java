@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
+import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisService;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.*;
 
 @Configuration
 @ComponentScan(basePackageClasses = {
+    EnvironmentModule.class,
     OpendistroModule.class,
     ReportingModule.class,
     SimulationModule.class,

@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @Builder
-public class KibanaReportsList {
+class KibanaReportsList {
 
   @NonNull
   private Set<KibanaReportDetailsDto> reports;

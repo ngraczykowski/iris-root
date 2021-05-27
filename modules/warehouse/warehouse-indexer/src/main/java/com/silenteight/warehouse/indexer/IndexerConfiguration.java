@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({
-    IndexerIntegrationProperties.class,
-    IndexingProperties.class
+    IndexerIntegrationProperties.class
 })
 class IndexerConfiguration {
 

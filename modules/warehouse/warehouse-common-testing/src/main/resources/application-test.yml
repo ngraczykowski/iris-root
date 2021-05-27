@@ -3,9 +3,6 @@ spring.cloud.consul.enabled: false
 sep:
   auth:
     permissionMethodsMappings:
-      REPORTS_MANAGEMENT:
-        - "SYNCHRONIZE_REPORTS"
-
       PRODUCTION_PERIODIC_REPORTS:
         - "SYNCHRONIZE_REPORTS"
 
@@ -18,5 +15,6 @@ sep:
 
     rolePermissionsMappings:
       BUSINESS_OPERATOR:
-        - "REPORTS_MANAGEMENT"
+        - "PRODUCTION_PERIODIC_REPORTS"
         - "SIMULATION_REPORTS"
+        - "PRODUCTION_ON_DEMAND_REPORTS"

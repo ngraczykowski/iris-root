@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer;
+package com.silenteight.warehouse.common.environment;
 
 import lombok.Data;
 
@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.indexing")
-public class IndexingProperties {
+@ConfigurationProperties(prefix = "warehouse.environment")
+public class EnvironmentProperties {
 
   @NotBlank
-  private String environmentPrefix;
+  private String prefix;
 }

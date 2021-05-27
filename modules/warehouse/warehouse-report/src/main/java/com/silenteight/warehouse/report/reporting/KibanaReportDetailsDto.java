@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 @Data
 @Builder
-public class KibanaReportDetailsDto {
+class KibanaReportDetailsDto {
 
   @NonNull
   private String id;

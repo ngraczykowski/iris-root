@@ -22,7 +22,8 @@ warehouse:
       master-tenant: admin_tenant
   tenant:
     max-object-count: 100
-
+  environment:
+    prefix: itest
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

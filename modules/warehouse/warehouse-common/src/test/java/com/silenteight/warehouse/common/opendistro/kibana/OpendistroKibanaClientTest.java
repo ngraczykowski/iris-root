@@ -88,7 +88,7 @@ class OpendistroKibanaClientTest {
   void shouldCreateReportDefinition() {
     createSearchDefinition(SEARCH_ID);
 
-    ReportDefinitionDto reportDefinition = ReportDefinitionDto.builder()
+    KibanaReportDefinitionDto reportDefinition = KibanaReportDefinitionDto.builder()
         .reportDefinitionDetails(REPORT_DEFINITION)
         .build();
 
@@ -100,10 +100,10 @@ class OpendistroKibanaClientTest {
         .until(() -> opendistroKibanaClient.isExistingReportDefinition(
             ADMIN_TENANT, reportDefinitionId));
 
-    List<ReportDefinitionDto> reportDefinitions =
+    List<KibanaReportDefinitionDto> reportDefinitions =
         opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT);
     assertThat(reportDefinitions).hasSize(1);
-    ReportDefinitionDto reportDefinitionDto = reportDefinitions.get(0);
+    KibanaReportDefinitionDto reportDefinitionDto = reportDefinitions.get(0);
     assertThat(reportDefinitionDto.getReportName()).isEqualTo(REPORT_NAME);
   }
 

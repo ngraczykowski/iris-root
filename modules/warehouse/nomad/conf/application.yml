@@ -30,8 +30,8 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: alert-indexed
         routing-key: alert.simulation
-  indexing:
-    environment-prefix: dev
+  environment:
+    prefix: dev
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-warehouse
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
