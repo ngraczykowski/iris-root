@@ -1,56 +1,70 @@
 openapi: 3.0.1
 info:
-  title: HSCB-Bridge-bulk API
-  description: HSCB-Bridge-bulk API
+  title: HSCB-Bridge-batch API
+  description: HSCB-Bridge-batch API
   version: 1.0.0
 
 paths:
-  /async/bulk/v1/recommend:
+  /async/batch/v1/{batchId}/recommend:
+    parameters:
+      - name: batchId
+        in: path
+        required: true
+        description: The id batch job.
+        schema:
+          type: string
     post:
-      summary: Submit bulk of alerts for async recommendations.
+      summary: Submit batch of alerts for async recommendations.
       requestBody:
-        description: BulkId and list of alerts to recommend.
+        description: BatchId and list of alerts to recommend.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BulkIdWithAlerts'
+              $ref: '#/components/schemas/BatchIdWithAlerts'
       responses:
         '200':
-          description: Confirmation of accepting bulk.
+          description: Confirmation of accepting batch.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkAcceptedResponse'
+                $ref: '#/components/schemas/BatchAcceptedResponse'
 
-  /async/bulk/v1/learning:
+  /async/batch/v1/{batchId}/learning:
+    parameters:
+      - name: batchId
+        in: path
+        required: true
+        description: The id batch job.
+        schema:
+          type: string
     post:
-      summary: Submit bulk of alerts for learning.
+      summary: Submit batch of alerts for learning.
       requestBody:
-        description: BulkId and list of alerts for learning processes.
+        description: BatchId and list of alerts for learning processes.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BulkIdWithAlerts'
+              $ref: '#/components/schemas/BatchIdWithAlerts'
       responses:
         '200':
-          description: Confirmation of accepting bulk.
+          description: Confirmation of accepting batch.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkAcceptedResponse'
+                $ref: '#/components/schemas/BatchAcceptedResponse'
 
-  /async/bulk/v1/ingestRecommendations:
+  /async/batch/v1/ingestRecommendations:
     post:
       summary: Submit recommendations.
       requestBody:
-        description: BulkId and list of recommended alerts.
+        description: BatchId and list of recommended alerts.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BulkSolvedAlertsResponse'
+              $ref: '#/components/schemas/BatchSolvedAlertsResponse'
       responses:
         '200':
           description: Confirmation of ingesting alerts.
@@ -58,14 +72,14 @@ paths:
             application/json:
               example: ''
 
-  /async/bulk/v1/{bulkId}/status:
+  /async/batch/v1/{batchId}/status:
     get:
-      summary: Status of bulk processing for given ID
+      summary: Status of batch processing for given ID
       parameters:
-        - name: bulkId
+        - name: batchId
           in: path
           required: true
-          description: The id bulk job.
+          description: The id batch job.
           schema:
             type: string
       responses:
@@ -74,16 +88,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkStatusResponse'
+                $ref: '#/components/schemas/BatchStatusResponse'
 
-  /async/bulk/v1/{bulkId}/ack:
+  /async/batch/v1/{batchId}/ack:
     put:
-      summary: Update bulk status for given ID
+      summary: Update batch status for given ID
       parameters:
-        - name: bulkId
+        - name: batchId
           in: path
           required: true
-          description: The id bulk job.
+          description: The id batch job.
           schema:
             type: string
       responses:
@@ -92,27 +106,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkStatusResponse'
+                $ref: '#/components/schemas/BatchStatusResponse'
 
-  /async/bulk/v1/processingStatus:
+  /async/batch/v1/processingStatus:
     get:
-      summary: Status of bulk processing for all bulks
+      summary: Status of batch processing for all batches
       responses:
         200:
           description: Boolean value if AE processing or not.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BulkProcessingStatusResponse"
+                $ref: "#/components/schemas/BatchProcessingStatusResponse"
 
-  /async/bulk/v1/{bulkId}/result:
+  /async/batch/v1/{batchId}/result:
     get:
-      summary: Get results from bulk job.
+      summary: Get results from batch job.
       parameters:
-        - name: bulkId
+        - name: batchId
           in: path
           required: true
-          description: The id bulk job.
+          description: The id batch job.
           schema:
             type: string
       responses:
@@ -121,25 +135,25 @@ paths:
           content:
             application/octet-stream:
               schema:
-                $ref: '#/components/schemas/BulkSolvedAlertsResponse'
+                $ref: '#/components/schemas/BatchSolvedAlertsResponse'
 
-  /async/bulk/v1/{bulkId}/cancel:
+  /async/batch/v1/{batchId}/cancel:
     get:
-      summary: Cancel bulk with given id.
+      summary: Cancel batch with given id.
       parameters:
-        - name: bulkId
+        - name: batchId
           in: path
           required: true
-          description: The id bulk job.
+          description: The id batch job.
           schema:
             type: string
       responses:
         200:
-          description: Bulk with given has been canceled.
+          description: Batch with given has been canceled.
           content:
             application/octet-stream:
               schema:
-                $ref: '#/components/schemas/BulkCancelResponse'
+                $ref: '#/components/schemas/BatchCancelResponse'
 
   /model:
     get:
@@ -1506,17 +1520,17 @@ components:
         value:
           type: string
 
-    BulkIdWithAlerts:
+    BatchIdWithAlerts:
       type: object
       properties:
-        bulkId:
+        batchId:
           type: string
         alerts:
           type: array
           items:
             $ref: "#/components/schemas/Alert"
 
-    BulkStatus:
+    BatchStatus:
       type: string
       enum:
         - PROCESSING
@@ -1533,62 +1547,62 @@ components:
         - FALSE_POSITIVE
         - MANUAL_INVESTIGATION
 
-    BulkAlertItem:
+    BatchAlertItem:
       type: object
       properties:
         id:
           type: integer
         status:
-          $ref: '#/components/schemas/BulkStatus'
+          $ref: '#/components/schemas/BatchStatus'
         errorMessage:
           type: string
 
-    BulkAcceptedResponse:
+    BatchAcceptedResponse:
       type: object
       properties:
-        bulkId:
+        batchId:
           type: string
         requestedAlerts:
           type: array
           items:
-            $ref: '#/components/schemas/BulkAlertItem'
+            $ref: '#/components/schemas/BatchAlertItem'
 
-    BulkStatusResponse:
+    BatchStatusResponse:
       type: object
       properties:
-        bulkId:
+        batchId:
           type: string
-        bulkStatus:
-          $ref: '#/components/schemas/BulkStatus'
+        batchStatus:
+          $ref: '#/components/schemas/BatchStatus'
         requestedAlerts:
           type: array
           items:
-            $ref: '#/components/schemas/BulkAlertItem'
+            $ref: '#/components/schemas/BatchAlertItem'
         policyName:
           type: string
           description: Name of solving policy (might be empty at the early stage of processing)
 
-    BulkProcessingStatusResponse:
+    BatchProcessingStatusResponse:
       type: object
       properties:
         isAdjudicationEngineProcessing:
           type: boolean
 
-    BulkCancelResponse:
+    BatchCancelResponse:
       type: object
       properties:
-        bulkId:
+        batchId:
           type: string
-        bulkStatus:
-          $ref: '#/components/schemas/BulkStatus'
+        batchStatus:
+          $ref: '#/components/schemas/BatchStatus'
 
-    BulkSolvedAlertsResponse:
+    BatchSolvedAlertsResponse:
       type: object
       properties:
-        bulkId:
+        batchId:
           type: string
-        bulkStatus:
-          $ref: '#/components/schemas/BulkStatus'
+        batchStatus:
+          $ref: '#/components/schemas/BatchStatus'
         alerts:
           type: array
           items:

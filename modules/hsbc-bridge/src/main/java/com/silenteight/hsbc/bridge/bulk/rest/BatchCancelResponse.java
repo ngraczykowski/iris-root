@@ -1,6 +1,6 @@
 /*
- * HSCB-Bridge-bulk API
- * HSCB-Bridge-bulk API
+ * HSCB-Bridge-batch API
+ * HSCB-Bridge-batch API
  *
  * OpenAPI spec version: 1.0.0
  * 
@@ -17,51 +17,51 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
 /**
- * BulkCancelResponse
+ * BatchCancelResponse
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
-public class BulkCancelResponse {
-  @SerializedName("bulkId")
-  private String bulkId = null;
+public class BatchCancelResponse {
+  @SerializedName("batchId")
+  private String batchId = null;
 
-  @SerializedName("bulkStatus")
-  private BulkStatus bulkStatus = null;
+  @SerializedName("batchStatus")
+  private BatchStatus batchStatus = null;
 
-  public BulkCancelResponse bulkId(String bulkId) {
-    this.bulkId = bulkId;
+  public BatchCancelResponse batchId(String batchId) {
+    this.batchId = batchId;
     return this;
   }
 
    /**
-   * Get bulkId
-   * @return bulkId
+   * Get batchId
+   * @return batchId
   **/
   @Schema(description = "")
-  public String getBulkId() {
-    return bulkId;
+  public String getBatchId() {
+    return batchId;
   }
 
-  public void setBulkId(String bulkId) {
-    this.bulkId = bulkId;
+  public void setBatchId(String batchId) {
+    this.batchId = batchId;
   }
 
-  public BulkCancelResponse bulkStatus(BulkStatus bulkStatus) {
-    this.bulkStatus = bulkStatus;
+  public BatchCancelResponse batchStatus(BatchStatus batchStatus) {
+    this.batchStatus = batchStatus;
     return this;
   }
 
    /**
-   * Get bulkStatus
-   * @return bulkStatus
+   * Get batchStatus
+   * @return batchStatus
   **/
   @Schema(description = "")
-  public BulkStatus getBulkStatus() {
-    return bulkStatus;
+  public BatchStatus getBatchStatus() {
+    return batchStatus;
   }
 
-  public void setBulkStatus(BulkStatus bulkStatus) {
-    this.bulkStatus = bulkStatus;
+  public void setBatchStatus(BatchStatus batchStatus) {
+    this.batchStatus = batchStatus;
   }
 
 
@@ -73,24 +73,24 @@ public class BulkCancelResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkCancelResponse bulkCancelResponse = (BulkCancelResponse) o;
-    return Objects.equals(this.bulkId, bulkCancelResponse.bulkId) &&
-        Objects.equals(this.bulkStatus, bulkCancelResponse.bulkStatus);
+    BatchCancelResponse batchCancelResponse = (BatchCancelResponse) o;
+    return Objects.equals(this.batchId, batchCancelResponse.batchId) &&
+        Objects.equals(this.batchStatus, batchCancelResponse.batchStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bulkId, bulkStatus);
+    return Objects.hash(batchId, batchStatus);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BulkCancelResponse {\n");
+    sb.append("class BatchCancelResponse {\n");
     
-    sb.append("    bulkId: ").append(toIndentedString(bulkId)).append("\n");
-    sb.append("    bulkStatus: ").append(toIndentedString(bulkStatus)).append("\n");
+    sb.append("    batchId: ").append(toIndentedString(batchId)).append("\n");
+    sb.append("    batchStatus: ").append(toIndentedString(batchStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }

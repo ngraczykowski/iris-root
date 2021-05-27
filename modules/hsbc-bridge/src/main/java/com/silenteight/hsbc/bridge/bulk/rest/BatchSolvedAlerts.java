@@ -1,6 +1,6 @@
 /*
- * HSCB-Bridge-bulk API
- * HSCB-Bridge-bulk API
+ * HSCB-Bridge-batch API
+ * HSCB-Bridge-batch API
  *
  * OpenAPI spec version: 1.0.0
  *
@@ -23,65 +23,65 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * BulkSolvedAlertsResponse
+ * BatchSolvedAlertsResponse
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
 @Validated
-public class BulkSolvedAlerts {
-  @SerializedName("bulkId")
-  private String bulkId = null;
+public class BatchSolvedAlerts {
+  @SerializedName("batchId")
+  private String batchId = null;
 
-  @SerializedName("bulkStatus")
-  private BulkStatus bulkStatus = null;
+  @SerializedName("batchStatus")
+  private BatchStatus batchStatus = null;
 
   @SerializedName("alerts")
   @NotNull
   @Size(min = 1)
   private List<SolvedAlert> alerts = null;
 
-  public BulkSolvedAlerts bulkId(String bulkId) {
-    this.bulkId = bulkId;
+  public BatchSolvedAlerts batchId(String batchId) {
+    this.batchId = batchId;
     return this;
   }
 
    /**
-   * Get bulkId
-   * @return bulkId
+   * Get batchId
+   * @return batchId
   **/
   @Schema(description = "")
-  public String getBulkId() {
-    return bulkId;
+  public String getBatchId() {
+    return batchId;
   }
 
-  public void setBulkId(String bulkId) {
-    this.bulkId = bulkId;
+  public void setBatchId(String batchId) {
+    this.batchId = batchId;
   }
 
-  public BulkSolvedAlerts bulkStatus(BulkStatus bulkStatus) {
-    this.bulkStatus = bulkStatus;
+  public BatchSolvedAlerts batchStatus(BatchStatus batchStatus) {
+    this.batchStatus = batchStatus;
     return this;
   }
 
    /**
-   * Get bulkStatus
-   * @return bulkStatus
+   * Get batchStatus
+   * @return batchStatus
   **/
   @Schema(description = "")
-  public BulkStatus getBulkStatus() {
-    return bulkStatus;
+  public BatchStatus getBatchStatus() {
+    return batchStatus;
   }
 
-  public void setBulkStatus(BulkStatus bulkStatus) {
-    this.bulkStatus = bulkStatus;
+  public void setBatchStatus(BatchStatus batchStatus) {
+    this.batchStatus = batchStatus;
   }
 
-  public BulkSolvedAlerts alerts(List<SolvedAlert> alerts) {
+  public BatchSolvedAlerts alerts(List<SolvedAlert> alerts) {
     this.alerts = alerts;
     return this;
   }
 
-  public BulkSolvedAlerts addAlertsItem(SolvedAlert alertsItem) {
+  public BatchSolvedAlerts addAlertsItem(SolvedAlert alertsItem) {
     if (this.alerts == null) {
       this.alerts = new ArrayList<SolvedAlert>();
     }
@@ -111,25 +111,25 @@ public class BulkSolvedAlerts {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkSolvedAlerts bulkSolvedAlerts = (BulkSolvedAlerts) o;
-    return Objects.equals(this.bulkId, bulkSolvedAlerts.bulkId) &&
-        Objects.equals(this.bulkStatus, bulkSolvedAlerts.bulkStatus) &&
-        Objects.equals(this.alerts, bulkSolvedAlerts.alerts);
+    BatchSolvedAlerts batchSolvedAlerts = (BatchSolvedAlerts) o;
+    return Objects.equals(this.batchId, batchSolvedAlerts.batchId) &&
+        Objects.equals(this.batchStatus, batchSolvedAlerts.batchStatus) &&
+        Objects.equals(this.alerts, batchSolvedAlerts.alerts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bulkId, bulkStatus, alerts);
+    return Objects.hash(batchId, batchStatus, alerts);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BulkSolvedAlertsResponse {\n");
+    sb.append("class BatchSolvedAlertsResponse {\n");
 
-    sb.append("    bulkId: ").append(toIndentedString(bulkId)).append("\n");
-    sb.append("    bulkStatus: ").append(toIndentedString(bulkStatus)).append("\n");
+    sb.append("    batchId: ").append(toIndentedString(batchId)).append("\n");
+    sb.append("    batchStatus: ").append(toIndentedString(batchStatus)).append("\n");
     sb.append("    alerts: ").append(toIndentedString(alerts)).append("\n");
     sb.append("}");
     return sb.toString();

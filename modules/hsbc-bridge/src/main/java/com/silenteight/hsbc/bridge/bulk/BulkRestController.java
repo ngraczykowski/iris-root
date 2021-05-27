@@ -32,7 +32,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @RestController
-@RequestMapping("/async/bulk/v1")
+@RequestMapping("/async/batch/v1")
 @RequiredArgsConstructor
 public class BulkRestController {
 
@@ -47,83 +47,69 @@ public class BulkRestController {
       { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
   private static final String OWS_FILE_NAME = "owsResponse.ows";
 
-  @PostMapping("/recommend")
-  public ResponseEntity<BulkAcceptedResponse> receiveBulk(HttpServletRequest request)
-      throws IOException {
-    //TODO leave as long as it's not confirmed how bulkId will be passed
-    return receiveBulk(generateBulkId(), request);
-}
-
-  @PostMapping("/learning")
-  public ResponseEntity<BulkAcceptedResponse> receiveLearningBulk(HttpServletRequest request)
-      throws IOException {
-    //TODO leave as long as it's not confirmed how bulkId will be passed
-    return receiveLearningBulk(generateBulkId(), request);
-  }
-
-  @PostMapping("/{bulkId}/recommend")
-  public ResponseEntity<BulkAcceptedResponse> receiveBulk(
-      @PathVariable String bulkId, HttpServletRequest request) throws IOException {
+  @PostMapping("/{batchId}/recommend")
+  public ResponseEntity<BatchAcceptedResponse> receiveBatch(
+      @PathVariable String batchId, HttpServletRequest request) throws IOException {
     storeBulkUseCase.handle(
         StoreBulkUseCaseCommand.builder()
-            .bulkId(bulkId)
+            .bulkId(batchId)
             .inputStream(request.getInputStream())
             .learning(false)
             .build());
 
-    return ResponseEntity.ok(new BulkAcceptedResponse().bulkId(bulkId));
+    return ResponseEntity.ok(new BatchAcceptedResponse().batchId(batchId));
   }
 
-  @PostMapping("/{bulkId}/learning")
-  public ResponseEntity<BulkAcceptedResponse> receiveLearningBulk(
-      @PathVariable String bulkId, HttpServletRequest request) throws IOException {
+  @PostMapping("/{batchId}/learning")
+  public ResponseEntity<BatchAcceptedResponse> receiveLearningBatch(
+      @PathVariable String batchId, HttpServletRequest request) throws IOException {
     storeBulkUseCase.handle(
         StoreBulkUseCaseCommand.builder()
-            .bulkId(bulkId)
+            .bulkId(batchId)
             .inputStream(request.getInputStream())
             .learning(true)
             .build());
 
-    return ResponseEntity.ok(new BulkAcceptedResponse().bulkId(bulkId));
+    return ResponseEntity.ok(new BatchAcceptedResponse().batchId(batchId));
   }
 
   @PostMapping("/ingestRecommendations")
   public ResponseEntity ingestRecommendations(
-      @RequestBody @Valid BulkSolvedAlerts recommendations) {
+      @RequestBody @Valid BatchSolvedAlerts recommendations) {
     ingestRecommendationsUseCase.ingest(recommendations.getAlerts());
 
     return ResponseEntity.ok().build();
   }
 
-  private String generateBulkId() {
-    return "bulk-" + UUID.randomUUID();
+  private String generateBatchId() {
+    return "batch-" + UUID.randomUUID();
   }
 
   @PutMapping("/{id}/ack")
-  public ResponseEntity<BulkStatusResponse> acknowledgeDelivery(@PathVariable String id) {
+  public ResponseEntity<BatchStatusResponse> acknowledgeDelivery(@PathVariable String id) {
     return ResponseEntity.ok(acknowledgeBulkDeliveryUseCase.apply(id));
   }
 
   @GetMapping("/{id}/result")
-  public ResponseEntity<BulkSolvedAlerts> getResult(@PathVariable String id) {
+  public ResponseEntity<BatchSolvedAlerts> getResult(@PathVariable String id) {
     return ResponseEntity.ok(getBulkResultsUseCase.getResults(id));
   }
 
   @GetMapping("/processingStatus")
-  public ResponseEntity<BulkProcessingStatusResponse> checkProcessingStatus() {
+  public ResponseEntity<BatchProcessingStatusResponse> checkProcessingStatus() {
     var isProcessing = getBulkStatusUseCase.isProcessing();
 
-    return ResponseEntity.ok(new BulkProcessingStatusResponse()
+    return ResponseEntity.ok(new BatchProcessingStatusResponse()
         .isAdjudicationEngineProcessing(isProcessing));
   }
 
   @GetMapping("/{id}/status")
-  public ResponseEntity<BulkStatusResponse> getBulkStatus(@PathVariable String id) {
+  public ResponseEntity<BatchStatusResponse> getBulkStatus(@PathVariable String id) {
     return ResponseEntity.ok(getBulkStatusUseCase.getStatus(id));
   }
 
   @GetMapping("/{id}/cancel")
-  public ResponseEntity<BulkCancelResponse> cancelBulk(@PathVariable String id) {
+  public ResponseEntity<BatchCancelResponse> cancelBulk(@PathVariable String id) {
     return ResponseEntity.ok(cancelBulkUseCase.cancel(id));
   }
 

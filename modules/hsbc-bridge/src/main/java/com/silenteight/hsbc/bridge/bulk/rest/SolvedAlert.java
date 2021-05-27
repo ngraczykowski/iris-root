@@ -1,6 +1,6 @@
 /*
- * HSCB-Bridge-bulk API
- * HSCB-Bridge-bulk API
+ * HSCB-Bridge-batch API
+ * HSCB-Bridge-batch API
  *
  * OpenAPI spec version: 1.0.0
  * 

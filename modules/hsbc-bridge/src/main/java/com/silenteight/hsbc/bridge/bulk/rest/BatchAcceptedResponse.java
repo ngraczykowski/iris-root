@@ -1,6 +1,6 @@
 /*
- * HSCB-Bridge-bulk API
- * HSCB-Bridge-bulk API
+ * HSCB-Bridge-batch API
+ * HSCB-Bridge-batch API
  *
  * OpenAPI spec version: 1.0.0
  * 
@@ -17,32 +17,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
 /**
- * BulkProcessingStatusResponse
+ * BatchAcceptedResponse
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
-public class BulkProcessingStatusResponse {
-  @SerializedName("isAdjudicationEngineProcessing")
-  private Boolean isAdjudicationEngineProcessing = null;
+public class BatchAcceptedResponse {
+  @SerializedName("batchId")
+  private String batchId = null;
 
-  public BulkProcessingStatusResponse isAdjudicationEngineProcessing(Boolean isAdjudicationEngineProcessing) {
-    this.isAdjudicationEngineProcessing = isAdjudicationEngineProcessing;
+  public BatchAcceptedResponse batchId(String batchId) {
+    this.batchId = batchId;
     return this;
   }
 
    /**
-   * Get isAdjudicationEngineProcessing
-   * @return isAdjudicationEngineProcessing
+   * Get batchId
+   * @return batchId
   **/
   @Schema(description = "")
-  public Boolean isIsAdjudicationEngineProcessing() {
-    return isAdjudicationEngineProcessing;
+  public String getBatchId() {
+    return batchId;
   }
 
-  public void setIsAdjudicationEngineProcessing(Boolean isAdjudicationEngineProcessing) {
-    this.isAdjudicationEngineProcessing = isAdjudicationEngineProcessing;
+  public void setBatchId(String batchId) {
+    this.batchId = batchId;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -52,22 +51,22 @@ public class BulkProcessingStatusResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkProcessingStatusResponse bulkProcessingStatusResponse = (BulkProcessingStatusResponse) o;
-    return Objects.equals(this.isAdjudicationEngineProcessing, bulkProcessingStatusResponse.isAdjudicationEngineProcessing);
+    BatchAcceptedResponse batchAcceptedResponse = (BatchAcceptedResponse) o;
+    return Objects.equals(this.batchId, batchAcceptedResponse.batchId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isAdjudicationEngineProcessing);
+    return Objects.hash(batchId);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BulkProcessingStatusResponse {\n");
+    sb.append("class BatchAcceptedResponse {\n");
     
-    sb.append("    isAdjudicationEngineProcessing: ").append(toIndentedString(isAdjudicationEngineProcessing)).append("\n");
+    sb.append("    batchId: ").append(toIndentedString(batchId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

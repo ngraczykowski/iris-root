@@ -11,23 +11,23 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 /**
- * BulkAlertItem
+ * BatchAlertItem
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-02-17T10:41:43.102Z[GMT]")
 @JsonInclude(Include.NON_NULL)
-public class BulkAlertItem {
+public class BatchAlertItem {
 
   @JsonProperty("id")
   private String id = null;
 
   @JsonProperty("status")
-  private BulkStatus status = null;
+  private BatchStatus status = null;
 
   @JsonProperty("errorMessage")
   private String errorMessage = null;
 
-  public BulkAlertItem id(String id) {
+  public BatchAlertItem id(String id) {
     this.id = id;
     return this;
   }
@@ -47,7 +47,7 @@ public class BulkAlertItem {
     this.id = id;
   }
 
-  public BulkAlertItem status(BulkStatus status) {
+  public BatchAlertItem status(BatchStatus status) {
     this.status = status;
     return this;
   }
@@ -60,15 +60,15 @@ public class BulkAlertItem {
   @Schema(description = "")
 
   @Valid
-  public BulkStatus getStatus() {
+  public BatchStatus getStatus() {
     return status;
   }
 
-  public void setStatus(BulkStatus status) {
+  public void setStatus(BatchStatus status) {
     this.status = status;
   }
 
-  public BulkAlertItem errorMessage(String errorMessage) {
+  public BatchAlertItem errorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
     return this;
   }
@@ -97,10 +97,10 @@ public class BulkAlertItem {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkAlertItem bulkAlertItem = (BulkAlertItem) o;
-    return Objects.equals(this.id, bulkAlertItem.id) &&
-        Objects.equals(this.status, bulkAlertItem.status) &&
-        Objects.equals(this.errorMessage, bulkAlertItem.errorMessage);
+    BatchAlertItem batchAlertItem = (BatchAlertItem) o;
+    return Objects.equals(this.id, batchAlertItem.id) &&
+        Objects.equals(this.status, batchAlertItem.status) &&
+        Objects.equals(this.errorMessage, batchAlertItem.errorMessage);
   }
 
   @Override
@@ -111,7 +111,7 @@ public class BulkAlertItem {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BulkAlertItem {\n");
+    sb.append("class BatchAlertItem {\n");
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");

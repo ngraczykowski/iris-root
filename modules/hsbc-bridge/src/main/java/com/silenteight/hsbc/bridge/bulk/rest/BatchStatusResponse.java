@@ -1,6 +1,6 @@
 /*
- * HSCB-Bridge-bulk API
- * HSCB-Bridge-bulk API
+ * HSCB-Bridge-batch API
+ * HSCB-Bridge-batch API
  *
  * OpenAPI spec version: 1.0.0
  * 
@@ -19,60 +19,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 /**
- * BulkStatusResponse
+ * BatchStatusResponse
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
-public class BulkStatusResponse {
-  @SerializedName("bulkId")
-  private String bulkId = null;
+public class BatchStatusResponse {
+  @SerializedName("batchId")
+  private String batchId = null;
 
-  @SerializedName("bulkStatus")
-  private BulkStatus bulkStatus = null;
+  @SerializedName("batchStatus")
+  private BatchStatus batchStatus = null;
 
   @SerializedName("policyName")
   private String policyName = null;
 
   @SerializedName("requestedAlerts")
-  private List<BulkAlertItem> requestedAlerts = null;
+  private List<BatchAlertItem> requestedAlerts = null;
 
-  public BulkStatusResponse bulkId(String bulkId) {
-    this.bulkId = bulkId;
+  public BatchStatusResponse batchId(String batchId) {
+    this.batchId = batchId;
     return this;
   }
 
    /**
-   * Get bulkId
-   * @return bulkId
+   * Get batchId
+   * @return batchId
   **/
   @Schema(description = "")
-  public String getBulkId() {
-    return bulkId;
+  public String getBatchId() {
+    return batchId;
   }
 
-  public void setBulkId(String bulkId) {
-    this.bulkId = bulkId;
+  public void setBatchId(String batchId) {
+    this.batchId = batchId;
   }
 
-  public BulkStatusResponse bulkStatus(BulkStatus bulkStatus) {
-    this.bulkStatus = bulkStatus;
+  public BatchStatusResponse batchStatus(BatchStatus batchStatus) {
+    this.batchStatus = batchStatus;
     return this;
   }
 
    /**
-   * Get bulkStatus
-   * @return bulkStatus
+   * Get batchStatus
+   * @return batchStatus
   **/
   @Schema(description = "")
-  public BulkStatus getBulkStatus() {
-    return bulkStatus;
+  public BatchStatus getBatchStatus() {
+    return batchStatus;
   }
 
-  public void setBulkStatus(BulkStatus bulkStatus) {
-    this.bulkStatus = bulkStatus;
+  public void setBatchStatus(BatchStatus batchStatus) {
+    this.batchStatus = batchStatus;
   }
 
-  public BulkStatusResponse policyName(String policyName) {
+  public BatchStatusResponse policyName(String policyName) {
     this.policyName = policyName;
     return this;
   }
@@ -90,14 +90,14 @@ public class BulkStatusResponse {
     this.policyName = policyName;
   }
 
-  public BulkStatusResponse requestedAlerts(List<BulkAlertItem> requestedAlerts) {
+  public BatchStatusResponse requestedAlerts(List<BatchAlertItem> requestedAlerts) {
     this.requestedAlerts = requestedAlerts;
     return this;
   }
 
-  public BulkStatusResponse addRequestedAlertsItem(BulkAlertItem requestedAlertsItem) {
+  public BatchStatusResponse addRequestedAlertsItem(BatchAlertItem requestedAlertsItem) {
     if (this.requestedAlerts == null) {
-      this.requestedAlerts = new ArrayList<BulkAlertItem>();
+      this.requestedAlerts = new ArrayList<BatchAlertItem>();
     }
     this.requestedAlerts.add(requestedAlertsItem);
     return this;
@@ -108,11 +108,11 @@ public class BulkStatusResponse {
    * @return requestedAlerts
   **/
   @Schema(description = "")
-  public List<BulkAlertItem> getRequestedAlerts() {
+  public List<BatchAlertItem> getRequestedAlerts() {
     return requestedAlerts;
   }
 
-  public void setRequestedAlerts(List<BulkAlertItem> requestedAlerts) {
+  public void setRequestedAlerts(List<BatchAlertItem> requestedAlerts) {
     this.requestedAlerts = requestedAlerts;
   }
 
@@ -125,26 +125,26 @@ public class BulkStatusResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BulkStatusResponse bulkStatusResponse = (BulkStatusResponse) o;
-    return Objects.equals(this.bulkId, bulkStatusResponse.bulkId) &&
-        Objects.equals(this.bulkStatus, bulkStatusResponse.bulkStatus) &&
-        Objects.equals(this.requestedAlerts, bulkStatusResponse.requestedAlerts) &&
-        Objects.equals(this.policyName, bulkStatusResponse.policyName);
+    BatchStatusResponse batchStatusResponse = (BatchStatusResponse) o;
+    return Objects.equals(this.batchId, batchStatusResponse.batchId) &&
+        Objects.equals(this.batchStatus, batchStatusResponse.batchStatus) &&
+        Objects.equals(this.requestedAlerts, batchStatusResponse.requestedAlerts) &&
+        Objects.equals(this.policyName, batchStatusResponse.policyName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bulkId, bulkStatus, requestedAlerts, policyName);
+    return Objects.hash(batchId, batchStatus, requestedAlerts, policyName);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BulkStatusResponse {\n");
+    sb.append("class BatchStatusResponse {\n");
     
-    sb.append("    bulkId: ").append(toIndentedString(bulkId)).append("\n");
-    sb.append("    bulkStatus: ").append(toIndentedString(bulkStatus)).append("\n");
+    sb.append("    batchId: ").append(toIndentedString(batchId)).append("\n");
+    sb.append("    batchStatus: ").append(toIndentedString(batchStatus)).append("\n");
     sb.append("    requestedAlerts: ").append(toIndentedString(requestedAlerts)).append("\n");
     sb.append("    policyName: ").append(toIndentedString(policyName)).append("\n");
     sb.append("}");

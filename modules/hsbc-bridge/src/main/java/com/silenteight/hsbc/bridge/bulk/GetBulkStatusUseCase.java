@@ -3,10 +3,9 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
-import com.silenteight.hsbc.bridge.bulk.rest.BulkAlertItem;
-import com.silenteight.hsbc.bridge.bulk.rest.BulkProcessingStatusResponse;
-import com.silenteight.hsbc.bridge.bulk.rest.BulkStatus;
-import com.silenteight.hsbc.bridge.bulk.rest.BulkStatusResponse;
+import com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItem;
+import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.BatchStatusResponse;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,12 +22,12 @@ public class GetBulkStatusUseCase {
   private final AnalysisFacade analysisFacade;
   private final BulkRepository bulkRepository;
 
-  public BulkStatusResponse getStatus(String id) {
+  public BatchStatusResponse getStatus(String id) {
     var bulk = bulkRepository.findById(id);
 
-    var response = new BulkStatusResponse();
-    response.setBulkId(id);
-    response.setBulkStatus(BulkStatus.fromValue(bulk.getStatus().name()));
+    var response = new BatchStatusResponse();
+    response.setBatchId(id);
+    response.setBatchStatus(BatchStatus.fromValue(bulk.getStatus().name()));
     response.setRequestedAlerts(getRequestedAlerts(bulk.getAlerts()));
 
     if (bulk.hasAnalysisId()) {
@@ -43,11 +42,11 @@ public class GetBulkStatusUseCase {
     return bulkRepository.existsByStatusIn(of(STORED, PRE_PROCESSED, PROCESSING));
   }
 
-  private List<BulkAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
+  private List<BatchAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
     return alerts.stream().map(r -> {
-      var bulkItem = new BulkAlertItem();
+      var bulkItem = new BatchAlertItem();
       bulkItem.setId(r.getExternalId());
-      bulkItem.setStatus(BulkStatus.fromValue(r.getStatus().name()));
+      bulkItem.setStatus(BatchStatus.fromValue(r.getStatus().name()));
       return bulkItem;
     }).collect(Collectors.toList());
   }

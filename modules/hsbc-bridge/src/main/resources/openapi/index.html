@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>HSCB-Bridge-bulk API</title>
+  <title>HSCB-Bridge-batch API</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8" />
@@ -766,58 +766,49 @@
     }
   }
 };
-            defs["body"] = {
+            defs["BatchAcceptedResponse"] = {
   "type" : "object",
   "properties" : {
-    "file" : {
-      "type" : "string",
-      "format" : "binary"
-    }
-  }
-};
-            defs["BulkAcceptedResponse"] = {
-  "type" : "object",
-  "properties" : {
-    "bulkId" : {
+    "batchId" : {
       "type" : "string"
     },
     "requestedAlerts" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/BulkAlertItem"
+        "$ref" : "#/components/schemas/BatchAlertItem"
       }
     }
   }
 };
-            defs["BulkAlertItem"] = {
+            defs["BatchAlertItem"] = {
   "type" : "object",
   "properties" : {
     "id" : {
       "type" : "integer"
     },
     "status" : {
-      "$ref" : "#/components/schemas/BulkStatus"
+      "$ref" : "#/components/schemas/BatchStatus"
     },
     "errorMessage" : {
       "type" : "string"
     }
   }
 };
-            defs["BulkCancelResponse"] = {
+            defs["BatchCancelResponse"] = {
   "type" : "object",
   "properties" : {
-    "bulkId" : {
+    "batchId" : {
       "type" : "string"
     },
-    "bulkStatus" : {
-      "$ref" : "#/components/schemas/BulkStatus"
+    "batchStatus" : {
+      "$ref" : "#/components/schemas/BatchStatus"
     }
   }
 };
-            defs["BulkIdWithAlerts"] = {
+            defs["BatchIdWithAlerts"] = {
   "type" : "object",
   "properties" : {
-    "bulkId" : {
+    "batchId" : {
       "type" : "string"
     },
     "alerts" : {
@@ -828,7 +819,7 @@
     }
   }
 };
-            defs["BulkProcessingStatusResponse"] = {
+            defs["BatchProcessingStatusResponse"] = {
   "type" : "object",
   "properties" : {
     "isAdjudicationEngineProcessing" : {
@@ -836,14 +827,14 @@
     }
   }
 };
-            defs["BulkSolvedAlertsResponse"] = {
+            defs["BatchSolvedAlertsResponse"] = {
   "type" : "object",
   "properties" : {
-    "bulkId" : {
+    "batchId" : {
       "type" : "string"
     },
-    "bulkStatus" : {
-      "$ref" : "#/components/schemas/BulkStatus"
+    "batchStatus" : {
+      "$ref" : "#/components/schemas/BatchStatus"
     },
     "alerts" : {
       "type" : "array",
@@ -853,28 +844,37 @@
     }
   }
 };
-            defs["BulkStatus"] = {
+            defs["BatchStatus"] = {
   "type" : "string",
   "enum" : [ "PROCESSING", "ERROR", "COMPLETED", "DELIVERED", "CANCELLED", "STORED" ]
 };
-            defs["BulkStatusResponse"] = {
+            defs["BatchStatusResponse"] = {
   "type" : "object",
   "properties" : {
-    "bulkId" : {
+    "batchId" : {
       "type" : "string"
     },
-    "bulkStatus" : {
-      "$ref" : "#/components/schemas/BulkStatus"
+    "batchStatus" : {
+      "$ref" : "#/components/schemas/BatchStatus"
     },
     "requestedAlerts" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/BulkAlertItem"
+        "$ref" : "#/components/schemas/BatchAlertItem"
       }
     },
     "policyName" : {
       "type" : "string",
       "description" : "Name of solving policy (might be empty at the early stage of processing)"
+    }
+  }
+};
+            defs["body"] = {
+  "type" : "object",
+  "properties" : {
+    "file" : {
+      "type" : "string",
+      "format" : "binary"
     }
   }
 };
@@ -2843,23 +2843,29 @@
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
-                    <li data-group="Default" data-name="asyncBulkV1BulkIdAckPut" class="">
-                      <a href="#api-Default-asyncBulkV1BulkIdAckPut">asyncBulkV1BulkIdAckPut</a>
+                    <li data-group="Default" data-name="asyncBatchV1BatchIdAckPut" class="">
+                      <a href="#api-Default-asyncBatchV1BatchIdAckPut">asyncBatchV1BatchIdAckPut</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkV1BulkIdCancelGet" class="">
-                      <a href="#api-Default-asyncBulkV1BulkIdCancelGet">asyncBulkV1BulkIdCancelGet</a>
+                    <li data-group="Default" data-name="asyncBatchV1BatchIdCancelGet" class="">
+                      <a href="#api-Default-asyncBatchV1BatchIdCancelGet">asyncBatchV1BatchIdCancelGet</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkV1BulkIdResultGet" class="">
-                      <a href="#api-Default-asyncBulkV1BulkIdResultGet">asyncBulkV1BulkIdResultGet</a>
+                    <li data-group="Default" data-name="asyncBatchV1BatchIdLearningPost" class="">
+                      <a href="#api-Default-asyncBatchV1BatchIdLearningPost">asyncBatchV1BatchIdLearningPost</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkV1BulkIdStatusGet" class="">
-                      <a href="#api-Default-asyncBulkV1BulkIdStatusGet">asyncBulkV1BulkIdStatusGet</a>
+                    <li data-group="Default" data-name="asyncBatchV1BatchIdRecommendPost" class="">
+                      <a href="#api-Default-asyncBatchV1BatchIdRecommendPost">asyncBatchV1BatchIdRecommendPost</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkV1ProcessingStatusGet" class="">
-                      <a href="#api-Default-asyncBulkV1ProcessingStatusGet">asyncBulkV1ProcessingStatusGet</a>
+                    <li data-group="Default" data-name="asyncBatchV1BatchIdResultGet" class="">
+                      <a href="#api-Default-asyncBatchV1BatchIdResultGet">asyncBatchV1BatchIdResultGet</a>
                     </li>
-                    <li data-group="Default" data-name="asyncBulkV1RecommendPost" class="">
-                      <a href="#api-Default-asyncBulkV1RecommendPost">asyncBulkV1RecommendPost</a>
+                    <li data-group="Default" data-name="asyncBatchV1BatchIdStatusGet" class="">
+                      <a href="#api-Default-asyncBatchV1BatchIdStatusGet">asyncBatchV1BatchIdStatusGet</a>
+                    </li>
+                    <li data-group="Default" data-name="asyncBatchV1IngestRecommendationsPost" class="">
+                      <a href="#api-Default-asyncBatchV1IngestRecommendationsPost">asyncBatchV1IngestRecommendationsPost</a>
+                    </li>
+                    <li data-group="Default" data-name="asyncBatchV1ProcessingStatusGet" class="">
+                      <a href="#api-Default-asyncBatchV1ProcessingStatusGet">asyncBatchV1ProcessingStatusGet</a>
                     </li>
                     <li data-group="Default" data-name="modelGet" class="">
                       <a href="#api-Default-modelGet">modelGet</a>
@@ -2879,7 +2885,7 @@
       <div id="content">
         <div id="project">
           <div class="pull-left">
-            <h1>HSCB-Bridge-bulk API</h1>
+            <h1>HSCB-Bridge-batch API</h1>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -2888,17 +2894,17 @@
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
               <div class="app-desc">Version: 1.0.0</div>
             <hr>
-            <div>HSCB-Bridge-bulk API</div>
+            <div>HSCB-Bridge-batch API</div>
           </div>
         </div>
         <div id="sections">
                 <section id="api-Default">
                   <h1>Default</h1>
-                    <div id="api-Default-asyncBulkV1BulkIdAckPut">
-                      <article id="api-Default-asyncBulkV1BulkIdAckPut-0" data-group="User" data-name="asyncBulkV1BulkIdAckPut" data-version="0">
+                    <div id="api-Default-asyncBatchV1BatchIdAckPut">
+                      <article id="api-Default-asyncBatchV1BatchIdAckPut-0" data-group="User" data-name="asyncBatchV1BatchIdAckPut" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkV1BulkIdAckPut</h1>
-                          <p>Update bulk status for given ID</p>
+                          <h1>asyncBatchV1BatchIdAckPut</h1>
+                          <p>Update batch status for given ID</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -2906,31 +2912,31 @@
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="put"><code><span class="pln">/async/bulk/v1/{bulkId}/ack</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="put"><code><span class="pln">/async/batch/v1/{batchId}/ack</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdAckPut-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdAckPut-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdAckPut-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdAckPut-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
 -H "Accept: application/json"\
-"//async/bulk/v1/{bulkId}/ack"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/ack"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -2944,48 +2950,48 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdAckPut(bulkId);
+            BatchStatusResponse result = apiInstance.asyncBatchV1BatchIdAckPut(batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdAckPut");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdAckPut");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdAckPut(bulkId);
+            BatchStatusResponse result = apiInstance.asyncBatchV1BatchIdAckPut(batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdAckPut");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdAckPut");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *batchId = batchId_example; // The id batch job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-// Update bulk status for given ID
-[apiInstance asyncBulkV1BulkIdAckPutWith:bulkId
-              completionHandler: ^(BulkStatusResponse output, NSError* error) {
+// Update batch status for given ID
+[apiInstance asyncBatchV1BatchIdAckPutWith:batchId
+              completionHandler: ^(BatchStatusResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2996,11 +3002,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = bulkId_example; // {{String}} The id bulk job.
+var api = new HscbBridgeBatchApi.DefaultApi()
+var batchId = batchId_example; // {{String}} The id batch job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3009,14 +3015,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkV1BulkIdAckPut(bulkId, callback);
+api.asyncBatchV1BatchIdAckPut(batchId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -3025,23 +3031,23 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkV1BulkIdAckPutExample
+    public class asyncBatchV1BatchIdAckPutExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = bulkId_example;  // String | The id bulk job.
+            var batchId = batchId_example;  // String | The id batch job.
 
             try
             {
-                // Update bulk status for given ID
-                BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdAckPut(bulkId);
+                // Update batch status for given ID
+                BatchStatusResponse result = apiInstance.asyncBatchV1BatchIdAckPut(batchId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdAckPut: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1BatchIdAckPut: " + e.Message );
             }
         }
     }
@@ -3049,40 +3055,40 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = bulkId_example; // String | The id bulk job.
+$batchId = batchId_example; // String | The id batch job.
 
 try {
-    $result = $api_instance->asyncBulkV1BulkIdAckPut($bulkId);
+    $result = $api_instance->asyncBatchV1BatchIdAckPut($batchId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdAckPut: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBatchV1BatchIdAckPut: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = bulkId_example; # String | The id bulk job.
+my $batchId = batchId_example; # String | The id batch job.
 
 eval { 
-    my $result = $api_instance->asyncBulkV1BulkIdAckPut(bulkId => $bulkId);
+    my $result = $api_instance->asyncBatchV1BatchIdAckPut(batchId => $batchId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdAckPut: $@\n";
+    warn "Exception when calling DefaultApi->asyncBatchV1BatchIdAckPut: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdAckPut-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -3091,14 +3097,14 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = bulkId_example # String | The id bulk job.
+batchId = batchId_example # String | The id batch job.
 
 try: 
-    # Update bulk status for given ID
-    api_response = api_instance.async_bulk_v1_bulk_id_ack_put(bulkId)
+    # Update batch status for given ID
+    api_response = api_instance.async_batch_v1_batch_id_ack_put(batchId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkV1BulkIdAckPut: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBatchV1BatchIdAckPut: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -3110,11 +3116,11 @@ except ApiException as e:
                                   <th width="150px">Name</th>
                                   <th>Description</th>
                                 </tr>
-                                  <tr><td style="width:150px;">bulkId*</td>
+                                  <tr><td style="width:150px;">batchId*</td>
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkV1BulkIdAckPut_bulkId">
+                                      <div id="d2e199_asyncBatchV1BatchIdAckPut_batchId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -3122,7 +3128,7 @@ except ApiException as e:
                                                   </span>
                                   
                                                       <div class="inner description">
-                                                          The id bulk job.
+                                                          The id batch job.
                                                       </div>
                                               </div>
                                                   <div class="inner required">
@@ -3143,14 +3149,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdAckPut-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1BatchIdAckPut-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdAckPut-200-schema">
-                                  <div id='responses-asyncBulkV1BulkIdAckPut-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBatchV1BatchIdAckPut-200-schema">
+                                  <div id='responses-asyncBatchV1BatchIdAckPut-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -3158,7 +3164,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BulkStatusResponse"
+        "$ref" : "#/components/schemas/BatchStatusResponse"
       }
     }
   }
@@ -3176,25 +3182,25 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkV1BulkIdAckPut-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkV1BulkIdAckPut-200-schema-200');
+                                        $('#responses-asyncBatchV1BatchIdAckPut-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1BatchIdAckPut-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkV1BulkIdAckPut-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBatchV1BatchIdAckPut-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkV1BulkIdCancelGet">
-                      <article id="api-Default-asyncBulkV1BulkIdCancelGet-0" data-group="User" data-name="asyncBulkV1BulkIdCancelGet" data-version="0">
+                    <div id="api-Default-asyncBatchV1BatchIdCancelGet">
+                      <article id="api-Default-asyncBatchV1BatchIdCancelGet-0" data-group="User" data-name="asyncBatchV1BatchIdCancelGet" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkV1BulkIdCancelGet</h1>
-                          <p>Cancel bulk with given id.</p>
+                          <h1>asyncBatchV1BatchIdCancelGet</h1>
+                          <p>Cancel batch with given id.</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3202,31 +3208,31 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/{bulkId}/cancel</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/batch/v1/{batchId}/cancel</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdCancelGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdCancelGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"//async/bulk/v1/{bulkId}/cancel"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/cancel"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -3240,48 +3246,48 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
+            BatchCancelResponse result = apiInstance.asyncBatchV1BatchIdCancelGet(batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdCancelGet");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdCancelGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
+            BatchCancelResponse result = apiInstance.asyncBatchV1BatchIdCancelGet(batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdCancelGet");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdCancelGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *batchId = batchId_example; // The id batch job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-// Cancel bulk with given id.
-[apiInstance asyncBulkV1BulkIdCancelGetWith:bulkId
-              completionHandler: ^(BulkCancelResponse output, NSError* error) {
+// Cancel batch with given id.
+[apiInstance asyncBatchV1BatchIdCancelGetWith:batchId
+              completionHandler: ^(BatchCancelResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3292,11 +3298,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = bulkId_example; // {{String}} The id bulk job.
+var api = new HscbBridgeBatchApi.DefaultApi()
+var batchId = batchId_example; // {{String}} The id batch job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3305,14 +3311,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkV1BulkIdCancelGet(bulkId, callback);
+api.asyncBatchV1BatchIdCancelGet(batchId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -3321,23 +3327,23 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkV1BulkIdCancelGetExample
+    public class asyncBatchV1BatchIdCancelGetExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = bulkId_example;  // String | The id bulk job.
+            var batchId = batchId_example;  // String | The id batch job.
 
             try
             {
-                // Cancel bulk with given id.
-                BulkCancelResponse result = apiInstance.asyncBulkV1BulkIdCancelGet(bulkId);
+                // Cancel batch with given id.
+                BatchCancelResponse result = apiInstance.asyncBatchV1BatchIdCancelGet(batchId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdCancelGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1BatchIdCancelGet: " + e.Message );
             }
         }
     }
@@ -3345,40 +3351,40 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = bulkId_example; // String | The id bulk job.
+$batchId = batchId_example; // String | The id batch job.
 
 try {
-    $result = $api_instance->asyncBulkV1BulkIdCancelGet($bulkId);
+    $result = $api_instance->asyncBatchV1BatchIdCancelGet($batchId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdCancelGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBatchV1BatchIdCancelGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = bulkId_example; # String | The id bulk job.
+my $batchId = batchId_example; # String | The id batch job.
 
 eval { 
-    my $result = $api_instance->asyncBulkV1BulkIdCancelGet(bulkId => $bulkId);
+    my $result = $api_instance->asyncBatchV1BatchIdCancelGet(batchId => $batchId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdCancelGet: $@\n";
+    warn "Exception when calling DefaultApi->asyncBatchV1BatchIdCancelGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdCancelGet-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -3387,14 +3393,14 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = bulkId_example # String | The id bulk job.
+batchId = batchId_example # String | The id batch job.
 
 try: 
-    # Cancel bulk with given id.
-    api_response = api_instance.async_bulk_v1_bulk_id_cancel_get(bulkId)
+    # Cancel batch with given id.
+    api_response = api_instance.async_batch_v1_batch_id_cancel_get(batchId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkV1BulkIdCancelGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBatchV1BatchIdCancelGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -3406,11 +3412,11 @@ except ApiException as e:
                                   <th width="150px">Name</th>
                                   <th>Description</th>
                                 </tr>
-                                  <tr><td style="width:150px;">bulkId*</td>
+                                  <tr><td style="width:150px;">batchId*</td>
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkV1BulkIdCancelGet_bulkId">
+                                      <div id="d2e199_asyncBatchV1BatchIdCancelGet_batchId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -3418,7 +3424,7 @@ except ApiException as e:
                                                   </span>
                                   
                                                       <div class="inner description">
-                                                          The id bulk job.
+                                                          The id batch job.
                                                       </div>
                                               </div>
                                                   <div class="inner required">
@@ -3435,26 +3441,26 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Bulk with given has been canceled. </h3>
+                            <h3> Status: 200 - Batch with given has been canceled. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdCancelGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1BatchIdCancelGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdCancelGet-200-schema">
-                                  <div id='responses-asyncBulkV1BulkIdCancelGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBatchV1BatchIdCancelGet-200-schema">
+                                  <div id='responses-asyncBatchV1BatchIdCancelGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Bulk with given has been canceled.",
+  "description" : "Batch with given has been canceled.",
   "content" : {
     "application/octet-stream" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BulkCancelResponse"
+        "$ref" : "#/components/schemas/BatchCancelResponse"
       }
     }
   }
@@ -3472,25 +3478,25 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkV1BulkIdCancelGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkV1BulkIdCancelGet-200-schema-200');
+                                        $('#responses-asyncBatchV1BatchIdCancelGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1BatchIdCancelGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkV1BulkIdCancelGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBatchV1BatchIdCancelGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkV1BulkIdResultGet">
-                      <article id="api-Default-asyncBulkV1BulkIdResultGet-0" data-group="User" data-name="asyncBulkV1BulkIdResultGet" data-version="0">
+                    <div id="api-Default-asyncBatchV1BatchIdLearningPost">
+                      <article id="api-Default-asyncBatchV1BatchIdLearningPost-0" data-group="User" data-name="asyncBatchV1BatchIdLearningPost" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkV1BulkIdResultGet</h1>
-                          <p>Get results from bulk job.</p>
+                          <h1>asyncBatchV1BatchIdLearningPost</h1>
+                          <p>Submit batch of alerts for learning.</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3498,31 +3504,32 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/{bulkId}/result</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/async/batch/v1/{batchId}/learning</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdResultGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdLearningPost-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdResultGet-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/octet-stream"\
-"//async/bulk/v1/{bulkId}/result"</code></pre>
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/learning"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -3536,48 +3543,52 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
+            BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdLearningPost(body, batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdResultGet");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdLearningPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
+            BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdLearningPost(body, batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdResultGet");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdLearningPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">BatchIdWithAlerts *body = ; // BatchId and list of alerts for learning processes.
+String *batchId = batchId_example; // The id batch job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-// Get results from bulk job.
-[apiInstance asyncBulkV1BulkIdResultGetWith:bulkId
-              completionHandler: ^(BulkSolvedAlertsResponse output, NSError* error) {
+// Submit batch of alerts for learning.
+[apiInstance asyncBatchV1BatchIdLearningPostWith:body
+    batchId:batchId
+              completionHandler: ^(BatchAcceptedResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3588,11 +3599,12 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = bulkId_example; // {{String}} The id bulk job.
+var api = new HscbBridgeBatchApi.DefaultApi()
+var body = ; // {{BatchIdWithAlerts}} BatchId and list of alerts for learning processes.
+var batchId = batchId_example; // {{String}} The id batch job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3601,14 +3613,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkV1BulkIdResultGet(bulkId, callback);
+api.asyncBatchV1BatchIdLearningPost(bodybatchId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -3617,23 +3629,24 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkV1BulkIdResultGetExample
+    public class asyncBatchV1BatchIdLearningPostExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = bulkId_example;  // String | The id bulk job.
+            var body = new BatchIdWithAlerts(); // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+            var batchId = batchId_example;  // String | The id batch job.
 
             try
             {
-                // Get results from bulk job.
-                BulkSolvedAlertsResponse result = apiInstance.asyncBulkV1BulkIdResultGet(bulkId);
+                // Submit batch of alerts for learning.
+                BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdLearningPost(body, batchId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdResultGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1BatchIdLearningPost: " + e.Message );
             }
         }
     }
@@ -3641,40 +3654,42 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = bulkId_example; // String | The id bulk job.
+$body = ; // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+$batchId = batchId_example; // String | The id batch job.
 
 try {
-    $result = $api_instance->asyncBulkV1BulkIdResultGet($bulkId);
+    $result = $api_instance->asyncBatchV1BatchIdLearningPost($body, $batchId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdResultGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBatchV1BatchIdLearningPost: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = bulkId_example; # String | The id bulk job.
+my $body = WWW::SwaggerClient::Object::BatchIdWithAlerts->new(); # BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+my $batchId = batchId_example; # String | The id batch job.
 
 eval { 
-    my $result = $api_instance->asyncBulkV1BulkIdResultGet(bulkId => $bulkId);
+    my $result = $api_instance->asyncBatchV1BatchIdLearningPost(body => $body, batchId => $batchId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdResultGet: $@\n";
+    warn "Exception when calling DefaultApi->asyncBatchV1BatchIdLearningPost: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdResultGet-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -3683,14 +3698,15 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = bulkId_example # String | The id bulk job.
+body =  # BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+batchId = batchId_example # String | The id batch job.
 
 try: 
-    # Get results from bulk job.
-    api_response = api_instance.async_bulk_v1_bulk_id_result_get(bulkId)
+    # Submit batch of alerts for learning.
+    api_response = api_instance.async_batch_v1_batch_id_learning_post(body, batchId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkV1BulkIdResultGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBatchV1BatchIdLearningPost: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -3702,11 +3718,11 @@ except ApiException as e:
                                   <th width="150px">Name</th>
                                   <th>Description</th>
                                 </tr>
-                                  <tr><td style="width:150px;">bulkId*</td>
+                                  <tr><td style="width:150px;">batchId*</td>
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkV1BulkIdResultGet_bulkId">
+                                      <div id="d2e199_asyncBatchV1BatchIdLearningPost_batchId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -3714,7 +3730,697 @@ except ApiException as e:
                                                   </span>
                                   
                                                       <div class="inner description">
-                                                          The id bulk job.
+                                                          The id batch job.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "description" : "BatchId and list of alerts for learning processes.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/BatchIdWithAlerts"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_asyncBatchV1BatchIdLearningPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_asyncBatchV1BatchIdLearningPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Confirmation of accepting batch. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1BatchIdLearningPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-asyncBatchV1BatchIdLearningPost-200-schema">
+                                  <div id='responses-asyncBatchV1BatchIdLearningPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Confirmation of accepting batch.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/BatchAcceptedResponse"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-asyncBatchV1BatchIdLearningPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1BatchIdLearningPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-asyncBatchV1BatchIdLearningPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-asyncBatchV1BatchIdRecommendPost">
+                      <article id="api-Default-asyncBatchV1BatchIdRecommendPost-0" data-group="User" data-name="asyncBatchV1BatchIdRecommendPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>asyncBatchV1BatchIdRecommendPost</h1>
+                          <p>Submit batch of alerts for async recommendations.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/async/batch/v1/{batchId}/recommend</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdRecommendPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/recommend"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+        String batchId = batchId_example; // String | The id batch job.
+        try {
+            BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdRecommendPost(body, batchId);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdRecommendPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+        String batchId = batchId_example; // String | The id batch job.
+        try {
+            BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdRecommendPost(body, batchId);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdRecommendPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">BatchIdWithAlerts *body = ; // BatchId and list of alerts to recommend.
+String *batchId = batchId_example; // The id batch job.
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Submit batch of alerts for async recommendations.
+[apiInstance asyncBatchV1BatchIdRecommendPostWith:body
+    batchId:batchId
+              completionHandler: ^(BatchAcceptedResponse output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
+
+var api = new HscbBridgeBatchApi.DefaultApi()
+var body = ; // {{BatchIdWithAlerts}} BatchId and list of alerts to recommend.
+var batchId = batchId_example; // {{String}} The id batch job.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.asyncBatchV1BatchIdRecommendPost(bodybatchId, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class asyncBatchV1BatchIdRecommendPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+            var body = new BatchIdWithAlerts(); // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+            var batchId = batchId_example;  // String | The id batch job.
+
+            try
+            {
+                // Submit batch of alerts for async recommendations.
+                BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdRecommendPost(body, batchId);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1BatchIdRecommendPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$body = ; // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+$batchId = batchId_example; // String | The id batch job.
+
+try {
+    $result = $api_instance->asyncBatchV1BatchIdRecommendPost($body, $batchId);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->asyncBatchV1BatchIdRecommendPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $body = WWW::SwaggerClient::Object::BatchIdWithAlerts->new(); # BatchIdWithAlerts | BatchId and list of alerts to recommend.
+my $batchId = batchId_example; # String | The id batch job.
+
+eval { 
+    my $result = $api_instance->asyncBatchV1BatchIdRecommendPost(body => $body, batchId => $batchId);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->asyncBatchV1BatchIdRecommendPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body =  # BatchIdWithAlerts | BatchId and list of alerts to recommend.
+batchId = batchId_example # String | The id batch job.
+
+try: 
+    # Submit batch of alerts for async recommendations.
+    api_response = api_instance.async_batch_v1_batch_id_recommend_post(body, batchId)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->asyncBatchV1BatchIdRecommendPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">batchId*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_asyncBatchV1BatchIdRecommendPost_batchId">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          The id batch job.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "description" : "BatchId and list of alerts to recommend.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/BatchIdWithAlerts"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_asyncBatchV1BatchIdRecommendPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_asyncBatchV1BatchIdRecommendPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Confirmation of accepting batch. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1BatchIdRecommendPost-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-asyncBatchV1BatchIdRecommendPost-200-schema">
+                                  <div id='responses-asyncBatchV1BatchIdRecommendPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Confirmation of accepting batch.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/BatchAcceptedResponse"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-asyncBatchV1BatchIdRecommendPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1BatchIdRecommendPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-asyncBatchV1BatchIdRecommendPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-asyncBatchV1BatchIdResultGet">
+                      <article id="api-Default-asyncBatchV1BatchIdResultGet-0" data-group="User" data-name="asyncBatchV1BatchIdResultGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>asyncBatchV1BatchIdResultGet</h1>
+                          <p>Get results from batch job.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/batch/v1/{batchId}/result</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdResultGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdResultGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/octet-stream"\
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/result"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        String batchId = batchId_example; // String | The id batch job.
+        try {
+            BatchSolvedAlertsResponse result = apiInstance.asyncBatchV1BatchIdResultGet(batchId);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdResultGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        String batchId = batchId_example; // String | The id batch job.
+        try {
+            BatchSolvedAlertsResponse result = apiInstance.asyncBatchV1BatchIdResultGet(batchId);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdResultGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *batchId = batchId_example; // The id batch job.
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Get results from batch job.
+[apiInstance asyncBatchV1BatchIdResultGetWith:batchId
+              completionHandler: ^(BatchSolvedAlertsResponse output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
+
+var api = new HscbBridgeBatchApi.DefaultApi()
+var batchId = batchId_example; // {{String}} The id batch job.
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.asyncBatchV1BatchIdResultGet(batchId, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class asyncBatchV1BatchIdResultGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+            var batchId = batchId_example;  // String | The id batch job.
+
+            try
+            {
+                // Get results from batch job.
+                BatchSolvedAlertsResponse result = apiInstance.asyncBatchV1BatchIdResultGet(batchId);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1BatchIdResultGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$batchId = batchId_example; // String | The id batch job.
+
+try {
+    $result = $api_instance->asyncBatchV1BatchIdResultGet($batchId);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->asyncBatchV1BatchIdResultGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $batchId = batchId_example; # String | The id batch job.
+
+eval { 
+    my $result = $api_instance->asyncBatchV1BatchIdResultGet(batchId => $batchId);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->asyncBatchV1BatchIdResultGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+batchId = batchId_example # String | The id batch job.
+
+try: 
+    # Get results from batch job.
+    api_response = api_instance.async_batch_v1_batch_id_result_get(batchId)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->asyncBatchV1BatchIdResultGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">batchId*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_asyncBatchV1BatchIdResultGet_batchId">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          The id batch job.
                                                       </div>
                                               </div>
                                                   <div class="inner required">
@@ -3735,14 +4441,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdResultGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1BatchIdResultGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdResultGet-200-schema">
-                                  <div id='responses-asyncBulkV1BulkIdResultGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBatchV1BatchIdResultGet-200-schema">
+                                  <div id='responses-asyncBatchV1BatchIdResultGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -3750,7 +4456,7 @@ except ApiException as e:
   "content" : {
     "application/octet-stream" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BulkSolvedAlertsResponse"
+        "$ref" : "#/components/schemas/BatchSolvedAlertsResponse"
       }
     }
   }
@@ -3768,25 +4474,25 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkV1BulkIdResultGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkV1BulkIdResultGet-200-schema-200');
+                                        $('#responses-asyncBatchV1BatchIdResultGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1BatchIdResultGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkV1BulkIdResultGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBatchV1BatchIdResultGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkV1BulkIdStatusGet">
-                      <article id="api-Default-asyncBulkV1BulkIdStatusGet-0" data-group="User" data-name="asyncBulkV1BulkIdStatusGet" data-version="0">
+                    <div id="api-Default-asyncBatchV1BatchIdStatusGet">
+                      <article id="api-Default-asyncBatchV1BatchIdStatusGet-0" data-group="User" data-name="asyncBatchV1BatchIdStatusGet" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkV1BulkIdStatusGet</h1>
-                          <p>Status of bulk processing for given ID</p>
+                          <h1>asyncBatchV1BatchIdStatusGet</h1>
+                          <p>Status of batch processing for given ID</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -3794,31 +4500,31 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/{bulkId}/status</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/batch/v1/{batchId}/status</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1BulkIdStatusGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1BatchIdStatusGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//async/bulk/v1/{bulkId}/status"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/status"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -3832,48 +4538,48 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
+            BatchStatusResponse result = apiInstance.asyncBatchV1BatchIdStatusGet(batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdStatusGet");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdStatusGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        String bulkId = bulkId_example; // String | The id bulk job.
+        String batchId = batchId_example; // String | The id batch job.
         try {
-            BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
+            BatchStatusResponse result = apiInstance.asyncBatchV1BatchIdStatusGet(batchId);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1BulkIdStatusGet");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1BatchIdStatusGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *bulkId = bulkId_example; // The id bulk job.
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *batchId = batchId_example; // The id batch job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-// Status of bulk processing for given ID
-[apiInstance asyncBulkV1BulkIdStatusGetWith:bulkId
-              completionHandler: ^(BulkStatusResponse output, NSError* error) {
+// Status of batch processing for given ID
+[apiInstance asyncBatchV1BatchIdStatusGetWith:batchId
+              completionHandler: ^(BatchStatusResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3884,11 +4590,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
-var bulkId = bulkId_example; // {{String}} The id bulk job.
+var api = new HscbBridgeBatchApi.DefaultApi()
+var batchId = batchId_example; // {{String}} The id batch job.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -3897,14 +4603,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.asyncBulkV1BulkIdStatusGet(bulkId, callback);
+api.asyncBatchV1BatchIdStatusGet(batchId, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -3913,23 +4619,23 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkV1BulkIdStatusGetExample
+    public class asyncBatchV1BatchIdStatusGetExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var bulkId = bulkId_example;  // String | The id bulk job.
+            var batchId = batchId_example;  // String | The id batch job.
 
             try
             {
-                // Status of bulk processing for given ID
-                BulkStatusResponse result = apiInstance.asyncBulkV1BulkIdStatusGet(bulkId);
+                // Status of batch processing for given ID
+                BatchStatusResponse result = apiInstance.asyncBatchV1BatchIdStatusGet(batchId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkV1BulkIdStatusGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1BatchIdStatusGet: " + e.Message );
             }
         }
     }
@@ -3937,40 +4643,40 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$bulkId = bulkId_example; // String | The id bulk job.
+$batchId = batchId_example; // String | The id batch job.
 
 try {
-    $result = $api_instance->asyncBulkV1BulkIdStatusGet($bulkId);
+    $result = $api_instance->asyncBatchV1BatchIdStatusGet($batchId);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkV1BulkIdStatusGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBatchV1BatchIdStatusGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $bulkId = bulkId_example; # String | The id bulk job.
+my $batchId = batchId_example; # String | The id batch job.
 
 eval { 
-    my $result = $api_instance->asyncBulkV1BulkIdStatusGet(bulkId => $bulkId);
+    my $result = $api_instance->asyncBatchV1BatchIdStatusGet(batchId => $batchId);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkV1BulkIdStatusGet: $@\n";
+    warn "Exception when calling DefaultApi->asyncBatchV1BatchIdStatusGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1BulkIdStatusGet-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -3979,14 +4685,14 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-bulkId = bulkId_example # String | The id bulk job.
+batchId = batchId_example # String | The id batch job.
 
 try: 
-    # Status of bulk processing for given ID
-    api_response = api_instance.async_bulk_v1_bulk_id_status_get(bulkId)
+    # Status of batch processing for given ID
+    api_response = api_instance.async_batch_v1_batch_id_status_get(batchId)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkV1BulkIdStatusGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBatchV1BatchIdStatusGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -3998,11 +4704,11 @@ except ApiException as e:
                                   <th width="150px">Name</th>
                                   <th>Description</th>
                                 </tr>
-                                  <tr><td style="width:150px;">bulkId*</td>
+                                  <tr><td style="width:150px;">batchId*</td>
                                   <td>
                                   
                                   
-                                      <div id="d2e199_asyncBulkV1BulkIdStatusGet_bulkId">
+                                      <div id="d2e199_asyncBatchV1BatchIdStatusGet_batchId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -4010,7 +4716,7 @@ except ApiException as e:
                                                   </span>
                                   
                                                       <div class="inner description">
-                                                          The id bulk job.
+                                                          The id batch job.
                                                       </div>
                                               </div>
                                                   <div class="inner required">
@@ -4031,14 +4737,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkV1BulkIdStatusGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1BatchIdStatusGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkV1BulkIdStatusGet-200-schema">
-                                  <div id='responses-asyncBulkV1BulkIdStatusGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBatchV1BatchIdStatusGet-200-schema">
+                                  <div id='responses-asyncBatchV1BatchIdStatusGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -4046,7 +4752,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BulkStatusResponse"
+        "$ref" : "#/components/schemas/BatchStatusResponse"
       }
     }
   }
@@ -4064,25 +4770,25 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkV1BulkIdStatusGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkV1BulkIdStatusGet-200-schema-200');
+                                        $('#responses-asyncBatchV1BatchIdStatusGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1BatchIdStatusGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkV1BulkIdStatusGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBatchV1BatchIdStatusGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-asyncBulkV1ProcessingStatusGet">
-                      <article id="api-Default-asyncBulkV1ProcessingStatusGet-0" data-group="User" data-name="asyncBulkV1ProcessingStatusGet" data-version="0">
+                    <div id="api-Default-asyncBatchV1IngestRecommendationsPost">
+                      <article id="api-Default-asyncBatchV1IngestRecommendationsPost-0" data-group="User" data-name="asyncBatchV1IngestRecommendationsPost" data-version="0">
                         <div class="pull-left">
-                          <h1>asyncBulkV1ProcessingStatusGet</h1>
-                          <p>Status of bulk processing for all bulks</p>
+                          <h1>asyncBatchV1IngestRecommendationsPost</h1>
+                          <p>Submit recommendations.</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -4090,290 +4796,32 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/bulk/v1/processingStatus</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/async/batch/v1/ingestRecommendations</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1ProcessingStatusGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1IngestRecommendationsPost-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/json"\
-"//async/bulk/v1/processingStatus"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.DefaultApi;
-
-import java.io.File;
-import java.util.*;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            BulkProcessingStatusResponse result = apiInstance.asyncBulkV1ProcessingStatusGet();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1ProcessingStatusGet");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            BulkProcessingStatusResponse result = apiInstance.asyncBulkV1ProcessingStatusGet();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1ProcessingStatusGet");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
-DefaultApi *apiInstance = [[DefaultApi alloc] init];
-
-// Status of bulk processing for all bulks
-[apiInstance asyncBulkV1ProcessingStatusGetWithCompletionHandler: 
-              ^(BulkProcessingStatusResponse output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
-
-var api = new HscbBridgeBulkApi.DefaultApi()
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.asyncBulkV1ProcessingStatusGet(callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class asyncBulkV1ProcessingStatusGetExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new DefaultApi();
-
-            try
-            {
-                // Status of bulk processing for all bulks
-                BulkProcessingStatusResponse result = apiInstance.asyncBulkV1ProcessingStatusGet();
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkV1ProcessingStatusGet: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiDefaultApi();
-
-try {
-    $result = $api_instance->asyncBulkV1ProcessingStatusGet();
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkV1ProcessingStatusGet: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DefaultApi;
-
-my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-
-eval { 
-    my $result = $api_instance->asyncBulkV1ProcessingStatusGet();
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkV1ProcessingStatusGet: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1ProcessingStatusGet-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.DefaultApi()
-
-try: 
-    # Status of bulk processing for all bulks
-    api_response = api_instance.async_bulk_v1_processing_status_get()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkV1ProcessingStatusGet: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - Boolean value if AE processing or not. </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkV1ProcessingStatusGet-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkV1ProcessingStatusGet-200-schema">
-                                  <div id='responses-asyncBulkV1ProcessingStatusGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Boolean value if AE processing or not.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/BulkProcessingStatusResponse"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkV1ProcessingStatusGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkV1ProcessingStatusGet-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-asyncBulkV1ProcessingStatusGet-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Default-asyncBulkV1RecommendPost">
-                      <article id="api-Default-asyncBulkV1RecommendPost-0" data-group="User" data-name="asyncBulkV1RecommendPost" data-version="0">
-                        <div class="pull-left">
-                          <h1>asyncBulkV1RecommendPost</h1>
-                          <p>Submit bulk of alerts for async recommendations.</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked"></p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/async/bulk/v1/recommend</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-asyncBulkV1RecommendPost-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-asyncBulkV1RecommendPost-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-asyncBulkV1RecommendPost-0-curl">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"//async/bulk/v1/recommend"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/ingestRecommendations"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-java">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -4387,51 +4835,46 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        BulkIdWithAlerts body = ; // BulkIdWithAlerts | BulkId and list of alerts to recommend.
+        BatchSolvedAlertsResponse body = ; // BatchSolvedAlertsResponse | BatchId and list of recommended alerts.
         try {
-            BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
-            System.out.println(result);
+            apiInstance.asyncBatchV1IngestRecommendationsPost(body);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1RecommendPost");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1IngestRecommendationsPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-android">
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        BulkIdWithAlerts body = ; // BulkIdWithAlerts | BulkId and list of alerts to recommend.
+        BatchSolvedAlertsResponse body = ; // BatchSolvedAlertsResponse | BatchId and list of recommended alerts.
         try {
-            BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
-            System.out.println(result);
+            apiInstance.asyncBatchV1IngestRecommendationsPost(body);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#asyncBulkV1RecommendPost");
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1IngestRecommendationsPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-groovy">
+  <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">BulkIdWithAlerts *body = ; // BulkId and list of alerts to recommend.
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">BatchSolvedAlertsResponse *body = ; // BatchId and list of recommended alerts.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-// Submit bulk of alerts for async recommendations.
-[apiInstance asyncBulkV1RecommendPostWith:body
-              completionHandler: ^(BulkAcceptedResponse output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
+// Submit recommendations.
+[apiInstance asyncBatchV1IngestRecommendationsPostWith:body
+              completionHandler: ^(NSError* error) {
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -4439,27 +4882,27 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
-var body = ; // {{BulkIdWithAlerts}} BulkId and list of alerts to recommend.
+var api = new HscbBridgeBatchApi.DefaultApi()
+var body = ; // {{BatchSolvedAlertsResponse}} BatchId and list of recommended alerts.
 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully. Returned data: ' + data);
+    console.log('API called successfully.');
   }
 };
-api.asyncBulkV1RecommendPost(body, callback);
+api.asyncBatchV1IngestRecommendationsPost(body, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-csharp">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -4468,23 +4911,22 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class asyncBulkV1RecommendPostExample
+    public class asyncBatchV1IngestRecommendationsPostExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var body = new BulkIdWithAlerts(); // BulkIdWithAlerts | BulkId and list of alerts to recommend.
+            var body = new BatchSolvedAlertsResponse(); // BatchSolvedAlertsResponse | BatchId and list of recommended alerts.
 
             try
             {
-                // Submit bulk of alerts for async recommendations.
-                BulkAcceptedResponse result = apiInstance.asyncBulkV1RecommendPost(body);
-                Debug.WriteLine(result);
+                // Submit recommendations.
+                apiInstance.asyncBatchV1IngestRecommendationsPost(body);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.asyncBulkV1RecommendPost: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1IngestRecommendationsPost: " + e.Message );
             }
         }
     }
@@ -4492,40 +4934,38 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-php">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // BulkIdWithAlerts | BulkId and list of alerts to recommend.
+$body = ; // BatchSolvedAlertsResponse | BatchId and list of recommended alerts.
 
 try {
-    $result = $api_instance->asyncBulkV1RecommendPost($body);
-    print_r($result);
+    $api_instance->asyncBatchV1IngestRecommendationsPost($body);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->asyncBulkV1RecommendPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->asyncBatchV1IngestRecommendationsPost: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-perl">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::BulkIdWithAlerts->new(); # BulkIdWithAlerts | BulkId and list of alerts to recommend.
+my $body = WWW::SwaggerClient::Object::BatchSolvedAlertsResponse->new(); # BatchSolvedAlertsResponse | BatchId and list of recommended alerts.
 
 eval { 
-    my $result = $api_instance->asyncBulkV1RecommendPost(body => $body);
-    print Dumper($result);
+    $api_instance->asyncBatchV1IngestRecommendationsPost(body => $body);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->asyncBulkV1RecommendPost: $@\n";
+    warn "Exception when calling DefaultApi->asyncBatchV1IngestRecommendationsPost: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-asyncBulkV1RecommendPost-0-python">
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -4534,14 +4974,13 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # BulkIdWithAlerts | BulkId and list of alerts to recommend.
+body =  # BatchSolvedAlertsResponse | BatchId and list of recommended alerts.
 
 try: 
-    # Submit bulk of alerts for async recommendations.
-    api_response = api_instance.async_bulk_v1_recommend_post(body)
-    pprint(api_response)
+    # Submit recommendations.
+    api_instance.async_batch_v1_ingest_recommendations_post(body)
 except ApiException as e:
-    print("Exception when calling DefaultApi->asyncBulkV1RecommendPost: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->asyncBatchV1IngestRecommendationsPost: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -4562,11 +5001,11 @@ except ApiException as e:
                                 <script>
                                 $(document).ready(function() {
                                   var schemaWrapper = {
-  "description" : "BulkId and list of alerts to recommend.",
+  "description" : "BatchId and list of recommended alerts.",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BulkIdWithAlerts"
+        "$ref" : "#/components/schemas/BatchSolvedAlertsResponse"
       }
     }
   },
@@ -4584,12 +5023,12 @@ except ApiException as e:
                                   }
                                 
                                   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_asyncBulkV1RecommendPost_body');
+                                  var result = $('#d2e199_asyncBatchV1IngestRecommendationsPost_body');
                                   result.empty();
                                   result.append(view.render());
                                 });
                                 </script>
-                                <div id="d2e199_asyncBulkV1RecommendPost_body"></div>
+                                <div id="d2e199_asyncBatchV1IngestRecommendationsPost_body"></div>
                                 </td>
                                 </tr>
                             </table>
@@ -4597,26 +5036,244 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Confirmation of accepting bulk. </h3>
+                            <h3> Status: 200 - Confirmation of ingesting alerts. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-asyncBatchV1ProcessingStatusGet">
+                      <article id="api-Default-asyncBatchV1ProcessingStatusGet-0" data-group="User" data-name="asyncBatchV1ProcessingStatusGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>asyncBatchV1ProcessingStatusGet</h1>
+                          <p>Status of batch processing for all batches</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/async/batch/v1/processingStatus</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-asyncBatchV1ProcessingStatusGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/processingStatus"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        try {
+            BatchProcessingStatusResponse result = apiInstance.asyncBatchV1ProcessingStatusGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1ProcessingStatusGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        try {
+            BatchProcessingStatusResponse result = apiInstance.asyncBatchV1ProcessingStatusGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#asyncBatchV1ProcessingStatusGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Status of batch processing for all batches
+[apiInstance asyncBatchV1ProcessingStatusGetWithCompletionHandler: 
+              ^(BatchProcessingStatusResponse output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
+
+var api = new HscbBridgeBatchApi.DefaultApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.asyncBatchV1ProcessingStatusGet(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class asyncBatchV1ProcessingStatusGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+
+            try
+            {
+                // Status of batch processing for all batches
+                BatchProcessingStatusResponse result = apiInstance.asyncBatchV1ProcessingStatusGet();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.asyncBatchV1ProcessingStatusGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+
+try {
+    $result = $api_instance->asyncBatchV1ProcessingStatusGet();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->asyncBatchV1ProcessingStatusGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+
+eval { 
+    my $result = $api_instance->asyncBatchV1ProcessingStatusGet();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->asyncBatchV1ProcessingStatusGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+
+try: 
+    # Status of batch processing for all batches
+    api_response = api_instance.async_batch_v1_processing_status_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->asyncBatchV1ProcessingStatusGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Boolean value if AE processing or not. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-asyncBulkV1RecommendPost-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-asyncBatchV1ProcessingStatusGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-asyncBulkV1RecommendPost-200-schema">
-                                  <div id='responses-asyncBulkV1RecommendPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-asyncBatchV1ProcessingStatusGet-200-schema">
+                                  <div id='responses-asyncBatchV1ProcessingStatusGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Confirmation of accepting bulk.",
+  "description" : "Boolean value if AE processing or not.",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BulkAcceptedResponse"
+        "$ref" : "#/components/schemas/BatchProcessingStatusResponse"
       }
     }
   }
@@ -4634,14 +5291,14 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-asyncBulkV1RecommendPost-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-asyncBulkV1RecommendPost-200-schema-200');
+                                        $('#responses-asyncBatchV1ProcessingStatusGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-asyncBatchV1ProcessingStatusGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-asyncBulkV1RecommendPost-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-asyncBatchV1ProcessingStatusGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
@@ -4682,7 +5339,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-modelGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//model"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/model"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-modelGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4748,9 +5405,9 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-modelGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
+var api = new HscbBridgeBatchApi.DefaultApi()
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -4940,7 +5597,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-modelPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Content-Type: application/json"\
-"//model"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/model"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-modelPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5004,9 +5661,9 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-modelPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
+var api = new HscbBridgeBatchApi.DefaultApi()
 var body = ; // {{ModelInfoRequest}} Model information.
 
 var callback = function(error, data, response) {
@@ -5202,7 +5859,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-modelPut-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
 -H "Content-Type: application/json"\
-"//model"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/model"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-modelPut-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5266,9 +5923,9 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-modelPut-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
+var api = new HscbBridgeBatchApi.DefaultApi()
 var body = ; // {{ModelInfoStatus}} Model information.
 
 var callback = function(error, data, response) {
@@ -5464,7 +6121,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-watchlistV1UploadPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Content-Type: multipart/form-data"\
-"//watchlist/v1/upload"</code></pre>
+"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/watchlist/v1/upload"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-watchlistV1UploadPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5528,9 +6185,9 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-watchlistV1UploadPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBulkApi = require('hscb_bridge_bulk_api');
+                              <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
-var api = new HscbBridgeBulkApi.DefaultApi()
+var api = new HscbBridgeBatchApi.DefaultApi()
 var file = file_example; // {{byte[]}} 
 
 var callback = function(error, data, response) {

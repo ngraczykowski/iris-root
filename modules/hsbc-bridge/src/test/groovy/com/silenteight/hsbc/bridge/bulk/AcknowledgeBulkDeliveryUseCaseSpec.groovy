@@ -25,8 +25,8 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
     1 * bulkRepository.findById(_ as String) >> bulk
     1 * bulkRepository.save(_ as Bulk) >> updatedBulk
     with(result) {
-      bulkId == bulk.id
-      bulkStatus.name() == updatedBulk.getStatus().name()
+      batchId == bulk.id
+      batchStatus.name() == updatedBulk.getStatus().name()
       with(requestedAlerts) {
 
       }
@@ -39,7 +39,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
     bulk.setStatus(PROCESSING)
 
     when:
-    def result = underTest.apply(bulk.id)
+    underTest.apply(bulk.id)
 
     then:
     1 * bulkRepository.findById(_ as String) >> bulk

@@ -1,6 +1,6 @@
 /*
- * HSCB-Bridge-bulk API
- * HSCB-Bridge-bulk API
+ * HSCB-Bridge-batch API
+ * HSCB-Bridge-batch API
  *
  * OpenAPI spec version: 1.0.0
  * 
@@ -20,10 +20,10 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
- * Gets or Sets BulkStatus
+ * Gets or Sets BatchStatus
  */
-@JsonAdapter(BulkStatus.Adapter.class)
-public enum BulkStatus {
+@JsonAdapter(BatchStatus.Adapter.class)
+public enum BatchStatus {
   PROCESSING("PROCESSING"),
   ERROR("ERROR"),
   COMPLETED("COMPLETED"),
@@ -33,7 +33,7 @@ public enum BulkStatus {
 
   private String value;
 
-  BulkStatus(String value) {
+  BatchStatus(String value) {
     this.value = value;
   }
 
@@ -46,8 +46,8 @@ public enum BulkStatus {
     return String.valueOf(value);
   }
 
-  public static BulkStatus fromValue(String text) {
-    for (BulkStatus b : BulkStatus.values()) {
+  public static BatchStatus fromValue(String text) {
+    for (BatchStatus b : BatchStatus.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }
@@ -55,16 +55,16 @@ public enum BulkStatus {
     return null;
   }
 
-  public static class Adapter extends TypeAdapter<BulkStatus> {
+  public static class Adapter extends TypeAdapter<BatchStatus> {
     @Override
-    public void write(final JsonWriter jsonWriter, final BulkStatus enumeration) throws IOException {
+    public void write(final JsonWriter jsonWriter, final BatchStatus enumeration) throws IOException {
       jsonWriter.value(enumeration.getValue());
     }
 
     @Override
-    public BulkStatus read(final JsonReader jsonReader) throws IOException {
+    public BatchStatus read(final JsonReader jsonReader) throws IOException {
       Object value = jsonReader.nextString();
-      return BulkStatus.fromValue(String.valueOf(value));
+      return BatchStatus.fromValue(String.valueOf(value));
     }
   }
 }

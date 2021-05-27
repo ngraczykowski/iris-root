@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
+import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade
 
 import spock.lang.Specification
@@ -21,7 +22,7 @@ class GetBulkResultsUseCaseSpec extends Specification {
     then:
     with(result) {
       bulkId == bulkId
-      bulkStatus == com.silenteight.hsbc.bridge.bulk.rest.BulkStatus.COMPLETED
+      batchStatus == BatchStatus.COMPLETED
     }
 
     1 * bulkRepository.findById(bulkId) >> fixtures.bulk
