@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.FilteredAlerts;
+import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 import com.silenteight.adjudication.engine.common.protobuf.TimestampConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
@@ -48,15 +49,24 @@ class CreateDatasetUseCase {
 
   @Transactional
   Dataset createDataset(FilteredAlerts filteredAlerts) {
-    // TODO(kdzieciol): Implement creating dataset using filters.
     var dataset = datasetRepository.save(DatasetEntity.builder().build());
+
+    createFilteredDatasetAlerts(dataset.getId(), filteredAlerts.getAlertTimeRange());
+    var alertCount = datasetAlertRepository.countByIdDatasetId(dataset.getId());
 
     return Dataset
         .newBuilder()
         .setName(NAME_PREFIX + dataset.getId())
         .setCreateTime(TimestampConverter.fromOffsetDateTime(dataset.getCreatedAt()))
-        .setAlertCount(0)
+        .setAlertCount(alertCount)
         .build();
+  }
+
+  private void createFilteredDatasetAlerts(long datasetId, AlertTimeRange alertTimeRange) {
+    datasetAlertRepository.createFilteredDataset(
+        datasetId,
+        TimestampConverter.toOffsetDateTime(alertTimeRange.getStartTime()),
+        TimestampConverter.toOffsetDateTime(alertTimeRange.getEndTime()));
   }
 
   Dataset getDataset(String name) {

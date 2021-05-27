@@ -3,11 +3,14 @@ package com.silenteight.adjudication.engine.dataset.dataset;
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -23,9 +26,7 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
 
   @Test
   void shouldPersistDatasetAlert() {
-    var dataset = DatasetEntity.builder()
-        .build();
-    datasetRepository.save(dataset);
+    DatasetEntity dataset = createDatasetEntity();
     var datasetAlert = DatasetFixture.newDatasetAlertEntity(DatasetAlertKey.builder()
         .datasetId(dataset.getId())
         .alertId(1L)
@@ -41,16 +42,8 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
 
   @Test
   void shouldCountAlertsByDatasetId() {
-    var dataset = DatasetEntity.builder()
-        .build();
-    datasetRepository.save(dataset);
-    for (long i = 1; i <= 10; i++) {
-      var datasetAlert = DatasetFixture.newDatasetAlertEntity(DatasetAlertKey.builder()
-          .datasetId(dataset.getId())
-          .alertId(i)
-          .build());
-      datasetAlertRepository.save(datasetAlert);
-    }
+    DatasetEntity dataset = createDatasetEntity();
+    createDatasetAlertsEntity(dataset.getId());
     entityManager.flush();
     var countByDatasetId = datasetAlertRepository.countByIdDatasetId(dataset.getId());
     assertThat(countByDatasetId).isEqualTo(10);
@@ -58,16 +51,9 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
 
   @Test
   void shouldFindAlertsByDatasetIdUsePaging() {
-    var dataset = DatasetEntity.builder()
-        .build();
-    datasetRepository.save(dataset);
-    for (long i = 1; i <= 10; i++) {
-      var datasetAlert = DatasetFixture.newDatasetAlertEntity(DatasetAlertKey.builder()
-          .datasetId(dataset.getId())
-          .alertId(i)
-          .build());
-      datasetAlertRepository.save(datasetAlert);
-    }
+    DatasetEntity dataset = createDatasetEntity();
+    createDatasetAlertsEntity(dataset.getId());
+
     entityManager.flush();
     var page =
         datasetAlertRepository.findAllByIdDatasetId(
@@ -76,5 +62,40 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
     assertThat(page.getTotalElements()).isEqualTo(10);
     assertThat(page.getSize()).isEqualTo(5);
     assertThat(page.hasNext()).isTrue();
+  }
+
+  @Test
+  void shouldCreateDatasetAlertByFilter() {
+    DatasetEntity dataset = createDatasetEntity();
+    datasetAlertRepository.createFilteredDataset(
+        dataset.getId(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"), OffsetDateTime.now());
+    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(10);
+  }
+
+  @Test
+  void shouldCreateEmptyDatasetAlertByFilter() {
+    DatasetEntity dataset = createDatasetEntity();
+    datasetAlertRepository.createFilteredDataset(
+        dataset.getId(), OffsetDateTime.now(), OffsetDateTime.now());
+    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(0);
+  }
+
+
+  @NotNull
+  private DatasetEntity createDatasetEntity() {
+    var dataset = DatasetEntity.builder()
+        .build();
+    datasetRepository.save(dataset);
+    return dataset;
+  }
+
+  private void createDatasetAlertsEntity(long datasetId) {
+    for (long i = 1; i <= 10; i++) {
+      var datasetAlert = DatasetFixture.newDatasetAlertEntity(DatasetAlertKey.builder()
+          .datasetId(datasetId)
+          .alertId(i)
+          .build());
+      datasetAlertRepository.save(datasetAlert);
+    }
   }
 }

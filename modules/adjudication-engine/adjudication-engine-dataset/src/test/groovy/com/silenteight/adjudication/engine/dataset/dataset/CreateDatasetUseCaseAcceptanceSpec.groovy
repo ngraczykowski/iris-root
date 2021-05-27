@@ -21,7 +21,7 @@ class CreateDatasetUseCaseAcceptanceSpec extends Specification {
     def createdDataset = facade.createDataset(namedAlerts)
 
     then:
-    validateDataset(createdDataset)
+    validateNamedDataset(createdDataset)
 
   }
 
@@ -33,7 +33,7 @@ class CreateDatasetUseCaseAcceptanceSpec extends Specification {
     def createdDataset = facade.createDataset(filteredAlerts)
 
     then:
-    validateDatasetIsEmpty(createdDataset)
+    validateFilteredDataset(createdDataset)
   }
 
   def "should get dataset by id"() {
@@ -84,14 +84,14 @@ class CreateDatasetUseCaseAcceptanceSpec extends Specification {
     lastPage.getDatasetAlertNamesList().get(0) == dataset.getName() + "/alerts/2"
   }
 
-  void validateDataset(dataset) {
+  void validateNamedDataset(dataset) {
     assert dataset.alertCount == 2
     assert dataset.name.contains('datasets/')
     assert dataset.createTime != null
   }
 
-  void validateDatasetIsEmpty(dataset) {
-    assert dataset.alertCount == 0
+  void validateFilteredDataset(dataset) {
+    assert dataset.alertCount == 10
     assert dataset.name.contains('datasets/')
     assert dataset.createTime != null
   }

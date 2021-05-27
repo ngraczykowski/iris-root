@@ -21,13 +21,12 @@ class AlertFixtures {
 
     var createAlertsUseCase = new CreateAlertsUseCase(alertRepository);
 
-    return new AlertFacade(
-        createAlertsUseCase);
+    return new AlertFacade(createAlertsUseCase);
   }
 
   static AlertEntity randomAlertEntity() {
     var batchType = getRandomBatchType();
-    var alertId =  String.format("%s!%s", batchType, getRandomUuid());
+    var alertId = String.format("%s!%s", batchType, getRandomUuid());
 
     return AlertEntity.builder()
         .clientAlertIdentifier(alertId)

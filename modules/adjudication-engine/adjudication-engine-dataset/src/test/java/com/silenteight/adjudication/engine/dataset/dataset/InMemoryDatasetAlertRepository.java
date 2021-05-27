@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,10 +38,30 @@ public class InMemoryDatasetAlertRepository implements DatasetAlertRepository {
         .stream()
         .filter(datasetAlertEntity -> datasetAlertEntity.getId().getDatasetId()
             == datasetId).collect(Collectors.toList());
-    var list = filteredDataset.stream().skip(pageNumber * pageSize)
+    var list = filteredDataset.stream().skip((long) pageNumber * pageSize)
         .limit(pageSize)
         .collect(Collectors.toList());
-    var total = filteredDataset.stream().count();
+    var total = filteredDataset.size();
     return new PageImpl<>(list, pageable, total);
+  }
+
+  @Override
+  public void createFilteredDataset(
+      long datasetId, OffsetDateTime startDate, OffsetDateTime endDate) {
+    for (int i = 1; i <= 10; i++) {
+      var entity = getRandomEntity(datasetId, i);
+      store.add(entity);
+    }
+  }
+
+  private DatasetAlertEntity getRandomEntity(long datasetId, long alertId) {
+    return DatasetAlertEntity
+        .builder()
+        .id(DatasetAlertKey
+            .builder()
+            .datasetId(datasetId)
+            .alertId(alertId)
+            .build())
+        .build();
   }
 }
