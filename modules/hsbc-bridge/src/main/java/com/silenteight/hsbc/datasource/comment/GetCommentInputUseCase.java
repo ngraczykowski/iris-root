@@ -6,8 +6,6 @@ import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.alert.AlertInfo;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
-import com.google.protobuf.Struct;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class GetCommentInputUseCase {
   private CommentInputDto createCommentInput(String alertName, List<MatchCommentInputDto> match) {
     return CommentInputDto.builder()
         .alert(alertName)
-        .alertCommentInput(Struct.getDefaultInstance())
+//      .alertCommentInput() TODO: Struct need to be add here
         .matchCommentInputsDto(match)
         .build();
   }
@@ -45,7 +43,7 @@ public class GetCommentInputUseCase {
         .map(matchComposite ->
             MatchCommentInputDto.builder()
                 .match(matchComposite.getName())
-                .commentInput(Struct.getDefaultInstance())
+//              .commentInput() TODO: Struct need to be add here
                 .build())
         .collect(toList());
   }

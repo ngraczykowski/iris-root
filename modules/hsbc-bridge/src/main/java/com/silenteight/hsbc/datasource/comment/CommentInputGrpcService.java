@@ -7,7 +7,6 @@ import com.silenteight.datasource.comments.api.v1.CommentInputServiceGrpc.Commen
 import com.silenteight.datasource.comments.api.v1.MatchCommentInput;
 import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 
-import com.google.protobuf.Struct;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
@@ -43,7 +42,7 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
     return commentInputsDto.stream()
         .map(commentInputDto -> CommentInput.newBuilder()
             .setAlert(commentInputDto.getAlert())
-            .setAlertCommentInput(Struct.getDefaultInstance())
+//          .setAlertCommentInput() TODO: Struct need to be add here
             .addAllMatchCommentInputs(mapToMatchCommentInputs(commentInputDto))
             .build())
         .collect(toList());
@@ -53,7 +52,7 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
     return commentInputDto.getMatchCommentInputsDto().stream()
         .map(matchCommentInputDto -> MatchCommentInput.newBuilder()
             .setMatch(matchCommentInputDto.getMatch())
-            .setCommentInput(Struct.getDefaultInstance())
+//          .setCommentInput() TODO: Struct need to be add here
             .build())
         .collect(toList());
   }
