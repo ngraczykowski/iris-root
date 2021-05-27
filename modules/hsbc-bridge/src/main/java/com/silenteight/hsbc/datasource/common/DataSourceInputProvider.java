@@ -43,7 +43,8 @@ public interface DataSourceInputProvider<R> {
         .collect(toList());
 
     features.forEach(feature -> {
-      if (!allowedFeatures.contains(feature)) {
+      var featureName = feature.replace("features/", "");
+      if (!allowedFeatures.contains(featureName)) {
         throw new FeatureNotAllowedException(feature, allowedFeatures);
       }
     });
