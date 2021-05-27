@@ -51,7 +51,7 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
       <constraint annotation="javax.validation.constraints.Size">
-        <element name="max">10000</element>
+        <element name="max">16384</element>
       </constraint>
     </field>
   </bean>
@@ -73,7 +73,7 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
       <constraint annotation="javax.validation.constraints.Size">
-        <element name="max">10000</element>
+        <element name="max">16384</element>
       </constraint>
     </field>
     <getter name="alert">
@@ -88,7 +88,7 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
       <constraint annotation="javax.validation.constraints.Size">
-        <element name="max">10000</element>
+        <element name="max">16384</element>
       </constraint>
     </field>
   </bean>
