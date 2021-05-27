@@ -20,7 +20,7 @@ message CompareLocationsRequest {
 }
 
 message CompareLocationsResponse {
-  GeoComparerSolution solution = 1;
+  string solution = 1;
   GeoComparerReason reason = 2;
   IdentifiedLocations identified_inputs = 3;
 }
