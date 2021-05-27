@@ -59,7 +59,7 @@ public class FeatureModel {
   }
 
   public static Retriever getFeatureRetriever(String featureName) {
-    var feature = Feature.getByName(featureName);
+    var feature = Feature.getByFullName(featureName);
     return model.get(feature);
   }
 }

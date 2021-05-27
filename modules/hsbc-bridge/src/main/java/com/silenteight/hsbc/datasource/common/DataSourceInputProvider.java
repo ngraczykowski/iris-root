@@ -39,12 +39,11 @@ public interface DataSourceInputProvider<R> {
 
   private void validateFeatures(List<String> features) {
     var allowedFeatures = getAllowedFeatures().stream()
-        .map(Feature::getName)
+        .map(Feature::getFullName)
         .collect(toList());
 
     features.forEach(feature -> {
-      var featureName = feature.replace("features/", "");
-      if (!allowedFeatures.contains(featureName)) {
+      if (!allowedFeatures.contains(feature)) {
         throw new FeatureNotAllowedException(feature, allowedFeatures);
       }
     });

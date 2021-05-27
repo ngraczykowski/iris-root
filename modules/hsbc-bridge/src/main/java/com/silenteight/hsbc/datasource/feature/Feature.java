@@ -22,14 +22,17 @@ public enum Feature {
   OTHER_DOCUMENT("otherDocument"),
   DATE_OF_BIRTH("dateOfBirth");
 
+  private final static String PREFIX = "features/";
+
   private final String name;
 
-  public static Feature getByName(@NonNull String featureName) {
+  public String getFullName() {
+    return PREFIX + getName();
+  }
 
-    String name = featureName.replace("features/", "");
-
+  public static Feature getByFullName(@NonNull String name) {
     return Stream.of(values())
-        .filter(n -> n.getName().equalsIgnoreCase(name))
+        .filter(n -> n.getFullName().equalsIgnoreCase(name))
         .findFirst()
         .orElseThrow(() -> new FeatureNotFoundException(name));
   }
