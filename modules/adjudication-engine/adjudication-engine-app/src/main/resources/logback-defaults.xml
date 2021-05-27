@@ -44,6 +44,7 @@
   <logger name="sun.net" level="WARN"/>
   <logger name="sun.rmi" level="WARN"/>
   <logger name="sun.rmi.transport" level="WARN"/>
+  <logger name="Hibernate Types" level="OFF"/>
 
   <logger name="org.apache.hadoop" level="WARN"/>
   <logger name="org.apache.parquet.hadoop" level="WARN"/>
