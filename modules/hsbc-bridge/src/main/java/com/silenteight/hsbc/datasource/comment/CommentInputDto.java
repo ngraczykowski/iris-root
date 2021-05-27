@@ -3,15 +3,14 @@ package com.silenteight.hsbc.datasource.comment;
 import lombok.Builder;
 import lombok.Value;
 
-import com.google.protobuf.Struct;
-
 import java.util.List;
+import java.util.Map;
 
 @Builder
 @Value
 public class CommentInputDto {
 
   String alert;
-  Struct alertCommentInput;
+  Map<String, String> alertCommentInput;
   List<MatchCommentInputDto> matchCommentInputsDto;
 }

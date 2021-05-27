@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.match.MatchFacade;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,7 +34,7 @@ public class GetCommentInputUseCase {
   private CommentInputDto createCommentInput(String alertName, List<MatchCommentInputDto> match) {
     return CommentInputDto.builder()
         .alert(alertName)
-//      .alertCommentInput() TODO: Struct need to be add here
+        .alertCommentInput(Map.of())
         .matchCommentInputsDto(match)
         .build();
   }
@@ -43,7 +44,7 @@ public class GetCommentInputUseCase {
         .map(matchComposite ->
             MatchCommentInputDto.builder()
                 .match(matchComposite.getName())
-//              .commentInput() TODO: Struct need to be add here
+                .commentInput(Map.of())
                 .build())
         .collect(toList());
   }
