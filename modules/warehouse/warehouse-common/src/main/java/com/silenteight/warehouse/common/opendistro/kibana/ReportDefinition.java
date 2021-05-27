@@ -88,8 +88,8 @@ class ReportDefinition {
     Boolean excel;
   }
 
-  ReportDefinitionDto toDto() {
-    return ReportDefinitionDto.builder()
+  KibanaReportDefinitionDto toDto() {
+    return KibanaReportDefinitionDto.builder()
         .id(getId())
         .reportDefinitionDetails(getDetails().getReportDefinition())
         .build();

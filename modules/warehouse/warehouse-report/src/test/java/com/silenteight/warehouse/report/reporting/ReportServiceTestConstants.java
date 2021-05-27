@@ -5,22 +5,23 @@ import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesR
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesResponse.ReportInstance.ReportDefinition;
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesResponse.ReportInstance.ReportDefinitionDetails;
 
-import java.util.List;
 import java.util.Set;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ADMIN_TENANT;
-import static com.silenteight.warehouse.report.reporting.ReportsController.BASE_ANALYSIS_URL_PREFIX;
-import static com.silenteight.warehouse.report.reporting.ReportsController.REPORTS;
-import static com.silenteight.warehouse.report.reporting.ReportsController.TENANT;
+import static java.util.List.of;
 
-class ReportServiceTestConstants {
-
+public class ReportServiceTestConstants {
+  static final String REPORTS = "reports";
+  static final String TENANT = "adminTenant";
   static final String FILE_NAME = "all-alerts-report";
   static final String REPORT_ID = "jn9qVnkBtbh61OJJm2PI";
   static final String REPORT_STATUS = "Success";
   static final Long HITS = 1L;
   static final String ANALYSIS_NAME = "8e9010ae-c3e2-417d--b3ea9bb5a454";
-
+  static final String REPORT_DEFINITION_NAME_PREFIX = "/analysis/production/definitions/";
+  static final String REPORT_TYPE = "AI_REASONING";
+  static final String REPORT_TITLE = "AI Reasoning";
+  static final String BASE_ANALYSIS_URL_PREFIX = "/v1/analysis/production/definitions";
+  static final String REP_DEF_DESCRIPTION = "Lst month";
   static final String GET_REPORTS_BY_ANALYSIS_NAME =
       BASE_ANALYSIS_URL_PREFIX + ANALYSIS_NAME + REPORTS;
   static final String GET_TENANT_BY_ANALYSIS_NAME =
@@ -43,7 +44,7 @@ class ReportServiceTestConstants {
   static final ListReportsInstancesResponse LIST_REPORTS_INSTANCES_RESPONSE =
       ListReportsInstancesResponse.builder()
           .totalHits(HITS)
-          .reportInstancesList(List.of(REPORT_INSTANCE))
+          .reportInstancesList(of(REPORT_INSTANCE))
           .build();
 
   static final Set<KibanaReportDetailsDto> TEST_REPORTDTOS = Set.of(
@@ -51,11 +52,4 @@ class ReportServiceTestConstants {
           .title(FILE_NAME)
           .id(REPORT_ID)
           .build());
-
-  static final KibanaReportsList KIBANA_REPORTS_WRAPPER_TEST = KibanaReportsList.builder()
-      .reports(TEST_REPORTDTOS).build();
-
-  static final TenantNameWrapper TENANT_NAME_WRAPPER = TenantNameWrapper.builder()
-      .tenantName(ADMIN_TENANT)
-      .build();
 }

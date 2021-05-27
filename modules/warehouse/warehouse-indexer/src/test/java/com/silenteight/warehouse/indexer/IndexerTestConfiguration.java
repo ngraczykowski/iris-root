@@ -8,6 +8,7 @@ import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
+import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexerClientIntegrationProperties;
@@ -27,6 +28,7 @@ import static java.time.Instant.parse;
 
 @Configuration
 @ComponentScan(basePackageClasses = {
+    EnvironmentModule.class,
     IndexerModule.class,
     AmqpCommonModule.class,
     TestElasticSearchModule.class

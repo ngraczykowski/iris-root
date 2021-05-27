@@ -9,15 +9,15 @@ import com.silenteight.warehouse.common.opendistro.kibana.ReportDefinition.Repor
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
-@Value
 @AllArgsConstructor
 @Builder
-public class ReportDefinitionDto {
+public class KibanaReportDefinitionDto {
 
-  String id;
+  @Getter(AccessLevel.PUBLIC)
+  private final String id;
 
   @Getter(AccessLevel.PACKAGE)
-  ReportDefinitionDetails reportDefinitionDetails;
+  private final ReportDefinitionDetails reportDefinitionDetails;
 
   public String getReportName() {
     return getReportParams().getReportName();
@@ -28,6 +28,10 @@ public class ReportDefinitionDto {
         .map(CoreParams::getSavedSearchId)
         .filter(searchId -> !searchId.isBlank())
         .orElseThrow(() -> new KibanaObjectEmptyFieldException("savedSearchId", getId(), this));
+  }
+
+  public String getDescription() {
+    return getReportParams().getDescription();
   }
 
   public void replaceExistingSearchId(String newSearchId) {

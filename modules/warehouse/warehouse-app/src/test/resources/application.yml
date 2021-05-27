@@ -28,8 +28,8 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: alert-indexed
         routing-key: alert.simulation
-  indexing:
-    environment-prefix: itest
+  environment:
+    prefix: itest
   minio:
     url: http://localhost:9000
     access-key: admin

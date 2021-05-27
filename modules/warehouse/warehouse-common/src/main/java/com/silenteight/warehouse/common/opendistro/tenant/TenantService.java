@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaIndexPatternDto;
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDefinitionDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.common.opendistro.kibana.ReportDefinitionDto;
 import com.silenteight.warehouse.common.opendistro.kibana.SearchDto;
 
 import java.util.HashMap;
@@ -79,11 +79,11 @@ public class TenantService {
   public Map<String, String> copyReportDefinition(
       String sourceTenant, String targetTenant, Map<String, String> searchMapping) {
 
-    List<ReportDefinitionDto> reportDefinitions =
+    List<KibanaReportDefinitionDto> kibanaReportDefinitions =
         opendistroKibanaClient.listReportDefinitions(sourceTenant);
 
     Map<String, String> idMapping = new HashMap<>();
-    for (ReportDefinitionDto reportDefinition : reportDefinitions) {
+    for (KibanaReportDefinitionDto reportDefinition : kibanaReportDefinitions) {
       String sourceId = reportDefinition.getId();
       String searchId = reportDefinition.getSearchId();
       reportDefinition.replaceExistingSearchId(searchMapping.get(searchId));
