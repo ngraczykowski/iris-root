@@ -10,6 +10,9 @@ server:
 grpc:
   server:
     port: 24801
+  client:
+    data-source:
+      address: static://localhost:${grpc.server.port}
 
 ae:
   #-------------------------------------------------------------------------------------------------
