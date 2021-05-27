@@ -12,6 +12,7 @@ dependencies {
   implementation libraries.spring_data_jpa
   implementation libraries.guava
   implementation libraries.spring_integration_amqp
+  implementation libraries.hibernate_types
 
   testImplementation project(":adjudication-engine-alerts")
   testImplementation project(":adjudication-engine-testing")
