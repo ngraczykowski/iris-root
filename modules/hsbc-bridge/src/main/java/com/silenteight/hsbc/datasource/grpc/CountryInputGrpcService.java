@@ -13,19 +13,15 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputResponse;
-import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.grpc.Status.INVALID_ARGUMENT;
-
 @Slf4j
-@GRpcService
+@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class CountryInputGrpcService extends CountryInputServiceImplBase {
 
@@ -36,23 +32,17 @@ class CountryInputGrpcService extends CountryInputServiceImplBase {
       BatchGetMatchCountryInputsRequest request,
       StreamObserver<BatchGetMatchCountryInputsResponse> responseObserver) {
 
-    try {
-      responseObserver.onNext(provideInputResponse(request));
-      responseObserver.onCompleted();
-    } catch (FeatureNotAllowedException e) {
-      responseObserver.onError(
-          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
-    }
+    var inputRequest = DataSourceInputRequest.builder()
+        .features(request.getFeaturesList())
+        .matches(request.getMatchesList())
+        .build();
+
+    responseObserver.onNext(provideInputResponse(inputRequest));
+    responseObserver.onCompleted();
   }
 
-  private BatchGetMatchCountryInputsResponse provideInputResponse(
-      BatchGetMatchCountryInputsRequest request) {
-
-    var input = countryInputProvider.provideInput(
-        DataSourceInputRequest.builder()
-            .features(request.getFeaturesList())
-            .matches(request.getMatchesList())
-            .build());
+  private BatchGetMatchCountryInputsResponse provideInputResponse(DataSourceInputRequest request) {
+    var input = countryInputProvider.provideInput(request);
 
     return BatchGetMatchCountryInputsResponse.newBuilder()
         .addAllCountryMatches(mapCountryMatches(input.getInputs()))

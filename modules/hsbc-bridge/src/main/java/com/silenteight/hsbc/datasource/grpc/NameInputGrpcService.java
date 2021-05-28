@@ -8,18 +8,14 @@ import com.silenteight.datasource.api.name.v1.WatchlistName.NameType;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.name.*;
-import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.grpc.Status.INVALID_ARGUMENT;
-
-@GRpcService
+@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class NameInputGrpcService extends NameInputServiceImplBase {
 
@@ -30,17 +26,13 @@ class NameInputGrpcService extends NameInputServiceImplBase {
       BatchGetMatchNameInputsRequest request,
       StreamObserver<BatchGetMatchNameInputsResponse> responseObserver) {
 
-    try {
-      responseObserver.onNext(provideInput(DataSourceInputRequest.builder()
-          .features(request.getFeaturesList())
-          .matches(request.getMatchesList())
-          .build()));
-      responseObserver.onCompleted();
-    } catch (
-        FeatureNotAllowedException e) {
-      responseObserver.onError(
-          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
-    }
+    var inputRequest = DataSourceInputRequest.builder()
+        .features(request.getFeaturesList())
+        .matches(request.getMatchesList())
+        .build();
+
+    responseObserver.onNext(provideInput(inputRequest));
+    responseObserver.onCompleted();
   }
 
   private BatchGetMatchNameInputsResponse provideInput(DataSourceInputRequest request) {

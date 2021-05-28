@@ -8,18 +8,14 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
-import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.grpc.Status.INVALID_ARGUMENT;
-
-@GRpcService
+@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase {
 
@@ -29,16 +25,11 @@ class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase
   public void batchGetMatchDateInputs(
       BatchGetMatchDateInputsRequest request,
       StreamObserver<BatchGetMatchDateInputsResponse> responseObserver) {
+
     var inputRequest = createRequest(request);
 
-    try {
-      responseObserver.onNext(provideInput(inputRequest));
-      responseObserver.onCompleted();
-    } catch (
-        FeatureNotAllowedException e) {
-      responseObserver.onError(
-          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
-    }
+    responseObserver.onNext(provideInput(inputRequest));
+    responseObserver.onCompleted();
   }
 
   private BatchGetMatchDateInputsResponse provideInput(DataSourceInputRequest request) {

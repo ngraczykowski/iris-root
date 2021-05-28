@@ -12,18 +12,14 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputDto;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputResponse;
-import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.grpc.Status.INVALID_ARGUMENT;
-
-@GRpcService
+@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class GenderInputGrpcService extends GenderInputServiceImplBase {
 
@@ -34,17 +30,13 @@ class GenderInputGrpcService extends GenderInputServiceImplBase {
       BatchGetMatchGenderInputsRequest request,
       StreamObserver<BatchGetMatchGenderInputsResponse> responseObserver) {
 
-    try {
-      responseObserver.onNext(prepareInput(DataSourceInputRequest.builder()
-          .features(request.getFeaturesList())
-          .matches(request.getMatchesList())
-          .build()));
-      responseObserver.onCompleted();
-    } catch (
-        FeatureNotAllowedException e) {
-      responseObserver.onError(
-          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
-    }
+    var inputRequest = DataSourceInputRequest.builder()
+        .features(request.getFeaturesList())
+        .matches(request.getMatchesList())
+        .build();
+
+    responseObserver.onNext(prepareInput(inputRequest));
+    responseObserver.onCompleted();
   }
 
   private BatchGetMatchGenderInputsResponse prepareInput(DataSourceInputRequest request) {

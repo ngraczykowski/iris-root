@@ -12,18 +12,14 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.location.LocationFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputDto;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
-import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.grpc.Status.INVALID_ARGUMENT;
-
-@GRpcService
+@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class LocationInputGrpcService extends LocationInputServiceImplBase {
 
@@ -34,19 +30,13 @@ class LocationInputGrpcService extends LocationInputServiceImplBase {
       BatchGetMatchLocationInputsRequest request,
       StreamObserver<BatchGetMatchLocationInputsResponse> responseObserver) {
 
-    try {
-      responseObserver.onNext(provideInput(
-          DataSourceInputRequest.builder()
-              .features(request.getFeaturesList())
-              .matches(request.getMatchesList())
-              .build()
-      ));
-      responseObserver.onCompleted();
-    } catch (
-        FeatureNotAllowedException e) {
-      responseObserver.onError(
-          new StatusRuntimeException(INVALID_ARGUMENT.withDescription(e.getMessage())));
-    }
+    var inputRequest = DataSourceInputRequest.builder()
+        .features(request.getFeaturesList())
+        .matches(request.getMatchesList())
+        .build();
+
+    responseObserver.onNext(provideInput(inputRequest));
+    responseObserver.onCompleted();
   }
 
   private BatchGetMatchLocationInputsResponse provideInput(DataSourceInputRequest request) {
