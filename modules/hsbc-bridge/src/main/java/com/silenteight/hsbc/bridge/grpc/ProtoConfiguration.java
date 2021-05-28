@@ -14,12 +14,6 @@ class ProtoConfiguration {
 
   @Bean
   MessageRegistry protoMessageRegistry() {
-    return new MessageRegistry() {
-      @Override
-      public Optional<Parser<Message>> findParser(
-          String typeName) {
-        return Optional.empty();
-      }
-    };
+    return new ProtoMessageRegistry();
   }
 }
