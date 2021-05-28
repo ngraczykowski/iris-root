@@ -11,6 +11,6 @@ public interface MatchData extends EntityComposite, IndividualComposite {
   }
 
   default boolean isEntity() {
-    return !isIndividual();
+    return nonNull(getCustomerEntity());
   }
 }

@@ -10,22 +10,28 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 
 public class RegistrationCountryFeature implements FeatureValuesRetriever<CountryFeatureInputDto> {
 
   @Override
   public CountryFeatureInputDto retrieve(MatchData matchData) {
-    var mpRegistrationCountries =
-        worldCheckEntityCountries(matchData.getWorldCheckEntities());
-    var apRegistrationCountries = customerEntityRegistrationCountries(
-        matchData.getCustomerEntity());
+    var builder = CountryFeatureInputDto.builder()
+        .feature(getFeatureName());
 
-    return CountryFeatureInputDto.builder()
-        .feature(getFeatureName())
-        .alertedPartyCountries(apRegistrationCountries.distinct().collect(toList()))
-        .watchlistCountries(mpRegistrationCountries.distinct().collect(toList()))
-        .build();
+    if (matchData.isEntity()) {
+      var customerEntity = matchData.getCustomerEntity();
+
+      var wlRegistrationCountries = customerEntityRegistrationCountries(
+          customerEntity);
+      builder.watchlistCountries(toDistinctList(wlRegistrationCountries));
+
+      var apRegistrationCountries = customerEntityRegistrationCountries(
+          customerEntity);
+      builder.alertedPartyCountries(toDistinctList(apRegistrationCountries));
+    }
+
+    return builder.build();
   }
 
   public static Stream<String> worldCheckEntityCountries(
