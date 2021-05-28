@@ -14,7 +14,7 @@ participant PostgresDB
 
 HSBC -> "SERP Bridge": Http request [REST/HTTP]
 "SERP Bridge" -> PostgresDB: Store alerts
-HSBC <- "SERP Bridge": Http response with bulk id [REST/HTTP]
+HSBC <- "SERP Bridge": Http response with batch id [REST/HTTP]
 "SERP Bridge" -> RabbitMQ: Send message
 
 == **3) Solve alert hit** ==

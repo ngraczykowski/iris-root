@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException
+import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException
 
 import spock.lang.Specification
 
@@ -22,7 +22,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
     def result = underTest.apply(bulk.id)
 
     then:
-    1 * bulkRepository.findById(_ as String) >> bulk
+    1 * bulkRepository.findById(_ as String) >> Optional.of(bulk)
     1 * bulkRepository.save(_ as Bulk) >> updatedBulk
     with(result) {
       batchId == bulk.id
@@ -42,9 +42,9 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
     underTest.apply(bulk.id)
 
     then:
-    1 * bulkRepository.findById(_ as String) >> bulk
+    1 * bulkRepository.findById(_ as String) >> Optional.of(bulk)
     0 * bulkRepository.save(_ as Bulk)
-    def exception = thrown(BulkProcessingNotCompletedException)
-    exception.message == "Bulk processing is not completed, id=20210101-1111"
+    def exception = thrown(BatchProcessingNotCompletedException)
+    exception.message == "Batch processing is not completed, id=20210101-1111"
   }
 }

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
-import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ class StoreBulkUseCase {
 
   private void validateBulkId(String bulkId) {
     if (bulkRepository.existsById(bulkId)) {
-      throw new BulkWithGivenIdAlreadyCreatedException(bulkId);
+      throw new BatchWithGivenIdAlreadyCreatedException(bulkId);
     }
   }
 

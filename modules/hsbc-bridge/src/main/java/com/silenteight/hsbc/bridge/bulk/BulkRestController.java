@@ -3,9 +3,9 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.StoreBulkUseCase.StoreBulkUseCaseCommand;
-import com.silenteight.hsbc.bridge.bulk.exception.BulkIdNotFoundException;
-import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.exception.BulkWithGivenIdAlreadyCreatedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
 
 import org.apache.commons.csv.CSVFormat;
@@ -156,14 +156,14 @@ public class BulkRestController {
         "Description");
   }
 
-  @ExceptionHandler({ BulkIdNotFoundException.class, BulkProcessingNotCompletedException.class })
+  @ExceptionHandler({ BatchIdNotFoundException.class, BatchProcessingNotCompletedException.class })
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleExceptionWithNotFoundStatus(
       RuntimeException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler({ BulkWithGivenIdAlreadyCreatedException.class })
+  @ExceptionHandler({ BatchWithGivenIdAlreadyCreatedException.class })
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleExceptionWithBadRequestStatus(
       RuntimeException exception) {

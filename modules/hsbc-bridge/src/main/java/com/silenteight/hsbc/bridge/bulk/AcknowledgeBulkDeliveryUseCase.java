@@ -3,7 +3,8 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.bulk.exception.BulkProcessingNotCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatusResponse;
@@ -14,8 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
-
 @RequiredArgsConstructor
 public class AcknowledgeBulkDeliveryUseCase {
 
@@ -25,32 +24,34 @@ public class AcknowledgeBulkDeliveryUseCase {
   public BatchStatusResponse apply(@NonNull String id) {
     var result = bulkRepository.findById(id);
 
-    if (result.getStatus() != COMPLETED) {
-      throw new BulkProcessingNotCompletedException(id);
+    if (result.isEmpty()) {
+      throw new BatchIdNotFoundException(id);
     }
 
-    result.delivered();
-    var bulk = bulkRepository.save(result);
+    var batch = result.get();
+    if (batch.isNotCompleted()) {
+      throw new BatchProcessingNotCompletedException(id);
+    }
+
+    batch.delivered();
+    bulkRepository.save(batch);
 
     var response = new BatchStatusResponse();
     response.setBatchId(id);
     response.setBatchStatus(
         BatchStatus.fromValue(
-            bulk.getStatus().name()));
-    response.setRequestedAlerts(getRequestedAlerts(result.getAlerts()));
+            batch.getStatus().name()));
+    response.setRequestedAlerts(getRequestedAlerts(batch.getAlerts()));
 
     return response;
   }
 
-  //FIXME do not use entity here, map statuses
   private List<BatchAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
     return alerts.stream().map(r -> {
-      var bulkItem = new BatchAlertItem();
-      bulkItem.setId(r.getExternalId());
-      bulkItem.setStatus(
-          BatchStatus.fromValue(
-              r.getStatus().name()));
-      return bulkItem;
+      var alertItem = new BatchAlertItem();
+      alertItem.setId(r.getExternalId());
+      alertItem.setStatus(BatchStatus.fromValue(r.getStatus().name()));
+      return alertItem;
     }).collect(Collectors.toList());
   }
 }

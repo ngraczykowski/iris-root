@@ -12,8 +12,6 @@ import java.util.function.Consumer;
 
 public interface AlertPayloadConverter {
 
-  List<AlertData> convert(byte[] payload);
-
   AlertData convertAlertData(byte[] payload) throws AlertConversionException;
 
   void convertAndConsumeAlertData(InputCommand command, Consumer<AlertDataComposite> consumer);

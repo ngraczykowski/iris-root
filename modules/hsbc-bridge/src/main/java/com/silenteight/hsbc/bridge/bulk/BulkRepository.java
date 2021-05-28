@@ -11,7 +11,7 @@ import java.util.UUID;
 
 interface BulkRepository extends Repository<Bulk, UUID> {
 
-  Bulk findById(String id);
+  Optional<Bulk> findById(String id);
 
   Optional<Bulk> findByAnalysisId(long analysisId);
 

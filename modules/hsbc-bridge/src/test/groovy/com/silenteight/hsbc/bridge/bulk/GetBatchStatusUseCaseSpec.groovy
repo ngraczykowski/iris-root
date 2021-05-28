@@ -18,7 +18,7 @@ class GetBatchStatusUseCaseSpec extends Specification {
     def result = underTest.getStatus(bulk.id)
 
     then:
-    1 * bulkRepository.findById(_ as String) >> bulk
+    1 * bulkRepository.findById(_ as String) >> Optional.of(bulk)
     0 * analysisFacade.getById(_)
 
     with(result) {

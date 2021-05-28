@@ -23,9 +23,9 @@ class BulkUpdater {
 
   @Transactional
   public void updateWithPreProcessedStatus(@NonNull String bulkId) {
-    var bulk = bulkRepository.findById(bulkId);
-
-    bulk.setStatus(PRE_PROCESSED);
-    bulkRepository.save(bulk);
+    bulkRepository.findById(bulkId).ifPresent(b -> {
+      b.setStatus(PRE_PROCESSED);
+      bulkRepository.save(b);
+    });
   }
 }

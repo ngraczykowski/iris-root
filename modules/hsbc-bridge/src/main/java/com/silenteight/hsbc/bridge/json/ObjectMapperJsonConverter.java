@@ -7,7 +7,6 @@ import com.silenteight.hsbc.bridge.alert.AlertConversionException;
 import com.silenteight.hsbc.bridge.alert.AlertPayloadConverter;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDataComposite;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
-import com.silenteight.hsbc.bridge.json.external.model.Alerts;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -45,12 +43,6 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       log.error("Error on object conversion", e);
       throw new JsonConversionException();
     }
-  }
-
-  @Override
-  public List<AlertData> convert(byte[] payload) {
-    var alerts = convert(payload, Alerts.class);
-    return alerts.getAlerts();
   }
 
   @Override

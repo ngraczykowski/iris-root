@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.persistence.*;
 
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.DELIVERED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.ERROR;
 import static java.util.Objects.nonNull;
@@ -69,5 +70,10 @@ class Bulk extends BaseEntity {
   @Transient
   Collection<BulkAlertEntity> getValidAlerts() {
     return alerts.stream().filter(BulkAlertEntity::isValid).collect(Collectors.toList());
+  }
+
+  @Transient
+  boolean isNotCompleted() {
+    return status != COMPLETED;
   }
 }

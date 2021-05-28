@@ -25,7 +25,7 @@ class GetBulkResultsUseCaseSpec extends Specification {
       batchStatus == BatchStatus.COMPLETED
     }
 
-    1 * bulkRepository.findById(bulkId) >> fixtures.bulk
+    1 * bulkRepository.findById(bulkId) >> Optional.of(fixtures.bulk)
   }
 
   class Fixtures {
