@@ -8,12 +8,14 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@ConfigurationProperties(prefix = "ae.comment-input")
+@ConfigurationProperties(prefix = "ae.comment-input.jdbc")
 @Data
 @Validated
 public class CommentInputJdbcProperties {
 
+  private static final int DEFAULT_MISSING_BATCH_SIZE_SELECT = 8_192;
+
   @Min(1)
   @Max(16_384)
-  private int missingBatchSizeSelect;
+  private int missingBatchSizeSelect = DEFAULT_MISSING_BATCH_SIZE_SELECT;
 }
