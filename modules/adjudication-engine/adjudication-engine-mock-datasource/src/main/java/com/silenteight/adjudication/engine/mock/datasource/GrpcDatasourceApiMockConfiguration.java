@@ -18,4 +18,9 @@ class GrpcDatasourceApiMockConfiguration {
     return new MockGetMatchCategoryValuesUseCase();
   }
 
+  @Bean
+  MockCommentsInputUseCase mockCommentsInputUseCase() {
+    return new MockCommentsInputUseCase();
+  }
+
 }

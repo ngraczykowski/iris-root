@@ -5,5 +5,6 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+  <include file="db/changelog/db.changelog-adjudication-engine-alerts-master.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-comments-master.xml"/>
 </databaseChangeLog>

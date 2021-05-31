@@ -4,10 +4,13 @@ plugins {
 
 dependencies {
   implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-alerts")
+
+  implementation libraries.data_source_comments_api
   implementation libraries.guava
   implementation libraries.pebble
   implementation libraries.silenteight_sep_base_common
-
+  implementation libraries.hibernate_types
   // Enable aspects
   aspect libraries.silenteight_sep_base_aspects
   compileOnly libraries.spring_tx

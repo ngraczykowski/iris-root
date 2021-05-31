@@ -9,6 +9,7 @@ description = "Adjudication Engine Analysis"
 dependencies {
   implementation project(":adjudication-engine-common")
   implementation project(":adjudication-engine-alerts")
+  implementation project(":adjudication-engine-comments")
   implementation project(":adjudication-engine-dataset")
   implementation project(":adjudication-engine-features")
   implementation project(":proto-adjudication-engine-internal-protos")
@@ -16,6 +17,7 @@ dependencies {
   implementation libraries.adjudication_engine_api
   implementation libraries.agents_api
   implementation libraries.data_source_categories_api
+  implementation libraries.data_source_comments_api
   implementation libraries.protobuf_java_util
 
   implementation libraries.grpc_spring_boot_starter
@@ -23,5 +25,8 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
 
   testImplementation project(":adjudication-engine-testing")
+  testImplementation libraries.hibernate_validator
+  testImplementation libraries.protobuf_java_util
   testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.tomcat_embed_el
 }
