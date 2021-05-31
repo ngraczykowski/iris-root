@@ -82,7 +82,7 @@ class NameFeatureSpec extends Specification {
     1 * client.getNameInformation(getNameInformationRequestDto) >> getNameInformationResponseDto
 
     with(result) {
-      feature == Feature.NAME.name
+      feature == Feature.NAME.fullName
       alertedPartyNames.size() == 2
       with(alertedPartyNames.name) {
         containsAll(['ALAKSANDR LEANIDAVICH ZIMOUSKI', 'AKIAKSANDR LEANIDAVICH ZIMOUSKI'])
@@ -160,7 +160,7 @@ class NameFeatureSpec extends Specification {
     1 * client.getNameInformation(getNameInformationRequestDto) >> getNameInformationResponseDto
 
     with(result) {
-      feature == Feature.NAME.name
+      feature == Feature.NAME.fullName
       alertedPartyNames.size() == 1
       with(alertedPartyNames.name) {
         containsAll(['AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])

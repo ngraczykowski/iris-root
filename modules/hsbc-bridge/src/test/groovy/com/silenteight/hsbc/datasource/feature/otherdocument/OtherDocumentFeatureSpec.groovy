@@ -23,7 +23,7 @@ class OtherDocumentFeatureSpec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.OTHER_DOCUMENT.name
+      feature == Feature.OTHER_DOCUMENT.fullName
       alertedPartyDocuments == []
       watchlistDocuments == []
     }
@@ -74,7 +74,7 @@ class OtherDocumentFeatureSpec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.OTHER_DOCUMENT.name
+      feature == Feature.OTHER_DOCUMENT.fullName
       alertedPartyDocuments.size() == 1
       alertedPartyDocuments == ['987654']
       watchlistDocuments.size() == 5

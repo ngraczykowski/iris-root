@@ -26,7 +26,7 @@ class NationalIdFeatureSpec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.NATIONAL_ID_DOCUMENT.name
+      feature == Feature.NATIONAL_ID_DOCUMENT.fullName
       alertedPartyDocumentNumbers == []
       watchlistDocumentNumbers == []
     }
@@ -70,7 +70,7 @@ class NationalIdFeatureSpec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.NATIONAL_ID_DOCUMENT.name
+      feature == Feature.NATIONAL_ID_DOCUMENT.fullName
       alertedPartyDocumentNumbers == ['987456']
       watchlistDocumentNumbers == ['78845ID', '4568795132', '5465498756']
     }

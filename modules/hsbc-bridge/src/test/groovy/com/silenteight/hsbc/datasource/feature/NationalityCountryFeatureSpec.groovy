@@ -18,7 +18,7 @@ class NationalityCountryFeatureSpec extends Specification implements FullMatch {
 
     then:
     with(result) {
-      feature == Feature.NATIONALITY_COUNTRY.name
+      feature == Feature.NATIONALITY_COUNTRY.fullName
 
       assertThat(alertedPartyCountries).contains("HK")
       assertThat(watchlistCountries).contains("IRAN", "VIET NAM", "UNK UNKW")

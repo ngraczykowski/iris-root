@@ -26,7 +26,7 @@ class PassportNumberFeatureSpec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.PASSPORT_NUMBER_DOCUMENT.name
+      feature == Feature.PASSPORT_NUMBER_DOCUMENT.fullName
       alertedPartyDocuments == []
       watchlistDocuments == []
     }
@@ -70,7 +70,7 @@ class PassportNumberFeatureSpec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.PASSPORT_NUMBER_DOCUMENT.name
+      feature == Feature.PASSPORT_NUMBER_DOCUMENT.fullName
       alertedPartyDocuments.size() == 1
       alertedPartyDocuments == ['123456']
       watchlistDocuments.size() == 2

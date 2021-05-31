@@ -30,7 +30,7 @@ public class OtherDocumentFeature implements FeatureValuesRetriever<DocumentFeat
     }
 
     return inputBuilder
-        .feature(getFeature().getName())
+        .feature(getFeatureName())
         .build();
   }
 

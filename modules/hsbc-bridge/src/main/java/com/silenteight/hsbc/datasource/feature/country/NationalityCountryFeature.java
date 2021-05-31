@@ -21,7 +21,7 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
   @Override
   public CountryFeatureInputDto retrieve(MatchData matchData) {
     var inputBuilder = CountryFeatureInputDto.builder()
-        .feature(getFeature().getName());
+        .feature(getFeatureName());
 
     if (matchData.isIndividual()) {
       var query = nationalityCountryQueryFactory.create(matchData);

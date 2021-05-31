@@ -36,7 +36,7 @@ public class OtherCountryFeature implements FeatureValuesRetriever<CountryFeatur
     }
 
     return inputBuilder
-        .feature(getFeature().getName())
+        .feature(getFeatureName())
         .build();
   }
 

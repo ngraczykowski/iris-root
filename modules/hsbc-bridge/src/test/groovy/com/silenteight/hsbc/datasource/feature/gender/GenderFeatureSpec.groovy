@@ -16,7 +16,7 @@ class GenderFeatureSpec extends Specification implements FullMatch {
 
     then:
     with(result) {
-      feature == Feature.GENDER.name
+      feature == Feature.GENDER.fullName
       alertedPartyGenders == ['M']
       watchlistGenders == ['M']
     }
@@ -28,7 +28,7 @@ class GenderFeatureSpec extends Specification implements FullMatch {
 
     then:
     with(result) {
-      feature == Feature.GENDER.name
+      feature == Feature.GENDER.fullName
       alertedPartyGenders == []
       watchlistGenders == []
     }

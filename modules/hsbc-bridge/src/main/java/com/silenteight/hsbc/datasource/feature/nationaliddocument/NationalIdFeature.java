@@ -29,7 +29,7 @@ public class NationalIdFeature implements FeatureValuesRetriever<NationalIdFeatu
     }
 
     return inputBuilder
-        .feature(getFeature().getName())
+        .feature(getFeatureName())
         //FIXME mmrowka which country to choose if there is many IDs?
         //.alertedPartyCountry("AP")
         //.watchlistCountry("PL")

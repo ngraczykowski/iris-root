@@ -32,7 +32,7 @@ public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFe
     }
 
     return inputBuilder
-        .feature(getFeature().getName())
+        .feature(getFeatureName())
         .build();
   }
 

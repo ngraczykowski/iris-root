@@ -5,6 +5,6 @@ public interface Retriever {
   Feature getFeature();
 
   default String getFeatureName() {
-    return getFeature().getName();
+    return getFeature().getFullName();
   }
 }

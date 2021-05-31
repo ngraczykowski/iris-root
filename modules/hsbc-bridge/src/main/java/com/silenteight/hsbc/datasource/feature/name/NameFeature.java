@@ -54,7 +54,7 @@ public class NameFeature implements FeatureClientValuesRetriever<NameFeatureInpu
     inputBuilder.matchingTexts(emptyList());
 
     return inputBuilder
-        .feature(getFeature().getName())
+        .feature(getFeatureName())
         .build();
   }
 

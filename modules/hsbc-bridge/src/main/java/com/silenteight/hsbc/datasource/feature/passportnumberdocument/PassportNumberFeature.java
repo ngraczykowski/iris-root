@@ -29,7 +29,7 @@ public class PassportNumberFeature implements FeatureValuesRetriever<DocumentFea
     }
 
     return inputBuilder
-        .feature(getFeature().getName())
+        .feature(getFeatureName())
         .build();
   }
 
