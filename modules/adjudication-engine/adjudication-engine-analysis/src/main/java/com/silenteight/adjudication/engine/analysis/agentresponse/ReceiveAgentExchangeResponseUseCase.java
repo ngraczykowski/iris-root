@@ -30,6 +30,9 @@ class ReceiveAgentExchangeResponseUseCase {
   private final FeatureIdsProvider featureIdsProvider;
 
   void receiveAgentExchangeResponse(UUID agentExchangeRequestId, AgentExchangeResponse response) {
+    log.debug("Receiving agent exchange response: requestId={}, agentOutputCount={}",
+        agentExchangeRequestId, response.getAgentOutputsCount());
+
     if (response.getAgentOutputsCount() == 0) {
       log.warn("Received empty agent exchange response, ignoring: requestId={}",
           agentExchangeRequestId);

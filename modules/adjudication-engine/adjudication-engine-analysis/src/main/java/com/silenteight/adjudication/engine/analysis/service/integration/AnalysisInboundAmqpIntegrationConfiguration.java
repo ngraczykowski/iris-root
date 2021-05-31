@@ -33,7 +33,7 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow analysisInboundIntegrationFlow() {
     return from(createInboundAdapter(properties.getEventInternalInboundQueueNames()))
-        .log(Level.DEBUG, getClass().getName())
+        .log(Level.DEBUG, getLogCategory("analysisInboundIntegrationFlow"))
         .<Object, Class<?>>route(Object::getClass, m -> m
             .channelMapping(
                 AddedAnalysisDatasets.class,
@@ -48,9 +48,13 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow agentResponseIntegrationFlow() {
     return from(createInboundAdapter(properties.getAgentResponse().getInboundQueueName()))
-        .log(Level.DEBUG, getClass().getName())
+        .log(Level.DEBUG, getLogCategory("agentResponseIntegrationFlow"))
         .channel(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
         .get();
+  }
+
+  private String getLogCategory(String suffix) {
+    return AnalysisInboundAmqpIntegrationConfiguration.class.getName() + "." + suffix;
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {
