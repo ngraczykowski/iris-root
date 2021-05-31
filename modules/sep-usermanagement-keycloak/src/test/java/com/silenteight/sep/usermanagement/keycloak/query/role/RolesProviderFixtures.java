@@ -3,32 +3,39 @@ package com.silenteight.sep.usermanagement.keycloak.query.role;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
 
-import java.util.List;
-import java.util.Map;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 
 @UtilityClass
-class RolesProviderFixtures {
+public class RolesProviderFixtures {
 
+  static final String SENS_USER_ROLE_SCOPE = "frontend";
   static final String AUDITOR = "Auditor";
   static final String ANALYST = "Analyst";
 
-  static final UserRoles USER_1_ROLES = new UserRoles(
-      "30da08c2-6fcc-4350-8ba1-a5ba7798b857", asList(ANALYST, AUDITOR));
+  public static final Set<String> FRONTEND_USER_ROLES_1 = Set.of(ANALYST, AUDITOR);
+  public static final Set<String> FRONTEND_USER_ROLES_2 = emptySet();
 
-  static final UserRoles USER_2_NO_ROLES = new UserRoles(
-      "f757bc03-ef62-4f69-a127-206ffc5b877c", emptyList());
+  static final RolesForUser USER_1_ROLES = new RolesForUser(
+      "30da08c2-6fcc-4350-8ba1-a5ba7798b857", FRONTEND_USER_ROLES_1);
 
-  static final Map<String, List<String>> USERS =
-      Map.of(USER_1_ROLES.userId, USER_1_ROLES.roles, USER_2_NO_ROLES.userId,
-          USER_2_NO_ROLES.roles);
+  static final RolesForUser USER_2_NO_ROLES = new RolesForUser(
+      "f757bc03-ef62-4f69-a127-206ffc5b877c", FRONTEND_USER_ROLES_2);
+
+  public static final UserRoles USER_ROLES_1 =
+      new ExtractedUserRoles(Map.of(SENS_USER_ROLE_SCOPE, FRONTEND_USER_ROLES_1));
+
+  public static final UserRoles USER_ROLES_2 =
+      new ExtractedUserRoles(Map.of(SENS_USER_ROLE_SCOPE, FRONTEND_USER_ROLES_2));
 
   @Value
-  static class UserRoles {
+  static class RolesForUser {
 
     String userId;
-    List<String> roles;
+    Set<String> roles;
   }
 }

@@ -1,7 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.query.role;
 
-
-import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.UserRoles;
+import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.RolesForUser;
 
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
@@ -47,17 +47,16 @@ class SingleRequestRoleProviderTest {
   void returnsEmptyListForRoleClient_whenUserHasNoRolesForClient() {
     givenUser(USER_2_NO_ROLES);
 
-    Map<String, List<String>> actual = underTest.getForUserId(
-        USER_2_NO_ROLES.getUserId(), Set.of(ROLE_CLIENT_ID));
+    UserRoles actual = underTest.getForUserId(USER_2_NO_ROLES.getUserId(), Set.of(ROLE_CLIENT_ID));
 
-    assertThat(actual).containsOnlyKeys(ROLE_CLIENT_ID);
-    List<String> roles = actual.get(ROLE_CLIENT_ID);
+    assertThat(actual.getScopes()).containsExactlyInAnyOrder(ROLE_CLIENT_ID);
+    Set<String> roles = actual.getRoles(ROLE_CLIENT_ID);
     assertThat(roles).isEmpty();
   }
 
-  private void givenUser(UserRoles userRoles) {
+  private void givenUser(RolesForUser rolesForUser) {
     Map<String, ClientMappingsRepresentation> rolesMappings =
-        Map.of(ROLE_CLIENT_ID, clientRolesMappings(ROLE_CLIENT_ID, userRoles));
+        Map.of(ROLE_CLIENT_ID, clientRolesMappings(ROLE_CLIENT_ID, rolesForUser));
 
     MappingsRepresentation mappingsRepresentation = mock(MappingsRepresentation.class);
     when(mappingsRepresentation.getClientMappings()).thenReturn(rolesMappings);
@@ -69,29 +68,29 @@ class SingleRequestRoleProviderTest {
     when(userResource.roles()).thenReturn(roleMappingResource);
 
     UsersResource usersResource = mock(UsersResource.class);
-    when(usersResource.get(userRoles.getUserId())).thenReturn(userResource);
+    when(usersResource.get(rolesForUser.getUserId())).thenReturn(userResource);
 
     when(realmResource.users()).thenReturn(usersResource);
-    if (userRoles.getRoles() != null)
-      userRoles.getRoles().forEach(name -> when(internalRoleFilter.test(name)).thenReturn(true));
+    if (rolesForUser.getRoles() != null)
+      rolesForUser.getRoles().forEach(name -> when(internalRoleFilter.test(name)).thenReturn(true));
   }
 
   private ClientMappingsRepresentation clientRolesMappings(
-      String rolesClientId, UserRoles userRoles) {
+      String rolesClientId, RolesForUser rolesForUser) {
 
     ClientMappingsRepresentation clientMappings = new ClientMappingsRepresentation();
     clientMappings.setClient(rolesClientId);
-    clientMappings.setMappings(roleRepresentations(userRoles));
+    clientMappings.setMappings(roleRepresentations(rolesForUser));
 
     return clientMappings;
   }
 
   @Nullable
-  private static List<RoleRepresentation> roleRepresentations(UserRoles userRoles) {
-    if (userRoles.getRoles() == null)
+  private static List<RoleRepresentation> roleRepresentations(RolesForUser rolesForUser) {
+    if (rolesForUser.getRoles() == null)
       return null;
 
-    return userRoles
+    return rolesForUser
         .getRoles()
         .stream()
         .map(SingleRequestRoleProviderTest::roleRepresentation)
@@ -109,11 +108,10 @@ class SingleRequestRoleProviderTest {
   void returnsRoles_whenUserHasRoles() {
     givenUser(USER_1_ROLES);
 
-    Map<String, List<String>> actual = underTest.getForUserId(
-        USER_1_ROLES.getUserId(), Set.of(ROLE_CLIENT_ID));
+    UserRoles actual = underTest.getForUserId(USER_1_ROLES.getUserId(), Set.of(ROLE_CLIENT_ID));
 
-    assertThat(actual).containsOnlyKeys(ROLE_CLIENT_ID);
-    List<String> roles = actual.get(ROLE_CLIENT_ID);
+    assertThat(actual.getScopes()).containsExactlyInAnyOrder(ROLE_CLIENT_ID);
+    Set<String> roles = actual.getRoles(ROLE_CLIENT_ID);
     assertThat(roles).containsExactlyInAnyOrder(AUDITOR, ANALYST);
   }
 }

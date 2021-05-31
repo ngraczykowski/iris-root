@@ -18,12 +18,12 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTest.KeycloakUserQueryUserDtoAssert.assertThatUserDto;
-import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.SENS_USER_ROLE_SCOPE;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.FRONTEND_USER_ROLES_1;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_1;
 import static java.lang.Integer.MAX_VALUE;
 import static java.time.OffsetDateTime.now;
 import static org.assertj.core.api.Assertions.*;
@@ -65,11 +65,9 @@ class KeycloakUserQueryTest {
         KeycloakUserQueryTestFixtures.EXTERNAL_USER.getUserId(),
         KeycloakUserQueryTestFixtures.EXTERNAL_USER.getLastLoginAtDate());
 
-    roleProvider.add(
-        KeycloakUserQueryTestFixtures.SENS_USER.getUserId(),
-        Map.of(SENS_USER_ROLE_SCOPE, KeycloakUserQueryTestFixtures.SENS_USER_ROLES));
+    roleProvider.add(KeycloakUserQueryTestFixtures.SENS_USER.getUserId(), USER_ROLES_1);
 
-    Collection<UserDto> actual = underTest.listAll(Set.of(SENS_USER_ROLE_SCOPE));
+    Collection<UserDto> actual = underTest.listAll(FRONTEND_USER_ROLES_1);
 
     assertThat(actual)
         .hasSize(2)
@@ -98,7 +96,7 @@ class KeycloakUserQueryTest {
 
     given(usersResource.list(0, MAX_VALUE)).willReturn(List.of(userRepresentation));
 
-    List<UserDto> usersList = underTest.listAll(Set.of(SENS_USER_ROLE_SCOPE));
+    List<UserDto> usersList = underTest.listAll(FRONTEND_USER_ROLES_1);
 
     assertThat(usersList).hasSize(1);
 

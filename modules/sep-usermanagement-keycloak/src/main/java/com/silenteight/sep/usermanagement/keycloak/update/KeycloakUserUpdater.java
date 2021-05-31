@@ -6,15 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
-
-import java.util.Map;
-import java.util.Set;
 
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
 import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
@@ -54,7 +52,7 @@ class KeycloakUserUpdater {
     userResource.update(userRepresentation);
   }
 
-  private void assignRoles(String userId, Map<String, Set<String>> roles) {
+  private void assignRoles(String userId, UserRoles roles) {
     roleAssigner.assignRoles(KeycloakUserId.of(userId), roles);
   }
 

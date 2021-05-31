@@ -1,6 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
-
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import org.assertj.core.api.AbstractAssert;
@@ -22,7 +22,12 @@ class UserDtoAssert extends AbstractAssert<UserDtoAssert, UserDto> {
   }
 
   UserDtoAssert hasRoles(Map<String, List<String>> assertedRoles) {
-    assertThat(actual.getRoles()).isEqualTo(assertedRoles);
+    UserRoles userRoles = actual.getRoles();
+    assertedRoles
+        .entrySet()
+        .forEach(
+            entry -> assertThat(
+                userRoles.getSortedRoles(entry.getKey())).isEqualTo(entry.getValue()));
 
     return this;
   }

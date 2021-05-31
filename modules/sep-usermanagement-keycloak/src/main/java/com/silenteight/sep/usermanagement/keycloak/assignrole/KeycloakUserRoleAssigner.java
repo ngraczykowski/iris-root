@@ -3,6 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.assignrole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
@@ -13,7 +14,6 @@ import org.keycloak.representations.idm.RoleRepresentation;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
@@ -30,12 +30,11 @@ public class KeycloakUserRoleAssigner {
   @NotNull
   private final ClientQuery clientQuery;
 
-  public void assignRoles(KeycloakUserId userId, Map<String, Set<String>> roles) {
+  public void assignRoles(KeycloakUserId userId, UserRoles roles) {
     log.info(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
     roles
-        .entrySet()
-        .forEach(rolesForClientId ->
-            assignRoles(userId, rolesForClientId.getKey(), rolesForClientId.getValue()));
+        .getScopes()
+        .forEach(clientId -> assignRoles(userId, clientId, roles.getRoles(clientId)));
   }
 
   private void assignRoles(KeycloakUserId userId, String roleClientId, Set<String> roles) {
