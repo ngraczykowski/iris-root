@@ -2,16 +2,23 @@ package com.silenteight.hsbc.bridge.amqp;
 
 import com.silenteight.hsbc.bridge.transfer.ProcessManager;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-class NewModelConfiguration {
+@Profile("!dev")
+class ListenerConfiguration {
 
-  @Profile("!dev")
   @Bean
   NewModelListener newModelListener(ProcessManager processManager) {
     return new NewModelListener(processManager);
+  }
+
+  @Bean
+  RecommendationGeneratedListener recommendationGeneratedListener(
+      ApplicationEventPublisher eventPublisher) {
+    return new RecommendationGeneratedListener(eventPublisher);
   }
 }

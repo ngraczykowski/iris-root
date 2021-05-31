@@ -8,6 +8,8 @@ import com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatusResponse;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +22,9 @@ import static java.util.List.of;
 @RequiredArgsConstructor
 public class GetBulkStatusUseCase {
 
-  private final AnalysisFacade analysisFacade;
   private final BulkRepository bulkRepository;
 
+  @Transactional(readOnly = true)
   public BatchStatusResponse getStatus(String id) {
     var result = bulkRepository.findById(id);
 
@@ -36,8 +38,8 @@ public class GetBulkStatusUseCase {
     response.setBatchStatus(BatchStatus.fromValue(batch.getStatus().name()));
     response.setRequestedAlerts(getRequestedAlerts(batch.getAlerts()));
 
-    if (batch.hasAnalysisId()) {
-      var analysis = analysisFacade.getById(batch.getAnalysisId());
+    if (batch.hasAnalysis()) {
+      var analysis = batch.getAnalysis();
       response.setPolicyName(analysis.getPolicy());
     }
 

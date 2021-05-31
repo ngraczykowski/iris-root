@@ -5,16 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("dev")
 @RequiredArgsConstructor
-class RecommendationEventConfiguration {
+class RecommendationGeneratorConfiguration {
 
+  private final RecommendationRepository repository;
   private final ApplicationEventPublisher eventPublisher;
-  private final RecommendationRepository recommendationRepository;
 
   @Bean
-  NewRecommendationEventListener recommendationEventListener() {
-    return new NewRecommendationEventListener(eventPublisher, recommendationRepository);
+  RecommendationGenerator recommendationGenerator() {
+    return new RecommendationGenerator(repository, eventPublisher);
   }
 }

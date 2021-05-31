@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 /**
  * SolvedAlert
@@ -33,6 +35,9 @@ public class SolvedAlert {
 
   @SerializedName("comment")
   private String comment = null;
+
+  @SerializedName("alertMetadata")
+  private List<AlertMetadata> alertMetadata = null;
 
   public SolvedAlert id(String id) {
     this.id = id;
@@ -54,6 +59,22 @@ public class SolvedAlert {
 
   public SolvedAlert recommendation(SolvedAlertStatus recommendation) {
     this.recommendation = recommendation;
+    return this;
+  }
+
+  public List<AlertMetadata> getAlertMetadata() {
+    return alertMetadata;
+  }
+
+  public void setAlertMetadata(List<AlertMetadata> alertMetadata) {
+    this.alertMetadata = alertMetadata;
+  }
+
+  public SolvedAlert addAlertMetadata(AlertMetadata alertMetadata) {
+    if (this.alertMetadata == null) {
+      this.alertMetadata = new ArrayList<AlertMetadata>();
+    }
+    this.alertMetadata.add(alertMetadata);
     return this;
   }
 
@@ -100,12 +121,13 @@ public class SolvedAlert {
     SolvedAlert solvedAlert = (SolvedAlert) o;
     return Objects.equals(this.id, solvedAlert.id) &&
         Objects.equals(this.recommendation, solvedAlert.recommendation) &&
-        Objects.equals(this.comment, solvedAlert.comment);
+        Objects.equals(this.comment, solvedAlert.comment) &&
+        Objects.equals(this.alertMetadata, solvedAlert.alertMetadata);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, recommendation, comment);
+    return Objects.hash(id, recommendation, comment, alertMetadata);
   }
 
 
@@ -117,6 +139,7 @@ public class SolvedAlert {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    recommendation: ").append(toIndentedString(recommendation)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    alertMetadata: ").append(toIndentedString(alertMetadata)).append("\n");
     sb.append("}");
     return sb.toString();
   }

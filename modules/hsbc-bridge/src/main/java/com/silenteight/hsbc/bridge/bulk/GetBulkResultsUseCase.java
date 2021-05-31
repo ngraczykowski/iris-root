@@ -5,15 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.rest.BatchSolvedAlerts;
-import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus;
-import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlert;
-import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlertStatus;
+import com.silenteight.hsbc.bridge.bulk.rest.*;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -57,6 +53,7 @@ public class GetBulkResultsUseCase {
   private List<SolvedAlert> getSolvedAlerts(Collection<BulkAlertEntity> items) {
     return items.stream().map(alert -> {
       var solvedAlert = new SolvedAlert();
+      solvedAlert.setAlertMetadata(getAlertMetadata(alert.getExternalId()));
       solvedAlert.setId(alert.getExternalId());
 
       if (alert.isCompleted()) {
@@ -64,6 +61,22 @@ public class GetBulkResultsUseCase {
       }
       return solvedAlert;
     }).collect(Collectors.toList());
+  }
+
+  private List<AlertMetadata> getAlertMetadata(String alertId) {
+    var metadata = new ArrayList<AlertMetadata>();
+    //TODO determine how to get proper metadata
+    var trackingMetadata = new AlertMetadata();
+    trackingMetadata.setKey("trackingId");
+    trackingMetadata.setValue(alertId);
+
+    var policyMetadata = new AlertMetadata();
+    policyMetadata.setKey("policy_id");
+    policyMetadata.setValue(UUID.randomUUID().toString());
+
+    metadata.add(trackingMetadata);
+    metadata.add(policyMetadata);
+    return metadata;
   }
 
   private void getAndFillWithRecommendation(String alert, SolvedAlert solvedAlert) {

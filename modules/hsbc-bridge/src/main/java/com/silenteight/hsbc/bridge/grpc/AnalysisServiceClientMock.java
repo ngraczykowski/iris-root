@@ -13,7 +13,7 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
   @Override
   public AnalysisDatasetDto addDataset(AddDatasetRequestDto request) {
     return AnalysisDatasetDto.builder()
-        .alertsCount(random.nextInt(5))
+        .alertsCount(1 + random.nextInt(5))
         .name("dataset-" + random.nextInt(1000))
         .build();
   }

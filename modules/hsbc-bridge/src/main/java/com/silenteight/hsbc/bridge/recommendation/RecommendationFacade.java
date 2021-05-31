@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.recommendation;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -7,7 +8,7 @@ public class RecommendationFacade {
 
   private final RecommendationRepository repository;
 
-  public RecommendationDto getRecommendation(String alert) {
+  public RecommendationDto getRecommendation(@NonNull String alert) {
     var findResult = repository.findByAlert(alert);
 
     if (findResult.isEmpty()) {

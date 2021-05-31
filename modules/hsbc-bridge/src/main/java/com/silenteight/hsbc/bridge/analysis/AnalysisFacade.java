@@ -27,12 +27,6 @@ public class AnalysisFacade {
     return entity.toAnalysisDto();
   }
 
-  public AnalysisDto getById(long id) {
-    return analysisRepository.findById(id)
-        .map(AnalysisEntity::toAnalysisDto)
-        .orElseThrow(() -> new AnalysisNotFoundException(id));
-  }
-
   private AnalysisEntity saveAnalysisWithTimeout(AnalysisDto analysis) {
     var timeout = determineTimeout(analysis.getAlertCount());
     var entity = new AnalysisEntity(analysis, timeout);

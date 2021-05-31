@@ -56,10 +56,10 @@ class BulkProcessor {
         .stream()
         .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
 
-    var analysisId =
-        adjudicationFacade.registerAlertWithMatchesAndAnalysis(compositeById);
+    var analysisId = adjudicationFacade.registerAlertWithMatchesAndAnalysis(compositeById);
 
     bulk.setAnalysisId(analysisId);
+
     bulk.setStatus(PROCESSING);
   }
 

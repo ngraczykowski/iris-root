@@ -31,6 +31,7 @@ class Bulk extends BaseEntity {
 
   @Enumerated(value = EnumType.STRING)
   private BulkStatus status = BulkStatus.STORED;
+  @Column(name = "analysis_id")
   private Long analysisId;
   private String errorMessage;
   private OffsetDateTime errorTimestamp;
@@ -40,6 +41,10 @@ class Bulk extends BaseEntity {
   @OneToMany
   @JoinColumn(name = "bulk_id")
   private Collection<BulkAlertEntity> alerts = new ArrayList<>();
+
+  @ManyToOne
+  @JoinColumn(name = "analysis_id", insertable = false, updatable = false)
+  private BulkAnalysisEntity analysis;
 
   Bulk(String id) {
     this.id = id;
@@ -51,8 +56,8 @@ class Bulk extends BaseEntity {
   }
 
   @Transient
-  boolean hasAnalysisId() {
-    return nonNull(analysisId);
+  boolean hasAnalysis() {
+    return nonNull(analysis);
   }
 
   @Transient

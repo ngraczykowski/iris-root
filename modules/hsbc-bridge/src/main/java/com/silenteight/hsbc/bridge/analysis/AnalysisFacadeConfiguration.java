@@ -23,6 +23,10 @@ class AnalysisFacadeConfiguration {
     return new AnalysisFacade(
         analysisRepository, registerer(), analysisProperties.getAlertTimeoutDuration());
   }
+  @Bean
+  AnalysisEventListener analysisEventListener() {
+    return new AnalysisEventListener(analysisRepository);
+  }
 
   private Registerer registerer() {
     return new Registerer(analysisServiceClient, modelServiceClient);

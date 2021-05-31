@@ -22,6 +22,14 @@ class BulkUpdater {
   }
 
   @Transactional
+  public void updateWithAnalysisCompleted(@NonNull String analysis) {
+    bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
+      bulk.setStatus(COMPLETED);
+      bulkRepository.save(bulk);
+    });
+  }
+
+  @Transactional
   public void updateWithPreProcessedStatus(@NonNull String bulkId) {
     bulkRepository.findById(bulkId).ifPresent(b -> {
       b.setStatus(PRE_PROCESSED);

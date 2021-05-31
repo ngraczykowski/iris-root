@@ -12,7 +12,7 @@ interface AnalysisRepository extends Repository<AnalysisEntity, Long> {
 
   void save(AnalysisEntity analysisEntity);
 
-  Optional<AnalysisEntity> findById(Long id);
-
   List<AnalysisEntity> findByTimeoutAtBeforeAndStatus(OffsetDateTime timeout, Status status);
+
+  Optional<AnalysisEntity> findByName(String name);
 }

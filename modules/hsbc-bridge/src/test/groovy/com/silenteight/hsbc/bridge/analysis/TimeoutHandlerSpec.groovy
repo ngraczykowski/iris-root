@@ -1,11 +1,8 @@
 package com.silenteight.hsbc.bridge.analysis
 
 import com.silenteight.hsbc.bridge.analysis.dto.GetAnalysisResponseDto
-import com.silenteight.hsbc.bridge.analysis.dto.GetRecommendationsDto
 import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent
-import com.silenteight.hsbc.bridge.recommendation.RecommendationDto
-import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient
-import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationEvent
+import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationsEvent
 
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
@@ -13,11 +10,9 @@ import spock.lang.Specification
 class TimeoutHandlerSpec extends Specification {
 
   def analysisServiceClient = Mock(AnalysisServiceClient)
-  def recommendationServiceClient = Mock(RecommendationServiceClient)
   def repository = Mock(AnalysisRepository)
   def eventPublisher = Mock(ApplicationEventPublisher)
-  def underTest = new TimeoutHandler(
-      analysisServiceClient, recommendationServiceClient, repository, eventPublisher)
+  def underTest = new TimeoutHandler(analysisServiceClient, repository, eventPublisher)
 
   def 'should process analysis after timeout'() {
     given:
@@ -36,20 +31,7 @@ class TimeoutHandlerSpec extends Specification {
     1 * analysisServiceClient.getAnalysis(completedAnalysis.name) >> completedAnalysisDto
     1 * analysisServiceClient.getAnalysis(inCompletedAnalysis.name) >> inCompletedAnalysisDto
 
-    1 * recommendationServiceClient.getRecommendations(
-        {GetRecommendationsDto request -> request.analysis == inCompletedAnalysis.name}) >>
-        [createRecommendation()]
-
-    1 * eventPublisher.publishEvent(_ as NewRecommendationEvent)
+    1 * eventPublisher.publishEvent(_ as NewRecommendationsEvent)
     1 * eventPublisher.publishEvent(_ as AnalysisTimeoutEvent)
-  }
-
-  def createRecommendation() {
-    RecommendationDto.builder()
-        .alert('someAlert')
-        .name('recommendation')
-        .recommendedAction('action')
-        .recommendationComment('comment')
-        .build()
   }
 }
