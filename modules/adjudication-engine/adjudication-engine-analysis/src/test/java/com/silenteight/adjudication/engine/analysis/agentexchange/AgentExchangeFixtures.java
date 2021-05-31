@@ -2,11 +2,16 @@ package com.silenteight.adjudication.engine.analysis.agentexchange;
 
 import lombok.*;
 
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage;
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage.Match;
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeature;
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeatureChunk;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -25,6 +30,8 @@ public final class AgentExchangeFixtures {
   private static final IntSupplier AGENT_ID_GENERATOR =
       IntStream.iterate(BASE_ID_SUPPLIER.getAsInt(), i -> i + 1).iterator()::nextInt;
   private static final IntSupplier FEATURE_ID_GENERATOR =
+      IntStream.iterate(BASE_ID_SUPPLIER.getAsInt(), i -> i + 1).iterator()::nextInt;
+  private static final IntSupplier AGENT_EXCHANGE_ID_GENERATOR =
       IntStream.iterate(BASE_ID_SUPPLIER.getAsInt(), i -> i + 1).iterator()::nextInt;
 
   public static List<MissingMatchFeature> createRandomMissingMatchFeatures(
@@ -64,6 +71,12 @@ public final class AgentExchangeFixtures {
         .collect(toList());
   }
 
+  public static AgentExchangeRequestMessage createAgentExchangeRequestMessage() {
+    var agent = dummyAgent(3);
+    return new AgentExchangeRequestMessage(
+        UUID.randomUUID(), agent.agentConfig, 2, agent.features, generateMatches(10));
+  }
+
   public static DummyAlert dummyAlert(int matchCount, int priority) {
     return new DummyAlert(
         ALERT_ID_GENERATOR.getAsLong(),
@@ -84,6 +97,24 @@ public final class AgentExchangeFixtures {
 
     return new DummyAgent(
         "agents/dummy_" + agentId + "/versions/9.8.7/configs/" + configId, features);
+  }
+
+  public static Supplier<FeatureRequestingStrategy> createFeatureRequestingStrategySupplier(
+      int maxMessageSize) {
+    return () -> new DefaultFeatureRequestingStrategy(maxMessageSize);
+  }
+
+  public static MissingMatchFeatureChunk createMissingMatchFeatureChunk(int chunkSize) {
+    List<MissingMatchFeature> missingMatchFeatures =
+        createMissingMatchFeatures(dummyAlert(chunkSize, 5), dummyAgent(1));
+    return new MissingMatchFeatureChunk(missingMatchFeatures);
+  }
+
+  public static List<Match> generateMatches(int matchCount) {
+    return IntStream
+        .range(0, matchCount)
+        .mapToObj(i -> new Match(ALERT_ID_GENERATOR.getAsLong(), MATCH_ID_GENERATOR.getAsLong()))
+        .collect(toList());
   }
 
   @RequiredArgsConstructor

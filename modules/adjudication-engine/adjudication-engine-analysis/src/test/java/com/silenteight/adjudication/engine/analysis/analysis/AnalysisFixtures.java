@@ -11,7 +11,7 @@ import java.util.*;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class AnalysisFixtures {
+public class AnalysisFixtures {
 
   private static final String[] STRATEGIES = { "back_test", "standard" };
   private static final String[] CATEGORIES = {
@@ -26,7 +26,7 @@ class AnalysisFixtures {
     return new CreateAndGetAnalysisUseCase(createAnalysisUseCase, getAnalysisUseCase);
   }
 
-  static Analysis randomAnalysis() {
+  public static Analysis randomAnalysis() {
     var builder = Analysis.newBuilder();
     var analysisEntity = randomAnalysisEntity();
     analysisEntity.updateBuilder(builder);

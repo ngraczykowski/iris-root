@@ -113,7 +113,7 @@ class MockedGrpcAnalysisService extends AnalysisServiceImplBase {
     responseObserver.onNext(Analysis
         .newBuilder()
         .setName(request.getAnalysis())
-        .setPolicy("policies/" + UUID.randomUUID().toString())
+        .setPolicy("policies/" + UUID.randomUUID())
         .setStrategy("strategies/back_test")
         .addFeatures(Feature.newBuilder()
             .setFeature("features/nationality")

@@ -6,7 +6,7 @@ import java.util.List;
 
 class InMemoryAnalysisDatasetRepository implements AnalysisDatasetRepository {
 
-  private List<AnalysisDatasetEntity> analysisDatasetEntities = new ArrayList<>();
+  private final List<AnalysisDatasetEntity> analysisDatasetEntities = new ArrayList<>();
 
   public List<AnalysisDatasetEntity> getAnalysisDatasetList() {
     return Collections.unmodifiableList(analysisDatasetEntities);

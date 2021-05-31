@@ -12,7 +12,7 @@ class CreateAndGetAnalysisUseCaseTest {
 
   private static final String[] IGNORED_PROTO_FIELDS =
       { "createTime_", "name_", "state_", "memoizedHashCode" };
-  private CreateAndGetAnalysisUseCase useCase = AnalysisFixtures.inMemoryAnalysisUseCase();
+  private final CreateAndGetAnalysisUseCase useCase = AnalysisFixtures.inMemoryAnalysisUseCase();
 
   @Test
   @Disabled
