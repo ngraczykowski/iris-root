@@ -29,6 +29,14 @@ Before you start working on the project, you need to install few prerequisites.
 >
 > All paths in this document are relative to the root project directory.
 
+## No REST API - no Keycloak
+
+Sometimes there is a need to block all endpoints (HSBC on a prod env).
+To do this, you can run the application with a `no-rest-api` profile.
+All endpoints will be available with a basic-auth, but there will be no user available to log in.
+
+With this profile, the application doesn't require Keycloak's adapter properties to boot. 
+
 ## Development Setup
 
 Before you can run Governance, you have to have a few infrastructural services running:
@@ -64,9 +72,19 @@ To start RabbitMQ, follow the steps:
 By default, swagger is disabled in production. To enable it you need to apply `swagger` Spring Boot profile.
 UI available under [link](https://localhost:24204/rest/governance/openapi/swagger-ui/index.html?configUrl=/rest/governance/openapi/api-docs/swagger-config).
 
-In order to make authenticated requests
-click the key lock icon, type in desired client id (normally this would be `frontend`)
-and click the `Authorize` button. 
+In order to make authenticated requests add a `basic-auth` profile and fill sep.auth.basic.users property.
+
+```yaml
+sep.auth.basic.users:
+  - username: bo
+    password: bodev
+    roles:
+      - BUSINESS_OPERATOR
+  - username: ap
+    password: apdev
+    roles:
+      - APPROVER
+```
 
 
 ## Helpers
