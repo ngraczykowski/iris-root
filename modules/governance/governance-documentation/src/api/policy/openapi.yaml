@@ -167,7 +167,7 @@ paths:
         201:
           description: Created
 
-  /policies/{id}/steps/search:
+  /policies/{id}/steps:search:
     post:
       tags:
         - steps
