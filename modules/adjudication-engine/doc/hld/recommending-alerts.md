@@ -57,25 +57,25 @@ This will trigger re-evaluation of analysis and its alerts that are missing reco
 The list of integration flows that would result in solving alerts:
 
 ```
-AddDatasetRequest (grpc) -> AnalysisDatasetsAdded (rabbit)
++ AddDatasetRequest (grpc) -> AnalysisDatasetsAdded (rabbit)
 
-BatchAddDatasetsRequest (grpc) -> AnalysisDatasetsAdded (rabbit)
++ BatchAddDatasetsRequest (grpc) -> AnalysisDatasetsAdded (rabbit)
 
-AnalysisDatasetsAdded (rabbit) -> List<PendingRecommendation> (db) -> PendingRecommendations (rabbit)
++ AnalysisDatasetsAdded (rabbit) -> List<PendingRecommendation> (db) -> PendingRecommendations (rabbit)
 
-PendingRecommendations (rabbit) -> List<AgentExchange> (db) -> List<AgentExchangeRequest> (rabbit)
++ PendingRecommendations (rabbit) -> List<AgentExchange> (db) -> List<AgentExchangeRequest> (rabbit)
 
-AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdated (spring)
++- AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdated (spring)
 
-PendingRecommendations (rabbit) -> BatchGetMatchCategoryValuesRequest: BatchGetMatchCategoryValuesResponse (grpc) -> List<MatchCategoryValue> (db) -> MatchCategoriesUpdated (spring)
++ PendingRecommendations (rabbit) -> BatchGetMatchCategoryValuesRequest: BatchGetMatchCategoryValuesResponse (grpc) -> List<MatchCategoryValue> (db) -> MatchCategoriesUpdated (spring)
 
 PendingRecommendations (rabbit) -> StreamCommentInputsRequest: List<CommentInput> (grpc) -> List<AlertCommentInput> (db) -> CommentInputsUpdated (spring)
 
-MatchCategoriesUpdated (spring) -> SolveMatchesCommand (spring)
+? MatchCategoriesUpdated (spring) -> SolveMatchesCommand (spring)
 
-MatchFeaturesUpdated (spring) -> SolveMatchesCommand (spring)
+? MatchFeaturesUpdated (spring) -> SolveMatchesCommand (spring)
 
-SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolved (rabbit)
+- SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolved (rabbit)
 
 MatchesSolved (spring) -> RecommendAlertsCommand (spring)
 
@@ -85,6 +85,31 @@ PendingRecommendations (rabbit) -> RecommendAlertsCommand (spring)
 
 RecommendAlertsCommand (spring) -> BatchSolveAlertsRequest: BatchSolveAlertsResponse (grpc) -> List<Recommendation> + delete PendingRecommendation (db) -> RecommendationsGenerated (rabbit)
 ```
+
+A
+- M1
+- M2
+
+M1
+- CV1 - AE
+- CV2 - DENY
+- FV1 - WEAK_MATCH
+- FV2 - MATCH
+- FV3 - NO_MATCH
+
+To get Match Solution for M1:
+- Request a solution from Gov for: AE, DENY, WEAK_MATCH, MATCH, NO_MATCH (feature vector), with policy "policies/xxxxxx".
+- **How do we know which matches are ready to be asked for?**
+- 
+
+WHAT IS NEEDED FOR ANALYSIS:
+
+- C1, C2, F1, F2, F3
+
+WHAT WE HAVE FOR MATCH:
+
+- C1, F2, F3
+
 
 > **TODO**
 >

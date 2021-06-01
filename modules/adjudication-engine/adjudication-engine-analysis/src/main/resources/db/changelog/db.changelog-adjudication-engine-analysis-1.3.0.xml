@@ -26,7 +26,20 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <!--  <changeSet id="adjudication-engine-analysis-1.3.0_4" author="tbozek">-->
-  <!--  </changeSet>-->
+  <changeSet id="adjudication-engine-analysis-1.3.0_4" author="ahaczewski">
+    <createView
+        viewName="ae_analysis_feature_vector_elements_query"
+        path="sql/view_ae_analysis_feature_vector_elements_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 
+  <changeSet id="adjudication-engine-analysis-1.3.0_5" author="ahaczewski">
+    <createView
+        viewName="ae_match_feature_vector_elements_query"
+        path="sql/view_ae_match_feature_vector_elements_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <!--  <changeSet id="adjudication-engine-analysis-1.3.0_5" author="tbozek">-->
+  <!--  </changeSet>-->
 </databaseChangeLog>
