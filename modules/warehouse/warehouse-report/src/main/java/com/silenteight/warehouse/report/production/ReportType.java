@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reporting;
+package com.silenteight.warehouse.report.production;
 
 import lombok.AllArgsConstructor;
 

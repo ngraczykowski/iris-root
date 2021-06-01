@@ -2,6 +2,7 @@ package com.silenteight.warehouse.common.opendistro.kibana;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 
@@ -14,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackageClasses = {
     OpendistroModule.class,
-    TestElasticSearchModule.class
+    TestElasticSearchModule.class,
+    TokenModule.class
 })
 @ImportAutoConfiguration({
     ElasticsearchRestClientAutoConfiguration.class,

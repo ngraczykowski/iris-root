@@ -1,7 +1,9 @@
 package com.silenteight.warehouse.indexer.analysis;
 
-import lombok.*;
+import lombok.Builder;
 import lombok.Builder.Default;
+import lombok.NonNull;
+import lombok.Value;
 
 import java.time.OffsetDateTime;
 import javax.annotation.concurrent.ThreadSafe;
@@ -18,7 +20,6 @@ public class NewAnalysisEvent {
   OffsetDateTime date = OffsetDateTime.now();
   @NonNull
   String analysis;
-  @NonNull
   boolean simulation;
   @NonNull
   AnalysisMetadataDto analysisMetadataDto;

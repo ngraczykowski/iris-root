@@ -1,5 +1,6 @@
 plugins {
   id "java-library"
+  id "java-test-fixtures"
 }
 
 description = "Warehouse Common"
@@ -9,11 +10,9 @@ configurations {
 }
 
 dependencies {
-  // API dependencies
-  api libraries.jakarta_validation_api
-  api libraries.silenteight_sep_base_common
+  implementation libraries.jakarta_validation_api
+  implementation libraries.silenteight_sep_base_common
 
-  // General dependencies
   implementation libraries.silenteight_commons_core
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_boot_starter_elasticsearch

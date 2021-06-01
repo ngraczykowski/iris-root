@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.common.opendistro.elastic;
 
 import lombok.*;
+import lombok.Builder.Default;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,6 +17,7 @@ public class ListReportsInstancesResponse {
   @JsonProperty("totalHits")
   Long totalHits;
   @JsonProperty("reportInstanceList")
+  @Default
   List<ReportInstance> reportInstancesList = new ArrayList<>();
 
   @Data
@@ -29,7 +31,17 @@ public class ListReportsInstancesResponse {
     @NonNull
     private String status;
     @NonNull
+    private Long createdTimeMs;
+    @NonNull
     private ReportDefinitionDetails reportDefinitionDetails;
+
+    public boolean hasReportDefinitionId(String id) {
+      return getReportDefinitionDetails().getId().equals(id);
+    }
+
+    public boolean isCreatedAfter(Long timestamp) {
+      return getCreatedTimeMs() > timestamp;
+    }
 
     @Data
     @NoArgsConstructor
@@ -46,6 +58,9 @@ public class ListReportsInstancesResponse {
     @AllArgsConstructor
     @Builder
     public static class ReportDefinitionDetails {
+
+      @NonNull
+      private String id;
 
       @NonNull
       private ReportDefinition reportDefinition;

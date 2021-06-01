@@ -3,15 +3,17 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
+import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
+import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 import com.silenteight.warehouse.indexer.analysis.NewAnalysisEvent;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.simulation.KibanaSetupForSimulationUseCase;
+import com.silenteight.warehouse.report.simulation.SimulationReportsController;
 
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
@@ -24,10 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
@@ -37,6 +38,7 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.*;
 
 @Transactional
 @SpringBootTest(classes = SimulationTestConfiguration.class)
@@ -70,13 +72,22 @@ class SimulationIT {
   private OpendistroKibanaTestClient kibanaTestClient;
 
   @Autowired
+  private OpendistroKibanaClientFactory opendistroKibanaClientFactory;
+
   private OpendistroKibanaClient opendistroKibanaClient;
 
   @Autowired
   private KibanaSetupForSimulationUseCase kibanaSetupForSimulationUseCase;
 
+  @Autowired
+  private SimulationReportsController simulationReportsController;
+
+  @Autowired
+  private AnalysisService analysisService;
+
   @BeforeEach
   public void init() {
+    opendistroKibanaClient = opendistroKibanaClientFactory.getAdminClient();
     // given
     storeData();
     createKibanaIndex();
@@ -93,35 +104,27 @@ class SimulationIT {
   }
 
   @Test
+  @WithMockUser(username = "admin", password = "admin")
   void shouldCreateReportForSimulation() {
-    //when
+    when(analysisService.getTenantIdByAnalysis("analysis/" + SIMULATION_ANALYSIS_ID))
+        .thenReturn(SIMULATION_TENANT);
+
+    // Trigger creating tenant for simulation
     kibanaSetupForSimulationUseCase.handle(ITEST_ANALYSIS_EVENT);
 
-    //then
-    var clonedIndexPatterns = opendistroKibanaClient.listKibanaIndexPattern(
-        SIMULATION_TENANT, 20);
-    assertThat(clonedIndexPatterns).hasSize(1);
+    // Verify tenant is cloned
+    verifyClonedIndexPattern();
+    verifySavedSearch();
 
-    var clonedSearchObjects = opendistroKibanaClient.listSavedSearchDefinitions(
-        SIMULATION_TENANT, 20);
-    assertThat(clonedSearchObjects).hasSize(1);
-
-    // TODO(WEB-1070): to be replaced by REST API call:
-    // GET /analysis/{analysisId}/definitions
+    // Trigger report generation
     waitForReportDefinitions(1, SIMULATION_TENANT);
-    var reportDefinitions = opendistroKibanaClient.listReportDefinitions(SIMULATION_TENANT);
-    assertThat(reportDefinitions).hasSize(1);
+    String reportDefinitionId = getFirstReportDefinitionId(SIMULATION_ANALYSIS_ID);
+    String timestamp = generateReport(SIMULATION_ANALYSIS_ID, reportDefinitionId);
 
-    // TODO(WEB-1070): to be replaced by REST API call:
-    // POST /analysis/production/definitions/{definitionId}/reports
-    reportingService.createReport(reportDefinitions.get(0).getId(), SIMULATION_TENANT);
-
-    // TODO(WEB-1070): to be replaced by REST API call:
-    // GET /analysis/production/definitions/{definitionId}/reports/{instanceId}
+    // Download report and verify the content
     waitForReportInstances(1, SIMULATION_TENANT);
-    String reportId = getFirstReportInstance(SIMULATION_TENANT);
-    KibanaReportDto report = reportingService.getReport(SIMULATION_TENANT, reportId);
-    assertThat(report.getContent()).contains(ALERT_ID_1);
+    String report = downloadReport(SIMULATION_ANALYSIS_ID, reportDefinitionId, timestamp);
+    assertThat(report).contains(ALERT_ID_1);
   }
 
   @SneakyThrows
@@ -144,9 +147,9 @@ class SimulationIT {
     kibanaTestClient.createSavedSearch(ADMIN_TENANT, payload);
   }
 
-  private String createReportDefinition() {
+  private void createReportDefinition() {
     byte[] payload = getJson("json/3-create-report-definition.json");
-    return kibanaTestClient.createReportDefinition(ADMIN_TENANT, payload);
+    kibanaTestClient.createReportDefinition(ADMIN_TENANT, payload);
   }
 
   private void waitForReportInstances(int minCount, String tenant) {
@@ -161,14 +164,46 @@ class SimulationIT {
         .until(() -> opendistroKibanaClient.listReportDefinitions(tenant).size() >= minCount);
   }
 
-  private String getFirstReportInstance(String tenant) {
-    Set<String> reportIds = reportingService.getReportIds(tenant);
-    return reportIds.toArray(String[]::new)[0];
-  }
-
   @SneakyThrows
   private byte[] getJson(String resourcePath) {
     return getClass().getClassLoader().getResourceAsStream(resourcePath).readAllBytes();
+  }
+
+  private void verifyClonedIndexPattern() {
+    var clonedIndexPatterns = opendistroKibanaClient.listKibanaIndexPattern(
+        SIMULATION_TENANT, 20);
+    assertThat(clonedIndexPatterns).hasSize(1);
+  }
+
+  private void verifySavedSearch() {
+    var clonedSearchObjects = opendistroKibanaClient.listSavedSearchDefinitions(
+        SIMULATION_TENANT, 20);
+    assertThat(clonedSearchObjects).hasSize(1);
+  }
+
+  private String getFirstReportDefinitionId(String analysisId) {
+    return simulationReportsController
+        .getReportsDtoList(analysisId)
+        .getBody()
+        .get(0)
+        .getId();
+  }
+
+  private String generateReport(String analysisId, String reportDefinitionId) {
+    String location =
+        simulationReportsController.createReport(analysisId, reportDefinitionId)
+            .getHeaders()
+            .get("Location")
+            .get(0);
+    return location.replace("reports/", "");
+  }
+
+  String downloadReport(String analysisId, String definitionId, String timestamp) {
+    byte[] reportBody =
+        simulationReportsController.downloadReport(analysisId, definitionId, timestamp)
+            .getBody();
+
+    return new String(reportBody);
   }
 
   private void removeKibanaIndex() {

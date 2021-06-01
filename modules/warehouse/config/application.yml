@@ -41,6 +41,8 @@ warehouse:
     private-key: admin123
   report:
     default-bucket: reports
+    synchronization:
+      cron: "0 0 */1 * * ?"
   kibana:
     url: http://localhost:5601
     username: admin

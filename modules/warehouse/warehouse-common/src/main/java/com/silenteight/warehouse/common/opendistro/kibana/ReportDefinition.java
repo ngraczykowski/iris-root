@@ -88,10 +88,20 @@ class ReportDefinition {
     Boolean excel;
   }
 
-  KibanaReportDefinitionDto toDto() {
-    return KibanaReportDefinitionDto.builder()
+  KibanaReportDefinitionForModification forModification() {
+    return KibanaReportDefinitionForModification.builder()
         .id(getId())
         .reportDefinitionDetails(getDetails().getReportDefinition())
+        .build();
+  }
+
+  KibanaReportDefinitionDto toDto() {
+    KibanaReportDefinitionForModification wrapper = forModification();
+
+    return KibanaReportDefinitionDto.builder()
+        .id(wrapper.getId())
+        .description(wrapper.getDescription())
+        .reportName(wrapper.getReportName())
         .build();
   }
 }

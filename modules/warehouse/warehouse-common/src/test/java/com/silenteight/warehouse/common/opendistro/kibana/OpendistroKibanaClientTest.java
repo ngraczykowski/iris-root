@@ -6,6 +6,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticC
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,10 +39,17 @@ import static org.awaitility.Awaitility.await;
 class OpendistroKibanaClientTest {
 
   @Autowired
+  OpendistroKibanaClientFactory opendistroKibanaClientFactory;
+
   OpendistroKibanaClient opendistroKibanaClient;
 
+  @BeforeEach
+  void init() {
+    opendistroKibanaClient = opendistroKibanaClientFactory.getAdminClient();
+  }
+
   @AfterEach
-  public void cleanup() {
+  void cleanup() {
     safeDeleteObject(KIBANA_INDEX_PATTERN, KIBANA_INDEX_ID);
     safeDeleteObject(SEARCH, SEARCH_ID);
     removeReportDefinitions();
@@ -88,9 +96,10 @@ class OpendistroKibanaClientTest {
   void shouldCreateReportDefinition() {
     createSearchDefinition(SEARCH_ID);
 
-    KibanaReportDefinitionDto reportDefinition = KibanaReportDefinitionDto.builder()
-        .reportDefinitionDetails(REPORT_DEFINITION)
-        .build();
+    KibanaReportDefinitionForModification reportDefinition =
+        KibanaReportDefinitionForModification.builder()
+            .reportDefinitionDetails(REPORT_DEFINITION)
+            .build();
 
     String reportDefinitionId =
         opendistroKibanaClient.createReportDefinition(ADMIN_TENANT, reportDefinition);

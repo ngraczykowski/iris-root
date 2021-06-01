@@ -11,7 +11,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.report.production.ProductionControllerTestConstants.AI_REASONING_TYPE;
 import static com.silenteight.warehouse.report.production.ProductionControllerTestConstants.GET_REPORT_DEF_BY_TYPE_AI_REASONING;
-import static com.silenteight.warehouse.report.production.ProductionControllerTestConstants.REPORTS_DEFINITION_DTOS;
+import static com.silenteight.warehouse.report.production.ProductionControllerTestConstants.REPORT_DEFINITION_DTO;
+import static java.util.List.of;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -31,11 +32,11 @@ class ProductionReportsControllerTest extends BaseRestControllerTest {
   void its200_whenInvokedGetKibanaReportDefinitionList() {
 
     when(productionReportingQuery.getReportsDefinitions(AI_REASONING_TYPE))
-        .thenReturn(REPORTS_DEFINITION_DTOS);
+        .thenReturn(of(REPORT_DEFINITION_DTO));
 
     get(GET_REPORT_DEF_BY_TYPE_AI_REASONING)
         .statusCode(OK.value())
-        .body("reportDefinitionDtoList[0].title", is("AI REASONING"));
+        .body("[0].title", is("AI REASONING"));
   }
 
   @Test
