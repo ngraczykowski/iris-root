@@ -4,3 +4,7 @@ plugins {
 }
 
 description = "SENS WebApp DB Changelog"
+
+dependencies {
+  implementation libraries.liquibase_sessionlock
+}
