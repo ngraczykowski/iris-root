@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.common.opendistro.tenant;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
-import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
+import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +15,13 @@ class TenantConfiguration {
 
   @Bean
   TenantService tenantService(
-      OpendistroKibanaClient opendistroKibanaClient,
+      OpendistroKibanaClientFactory opendistroKibanaClientFactory,
       OpendistroElasticClient opendistroElasticClient,
       @Valid TenantProperties tenantProperties) {
 
     return new TenantService(
-        opendistroKibanaClient, opendistroElasticClient, tenantProperties.getMaxObjectCount());
+        opendistroKibanaClientFactory.getAdminClient(),
+        opendistroElasticClient,
+        tenantProperties.getMaxObjectCount());
   }
 }

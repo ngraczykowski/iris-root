@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.report.reporting;
 
+import com.silenteight.warehouse.report.production.ReportType;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

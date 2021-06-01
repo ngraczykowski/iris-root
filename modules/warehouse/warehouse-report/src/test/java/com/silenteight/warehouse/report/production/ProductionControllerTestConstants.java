@@ -1,10 +1,6 @@
 package com.silenteight.warehouse.report.production;
 
-import com.silenteight.warehouse.report.reporting.ReportType;
-import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
-
-import static java.util.List.of;
 
 public class ProductionControllerTestConstants {
 
@@ -19,10 +15,5 @@ public class ProductionControllerTestConstants {
           .title("AI REASONING")
           .description("Last month")
           .reportType("AI_REASONING")
-          .build();
-
-  static final ReportsDefinitionListDto REPORTS_DEFINITION_DTOS =
-      ReportsDefinitionListDto.builder()
-          .reportDefinitionDtoList(of(REPORT_DEFINITION_DTO))
           .build();
 }

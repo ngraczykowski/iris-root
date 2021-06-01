@@ -2,11 +2,13 @@ package com.silenteight.warehouse.report;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
+import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
@@ -28,6 +30,8 @@ import static org.mockito.Mockito.*;
     ReportingModule.class,
     SimulationModule.class,
     TestElasticSearchModule.class,
+    TokenModule.class,
+    TimeModule.class
 })
 @ImportAutoConfiguration({
     ElasticsearchRestClientAutoConfiguration.class,

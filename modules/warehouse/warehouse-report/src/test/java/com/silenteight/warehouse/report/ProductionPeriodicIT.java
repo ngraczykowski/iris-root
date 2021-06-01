@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
+import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
@@ -78,10 +79,13 @@ class ProductionPeriodicIT {
   private ReportSynchronizationService reportSynchronizationService;
 
   @Autowired
+  private OpendistroKibanaClientFactory opendistroKibanaClientFactory;
+
   private OpendistroKibanaClient opendistroKibanaClient;
 
   @BeforeEach
   public void init() {
+    opendistroKibanaClient = opendistroKibanaClientFactory.getAdminClient();
     // given
     storeData();
     createKibanaIndex();

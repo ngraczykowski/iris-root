@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-final class AnalysisResource {
+public final class AnalysisResource {
 
   static final String ANALYSIS_PREFIX = "analysis/";
 

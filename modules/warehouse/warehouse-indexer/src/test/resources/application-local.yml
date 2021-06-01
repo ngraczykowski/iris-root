@@ -1,4 +1,15 @@
 spring:
+  rabbitmq:
+    #   If multiple brokers required:
+    #   host: <must be empty>
+    #   addresses: host1:port1,host2:port2,...
+
+    #   configuration for common-docker-infrastructure
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
   elasticsearch:
     rest:
       username: admin

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 @Data
 @Builder
@@ -25,7 +26,7 @@ public class ReportsDefinitionListDto {
     private String title;
     @NonNull
     private String description;
-    @NonNull
+    @Nullable
     private String reportType;
   }
 }

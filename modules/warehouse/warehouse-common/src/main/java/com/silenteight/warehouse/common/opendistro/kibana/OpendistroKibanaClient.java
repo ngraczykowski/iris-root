@@ -34,7 +34,6 @@ public class OpendistroKibanaClient {
 
   private static final String HEADER_SECURITY_TENANT = "securitytenant";
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
-  private static final String HEADER_ORIGIN = "Origin";
   private static final String URL_REPORT_DEFINITION_LIST =
       "/api/reporting/reportDefinitions";
   private static final String URL_REPORT_DEFINITION =
@@ -202,15 +201,30 @@ public class OpendistroKibanaClient {
         .collect(toList());
   }
 
+  public List<KibanaReportDefinitionForModification> listReportDefinitionsForModification(
+      String tenant) {
+    TypeReference<ReportDefinitionList> typeRef = new TypeReference<>() {};
+
+    GetHttpRequest request = new GetHttpRequest(URL_REPORT_DEFINITION_LIST, tenant);
+    return get(request, typeRef)
+        .getData()
+        .stream()
+        .map(ReportDefinition::forModification)
+        .collect(toList());
+  }
+
   @SneakyThrows
   public String createReportDefinition(
-      String tenant, KibanaReportDefinitionDto reportDefinitionDto) {
+      String tenant, KibanaReportDefinitionForModification reportDefinitionForModification) {
+
     TypeReference<ReportDefinitionCreated> typeRef = new TypeReference<>() {};
+    byte[] payload = objectMapper.writeValueAsBytes(
+        reportDefinitionForModification.getReportDefinitionDetails());
 
     PostHttpRequest request = PostHttpRequest.builder()
         .endpoint(URL_CREATE_REPORT_DEFINITION)
         .tenant(tenant)
-        .payload(objectMapper.writeValueAsBytes(reportDefinitionDto.getReportDefinitionDetails()))
+        .payload(payload)
         .build();
 
     return post(request, typeRef)
@@ -313,7 +327,8 @@ public class OpendistroKibanaClient {
         httpRequest.method(), httpRequest.uri(), response.statusCode(), loggedResponse);
 
     if (isError(response)) {
-      throw new OpendistroKibanaClientException(response.statusCode(), loggedResponse);
+      throw new OpendistroKibanaClientException(
+          response.statusCode(), loggedResponse, httpRequest.uri().toString());
     }
 
     return parsedResponse;

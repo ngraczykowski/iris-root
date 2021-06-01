@@ -18,14 +18,18 @@ dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-indexer")
+
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_sep_auth
   implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
   implementation libraries.minio
+  implementation libraries.jakarta_validation_api
+  implementation libraries.silenteight_sep_base_common
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-indexer'))
+  testImplementation testFixtures(project(':warehouse-common'))
   testImplementation libraries.awaitility
 }

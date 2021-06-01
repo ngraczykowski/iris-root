@@ -36,8 +36,7 @@ paths:
               example:
                 "sim_simulation_49"
 
-
-  /analysis/{analysisId}/reports:
+  /analysis/{analysisId}/definitions:
     get:
       description: Returns a list of reports for specific analysis
       parameters:
@@ -59,20 +58,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/Report'
               example:
-                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                - id: 'FlpJp3kBtnbt7Zpy1zHr'
+                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/FlpJp3kBtnbt7Zpy1zHr'
                   title: 'AI Reasoning'
                   description: 'Ai Reasoning report'
-                  reportType: 'AI_REASONING'
-                - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+                - id: 'lVrjnHkBtnbt7ZpytDA6'
+                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/lVrjnHkBtnbt7ZpytDA6'
                   title: 'Accuracy'
                   description: 'Accuracy report'
-                  reportType: 'ACCURACY'
 
-  /analysis/{analysisId}/reports/{id}:
-    get:
-      description: Returns simulation report. You will have this URL in the field `name` on the list of reports.
+  /analysis/{analysisId}/definitions/{id}/reports:
+    post:
+      description: Generate report instance.
       parameters:
         - in: path
           name: analysisId
@@ -82,21 +79,63 @@ paths:
           allowEmptyValue: false
           description: 'Analysis Id'
           example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-        - in: path
-          name: id
+        - name: id
+          in: path
+          description: Report definition Id.
           required: true
           schema:
             type: string
-          description: 'Report UUID'
-          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          style: simple
+          explode: false
+          example: FlpJp3kBtnbt7Zpy1zHr
       responses:
+        303:
+          description: Redirect to the report instance.
+          headers:
+            Location:
+              description: The report will be available over an URL address /analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/definitions/FlpJp3kBtnbt7Zpy1zHr/reports/1622009778938
+              schema:
+                type: string
+                example: reports/1622009778938
+
+  /analysis/{analysisId}/definitions/{id}/reports/{timestamp}:
+    get:
+      description: Returns simulation report
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          allowEmptyValue: false
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        - name: id
+          in: path
+          description: Report definition Id.
+          required: true
+          schema:
+            type: string
+          style: simple
+          explode: false
+          example: FlpJp3kBtnbt7Zpy1zHr
+        - in: path
+          name: timestamp
+          description: Report instance timestamp. This value allows downloading a report in a specific time range (e.g. 1h since generating).
+          required: true
+          schema:
+            type: string
+          example: 1622009778938
+      responses:
+        102:
+          description: Processing. The report is still generating. Try again later.
         200:
           description: Returns a report.
           content:
             text/csv:
               schema:
-                type: string
                 format: binary
+                type: string
 
   /analysis/production:synchronizePeriodic:
     post:
@@ -170,8 +209,6 @@ paths:
                 type: string
                 example: reports/20200414T220523
 
-
-
   /analysis/production/definitions/{id}/reports/{timestamp}:
     get:
       description: Returns production report
@@ -200,8 +237,6 @@ paths:
               schema:
                 format: binary
                 type: string
-        410:
-          description: Report for a specific timestamp is no longer available.
 
 components:
   schemas:

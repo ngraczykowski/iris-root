@@ -8,7 +8,7 @@ public class OpendistroTestConfiguration {
 
   @Bean
   OpendistroKibanaTestClient opendistroKibanaTestClient(
-      OpendistroKibanaClient opendistroKibanaClient) {
-    return new OpendistroKibanaTestClient(opendistroKibanaClient);
+      OpendistroKibanaClientFactory opendistroKibanaClientFactory) {
+    return new OpendistroKibanaTestClient(opendistroKibanaClientFactory.getAdminClient());
   }
 }
