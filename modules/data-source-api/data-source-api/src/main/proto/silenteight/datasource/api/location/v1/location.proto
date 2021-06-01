@@ -39,6 +39,6 @@ message LocationInput {
 
 message LocationFeatureInput {
   string feature = 1;
-  repeated string alerted_party_locations = 2;
-  repeated string watchlist_locations = 3;
+  string alerted_party_location = 2;
+  string watchlist_location = 3;
 }
