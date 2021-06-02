@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.importing;
+package com.silenteight.serp.governance.policy.transfer.importing;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration.StepConfigurationBuilder;
+import com.silenteight.serp.governance.policy.transfer.dto.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,94 +22,94 @@ import static java.util.stream.Collectors.toList;
 public class ImportPolicyUseCase {
 
   @NonNull
-  private final ImportedPolicyRootParser importedPolicyRootParser;
+  private final TransferredPolicyRootDtoParser transferredPolicyRootParser;
 
   @NonNull
   private final PolicyService policyService;
 
   public UUID apply(@NonNull ImportPolicyCommand command) {
-    ImportedPolicyRoot root = importedPolicyRootParser.parse(command.getInputStream());
+    TransferredPolicyRootDto root = transferredPolicyRootParser.parse(command.getInputStream());
     return policyService.doImport(createRequest(root.getPolicy(), command.getImportedBy()));
   }
 
   private static ConfigurePolicyRequest createRequest(
-      @NonNull ImportedPolicy importedPolicy, @NonNull String createdBy) {
+      @NonNull TransferredPolicyDto transferredPolicy, @NonNull String createdBy) {
 
     ConfigurePolicyRequestBuilder builder = ConfigurePolicyRequest
         .builder()
-        .policyName(importedPolicy.getName())
-        .description(importedPolicy.getDescription())
+        .policyName(transferredPolicy.getName())
+        .description(transferredPolicy.getDescription())
         .createdBy(createdBy)
-        .stepConfigurations(mapToStepConfigurations(importedPolicy.getSteps()));
+        .stepConfigurations(mapToStepConfigurations(transferredPolicy.getSteps()));
 
-    if (importedPolicy.getPolicyId() != null)
-      builder.policyId(importedPolicy.getPolicyId());
+    if (transferredPolicy.getPolicyId() != null)
+      builder.policyId(transferredPolicy.getPolicyId());
 
     return builder.build();
   }
 
   private static List<StepConfiguration> mapToStepConfigurations(
-      List<ImportedStep> importedSteps) {
+      List<TransferredStepDto> transferredSteps) {
 
-    return importedSteps
+    return transferredSteps
         .stream()
         .map(ImportPolicyUseCase::mapToStepConfiguration)
         .collect(toList());
   }
 
-  private static StepConfiguration mapToStepConfiguration(ImportedStep importedStep) {
+  private static StepConfiguration mapToStepConfiguration(TransferredStepDto transferredStep) {
     StepConfigurationBuilder builder = StepConfiguration
         .builder()
-        .solution(importedStep.getSolution())
-        .stepName(importedStep.getName())
-        .stepDescription(importedStep.getDescription())
-        .stepType(importedStep.getType())
+        .solution(transferredStep.getSolution())
+        .stepName(transferredStep.getName())
+        .stepDescription(transferredStep.getDescription())
+        .stepType(transferredStep.getType())
         .featureLogicConfigurations(
-            mapToFeatureLogicConfigurations(importedStep.getFeatureLogics()));
+            mapToFeatureLogicConfigurations(transferredStep.getFeatureLogics()));
 
-    if (importedStep.getStepId() != null)
-      builder.stepId(importedStep.getStepId());
+    if (transferredStep.getStepId() != null)
+      builder.stepId(transferredStep.getStepId());
 
     return builder.build();
   }
 
   private static Collection<FeatureLogicConfiguration> mapToFeatureLogicConfigurations(
-      List<ImportedFeatureLogic> importedFeatureLogics) {
+      List<TransferredFeatureLogicDto> transferredFeatureLogics) {
 
-    return importedFeatureLogics
+    return transferredFeatureLogics
         .stream()
         .map(ImportPolicyUseCase::mapToFeatureLogicConfiguration)
         .collect(toList());
   }
 
   private static FeatureLogicConfiguration mapToFeatureLogicConfiguration(
-      ImportedFeatureLogic importedFeatureLogic) {
+      TransferredFeatureLogicDto transferredFeatureLogics) {
 
     return FeatureLogicConfiguration
         .builder()
-        .toFulfill(importedFeatureLogic.getToFulfill())
+        .toFulfill(transferredFeatureLogics.getToFulfill())
         .featureConfigurations(
-            mapToFeatureConfigurations(importedFeatureLogic.getMatchConditions()))
+            mapToFeatureConfigurations(transferredFeatureLogics.getMatchConditions()))
         .build();
   }
 
   private static Collection<FeatureConfiguration> mapToFeatureConfigurations(
-      Collection<MatchCondition> matchConditions) {
+      Collection<TransferredMatchConditionDto> transferredMatchConditions) {
 
-    return matchConditions
+    return transferredMatchConditions
         .stream()
         .map(ImportPolicyUseCase::mapToFeatureConfiguration)
         .collect(toList());
   }
 
   private static FeatureConfiguration mapToFeatureConfiguration(
-      MatchCondition matchCondition) {
+      TransferredMatchConditionDto transferredMatchCondition) {
 
     return FeatureConfiguration
         .builder()
-        .name(matchCondition.getName())
-        .condition(matchCondition.getCondition())
-        .values(matchCondition.getValues())
+        .name(transferredMatchCondition.getName())
+        .condition(transferredMatchCondition.getCondition())
+        .values(transferredMatchCondition.getValues())
         .build();
   }
 }

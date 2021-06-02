@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.importing;
+package com.silenteight.serp.governance.policy.transfer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,7 @@ import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +26,9 @@ import java.util.UUID;
     "stepType",
     "featuresLogic"
 })
-class ImportedStep {
+public class TransferredStepDto implements Serializable {
+
+  private static final long serialVersionUID = -8724350671229883206L;
 
   @NonNull
   private FeatureVectorSolution solution;
@@ -46,5 +49,5 @@ class ImportedStep {
 
   @NonNull
   @JsonProperty("featuresLogic")
-  private List<ImportedFeatureLogic> featureLogics;
+  private List<TransferredFeatureLogicDto> featureLogics;
 }

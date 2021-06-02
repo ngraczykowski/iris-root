@@ -12,6 +12,10 @@ public final class PolicyResource extends AbstractResourceExtractor {
 
   private static final String RESOURCE_NAME_PREFIX = "policies/";
 
+  public static String toResourceName(UUID id) {
+    return RESOURCE_NAME_PREFIX + id.toString();
+  }
+
   public static UUID fromResourceName(String resourceName) {
     return fromResourceName(resourceName, RESOURCE_NAME_PREFIX);
   }

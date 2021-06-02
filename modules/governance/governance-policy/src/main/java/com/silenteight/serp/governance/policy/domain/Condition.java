@@ -6,6 +6,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
 public enum Condition {
+
   IS("is"),
   IS_NOT("is_not");
 

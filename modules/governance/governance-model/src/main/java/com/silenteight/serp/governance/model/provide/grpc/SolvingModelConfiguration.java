@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.model.provide.grpc;
 
 import com.silenteight.serp.governance.model.category.CategoryRegistry;
+import com.silenteight.serp.governance.model.transfer.importing.ImportModelUseCase;
 import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
@@ -16,9 +17,11 @@ class SolvingModelConfiguration {
   SolvingModelGrpcService modelGrpcService(
       DefaultModelQuery defaultModelQuery,
       SolvingModelDetailsQuery modelDetailsQuery,
-      SolvingModelProvider solvingModelProvider) {
+      SolvingModelProvider solvingModelProvider,
+      ImportModelUseCase importModelUseCase) {
 
-    return new SolvingModelGrpcService(defaultModelQuery, modelDetailsQuery, solvingModelProvider);
+    return new SolvingModelGrpcService(
+        defaultModelQuery, modelDetailsQuery, solvingModelProvider, importModelUseCase);
   }
 
   @Bean
