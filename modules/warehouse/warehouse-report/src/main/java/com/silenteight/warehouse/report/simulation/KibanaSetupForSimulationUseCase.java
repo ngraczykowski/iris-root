@@ -7,12 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.common.opendistro.tenant.TenantCloningSpecification;
 import com.silenteight.warehouse.common.opendistro.tenant.TenantService;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
-import com.silenteight.warehouse.indexer.analysis.NewAnalysisEvent;
-import com.silenteight.warehouse.indexer.analysis.NewAnalysisHandler;
+import com.silenteight.warehouse.indexer.analysis.NewSimulationAnalysisEvent;
+import com.silenteight.warehouse.indexer.analysis.NewSimulationAnalysisHandler;
 
 @Slf4j
 @RequiredArgsConstructor
-public class KibanaSetupForSimulationUseCase implements NewAnalysisHandler {
+public class KibanaSetupForSimulationUseCase implements NewSimulationAnalysisHandler {
 
   @NonNull
   private final TenantService tenantService;
@@ -20,10 +20,8 @@ public class KibanaSetupForSimulationUseCase implements NewAnalysisHandler {
   private final String sourceTenant;
 
   @Override
-  public void handle(NewAnalysisEvent event) {
-    if (event.isSimulation()) {
-      activate(event.getAnalysis(), event.getAnalysisMetadataDto());
-    }
+  public void handle(NewSimulationAnalysisEvent event) {
+    activate(event.getAnalysis(), event.getAnalysisMetadataDto());
   }
 
   void activate(String analysis, AnalysisMetadataDto analysisMetadata) {

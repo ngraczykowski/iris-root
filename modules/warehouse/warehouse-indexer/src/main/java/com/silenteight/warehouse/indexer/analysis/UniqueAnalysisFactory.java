@@ -13,20 +13,23 @@ import java.util.Optional;
 public class UniqueAnalysisFactory {
 
   @NonNull
-  private final AnalysisService analysisService;
+  private final SimulationAnalysisService simulationAnalysisService;
 
-  public AnalysisMetadataDto getUniqueAnalysis(String analysis, NamingStrategy namingStrategy) {
-    Optional<AnalysisMetadataDto> analysisMetadata = analysisService.getAnalysisMetadata(analysis);
+  public AnalysisMetadataDto getUniqueAnalysis(
+      String analysis, SimulationNamingStrategy simulationNamingStrategy) {
+
+    Optional<AnalysisMetadataDto> analysisMetadata =
+        simulationAnalysisService.getAnalysisMetadata(analysis);
     if (analysisMetadata.isPresent())
       return analysisMetadata.get();
 
     try {
-      return analysisService.createAnalysisMetadata(analysis, namingStrategy);
+      return simulationAnalysisService.createAnalysisMetadata(analysis, simulationNamingStrategy);
     } catch (DataIntegrityViolationException e) {
       log.debug("Attempt to create analysis metadata failed. Reattempting to fetch from db.", e);
     }
 
-    return analysisService.getAnalysisMetadata(analysis)
+    return simulationAnalysisService.getAnalysisMetadata(analysis)
         .orElseThrow(() -> new IllegalStateException(
             "Attempt to fetch analysis metadata failed: analysis=" + analysis));
   }

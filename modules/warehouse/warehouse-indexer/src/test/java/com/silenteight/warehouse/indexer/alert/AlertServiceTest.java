@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.DATA_INDEX_REQUEST_WITHOUT_MATCHES;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.DATA_INDEX_REQUEST_WITH_ALERTS;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.INDEX_NAME;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.elasticsearch.client.RequestOptions.DEFAULT;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,7 +36,7 @@ class AlertServiceTest {
   void shouldThrowExceptionWhenAlertHasZeroMatches() {
     assertThrows(
         ZeroMatchesException.class,
-        () -> underTest.indexAlert(DATA_INDEX_REQUEST_WITHOUT_MATCHES, INDEX_NAME));
+        () -> underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), INDEX_NAME));
   }
 
   @SneakyThrows
@@ -45,7 +46,7 @@ class AlertServiceTest {
     ArgumentCaptor<BulkRequest> argumentCaptor = forClass(BulkRequest.class);
     doNothing().when(restHighLevelClient).bulk(argumentCaptor.capture(), eq(DEFAULT));
 
-    underTest.indexAlert(DATA_INDEX_REQUEST_WITH_ALERTS, INDEX_NAME);
+    underTest.indexAlerts(ALERTS_WITH_MATCHES, INDEX_NAME);
 
     int operationsCount = argumentCaptor.getValue().numberOfActions();
     assertThat(operationsCount).isEqualTo(4);

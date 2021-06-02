@@ -33,7 +33,7 @@ class UniqueAnalysisFactoryTest extends BaseDataJpaTest {
   TestAnalysisMetadataRepository testAnalysisMetadataRepository;
 
   @Autowired
-  TestNewAnalysisHandler testNewAnalysisHandler;
+  TestNewSimulationAnalysisHandler testNewAnalysisHandler;
 
   @AfterEach()
   public void cleanup() {

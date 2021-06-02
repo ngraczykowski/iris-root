@@ -9,8 +9,8 @@ import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestCl
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
-import com.silenteight.warehouse.indexer.analysis.NewAnalysisEvent;
+import com.silenteight.warehouse.indexer.analysis.NewSimulationAnalysisEvent;
+import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.simulation.KibanaSetupForSimulationUseCase;
 import com.silenteight.warehouse.report.simulation.SimulationReportsController;
@@ -56,11 +56,11 @@ class SimulationIT {
       .tenant(SIMULATION_TENANT)
       .elasticIndexName(ELASTIC_INDEX_NAME)
       .build();
-  private static final NewAnalysisEvent ITEST_ANALYSIS_EVENT = NewAnalysisEvent.builder()
-      .analysis("analysis/" + SIMULATION_ANALYSIS_ID)
-      .simulation(true)
-      .analysisMetadataDto(ITEST_ANALYSIS)
-      .build();
+  private static final NewSimulationAnalysisEvent ITEST_ANALYSIS_EVENT =
+      NewSimulationAnalysisEvent.builder()
+          .analysis(SIMULATION_ANALYSIS)
+          .analysisMetadataDto(ITEST_ANALYSIS)
+          .build();
 
   @Autowired
   private ReportingService reportingService;
@@ -83,7 +83,7 @@ class SimulationIT {
   private SimulationReportsController simulationReportsController;
 
   @Autowired
-  private AnalysisService analysisService;
+  private SimulationAnalysisService simulationAnalysisService;
 
   @BeforeEach
   public void init() {
@@ -106,7 +106,7 @@ class SimulationIT {
   @Test
   @WithMockUser(username = "admin", password = "admin")
   void shouldCreateReportForSimulation() {
-    when(analysisService.getTenantIdByAnalysis("analysis/" + SIMULATION_ANALYSIS_ID))
+    when(simulationAnalysisService.getTenantIdByAnalysis(SIMULATION_ANALYSIS))
         .thenReturn(SIMULATION_TENANT);
 
     // Trigger creating tenant for simulation

@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.simulation;
 
+import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ADMIN_TENANT;
+import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS;
 import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,17 +21,20 @@ class SimulationReportingQueryTest {
   @Mock
   private ReportingService reportingService;
 
+  @Mock
+  private SimulationAnalysisService simulationAnalysisService;
+
   @InjectMocks
   private SimulationReportingQuery underTest;
 
   @Test
   void shouldReturnTenantWrapperDto() {
     //given
-    when(reportingService.getTenantIdByAnalysisId(ANALYSIS_ID))
-        .thenReturn(ADMIN_TENANT);
+    when(simulationAnalysisService.getTenantIdByAnalysis(ANALYSIS)).thenReturn(ADMIN_TENANT);
+
     //when
-    TenantDto tenantNameWrapperByAnalysis =
-        underTest.getTenantDtoByAnalysisId(ANALYSIS_ID);
+    TenantDto tenantNameWrapperByAnalysis = underTest.getTenantDtoByAnalysisId(ANALYSIS_ID);
+
     //then
     assertThat(tenantNameWrapperByAnalysis.getTenantName()).isEqualTo(ADMIN_TENANT);
   }

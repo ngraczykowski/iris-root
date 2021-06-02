@@ -7,7 +7,6 @@ import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +39,6 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
-  @Qualifier("simulation")
   GatewayProxyFactoryBean simulationIndexClientGateway() {
     GatewayProxyFactoryBean factoryBean =
         new GatewayProxyFactoryBean(IndexClientGateway.class);

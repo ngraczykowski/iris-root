@@ -13,7 +13,7 @@ import static java.lang.String.format;
 import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @RequiredArgsConstructor
-public class AnalysisService {
+public class SimulationAnalysisService {
 
   @NonNull
   private final AnalysisMetadataRepository analysisMetadataRepository;
@@ -27,7 +27,7 @@ public class AnalysisService {
 
   @Transactional(propagation = REQUIRES_NEW)
   public AnalysisMetadataDto createAnalysisMetadata(
-      String analysis, NamingStrategy namingStrategy) {
+      String analysis, SimulationNamingStrategy namingStrategy) {
 
     return storeMetadata(analysis, namingStrategy).toDto();
   }
@@ -43,11 +43,13 @@ public class AnalysisService {
     return analysisMetadataRepository.getByAnalysis(analysis);
   }
 
-  private AnalysisMetadataEntity storeMetadata(String analysisName, NamingStrategy namingStrategy) {
+  private AnalysisMetadataEntity storeMetadata(
+      String analysisName, SimulationNamingStrategy simulationNamingStrategy) {
+
     String analysisId = getId(analysisName);
 
-    String elasticIndexName = namingStrategy.getElasticIndexName(analysisId);
-    String tenantName = namingStrategy.getTenantName(analysisId);
+    String elasticIndexName = simulationNamingStrategy.getElasticIndexName(analysisId);
+    String tenantName = simulationNamingStrategy.getTenantName(analysisId);
 
     AnalysisMetadataEntity analysisMetadataEntity = AnalysisMetadataEntity.builder()
         .analysisId(analysisId)
@@ -56,12 +58,11 @@ public class AnalysisService {
         .elasticIndexPattern(elasticIndexName)
         .build();
 
-    NewAnalysisEvent newAnalysisEvent = NewAnalysisEvent.builder()
+    NewSimulationAnalysisEvent newSimulationAnalysisEvent = NewSimulationAnalysisEvent.builder()
         .analysis(analysisName)
-        .simulation(namingStrategy instanceof SimulationNamingStrategy)
         .analysisMetadataDto(analysisMetadataEntity.toDto())
         .build();
-    eventPublisher.publishEvent(newAnalysisEvent);
+    eventPublisher.publishEvent(newSimulationAnalysisEvent);
 
     return analysisMetadataRepository.save(analysisMetadataEntity);
   }

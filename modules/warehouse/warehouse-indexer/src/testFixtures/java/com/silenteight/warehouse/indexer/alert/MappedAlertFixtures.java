@@ -12,7 +12,6 @@ public class MappedAlertFixtures {
   public static final String MATCH_ID_2_2 = "f9fb9828-edb7-441d-b6f9-4d8a10cfc022";
   public static final String ALERT_ID_1 = "457b1498-e348-4a81-8093-6079c1173010";
   public static final String ALERT_ID_2 = "80a8cfc0-86c3-4360-afed-7a1b9a326020";
-  public static final String ANALYSIS_ID = "bc685176-2c39-4934-b450-88795bc82aaa";
   public static final String DOCUMENT_ID = ALERT_ID_1 + ":" + MATCH_ID_1_1;
   public static final String MATCH_PAYLOAD_SOLUTION_KEY = "solution";
   public static final String MATCH_PAYLOAD_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
@@ -26,7 +25,6 @@ public class MappedAlertFixtures {
   private static final String ALERT_RESOURCE_PREFIX = "alerts/";
   public static final String ANALYSIS_RESOURCE_PREFIX = "analysis/";
 
-  static final String REQUEST_ID = "TEST_123";
   static final String NO_DATA = "NO_DATA";
   static final String MATCH_NAME_1_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_1;
   static final String MATCH_NAME_1_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_2;
@@ -34,7 +32,6 @@ public class MappedAlertFixtures {
   static final String MATCH_NAME_2_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_2;
   static final String ALERT_NAME_1 = ALERT_RESOURCE_PREFIX + ALERT_ID_1;
   static final String ALERT_NAME_2 = ALERT_RESOURCE_PREFIX + ALERT_ID_2;
-  static final String ANALYSIS = ANALYSIS_RESOURCE_PREFIX + ANALYSIS_ID;
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_1_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,

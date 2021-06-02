@@ -14,15 +14,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 class AnalysisConfiguration {
 
   @Bean
-  AnalysisService analysisService(
+  SimulationAnalysisService simulationAnalysisService(
       AnalysisMetadataRepository analysisMetadataRepository,
       ApplicationEventPublisher eventPublisher) {
 
-    return new AnalysisService(analysisMetadataRepository, eventPublisher);
+    return new SimulationAnalysisService(analysisMetadataRepository, eventPublisher);
   }
 
   @Bean
-  UniqueAnalysisFactory uniqueAnalysisFactory(AnalysisService analysisService) {
-    return new UniqueAnalysisFactory(analysisService);
+  UniqueAnalysisFactory uniqueAnalysisFactory(SimulationAnalysisService simulationAnalysisService) {
+    return new UniqueAnalysisFactory(simulationAnalysisService);
   }
 }

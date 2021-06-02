@@ -6,7 +6,6 @@ import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
-import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -13,10 +13,13 @@ public class SimulationService {
   private final ReportingService reportingService;
 
   @NonNull
+  private final SimulationReportingQuery simulationReportingQuery;
+
+  @NonNull
   private final TimeSource timeSource;
 
   public ReportInstance createSimulationReport(String analysisId, String definitionId) {
-    String tenantName = reportingService.getTenantIdByAnalysisId(analysisId);
+    String tenantName = simulationReportingQuery.getTenantIdByAnalysisId(analysisId);
 
     long timestamp = timeSource.now().toEpochMilli();
     reportingService.createReport(definitionId, tenantName);

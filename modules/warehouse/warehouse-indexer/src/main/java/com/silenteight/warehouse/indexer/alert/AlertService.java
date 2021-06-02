@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.DataIndexRequest;
 import com.silenteight.data.api.v1.Match;
 
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -28,12 +27,10 @@ public class AlertService {
   @NonNull
   private final AlertMapper alertMapper;
 
-  public void indexAlert(DataIndexRequest dataIndexRequest, String indexName) {
+  public void indexAlerts(List<Alert> alerts, String indexName) {
     BulkRequest bulkRequest = new BulkRequest();
 
-    dataIndexRequest
-        .getAlertsList()
-        .stream()
+    alerts.stream()
         .flatMap(alert -> convertAlertToDocument(indexName, alert))
         .forEach(bulkRequest::add);
 

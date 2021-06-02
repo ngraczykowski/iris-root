@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.SIMULATION_TENANT;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.createNewProductionEvent;
 import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.createNewSimulationEvent;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -43,12 +42,5 @@ class KibanaSetupForSimulationUseCaseTest {
     verify(tenantService, times(1)).cloneTenant(specificationCaptor.capture());
     assertThat(specificationCaptor.getValue().getSourceTenant()).isEqualTo(SOURCE_TENANT);
     assertThat(specificationCaptor.getValue().getTargetTenant()).isEqualTo(SIMULATION_TENANT);
-  }
-
-  @Test
-  void shouldNotTriggerAnyActionForProductionAnalysis() {
-    underTest.handle(createNewProductionEvent(ANALYSIS));
-
-    verifyNoInteractions(tenantService);
   }
 }

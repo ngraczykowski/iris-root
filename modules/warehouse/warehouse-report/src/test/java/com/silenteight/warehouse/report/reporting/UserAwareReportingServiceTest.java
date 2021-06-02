@@ -7,7 +7,8 @@ import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesR
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
+import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
+import com.silenteight.warehouse.report.simulation.UserAwareReportingService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.KIBANA_REPORT_DTO;
 import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.REPORT_DEFINITION_ID;
+import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS;
 import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -39,7 +41,7 @@ class UserAwareReportingServiceTest {
   private static final String TENANT = "tenant";
 
   @Mock
-  private AnalysisService analysisService;
+  private SimulationAnalysisService simulationAnalysisService;
   @Mock
   private OpendistroElasticClient opendistroElasticClient;
   @Mock
@@ -49,7 +51,7 @@ class UserAwareReportingServiceTest {
 
   @BeforeEach
   void init() {
-    when(analysisService.getTenantIdByAnalysis("analysis/" + ANALYSIS_ID))
+    when(simulationAnalysisService.getTenantIdByAnalysis(ANALYSIS))
         .thenReturn(TENANT);
   }
 
