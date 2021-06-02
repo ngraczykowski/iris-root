@@ -12,6 +12,7 @@ public class ElasticSearchTestConstants {
   // Elasticsearch index that is referenced via pattern by kibana index
   // created via '1-create-kibana-index.json'
   public static final String SIMULATION_ANALYSIS_ID = "9630b08f-682c-4565-bf4d-c07064c65615";
+  public static final String SIMULATION_ANALYSIS = "analysis/" + SIMULATION_ANALYSIS_ID;
   public static final String INDEX_NAME_PATTERN = "itest_simulation_*";
   public static final String ELASTIC_INDEX_NAME = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
 

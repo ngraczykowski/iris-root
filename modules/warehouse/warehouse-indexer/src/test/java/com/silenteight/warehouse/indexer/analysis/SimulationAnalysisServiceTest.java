@@ -31,13 +31,13 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
   effectively disables @Transactional applied to BaseDataJpaTest via @DataJpaTest.
   Leveraging @Transaction has its pitfalls - it does not handle Propagation.REQUIRES_NEW
 */
-class AnalysisServiceTest extends BaseDataJpaTest {
+class SimulationAnalysisServiceTest extends BaseDataJpaTest {
 
   @Autowired
   EntityManager testEntityManager;
 
   @Autowired
-  AnalysisService underTest;
+  SimulationAnalysisService underTest;
 
   @Autowired
   TestAnalysisMetadataRepository testAnalysisMetadataRepository;
@@ -46,7 +46,7 @@ class AnalysisServiceTest extends BaseDataJpaTest {
   AnalysisMetadataRepository analysisMetadataRepository;
 
   @Autowired
-  TestNewAnalysisHandler testNewAnalysisHandler;
+  TestNewSimulationAnalysisHandler testNewAnalysisHandler;
 
   @AfterEach
   public void cleanup() {
@@ -68,26 +68,12 @@ class AnalysisServiceTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldStoreProductionAnalysis() {
-    underTest.createAnalysisMetadata(ANALYSIS, PRODUCTION_NAMING_STRATEGY);
-
-    List<AnalysisMetadataEntity> allEntries = testAnalysisMetadataRepository.findAll();
-    assertThat(allEntries).hasSize(1);
-    AnalysisMetadataEntity analysisMetadataEntity = allEntries.get(0);
-    assertThat(analysisMetadataEntity.getAnalysisId()).isEqualTo(ANALYSIS_ID);
-    assertThat(analysisMetadataEntity.getTenant()).isEqualTo(PRODUCTION_TENANT);
-    assertThat(analysisMetadataEntity.getElasticIndexPattern()).isEqualTo(
-        PRODUCTION_ELASTIC_SEARCH_INDEX);
-  }
-
-  @Test
   void shouldEmitNewEventOnStore() {
     underTest.createAnalysisMetadata(ANALYSIS, SIMULATION_NAMING_STRATEGY);
 
-    NewAnalysisEvent event = testNewAnalysisHandler.getLastEvent();
+    NewSimulationAnalysisEvent event = testNewAnalysisHandler.getLastEvent();
     assertThat(event.getDate()).isNotNull();
     assertThat(event.getAnalysis()).isEqualTo(ANALYSIS);
-    assertThat(event.isSimulation()).isTrue();
   }
 
   @Test

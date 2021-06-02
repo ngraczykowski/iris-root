@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reporting;
+package com.silenteight.warehouse.report.simulation;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,8 @@ import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesR
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
+import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
+import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
 
 import static com.silenteight.warehouse.report.reporting.AnalysisResource.toResourceName;
 import static java.util.Comparator.comparingLong;
@@ -19,7 +20,7 @@ import static java.util.Comparator.comparingLong;
 public class UserAwareReportingService {
 
   @NonNull
-  private final AnalysisService analysisService;
+  private final SimulationAnalysisService simulationAnalysisService;
   @NonNull
   private final OpendistroElasticClient opendistroElasticClient;
   @NonNull
@@ -28,7 +29,7 @@ public class UserAwareReportingService {
   public KibanaReportDto downloadReport(
       String reportDefinitionId, String analysisId, Long timestamp) {
 
-    String tenantName = analysisService.getTenantIdByAnalysis(toResourceName(analysisId));
+    String tenantName = simulationAnalysisService.getTenantIdByAnalysis(toResourceName(analysisId));
 
     ListReportsInstancesRequest request = ListReportsInstancesRequest.builder()
         .tenant(tenantName)

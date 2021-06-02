@@ -1,7 +1,6 @@
 package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.DataIndexRequest;
 import com.silenteight.data.api.v1.Match;
 
 import com.google.protobuf.Struct;
@@ -46,20 +45,6 @@ public class DataIndexFixtures {
           ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_MI))
       .addAllMatches(emptyList())
       .build();
-
-  public static final DataIndexRequest DATA_INDEX_REQUEST_WITH_ALERTS =
-      DataIndexRequest.newBuilder()
-          .setRequestId(REQUEST_ID)
-          .setAnalysisName(ANALYSIS)
-          .addAllAlerts(ALERTS_WITH_MATCHES)
-          .build();
-
-  public static final DataIndexRequest DATA_INDEX_REQUEST_WITHOUT_MATCHES =
-      DataIndexRequest.newBuilder()
-          .setRequestId(REQUEST_ID)
-          .setAnalysisName(ANALYSIS)
-          .addAlerts(0, ALERT_WITHOUT_MATCHES)
-          .build();
 
   static Builder structWithValue(String key, String value) {
     return Struct.newBuilder()

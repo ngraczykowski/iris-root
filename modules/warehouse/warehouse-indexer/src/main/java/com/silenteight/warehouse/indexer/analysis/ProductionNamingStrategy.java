@@ -3,17 +3,15 @@ package com.silenteight.warehouse.indexer.analysis;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ProductionNamingStrategy implements NamingStrategy {
+public class ProductionNamingStrategy {
 
   private final String environmentPrefix;
 
-  @Override
-  public String getTenantName(String analysisId) {
+  public String getTenantName() {
     return environmentPrefix + "_production";
   }
 
-  @Override
-  public String getElasticIndexName(String analysisId) {
+  public String getElasticIndexName() {
     return environmentPrefix + "_production";
   }
 }

@@ -4,9 +4,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-public interface NewAnalysisHandler {
+public interface NewSimulationAnalysisHandler {
 
-  @EventListener(NewAnalysisEvent.class)
+  @EventListener(NewSimulationAnalysisEvent.class)
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  void handle(NewAnalysisEvent event);
+  void handle(NewSimulationAnalysisEvent event);
 }

@@ -2,12 +2,13 @@ package com.silenteight.warehouse.indexer.analysis;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-class TestNewAnalysisHandler implements NewAnalysisHandler {
+class TestNewSimulationAnalysisHandler implements NewSimulationAnalysisHandler {
 
-  private final CopyOnWriteArrayList<NewAnalysisEvent> events = new CopyOnWriteArrayList<>();
+  private final CopyOnWriteArrayList<NewSimulationAnalysisEvent> events =
+      new CopyOnWriteArrayList<>();
 
   @Override
-  public void handle(NewAnalysisEvent event) {
+  public void handle(NewSimulationAnalysisEvent event) {
     events.add(event);
   }
 
@@ -15,7 +16,7 @@ class TestNewAnalysisHandler implements NewAnalysisHandler {
     events.clear();
   }
 
-  public NewAnalysisEvent getLastEvent() {
+  public NewSimulationAnalysisEvent getLastEvent() {
     return events.get(events.size() - 1);
   }
 

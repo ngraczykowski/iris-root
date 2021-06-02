@@ -1,7 +1,8 @@
 package com.silenteight.warehouse.indexer;
 
-import com.silenteight.data.api.v1.DataIndexRequest;
 import com.silenteight.data.api.v1.DataIndexResponse;
+import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
@@ -39,7 +40,6 @@ import static org.awaitility.Awaitility.await;
 @ActiveProfiles("jpa-test")
 class IndexerIT {
 
-  private static final String PRODUCTION_ANALYSIS_ID = "ef649029-70e5-49b3-918c-8f5f621cd7bc";
   private static final String SIMULATION_ANALYSIS_ID = "9630b08f-682c-4565-bf4d-c07064c65615";
 
   @BeforeEach
@@ -69,8 +69,7 @@ class IndexerIT {
 
   @Test
   void shouldReturnConfirmationWhenProductionDataIndexRequested() {
-    DataIndexRequest request = DataIndexRequest.newBuilder()
-        .setAnalysisName(ANALYSIS_RESOURCE_PREFIX + PRODUCTION_ANALYSIS_ID)
+    ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
         .addAllAlerts(ALERTS_WITH_MATCHES)
         .build();
 
@@ -91,7 +90,7 @@ class IndexerIT {
 
   @Test
   void shouldReturnConfirmationWhenSimulationDataIndexRequested() {
-    DataIndexRequest request = DataIndexRequest.newBuilder()
+    SimulationDataIndexRequest request = SimulationDataIndexRequest.newBuilder()
         .setAnalysisName(ANALYSIS_RESOURCE_PREFIX + SIMULATION_ANALYSIS_ID)
         .addAllAlerts(ALERTS_WITH_MATCHES)
         .build();

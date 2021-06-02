@@ -11,7 +11,7 @@ import javax.annotation.concurrent.ThreadSafe;
 @Value
 @Builder
 @ThreadSafe
-public class NewAnalysisEvent {
+public class NewSimulationAnalysisEvent {
 
   private static final long serialVersionUID = -5302121986943664724L;
 
@@ -20,7 +20,6 @@ public class NewAnalysisEvent {
   OffsetDateTime date = OffsetDateTime.now();
   @NonNull
   String analysis;
-  boolean simulation;
   @NonNull
   AnalysisMetadataDto analysisMetadataDto;
 }

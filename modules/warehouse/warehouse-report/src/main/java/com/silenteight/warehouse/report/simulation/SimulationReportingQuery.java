@@ -4,12 +4,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDefinitionDto;
+import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.warehouse.report.reporting.AnalysisResource.toResourceName;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsController.ANALYSIS_ID_PARAM;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsController.DEFINITIONS_RESOURCE_URL;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsController.DEFINITION_ID_PARAM;
@@ -22,8 +24,11 @@ public class SimulationReportingQuery {
   @NonNull
   private final ReportingService reportingService;
 
+  @NonNull
+  private final SimulationAnalysisService simulationAnalysisService;
+
   List<ReportDefinitionDto> getReportsDefinitions(String analysisId) {
-    String tenantName = reportingService.getTenantIdByAnalysisId(analysisId);
+    String tenantName = getTenantIdByAnalysisId(analysisId);
 
     return reportingService.listReportDefinitions(tenantName)
         .stream()
@@ -31,8 +36,12 @@ public class SimulationReportingQuery {
         .collect(toList());
   }
 
+  public String getTenantIdByAnalysisId(String analysisId) {
+    return simulationAnalysisService.getTenantIdByAnalysis(toResourceName(analysisId));
+  }
+
   public TenantDto getTenantDtoByAnalysisId(String analysisId) {
-    String tenantIdByAnalysisId = reportingService.getTenantIdByAnalysisId(analysisId);
+    String tenantIdByAnalysisId = getTenantIdByAnalysisId(analysisId);
     return TenantDto.builder()
         .tenantName(tenantIdByAnalysisId)
         .build();

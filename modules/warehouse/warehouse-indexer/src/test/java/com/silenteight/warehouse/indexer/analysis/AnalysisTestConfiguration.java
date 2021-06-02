@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 public class AnalysisTestConfiguration {
 
   @Bean
-  TestNewAnalysisHandler testNewAnalysisHandler() {
-    return new TestNewAnalysisHandler();
+  TestNewSimulationAnalysisHandler testNewAnalysisHandler() {
+    return new TestNewSimulationAnalysisHandler();
   }
 }

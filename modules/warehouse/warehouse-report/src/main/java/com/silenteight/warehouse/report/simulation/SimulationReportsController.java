@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
-import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

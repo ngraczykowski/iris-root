@@ -9,7 +9,7 @@ import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.common.time.TimeModule;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
+import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
 
@@ -44,7 +44,7 @@ public class SimulationTestConfiguration {
 
   @Bean
   @Primary
-  AnalysisService analysisService() {
-    return mock(AnalysisService.class);
+  SimulationAnalysisService analysisService() {
+    return mock(SimulationAnalysisService.class);
   }
 }

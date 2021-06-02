@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.reporting;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesRequest;
@@ -8,19 +9,18 @@ import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClie
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDefinitionDto;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.indexer.analysis.AnalysisService;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.silenteight.warehouse.report.reporting.AnalysisResource.toResourceName;
 import static java.util.stream.Collectors.toSet;
 
 @RequiredArgsConstructor
 public class ReportingService {
 
-  private final AnalysisService analysisService;
+  @NonNull
   private final OpendistroElasticClient opendistroElasticClient;
+  @NonNull
   private final OpendistroKibanaClient opendistroKibanaClient;
 
   public Set<String> getReportIds(String tenant) {
@@ -41,10 +41,6 @@ public class ReportingService {
 
   public KibanaReportDto getReport(String tenant, String reportInstanceId) {
     return opendistroKibanaClient.getReportContent(tenant, reportInstanceId);
-  }
-
-  public String getTenantIdByAnalysisId(String analysisId) {
-    return analysisService.getTenantIdByAnalysis(toResourceName(analysisId));
   }
 
   public void createReport(String reportDefinitionId, String tenant) {
