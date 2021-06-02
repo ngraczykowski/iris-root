@@ -766,6 +766,17 @@
     }
   }
 };
+            defs["Alerts"] = {
+  "type" : "object",
+  "properties" : {
+    "alerts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/Alert"
+      }
+    }
+  }
+};
             defs["BatchAcceptedResponse"] = {
   "type" : "object",
   "properties" : {
@@ -2934,7 +2945,7 @@
                           <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdAckPut-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/ack"</code></pre>
+"//async/batch/v1/{batchId}/ack"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdAckPut-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3230,7 +3241,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/cancel"</code></pre>
+"//async/batch/v1/{batchId}/cancel"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdCancelGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3527,7 +3538,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/learning"</code></pre>
+"//async/batch/v1/{batchId}/learning"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3877,7 +3888,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/recommend"</code></pre>
+"//async/batch/v1/{batchId}/recommend"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3893,7 +3904,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+        Alerts body = ; // Alerts | BatchId and list of alerts to recommend.
         String batchId = batchId_example; // String | The id batch job.
         try {
             BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdRecommendPost(body, batchId);
@@ -3913,7 +3924,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+        Alerts body = ; // Alerts | BatchId and list of alerts to recommend.
         String batchId = batchId_example; // String | The id batch job.
         try {
             BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdRecommendPost(body, batchId);
@@ -3930,7 +3941,7 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdRecommendPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">BatchIdWithAlerts *body = ; // BatchId and list of alerts to recommend.
+                              <pre class="prettyprint"><code class="language-cpp">Alerts *body = ; // BatchId and list of alerts to recommend.
 String *batchId = batchId_example; // The id batch job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -3953,7 +3964,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
 var api = new HscbBridgeBatchApi.DefaultApi()
-var body = ; // {{BatchIdWithAlerts}} BatchId and list of alerts to recommend.
+var body = ; // {{Alerts}} BatchId and list of alerts to recommend.
 var batchId = batchId_example; // {{String}} The id batch job.
 
 var callback = function(error, data, response) {
@@ -3985,7 +3996,7 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var body = new BatchIdWithAlerts(); // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+            var body = new Alerts(); // Alerts | BatchId and list of alerts to recommend.
             var batchId = batchId_example;  // String | The id batch job.
 
             try
@@ -4009,7 +4020,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // BatchIdWithAlerts | BatchId and list of alerts to recommend.
+$body = ; // Alerts | BatchId and list of alerts to recommend.
 $batchId = batchId_example; // String | The id batch job.
 
 try {
@@ -4027,7 +4038,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::BatchIdWithAlerts->new(); # BatchIdWithAlerts | BatchId and list of alerts to recommend.
+my $body = WWW::SwaggerClient::Object::Alerts->new(); # Alerts | BatchId and list of alerts to recommend.
 my $batchId = batchId_example; # String | The id batch job.
 
 eval { 
@@ -4048,7 +4059,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # BatchIdWithAlerts | BatchId and list of alerts to recommend.
+body =  # Alerts | BatchId and list of alerts to recommend.
 batchId = batchId_example # String | The id batch job.
 
 try: 
@@ -4110,7 +4121,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BatchIdWithAlerts"
+        "$ref" : "#/components/schemas/Alerts"
       }
     }
   },
@@ -4226,7 +4237,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdResultGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/octet-stream"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/result"</code></pre>
+"//async/batch/v1/{batchId}/result"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdResultGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4522,7 +4533,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/{batchId}/status"</code></pre>
+"//async/batch/v1/{batchId}/status"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4819,7 +4830,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/ingestRecommendations"</code></pre>
+"//async/batch/v1/ingestRecommendations"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1IngestRecommendationsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5081,7 +5092,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/async/batch/v1/processingStatus"</code></pre>
+"//async/batch/v1/processingStatus"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-asyncBatchV1ProcessingStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5339,7 +5350,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-modelGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/model"</code></pre>
+"//model"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-modelGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5597,7 +5608,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-modelPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/model"</code></pre>
+"//model"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-modelPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5859,7 +5870,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-modelPut-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/model"</code></pre>
+"//model"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-modelPut-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6121,7 +6132,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-watchlistV1UploadPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Content-Type: multipart/form-data"\
-"https://virtserver.swaggerhub.com/bmartofel/HSBC/1.0.0/watchlist/v1/upload"</code></pre>
+"//watchlist/v1/upload"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-watchlistV1UploadPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;

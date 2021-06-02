@@ -21,7 +21,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BatchIdWithAlerts'
+              $ref: '#/components/schemas/Alerts'
       responses:
         '200':
           description: Confirmation of accepting batch.
@@ -1525,6 +1525,14 @@ components:
       properties:
         batchId:
           type: string
+        alerts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Alert"
+
+    Alerts:
+      type: object
+      properties:
         alerts:
           type: array
           items:

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -79,10 +78,6 @@ public class BulkRestController {
     ingestRecommendationsUseCase.ingest(recommendations.getAlerts());
 
     return ResponseEntity.ok().build();
-  }
-
-  private String generateBatchId() {
-    return "batch-" + UUID.randomUUID();
   }
 
   @PutMapping("/{id}/ack")
