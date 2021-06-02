@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.importing;
+package com.silenteight.serp.governance.policy.transfer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,13 +8,16 @@ import lombok.NonNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({ "toFulfill", "matchConditions" })
-class ImportedFeatureLogic {
+public class TransferredFeatureLogicDto implements Serializable {
+
+  private static final long serialVersionUID = 8055332760411371655L;
 
   @NonNull
   @JsonProperty("toFulfill")
@@ -22,5 +25,5 @@ class ImportedFeatureLogic {
 
   @NonNull
   @JsonProperty("matchConditions")
-  private List<MatchCondition> matchConditions;
+  private List<TransferredMatchConditionDto> matchConditions;
 }

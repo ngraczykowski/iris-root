@@ -1,0 +1,69 @@
+{
+  "checksum": "72AC6FE2BF1CCC109D530FCAA1487EEC",
+  "model": {
+    "metadata": {
+      "modelId": "de1afe98-0b58-4941-9791-4e081f9b8139",
+      "approvedBy": "asmith",
+      "approvedAt": "2020-06-01 11:25:34.187"
+    },
+    "policy": {
+      "metadata": {
+        "exportedAt": "2020-04-15 10:58:53.451"
+      },
+      "policy": {
+        "policyId": "01256804-1ce1-4d52-94d4-d1876910f272",
+        "policyName": "policy-name",
+        "steps": [
+          {
+            "solution": "SOLUTION_FALSE_POSITIVE",
+            "stepId": "de1afe98-0b58-4941-9791-4e081f9b8139",
+            "stepName": "branchId=1",
+            "stepDescription": "This is step description",
+            "stepType": "BUSINESS_LOGIC",
+            "featuresLogic": [
+              {
+                "toFulfill": 2,
+                "matchConditions": [
+                  {
+                    "name": "apType",
+                    "condition": "is",
+                    "values": ["I"]
+                  },
+                  {
+                    "name": "nameAgent",
+                    "condition": "is",
+                    "values": ["HQ_NO_MATCH"]
+                  }
+                ]
+              },
+              {
+                "toFulfill": 2,
+                "matchConditions": [
+                  {
+                    "name": "genderAgent",
+                    "condition": "is",
+                    "values": ["NO_DATA"]
+                  },
+                  {
+                    "name": "dateAgent",
+                    "condition": "is",
+                    "values": ["NO_DATA"]
+                  },{
+                    "name": "nationalIdAgent",
+                    "condition": "is",
+                    "values": ["NO_DATA"]
+                  },
+                  {
+                    "name": "passportAgent",
+                    "condition": "is",
+                    "values": ["NO_DATA"]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
-package com.silenteight.serp.governance.policy.importing;
+package com.silenteight.serp.governance.policy.transfer.importing;
 
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
+import com.silenteight.serp.governance.policy.transfer.dto.TransferredPolicyRootDto;
 
 import org.apache.commons.io.IOUtils;
 
@@ -9,9 +10,9 @@ import java.io.InputStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-class ImportedPolicyRootParser {
+class TransferredPolicyRootDtoParser {
 
-  ImportedPolicyRoot parse(InputStream inputStream) {
+  TransferredPolicyRootDto parse(InputStream inputStream) {
     try {
       String json = IOUtils.toString(inputStream, UTF_8);
       if (json.isEmpty())
@@ -23,12 +24,12 @@ class ImportedPolicyRootParser {
     }
   }
 
-  private ImportedPolicyRoot parse(String json) {
+  private TransferredPolicyRootDto parse(String json) {
     try {
       return JsonConversionHelper
           .INSTANCE
           .objectMapper()
-          .readValue(json, ImportedPolicyRoot.class);
+          .readValue(json, TransferredPolicyRootDto.class);
     } catch (Exception e) {
       throw new PolicyImportException(e);
     }

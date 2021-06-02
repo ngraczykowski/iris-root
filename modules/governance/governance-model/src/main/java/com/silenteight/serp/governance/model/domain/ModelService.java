@@ -27,8 +27,7 @@ public class ModelService {
       @NonNull String policy,
       @NonNull String createdBy) {
 
-    AddModelRequest request = AddModelRequest
-        .builder()
+    AddModelRequest request = AddModelRequest.builder()
         .id(modelId)
         .policy(policy)
         .createdBy(createdBy)

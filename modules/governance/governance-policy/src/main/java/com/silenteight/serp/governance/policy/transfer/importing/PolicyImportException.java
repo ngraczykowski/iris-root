@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.importing;
+package com.silenteight.serp.governance.policy.transfer.importing;
 
 class PolicyImportException extends RuntimeException {
 

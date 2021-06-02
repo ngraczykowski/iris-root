@@ -53,7 +53,7 @@ public class PolicyService {
         request.getCreatedBy());
 
     Policy policy = addPolicyInternal(addPolicyRequest);
-    configureImportedSteps(
+    configureSteps(
         request.getCorrelationId(),
         policy,
         request.getStepConfigurations(),
@@ -71,16 +71,16 @@ public class PolicyService {
     return savedPolicy.getPolicyId();
   }
 
-  private void configureImportedSteps(
+  private void configureSteps(
       UUID correlationID, Policy policy, List<StepConfiguration> configurations, String createdBy) {
 
     range(0, configurations.size())
         .boxed()
-        .forEach(i -> configureImportedStep(
+        .forEach(i -> configureSteps(
             correlationID, policy, configurations.get(i), i, createdBy));
   }
 
-  private void configureImportedStep(
+  private void configureSteps(
       UUID correlationId,
       Policy policy,
       StepConfiguration configuration,

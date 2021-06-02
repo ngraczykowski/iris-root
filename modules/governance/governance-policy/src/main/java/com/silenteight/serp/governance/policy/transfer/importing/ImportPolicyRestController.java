@@ -1,10 +1,10 @@
-package com.silenteight.serp.governance.policy.importing;
+package com.silenteight.serp.governance.policy.transfer.importing;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import com.silenteight.serp.governance.policy.importing.ImportPolicyRestController.RestConstants;
+import com.silenteight.serp.governance.policy.transfer.importing.ImportPolicyRestController.RestConstants;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
