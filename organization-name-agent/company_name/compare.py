@@ -1,24 +1,24 @@
 from typing import Mapping
 
 from company_name.names.name_information import NameInformation
-
 from company_name.names.parse.parse import parse_name
 
-from company_name.scores.score import Score
+from company_name.scores.abbreviation import abbreviation_score
 from company_name.scores.blacklist import blacklist_score
-from company_name.scores.potential_subsidiary import potential_subsidiary_score
-from company_name.scores.phonetics import phonetic_score
+from company_name.scores.country import country_score
+from company_name.scores.first_token import first_token_score
 from company_name.scores.fuzzy import (
     fuzzy_score,
     partial_fuzzy_score,
     sorted_fuzzy_score,
 )
-from company_name.scores.abbreviation import abbreviation_score
-from company_name.scores.parenthesis_match import parenthesis_score
-from company_name.scores.tokenization import tokenization_score
-from company_name.scores.country import country_score
 from company_name.scores.legal_terms import legal_score
+from company_name.scores.parenthesis_match import parenthesis_score
+from company_name.scores.phonetics import phonetic_score
+from company_name.scores.potential_subsidiary import potential_subsidiary_score
+from company_name.scores.score import Score
 from company_name.scores.token_inclusion import token_inclusion_score
+from company_name.scores.tokenization import tokenization_score
 
 
 def compare_names(
@@ -52,6 +52,7 @@ def compare_names(
             alerted_name, watchlist_name
         ),
         "token_inclusion": token_inclusion_score(alerted_name, watchlist_name),
+        "first_token": first_token_score(alerted_name, watchlist_name),
     }
 
     return scores
