@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package silenteight.agent.allowlist.v1.api;
+
+option java_package = "com.silenteight.proto.agent.allowlist.v1.api";
+option java_outer_classname = "AllowListAgentApiProto";
+option java_multiple_files = true;
+
+service AllowListAgent {
+
+  rpc CompareWithAllowList (CompareWithAllowListRequest) returns (CompareWithAllowListResponse) {
+  }
+}
+
+message CompareWithAllowListRequest {
+  repeated string characteristics_value = 1;
+  string allow_list_name = 2;
+}
+
+message CompareWithAllowListResponse {
+  string solution = 1;
+  CompareWithAllowListReason reason = 2;
+}
+
+message CompareWithAllowListReason {
+  repeated MatchedCharacteristic matched_characteristics = 1;
+  Configuration configuration = 2;
+}
+
+message MatchedCharacteristic {
+  string characteristic_value = 1;
+  string solution = 2;
+  uint32 false_positive_count = 3;
+  uint32 true_positive_count = 4;
+  // false positive by true positive ratio
+  double ratio = 5;
+}
+
+message Configuration {
+  string allow_list_name = 1;
+  uint32 min_false_positive_count = 2;
+  double min_ratio = 3;
+}
