@@ -3,8 +3,9 @@ package com.silenteight.hsbc.bridge.jenkins;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.transfer.ModelClient;
-import com.silenteight.hsbc.bridge.transfer.ModelInfo;
+import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
+import com.silenteight.hsbc.bridge.model.transfer.ModelInfo;
+import com.silenteight.hsbc.bridge.model.transfer.ModelStatusUpdatedDto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -27,9 +28,17 @@ public class JenkinsModelClient implements ModelClient {
   private final JenkinsApiProperties jenkinsApiProperties;
 
   @Override
-  public Model getModel(ModelInfo modelInfo) {
+  public void updateModel(ModelInfo modelInfo) {
     var crumbResponse = getCrumb();
-    return getUpdatedModel(crumbResponse, modelInfo);
+    var statusCode = getUpdatedModel(crumbResponse, modelInfo);
+    log.info("Status code of getting model from Jenkins is: " + statusCode);
+  }
+
+  @Override
+  public void sendModelStatus(ModelStatusUpdatedDto modelStatusUpdated) {
+    var crumbResponse = getCrumb();
+    var statusCode = sendUpdateModelStatus(crumbResponse, modelStatusUpdated);
+    log.info("Status code of sending model status to Jenkins is: " + statusCode);
   }
 
   private CrumbResponse getCrumb() {
@@ -63,10 +72,48 @@ public class JenkinsModelClient implements ModelClient {
     }
   }
 
-  private Model getUpdatedModel(CrumbResponse crumbResponse, ModelInfo modelInfo) {
+  private int getUpdatedModel(CrumbResponse crumbResponse, ModelInfo modelInfo) {
     var updateModelRequest =
         createUpdateModelHttpRequest(crumbResponse, modelInfo);
-    return receiveModelUpdateResponse(updateModelRequest);
+    var statusCode = sendRequest(updateModelRequest).statusCode();
+    if (statusCode == 200) {
+      return statusCode;
+    } else {
+      throw new ModelNotReceivedException(
+          "Unable to get updated model with status code: " + statusCode);
+    }
+  }
+
+  private int sendUpdateModelStatus(
+      CrumbResponse crumbResponse, ModelStatusUpdatedDto modelStatusUpdated) {
+    var updateModelStatusRequest =
+        createUpdateModelStatusHttpRequest(crumbResponse, modelStatusUpdated);
+    int statusCode = sendRequest(updateModelStatusRequest).statusCode();
+    if (statusCode == 200) {
+      return statusCode;
+    } else {
+      throw new ModelNotReceivedException(
+          "Unable to send update model status with code: " + statusCode);
+    }
+  }
+
+  private HttpRequest createUpdateModelStatusHttpRequest(
+      CrumbResponse crumbResponse, ModelStatusUpdatedDto modelStatusUpdated) {
+    return HttpRequest.newBuilder()
+        .POST(
+            HttpRequest.BodyPublishers.ofString(
+                mapModelInfoStatusRequestToJsonAsString(modelStatusUpdated)))
+        .header(crumbResponse.getCrumbRequestField(), crumbResponse.getCrumb())
+        .uri(URI.create(jenkinsApiProperties.getUpdateModelStatusUri()))
+        .build();
+  }
+
+  private String mapModelInfoStatusRequestToJsonAsString(ModelStatusUpdatedDto modelStatusUpdated) {
+    try {
+      return objectMapper.writeValueAsString(modelStatusUpdated);
+    } catch (JsonProcessingException e) {
+      throw new ModelNotReceivedException(e.getMessage());
+    }
   }
 
   private HttpRequest createUpdateModelHttpRequest(
@@ -82,16 +129,6 @@ public class JenkinsModelClient implements ModelClient {
     try {
       return objectMapper.writeValueAsString(modelInfo);
     } catch (JsonProcessingException e) {
-      throw new ModelNotReceivedException(e.getMessage());
-    }
-  }
-
-  private Model receiveModelUpdateResponse(HttpRequest updateModelRequest) {
-    var updateModelResponse = sendRequest(updateModelRequest);
-    try {
-      return objectMapper.readValue(updateModelResponse.body(), new TypeReference<>() {});
-    } catch (JsonProcessingException e) {
-      log.error("Exception occurred on receiving ModelUpdateResponse: ", e);
       throw new ModelNotReceivedException(e.getMessage());
     }
   }

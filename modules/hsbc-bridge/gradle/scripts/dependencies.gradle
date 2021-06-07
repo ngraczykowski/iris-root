@@ -5,7 +5,7 @@ ext {
   // Silent Eight
   //***********************************
   adjudicationEngineApiVersion = "0.1.0-SNAPSHOT"
-  governanceModelApiVersion = "1.3.0-SNAPSHOT"
+  governanceModelApiVersion = "1.5.0-SNAPSHOT"
   silenteightDataSourceApiVersion = "0.1.0-SNAPSHOT"
   warehouseApiVersion = "1.1.0-SNAPSHOT"
   worldCheckApiVersion = "0.1.0-SNAPSHOT"
@@ -75,6 +75,7 @@ libraries.amazon_aws = [group: 'com.amazonaws', name: 'aws-java-sdk-s3', version
 // Others
 libraries.commons_compress = [group: 'org.apache.commons', name: 'commons-compress', version: '1.20']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
+libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.8.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 libraries.orika = [group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4']
 libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
@@ -127,6 +128,7 @@ dependencies {
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
   implementation libraries.grpc_spring_boot_starter
+  implementation libraries.io_utils
   implementation libraries.jjwt
   implementation libraries.liquibase_core
   implementation libraries.liquibase_sessionlock

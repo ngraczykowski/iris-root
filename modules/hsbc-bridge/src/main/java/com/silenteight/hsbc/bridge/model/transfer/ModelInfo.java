@@ -1,28 +1,33 @@
-package com.silenteight.hsbc.bridge.transfer;
+package com.silenteight.hsbc.bridge.model.transfer;
 
+import lombok.Builder;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 @Validated
 @Data
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ModelInfo {
 
   @NotNull
-  @JsonProperty("id")
-  UUID id;
-
-  @NotNull
-  @JsonProperty("modelName")
-  String modelName;
+  @JsonProperty("name")
+  String name;
 
   @NotNull
   @JsonProperty("url")
   String url;
+
+  @NotNull
+  @JsonProperty("type")
+  String type;
+
+  @NotNull
+  @JsonProperty("changeType")
+  String changeType;
 }

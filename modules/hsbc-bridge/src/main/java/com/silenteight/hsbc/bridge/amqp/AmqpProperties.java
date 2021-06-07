@@ -12,4 +12,6 @@ class AmqpProperties {
 
   String warehouseExchangeName;
   String warehouseRoutingKey;
+  String modelPersistedExchangeName;
+  String modelPersistedRoutingKey;
 }

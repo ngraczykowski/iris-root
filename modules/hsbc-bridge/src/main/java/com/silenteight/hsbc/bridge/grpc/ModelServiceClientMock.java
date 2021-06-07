@@ -1,11 +1,14 @@
 package com.silenteight.hsbc.bridge.grpc;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.hsbc.bridge.model.FeatureDto;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 import com.silenteight.hsbc.bridge.model.SolvingModelDto;
 
 import java.util.List;
 
+@Slf4j
 class ModelServiceClientMock implements ModelServiceClient {
 
   @Override
@@ -20,5 +23,15 @@ class ModelServiceClientMock implements ModelServiceClient {
             .build()))
         .categories(List.of("category"))
         .build();
+  }
+
+  @Override
+  public void transferModel(byte[] model) {
+    log.info("Transfer mocked model started ...");
+  }
+
+  @Override
+  public void sendStatus(String modelName) {
+    log.info("Transfer Governance model: " + modelName + " has status: MOCK");
   }
 }

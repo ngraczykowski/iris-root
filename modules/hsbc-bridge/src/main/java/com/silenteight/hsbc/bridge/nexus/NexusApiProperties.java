@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.jenkins;
+package com.silenteight.hsbc.bridge.nexus;
 
 import lombok.Value;
 
@@ -6,13 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties("silenteight.bridge.jenkins.api")
+@ConfigurationProperties("silenteight.bridge.nexus.api")
 @Value
-class JenkinsApiProperties {
+class NexusApiProperties {
 
-  String crumbUri;
-  String updateModelUri;
-  String updateModelStatusUri;
   String username;
   String password;
 }

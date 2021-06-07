@@ -8,15 +8,16 @@ import com.silenteight.hsbc.bridge.aws.AwsModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.file.FileModule;
 import com.silenteight.hsbc.bridge.grpc.GrpcModule;
+import com.silenteight.hsbc.bridge.http.HttpModule;
 import com.silenteight.hsbc.bridge.http.security.SecurityModule;
 import com.silenteight.hsbc.bridge.jenkins.JenkinsModule;
 import com.silenteight.hsbc.bridge.json.JsonModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
 import com.silenteight.hsbc.bridge.model.Model;
+import com.silenteight.hsbc.bridge.nexus.NexusModule;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
 import com.silenteight.hsbc.bridge.report.ReportModule;
 import com.silenteight.hsbc.bridge.retention.DataRetentionModule;
-import com.silenteight.hsbc.bridge.transfer.TransferModule;
 import com.silenteight.hsbc.bridge.unpacker.UnpackerModule;
 import com.silenteight.hsbc.bridge.watchlist.WatchlistModule;
 import com.silenteight.hsbc.bridge.worldcheck.WorldCheckModule;
@@ -46,14 +47,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     FileModule.class,
     BulkModule.class,
     DataRetentionModule.class,
+    HttpModule.class,
     JenkinsModule.class,
+    NexusModule.class,
     JsonModule.class,
     MatchModule.class,
     Model.class,
     RecommendationModule.class,
     ReportModule.class,
     SecurityModule.class,
-    TransferModule.class,
     UnpackerModule.class,
     WatchlistModule.class,
     WorldCheckModule.class,

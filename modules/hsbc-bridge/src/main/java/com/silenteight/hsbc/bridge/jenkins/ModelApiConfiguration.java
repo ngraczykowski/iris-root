@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.jenkins;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.transfer.ModelClient;
+import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

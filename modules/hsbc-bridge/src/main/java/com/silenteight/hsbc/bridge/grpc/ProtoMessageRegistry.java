@@ -6,8 +6,8 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.hsbc.bridge.amqp.MessageRegistry;
 
-import com.google.protobuf.*;
 import com.google.protobuf.Enum;
+import com.google.protobuf.*;
 
 import java.util.HashMap;
 import java.util.List;

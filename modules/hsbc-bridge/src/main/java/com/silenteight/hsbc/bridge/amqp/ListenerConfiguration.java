@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.amqp;
 
-import com.silenteight.hsbc.bridge.transfer.ProcessManager;
+import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager;
+import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +13,21 @@ import org.springframework.context.annotation.Profile;
 class ListenerConfiguration {
 
   @Bean
-  NewModelListener newModelListener(ProcessManager processManager) {
-    return new NewModelListener(processManager);
+  NewGovernanceModelListener newGovernanceModelListener(
+      GovernanceModelManager governanceModelManager) {
+    return new NewGovernanceModelListener(governanceModelManager);
+  }
+
+  @Bean
+  NewWorldCheckModelListener newWorldCheckModelListener(
+      WorldCheckModelManager worldCheckModelManager) {
+    return new NewWorldCheckModelListener(worldCheckModelManager);
+  }
+
+  @Bean
+  WorldCheckModelTransferStatusListener worldCheckModelTransferStatusListener(
+      WorldCheckModelManager worldCheckModelManager) {
+    return new WorldCheckModelTransferStatusListener(worldCheckModelManager);
   }
 
   @Bean

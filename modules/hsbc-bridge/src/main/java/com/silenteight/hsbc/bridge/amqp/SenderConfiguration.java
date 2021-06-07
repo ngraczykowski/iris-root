@@ -30,6 +30,18 @@ class SenderConfiguration {
         .build();
   }
 
+  @Bean
+  ModelPersistedMessageSender modelPersistedMessageSender() {
+    return ModelPersistedMessageSender.builder()
+        .amqpTemplate(rabbitTemplate)
+        .configuration(ModelPersistedMessageSender.Configuration.builder()
+            .exchangeName(amqpProperties.getModelPersistedExchangeName())
+            .routingKey(amqpProperties.getModelPersistedRoutingKey())
+            .build())
+        .messageConverter(protoMessageConverter())
+        .build();
+  }
+
   private ProtoMessageConverter protoMessageConverter() {
     return new ProtoMessageConverter(messageRegistry);
   }

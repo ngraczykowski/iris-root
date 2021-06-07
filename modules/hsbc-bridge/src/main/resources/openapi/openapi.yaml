@@ -187,7 +187,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ModelInfoStatus'
+              $ref: '#/components/schemas/ModelInfoStatusRequest'
+      responses:
+        '200':
+          description: Model uploaded.
+
+
+  /v1/upload:
+    post:
+      summary: Submit new model.
+      requestBody:
+        description: Model information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfoRequest'
+      responses:
+        '200':
+          description: Model uploaded.
+
+    put:
+      summary: Update status of new model.
+      requestBody:
+        description: Model information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfoStatusRequest'
       responses:
         '200':
           description: Model uploaded.
@@ -1649,24 +1677,24 @@ components:
     ModelInfoRequest:
       type: object
       properties:
+        name:
+          type: string
+        url:
+          type: string
         type:
           $ref: '#/components/schemas/ModelType'
         changeType:
           $ref: '#/components/schemas/ChangeType'
-        version:
-          type: string
-        url:
-          type: string
 
-    ModelInfoStatus:
+    ModelInfoStatusRequest:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ModelType'
-        version:
+        name:
           type: string
         url:
           type: string
+        type:
+          $ref: '#/components/schemas/ModelType'
         status:
           $ref: '#/components/schemas/ModelChangeStatus'
 
@@ -1674,8 +1702,8 @@ components:
       type: string
       enum:
         - MODEL
-        - IS-PEP-MODEL
-        - NAME-ALIASES-MODEL
+        - IS_PEP
+        - NAME_ALIASES
 
     ChangeType:
       type: string

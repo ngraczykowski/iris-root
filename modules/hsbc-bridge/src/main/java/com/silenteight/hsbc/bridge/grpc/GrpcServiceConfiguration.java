@@ -8,7 +8,6 @@ import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBl
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc;
 import com.silenteight.hsbc.bridge.adjudication.DatasetServiceClient;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
-import com.silenteight.hsbc.bridge.transfer.TransferServiceClient;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
@@ -26,15 +25,13 @@ import org.springframework.context.annotation.Profile;
     AlertGrpcAdapterProperties.class,
     AnalysisGrpcAdapterProperties.class,
     DatasetGrpcAdapterProperties.class,
-    ModelGrpcAdapterProperties.class,
-    TransferModelGrpcAdapterProperties.class })
+    ModelGrpcAdapterProperties.class })
 class GrpcServiceConfiguration {
 
   private final AlertGrpcAdapterProperties alertGrpcAdapterProperties;
   private final AnalysisGrpcAdapterProperties analysisGrpcAdapterProperties;
   private final DatasetGrpcAdapterProperties datasetGrpcAdapterProperties;
   private final ModelGrpcAdapterProperties modelGrpcAdapterProperties;
-  private final TransferModelGrpcAdapterProperties transferModelGrpcAdapterProperties;
 
   @Bean
   AnalysisGrpcAdapter analysisServiceGrpcApi() {
@@ -85,13 +82,6 @@ class GrpcServiceConfiguration {
     return SolvingModelServiceGrpc.newBlockingStub(
         getManagedChannel(modelGrpcAdapterProperties.getGrpcAddress()))
         .withWaitForReady();
-  }
-
-  @Bean
-  TransferServiceClient transferModelGrpcApi() {
-    // TODO waiting for .proto file from Governance !
-    return new TransferModelGrpcAdapter(
-        transferModelGrpcAdapterProperties.getDeadlineInSeconds());
   }
 
   private ManagedChannel getManagedChannel(String address) {

@@ -1,8 +1,7 @@
-package com.silenteight.hsbc.bridge.jenkins;
+package com.silenteight.hsbc.bridge.model.transfer;
 
+import lombok.Builder;
 import lombok.Data;
-
-import com.silenteight.hsbc.bridge.transfer.ModelClient.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,14 +11,23 @@ import javax.validation.constraints.NotNull;
 
 @Validated
 @Data
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ModelUpdateResponse implements Model {
+public class ModelStatusUpdatedDto {
 
   @NotNull
-  @JsonProperty("version")
-  String version;
+  @JsonProperty("name")
+  String name;
 
   @NotNull
   @JsonProperty("url")
   String url;
+
+  @NotNull
+  @JsonProperty("type")
+  String type;
+
+  @NotNull
+  @JsonProperty("status")
+  String status;
 }

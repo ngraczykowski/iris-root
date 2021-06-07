@@ -114,6 +114,16 @@
       "name": "silenteight.bridge.aws.region",
       "type": "java.lang.String",
       "description": "AWS region name."
+    },
+    {
+      "name": "silenteight.bridge.model.persisted.queue",
+      "type": "java.lang.String",
+      "description": "Description for silenteight.bridge.model.persisted.queue."
+    },
+    {
+      "name": "silenteight.bridge.model.loaded.queue",
+      "type": "java.lang.String",
+      "description": "Description for silenteight.bridge.model.loaded.queue."
     }
   ]
 }

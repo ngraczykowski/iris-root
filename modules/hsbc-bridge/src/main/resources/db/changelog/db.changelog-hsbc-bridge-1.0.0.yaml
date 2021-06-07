@@ -45,7 +45,6 @@ databaseChangeLog:
                   name: updated_at
                   type: timestamp
 
-
         - createTable:
             tableName: hsbc_bridge_bulk
             columns:
@@ -110,7 +109,6 @@ databaseChangeLog:
               - column:
                   name: payload
                   type: bytea
-
 
         - createTable:
             tableName: hsbc_bridge_alert
@@ -181,7 +179,6 @@ databaseChangeLog:
               - column:
                   name: payload
                   type: bytea
-
 
         - createTable:
             tableName: hsbc_bridge_match
@@ -264,6 +261,7 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: timestamp
+
   - changeSet:
       id: 1.0.0-4
       author: bmartofel
@@ -283,6 +281,7 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+
   - changeSet:
       id: 1.0.0-5
       author: bmartofel
@@ -326,6 +325,7 @@ databaseChangeLog:
                   type: varchar(100)
                   constraints:
                     nullable: false
+
   - changeSet:
       id: 1.0.0-6
       author: bmartofel
@@ -390,3 +390,32 @@ databaseChangeLog:
                   name: name
             indexName: idx_bridge_alert_name
             tableName: hsbc_bridge_alert
+
+  - changeSet:
+      id: 1.0.0-9
+      author: awojcicki
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_model
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: minio_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(30)
+
