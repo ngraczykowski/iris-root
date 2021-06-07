@@ -4,6 +4,8 @@ public interface PrivateListIndividual {
 
   String getGender();
 
+  String getGenderDerivedFlag();
+
   String getEdqSuffix();
 
   String getPassportNumber();

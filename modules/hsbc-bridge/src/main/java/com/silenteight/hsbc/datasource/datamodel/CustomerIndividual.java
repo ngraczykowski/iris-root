@@ -4,6 +4,8 @@ public interface CustomerIndividual {
 
   String getGender();
 
+  String getGenderDerivedFlag();
+
   String getIdentificationDocument1();
 
   String getIdentificationDocument2();

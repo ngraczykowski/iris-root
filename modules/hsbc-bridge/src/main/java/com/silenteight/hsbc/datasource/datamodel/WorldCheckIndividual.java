@@ -4,6 +4,8 @@ public interface WorldCheckIndividual {
 
   String getGender();
 
+  String getGenderDerivedFlag();
+
   String getPassportNumber();
 
   String getIdNumbers();

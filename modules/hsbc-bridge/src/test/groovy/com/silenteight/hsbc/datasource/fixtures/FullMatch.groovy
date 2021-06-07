@@ -13,6 +13,7 @@ trait FullMatch {
       getCustomerIndividual    : {
         new CustomerIndividual(
             gender: "M",
+            genderDerivedFlag: "N",
             identificationDocument1: "\"P\",\"ZS12398745\",\"\",\"\",\"PASSPORT\"",
             identificationDocument2: "###### THE PASSPORT POLICE OF IRAN",
             identificationDocument3: "Iran, Islamic Republic Of",
@@ -32,6 +33,7 @@ trait FullMatch {
       getWorldCheckIndividuals : {
         [new WorldCheckIndividual(
             gender: "M",
+            genderDerivedFlag: "N",
             passportNumber: "KZ0212573 (UNK-UNKW);KW4444587 (GB);A52345",
             passportCountry: "KJ0114578 (VIET NAM);KJ4514578 (IRAN);A501245",
             idNumbers: "BC 78845 (UNK-UNKW)|ID78845 (UNK-UNKW)|78845ID (UNK-UNKW)",
@@ -43,6 +45,7 @@ trait FullMatch {
       getPrivateListIndividuals: {
         [new PrivateListIndividual(
             gender: "M",
+            genderDerivedFlag: "N",
             edqTaxNumber: "GOHA784512R12",
             passportNumber: "K45R78986,T3GD45689",
             nationalId: "4568795132,5465498756",

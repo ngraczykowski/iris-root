@@ -5,11 +5,8 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
-import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto.GenderFeatureInputDtoBuilder;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
-
-import io.micrometer.core.instrument.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,14 +14,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputDto> {
 
   @Override
   public GenderFeatureInputDto retrieve(MatchData matchData) {
-    GenderFeatureInputDtoBuilder genderFeatureInputDtoBuilder = GenderFeatureInputDto.builder()
+    var genderFeatureInputDtoBuilder = GenderFeatureInputDto.builder()
         .feature(getFeatureName())
         .alertedPartyGenders(emptyList())
         .watchlistGenders(emptyList());
@@ -55,7 +51,9 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
   }
 
   private Optional<String> getCustomerIndividualsGender(IndividualComposite individualComposite) {
-    return ofNullable(individualComposite.getCustomerIndividual().getGender());
+    var customerIndividual = individualComposite.getCustomerIndividual();
+
+    return GenderFieldsWrapper.fromCustomerIndividual(customerIndividual).tryExtracting();
   }
 
   private List<String> mergeLists(
@@ -68,15 +66,19 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
   private Stream<String> getPrivateListIndividualsGenders(
       List<PrivateListIndividual> privateListIndividuals) {
     return privateListIndividuals.stream()
-        .map(PrivateListIndividual::getGender)
-        .filter(StringUtils::isNotEmpty);
+        .map(GenderFieldsWrapper::fromPrivateListIndividual)
+        .map(GenderFieldsWrapper::tryExtracting)
+        .filter(Optional::isPresent)
+        .map(Optional::get);
   }
 
   private Stream<String> getWorldCheckIndividualsGenders(
       List<WorldCheckIndividual> worldCheckIndividuals) {
     return worldCheckIndividuals.stream()
-        .map(WorldCheckIndividual::getGender)
-        .filter(StringUtils::isNotEmpty);
+        .map(GenderFieldsWrapper::fromWorldCheckIndividual)
+        .map(GenderFieldsWrapper::tryExtracting)
+        .filter(Optional::isPresent)
+        .map(Optional::get);
   }
 
   private List<String> createValidGenderAlertPartyListForAgents(Optional<String> apGender) {
