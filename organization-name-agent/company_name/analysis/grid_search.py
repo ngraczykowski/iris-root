@@ -6,7 +6,7 @@ import csv
 
 import numpy
 
-from typing import *
+from typing import List, Tuple, Any
 
 from compare import score
 
@@ -48,7 +48,9 @@ def compute_scores(
 
 COMPANY_FILE = "../data/company_pairs_with_results.csv"
 with open(COMPANY_FILE, "rt") as f:
-    companies_columns = {name: i for i, name in enumerate(next(f).rstrip().split(",")[2:])}
+    companies_columns = {
+        name: i for i, name in enumerate(next(f).rstrip().split(",")[2:])
+    }
 companies_df = numpy.genfromtxt(COMPANY_FILE, delimiter=",")[1:].transpose()[2:]
 
 Score = collections.namedtuple("Score", ("accuracy", "precision", "recall"))
@@ -88,14 +90,14 @@ def get_thresholds(set_keys, keys):
 
 def print_top(result: List[Tuple[Any, Score]], k=3):
     for t in ("accuracy", "precision", "recall"):
-        sorted_list = reversed(sorted((getattr(r[1], t), r) for r in result))
+        sorted_list = sorted(((getattr(r[1], t), r) for r in result), reverse=True)
         print(t, ":")
-        for i, (_, r) in zip(range(k), sorted_list):
+        for _, (_, r) in zip(range(k), sorted_list):
             print("\t", r)
 
-    sorted_list = reversed(sorted((sum(list(r[1])), r) for r in result))
+    sorted_list = sorted(((sum(list(r[1])), r) for r in result), reverse=True)
     print("sum:")
-    for i, (_, r) in zip(range(k), sorted_list):
+    for _, (_, r) in zip(range(k), sorted_list):
         print("\t", r)
 
     print()
@@ -115,11 +117,13 @@ def main():
 
         with open("../data/thresholds_scores.csv", "wt") as f:
             writer = csv.writer(f)
-            writer.writerow(([*[k[0] for k in scores_all_keys], "accuracy", "precision", "recall"]))
+            writer.writerow(
+                ([*[k[0] for k in scores_all_keys], "accuracy", "precision", "recall"])
+            )
             for r in result:
                 writer.writerow([*r[0], *r[1]])
 
 
 if __name__ == "__main__":
-    #compute_scores()
+    # compute_scores()
     main()
