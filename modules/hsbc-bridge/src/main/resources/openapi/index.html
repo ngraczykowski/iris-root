@@ -3585,7 +3585,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+        Alerts body = ; // Alerts | BatchId and list of alerts for learning processes.
         String batchId = batchId_example; // String | The id batch job.
         try {
             BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdLearningPost(body, batchId);
@@ -3605,7 +3605,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        BatchIdWithAlerts body = ; // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+        Alerts body = ; // Alerts | BatchId and list of alerts for learning processes.
         String batchId = batchId_example; // String | The id batch job.
         try {
             BatchAcceptedResponse result = apiInstance.asyncBatchV1BatchIdLearningPost(body, batchId);
@@ -3622,7 +3622,7 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-asyncBatchV1BatchIdLearningPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">BatchIdWithAlerts *body = ; // BatchId and list of alerts for learning processes.
+                              <pre class="prettyprint"><code class="language-cpp">Alerts *body = ; // BatchId and list of alerts for learning processes.
 String *batchId = batchId_example; // The id batch job.
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -3645,7 +3645,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
 var api = new HscbBridgeBatchApi.DefaultApi()
-var body = ; // {{BatchIdWithAlerts}} BatchId and list of alerts for learning processes.
+var body = ; // {{Alerts}} BatchId and list of alerts for learning processes.
 var batchId = batchId_example; // {{String}} The id batch job.
 
 var callback = function(error, data, response) {
@@ -3677,7 +3677,7 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var body = new BatchIdWithAlerts(); // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+            var body = new Alerts(); // Alerts | BatchId and list of alerts for learning processes.
             var batchId = batchId_example;  // String | The id batch job.
 
             try
@@ -3701,7 +3701,7 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+$body = ; // Alerts | BatchId and list of alerts for learning processes.
 $batchId = batchId_example; // String | The id batch job.
 
 try {
@@ -3719,7 +3719,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::BatchIdWithAlerts->new(); # BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+my $body = WWW::SwaggerClient::Object::Alerts->new(); # Alerts | BatchId and list of alerts for learning processes.
 my $batchId = batchId_example; # String | The id batch job.
 
 eval { 
@@ -3740,7 +3740,7 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # BatchIdWithAlerts | BatchId and list of alerts for learning processes.
+body =  # Alerts | BatchId and list of alerts for learning processes.
 batchId = batchId_example # String | The id batch job.
 
 try: 
@@ -3802,7 +3802,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BatchIdWithAlerts"
+        "$ref" : "#/components/schemas/Alerts"
       }
     }
   },
