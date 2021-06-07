@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.file;
+package com.silenteight.hsbc.bridge.worldcheck;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

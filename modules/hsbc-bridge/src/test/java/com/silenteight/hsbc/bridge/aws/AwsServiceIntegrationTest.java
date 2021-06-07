@@ -15,7 +15,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URI;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
@@ -27,22 +26,23 @@ class AwsServiceIntegrationTest {
   private static final String KEY_NAME = "file";
   private static final String FILE_CONTENT = "someContent";
 
-  DockerImageName localstackImage = DockerImageName.parse("localstack/localstack");
+  private static final DockerImageName LOCALSTACK_IMAGE =
+      DockerImageName.parse("localstack/localstack:0.12.11");
+  @Container
+  private static final LocalStackContainer LOCALSTACK =
+      new LocalStackContainer(LOCALSTACK_IMAGE).withServices(S3);
   private AwsAdapter awsAdapter;
   private S3Client s3client;
 
-  @Container
-  LocalStackContainer localstack = new LocalStackContainer(localstackImage)
-      .withServices(S3);
 
   @BeforeEach
   public void setup() {
     s3client = S3Client
         .builder()
-        .endpointOverride(localstack.getEndpointOverride(LocalStackContainer.Service.S3))
+        .endpointOverride(LOCALSTACK.getEndpointOverride(LocalStackContainer.Service.S3))
         .credentialsProvider(StaticCredentialsProvider.create(
-            AwsBasicCredentials.create(localstack.getAccessKey(), localstack.getSecretKey())))
-        .region(Region.of(localstack.getRegion()))
+            AwsBasicCredentials.create(LOCALSTACK.getAccessKey(), LOCALSTACK.getSecretKey())))
+        .region(Region.of(LOCALSTACK.getRegion()))
         .build();
 
     s3client.createBucket(b -> b.bucket(BUCKET_NAME));
@@ -50,7 +50,7 @@ class AwsServiceIntegrationTest {
   }
 
   @Test
-  public void transferFile_shouldTransferFileToServer() throws IOException {
+  void transferFile_shouldTransferFileToServer() throws IOException {
     //given
     var content = FILE_CONTENT.getBytes();
     var file = new ByteArrayInputStream(content);

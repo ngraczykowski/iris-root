@@ -194,21 +194,43 @@ paths:
 
   /watchlist/v1/upload:
     post:
-      summary: Upload watchlist file with up to 1GB limit.
+      summary: Upload watchlist files with up to 1GB limit.
       requestBody:
-        description: Watchlist file.
+        description: 3 watchlist types (core and nameAliases with .gz extension and keywords as .xml) and 2 md5 checksum files.
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
               properties:
-                file:
-                  type: string
+                coreWatchlist:
+                  type: object
+                  items:
+                    type: string
+                  format: binary
+                nameAliasesWatchlist:
+                  type: object
+                  items:
+                    type: string
+                  format: binary
+                keywordsWatchlist:
+                  type: object
+                  items:
+                    type: string
+                  format: binary
+                coreChecksum:
+                  type: object
+                  items:
+                    type: string
+                  format: binary
+                aliasesChecksum:
+                  type: object
+                  items:
+                    type: string
                   format: binary
       responses:
         200:
-          description: The watchlist file was uploaded successfully.
+          description: The watchlist files were uploaded successfully.
 
 components:
   schemas:

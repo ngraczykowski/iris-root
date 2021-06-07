@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.file;
+package com.silenteight.hsbc.bridge.unpacker;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-class FileUseCaseConfiguration {
+class UnpackerConfiguration {
 
   @Bean
-  SaveFileUseCase fileTransferUseCase(ResourceSaver resourceSaver) {
-    return new SaveFileUseCase(resourceSaver);
+  FileUnzipper fileUnzipper() {
+    return new FileUnzipper();
   }
 }

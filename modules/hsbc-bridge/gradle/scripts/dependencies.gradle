@@ -73,6 +73,7 @@ libraries.amazon_s3 = [group: 'software.amazon.awssdk', name: 's3', version: '2.
 libraries.amazon_aws = [group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.1017']
 
 // Others
+libraries.commons_compress = [group: 'org.apache.commons', name: 'commons-compress', version: '1.20']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 libraries.orika = [group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4']
@@ -120,6 +121,7 @@ dependencies {
   implementation libraries.adjudication_engine_api
   implementation libraries.amazon_aws
   implementation libraries.amazon_s3
+  implementation libraries.commons_compress
   implementation libraries.commons_lang3
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api

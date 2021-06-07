@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.aws;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.file.ResourceIdentifier;
-import com.silenteight.hsbc.bridge.file.ResourceSaver;
+import com.silenteight.hsbc.bridge.file.SaveResourceUseCase;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -12,18 +12,23 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 
 @RequiredArgsConstructor
-class AwsAdapter implements ResourceSaver {
+class AwsAdapter implements SaveResourceUseCase {
 
   private final S3Client client;
   private final String bucketName;
 
   @Override
-  public ResourceIdentifier save(InputStream file, String fileName) throws IOException {
-    var objectResult = putInputStreamObject(file, fileName);
-    var uri = createUri(fileName, objectResult.versionId());
-    return new ResourceIdentifier(uri);
+  public ResourceIdentifier save(InputStream file, String fileName) throws UncheckedIOException {
+    try {
+      var objectResult = putInputStreamObject(file, fileName);
+      var uri = createUri(fileName, objectResult.versionId());
+      return ResourceIdentifier.of(uri);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   private String createUri(String fileName, String versionId) {
