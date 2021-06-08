@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.names.legal_terms import LegalTerms
+from company_name.datasources.legal_terms import LegalTerms
 from company_name.compare import parse_name
 
 
@@ -90,3 +90,49 @@ def test_words_not_always_legal(name: str):
     parsed = parse_name(name)
     assert parsed.legal == []
     assert parsed.other == []
+
+
+@pytest.mark.parametrize(
+    ("name", "legal"),
+    (
+        (
+            "U-G-T Group LLC(Limited liability Company)",
+            {"llc", "limited liability company"},
+        ),
+        ("SIGNATURE COSMETICS (PTY) LTD ", {"pty", "ltd"}),
+        ("Pax Holding (Genossenschaft) ", {"genossenschaft"}),
+        ("OMEN CASTING (LIMITED PARTNERSHIP)", {"limited partnership"}),
+    ),
+)
+def test_legal_in_parenthesis(name: str, legal: str):
+    information = parse_name(name)
+    print(information)
+    assert set(information.legal) == legal
+
+
+@pytest.mark.skip
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    (("TADIRAN TELECOM (TTL), LIMITED PRTNERSHIP", {"base": ("tadiran", "telecom")}),),
+)
+def test_legal_with_typos(name: str, expected):
+    information = parse_name(name)
+    print(information)
+    for key, value in expected.items():
+        assert getattr(information, key) == value
+
+
+@pytest.mark.skip
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    (
+        ("D A D Sales", {"base": "D A D Sales"}),
+        ("G S L Savings Bank", {"base": "G S L Saving Bank"}),
+        ("Y K D, K.K.", {"base": "Y K D", "legal": "K.K."}),
+    ),
+)
+def test_legal_in_company_abbreviation(name: str, expected):
+    information = parse_name(name)
+    print(information)
+    for key, value in expected.items():
+        assert getattr(information, key) == value.lower().split()

@@ -4,7 +4,7 @@ import pathlib
 from typing import Sequence, Set, Tuple, NamedTuple, Dict, List, Any
 
 from company_name.utils.clear_name import clear_name, divide
-
+from company_name.datasources.term_sources import TermSources
 
 LEGAL_TERMS_PATH = pathlib.Path(__file__).parent / "legal_terms.json"
 
@@ -26,10 +26,12 @@ class LegalTerms:
             source_path
         )
 
-        self.legal_term_sources: Set[Tuple[str, ...]] = set(
-            itertools.chain.from_iterable(
-                entity.abbreviations for entity in known_entities
-            )
+        self.legal_term_sources = TermSources(
+            {
+                abbreviation
+                for entity in known_entities
+                for abbreviation in entity.abbreviations
+            }
         )
 
         self.source_to_legal_terms: Dict[Tuple[str, ...], List[LegalTerm]] = {}

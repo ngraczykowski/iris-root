@@ -1,25 +1,6 @@
 import pytest
 
-from company_name.compare import compare, parse_name
-
-
-@pytest.mark.parametrize(
-    ("name", "expected_country"),
-    (
-        ("Google", ()),
-        ("Google (UK)", ("uk",)),
-        ("(UK) Google", ("uk",)),
-        ("Google (UK) Facebook", ("uk",)),
-        ("Google (United Kingdom)", ("united kingdom",)),
-        ("(UK) Google (China)", ("uk", "china")),
-        ("(Facebook) Google", ()),
-        ("(France) (Facebook) Google", ("france",)),
-        ("(U.K.) Google", ("uk",)),
-    ),
-)
-def test_parse_country(name, expected_country):
-    information = parse_name(name)
-    assert set(information.countries.cleaned_tuple) == set(expected_country)
+from company_name.compare import compare
 
 
 @pytest.mark.parametrize(

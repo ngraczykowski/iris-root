@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.names.parse_name import parse_name
+from company_name.names.parse.parse import parse_name
 
 
 @pytest.mark.parametrize(
@@ -28,20 +28,8 @@ from company_name.names.parse_name import parse_name
         ),
         ("\"S & T COMPANY\" d.o.o.", {"base": "\"S & T", "legal": "COMPANY\" d.o.o."}),
         (
-            "M2A SOLUTIONS SOCIEDAD COMERCIAL DE RESPONSABILIDAD LIMITADA  M2A SOLUTIONS S.R.L.",
-            {
-                # TODO
-            },
-        ),
-        (
             "Corporation of The Town of Whitby, The ",
             {"base": "Corporation of The Town of Whitby"},
-        ),
-        (
-            "TADIRAN TELECOM (TTL), LIMITED PRTNERSHIP",
-            {
-                # TODO
-            },
         ),
         (
             "FAXINFORME, GESTÃO DE INFORMAÇÃO E SERVIÇOS, LDA - EM LIQUIDAÇÃO ",
@@ -51,13 +39,35 @@ from company_name.names.parse_name import parse_name
                 "other": "EM LIQUIDAÇÃO",
             },
         ),
+        ("BRUSKO, Joze Saje s.p.", {"base": "BRUSKO Joze Saje", "legal": "s.p."}),
         (
-            "BRUSKO, Joze Saje s.p.",
+            "TECHNIRAIL S. A. - MANILA BRANCH",
+            {"base": "TECHNIRAIL", "legal": "S. A.", "other": "MANILA BRANCH"},
+        ),
+        (
+            "MEWOD PRODUKCJA USŁUGI I HANDEL S C FRANCISZEK GOLONKA WOJCIECH HERMAN LESŁAW ZDON",
             {
-                "base": "BRUSKO Joze Saje",
-                "legal": "s.p."
-            }
-        )
+                "base": "MEWOD PRODUKCJA USŁUGI I HANDEL",
+                "legal": "S C",
+                "other": "FRANCISZEK GOLONKA WOJCIECH HERMAN LESŁAW ZDON",
+            },
+        ),
+        (
+            "Cia de Ferro Ligas da Bahia Ferbasa",
+            {"base": "Cia de Ferro Ligas", "legal": "da", "other": "Bahia Ferbasa"},
+        ),
+        (
+            "TRIL BENGALURU REAL ESTATE FOUR PRIVATE LIMITED",
+            {"base": "TRIL BENGALURU REAL ESTATE FOUR", "legal": "PRIVATE LIMITED"},
+        ),
+        (
+            "THE ASSET MANAGEMENT GROUP",
+            {
+                "common_prefixes": "THE",
+                "base": "ASSET",
+                "common_suffixes": "MANAGEMENT GROUP",
+            },
+        ),
     ),
 )
 def test_company_name(name, expected):

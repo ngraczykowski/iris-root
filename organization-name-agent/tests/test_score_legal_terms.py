@@ -112,3 +112,19 @@ def test_similar_legal(first_legal: str, second_legal: str):
 )
 def test_same_legal_from_different_countries(first_legal: str, second_legal: str):
     assert _get_legal_terms_result(first_legal, second_legal) == 1
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        (
+            "DIAMOND POCKET BOOKS PRIVATE LIMITED",
+            "DIAMOND POCKET BOOKS (PRIVATE LIMITED)",
+        ),
+        ("HUNZA SUGAR MILLS (PVT.) LIMITED", "HUNZA SUGAR MILLS PRIVATE LIMITED"),
+    ),
+)
+def test_legal_in_parenthesis(first, second):
+    result = compare(first, second)
+    assert result["fuzzy"].value == 1
+    assert result["legal_terms"].value == 1

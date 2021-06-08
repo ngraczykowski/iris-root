@@ -43,6 +43,7 @@ ANY_COMPARED = (AnyValue(), AnyValue())
                     value=1, compared=(("HP",), ("HEWLETT-PACKARD",))
                 ),
                 "legal_terms": Score(value=0, compared=(("INC",), ("COMPANY",))),
+                "parenthesis_match": Score(value=1, compared=ANY_COMPARED),
             },
         ),
         (
@@ -164,6 +165,28 @@ ANY_COMPARED = (AnyValue(), AnyValue())
             "THE KOREA DEVELOPMENT BANK (KDB)",
             {
                 "fuzzy": Score(value=EstimatedValue(lower=0.75), compared=ANY_COMPARED),
+            },
+        ),
+        (
+            "Alpha Engineering Co Private Ltd.",
+            "Charlie Engineering Co Private Ltd.",
+            {
+                "fuzzy_on_base": Score(
+                    value=EstimatedValue(upper=0.4), compared=(("Alpha",), ("Charlie",))
+                ),
+                "fuzzy_on_suffix": Score(
+                    value=1, compared=(("Engineering",), ("Engineering",))
+                ),
+            },
+        ),
+        (
+            "Remit OOO",
+            "Out Of Order Advertisements",
+            {
+                "legal_terms": Score(
+                    status=Score.ScoreStatus.NO_MATCHED_PARTY_DATA,
+                    compared=(("OOO",), ()),
+                ),
             },
         ),
     ),

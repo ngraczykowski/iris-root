@@ -2,16 +2,16 @@ import dataclasses
 import string
 from typing import Tuple, Generator, Sequence
 
-from company_name.names.special_words import WEAK_WORDS
-from company_name.names.name_information import NameInformation, NameWord, NameSequence
+from company_name.datasources.special_words import WEAK_WORDS
+from company_name.names.name_information import NameInformation, Token, TokensSequence
 from company_name.utils.clear_name import clear_name, POSSIBLE_SEPARATORS
-from .score import Score
+from company_name.scores.score import Score
 
 
 @dataclasses.dataclass
 class Abbreviation:
-    source: NameSequence
-    abbreviated: NameSequence
+    source: TokensSequence
+    abbreviated: TokensSequence
 
     def compared(self) -> Tuple[Tuple[str, ...], Tuple[str, ...]]:
         return (self.source.original_name,) if self.source else (), (
@@ -20,9 +20,9 @@ class Abbreviation:
 
 
 def _check_abbreviation_for_next_word(
-    word: NameWord,
-    rest_of_information: Sequence[NameSequence],
-    abbreviation: NameSequence,
+    word: Token,
+    rest_of_information: Sequence[TokensSequence],
+    abbreviation: TokensSequence,
     result: Abbreviation,
 ) -> Generator[Score, None, None]:
     # words such as of / the / ... are often omitted in abbreviation
@@ -63,7 +63,7 @@ def _check_abbreviation_for_next_word(
             yield check_abbreviation(
                 (
                     (
-                        NameWord(original="", cleaned=separated[1]),
+                        Token(original="", cleaned=separated[1]),
                         *rest_of_information[0],
                     ),
                     *rest_of_information[1:],
@@ -83,12 +83,12 @@ def _check_abbreviation_for_next_word(
         and abbreviation[1].cleaned == word.cleaned[0]
     ):
         duplicate_by = int(abbreviation[0].cleaned) - 1
-        abbreviated = NameWord(
+        abbreviated = Token(
             cleaned="", original="".join(abbreviation[:2].original_tuple)
         )
         new_abbreviation = (
-            NameSequence(
-                [NameWord(cleaned=abbreviation[1].cleaned, original="")] * duplicate_by
+            TokensSequence(
+                [Token(cleaned=abbreviation[1].cleaned, original="")] * duplicate_by
             )
             + abbreviation[2:]
         )
@@ -103,7 +103,7 @@ def _check_abbreviation_for_next_word(
 
 
 def _check_abbreviation_when_no_abbreviation(
-    words: NameSequence, result: Abbreviation
+    words: TokensSequence, result: Abbreviation
 ) -> Score:
     left_words = len(set(words).difference(WEAK_WORDS))
     if not left_words:
@@ -117,8 +117,8 @@ def _check_abbreviation_when_no_abbreviation(
 
 
 def _check_abbreviation_when_no_words(
-    rest_of_information: Sequence[NameSequence],
-    abbreviation: NameSequence,
+    rest_of_information: Sequence[TokensSequence],
+    abbreviation: TokensSequence,
     result: Abbreviation,
 ) -> Generator[Score, None, None]:
 
@@ -138,7 +138,9 @@ def _check_abbreviation_when_no_words(
                 # only first legal information is freely accessible in abbreviation
                 # - next ones should be penalized
                 yield check_abbreviation(
-                    [NameSequence([legal_information[0]]), [], []], abbreviation, result
+                    [TokensSequence([legal_information[0]]), [], []],
+                    abbreviation,
+                    result,
                 )
 
     yield Score(
@@ -150,8 +152,8 @@ def _check_abbreviation_when_no_words(
 
 
 def check_abbreviation(
-    information: Sequence[NameSequence],
-    abbreviation: NameSequence,
+    information: Sequence[TokensSequence],
+    abbreviation: TokensSequence,
     result: Abbreviation,
 ) -> Score:
     words, *rest = information
@@ -181,9 +183,9 @@ def check_abbreviation(
     )
 
 
-def _create_possible_abbreviation(name: str) -> NameSequence:
-    return NameSequence(
-        [NameWord(original=n, cleaned=clear_name(n)) for n in list(name)]
+def _create_possible_abbreviation(name: str) -> TokensSequence:
+    return TokensSequence(
+        [Token(original=n, cleaned=clear_name(n)) for n in list(name)]
     )
 
 
@@ -191,7 +193,7 @@ def _abbreviation_score(
     information: NameInformation, abbreviation_name: NameInformation
 ) -> Score:
     abbreviation = _create_possible_abbreviation(abbreviation_name.base.original_name)
-    words = NameSequence([*information.common_prefixes, *information.base])
+    words = TokensSequence([*information.common_prefixes, *information.base])
     base_score = Score(compared=Abbreviation(words, abbreviation).compared())
 
     if (
@@ -213,7 +215,7 @@ def _abbreviation_score(
             information.legal,
         ],
         abbreviation,
-        Abbreviation(source=NameSequence(), abbreviated=NameSequence()),
+        Abbreviation(source=TokensSequence(), abbreviated=TokensSequence()),
     )
     return max(abbreviation_score, base_score)
 

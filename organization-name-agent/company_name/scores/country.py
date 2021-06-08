@@ -1,9 +1,9 @@
-from company_name.names.countries import COUNTRIES
-from company_name.names.name_information import NameSequence
-from .score import Score
+from company_name.datasources.countries import COUNTRIES
+from company_name.names.name_information import TokensSequence
+from company_name.scores.score import Score
 
 
-def country_score(first_countries: NameSequence, second_countries: NameSequence) -> Score:
+def country_score(first_countries: TokensSequence, second_countries: TokensSequence) -> Score:
     if not first_countries and not second_countries:
         return Score()
 

@@ -2,7 +2,7 @@ import re
 from typing import List
 
 from company_name.names.name_information import NameInformation
-from .score import Score
+from company_name.scores.score import Score
 
 
 BLACKLIST = {"gazprom", "vtb"}

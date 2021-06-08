@@ -1,9 +1,9 @@
 import collections
 from typing import List, Iterable, Counter
 
-from company_name.names.special_words import WEAK_WORDS
-from company_name.names.name_information import NameSequence
-from .score import Score
+from company_name.datasources.special_words import WEAK_WORDS
+from company_name.names.name_information import TokensSequence
+from company_name.scores.score import Score
 
 
 def _filter_weak_words(names: Iterable[str]) -> List[str]:
@@ -19,7 +19,7 @@ def _different(first: Counter[str], second: Counter[str]) -> List[str]:
 
 
 def tokenization_score(
-    first_name: NameSequence, second_name: NameSequence, absolute: bool = False
+    first_name: TokensSequence, second_name: TokensSequence, absolute: bool = False
 ) -> Score:
     if not first_name and not second_name:
         return Score()

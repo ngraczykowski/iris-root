@@ -1,7 +1,4 @@
-from .special_words import WEAK_WORDS
-from company_name.utils.clear_name import divide
-
-_COMMON_SUFFIXES = {
+[
     "asset",
     "association",
     "authorised distributor",
@@ -83,8 +80,5 @@ _COMMON_SUFFIXES = {
     "trade",
     "trading",
     "trust",
-    "universal",
-    *WEAK_WORDS
-}
-
-COMMON_SUFFIXES = {tuple(divide(n)) for n in _COMMON_SUFFIXES}
+    "universal"
+]

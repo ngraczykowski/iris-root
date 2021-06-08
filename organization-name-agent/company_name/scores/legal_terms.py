@@ -1,13 +1,13 @@
 import statistics
 from typing import Sequence, Set, Generator
 
-from company_name.names.legal_terms import LEGAL_TERMS, LegalTerm
-from company_name.names.name_information import NameSequence
-from .score import Score
+from company_name.datasources.legal_terms import LEGAL_TERMS, LegalTerm
+from company_name.names.name_information import TokensSequence
+from company_name.scores.score import Score
 
 
 def _get_legal_terms(
-    values: NameSequence,
+    values: TokensSequence,
 ) -> Generator[Sequence[LegalTerm], None, None]:
     for value in values:
         key = tuple(value.cleaned.split())
@@ -39,7 +39,7 @@ def _coverage(terms: Sequence[Sequence[LegalTerm]], all_meanings: Set[str]) -> f
     return statistics.mean(scores) if scores else 1
 
 
-def legal_score(first: NameSequence, second: NameSequence) -> Score:
+def legal_score(first: TokensSequence, second: TokensSequence) -> Score:
     if not first and not second:
         return Score()
 

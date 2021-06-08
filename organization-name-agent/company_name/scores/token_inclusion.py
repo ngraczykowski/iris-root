@@ -1,22 +1,22 @@
 import itertools
 from typing import Sequence
 
-from company_name.names.name_information import NameInformation, NameSequence, NameWord
+from company_name.names.name_information import NameInformation, TokensSequence, Token
 from company_name.scores.score import Score
 from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 
 
-def _tokens(name: NameInformation) -> Sequence[NameSequence]:
+def _tokens(name: NameInformation) -> Sequence[TokensSequence]:
     return (
         name.name(),
-        NameSequence(list(itertools.chain.from_iterable(
-            [NameWord(original=o, cleaned=clear_name(o)) for o in POSSIBLE_SEPARATORS.split(word)]
+        TokensSequence(list(itertools.chain.from_iterable(
+            [Token(original=o, cleaned=clear_name(o)) for o in POSSIBLE_SEPARATORS.split(word)]
             for word in name.name().original_tuple
         ))),
     )
 
 
-def _token_inclusion(name: NameSequence, tokens: NameSequence) -> Score:
+def _token_inclusion(name: TokensSequence, tokens: TokensSequence) -> Score:
     return Score(
         value=float(len(name) == 1 and name[0] in tokens),
         compared=(name.original_tuple, tokens.original_tuple)

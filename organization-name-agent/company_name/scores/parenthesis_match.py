@@ -1,14 +1,14 @@
 from company_name.names.name_information import NameInformation
-from .score import Score
+from company_name.scores.score import Score
 
 
 def parenthesis_score(first: NameInformation, second: NameInformation) -> Score:
-    if not first.parenthesis.cleaned_tuple and not second.parenthesis.cleaned_tuple:
+    if not first.parenthesis and not second.parenthesis:
         return Score()
 
     second_base_appeared, first_base_appeared = (
-        second.base.cleaned_name in first.parenthesis.cleaned_tuple,
-        first.base.cleaned_name in second.parenthesis.cleaned_tuple,
+        second.base.cleaned_name in (n.name().cleaned_name for n in first.parenthesis),
+        first.base.cleaned_name in (n.name().cleaned_name for n in second.parenthesis),
     )
     return Score(
         status=Score.ScoreStatus.OK,

@@ -150,8 +150,9 @@ def test_whitespaces(first, second):
     ),
 )
 def test_only_legal_in_names(first, second):
-    print(repr(first), repr(second), compare(first, second))
+    print(repr(first), repr(second))
     result = compare(first, second)
+    print(result)
     assert result["fuzzy_on_base"].value == 1
     assert result["fuzzy_on_base"].compared == ((first,), (second,))
 

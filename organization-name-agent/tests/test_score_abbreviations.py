@@ -145,7 +145,8 @@ def test_separators(first, second):
     ),
 )
 def test_when_no_acceptable_data(first, second, status):
-    print(repr(first), repr(second), compare(first, second))
+    print(repr(first), repr(second))
     score = compare(first, second)
+    print(score)
     assert score["abbreviation"].status == status
     assert score["abbreviation"].value == 0
