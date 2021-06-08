@@ -1,0 +1,79 @@
+== Production periodic reports
+
+[plantuml, production-periodic-reports-generating-and-storing-reports, svg]
+-----
+@startuml
+header Production periodic reports - Generating and storing reports
+
+title  Production periodic reports
+actor User
+
+
+participant Warehouse
+
+participant S3 as "S3/SFTP"
+
+participant Kibana
+participant Elastic
+
+--> Kibana : Prepare reports in a production tenant
+...
+--> Elastic : Update/Create index for production data
+
+...
+
+autonumber
+Kibana -> Kibana : Generate reports based on definitions \nin production tenant
+Kibana -> Elastic : Query for data
+note over Kibana
+Generating those reports is controlled by Kibana.
+The user defines a cron job, when a report should be generated,
+and this report is generated automatically by Kibana.
+end note
+...
+
+Warehouse -> Warehouse : Scheduled event
+Warehouse -> Kibana : List report instances
+Warehouse -> Kibana : Download new reports
+Warehouse -> S3 : Store reports
+
+@enduml
+-----
+
+== On-demand reports
+
+[plantuml, on_demand-reports-downloading-reports, svg]
+-----
+@startuml
+header On-demand reports - Downloading reports
+
+title  On-demand reports
+
+actor User
+
+participant Warehouse
+
+participant Kibana
+
+participant Elasticsearch
+
+autonumber
+
+User -> Warehouse : List defined reports
+Warehouse -> Kibana : List defined on-demand report definitions
+
+...
+User -> Warehouse : Download report
+Warehouse -> Kibana : Generate report
+Kibana -> Elasticsearch : Query for data
+
+note over Warehouse, Kibana
+Generating reports in the User's context will allow us to present only those data, the user may see
+end note
+
+Kibana -> Warehouse : Return report generated \nin the user's context
+
+Warehouse -> User : Save the report
+
+@enduml
+-----
