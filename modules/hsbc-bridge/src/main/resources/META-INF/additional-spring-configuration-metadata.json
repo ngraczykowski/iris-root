@@ -124,6 +124,26 @@
       "name": "silenteight.bridge.model.loaded.queue",
       "type": "java.lang.String",
       "description": "Description for silenteight.bridge.model.loaded.queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.model-persisted-exchange-name",
+      "type": "java.lang.String",
+      "description": "Model exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.model-persisted-routing-key",
+      "type": "java.lang.String",
+      "description": "Model persisted exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.watchlist-persisted-exchange-name",
+      "type": "java.lang.String",
+      "description": "Watchlist exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.watchlist-persisted-routing-key",
+      "type": "java.lang.String",
+      "description": "Watchlist persisted exchange routing key."
     }
   ]
 }

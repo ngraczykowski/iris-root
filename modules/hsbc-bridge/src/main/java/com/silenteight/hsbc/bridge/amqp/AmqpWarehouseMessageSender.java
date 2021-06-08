@@ -14,7 +14,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 
 @Builder
 @Slf4j
-class MessageSender implements WarehouseMessageSender {
+class AmqpWarehouseMessageSender implements WarehouseMessageSender {
 
   private final AmqpTemplate amqpTemplate;
   private final MessageConverter messageConverter;

@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.hsbc.bridge.amqp.MessageRegistry;
+import com.silenteight.worldcheck.api.v1.ModelPersisted;
+import com.silenteight.worldcheck.api.v1.MultipleWatchlistPersisted;
+import com.silenteight.worldcheck.api.v1.WatchlistPersisted;
 
 import com.google.protobuf.Enum;
 import com.google.protobuf.*;
@@ -50,7 +53,10 @@ class ProtoMessageRegistry implements MessageRegistry {
         Empty.getDefaultInstance(),
         Enum.getDefaultInstance(),
         ProductionDataIndexRequest.getDefaultInstance(),
-        RecommendationsGenerated.getDefaultInstance()
+        RecommendationsGenerated.getDefaultInstance(),
+        MultipleWatchlistPersisted.getDefaultInstance(),
+        WatchlistPersisted.getDefaultInstance(),
+        ModelPersisted.getDefaultInstance()
     ).forEach(this::registerMessageType);
   }
 }

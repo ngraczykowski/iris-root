@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 class WatchlistUseCaseConfiguration {
 
   private final SaveResourceUseCase saveResourceUseCase;
-  private final WorldCheckNotifierServiceClient worldCheckNotifier;
+  private final WorldCheckNotifier worldCheckNotifier;
   private final DownloadResourceUseCase downloadFileUseCase;
   private final ApplicationEventPublisher eventPublisher;
   private final FileUnzipper unzipper;
