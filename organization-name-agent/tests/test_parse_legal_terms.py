@@ -136,3 +136,13 @@ def test_legal_in_company_abbreviation(name: str, expected):
     print(information)
     for key, value in expected.items():
         assert getattr(information, key) == value.lower().split()
+
+
+@pytest.mark.parametrize(
+    "name",
+    ("POWER SAL", "POWER S A L", "POWER S.A.L.", "POWER (SAL)", "POWER (S.A.L.)"),
+)
+def test_different_ways_to_use_legal_term_abbreviation(name):
+    information = parse_name(name)
+    print(information)
+    assert len(information.legal) == 1

@@ -315,6 +315,14 @@
         "limited liability"
       ]
     },
+    "Empresa Pública": {
+      "abbreviations": [
+        "EP"
+      ],
+      "country": [
+        "Ecuador"
+      ]
+    },
     "Enkeltmandsvirksomhed": {
       "abbreviations": [],
       "country": [
@@ -337,6 +345,20 @@
       "abbreviations": [],
       "country": [
         "Denmark"
+      ]
+    },
+    "Etaireía Periorisménis Efthínis": {
+      "abbreviations": [
+        "Εταιρεία Περιορισμένης Ευθύνη",
+        "E.P.E.",
+        "Ε.Π.Ε."
+      ],
+      "meaning": [
+        "limited",
+        "private"
+      ],
+      "country": [
+        "Greece"
       ]
     },
     "Forening": {
@@ -686,6 +708,21 @@
       "meaning": [
         "limited liability",
         "partnership"
+      ]
+    },
+    "Monoprósopi Etaireía Periorisménis Efthínis": {
+      "abbreviations": [
+        "Μονοπρόσωπη Εταιρεία Περιορισμένης Ευθύνη",
+        "M.E.P.E.",
+        "Μ.Ε.Π.Ε."
+      ],
+      "meaning": [
+        "limited",
+        "private",
+        "single member"
+      ],
+      "country": [
+        "Greece"
       ]
     },
     "naamloze vennootschap": {
@@ -1210,6 +1247,17 @@
         "Belgium",
         "France",
         "Morocco"
+      ]
+    },
+    "Société anonyme libanaise": {
+      "abbreviations": [
+        "s.a.l."
+      ],
+      "meaning": [
+        "joint stock company"
+      ],
+      "country": [
+        "Lebanon"
       ]
     },
     "société coopérative": {
