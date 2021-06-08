@@ -65,7 +65,8 @@ from company_name.names.parse.parse import parse_name
             {
                 "common_prefixes": "THE",
                 "base": "ASSET",
-                "common_suffixes": "MANAGEMENT GROUP",
+                "common_suffixes": "MANAGEMENT",
+                "legal": "GROUP",
             },
         ),
     ),

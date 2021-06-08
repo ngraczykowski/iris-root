@@ -97,7 +97,7 @@ def test_words_not_always_legal(name: str):
     (
         (
             "U-G-T Group LLC(Limited liability Company)",
-            {"llc", "limited liability company"},
+            {"group", "llc", "limited liability company"},
         ),
         ("SIGNATURE COSMETICS (PTY) LTD ", {"pty", "ltd"}),
         ("Pax Holding (Genossenschaft) ", {"genossenschaft"}),

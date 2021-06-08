@@ -131,6 +131,17 @@
         "Malaysia"
       ]
     },
+    "beslote korporasie": {
+      "abbreviation": [
+        "BK"
+      ],
+      "country": [
+        "South Africa"
+      ],
+      "meaning": [
+        "close corporation"
+      ]
+    },
     "besloten vennootschap": {
       "abbreviations": [
         "bv"
@@ -142,17 +153,6 @@
       "country": [
         "Belgium",
         "Netherlands"
-      ]
-    },
-    "beslote korporasie": {
-      "abbreviation": [
-        "BK"
-      ],
-      "country": [
-        "South Africa"
-      ],
-      "meaning": [
-        "close corporation"
       ]
     },
     "Borettslag": {
@@ -339,21 +339,21 @@
         "Denmark"
       ]
     },
-    "Forening med begrænset ansvar": {
-      "abbreviations": [
-        "F.M.B.A."
-      ],
+    "Forening": {
+      "abbreviations": [],
       "meaning": [
-        "limited liability",
         "association"
       ],
       "country": [
         "Denmark"
       ]
     },
-    "Forening": {
-      "abbreviations": [],
+    "Forening med begrænset ansvar": {
+      "abbreviations": [
+        "F.M.B.A."
+      ],
       "meaning": [
+        "limited liability",
         "association"
       ],
       "country": [
@@ -430,6 +430,12 @@
         "goe"
       ]
     },
+    "group": {
+      "abbreviations": [
+        "grup",
+        "grupo"
+      ]
+    },
     "handelsbolag": {
       "abbreviations": [
         "hb"
@@ -449,6 +455,12 @@
         "Norway"
       ]
     },
+    "Incorporated": {
+      "abbreviations": [
+        "inc.",
+        "incorporation"
+      ]
+    },
     "incorporated limited partnership": {
       "abbreviations": [
         "ilp"
@@ -459,12 +471,6 @@
       ],
       "country": [
         "Australia"
-      ]
-    },
-    "Incorporated": {
-      "abbreviations": [
-        "inc.",
-        "incorporation"
       ]
     },
     "Interessentskab": {
@@ -829,14 +835,29 @@
       ]
     },
     "Perseroan Terbatas": {
-      "abbreviations": ["PT"],
-      "meaning": ["private","limited liability"],
-      "country": ["Indonesia"]
+      "abbreviations": [
+        "PT"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ],
+      "country": [
+        "Indonesia"
+      ]
     },
     "Perseroan Terbatas Terbuka": {
-      "abbreviations": ["PT Tbk", "Perseroan Terbuka"],
-      "meaning": ["public","limited liability"],
-      "country": ["Indonesia"]
+      "abbreviations": [
+        "PT Tbk",
+        "Perseroan Terbuka"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
+      ],
+      "country": [
+        "Indonesia"
+      ]
     },
     "preduzetnik": {
       "abbreviations": [],
@@ -848,6 +869,9 @@
         "Serbia"
       ]
     },
+    "private": {
+      "abbreviations": []
+    },
     "Private limited company": {
       "abbreviations": [
         "pte",
@@ -856,9 +880,6 @@
       "meaning": [
         "private"
       ]
-    },
-    "private": {
-      "abbreviations": []
     },
     "professional corporation": {
       "abbreviations": [
@@ -888,6 +909,9 @@
         "state-owned"
       ]
     },
+    "public": {
+      "abbreviations": []
+    },
     "Public Establishment with Economic characteristics": {
       "abbreviations": [
         "PEEC"
@@ -914,9 +938,6 @@
         "public",
         "limited liability"
       ]
-    },
-    "public": {
-      "abbreviations": []
     },
     "publichnoye aktsionernoye obschestvo": {
       "abbreviations": [
@@ -1015,6 +1036,11 @@
         "limited liability"
       ]
     },
+    "Single Member Company": {
+      "meaning": [
+        "single member"
+      ]
+    },
     "Single Member Private Limited Company": {
       "abbreviations": [
         "SM Pte Ltd."
@@ -1026,11 +1052,6 @@
       ],
       "country": [
         "Cambodia"
-      ]
-    },
-    "Single Member Company": {
-      "meaning": [
-        "single member"
       ]
     },
     "Sociedad Anónima Cerrada": {
@@ -1101,18 +1122,6 @@
         "general partnership"
       ]
     },
-    "sociedad limitada nueva empresa": {
-      "abbreviations": [
-        "S.L.N.E."
-      ],
-      "country": [
-        "Spain"
-      ],
-      "meaning": [
-        "private",
-        "limited liability"
-      ]
-    },
     "sociedad limitada": {
       "abbreviations": [
         "s.l."
@@ -1125,6 +1134,26 @@
         "limited liability"
       ]
     },
+    "sociedad limitada nueva empresa": {
+      "abbreviations": [
+        "S.L.N.E."
+      ],
+      "country": [
+        "Spain"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "Sociedad por acciones": {
+      "abbreviations": [
+        "SpA"
+      ],
+      "country": [
+        "Chile"
+      ]
+    },
     "sociedad por acciones simplificada": {
       "abbreviations": [
         "sas"
@@ -1135,14 +1164,6 @@
       "meaning": [
         "public",
         "limited liability"
-      ]
-    },
-    "Sociedad por acciones": {
-      "abbreviations": [
-        "SpA"
-      ],
-      "country": [
-        "Chile"
       ]
     },
     "Sociedade Gestora de Participações Sociais": {
@@ -1315,8 +1336,12 @@
       ]
     },
     "terbuka": {
-      "abbreviations": ["tbk"],
-      "meaning": ["public"]
+      "abbreviations": [
+        "tbk"
+      ],
+      "meaning": [
+        "public"
+      ]
     },
     "Tovarystvo z obmezhenoiu vidpovidalnistiu": {
       "abbreviations": [

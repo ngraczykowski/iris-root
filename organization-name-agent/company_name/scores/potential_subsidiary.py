@@ -1,9 +1,17 @@
 from company_name.names.name_information import NameInformation
 from company_name.scores.score import Score
+from company_name.datasources.legal_terms import LEGAL_TERMS
 
 
 def _potential_subsidiary_parent(name: NameInformation) -> bool:
-    return "group" in name.name().cleaned_tuple
+    group_sources = {
+        " ".join(source)
+        for source, terms in LEGAL_TERMS.source_to_legal_terms.items()
+        if any(t.normalized == "group" for t in terms)
+    }
+    return group_sources.intersection(name.legal.cleaned_tuple) or any(
+        group_name in name.name().cleaned_tuple for group_name in group_sources
+    )
 
 
 def potential_subsidiary_score(

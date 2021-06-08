@@ -143,20 +143,20 @@ ANY_COMPARED = (AnyValue(), AnyValue())
                 "tokenization": Score(
                     value=1,
                     compared=(
-                        ("NORTH", "CHINA", "INDUSTRIES", "GROUP"),
-                        ("China", "North", "Industries", "Group"),
+                        ("NORTH", "CHINA", "INDUSTRIES"),
+                        ("China", "North", "Industries"),
                     ),
                 ),
                 "absolute_tokenization": Score(
-                    value=4,
+                    value=3,
                     compared=(
-                        ("NORTH", "CHINA", "INDUSTRIES", "GROUP"),
-                        ("China", "North", "Industries", "Group"),
+                        ("NORTH", "CHINA", "INDUSTRIES"),
+                        ("China", "North", "Industries"),
                     ),
                 ),
                 "legal_terms": Score(
-                    value=0.75,
-                    compared=(("CORPORATION",), ("Corp", "Ltd")),
+                    value=EstimatedValue(lower=0.8, upper=0.9),
+                    compared=(("GROUP", "CORPORATION",), ("Group", "Corp", "Ltd")),
                 ),
             },
         ),
