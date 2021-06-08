@@ -4,6 +4,7 @@ package silenteight.solving.api.v1;
 
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
 
 import public "silenteight/protobuf/uuid.proto";
 import public "silenteight/solving/api/v1/feature.proto";
@@ -42,7 +43,9 @@ message SolutionResponse {
   // Solution assigned to a vector
   FeatureVectorSolution feature_vector_solution = 1;
   // Any two vectors with the same signatures are considered the same.
-  bytes feature_vector_signature = 2;
+  bytes feature_vector_signature = 2 [deprecated = true];
   // Id of the step that triggered the solution
-  protobuf.Uuid step_id = 3;
+  protobuf.Uuid step_id = 3 [deprecated = true];
+  // Justification for the solution
+  google.protobuf.Struct reason = 4;
 }
