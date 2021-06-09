@@ -18,7 +18,7 @@ class JdbcUnsolvedMatchesReaderConfiguration {
   private final UnsolvedMatchesReaderProperties properties;
 
   @Bean
-  JdbcUnsolvedMatchesReader jdbcMissingMatchFeatureReader(DataSource dataSource) {
+  JdbcUnsolvedMatchesReader jdbcUnsolvedMatchesReader(DataSource dataSource) {
     return new JdbcUnsolvedMatchesReader(
         dataSource, properties.getChunkSize(), properties.getMaxRows());
   }
