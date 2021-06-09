@@ -2,9 +2,8 @@ server.port: {{ env "NOMAD_PORT_http" }}
 grpc.server.port: {{ env "NOMAD_PORT_grpc" }}
 
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
-{{- with $all_instances := service (print $nomad_namespace "-hsbc-bridge-db") -}}
-{{- with index $all_instances 0 }}
-spring.datasource.url: jdbc:postgresql://{{ .Address }}:{{ .Port }}/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
+{{- with service (print $nomad_namespace "-hsbc-bridge-db") }}
+spring.datasource.url: jdbc:postgresql://{{ (index . 0).Address }}:{{ (index . 0).Port }}/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
 {{ end -}}
 
 silenteight.bridge.grpc.governance-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
@@ -20,6 +19,5 @@ spring:
       {{ $rabbit.Address }}:{{ $rabbit.Port -}}
 {{- end }}
 # NOTE(ahaczewski): Intentionally left empty.
-host:
-virtual-host: /{{ env "NOMAD_NAMESPACE" }}
-
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
