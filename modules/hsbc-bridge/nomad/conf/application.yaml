@@ -21,3 +21,5 @@ spring:
 # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+logging.level.com.silenteight: DEBUG
