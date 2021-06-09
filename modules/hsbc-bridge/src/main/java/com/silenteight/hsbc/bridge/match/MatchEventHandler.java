@@ -9,19 +9,17 @@ import org.springframework.context.event.EventListener;
 
 import javax.transaction.Transactional;
 
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 class MatchEventHandler {
 
   private final MatchRepository matchRepository;
 
   @EventListener
   @Transactional
-  public void onUpdateMatchWithNameEvent(UpdateMatchWithNameEvent updateMatchWithNameEvent) {
-    log.debug("Received updateMatchWithNameEvent.");
+  public void onUpdateMatchWithNameEvent(UpdateMatchWithNameEvent event) {
+    log.debug("Received match ids with names = {}", event.getMatchIdsWithNames());
 
-    updateMatchWithNameEvent.getMatchIdsWithNames().forEach(matchRepository::updateNameById);
-
-    log.debug("End processing updateMatchWithNameEvent.");
+    event.getMatchIdsWithNames().forEach(matchRepository::updateNameById);
   }
 }

@@ -29,8 +29,6 @@ class StoreMatchCategoriesUseCase {
           matchCategoryRepository.save(matchCategory);
         }));
 
-    if (log.isDebugEnabled()) {
-      log.info("Match categories has been stored");
-    }
+    log.debug("Match categories has been stored");
   }
 }

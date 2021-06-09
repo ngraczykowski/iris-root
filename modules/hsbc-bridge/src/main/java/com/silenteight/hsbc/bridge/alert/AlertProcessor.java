@@ -34,7 +34,7 @@ class AlertProcessor {
       alerts.forEach(this::tryToPreProcessAlert);
     }
 
-    log.debug("Alerts pre-processing have been completed, bulkId = {}", bulkId);
+    log.debug("Alerts pre-processing have been completed, batchId = {}", bulkId);
   }
 
   private void tryToPreProcessAlert(AlertEntity alert) {

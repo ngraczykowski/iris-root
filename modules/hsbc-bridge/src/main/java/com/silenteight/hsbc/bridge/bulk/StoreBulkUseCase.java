@@ -32,7 +32,7 @@ class StoreBulkUseCase {
     bulkRepository.save(bulk);
 
     alertFacade.createRawAlerts(command.getBulkId(), command.getInputStream());
-    log.info("Bulk has been stored, ID: {}", bulkId);
+    log.info("Batch has been stored, ID: {}", bulkId);
 
     eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
   }

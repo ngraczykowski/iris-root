@@ -57,7 +57,7 @@ public class WorldCheckModelManager implements ModelManager {
       var url = new URL(request.getUrl());
       var inputStream = url.openStream();
       var resource = saveResourceUseCase.save(inputStream, request.getName());
-      log.info("Update model uri on minio successful!");
+      log.debug("Update model uri on minio successful!");
       return createModelStatusUpdate(request, resource);
     } catch (IOException e) {
       log.error("Unable to update model uri on minio: " + request.getName(), e);

@@ -40,7 +40,7 @@ class RecommendationHandler {
     if (doesNotExist(recommendation.getName())) {
       save(recommendation);
 
-      log.info("Recommendation for an alert:{} has been stored", alert);
+      log.debug("Recommendation has been stored, alert={}", alert);
 
       eventPublisher.publishEvent(new AlertRecommendationReadyEvent(alert));
     }

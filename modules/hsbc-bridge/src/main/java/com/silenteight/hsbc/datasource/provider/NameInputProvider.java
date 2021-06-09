@@ -2,7 +2,6 @@ package com.silenteight.hsbc.datasource.provider;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 import static com.silenteight.hsbc.datasource.feature.Feature.NAME;
 import static java.util.List.of;
 
-@Slf4j
 @RequiredArgsConstructor
 class NameInputProvider implements DataSourceInputProvider<NameInputResponse> {
 
@@ -50,13 +48,11 @@ class NameInputProvider implements DataSourceInputProvider<NameInputResponse> {
   }
 
   private List<NameFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
-    var featureInputs = features.stream()
+    return features.stream()
         .map(featureName -> (NameFeatureInputDto)
             ((FeatureClientValuesRetriever) getFeatureRetriever(featureName))
                 .retrieve(matchData, nameInformationServiceClient))
         .collect(Collectors.toList());
-    log.info("Feature Input:\n\n" + featureInputs);
-    return featureInputs;
   }
 
   @Override

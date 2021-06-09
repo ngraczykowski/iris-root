@@ -29,7 +29,7 @@ class DataRetentionConfiguration {
   }
 
   private void schedulePayloadCleanerJob() {
-    log.info("Registering payload cleaner job, rate={}", properties.getRate());
+    log.debug("Registering payload cleaner job, rate={}", properties.getRate());
 
     taskScheduler.scheduleAtFixedRate(getPayloadCleanerJob()::clean, properties.getRate());
   }

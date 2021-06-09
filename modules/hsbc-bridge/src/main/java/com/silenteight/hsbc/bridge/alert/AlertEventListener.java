@@ -21,7 +21,7 @@ class AlertEventListener {
 
   @EventListener
   public void onUpdateAlertEventWithNameEvent(UpdateAlertWithNameEvent event) {
-    log.debug("Received updateAlertEventWithNameEvent, {}", event);
+    log.trace("Received updateAlertEventWithNameEvent, {}", event.getAlertIdToName());
 
     updater.updateNames(event.getAlertIdToName());
   }

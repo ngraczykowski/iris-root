@@ -15,7 +15,8 @@ public class StoreModelUseCase {
   public void storeModel(ModelStatusUpdatedDto modelStatusUpdated) {
     var modelEntity = toModelEntity(modelStatusUpdated);
     modelRepository.save(modelEntity);
-    log.info("New model: " + modelEntity + " has been stored");
+
+    log.info("New model: {} has been stored", modelEntity);
   }
 
   private ModelEntity toModelEntity(ModelStatusUpdatedDto modelStatusUpdated) {
