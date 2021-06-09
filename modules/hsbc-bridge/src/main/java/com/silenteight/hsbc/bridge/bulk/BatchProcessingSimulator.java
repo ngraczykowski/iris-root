@@ -2,8 +2,8 @@ package com.silenteight.hsbc.bridge.bulk;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.alert.AlertStatus;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationGenerator;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationGenerator.GenerationRequest;
 
@@ -25,12 +25,13 @@ class BatchProcessingSimulator {
   private final BulkRepository bulkRepository;
   private final RecommendationGenerator generator;
 
-  @Scheduled(fixedRateString = "PT30S" , initialDelay = 2000)
+  @Scheduled(fixedRateString = "PT30S", initialDelay = 2000)
   @Transactional
   public void simulate() {
     findBatchInProcessing().ifPresent(b -> {
 
       var alerts = b.getValidAlerts().stream()
+          .filter(a -> AlertStatus.PROCESSING == a.getStatus())
           .map(BulkAlertEntity::getName)
           .collect(Collectors.toList());
       var analysis = b.getAnalysis();

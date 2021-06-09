@@ -8,16 +8,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-class RecommendationFacadeConfiguration {
+class HandlerConfiguration {
 
   private final ApplicationEventPublisher eventPublisher;
   private final RecommendationServiceClient recommendationServiceClient;
   private final RecommendationRepository recommendationRepository;
-
-  @Bean
-  public RecommendationFacade recommendationFacade() {
-    return new RecommendationFacade(recommendationRepository);
-  }
 
   @Bean
   NewRecommendationEventListener recommendationEventListener() {

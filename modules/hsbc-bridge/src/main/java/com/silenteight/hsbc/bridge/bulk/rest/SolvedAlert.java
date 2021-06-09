@@ -31,7 +31,7 @@ public class SolvedAlert {
   private String id = null;
 
   @SerializedName("recommendation")
-  private SolvedAlertStatus recommendation = null;
+  private String recommendation = null;
 
   @SerializedName("comment")
   private String comment = null;
@@ -57,7 +57,7 @@ public class SolvedAlert {
     this.id = id;
   }
 
-  public SolvedAlert recommendation(SolvedAlertStatus recommendation) {
+  public SolvedAlert recommendation(String recommendation) {
     this.recommendation = recommendation;
     return this;
   }
@@ -83,11 +83,11 @@ public class SolvedAlert {
    * @return recommendation
   **/
   @Schema(description = "")
-  public SolvedAlertStatus getRecommendation() {
+  public String getRecommendation() {
     return recommendation;
   }
 
-  public void setRecommendation(SolvedAlertStatus recommendation) {
+  public void setRecommendation(String recommendation) {
     this.recommendation = recommendation;
   }
 

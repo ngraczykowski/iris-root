@@ -419,3 +419,29 @@ databaseChangeLog:
                   name: type
                   type: varchar(30)
 
+
+  - changeSet:
+      id: 1.0.0-10
+      author: bmartofel
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_alert_metadata
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+              - column:
+                  name: key
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: text
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: id
+            indexName: idx_bridge_alert_metadata_id
+            tableName: hsbc_bridge_alert_metadata

@@ -1,14 +1,14 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus
-import com.silenteight.hsbc.bridge.recommendation.RecommendationFacade
+import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase
 
 import spock.lang.Specification
 
 class GetBulkResultsUseCaseSpec extends Specification {
 
   def fixtures = new Fixtures()
-  def recommendationFacade = Mock(RecommendationFacade)
+  def recommendationFacade = Mock(GetRecommendationUseCase)
   def bulkRepository = Mock(BulkRepository)
   def underTest = new GetBulkResultsUseCase(bulkRepository, recommendationFacade)
 

@@ -6,6 +6,7 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.NONE;
@@ -52,6 +53,10 @@ public class AlertEntity extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "alert_payload_id")
   private AlertDataPayloadEntity payload;
+
+  @ElementCollection
+  @CollectionTable(name = "hsbc_bridge_alert_metadata", joinColumns = @JoinColumn(name = "id"))
+  private List<AlertMetadata> metadata = new ArrayList<>();
 
   public AlertEntity(String bulkId) {
     this.bulkId = bulkId;

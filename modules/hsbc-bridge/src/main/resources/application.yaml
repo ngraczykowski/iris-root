@@ -41,6 +41,16 @@ silenteight.bridge:
   nexus.api:
     password: ${NEXUS_PASSWORD:dev}
     username: ${NEXUS_USER:dev}
+  recommendation:
+    silent-eight-values:
+      FALSE_POSITIVE: False Positive
+      MANUAL_INVESTIGATION: Manual Adjudication
+      POTENTIAL_TRUE_POSITIVE: Potential True Positive
+    user-friendly-values:
+      AAA_FALSE_POSITIVE: AAA False Positive
+      LEVEL_1_REVIEW: Level 1 Review
+      LEVEL_2_REVIEW: Level 2 Review
+      LEVEL_3_REVIEW: Level 3 Review
   recommendations.queue: bridge.recommendations
   security: false
   security.endpoints: /async/batch/v1/**,/model

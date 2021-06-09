@@ -147,7 +147,7 @@ public class BulkRestController {
 
   private List<String> createOwsRow(SolvedAlert a) {
     // TODO fill it with proper data
-    return List.of(a.getId() + "", a.getRecommendation().name(), a.getComment(), "Code",
+    return List.of(a.getId() + "", a.getRecommendation(), a.getComment(), "Code",
         "Description");
   }
 

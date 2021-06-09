@@ -144,6 +144,41 @@
       "name": "silenteight.bridge.amqp.watchlist-persisted-routing-key",
       "type": "java.lang.String",
       "description": "Watchlist persisted exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.silentEightValues.MANUAL_INVESTIGATION",
+      "type": "java.lang.String",
+      "description": "Recommendation action for manual investigation solution."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.silentEightValues.FALSE_POSITIVE",
+      "type": "java.lang.String",
+      "description": "Recommendation action for false positive solution."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.silentEightValues.POTENTIAL_TRUE_POSITIVE",
+      "type": "java.lang.String",
+      "description": "Recommendation action for potential true positive solution."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.AAA_FALSE_POSITIVE",
+      "type": "java.lang.String",
+      "description": "User-friendly value for AAA FALSE POSITIVE recommendation."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_1_REVIEW",
+      "type": "java.lang.String",
+      "description": "User-friendly value for LEVEL 1 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_2_REVIEW",
+      "type": "java.lang.String",
+      "description": "User-friendly value for LEVEL 2 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_3_REVIEW",
+      "type": "java.lang.String",
+      "description": "User-friendly value for LEVEL 3 REVIEW recommendation."
     }
   ]
 }

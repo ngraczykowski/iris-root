@@ -11,6 +11,7 @@ import org.hibernate.annotations.Immutable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.*;
 
 import static java.util.Objects.isNull;
@@ -39,6 +40,11 @@ class BulkAlertEntity {
   @OneToMany
   @JoinColumn(name = "alert_id")
   private Collection<BulkAlertMatchEntity> matches = new ArrayList<>();
+
+  @Setter(NONE)
+  @ElementCollection
+  @CollectionTable(name = "hsbc_bridge_alert_metadata", joinColumns = @JoinColumn(name = "id"))
+  private List<BulkAlertMetadata> metadata = new ArrayList<>();
 
   @Transient
   boolean isValid() {

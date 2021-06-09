@@ -1551,13 +1551,12 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int32
+          type: string
         recommendation:
-          $ref: '#/components/schemas/SolvedAlertStatus'
+          type: string
         comment:
           type: string
-        alertMetada:
+        alertMetadata:
           type: array
           items:
             $ref: '#/components/schemas/KeyValue'
@@ -1597,13 +1596,6 @@ components:
         - DELIVERED
         - CANCELLED
         - STORED
-
-    SolvedAlertStatus:
-      type: string
-      enum:
-        - POTENTIAL_TRUE_POSITIVE
-        - FALSE_POSITIVE
-        - MANUAL_INVESTIGATION
 
     BatchAlertItem:
       type: object

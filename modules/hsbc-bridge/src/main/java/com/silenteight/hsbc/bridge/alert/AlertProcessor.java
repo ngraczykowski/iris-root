@@ -5,11 +5,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
+import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.EXTENDED_ATTRIBUTE_5;
+import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.TRACKING_ID;
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.PRE_PROCESSED;
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.STORED;
 
@@ -51,6 +56,12 @@ class AlertProcessor {
   private void fillAlert(AlertEntity alert, AlertData alertData) {
     alert.setDiscriminator(alertData.getFlagKey());
     alert.setExternalId(alertData.getId());
+    fillMetadata(alert.getMetadata(), alertData.getCaseInformation());
+  }
+
+  private void fillMetadata(List<AlertMetadata> metadata, CaseInformation caseInformation) {
+    metadata.add(new AlertMetadata(EXTENDED_ATTRIBUTE_5, caseInformation.getExtendedAttribute5()));
+    metadata.add(new AlertMetadata(TRACKING_ID, caseInformation.getFlagKey()));
   }
 
   private void tryToProcessRelationshipsAndCreateMatches(AlertEntity alert, AlertData alertData) {
