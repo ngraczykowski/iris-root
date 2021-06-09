@@ -3,6 +3,8 @@ package com.silenteight.serp.governance.model;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.serp.governance.model.provide.grpc.PolicyFeatureProvider;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
+import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
+import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
 import com.silenteight.serp.governance.policy.transfer.importing.ImportPolicyUseCase;
@@ -38,4 +40,10 @@ public class ModelTestConfiguration {
 
   @MockBean
   ImportPolicyUseCase importPolicyUseCase;
+
+  @MockBean
+  PolicyDetailsQuery policyDetailsQuery;
+
+  @MockBean
+  PolicyService policyService;
 }

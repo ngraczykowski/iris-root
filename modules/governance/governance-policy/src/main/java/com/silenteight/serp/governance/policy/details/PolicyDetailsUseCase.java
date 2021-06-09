@@ -12,13 +12,13 @@ import java.util.UUID;
 class PolicyDetailsUseCase {
 
   @NonNull
-  private final PolicyDetailsRequestQuery policyDetailsRequestQuery;
+  private final PolicyDetailsQuery policyDetailsQuery;
 
   @NonNull
   private final PolicyStepsCountQuery policyStepsCountQuery;
 
   public PolicyDetailsDto activate(UUID id) {
-    PolicyDto policyDto = policyDetailsRequestQuery.details(id);
+    PolicyDto policyDto = policyDetailsQuery.details(id);
     long stepsCount = policyStepsCountQuery.getStepsCount(id);
     return new PolicyDetailsDto(policyDto, stepsCount);
   }

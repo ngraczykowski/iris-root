@@ -51,7 +51,7 @@ class PolicyDetailsUseCaseTest {
       .build();
 
   @Mock
-  private PolicyDetailsRequestQuery policyDetailsRequestQuery;
+  private PolicyDetailsQuery policyDetailsQuery;
   @Mock
   private PolicyStepsCountQuery policyStepsCountQuery;
 
@@ -60,12 +60,12 @@ class PolicyDetailsUseCaseTest {
   @BeforeEach
   void setUp() {
     underTest = new PolicyDetailsConfiguration().policyDetailsUseCase(
-        policyDetailsRequestQuery, policyStepsCountQuery);
+        policyDetailsQuery, policyStepsCountQuery);
   }
 
   @Test
   void createValidResponse() {
-    when(policyDetailsRequestQuery.details(POLICY_UUID)).thenReturn(POLICY_DTO);
+    when(policyDetailsQuery.details(POLICY_UUID)).thenReturn(POLICY_DTO);
     when(policyStepsCountQuery.getStepsCount(POLICY_UUID)).thenReturn(Long.valueOf(STEPS_COUNT));
 
     PolicyDetailsDto result = underTest.activate(POLICY_UUID);

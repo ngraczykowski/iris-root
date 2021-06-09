@@ -24,8 +24,8 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ PolicyDetailsRequestRestController.class, GenericExceptionControllerAdvice.class })
-class PolicyDetailsRequestRestControllerTest extends BaseRestControllerTest {
+@Import({ PolicyDetailsRestController.class, GenericExceptionControllerAdvice.class })
+class PolicyDetailsRestControllerTest extends BaseRestControllerTest {
 
   private static final String POLICY_URL = "/v1/policies/";
   private static final String RESOURCE_NAME = "policies/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";

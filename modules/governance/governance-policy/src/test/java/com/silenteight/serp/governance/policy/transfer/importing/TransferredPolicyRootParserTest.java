@@ -61,8 +61,8 @@ class TransferredPolicyRootParserTest {
     TransferredPolicyRootDto root = underTest.parse(inputStream);
 
     // then
-    TransferredMetadataDto transferredMetadata = root.getMetadata();
-    assertThat(transferredMetadata.getExportedAt())
+    TransferredPolicyMetadataDto transferredPolicyMetadata = root.getMetadata();
+    assertThat(transferredPolicyMetadata.getExportedAt())
         .isEqualTo(Instant.parse("2020-04-15T10:58:53.451Z"));
 
     TransferredPolicyDto transferredPolicy = root.getPolicy();

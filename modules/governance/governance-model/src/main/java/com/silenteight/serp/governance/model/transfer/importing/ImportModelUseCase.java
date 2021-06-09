@@ -62,7 +62,8 @@ public class ImportModelUseCase {
 
     return ImportPolicyCommand.builder()
         .inputStream(getPolicyAsStream(transferredModel.getPolicy()))
-        .importedBy(transferredModel.getApprovedBy())
+        .createdBy(transferredModel.getPolicyCreatedBy())
+        .updatedBy(transferredModel.getApprovedBy())
         .build();
   }
 

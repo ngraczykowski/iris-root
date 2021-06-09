@@ -9,6 +9,7 @@ import com.silenteight.serp.governance.model.NonResolvableResourceException;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.transfer.importing.ImportModelUseCase;
+import com.silenteight.serp.governance.model.use.UseModelUseCase;
 
 import com.google.protobuf.Empty;
 import com.google.rpc.Status;
@@ -34,6 +35,10 @@ class SolvingModelGrpcService
   private static final String MODEL_CANNOT_BE_RESOLVED_ERROR =
       "Some elements of the current configuration cannot be resolved. "
           + "Make sure all services are running";
+  private static final String IMPORT_MODEL_ERROR =
+      "Unhandled error occurred in Governance while calling 'importModel'.";
+  private static final String USE_MODEL_ERROR =
+      "Unhandled error occurred in Governance while calling 'useModel'.";
 
   @NonNull
   private final DefaultModelQuery defaultModelQuery;
@@ -43,6 +48,8 @@ class SolvingModelGrpcService
   private final SolvingModelProvider solvingModelProvider;
   @NonNull
   private final ImportModelUseCase importModelUseCase;
+  @NonNull
+  private final UseModelUseCase useModelUseCase;
 
   @Override
   public void getDefaultSolvingModel(Empty request, StreamObserver<SolvingModel> responseObserver) {
@@ -66,13 +73,21 @@ class SolvingModelGrpcService
           .build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch (NonResolvableResourceException e) {
-      handleException(
-          responseObserver, e, FAILED_PRECONDITION_VALUE, MODEL_CANNOT_BE_RESOLVED_ERROR);
-    } catch (ModelMisconfiguredException e) {
-      handleException(responseObserver, e, FAILED_PRECONDITION_VALUE, MODEL_NOT_CONFIGURED_ERROR);
     } catch (RuntimeException e) {
-      handleException(responseObserver, e, INTERNAL_VALUE, GET_DEFAULT_SOLVING_MODEL_ERROR);
+      handleException(responseObserver, e, INTERNAL_VALUE, IMPORT_MODEL_ERROR);
+    }
+  }
+
+  @Override
+  public void useModel(
+      UseModelRequest request, StreamObserver<Empty> responseObserver) {
+
+    try {
+      useModelUseCase.apply(request.getModel());
+      responseObserver.onNext(Empty.newBuilder().build());
+      responseObserver.onCompleted();
+    } catch (RuntimeException e) {
+      handleException(responseObserver, e, INTERNAL_VALUE, USE_MODEL_ERROR);
     }
   }
 

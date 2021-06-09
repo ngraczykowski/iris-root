@@ -35,6 +35,8 @@ public class ConfigurePolicyRequest implements AuditableRequest {
   @NonNull
   String createdBy;
 
+  String updatedBy;
+
   @NonNull
   List<StepConfiguration> stepConfigurations;
 

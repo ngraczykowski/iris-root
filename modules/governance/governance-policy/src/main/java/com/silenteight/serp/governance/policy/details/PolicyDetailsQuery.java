@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
 import java.util.UUID;
 
-public interface PolicyDetailsRequestQuery {
+public interface PolicyDetailsQuery {
 
   PolicyDto details(@NonNull UUID id);
 }

@@ -120,12 +120,12 @@ class PolicyServiceTest {
     // then
     var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
 
-    verify(auditingLogger, times(8)).log(logCaptor.capture());
+    verify(auditingLogger, times(6)).log(logCaptor.capture());
 
     assertThat(policyId).isEqualTo(POLICY_ID);
     var policy = policyRepository.getByPolicyId(POLICY_ID);
     assertThat(policy.getName()).isEqualTo(policyName);
-    assertThat(policy.getState()).isEqualTo(IN_USE);
+    assertThat(policy.getState()).isEqualTo(SAVED);
     assertThat(policy.getPolicyId()).isEqualTo(policyId);
     assertThat(policy.getCreatedBy()).isEqualTo(creator);
     assertThat(policy.getUpdatedBy()).isEqualTo(creator);
@@ -195,11 +195,11 @@ class PolicyServiceTest {
     // then
     var logCaptor = ArgumentCaptor.forClass(AuditDataDto.class);
 
-    verify(auditingLogger, times(8)).log(logCaptor.capture());
+    verify(auditingLogger, times(6)).log(logCaptor.capture());
 
     var policy = policyRepository.getByPolicyId(policyId);
     assertThat(policy.getName()).isEqualTo(policyName);
-    assertThat(policy.getState()).isEqualTo(IN_USE);
+    assertThat(policy.getState()).isEqualTo(SAVED);
     assertThat(policy.getPolicyId()).isEqualTo(policyId);
     assertThat(policy.getCreatedBy()).isEqualTo(creator);
     assertThat(policy.getUpdatedBy()).isEqualTo(creator);
