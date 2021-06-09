@@ -14,9 +14,19 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({ "exportedAt" })
-public class TransferredMetadataDto implements Serializable {
+public class TransferredPolicyMetadataDto implements Serializable {
 
   private static final long serialVersionUID = -3686897739373445722L;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
+  private Instant createdAt;
+
+  private String createdBy;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
+  private Instant updatedAt;
+
+  private String updatedBy;
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
   private Instant exportedAt;

@@ -53,15 +53,11 @@ public class PolicyService {
         request.getCreatedBy());
 
     Policy policy = addPolicyInternal(addPolicyRequest);
-    configureSteps(
-        request.getCorrelationId(),
-        policy,
-        request.getStepConfigurations(),
-        request.getCreatedBy());
+    configureSteps(policy, request.getStepConfigurations(), request.getCreatedBy());
     Policy savedPolicy = policyRepository.save(policy);
     savePolicy(SavePolicyRequest.of(request.getPolicyId(), request.getCreatedBy()));
-    //TODO(kdzieciol): After the import, the policy should stay in the `SAVED` state. (WEB-1092)
-    usePolicy(UsePolicyRequest.of(request.getPolicyId(), request.getCreatedBy()));
+    ofNullable(request.getUpdatedBy())
+        .ifPresent(updatedBy -> setUpdatedBy(savedPolicy.getPolicyId(), updatedBy));
     PolicyImportedEvent importedEvent = PolicyImportedEvent.builder()
         .policyId(savedPolicy.getPolicyId())
         .correlationId(request.getCorrelationId())
@@ -72,23 +68,20 @@ public class PolicyService {
   }
 
   private void configureSteps(
-      UUID correlationID, Policy policy, List<StepConfiguration> configurations, String createdBy) {
+      Policy policy, List<StepConfiguration> configurations, String createdBy) {
 
     range(0, configurations.size())
         .boxed()
-        .forEach(i -> configureSteps(
-            correlationID, policy, configurations.get(i), i, createdBy));
+        .forEach(i -> configureSteps(policy, configurations.get(i), i, createdBy));
   }
 
   private void configureSteps(
-      UUID correlationId,
       Policy policy,
       StepConfiguration configuration,
       int sortOrder,
       String createdBy) {
 
     addStep(
-        correlationId,
         policy,
         configuration.getSolution(),
         configuration.getStepId(),
@@ -132,7 +125,6 @@ public class PolicyService {
     createStepRequest.preAudit(auditingLogger::log);
     Policy policy = policyRepository.getByPolicyId(createStepRequest.getPolicyId());
     addStep(
-        UUID.randomUUID(),
         policy,
         createStepRequest.getSolution(),
         createStepRequest.getStepId(),
@@ -146,7 +138,6 @@ public class PolicyService {
 
   @NotNull
   private Step addStep(
-      @NonNull UUID correlationId,
       @NonNull Policy policy,
       @NonNull FeatureVectorSolution solution,
       @NonNull UUID stepId,
@@ -247,6 +238,13 @@ public class PolicyService {
     policy.setUpdatedBy(savePolicyRequest.getSavedBy());
     policyRepository.save(policy);
     savePolicyRequest.postAudit(auditingLogger::log);
+  }
+
+  @Transactional
+  public void setUpdatedBy(UUID policyId, String updatedBy) {
+    Policy policy = policyRepository.getByPolicyId(policyId);
+    policy.setUpdatedBy(updatedBy);
+    policyRepository.save(policy);
   }
 
   @Transactional

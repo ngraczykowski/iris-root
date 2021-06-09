@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.policy.details.PolicyDetailsRequestQuery;
+import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.domain.exception.PolicyNotFoundException;
 import com.silenteight.serp.governance.policy.featurevector.PolicyByIdQuery;
@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 class PolicyQuery implements
-    ListPoliciesRequestQuery, PolicyByIdQuery, InUsePolicyQuery, PolicyDetailsRequestQuery {
+    ListPoliciesRequestQuery, PolicyByIdQuery, InUsePolicyQuery, PolicyDetailsQuery {
 
   @NonNull
   private final PolicyRepository policyRepository;

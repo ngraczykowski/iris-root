@@ -21,7 +21,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
-class PolicyDetailsRequestRestController {
+class PolicyDetailsRestController {
 
   @NonNull
   private final PolicyDetailsUseCase policyDetailsUseCase;

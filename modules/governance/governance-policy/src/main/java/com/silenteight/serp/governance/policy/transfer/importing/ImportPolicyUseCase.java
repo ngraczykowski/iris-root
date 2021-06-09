@@ -29,17 +29,20 @@ public class ImportPolicyUseCase {
 
   public UUID apply(@NonNull ImportPolicyCommand command) {
     TransferredPolicyRootDto root = transferredPolicyRootParser.parse(command.getInputStream());
-    return policyService.doImport(createRequest(root.getPolicy(), command.getImportedBy()));
+    return policyService.doImport(
+        createRequest(root.getPolicy(), command.getCreatedBy(), command.getUpdatedBy()));
   }
 
   private static ConfigurePolicyRequest createRequest(
-      @NonNull TransferredPolicyDto transferredPolicy, @NonNull String createdBy) {
+      @NonNull TransferredPolicyDto transferredPolicy,
+      @NonNull String createdBy,
+      String updatedBy) {
 
-    ConfigurePolicyRequestBuilder builder = ConfigurePolicyRequest
-        .builder()
+    ConfigurePolicyRequestBuilder builder = ConfigurePolicyRequest.builder()
         .policyName(transferredPolicy.getName())
         .description(transferredPolicy.getDescription())
         .createdBy(createdBy)
+        .updatedBy(updatedBy)
         .stepConfigurations(mapToStepConfigurations(transferredPolicy.getSteps()));
 
     if (transferredPolicy.getPolicyId() != null)
@@ -58,8 +61,7 @@ public class ImportPolicyUseCase {
   }
 
   private static StepConfiguration mapToStepConfiguration(TransferredStepDto transferredStep) {
-    StepConfigurationBuilder builder = StepConfiguration
-        .builder()
+    StepConfigurationBuilder builder = StepConfiguration.builder()
         .solution(transferredStep.getSolution())
         .stepName(transferredStep.getName())
         .stepDescription(transferredStep.getDescription())
@@ -85,8 +87,7 @@ public class ImportPolicyUseCase {
   private static FeatureLogicConfiguration mapToFeatureLogicConfiguration(
       TransferredFeatureLogicDto transferredFeatureLogics) {
 
-    return FeatureLogicConfiguration
-        .builder()
+    return FeatureLogicConfiguration.builder()
         .toFulfill(transferredFeatureLogics.getToFulfill())
         .featureConfigurations(
             mapToFeatureConfigurations(transferredFeatureLogics.getMatchConditions()))
@@ -105,8 +106,7 @@ public class ImportPolicyUseCase {
   private static FeatureConfiguration mapToFeatureConfiguration(
       TransferredMatchConditionDto transferredMatchCondition) {
 
-    return FeatureConfiguration
-        .builder()
+    return FeatureConfiguration.builder()
         .name(transferredMatchCondition.getName())
         .condition(transferredMatchCondition.getCondition())
         .values(transferredMatchCondition.getValues())

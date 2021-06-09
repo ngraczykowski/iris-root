@@ -41,7 +41,7 @@ class ImportPolicyUseCaseTest {
     TransferredPolicyRootDto root = createTransferredPolicyRoot();
     ImportPolicyCommand command = ImportPolicyCommand.builder()
         .inputStream(inputStream)
-        .importedBy(importedBy)
+        .createdBy(importedBy)
         .build();
 
     when(transferredPolicyRootParser.parse(any(InputStream.class))).thenReturn(root);

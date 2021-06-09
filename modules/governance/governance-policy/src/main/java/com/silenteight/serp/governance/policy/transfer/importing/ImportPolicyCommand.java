@@ -14,5 +14,7 @@ public class ImportPolicyCommand {
   InputStream inputStream;
 
   @NonNull
-  String importedBy;
+  String createdBy;
+
+  String updatedBy;
 }

@@ -8,9 +8,9 @@ public class PolicyDetailsConfiguration {
 
   @Bean
   PolicyDetailsUseCase policyDetailsUseCase(
-      PolicyDetailsRequestQuery policyDetailsRequestQuery,
+      PolicyDetailsQuery policyDetailsQuery,
       PolicyStepsCountQuery policyStepsCountQuery) {
 
-    return new PolicyDetailsUseCase(policyDetailsRequestQuery, policyStepsCountQuery);
+    return new PolicyDetailsUseCase(policyDetailsQuery, policyStepsCountQuery);
   }
 }

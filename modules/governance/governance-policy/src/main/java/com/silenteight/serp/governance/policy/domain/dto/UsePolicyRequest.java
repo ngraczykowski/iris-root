@@ -17,7 +17,7 @@ import static java.util.UUID.randomUUID;
 @Value
 public class UsePolicyRequest {
 
-  UUID correlationId = UUID.randomUUID();
+  UUID correlationId = randomUUID();
   @NonNull
   UUID policyId;
   @NonNull

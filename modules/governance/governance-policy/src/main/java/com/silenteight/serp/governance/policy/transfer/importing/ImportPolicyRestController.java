@@ -35,7 +35,7 @@ class ImportPolicyRestController {
 
     ImportPolicyCommand command = ImportPolicyCommand.builder()
         .inputStream(file.getInputStream())
-        .importedBy(authentication.getName())
+        .createdBy(authentication.getName())
         .build();
     UUID policyId = importPolicyUseCase.apply(command);
 

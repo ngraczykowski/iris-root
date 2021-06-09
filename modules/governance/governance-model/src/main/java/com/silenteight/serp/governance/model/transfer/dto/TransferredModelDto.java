@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -39,7 +38,7 @@ public class TransferredModelDto implements Serializable {
   }
 
   @JsonIgnore
-  public Instant getApprovedAt() {
-    return metadata.getApprovedAt();
+  public String getPolicyCreatedBy() {
+    return policy.getCreatedBy();
   }
 }
