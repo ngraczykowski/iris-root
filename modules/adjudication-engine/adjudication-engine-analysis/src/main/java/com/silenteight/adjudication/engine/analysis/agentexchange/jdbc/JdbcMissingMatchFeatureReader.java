@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.analysis.agentexchange.MissingMatchFeatureReader;
 
 import com.google.common.base.Preconditions;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,24 +14,19 @@ import javax.sql.DataSource;
 @Slf4j
 class JdbcMissingMatchFeatureReader implements MissingMatchFeatureReader {
 
-  private final JdbcTemplate jdbcTemplate;
   private final SelectMissingMatchFeatureQuery query;
 
-  JdbcMissingMatchFeatureReader(DataSource dataSource, int chunkSize, int maxRows) {
+  JdbcMissingMatchFeatureReader(DataSource dataSource, int chunkSize, int limit) {
     Preconditions.checkArgument(
-        chunkSize <= maxRows, "Chunk size %s must be less than or equal to max rows %s", chunkSize,
-        maxRows);
+        chunkSize <= limit, "Chunk size %s must be less than or equal to limit %s", chunkSize,
+        limit);
 
-    jdbcTemplate = new JdbcTemplate(dataSource, true);
-    jdbcTemplate.setFetchSize(chunkSize);
-
-    query = new SelectMissingMatchFeatureQuery(chunkSize, maxRows);
+    query = new SelectMissingMatchFeatureQuery(dataSource, chunkSize, limit);
   }
 
   @Transactional(propagation = Propagation.NEVER)
   @Override
   public int read(long analysisId, ChunkHandler chunkHandler) {
-    var result = jdbcTemplate.execute(query.getCallback(analysisId, chunkHandler));
-    return result != null ? result : -1;
+    return query.execute(analysisId, chunkHandler);
   }
 }

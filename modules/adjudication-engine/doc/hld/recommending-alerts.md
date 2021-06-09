@@ -65,23 +65,23 @@ The list of integration flows that would result in solving alerts:
 
 + PendingRecommendations (rabbit) -> List<AgentExchange> (db) -> List<AgentExchangeRequest> (rabbit)
 
-+- AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> MatchFeaturesUpdated (spring)
++- AgentExchangeResponse (rabbit) -> List<MatchFeatureValue> (db) -> (-) (TODO ISSUE) MatchFeaturesUpdated (spring)
 
 + PendingRecommendations (rabbit) -> BatchGetMatchCategoryValuesRequest: BatchGetMatchCategoryValuesResponse (grpc) -> List<MatchCategoryValue> (db) -> MatchCategoriesUpdated (spring)
 
-PendingRecommendations (rabbit) -> StreamCommentInputsRequest: List<CommentInput> (grpc) -> List<AlertCommentInput> (db) -> CommentInputsUpdated (spring)
++ PendingRecommendations (rabbit) -> StreamCommentInputsRequest: List<CommentInput> (grpc) -> List<AlertCommentInput> (db) -> CommentInputsUpdated (spring)
 
 ? MatchCategoriesUpdated (spring) -> SolveMatchesCommand (spring)
 
-? MatchFeaturesUpdated (spring) -> SolveMatchesCommand (spring)
+? MatchFeaturesUpdated (repeated matches) (spring) -> SolveMatchesCommand (analysis_id) (spring)
 
 - SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolved (rabbit)
 
-MatchesSolved (spring) -> RecommendAlertsCommand (spring)
+? MatchesSolved (spring) -> RecommendAlertsCommand (spring)
 
-CommentInputsUpdated (spring) -> RecommendAlertsCommand (spring)
+? CommentInputsUpdated (spring) -> RecommendAlertsCommand (spring)
 
-PendingRecommendations (rabbit) -> RecommendAlertsCommand (spring)
+? PendingRecommendations (rabbit) -> RecommendAlertsCommand (spring)
 
 RecommendAlertsCommand (spring) -> BatchSolveAlertsRequest: BatchSolveAlertsResponse (grpc) -> List<Recommendation> + delete PendingRecommendation (db) -> RecommendationsGenerated (rabbit)
 ```

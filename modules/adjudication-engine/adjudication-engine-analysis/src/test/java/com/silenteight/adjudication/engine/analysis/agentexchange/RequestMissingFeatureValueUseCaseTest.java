@@ -28,6 +28,6 @@ class RequestMissingFeatureValueUseCaseTest {
   @Test
   void shouldSendMessages() {
     requestMissingFeatureValuesUseCase.requestMissingFeatureValues("analysis/123");
-    assertThat(((InMemoryAgentExchangeRequestGateway)gateway).count()).isEqualTo(100);
+    assertThat(((InMemoryAgentExchangeRequestGateway) gateway).count()).isEqualTo(100);
   }
 }

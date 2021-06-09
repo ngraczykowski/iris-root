@@ -12,7 +12,7 @@ import static com.silenteight.adjudication.engine.analysis.analysis.AnalysisFixt
 import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
-class AnalysisRepositoryIT extends BaseDataJpaTest {
+class AnalysisFeatureVectorElementsConfigurationIT extends BaseDataJpaTest {
 
   @Autowired
   private AnalysisRepository repository;

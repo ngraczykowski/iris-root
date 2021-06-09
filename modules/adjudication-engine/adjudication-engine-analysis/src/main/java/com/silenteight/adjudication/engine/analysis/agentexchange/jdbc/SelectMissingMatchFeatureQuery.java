@@ -1,26 +1,25 @@
 package com.silenteight.adjudication.engine.analysis.agentexchange.jdbc;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.MissingMatchFeatureReader.ChunkHandler;
+import com.silenteight.adjudication.engine.analysis.agentexchange.MissingMatchFeatureReader;
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeature;
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeatureChunk;
+import com.silenteight.adjudication.engine.common.jdbc.ChunkHandler;
+import com.silenteight.adjudication.engine.common.jdbc.JdbcCursorQueryTemplate;
 
 import org.intellij.lang.annotations.Language;
-import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import javax.sql.DataSource;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static java.sql.ResultSet.CONCUR_READ_ONLY;
-import static java.sql.ResultSet.HOLD_CURSORS_OVER_COMMIT;
-import static java.sql.ResultSet.TYPE_FORWARD_ONLY;
 
-@RequiredArgsConstructor
 @Slf4j
 class SelectMissingMatchFeatureQuery {
 
@@ -34,47 +33,35 @@ class SelectMissingMatchFeatureQuery {
           + "FROM ae_missing_match_feature_query\n"
           + "WHERE analysis_id = ?\n"
           + "LIMIT ?";
+
   private static final MissingMatchFeatureMapper ROW_MAPPER = new MissingMatchFeatureMapper();
 
-  private final int chunkSize;
-  private final int maxRows;
+  private final JdbcCursorQueryTemplate<MissingMatchFeature> queryTemplate;
+  private final int limit;
 
-  public ConnectionCallback<Integer> getCallback(long analysisId, ChunkHandler chunkHandler) {
-    return con -> execute(con, analysisId, chunkHandler);
+  @SuppressWarnings("FeatureEnvy")
+  SelectMissingMatchFeatureQuery(@NonNull DataSource dataSource, int chunkSize, int limit) {
+    this.limit = limit;
+
+    queryTemplate = JdbcCursorQueryTemplate
+        .<MissingMatchFeature>builder()
+        .dataSource(dataSource)
+        .chunkSize(chunkSize)
+        .maxRows(limit)
+        .sql(SQL)
+        .build();
   }
 
-  int execute(Connection con, long analysisId, ChunkHandler chunkHandler) throws SQLException {
+  int execute(long analysisId, MissingMatchFeatureReader.ChunkHandler chunkHandler) {
     if (log.isDebugEnabled()) {
-      log.debug("Selecting missing match feature values: analysisId={}, chunkSize={}, maxRows={}",
-          analysisId, chunkSize, maxRows);
+      log.debug("Selecting missing match feature values: analysisId={}, limit={}",
+          analysisId, limit);
     }
 
-    // NOTE(ahaczewski): Holding cursor over commits allows for chunk handler to commit
-    //  transactions, without affecting the ResultSet iteration.
-    var previousHoldability = con.getHoldability();
-    con.setHoldability(HOLD_CURSORS_OVER_COMMIT);
-
-    try (var statement = con.prepareStatement(SQL, TYPE_FORWARD_ONLY, CONCUR_READ_ONLY)) {
-      statement.setFetchSize(chunkSize);
-      statement.setLong(1, analysisId);
-      statement.setInt(2, maxRows);
-      statement.setMaxRows(maxRows);
-
-      try (var fetcher = createFetcher(statement, chunkHandler)) {
-        return fetcher.readInChunks();
-      }
-    } finally {
-      con.commit();
-      con.setHoldability(previousHoldability);
-    }
-  }
-
-  private MissingMatchFeatureChunkFetcher createFetcher(
-      PreparedStatement statement, ChunkHandler chunkHandler)
-      throws SQLException {
-
-    var resultSet = statement.executeQuery();
-    return new MissingMatchFeatureChunkFetcher(resultSet, chunkSize, ROW_MAPPER, chunkHandler);
+    return queryTemplate.execute(ROW_MAPPER, new InternalChunkHandler(chunkHandler), ps -> {
+      ps.setLong(1, analysisId);
+      ps.setInt(2, limit);
+    });
   }
 
   private static final class MissingMatchFeatureMapper implements RowMapper<MissingMatchFeature> {
@@ -82,13 +69,36 @@ class SelectMissingMatchFeatureQuery {
     @SuppressWarnings("FeatureEnvy")
     @Override
     public MissingMatchFeature mapRow(ResultSet rs, int rowNum) throws SQLException {
-      return MissingMatchFeature.builder()
+      var row = MissingMatchFeature.builder()
           .alertId(rs.getLong(1))
           .matchId(rs.getLong(2))
           .agentConfig(nullToEmpty(rs.getString(3)))
           .feature(nullToEmpty(rs.getString(4)))
           .priority(rs.getInt(5))
           .build();
+
+      if (!row.isValid()) {
+        log.warn("Invalid row read: row={}", row);
+        return null;
+      }
+
+      return row;
+    }
+  }
+
+  @RequiredArgsConstructor
+  private static final class InternalChunkHandler implements ChunkHandler<MissingMatchFeature> {
+
+    private final MissingMatchFeatureReader.ChunkHandler delegate;
+
+    @Override
+    public void handle(List<? extends MissingMatchFeature> chunk) {
+      delegate.handle(new MissingMatchFeatureChunk(chunk));
+    }
+
+    @Override
+    public void finished() {
+      delegate.finished();
     }
   }
 }

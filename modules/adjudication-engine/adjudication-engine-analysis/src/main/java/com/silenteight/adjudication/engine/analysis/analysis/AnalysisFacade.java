@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
+import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
 
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,10 @@ public class AnalysisFacade {
   @NonNull
   private final GetAnalysisAgentConfigsUseCase getAnalysisAgentConfigsUseCase;
 
+  @NonNull
+  private final GetPolicyAndFeatureVectorElementsUseCase
+      getPolicyAndFeatureVectorElementsUseCase;
+
   public Analysis createAndGetAnalysis(Analysis analysis) {
     return createAndGetAnalysisUseCase.createAndGetAnalysis(analysis);
   }
@@ -40,5 +45,12 @@ public class AnalysisFacade {
 
   public List<String> getAgentConfigs(String analysisName) {
     return getAnalysisAgentConfigsUseCase.getAnalysisAgentConfigs(analysisName);
+  }
+
+  public PolicyAndFeatureVectorElements getAnalysisPolicyAndFeatureVectorElements(
+      long analysisId) {
+
+    return getPolicyAndFeatureVectorElementsUseCase.getPolicyAndFeatureVectorElements(
+        analysisId);
   }
 }

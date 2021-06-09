@@ -13,6 +13,8 @@ grpc:
   client:
     data-source:
       address: static://localhost:${grpc.server.port}
+    governance:
+      address: static://localhost:${grpc.server.port}
 
 ae:
   #-------------------------------------------------------------------------------------------------

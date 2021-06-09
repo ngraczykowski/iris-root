@@ -9,7 +9,7 @@ public class MissingMatchFeatureChunk {
 
   private final List<MissingMatchFeature> missingMatchFeatures;
 
-  public MissingMatchFeatureChunk(List<MissingMatchFeature> missingMatchFeatures) {
+  public MissingMatchFeatureChunk(List<? extends MissingMatchFeature> missingMatchFeatures) {
     this.missingMatchFeatures = new ArrayList<>(missingMatchFeatures);
     missingMatchFeatures.sort(
         Comparator.comparing(MissingMatchFeature::getAgentConfig, String::compareToIgnoreCase));
