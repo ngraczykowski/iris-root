@@ -12,5 +12,5 @@ import java.time.Duration;
 @Value
 class AnalysisProperties {
 
-  Duration alertTimeoutDuration;
+  Duration alertTimeout;
 }

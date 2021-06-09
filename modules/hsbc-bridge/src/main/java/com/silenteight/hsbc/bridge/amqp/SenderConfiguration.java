@@ -11,14 +11,14 @@ import org.springframework.context.annotation.Profile;
 @EnableConfigurationProperties(AmqpProperties.class)
 class SenderConfiguration {
 
-  private final AmqpProperties amqpProperties;
+  private final AmqpProperties.Outgoing outgoing;
   private final RabbitTemplate rabbitTemplate;
   private final ProtoMessageConverter converter;
 
   SenderConfiguration(
       AmqpProperties amqpProperties,
       RabbitTemplate rabbitTemplate, MessageRegistry messageRegistry) {
-    this.amqpProperties = amqpProperties;
+    this.outgoing = amqpProperties.getOutgoing();
     this.rabbitTemplate = rabbitTemplate;
     this.converter = new ProtoMessageConverter(messageRegistry);
   }
@@ -28,8 +28,8 @@ class SenderConfiguration {
     return AmqpWarehouseMessageSender.builder()
         .amqpTemplate(rabbitTemplate)
         .configuration(AmqpWarehouseMessageSender.Configuration.builder()
-            .exchangeName(amqpProperties.getWarehouseExchangeName())
-            .routingKey(rabbitTemplate.getRoutingKey())
+            .exchangeName(outgoing.getWarehouseExchangeName())
+            .routingKey(outgoing.getWarehouseRoutingKey())
             .build())
         .messageConverter(converter)
         .build();
@@ -40,8 +40,8 @@ class SenderConfiguration {
     return ModelPersistedMessageSender.builder()
         .amqpTemplate(rabbitTemplate)
         .configuration(ModelPersistedMessageSender.Configuration.builder()
-            .exchangeName(amqpProperties.getModelPersistedExchangeName())
-            .routingKey(amqpProperties.getModelPersistedRoutingKey())
+            .exchangeName(outgoing.getModelPersistedExchangeName())
+            .routingKey(outgoing.getModelPersistedRoutingKey())
             .build())
         .messageConverter(converter)
         .build();
@@ -52,8 +52,8 @@ class SenderConfiguration {
     return AmqpWatchlistPersistedMessageSender.builder()
         .configuration(AmqpWatchlistPersistedMessageSender.Configuration
             .builder()
-            .exchangeName(amqpProperties.getWatchlistPersistedExchangeName())
-            .routingKey(amqpProperties.getWatchlistPersistedRoutingKey())
+            .exchangeName(outgoing.getWatchlistPersistedExchangeName())
+            .routingKey(outgoing.getWatchlistPersistedRoutingKey())
             .build())
         .amqpTemplate(rabbitTemplate)
         .messageConverter(converter)

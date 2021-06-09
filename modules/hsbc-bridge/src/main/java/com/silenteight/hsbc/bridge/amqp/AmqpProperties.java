@@ -10,10 +10,16 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Value
 class AmqpProperties {
 
-  String warehouseExchangeName;
-  String warehouseRoutingKey;
-  String watchlistPersistedExchangeName;
-  String watchlistPersistedRoutingKey;
-  String modelPersistedExchangeName;
-  String modelPersistedRoutingKey;
+  Outgoing outgoing;
+
+  @Value
+  static class Outgoing {
+
+    String warehouseExchangeName;
+    String warehouseRoutingKey;
+    String watchlistPersistedExchangeName;
+    String watchlistPersistedRoutingKey;
+    String modelPersistedExchangeName;
+    String modelPersistedRoutingKey;
+  }
 }

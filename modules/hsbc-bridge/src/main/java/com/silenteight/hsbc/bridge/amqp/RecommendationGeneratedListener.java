@@ -13,7 +13,7 @@ class RecommendationGeneratedListener {
 
   private final ApplicationEventPublisher eventPublisher;
 
-  @RabbitListener(queues = "${silenteight.bridge.recommendations.queue}")
+  @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.recommendations-queue}")
   void onRecommendation(RecommendationsGenerated recommendation) {
     eventPublisher.publishEvent(NewRecommendationsEvent.builder()
             .analysis(recommendation.getAnalysis())

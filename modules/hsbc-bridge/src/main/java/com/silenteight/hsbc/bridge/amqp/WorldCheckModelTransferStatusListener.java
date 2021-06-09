@@ -13,7 +13,7 @@ class WorldCheckModelTransferStatusListener {
 
   private final WorldCheckModelManager worldCheckModelManager;
 
-  @RabbitListener(queues = "${silenteight.bridge.model.loaded.queue}")
+  @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.model-loaded-queue}")
   public void handleWorldCheckStatus(ModelStatusUpdated modelStatus) {
     var modelStatusUpdated = convertToModelStatusUpdated(modelStatus);
     worldCheckModelManager.transferWorldCheckModelStatus(modelStatusUpdated);

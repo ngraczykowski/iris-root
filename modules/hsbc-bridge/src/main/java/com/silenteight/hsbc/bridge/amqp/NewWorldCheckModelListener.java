@@ -15,7 +15,7 @@ class NewWorldCheckModelListener {
 
   private final WorldCheckModelManager worldCheckModelManager;
 
-  @RabbitListener(queues = "${silenteight.bridge.model.persisted.queue}")
+  @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.model-persisted-queue}")
   void onModelChange(ModelPersisted modelPersisted) {
     var modelInfo = convertToModelInfo(modelPersisted);
     worldCheckModelManager.transferModelToJenkins(modelInfo);

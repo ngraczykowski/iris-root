@@ -21,7 +21,7 @@ class AnalysisFacadeConfiguration {
   @Bean
   AnalysisFacade analysisFacade() {
     return new AnalysisFacade(
-        analysisRepository, registerer(), analysisProperties.getAlertTimeoutDuration());
+        analysisRepository, registerer(), analysisProperties.getAlertTimeout());
   }
   @Bean
   AnalysisEventListener analysisEventListener() {

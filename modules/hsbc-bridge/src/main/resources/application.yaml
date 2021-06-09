@@ -1,21 +1,26 @@
 silenteight.bridge:
   grpc:
+    port: 24803
     default-deadline: 5s
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24801
+  http.port: 24802
   amqp:
-    model-persisted-exchange-name: bridge.model
-    model-persisted-routing-key: persisted.external
-    warehouse-exchange-name: alert-indexing
-    warehouse-routing-key: alert.production
-    watchlist-persisted-exchange-name: bridge.watchlist
-    watchlist-persisted-routing-key: persisted
+    outgoing:
+      model-persisted-exchange-name: bridge.model
+      model-persisted-routing-key: persisted.external
+      warehouse-exchange-name: alert-indexing
+      warehouse-routing-key: alert.production
+      watchlist-persisted-exchange-name: bridge.watchlist
+      watchlist-persisted-routing-key: persisted
+    ingoing:
+      model-promoted-queue: governance.model_promoted
+      recommendations-queue: bridge.recommendations
+      model-loaded-queue: bridge.model.loaded
+      model-persisted-queue: bridge.model.persisted.internal
   analysis:
-    alert-timeout-duration: 5m
-    service.api:
-      deadline-in-seconds: 5
-      grpc-address: static://localhost:24801
+    alert-timeout: 5m
   aws:
     accessKey: minioadmin
     bucketName: test
@@ -26,18 +31,12 @@ silenteight.bridge:
     duration: 5d
     enabled: true
     rate: 1d
-  dataset.service.api:
-    deadline-in-seconds: 5
-    grpc-address: static://localhost:24801
   jenkins.api:
     crumbUri: https://jenkins.silenteight.com/crumbIssuer/api/json
     password: ${JENKINS_PASSWORD:dev}
     updateModelStatusUri: https://jenkins.silenteight.com/model/status
     updateModelUri: https://jenkins.silenteight.com/model/update
     username: ${JENKINS_USER:dev}
-  model:
-    loaded.queue: bridge.model.loaded
-    persisted.queue: bridge.model.persisted.internal
   nexus.api:
     password: ${NEXUS_PASSWORD:dev}
     username: ${NEXUS_USER:dev}
@@ -54,22 +53,20 @@ silenteight.bridge:
   recommendations.queue: bridge.recommendations
   security: false
   security.endpoints: /async/batch/v1/**,/model
-  solving.model.service.api:
-    deadline-in-seconds: 5
-    grpc-address: localhost:24205
-  datasource:
-    worldcheck:
-      service:
-        api:
-          deadline-in-seconds: 5
-          grpc-address: localhost:24801
-  governance:
-    model_promoted:
-      queue: governance.model_promoted
 
-### SERVER
+### GRPC
 
-server.port: 0
+grpc:
+  server.port: ${silenteight.bridge.grpc.port}
+  client:
+    GLOBAL.negotiation-type: PLAINTEXT
+    adjudication-engine.address: ${silenteight.bridge.grpc.adjudication-engine-address}
+    hsbc-worldcheck.address: ${silenteight.bridge.grpc.worldcheck-address}
+    governance.address: ${silenteight.bridge.grpc.governance-address}
+
+### HTTP
+
+server.port: ${silenteight.bridge.http.port}
 
 spring:
   application.name: hsbc-bridge
@@ -107,14 +104,3 @@ spring:
     password: ${RABBITMQ_PASSWORD:dev}
     port: ${RABBITMQ_AMQP_PORT:24160}
     username: ${RABBITMQ_USER:dev}
-
-
-### GRPC
-
-grpc:
-  server.port: 0
-  client:
-    GLOBAL.negotiation-type: PLAINTEXT
-    adjudication-engine.address: ${silenteight.bridge.grpc.adjudication-engine-address}
-    hsbc-worldcheck.address: ${silenteight.bridge.grpc.worldcheck-address}
-    governance.address: ${silenteight.bridge.grpc.governance-address}
