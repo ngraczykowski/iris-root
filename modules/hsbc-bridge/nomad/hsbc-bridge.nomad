@@ -96,7 +96,7 @@ job "hsbc-bridge" {
   }
 
   group "hsbc-bridge" {
-    count = 1
+    count = 3
 
     network {
       port "http" {
@@ -187,8 +187,8 @@ job "hsbc-bridge" {
       }
 
       template {
-        data        = file("./conf/application.properties")
-        destination = "local/conf/application.properties"
+        data        = file("./conf/application.yaml")
+        destination = "local/conf/application.yaml"
         change_mode = "restart"
       }
 

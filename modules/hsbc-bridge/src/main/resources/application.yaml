@@ -1,0 +1,110 @@
+silenteight.bridge:
+  grpc:
+    default-deadline: 5s
+    adjudication-engine-address: static://localhost:24801
+    governance-address: static://localhost:24205
+    worldcheck-address: static://localhost:24801
+  amqp:
+    model-persisted-exchange-name: bridge.model
+    model-persisted-routing-key: persisted.external
+    warehouse-exchange-name: alert-indexing
+    warehouse-routing-key: alert.production
+    watchlist-persisted-exchange-name: bridge.watchlist
+    watchlist-persisted-routing-key: persisted
+  analysis:
+    alert-timeout-duration: 5m
+    service.api:
+      deadline-in-seconds: 5
+      grpc-address: static://localhost:24801
+  aws:
+    accessKey: minioadmin
+    bucketName: test
+    region: EU_CENTRAL_1
+    secretKey: minioadmin
+    uri: http://127.0.0.1:9000
+  data.retention:
+    duration: 5d
+    enabled: true
+    rate: 1d
+  dataset.service.api:
+    deadline-in-seconds: 5
+    grpc-address: static://localhost:24801
+  jenkins.api:
+    crumbUri: https://jenkins.silenteight.com/crumbIssuer/api/json
+    password: ${JENKINS_PASSWORD:dev}
+    updateModelStatusUri: https://jenkins.silenteight.com/model/status
+    updateModelUri: https://jenkins.silenteight.com/model/update
+    username: ${JENKINS_USER:dev}
+  model:
+    loaded.queue: bridge.model.loaded
+    persisted.queue: bridge.model.persisted.internal
+  nexus.api:
+    password: ${NEXUS_PASSWORD:dev}
+    username: ${NEXUS_USER:dev}
+  recommendations.queue: bridge.recommendations
+  security: false
+  security.endpoints: /async/batch/v1/**,/model
+  solving.model.service.api:
+    deadline-in-seconds: 5
+    grpc-address: localhost:24205
+  datasource:
+    worldcheck:
+      service:
+        api:
+          deadline-in-seconds: 5
+          grpc-address: localhost:24801
+  governance:
+    model_promoted:
+      queue: governance.model_promoted
+
+### SERVER
+
+server.port: 0
+
+spring:
+  application.name: hsbc-bridge
+  servlet.multipart:
+    max-file-size: 1GB
+    max-request-size: 1GB
+
+  ### CONSUL
+
+  cloud.consul:
+    config.enabled: false
+    enabled: true
+    host: localhost
+    port: 8500
+    discovery:
+      enabled: true
+      register: false
+      register-health-check: false
+    service-registry.auto-registration.enabled: false
+
+  ### DATABASE
+
+  datasource:
+    password: serp
+    url: jdbc:postgresql://localhost:24881/hsbc_bridge
+    username: serp
+  jpa:
+    hibernate.ddl-auto: none
+    show-sql: false
+
+  ### RABBIT
+
+  rabbitmq:
+    host: ${RABBITMQ_ADDRESS:localhost}
+    password: ${RABBITMQ_PASSWORD:dev}
+    port: ${RABBITMQ_AMQP_PORT:24160}
+    username: ${RABBITMQ_USER:dev}
+
+
+### GRPC
+
+grpc:
+  server.port: 0
+  client:
+    GLOBAL.negotiation-type: PLAINTEXT
+    adjudication-engine.address: ${silenteight.bridge.grpc.adjudication-engine-address}
+    hsbc-worldcheck.address: ${silenteight.bridge.grpc.worldcheck-address}
+    governance.address: ${silenteight.bridge.grpc.governance-address}

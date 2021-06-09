@@ -9,13 +9,13 @@ import com.silenteight.hsbc.datasource.category.dto.CategoryDto;
 import com.silenteight.hsbc.datasource.category.dto.CategoryValueDto;
 
 import io.grpc.stub.StreamObserver;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@GRpcService
+@GrpcService
 @RequiredArgsConstructor
 class CategoryGrpcService extends CategoryServiceImplBase {
 

@@ -45,6 +45,8 @@ libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-bo
 libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retry', version: '1.3.1']
 
 // Spring Cloud
+libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config', version: springCloudVersion]
+libraries.spring_cloud_starter_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery', version: springCloudVersion]
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: springCloudVersion]
 
 // Database
@@ -65,7 +67,7 @@ libraries.springfox_oas = [group: 'io.springfox', name: 'springfox-oas', version
 libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1']
 
 // GRPC
-libraries.grpc_spring_boot_starter = [group: 'io.github.lognet', name: 'grpc-spring-boot-starter', version: '4.4.5']
+libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter', version: '2.12.0.RELEASE' ]
 libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.15.6']
 
 // Amazon
@@ -145,6 +147,8 @@ dependencies {
   implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.spring_cloud_starter_consul_discovery
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_data_jpa

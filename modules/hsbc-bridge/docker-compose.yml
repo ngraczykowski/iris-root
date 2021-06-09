@@ -46,6 +46,15 @@ services:
       /usr/bin/mc policy set public myminio/test;
       exit 0;
       "
+#
+#  consul-server:
+#    image: consul:1.9.3
+#    restart: unless-stopped
+#    ports:
+#      - '8500:8500'
+#      - '8600:8600/tcp'
+#      - '8600:8600/udp'
+#    command: "agent -server -bootstrap -ui -client=0.0.0.0"
 
 volumes:
   postgres-storage:

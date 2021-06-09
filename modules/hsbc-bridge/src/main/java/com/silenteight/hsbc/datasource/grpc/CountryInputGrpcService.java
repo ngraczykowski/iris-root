@@ -15,13 +15,13 @@ import com.silenteight.hsbc.datasource.dto.country.CountryInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputResponse;
 
 import io.grpc.stub.StreamObserver;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
+@GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class CountryInputGrpcService extends CountryInputServiceImplBase {
 

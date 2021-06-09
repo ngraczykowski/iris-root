@@ -9,13 +9,13 @@ import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 
 import com.google.protobuf.Struct;
 import io.grpc.stub.StreamObserver;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@GRpcService
+@GrpcService
 @RequiredArgsConstructor
 class CommentInputGrpcService extends CommentInputServiceImplBase {
 

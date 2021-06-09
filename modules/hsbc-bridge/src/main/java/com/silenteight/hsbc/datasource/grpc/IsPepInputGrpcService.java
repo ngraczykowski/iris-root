@@ -8,12 +8,12 @@ import com.silenteight.hsbc.datasource.dto.ispep.*;
 import com.silenteight.hsbc.datasource.provider.IsPepInputProvider;
 
 import io.grpc.stub.StreamObserver;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@GRpcService(interceptors = DatasourceGrpcInterceptor.class)
+@GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
 class IsPepInputGrpcService extends IsPepInputServiceImplBase {
 

@@ -1,0 +1,25 @@
+server.port: {{ env "NOMAD_PORT_http" }}
+grpc.server.port: {{ env "NOMAD_PORT_grpc" }}
+
+{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+{{- with $all_instances := service (print $nomad_namespace "-hsbc-bridge-db") -}}
+{{- with index $all_instances 0 }}
+spring.datasource.url: jdbc:postgresql://{{ .Address }}:{{ .Port }}/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
+{{ end -}}
+
+silenteight.bridge.grpc.governance-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+silenteight.bridge.grpc.adjudication-engine-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
+
+#Temporary settings until stable db structure
+#spring.liquibase.drop-first=true
+
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+# NOTE(ahaczewski): Intentionally left empty.
+host:
+virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+

@@ -2,17 +2,15 @@ package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.AlertServiceGrpc;
-import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc;
+import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
-import com.silenteight.adjudication.api.v1.DatasetServiceGrpc;
+import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
+import com.silenteight.hsbc.bridge.KnownServices;
 import com.silenteight.hsbc.bridge.adjudication.DatasetServiceClient;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
-import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,71 +20,42 @@ import org.springframework.context.annotation.Profile;
 @Profile("!dev")
 @RequiredArgsConstructor
 @EnableConfigurationProperties({
-    AlertGrpcAdapterProperties.class,
-    AnalysisGrpcAdapterProperties.class,
-    DatasetGrpcAdapterProperties.class,
-    ModelGrpcAdapterProperties.class })
+    GrpcProperties.class
+})
 class GrpcServiceConfiguration {
 
-  private final AlertGrpcAdapterProperties alertGrpcAdapterProperties;
-  private final AnalysisGrpcAdapterProperties analysisGrpcAdapterProperties;
-  private final DatasetGrpcAdapterProperties datasetGrpcAdapterProperties;
-  private final ModelGrpcAdapterProperties modelGrpcAdapterProperties;
+  private final GrpcProperties grpcProperties;
+
+  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  private AnalysisServiceBlockingStub analysisServiceBlockingStub;
+
+  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  private AlertServiceBlockingStub alertServiceBlockingStub;
+
+  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  private DatasetServiceBlockingStub datasetServiceBlockingStub;
+
+  @GrpcClient(KnownServices.GOVERNANCE)
+  private SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
 
   @Bean
   AnalysisGrpcAdapter analysisServiceGrpcApi() {
-    return new AnalysisGrpcAdapter(
-        analysisServiceBlockingStub(), analysisGrpcAdapterProperties.getDeadlineInSeconds());
-  }
-
-  private AnalysisServiceBlockingStub analysisServiceBlockingStub() {
-
-    return AnalysisServiceGrpc.newBlockingStub(
-        getManagedChannel(analysisGrpcAdapterProperties.getGrpcAddress()))
-        .withWaitForReady();
+    return new AnalysisGrpcAdapter(analysisServiceBlockingStub, grpcProperties.deadlineInSeconds());
   }
 
   @Bean
   AlertGrpcAdapter alertServiceGrpcApi() {
-    return new AlertGrpcAdapter(
-        alertServiceBlockingStub(), alertGrpcAdapterProperties.getDeadlineInSeconds());
-  }
-
-  private AlertServiceGrpc.AlertServiceBlockingStub alertServiceBlockingStub() {
-
-    return AlertServiceGrpc.newBlockingStub(
-        getManagedChannel(alertGrpcAdapterProperties.getGrpcAddress()))
-        .withWaitForReady();
+    return new AlertGrpcAdapter(alertServiceBlockingStub, grpcProperties.deadlineInSeconds());
   }
 
   @Bean
   DatasetServiceClient datasetServiceGrpcApi() {
-    return new DatasetGrpcAdapter(
-        datasetServiceBlockingStub(), datasetGrpcAdapterProperties.getDeadlineInSeconds());
-  }
-
-  private DatasetServiceGrpc.DatasetServiceBlockingStub datasetServiceBlockingStub() {
-
-    return DatasetServiceGrpc.newBlockingStub(
-        getManagedChannel(datasetGrpcAdapterProperties.getGrpcAddress()))
-        .withWaitForReady();
+    return new DatasetGrpcAdapter(datasetServiceBlockingStub, grpcProperties.deadlineInSeconds());
   }
 
   @Bean
   ModelServiceClient modelServiceGrpcApi() {
     return new ModelGrpcAdapter(
-        solvingModelServiceBlockingStub(), modelGrpcAdapterProperties.getDeadlineInSeconds());
-  }
-
-  private SolvingModelServiceBlockingStub solvingModelServiceBlockingStub() {
-    return SolvingModelServiceGrpc.newBlockingStub(
-        getManagedChannel(modelGrpcAdapterProperties.getGrpcAddress()))
-        .withWaitForReady();
-  }
-
-  private ManagedChannel getManagedChannel(String address) {
-    return ManagedChannelBuilder.forTarget(address)
-        .usePlaintext()
-        .build();
+        solvingModelServiceBlockingStub, grpcProperties.deadlineInSeconds());
   }
 }
