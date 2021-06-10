@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 class RelationshipProcessor {

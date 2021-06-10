@@ -70,6 +70,8 @@ public class NexusModelClient implements RepositoryClient {
 
   private static class NexusResponseNotReceivedException extends RuntimeException {
 
+    private static final long serialVersionUID = 7105701841811530177L;
+
     public NexusResponseNotReceivedException(String message) {
       super(message);
     }

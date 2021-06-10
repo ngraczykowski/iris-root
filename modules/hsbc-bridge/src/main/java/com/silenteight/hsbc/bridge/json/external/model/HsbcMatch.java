@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class HsbcMatch implements Serializable {
 
+  private static final long serialVersionUID = -4825776220026119797L;
+
   private CaseInformation caseInformation;
   private CustomerEntity customerEntity;
   private CustomerIndividual customerIndividual;

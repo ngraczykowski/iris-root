@@ -28,14 +28,10 @@ public class MatchFacade {
   }
 
   @Transactional
-  public Collection<MatchIdComposite> prepareAndSaveMatches(long alertId, List<Match> matches) {
+  public void prepareAndSaveMatches(long alertId, List<Match> matches) {
     var matchComposites = saveMatches(alertId, matches);
 
     eventPublisher.publishEvent(new StoredMatchesEvent(matchComposites));
-
-    return matchComposites.stream()
-        .map(m -> new MatchIdComposite(m.getId(), m.getExternalId()))
-        .collect(Collectors.toList());
   }
 
   private List<MatchComposite> saveMatches(long alertId, List<Match> matches) {

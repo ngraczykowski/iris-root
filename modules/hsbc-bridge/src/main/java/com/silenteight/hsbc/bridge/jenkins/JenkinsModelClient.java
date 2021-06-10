@@ -148,6 +148,8 @@ public class JenkinsModelClient implements ModelClient {
 
   private static class ModelNotReceivedException extends RuntimeException {
 
+    private static final long serialVersionUID = 330005480374608070L;
+
     public ModelNotReceivedException(String message) {
       super(message);
     }

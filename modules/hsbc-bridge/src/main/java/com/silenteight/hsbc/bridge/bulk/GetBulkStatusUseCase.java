@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.analysis.AnalysisFacade;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus;
