@@ -14,5 +14,5 @@ keycloak:
 sens.webapp:
   roles:
     roles-scope: ${keycloak.frontend-client-id}
-    country-groups-scope: {{ env "NOMAD_NAMESPACE" }}-kibana
+    country-groups-scope: kibana-sso
   external.apps.reporting-ui.url: https://kibana.dev.silenteight.com/
