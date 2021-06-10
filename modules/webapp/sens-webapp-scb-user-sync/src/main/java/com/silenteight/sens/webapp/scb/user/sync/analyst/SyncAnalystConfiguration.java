@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.BulkAnalystService;
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.lock.UnlockUserUseCase;
 import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
@@ -32,15 +33,17 @@ class SyncAnalystConfiguration {
       ExternalAnalystRepository externalAnalystRepository,
       BulkAnalystService bulkAnalystService,
       AuditTracer auditTracer,
-      SyncAnalystProperties syncAnalystProperties) {
+      SyncAnalystProperties syncAnalystProperties,
+      RolesProperties rolesProperties) {
 
     return new SyncAnalystsUseCase(
         userQuery,
         externalAnalystRepository,
-        new AnalystSynchronizer(),
+        new AnalystSynchronizer(rolesProperties.getRolesScope()),
         bulkAnalystService,
         auditTracer,
-        syncAnalystProperties.getMaxErrors());
+        syncAnalystProperties.getMaxErrors(),
+        rolesProperties.getRolesScope());
   }
 
   @Bean

@@ -14,6 +14,8 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 
+import static java.util.Optional.ofNullable;
+
 @Slf4j
 @RequiredArgsConstructor
 public class UpdateUserDisplayNameUseCase {
@@ -24,6 +26,8 @@ public class UpdateUserDisplayNameUseCase {
   private final AuditTracer auditTracer;
   @NonNull
   private final UserRolesRetriever userRolesRetriever;
+  @NonNull
+  private final String rolesScope;
 
   public void apply(UpdateUserDisplayNameCommand command) {
     auditTracer.save(new UserUpdateRequestedEvent(
@@ -33,9 +37,14 @@ public class UpdateUserDisplayNameUseCase {
     updatedUserRepository.save(updatedUser);
 
     auditTracer.save(new UserUpdatedEvent(
-        updatedUser.getUsername(), UpdatedUser.class.getName(),
+        updatedUser.getUsername(),
+        UpdatedUser.class.getName(),
         new UpdatedUserDetails(
-            updatedUser, userRolesRetriever.rolesOf(updatedUser.getUsername()))));
+            updatedUser,
+            ofNullable(updatedUser.getRoles())
+                .map(userRoles -> userRoles.getRoles(rolesScope))
+                .orElse(null),
+            userRolesRetriever.rolesOf(updatedUser.getUsername()).getRoles(rolesScope))));
   }
 
   @Data
@@ -51,8 +60,7 @@ public class UpdateUserDisplayNameUseCase {
     private final TimeSource timeSource = DefaultTimeSource.INSTANCE;
 
     UpdatedUser toUpdatedUser() {
-      return UpdatedUser
-          .builder()
+      return UpdatedUser.builder()
           .username(username)
           .displayName(displayName)
           .updateDate(timeSource.offsetDateTime())

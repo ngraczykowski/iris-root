@@ -54,6 +54,9 @@ class UserAuthActivityEventProvider {
   @NonNull
   private final ZoneId zoneId;
 
+  @NonNull
+  private final String rolesScope;
+
   List<UserAuthActivityEventDto> provide(
       @NonNull OffsetDateTime from, @NonNull OffsetDateTime to) {
 
@@ -209,7 +212,9 @@ class UserAuthActivityEventProvider {
 
   private List<String> getUserRoles(String userName) {
     try {
-      return userRolesRetriever.rolesOf(userName);
+      return userRolesRetriever
+          .rolesOf(userName)
+          .getSortedRoles(rolesScope);
     } catch (UserNotFoundException e) {
       log.error(e.getMessage(), e);
       return emptyList();

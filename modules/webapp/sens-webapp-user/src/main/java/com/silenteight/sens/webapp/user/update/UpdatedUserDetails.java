@@ -22,10 +22,12 @@ public class UpdatedUserDetails {
   private OffsetDateTime updateDate;
   private Collection<String> currentRoles;
 
-  public UpdatedUserDetails(UpdatedUser updatedUser, Collection<String> currentRoles) {
+  public UpdatedUserDetails(
+      UpdatedUser updatedUser, Set<String> newRoles, Collection<String> currentRoles) {
+
     this.username = updatedUser.getUsername();
     this.displayName = updatedUser.getDisplayName();
-    this.newRoles = updatedUser.getRoles();
+    this.newRoles = newRoles;
     this.locked = updatedUser.getLocked();
     this.updateDate = updatedUser.getUpdateDate();
     this.currentRoles = currentRoles;

@@ -14,6 +14,8 @@ class UpdateUserDisplayNameUseCaseFixtures {
   private static final MockTimeSource MOCK_TIME_SOURCE = MockTimeSource.ARBITRARY_INSTANCE;
 
   static final OffsetDateTime OFFSET_DATE_TIME = MOCK_TIME_SOURCE.offsetDateTime();
+  static final String ROLES_SCOPE = "frontend";
+  static final String COUNTRY_GROUPS_SCOPE = "kibana";
 
   static final UpdateUserDisplayNameCommand NEW_DISPLAY_NAME_COMMAND =
       UpdateUserDisplayNameCommand

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.report;
 
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.sep.base.common.time.IsoOffsetDateFormatter;
@@ -12,11 +13,12 @@ import org.springframework.context.annotation.Configuration;
 class UsersReportConfiguration {
 
   @Bean
-  UsersReportGenerator usersReportGenerator(UserQuery userListQuery) {
+  UsersReportGenerator usersReportGenerator(UserQuery userQuery, RolesProperties rolesProperties) {
     return new UsersReportGenerator(
         DefaultTimeSource.INSTANCE,
         DigitsOnlyDateFormatter.INSTANCE,
         IsoOffsetDateFormatter.INSTANCE,
-        userListQuery);
+        userQuery,
+        rolesProperties.getRolesScope());
   }
 }

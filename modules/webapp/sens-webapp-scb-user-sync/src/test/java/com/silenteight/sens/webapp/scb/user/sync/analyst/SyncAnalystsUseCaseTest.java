@@ -10,6 +10,7 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.*;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnalystsRequest.NewAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.SyncAnalystStatsDto;
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +20,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Set;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
-import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
-import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.NEW_ANALYST;
-import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.RESTORED_ANALYST;
+import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.*;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.UserDtoFixtures.*;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.SingleResult.failure;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.SingleResult.success;
@@ -34,6 +33,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.LongStream.range;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +47,8 @@ class SyncAnalystsUseCaseTest {
   private BulkAnalystService bulkAnalystService;
   @Mock
   private AuditTracer auditTracer;
+  @Mock
+  private RolesProperties rolesProperties;
 
   private SyncAnalystProperties syncAnalystProperties;
 
@@ -54,6 +56,8 @@ class SyncAnalystsUseCaseTest {
 
   @BeforeEach
   void setUp() {
+    given(rolesProperties.getRolesScope()).willReturn(ROLES_SCOPE);
+
     syncAnalystProperties = new SyncAnalystProperties();
     underTest = new SyncAnalystConfiguration()
         .syncAnalystsUseCase(
@@ -61,13 +65,14 @@ class SyncAnalystsUseCaseTest {
             externalAnalystRepository,
             bulkAnalystService,
             auditTracer,
-            syncAnalystProperties);
+            syncAnalystProperties,
+            rolesProperties);
   }
 
   @Test
   void usersAvailable_syncAnalysts() {
     // given
-    when(userQuery.listAll()).thenReturn(
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(
         asList(
             SENS_USER,
             GNS_USER_WITHOUT_ANALYST_ROLE,
@@ -110,7 +115,7 @@ class SyncAnalystsUseCaseTest {
   @Test
   void analystsAvailable_syncAnalysts() {
     // given
-    when(userQuery.listAll()).thenReturn(emptyList());
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(emptyList());
     when(externalAnalystRepository.list()).thenReturn(
         asList(ANALYST_WITHOUT_DISPLAY_NAME, ANALYST_WITH_DISPLAY_NAME, NEW_ANALYST));
     when(bulkAnalystService.create(any(BulkCreateAnalystsRequest.class)))
@@ -153,7 +158,7 @@ class SyncAnalystsUseCaseTest {
   @Test
   void usersAndAnalystsAvailable_syncAnalysts() {
     // give
-    when(userQuery.listAll()).thenReturn(
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(
         asList(
             SENS_USER,
             GNS_USER_WITHOUT_ANALYST_ROLE,
@@ -224,7 +229,8 @@ class SyncAnalystsUseCaseTest {
             externalAnalystRepository,
             bulkAnalystService,
             auditTracer,
-            syncAnalystProperties);
+            syncAnalystProperties,
+            rolesProperties);
 
     // when
     SyncAnalystStatsDto stats = underTest.synchronize();

@@ -8,18 +8,22 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.TemporaryPasswordDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDto;
+import com.silenteight.sens.webapp.user.list.ListUsersUseCase;
+import com.silenteight.sens.webapp.user.list.UserListDto;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
+import com.silenteight.sens.webapp.user.roles.ListRolesUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
-import com.silenteight.sep.usermanagement.api.*;
+import com.silenteight.sep.usermanagement.api.RolesValidationException;
+import com.silenteight.sep.usermanagement.api.TemporaryPassword;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository.UserUpdateException;
+import com.silenteight.sep.usermanagement.api.UserDomainError;
 import com.silenteight.sep.usermanagement.api.dto.RolesDto;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -56,6 +60,9 @@ import static org.springframework.http.ResponseEntity.*;
 class UserRestController {
 
   @NonNull
+  private final ListUsersUseCase listUsersUseCase;
+
+  @NonNull
   private final RegisterInternalUserUseCase registerInternalUserUseCase;
 
   @NonNull
@@ -68,16 +75,13 @@ class UserRestController {
   private final ResetInternalUserPasswordUseCase resetPasswordUseCase;
 
   @NonNull
-  private final UserQuery userQuery;
-
-  @NonNull
-  private final RolesQuery rolesQuery;
+  private final ListRolesUseCase listRolesUseCase;
 
   @GetMapping
   @PreAuthorize("isAuthorized('LIST_USERS')")
-  public List<UserDto> users() {
+  public List<UserListDto> users() {
     log.info(USER_MANAGEMENT, "Listing users");
-    return userQuery.listAll();
+    return listUsersUseCase.apply();
   }
 
   //TODO(jobarymski): this needs to be removed once the frontend switches
@@ -85,13 +89,13 @@ class UserRestController {
   @Deprecated
   @GetMapping("/pageable")
   @PreAuthorize("isAuthorized('LIST_USERS')")
-  public Page<UserDto> pageableUsers(Pageable pageable) {
+  public Page<UserListDto> pageableUsers(Pageable pageable) {
     log.info(
         USER_MANAGEMENT,
         "Listing users. pageNumber={},pageSize={}",
         pageable.getPageNumber(),
         pageable.getPageSize());
-    List<UserDto> users = userQuery.listAll();
+    List<UserListDto> users = listUsersUseCase.apply();
     return new PageImpl<>(users, pageable, users.size());
   }
 
@@ -176,7 +180,7 @@ class UserRestController {
   @PreAuthorize("isAuthorized('LIST_ROLES')")
   public ResponseEntity<RolesDto> roles() {
     log.info(USER_MANAGEMENT, "Listing roles");
-    return ok(rolesQuery.list());
+    return ok(listRolesUseCase.apply());
   }
 
   @Getter

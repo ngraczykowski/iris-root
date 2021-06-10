@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
@@ -28,6 +29,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AccountsReportGeneratorTest {
 
+  private static final String ROLES_SCOPE = "frontend";
+
   @Mock
   private UserQuery repository;
 
@@ -38,14 +41,15 @@ class AccountsReportGeneratorTest {
     underTest = new AccountsReportGenerator(
         repository,
         new MockTimeSource(Instant.parse("2011-12-03T10:15:30Z")),
-        new ScbReportDateFormatter());
+        new ScbReportDateFormatter(),
+        ROLES_SCOPE);
   }
 
   @ParameterizedTest
   @MethodSource("reportTestCases")
   void reportTest(List<UserDto> users, String expectedReportFile) throws Exception {
     //given
-    when(repository.listAll()).thenReturn(users);
+    when(repository.listAll(Set.of(ROLES_SCOPE))).thenReturn(users);
 
     //when
     Report report = underTest.generateReport(emptyMap());

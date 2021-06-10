@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+import static java.util.Set.of;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -38,13 +39,14 @@ public class SyncAnalystsUseCase {
   @NonNull
   private final AuditTracer auditTracer;
   private final int maxErrors;
+  private final String rolesScope;
 
   public SyncAnalystStatsDto synchronize() {
     log.info(USER_MANAGEMENT, "Synchronizing Analysts");
 
     auditTracer.save(new AnalystsSyncRequestedEvent());
 
-    Collection<UserDto> users = userQuery.listAll();
+    Collection<UserDto> users = userQuery.listAll(of(rolesScope));
     Collection<Analyst> analysts = externalAnalystRepository.list();
     SynchronizedAnalysts syncResult = analystSynchronizer.synchronize(users, analysts);
 

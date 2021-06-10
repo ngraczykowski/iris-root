@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.user.registration;
 import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.InvalidNameLengthError;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
@@ -42,7 +43,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RegisterInternalUserUseCaseTest {
 
-  private RegisterInternalUserUseCase underTest;
+  private static final String ROLES_SCOPE = "frontend";
+  private static final String COUNTRY_GROUPS_SCOPE = "kibana";
 
   @Mock
   private UsernameUniquenessValidator usernameUniquenessValidator;
@@ -52,18 +54,26 @@ class RegisterInternalUserUseCaseTest {
   private RegisteredUserRepository registeredUserRepository;
   @Mock
   private AuditTracer auditTracer;
+  @Mock
+  private RolesProperties rolesProperties;
+
+  private RegisterInternalUserUseCase underTest;
 
   @BeforeEach
   void setUp() {
+    given(rolesProperties.getRolesScope()).willReturn(ROLES_SCOPE);
+    given(rolesProperties.getCountryGroupsScope()).willReturn(COUNTRY_GROUPS_SCOPE);
+
     UserRegistrationUseCaseConfiguration configuration =
         new UserRegistrationUseCaseConfiguration();
     UserRegisteringDomainService userRegisteringDomainService =
         new UserRegistrationDomainTestConfiguration()
-            .userRegisteringDomainService(usernameUniquenessValidator, rolesValidator);
+            .userRegisteringDomainService(
+                usernameUniquenessValidator, rolesValidator, rolesProperties);
 
     underTest =
         configuration.registerInternalUserUseCase(
-            userRegisteringDomainService, registeredUserRepository, auditTracer);
+            userRegisteringDomainService, registeredUserRepository, auditTracer, rolesProperties);
   }
 
   @Test
@@ -194,7 +204,7 @@ class RegisterInternalUserUseCaseTest {
     @BeforeEach
     void setUp() {
       given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
-      given(rolesValidator.validate(any())).willReturn(Optional.empty());
+      given(rolesValidator.validate(any(), any())).willReturn(Optional.empty());
     }
 
     @Test
@@ -272,7 +282,7 @@ class RegisterInternalUserUseCaseTest {
     @BeforeEach
     void setUp() {
       given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
-      given(rolesValidator.validate(any())).willReturn(Optional.of(
+      given(rolesValidator.validate(any(), any())).willReturn(Optional.of(
           UserRegistrationUseCaseFixtures.ROLES_DONT_EXIST));
     }
 
@@ -300,7 +310,7 @@ class RegisterInternalUserUseCaseTest {
     @BeforeEach
     void setUp() {
       given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
-      given(rolesValidator.validate(any())).willReturn(Optional.empty());
+      given(rolesValidator.validate(any(), any())).willReturn(Optional.empty());
     }
 
     @Test

@@ -30,12 +30,16 @@ public class CreateUserDto {
   @Builder.Default
   private Set<String> roles = emptySet();
 
+  @Builder.Default
+  private Set<String> countryGroups = emptySet();
+
   public RegisterInternalUserCommand toCommand() {
     return RegisterInternalUserCommand.builder()
         .username(getUserName())
         .password(getPassword())
         .displayName(getDisplayName())
         .roles(getRoles())
+        .countryGroups(getCountryGroups())
         .build();
   }
 }

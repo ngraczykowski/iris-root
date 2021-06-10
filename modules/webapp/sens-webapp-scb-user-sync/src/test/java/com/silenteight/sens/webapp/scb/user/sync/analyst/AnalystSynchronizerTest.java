@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.scb.user.sync.analyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.SynchronizedAnalysts;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
+import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITHOUT_DISPLAY_NAME;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystFixtures.ANALYST_WITH_DISPLAY_NAME;
@@ -25,11 +27,13 @@ import static org.assertj.core.api.Assertions.*;
 
 class AnalystSynchronizerTest {
 
+  private static final String ROLES_SCOPE = "frontend";
+
   private AnalystSynchronizer underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new AnalystSynchronizer();
+    underTest = new AnalystSynchronizer(ROLES_SCOPE);
   }
 
   @Test
@@ -205,11 +209,10 @@ class AnalystSynchronizerTest {
   private static final UserDto createUser(
       String login, String displayName, String role, String origin, OffsetDateTime deletedAt) {
 
-    return UserDto
-        .builder()
+    return UserDto.builder()
         .userName(login)
         .displayName(displayName)
-        .roles(singletonList(role))
+        .roles(new ScopeUserRoles(Map.of(ROLES_SCOPE, singletonList(role))))
         .origin(origin)
         .lockedAt(deletedAt)
         .build();

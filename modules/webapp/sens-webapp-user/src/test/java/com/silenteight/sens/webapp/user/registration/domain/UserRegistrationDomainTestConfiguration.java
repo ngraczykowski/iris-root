@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.domain.validator.ValidatorConfigurationTestConfiguration;
 import com.silenteight.sep.usermanagement.api.RolesValidator;
 import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
@@ -13,7 +14,8 @@ public class UserRegistrationDomainTestConfiguration {
 
   public UserRegisteringDomainService userRegisteringDomainService(
       UsernameUniquenessValidator usernameUniquenessValidator,
-      RolesValidator rolesValidator) {
+      RolesValidator rolesValidator,
+      RolesProperties rolesProperties) {
 
     return configuration.userRegisteringDomainService(
         validationConfiguration.usernameLengthValidator(),
@@ -21,6 +23,7 @@ public class UserRegistrationDomainTestConfiguration {
         validationConfiguration.displayNameLengthValidator(),
         rolesValidator,
         usernameUniquenessValidator,
-        validationConfiguration.passwordCharsValidator());
+        validationConfiguration.passwordCharsValidator(),
+        rolesProperties);
   }
 }

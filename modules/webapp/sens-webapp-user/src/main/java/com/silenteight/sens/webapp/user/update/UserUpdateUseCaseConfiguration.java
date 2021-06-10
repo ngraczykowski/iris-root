@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.user.update;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.RolesValidator;
@@ -18,15 +19,26 @@ class UserUpdateUseCaseConfiguration {
   UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase(
       UpdatedUserRepository updatedUserRepository,
       AuditTracer auditTracer,
-      UserRolesRetriever userRolesRetriever) {
+      UserRolesRetriever userRolesRetriever,
+      RolesProperties rolesProperties) {
 
-    return new UpdateUserDisplayNameUseCase(updatedUserRepository, auditTracer, userRolesRetriever);
+    return new UpdateUserDisplayNameUseCase(
+        updatedUserRepository, auditTracer, userRolesRetriever, rolesProperties.getRolesScope());
   }
 
   @Bean
   AddRolesToUserUseCase addRolesToUserUseCase(
-      UpdatedUserRepository updatedUserRepository, UserQuery userQuery, AuditTracer auditTracer) {
-    return new AddRolesToUserUseCase(updatedUserRepository, userQuery, auditTracer);
+      UpdatedUserRepository updatedUserRepository,
+      UserQuery userQuery,
+      AuditTracer auditTracer,
+      RolesProperties rolesProperties) {
+
+    return new AddRolesToUserUseCase(
+        updatedUserRepository,
+        userQuery,
+        auditTracer,
+        rolesProperties.getRolesScope(),
+        rolesProperties.getCountryGroupsScope());
   }
 
   @Bean
@@ -35,13 +47,16 @@ class UserUpdateUseCaseConfiguration {
       RolesValidator rolesValidator,
       @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator,
       AuditTracer auditTracer,
-      UserRolesRetriever userRolesRetriever) {
+      UserRolesRetriever userRolesRetriever,
+      RolesProperties rolesProperties) {
 
     return new UpdateUserUseCase(
         updatedUserRepository, 
         displayNameLengthValidator, 
         rolesValidator, 
         auditTracer, 
-        userRolesRetriever);
+        userRolesRetriever,
+        rolesProperties.getRolesScope(),
+        rolesProperties.getCountryGroupsScope());
   }
 }

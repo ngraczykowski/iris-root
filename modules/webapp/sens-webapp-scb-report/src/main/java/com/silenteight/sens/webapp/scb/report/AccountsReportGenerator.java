@@ -16,6 +16,7 @@ import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.silenteight.sens.webapp.scb.report.ReportColumns.*;
@@ -39,6 +40,9 @@ class AccountsReportGenerator implements ReportGenerator {
   @NonNull
   private final DateFormatter timeFormatter;
 
+  @NonNull
+  private final String rolesScope;
+
   @Override
   public String getName() {
     return REPORT_NAME;
@@ -57,11 +61,19 @@ class AccountsReportGenerator implements ReportGenerator {
   }
 
   private List<ReportUserDto> getUsersDto() {
-    return userQuery.listAll().stream().flatMap(this::getUserDto).collect(toList());
+    return userQuery
+        .listAll(Set.of(rolesScope))
+        .stream()
+        .flatMap(this::getUserDto)
+        .collect(toList());
   }
 
   private Stream<ReportUserDto> getUserDto(UserDto user) {
-    return user.getRoles().stream().map(role -> new ReportUserDto(user, role, timeFormatter));
+    return user
+        .getRoles()
+        .getSortedRoles(rolesScope)
+        .stream()
+        .map(role -> new ReportUserDto(user, role, timeFormatter));
   }
 
   private static Stream<String> buildReportData(List<ReportUserDto> usersToReport) {

@@ -28,11 +28,13 @@ public class NewUserRegistration {
     return getUserDetails().getCredentials();
   }
 
-  public boolean hasRoles() {
-    return !getRoles().isEmpty();
+  public boolean hasRoles(String rolesScope) {
+    return !getRoles(rolesScope).isEmpty();
   }
 
-  public Set<String> getRoles() {
-    return getUserDetails().getRoles();
+  public Set<String> getRoles(String rolesScope) {
+    return getUserDetails()
+        .getRoles()
+        .getRoles(rolesScope);
   }
 }

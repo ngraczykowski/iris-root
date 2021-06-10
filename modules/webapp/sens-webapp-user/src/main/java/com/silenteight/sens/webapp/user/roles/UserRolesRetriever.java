@@ -4,19 +4,24 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
-import java.util.List;
+import static java.util.Set.of;
 
 @RequiredArgsConstructor
 public class UserRolesRetriever {
 
   @NonNull
   private final UserQuery userQuery;
+  @NonNull
+  private final String rolesScope;
+  @NonNull
+  private final String countryGroupsScope;
 
-  public List<String> rolesOf(String username) {
+  public UserRoles rolesOf(String username) {
     return userQuery
-        .find(username)
+        .find(username, of(rolesScope, countryGroupsScope))
         .map(UserDto::getRoles)
         .orElseThrow(UserNotFoundException::new);
   }

@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,13 +30,22 @@ import static io.vavr.control.Either.right;
 @RequiredArgsConstructor
 public class UserRegisteringDomainService {
 
+  @NonNull
   private final TimeSource timeSource;
+  @NonNull
   private final NameLengthValidator usernameLengthValidator;
+  @NonNull
   private final RegexValidator usernameCharsValidator;
+  @NonNull
   private final NameLengthValidator displayNameLengthValidator;
+  @NonNull
   private final RolesValidator rolesValidator;
+  @NonNull
   private final UsernameUniquenessValidator usernameUniquenessValidator;
+  @NonNull
   private final RegexValidator passwordCharsValidator;
+  @NonNull
+  private final String rolesScope;
 
   public Either<UserDomainError, CompletedUserRegistration> register(
       NewUserRegistration registration) {
@@ -61,9 +71,9 @@ public class UserRegisteringDomainService {
     if (invalidDisplayNameLengthError.isDefined())
       return left(invalidDisplayNameLengthError.get());
 
-    if (registration.hasRoles()) {
+    if (registration.hasRoles(rolesScope)) {
       Optional<RolesDontExistError> rolesDontExistError =
-          rolesValidator.validate(registration.getRoles());
+          rolesValidator.validate(rolesScope, registration.getRoles(rolesScope));
 
       if (rolesDontExistError.isPresent())
         return left(rolesDontExistError.get());

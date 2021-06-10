@@ -1,10 +1,12 @@
 package com.silenteight.sens.webapp.scb.report;
 
 import com.silenteight.sens.webapp.backend.report.domain.ReportMetadataService;
+import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
 import com.silenteight.sep.usermanagement.api.EventQuery;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.api.dto.EventDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.sep.base.testing.time.MockTimeSource.ARBITRARY_INSTANCE;
 import static com.silenteight.sep.usermanagement.api.event.EventType.EXTEND_SESSION;
@@ -29,13 +32,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserAuthActivityEventProviderTest {
 
+  private static final String ROLES_SCOPE = "frontend";
+
   private static final String REPORT_NAME = "user-auth-activity";
 
   private static final String IP_ADDRESS = "191.15.0.7";
 
   private static final int REPORT_PERIOD_IN_MINUTES = 60;
 
-  private static final List<String> USER_ROLES = List.of("ADMINISTRATOR", "AUDITOR");
+  private static final UserRoles USER_ROLES =
+      new ScopeUserRoles(Map.of(ROLES_SCOPE, List.of("ADMINISTRATOR", "AUDITOR")));
 
   private static final int SESSION_TIMEOUT = 1800;
 
@@ -62,7 +68,8 @@ class UserAuthActivityEventProviderTest {
         eventQuery,
         reportMetadataService,
         userRolesRetriever,
-        TIME_SOURCE.timeZone().toZoneId());
+        TIME_SOURCE.timeZone().toZoneId(),
+        ROLES_SCOPE);
 
     when(configurationQuery.getSessionIdleTimeoutSeconds()).thenReturn(SESSION_TIMEOUT);
   }
@@ -503,7 +510,7 @@ class UserAuthActivityEventProviderTest {
 
     return UserAuthActivityEventDto.builder()
         .username(userName)
-        .roles(USER_ROLES)
+        .roles(USER_ROLES.getSortedRoles(ROLES_SCOPE))
         .ipAddress(IP_ADDRESS)
         .loginTimestamp(loginTimestamp)
         .build();
@@ -514,7 +521,7 @@ class UserAuthActivityEventProviderTest {
 
     return UserAuthActivityEventDto.builder()
         .username(userName)
-        .roles(USER_ROLES)
+        .roles(USER_ROLES.getSortedRoles(ROLES_SCOPE))
         .ipAddress(IP_ADDRESS)
         .loginTimestamp(loginTimestamp)
         .logoutTimestamp(logoutTimestamp)

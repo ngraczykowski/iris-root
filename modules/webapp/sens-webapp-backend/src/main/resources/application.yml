@@ -223,7 +223,7 @@ sens.web:
   #   - The green color occurs to something positive. That's why it should be used only when the alert is a "False positive," which means it is not a threat.
   #   - Gray is a neutral color which distinguishes itself from red, blue, and green. Therefore, it should be used only in a situation when there is no solution yet.
   #   ## Color variants
-  #   For each set use first color to describe the main solution. Use other shades from the particular set for additional   solutions in that group.
+  #   For each set use first color to describe the main solution. Use other shades from the particular set for additional solutions in that group.
   #   ## Colors
   #   ### Negative like "True positive"
   #   ai-solution-negative-1  — Red
@@ -256,6 +256,10 @@ sens.web:
     - key: "POTENTIAL_TRUE_POSITIVE"
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
+
+  roles:
+    roles-scope: ${keycloak.frontend-client-id}
+    country-groups-scope: "kibana"
 
 # Authorization
 sep.auth:

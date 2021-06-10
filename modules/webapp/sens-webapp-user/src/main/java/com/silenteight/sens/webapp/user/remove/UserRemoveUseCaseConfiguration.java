@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.user.remove;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;
@@ -16,8 +17,15 @@ class UserRemoveUseCaseConfiguration {
       UserQuery userQuery, 
       UserRemover userRemover,
       AuditTracer auditTracer,
-      UserRolesRetriever userRolesRetriever) {
+      UserRolesRetriever userRolesRetriever,
+      RolesProperties rolesProperties) {
 
-    return new RemoveUserUseCase(userQuery, userRemover, auditTracer, userRolesRetriever);
+    return new RemoveUserUseCase(
+        userQuery,
+        userRemover,
+        auditTracer,
+        userRolesRetriever,
+        rolesProperties.getRolesScope(),
+        rolesProperties.getCountryGroupsScope());
   }
 }

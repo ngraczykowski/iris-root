@@ -27,7 +27,11 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
+@RequiredArgsConstructor
 class AnalystSynchronizer {
+
+  @NonNull
+  private final String rolesScope;
 
   SynchronizedAnalysts synchronize(
       @NonNull Collection<UserDto> users, @NonNull Collection<Analyst> analysts) {
@@ -58,13 +62,13 @@ class AnalystSynchronizer {
         .collect(toSet());
   }
 
-  private static List<String> analystsToRestore(
+  private List<String> analystsToRestore(
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getDeletedExternalUsers(users)
         .filter(user -> analystUserNames.contains(user.getUserName()))
-        .filter(user -> user.hasOnlyRole(ANALYST))
+        .filter(user -> user.hasOnlyRole(rolesScope, ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
@@ -83,13 +87,13 @@ class AnalystSynchronizer {
         .filter(user -> user.hasOrigin(new GnsOrigin()));
   }
 
-  private static List<String> analystsToAddRole(
+  private List<String> analystsToAddRole(
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getNonDeletedExternalUsers(users)
         .filter(user -> analystUserNames.contains(user.getUserName()))
-        .filter(user -> !user.hasRole(ANALYST))
+        .filter(user -> !user.hasRole(rolesScope, ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }
@@ -119,13 +123,13 @@ class AnalystSynchronizer {
         .collect(toMap(Analyst::getUserName, identity()));
   }
 
-  private static List<String> analystsToDelete(
+  private List<String> analystsToDelete(
       Collection<UserDto> users, Collection<Analyst> analysts) {
 
     Set<String> analystUserNames = extractAnalystsUserNames(analysts);
     return getNonDeletedExternalUsers(users)
         .filter(user -> !analystUserNames.contains(user.getUserName()))
-        .filter(user -> user.hasOnlyRole(ANALYST))
+        .filter(user -> user.hasOnlyRole(rolesScope, ANALYST))
         .map(UserDto::getUserName)
         .collect(toList());
   }

@@ -11,6 +11,7 @@ import com.silenteight.sens.webapp.report.SimpleReport;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import io.vavr.control.Option;
@@ -23,6 +24,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
+import static java.util.Set.of;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -47,7 +49,9 @@ class UsersReportGenerator implements ReportGenerator {
   @NonNull
   private final DateFormatter rowDateFormatter;
   @NonNull
-  private final UserQuery userListQuery;
+  private final UserQuery userQuery;
+  @NonNull
+  private final String rolesScope;
 
   @Override
   public String getName() {
@@ -59,8 +63,8 @@ class UsersReportGenerator implements ReportGenerator {
     return new SimpleReport(getReportFileName(), getReportData());
   }
 
-  private static String rolesFormatter(UserDto user) {
-    return String.join(MUTLIVALUE_FILED_SEPARATOR, user.getRoles());
+  private String rolesFormatter(UserRoles roles) {
+    return String.join(MUTLIVALUE_FILED_SEPARATOR, roles.getSortedRoles(rolesScope));
   }
 
   private String getReportFileName() {
@@ -72,7 +76,7 @@ class UsersReportGenerator implements ReportGenerator {
   }
 
   private List<String> getReportData() {
-    Collection<UserDto> users = userListQuery.listAll();
+    Collection<UserDto> users = userQuery.listAll(of(rolesScope));
     return buildReportData(users).collect(toList());
   }
 
@@ -81,7 +85,7 @@ class UsersReportGenerator implements ReportGenerator {
         .cell(USERNAME_COLUMN_HEADER, UserDto::getUserName)
         .cell(DISPLAY_NAME_COLUMN_HEADER, UserDto::getDisplayName)
         .cell(ORIGIN_COLUMN_HEADER, UserDto::getOrigin)
-        .cell(ROLES_COLUMN_HEADER, UsersReportGenerator::rolesFormatter)
+        .cell(ROLES_COLUMN_HEADER, user -> rolesFormatter(user.getRoles()))
         .cell(LAST_LOGIN_AT_COLUMN_HEADER, dateFormatter(UserDto::getLastLoginAt))
         .cell(CREATED_AT_COLUMN_HEADER, dateFormatter(UserDto::getCreatedAt))
         .cell(LOCKED_AT_COLUMN_HEADER, dateFormatter(UserDto::getLockedAt))

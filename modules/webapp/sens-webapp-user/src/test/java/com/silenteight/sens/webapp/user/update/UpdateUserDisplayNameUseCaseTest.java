@@ -3,9 +3,11 @@ package com.silenteight.sens.webapp.user.update;
 import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
@@ -25,6 +29,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateUserDisplayNameUseCaseTest {
+
+  private static final String ROLES_SCOPE = "frontend";
 
   @Mock
   private UpdatedUserRepository updatedUserRepository;
@@ -37,12 +43,18 @@ class UpdateUserDisplayNameUseCaseTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new UserUpdateUseCaseConfiguration()
-        .updateUserDisplayNameUseCase(updatedUserRepository, auditTracer, userRolesRetriever);
+    underTest = new UpdateUserDisplayNameUseCase(
+        updatedUserRepository, auditTracer, userRolesRetriever, ROLES_SCOPE);
   }
 
   @Test
   void updateDisplayNameCommand_updateUser() {
+    //given
+    List<String> roles = List.of("role1", "role2");
+    Map<String, List<String>> scopeRoles = Map.of(ROLES_SCOPE, roles);
+    UserRoles userRoles = new ScopeUserRoles(scopeRoles);
+    when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(userRoles);
+
     // when
     underTest.apply(NEW_DISPLAY_NAME_COMMAND);
 
@@ -57,7 +69,9 @@ class UpdateUserDisplayNameUseCaseTest {
     UUID correlationId = RequestCorrelation.id();
 
     List<String> roles = List.of("role1", "role2");
-    when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(roles);
+    Map<String, List<String>> scopeRoles = Map.of(ROLES_SCOPE, roles);
+    UserRoles userRoles = new ScopeUserRoles(scopeRoles);
+    when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(userRoles);
 
     underTest.apply(NEW_DISPLAY_NAME_COMMAND);
 
@@ -77,7 +91,8 @@ class UpdateUserDisplayNameUseCaseTest {
         new UpdatedUserDetails(
             updatedUser(
                 NEW_DISPLAY_NAME_COMMAND.getUsername(), NEW_DISPLAY_NAME_COMMAND.getDisplayName()),
-            roles));
+            null,
+            new HashSet<>(roles)));
   }
 
   private static UpdatedUser updatedUser(String username, String displayName) {

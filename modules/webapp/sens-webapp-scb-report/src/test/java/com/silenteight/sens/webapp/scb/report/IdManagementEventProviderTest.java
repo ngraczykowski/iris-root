@@ -3,17 +3,18 @@ package com.silenteight.sens.webapp.scb.report;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditDataDto.AuditDataDtoBuilder;
 import com.silenteight.auditing.bs.AuditingFinder;
+import com.silenteight.sens.webapp.user.registration.CreatedUserDetails;
+import com.silenteight.sens.webapp.user.registration.CreatedUserDetails.ObfuscatedCredentials;
+import com.silenteight.sens.webapp.user.registration.CreatedUserDetails.UserDetails;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.remove.RemovedUserDetails;
 import com.silenteight.sens.webapp.user.update.UpdatedUserDetails;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
-import com.silenteight.sep.usermanagement.api.NewUserDetails;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -21,6 +22,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -42,8 +44,12 @@ class IdManagementEventProviderTest {
   @Mock
   private AuditingFinder auditingFinder;
 
-  @InjectMocks
-  private IdManagementEventProvider idManagementEventProvider;
+  private IdManagementEventProvider underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new IdManagementEventProvider(auditingFinder);
+  }
 
   @Test
   void returnsCreateEventBasingOnAudit() {
@@ -51,7 +57,7 @@ class IdManagementEventProviderTest {
     String principal = "user2";
     String role1 = "roleA";
     String role2 = "roleB";
-    Set<String> roles = of(role1, role2);
+    Set<String> roles = Set.of(role1, role2);
 
     OffsetDateTime from = now().minusHours(6);
     OffsetDateTime to = now();
@@ -63,11 +69,11 @@ class IdManagementEventProviderTest {
                 .timestamp(Timestamp.valueOf("2020-04-15 12:14:32"))
                 .type("UserCreated")
                 .principal(principal)
-                .details(jsonStringOf(completedUserRegistrationWith(roles)))
+                .details(jsonStringOf(createdUserDetailsWith(roles)))
                 .build()));
 
     List<IdManagementEventDto> idManagementEvents =
-        idManagementEventProvider.idManagementEvents(from, to);
+        underTest.idManagementEvents(from, to);
 
     assertThat(idManagementEvents).hasSize(1);
 
@@ -89,11 +95,11 @@ class IdManagementEventProviderTest {
         .thenReturn(List.of(
             auditDataDtoWithDefaults()
                 .type("UserCreated")
-                .details(jsonStringOf(completedUserRegistrationWith(emptySet())))
+                .details(jsonStringOf(createdUserDetailsWith(emptySet())))
                 .build()));
 
     List<IdManagementEventDto> idManagementEvents =
-        idManagementEventProvider.idManagementEvents(from, to);
+        underTest.idManagementEvents(from, to);
 
     assertThat(idManagementEvents).hasSize(1);
 
@@ -110,7 +116,7 @@ class IdManagementEventProviderTest {
 
     OffsetDateTime from = now().minusHours(7);
     OffsetDateTime to = now();
-    Set<String> roles = of(role);
+    Set<String> roles =  Set.of(role);
 
     when(auditingFinder.find(from, to, USER_MANAGEMENT_EVENT_TYPES))
         .thenReturn(List.of(
@@ -123,7 +129,7 @@ class IdManagementEventProviderTest {
                 .build()));
 
     List<IdManagementEventDto> idManagementEvents =
-        idManagementEventProvider.idManagementEvents(from, to);
+        underTest.idManagementEvents(from, to);
 
     assertThat(idManagementEvents).hasSize(1);
 
@@ -155,7 +161,7 @@ class IdManagementEventProviderTest {
                 .build()));
 
     List<IdManagementEventDto> idManagementEvents =
-        idManagementEventProvider.idManagementEvents(from, to);
+        underTest.idManagementEvents(from, to);
 
     assertThat(idManagementEvents).hasSize(1);
 
@@ -176,7 +182,7 @@ class IdManagementEventProviderTest {
 
     OffsetDateTime from = now().minusHours(7);
     OffsetDateTime to = now();
-    Set<String> roles = of(role);
+    List<String> roles = List.of(role);
 
     when(auditingFinder.find(from, to, USER_MANAGEMENT_EVENT_TYPES))
         .thenReturn(List.of(
@@ -189,7 +195,7 @@ class IdManagementEventProviderTest {
                 .build()));
 
     List<IdManagementEventDto> idManagementEvents =
-        idManagementEventProvider.idManagementEvents(from, to);
+        underTest.idManagementEvents(from, to);
 
     assertThat(idManagementEvents).hasSize(1);
 
@@ -202,9 +208,13 @@ class IdManagementEventProviderTest {
     assertThat(idManagementEvent1.getRoles()).contains(role);
   }
 
-  private RemovedUserDetails removedUserDetailsWith(Set<String> roles) {
+  private RemovedUserDetails removedUserDetailsWith(Collection<String> roles) {
     return new RemovedUserDetails(
-        RemoveUserCommand.builder().username("not_used").expectedOrigin("not_used").build(), roles);
+        RemoveUserCommand.builder()
+            .username("not_used")
+            .expectedOrigin("not_used")
+            .build(),
+        roles);
   }
 
   private AuditDataDtoBuilder auditDataDtoWithDefaults() {
@@ -214,14 +224,21 @@ class IdManagementEventProviderTest {
         .timestamp(Timestamp.valueOf(LocalDateTime.now()));
   }
 
-  private CompletedUserRegistration completedUserRegistrationWith(Set<String> roles) {
-    return new CompletedUserRegistration(
-        new NewUserDetails("not_used", "not_used", roles), "not_used", now());
+  private CreatedUserDetails createdUserDetailsWith(Set<String> roles) {
+    return new CreatedUserDetails(
+        new UserDetails("not_used", "not_used", new ObfuscatedCredentials(), roles),
+        "not_used",
+        now());
   }
 
   private UpdatedUserDetails updatedUserDetailsWith(Set<String> roles) {
     return new UpdatedUserDetails(
-        UpdatedUser.builder().username("not_used").updateDate(now()).build(), roles);
+        UpdatedUser.builder()
+            .username("not_used")
+            .updateDate(now())
+            .build(),
+        null,
+        roles);
   }
 
   private static String jsonStringOf(Object details) {

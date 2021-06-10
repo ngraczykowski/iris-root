@@ -4,9 +4,11 @@ import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
+import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -17,9 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.DELETE;
 import static org.assertj.core.api.Assertions.*;
@@ -27,6 +27,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RemoveUserUseCaseTest {
+
+  private static final String ROLES_SCOPE = "frontend";
+  private static final String COUNTRY_GROUPS_SCOPE = "kibana";
 
   @Mock
   private UserQuery userQuery;
@@ -41,14 +44,23 @@ class RemoveUserUseCaseTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new RemoveUserUseCase(userQuery, userRemover, auditTracer, userRolesRetriever);
+    underTest = new RemoveUserUseCase(
+        userQuery, userRemover, auditTracer, userRolesRetriever, ROLES_SCOPE, COUNTRY_GROUPS_SCOPE);
   }
 
   @Test
   void removeUser() {
     String username = "jsmith";
     String origin = "orig123";
-    when(userQuery.find(username)).thenReturn(Optional.of(userDtoWith(origin)));
+    when(userQuery.find(username, Set.of(ROLES_SCOPE, COUNTRY_GROUPS_SCOPE)))
+        .thenReturn(Optional.of(userDtoWith(origin)));
+    List<String> roles = List.of("role1", "role3");
+    List<String> countryGroups = List.of("SG", "HK");
+    Map<String, List<String>> scopeRoles = Map.of(
+        ROLES_SCOPE, roles,
+        COUNTRY_GROUPS_SCOPE, countryGroups);
+    UserRoles userRoles = new ScopeUserRoles(scopeRoles);
+    when(userRolesRetriever.rolesOf(username)).thenReturn(userRoles);
 
     underTest.apply(
         RemoveUserCommand
@@ -65,9 +77,15 @@ class RemoveUserUseCaseTest {
     String username = "abc";
     String origin = "oryg123";
 
-    when(userQuery.find(username)).thenReturn(Optional.of(userDtoWith(origin)));
+    when(userQuery.find(username,  Set.of(ROLES_SCOPE, COUNTRY_GROUPS_SCOPE)))
+        .thenReturn(Optional.of(userDtoWith(origin)));
     List<String> roles = List.of("role1", "role3");
-    when(userRolesRetriever.rolesOf(username)).thenReturn(roles);
+    List<String> countryGroups = List.of("SG", "HK");
+    Map<String, List<String>> scopeRoles = Map.of(
+        ROLES_SCOPE, roles,
+        COUNTRY_GROUPS_SCOPE, countryGroups);
+    UserRoles userRoles = new ScopeUserRoles(scopeRoles);
+    when(userRolesRetriever.rolesOf(username)).thenReturn(userRoles);
 
     UUID correlationId = RequestCorrelation.id();
 
@@ -92,14 +110,16 @@ class RemoveUserUseCaseTest {
     assertThat(auditEvent.getType()).isEqualTo("UserRemoved");
     assertThat(auditEvent.getEntityAction()).isEqualTo(DELETE.toString());
     assertThat(auditEvent.getCorrelationId()).isEqualTo(correlationId);
-    assertThat(auditEvent.getDetails()).isEqualTo(new RemovedUserDetails(command, roles));
+    assertThat(auditEvent.getDetails())
+        .isEqualTo(new RemovedUserDetails(command, new HashSet<>(roles)));
   }
 
   @Test
   void throwsExceptionIfOriginDoesNotMatch() {
     String username = "userABC";
 
-    when(userQuery.find(username)).thenReturn(Optional.of(userDtoWith("some_origin")));
+    when(userQuery.find(username,  Set.of(ROLES_SCOPE, COUNTRY_GROUPS_SCOPE)))
+        .thenReturn(Optional.of(userDtoWith("some_origin")));
 
     ThrowingCallable removalCall = () ->
         underTest.apply(

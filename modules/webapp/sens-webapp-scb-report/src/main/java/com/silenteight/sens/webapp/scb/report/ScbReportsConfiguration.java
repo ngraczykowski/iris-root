@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.scb.report;
 import com.silenteight.auditing.bs.AuditingFinder;
 import com.silenteight.sens.webapp.backend.report.domain.ReportMetadataService;
 import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
@@ -20,9 +21,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 class ScbReportsConfiguration {
 
   @Bean
-  AccountsReportGenerator accountsReportGenerator(UserQuery userQuery) {
+  AccountsReportGenerator accountsReportGenerator(
+      UserQuery userQuery, RolesProperties rolesProperties) {
+
     return new AccountsReportGenerator(
-        userQuery, DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
+        userQuery,
+        DefaultTimeSource.INSTANCE,
+        new ScbReportDateFormatter(),
+        rolesProperties.getRolesScope());
   }
 
   @Bean
@@ -92,13 +98,15 @@ class ScbReportsConfiguration {
       ConfigurationQuery configurationQuery,
       EventQuery eventQuery,
       ReportMetadataService reportMetadataService,
-      UserRolesRetriever userRolesRetriever) {
+      UserRolesRetriever userRolesRetriever,
+      RolesProperties rolesProperties) {
 
     return new UserAuthActivityEventProvider(
         configurationQuery,
         eventQuery,
         reportMetadataService,
         userRolesRetriever,
-        DefaultTimeSource.INSTANCE.timeZone().toZoneId());
+        DefaultTimeSource.INSTANCE.timeZone().toZoneId(),
+        rolesProperties.getRolesScope());
   }
 }

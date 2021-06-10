@@ -11,7 +11,7 @@ import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.UserRemover;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
-import java.util.List;
+import static java.util.Set.of;
 
 @RequiredArgsConstructor
 public class RemoveUserUseCase {
@@ -24,6 +24,10 @@ public class RemoveUserUseCase {
   private final AuditTracer auditTracer;
   @NonNull
   private final UserRolesRetriever userRolesRetriever;
+  @NonNull
+  private final String rolesScope;
+  @NonNull
+  private final String countryGroupsScope;
 
   public void apply(RemoveUserCommand command) {
     String username = command.getUsername();
@@ -32,20 +36,22 @@ public class RemoveUserUseCase {
         new UserRemovalRequestedEvent(
             username, RemoveUserCommand.class.getName(), command));
     verifyOrigin(username, command.expectedOrigin);
-    List<String> roles = userRolesRetriever.rolesOf(username);
     userRemover.remove(username);
     auditTracer.save(
         new UserRemovedEvent(
             username, 
             RemoveUserCommand.class.getName(),
-            new RemovedUserDetails(command, roles)));
+            new RemovedUserDetails(
+                command, userRolesRetriever.rolesOf(username).getRoles(rolesScope))));
   }
 
   private void verifyOrigin(String username, String expectedOrigin) {
-    UserDto user = userQuery.find(username).orElseThrow(() -> new UserNotFoundException());
-    if (!containsOrigin(user, expectedOrigin)) {
+    UserDto user = userQuery
+        .find(username, of(rolesScope, countryGroupsScope))
+        .orElseThrow(() -> new UserNotFoundException());
+
+    if (!containsOrigin(user, expectedOrigin))
       throw new OriginNotMatchingException();
-    }
   }
 
   private boolean containsOrigin(UserDto user, String origin) {

@@ -8,17 +8,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.UpdatedUser;
 import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
 import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.Collections.emptyList;
+import static java.util.Set.of;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
 @RequiredArgsConstructor
@@ -31,15 +37,19 @@ public class AddRolesToUserUseCase {
   private final UserQuery userQuery;
   @NonNull
   private final AuditTracer auditTracer;
+  @NonNull
+  private final String rolesScope;
+  @NonNull
+  private final String countryGroupsScope;
 
   public void apply(AddRolesToUserCommand command) {
     auditTracer.save(new UserUpdateRequestedEvent(
         command.getUsername(), AddRolesToUserCommand.class.getName(), command));
 
     userQuery
-        .find(command.getUsername())
+        .find(command.getUsername(), of(rolesScope, countryGroupsScope))
         .map(UserDto::getRoles)
-        .map(command::toUpdatedUser)
+        .map(roles -> command.toUpdatedUser(rolesScope, roles))
         .ifPresentOrElse(
             this::saveUser,
             () -> log.warn("Could not find user. username={}", command.getUsername()));
@@ -48,7 +58,8 @@ public class AddRolesToUserUseCase {
   private void saveUser(UpdatedUser user) {
     updatedUserRepository.save(user);
     auditTracer.save(new UserUpdatedEvent(user.getUsername(), UpdatedUser.class.getName(),
-        new UpdatedUserDetails(user, user.getRoles())));
+        new UpdatedUserDetails(
+            user, user.getRoles().getRoles(rolesScope), emptyList())));
   }
 
   @Data
@@ -63,13 +74,30 @@ public class AddRolesToUserUseCase {
     @Default
     private final TimeSource timeSource = DefaultTimeSource.INSTANCE;
 
-    UpdatedUser toUpdatedUser(Collection<String> userRoles) {
-      return UpdatedUser
-          .builder()
+    UpdatedUser toUpdatedUser(String rolesScope, UserRoles roles) {
+      Map<String, List<String>> rolesByScope = toRolesByScope(roles);
+      rolesByScope.put(rolesScope, toNewRoles(rolesScope, roles));
+      UserRoles newUserRoles = new ScopeUserRoles(rolesByScope);
+
+      return UpdatedUser.builder()
           .username(username)
-          .roles(concat(userRoles.stream(), rolesToAdd.stream()).collect(toSet()))
+          .roles(newUserRoles)
           .updateDate(timeSource.offsetDateTime())
           .build();
+    }
+
+    private static Map<String, List<String>> toRolesByScope(UserRoles roles) {
+      Map<String, List<String>> result = new HashMap<>();
+      roles
+          .getScopes()
+          .forEach(scope -> result.put(scope, roles.getSortedRoles(scope)));
+
+      return result;
+    }
+
+    private List<String> toNewRoles(String rolesScope, UserRoles roles) {
+      List<String> currentRoles = roles.getSortedRoles(rolesScope);
+      return concat(currentRoles.stream(), rolesToAdd.stream()).collect(toList());
     }
   }
 }

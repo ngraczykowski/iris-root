@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.registration.domain;
 
+import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
@@ -20,7 +21,8 @@ class UserRegistrationDomainConfiguration {
       @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator,
       RolesValidator rolesValidator,
       UsernameUniquenessValidator usernameUniquenessValidator,
-      @Qualifier("passwordCharsValidator") RegexValidator passwordCharsValidator) {
+      @Qualifier("passwordCharsValidator") RegexValidator passwordCharsValidator,
+      RolesProperties rolesProperties) {
 
     return new UserRegisteringDomainService(
         DefaultTimeSource.INSTANCE,
@@ -29,6 +31,7 @@ class UserRegistrationDomainConfiguration {
         displayNameLengthValidator,
         rolesValidator,
         usernameUniquenessValidator,
-        passwordCharsValidator);
+        passwordCharsValidator,
+        rolesProperties.getRolesScope());
   }
 }

@@ -2,10 +2,10 @@ package com.silenteight.sens.webapp.backend.user.rest;
 
 import lombok.experimental.UtilityClass;
 
+import com.silenteight.sens.webapp.user.list.UserListDto;
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase;
 import com.silenteight.sep.usermanagement.api.UserDomainError;
 import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import static java.time.OffsetDateTime.parse;
 import static java.util.Collections.singletonList;
@@ -24,21 +24,23 @@ class UserRestControllerFixtures {
 
   static final UsernameNotUniqueError USERNAME_NOT_UNIQUE = new UsernameNotUniqueError(USERNAME);
 
-  static final UserDto ANALYST_USER = UserDto.builder()
+  static final UserListDto ANALYST_USER = UserListDto.builder()
       .userName("analyst")
       .displayName("Analyst")
+      .origin("SENS")
       .roles(singletonList("ANALYST"))
+      .countryGroups(singletonList("SG"))
       .lastLoginAt(parse("2020-05-28T12:42:15+01:00"))
       .createdAt(parse("2020-05-20T10:15:30+01:00"))
-      .origin("SENS")
       .build();
 
-  static final UserDto APPROVER_USER = UserDto.builder()
+  static final UserListDto APPROVER_USER = UserListDto.builder()
       .userName("approver")
       .displayName("Approver")
+      .origin("SENS")
       .roles(singletonList("APPROVER"))
+      .countryGroups(singletonList("SG"))
       .lastLoginAt(parse("2020-06-12T11:32:10+01:00"))
       .createdAt(parse("2020-06-02T08:12:30+01:00"))
-      .origin("SENS")
       .build();
 }

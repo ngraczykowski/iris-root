@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingFinder;
+import com.silenteight.sens.webapp.user.registration.CreatedUserDetails;
 import com.silenteight.sens.webapp.user.remove.RemovedUserDetails;
 import com.silenteight.sens.webapp.user.update.UpdatedUserDetails;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -43,14 +43,15 @@ class IdManagementEventProvider {
   List<IdManagementEventDto> idManagementEvents(
       @NonNull OffsetDateTime from, @NonNull OffsetDateTime to) {
 
-    return auditingFinder.find(from, to, ACTIONS.keySet())
+    return auditingFinder
+        .find(from, to, ACTIONS.keySet())
         .stream()
         .map(this::idManagementEventDtoFrom)
         .collect(toList());
   }
 
   private IdManagementEventDto idManagementEventDtoFrom(AuditDataDto auditData) {
-    Collection<String> roles = ROLES_EXTRACTING_FUNCTIONS.get(auditData.getType()).apply(auditData);
+    Collection<String> roles = getRoles(auditData);
     return IdManagementEventDto.builder()
         .username(auditData.getEntityId())
         .action(getAction(auditData, roles))
@@ -58,6 +59,12 @@ class IdManagementEventProvider {
         .roles(roles)
         .timestamp(auditData.getTimestamp().toInstant())
         .build();
+  }
+
+  private Collection<String> getRoles(AuditDataDto auditData) {
+    return ROLES_EXTRACTING_FUNCTIONS
+        .get(auditData.getType())
+        .apply(auditData);
   }
 
   private static String getAction(AuditDataDto auditData, Collection<String> roles) {
@@ -69,15 +76,16 @@ class IdManagementEventProvider {
 
   private static boolean allRolesRemovedDuringUpdate(
       AuditDataDto auditData, Collection<String> roles) {
+
     return roles.isEmpty() && USER_UPDATED.equals(auditData.getType());
   }
 
   private static Collection<String> createdUserRolesOf(AuditDataDto auditData) {
-    CompletedUserRegistration completedUserRegistration =
+    CreatedUserDetails createdUserDetails =
         JSON_CONVERTER.deserializeObject(
             JSON_CONVERTER.deserializeFromString(auditData.getDetails()),
-            CompletedUserRegistration.class);
-    Set<String> roles = completedUserRegistration.getRoles();
+            CreatedUserDetails.class);
+    Set<String> roles = createdUserDetails.getRoles();
     return roles.isEmpty() ? Set.of(CREATED_WITHOUT_ROLES) : roles;
   }
 

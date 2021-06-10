@@ -8,6 +8,8 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AnalystFixtures {
 
+  static final String ROLES_SCOPE = "frontend";
+
   static final Analyst ANALYST_WITHOUT_DISPLAY_NAME =
       Analyst
           .builder()

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.util.Set;
 
 import static com.silenteight.sens.webapp.user.report.ReportAssert.assertThat;
 import static com.silenteight.sens.webapp.user.report.UserDtoFixtures.*;
@@ -45,7 +46,8 @@ class UsersReportGeneratorTest {
         new MockTimeSource(Instant.parse(CURRENT_TIME)),
         filenameDateFormatter,
         rowDateFormatter,
-        userQuery);
+        userQuery,
+        ROLES_SCOPE);
   }
 
   @Test
@@ -57,7 +59,7 @@ class UsersReportGeneratorTest {
 
   @Test
   void reportFilenameContainsNameAndTimestamp() {
-    when(userQuery.listAll()).thenReturn(emptyList());
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(emptyList());
 
     Report report = underTest.generateReport(emptyMap());
 
@@ -67,7 +69,7 @@ class UsersReportGeneratorTest {
 
   @Test
   void reportContainsProperHeaders() {
-    when(userQuery.listAll()).thenReturn(of(ACTIVE_USER));
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(of(ACTIVE_USER));
 
     Report report = underTest.generateReport(emptyMap());
 
@@ -78,7 +80,7 @@ class UsersReportGeneratorTest {
 
   @Test
   void reportContainsData() {
-    when(userQuery.listAll()).thenReturn(of(ACTIVE_USER));
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(of(ACTIVE_USER));
 
     Report report = underTest.generateReport(emptyMap());
 
@@ -91,7 +93,7 @@ class UsersReportGeneratorTest {
 
   @Test
   void reportContainsUserWithMultipleRoles() {
-    when(userQuery.listAll()).thenReturn(of(MULTIPLE_ROLES_USER));
+    when(userQuery.listAll(Set.of(ROLES_SCOPE))).thenReturn(of(MULTIPLE_ROLES_USER));
 
     Report report = underTest.generateReport(emptyMap());
 

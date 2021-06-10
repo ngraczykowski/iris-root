@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
+import com.silenteight.sens.webapp.user.registration.CreatedUserDetails.ObfuscatedCredentials;
+import com.silenteight.sens.webapp.user.registration.CreatedUserDetails.UserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
 import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
@@ -25,6 +27,10 @@ abstract class BaseRegisterUserUseCase {
   private final RegisteredUserRepository registeredUserRepository;
   @NonNull
   protected final AuditTracer auditTracer;
+  @NonNull
+  protected final String rolesScope;
+  @NonNull
+  protected final String countryGroupsScope;
 
   Either<UserDomainError, Success> register(NewUserRegistration registration) {
     Either<UserDomainError, CompletedUserRegistration> result =
@@ -35,7 +41,7 @@ abstract class BaseRegisterUserUseCase {
           new UserCreatedEvent(
               userRegistration.getUsername(),
               CompletedUserRegistration.class.getName(),
-              userRegistration.toCompletedUserRegistrationEvent()));
+              toCreatedUserDetails(userRegistration)));
 
       registeredUserRepository.save(userRegistration);
 
@@ -48,6 +54,17 @@ abstract class BaseRegisterUserUseCase {
     log.info(USER_MANAGEMENT, "User registration result={}", result);
 
     return result.map(completedRegistration -> completedRegistration::getUsername);
+  }
+
+  private CreatedUserDetails toCreatedUserDetails(CompletedUserRegistration registration) {
+    return new CreatedUserDetails(
+        new UserDetails(
+            registration.getUsername(),
+            registration.getDisplayName(),
+            new ObfuscatedCredentials(),
+            registration.getRoles().getRoles(rolesScope)),
+        registration.getOrigin(),
+        registration.getRegistrationDate());
   }
 
   public interface Success {
