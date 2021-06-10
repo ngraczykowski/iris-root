@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.handler.LoggingHandler.Level;
 
 import javax.validation.Valid;
 
@@ -33,7 +32,6 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow analysisInboundIntegrationFlow() {
     return from(createInboundAdapter(properties.getEventInternalInboundQueueNames()))
-        .log(Level.DEBUG, getLogCategory("analysisInboundIntegrationFlow"))
         .<Object, Class<?>>route(Object::getClass, m -> m
             .channelMapping(
                 AddedAnalysisDatasets.class,
@@ -48,13 +46,8 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow agentResponseIntegrationFlow() {
     return from(createInboundAdapter(properties.getAgentResponse().getInboundQueueName()))
-        .log(Level.DEBUG, getLogCategory("agentResponseIntegrationFlow"))
         .channel(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
         .get();
-  }
-
-  private String getLogCategory(String suffix) {
-    return AnalysisInboundAmqpIntegrationConfiguration.class.getName() + "." + suffix;
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {

@@ -22,7 +22,6 @@ class PendingRecommendationsPubSubIntegrationConfiguration {
   @Bean
   IntegrationFlow agentExchangePendingRecommendationsInboundIntegrationFlow() {
     return from(pendingRecommendationsPubSubChannel())
-        .log()
         .channel(AgentExchangeChannels.AGENT_EXCHANGE_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
         .get();
   }
