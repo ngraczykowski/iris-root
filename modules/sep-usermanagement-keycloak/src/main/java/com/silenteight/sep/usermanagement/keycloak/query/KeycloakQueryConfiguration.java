@@ -7,8 +7,8 @@ import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLogin
 import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
 
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RoleMappingResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,10 +32,10 @@ class KeycloakQueryConfiguration {
   @Bean
   KeycloakRolesQuery keycloakRolesQuery(
       ClientQuery clientQuery,
-      RoleMappingResource roleMappingResource,
+      ClientsResource clientsResource,
       InternalRoleFilter internalRoleFilter) {
 
-    return new KeycloakRolesQuery(clientQuery, roleMappingResource, internalRoleFilter);
+    return new KeycloakRolesQuery(clientQuery, clientsResource, internalRoleFilter);
   }
 
   @Bean

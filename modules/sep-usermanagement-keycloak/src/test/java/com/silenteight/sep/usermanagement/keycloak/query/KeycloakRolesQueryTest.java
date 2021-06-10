@@ -7,6 +7,8 @@ import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.keycloak.admin.client.resource.ClientResource;
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.RoleMappingResource;
 import org.keycloak.admin.client.resource.RoleScopeResource;
 import org.keycloak.representations.idm.ClientRepresentation;
@@ -33,6 +35,10 @@ class KeycloakRolesQueryTest {
   @Mock
   private ClientQuery clientQuery;
   @Mock
+  private ClientsResource clientsResource;
+  @Mock
+  private ClientResource clientResource;
+  @Mock
   private RoleMappingResource roleMappingResource;
   @Mock
   private InternalRoleFilter internalRoleFilter;
@@ -42,7 +48,7 @@ class KeycloakRolesQueryTest {
   @BeforeEach
   void setUp() {
     underTest = new KeycloakQueryConfiguration()
-        .keycloakRolesQuery(clientQuery, roleMappingResource, internalRoleFilter);
+        .keycloakRolesQuery(clientQuery, clientsResource, internalRoleFilter);
   }
 
   @Test
@@ -56,6 +62,8 @@ class KeycloakRolesQueryTest {
 
   private void givenNoRoles() {
     RoleScopeResource roleScopeResource = mock(RoleScopeResource.class);
+    when(clientsResource.get(SCOPE)).thenReturn(clientResource);
+    when(clientResource.getScopeMappings()).thenReturn(roleMappingResource);
     when(clientQuery.getByClientId(SCOPE)).thenReturn(clientRepresentation());
     when(roleMappingResource.clientLevel(CLIENT_ID)).thenReturn(roleScopeResource);
     when(roleScopeResource.listAll()).thenReturn(emptyList());
@@ -76,6 +84,8 @@ class KeycloakRolesQueryTest {
     List<RoleRepresentation> roleRepresentations = of(analyst, auditor);
 
     RoleScopeResource roleScopeResource = mock(RoleScopeResource.class);
+    when(clientsResource.get(SCOPE)).thenReturn(clientResource);
+    when(clientResource.getScopeMappings()).thenReturn(roleMappingResource);
     when(clientQuery.getByClientId(SCOPE)).thenReturn(clientRepresentation());
     when(roleMappingResource.clientLevel(CLIENT_ID)).thenReturn(roleScopeResource);
     when(roleScopeResource.listAll()).thenReturn(roleRepresentations);
