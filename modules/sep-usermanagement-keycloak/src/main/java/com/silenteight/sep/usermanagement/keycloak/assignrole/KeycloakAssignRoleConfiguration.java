@@ -2,7 +2,7 @@ package com.silenteight.sep.usermanagement.keycloak.assignrole;
 
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
-import org.keycloak.admin.client.resource.RolesResource;
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +12,8 @@ class KeycloakAssignRoleConfiguration {
 
   @Bean
   KeycloakUserRoleAssigner keycloakUserRoleAssigner(
-      RolesResource rolesResource, UsersResource usersResource, ClientQuery clientQuery) {
+      UsersResource usersResource, ClientQuery clientQuery, ClientsResource clientsResource) {
 
-    return new KeycloakUserRoleAssigner(usersResource, rolesResource, clientQuery);
+    return new KeycloakUserRoleAssigner(usersResource, clientQuery, clientsResource);
   }
 }
