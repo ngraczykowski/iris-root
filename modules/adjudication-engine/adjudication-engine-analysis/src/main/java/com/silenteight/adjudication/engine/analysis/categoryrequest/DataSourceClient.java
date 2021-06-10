@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.categoryrequest;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,19 +8,25 @@ import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesR
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.CategoryServiceBlockingStub;
 
-import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.stereotype.Service;
+import io.grpc.Deadline;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
-@Service
 @Slf4j
 class DataSourceClient {
 
-  @GrpcClient("data-source")
-  private CategoryServiceBlockingStub categoryServiceStub;
+  private final CategoryServiceBlockingStub categoryServiceStub;
+
+  @NonNull
+  private final Duration timeout;
 
   public BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
-    return categoryServiceStub.batchGetMatchCategoryValues(request);
+
+    return categoryServiceStub
+        .withDeadline(Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS))
+        .batchGetMatchCategoryValues(request);
   }
 }

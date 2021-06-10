@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.categoryrequest.jdbc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryMap;
 import com.silenteight.adjudication.engine.analysis.categoryrequest.MissingCategoryResult;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,36 +23,36 @@ class SelectMissingMatchCategoryValuesQuery {
   private final CategoryRequestJdbcConfiguration configuration;
   private final JdbcTemplate jdbcTemplate;
 
-
   MissingCategoryResult execute(long analysisId) {
     this.jdbcTemplate.setMaxRows(configuration.getSelectBatchSize());
-    String sql =
-        "SELECT category,category_id,match_id,alert_id "
-            + "FROM ae_missing_match_category_values_query a "
-            + "WHERE a.analysis_id = ?";
     return jdbcTemplate.query(
-        sql, new Object[] { analysisId }, new SqlMissingMatchCategoryExtractor());
+        "SELECT category, category_id, match_id, alert_id\n"
+            + "FROM ae_missing_match_category_values_query\n"
+            + "WHERE analysis_id = ?",
+        new Object[] { analysisId }, new SqlMissingMatchCategoryExtractor());
   }
 
-  static class SqlMissingMatchCategoryExtractor implements
+  private static final class SqlMissingMatchCategoryExtractor implements
       ResultSetExtractor<MissingCategoryResult> {
 
     @Override
     public MissingCategoryResult extractData(ResultSet rs) throws SQLException {
-      MissingCategoryResult result = new MissingCategoryResult(new ArrayList<>(), new HashMap<>());
+      var missingMatchCategories = new ArrayList<String>();
+      var categories = new HashMap<String, Long>();
 
       while (rs.next()) {
-        var category = rs.getString("category");
-        var categoryId = rs.getLong("category_id");
-        var matchId = rs.getInt("match_id");
-        var alertId = rs.getInt("alert_id");
-        var resultResource = category + "/alerts/" + alertId + "/matches/" + matchId;
+        var category = rs.getString(1);
+        var categoryId = rs.getLong(2);
+        var matchId = rs.getInt(3);
+        var alertId = rs.getInt(4);
 
-        result.addMissingMatchCategory(resultResource);
-        result.addCategoryMapping(category, categoryId);
+        var matchCategoryValueName = category + "/alerts/" + alertId + "/matches/" + matchId;
+
+        missingMatchCategories.add(matchCategoryValueName);
+        categories.putIfAbsent(category, categoryId);
       }
-      log.debug("Missing match category:{}", result);
-      return result;
+
+      return new MissingCategoryResult(missingMatchCategories, new CategoryMap(categories));
     }
   }
 }

@@ -1,0 +1,6 @@
+# Start the recommendation process
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/09062021-3/recommend
+Accept: application/json
+Content-Type: application/json
+
+< hsbc-bridge-request-1.json

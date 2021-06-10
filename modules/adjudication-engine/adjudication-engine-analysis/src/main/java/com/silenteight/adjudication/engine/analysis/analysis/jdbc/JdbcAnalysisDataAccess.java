@@ -15,11 +15,19 @@ class JdbcAnalysisDataAccess implements AnalysisDataAccess {
 
   private final SelectAnalysisAgentConfigQuery selectAnalysisAgentConfigQuery;
 
+  private final SelectAnalysisByPendingRecommendationMatches
+      selectAnalysisByPendingRecommendationMatches;
+
   private final SelectFeatureVectorElementsQuery selectFeatureVectorElementsQuery;
 
   @Override
   public List<String> findAgentConfigsByAnalysisId(long analysisId) {
     return selectAnalysisAgentConfigQuery.execute(analysisId);
+  }
+
+  @Override
+  public List<Long> findByPendingRecommendationMatchIds(List<Long> matchIds) {
+    return selectAnalysisByPendingRecommendationMatches.execute(matchIds);
   }
 
   @Override

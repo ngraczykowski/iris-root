@@ -80,7 +80,7 @@ class JdbcUnsolvedMatchesReaderIT extends BaseJdbcTest {
 
     assertThat(solutions.getMatchSolutions())
         .hasSize(1)
-        .containsExactly(new MatchSolution(11, solutionResponse()));
+        .containsExactly(new MatchSolution(1L, 11L, solutionResponse()));
   }
 
   private static FeatureVector featureVector() {

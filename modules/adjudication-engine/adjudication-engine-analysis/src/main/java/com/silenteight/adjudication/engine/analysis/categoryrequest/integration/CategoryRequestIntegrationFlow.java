@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryRequestFacade;
-import com.silenteight.adjudication.engine.analysis.categoryrequest.MatchCategoriesUpdated;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
@@ -25,13 +24,9 @@ class CategoryRequestIntegrationFlow extends IntegrationFlowAdapter {
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(
         CATEGORY_REQUEST_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
-        .handle(PendingRecommendations.class, (payload, headers) -> {
-          categoryRequestFacade.handlePendingRecommendations(payload);
-          return MatchCategoriesUpdated
-              .builder()
-              .analysis(payload.getAnalysisList())
-              .build();
-        })
+        .handle(PendingRecommendations.class, (payload, headers) ->
+            categoryRequestFacade.handlePendingRecommendations(payload))
+        .split()
         .channel(MATCH_CATEGORIES_UPDATED_OUTBOUND_CHANNEL);
   }
 }

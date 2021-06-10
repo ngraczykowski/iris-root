@@ -15,11 +15,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
-
 class CategoryRequestTest {
 
-  private CategoryRequestFacade categoryRequestFacade;
-  private FetchAllMissingCategoryValuesUseCase fetchAllMissingCategoryValuesUseCase;
+  private HandlePendingRecommendationsUseCase handlePendingRecommendationsUseCase;
   private MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
   private DataSourceClient datasourceClient;
 
@@ -27,29 +25,30 @@ class CategoryRequestTest {
   void setUp() {
     matchCategoryValuesDataAccess = Mockito.mock(MatchCategoryValuesDataAccess.class);
     datasourceClient = Mockito.mock(DataSourceClient.class);
-    fetchAllMissingCategoryValuesUseCase =
-        new FetchAllMissingCategoryValuesUseCase(matchCategoryValuesDataAccess, datasourceClient);
-    categoryRequestFacade = new CategoryRequestFacade(fetchAllMissingCategoryValuesUseCase);
+    handlePendingRecommendationsUseCase = new HandlePendingRecommendationsUseCase(
+        new FetchAllMissingCategoryValuesUseCase(matchCategoryValuesDataAccess, datasourceClient));
   }
 
   @Test
   void shouldHandleRequest() {
+    var categoryMap = new CategoryMap(Map.of("categories/country", 1L));
+
     when(
         datasourceClient.batchGetMatchCategoryValues(any(BatchGetMatchCategoryValuesRequest.class)))
         .thenReturn(BatchGetMatchCategoryValuesResponse.newBuilder().build());
     when(matchCategoryValuesDataAccess.getMissingCategoryValues(1))
         .thenReturn(
             new MissingCategoryResult(
-                List.of("categories/country/matches/1"), Map.of("categories/country", 1L))
-        ).thenReturn(new MissingCategoryResult(List.of(), Map.of()));
+                List.of("categories/country/matches/1"), categoryMap)
+        )
+        .thenReturn(new MissingCategoryResult(List.of(), new CategoryMap()));
 
     assertDoesNotThrow(() ->
-        categoryRequestFacade.handlePendingRecommendations(dataset().build())
+        handlePendingRecommendationsUseCase.handlePendingRecommendations(dataset().build())
     );
   }
 
   private static Builder dataset() {
-    return PendingRecommendations
-        .newBuilder().addAnalysis("analysis/1");
+    return PendingRecommendations.newBuilder().addAnalysis("analysis/1");
   }
 }

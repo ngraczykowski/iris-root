@@ -8,5 +8,7 @@ public interface AnalysisDataAccess {
 
   List<String> findAgentConfigsByAnalysisId(long analysisId);
 
+  List<Long> findByPendingRecommendationMatchIds(List<Long> matchIds);
+
   PolicyAndFeatureVectorElements getPolicyAndFeatureVectorElements(long analysisId);
 }

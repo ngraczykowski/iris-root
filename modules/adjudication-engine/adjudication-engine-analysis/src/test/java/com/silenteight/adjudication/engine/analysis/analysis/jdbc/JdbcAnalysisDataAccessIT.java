@@ -11,13 +11,14 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
     JdbcAnalysisDataAccess.class,
     SelectAnalysisAgentConfigQuery.class,
+    SelectAnalysisByPendingRecommendationMatches.class,
     SelectFeatureVectorElementsQuery.class
 })
 @Sql
@@ -29,7 +30,7 @@ class JdbcAnalysisDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldGetPolicy() {
     var policy = jdbcAnalysisDataAccess.getPolicyAndFeatureVectorElements(1).getPolicy();
-    assertThat(policy).isEqualTo("policies/1");
+    assertThat(policy).isEqualTo("policies/asd");
   }
 
   @Test
@@ -46,5 +47,13 @@ class JdbcAnalysisDataAccessIT extends BaseJdbcTest {
     assertThrows(
         org.springframework.dao.EmptyResultDataAccessException.class,
         () -> jdbcAnalysisDataAccess.getPolicyAndFeatureVectorElements(420));
+  }
+
+  @Test
+  void shouldGetAllAnalysisId() {
+    var matchIds = List.of(11L, 12L);
+
+    assertThat(jdbcAnalysisDataAccess.findByPendingRecommendationMatchIds(matchIds))
+        .isEqualTo(List.of(1L, 2L));
   }
 }

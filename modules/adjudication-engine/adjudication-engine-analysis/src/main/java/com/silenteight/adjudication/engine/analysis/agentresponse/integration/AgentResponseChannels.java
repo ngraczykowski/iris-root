@@ -11,4 +11,7 @@ public final class AgentResponseChannels {
    * The channel which receives responses from agents.
    */
   public static final String AGENT_RESPONSE_INBOUND_CHANNEL = "agentResponseInboundChannel";
+
+  public static final String MATCH_FEATURES_UPDATED_OUTBOUND_CHANNEL =
+      "matchFeaturesUpdatedOutboundChannel";
 }

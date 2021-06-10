@@ -7,6 +7,8 @@ import com.silenteight.solving.api.v1.SolutionResponse;
 @Value
 public class MatchSolution {
 
+  long alertId;
+
   long matchId;
 
   SolutionResponse response;

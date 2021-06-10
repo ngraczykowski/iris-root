@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
-import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
-import com.silenteight.datasource.categories.api.v1.CategoryValue;
+import com.silenteight.adjudication.internal.v1.MatchCategoriesUpdated;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 
 @RequiredArgsConstructor
 @Service
@@ -21,47 +19,43 @@ class FetchAllMissingCategoryValuesUseCase {
   private final MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
   private final DataSourceClient datasourceClient;
 
-  void fetchAllMissingCategoryValues(String analysis) {
+  @Transactional
+  MatchCategoriesUpdated fetchAllMissingCategoryValues(String analysis) {
+    log.info("Fetching missing category values: analysis={}", analysis);
+
     var analysisId = ResourceName.create(analysis).getLong("analysis");
-
-    log.info("Fetching missing category values: analysisId={}", analysisId);
-
+    var categories = new HashSet<String>();
+    var matches = new HashSet<String>();
     do {
       var missingValues =
           matchCategoryValuesDataAccess.getMissingCategoryValues(analysisId);
 
       if (missingValues.isEmpty()) {
+        log.debug("No more missing category values: analysis={}, categoryCount={}, matchCount={}",
+            analysis, categories.size(), matches.size());
         break;
       }
 
       if (log.isTraceEnabled()) {
-        log.trace("Analysis is still missing match categories: analysisId={}, missingCount={}",
-            analysisId, missingValues.getCount());
+        log.trace("Analysis is missing match category values: analysis={}, missingCount={}",
+            analysis, missingValues.getCount());
       }
 
-      var response = requestMatchCategoryValues(missingValues.getMissingMatchCategories());
+      var response = datasourceClient.batchGetMatchCategoryValues(
+          missingValues.toBatchGetMatchCategoryValuesRequest());
 
-      storeMatchMissingCategoryValues(
-          missingValues.getCategories(),
-          response.getCategoryValuesList());
+      matchCategoryValuesDataAccess.createMatchCategoryValues(
+          missingValues.getCategoryMap(), response.getCategoryValuesList());
+
+      categories.addAll(missingValues.getCategories());
+      missingValues.forEachMatch(matches::add);
     } while (true);
-  }
 
-
-  private BatchGetMatchCategoryValuesResponse requestMatchCategoryValues(
-      List<String> missingMatchCategories) {
-
-    var request = BatchGetMatchCategoryValuesRequest.newBuilder()
-        .addAllMatchValues(missingMatchCategories)
+    return MatchCategoriesUpdated
+        .newBuilder()
+        .setAnalysis(analysis)
+        .addAllCategories(categories)
+        .addAllMatches(matches)
         .build();
-
-    return datasourceClient.batchGetMatchCategoryValues(request);
-  }
-
-  private void storeMatchMissingCategoryValues(
-      Map<String, Long> categories, List<CategoryValue> categoryValuesList) {
-
-    matchCategoryValuesDataAccess.createMatchCategoryValues(
-        categoryValuesList, categories);
   }
 }

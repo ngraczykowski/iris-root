@@ -15,7 +15,7 @@ import java.util.Map;
 @Slf4j
 public class ResourceName {
 
-  private static final String NAME_SPLITTER = "/";
+  private static final String DELIMITER = "/";
   private final Map<String, String> pathTokens;
 
   public static ResourceName create(@NonNull String path) {
@@ -24,7 +24,7 @@ public class ResourceName {
 
   private static Map<String, String> tokenize(String path) {
     Map<String, String> tokenized = new LinkedHashMap<>();
-    var tokens = Splitter.on(NAME_SPLITTER).trimResults().split(path).iterator();
+    var tokens = Splitter.on(DELIMITER).trimResults().split(path).iterator();
     while (tokens.hasNext()) {
       var name = tokens.next();
       if (tokens.hasNext()) {
@@ -35,7 +35,12 @@ public class ResourceName {
   }
 
   public String getPath() {
-    return Joiner.on(NAME_SPLITTER).withKeyValueSeparator(NAME_SPLITTER).join(pathTokens);
+    return Joiner.on(DELIMITER).withKeyValueSeparator(DELIMITER).join(pathTokens);
+  }
+
+  @Override
+  public String toString() {
+    return getPath();
   }
 
   public ResourceName remove(@NonNull String name) {

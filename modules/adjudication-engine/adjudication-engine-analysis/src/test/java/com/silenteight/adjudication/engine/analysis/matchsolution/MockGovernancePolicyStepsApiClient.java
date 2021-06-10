@@ -5,14 +5,15 @@ import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import com.silenteight.solving.api.v1.SolutionResponse;
 
+import java.time.Duration;
 import java.util.ArrayList;
 
-public class InMemoryGovernancePolicyStepsApiClient extends GovernancePolicyStepsApiClient {
+public class MockGovernancePolicyStepsApiClient extends GovernancePolicyStepsApiClient {
 
   private int solvedFeatureVectors = 0;
 
-  public InMemoryGovernancePolicyStepsApiClient() {
-    super(null);
+  public MockGovernancePolicyStepsApiClient() {
+    super(null, Duration.ZERO);
   }
 
   @Override

@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.matchsolution.UnsolvedMatchesReader;
+import com.silenteight.adjudication.engine.analysis.matchsolution.dto.UnsolvedMatch;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.UnsolvedMatchesChunk;
 import com.silenteight.adjudication.engine.common.jdbc.ChunkHandler;
 import com.silenteight.adjudication.engine.common.jdbc.JdbcCursorQueryTemplate;
-import com.silenteight.solving.api.v1.FeatureVector;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +17,6 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.sql.DataSource;
@@ -29,7 +28,8 @@ class SelectUnsolvedMatchesQuery {
   @Language("PostgreSQL")
   private static final String SQL =
       "SELECT"
-          + " am.match_id,\n"
+          + " apr.alert_id,\n"
+          + "       am.match_id,\n"
           + "       amfveq.category_values,\n"
           + "       amfveq.feature_values\n"
           + "FROM ae_pending_recommendation apr\n"
@@ -79,9 +79,15 @@ class SelectUnsolvedMatchesQuery {
     @Nullable
     @Override
     public UnsolvedMatch mapRow(ResultSet rs, int rowNum) throws SQLException {
-      Long matchId = rs.getObject(1, Long.class);
-      Array categoryValues = rs.getArray(2);
-      Array featureValues = rs.getArray(3);
+      Long alertId = rs.getObject(1, Long.class);
+      Long matchId = rs.getObject(2, Long.class);
+      Array categoryValues = rs.getArray(3);
+      Array featureValues = rs.getArray(4);
+
+      if (alertId == null) {
+        log.warn("Row with NULL alert_id: rowNum={}", rowNum);
+        return null;
+      }
 
       if (matchId == null) {
         log.warn("Row with NULL match_id: rowNum={}", rowNum);
@@ -97,7 +103,8 @@ class SelectUnsolvedMatchesQuery {
       }
 
       return new UnsolvedMatch(
-          matchId, (String[]) categoryValues.getArray(), (String[]) featureValues.getArray());
+          alertId, matchId, (String[]) categoryValues.getArray(),
+          (String[]) featureValues.getArray());
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -129,16 +136,7 @@ class SelectUnsolvedMatchesQuery {
 
     @Override
     public void handle(List<? extends UnsolvedMatch> chunk) {
-      var matchIds = new long[chunk.size()];
-      var featureVectors = new ArrayList<FeatureVector>(chunk.size());
-
-      for (int idx = 0; idx < chunk.size(); idx++) {
-        var unsolvedMatch = chunk.get(idx);
-        matchIds[idx] = unsolvedMatch.getMatchId();
-        featureVectors.add(unsolvedMatch.toFeatureVector());
-      }
-
-      chunkHandler.handle(new UnsolvedMatchesChunk(matchIds, featureVectors));
+      chunkHandler.handle(new UnsolvedMatchesChunk(chunk));
     }
 
     @Override

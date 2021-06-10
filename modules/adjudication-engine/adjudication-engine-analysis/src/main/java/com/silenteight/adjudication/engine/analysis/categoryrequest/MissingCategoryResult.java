@@ -1,31 +1,51 @@
 package com.silenteight.adjudication.engine.analysis.categoryrequest;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
+
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
-@Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MissingCategoryResult {
 
+  @NonNull
   private final List<String> missingMatchCategories;
-  private final Map<String, Long> categories;
+  @Getter
+  @NonNull
+  private final CategoryMap categoryMap;
 
-  public void addMissingMatchCategory(String missingMatchCategory) {
-    this.missingMatchCategories.add(missingMatchCategory);
-  }
-
-  public void addCategoryMapping(String categoryKey, Long categoryId) {
-    this.categories.putIfAbsent(categoryKey, categoryId);
-  }
-
-  public boolean isEmpty() {
+  boolean isEmpty() {
     return missingMatchCategories.isEmpty();
   }
 
-  public int getCount() {
+  int getCount() {
     return missingMatchCategories.size();
+  }
+
+  BatchGetMatchCategoryValuesRequest toBatchGetMatchCategoryValuesRequest() {
+    return BatchGetMatchCategoryValuesRequest.newBuilder()
+        .addAllMatchValues(missingMatchCategories)
+        .build();
+  }
+
+  Collection<String> getCategories() {
+    return categoryMap.getCategoryNames();
+  }
+
+  void forEachMatch(Consumer<String> matchNameConsumer) {
+    missingMatchCategories
+        .stream()
+        .map(categoryValueName -> {
+          var resourceName = ResourceName.create(categoryValueName);
+          resourceName.remove("categories");
+          return resourceName.getPath();
+        })
+        .forEach(matchNameConsumer);
   }
 }

@@ -1,16 +1,17 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution;
 
 import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolution;
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolutionCollection;
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.SolveMatchesRequest;
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.UnsolvedMatchesChunk;
-import com.silenteight.solving.api.v1.*;
+import com.silenteight.adjudication.engine.analysis.matchsolution.dto.*;
+import com.silenteight.solving.api.v1.Feature;
+import com.silenteight.solving.api.v1.FeatureCollection;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
+import com.silenteight.solving.api.v1.SolutionResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -41,17 +42,21 @@ class MatchSolutionFixture {
     return new MatchSolutionCollection(1L, matchSolutions);
   }
 
-  static UnsolvedMatchesChunk createUnsolvedMatchesChunk(int featureVectorCount) {
-    long[] matchId = { 1, 2, 3, 4, 5, 6, 7, 8, 8, 10 };
-    List<FeatureVector> featureVectors = IntStream
-        .range(0, featureVectorCount)
-        .mapToObj(n -> FeatureVector
-            .newBuilder()
-            .addAllFeatureValue(IntStream.range(0, 10).mapToObj(String::valueOf).collect(
-                Collectors.toList()))
-            .build())
+  static UnsolvedMatchesChunk createUnsolvedMatchesChunk(int count) {
+    var unsolvedMatches = LongStream
+        .range(0, count)
+        .mapToObj(n -> new UnsolvedMatch(
+            1L, n, elementValues("category", 4), elementValues("feature", 6)))
         .collect(toList());
-    return new UnsolvedMatchesChunk(matchId, featureVectors);
+
+    return new UnsolvedMatchesChunk(unsolvedMatches);
+  }
+
+  static String[] elementValues(String prefix, int count) {
+    return IntStream
+        .range(0, count)
+        .mapToObj(idx -> prefix + idx)
+        .toArray(String[]::new);
   }
 
   static PolicyAndFeatureVectorElements createAnalysisFeatureVectorElements(int numberOfElements) {
@@ -64,6 +69,8 @@ class MatchSolutionFixture {
   }
 
   private static MatchSolution createMatchSolution() {
-    return new MatchSolution(1L, SolutionResponse.newBuilder().build());
+    return new MatchSolution(1L, 1L, SolutionResponse.newBuilder()
+        .setFeatureVectorSolution(FeatureVectorSolution.SOLUTION_FALSE_POSITIVE)
+        .build());
   }
 }

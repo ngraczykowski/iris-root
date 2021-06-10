@@ -13,8 +13,13 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 class CategoryRequestJdbcConfiguration {
 
+  /**
+   * @deprecated Unused.
+   */
   @Value("${ae.categories.missing.batch-size.insert:1024}")
-  private  int insertBatchSize;
+  @Deprecated(since = "1.3.0")
+  private int insertBatchSize;
+
   @Value("${ae.categories.missing.batch-size.select:4096}")
-  private  int selectBatchSize;
+  private int selectBatchSize;
 }

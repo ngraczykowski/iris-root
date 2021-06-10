@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static com.silenteight.adjudication.engine.analysis.matchsolution.FeaturesFixtures.makeFeatureCollection;
 import static com.silenteight.adjudication.engine.analysis.matchsolution.FeaturesFixtures.makeFeatureVector;
@@ -16,20 +17,13 @@ import static org.assertj.core.api.Assertions.*;
 
 class UnsolvedMatchesChunkTest {
 
-  protected static final String POLICY = "policy";
-  protected static final long ANALYSIS_ID = 123L;
+  private static final String POLICY = "policy";
+  private static final long ANALYSIS_ID = 123L;
+  private static final long ALERT_ID = 456L;
+
   private long[] matchIds;
   private List<FeatureVector> featureVectors;
   private UnsolvedMatchesChunk chunk;
-
-  @Test
-  void shouldFailOnDifferentNumberOfMatchesAndFeatureVectors() {
-    givenMatchIds(1L, 2L);
-    givenFeatureVectors(makeFeatureVector("feature1", "feature2", "feature3"));
-
-    assertThatThrownBy(this::whenNewChunk)
-        .isInstanceOf(IllegalArgumentException.class);
-  }
 
   @Test
   void shouldFailOnNoFeatureVectors() {
@@ -42,7 +36,7 @@ class UnsolvedMatchesChunkTest {
 
   @Test
   void shouldFailForDifferentNumberOfFeaturesThanValues() {
-    givenMatchIds(ANALYSIS_ID);
+    givenMatchIds(1L);
     givenFeatureVectors(makeFeatureVector("V1", "V2"));
 
     assertThatThrownBy(() -> whenBatchSolveFeaturesRequest("F1", "F2", "F3"))
@@ -52,7 +46,7 @@ class UnsolvedMatchesChunkTest {
 
   @Test
   void shouldCreateRequest() {
-    givenMatchIds(ANALYSIS_ID);
+    givenMatchIds(1L);
     givenFeatureVectors(makeFeatureVector("V1", "V2"));
 
     var request = whenBatchSolveFeaturesRequest("F1", "F2");
@@ -76,7 +70,7 @@ class UnsolvedMatchesChunkTest {
   @Test
   void shouldCreateSolutionCollection() {
     givenMatchIds(1L, 2L);
-    givenFeatureVectors(makeFeatureVector("V1"), makeFeatureVector("V2"));
+    givenFeatureVectors(makeFeatureVector("M1V1"), makeFeatureVector("M2V1"));
 
     var solutionCollection =
         whenMatchSolutionCollection(SOLUTION_FALSE_POSITIVE, SOLUTION_NO_DECISION);
@@ -100,7 +94,14 @@ class UnsolvedMatchesChunkTest {
   }
 
   private UnsolvedMatchesChunk whenNewChunk() {
-    chunk = new UnsolvedMatchesChunk(matchIds, featureVectors);
+    var unsolvedMatches = IntStream
+        .range(0, matchIds.length)
+        .mapToObj(idx -> new UnsolvedMatch(
+            ALERT_ID, matchIds[idx], new String[0],
+            featureVectors.get(idx).getFeatureValueList().toArray(String[]::new)))
+        .collect(toList());
+
+    chunk = new UnsolvedMatchesChunk(unsolvedMatches);
     return chunk;
   }
 

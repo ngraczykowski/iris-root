@@ -5,18 +5,28 @@ ae:
   messaging:
     concurrency: 4
     prefetch: 25
+
   comments:
     template:
       cache:
         invalidation: "0 */15 * * * ?"
+
   categories:
     missing:
       batch-size:
         insert: 1024
         select: 4096
+
   comment-input:
     jdbc:
       missing-batch-size-select: 8192
+
+  grpc:
+    client:
+      data-source:
+        timeout: 5s
+      governance:
+        timeout: 5s
 
 #---------------------------------------------------------------------------------------------------
 # SERVER

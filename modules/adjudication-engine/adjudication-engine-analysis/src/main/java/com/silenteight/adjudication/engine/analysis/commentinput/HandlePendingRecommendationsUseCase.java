@@ -7,7 +7,7 @@ import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Service
+@Service("commentinput.handlePendingRecommendationsUseCase")
 class HandlePendingRecommendationsUseCase {
 
   private final FetchAllMissingCommentInputsUseCase fetchAllMissingCommentInputsUseCase;

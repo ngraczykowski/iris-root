@@ -1,0 +1,20 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.internal.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MatchFeaturesUpdatedProto";
+option java_package = "com.silenteight.adjudication.internal.v1";
+
+message MatchFeaturesUpdated {
+  // The list of match names that seen updates to feature values, in form of
+  // `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of feature names updated.
+  repeated string features = 2 [(google.api.field_behavior) = REQUIRED];
+}

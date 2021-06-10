@@ -1,71 +1,65 @@
 package com.silenteight.adjudication.engine.analysis.categoryrequest.jdbc;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryMap;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.datasource.categories.api.v1.CategoryValue;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 @Slf4j
 class CreateMatchCategoryValue {
 
-  private final CategoryRequestJdbcConfiguration configuration;
   private final JdbcTemplate jdbcTemplate;
 
-  int[][] execute(
-      @NonNull List<CategoryValue> missingCategoryValues, @NonNull Map<String, Long> categories) {
+  int[] execute(CategoryMap categoryMap, List<CategoryValue> categoryValues) {
     return jdbcTemplate.batchUpdate(
-        "INSERT INTO ae_match_category_value (match_id, category_id, created_at, value)"
-            + " VALUES(?, ?, NOW(), ?)",
-        missingCategoryValues,
-        configuration.getInsertBatchSize(),
-        new CategoryValueParametrizedPreparedStatementSetter(categories));
+        "INSERT INTO ae_match_category_value (match_id, category_id, created_at, value)\n"
+            + "VALUES (?, ?, now(), ?)",
+        new CategoryValueParametrizedPreparedStatementSetter(categoryMap, categoryValues));
   }
 
 
+  @RequiredArgsConstructor
   private static final class CategoryValueParametrizedPreparedStatementSetter
-      implements ParameterizedPreparedStatementSetter<CategoryValue> {
+      implements BatchPreparedStatementSetter {
 
-    private final Map<String, Long> categories;
+    private final CategoryMap categoryMap;
+    private final List<CategoryValue> categoryValues;
 
-    CategoryValueParametrizedPreparedStatementSetter(
-        @NonNull Map<String, Long> categories) {
-      this.categories = categories;
+    @SuppressWarnings("FeatureEnvy")
+    @Override
+    public void setValues(PreparedStatement ps, int i) throws SQLException {
+      var categoryValue = categoryValues.get(i);
+      var resourceName = ResourceName.create(categoryValue.getName());
+      var matchId = resourceName.getLong("matches");
+      var category = "categories/" + resourceName.get("categories");
+      var categoryId = categoryMap.getCategoryId(category);
+
+      ps.setLong(1, matchId);
+      ps.setLong(2, categoryId);
+
+      if (categoryValue.hasMultiValue()) {
+        // XXX(ahaczewski): How should we treat multiple values in category?
+        ps.setString(3, String.join(",", categoryValue.getMultiValue().getValuesList()));
+      } else {
+        ps.setString(3, categoryValue.getSingleValue());
+      }
     }
 
     @Override
-    public void setValues(PreparedStatement ps, CategoryValue argument) throws SQLException {
-      var resourceName = ResourceName.create(argument.getName());
-      var matchId = resourceName.getLong("matches");
-      var categoryKey = "categories/" + resourceName.get("categories");
-
-      if (!categories.containsKey(categoryKey)) {
-        throw new CategoryNotFoundInLocalStorageMap(categoryKey);
-      }
-
-      ps.setLong(1, matchId);
-      ps.setLong(2, categories.get(categoryKey));
-      if (argument.hasMultiValue()) {
-        ps.setString(3, argument.getMultiValue().getValuesList()
-            .stream()
-            .collect(Collectors.joining(",")));
-      } else {
-        ps.setString(3, argument.getSingleValue());
-      }
+    public int getBatchSize() {
+      return categoryValues.size();
     }
   }
-
 }

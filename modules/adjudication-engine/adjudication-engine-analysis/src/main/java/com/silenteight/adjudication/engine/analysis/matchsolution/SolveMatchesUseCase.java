@@ -8,6 +8,9 @@ import com.silenteight.adjudication.engine.analysis.matchsolution.dto.UnsolvedMa
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 class SolveMatchesUseCase {
@@ -16,19 +19,23 @@ class SolveMatchesUseCase {
   private final GovernancePolicyStepsApiClient solvingApiClient;
   private final CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
 
-  void solveMatches(SolveMatchesRequest request) {
-    var matchCount = 0;
+  List<String> solveMatches(SolveMatchesRequest request) {
+    var chunkHandler = new SolvedMatchChunkHandler(request);
 
+    var matchCount = 0;
     do {
       matchCount = unsolvedMatchesReader.readInChunks(
-          request.getAnalysisId(), new SolvedMatchChunkHandler(request));
+          request.getAnalysisId(), chunkHandler);
     } while (matchCount > 0);
+
+    return chunkHandler.solvedMatches;
   }
 
   @RequiredArgsConstructor
   private final class SolvedMatchChunkHandler implements ChunkHandler {
 
     private final SolveMatchesRequest solveRequest;
+    private final List<String> solvedMatches = new ArrayList<>();
 
     @Override
     public void handle(UnsolvedMatchesChunk chunk) {
@@ -41,6 +48,8 @@ class SolveMatchesUseCase {
           solveRequest.getAnalysisId(), response.getSolutionsList());
 
       createMatchSolutionsUseCase.createMatchSolutions(solutionCollection);
+
+      solvedMatches.addAll(chunk.getMatchNames());
     }
   }
 }

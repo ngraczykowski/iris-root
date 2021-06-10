@@ -75,7 +75,7 @@ The list of integration flows that would result in solving alerts:
 
 ? MatchFeaturesUpdated (repeated matches) (spring) -> SolveMatchesCommand (analysis_id) (spring)
 
-- SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolved (rabbit)
++- SolveMatchesCommand (spring) -> BatchSolveFeaturesRequest: BatchSolveFeaturesResponse (grpc) -> List<MatchSolution> (db) -> MatchesSolved (rabbit)
 
 ? MatchesSolved (spring) -> RecommendAlertsCommand (spring)
 

@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.categoryrequest.jdbc;
 
 
+import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryMap;
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
 import com.silenteight.datasource.categories.api.v1.CategoryValue;
 import com.silenteight.datasource.categories.api.v1.MultiValue;
@@ -42,16 +43,15 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
         .setMultiValue(MultiValue.newBuilder().addValues("PL").addValues("SE").build())
         .setName("categories/country/matches/1")
         .build();
-    var map = Map.of(
+    var map = new CategoryMap(Map.of(
         "categories/source_system", 1L,
         "categories/country", 4L
-    );
-    var inserts
-        = new CreateMatchCategoryValue(configuration, jdbcTemplate).execute(
-        List.of(countryCategory, sourceSystemCategory), map);
-    assertThat(inserts).hasDimensions(1, 2);
-    assertThat(inserts[0][0]).isEqualTo(1);
-    assertThat(inserts[0][1]).isEqualTo(1);
+    ));
+    var inserts = new CreateMatchCategoryValue(jdbcTemplate)
+        .execute(map, List.of(countryCategory, sourceSystemCategory));
+
+    assertThat(inserts[0]).isEqualTo(1);
+    assertThat(inserts[1]).isEqualTo(1);
   }
 
   @Test

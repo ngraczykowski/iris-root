@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+import static com.silenteight.adjudication.engine.analysis.agentresponse.integration.AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL;
+import static com.silenteight.adjudication.engine.analysis.agentresponse.integration.AgentResponseChannels.MATCH_FEATURES_UPDATED_OUTBOUND_CHANNEL;
 import static org.springframework.integration.IntegrationMessageHeaderAccessor.CORRELATION_ID;
 
 @RequiredArgsConstructor
@@ -25,8 +27,9 @@ class ReceiveAgentExchangeResponseIntegrationFlow extends IntegrationFlowAdapter
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
-    return from(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
-        .handle(AgentExchangeResponse.class, this::handleResponse);
+    return from(AGENT_RESPONSE_INBOUND_CHANNEL)
+        .handle(AgentExchangeResponse.class, this::handleResponse)
+        .channel(MATCH_FEATURES_UPDATED_OUTBOUND_CHANNEL);
   }
 
   private Object handleResponse(AgentExchangeResponse payload, MessageHeaders headers) {
@@ -37,9 +40,8 @@ class ReceiveAgentExchangeResponseIntegrationFlow extends IntegrationFlowAdapter
     }
 
     var requestId = UUID.fromString(correlationId);
-    facade.receiveAgentExchangeResponse(requestId, payload);
+    var result = facade.receiveAgentExchangeResponse(requestId, payload);
 
-    // TODO(ahaczewski): Return a notification of all updated matches.
-    return null;
+    return result.orElse(null);
   }
 }

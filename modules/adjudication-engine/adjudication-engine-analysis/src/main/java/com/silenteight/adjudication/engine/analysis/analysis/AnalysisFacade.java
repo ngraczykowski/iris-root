@@ -28,6 +28,10 @@ public class AnalysisFacade {
   private final GetAnalysisAgentConfigsUseCase getAnalysisAgentConfigsUseCase;
 
   @NonNull
+  private final FindAnalysisByPendingMatchesUseCase
+      findAnalysisByPendingMatchesUseCase;
+
+  @NonNull
   private final GetPolicyAndFeatureVectorElementsUseCase
       getPolicyAndFeatureVectorElementsUseCase;
 
@@ -45,6 +49,10 @@ public class AnalysisFacade {
 
   public List<String> getAgentConfigs(String analysisName) {
     return getAnalysisAgentConfigsUseCase.getAnalysisAgentConfigs(analysisName);
+  }
+
+  public List<String> findAnalysisByPendingMatches(List<String> matches) {
+    return findAnalysisByPendingMatchesUseCase.findAnalysisByPendingMatches(matches);
   }
 
   public PolicyAndFeatureVectorElements getAnalysisPolicyAndFeatureVectorElements(
