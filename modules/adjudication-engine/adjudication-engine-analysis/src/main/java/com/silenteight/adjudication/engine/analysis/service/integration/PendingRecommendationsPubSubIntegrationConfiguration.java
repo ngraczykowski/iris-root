@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.service.integration;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.integration.AgentExchangeChannels;
+import com.silenteight.adjudication.engine.analysis.categoryrequest.integration.CategoryRequestChannels;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,13 @@ class PendingRecommendationsPubSubIntegrationConfiguration {
   IntegrationFlow agentExchangePendingRecommendationsInboundIntegrationFlow() {
     return from(pendingRecommendationsPubSubChannel())
         .channel(AgentExchangeChannels.AGENT_EXCHANGE_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
+        .get();
+  }
+
+  @Bean
+  IntegrationFlow categoryRequestPendingRecommendationsInboundIntegrationFlow() {
+    return from(pendingRecommendationsPubSubChannel())
+        .channel(CategoryRequestChannels.CATEGORY_REQUEST_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
         .get();
   }
 }
