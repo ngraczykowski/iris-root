@@ -1,6 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.registration;
 
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
+import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -28,8 +29,9 @@ class KeycloakUserManagementConfiguration {
   }
 
   @Bean
-  KeycloakRolesValidator keycloakRolesValidator(ClientsResource clientsResource) {
+  KeycloakRolesValidator keycloakRolesValidator(
+      ClientQuery clientQuery, ClientsResource clientsResource) {
 
-    return new KeycloakRolesValidator(clientsResource);
+    return new KeycloakRolesValidator(clientQuery, clientsResource);
   }
 }
