@@ -78,7 +78,14 @@ spring:
 
   main:
     banner-mode: 'off'
-
+  #-------------------------------------------------------------------------------------------------
+  # CONSUL SERVICE DISCOVERY
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
   #-------------------------------------------------------------------------------------------------
   # DATABASE
   #-------------------------------------------------------------------------------------------------
@@ -169,3 +176,6 @@ grpc:
     data-source:
       address: ${ae.grpc.data-source-api.address}
       negotiation-type: ${ae.grpc.data-source-api.negotiation-type:PLAINTEXT}
+    governance:
+      address: ${ae.grpc.governance.address}
+      negotiation-type: ${ae.grpc.governance.negotiation-type:PLAINTEXT}

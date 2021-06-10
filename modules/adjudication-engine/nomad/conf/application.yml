@@ -6,16 +6,16 @@ grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
   logging:
     enabled: true
-  client:
-    data-source:
-      address: static://
-{{- range $index, $bridge := service (print "grpc." (env "NOMAD_NAMESPACE") "-hsbc-bridge") -}}
-  {{ if $index }},{{ end -}}
-  {{ $bridge.Address }}:{{ $bridge.Port -}}
-{{- end }}
-      negotiation-type: PLAINTEXT
 
 ae:
+  grpc:
+    governance:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+      negotiation-type: PLAINTEXT
+    data-source-api:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
+      negotiation-type: PLAINTEXT
+
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-adjudication-engine
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
@@ -33,3 +33,21 @@ spring:
     # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+  #-------------------------------------------------------------------------------------------------
+  # Consul Service Discovery
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+    service-registry:
+      auto-registration:
+        enabled: false

@@ -1,5 +1,5 @@
 rootProject.name = 'adjudication-engine'
-gradle.ext.sepDependenciesVersion = "1.12.1"
+gradle.ext.sepDependenciesVersion = "2.2.0"
 
 // NOTE(ahaczewski): Keep sorted alphabetically.
 include "adjudication-engine-alerts"

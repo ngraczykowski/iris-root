@@ -9,7 +9,7 @@ ext {
   agentsApiVersion = "0.4.0-SNAPSHOT"
   silenteightDataSourceApiVersion = "0.1.0"
   silenteightCommonsVersion = "2.1.0"
-  silenteightSepBaseVersion = "1.10.1"
+  silenteightSepBaseVersion = "1.12.0"
 }
 
 // @formatter:off
@@ -28,7 +28,6 @@ libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 's
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_spring_cloud_consul_discovery = [group: 'com.silenteight.spring.cloud.consul.discovery', name: 'silenteight-spring-cloud-consul-discovery', version: '2.4.0']
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']
@@ -83,6 +82,7 @@ libraries.spring_cloud_starter_consul = [group: 'org.springframework.cloud', nam
 libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
 libraries.spring_cloud_test_support = [group: 'org.springframework.cloud', name: 'spring-cloud-test-support']
+libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
 
 libraries.spring_data_commons = [group: 'org.springframework.data', name: 'spring-data-commons']
 libraries.spring_data_jpa = [group: 'org.springframework.data', name: 'spring-data-jpa']

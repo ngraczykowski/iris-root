@@ -129,7 +129,7 @@ job "adjudication-engine" {
         type     = "http"
         path     = "/rest/ae/management/health"
         method   = "GET"
-        interval = "10s"
+        interval = "30s"
         timeout  = "2s"
       }
     }
