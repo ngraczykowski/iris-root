@@ -51,6 +51,9 @@ class FetchAllMissingCategoryValuesUseCase {
       missingValues.forEachMatch(matches::add);
     } while (true);
 
+    log.info("Fetched all missing category values: analysis={}, categories={}, matches={}",
+        analysis, categories, matches);
+
     return MatchCategoriesUpdated
         .newBuilder()
         .setAnalysis(analysis)
