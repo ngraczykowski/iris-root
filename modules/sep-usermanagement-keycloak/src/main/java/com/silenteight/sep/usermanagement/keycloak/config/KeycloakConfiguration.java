@@ -3,6 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.config;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -38,6 +39,11 @@ public class KeycloakConfiguration {
   @Bean
   UsersResource usersResource(RealmResource realmResource) {
     return realmResource.users();
+  }
+
+  @Bean
+  ClientsResource clientsResource(RealmResource realmResource) {
+    return realmResource.clients();
   }
 
   @Bean

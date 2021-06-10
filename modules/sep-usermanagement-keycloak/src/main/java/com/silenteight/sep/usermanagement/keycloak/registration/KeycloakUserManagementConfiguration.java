@@ -1,10 +1,9 @@
 package com.silenteight.sep.usermanagement.keycloak.registration;
 
-
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
-import org.keycloak.admin.client.resource.RoleMappingResource;
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +30,8 @@ class KeycloakUserManagementConfiguration {
 
   @Bean
   KeycloakRolesValidator keycloakRolesValidator(
-      ClientQuery clientQuery, RoleMappingResource roleMappingResource) {
+      ClientQuery clientQuery, ClientsResource clientsResource) {
 
-    return new KeycloakRolesValidator(clientQuery, roleMappingResource);
+    return new KeycloakRolesValidator(clientQuery, clientsResource);
   }
 }
