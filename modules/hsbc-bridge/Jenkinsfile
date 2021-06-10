@@ -2,6 +2,7 @@
 
 gradleBuild(
     jdkVersion: 'jdk-11',
+    sonarEnabled: true,
     archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [booleanParam(name: 'deployOnTest',
