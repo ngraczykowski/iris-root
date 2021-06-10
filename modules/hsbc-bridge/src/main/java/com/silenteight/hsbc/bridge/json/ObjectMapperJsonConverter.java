@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.bridge.json;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertConversionException;
@@ -26,12 +25,12 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       .setSerializationInclusion(Include.NON_NULL);
 
   @Override
-  public <T> T convert(byte[] src, Class<T> valueType) {
+  public <T> T convert(byte[] src, Class<T> valueType) throws ObjectConversionException {
     try {
       return objectMapper.readValue(src, valueType);
-    } catch (IOException e) {
+    } catch (RuntimeException | IOException e) {
       log.error("Error on payload conversion", e);
-      throw new JsonConversionException();
+      throw new ObjectConversionException(e);
     }
   }
 
@@ -67,7 +66,7 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       while (parser.nextToken() == JsonToken.START_OBJECT) {
         tryToParseAndConsumeAlertData(command, consumer, parser);
       }
-    } catch (IOException exception) {
+    } catch (RuntimeException | IOException exception) {
       log.error("Error on parsing json", exception);
       throw new JsonConversionException("Error on parsing the input stream", exception);
     }
@@ -90,17 +89,4 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
     return objectMapper.getFactory();
   }
 
-  @NoArgsConstructor
-  class JsonConversionException extends RuntimeException {
-
-    private static final long serialVersionUID = 2587038986777201805L;
-
-    JsonConversionException(String message) {
-      super(message);
-    }
-
-    JsonConversionException(String message, Throwable throwable) {
-      super(message, throwable);
-    }
-  }
 }

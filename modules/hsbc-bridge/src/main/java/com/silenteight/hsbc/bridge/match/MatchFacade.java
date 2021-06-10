@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 
 import com.silenteight.hsbc.bridge.json.ObjectConverter;
+import com.silenteight.hsbc.bridge.json.ObjectConverter.ObjectConversionException;
 import com.silenteight.hsbc.bridge.json.external.model.HsbcMatch;
 import com.silenteight.hsbc.bridge.match.event.StoredMatchesEvent;
 
@@ -63,12 +64,26 @@ public class MatchFacade {
   }
 
   private MatchComposite toMatchComposite(MatchEntity matchEntity) {
-    var payload = matchEntity.getPayload();
+    var payloadEntity = matchEntity.getPayload();
+
+    if (payloadEntity.isArchived()) {
+      throw new MatchDataNoLongerAvailableException(matchEntity.getName());
+    }
+
+    var name = matchEntity.getName();
     return MatchComposite.builder()
         .id(matchEntity.getId())
-        .name(matchEntity.getName())
-        .matchData(objectConverter.convert(payload.getPayload(), MatchRawData.class))
+        .name(name)
+        .matchData(getMatchRawData(name, payloadEntity.getPayload()))
         .build();
+  }
+
+  private MatchRawData getMatchRawData(String name, byte[] payload) {
+    try {
+      return objectConverter.convert(payload, MatchRawData.class);
+    } catch (ObjectConversionException e) {
+      throw new MatchDataNoLongerAvailableException(name);
+    }
   }
 
   private List<MatchComposite> toMatchComposites(List<MatchEntity> matchEntities) {
@@ -78,8 +93,8 @@ public class MatchFacade {
   }
 
   @Transactional(readOnly = true)
-  public List<MatchComposite> getMatches(@NonNull List<String> matchNames) {
-    return matchNames.stream()
+  public List<MatchComposite> getMatches(@NonNull List<String> names) {
+    return names.stream()
         .map(this::getMatch)
         .collect(Collectors.toList());
   }
