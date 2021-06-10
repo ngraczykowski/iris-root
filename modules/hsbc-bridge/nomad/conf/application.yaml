@@ -20,6 +20,3 @@ spring:
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
-{{- if env "NOMAD_PORT_http" == "dev"}}
-logging.level.com.silenteight: DEBUG
-{{ end -}}
