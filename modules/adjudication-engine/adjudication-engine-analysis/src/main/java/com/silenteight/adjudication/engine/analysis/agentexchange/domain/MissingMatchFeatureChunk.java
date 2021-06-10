@@ -11,8 +11,9 @@ public class MissingMatchFeatureChunk {
 
   public MissingMatchFeatureChunk(List<? extends MissingMatchFeature> missingMatchFeatures) {
     this.missingMatchFeatures = new ArrayList<>(missingMatchFeatures);
-    this.missingMatchFeatures.sort(
-        Comparator.comparing(MissingMatchFeature::getAgentConfig, String::compareToIgnoreCase));
+    this.missingMatchFeatures.sort(Comparator
+        .comparing(MissingMatchFeature::getAgentConfig, String::compareToIgnoreCase)
+        .thenComparing(MissingMatchFeature::getFeature, String::compareToIgnoreCase));
   }
 
   public int getSize() {
