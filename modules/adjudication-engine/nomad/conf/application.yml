@@ -10,10 +10,10 @@ grpc:
 ae:
   grpc:
     governance:
-      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-governance
       negotiation-type: PLAINTEXT
     data-source-api:
-      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
       negotiation-type: PLAINTEXT
 
   db:
