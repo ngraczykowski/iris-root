@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.keycloak.admin.client.resource.ClientsResource;
-import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 
 import java.util.Optional;
@@ -22,8 +20,6 @@ import static java.util.stream.Collectors.toSet;
 class KeycloakRolesValidator implements RolesValidator {
 
   @NonNull
-  private final ClientQuery clientQuery;
-  @NonNull
   private final ClientsResource clientsResource;
 
   @Override
@@ -33,13 +29,10 @@ class KeycloakRolesValidator implements RolesValidator {
     if (roles.isEmpty())
       throw new IllegalArgumentException("You need to provide roles to check.");
 
-    ClientRepresentation clientRepresentation = clientQuery.getByClientId(scope);
-
     Set<String> availableRoles = clientsResource
         .get(scope)
-        .getScopeMappings()
-        .clientLevel(clientRepresentation.getId())
-        .listAll()
+        .roles()
+        .list()
         .stream()
         .map(RoleRepresentation::getName)
         .collect(toSet());

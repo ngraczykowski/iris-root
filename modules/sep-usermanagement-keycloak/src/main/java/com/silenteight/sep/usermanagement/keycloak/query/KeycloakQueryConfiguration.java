@@ -2,7 +2,6 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
-import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
@@ -31,11 +30,9 @@ class KeycloakQueryConfiguration {
 
   @Bean
   KeycloakRolesQuery keycloakRolesQuery(
-      ClientQuery clientQuery,
-      ClientsResource clientsResource,
-      InternalRoleFilter internalRoleFilter) {
+      ClientsResource clientsResource, InternalRoleFilter internalRoleFilter) {
 
-    return new KeycloakRolesQuery(clientQuery, clientsResource, internalRoleFilter);
+    return new KeycloakRolesQuery(clientsResource, internalRoleFilter);
   }
 
   @Bean
