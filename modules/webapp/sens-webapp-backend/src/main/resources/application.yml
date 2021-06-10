@@ -257,7 +257,7 @@ sens.web:
       label: "POTENTIAL_TRUE_POSITIVE"
       className: "ai-solution-negative-1"
 
-  roles:
+sens.webapp.roles:
     roles-scope: ${keycloak.frontend-client-id}
     country-groups-scope: "kibana"
 
