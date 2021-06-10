@@ -24,7 +24,7 @@ class KeycloakRolesValidator implements RolesValidator {
 
   @Override
   public Optional<RolesDontExistError> validate(@NonNull String scope, @NonNull Set<String> roles) {
-    log.debug("Checking if roles exist. {}", roles);
+    log.debug("Checking if roles exist {} in a scope {}", roles, scope);
 
     if (roles.isEmpty())
       throw new IllegalArgumentException("You need to provide roles to check.");
