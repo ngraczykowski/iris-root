@@ -38,6 +38,11 @@ class RequestMissingFeatureValuesUseCase {
   }
 
   private void sendRequests(List<AgentExchangeRequestMessage> messages) {
+    if (messages.isEmpty()) {
+      log.debug("No agent exchange requests to send");
+      return;
+    }
+
     if (log.isDebugEnabled()) {
       log.debug("Sending agent requests: messageCount={}", messages.size());
     }

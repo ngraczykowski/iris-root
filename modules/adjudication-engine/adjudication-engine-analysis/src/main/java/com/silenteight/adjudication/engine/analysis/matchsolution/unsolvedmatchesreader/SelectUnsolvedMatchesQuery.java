@@ -64,7 +64,7 @@ class SelectUnsolvedMatchesQuery {
 
   int execute(long analysisId, UnsolvedMatchesReader.ChunkHandler chunkHandler) {
     if (log.isDebugEnabled()) {
-      log.debug("Selecting missing match feature values: analysisId={}, limit={}",
+      log.debug("Finding unsolved matches with ready feature vectors: analysisId={}, limit={}",
           analysisId, limit);
     }
 

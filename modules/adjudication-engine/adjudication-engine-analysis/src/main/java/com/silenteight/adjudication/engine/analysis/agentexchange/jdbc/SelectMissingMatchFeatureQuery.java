@@ -54,7 +54,7 @@ class SelectMissingMatchFeatureQuery {
 
   int execute(long analysisId, MissingMatchFeatureReader.ChunkHandler chunkHandler) {
     if (log.isDebugEnabled()) {
-      log.debug("Selecting missing match feature values: analysisId={}, limit={}",
+      log.debug("Finding missing match feature values: analysisId={}, limit={}",
           analysisId, limit);
     }
 
