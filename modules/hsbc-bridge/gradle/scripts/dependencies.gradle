@@ -6,7 +6,7 @@ ext {
   //***********************************
   adjudicationEngineApiVersion = "0.1.0-SNAPSHOT"
   governanceModelApiVersion = "1.5.0-SNAPSHOT"
-  silenteightDataSourceApiVersion = "0.1.0-SNAPSHOT"
+  silenteightDataSourceApiVersion = "0.2.0-SNAPSHOT"
   warehouseApiVersion = "1.1.0-SNAPSHOT"
   worldCheckApiVersion = "0.1.0-SNAPSHOT"
 

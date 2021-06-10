@@ -51,7 +51,7 @@ class LocationInputGrpcService extends LocationInputServiceImplBase {
     return inputs.stream()
         .map(i -> LocationInput.newBuilder()
             .setMatch(i.getMatch())
-            .addAllLcoationFeatureInputs(mapFeatureInputs(i.getFeatureInputs()))
+            .addAllLocationFeatureInputs(mapFeatureInputs(i.getFeatureInputs()))
             .build())
         .collect(Collectors.toList());
   }
@@ -60,8 +60,8 @@ class LocationInputGrpcService extends LocationInputServiceImplBase {
     return inputs.stream()
         .map(i -> LocationFeatureInput.newBuilder()
             .setFeature(i.getFeature())
-            .addAllAlertedPartyLocations(i.getAlertedPartyLocations())
-            .addAllWatchlistLocations(i.getWatchlistLocations())
+            .setAlertedPartyLocation(i.getAlertedPartyLocation())
+            .setWatchlistLocation(i.getWatchlistLocation())
             .build())
         .collect(Collectors.toList());
   }

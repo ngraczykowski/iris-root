@@ -12,6 +12,7 @@ public enum Feature {
 
   NAME("name"),
   GENDER("gender"),
+  IS_PEP("isPep"),
   REGISTRATION_COUNTRY("registrationCountry"),
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),

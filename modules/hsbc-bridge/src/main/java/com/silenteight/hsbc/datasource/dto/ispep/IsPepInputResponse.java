@@ -11,6 +11,7 @@ import static java.util.Collections.emptyList;
 @Value
 public class IsPepInputResponse {
 
+  String match;
   @Builder.Default
-  List<IsPepInputDto> inputs = emptyList();
+  List<IsPepFeatureInputDto> featureInputs = emptyList();
 }

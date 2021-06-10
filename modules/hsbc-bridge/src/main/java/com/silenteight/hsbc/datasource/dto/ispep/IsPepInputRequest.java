@@ -14,5 +14,5 @@ public class IsPepInputRequest {
   @Builder.Default
   List<String> matches = emptyList();
   @Builder.Default
-  List<RegionModelFieldDto> regionModelFields = emptyList();
+  List<String> features = emptyList();
 }

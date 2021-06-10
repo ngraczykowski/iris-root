@@ -12,7 +12,6 @@ import static java.util.Collections.emptyList;
 public class IsPepFeatureInputDto {
 
   String feature;
-  String region;
   @Builder.Default
-  List<ModelFieldValueDto> modelFieldValues = emptyList();
+  List<IsPepFeatureSolutionDto> featureSolutions = emptyList();
 }
