@@ -25,6 +25,7 @@ dependencies {
   implementation libraries.commons_text
   implementation libraries.guava
   runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
 
   // Base Libraries
   implementation libraries.silenteight_sep_base_common

@@ -245,6 +245,8 @@ configurations.all {
     force libraries.aspectjrt
     force libraries.aspectjtools
     force libraries.liquibase_core
+    force libraries.ecs_logging_core
+    force libraries.logback_ecs_encoder
 
     // Fix for running with JDK11
     force group: 'org.jboss.xnio', name: 'xnio-api', version: '3.5.9.Final'
