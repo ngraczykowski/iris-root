@@ -10,24 +10,33 @@ import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public class IncorporationCountryFeature implements FeatureValuesRetriever<CountryFeatureInputDto> {
 
   @Override
   public CountryFeatureInputDto retrieve(MatchData matchData) {
-    var apIncorporationCountries = customerEntitiesIncorporationCountries(
-        matchData.getCustomerEntity());
-    var mpIncorporationCountries = worldCheckEntitiesIncorporationCountries(
-        matchData.getWorldCheckEntities());
+    var builder = CountryFeatureInputDto.builder()
+        .feature(getFeatureName());
 
-    return CountryFeatureInputDto.builder()
-        .feature(getFeatureName())
-        .watchlistCountries(mpIncorporationCountries.distinct().collect(Collectors.toList()))
-        .alertedPartyCountries(apIncorporationCountries.distinct().collect(Collectors.toList()))
-        .build();
+    if (matchData.isEntity()) {
+      var apIncorporationCountries = customerEntitiesIncorporationCountries(
+          matchData.getCustomerEntity());
+      var mpIncorporationCountries = worldCheckEntitiesIncorporationCountries(
+          matchData.getWorldCheckEntities());
+
+      builder.watchlistCountries(mpIncorporationCountries.distinct().collect(toList()));
+      builder.alertedPartyCountries(apIncorporationCountries.distinct().collect(toList()));
+    } else {
+      builder.watchlistCountries(emptyList());
+      builder.alertedPartyCountries(emptyList());
+    }
+
+    return builder.build();
   }
 
   public static Stream<String> worldCheckEntitiesIncorporationCountries(
