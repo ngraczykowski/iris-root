@@ -20,7 +20,7 @@ class StoreMatchCategoriesUseCaseSpec extends Specification {
     def matchData = [
         getCaseInformation: {
           [
-              getExtendedAttribute3: {'AM'},
+              getExtendedAttribute5: {'AM'},
               getSourceName        : {'sourceName'}
           ] as CaseInformation
         },

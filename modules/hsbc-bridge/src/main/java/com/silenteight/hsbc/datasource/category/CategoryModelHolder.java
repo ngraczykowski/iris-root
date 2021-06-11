@@ -49,7 +49,7 @@ class CategoryModelHolder {
         .allowedValues(List.of("SAN", "PEP", "AM"))
         .valueRetriever(matchData -> {
           var caseInformation = matchData.getCaseInformation();
-          return List.of(ofNullable(caseInformation.getExtendedAttribute3()).orElse(""));
+          return List.of(ofNullable(caseInformation.getExtendedAttribute5()).orElse(""));
         })
         .build();
 

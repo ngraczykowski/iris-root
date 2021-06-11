@@ -4,5 +4,5 @@ public interface CaseInformation {
 
   String getSourceName();
 
-  String getExtendedAttribute3();
+  String getExtendedAttribute5();
 }
