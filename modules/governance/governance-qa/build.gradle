@@ -1,0 +1,32 @@
+plugins {
+  id "java"
+  id "java-test-fixtures"
+}
+
+description = "Governance Quality Assurance Alerts"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterJackson
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+
+  implementation libraries.spring_webmvc
+  implementation libraries.spring_security_config
+
+  implementation project(":governance-db-changelog")
+  implementation project(":governance-common-web")
+
+  testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libraries.spring_security_test
+
+  testImplementation project(":governance-common-web-testing")
+}

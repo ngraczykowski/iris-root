@@ -15,6 +15,7 @@ import com.silenteight.serp.governance.mailer.MailerModule;
 import com.silenteight.serp.governance.model.ModelModule;
 import com.silenteight.serp.governance.notifier.NotifierModule;
 import com.silenteight.serp.governance.policy.PolicyModule;
+import com.silenteight.serp.governance.qa.QaModule;
 import com.silenteight.serp.governance.solutiondiscrepancy.SolutionDiscrepancyModule;
 import com.silenteight.serp.governance.strategy.StrategyModule;
 
@@ -34,6 +35,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     ModelModule.class,
     NotifierModule.class,
     PolicyModule.class,
+    QaModule.class,
     SolutionDiscrepancyModule.class,
     StrategyModule.class,
     SignatureModule.class,

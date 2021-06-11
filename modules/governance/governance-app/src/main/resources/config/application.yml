@@ -238,7 +238,9 @@ sep.auth:
       - "CREATE_STEP"
       - "EDIT_STEP"
       - "REMOVE_STEP"
-
+    MANAGE_QA_ALERTS:
+      - "ALERTS_ANALYSIS"
+      - "ALERTS_VALIDATION"
   rolePermissionsMappings:
 #    POLICY_MANAGER:
     APPROVER:
@@ -254,3 +256,4 @@ sep.auth:
       - "MANAGE_MODEL"
       - "MANAGE_POLICY"
       - "MANAGE_STEPS"
+      - "MANAGE_QA_ALERTS"
