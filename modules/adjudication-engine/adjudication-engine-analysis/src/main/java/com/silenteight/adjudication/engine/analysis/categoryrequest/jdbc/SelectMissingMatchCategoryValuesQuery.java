@@ -1,6 +1,5 @@
 package com.silenteight.adjudication.engine.analysis.categoryrequest.jdbc;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryMap;
@@ -8,28 +7,30 @@ import com.silenteight.adjudication.engine.analysis.categoryrequest.MissingCateg
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.sql.DataSource;
 
-@RequiredArgsConstructor
-@Component
 @Slf4j
 class SelectMissingMatchCategoryValuesQuery {
 
-  private final CategoryRequestJdbcConfiguration configuration;
   private final JdbcTemplate jdbcTemplate;
 
+  SelectMissingMatchCategoryValuesQuery(DataSource datasource, int batchSize) {
+    jdbcTemplate = new JdbcTemplate(datasource, true);
+    jdbcTemplate.setMaxRows(batchSize);
+  }
+
   MissingCategoryResult execute(long analysisId) {
-    this.jdbcTemplate.setMaxRows(configuration.getSelectBatchSize());
     return jdbcTemplate.query(
         "SELECT category, category_id, match_id, alert_id\n"
             + "FROM ae_missing_match_category_values_query\n"
             + "WHERE analysis_id = ?",
-        new Object[] { analysisId }, new SqlMissingMatchCategoryExtractor());
+        new SqlMissingMatchCategoryExtractor(),
+        analysisId);
   }
 
   private static final class SqlMissingMatchCategoryExtractor implements

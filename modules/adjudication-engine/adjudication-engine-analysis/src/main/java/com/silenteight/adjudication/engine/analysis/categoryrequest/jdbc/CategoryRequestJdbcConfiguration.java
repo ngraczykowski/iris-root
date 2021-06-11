@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +25,11 @@ class CategoryRequestJdbcConfiguration {
 
   @Value("${ae.categories.missing.batch-size.select:4096}")
   private int selectBatchSize;
+
+  @Bean
+  SelectMissingMatchCategoryValuesQuery selectMissingMatchCategoryValuesQuery(
+      DataSource dataSource) {
+
+    return new SelectMissingMatchCategoryValuesQuery(dataSource, selectBatchSize);
+  }
 }

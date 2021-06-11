@@ -7,7 +7,6 @@ import com.silenteight.datasource.categories.api.v1.CategoryValue;
 import com.silenteight.datasource.categories.api.v1.MultiValue;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Map;
+import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -26,12 +26,8 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
   @Autowired
   protected JdbcTemplate jdbcTemplate;
 
-  private CategoryRequestJdbcConfiguration configuration;
-
-  @BeforeEach
-  public void setUp() {
-    configuration = new CategoryRequestJdbcConfiguration(1024, 4096);
-  }
+  @Autowired
+  protected DataSource dataSource;
 
   @Test
   void shouldAddMissingCategoryForMatch() {
@@ -57,8 +53,8 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
   @Test
   void shouldSelectMissingCategories() {
     var missingCategoryResult
-        = new SelectMissingMatchCategoryValuesQuery(configuration, jdbcTemplate)
-        .execute(1);
+        = new SelectMissingMatchCategoryValuesQuery(dataSource, 4096).execute(1);
+
     assertThat(missingCategoryResult).isNotNull();
   }
 
