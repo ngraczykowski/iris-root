@@ -17,6 +17,8 @@ import static com.silenteight.adjudication.engine.analysis.service.integration.A
 @ConfigurationProperties(prefix = "ae.analysis.integration.inbound")
 class AnalysisInboundAmqpIntegrationProperties {
 
+  static final boolean AGENT_RESPONSE_ENABLED_DEFAULT = true;
+
   @NestedConfigurationProperty
   @Valid
   @NotNull
@@ -48,7 +50,11 @@ class AnalysisInboundAmqpIntegrationProperties {
         agentExchange.getInboundQueueName(),
         category.getInboundQueueName(),
         commentInput.getInboundQueueName(),
-    };
+        };
+  }
+
+  String getInboundQueueName() {
+    return agentExchange.getInboundQueueName();
   }
 
   @Data
@@ -70,6 +76,8 @@ class AnalysisInboundAmqpIntegrationProperties {
 
     @NotBlank
     private String inboundQueueName = AGENT_RESPONSE_QUEUE_NAME;
+
+    private boolean enabled = AGENT_RESPONSE_ENABLED_DEFAULT;
   }
 
   @Data

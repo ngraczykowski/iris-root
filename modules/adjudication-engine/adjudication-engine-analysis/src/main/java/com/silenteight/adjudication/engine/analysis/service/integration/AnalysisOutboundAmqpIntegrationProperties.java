@@ -17,6 +17,8 @@ import static com.silenteight.adjudication.engine.analysis.service.integration.A
 @ConfigurationProperties(prefix = "ae.analysis.integration.outbound")
 class AnalysisOutboundAmqpIntegrationProperties {
 
+  static final boolean AGENT_ENABLED_DEFAULT = true;
+
   @NestedConfigurationProperty
   @Valid
   @NotNull
@@ -72,5 +74,7 @@ class AnalysisOutboundAmqpIntegrationProperties {
 
     @NotBlank
     private String outboundExchangeName = AGENT_REQUEST_EXCHANGE_NAME;
+
+    private boolean enabled = AGENT_ENABLED_DEFAULT;
   }
 }

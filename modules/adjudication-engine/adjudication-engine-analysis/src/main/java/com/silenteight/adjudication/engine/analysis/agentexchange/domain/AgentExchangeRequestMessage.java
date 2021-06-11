@@ -37,6 +37,10 @@ public class AgentExchangeRequestMessage {
     return matches.size();
   }
 
+  public String getCorrelationId() {
+    return requestId.toString();
+  }
+
   public AgentExchangeRequest toRequest() {
     var builder = AgentExchangeRequest.newBuilder().addAllFeatures(features);
 
@@ -134,7 +138,7 @@ public class AgentExchangeRequestMessage {
         matches = new TreeSet<>();
       }
 
-      matches.add(new Match(alertId, matchId));
+      this.matches.add(new Match(alertId, matchId));
       return this;
     }
 

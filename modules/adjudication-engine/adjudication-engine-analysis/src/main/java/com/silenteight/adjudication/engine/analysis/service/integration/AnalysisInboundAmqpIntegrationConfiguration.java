@@ -8,6 +8,7 @@ import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,8 +45,10 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty(prefix = "ae.analysis.integration.outbound.agent", name = "enabled",
+      havingValue = "true")
   IntegrationFlow agentResponseIntegrationFlow() {
-    return from(createInboundAdapter(properties.getAgentResponse().getInboundQueueName()))
+    return from(createInboundAdapter(properties.getInboundQueueName()))
         .channel(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
         .get();
   }

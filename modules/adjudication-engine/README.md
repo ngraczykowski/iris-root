@@ -14,7 +14,7 @@
 
 To test application with mocked dependencies activate following Spring Profiles:
 
-    mock-governance
+    mockgovernance
 
 ### Tracing gRPC calls
 

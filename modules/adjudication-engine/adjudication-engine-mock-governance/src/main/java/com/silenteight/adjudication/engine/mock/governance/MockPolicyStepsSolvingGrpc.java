@@ -12,7 +12,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
 
 @GrpcService
-@Profile("mock-governance")
+@Profile("mockgovernance")
 @RequiredArgsConstructor
 class MockPolicyStepsSolvingGrpc extends PolicyStepsSolvingGrpc.PolicyStepsSolvingImplBase {
 

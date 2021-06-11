@@ -18,7 +18,7 @@ class AgentExchangeRequestGatewayIntegrationConfiguration {
     var factoryBean = new GatewayProxyFactoryBean(AgentExchangeRequestGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(
-        AgentExchangeChannels.AGENT_EXCHANGE_REQUEST_OUTBOUND_CHANNEL);
+        AgentExchangeChannels.AGENT_EXCHANGE_REQUEST_GATEWAY_CHANNEL);
     return factoryBean;
   }
 }

@@ -1,0 +1,9 @@
+ae:
+  analysis:
+    integration:
+      outbound:
+        agent:
+          enabled: false
+      inbound:
+        agent-response:
+          enabled: false

@@ -2,3 +2,4 @@ grpc:
   client:
     governance:
       address: static://localhost:${grpc.server.port}
+      negotiation-type: PLAINTEXT

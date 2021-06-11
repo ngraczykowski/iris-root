@@ -11,7 +11,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
 
 @GrpcService
-@Profile("mock-datasource")
+@Profile("mockdatasource")
 @RequiredArgsConstructor
 class MockCommentInputGrpcService extends CommentInputServiceImplBase {
 

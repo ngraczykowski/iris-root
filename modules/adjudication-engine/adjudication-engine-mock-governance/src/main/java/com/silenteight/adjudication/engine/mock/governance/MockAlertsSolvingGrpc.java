@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
 
 @GrpcService
 @RequiredArgsConstructor
-@Profile("mock-governance")
+@Profile("mockgovernance")
 class MockAlertsSolvingGrpc extends AlertsSolvingGrpc.AlertsSolvingImplBase {
 
   private final List<String> availableSolutions =

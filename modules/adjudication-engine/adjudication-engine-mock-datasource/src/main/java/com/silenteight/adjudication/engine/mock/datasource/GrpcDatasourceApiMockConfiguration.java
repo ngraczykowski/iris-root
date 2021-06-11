@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("mock-datasource")
+@Profile("mockdatasource")
 class GrpcDatasourceApiMockConfiguration {
 
   @Bean
@@ -22,5 +22,6 @@ class GrpcDatasourceApiMockConfiguration {
   MockCommentsInputUseCase mockCommentsInputUseCase() {
     return new MockCommentsInputUseCase();
   }
+
 
 }

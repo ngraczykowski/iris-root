@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("mock-agents")
 @Slf4j
-class AgentsMockConfiguration {
+class AgentMockConfiguration {
 
   @Bean
   CachingConnectionFactory connectionFactory() {

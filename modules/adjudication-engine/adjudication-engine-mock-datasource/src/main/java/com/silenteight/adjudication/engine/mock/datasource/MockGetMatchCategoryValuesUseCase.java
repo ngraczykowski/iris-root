@@ -1,7 +1,6 @@
 package com.silenteight.adjudication.engine.mock.datasource;
 
 import com.silenteight.datasource.categories.api.v1.CategoryValue;
-import com.silenteight.datasource.categories.api.v1.MultiValue;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,7 @@ class MockGetMatchCategoryValuesUseCase {
           .build();
     } else if (matchValue.contains("categories/country")) {
       return CategoryValue.newBuilder()
-          .setMultiValue(MultiValue.newBuilder().addAllValues(List.of("PL", "SG")))
+          .setSingleValue("PL")
           .setName(matchValue)
           .build();
     } else if (matchValue.contains("categories/customer_type")) {

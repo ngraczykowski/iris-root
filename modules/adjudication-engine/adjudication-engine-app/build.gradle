@@ -79,6 +79,7 @@ dependencies {
   // GRPC
   implementation libraries.brave_instrumentation_grpc
   implementation libraries.grpc_server_spring_boot_starter
+  implementation libraries.grpc_client_spring_boot_starter
 
   // AspectJ
   implementation libraries.aspectjrt
@@ -86,6 +87,8 @@ dependencies {
 
   // Testing
   testImplementation libraries.junit_jupiter_api
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.adjudication_engine_api
 }
 
 jar {

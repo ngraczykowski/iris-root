@@ -9,7 +9,7 @@ import static com.silenteight.adjudication.engine.analysis.service.integration.A
 import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
 @Configuration
-@Profile("rabbitmq-declare")
+@Profile("rabbitdeclare")
 class RabbitBrokerConfiguration {
 
   private static final String ERROR_QUEUE = "ae.error-queue";
