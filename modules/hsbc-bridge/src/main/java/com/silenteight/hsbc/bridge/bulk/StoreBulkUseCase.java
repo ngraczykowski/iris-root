@@ -23,18 +23,22 @@ class StoreBulkUseCase {
   private final BulkRepository bulkRepository;
   private final ApplicationEventPublisher eventPublisher;
 
-  @Transactional
   void handle(@NonNull StoreBulkUseCaseCommand command) {
     var bulkId = command.getBulkId();
     validateBulkId(bulkId);
 
-    var bulk = new Bulk(bulkId, command.isLearning());
-    bulkRepository.save(bulk);
-
-    alertFacade.createRawAlerts(command.getBulkId(), command.getInputStream());
-    log.info("Batch has been stored, ID: {}", bulkId);
+    storeBulkWithAlerts(bulkId, command.isLearning(), command.getInputStream());
 
     eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
+  }
+
+  @Transactional
+  public void storeBulkWithAlerts(String bulkId, boolean learning, InputStream inputStream) {
+    var bulk = new Bulk(bulkId, learning);
+    bulkRepository.save(bulk);
+
+    alertFacade.createRawAlerts(bulkId, inputStream);
+    log.info("Batch has been stored, ID: {}", bulkId);
   }
 
   private void validateBulkId(String bulkId) {

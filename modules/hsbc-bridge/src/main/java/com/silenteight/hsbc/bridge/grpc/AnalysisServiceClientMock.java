@@ -5,6 +5,7 @@ import com.silenteight.hsbc.bridge.analysis.dto.*;
 
 import java.time.OffsetDateTime;
 import java.util.Random;
+import java.util.UUID;
 
 class AnalysisServiceClientMock implements AnalysisServiceClient {
 
@@ -14,7 +15,7 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
   public AnalysisDatasetDto addDataset(AddDatasetRequestDto request) {
     return AnalysisDatasetDto.builder()
         .alertsCount(1 + random.nextInt(5))
-        .name("dataset-" + random.nextInt(1000))
+        .name("dataset-" + UUID.randomUUID())
         .build();
   }
 
@@ -23,7 +24,7 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
     return CreateAnalysisResponseDto.builder()
         .strategy("strategy")
         .policy("policy_" + OffsetDateTime.now())
-        .name("analysis/" + random.nextInt(1000))
+        .name("analysis/" + UUID.randomUUID())
         .build();
   }
 

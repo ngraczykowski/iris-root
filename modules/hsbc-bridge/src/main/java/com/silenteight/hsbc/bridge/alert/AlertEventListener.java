@@ -10,6 +10,7 @@ import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ class AlertEventListener {
   }
 
   @EventListener
+  @Async
   public void onBulkStoredEvent(BulkStoredEvent event) {
     log.info("NOMAD, bulk stored event handling started");
 

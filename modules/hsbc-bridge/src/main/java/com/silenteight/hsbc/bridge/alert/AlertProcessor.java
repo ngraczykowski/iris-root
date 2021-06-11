@@ -8,7 +8,6 @@ import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,7 +26,6 @@ class AlertProcessor {
   private final RelationshipProcessor relationshipProcessor;
   private final MatchFacade matchFacade;
 
-  @Async
   @Transactional
   public void preProcessAlertsWithinBulk(@NonNull String bulkId) {
     try (var alerts = repository.findByBulkIdAndStatus(bulkId, STORED)) {
