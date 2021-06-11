@@ -4,9 +4,11 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.sep.base.common.support.hibernate.StringListConverter;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
@@ -75,4 +77,9 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @ToString.Include
   @Column(name = "generation_date_to")
   private OffsetDateTime generationDateTo;
+
+  @ToString.Include
+  @Convert(converter = StringListConverter.class)
+  @Column(name = "countries")
+  private List<String> countries;
 }

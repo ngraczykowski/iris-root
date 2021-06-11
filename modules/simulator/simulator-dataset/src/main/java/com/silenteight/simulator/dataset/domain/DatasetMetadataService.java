@@ -25,6 +25,7 @@ public class DatasetMetadataService {
         .state(CURRENT)
         .generationDateFrom(request.getRangeFrom())
         .generationDateTo(request.getRangeTo())
+        .countries(request.getCountries())
         .build();
     repository.save(datasetEntity);
   }

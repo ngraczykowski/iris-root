@@ -9,6 +9,7 @@ import com.silenteight.simulator.common.audit.AuditableRequest;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -41,6 +42,10 @@ public class CreateDatasetRequest implements AuditableRequest {
 
   public OffsetDateTime getRangeTo() {
     return query.getRangeTo();
+  }
+
+  public List<String> getCountries() {
+    return query.getCountries();
   }
 
   @Override

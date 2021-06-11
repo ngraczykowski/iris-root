@@ -106,4 +106,10 @@
         newColumnName="external_resource_name"/>
   </changeSet>
 
+  <changeSet id="simulator-1.0.0-4" author="plewandowski">
+    <addColumn tableName="simulator_dataset">
+      <column name="countries" type="TEXT"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

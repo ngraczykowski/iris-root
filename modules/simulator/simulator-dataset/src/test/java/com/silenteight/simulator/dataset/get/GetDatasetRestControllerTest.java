@@ -23,7 +23,7 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class GetDatasetRestControllerTest extends BaseRestControllerTest {
 
-  private static final String GET_DATASET_URL = "/v1/datasets/" + ID.toString();
+  private static final String GET_DATASET_URL = "/v1/datasets/" + ID;
 
   @MockBean
   private DatasetQuery datasetQuery;

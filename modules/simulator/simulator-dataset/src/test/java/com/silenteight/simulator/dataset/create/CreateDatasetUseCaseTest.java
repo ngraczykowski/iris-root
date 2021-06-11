@@ -1,6 +1,5 @@
 package com.silenteight.simulator.dataset.create;
 
-import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.simulator.dataset.domain.DatasetMetadataService;
@@ -14,17 +13,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.simulator.dataset.create.CreateDatasetFixtures.CREATE_DATASET_REQUEST;
 import static com.silenteight.simulator.dataset.create.CreateDatasetRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.dataset.create.CreateDatasetRequest.PRE_AUDIT_TYPE;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.DATASET;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateDatasetUseCaseTest {
-
-  private static final String EXTERNAL_RESOURCE_NAME = "datasets/1234";
 
   @InjectMocks
   private CreateDatasetUseCase underTest;
@@ -41,28 +39,19 @@ class CreateDatasetUseCaseTest {
   @Test
   void createDataset() {
     // given
-    long alertsCount = 5L;
-    Dataset dataset = makeDataset(EXTERNAL_RESOURCE_NAME, alertsCount);
-    when(createDatasetService.createDataset(CREATE_DATASET_REQUEST)).thenReturn(dataset);
+    when(createDatasetService.createDataset(CREATE_DATASET_REQUEST)).thenReturn(DATASET);
 
     // when
     underTest.activate(CREATE_DATASET_REQUEST);
 
     // then
-    verify(datasetMetadataService).createMetadata(CREATE_DATASET_REQUEST, dataset);
+    verify(datasetMetadataService).createMetadata(CREATE_DATASET_REQUEST, DATASET);
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);
     assertThat(preAudit.getType()).isEqualTo(PRE_AUDIT_TYPE);
     AuditDataDto postAudit = getPostAudit(logCaptor);
     assertThat(postAudit.getType()).isEqualTo(POST_AUDIT_TYPE);
-  }
-
-  private static Dataset makeDataset(String datasetName, long alertCount) {
-    return Dataset.newBuilder()
-        .setName(datasetName)
-        .setAlertCount(alertCount)
-        .build();
   }
 
   private static AuditDataDto getPreAudit(ArgumentCaptor<AuditDataDto> logCaptor) {

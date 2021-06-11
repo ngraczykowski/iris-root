@@ -35,12 +35,13 @@ class DatasetQueryTest extends BaseDataJpaTest {
     assertThat(result).hasSize(1);
     DatasetDto datasetDto = result.get(0);
     assertThat(datasetDto.getId()).isEqualTo(ID);
-    assertThat(datasetDto.getName()).isEqualTo("datasets/" + ID.toString());
+    assertThat(datasetDto.getName()).isEqualTo("datasets/" + ID);
     assertThat(datasetDto.getDatasetName()).isEqualTo(DATASET_NAME);
     assertThat(datasetDto.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(datasetDto.getAlertsCount()).isEqualTo(ALERTS_COUNT);
     assertThat(datasetDto.getCreatedBy()).isEqualTo(CREATED_BY);
     assertThat(datasetDto.getQuery()).isNotNull();
+    assertThat(datasetDto.getQuery().getCountries()).containsExactlyElementsOf(COUNTRIES);
   }
 
   @Test
@@ -50,12 +51,13 @@ class DatasetQueryTest extends BaseDataJpaTest {
     DatasetDto result = underTest.get(ID);
 
     assertThat(result.getId()).isEqualTo(ID);
-    assertThat(result.getName()).isEqualTo("datasets/" + ID.toString());
+    assertThat(result.getName()).isEqualTo("datasets/" + ID);
     assertThat(result.getDatasetName()).isEqualTo(DATASET_NAME);
     assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(result.getAlertsCount()).isEqualTo(ALERTS_COUNT);
     assertThat(result.getCreatedBy()).isEqualTo(CREATED_BY);
     assertThat(result.getQuery()).isNotNull();
+    assertThat(result.getQuery().getCountries()).containsExactlyElementsOf(COUNTRIES);
   }
 
   @Test
@@ -78,6 +80,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
         .state(CURRENT)
         .generationDateFrom(FROM)
         .generationDateTo(TO)
+        .countries(COUNTRIES)
         .build();
 
     repository.save(datasetEntity);
