@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
-import static com.silenteight.simulator.dataset.create.CreateDatasetFixtures.CREATE_DATASET_REQUEST_DTO;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST_DTO;
 import static io.restassured.http.ContentType.JSON;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

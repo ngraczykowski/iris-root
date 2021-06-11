@@ -60,6 +60,7 @@ public class DatasetQuery {
   private static AlertSelectionCriteriaDto toQuery(DatasetEntity datasetEntity) {
     return AlertSelectionCriteriaDto.builder()
         .alertGenerationDate(toRange(datasetEntity))
+        .countries(datasetEntity.getCountries())
         .build();
   }
 
