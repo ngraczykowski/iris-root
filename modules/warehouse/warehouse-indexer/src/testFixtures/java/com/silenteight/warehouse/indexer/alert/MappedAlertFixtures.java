@@ -1,8 +1,10 @@
 package com.silenteight.warehouse.indexer.alert;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
+import static java.util.List.of;
 
 public class MappedAlertFixtures {
 
@@ -13,13 +15,29 @@ public class MappedAlertFixtures {
   public static final String ALERT_ID_1 = "457b1498-e348-4a81-8093-6079c1173010";
   public static final String ALERT_ID_2 = "80a8cfc0-86c3-4360-afed-7a1b9a326020";
   public static final String DOCUMENT_ID = ALERT_ID_1 + ":" + MATCH_ID_1_1;
-  public static final String MATCH_PAYLOAD_SOLUTION_KEY = "solution";
-  public static final String MATCH_PAYLOAD_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
-  public static final String MATCH_PAYLOAD_SOLUTION_NO_DECISION = "NO_DECISION";
-  public static final String ALERT_PAYLOAD_RECOMMENDATION_KEY = "recommendation";
-  public static final String ALERT_PAYLOAD_RECOMMENDATION_FP = "FALSE_POSITIVE";
-  public static final String ALERT_PAYLOAD_RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
+  public static final String MATCH_SOLUTION_KEY = "solution";
+  public static final String MATCH_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
+  public static final String MATCH_SOLUTION_NO_DECISION = "NO_DECISION";
+  public static final String ALERT_RECOMMENDATION_KEY = "recommendation";
+  public static final String ALERT_RECOMMENDATION_FP = "FALSE_POSITIVE";
+  public static final String ALERT_RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
+  public static final String ALERT_RISK_TYPE_PEP = "PEP";
+  public static final String ALERT_RISK_TYPE_KEY = "riskType";
+  public static final String ALERT_COUNTRY_KEY = "country";
+  public static final String ALERT_COUNTRY = "UK";
   public static final String PROCESSING_TIMESTAMP = "2021-04-15T12:17:37.098Z";
+  public static final String DOCUMENT_ID_1 = ALERT_ID_1 + ":" + MATCH_ID_1_1;
+  public static final String DOCUMENT_ID_2 = ALERT_ID_1 + ":" + MATCH_ID_1_2;
+  public static final String DOCUMENT_ID_3 = ALERT_ID_1 + ":" + MATCH_ID_2_1;
+  public static final String SIMULATION_ANALYSIS_ID = "9630b08f-682c-4565-bf4d-c07064c65615";
+  public static final List<String> ALERT_FIELDS =
+      of(ALERT_RECOMMENDATION_KEY, ALERT_RISK_TYPE_KEY, ALERT_COUNTRY_KEY);
+  public static final List<String> ALERT_FIELDS_WITH_ONE_NON_EXISTING =
+      of(ALERT_RECOMMENDATION_KEY, ALERT_RISK_TYPE_KEY);
+  public static final List<String> LIST_OF_ID =
+      of(
+          "alerts/457b1498-e348-4a81-8093-6079c1173010",
+          "alerts/80a8cfc0-86c3-4360-afed-7a1b9a326020");
 
   private static final String MATCH_RESOURCE_PREFIX = "matches/";
   private static final String ALERT_RESOURCE_PREFIX = "alerts/";
@@ -36,8 +54,28 @@ public class MappedAlertFixtures {
   public static final Map<String, Object> ALERT_WITH_MATCHES_1_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
       ALERT_ID_KEY, ALERT_ID_1,
-      ALERT_PREFIX + ALERT_PAYLOAD_RECOMMENDATION_KEY, ALERT_PAYLOAD_RECOMMENDATION_FP,
+      ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
+      ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY,
       MATCH_ID_KEY, MATCH_ID_1_1,
-      MATCH_PREFIX + MATCH_PAYLOAD_SOLUTION_KEY, MATCH_PAYLOAD_SOLUTION_NO_DECISION
+      MATCH_PREFIX + MATCH_SOLUTION_KEY, MATCH_SOLUTION_NO_DECISION
+  );
+
+  public static final Map<String, Object> ALERT_WITH_MATCHES_2_MAP = Map.of(
+      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
+      ALERT_ID_KEY, ALERT_ID_1,
+      ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
+      ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY,
+      MATCH_ID_KEY, MATCH_ID_1_2,
+      MATCH_PREFIX + MATCH_SOLUTION_KEY, MATCH_SOLUTION_EXACT_MATCH
+  );
+
+  public static final Map<String, Object> ALERT_WITH_MATCHES_3_MAP = Map.of(
+      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
+      ALERT_ID_KEY, ALERT_ID_2,
+      ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
+      ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY,
+      ALERT_PREFIX + ALERT_RISK_TYPE_KEY, ALERT_RISK_TYPE_PEP,
+      MATCH_ID_KEY, MATCH_ID_1_2,
+      MATCH_PREFIX + MATCH_SOLUTION_KEY, MATCH_SOLUTION_EXACT_MATCH
   );
 }

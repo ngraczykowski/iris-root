@@ -38,8 +38,10 @@ warehouse:
     default-bucket: reports
   kibana:
     url: http://localhost:5601
-    username: admin
+    us  ername: admin
     password: admin
+  es  :
+    production-query-index: ${warehouse.environment.prefix}_production
   db:
     host: localhost
     port: 24910

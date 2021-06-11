@@ -17,7 +17,6 @@ curl -X PUT 'http://localhost:9200/itest_simulation_9630b08f-682c-4565-bf4d-c070
   "match_solution": "NO_DECISION"
 }'
 
-
 curl -X PUT 'http://localhost:9200/itest_production/_doc/457b1498-e348-4a81-8093-6079c1173010:42df75f8-1ba6-4ce8-93d7-d144ef196011' \
   --silent --show-error --fail \
   -u admin:admin \

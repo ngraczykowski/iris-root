@@ -7,7 +7,6 @@ warehouse:
     timezone: Europe/Warsaw
   tenant:
     max-object-count: 100
-
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

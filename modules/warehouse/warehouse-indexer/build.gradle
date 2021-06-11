@@ -20,6 +20,7 @@ dependencies {
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_data_api
   implementation libraries.spring_boot_starter_elasticsearch
+  implementation libraries.spring_security_config
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
 

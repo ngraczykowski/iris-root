@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
-import static com.silenteight.warehouse.indexer.alert.NameResource.getId;
+import static com.silenteight.warehouse.indexer.alert.NameResource.getSplitName;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
@@ -29,9 +29,9 @@ class AlertMapper {
     Map<String, String> documentAttributes = new LinkedHashMap<>();
 
     documentAttributes.put(INDEX_TIMESTAMP, now.format(ISO_DATE_TIME));
-    documentAttributes.put(ALERT_ID_KEY, getId(alert.getName()));
+    documentAttributes.put(ALERT_ID_KEY, getSplitName(alert.getName()));
     documentAttributes.putAll(convertPayloadToMap(alert.getPayload(), ALERT_PREFIX));
-    documentAttributes.put(MATCH_ID_KEY, getId(match.getName()));
+    documentAttributes.put(MATCH_ID_KEY, getSplitName(match.getName()));
     documentAttributes.putAll(convertPayloadToMap(match.getPayload(), MATCH_PREFIX));
 
     return documentAttributes;

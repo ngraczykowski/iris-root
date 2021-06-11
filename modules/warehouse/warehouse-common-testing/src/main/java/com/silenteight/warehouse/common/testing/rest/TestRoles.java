@@ -13,4 +13,5 @@ public class TestRoles {
   public static final String AUDITOR = "AUDITOR";
   public static final String BUSINESS_OPERATOR = "BUSINESS_OPERATOR";
   public static final String POLICY_MANAGER = "POLICY_MANAGER";
+  public static final String QA = "QA";
 }

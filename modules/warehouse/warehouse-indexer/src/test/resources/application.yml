@@ -24,6 +24,8 @@ warehouse:
         routing-key: alert.simulation
   environment:
     prefix: itest
+  es:
+    production-query-index: ${warehouse.environment.prefix}_simulation_*
 
 spring:
   elasticsearch:

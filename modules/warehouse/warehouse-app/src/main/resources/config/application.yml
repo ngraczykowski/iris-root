@@ -52,6 +52,8 @@ warehouse:
       master-tenant: ${warehouse.environment.prefix}_simulation_master
   tenant:
     max-object-count: 100
+  es:
+    production-query-index: ${warehouse.environment.prefix}_production
 
 spring:
   #-------------------------------------------------------------------------------------------------
@@ -176,7 +178,12 @@ sep:
         - "CREATE_SIMULATION_REPORT"
         - "DOWNLOAD_SIMULATION_REPORT"
 
+      VIEW_ALERTS:
+        - "LIST_ALERTS"
+
     rolePermissionsMappings:
       BUSINESS_OPERATOR:
         - "PRODUCTION_ON_DEMAND_REPORTS"
         - "SIMULATION_REPORTS"
+      QA:
+        - "VIEW_ALERTS"
