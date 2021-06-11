@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.grpc;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.hsbc.bridge.json.JsonConversionException;
 import com.silenteight.hsbc.bridge.match.MatchDataNoLongerAvailableException;
 import com.silenteight.hsbc.bridge.match.MatchNotFoundException;
@@ -12,9 +14,12 @@ import static io.grpc.Status.INVALID_ARGUMENT;
 import static io.grpc.Status.NOT_FOUND;
 import static io.grpc.Status.UNKNOWN;
 
+@Slf4j
 class GrpcErrorHandler {
 
   Status handle(RuntimeException exception) {
+    log.error("Grpc error", exception);
+
     var status = determineStatus(exception);
 
     return status
