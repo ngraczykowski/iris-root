@@ -25,6 +25,7 @@ import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_W
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ANALYSIS_RESOURCE_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SIMULATION_ANALYSIS_ID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -39,8 +40,6 @@ import static org.awaitility.Awaitility.await;
 @AutoConfigureDataJpa
 @ActiveProfiles("jpa-test")
 class IndexerIT {
-
-  private static final String SIMULATION_ANALYSIS_ID = "9630b08f-682c-4565-bf4d-c07064c65615";
 
   @BeforeEach
   void init() {
