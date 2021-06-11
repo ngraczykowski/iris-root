@@ -41,7 +41,7 @@ class AlertEventListener {
 
     alertProcessor.preProcessAlertsWithinBulk(bulkId);
 
-    log.info("NOMAD, alerts preprocessing has been finished, bulkId=", bulkId);
+    log.info("NOMAD, alerts preprocessing has been finished, bulkId={}", bulkId);
 
     eventPublisher.publishEvent(new AlertsPreProcessingCompletedEvent(bulkId));
 

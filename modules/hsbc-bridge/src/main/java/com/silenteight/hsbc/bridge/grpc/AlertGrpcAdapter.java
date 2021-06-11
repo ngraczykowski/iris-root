@@ -30,7 +30,7 @@ public class AlertGrpcAdapter implements AlertServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
-    log.info("NOMAD, batchCreateAlerts alertIds=", alertIds);
+    log.info("NOMAD, batchCreateAlerts alertIds={}", alertIds);
 
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alertIds.stream()
