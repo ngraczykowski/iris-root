@@ -13,7 +13,7 @@ public final class ModelResource extends AbstractResourceExtractor {
   private static final String RESOURCE_NAME_PREFIX = "solvingModels/";
 
   public static String toResourceName(UUID id) {
-    return RESOURCE_NAME_PREFIX + id.toString();
+    return toResourceName(id, RESOURCE_NAME_PREFIX);
   }
 
   public static UUID fromResourceName(String resourceName) {

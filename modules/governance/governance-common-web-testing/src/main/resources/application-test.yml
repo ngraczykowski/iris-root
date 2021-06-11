@@ -36,7 +36,9 @@ sep.auth:
       - "CREATE_STEP"
       - "EDIT_STEP"
       - "REMOVE_STEP"
-
+    MANAGE_QA_ALERTS:
+      - "ALERTS_ANALYSIS"
+      - "ALERTS_VALIDATION"
   rolePermissionsMappings:
     APPROVER:
       - "APPROVE_CHANGE_REQUESTS"
@@ -46,6 +48,7 @@ sep.auth:
       - "CANCEL_CHANGE_REQUESTS"
       - "CREATE_CHANGE_REQUESTS"
       - "VIEW_CHANGE_REQUESTS"
+      - "MANAGE_QA_ALERTS"
     POLICY_MANAGER:
       - "VIEW_POLICIES"
       - "IMPORT_POLICY"

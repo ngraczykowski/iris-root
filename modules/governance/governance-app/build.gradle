@@ -25,13 +25,14 @@ configurations {
 
 dependencies {
   implementation project(":governance-agent")
+  implementation project(":governance-analytics")
   implementation project(":governance-change-request")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
   implementation project(":governance-db-changelog")
-  implementation project(":governance-policy")
-  implementation project(":governance-analytics")
   implementation project(":governance-model")
+  implementation project(":governance-policy")
+  implementation project(":governance-qa")
   implementation project(":governance-strategy")
 
   implementation libraries.silenteight_audit_bs

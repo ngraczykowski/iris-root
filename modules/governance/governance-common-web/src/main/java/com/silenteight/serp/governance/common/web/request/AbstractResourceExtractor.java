@@ -10,4 +10,8 @@ public abstract class AbstractResourceExtractor {
   protected static UUID fromResourceName(String resourceName, String prefix) {
     return fromString(removeStart(resourceName, prefix));
   }
+
+  public static String toResourceName(UUID id, String prefix) {
+    return prefix + id.toString();
+  }
 }

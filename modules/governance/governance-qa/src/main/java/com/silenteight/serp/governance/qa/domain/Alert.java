@@ -1,0 +1,31 @@
+package com.silenteight.serp.governance.qa.domain;
+
+import lombok.*;
+
+import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
+import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+
+import java.time.OffsetDateTime;
+import javax.persistence.*;
+
+@Entity
+@Data
+@Table(name = "governance_qa_alert")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@ToString(onlyExplicitlyIncluded = true)
+class Alert extends BaseAggregateRoot implements IdentifiableEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
+  @Column(updatable = false)
+  private Long id;
+
+  @ToString.Include
+  @Column(nullable = false, length = 80, unique = true)
+  private String alertName;
+
+  @NonNull
+  private OffsetDateTime createdAt;
+}
