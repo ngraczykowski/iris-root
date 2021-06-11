@@ -116,6 +116,7 @@ job "adjudication-engine" {
         "prometheus.metrics.path=/rest/ae/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ], var.http_tags)
 
       check_restart {
@@ -187,20 +188,30 @@ job "adjudication-engine" {
       }
 
       template {
-        data        = "{{ keyOrDefault \"${var.namespace}/adjudication-engine/environment\" \"\" }}"
+        data = "{{ keyOrDefault \"${var.namespace}/adjudication-engine/environment\" \"\" }}"
         destination = "local/adjudication-engine.env"
-        env         = true
+        env = true
       }
 
       template {
-        data        = file("./conf/application.yml")
+        data = file("./conf/application.yml")
         destination = "local/conf/application.yml"
         change_mode = "noop"
       }
 
+      template {
+        data = file("./conf/logback.xml")
+        destination = "secrets/conf/logback.xml"
+        change_mode = "noop"
+      }
+
+      env {
+        LOG_PATH = "${NOMAD_ALLOC_DIR}/logs"
+      }
+
       config {
         command = "java"
-        args    = [
+        args = [
           format("-Xms%dm", local.jvm_memory),
           format("-Xmx%dm", local.jvm_memory),
           format("-XX:MaxPermSize=%dm", local.perm_memory),
@@ -208,6 +219,7 @@ job "adjudication-engine" {
           "-Dsun.jnu.encoding=UTF-8",
           "-Djava.net.preferIPv4Stack=true",
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
+          "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/adjudication-engine-app.jar",
           "--spring.profiles.active=linux,adjudication-engine,database,rabbitmq,messaging",
@@ -216,13 +228,46 @@ job "adjudication-engine" {
       }
 
       logs {
-        max_files     = 10
+        max_files = 10
         max_file_size = 20
       }
 
       resources {
-        cpu    = 400
+        cpu = 400
         memory = var.memory
+      }
+    }
+
+    task "fluentbit" {
+      driver = "docker"
+
+      lifecycle {
+        hook = "prestart"
+        sidecar = true
+      }
+
+      config {
+        image = "fluent/fluent-bit:1.7.7"
+        network_mode = "host"
+        volumes = [
+          "secrets/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf",
+          "local/fluent-parsers.conf:/fluent-bit/etc/fluent-parsers.conf",
+        ]
+      }
+
+      resources {
+        cpu = 50
+        memory = 100
+      }
+
+      template {
+        data = file("./conf/fluent-bit.conf")
+        destination = "secrets/fluent-bit.conf"
+      }
+
+      template {
+        data = file("./conf/fluent-parsers.conf")
+        destination = "local/fluent-parsers.conf"
       }
     }
   }

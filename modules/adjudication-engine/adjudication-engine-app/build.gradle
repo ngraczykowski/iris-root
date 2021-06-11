@@ -24,6 +24,7 @@ dependencies {
   implementation libraries.commons_lang3
   implementation libraries.commons_text
   implementation libraries.guava
+  runtimeOnly libraries.ecs_logging_core
 
   // Base Libraries
   implementation libraries.silenteight_sep_base_common
