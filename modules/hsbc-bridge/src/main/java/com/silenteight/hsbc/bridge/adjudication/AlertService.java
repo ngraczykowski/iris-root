@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.adjudication;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDto;
@@ -20,12 +21,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 class AlertService {
 
   private final AlertServiceClient alertServiceClient;
   private final ApplicationEventPublisher eventPublisher;
 
   Collection<String> registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
+    log.info("NOMAD, registerAlerts = {}", alertMatchIds.keySet());
+
     var alerts = registerAlerts(alertMatchIds.keySet());
     var matches = registerMatches(alertMatchIds, alerts);
 

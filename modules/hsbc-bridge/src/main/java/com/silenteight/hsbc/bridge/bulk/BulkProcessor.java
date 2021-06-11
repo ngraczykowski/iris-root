@@ -52,9 +52,13 @@ class BulkProcessor {
   }
 
   private void processSolvingBulk(Bulk bulk) {
+    log.info("NOMAD, number of valid alerts within bulk: {}", bulk.getValidAlerts().size());
+
     var compositeById = bulk.getValidAlerts()
         .stream()
         .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite, (e, n) -> e));
+
+    log.info("NOMAD, number of composite by id: {}", compositeById.keySet().size());
 
     var analysisId = adjudicationFacade.registerAlertWithMatchesAndAnalysis(compositeById);
 

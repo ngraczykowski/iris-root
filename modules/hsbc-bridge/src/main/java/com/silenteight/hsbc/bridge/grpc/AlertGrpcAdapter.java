@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
@@ -20,6 +21,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Slf4j
 public class AlertGrpcAdapter implements AlertServiceClient {
 
   private final AlertServiceBlockingStub alertServiceBlockingStub;
@@ -28,6 +30,8 @@ public class AlertGrpcAdapter implements AlertServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
+    log.info("NOMAD, batchCreateAlerts alertIds=", alertIds);
+
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alertIds.stream()
             .map(a -> Alert.newBuilder().setAlertId(a).build())

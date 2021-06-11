@@ -35,10 +35,16 @@ class AlertEventListener {
 
   @EventListener
   public void onBulkStoredEvent(BulkStoredEvent event) {
+    log.info("NOMAD, bulk stored event handling started");
+
     var bulkId = event.getBulkId();
 
     alertProcessor.preProcessAlertsWithinBulk(bulkId);
 
+    log.info("NOMAD, alerts preprocessing has been finished, bulkId=", bulkId);
+
     eventPublisher.publishEvent(new AlertsPreProcessingCompletedEvent(bulkId));
+
+    log.info("NOMAD, bulk stored event has been handled");
   }
 }
