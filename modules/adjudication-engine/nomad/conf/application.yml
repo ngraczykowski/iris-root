@@ -27,7 +27,7 @@ ae:
 spring:
   rabbitmq:
     addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
-      {{ if $index }},{{ end - }}
+      {{ if $index }},{{ end -}}
       {{ $rabbit.Address }}:{{ $rabbit.Port -}}
 {{- end }}
     # NOTE(ahaczewski): Intentionally left empty.
