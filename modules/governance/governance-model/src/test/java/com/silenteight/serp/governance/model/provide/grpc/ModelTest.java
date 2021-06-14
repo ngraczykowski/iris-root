@@ -5,6 +5,7 @@ import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.model.ModelTestConfiguration;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsMatchConditionsNamesProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import static com.silenteight.serp.governance.model.category.CategoryFixture.APT
 import static com.silenteight.serp.governance.model.category.CategoryFixture.ISDENY_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.DEFAULT_MODEL_DTO;
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
+import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_UUID;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -45,6 +47,9 @@ class ModelTest extends BaseDataJpaTest {
   PolicyFeatureProvider policyFeatureProviderMock;
 
   @Autowired
+  PolicyStepsMatchConditionsNamesProvider policyStepsConditionsProvider;
+
+  @Autowired
   SolvingModelProvider solvingModelProvider;
 
   @Test
@@ -54,6 +59,9 @@ class ModelTest extends BaseDataJpaTest {
     when(policyFeatureProviderMock.resolveFeatures(any())).thenReturn(List.of(
         getFeature(AGENT_FEATURE_NAME, NAME_AGENT_CONFIG_NAME),
         getFeature(AGENT_FEATURE_DATE, AGENT_FEATURE_DATE)));
+    when(policyStepsConditionsProvider.getMatchConditionsNames(CURRENT_POLICY_UUID))
+        .thenReturn(List.of(
+            AGENT_FEATURE_NAME, AGENT_FEATURE_DATE, APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME));
 
     SolvingModel solvingModel = solvingModelProvider.get(DEFAULT_MODEL_DTO);
 
