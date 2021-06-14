@@ -202,7 +202,6 @@ job "hsbc-bridge" {
         LOG_PATH = "${NOMAD_ALLOC_DIR}/logs"
       }
 
-
       config {
         command = "java"
         args    = [
