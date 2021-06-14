@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.solve;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
@@ -24,9 +25,16 @@ import static java.util.stream.IntStream.range;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
 @RequiredArgsConstructor
+@Slf4j
 public class SolveUseCase {
 
   private static final String POLICY_NAME_RESOURCE_PREFIX = "policies/";
+  private static final String SOLVED_MASSAGE =
+      "Solved feature (featureNames = '{}', featureValues = '{}', signature = '{}') "
+          + "as '{}' with step '{}'.";
+  private static final String SOLVED_NO_STEP_MASSAGE =
+      "Solved feature (featureNames = '{}', featureValues = '{}', signature = '{}') "
+          + "as '{}' - no corresponding step in the policy.";
 
   @NonNull
   private final StepsSupplierProvider stepsSupplierProvider;
@@ -40,6 +48,8 @@ public class SolveUseCase {
   private final TimeSource timeSource;
 
   public BatchSolveFeaturesResponse solve(BatchSolveFeaturesRequest request) {
+    log.info("Solving {} features using policy {}.",
+             request.getFeatureVectorsCount(), request.getPolicyName());
     UUID policyId = retrievePolicyId(request.getPolicyName());
     StepsSupplier stepsSupplier = stepsSupplierProvider.getStepsSupplier(policyId);
     FeatureCollection featureCollection = request.getFeatureCollection();
@@ -49,6 +59,8 @@ public class SolveUseCase {
         .map(featureVector -> solveSingle(stepsSupplier, featureCollection, featureVector))
         .collect(toList());
 
+    log.info("Solved {} features using policy {}.",
+             request.getFeatureVectorsCount(), request.getPolicyName());
     return BatchSolveFeaturesResponse.newBuilder()
         .addAllSolutions(solutionResponses)
         .build();
@@ -66,6 +78,10 @@ public class SolveUseCase {
     List<String> featureNames = asFeatureNames(featureCollection.getFeatureList());
     List<String> featureValues = new ArrayList<>(featureVector.getFeatureValueList());
 
+    log.debug("Solving feature (featureNames = '{}', featureValues = '{}').",
+              featureNames,
+              featureValues);
+
     CanonicalFeatureVector canonicalFeatureVector =
         canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
 
@@ -75,7 +91,26 @@ public class SolveUseCase {
     emitEvent(featureCollection, featureVector,
         canonicalFeatureVector.getVectorSignature(), response);
 
+    logSolved(featureNames, featureValues, canonicalFeatureVector.getVectorSignature(), response);
     return asSolutionResponse(canonicalFeatureVector.getVectorSignature(), response);
+  }
+
+  private void logSolved(
+      List<String> featureNames,
+      List<String> featureValues,
+      Signature signature,
+      SolveResponse response) {
+
+    if (response.getStepId() == null)
+      log.debug(
+          SOLVED_NO_STEP_MASSAGE, featureNames, featureValues, signature, response.getSolution());
+    else
+      log.debug(SOLVED_MASSAGE,
+                featureNames,
+                featureValues,
+                signature,
+                response.getSolution(),
+                response.getStepId());
   }
 
   private static List<String> asFeatureNames(List<Feature> features) {
