@@ -10,7 +10,6 @@ paths:
   /api/v1/features:
     get:
       tags:
-        - 1st iteration
         - features
       description: Returns a list of all features
       responses:
