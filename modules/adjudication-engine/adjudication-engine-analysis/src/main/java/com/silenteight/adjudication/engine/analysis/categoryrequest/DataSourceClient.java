@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.CategoryServiceBlockingStub;
+import com.silenteight.datasource.categories.api.v1.CategoryValue;
 
 import io.grpc.Deadline;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -36,12 +38,26 @@ class DataSourceClient {
         .batchGetMatchCategoryValues(request);
 
     if (response.getCategoryValuesCount() == 0) {
-      throw new EmptyCategoryServiceResponseException(stub.getChannel().authority());
+      // FIXME(ahaczewski): Uncomment this exception, instead of hiding Data Source shit.
+      //throw new EmptyCategoryServiceResponseException(stub.getChannel().authority());
     }
 
     if (response.getCategoryValuesCount() < request.getMatchValuesCount()) {
       log.warn("Not all requested category values received: requestedCount={}, receivedCount={}",
           request.getMatchValuesCount(), response.getCategoryValuesCount());
+
+      // FIXME(ahaczewski): Remove this mocked response, instead of hiding Data Source shit.
+      var mockedResults = request.getMatchValuesList()
+          .stream()
+          .map(categoryValueName ->
+              CategoryValue.newBuilder()
+                  .setSingleValue("SOURCE_ERROR")
+                  .setName(categoryValueName)
+                  .build())
+          .collect(Collectors.toList());
+      return BatchGetMatchCategoryValuesResponse.newBuilder()
+          .addAllCategoryValues(mockedResults)
+          .build();
     }
 
     if (log.isTraceEnabled()) {
