@@ -3,7 +3,7 @@
 gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
-    dependencyCheckEnabled: true,
+    dependencyCheckEnabled: false,
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [booleanParam(name: 'deployOnTest',
         description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
