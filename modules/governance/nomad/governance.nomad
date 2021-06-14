@@ -61,6 +61,7 @@ job "governance" {
         "prometheus.metrics.path=/rest/governance/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ], var.http_tags)
 
       check_restart {
@@ -86,6 +87,7 @@ job "governance" {
         "grpc",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ]
 
       check_restart {
@@ -110,6 +112,7 @@ job "governance" {
       tags = [
         "grpc",
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ]
     }
 
