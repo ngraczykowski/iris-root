@@ -19,7 +19,7 @@ import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSear
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.reporting.ReportServiceTestConstants.TENANT_NAME_WRAPPER;
-import static com.silenteight.warehouse.report.simulation.SimulationReportsController.*;
+import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.*;
 import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_DEFINITION_DTO;
 import static java.lang.String.format;
 import static java.util.Map.of;
@@ -30,11 +30,11 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Import({
-    SimulationReportsController.class,
+    SimulationReportsRestController.class,
     SimulationReportsControllerAdvice.class,
     GenericExceptionControllerAdvice.class
 })
-class SimulationReportsControllerTest extends BaseRestControllerTest {
+class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
   private static final long TIMESTAMP = 1622009305142L;
   private static final ReportInstance REPORT_INSTANCE = new ReportInstance(TIMESTAMP);

@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.common.opendistro.elastic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,12 +12,14 @@ import static com.fasterxml.jackson.databind.PropertyNamingStrategy.LOWER_CAMEL_
 class OpendistroElasticConfiguration {
 
   @Bean
-  OpendistroElasticClient opendistroElasticClient(RestClient restLowLevelClient) {
+  OpendistroElasticClient opendistroElasticClient(
+      RestHighLevelClient restHighLevelAdminClient) {
 
     ObjectMapper objectMapper = new ObjectMapper()
         .setPropertyNamingStrategy(LOWER_CAMEL_CASE)
         .configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    return new OpendistroElasticClient(restLowLevelClient, objectMapper);
+    return new OpendistroElasticClient(
+        restHighLevelAdminClient.getLowLevelClient(), objectMapper);
   }
 }

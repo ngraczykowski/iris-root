@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 
-import static com.silenteight.warehouse.report.production.ProductionReportsController.DEFINITIONS_RESOURCE_URL;
-import static com.silenteight.warehouse.report.production.ProductionReportsController.DEFINITION_ID_PARAM;
+import static com.silenteight.warehouse.report.production.ProductionReportsRestController.DEFINITIONS_RESOURCE_URL;
+import static com.silenteight.warehouse.report.production.ProductionReportsRestController.DEFINITION_ID_PARAM;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 

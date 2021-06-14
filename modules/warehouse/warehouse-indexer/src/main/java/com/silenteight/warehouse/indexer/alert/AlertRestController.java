@@ -17,13 +17,13 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
-class AlertController {
+class AlertRestController {
 
   private static final String QA_ALERT_LIST_URL = "/v1/analysis/production/query";
   private static final String QA_ALERT_DETAIL_URL = "/v1/analysis/production/alerts/{id}";
 
   @NonNull
-  private final AlertService alertService;
+  private final AlertQueryService alertQueryService;
 
   @GetMapping(QA_ALERT_LIST_URL)
   @PreAuthorize("isAuthorized('LIST_ALERTS')")
@@ -31,7 +31,7 @@ class AlertController {
       @RequestParam(name = "fields") List<String> fields,
       @RequestParam(name = "name") List<String> names) {
 
-    return ok().body(alertService.getMultipleAlertsAttributes(fields, names));
+    return ok().body(alertQueryService.getMultipleAlertsAttributes(fields, names));
   }
 
   @GetMapping(QA_ALERT_DETAIL_URL)
@@ -39,6 +39,6 @@ class AlertController {
   public ResponseEntity<AlertAttributes> getSingleAlertDto(
       @PathVariable("id") String id, @RequestParam(name = "fields") List<String> fields) {
 
-    return ok().body(alertService.getSingleAlertAttributes(fields, id));
+    return ok().body(alertQueryService.getSingleAlertAttributes(fields, id));
   }
 }

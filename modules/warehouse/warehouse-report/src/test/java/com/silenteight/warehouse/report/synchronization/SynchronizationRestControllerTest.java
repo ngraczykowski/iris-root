@@ -9,16 +9,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
-import static com.silenteight.warehouse.report.synchronization.SynchronizationController.REPORT_SYNCHRONIZATION_URL;
+import static com.silenteight.warehouse.report.synchronization.SynchronizationRestController.REPORT_SYNCHRONIZATION_URL;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
-    SynchronizationController.class,
+    SynchronizationRestController.class,
     GenericExceptionControllerAdvice.class
 })
-class SynchronizationControllerTest extends BaseRestControllerTest {
+class SynchronizationRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private ReportSynchronizationUseCase reportSynchronizationUseCase;

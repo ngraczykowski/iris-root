@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.warehouse.report.reporting.AnalysisResource.toResourceName;
-import static com.silenteight.warehouse.report.simulation.SimulationReportsController.ANALYSIS_ID_PARAM;
-import static com.silenteight.warehouse.report.simulation.SimulationReportsController.DEFINITIONS_RESOURCE_URL;
-import static com.silenteight.warehouse.report.simulation.SimulationReportsController.DEFINITION_ID_PARAM;
+import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.ANALYSIS_ID_PARAM;
+import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_RESOURCE_URL;
+import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITION_ID_PARAM;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
