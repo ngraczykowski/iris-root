@@ -116,6 +116,7 @@ job "hsbc-bridge" {
         "prometheus.metrics.path=/hsbc-bridge/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ], var.http_tags)
 
       check_restart {
@@ -141,6 +142,7 @@ job "hsbc-bridge" {
         "grpc",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ]
 
       check_restart {
@@ -165,6 +167,7 @@ job "hsbc-bridge" {
       tags = [
         "grpc",
         "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
       ]
     }
 
