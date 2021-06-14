@@ -30,7 +30,7 @@ class AgentExchangeRequestOutboundAmqpIntegrationFlowConfiguration {
 
   @Bean
   @ConditionalOnProperty(prefix = "ae.analysis.integration.outbound.agent", name = "enabled",
-      havingValue = "true")
+      havingValue = "true", matchIfMissing = true)
   IntegrationFlow agentExchangeRequestOutboundAmqpIntegrationFlow() {
     return from(AgentExchangeChannels.AGENT_EXCHANGE_REQUEST_OUTBOUND_CHANNEL)
         .handle(createOutboundAdapter(properties.getAgent().getOutboundExchangeName()))
