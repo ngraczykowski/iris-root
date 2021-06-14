@@ -41,7 +41,11 @@ class SelectUnsolvedMatchesQuery {
           + "                  AND aafveq.category_ids = amfveq.category_ids\n"
           + "                  AND aafveq.agent_config_feature_ids"
           + " = amfveq.agent_config_feature_ids\n"
+          + "         LEFT JOIN ae_match_solution ams\n"
+          + "                   on am.match_id = ams.match_id"
+          + " AND apr.analysis_id = ams.analysis_id\n"
           + "WHERE apr.analysis_id = ?\n"
+          + "  AND ams.match_id IS NULL\n"
           + "LIMIT ?";
 
   private static final UnsolvedMatchMapper ROW_MAPPER = new UnsolvedMatchMapper();
