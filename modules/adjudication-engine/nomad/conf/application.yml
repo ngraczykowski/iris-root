@@ -15,6 +15,7 @@ grpc:
     data-source:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
 
+# @formatter:off
 ae:
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-adjudication-engine
@@ -33,6 +34,7 @@ spring:
     # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+# @formatter:on
 
 #-------------------------------------------------------------------------------------------------
 # Consul Service Discovery
