@@ -10,7 +10,8 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-queue-type": "classic"
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "ae.dlx"
       }
     },
     {
@@ -19,7 +20,8 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-queue-type": "classic"
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "ae.dlx"
       }
     },
     {
@@ -28,7 +30,8 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-queue-type": "classic"
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "ae.dlx"
       }
     },
     {
@@ -37,7 +40,8 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-queue-type": "classic"
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "ae.dlx"
       }
     },
     {
@@ -46,7 +50,8 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-queue-type": "classic"
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "ae.dlx"
       }
     },
     {
@@ -65,6 +70,7 @@
       "auto_delete": false,
       "arguments": {
         "x-queue-type": "classic",
+        "x-dead-letter-exchange": "ae.dlx",
         "x-max-priority": 10
       }
     },
@@ -76,6 +82,16 @@
       "arguments": {
         "x-queue-type": "classic",
         "x-max-priority": 10
+      }
+    },
+    {
+      "name": "ae.dlq",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-queue-mode": "lazy"
       }
     }
   ],
@@ -105,6 +121,15 @@
       "durable": true,
       "auto_delete": false,
       "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ae.dlx",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": true,
       "arguments": {}
     },
     {
@@ -157,6 +182,14 @@
       "destination": "ae.comment-input",
       "destination_type": "queue",
       "routing_key": "ae.event.pending-recommendations",
+      "arguments": {}
+    },
+    {
+      "source": "ae.dlx",
+      "vhost": "/",
+      "destination": "ae.dlq",
+      "destination_type": "queue",
+      "routing_key": "#",
       "arguments": {}
     },
     {
