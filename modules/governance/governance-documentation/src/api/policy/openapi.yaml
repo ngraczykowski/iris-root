@@ -3,8 +3,15 @@ info:
   title: Policy versions and steps
   description: Policy versions and policy steps API
   version: 0.3.0
+
 servers:
-  - url: 'https'
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
 
 tags:
   - name: policies
@@ -15,8 +22,6 @@ tags:
     description: Endpoints related to steps logic
   - name: feature vectors
     description: Endpoints related to steps feature vectors statistics
-  - name: TBD
-    description: To be discussed
 
 paths:
   /policies?state={state}:
@@ -294,6 +299,35 @@ paths:
         200:
           description: Deleted
 
+  /steps:
+    get:
+      tags:
+        - steps
+      description: Return a list of steps filtered by the Step name
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 50
+            items:
+              type: string
+          style: form
+          explode: false
+          description: The step resource name
+          example: 'steps/32400575-cc51-4663-a810-7888ee9f82ce'
+      responses:
+        200:
+          description: A list of steps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Step'
+
   /steps/{id}/logic:
     get:
       tags:
@@ -446,6 +480,10 @@ components:
           type: string
         name:
           type: string
+          description: Step resource name
+        title:
+          type: string
+          description: Human readible step name
         description:
           type: string
         solution:
@@ -453,11 +491,13 @@ components:
         type:
           $ref: '#/components/schemas/StepType'
       example:
-        id: 'd55619c0-74c8-4ea8-8c6d-036d3db6f069'
-        name: 'New step'
-        description: 'Step description'
-        solution: 'FALSE_POSITIVE'
-        type: NARROW
+        {
+          id: 'd55619c0-74c8-4ea8-8c6d-036d3db6f069',
+          name: 'New step',
+          description: 'Step description',
+          solution: 'FALSE_POSITIVE',
+          type: 'NARROW'
+        }
 
     StepEdit:
       type: object
@@ -557,22 +597,3 @@ components:
           type: array
           items:
             type: string
-
-
-    FeatureVector:
-      type: object
-      properties:
-        id:
-          type: integer
-        alertsCount:
-          type: long
-        features:
-          type: array
-          items:
-            type: string
-      example:
-        {
-          "id": 2,
-          "alertsCount": 2344,
-          "features": [ "STRONG_MATCH", "MATCH" ]
-        }
