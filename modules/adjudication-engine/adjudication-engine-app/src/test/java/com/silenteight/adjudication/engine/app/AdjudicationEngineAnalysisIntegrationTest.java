@@ -89,7 +89,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
     await()
-        .atMost(Duration.ofSeconds(1))
+        .atMost(Duration.ofSeconds(3))
         .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(solvedMatchesCount(jdbcTemplate, analysisId))

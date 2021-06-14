@@ -13,6 +13,8 @@ import io.grpc.Deadline;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
@@ -33,12 +35,19 @@ class CommentInputServiceClient {
     var commentInputs = Lists.newArrayList(elements);
 
     if (commentInputs.isEmpty()) {
-      throw new EmptyCommentInputServiceResponseException(stub.getChannel().authority());
+      // FIXME(ahaczewski): Uncomment this exception, instead of hiding Data Source shit.
+      //throw new EmptyCommentInputServiceResponseException(stub.getChannel().authority());
     }
 
     if (commentInputs.size() < request.getAlertsCount()) {
       log.warn("Received less comment inputs than expected: requestedCount={}, receivedCount={}",
           request.getAlertsCount(), commentInputs.size());
+
+      // FIXME(ahaczewski): Remove this return, instead of hiding Data Source shit.
+      return IntStream
+          .range(0, request.getAlertsCount())
+          .mapToObj(idx -> CommentInput.newBuilder().build())
+          .collect(Collectors.toList());
     }
 
     if (log.isTraceEnabled()) {

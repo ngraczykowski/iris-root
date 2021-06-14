@@ -1,10 +1,13 @@
 package com.silenteight.adjudication.engine.mock.datasource;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.datasource.categories.api.v1.CategoryValue;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 class MockGetMatchCategoryValuesUseCase {
 
   public List<CategoryValue> getMatchCategoryValues(List<String> matchValues) {
@@ -14,33 +17,24 @@ class MockGetMatchCategoryValuesUseCase {
   }
 
   private static CategoryValue getCategoryValue(String matchValue) {
+    var builder = CategoryValue.newBuilder()
+        .setName(matchValue);
+
     if (matchValue.contains("categories/source_system")) {
-      return CategoryValue.newBuilder()
-          .setSingleValue("ECDD")
-          .setName(matchValue)
-          .build();
+      builder.setSingleValue("ECDD");
     } else if (matchValue.contains("categories/country")) {
-      return CategoryValue.newBuilder()
-          .setSingleValue("PL")
-          .setName(matchValue)
-          .build();
+      builder.setSingleValue("PL");
     } else if (matchValue.contains("categories/customer_type")) {
-      return CategoryValue.newBuilder()
-          .setSingleValue("I")
-          .setName(matchValue)
-          .build();
+      builder.setSingleValue("I");
     } else if (matchValue.contains("categories/hit_type")) {
-      return CategoryValue.newBuilder()
-          .setSingleValue("DENY")
-          .setName(matchValue)
-          .build();
+      builder.setSingleValue("DENY");
     } else if (matchValue.contains("categories/segment")) {
-      return CategoryValue.newBuilder()
-          .setSingleValue("CONSUMER")
-          .setName(matchValue)
-          .build();
+      builder.setSingleValue("CONSUMER");
     } else {
-      throw new IllegalArgumentException("Could not find category match in mock");
+      log.warn("Category is unknown for the mock, returning dummy: match={}", matchValue);
+      builder.setSingleValue("UNKNOWN");
     }
+
+    return builder.build();
   }
 }
