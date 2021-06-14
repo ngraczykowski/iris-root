@@ -1,10 +1,12 @@
 package com.silenteight.adjudication.engine.app;
 
-import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
+import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
+import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
+import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
@@ -18,9 +20,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.assertj.core.api.Assertions.*;
+import java.time.Duration;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
+import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
+import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
+import static org.assertj.core.api.Assertions.*;
+import static org.awaitility.Awaitility.await;
+
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @SpringBootTest(
     classes = AdjudicationEngineApplication.class,
@@ -44,6 +50,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   private Analysis analysisFixture;
 
   private Analysis savedAnalysis;
+
   private Dataset savedDataset;
 
   @BeforeEach
@@ -66,42 +73,25 @@ class AdjudicationEngineAnalysisIntegrationTest {
         .putLabels("SIMULATION", "2021-03")
         .build();
 
-    var analysis = analysisService.createAnalysis(
-        CreateAnalysisRequest.newBuilder()
-            .setAnalysis(analysisFixture)
-            .build());
+    var analysis = createAnalysis(analysisService, analysisFixture);
+    var alert = createAlert(alertService, "alert1");
+    createMatch(alertService, alert.getName(), "match1");
+    var dataset = createDataset(datasetService, alert.getName());
+    addDataset(analysisService, analysis.getName(), dataset.getName());
+    savedAnalysis = getAnalysis(analysisService, analysis.getName());
+    savedDataset = getDataset(datasetService, dataset.getName());
+  }
 
-    var alert = alertService.createAlert(
-        CreateAlertRequest.newBuilder()
-            .setAlert(Alert.newBuilder().setAlertId("alert1").build())
-            .build());
+  @Test
+  void shouldSolveAlerts() {
+    var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
-    alertService.createMatch(
-        CreateMatchRequest.newBuilder()
-            .setAlert(alert.getName())
-            .setMatch(Match.newBuilder()
-                .setMatchId("match1")
-                .build())
-            .build());
+    await()
+        .atMost(Duration.ofSeconds(1))
+        .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) > 0);
 
-    var dataset = datasetService.createDataset(
-        CreateDatasetRequest.newBuilder()
-            .setNamedAlerts(NamedAlerts.newBuilder().addAlerts(alert.getName()).build())
-            .build());
-
-    analysisService.addDataset(
-        AddDatasetRequest.newBuilder()
-            .setAnalysis(analysis.getName())
-            .setDataset(dataset.getName())
-            .build());
-
-    savedAnalysis = analysisService.getAnalysis(
-        GetAnalysisRequest.newBuilder()
-            .setAnalysis(analysis.getName())
-            .build());
-
-    savedDataset = datasetService.getDataset(
-        GetDatasetRequest.newBuilder().setName(dataset.getName()).build());
+    assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
+        .isEqualTo(1);
   }
 
   @Test
@@ -133,46 +123,14 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   @Test
   void checkAlertsCountInAnalysisWithSameAlertInTwoDatasets() {
-    var analysis = analysisService.createAnalysis(
-        CreateAnalysisRequest.newBuilder()
-            .setAnalysis(analysisFixture)
-            .build());
-
-    var alert = alertService.createAlert(
-        CreateAlertRequest.newBuilder()
-            .setAlert(Alert.newBuilder().setAlertId("alert1").build())
-            .build());
-
-    alertService.createMatch(CreateMatchRequest.newBuilder()
-        .setAlert(alert.getName())
-        .setMatch(Match.newBuilder()
-            .setMatchId("match1")
-            .build())
-        .build());
-
-    var dataset1 = datasetService.createDataset(
-        CreateDatasetRequest.newBuilder()
-            .setNamedAlerts(NamedAlerts.newBuilder().addAlerts(alert.getName()).build())
-            .build());
-
-    var dataset2 = datasetService.createDataset(
-        CreateDatasetRequest.newBuilder()
-            .setNamedAlerts(NamedAlerts.newBuilder().addAlerts(alert.getName()).build())
-            .build());
-
-    analysisService.addDataset(
-        AddDatasetRequest.newBuilder()
-            .setAnalysis(analysis.getName()).setDataset(dataset1.getName())
-            .build());
-    analysisService.addDataset(
-        AddDatasetRequest.newBuilder()
-            .setAnalysis(analysis.getName()).setDataset(dataset2.getName())
-            .build());
-
-    var savedAnalysis = analysisService.getAnalysis(
-        GetAnalysisRequest.newBuilder()
-            .setAnalysis(analysis.getName())
-            .build());
+    var analysis = createAnalysis(analysisService, analysisFixture);
+    var alert = createAlert(alertService, "alert1");
+    createMatch(alertService, alert.getName(), "match1");
+    var dataset1 = createDataset(datasetService, alert.getName());
+    var dataset2 = createDataset(datasetService, alert.getName());
+    addDataset(analysisService, analysis.getName(), dataset1.getName());
+    addDataset(analysisService, analysis.getName(), dataset2.getName());
+    savedAnalysis = getAnalysis(analysisService, analysis.getName());
 
     assertThat(savedAnalysis.getAlertCount()).isEqualTo(1);
     assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(1);
