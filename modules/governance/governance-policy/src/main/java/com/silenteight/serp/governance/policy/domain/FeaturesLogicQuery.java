@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
-import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsMatchConditionsNamesProvider;
 import com.silenteight.serp.governance.policy.step.logic.list.FeatureLogicRequestQuery;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,8 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class FeaturesLogicQuery implements FeatureLogicRequestQuery, PolicyStepsFeaturesProvider {
+class FeaturesLogicQuery implements
+    FeatureLogicRequestQuery, PolicyStepsMatchConditionsNamesProvider {
 
   private final StepRepository stepRepository;
   private final FeatureLogicRepository featureLogicRepository;
@@ -36,7 +37,7 @@ class FeaturesLogicQuery implements FeatureLogicRequestQuery, PolicyStepsFeature
   }
 
   @Override
-  public List<String> getFeatures(UUID policyId) {
+  public List<String> getMatchConditionsNames(UUID policyId) {
     return featureLogicRepository.findAllDistinctFeaturesByPolicyId(policyId);
   }
 }

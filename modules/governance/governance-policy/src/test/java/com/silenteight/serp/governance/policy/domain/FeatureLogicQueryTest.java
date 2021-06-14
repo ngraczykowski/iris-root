@@ -101,8 +101,8 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   void getFeaturesShouldReturnFeatures() {
     savePolicyWithConfiguredStepsLogic();
 
-    List<String> featuresNames = underTest.getFeatures(POLICY_UID);
-    assertThat(featuresNames).containsExactlyInAnyOrder(
+    List<String> matchConditionsNamesProvider = underTest.getMatchConditionsNames(POLICY_UID);
+    assertThat(matchConditionsNamesProvider).containsExactlyInAnyOrder(
         FEATURE_NAME_1, FEATURE_NAME_2, FEATURE_NAME_3, FEATURE_NAME_4);
   }
 

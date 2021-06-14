@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface PolicyFeatureProvider {
 
-  List<Feature> resolveFeatures(List<String> features);
+  List<Feature> resolveFeatures(List<String> conditions);
 }

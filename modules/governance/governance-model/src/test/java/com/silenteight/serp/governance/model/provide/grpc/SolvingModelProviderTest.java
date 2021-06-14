@@ -2,10 +2,9 @@ package com.silenteight.serp.governance.model.provide.grpc;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
-import com.silenteight.serp.governance.model.category.CategoryRegistry;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
-import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsMatchConditionsNamesProvider;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +17,11 @@ import java.util.List;
 
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
-import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
+import static com.silenteight.serp.governance.model.category.CategoryFixture.ISDENY_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.*;
 import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_NAME;
+import static com.silenteight.serp.governance.policy.current.CurrentPolicyFixture.CURRENT_POLICY_UUID;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -36,13 +36,10 @@ class SolvingModelProviderTest {
   private CurrentStrategyProvider currentStrategyProvider;
 
   @Mock
-  private CategoryRegistry categoryRegistry;
-
-  @Mock
   private PolicyFeatureProvider policyFeatureProvider;
 
   @Mock
-  private PolicyStepsFeaturesProvider policyStepsFeaturesProvider;
+  private PolicyStepsMatchConditionsNamesProvider matchConditionsNamesProvider;
 
   @Mock
   private DefaultModelQuery defaultModelQuery;
@@ -57,8 +54,7 @@ class SolvingModelProviderTest {
     underTest = new SolvingModelConfiguration().solvingModelProvider(
         currentStrategyProvider,
         policyFeatureProvider,
-        categoryRegistry,
-        policyStepsFeaturesProvider);
+        matchConditionsNamesProvider);
     setCorrectConfiguration();
   }
 
@@ -89,7 +85,7 @@ class SolvingModelProviderTest {
             .setName(AGENT_FEATURE_NAME)
             .setAgentConfig(NAME_AGENT_CONFIG_NAME)
             .build());
-    assertThat(solvingModel.getCategoriesList()).containsExactlyInAnyOrder(APTYPE_CATEGORY_NAME);
+    assertThat(solvingModel.getCategoriesList()).containsExactlyInAnyOrder(ISDENY_CATEGORY_NAME);
   }
 
   @Test
@@ -104,12 +100,14 @@ class SolvingModelProviderTest {
   private void setCorrectConfiguration() throws ModelMisconfiguredException {
     lenient().when(currentStrategyProvider.getCurrentStrategy())
         .thenReturn(of(CURRENT_STRATEGY_NAME));
-    lenient().when(categoryRegistry.getAllCategories())
-        .thenReturn(List.of(APTYPE_CATEGORY));
     lenient().when(modelDetailsQuery.getByPolicy(MODEL_RESOURCE_NAME))
         .thenReturn(List.of(MODEL_DTO));
     lenient().when(defaultModelQuery.getDefault())
         .thenReturn(DEFAULT_MODEL_DTO);
+    lenient().when(matchConditionsNamesProvider.getMatchConditionsNames(CURRENT_POLICY_UUID))
+        .thenReturn(List.of(AGENT_FEATURE_NAME, APTYPE_CATEGORY_NAME));
+    lenient().when(matchConditionsNamesProvider.getMatchConditionsNames(POLICY_ID))
+             .thenReturn(List.of(AGENT_FEATURE_NAME, ISDENY_CATEGORY_NAME));
     lenient().when(policyFeatureProvider.resolveFeatures(any())).thenReturn(List.of(getFeature()));
   }
 

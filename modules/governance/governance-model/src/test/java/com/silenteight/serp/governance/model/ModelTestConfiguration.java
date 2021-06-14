@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
-import com.silenteight.serp.governance.policy.step.logic.PolicyStepsFeaturesProvider;
+import com.silenteight.serp.governance.policy.step.logic.PolicyStepsMatchConditionsNamesProvider;
 import com.silenteight.serp.governance.policy.transfer.importing.ImportPolicyUseCase;
 import com.silenteight.serp.governance.strategy.CurrentStrategyProvider;
 
@@ -30,7 +30,7 @@ public class ModelTestConfiguration {
   CurrentPolicyProvider currentPolicyProviderMock;
 
   @MockBean
-  PolicyStepsFeaturesProvider policyStepsFeaturesProvider;
+  PolicyStepsMatchConditionsNamesProvider policyStepsFeaturesProvider;
 
   @MockBean
   PolicyFeatureProvider policyFeatureProvider;
