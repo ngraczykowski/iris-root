@@ -232,40 +232,39 @@ job "hsbc-bridge" {
         cpu    = 400
         memory = var.memory
       }
+    }
 
-      task "fluentbit" {
-        driver = "docker"
+    task "fluentbit" {
+      driver = "docker"
 
-        lifecycle {
-          hook = "prestart"
-          sidecar = true
-        }
-
-        config {
-          image = "fluent/fluent-bit:1.7.7"
-          network_mode = "host"
-          volumes = [
-            "secrets/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf",
-            "local/fluent-parsers.conf:/fluent-bit/etc/fluent-parsers.conf",
-          ]
-        }
-
-        resources {
-          cpu = 50
-          memory = 100
-        }
-
-        template {
-          data = file("./conf/fluent-bit.conf")
-          destination = "secrets/fluent-bit.conf"
-        }
-
-        template {
-          data = file("./conf/fluent-parsers.conf")
-          destination = "local/fluent-parsers.conf"
-        }
+      lifecycle {
+        hook = "prestart"
+        sidecar = true
       }
 
+      config {
+        image = "fluent/fluent-bit:1.7.7"
+        network_mode = "host"
+        volumes = [
+          "secrets/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf",
+          "local/fluent-parsers.conf:/fluent-bit/etc/fluent-parsers.conf",
+        ]
+      }
+
+      resources {
+        cpu = 50
+        memory = 100
+      }
+
+      template {
+        data = file("./conf/fluent-bit.conf")
+        destination = "secrets/fluent-bit.conf"
+      }
+
+      template {
+        data = file("./conf/fluent-parsers.conf")
+        destination = "local/fluent-parsers.conf"
+      }
     }
   }
 }
