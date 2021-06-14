@@ -8,21 +8,21 @@ option java_multiple_files = true;
 
 service AllowListAgent {
 
-  rpc CompareWithAllowList (CompareWithAllowListRequest) returns (CompareWithAllowListResponse) {
+  rpc Verify (VerifyRequest) returns (VerifyResponse) {
   }
 }
 
-message CompareWithAllowListRequest {
+message VerifyRequest {
   repeated string characteristics_value = 1;
   string allow_list_name = 2;
 }
 
-message CompareWithAllowListResponse {
+message VerifyResponse {
   string solution = 1;
-  CompareWithAllowListReason reason = 2;
+  AllowListReason reason = 2;
 }
 
-message CompareWithAllowListReason {
+message AllowListReason {
   repeated MatchedCharacteristic matched_characteristics = 1;
   Configuration configuration = 2;
 }
