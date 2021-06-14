@@ -12,4 +12,8 @@ public class SolveMatchesRequest {
   String policy;
 
   FeatureCollection featureCollection;
+
+  public int getFeatureCount() {
+    return featureCollection.getFeatureCount();
+  }
 }
