@@ -29,7 +29,7 @@ class FetchAllMissingCommentInputsUseCaseTest {
   @Mock
   private CommentInputDataAccess commentInputDataAccess;
   @Mock
-  private CommentInputClient commentInputClient;
+  private CommentInputServiceClient commentInputClient;
 
   @BeforeEach
   void setUp() {

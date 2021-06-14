@@ -1,9 +1,9 @@
-package com.silenteight.adjudication.engine.analysis.categoryrequest;
+package com.silenteight.adjudication.engine.analysis.commentinput;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc;
+import com.silenteight.datasource.comments.api.v1.CommentInputServiceGrpc;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -13,23 +13,23 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(DataSourceClientProperties.class)
-public class DataSourceClientConfiguration {
+@EnableConfigurationProperties(CommentInputServiceClientProperties.class)
+@RequiredArgsConstructor
+class CommentInputServiceClientConfiguration {
 
   @Valid
-  private final DataSourceClientProperties properties;
+  private final CommentInputServiceClientProperties properties;
 
   @Setter(onMethod_ = @GrpcClient("data-source"))
   private Channel dataSourceChannel;
 
   @Bean
-  DataSourceClient dataSourceClient() {
-    var stub = CategoryServiceGrpc
+  CommentInputServiceClient commentInputServiceClient() {
+    var stub = CommentInputServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new DataSourceClient(stub, properties.getTimeout());
+    return new CommentInputServiceClient(stub, properties.getTimeout());
   }
 }

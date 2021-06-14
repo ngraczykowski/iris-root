@@ -86,7 +86,7 @@ spring:
 
     scheduling:
       pool:
-        size: 2
+        size: 4
       thread-name-prefix: pool-scheduling-
 
   main:

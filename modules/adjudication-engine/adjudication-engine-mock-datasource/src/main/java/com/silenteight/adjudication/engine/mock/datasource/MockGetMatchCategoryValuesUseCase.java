@@ -29,9 +29,14 @@ class MockGetMatchCategoryValuesUseCase {
           .setSingleValue("I")
           .setName(matchValue)
           .build();
-    } else if (matchValue.contains("categories/hit_category")) {
+    } else if (matchValue.contains("categories/hit_type")) {
       return CategoryValue.newBuilder()
           .setSingleValue("DENY")
+          .setName(matchValue)
+          .build();
+    } else if (matchValue.contains("categories/segment")) {
+      return CategoryValue.newBuilder()
+          .setSingleValue("CONSUMER")
           .setName(matchValue)
           .build();
     } else {

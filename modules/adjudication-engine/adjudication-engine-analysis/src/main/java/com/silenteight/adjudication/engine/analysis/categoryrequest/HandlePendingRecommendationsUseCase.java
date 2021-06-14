@@ -30,7 +30,7 @@ class HandlePendingRecommendationsUseCase {
 
     if (log.isDebugEnabled()) {
       log.debug(
-          "Fetched missing category values: analysis={}",
+          "Fetched missing category values: analysisList={}",
           pendingRecommendations.getAnalysisList());
     }
 

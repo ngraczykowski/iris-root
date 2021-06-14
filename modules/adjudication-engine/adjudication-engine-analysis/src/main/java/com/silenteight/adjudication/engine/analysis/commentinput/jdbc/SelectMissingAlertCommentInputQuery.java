@@ -27,9 +27,8 @@ class SelectMissingAlertCommentInputQuery {
   Optional<MissingCommentInputsResult> execute(long analysisId) {
     this.jdbcTemplate.setMaxRows(maxRows);
 
-    return Optional.ofNullable(
-        jdbcTemplate.query(MISSING_COMMENT_INPUTS, new Object[] { analysisId },
-            new SqlMissingCommentInputExtractor()));
+    return Optional.ofNullable(jdbcTemplate.query(
+        MISSING_COMMENT_INPUTS, new SqlMissingCommentInputExtractor(), analysisId));
   }
 
   static class SqlMissingCommentInputExtractor implements
@@ -44,7 +43,9 @@ class SelectMissingAlertCommentInputQuery {
         var resultResource = "alerts/" + alertId;
         result.addAlert(resultResource);
       }
+
       log.debug("Missing match category:{}", result);
+
       return result;
     }
   }

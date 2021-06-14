@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 class FetchAllMissingCommentInputsUseCase {
 
   private final CommentInputDataAccess commentInputDataAccess;
-  private final CommentInputClient commentInputClient;
+  private final CommentInputServiceClient commentInputClient;
   private final AlertCommentInputFacade alertCommentInputFacade;
 
   void fetchAllMissingCommentInputsValues(@NotNull String analysis) {

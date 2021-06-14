@@ -26,7 +26,9 @@ class GovernancePolicyStepsApiClientConfiguration {
 
   @Bean
   GovernancePolicyStepsApiClient governancePolicyStepsApiClient() {
-    var stub = PolicyStepsSolvingGrpc.newBlockingStub(governanceChannel);
+    var stub = PolicyStepsSolvingGrpc
+        .newBlockingStub(governanceChannel)
+        .withWaitForReady();
     return new GovernancePolicyStepsApiClient(stub, properties.getTimeout());
   }
 }

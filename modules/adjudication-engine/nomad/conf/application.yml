@@ -2,22 +2,22 @@ server:
   port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
-  server:
-    port: {{ env "NOMAD_PORT_grpc" }}
   logging:
     enabled: true
+  server:
+    port: { { env "NOMAD_PORT_grpc" } }
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiation-type: PLAINTEXT
+    governance:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-governance
+    data-source:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
 
 ae:
-  grpc:
-    governance:
-      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-governance
-      negotiation-type: PLAINTEXT
-    data-source:
-      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
-      negotiation-type: PLAINTEXT
-
   db:
-    name: {{ env "NOMAD_NAMESPACE" }}-adjudication-engine
+    name: { { env "NOMAD_NAMESPACE" } }-adjudication-engine
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
 {{- with service (print $nomad_namespace "-adjudication-engine-db") }}
     host: {{ (index . 0).Address }}
@@ -26,24 +26,25 @@ ae:
 
 spring:
   rabbitmq:
-    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
-      {{ if $index }},{{ end -}}
-      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
-{{- end }}
-    # NOTE(ahaczewski): Intentionally left empty.
-    host:
-    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
-  #-------------------------------------------------------------------------------------------------
-  # Consul Service Discovery
-  #-------------------------------------------------------------------------------------------------
-  cloud:
-    consul:
+    addresses: { { range $index, $rabbit := service "amqp.rabbitmq" - } }
+      { { if $index } },{ { end - } }
+      { { $rabbit.Address } }:{{ $rabbit.Port -}}
+  { { - end } }
+# NOTE(ahaczewski): Intentionally left empty.
+host:
+virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+#-------------------------------------------------------------------------------------------------
+# Consul Service Discovery
+#-------------------------------------------------------------------------------------------------
+cloud:
+  consul:
+    enabled: true
+    host: localhost
+    port: 8500
+    scheme: http
+    discovery:
       enabled: true
-      host: localhost
-      port: 8500
-      scheme: http
-      discovery:
-        enabled: true
         register: false
         register-health-check: false
         catalog-services-watch:

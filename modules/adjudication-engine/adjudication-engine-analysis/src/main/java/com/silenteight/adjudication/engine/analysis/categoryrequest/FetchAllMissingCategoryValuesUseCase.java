@@ -7,7 +7,6 @@ import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.internal.v1.MatchCategoriesUpdated;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 
@@ -19,7 +18,6 @@ class FetchAllMissingCategoryValuesUseCase {
   private final MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
   private final DataSourceClient datasourceClient;
 
-  @Transactional
   MatchCategoriesUpdated fetchAllMissingCategoryValues(String analysis) {
     log.info("Fetching missing category values: analysis={}", analysis);
 
