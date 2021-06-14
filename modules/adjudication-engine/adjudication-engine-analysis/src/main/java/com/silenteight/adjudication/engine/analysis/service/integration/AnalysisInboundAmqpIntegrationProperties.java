@@ -53,8 +53,8 @@ class AnalysisInboundAmqpIntegrationProperties {
         };
   }
 
-  String getInboundQueueName() {
-    return agentExchange.getInboundQueueName();
+  String getAgentResponseInboundQueueName() {
+    return agentResponse.getInboundQueueName();
   }
 
   @Data

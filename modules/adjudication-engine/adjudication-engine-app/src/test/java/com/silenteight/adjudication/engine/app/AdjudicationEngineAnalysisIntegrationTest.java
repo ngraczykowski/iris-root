@@ -12,6 +12,7 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -33,6 +34,7 @@ import static org.awaitility.Awaitility.await;
     properties = "debug=true")
 @EnableConfigurationProperties
 @ActiveProfiles({ "mockagents", "rabbitdeclare", "mockgovernance", "mockdatasource", "test" })
+@Tag("longrunning")
 class AdjudicationEngineAnalysisIntegrationTest {
 
   @GrpcClient("ae")
