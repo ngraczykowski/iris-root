@@ -185,12 +185,3 @@ spring:
 
 info:
   env: ${ae.env:local}
-
-grpc:
-  client:
-    data-source:
-      address: ${ae.grpc.data-source-api.address}
-      negotiation-type: ${ae.grpc.data-source-api.negotiation-type:PLAINTEXT}
-    governance:
-      address: ${ae.grpc.governance.address}
-      negotiation-type: ${ae.grpc.governance.negotiation-type:PLAINTEXT}

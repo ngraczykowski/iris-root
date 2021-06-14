@@ -12,7 +12,7 @@ ae:
     governance:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-governance
       negotiation-type: PLAINTEXT
-    data-source-api:
+    data-source:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
       negotiation-type: PLAINTEXT
 
