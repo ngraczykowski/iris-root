@@ -5,7 +5,7 @@ grpc:
   logging:
     enabled: true
   server:
-    port: { { env "NOMAD_PORT_grpc" } }
+    port: {{ env "NOMAD_PORT_grpc" }}
   client:
     GLOBAL:
       enableKeepAlive: true
@@ -26,13 +26,13 @@ ae:
 
 spring:
   rabbitmq:
-    addresses: { { range $index, $rabbit := service "amqp.rabbitmq" - } }
-      { { if $index } },{ { end - } }
-      { { $rabbit.Address } }:{{ $rabbit.Port -}}
-  { { - end } }
-# NOTE(ahaczewski): Intentionally left empty.
-host:
-virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end - }}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
 #-------------------------------------------------------------------------------------------------
 # Consul Service Discovery
