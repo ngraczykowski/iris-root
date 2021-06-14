@@ -16,7 +16,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
-class SynchronizationController {
+class SynchronizationRestController {
 
   static final String REPORT_SYNCHRONIZATION_URL = "/v1/reports:synchronize";
 

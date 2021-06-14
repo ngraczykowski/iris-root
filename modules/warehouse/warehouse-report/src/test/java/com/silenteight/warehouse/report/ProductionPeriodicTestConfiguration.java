@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
+import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
@@ -16,7 +17,6 @@ import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,6 +27,7 @@ import static org.mockito.Mockito.*;
 
 @Configuration
 @ComponentScan(basePackageClasses = {
+    ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     OpendistroModule.class,
     ReportingModule.class,
@@ -38,7 +39,6 @@ import static org.mockito.Mockito.*;
     TimeModule.class
 })
 @ImportAutoConfiguration({
-    ElasticsearchRestClientAutoConfiguration.class,
     JacksonAutoConfiguration.class,
     HibernateCacheAutoConfiguration.class,
     SilentEightNamingConventionConfiguration.class,

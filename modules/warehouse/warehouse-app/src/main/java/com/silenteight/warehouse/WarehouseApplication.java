@@ -7,6 +7,7 @@ import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.auth.token.TokenModule;
+import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
@@ -44,6 +45,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     OpendistroModule.class,
     StorageModule.class,

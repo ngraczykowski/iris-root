@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
+import com.silenteight.warehouse.common.testing.rest.WithElasticForbiddenCredentials;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -114,6 +115,17 @@ class OpendistroKibanaClientTest {
     assertThat(reportDefinitions).hasSize(1);
     KibanaReportDefinitionDto reportDefinitionDto = reportDefinitions.get(0);
     assertThat(reportDefinitionDto.getReportName()).isEqualTo(REPORT_NAME);
+  }
+
+  @Test
+  @WithElasticForbiddenCredentials
+  void shouldReturnAccessForbidden() {
+    OpendistroKibanaClient userAwareClient = opendistroKibanaClientFactory.getUserAwareClient();
+
+    assertThatThrownBy(() -> userAwareClient.listReportDefinitions(ADMIN_TENANT))
+        .isInstanceOf(OpendistroKibanaClientException.class)
+        .extracting("statusCode")
+        .isEqualTo(401);
   }
 
   private void createSearchDefinition(String id) {

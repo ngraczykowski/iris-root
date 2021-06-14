@@ -20,7 +20,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
-class ProductionReportsController {
+class ProductionReportsRestController {
 
   static final String DEFINITION_ID_PARAM = "definitionId";
   static final String DEFINITIONS_COLLECTION_URL =

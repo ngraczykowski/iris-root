@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.common.time;
 
-
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 

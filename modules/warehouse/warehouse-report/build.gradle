@@ -21,7 +21,6 @@ dependencies {
 
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_sep_auth
-  implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
   implementation libraries.minio

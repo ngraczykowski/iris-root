@@ -26,7 +26,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RequestMapping(ROOT)
 @AllArgsConstructor
 @Slf4j
-public class SimulationReportsController {
+public class SimulationReportsRestController {
 
   static final String ANALYSIS_ID_PARAM = "analysisId";
   static final String DEFINITION_ID_PARAM = "definitionId";

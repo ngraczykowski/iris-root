@@ -17,18 +17,18 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
-    AlertController.class,
+    AlertRestController.class,
     GenericExceptionControllerAdvice.class
 })
-class AlertControllerTest extends BaseRestControllerTest {
+class AlertRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
-  AlertService alertService;
+  AlertQueryService alertQueryService;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
   void its200_whenInvokedGetQaAlertsList() {
-    when(alertService.getMultipleAlertsAttributes(any(), any()))
+    when(alertQueryService.getMultipleAlertsAttributes(any(), any()))
         .thenReturn(ALERT_ATTRIBUTES_LIST_DTO);
 
     get(QA_ALERT_LIST_URL)
@@ -47,7 +47,7 @@ class AlertControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
   void its200_whenInvokedGetQaAlert() {
-    when(alertService.getSingleAlertAttributes(any(), any()))
+    when(alertQueryService.getSingleAlertAttributes(any(), any()))
         .thenReturn(ALERT_ATTRIBUTES);
 
     get(QA_ALERT_URL)

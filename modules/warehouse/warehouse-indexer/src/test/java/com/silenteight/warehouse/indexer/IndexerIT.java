@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.indexer;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
@@ -11,6 +13,7 @@ import com.silenteight.warehouse.indexer.analysis.TestAnalysisMetadataRepository
 import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexClientGateway;
 import com.silenteight.warehouse.indexer.indextestclient.listener.IndexedEventListener;
 
+import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +33,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
 
+@Slf4j
 @SpringBootTest(classes = IndexerTestConfiguration.class)
 @SpringIntegrationTest
 @ContextConfiguration(initializers = {
@@ -41,6 +45,9 @@ import static org.awaitility.Awaitility.await;
 @ActiveProfiles("jpa-test")
 class IndexerIT {
 
+  static final String PRODUCTION_INDEX_NAME = "itest_production";
+  static final String SIMULATION_INDEX_NAME = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
+
   @BeforeEach
   void init() {
     indexedEventListener.clear();
@@ -49,6 +56,7 @@ class IndexerIT {
   @AfterEach
   void cleanup() {
     testAnalysisMetadataRepository.truncateAnalysisMetadata();
+    removeData();
   }
 
   @Autowired
@@ -67,7 +75,7 @@ class IndexerIT {
   private SimpleElasticTestClient simpleElasticTestClient;
 
   @Test
-  void shouldReturnConfirmationWhenProductionDataIndexRequested() {
+  void  shouldReturnConfirmationWhenProductionDataIndexRequested() {
     ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
         .addAllAlerts(ALERTS_WITH_MATCHES)
         .build();
@@ -82,8 +90,7 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    String expectedElasticIndexName = "itest_production";
-    var source = simpleElasticTestClient.getSource(expectedElasticIndexName, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(PRODUCTION_INDEX_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(ALERT_WITH_MATCHES_1_MAP);
   }
 
@@ -104,8 +111,20 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    String expectedElasticIndexName = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
-    var source = simpleElasticTestClient.getSource(expectedElasticIndexName, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(SIMULATION_INDEX_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(ALERT_WITH_MATCHES_1_MAP);
+  }
+
+  private void removeData() {
+    safeDeleteIndex(SIMULATION_INDEX_NAME);
+    safeDeleteIndex(PRODUCTION_INDEX_NAME);
+  }
+
+  private void safeDeleteIndex(String index) {
+    try {
+      simpleElasticTestClient.removeIndex(index);
+    } catch (ElasticsearchException e) {
+      log.debug("index not present index={}", index);
+    }
   }
 }

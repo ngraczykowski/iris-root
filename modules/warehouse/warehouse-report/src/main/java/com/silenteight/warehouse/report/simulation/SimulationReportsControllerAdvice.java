@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-@RestControllerAdvice(basePackageClasses = SimulationReportsController.class)
+@RestControllerAdvice(basePackageClasses = SimulationReportsRestController.class)
 class SimulationReportsControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(OpendistroKibanaClientException.class)

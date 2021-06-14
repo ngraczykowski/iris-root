@@ -19,10 +19,10 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
-    ProductionReportsController.class,
+    ProductionReportsRestController.class,
     GenericExceptionControllerAdvice.class
 })
-class ProductionReportsControllerTest extends BaseRestControllerTest {
+class ProductionReportsRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   ProductionReportingQuery productionReportingQuery;

@@ -8,6 +8,7 @@ import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
+import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.minio.MinioContainer.MinioContainerInitializer;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.synchronization.ReportDto;
@@ -16,10 +17,6 @@ import com.silenteight.warehouse.report.synchronization.ReportSynchronizationUse
 
 import io.minio.*;
 import io.minio.messages.Item;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +61,7 @@ class ProductionPeriodicIT {
   private ReportingService reportingService;
 
   @Autowired
-  private RestHighLevelClient restHighLevelClient;
+  private SimpleElasticTestClient simpleElasticTestClient;
 
   @Autowired
   private OpendistroKibanaTestClient kibanaTestClient;
@@ -101,6 +98,7 @@ class ProductionPeriodicIT {
     removeKibanaIndex();
     removeReportDefinitions();
     clearMinioBucket();
+    removeData();
   }
 
   @Test
@@ -120,12 +118,7 @@ class ProductionPeriodicIT {
 
   @SneakyThrows
   private void storeData() {
-    IndexRequest indexRequest = new IndexRequest(ELASTIC_INDEX_NAME);
-    indexRequest.id(ALERT_ID_1);
-    indexRequest.source(ALERT_WITH_MATCHES_1_MAP);
-
-    indexRequest.setRefreshPolicy(RefreshPolicy.WAIT_UNTIL);
-    restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+    simpleElasticTestClient.storeData(ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
   }
 
   @SneakyThrows
@@ -212,5 +205,9 @@ class ProductionPeriodicIT {
     opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).forEach(
         report -> opendistroKibanaClient.deleteReportDefinition(ADMIN_TENANT, report.getId())
     );
+  }
+
+  private void removeData() {
+    simpleElasticTestClient.removeIndex(ELASTIC_INDEX_NAME);
   }
 }
