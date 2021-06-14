@@ -103,6 +103,8 @@ libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'sprin
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
 libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: '1.15.3']
 
+libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
+libraries.logback_ecs_encoder = [group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.6']
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -111,6 +113,10 @@ configurations.all {
   resolutionStrategy {
     failOnVersionConflict()
     preferProjectModules()
+
+    force libraries.ecs_logging_core
+    force libraries.logback_ecs_encoder
+
   }
 }
 
@@ -157,6 +163,7 @@ dependencies {
   implementation libraries.streamex
   implementation libraries.warehouse_api
   implementation libraries.worldcheck_api
+  runtimeOnly libraries.ecs_logging_core
 
   testAnnotationProcessor libraries.lombok
   testCompile libraries.groovy_all
