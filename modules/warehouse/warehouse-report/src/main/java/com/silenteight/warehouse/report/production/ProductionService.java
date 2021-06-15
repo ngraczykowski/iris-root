@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.simulation;
+package com.silenteight.warehouse.report.production;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,26 +9,28 @@ import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
 @RequiredArgsConstructor
-public class SimulationService {
+class ProductionService {
 
   @NonNull
   private final ReportingService reportingService;
 
   @NonNull
-  private final SimulationReportingQuery simulationReportingQuery;
-
-  @NonNull
   private final UserAwareReportingService userAwareReportingService;
 
-  public ReportInstanceReferenceDto createSimulationReport(String analysisId, String definitionId) {
-    String tenantName = simulationReportingQuery.getTenantIdByAnalysisId(analysisId);
+  @NonNull
+  private final ProductionReportingQuery productionReportingQuery;
+
+  public ReportInstanceReferenceDto createSimulationReport(
+      ProductionReportType reportType, String definitionId) {
+
+    String tenantName = productionReportingQuery.getTenantName(reportType);
     return reportingService.createReport(definitionId, tenantName);
   }
 
   public KibanaReportDto downloadReport(
-      String analysisId, String reportDefinitionId, Long timestamp) {
+      ProductionReportType reportType, String reportDefinitionId, Long timestamp) {
 
-    String tenantName = simulationReportingQuery.getTenantIdByAnalysisId(analysisId);
+    String tenantName = productionReportingQuery.getTenantName(reportType);
     return userAwareReportingService.downloadReport(tenantName, reportDefinitionId, timestamp);
   }
 }

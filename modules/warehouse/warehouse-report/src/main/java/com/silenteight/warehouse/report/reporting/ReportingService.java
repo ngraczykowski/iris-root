@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.reporting;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesRequest;
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesResponse.ReportInstance;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
@@ -22,6 +23,8 @@ public class ReportingService {
   private final OpendistroElasticClient opendistroElasticClient;
   @NonNull
   private final OpendistroKibanaClient opendistroKibanaClient;
+  @NonNull
+  private final TimeSource timeSource;
 
   public Set<String> getReportIds(String tenant) {
     ListReportsInstancesRequest listReportsInstancesRequest = ListReportsInstancesRequest.builder()
@@ -43,7 +46,10 @@ public class ReportingService {
     return opendistroKibanaClient.getReportContent(tenant, reportInstanceId);
   }
 
-  public void createReport(String reportDefinitionId, String tenant) {
-    opendistroKibanaClient.createReportInstance(tenant, reportDefinitionId);
+  public ReportInstanceReferenceDto createReport(String reportDefinitionId, String tenant) {
+    long timestamp = timeSource.now().toEpochMilli();
+    opendistroKibanaClient.createReportInstanceAsync(tenant, reportDefinitionId);
+
+    return new ReportInstanceReferenceDto(timestamp);
   }
 }

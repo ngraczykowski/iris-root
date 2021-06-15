@@ -59,11 +59,11 @@ paths:
                   $ref: '#/components/schemas/Report'
               example:
                 - id: 'FlpJp3kBtnbt7Zpy1zHr'
-                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/FlpJp3kBtnbt7Zpy1zHr'
+                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/definitions/reports/FlpJp3kBtnbt7Zpy1zHr'
                   title: 'AI Reasoning'
                   description: 'Ai Reasoning report'
                 - id: 'lVrjnHkBtnbt7ZpytDA6'
-                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/lVrjnHkBtnbt7ZpytDA6'
+                  name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/definitions/reports/lVrjnHkBtnbt7ZpytDA6'
                   title: 'Accuracy'
                   description: 'Accuracy report'
 
@@ -152,18 +152,19 @@ paths:
         201:
           description: OK
 
-  /analysis/production/definitions:
+  /analysis/production/definitions/{type}:
     get:
       description: Return a list of reports definitions based on production data.
       parameters:
-        - in: query
+        - in: path
           name: type
           required: true
           schema:
             $ref: '#/components/schemas/ReportType'
-          style: form
+          style: simple
           explode: false
           description: Report type
+          example: AI_REASONING
       responses:
         200:
           description: List of reports available to generate.
@@ -175,21 +176,30 @@ paths:
                   $ref: '#/components/schemas/Report'
               example:
                 - id: 'a9b45451d17b4708d8ca'
-                  name: '/analysis/production/reports/a9b45451d17b4708d8ca'
+                  name: '/analysis/production/definitions/AI_REASONING/reports/a9b45451d17b4708d8ca'
                   title: 'AI Reasoning'
                   description: 'Last month'
                   reportType: 'AI_REASONING'
                 - id: 'b9b45451d17b4708d8ch'
-                  name: '/analysis/production/reports/b9b45451d17b4708d8ch'
+                  name: '/analysis/production/definitions/AI_REASONING/reports/AI_REASONING/b9b45451d17b4708d8ch'
                   title: 'AI Reasoning'
                   description: 'Last 3 months'
                   reportType: 'AI_REASONING'
 
 
-  /analysis/production/definitions/{id}/reports:
+  /analysis/production/definitions/{type}/{id}/reports:
     post:
       description: Generate report instance.
       parameters:
+        - in: path
+          name: type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ReportType'
+          style: simple
+          explode: false
+          description: Report type
+          example: AI_REASONING
         - name: id
           in: path
           description: Report definition Id.
@@ -209,10 +219,19 @@ paths:
                 type: string
                 example: reports/20200414T220523
 
-  /analysis/production/definitions/{id}/reports/{timestamp}:
+  /analysis/production/definitions/{type}/{id}/reports/{timestamp}:
     get:
       description: Returns production report
       parameters:
+        - in: path
+          name: type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ReportType'
+          style: simple
+          explode: false
+          description: Report type
+          example: AI_REASONING
         - in: path
           name: id
           description: Report definition id.
@@ -260,9 +279,9 @@ components:
           type: string
         reportType:
           $ref: '#/components/schemas/ReportType'
-      examples:
+      example:
         - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-          name: '/analysis/7afe9a43-f29c-4752-ba0a-057e5efee616/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          name: '/analysis/7afe9a43-f29c-4752-ba0a-057e5efee616/definitions/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
           title: 'AI Reasoning'
           description: 'Last month'
           reportType: 'AI_REASONING'

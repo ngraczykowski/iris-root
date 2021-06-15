@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse;
 import java.util.List;
@@ -19,8 +18,6 @@ import java.util.function.Supplier;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
 import static java.net.URI.create;
-import static java.net.http.HttpRequest.BodyPublishers.noBody;
-import static java.net.http.HttpRequest.BodyPublishers.ofInputStream;
 import static java.net.http.HttpResponse.BodyHandlers.ofString;
 import static java.util.Map.of;
 import static java.util.Optional.ofNullable;
@@ -94,7 +91,8 @@ public class OpendistroKibanaClient {
         .toUriString();
 
     GetHttpRequest request = new GetHttpRequest(path, tenant);
-    return get(request, typeRef).getSavedObjects()
+    return get(request, typeRef)
+        .getSavedObjects()
         .stream()
         .map(OpendistroKibanaClient::toKibanaIndexPatternDto)
         .collect(toList());
@@ -156,9 +154,7 @@ public class OpendistroKibanaClient {
         .collect(toList());
   }
 
-  private static SearchDto toSearchDto(
-      SavedObject<SearchAttributes> savedObject) {
-
+  private static SearchDto toSearchDto(SavedObject<SearchAttributes> savedObject) {
     return SearchDto.builder()
         .id(savedObject.getId())
         .attributes(savedObject.getAttributes())
@@ -232,9 +228,7 @@ public class OpendistroKibanaClient {
         .getReportDefinitionId();
   }
 
-  public void createReportInstance(String tenant, String reportDefinitionId) {
-    TypeReference<Void> typeRef = new TypeReference<>() {};
-
+  public void createReportInstanceAsync(String tenant, String reportDefinitionId) {
     String path = fromUriString(URL_CREATE_REPORT)
         .queryParam(QUERY_PARAM_TIMEZONE, timezone)
         .buildAndExpand(of(PARAM_REPORT_DEFINITION_ID, reportDefinitionId))
@@ -245,7 +239,7 @@ public class OpendistroKibanaClient {
         .tenant(tenant)
         .build();
 
-    post(request, typeRef);
+    postAsync(request);
   }
 
   public void deleteReportDefinition(String tenant, String reportDefinitionId) {
@@ -279,42 +273,50 @@ public class OpendistroKibanaClient {
         .anyMatch(id -> id.equals(objectId));
   }
 
-  @SneakyThrows
-  <T> T delete(DeleteHttpRequest deleteHttpRequest, TypeReference<T> type) {
-    HttpRequest request = defaultHttpRequestBuilder.get()
+  <T> T get(GetHttpRequest request, TypeReference<T> typeRef) {
+    HttpRequest httpRequest = asHttpRequest(request);
+    return execute(httpRequest, typeRef);
+  }
+
+  <T> T post(PostHttpRequest request, TypeReference<T> typeRef) {
+    HttpRequest httpRequest = asHttpRequest(request);
+    return execute(httpRequest, typeRef);
+  }
+
+  void postAsync(PostHttpRequest request) {
+    HttpRequest httpRequest = asHttpRequest(request);
+    executeAsync(httpRequest);
+  }
+
+  <T> T delete(DeleteHttpRequest request, TypeReference<T> typeRef) {
+    HttpRequest httpRequest = asHttpRequest(request);
+    return execute(httpRequest, typeRef);
+  }
+
+  HttpRequest asHttpRequest(DeleteHttpRequest deleteHttpRequest) {
+    return defaultHttpRequestBuilder.get()
         .uri(create(hostname + deleteHttpRequest.getEndpoint()))
         .header(HEADER_SECURITY_TENANT, deleteHttpRequest.getTenant())
         .DELETE()
         .build();
-
-    return execute(request, type);
   }
 
-  @SneakyThrows
-  <T> T post(PostHttpRequest postHttpRequest, TypeReference<T> type) {
-    BodyPublisher bodyPublisherInUse = postHttpRequest.hasPayload()
-                                       ? ofInputStream(postHttpRequest::getPayload)
-                                       : noBody();
-
-    Builder httpRequestBuilder = defaultHttpRequestBuilder.get()
+  HttpRequest asHttpRequest(PostHttpRequest postHttpRequest) {
+    return defaultHttpRequestBuilder.get()
         .uri(create(hostname + postHttpRequest.getEndpoint()))
         .header(HEADER_CONTENT_TYPE, APPLICATION_JSON_VALUE)
         .header(HEADER_SECURITY_TENANT, postHttpRequest.getTenant())
-        .POST(bodyPublisherInUse);
-
-    return execute(httpRequestBuilder.build(), type);
+        .POST(postHttpRequest.getBodyPublisher())
+        .build();
   }
 
-  @SneakyThrows
-  <T> T get(GetHttpRequest getHttpRequest, TypeReference<T> type) {
-    HttpRequest request = defaultHttpRequestBuilder.get()
+  HttpRequest asHttpRequest(GetHttpRequest getHttpRequest) {
+    return defaultHttpRequestBuilder.get()
         .uri(create(hostname + getHttpRequest.getEndpoint()))
         .header(HEADER_CONTENT_TYPE, APPLICATION_JSON_VALUE)
         .header(HEADER_SECURITY_TENANT, getHttpRequest.getTenant())
         .GET()
         .build();
-
-    return execute(request, type);
   }
 
   @SneakyThrows
@@ -332,6 +334,14 @@ public class OpendistroKibanaClient {
     }
 
     return parsedResponse;
+  }
+
+  @SneakyThrows
+  private void executeAsync(HttpRequest httpRequest) {
+    client.sendAsync(httpRequest, ofString())
+        .thenAccept(response ->
+            log.debug("OpendistroKibanaClient(async) method={}, endpoint={}, statusCode={}",
+                httpRequest.method(), httpRequest.uri(), response.statusCode()));
   }
 
   private <T> String intoLoggedResponse(HttpResponse<String> response, T parsedResponse) {

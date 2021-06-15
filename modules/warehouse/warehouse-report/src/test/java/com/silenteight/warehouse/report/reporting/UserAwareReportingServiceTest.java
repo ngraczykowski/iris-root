@@ -7,10 +7,7 @@ import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesR
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
-import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
-import com.silenteight.warehouse.report.simulation.UserAwareReportingService;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,8 +18,6 @@ import java.util.List;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.KIBANA_REPORT_DTO;
 import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.REPORT_DEFINITION_ID;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -41,19 +36,11 @@ class UserAwareReportingServiceTest {
   private static final String TENANT = "tenant";
 
   @Mock
-  private SimulationAnalysisService simulationAnalysisService;
-  @Mock
   private OpendistroElasticClient opendistroElasticClient;
   @Mock
   private OpendistroKibanaClient opendistroKibanaClient;
   @InjectMocks
   UserAwareReportingService underTest;
-
-  @BeforeEach
-  void init() {
-    when(simulationAnalysisService.getTenantIdByAnalysis(ANALYSIS))
-        .thenReturn(TENANT);
-  }
 
   @Test
   void shouldReturnFirstReportAfterTimestamp() {
@@ -64,7 +51,7 @@ class UserAwareReportingServiceTest {
     mockExpectedReportInstance(REPORT_INSTANCE_ID_AFTER);
 
     KibanaReportDto kibanaReportDto =
-        underTest.downloadReport(REPORT_DEFINITION_ID, ANALYSIS_ID, CREATED_NOW);
+        underTest.downloadReport(TENANT, REPORT_DEFINITION_ID, CREATED_NOW);
 
     assertThat(kibanaReportDto).isNotNull();
   }
@@ -77,7 +64,7 @@ class UserAwareReportingServiceTest {
     mockExpectedReportInstance(REPORT_INSTANCE_ID_AFTER_AFTER);
 
     KibanaReportDto kibanaReportDto =
-        underTest.downloadReport(REPORT_DEFINITION_ID, ANALYSIS_ID, CREATED_NOW);
+        underTest.downloadReport(TENANT, REPORT_DEFINITION_ID, CREATED_NOW);
 
     assertThat(kibanaReportDto).isNotNull();
   }
@@ -86,7 +73,7 @@ class UserAwareReportingServiceTest {
   void shouldThrowExceptionIfReportNotFound() {
     mockListReportsInstancesResponse(of());
     assertThatThrownBy(
-        () -> underTest.downloadReport(REPORT_DEFINITION_ID, ANALYSIS_ID, CREATED_NOW))
+        () -> underTest.downloadReport(TENANT, REPORT_DEFINITION_ID, CREATED_NOW))
         .isInstanceOf(ReportInstanceNotFoundException.class);
   }
 

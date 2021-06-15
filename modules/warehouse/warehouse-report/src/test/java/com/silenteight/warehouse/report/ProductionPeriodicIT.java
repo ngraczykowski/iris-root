@@ -33,8 +33,8 @@ import java.util.List;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ADMIN_TENANT;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.KIBANA_INDEX_PATTERN_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_KIBANA_INDEX_PATTERN_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
@@ -118,7 +118,8 @@ class ProductionPeriodicIT {
 
   @SneakyThrows
   private void storeData() {
-    simpleElasticTestClient.storeData(ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
+    simpleElasticTestClient.storeData(
+        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
   }
 
   @SneakyThrows
@@ -127,12 +128,12 @@ class ProductionPeriodicIT {
   }
 
   private void createKibanaIndex() {
-    byte[] payload = getJson("json/1-create-kibana-index.json");
-    kibanaTestClient.createKibanaIndex(ADMIN_TENANT, payload);
+    byte[] payload = getJson("json/production/1-create-kibana-index.json");
+    kibanaTestClient.createKibanaIndex(ADMIN_TENANT, PRODUCTION_KIBANA_INDEX_PATTERN_NAME, payload);
   }
 
   private void createSavedSearch() {
-    byte[] payload = getJson("json/2-create-saved-search.json");
+    byte[] payload = getJson("json/production/2-create-saved-search.json");
     kibanaTestClient.createSavedSearch(ADMIN_TENANT, payload);
   }
 
@@ -194,7 +195,7 @@ class ProductionPeriodicIT {
 
   private void removeKibanaIndex() {
     opendistroKibanaClient.deleteSavedObjects(
-        ADMIN_TENANT, KIBANA_INDEX_PATTERN, KIBANA_INDEX_PATTERN_NAME);
+        ADMIN_TENANT, KIBANA_INDEX_PATTERN, PRODUCTION_KIBANA_INDEX_PATTERN_NAME);
   }
 
   private void removeSavedSearch() {
@@ -208,6 +209,6 @@ class ProductionPeriodicIT {
   }
 
   private void removeData() {
-    simpleElasticTestClient.removeIndex(ELASTIC_INDEX_NAME);
+    simpleElasticTestClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
   }
 }

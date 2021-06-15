@@ -5,9 +5,11 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.net.http.HttpRequest.BodyPublisher;
 import javax.annotation.Nullable;
 
+import static java.net.http.HttpRequest.BodyPublishers.noBody;
+import static java.net.http.HttpRequest.BodyPublishers.ofInputStream;
 import static java.util.Objects.nonNull;
 
 @Value
@@ -21,11 +23,15 @@ class PostHttpRequest {
   @Nullable
   byte[] payload;
 
-  boolean hasPayload() {
-    return nonNull(payload);
+  BodyPublisher getBodyPublisher() {
+    if (hasPayload()) {
+      return ofInputStream(() -> new ByteArrayInputStream(payload));
+    } else {
+      return noBody();
+    }
   }
 
-  InputStream getPayload() {
-    return new ByteArrayInputStream(payload);
+  private boolean hasPayload() {
+    return nonNull(payload);
   }
 }
