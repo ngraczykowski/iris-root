@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.agent.domain;
 
-import com.silenteight.serp.governance.agent.feature.FeaturesListDto;
+import com.silenteight.serp.governance.agent.domain.dto.FeaturesListDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,7 @@ import static com.silenteight.serp.governance.agent.AgentFixture.DOCUMENT_AGENT;
 import static com.silenteight.serp.governance.agent.AgentFixture.NAME_AGENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -58,7 +59,7 @@ class AgentMappingServiceTest {
   @Test
   void shouldReturnSameSolutionsForSameAgentAndCorrectSNumberOfAgents() {
     // given
-    when(agentsRegistry.getAllAgents()).thenReturn(asList(COUNTRY_AGENT));
+    when(agentsRegistry.getAllAgents()).thenReturn(of(COUNTRY_AGENT));
 
     // when
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();
@@ -77,7 +78,7 @@ class AgentMappingServiceTest {
   @Test
   void shouldReturnListOfSolutionsWithCorrectSizeAndCorrectContent() {
     //given
-    when(agentsRegistry.getAllAgents()).thenReturn(asList(DOCUMENT_AGENT));
+    when(agentsRegistry.getAllAgents()).thenReturn(of(DOCUMENT_AGENT));
 
     //when
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();

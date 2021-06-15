@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.agent.feature;
+package com.silenteight.serp.governance.agent.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

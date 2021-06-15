@@ -4,7 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.serp.governance.agent.domain.AgentMappingService;
+import com.silenteight.serp.governance.agent.domain.FeaturesProvider;
+import com.silenteight.serp.governance.agent.domain.dto.FeaturesListDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +22,11 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 class AgentsRestController {
 
   @NonNull
-  private final AgentMappingService agentMappingService;
+  private final FeaturesProvider featuresProvider;
 
   @GetMapping("/v1/features")
   @PreAuthorize("isAuthorized('LIST_AGENTS')")
   public ResponseEntity<FeaturesListDto> getFeaturesListDto() {
-    return ResponseEntity.ok().body(agentMappingService.getFeaturesListDto());
+    return ResponseEntity.ok().body(featuresProvider.getFeaturesListDto());
   }
 }

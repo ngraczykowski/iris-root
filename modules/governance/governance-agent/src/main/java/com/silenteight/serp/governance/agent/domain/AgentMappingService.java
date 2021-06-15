@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.agent.domain.dto.AgentDto;
-import com.silenteight.serp.governance.agent.feature.FeatureDto;
-import com.silenteight.serp.governance.agent.feature.FeaturesListDto;
+import com.silenteight.serp.governance.agent.domain.dto.FeatureDto;
+import com.silenteight.serp.governance.agent.domain.dto.FeaturesListDto;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -13,17 +13,19 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class AgentMappingService {
+class AgentMappingService implements FeaturesProvider {
 
   @NonNull
   private final AgentsRegistry agentsRegistry;
 
+  @Override
   public FeaturesListDto getFeaturesListDto() {
     return mapAgentsDtoIntoFeaturesDto(agentsRegistry.getAllAgents());
   }
 
   private static FeaturesListDto mapAgentsDtoIntoFeaturesDto(List<AgentDto> agentDtos) {
-    List<FeatureDto> featuresDto = agentDtos.stream()
+    List<FeatureDto> featuresDto = agentDtos
+        .stream()
         .flatMap(AgentMappingService::mapSingleAgent)
         .collect(toList());
 
@@ -33,15 +35,18 @@ public class AgentMappingService {
   }
 
   private static Stream<FeatureDto> mapSingleAgent(AgentDto agentDto) {
-    List<String> solutions = agentDto.getSolutions();
     return agentDto.getFeatures().stream()
-        .map(feature -> getFeatureDto(solutions, feature));
+        .map(feature -> getFeatureDto(
+            agentDto.getName(),
+            agentDto.getSolutions(),
+            feature));
   }
 
-  private static FeatureDto getFeatureDto(List<String> solutions, String feature) {
+  private static FeatureDto getFeatureDto(String name, List<String> solutions, String feature) {
     return FeatureDto.builder()
-        .name(feature)
-        .solutions(solutions)
-        .build();
+       .name(feature)
+       .agentConfig(name)
+       .solutions(solutions)
+       .build();
   }
 }

@@ -13,7 +13,5 @@ import javax.validation.constraints.NotNull;
 public class ModelProperties {
 
   @NotNull
-  String featureSetSource;
-  @NotNull
   String categorySource;
 }

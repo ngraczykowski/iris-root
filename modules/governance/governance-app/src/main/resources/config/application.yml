@@ -20,7 +20,6 @@ serp:
         reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
     model:
       categorySource: classpath:categories.json
-      featureSetSource: classpath:feature_sets.json
 
   ####################################################################################################
 # Error Queue Configuration
