@@ -19,7 +19,7 @@ public class CategoryRestController {
 
   private final ListCategoriesUseCase listCategoriesUseCase;
 
-  @GetMapping(value = "/category", produces = APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/categories", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<List<CategoryDto>> getCategories() {
     return ResponseEntity.ok(listCategoriesUseCase.getCategories());
   }

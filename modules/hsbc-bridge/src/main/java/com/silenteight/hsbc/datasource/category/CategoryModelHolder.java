@@ -8,11 +8,12 @@ import static java.util.Optional.ofNullable;
 class CategoryModelHolder {
 
   private static final List<CategoryModel> CATEGORIES = createCategories();
+  private static final String CATEGORIES_PREFIX = "categories/";
 
   private static List<CategoryModel> createCategories() {
 
     var sourceSystem = CategoryModel.builder()
-        .name("sourceSystem")
+        .name(CATEGORIES_PREFIX + "sourceSystem")
         .displayName("Source System")
         .type(CategoryType.ANY_STRING)
         .multiValue(false)
@@ -24,7 +25,7 @@ class CategoryModelHolder {
         .build();
 
     var country = CategoryModel.builder()
-        .name("country")
+        .name(CATEGORIES_PREFIX + "country")
         .displayName("Country")
         .type(CategoryType.ANY_STRING)
         .multiValue(true)
@@ -33,8 +34,8 @@ class CategoryModelHolder {
         .build();
 
     var customerType = CategoryModel.builder()
-        .name("customerType")
-        .displayName("Customer Type (Individual / Company)")
+        .name(CATEGORIES_PREFIX + "customerType")
+        .displayName("Customer Type")
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
         .allowedValues(List.of("I", "C"))
@@ -42,8 +43,8 @@ class CategoryModelHolder {
         .build();
 
     var hitType = CategoryModel.builder()
-        .name("hitType")
-        .displayName("Hit Type (PEP / AM / SAN)")
+        .name(CATEGORIES_PREFIX + "hitType")
+        .displayName("Hit Type")
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
         .allowedValues(List.of("SAN", "PEP", "AM"))

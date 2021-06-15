@@ -24,7 +24,7 @@ class CategoryRestControllerSpec extends Specification {
 
   def 'should return categories'() {
     when:
-    def results = mockMvc.perform(get('/category'))
+    def results = mockMvc.perform(get('/categories'))
 
     then:
     1 * listCategoriesUseCase.getCategories() >> categories
@@ -33,7 +33,7 @@ class CategoryRestControllerSpec extends Specification {
 
   def 'should return empty categories'() {
     when:
-    def results = mockMvc.perform(get('/category'))
+    def results = mockMvc.perform(get('/categories'))
 
     then:
     1 * listCategoriesUseCase.getCategories() >> emptyCategories
