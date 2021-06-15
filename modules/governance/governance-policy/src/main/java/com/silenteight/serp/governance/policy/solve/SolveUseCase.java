@@ -149,7 +149,10 @@ public class SolveUseCase {
     if (solveResponse.getStepId() != null)
       eventBuilder.setStepId(fromJavaUuid(solveResponse.getStepId()));
 
-    featureVectorSolvedMessageGateway.send(eventBuilder.build());
+    FeatureVectorSolvedEvent event = eventBuilder.build();
+    log.debug("Sending FV event: {}", event);
+
+    featureVectorSolvedMessageGateway.send(event);
   }
 
   private static SolutionResponse asSolutionResponse(

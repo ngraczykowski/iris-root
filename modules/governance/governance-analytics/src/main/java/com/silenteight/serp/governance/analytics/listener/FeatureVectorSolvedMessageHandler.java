@@ -17,6 +17,7 @@ public class FeatureVectorSolvedMessageHandler {
   private final StoreFeatureVectorSolvedUseCase storeFeatureVectorSolvedUseCase;
 
   public void handle(FeatureVectorSolvedEvent event) throws MessagingException {
+    log.debug("Received FV event: {}", event);
     storeFeatureVectorSolvedUseCase.activate(event);
   }
 }

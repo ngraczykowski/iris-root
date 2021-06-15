@@ -2,11 +2,13 @@ package com.silenteight.serp.governance.analytics.featurevector;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 import com.silenteight.serp.governance.common.signature.Signature;
 
 @RequiredArgsConstructor
+@Slf4j
 public class FeatureVectorService {
 
   @NonNull
@@ -25,6 +27,7 @@ public class FeatureVectorService {
   }
 
   private void store(CanonicalFeatureVector canonicalFeatureVector) {
+    log.info("Storing a new FV: {}", canonicalFeatureVector);
     FeatureVector featureVector = new FeatureVector(
         canonicalFeatureVector.getVectorSignature(),
         canonicalFeatureVector.getNames(),
