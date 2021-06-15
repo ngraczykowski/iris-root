@@ -4,5 +4,4 @@ serp:
       agentConfigurationSource: classpath:test_agent_configs.json
       agentDetailsSource: classpath:test_agent_details.json
     model:
-      featureSetSource: classpath:test_feature_sets.json
       categorySource: classpath:test_categories.json
