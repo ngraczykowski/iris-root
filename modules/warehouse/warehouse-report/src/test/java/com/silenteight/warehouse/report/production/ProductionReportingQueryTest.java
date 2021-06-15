@@ -45,7 +45,7 @@ class ProductionReportingQueryTest {
 
     assertThat(dto.getId()).isEqualTo(REPORT_DEFINITION_ID);
     assertThat(dto.getName()).isEqualTo(
-        "/v1/analysis/production/definitions/" + REPORT_DEFINITION_ID);
+        "/analysis/production/definitions/" + AI_REASONING_TYPE + "/" + REPORT_DEFINITION_ID);
     assertThat(dto.getTitle()).isEqualTo(AI_REASONING_TYPE.getTitle());
     assertThat(dto.getDescription()).isEqualTo(REPORT_DESCRIPTION);
   }

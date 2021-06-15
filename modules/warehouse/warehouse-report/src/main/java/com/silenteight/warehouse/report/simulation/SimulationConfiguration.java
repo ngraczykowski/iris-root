@@ -1,11 +1,9 @@
 package com.silenteight.warehouse.report.simulation;
 
-import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
-import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 import com.silenteight.warehouse.common.opendistro.tenant.TenantService;
 import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
 import com.silenteight.warehouse.report.reporting.ReportingService;
+import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +29,10 @@ class SimulationConfiguration {
   SimulationService simulationService(
       ReportingService reportingService,
       SimulationReportingQuery simulationReportingQuery,
-      TimeSource timeSource) {
+      UserAwareReportingService userAwareReportingService) {
 
-    return new SimulationService(reportingService, simulationReportingQuery, timeSource);
+    return new SimulationService(
+        reportingService, simulationReportingQuery, userAwareReportingService);
   }
 
   @Bean
@@ -42,17 +41,5 @@ class SimulationConfiguration {
       SimulationAnalysisService simulationAnalysisService) {
 
     return new SimulationReportingQuery(reportingService, simulationAnalysisService);
-  }
-
-  @Bean
-  UserAwareReportingService userAwareReportingService(
-      OpendistroElasticClient opendistroElasticClient,
-      OpendistroKibanaClientFactory opendistroKibanaClientFactory,
-      SimulationAnalysisService simulationAnalysisService) {
-
-    return new UserAwareReportingService(
-        simulationAnalysisService,
-        opendistroElasticClient,
-        opendistroKibanaClientFactory.getUserAwareClient());
   }
 }

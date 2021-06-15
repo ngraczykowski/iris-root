@@ -4,9 +4,7 @@ import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.Repor
 
 public class ProductionControllerTestConstants {
 
-  static final ReportType AI_REASONING_TYPE = ReportType.AI_REASONING;
-  static final String GET_REPORT_DEF_BY_TYPE_AI_REASONING =
-      "/v1/analysis/production/definitions?type=" + AI_REASONING_TYPE;
+  static final ProductionReportType AI_REASONING_TYPE = ProductionReportType.AI_REASONING;
 
   static final ReportDefinitionDto REPORT_DEFINITION_DTO =
       ReportDefinitionDto.builder()

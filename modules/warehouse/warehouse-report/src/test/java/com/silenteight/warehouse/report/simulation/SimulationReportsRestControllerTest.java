@@ -6,6 +6,7 @@ import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
+import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,7 +38,8 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
   private static final long TIMESTAMP = 1622009305142L;
-  private static final ReportInstance REPORT_INSTANCE = new ReportInstance(TIMESTAMP);
+  private static final ReportInstanceReferenceDto REPORT_INSTANCE =
+      new ReportInstanceReferenceDto(TIMESTAMP);
 
   private static final String SAMPLE_KIBANA_URL =
       "/api/reporting/generateReport/KyFUeXkB_K2MGH_UzxPa?timezone=Europe/Warsaw";
@@ -65,9 +67,6 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
   private SimulationReportingQuery simulationReportingQuery;
-
-  @MockBean
-  private UserAwareReportingService userAwareReportingService;
 
   @MockBean
   private SimulationService simulationService;
@@ -142,7 +141,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its200_whenInvokedDownloadReport() {
-    given(userAwareReportingService.downloadReport(REPORT_DEFINITION_ID, ANALYSIS_ID, TIMESTAMP))
+    given(simulationService.downloadReport(ANALYSIS_ID, REPORT_DEFINITION_ID, TIMESTAMP))
         .willReturn(KIBANA_REPORT_DTO);
 
     String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
@@ -157,7 +156,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its102_whenReportNotReady() {
-    given(userAwareReportingService.downloadReport(REPORT_DEFINITION_ID, ANALYSIS_ID, TIMESTAMP))
+    given(simulationService.downloadReport(ANALYSIS_ID, REPORT_DEFINITION_ID, TIMESTAMP))
         .willThrow(ReportInstanceNotFoundException.class);
 
     get(TEST_DOWNLOAD_REPORT_URL).statusCode(PROCESSING.value());

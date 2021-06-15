@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static com.silenteight.warehouse.report.reporting.AnalysisResource.toResourceName;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.ANALYSIS_ID_PARAM;
-import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_RESOURCE_URL;
+import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_RESOURCE_NAME;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITION_ID_PARAM;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
@@ -59,7 +59,7 @@ public class SimulationReportingQuery {
   }
 
   private static String buildName(String analysisId, String reportDefinitionId) {
-    return fromPath(DEFINITIONS_RESOURCE_URL)
+    return fromPath(DEFINITIONS_RESOURCE_NAME)
         .buildAndExpand(Map.of(
             ANALYSIS_ID_PARAM, analysisId,
             DEFINITION_ID_PARAM, reportDefinitionId))

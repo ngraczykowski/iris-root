@@ -22,7 +22,7 @@ Additionally, there are two more `application.yml`:
 Warehouse depends heavily on the concept of tenants introduced in Opendistro and uses it
 to separate distinct reports.
 
-Following summarizes the tenants that should be preconfigured in the environment:
+The following summarizes the tenants that should be preconfigured in the environment:
 
 - `[env]_production_ai_reasoning` - production flow, 'ai-reasoning' report definitions
 - `[env]_production_rb_scorer` - production flow, 'rb-scorer' report definitions

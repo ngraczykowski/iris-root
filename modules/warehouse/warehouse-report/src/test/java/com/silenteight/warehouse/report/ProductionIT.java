@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
@@ -10,12 +11,9 @@ import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticC
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
-import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
-import com.silenteight.warehouse.indexer.analysis.NewSimulationAnalysisEvent;
-import com.silenteight.warehouse.indexer.analysis.SimulationAnalysisService;
+import com.silenteight.warehouse.report.production.ProductionReportType;
+import com.silenteight.warehouse.report.production.ProductionReportsRestController;
 import com.silenteight.warehouse.report.reporting.ReportingService;
-import com.silenteight.warehouse.report.simulation.KibanaSetupForSimulationUseCase;
-import com.silenteight.warehouse.report.simulation.SimulationReportsRestController;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,32 +26,26 @@ import java.util.Optional;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.*;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_KIBANA_INDEX_PATTERN_NAME;
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
+import static com.silenteight.warehouse.report.production.ProductionReportType.ACCURACY;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.*;
 
 @Slf4j
-@SpringBootTest(classes = SimulationTestConfiguration.class)
+@SpringBootTest(classes = ProductionTestConfiguration.class)
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class,
     OpendistroKibanaContainerInitializer.class
 })
-class SimulationIT {
+class ProductionIT {
 
-  private static final String SIMULATION_TENANT = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
-  private static final AnalysisMetadataDto ITEST_ANALYSIS = AnalysisMetadataDto.builder()
-      .tenant(SIMULATION_TENANT)
-      .elasticIndexName(SIMULATION_ELASTIC_INDEX_NAME)
-      .build();
-  private static final NewSimulationAnalysisEvent ITEST_ANALYSIS_EVENT =
-      NewSimulationAnalysisEvent.builder()
-          .analysis(SIMULATION_ANALYSIS)
-          .analysisMetadataDto(ITEST_ANALYSIS)
-          .build();
+  private static final ProductionReportType REPORT_TYPE = ACCURACY;
+  private static final String PRODUCTION_TENANT = REPORT_TYPE.getTenantName("itest");
 
   @Autowired
   private ReportingService reportingService;
@@ -70,13 +62,10 @@ class SimulationIT {
   private OpendistroKibanaClient opendistroKibanaClient;
 
   @Autowired
-  private KibanaSetupForSimulationUseCase kibanaSetupForSimulationUseCase;
+  private OpendistroElasticClient opendistroElasticClient;
 
   @Autowired
-  private SimulationReportsRestController simulationReportsRestController;
-
-  @Autowired
-  private SimulationAnalysisService simulationAnalysisService;
+  private ProductionReportsRestController productionReportsRestController;
 
   @BeforeEach
   public void init() {
@@ -84,6 +73,7 @@ class SimulationIT {
     // given
     log.info("Setting up ES and Kibana");
     storeData();
+    createProductionTenant();
     createKibanaIndex();
     createSavedSearch();
     createReportDefinition();
@@ -100,47 +90,42 @@ class SimulationIT {
 
   @Test
   @WithElasticAccessCredentials
-  void shouldCreateReportForSimulation() {
-    when(simulationAnalysisService.getTenantIdByAnalysis(SIMULATION_ANALYSIS))
-        .thenReturn(SIMULATION_TENANT);
-
-    // Trigger creating tenant for simulation
-    kibanaSetupForSimulationUseCase.handle(ITEST_ANALYSIS_EVENT);
-
-    // Verify tenant is cloned
-    verifyClonedIndexPattern();
-    verifySavedSearch();
-
+  void shouldCreateReportForProduction() {
     // Trigger report generation
-    waitForReportDefinitions(1, SIMULATION_TENANT);
-    String reportDefinitionId = getFirstReportDefinitionId(SIMULATION_ANALYSIS_ID);
-    String timestamp = generateReport(SIMULATION_ANALYSIS_ID, reportDefinitionId);
+    waitForReportDefinitions(1, PRODUCTION_TENANT);
+    String reportDefinitionId = getFirstReportDefinitionId(REPORT_TYPE);
+    String timestamp = generateReport(REPORT_TYPE, reportDefinitionId);
 
     // Download report and verify the content
-    waitForReportInstances(1, SIMULATION_TENANT);
-    String report = downloadReport(SIMULATION_ANALYSIS_ID, reportDefinitionId, timestamp);
+    waitForReportInstances(1, PRODUCTION_TENANT);
+    String report = downloadReport(reportDefinitionId, timestamp, REPORT_TYPE);
     assertThat(report).contains(ALERT_ID_1);
   }
 
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        SIMULATION_ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
+        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
+  }
+
+  private void createProductionTenant() {
+    opendistroElasticClient.createTenant(PRODUCTION_TENANT, "Production reports");
   }
 
   private void createKibanaIndex() {
-    byte[] payload = getJson("json/simulation/1-create-kibana-index.json");
-    kibanaTestClient.createKibanaIndex(ADMIN_TENANT, SIMULATION_KIBANA_INDEX_PATTERN_NAME, payload);
+    byte[] payload = getJson("json/production/1-create-kibana-index.json");
+    kibanaTestClient.createKibanaIndex(
+        PRODUCTION_TENANT, PRODUCTION_KIBANA_INDEX_PATTERN_NAME, payload);
   }
 
   private void createSavedSearch() {
-    byte[] payload = getJson("json/simulation/2-create-saved-search.json");
-    kibanaTestClient.createSavedSearch(ADMIN_TENANT, payload);
+    byte[] payload = getJson("json/production/2-create-saved-search.json");
+    kibanaTestClient.createSavedSearch(PRODUCTION_TENANT, payload);
   }
 
   private void createReportDefinition() {
     byte[] payload = getJson("json/3-create-report-definition.json");
-    kibanaTestClient.createReportDefinition(ADMIN_TENANT, payload);
+    kibanaTestClient.createReportDefinition(PRODUCTION_TENANT, payload);
   }
 
   private void waitForReportInstances(int minCount, String tenant) {
@@ -160,38 +145,26 @@ class SimulationIT {
     return getClass().getClassLoader().getResourceAsStream(resourcePath).readAllBytes();
   }
 
-  private void verifyClonedIndexPattern() {
-    var clonedIndexPatterns = opendistroKibanaClient.listKibanaIndexPattern(
-        SIMULATION_TENANT, 20);
-    assertThat(clonedIndexPatterns).hasSize(1);
-  }
-
-  private void verifySavedSearch() {
-    var clonedSearchObjects = opendistroKibanaClient.listSavedSearchDefinitions(
-        SIMULATION_TENANT, 20);
-    assertThat(clonedSearchObjects).hasSize(1);
-  }
-
-  private String getFirstReportDefinitionId(String analysisId) {
-    return simulationReportsRestController
-        .getReportsDtoList(analysisId)
+  private String getFirstReportDefinitionId(ProductionReportType reportType) {
+    return productionReportsRestController
+        .getProductionReportDefinitionDto(reportType)
         .getBody()
         .get(0)
         .getId();
   }
 
-  private String generateReport(String analysisId, String reportDefinitionId) {
+  private String generateReport(ProductionReportType reportType, String reportDefinitionId) {
     String location =
-        simulationReportsRestController.createReport(analysisId, reportDefinitionId)
+        productionReportsRestController.createReport(reportDefinitionId, reportType)
             .getHeaders()
             .get("Location")
             .get(0);
     return location.replace("reports/", "");
   }
 
-  String downloadReport(String analysisId, String definitionId, String timestamp) {
+  String downloadReport(String definitionId, String timestamp, ProductionReportType reportType) {
     byte[] reportBody =
-        simulationReportsRestController.downloadReport(analysisId, definitionId, timestamp)
+        productionReportsRestController.downloadReport(definitionId, timestamp, reportType)
             .getBody();
 
     return Optional.ofNullable(reportBody).map(String::new).orElse(null);
@@ -199,20 +172,20 @@ class SimulationIT {
 
   private void removeKibanaIndex() {
     opendistroKibanaClient.deleteSavedObjects(
-        ADMIN_TENANT, KIBANA_INDEX_PATTERN, SIMULATION_KIBANA_INDEX_PATTERN_NAME);
+        PRODUCTION_TENANT, KIBANA_INDEX_PATTERN, PRODUCTION_KIBANA_INDEX_PATTERN_NAME);
   }
 
   private void removeSavedSearch() {
-    opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVED_SEARCH);
+    opendistroKibanaClient.deleteSavedObjects(PRODUCTION_TENANT, SEARCH, SAVED_SEARCH);
   }
 
   private void removeReportDefinitions() {
-    opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).forEach(
-        report -> opendistroKibanaClient.deleteReportDefinition(ADMIN_TENANT, report.getId())
+    opendistroKibanaClient.listReportDefinitions(PRODUCTION_TENANT).forEach(
+        report -> opendistroKibanaClient.deleteReportDefinition(PRODUCTION_TENANT, report.getId())
     );
   }
 
   private void removeData() {
-    simpleElasticTestClient.removeIndex(SIMULATION_ELASTIC_INDEX_NAME);
+    simpleElasticTestClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
   }
 }

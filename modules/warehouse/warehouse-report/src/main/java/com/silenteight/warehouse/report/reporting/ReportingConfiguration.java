@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.reporting;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 
@@ -16,10 +17,22 @@ class ReportingConfiguration {
   @Bean
   ReportingService reportingService(
       OpendistroElasticClient opendistroElasticClient,
-      OpendistroKibanaClientFactory opendistroKibanaClientFactory) {
+      OpendistroKibanaClientFactory opendistroKibanaClientFactory,
+      TimeSource timeSource) {
 
     return new ReportingService(
         opendistroElasticClient,
-        opendistroKibanaClientFactory.getAdminClient());
+        opendistroKibanaClientFactory.getAdminClient(),
+        timeSource);
+  }
+
+  @Bean
+  UserAwareReportingService userAwareReportingService(
+      OpendistroElasticClient opendistroElasticClient,
+      OpendistroKibanaClientFactory opendistroKibanaClientFactory) {
+
+    return new UserAwareReportingService(
+        opendistroElasticClient,
+        opendistroKibanaClientFactory.getUserAwareClient());
   }
 }

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
+import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import org.springframework.http.HttpStatus;
@@ -32,19 +33,20 @@ public class SimulationReportsRestController {
   static final String DEFINITION_ID_PARAM = "definitionId";
   static final String TIMESTAMP_PARAM = "timestamp";
 
-  static final String ANALYSIS_RESOURCE_URL = "/v1/analysis/{" + ANALYSIS_ID_PARAM + "}";
+  static final String ANALYSIS_RESOURCE_NAME = "/analysis/{" + ANALYSIS_ID_PARAM + "}";
+  static final String DEFINITIONS_COLLECTION_NAME = ANALYSIS_RESOURCE_NAME + "/definitions";
+  static final String DEFINITIONS_RESOURCE_NAME =
+      DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}";
+
+  static final String ANALYSIS_RESOURCE_URL = "/v1" + ANALYSIS_RESOURCE_NAME;
   static final String TENANT_SUBRESOURCE_URL = ANALYSIS_RESOURCE_URL + "/tenant";
-  static final String DEFINITIONS_COLLECTION_URL = ANALYSIS_RESOURCE_URL + "/definitions";
-  static final String DEFINITIONS_RESOURCE_URL =
-      DEFINITIONS_COLLECTION_URL + "/{" + DEFINITION_ID_PARAM + "}";
+  static final String DEFINITIONS_COLLECTION_URL = "/v1" + DEFINITIONS_COLLECTION_NAME;
+  static final String DEFINITIONS_RESOURCE_URL = "/v1" + DEFINITIONS_RESOURCE_NAME;
   static final String REPORTS_COLLECTION_URL = DEFINITIONS_RESOURCE_URL + "/reports";
   static final String REPORTS_RESOURCE_URL = REPORTS_COLLECTION_URL + "/{" + TIMESTAMP_PARAM + "}";
 
   @NonNull
   private SimulationReportingQuery simulationReportingQuery;
-
-  @NonNull
-  private UserAwareReportingService userAwareReportingService;
 
   @NonNull
   private SimulationService simulationService;
@@ -71,7 +73,7 @@ public class SimulationReportsRestController {
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
       @PathVariable(DEFINITION_ID_PARAM) String definitionId) {
 
-    ReportInstance reportInstance =
+    ReportInstanceReferenceDto reportInstance =
         simulationService.createSimulationReport(analysisId, definitionId);
     return status(HttpStatus.SEE_OTHER)
         .header("Location", "reports/" + reportInstance.getTimestamp())
@@ -87,7 +89,7 @@ public class SimulationReportsRestController {
 
     try {
       KibanaReportDto kibanaReportDto =
-          userAwareReportingService.downloadReport(definitionId, analysisId, valueOf(timestamp));
+          simulationService.downloadReport(analysisId, definitionId, valueOf(timestamp));
 
       String filename = kibanaReportDto.getFilename();
       String data = kibanaReportDto.getContent();

@@ -18,7 +18,7 @@ import static org.springframework.http.ResponseEntity.status;
 @AllArgsConstructor
 class SynchronizationRestController {
 
-  static final String REPORT_SYNCHRONIZATION_URL = "/v1/reports:synchronize";
+  static final String REPORT_SYNCHRONIZATION_URL = "/v1/analysis/production:synchronizePeriodic";
 
   @NonNull
   private final ReportSynchronizationUseCase reportSynchronizationUseCase;
