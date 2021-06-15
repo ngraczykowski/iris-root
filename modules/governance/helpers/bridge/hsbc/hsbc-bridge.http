@@ -1,0 +1,11 @@
+### Start the recommendation process
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/14062021-100/recommend
+Accept: application/json
+Content-Type: application/json
+
+< hsbc-bridge-request-1.json
+
+
+### Check HSBC Bridge status
+GET {{baseUrl}}/rest/hsbc-bridge/management/info
+Accept: application/json
