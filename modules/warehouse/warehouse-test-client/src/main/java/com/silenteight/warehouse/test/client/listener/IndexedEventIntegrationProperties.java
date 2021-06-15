@@ -1,8 +1,8 @@
-package com.silenteight.warehouse.indexer.indextestclient.listener;
+package com.silenteight.warehouse.test.client.listener;
 
 import lombok.Data;
 
-import com.silenteight.warehouse.common.integration.AmqpInboundProperties;
+import com.silenteight.warehouse.test.integration.AmqpInboundProperties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

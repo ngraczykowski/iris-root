@@ -1,8 +1,8 @@
-package com.silenteight.warehouse.indexer.indextestclient.gateway;
+package com.silenteight.warehouse.test.client.gateway;
 
 import lombok.Data;
 
-import com.silenteight.warehouse.common.integration.AmqpOutboundProperties;
+import com.silenteight.warehouse.test.integration.AmqpOutboundProperties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "test.messaging.integration")
+@ConfigurationProperties("test.messaging.integration")
 public class IndexerClientIntegrationProperties {
 
   @Valid

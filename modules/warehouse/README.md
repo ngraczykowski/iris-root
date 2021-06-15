@@ -68,17 +68,29 @@ If you need to run services with TLS enabled:
 
         ./scripts/run-service-https.sh
 
-### Initializing ElasticSearch and Kibana
-If you wish to play with ElasticSearch and Kibana you need to populate these with some data first.
-You may want to use the following convenience script that:
-
-        ./scripts/init.sh
-
-or in the case of https setup:
-
-        ./scripts/init-https.sh
-
+**Note**: Elasticsearch requires that you configured `vm.max_map_count=262144` in `/etc/sysctl.conf`
+  
 ## Testing
+
+### Initializing ElasticSearch and Kibana
+If you wish to play with ElasticSearch and Kibana:
+
+1.  You need to pre-create tenants and generate some reports.
+    You may want to use the following convenience script:
+    
+            ./scripts/init.sh
+    
+    or in the case of https setup:
+    
+            ./scripts/init-https.sh
+ 
+2.  Deliver some test data to the application. 
+    For the local testing purpose you can start via Intellij/RunConfiguration:
+    
+    -   `WarehouseTestApplication (Sim)` to generate random data for simulation flow.
+        The analysisId is randomly generated at application startup.
+   
+    -   `WarehouseTestApplication (Prod)` to generate random data for production flow.
 
 ### Swagger-ui
 
