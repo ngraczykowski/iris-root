@@ -39,7 +39,7 @@ paths:
         200:
           description: 'A list of feature vectors'
           headers:
-            X-Total-Items:
+            X-Total-Count:
               explode: false
               schema:
                 description: Total items count
@@ -84,10 +84,16 @@ paths:
         200:
           description: 'A list of feature vectors'
           headers:
-            X-Total-Items:
+            X-Total-Count:
               explode: false
               schema:
-                description: Total items count
+                description: Total filtered items count
+                type: integer
+              style: simple
+            X-Total-Count-All:
+              explode: false
+              schema:
+                description: Total items count regardless of any filters
                 type: integer
               style: simple
           content:
