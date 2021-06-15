@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.indextestclient.listener;
+package com.silenteight.warehouse.test.client.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import com.silenteight.data.api.v1.DataIndexResponse;
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 
-import static com.silenteight.warehouse.indexer.indextestclient.listener.IndexedListenerConfiguration.ALERT_INDEXED_INBOUND_CHANNEL;
+import static com.silenteight.warehouse.test.client.listener.IndexedListenerConfiguration.ALERT_INDEXED_INBOUND_CHANNEL;
 
 @RequiredArgsConstructor
 class IndexedEventListenerIntegrationFlowAdapter extends IntegrationFlowAdapter {

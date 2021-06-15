@@ -4,10 +4,10 @@
     "report_source":"Saved search",
     "description":"",
     "core_params":{
-      "base_url":"/app/discover#/view/ai-resoning-wl-search-id",
+      "base_url":"/app/discover#/view/ai-resoning-wl-search",
       "report_format":"csv",
       "time_duration":"PT262992H",
-      "saved_search_id":"ai-resoning-wl-search-id",
+      "saved_search_id":"ai-resoning-wl-search",
       "limit":10000,
       "excel":true
     }

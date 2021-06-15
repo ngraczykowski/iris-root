@@ -19,7 +19,7 @@
     {
       "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
       "type": "index-pattern",
-      "id": "all_itest_production"
+      "id": "all_production"
     }
   ]
 }

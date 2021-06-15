@@ -4,7 +4,8 @@ set -e -o pipefail
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P )"
 cd "${CURRENTDIR}/.."
 
+./scripts/es/create-tenants.sh
 ./scripts/es/load-data.sh
-./scripts/kibana/create-kibana-index.sh
-./scripts/kibana/create-saved-search.sh
-./scripts/kibana/create-report.sh
+./scripts/kibana/create-simulation-master.sh
+./scripts/kibana/create-production-ai-reasoning.sh
+./scripts/kibana/create-production-periodic.sh

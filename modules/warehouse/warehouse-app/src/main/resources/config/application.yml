@@ -169,6 +169,9 @@ serp:
 sep:
   auth:
     permissionMethodsMappings:
+      PRODUCTION_PERIODIC_REPORTS:
+        - "SYNCHRONIZE_REPORTS"
+
       PRODUCTION_ON_DEMAND_REPORTS:
         - "LIST_PRODUCTION_ON_DEMAND_REPORTS"
         - "CREATE_PRODUCTION_ON_DEMAND_REPORT"
@@ -185,6 +188,7 @@ sep:
 
     rolePermissionsMappings:
       BUSINESS_OPERATOR:
+        - "PRODUCTION_PERIODIC_REPORTS"
         - "PRODUCTION_ON_DEMAND_REPORTS"
         - "SIMULATION_REPORTS"
       QA:

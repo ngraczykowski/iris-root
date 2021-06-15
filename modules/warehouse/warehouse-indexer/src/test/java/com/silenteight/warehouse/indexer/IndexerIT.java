@@ -10,8 +10,9 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.analysis.TestAnalysisMetadataRepository;
-import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexClientGateway;
-import com.silenteight.warehouse.indexer.indextestclient.listener.IndexedEventListener;
+import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
+import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
+import com.silenteight.warehouse.test.client.listener.IndexedEventListener;
 
 import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
@@ -63,10 +64,10 @@ class IndexerIT {
   private TestAnalysisMetadataRepository testAnalysisMetadataRepository;
 
   @Autowired
-  private IndexClientGateway productionIndexClientGateway;
+  private ProductionIndexClientGateway productionIndexClientGateway;
 
   @Autowired
-  private IndexClientGateway simulationIndexClientGateway;
+  private SimulationIndexClientGateway simulationIndexClientGateway;
 
   @Autowired
   private IndexedEventListener indexedEventListener;

@@ -1,0 +1,42 @@
+plugins {
+  id "java"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "org.springframework.boot"
+}
+
+description = "Test App Warehouse"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterIntegration
+}
+
+dependencies {
+  implementation project(":warehouse-test-client")
+
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+  implementation libraries.spring_boot_starter_undertow
+
+  implementation libraries.spring_context_support
+
+  implementation libraries.silenteight_data_api
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.jaxb_api
+  implementation libraries.jakarta_inject
+
+  implementation libraries.protobuf_java_util
+
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.indextestclient.gateway;
+package com.silenteight.warehouse.test.client.gateway;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,14 @@ public class IndexerClientConfiguration {
   private final IndexerClientIntegrationProperties properties;
 
   @Bean
+  DirectChannel productionIndexingOutboundChannel() {
+    return new DirectChannel();
+  }
+
+  @Bean
   GatewayProxyFactoryBean productionIndexClientGateway() {
     GatewayProxyFactoryBean factoryBean =
-        new GatewayProxyFactoryBean(IndexClientGateway.class);
+        new GatewayProxyFactoryBean(ProductionIndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(PRODUCTION_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;
@@ -41,7 +46,7 @@ public class IndexerClientConfiguration {
   @Bean
   GatewayProxyFactoryBean simulationIndexClientGateway() {
     GatewayProxyFactoryBean factoryBean =
-        new GatewayProxyFactoryBean(IndexClientGateway.class);
+        new GatewayProxyFactoryBean(SimulationIndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;

@@ -1,0 +1,22 @@
+plugins {
+  id "java-library"
+  id "io.freefair.aspectj.post-compile-weaving"
+}
+
+description = "Warehouse Test Client"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterIntegration
+}
+
+dependencies {
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_data_api
+  implementation libraries.jakarta_validation_api
+  implementation libraries.spring_context_support
+
+  aspect libraries.silenteight_sep_base_aspects
+}

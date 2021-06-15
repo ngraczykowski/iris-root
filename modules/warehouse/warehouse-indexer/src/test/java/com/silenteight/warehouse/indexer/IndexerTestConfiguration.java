@@ -13,7 +13,8 @@ import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
-import com.silenteight.warehouse.indexer.indextestclient.gateway.IndexerClientIntegrationProperties;
+import com.silenteight.warehouse.test.client.TestClientModule;
+import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
 import org.springframework.amqp.core.*;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -32,7 +33,8 @@ import static org.mockito.Mockito.*;
     EnvironmentModule.class,
     IndexerModule.class,
     AmqpCommonModule.class,
-    TestElasticSearchModule.class
+    TestElasticSearchModule.class,
+    TestClientModule.class
 })
 @ImportAutoConfiguration({
     IntegrationConfiguration.class,

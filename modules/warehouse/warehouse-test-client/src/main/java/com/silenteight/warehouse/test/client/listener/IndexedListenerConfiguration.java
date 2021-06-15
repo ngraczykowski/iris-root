@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.indextestclient.listener;
+package com.silenteight.warehouse.test.client.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
