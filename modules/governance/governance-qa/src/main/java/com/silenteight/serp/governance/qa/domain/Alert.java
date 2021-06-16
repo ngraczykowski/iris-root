@@ -5,7 +5,6 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
-import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 @Entity
@@ -25,7 +24,4 @@ class Alert extends BaseEntity implements IdentifiableEntity {
   @ToString.Include
   @Column(nullable = false, length = 80, unique = true)
   private String alertName;
-
-  @NonNull
-  private OffsetDateTime createdAt;
 }

@@ -56,4 +56,12 @@ interface DecisionRepository extends Repository<Decision, Long> {
 
   @Query(value = FIND_DETAILS_QUERY_VALUE)
   AlertValidationDetailsDto findValidationDetails(String name, Integer level);
+
+  @Query(value = "SELECT d.* FROM governance_qa_decision AS d "
+      + "WHERE d.state = :state AND d.updated_at < :olderThan "
+      + "LIMIT :limit", nativeQuery = true)
+  List<Decision> findAllByStateAndUpdatedAtOlderThan(
+      String state, OffsetDateTime olderThan, Integer limit);
+
+  Decision getById(Long id);
 }

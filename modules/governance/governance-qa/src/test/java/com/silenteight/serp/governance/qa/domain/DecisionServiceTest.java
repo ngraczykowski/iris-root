@@ -18,8 +18,13 @@ import java.time.OffsetDateTime;
 
 import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.DecisionFixture.*;
+import static com.silenteight.serp.governance.qa.domain.DecisionLevel.ANALYSIS;
+import static com.silenteight.serp.governance.qa.domain.DecisionLevel.VALIDATION;
+import static com.silenteight.serp.governance.qa.domain.DecisionState.NEW;
+import static com.silenteight.serp.governance.qa.domain.DecisionState.VIEWING;
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.parse;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -148,5 +153,56 @@ class DecisionServiceTest {
         COMMENT_FAILED,
         "username-failed",
         OffsetDateTime.now());
+  }
+
+  @Test
+  void restartViewingDecisionsShouldSetNewState() {
+    //given
+    OffsetDateTime viewedBefore = parse("2021-06-06T13:30:30+05:00");
+    OffsetDateTime viewedAfter = parse("2021-06-07T13:30:30+05:00");
+    Decision analysisViewingBefore = saveDecision(ANALYSIS.getValue(), VIEWING, viewedBefore,
+        getGeneratedAlert().getId());
+    Decision analysisViewingAfter = saveDecision(ANALYSIS.getValue(), VIEWING, viewedAfter,
+        getGeneratedAlert().getId());
+    Decision validationViewingBefore = saveDecision(VALIDATION.getValue(), VIEWING, viewedBefore,
+        getGeneratedAlert().getId());
+    Decision validationNewBefore = saveDecision(VALIDATION.getValue(), NEW, viewedBefore,
+        getGeneratedAlert().getId());
+    //when
+    underTest.restartViewingDecisions(viewedAfter, 10);
+    //then
+    assertThat(decisionRepository.getById(analysisViewingBefore.getId()).getState())
+        .isEqualTo(NEW);
+    assertThat(decisionRepository.getById(analysisViewingBefore.getId()).getUpdatedAt())
+        .isAfter(viewedAfter);
+    assertThat(decisionRepository.getById(analysisViewingAfter.getId()).getState())
+        .isEqualTo(VIEWING);
+    assertThat(decisionRepository.getById(analysisViewingAfter.getId()).getUpdatedAt())
+        .isEqualTo(viewedAfter);
+    assertThat(decisionRepository.getById(validationViewingBefore.getId()).getState())
+        .isEqualTo(NEW);
+    assertThat(decisionRepository.getById(validationViewingBefore.getId()).getUpdatedAt())
+        .isAfter(viewedAfter);
+    assertThat(decisionRepository.getById(validationNewBefore.getId()).getState())
+        .isEqualTo(NEW);
+    assertThat(decisionRepository.getById(validationNewBefore.getId()).getUpdatedAt())
+        .isEqualTo(viewedBefore);
+  }
+
+  private Alert getGeneratedAlert() {
+    Alert alert = new Alert();
+    alert.setAlertName(format("alerts/%s", randomUUID()));
+    return alertRepository.save(alert);
+  }
+
+  private Decision saveDecision(Integer level, DecisionState state, OffsetDateTime updatedAt,
+      Long alertId) {
+
+    Decision decision = new Decision();
+    decision.setAlertId(alertId);
+    decision.setLevel(level);
+    decision.setState(state);
+    decision.setUpdatedAt(updatedAt);
+    return decisionRepository.save(decision);
   }
 }

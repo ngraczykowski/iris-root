@@ -11,8 +11,9 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 class InMemoryDecisionRepository
     extends BasicInMemoryRepository<Decision>
@@ -66,6 +67,7 @@ class InMemoryDecisionRepository
     return findAllByLevelAndStatesNewerThan(level, states, createdAt, limit)
         .map(decision -> {
           Alert alert = alertRepository.findById(decision.getAlertId());
+
           return AlertAnalysisDtoBuilder.builder()
               .alertName(alert.getAlertName())
               .addedAt(toInstant(alert.getCreatedAt()))
@@ -74,7 +76,7 @@ class InMemoryDecisionRepository
               .decisionBy(decision.getDecidedBy())
               .decisionComment(decision.getComment())
               .build();
-        }).collect(Collectors.toList());
+        }).collect(toList());
   }
 
   private Stream<Decision> findAllByLevelAndStatesNewerThan(Integer level, List<String> states,
@@ -102,7 +104,7 @@ class InMemoryDecisionRepository
               .decisionBy(decision.getDecidedBy())
               .decisionComment(decision.getComment())
               .build();
-        }).collect(Collectors.toList());
+        }).collect(toList());
   }
 
   private Instant toInstant(OffsetDateTime offsetDateTime) {
@@ -123,5 +125,19 @@ class InMemoryDecisionRepository
         .decisionAt(decision.getDecidedAt())
         .addedAt(alert.getCreatedAt())
         .build();
+  }
+
+  @Override
+  public List<Decision> findAllByStateAndUpdatedAtOlderThan(
+      String state, OffsetDateTime olderThan, Integer limit) {
+
+    return stream()
+        .filter(decision -> decision.hasState(state) && decision.hasUpdatedAtBefore(olderThan))
+        .collect(toList());
+  }
+
+  @Override
+  public Decision getById(Long id) {
+    return stream().filter(decision -> decision.hasId(id)).findAny().orElse(null);
   }
 }

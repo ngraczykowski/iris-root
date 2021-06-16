@@ -11,9 +11,10 @@ import com.silenteight.serp.governance.qa.domain.exception.AlertAlreadyProcessed
 import com.silenteight.serp.governance.qa.domain.exception.WrongAlertNameException;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import javax.transaction.Transactional;
 
-import static com.silenteight.serp.governance.qa.domain.DecisionState.NEW;
+import static com.silenteight.serp.governance.qa.domain.DecisionState.VIEWING;
 
 @RequiredArgsConstructor
 public class DecisionService {
@@ -86,9 +87,14 @@ public class DecisionService {
       throw new AlertAlreadyProcessedException(alertName);
   }
 
-  public void restartDecisionState(Decision decision) {
-    decision.setState(NEW);
-    decision.setUpdatedAt(OffsetDateTime.now());
+  public void restartViewingDecisions(OffsetDateTime viewedBefore, Integer limit) {
+    List<Decision> decisions = decisionRepository.findAllByStateAndUpdatedAtOlderThan(
+        VIEWING.toString(), viewedBefore, limit);
+    decisions.forEach(this::saveViewingState);
+  }
+
+  private void saveViewingState(Decision decision) {
+    decision.resetViewingState();
     decisionRepository.save(decision);
   }
 }

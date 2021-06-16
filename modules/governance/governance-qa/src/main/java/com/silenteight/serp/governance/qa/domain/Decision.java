@@ -6,11 +6,12 @@ import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import javax.persistence.*;
 
 import static com.silenteight.serp.governance.qa.domain.DecisionState.NEW;
 import static com.silenteight.serp.governance.qa.domain.DecisionState.VIEWING;
+import static java.time.OffsetDateTime.now;
+import static java.util.List.of;
 
 @Entity
 @Table(name = "governance_qa_decision")
@@ -55,6 +56,25 @@ class Decision extends BaseAggregateRoot implements IdentifiableEntity {
   private OffsetDateTime updatedAt;
 
   public boolean canBeProcessed() {
-    return List.of(NEW, VIEWING).contains(state);
+    return of(NEW, VIEWING).contains(state);
+  }
+
+  public boolean hasId(Long id) {
+    return getId().equals(id);
+  }
+
+  public boolean hasState(String state) {
+    return getState().toString().equals(state);
+  }
+
+  public boolean hasUpdatedAtBefore(OffsetDateTime updatedAt) {
+    return getUpdatedAt().isBefore(updatedAt);
+  }
+
+  public void resetViewingState() {
+    if (hasState(VIEWING.toString())) {
+      setState(NEW);
+      setUpdatedAt(now());
+    }
   }
 }
