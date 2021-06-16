@@ -38,7 +38,7 @@ public class FeatureVectorsDto {
 
     @NonNull
     String signature;
-    long usageCount;
+    long matchesCount;
     @NonNull
     @Default
     List<String> values = of();

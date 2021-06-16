@@ -40,7 +40,7 @@ public class FeatureVectorWithUsageDto {
   public FeatureVectorDto standardize(List<String> columns) {
     return FeatureVectorDto.builder()
          .signature(getSignature())
-         .usageCount(getUsageCount())
+         .matchesCount(getUsageCount())
          .values(mapToValues(columns))
          .build();
   }

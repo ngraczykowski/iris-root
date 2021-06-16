@@ -108,7 +108,7 @@ class FindMatchingFeatureVectorsUseCaseTest {
         .extracting(FeatureVectorDto::getSignature)
         .containsExactly(SIGNATURE_1);
     assertThat(response.getFeatureVectors())
-        .extracting(FeatureVectorDto::getUsageCount)
+        .extracting(FeatureVectorDto::getMatchesCount)
         .containsExactly(USAGE_COUNT_1);
     assertThat(response.getFeatureVectors())
         .extracting(FeatureVectorDto::getValues)
