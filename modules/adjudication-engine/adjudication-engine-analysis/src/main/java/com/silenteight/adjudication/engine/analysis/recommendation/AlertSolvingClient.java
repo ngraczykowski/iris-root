@@ -26,7 +26,7 @@ class AlertSolvingClient {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
     if (log.isTraceEnabled()) {
-      log.trace("Solving alerts: deadline={}, request={}", deadline, request);
+      log.trace("Requesting alert solutions: deadline={}, request={}", deadline, request);
     }
 
     var response = stub
@@ -52,7 +52,7 @@ class AlertSolvingClient {
     }
 
     if (log.isTraceEnabled()) {
-      log.trace("Solved alerts: response={}", response);
+      log.trace("Received alert solutions: response={}", response);
     }
 
     return response;

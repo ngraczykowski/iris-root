@@ -22,6 +22,7 @@ class HandleCommentInputsUpdatedUseCase {
 
   List<RecommendationsGenerated> handleCommentInputsUpdated(
       CommentInputsUpdated commentInputsUpdated) {
+
     if (log.isDebugEnabled()) {
       log.debug("Handling comment inputs updated: analysisList={}",
           commentInputsUpdated.getAnalysisList());

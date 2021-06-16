@@ -23,19 +23,17 @@ public class PendingAlert {
   List<FeatureVectorSolution> matchSolution;
 
   public Alert toAlert() {
+    var matches = matchSolution.stream()
+        .map(m -> Match.newBuilder()
+            .setSolution(m)
+            .addFlags(MatchFlag.MATCH_FLAG_UNSPECIFIED)
+            .build())
+        .collect(Collectors.toList());
+
     return Alert
         .newBuilder()
         .setName("alerts/" + alertId)
-        .addAllMatches(
-            matchSolution
-                .stream()
-                .map(m -> Match
-                    .newBuilder()
-                    .setSolution(m)
-                    .addFlags(MatchFlag.MATCH_FLAG_UNSPECIFIED)
-                    .build())
-                .collect(
-                    Collectors.toList()))
+        .addAllMatches(matches)
         .build();
   }
 }

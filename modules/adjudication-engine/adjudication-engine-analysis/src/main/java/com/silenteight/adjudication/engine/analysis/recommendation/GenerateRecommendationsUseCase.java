@@ -34,7 +34,7 @@ class GenerateRecommendationsUseCase {
     var recommendations = new ArrayList<RecommendationInfo>();
 
     if (log.isDebugEnabled()) {
-      log.debug("Generating recommendations: analysis={}", analysisName);
+      log.debug("Starting generating recommendations: analysis={}", analysisName);
     }
 
     do {
@@ -52,11 +52,10 @@ class GenerateRecommendationsUseCase {
 
     if (recommendations.isEmpty()) {
       log.info("No recommendations generated: analysis={}", analysisName);
-
       return Optional.empty();
     }
 
-    log.info("Generated recommendations: analysis={}, recommendationCount={}",
+    log.info("Finished generating recommendations: analysis={}, recommendationCount={}",
         analysisName, recommendations.size());
 
     return Optional.of(RecommendationsGenerated.newBuilder()
