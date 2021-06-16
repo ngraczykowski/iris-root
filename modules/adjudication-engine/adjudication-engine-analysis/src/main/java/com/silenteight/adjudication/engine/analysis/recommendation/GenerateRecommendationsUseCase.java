@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
@@ -21,6 +22,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 class GenerateRecommendationsUseCase {
 
   private final AlertSolvingClient client;
@@ -30,6 +32,10 @@ class GenerateRecommendationsUseCase {
   Optional<RecommendationsGenerated> generateRecommendations(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     var recommendations = new ArrayList<RecommendationInfo>();
+
+    if (log.isDebugEnabled()) {
+      log.debug("Generating recommendations: analysis={}", analysisName);
+    }
 
     do {
       var request = createRequest(analysisId);
@@ -42,8 +48,14 @@ class GenerateRecommendationsUseCase {
       recommendations.addAll(createRecommendations(analysisId, response));
     } while (true);
 
-    if (recommendations.isEmpty())
+    if (recommendations.isEmpty()) {
+      log.info("No recommendations generated: analysis={}", analysisName);
+
       return Optional.empty();
+    }
+
+    log.info("Generated recommendations: analysis={}, recommendationCount",
+        analysisName, recommendations.size());
 
     return Optional.of(RecommendationsGenerated.newBuilder()
         .setAnalysis(analysisName)
@@ -54,8 +66,15 @@ class GenerateRecommendationsUseCase {
   private Optional<BatchSolveAlertsRequest> createRequest(long analysisId) {
     var pendingAlerts = recommendationDataAccess.selectPendingAlerts(analysisId);
 
-    if (pendingAlerts.isEmpty())
+    if (pendingAlerts.isEmpty()) {
+      log.debug("No pending alerts: analysis=analysis/{}", analysisId);
       return Optional.empty();
+    }
+
+    if (log.isDebugEnabled()) {
+      log.debug("Fetched pending alerts: analysis=analysis/{}, pendingCount={}",
+          analysisId, pendingAlerts.size());
+    }
 
     return Optional.of(
         BatchSolveAlertsRequest

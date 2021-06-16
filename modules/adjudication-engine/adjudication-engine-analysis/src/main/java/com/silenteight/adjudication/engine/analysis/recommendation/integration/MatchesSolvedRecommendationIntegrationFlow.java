@@ -7,6 +7,7 @@ import com.silenteight.adjudication.internal.v1.MatchesSolved;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
+import org.springframework.integration.handler.LoggingHandler.Level;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ class MatchesSolvedRecommendationIntegrationFlow extends IntegrationFlowAdapter 
           var notification = facade.handleMatchesSolved(payload);
           return notification.orElse(null);
         })
+        .log(Level.DEBUG, getClass().getName())
         .channel(RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL);
   }
 }

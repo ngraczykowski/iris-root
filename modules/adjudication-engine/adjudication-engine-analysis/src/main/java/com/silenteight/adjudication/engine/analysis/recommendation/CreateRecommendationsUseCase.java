@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertS
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,11 +24,20 @@ class CreateRecommendationsUseCase {
   private final RecommendationRepository repository;
   private final PendingRecommendationFacade pendingRecommendationFacade;
 
+  @Transactional
   List<RecommendationInfo> createRecommendations(
       long analysisId, List<AlertSolution> alertSolutions) {
+
     var recommendations = createRecommendationEntities(analysisId, alertSolutions);
     var savedRecommendations = repository.saveAll(recommendations);
+
     pendingRecommendationFacade.removeSolvedPendingRecommendation();
+
+    if (log.isDebugEnabled()) {
+      log.debug("Saved recommendations: analysis=analysis/{}, recommendationCount={}",
+          analysisId, recommendations.size());
+    }
+
     return savedRecommendations
         .stream()
         .map(RecommendationEntity::toRecommendationInfo)
@@ -37,10 +47,10 @@ class CreateRecommendationsUseCase {
   @NotNull
   private List<RecommendationEntity> createRecommendationEntities(
       long analysisId, List<AlertSolution> alertSolutions) {
+
     return alertSolutions
         .stream()
         .map(a -> RecommendationEntity.fromAlertSolution(analysisId, a))
-        .collect(
-            toList());
+        .collect(toList());
   }
 }

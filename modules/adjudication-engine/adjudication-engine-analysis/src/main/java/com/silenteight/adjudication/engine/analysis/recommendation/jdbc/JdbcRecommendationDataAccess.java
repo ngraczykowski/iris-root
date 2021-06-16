@@ -6,6 +6,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.Recommendatio
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
   private final SelectPendingAlertsQuery query;
 
   @Override
+  @Transactional(readOnly = true)
   public List<PendingAlert> selectPendingAlerts(long analysisId) {
     return query.execute(analysisId);
   }

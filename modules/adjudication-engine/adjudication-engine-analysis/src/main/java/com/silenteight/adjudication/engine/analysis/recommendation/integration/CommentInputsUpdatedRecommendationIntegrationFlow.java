@@ -7,6 +7,7 @@ import com.silenteight.adjudication.internal.v1.CommentInputsUpdated;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
+import org.springframework.integration.handler.LoggingHandler.Level;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ class CommentInputsUpdatedRecommendationIntegrationFlow extends IntegrationFlowA
             CommentInputsUpdated.class,
             (payload, headers) -> facade.handleCommentInputsUpdated(payload))
         .split()
+        .log(Level.DEBUG, getClass().getName())
         .channel(RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL);
   }
 }
