@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
@@ -40,9 +39,9 @@ class CommentInputServiceClient {
           request.getAlertsCount(), commentInputs.size());
 
       // FIXME(ahaczewski): Remove this return, instead of hiding Data Source shit.
-      return IntStream
-          .range(0, request.getAlertsCount())
-          .mapToObj(idx -> CommentInput.newBuilder().build())
+      return request.getAlertsList()
+          .stream()
+          .map(alert -> CommentInput.newBuilder().setAlert(alert).build())
           .collect(Collectors.toList());
     }
 
