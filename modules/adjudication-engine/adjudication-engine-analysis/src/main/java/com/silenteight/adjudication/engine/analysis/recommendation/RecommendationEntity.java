@@ -68,6 +68,8 @@ class RecommendationEntity extends BaseEntity {
         .setAlert("alerts/" + getAlertId())
         .setCreateTime(fromOffsetDateTime(getCreatedAt()))
         .setName("recommendation/" + getId())
+        .setRecommendedAction(recommendedAction)
+        .setRecommendationComment("Recommended action: " + recommendedAction)
         .build();
   }
 }
