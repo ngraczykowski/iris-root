@@ -37,17 +37,18 @@ class SelectMissingAlertCommentInputQuery {
 
     @Override
     public MissingCommentInputsResult extractData(ResultSet rs) throws SQLException {
-      MissingCommentInputsResult result = new MissingCommentInputsResult(new ArrayList<>());
+      var alerts = new ArrayList<String>();
 
       while (rs.next()) {
-        var alertId = rs.getLong("alert_id");
-        var resultResource = "alerts/" + alertId;
-        result.addAlert(resultResource);
+        var alertId = rs.getObject(1, Long.class);
+        alerts.add("alerts/" + alertId);
       }
 
-      log.debug("Missing match category:{}", result);
+      if (log.isTraceEnabled()) {
+        log.trace("Missing comment inputs: alerts={}", alerts);
+      }
 
-      return result;
+      return new MissingCommentInputsResult(alerts);
     }
   }
 }
