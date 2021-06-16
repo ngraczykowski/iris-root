@@ -40,8 +40,10 @@ class GenerateRecommendationsUseCase {
     do {
       var request = createRequest(analysisId);
 
-      if (request.isEmpty())
+      if (request.isEmpty()) {
+        log.debug("No more alerts pending recommendation: analysis={}", analysisName);
         break;
+      }
 
       var response = client.batchSolveAlerts(request.get());
 
@@ -54,7 +56,7 @@ class GenerateRecommendationsUseCase {
       return Optional.empty();
     }
 
-    log.info("Generated recommendations: analysis={}, recommendationCount",
+    log.info("Generated recommendations: analysis={}, recommendationCount={}",
         analysisName, recommendations.size());
 
     return Optional.of(RecommendationsGenerated.newBuilder()

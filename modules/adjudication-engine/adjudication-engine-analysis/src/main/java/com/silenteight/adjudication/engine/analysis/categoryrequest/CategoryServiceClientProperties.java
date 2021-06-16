@@ -7,10 +7,10 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties(prefix = "ae.grpc.client.data-source")
+@ConfigurationProperties(prefix = "ae.grpc.client.category-service")
 @Validated
 @Data
-public class DataSourceClientProperties {
+public class CategoryServiceClientProperties {
 
   private static final Duration TIMEOUT_DEFAULT = Duration.ofSeconds(5);
 

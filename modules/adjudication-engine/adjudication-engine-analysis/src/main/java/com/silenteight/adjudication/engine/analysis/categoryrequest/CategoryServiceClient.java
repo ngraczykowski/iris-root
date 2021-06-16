@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
-class DataSourceClient {
+class CategoryServiceClient {
 
   private final CategoryServiceBlockingStub stub;
 
@@ -43,7 +43,7 @@ class DataSourceClient {
     }
 
     if (response.getCategoryValuesCount() < request.getMatchValuesCount()) {
-      log.warn("Not all requested category values received: requestedCount={}, receivedCount={}",
+      log.error("Not all requested category values received: requestedCount={}, receivedCount={}",
           request.getMatchValuesCount(), response.getCategoryValuesCount());
 
       // FIXME(ahaczewski): Remove this mocked response, instead of hiding Data Source shit.

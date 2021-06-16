@@ -15,21 +15,21 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(DataSourceClientProperties.class)
-public class DataSourceClientConfiguration {
+@EnableConfigurationProperties(CategoryServiceClientProperties.class)
+public class CategoryServiceClientConfiguration {
 
   @Valid
-  private final DataSourceClientProperties properties;
+  private final CategoryServiceClientProperties properties;
 
   @Setter(onMethod_ = @GrpcClient("data-source"))
   private Channel dataSourceChannel;
 
   @Bean
-  DataSourceClient dataSourceClient() {
+  CategoryServiceClient dataSourceClient() {
     var stub = CategoryServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new DataSourceClient(stub, properties.getTimeout());
+    return new CategoryServiceClient(stub, properties.getTimeout());
   }
 }

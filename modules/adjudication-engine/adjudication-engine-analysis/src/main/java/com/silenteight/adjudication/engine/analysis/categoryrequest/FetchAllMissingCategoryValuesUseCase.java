@@ -16,7 +16,7 @@ import java.util.HashSet;
 class FetchAllMissingCategoryValuesUseCase {
 
   private final MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
-  private final DataSourceClient datasourceClient;
+  private final CategoryServiceClient categoryServiceClient;
 
   MatchCategoriesUpdated fetchAllMissingCategoryValues(String analysis) {
     log.info("Fetching missing category values: analysis={}", analysis);
@@ -39,8 +39,9 @@ class FetchAllMissingCategoryValuesUseCase {
             analysis, missingValues.getCount());
       }
 
-      var response = datasourceClient.batchGetMatchCategoryValues(
-          missingValues.toBatchGetMatchCategoryValuesRequest());
+      var response =
+          categoryServiceClient.batchGetMatchCategoryValues(
+              missingValues.toBatchGetMatchCategoryValuesRequest());
 
       matchCategoryValuesDataAccess.createMatchCategoryValues(
           missingValues.getCategoryMap(), response.getCategoryValuesList());

@@ -28,7 +28,9 @@ ae:
 
   grpc:
     client:
-      data-source:
+      category-service:
+        timeout: 5s
+      comment-input:
         timeout: 5s
       policy-steps:
         timeout: 5s
