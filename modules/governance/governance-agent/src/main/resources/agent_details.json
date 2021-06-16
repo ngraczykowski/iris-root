@@ -48,9 +48,28 @@
   "agents/document/versions/1.0.0/configs/1": {
     "agentId": "13807c0f-1b88-4043-a32c-dc45b1a9068c",
     "features": [
-      "features/nationalIdDocument",
       "features/passportNumberDocument",
       "features/otherDocument"
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/nationalId/versions/1.0.0/configs/1": {
+    "agentId": "96d59e74-ce9c-11eb-b8bc-0242ac130003",
+    "features": [
+      "features/nationalIdDocument"
     ],
     "responses": [
       "PERFECT_MATCH",
