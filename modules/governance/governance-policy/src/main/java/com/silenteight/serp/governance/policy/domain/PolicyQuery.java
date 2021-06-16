@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.domain.exception.PolicyNotFoundException;
-import com.silenteight.serp.governance.policy.featurevector.PolicyByIdQuery;
 import com.silenteight.serp.governance.policy.list.ListPoliciesRequestQuery;
 import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
 

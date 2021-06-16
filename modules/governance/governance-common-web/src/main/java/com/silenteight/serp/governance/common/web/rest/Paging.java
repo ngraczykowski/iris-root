@@ -13,4 +13,8 @@ public class Paging {
   private final int pageIndex;
   @Min(1)
   private final int pageSize;
+
+  public long getSkip() {
+    return (long) pageIndex * pageSize;
+  }
 }

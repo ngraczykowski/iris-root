@@ -33,7 +33,7 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class GetModelRestControllerTest extends BaseRestControllerTest {
 
-  private static final String GET_MODEL_URL = "/v1/solvingModels/" + MODEL_ID.toString();
+  private static final String GET_MODEL_URL = "/v1/solvingModels/" + MODEL_ID;
   private static final String GET_MODEL_BY_POLICY_URL = "/v1/solvingModels?policy=" + POLICY;
 
   @MockBean
