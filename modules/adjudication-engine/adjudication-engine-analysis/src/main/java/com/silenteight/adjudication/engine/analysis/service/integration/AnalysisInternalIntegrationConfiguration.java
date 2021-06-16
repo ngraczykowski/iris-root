@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.integration.R
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.handler.LoggingHandler.Level;
 
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
@@ -19,6 +20,7 @@ class AnalysisInternalIntegrationConfiguration {
   @Bean
   IntegrationFlow matchesSolvedToRecommendationIntegrationFlow() {
     return from(MatchSolutionChannels.MATCHES_SOLVED_OUTBOUND_CHANNEL)
+        .log(Level.DEBUG, AnalysisInternalIntegrationConfiguration.class.getName())
         .channel(RecommendationChannels.MATCHES_SOLVED_RECOMMENDATION_INBOUND_CHANNEL)
         .get();
   }
@@ -26,6 +28,7 @@ class AnalysisInternalIntegrationConfiguration {
   @Bean
   IntegrationFlow commentInputToRecommendationIntegrationFlow() {
     return from(CommentInputChannels.COMMENT_INPUTS_UPDATED_OUTBOUND_CHANNEL)
+        .log(Level.DEBUG, AnalysisInternalIntegrationConfiguration.class.getName())
         .channel(RecommendationChannels.COMMENT_INPUT_UPDATED_RECOMMENDATION_INBOUND_CHANNEL)
         .get();
   }
