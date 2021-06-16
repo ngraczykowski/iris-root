@@ -6,6 +6,8 @@ import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.alert.AlertInfo;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ public class GetCommentInputUseCase {
   private final AlertFacade alertFacade;
   private final MatchFacade matchFacade;
 
+  @Transactional(readOnly = true)
   public List<CommentInputDto> getInputRequestsResponse(StreamCommentInputsRequestDto request) {
     var commentInputs = new ArrayList<CommentInputDto>();
 
