@@ -3,11 +3,18 @@ info:
   title: Features
   description: List of all features
   version: 0.1.0
+
 servers:
-  - url: 'https'
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
 
 paths:
-  /api/v1/features:
+  /features:
     get:
       tags:
         - features
