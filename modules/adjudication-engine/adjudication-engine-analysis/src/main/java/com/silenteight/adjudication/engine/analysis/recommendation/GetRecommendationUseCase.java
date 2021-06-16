@@ -15,6 +15,7 @@ class GetRecommendationUseCase {
   private final RecommendationRepository repository;
 
   Recommendation getRecommendation(String recommendationName) {
+    // TODO(ahaczewski): Build Alert
     return repository
         .getById(ResourceName.create(recommendationName).getLong("recommendations"))
         .toRecommendation();

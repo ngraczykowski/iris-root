@@ -26,9 +26,10 @@ class FetchAllMissingCommentInputsUseCase {
     var analysisId = ResourceName.create(analysis).getLong("analysis");
 
     if (log.isDebugEnabled()) {
-      log.debug(
-          "Handled pending recommendations: analysis={}", analysis);
+      log.debug("Fetching missing comment inputs: analysis={}", analysis);
     }
+
+    var totalCount = 0;
 
     do {
       var result = commentInputDataAccess
@@ -40,15 +41,20 @@ class FetchAllMissingCommentInputsUseCase {
 
       var missingCommentInputs = result.get();
 
-      if (log.isTraceEnabled()) {
-        log.trace("Analysis is still missing comment inputs: analysisId={}, missingCount={}",
+      if (log.isDebugEnabled()) {
+        log.debug("Analysis is still missing comment inputs: analysisId={}, missingCount={}",
             analysisId, missingCommentInputs.count());
       }
 
       var inputs = requestCommentInputs(missingCommentInputs.getAlerts());
 
+      totalCount += inputs.size();
+
       alertCommentInputFacade.createAlertCommentInputs(inputs);
     } while (true);
+
+    log.info("Fetched missing comment inputs: analysis={}, commentInputCount={}",
+        analysis, totalCount);
   }
 
   private List<CommentInput> requestCommentInputs(@NotNull List<String> alerts) {
