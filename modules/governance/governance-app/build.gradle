@@ -25,11 +25,11 @@ configurations {
 
 dependencies {
   implementation project(":governance-agent")
-  implementation project(":governance-analytics")
   implementation project(":governance-change-request")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
   implementation project(":governance-db-changelog")
+  implementation project(":governance-feature-vector")
   implementation project(":governance-model")
   implementation project(":governance-policy")
   implementation project(":governance-qa")

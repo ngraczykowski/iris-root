@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.qa.domain;
 
 import lombok.*;
 
-import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
+import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import java.time.OffsetDateTime;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class Alert extends BaseAggregateRoot implements IdentifiableEntity {
+class Alert extends BaseEntity implements IdentifiableEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

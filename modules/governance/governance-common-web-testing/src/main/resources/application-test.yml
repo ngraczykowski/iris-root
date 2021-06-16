@@ -23,6 +23,7 @@ sep.auth:
       - "LIST_STEP_FEATURE_VECTORS"
       - "LIST_AGENTS"
       - "LIST_CATEGORIES"
+      - "LIST_STEP_FEATURE_VECTORS"
     MANAGE_MODEL:
       - "CREATE_MODEL"
       - "LIST_MODELS"
@@ -36,9 +37,13 @@ sep.auth:
       - "CREATE_STEP"
       - "EDIT_STEP"
       - "REMOVE_STEP"
+    VIEW_VECTORS:
+      - "LIST_VECTORS"
     MANAGE_QA_ALERTS:
       - "ALERTS_ANALYSIS"
       - "ALERTS_VALIDATION"
+      - "VIEW_VECTORS_STATISTICS"
+
   rolePermissionsMappings:
     APPROVER:
       - "APPROVE_CHANGE_REQUESTS"
@@ -55,3 +60,4 @@ sep.auth:
       - "MANAGE_MODEL"
       - "MANAGE_POLICY"
       - "MANAGE_STEPS"
+      - "VIEW_VECTORS"

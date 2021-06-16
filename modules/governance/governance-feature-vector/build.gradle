@@ -3,14 +3,12 @@ plugins {
   id "java-test-fixtures"
 }
 
-description = "Governance Policy"
+description = "Governance Vector"
 
 configurations {
   implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterJackson
-  implementation.extendsFrom starterGrpc
-  implementation.extendsFrom starterMessaging
   implementation.extendsFrom starterDatabase
+
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
   testImplementation.extendsFrom starterSpringTest
@@ -19,22 +17,18 @@ configurations {
 dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_serp_protocol_base
-
   implementation libraries.silenteight_solving_api
 
   implementation libraries.silenteight_audit_bs
 
+  implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
-  implementation project(":governance-db-changelog")
+  implementation project(":governance-policy")
 
   implementation libraries.spring_webmvc
   implementation libraries.spring_security_config
 
-  implementation libraries.grpc_api
-  implementation libraries.grpc_stub
-
+  testImplementation(testFixtures(project(":governance-policy")))
   testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
 }
