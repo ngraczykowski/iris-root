@@ -3,20 +3,21 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
-import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
 
 import org.springframework.stereotype.Service;
 
+import java.util.function.Consumer;
+
 @Service
 @RequiredArgsConstructor
-class GetRecommendationUseCase {
+class StreamRecommendationsUseCase {
 
   private final GenerateCommentsUseCase generateCommentsUseCase;
   private final RecommendationRepository repository;
 
-  Recommendation getRecommendation(String recommendationName) {
-    return repository
-        .getById(ResourceName.create(recommendationName).getLong("recommendations"))
-        .toRecommendation();
+  void streamRecommendations(
+      StreamRecommendationsRequest request, Consumer<Recommendation> consumer) {
+
   }
 }

@@ -58,8 +58,8 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
   public void getRecommendation(
       GetRecommendationRequest request,
       StreamObserver<Recommendation> responseObserver) {
-    // TODO(ahaczewski): First to go.
-    respondWithNotFound(responseObserver);
+    responseObserver.onNext(analysisService.getRecommendation(request));
+    responseObserver.onCompleted();
   }
 
   @Override
