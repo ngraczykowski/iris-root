@@ -1,10 +1,8 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
-
-import java.util.List;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlertsWithStrategy;
 
 public interface RecommendationDataAccess {
 
-  List<PendingAlert> selectPendingAlerts(long analysisId);
+  PendingAlertsWithStrategy selectPendingAlerts(long analysisId);
 }

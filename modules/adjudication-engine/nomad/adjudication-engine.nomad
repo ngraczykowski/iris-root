@@ -222,7 +222,7 @@ job "adjudication-engine" {
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/adjudication-engine-app.jar",
-          "--spring.profiles.active=linux,adjudication-engine,database,rabbitmq,messaging",
+          "--spring.profiles.active=linux,database,rabbitmq,messaging,prod",
           "--spring.config.additional-location=file:local/conf/",
         ]
       }

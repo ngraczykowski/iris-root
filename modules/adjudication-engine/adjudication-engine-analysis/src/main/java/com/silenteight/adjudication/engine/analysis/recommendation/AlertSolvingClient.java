@@ -34,15 +34,15 @@ class AlertSolvingClient {
         .batchSolveAlerts(request);
 
     if (response.getSolutionsCount() < request.getAlertsCount()) {
-      log.error("Received less than expected number of alert solutions, solving all as NO_DECISION:"
-              + " solutionCount={}, alertCount={}, authority={}",
+      log.error("Received less than expected number of alert solutions, solving all as"
+              + " ACTION_INVESTIGATE: solutionCount={}, alertCount={}, authority={}",
           response.getSolutionsCount(), request.getAlertsCount(), stub.getChannel().authority());
 
       var noDecisionSolutions = request.getAlertsList().stream()
           .map(alert -> SolveAlertSolutionResponse
               .newBuilder()
               .setAlertName(alert.getName())
-              .setAlertSolution("NO_DECISION")
+              .setAlertSolution("ACTION_INVESTIGATE")
               .build())
           .collect(Collectors.toList());
 

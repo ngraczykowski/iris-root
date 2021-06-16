@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.solving.api.v1.BatchSolveAlertsRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
@@ -77,12 +76,7 @@ class GenerateRecommendationsUseCase {
           analysisId, pendingAlerts.size());
     }
 
-    return Optional.of(
-        BatchSolveAlertsRequest
-            .newBuilder()
-            .addAllAlerts(pendingAlerts.stream().map(PendingAlert::toAlert).collect(toList()))
-            .build()
-    );
+    return Optional.of(pendingAlerts.toBatchSolveAlertsRequest());
   }
 
   private List<RecommendationInfo> createRecommendations(

@@ -19,11 +19,10 @@ class MatchesSolvedRecommendationIntegrationFlow extends IntegrationFlowAdapter 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(RecommendationChannels.MATCHES_SOLVED_RECOMMENDATION_INBOUND_CHANNEL)
-        .handle(MatchesSolved.class, (payload, headers) -> {
-          var notification = facade.handleMatchesSolved(payload);
-          return notification.orElse(null);
-        })
-        .log(Level.DEBUG, getClass().getName())
+        .handle(
+            MatchesSolved.class,
+            (payload, headers) -> facade.handleMatchesSolved(payload).orElse(null))
+        .log(Level.TRACE, getClass().getName())
         .channel(RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL);
   }
 }

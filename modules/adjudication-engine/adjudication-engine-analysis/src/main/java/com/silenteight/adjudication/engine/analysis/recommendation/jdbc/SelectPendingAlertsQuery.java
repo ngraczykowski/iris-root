@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 import lombok.NonNull;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlertsWithStrategy;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import com.google.common.base.Preconditions;
@@ -31,8 +32,8 @@ class SelectPendingAlertsQuery {
     jdbcTemplate.setMaxRows(fetchSize);
   }
 
-  List<PendingAlert> execute(long analysisId) {
-    return jdbcTemplate.query(
+  PendingAlertsWithStrategy execute(long analysisId) {
+    var pendingAlerts = jdbcTemplate.query(
         "SELECT aamsq.alert_id, aamsq.match_solution\n"
             + "FROM ae_alert_match_solutions_query aamsq\n"
             + "         JOIN ae_alert_matches_query aamq\n"
@@ -45,6 +46,16 @@ class SelectPendingAlertsQuery {
             + "WHERE aamsq.analysis_id = ?\n"
             + "  AND ar.recommendation_id IS NULL",
         ROW_MAPPER, analysisId);
+
+    // NOTE(ahaczewski): There is no need to query strategy name when there are no pending alerts.
+    if (pendingAlerts.isEmpty()) {
+      return new PendingAlertsWithStrategy("", List.of());
+    }
+
+    var strategyName = jdbcTemplate.queryForObject(
+        "SELECT strategy FROM ae_analysis WHERE analysis_id = ?", String.class, analysisId);
+
+    return new PendingAlertsWithStrategy(strategyName, pendingAlerts);
   }
 
   private static final class PendingAlertMapper implements RowMapper<PendingAlert> {

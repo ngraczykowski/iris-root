@@ -23,7 +23,7 @@ class CommentInputsUpdatedRecommendationIntegrationFlow extends IntegrationFlowA
             CommentInputsUpdated.class,
             (payload, headers) -> facade.handleCommentInputsUpdated(payload))
         .split()
-        .log(Level.DEBUG, getClass().getName())
+        .log(Level.TRACE, getClass().getName())
         .channel(RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL);
   }
 }

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
+import org.springframework.integration.handler.LoggingHandler.Level;
 
 import javax.validation.Valid;
 
@@ -65,6 +66,7 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
       String outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
 
     return from(outboundChannel)
+        .log(Level.TRACE, getClass().getName() + "." + outboundExchangeName)
         .handle(createOutboundAdapter(outboundExchangeName, outboundRoutingKey))
         .get();
   }
