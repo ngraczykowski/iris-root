@@ -101,6 +101,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/VectorsListDto'
 
+  /vectors/statistics:
+    get:
+      tags:
+        - feature vectors
+      parameters:
+        - in: query
+          name: signature
+          required: true
+          description: FeatureVector Signature
+          schema:
+            type: string
+          example: rJoE7bSu1N0zEnhud4TxhgjdG/4=
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsDto'
 
 components:
   schemas:
@@ -146,4 +165,13 @@ components:
           "signature": "rJoE7bSu1N0zEnhud4TxhgjdG/4=",
           "matchesCount": 2344,
           "values": [ "NO_MATCH", "MATCH", "NO_MATCH", "NO_MATCH" ]
+        }
+    StatisticsDto:
+      type: object
+      properties:
+        matchesCount:
+          type: integer
+      example:
+        {
+          'matchesCount': 3453
         }
