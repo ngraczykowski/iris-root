@@ -14,10 +14,15 @@ import java.util.Optional;
 public class PendingRecommendationFacade {
 
   private final HandleAddedAnalysisDatasetsUseCase handleAddedAnalysisDatasetsUseCase;
+  private final RemoveSolvedPendingRecommendationUseCase removeSolvedPendingRecommendationUseCase;
 
   public Optional<PendingRecommendations> handleAddedAnalysisDatasets(
       AddedAnalysisDatasets addedAnalysisDatasets) {
 
     return handleAddedAnalysisDatasetsUseCase.handleAddedAnalysisDatasets(addedAnalysisDatasets);
+  }
+
+  public void removeSolvedPendingRecommendation() {
+    removeSolvedPendingRecommendationUseCase.removeSolvedPendingRecommendation();
   }
 }

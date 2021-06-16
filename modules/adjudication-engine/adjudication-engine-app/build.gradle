@@ -14,6 +14,7 @@ dependencies {
   implementation project(":adjudication-engine-common")
   implementation project(":adjudication-engine-dataset")
   implementation project(":adjudication-engine-features")
+  implementation project(":proto-adjudication-engine-internal-protos")
   implementation project(":adjudication-engine-mock-agents")
   implementation project(":adjudication-engine-mock-datasource")
   implementation project(":adjudication-engine-mock-governance")

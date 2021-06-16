@@ -12,8 +12,15 @@ class JdbcPendingRecommendationDataAccess implements PendingRecommendationDataAc
 
   private final CreatePendingRecommendationsQuery createPendingRecommendationsQuery;
 
+  private final RemovePendingRecommendationsQuery removePendingRecommendationsQuery;
+
   @Override
   public int createPendingRecommendations(long analysisId) {
     return createPendingRecommendationsQuery.execute(analysisId);
+  }
+
+  @Override
+  public int removeSolvedPendingRecommendations() {
+    return removePendingRecommendationsQuery.execute();
   }
 }

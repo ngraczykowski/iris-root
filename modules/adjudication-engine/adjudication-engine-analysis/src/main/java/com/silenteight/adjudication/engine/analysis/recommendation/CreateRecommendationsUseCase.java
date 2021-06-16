@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
+import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,12 +21,13 @@ class CreateRecommendationsUseCase {
 
   private final GenerateCommentsUseCase generateCommentsUseCase;
   private final RecommendationRepository repository;
-  // TODO: Remove pending recommendation once the recommendation is generated.
+  private final PendingRecommendationFacade pendingRecommendationFacade;
 
   List<RecommendationInfo> createRecommendations(
       long analysisId, List<AlertSolution> alertSolutions) {
     var recommendations = createRecommendationEntities(analysisId, alertSolutions);
     var savedRecommendations = repository.saveAll(recommendations);
+    pendingRecommendationFacade.removeSolvedPendingRecommendation();
     return savedRecommendations
         .stream()
         .map(RecommendationEntity::toRecommendationInfo)
