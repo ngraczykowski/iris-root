@@ -39,6 +39,7 @@ class JdbcAnalysisDataAccessIT extends BaseJdbcTest {
     var result = jdbcAnalysisDataAccess.getPolicyAndFeatureVectorElements(1).toFeatureCollection();
 
     assertThat(result.getFeatureList())
+        .isNotEmpty()
         .allSatisfy(f -> assertThat(names).contains(f.getName()));
   }
 
