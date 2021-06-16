@@ -23,7 +23,7 @@ class JdbcMatchCategoryValuesDataAccess implements MatchCategoryValuesDataAccess
   private final CreateMatchCategoryValue createMatchCategoryValue;
 
   @Override
-  @Transactional
+  @Transactional(readOnly = true)
   public MissingCategoryResult getMissingCategoryValues(long analysisId) {
     return selectMissingMatchCategoryValuesQuery.execute(analysisId);
   }

@@ -18,7 +18,7 @@ import java.util.List;
 class SolveMatchesUseCase {
 
   private final UnsolvedMatchesReader unsolvedMatchesReader;
-  private final GovernancePolicyStepsApiClient solvingApiClient;
+  private final PolicyStepsClient solvingApiClient;
   private final CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
 
   List<String> solveMatches(SolveMatchesRequest request) {

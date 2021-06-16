@@ -19,7 +19,7 @@ class JdbcCommentInputDataAccess implements CommentInputDataAccess {
   private final SelectMissingAlertCommentInputQuery selectMissingAlertCommentInputQuery;
 
   @Override
-  @Transactional
+  @Transactional(readOnly = true)
   public Optional<MissingCommentInputsResult> getMissingCommentInputs(long analysisId) {
     return selectMissingAlertCommentInputQuery.execute(analysisId);
   }

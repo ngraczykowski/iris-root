@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.engine.analysis.analysis.integration.AnalysisChannels;
 import com.silenteight.adjudication.engine.analysis.categoryrequest.integration.CategoryRequestChannels;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
+import com.silenteight.adjudication.engine.analysis.recommendation.integration.RecommendationChannels;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -50,6 +51,14 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
         CategoryRequestChannels.MATCH_CATEGORIES_UPDATED_OUTBOUND_CHANNEL,
         properties.getEventInternal().getOutboundExchangeName(),
         properties.getEventInternal().getMatchCategoriesUpdatedRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow recommendationsGeneratedOutboundIntegrationFlow() {
+    return createOutboundFlow(
+        RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL,
+        properties.getEvent().getOutboundExchangeName(),
+        properties.getEvent().getRecommendationsGeneratedRoutingKey());
   }
 
   private StandardIntegrationFlow createOutboundFlow(

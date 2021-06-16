@@ -15,20 +15,20 @@ import javax.validation.Valid;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(GovernanceClientProperties.class)
-class GovernancePolicyStepsApiClientConfiguration {
+@EnableConfigurationProperties(PolicyStepsClientProperties.class)
+class PolicyStepsClientConfiguration {
 
   @Valid
-  private final GovernanceClientProperties properties;
+  private final PolicyStepsClientProperties properties;
 
   @Setter(onMethod_ = @GrpcClient("governance"))
   private Channel governanceChannel;
 
   @Bean
-  GovernancePolicyStepsApiClient governancePolicyStepsApiClient() {
+  PolicyStepsClient governancePolicyStepsApiClient() {
     var stub = PolicyStepsSolvingGrpc
         .newBlockingStub(governanceChannel)
         .withWaitForReady();
-    return new GovernancePolicyStepsApiClient(stub, properties.getTimeout());
+    return new PolicyStepsClient(stub, properties.getTimeout());
   }
 }

@@ -10,13 +10,14 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
-class GovernancePolicyStepsApiClient {
+class PolicyStepsClient {
 
   private final PolicyStepsSolvingBlockingStub policyStepsStub;
 
   private final Duration timeout;
 
   public BatchSolveFeaturesResponse batchSolveFeatures(BatchSolveFeaturesRequest request) {
+    // TODO(ahaczewski): Add logging and checks for expected and valid response.
     return policyStepsStub
         .withDeadlineAfter(timeout.toMillis(), TimeUnit.MILLISECONDS)
         .batchSolveFeatures(request);

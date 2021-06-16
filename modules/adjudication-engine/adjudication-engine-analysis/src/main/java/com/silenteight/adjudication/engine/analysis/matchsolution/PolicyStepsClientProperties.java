@@ -7,10 +7,10 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties(prefix = "ae.grpc.client.governance")
+@ConfigurationProperties(prefix = "ae.grpc.client.policy-steps")
 @Validated
 @Data
-public class GovernanceClientProperties {
+public class PolicyStepsClientProperties {
 
   private static final Duration TIMEOUT_DEFAULT = Duration.ofSeconds(5);
 

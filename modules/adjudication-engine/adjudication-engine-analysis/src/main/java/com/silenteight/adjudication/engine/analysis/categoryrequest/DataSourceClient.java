@@ -51,7 +51,7 @@ class DataSourceClient {
           .stream()
           .map(categoryValueName ->
               CategoryValue.newBuilder()
-                  .setSingleValue("SOURCE_ERROR")
+                  .setSingleValue("NO_VALUE")
                   .setName(categoryValueName)
                   .build())
           .collect(Collectors.toList());

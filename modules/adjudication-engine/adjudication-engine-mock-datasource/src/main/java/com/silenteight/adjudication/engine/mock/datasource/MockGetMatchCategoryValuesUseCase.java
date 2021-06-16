@@ -30,6 +30,8 @@ class MockGetMatchCategoryValuesUseCase {
       builder.setSingleValue("DENY");
     } else if (matchValue.contains("categories/segment")) {
       builder.setSingleValue("CONSUMER");
+    } else if (matchValue.contains("categories/hit_category")) {
+      builder.setSingleValue("DENY");
     } else {
       log.warn("Category is unknown for the mock, returning dummy: match={}", matchValue);
       builder.setSingleValue("UNKNOWN");

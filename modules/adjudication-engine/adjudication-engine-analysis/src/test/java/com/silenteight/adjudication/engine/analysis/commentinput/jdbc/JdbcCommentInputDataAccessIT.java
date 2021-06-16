@@ -14,10 +14,11 @@ import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Sql
-class JdbcAlertCommentInputDataAccessTest extends BaseDataJpaTest {
+class JdbcCommentInputDataAccessIT extends BaseDataJpaTest {
 
   @Autowired
   protected JdbcTemplate jdbcTemplate;
+
   private SelectMissingAlertCommentInputQuery query;
 
   @BeforeEach
@@ -30,6 +31,6 @@ class JdbcAlertCommentInputDataAccessTest extends BaseDataJpaTest {
     var missingCommentInputsResult = query.execute(1);
 
     assertThat(missingCommentInputsResult)
-        .hasValueSatisfying(r -> assertThat(r.count()).isEqualTo(1));
+        .hasValueSatisfying(r -> assertThat(r.count()).isEqualTo(3));
   }
 }

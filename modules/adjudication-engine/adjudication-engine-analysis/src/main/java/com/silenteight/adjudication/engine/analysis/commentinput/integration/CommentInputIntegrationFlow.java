@@ -24,8 +24,7 @@ class CommentInputIntegrationFlow extends IntegrationFlowAdapter {
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
-    return from(
-        COMMENT_INPUT_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
+    return from(COMMENT_INPUT_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
         .handle(PendingRecommendations.class, (payload, headers) -> {
           commentInputFacade.handlePendingRecommendations(payload);
           return CommentInputsUpdated

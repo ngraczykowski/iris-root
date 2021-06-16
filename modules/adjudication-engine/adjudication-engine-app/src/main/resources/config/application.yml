@@ -21,11 +21,18 @@ ae:
     jdbc:
       missing-batch-size-select: 8192
 
+  recommendation:
+    jdbc:
+      pending-alerts:
+        fetch-size: 8192
+
   grpc:
     client:
       data-source:
         timeout: 5s
-      governance:
+      policy-steps:
+        timeout: 5s
+      alert-solving:
         timeout: 5s
 
 #---------------------------------------------------------------------------------------------------

@@ -17,7 +17,8 @@ import java.util.Optional;
 @Slf4j
 class SelectMissingAlertCommentInputQuery {
 
-  private static final String MISSING_COMMENT_INPUTS = "SELECT alert_id"
+  private static final String MISSING_COMMENT_INPUTS =
+      "SELECT alert_id"
       + " FROM ae_missing_alert_comment_input_query a"
       + " WHERE a.analysis_id = ?";
 

@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 class SolveMatchesUseCaseTest {
 
   @Mock
-  private GovernancePolicyStepsApiClient governancePolicyStepsApiClient;
+  private PolicyStepsClient policyStepsClient;
   @Mock
   private CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
   private SolveMatchesUseCase solveMatchesUseCase;
@@ -25,12 +25,12 @@ class SolveMatchesUseCaseTest {
   void setUp() {
     var unsolvedMatchesReader = new InMemoryUnsolvedMatchesReader();
     solveMatchesUseCase = new SolveMatchesUseCase(
-        unsolvedMatchesReader, governancePolicyStepsApiClient, createMatchSolutionsUseCase);
+        unsolvedMatchesReader, policyStepsClient, createMatchSolutionsUseCase);
   }
 
   @Test
   void shouldSolveAllMatches() {
-    when(governancePolicyStepsApiClient.batchSolveFeatures(any()))
+    when(policyStepsClient.batchSolveFeatures(any()))
         .thenReturn(BatchSolveFeaturesResponse
             .newBuilder()
             .addAllSolutions(createSolutionResponses(10))
@@ -39,6 +39,6 @@ class SolveMatchesUseCaseTest {
     var matchesRequest = createSolveMatchesRequest(10);
     solveMatchesUseCase.solveMatches(matchesRequest);
 
-    verify(governancePolicyStepsApiClient, times(10)).batchSolveFeatures(any());
+    verify(policyStepsClient, times(10)).batchSolveFeatures(any());
   }
 }

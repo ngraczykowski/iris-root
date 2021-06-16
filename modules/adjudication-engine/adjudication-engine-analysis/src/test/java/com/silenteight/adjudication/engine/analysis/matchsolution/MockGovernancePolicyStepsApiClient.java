@@ -8,7 +8,7 @@ import com.silenteight.solving.api.v1.SolutionResponse;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class MockGovernancePolicyStepsApiClient extends GovernancePolicyStepsApiClient {
+public class MockGovernancePolicyStepsApiClient extends PolicyStepsClient {
 
   private int solvedFeatureVectors = 0;
 

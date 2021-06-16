@@ -14,6 +14,7 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,7 @@ import java.time.Duration;
 
 import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
 import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
+import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedRecommendationCount;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
 
@@ -45,6 +47,9 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   @GrpcClient("ae")
   private AlertServiceBlockingStub alertService;
+
+  @Autowired
+  private RabbitTemplate rabbitTemplate;
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
@@ -95,6 +100,33 @@ class AdjudicationEngineAnalysisIntegrationTest {
     assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
         .isEqualTo(1);
   }
+
+  @Test
+  void shouldSaveRecommendations() {
+    var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
+
+    await()
+        .atMost(Duration.ofSeconds(10))
+        .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
+
+    assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))
+        .isEqualTo(1);
+  }
+
+  // TODO: test recommandation generation
+  /*
+    FIRST APPROACH:
+
+    - as in shouldSolveAlerts wait until count of recommendations
+
+    SECOND APPROACH:
+
+    - wait for a message on queue
+    - prerequisite: bind the queue to exchange where RecommendationsGenerated gets published
+
+      //rabbitTemplate.receiveAndConvert(
+      //    "dont_know_yet", ParameterizedTypeReference.forType(RecommendationsGenerated.class));
+   */
 
   @Test
   void shouldSaveOneAlertToDataSet() {

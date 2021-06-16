@@ -58,6 +58,7 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
   public void getRecommendation(
       GetRecommendationRequest request,
       StreamObserver<Recommendation> responseObserver) {
+    // TODO(ahaczewski): First to go.
     respondWithNotFound(responseObserver);
   }
 
@@ -72,6 +73,7 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
   public void getMatchSolution(
       GetMatchSolutionRequest request,
       StreamObserver<MatchSolution> responseObserver) {
+    // TODO(ahaczewski): Second to go.
     respondWithNotFound(responseObserver);
   }
 
