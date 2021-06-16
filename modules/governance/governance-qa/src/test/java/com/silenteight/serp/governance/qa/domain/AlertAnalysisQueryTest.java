@@ -19,6 +19,8 @@ import static com.silenteight.serp.governance.qa.domain.DecisionState.VIEWING;
 import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class AlertAnalysisQueryTest {
 
@@ -38,22 +40,22 @@ class AlertAnalysisQueryTest {
   @Test
   void listShouldReturnAlertsWithNewAndFailedStateNewerThanDate() {
     //given
-    Alert alertBefore = alertRepository.save(getAlertGenerated(ALERT_BEFORE_DATE));
+    Alert alertBefore = alertRepository.save(getMockedAlert(ALERT_BEFORE_DATE));
     decisionRepository.save(getDecision(alertBefore.getId(), NEW));
 
-    Alert alertFailedAfter = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertFailedAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertFailedAfter.getId(), FAILED));
 
-    Alert alertNewAfter = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertNewAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertNewAfter.getId(), NEW));
 
-    Alert alertViewingAfter = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertViewingAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertViewingAfter.getId(), VIEWING));
 
-    Alert alertViewingAfterSecond = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertViewingAfterSecond = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertViewingAfterSecond.getId(), VIEWING));
     //when
-    List<AlertAnalysisDto> alertDtos = underTest.list(of(NEW, FAILED), ALERT_BEFORE_DATE,2);
+    List<AlertAnalysisDto> alertDtos = underTest.list(of(NEW, FAILED), ALERT_BEFORE_DATE,5);
     //then
     alertDtos.forEach(dto -> {
       assertThat(dto.getAddedAt()).isAfter(ALERT_BEFORE_DATE.toInstant());
@@ -62,10 +64,12 @@ class AlertAnalysisQueryTest {
     assertThat(alertDtos.size()).isEqualTo(2);
   }
 
-  private Alert getAlertGenerated(OffsetDateTime createdAt) {
-    Alert alert = new Alert();
-    alert.setAlertName(generateAlertName());
-    alert.setCreatedAt(createdAt);
+  private Alert getMockedAlert(OffsetDateTime createdAt) {
+    Alert alert = mock(Alert.class);
+    doCallRealMethod().when(alert).setId(any());
+    doCallRealMethod().when(alert).getId();
+    when(alert.getAlertName()).thenReturn(generateAlertName());
+    when(alert.getCreatedAt()).thenReturn(createdAt);
     return alert;
   }
 
@@ -80,16 +84,16 @@ class AlertAnalysisQueryTest {
   @Test
   void countShouldReturnNumberOfAlertsWithGivenStateNewerThanDate() {
     //given
-    Alert alertBefore = alertRepository.save(getAlertGenerated(ALERT_BEFORE_DATE));
+    Alert alertBefore = alertRepository.save(getMockedAlert(ALERT_BEFORE_DATE));
     decisionRepository.save(getDecision(alertBefore.getId(), NEW));
 
-    Alert alertFailedAfter = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertFailedAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertFailedAfter.getId(), FAILED));
 
-    Alert alertNewAfter = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertNewAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertNewAfter.getId(), NEW));
 
-    Alert alertViewingAfter = alertRepository.save(getAlertGenerated(ALERT_AFTER_DATE));
+    Alert alertViewingAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertViewingAfter.getId(), VIEWING));
     //when
     //then
@@ -100,7 +104,6 @@ class AlertAnalysisQueryTest {
   void detailsWillReturnAnalysisDetails() {
     Alert alert = new Alert();
     alert.setAlertName(ALERT_NAME);
-    alert.setCreatedAt(OffsetDateTime.now());
     alert = alertRepository.save(alert);
     Decision analysisDecision = decisionRepository.save(getDecision(alert.getId(), FAILED));
 

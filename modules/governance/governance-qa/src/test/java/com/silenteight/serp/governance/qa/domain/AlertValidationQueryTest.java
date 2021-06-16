@@ -18,6 +18,8 @@ import static com.silenteight.serp.governance.qa.domain.DecisionState.NEW;
 import static com.silenteight.serp.governance.qa.domain.DecisionState.VIEWING;
 import static java.time.OffsetDateTime.parse;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class AlertValidationQueryTest {
 
@@ -37,14 +39,14 @@ class AlertValidationQueryTest {
   @Test
   void listShouldReturnAlertsWithNewAndViewingStateNewerThanDate() {
     //given
-    Alert alertBefore = alertRepository.save(getAlert(ALERT_BEFORE_DATE));
+    Alert alertBefore = alertRepository.save(getMockedAlert(ALERT_BEFORE_DATE));
     decisionRepository.save(getDecision(alertBefore.getId(), NEW));
 
-    Alert alertFailedAfter = alertRepository.save(getAlert(ALERT_AFTER_DATE));
+    Alert alertFailedAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     Decision decisionFailedAfter = decisionRepository.save(getDecision(alertFailedAfter.getId(),
         FAILED));
 
-    Alert alertNewAfter = alertRepository.save(getAlert(ALERT_AFTER_DATE));
+    Alert alertNewAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertNewAfter.getId(), NEW));
     //when
     List<AlertValidationDto> alertDtos = underTest.list(List.of(FAILED), ALERT_BEFORE_DATE,2);
@@ -55,10 +57,12 @@ class AlertValidationQueryTest {
     assertThat(alertDtos.get(0).getAddedAt()).isAfter(ALERT_BEFORE_DATE.toInstant());
   }
 
-  private Alert getAlert(OffsetDateTime createdAt) {
-    Alert alert = new Alert();
-    alert.setAlertName(generateAlertName());
-    alert.setCreatedAt(createdAt);
+  private Alert getMockedAlert(OffsetDateTime createdAt) {
+    Alert alert = mock(Alert.class);
+    doCallRealMethod().when(alert).setId(any());
+    doCallRealMethod().when(alert).getId();
+    when(alert.getAlertName()).thenReturn(generateAlertName());
+    when(alert.getCreatedAt()).thenReturn(createdAt);
     return alert;
   }
 
@@ -73,13 +77,13 @@ class AlertValidationQueryTest {
   @Test
   void countShouldReturnNumberOfAlertsWithGivenStateNewerThanDate() {
     //given
-    Alert alertBefore = alertRepository.save(getAlert(ALERT_BEFORE_DATE));
+    Alert alertBefore = alertRepository.save(getMockedAlert(ALERT_BEFORE_DATE));
     decisionRepository.save(getDecision(alertBefore.getId(), NEW));
 
-    Alert alertFailedAfter = alertRepository.save(getAlert(ALERT_AFTER_DATE));
+    Alert alertFailedAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertFailedAfter.getId(), FAILED));
 
-    Alert alertNewAfter = alertRepository.save(getAlert(ALERT_AFTER_DATE));
+    Alert alertNewAfter = alertRepository.save(getMockedAlert(ALERT_AFTER_DATE));
     decisionRepository.save(getDecision(alertNewAfter.getId(), NEW));
 
     //when
@@ -90,7 +94,6 @@ class AlertValidationQueryTest {
   void detailsWillReturnValidationDetails() {
     Alert alert = new Alert();
     alert.setAlertName(ALERT_NAME);
-    alert.setCreatedAt(OffsetDateTime.now());
     alert = alertRepository.save(alert);
     decisionRepository.save(getDecision(alert.getId(), NEW));
     Decision validationDecision = decisionRepository.save(getDecision(alert.getId(), NEW));

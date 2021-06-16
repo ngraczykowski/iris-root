@@ -262,3 +262,8 @@ sep.auth:
       - "MANAGE_STEPS"
       - "MANAGE_QA_ALERTS"
       - "VIEW_VECTORS"
+
+serp.governance.qa:
+  scheduled:
+    viewing-decision:
+      max-ms: 45000
