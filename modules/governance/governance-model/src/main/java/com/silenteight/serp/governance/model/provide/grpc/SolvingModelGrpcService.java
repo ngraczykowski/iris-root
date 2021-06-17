@@ -19,14 +19,12 @@ import java.util.UUID;
 
 import static com.google.rpc.Code.FAILED_PRECONDITION_VALUE;
 import static com.google.rpc.Code.INTERNAL_VALUE;
-import static com.silenteight.sep.base.common.protocol.ByteStringUtils.toBase64String;
 import static com.silenteight.serp.governance.model.common.ModelResource.toResourceName;
 import static io.grpc.protobuf.StatusProto.toStatusRuntimeException;
 
 @RequiredArgsConstructor
 @Slf4j
-class SolvingModelGrpcService
-    extends SolvingModelServiceGrpc.SolvingModelServiceImplBase {
+class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServiceImplBase {
 
   private static final String MODEL_NOT_CONFIGURED_ERROR =
       "Requested model is not fully configured.";
@@ -67,7 +65,7 @@ class SolvingModelGrpcService
       ImportNewModelRequest request, StreamObserver<ImportNewModelResponse> responseObserver) {
 
     try {
-      UUID modelId = importModelUseCase.apply(toBase64String(request.getModelJson()));
+      UUID modelId = importModelUseCase.apply(request.getModelJson().toStringUtf8());
       ImportNewModelResponse response = ImportNewModelResponse.newBuilder()
           .setModel(toResourceName(modelId))
           .build();

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestRoles {
 
-  public static final String ADMIN = "ADMIN";
   public static final String ADMINISTRATOR = "ADMINISTRATOR";
   public static final String ANALYST = "ANALYST";
   public static final String APPROVER = "APPROVER";

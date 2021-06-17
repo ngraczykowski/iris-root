@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 import com.silenteight.serp.governance.policy.domain.exception.PolicyNotFoundException;
 import com.silenteight.serp.governance.policy.list.ListPoliciesRequestQuery;
 import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
+import com.silenteight.serp.governance.policy.transfer.export.PolicyExportQuery;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,11 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 class PolicyQuery implements
-    ListPoliciesRequestQuery, PolicyByIdQuery, InUsePolicyQuery, PolicyDetailsQuery {
+    ListPoliciesRequestQuery,
+    PolicyByIdQuery,
+    InUsePolicyQuery,
+    PolicyDetailsQuery,
+    PolicyExportQuery {
 
   @NonNull
   private final PolicyRepository policyRepository;
@@ -59,7 +65,17 @@ class PolicyQuery implements
   @Override
   public PolicyDto details(UUID id) {
     return policyRepository
-        .findByPolicyId(id).orElseThrow(() -> new PolicyNotFoundException(id))
+        .findByPolicyId(id)
+        .orElseThrow(() -> new PolicyNotFoundException(id))
         .toDto();
+  }
+
+  @Override
+  public TransferredPolicyRootDto getTransferablePolicy(@NonNull UUID policyId) {
+    Policy policy = policyRepository
+        .findByPolicyId(policyId)
+        .orElseThrow(() -> new PolicyNotFoundException(policyId));
+
+    return policy.toTransferablePolicyRootDto();
   }
 }

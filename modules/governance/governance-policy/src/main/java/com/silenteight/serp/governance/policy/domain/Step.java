@@ -8,10 +8,13 @@ import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurati
 import com.silenteight.serp.governance.policy.domain.dto.Solution;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredFeatureLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredStepDto;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
@@ -133,5 +136,23 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
 
   public boolean isNarrowStep() {
     return type == NARROW;
+  }
+
+  TransferredStepDto toTransferredDto() {
+    TransferredStepDto dto = new TransferredStepDto();
+    dto.setStepId(getStepId());
+    dto.setName(getName());
+    dto.setDescription(getDescription());
+    dto.setType(getType());
+    dto.setSolution(getSolution());
+    dto.setFeatureLogics(toTransferredFeatureLogicDtos());
+    return dto;
+  }
+
+  private List<TransferredFeatureLogicDto> toTransferredFeatureLogicDtos() {
+    return getFeatureLogics()
+        .stream()
+        .map(FeatureLogic::toTransferredDto)
+        .collect(toList());
   }
 }

@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.policy.transfer.importing;
 
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-import com.silenteight.serp.governance.policy.transfer.dto.TransferredPolicyRootDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 
 import org.apache.commons.io.IOUtils;
 

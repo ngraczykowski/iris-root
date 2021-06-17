@@ -4,18 +4,23 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.exception.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.time.Instant.now;
 import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
@@ -238,5 +243,38 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
 
     if (maxSortOrderNarrow > minSortOrderRegular)
         throw new NarrowStepsOrderHierarchyMismatch(policyId);
+  }
+
+  TransferredPolicyRootDto toTransferablePolicyRootDto() {
+    TransferredPolicyRootDto root = new TransferredPolicyRootDto();
+    root.setMetadata(getTransferredMetadata());
+    root.setPolicy(getTransferredPolicy());
+    return root;
+  }
+
+  private TransferredPolicyMetadataDto getTransferredMetadata() {
+    TransferredPolicyMetadataDto metadata = new TransferredPolicyMetadataDto();
+    metadata.setCreatedAt(getCreatedAt().toInstant());
+    metadata.setCreatedBy(getCreatedBy());
+    metadata.setUpdatedAt(getUpdatedAt().toInstant());
+    metadata.setUpdatedBy(getUpdatedBy());
+    metadata.setExportedAt(now());
+    return metadata;
+  }
+
+  private TransferredPolicyDto getTransferredPolicy() {
+    TransferredPolicyDto dto = new TransferredPolicyDto();
+    dto.setPolicyId(getPolicyId());
+    dto.setName(getName());
+    dto.setDescription(getDescription());
+    dto.setSteps(getTransferredStepDtos());
+    return dto;
+  }
+
+  private List<TransferredStepDto> getTransferredStepDtos() {
+    return getSteps()
+        .stream()
+        .map(Step::toTransferredDto)
+        .collect(toList());
   }
 }

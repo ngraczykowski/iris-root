@@ -3,10 +3,13 @@ package com.silenteight.serp.governance.changerequest.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.serp.governance.changerequest.approval.ModelApprovalQuery;
+import com.silenteight.serp.governance.changerequest.approval.dto.ModelApprovalDto;
 import com.silenteight.serp.governance.changerequest.approve.ChangeRequestModelQuery;
 import com.silenteight.serp.governance.changerequest.details.ChangeRequestDetailsQuery;
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotFoundException;
+import com.silenteight.serp.governance.changerequest.domain.exception.ModelApprovalNotFoundException;
 import com.silenteight.serp.governance.changerequest.list.ListChangeRequestsQuery;
 
 import java.util.Collection;
@@ -17,7 +20,10 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class ChangeRequestQuery implements
-    ListChangeRequestsQuery, ChangeRequestDetailsQuery, ChangeRequestModelQuery {
+    ListChangeRequestsQuery,
+    ChangeRequestDetailsQuery,
+    ChangeRequestModelQuery,
+    ModelApprovalQuery {
 
   @NonNull
   private final ChangeRequestRepository repository;
@@ -43,5 +49,13 @@ class ChangeRequestQuery implements
   @Override
   public String getModel(@NonNull UUID changeRequestId) {
     return details(changeRequestId).getModelName();
+  }
+
+  @Override
+  public ModelApprovalDto getApproval(@NonNull String modelName) {
+    return repository
+        .findByModelName(modelName)
+        .map(ChangeRequest::toModelApprovalDto)
+        .orElseThrow(() -> new ModelApprovalNotFoundException(modelName));
   }
 }

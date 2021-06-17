@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.serp.governance.policy.transfer.dto.TransferredPolicyRootDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

@@ -4,11 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-import com.silenteight.serp.governance.model.common.exception.InvalidChecksumException;
 import com.silenteight.serp.governance.model.domain.ModelService;
 import com.silenteight.serp.governance.model.transfer.dto.TransferredModelDto;
 import com.silenteight.serp.governance.model.transfer.dto.TransferredModelRootDto;
-import com.silenteight.serp.governance.policy.transfer.dto.TransferredPolicyRootDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 import com.silenteight.serp.governance.policy.transfer.importing.ImportPolicyCommand;
 import com.silenteight.serp.governance.policy.transfer.importing.ImportPolicyUseCase;
 
@@ -16,7 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
-import static com.silenteight.serp.governance.model.common.ChecksumCalculator.calculate;
+import static com.silenteight.serp.governance.model.transfer.TransferredModelChecksumCalculator.assertTheSame;
 import static com.silenteight.serp.governance.policy.common.PolicyResource.toResourceName;
 import static java.nio.charset.Charset.forName;
 
@@ -33,7 +32,7 @@ public class ImportModelUseCase {
   public UUID apply(@NonNull String modelJson) {
     TransferredModelRootDto root = parse(modelJson);
     TransferredModelDto transferredModel = root.getModel();
-    validateChecksum(root.getChecksum(), transferredModel);
+    assertTheSame(root.getChecksum(), transferredModel);
     UUID policyId = importPolicyUseCase.apply(toImportPolicyCommand(transferredModel));
 
     return modelService.createModel(
@@ -46,15 +45,6 @@ public class ImportModelUseCase {
     return JSON_CONVERTER.deserializeObject(
         JSON_CONVERTER.deserializeFromString(modelJson),
         TransferredModelRootDto.class);
-  }
-
-  private static void validateChecksum(
-      String expectedChecksum, TransferredModelDto transferredModel) {
-
-    String checksum = calculate(transferredModel);
-
-    if (!expectedChecksum.equals(checksum))
-      throw new InvalidChecksumException("Checksum is different from expected.");
   }
 
   private static ImportPolicyCommand toImportPolicyCommand(

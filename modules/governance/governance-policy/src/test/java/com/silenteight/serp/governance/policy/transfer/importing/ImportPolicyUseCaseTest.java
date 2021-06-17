@@ -1,8 +1,7 @@
 package com.silenteight.serp.governance.policy.transfer.importing;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
-import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest;
-import com.silenteight.serp.governance.policy.transfer.dto.*;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
