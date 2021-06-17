@@ -85,6 +85,7 @@ libraries.orika = [group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5
 libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
 
 // Messaging
+libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java', version: '1.7.1']
 libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
 libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
 
@@ -143,6 +144,7 @@ dependencies {
   implementation libraries.jjwt
   implementation libraries.liquibase_core
   implementation libraries.liquibase_sessionlock
+  implementation libraries.lz4_java
   implementation libraries.orika
   implementation libraries.postgresql
   implementation libraries.protobuf_util
