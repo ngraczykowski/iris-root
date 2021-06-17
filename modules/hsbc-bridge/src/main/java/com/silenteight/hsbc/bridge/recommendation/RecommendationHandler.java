@@ -11,7 +11,7 @@ import com.silenteight.hsbc.bridge.analysis.event.AnalysisCompletedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Objects.nonNull;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,10 +23,7 @@ class RecommendationHandler {
 
   @Transactional
   public void getAndStoreRecommendations(@NonNull String analysis, String dataset) {
-    var request = GetRecommendationsDto.builder()
-        .analysis(analysis)
-        .dataset(ofNullable(dataset).orElse(""))
-        .build();
+    var request = buildRequest(analysis, dataset);
 
     var recommendations = recommendationServiceClient.getRecommendations(request);
     recommendations.forEach(this::handleRecommendation);
@@ -44,6 +41,20 @@ class RecommendationHandler {
 
       eventPublisher.publishEvent(new AlertRecommendationReadyEvent(alert));
     }
+  }
+
+  private GetRecommendationsDto buildRequest(String analysis, String dataset) {
+    var builder = GetRecommendationsDto.builder()
+        .analysis(analysis);
+
+    if (nonNull(dataset)) {
+      builder.dataset(dataset);
+    }
+
+    var request = builder.build();
+
+    log.info("NOMAD, Ask for recommendations, request:{}", request);
+    return request;
   }
 
   private void save(RecommendationDto recommendation) {

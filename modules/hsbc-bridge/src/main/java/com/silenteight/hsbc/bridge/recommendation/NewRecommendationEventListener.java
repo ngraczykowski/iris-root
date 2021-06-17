@@ -15,6 +15,8 @@ class NewRecommendationEventListener {
 
   @EventListener
   public void onNewRecommendationsEvent(NewRecommendationsEvent event) {
+    log.info("Handling new recommendations event, analysis={}", event.getAnalysis());
+
     recommendationHandler.getAndStoreRecommendations(event.getAnalysis(), event.getDataset());
   }
 }
