@@ -7,9 +7,12 @@ import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurati
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredFeatureLogicDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredMatchConditionDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.*;
 
 import static java.util.stream.Collectors.toList;
@@ -57,5 +60,19 @@ class FeatureLogic extends BaseEntity {
 
   private Collection<MatchConditionConfigurationDto> featuresToConfigurationDto() {
     return getFeatures().stream().map(MatchCondition::toConfigurationDto).collect(toList());
+  }
+
+  TransferredFeatureLogicDto toTransferredDto() {
+    TransferredFeatureLogicDto dto = new TransferredFeatureLogicDto();
+    dto.setToFulfill(getCount());
+    dto.setMatchConditions(toTransferredMatchConditionDtos());
+    return dto;
+  }
+
+  private List<TransferredMatchConditionDto> toTransferredMatchConditionDtos() {
+    return getFeatures()
+        .stream()
+        .map(MatchCondition::toTransferredDto)
+        .collect(toList());
   }
 }

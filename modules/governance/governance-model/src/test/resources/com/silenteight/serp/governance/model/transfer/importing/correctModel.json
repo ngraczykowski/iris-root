@@ -1,15 +1,18 @@
 {
-  "checksum": "D7369B710AB26FCA464ED63721406060",
+  "checksum": "A4B3C967EB01E884AE6D7B149302AE3C",
   "model": {
     "metadata": {
       "modelId": "de1afe98-0b58-4941-9791-4e081f9b8139",
       "approvedBy": "asmith",
-      "approvedAt": "2020-06-01 11:25:34.187"
+      "approvedAt": "2020-06-01 11:25:34.187342"
     },
     "policy": {
       "metadata": {
         "createdBy": "jdoe",
-        "exportedAt": "2020-04-15 10:58:53.451"
+        "createdAt": "2020-04-15 10:38:53.451244",
+        "updatedBy": "jbravo",
+        "updatedAt": "2020-04-15 10:48:53.451244",
+        "exportedAt": "2020-04-15 10:58:53.451244"
       },
       "policy": {
         "policyId": "01256804-1ce1-4d52-94d4-d1876910f272",

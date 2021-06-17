@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.policy.transfer.importing;
 
-import com.silenteight.serp.governance.policy.transfer.dto.*;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +63,7 @@ class TransferredPolicyRootParserTest {
     // then
     TransferredPolicyMetadataDto transferredPolicyMetadata = root.getMetadata();
     assertThat(transferredPolicyMetadata.getExportedAt())
-        .isEqualTo(Instant.parse("2020-04-15T10:58:53.451Z"));
+        .isEqualTo(Instant.parse("2020-04-15T10:58:53.451343Z"));
 
     TransferredPolicyDto transferredPolicy = root.getPolicy();
     assertThat(transferredPolicy.getName()).isEqualTo("policy-name");

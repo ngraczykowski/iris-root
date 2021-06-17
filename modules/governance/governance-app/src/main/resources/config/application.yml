@@ -227,6 +227,7 @@ sep.auth:
       - "IMPORT_POLICY"
     MANAGE_MODEL:
       - "CREATE_MODEL"
+      - "EXPORT_MODEL"
       - "LIST_MODELS"
     MANAGE_POLICY:
       - "EDIT_POLICY"

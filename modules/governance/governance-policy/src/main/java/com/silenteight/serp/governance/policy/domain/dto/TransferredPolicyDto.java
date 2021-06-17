@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.transfer.dto;
+package com.silenteight.serp.governance.policy.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -31,4 +31,11 @@ class InMemoryChangeRequestRepository
         .filter(changeRequest -> changeRequest.hasChangeRequestId(changeRequestId))
         .findFirst();
   }
+
+  @Override
+  public Optional<ChangeRequest> findByModelName(String modelName) {
+    return stream()
+        .filter(changeRequest -> changeRequest.hasModelName(modelName))
+        .findFirst();
+  }
 }

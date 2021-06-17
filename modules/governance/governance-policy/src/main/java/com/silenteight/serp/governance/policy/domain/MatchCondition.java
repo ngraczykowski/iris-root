@@ -5,6 +5,7 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredMatchConditionDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,5 +63,13 @@ class MatchCondition extends BaseEntity {
 
   public Collection<String> getValues() {
     return new ArrayList<>(values);
+  }
+
+  TransferredMatchConditionDto toTransferredDto() {
+    TransferredMatchConditionDto dto = new TransferredMatchConditionDto();
+    dto.setName(getName());
+    dto.setCondition(getCondition());
+    dto.setValues(new ArrayList<>(getValues()));
+    return dto;
   }
 }

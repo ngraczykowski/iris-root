@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.serp.governance.changerequest.approval.dto.ModelApprovalDto;
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestNotInPendingStateException;
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
@@ -80,6 +81,10 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
     return getChangeRequestId() == changeRequestId;
   }
 
+  boolean hasModelName(String modelName) {
+    return getModelName().equals(modelName);
+  }
+
   void approve(String username, String comment) {
     if (isNotInPendingState())
       throw new ChangeRequestNotInPendingStateException(getChangeRequestId());
@@ -134,6 +139,13 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
         .decidedAt(getDecidedAt())
         .state(getState())
         .modelName(getModelName())
+        .build();
+  }
+
+  ModelApprovalDto toModelApprovalDto() {
+    return ModelApprovalDto.builder()
+        .approvedAt(getDecidedAt())
+        .approvedBy(getDecidedBy())
         .build();
   }
 }

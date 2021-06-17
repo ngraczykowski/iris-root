@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.transfer.dto;
+package com.silenteight.serp.governance.policy.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,21 +13,21 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({ "exportedAt" })
+@JsonPropertyOrder({ "createdAt", "createdBy", "updatedAt", "updatedBy", "exportedAt" })
 public class TransferredPolicyMetadataDto implements Serializable {
 
   private static final long serialVersionUID = -3686897739373445722L;
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "UTC")
   private Instant createdAt;
 
   private String createdBy;
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "UTC")
   private Instant updatedAt;
 
   private String updatedBy;
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "UTC")
   private Instant exportedAt;
 }

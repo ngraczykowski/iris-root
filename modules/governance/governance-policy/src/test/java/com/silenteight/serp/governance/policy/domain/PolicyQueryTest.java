@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.domain.dto.SavePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 import com.silenteight.serp.governance.policy.domain.dto.UpdatePolicyRequest;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static java.time.Instant.now;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
@@ -87,6 +89,28 @@ class PolicyQueryTest extends BaseDataJpaTest {
     Collection<PolicyDto> result = underTest.list(of(SAVED, DRAFT));
 
     assertThat(result).containsExactlyInAnyOrder(saved.toDto(), draft.toDto());
+  }
+
+  @Test
+  void exportPolicy() {
+    Policy policy = createSavedPolicy(
+        FIRST_POLICY_UID, FIRST_POLICY_NAME, FIRST_POLICY_DESC, FIRST_POLICY_CREATED_BY);
+
+    TransferredPolicyRootDto transferablePolicy = underTest.getTransferablePolicy(FIRST_POLICY_UID);
+
+    assertThat(transferablePolicy).isNotNull();
+    assertThat(transferablePolicy.getCreatedBy()).isEqualTo(FIRST_POLICY_CREATED_BY);
+    assertThat(transferablePolicy.getMetadata().getCreatedBy()).isEqualTo(FIRST_POLICY_CREATED_BY);
+    assertThat(transferablePolicy.getMetadata().getUpdatedBy()).isEqualTo(policy.getUpdatedBy());
+    assertThat(transferablePolicy.getMetadata().getExportedAt()).isBeforeOrEqualTo(now());
+    assertThat(transferablePolicy.getMetadata().getCreatedAt())
+        .isEqualTo(policy.getCreatedAt().toInstant());
+    assertThat(transferablePolicy.getMetadata().getUpdatedAt())
+        .isEqualTo(policy.getUpdatedAt().toInstant());
+    assertThat(transferablePolicy.getPolicy().getPolicyId()).isEqualTo(FIRST_POLICY_UID);
+    assertThat(transferablePolicy.getPolicy().getDescription()).isEqualTo(FIRST_POLICY_DESC);
+    assertThat(transferablePolicy.getPolicy().getName()).isEqualTo(FIRST_POLICY_NAME);
+    assertThat(transferablePolicy.getPolicy().getSteps()).isEmpty();
   }
 
   @NotNull

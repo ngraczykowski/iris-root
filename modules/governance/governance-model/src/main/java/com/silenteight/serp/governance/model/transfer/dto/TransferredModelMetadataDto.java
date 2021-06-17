@@ -26,6 +26,6 @@ public class TransferredModelMetadataDto implements Serializable {
   @NonNull
   private String approvedBy;
 
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "UTC")
   private Instant approvedAt;
 }

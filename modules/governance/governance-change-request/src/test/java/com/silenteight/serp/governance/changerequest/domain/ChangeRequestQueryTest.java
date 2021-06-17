@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.changerequest.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.changerequest.approval.dto.ModelApprovalDto;
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
@@ -19,6 +21,7 @@ import static com.silenteight.serp.governance.changerequest.fixture.ChangeReques
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATED_BY;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.CREATOR_COMMENT;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
+import static java.time.OffsetDateTime.now;
 import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
 
@@ -97,6 +100,23 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(result.getDecidedAt()).isNotNull();
     assertThat(result.getDeciderComment()).isEqualTo(deciderComment);
     assertThat(result.getState()).isEqualTo(APPROVED);
+  }
+
+  @Test
+  void shouldGetModelApproval() {
+    // given
+    String decider = "jdoe";
+    String deciderComment = "Looks good";
+    ChangeRequest changeRequest = persistChangeRequest();
+    OffsetDateTime timeBeforeApproval = now();
+    changeRequest.approve(decider, deciderComment);
+
+    // when
+    ModelApprovalDto result = underTest.getApproval(MODEL_NAME);
+
+    // then
+    assertThat(result.getApprovedAt()).isAfter(timeBeforeApproval);
+    assertThat(result.getApprovedBy()).isEqualTo(decider);
   }
 
   private ChangeRequest persistChangeRequest() {

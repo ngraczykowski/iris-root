@@ -14,4 +14,6 @@ interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
   Collection<ChangeRequest> findAllByStateInOrderByDecidedAtDesc(Set<ChangeRequestState> states);
 
   Optional<ChangeRequest> findByChangeRequestId(UUID changeRequestId);
+
+  Optional<ChangeRequest> findByModelName(String modelName);
 }
