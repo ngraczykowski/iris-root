@@ -4,9 +4,9 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  adjudicationEngineApiVersion = "0.3.0-SNAPSHOT"
+  adjudicationEngineApiVersion = "0.3.0"
   governanceApiVersion = "1.3.0"
-  agentsApiVersion = "0.4.0-SNAPSHOT"
+  agentsApiVersion = "0.4.0"
   silenteightDataSourceApiVersion = "0.1.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.0"
