@@ -59,7 +59,7 @@ class RecommendationEntity extends BaseEntity {
     return RecommendationInfo
         .newBuilder()
         .setAlert("alerts/" + getAlertId())
-        .setRecommendation("recommendations/" + getId())
+        .setRecommendation("analysis/" + getAnalysisId() + "/recommendations/" + getId())
         .build();
   }
 
@@ -68,8 +68,9 @@ class RecommendationEntity extends BaseEntity {
         .newBuilder()
         .setAlert("alerts/" + getAlertId())
         .setCreateTime(fromOffsetDateTime(getCreatedAt()))
-        .setName("recommendations/" + getId())
+        .setName("analysis/" + getAnalysisId() + "/recommendations/" + getId())
         .setRecommendedAction(recommendedAction)
+        // TODO(ahaczewski): Generate a proper comment.
         .setRecommendationComment("Recommended action: " + recommendedAction)
         .build();
   }
