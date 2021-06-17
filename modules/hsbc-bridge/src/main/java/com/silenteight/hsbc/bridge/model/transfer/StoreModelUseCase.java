@@ -9,18 +9,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class StoreModelUseCase {
 
-  private final ModelRepository modelRepository;
+  private final ModelInformationRepository modelInformationRepository;
 
   @Transactional
   public void storeModel(ModelStatusUpdatedDto modelStatusUpdated) {
     var modelEntity = toModelEntity(modelStatusUpdated);
-    modelRepository.save(modelEntity);
+    modelInformationRepository.save(modelEntity);
 
     log.info("New model: {} has been stored", modelEntity);
   }
 
-  private ModelEntity toModelEntity(ModelStatusUpdatedDto modelStatusUpdated) {
-    return ModelEntity.builder()
+  private ModelInformationEntity toModelEntity(ModelStatusUpdatedDto modelStatusUpdated) {
+    return ModelInformationEntity.builder()
         .name(modelStatusUpdated.getName())
         .minIoUrl(modelStatusUpdated.getUrl())
         .type(ModelType.valueOf(modelStatusUpdated.getType()))

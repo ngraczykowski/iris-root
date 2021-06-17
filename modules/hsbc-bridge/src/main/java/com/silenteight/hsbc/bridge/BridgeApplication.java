@@ -6,7 +6,6 @@ import com.silenteight.hsbc.bridge.amqp.AmqpModule;
 import com.silenteight.hsbc.bridge.analysis.AnalysisModule;
 import com.silenteight.hsbc.bridge.aws.AwsModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
-import com.silenteight.hsbc.bridge.file.FileModule;
 import com.silenteight.hsbc.bridge.grpc.GrpcModule;
 import com.silenteight.hsbc.bridge.http.HttpModule;
 import com.silenteight.hsbc.bridge.http.security.SecurityModule;
@@ -43,7 +42,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     AmqpModule.class,
     AwsModule.class,
     GrpcModule.class,
-    FileModule.class,
     BulkModule.class,
     DataRetentionModule.class,
     HttpModule.class,

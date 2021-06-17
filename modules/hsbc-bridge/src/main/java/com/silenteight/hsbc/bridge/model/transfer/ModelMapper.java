@@ -3,10 +3,11 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.hsbc.bridge.file.ResourceIdentifier;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.worldcheck.api.v1.ModelPersisted;
+
+import java.net.URI;
 
 import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.SUCCESS;
 
@@ -22,10 +23,10 @@ class ModelMapper {
   }
 
   static ModelStatusUpdatedDto createModelStatusUpdate(
-      ModelInfoRequest modelInfoRequest, ResourceIdentifier resource) {
+      ModelInfoRequest modelInfoRequest, URI modelUri) {
     return ModelStatusUpdatedDto.builder()
         .name(modelInfoRequest.getName())
-        .url(resource.getUri())
+        .url(modelUri.toString())
         .type(modelInfoRequest.getType().name())
         .status(SUCCESS.name())
         .build();

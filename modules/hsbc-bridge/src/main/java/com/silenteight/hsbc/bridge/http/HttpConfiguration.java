@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 class HttpConfiguration {
 
   @Bean
-  HttpResourceLoader httpResourceLoader() {
-    return new HttpResourceLoader();
+  HttpAdapter httpAdapter() {
+    return new HttpAdapter();
   }
 }

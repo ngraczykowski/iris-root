@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class StoreModelUseCaseConfiguration {
 
-  private final ModelRepository modelRepository;
+  private final ModelInformationRepository modelRepository;
 
   @Bean
   StoreModelUseCase storeModelUseCase() {

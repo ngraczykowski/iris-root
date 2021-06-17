@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class StoreModelUseCaseSpec extends Specification {
 
-  def modelRepository = Mock(ModelRepository)
+  def modelRepository = Mock(ModelInformationRepository)
   def underTest = new StoreModelUseCase(modelRepository)
 
   def 'should save model'() {
@@ -16,6 +16,6 @@ class StoreModelUseCaseSpec extends Specification {
     underTest.storeModel(modelStatusUpdated)
 
     then:
-    1 * modelRepository.save(_ as ModelEntity)
+    1 * modelRepository.save(_ as ModelInformationEntity)
   }
 }

@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.model.transfer;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.file.SaveResourceUseCase;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 
 import org.springframework.context.annotation.Bean;
@@ -18,14 +17,14 @@ class TransferModelConfiguration {
 
   @Bean
   WorldCheckModelManager worldCheckModelManager(
-      SaveResourceUseCase saveResourceUseCase,
+      ModelRepository modelRepository,
       StoreModelUseCase storeModelUseCase,
       WorldCheckMessageSender worldCheckMessageSender) {
     return new WorldCheckModelManager(
         jenkinsModelClient,
-        saveResourceUseCase,
         storeModelUseCase,
-        worldCheckMessageSender);
+        worldCheckMessageSender,
+        modelRepository);
   }
 
   @Bean

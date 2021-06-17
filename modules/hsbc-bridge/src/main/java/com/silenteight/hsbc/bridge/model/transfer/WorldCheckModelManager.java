@@ -3,12 +3,10 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.file.SaveResourceUseCase;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 
 import java.io.IOException;
-import java.net.URL;
 
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
@@ -22,9 +20,9 @@ import static com.silenteight.hsbc.bridge.model.transfer.ModelType.NAME_ALIASES;
 public class WorldCheckModelManager implements ModelManager {
 
   private final ModelClient jenkinsModelClient;
-  private final SaveResourceUseCase saveResourceUseCase;
   private final StoreModelUseCase storeModelUseCase;
   private final WorldCheckMessageSender worldCheckMessageSender;
+  private final ModelRepository modelRepository;
 
   @Override
   public void transferModelToJenkins(ModelInfo modelInfo) {
@@ -33,7 +31,7 @@ public class WorldCheckModelManager implements ModelManager {
 
   @Override
   public void transferModelFromJenkins(ModelInfoRequest request) {
-    var modelStatusUpdated = transferModelToMinIo(request);
+    var modelStatusUpdated = trySavingModel(request);
     jenkinsModelClient.sendModelStatus(modelStatusUpdated);
   }
 
@@ -52,13 +50,10 @@ public class WorldCheckModelManager implements ModelManager {
     storeModelUseCase.storeModel(modelStatusUpdated);
   }
 
-  private ModelStatusUpdatedDto transferModelToMinIo(ModelInfoRequest request) {
+  private ModelStatusUpdatedDto trySavingModel(ModelInfoRequest request) {
     try {
-      var url = new URL(request.getUrl());
-      var inputStream = url.openStream();
-      var resource = saveResourceUseCase.save(inputStream, request.getName());
-      log.debug("Update model uri on minio successful!");
-      return createModelStatusUpdate(request, resource);
+      var modelUri = modelRepository.saveModel(request.getUrl(), request.getName());
+      return createModelStatusUpdate(request, modelUri);
     } catch (IOException e) {
       log.error("Unable to update model uri on minio: " + request.getName(), e);
       return convertToModelStatusUpdated(request, FAILURE);

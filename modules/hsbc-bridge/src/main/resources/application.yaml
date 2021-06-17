@@ -23,8 +23,10 @@ silenteight.bridge:
     alert-timeout: 5m
   aws:
     accessKey: minioadmin
-    bucketName: test
-    region: EU_CENTRAL_1
+    buckets:
+      modelBucketName: test
+      watchlistBucketName: test
+    region: US_EAST_1
     secretKey: minioadmin
     uri: http://127.0.0.1:9000
   data.retention:

@@ -16,7 +16,7 @@ import static lombok.AccessLevel.NONE;
 @Getter
 @Entity
 @Table(name = "hsbc_bridge_model")
-public class ModelEntity extends BaseEntity {
+public class ModelInformationEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)

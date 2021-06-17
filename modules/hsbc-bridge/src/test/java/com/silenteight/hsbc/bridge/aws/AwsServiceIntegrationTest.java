@@ -46,7 +46,7 @@ class AwsServiceIntegrationTest {
         .build();
 
     s3client.createBucket(b -> b.bucket(BUCKET_NAME));
-    awsAdapter = new AwsAdapter(s3client, BUCKET_NAME);
+    awsAdapter = new AwsAdapter(s3client, BUCKET_NAME, BUCKET_NAME);
   }
 
   @Test

@@ -15,6 +15,13 @@ class AwsAdapterProperties {
   URI uri;
   String accessKey;
   String secretKey;
-  String bucketName;
+  Buckets buckets;
   String region;
+
+  @Value
+  static class Buckets {
+
+    String modelBucketName;
+    String watchlistBucketName;
+  }
 }

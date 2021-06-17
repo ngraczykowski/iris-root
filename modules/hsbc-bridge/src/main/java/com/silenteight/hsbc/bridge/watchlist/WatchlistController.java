@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.watchlist;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
-import com.silenteight.hsbc.bridge.file.ResourceDoesNotExistException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -74,7 +73,10 @@ class WatchlistController {
     return getErrorResponse(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  @ExceptionHandler({ ResourceDoesNotExistException.class, IncorrectFileExtensionException.class })
+  @ExceptionHandler({
+      WatchlistLoader.WatchlistLoadingException.class,
+      WatchlistSaver.WatchlistSavingException.class,
+      IncorrectFileExtensionException.class })
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleExceptionWithBadRequestStatus(
       RuntimeException exception) {

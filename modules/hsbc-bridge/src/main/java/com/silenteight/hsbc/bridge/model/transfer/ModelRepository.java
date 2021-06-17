@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.bridge.model.transfer;
 
-import org.springframework.data.repository.Repository;
+import java.io.IOException;
+import java.net.URI;
 
-@org.springframework.stereotype.Repository
-interface ModelRepository extends Repository<ModelEntity, Long> {
+public interface ModelRepository {
 
-  void save(ModelEntity modelEntity);
+  URI saveModel(String modelUrl, String name) throws IOException;
 }

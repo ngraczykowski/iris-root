@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.watchlist;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.file.SaveResourceUseCase;
 import com.silenteight.hsbc.bridge.watchlist.event.OriginalWatchlistSavedEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -10,18 +9,18 @@ import org.springframework.context.ApplicationEventPublisher;
 @RequiredArgsConstructor
 class SaveOriginalWatchlistUseCase {
 
-  private final SaveResourceUseCase saveFileUseCase;
+  private final WatchlistSaver watchlistSaver;
   private final ApplicationEventPublisher eventPublisher;
 
   void save(RawWatchlistData core, RawWatchlistData aliases, RawWatchlistData keywords) {
-    var savedCore = saveFileUseCase.save(core.getInputStream(), core.getName());
-    var savedAliases = saveFileUseCase.save(aliases.getInputStream(), aliases.getName());
-    var savedKeywords = saveFileUseCase.save(keywords.getInputStream(), keywords.getName());
+    var savedCore = watchlistSaver.save(core.getInputStream(), core.getName());
+    var savedAliases = watchlistSaver.save(aliases.getInputStream(), aliases.getName());
+    var savedKeywords = watchlistSaver.save(keywords.getInputStream(), keywords.getName());
 
     eventPublisher.publishEvent(OriginalWatchlistSavedEvent.builder()
-        .coreWatchlistUri(savedCore.getUri())
-        .aliasesWatchlistUri(savedAliases.getUri())
-        .keywordsWatchlistUri(savedKeywords.getUri())
+        .coreWatchlistUri(savedCore.toString())
+        .aliasesWatchlistUri(savedAliases.toString())
+        .keywordsWatchlistUri(savedKeywords.toString())
         .build());
   }
 }

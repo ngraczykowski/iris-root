@@ -22,7 +22,9 @@ class AwsMockConfiguration {
 
   @Bean
   public AwsAdapter awsAdapterMock() {
-    return new AwsAdapter(createS3Client(), properties.getBucketName());
+    var buckets = properties.getBuckets();
+    return new AwsAdapter(
+        createS3Client(), buckets.getModelBucketName(), buckets.getWatchlistBucketName());
   }
 
   private S3Client createS3Client() {
