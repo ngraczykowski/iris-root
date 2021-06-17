@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.analysis.matchsolution;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.adjudication.api.v1.MatchSolution;
 import com.silenteight.adjudication.internal.v1.MatchCategoriesUpdated;
 import com.silenteight.adjudication.internal.v1.MatchFeaturesUpdated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
@@ -21,6 +22,8 @@ public class MatchSolutionFacade {
 
   private final HandleMatchCategoriesUpdatedUseCase handleMatchCategoriesUpdatedUseCase;
 
+  private final GetMatchSolutionUseCase getMatchSolutionUseCase;
+
   public void solveAnalysisMatches(String analysisName) {
     solveAnalysisMatchesUseCase.solveAnalysisMatches(analysisName);
   }
@@ -34,5 +37,9 @@ public class MatchSolutionFacade {
       MatchCategoriesUpdated matchCategoriesUpdated) {
 
     return handleMatchCategoriesUpdatedUseCase.handleMatchCategoriesUpdated(matchCategoriesUpdated);
+  }
+
+  public MatchSolution getMatchSolution(String matchSolutionName) {
+    return getMatchSolutionUseCase.getMatchSolution(matchSolutionName);
   }
 }

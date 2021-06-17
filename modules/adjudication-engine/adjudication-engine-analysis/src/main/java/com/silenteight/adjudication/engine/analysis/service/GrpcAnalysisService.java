@@ -73,8 +73,8 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
   public void getMatchSolution(
       GetMatchSolutionRequest request,
       StreamObserver<MatchSolution> responseObserver) {
-    // TODO(ahaczewski): Second to go.
-    respondWithNotFound(responseObserver);
+    responseObserver.onNext(analysisService.getMatchSolution(request));
+    responseObserver.onCompleted();
   }
 
   private static void respondWithNotFound(StreamObserver<?> responseObserver) {

@@ -9,5 +9,7 @@ interface MatchSolutionRepository extends Repository<MatchSolutionEntity, Long> 
   @Nonnull
   MatchSolutionEntity save(MatchSolutionEntity entity);
 
+  MatchSolutionEntity getById(long matchSolutionId);
+
   int count();
 }
