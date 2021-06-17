@@ -5,7 +5,7 @@ silenteight.bridge:
     secretKey: ${HSBC_BRIDGE_MINIO_PRIVATE_KEY}
     buckets:
       modelBucketName: hsbc-model-{{ env "NOMAD_NAMESPACE" }}
-      watchlistBucketName: hsbc-model-{{ env "NOMAD_NAMESPACE" }}
+      watchlistBucketName: hsbc-watchlist-{{ env "NOMAD_NAMESPACE" }}
     region: US_EAST_1
 
   http.port: {{ env "NOMAD_PORT_http" }}
