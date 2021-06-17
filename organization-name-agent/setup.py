@@ -27,9 +27,9 @@ setup(
     install_requires=[
         "phonetics",
         "fuzzywuzzy",
-        "python-Levenshtein",
         "unidecode",
-        "pyyaml"
+        "pyyaml",
+        "scikit-learn"
     ],
     extras_require={
         "tests": tests_require,

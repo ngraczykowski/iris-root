@@ -17,7 +17,7 @@ def resolve_pair(name1, name2):
 
 
 if __name__ == '__main__':
-    with open('config.yaml') as config_file:
+    with open('config/config.yaml') as config_file:
         cfg = yaml.load(config_file, Loader=yaml.FullLoader)
 
     pairs = [

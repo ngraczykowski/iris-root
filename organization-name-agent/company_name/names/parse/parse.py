@@ -30,7 +30,10 @@ def _fix_expression_divided(
     # move "and" to previous part, if at the beginning
     for joining_index, joining_data in enumerate(data):
         if joining_index and joining_data and joining_data[0].cleaned in JOINING_WORDS:
-            new_index = [i for i in reversed(range(joining_index)) if data[i]][0]
+            possible_indexes = [i for i in reversed(range(joining_index)) if data[i]]
+            if not possible_indexes:
+                continue
+            new_index = possible_indexes[0]
             data[new_index] = TokensSequence([*data[new_index], joining_data[0]])
             data[joining_index] = TokensSequence(joining_data[1:])
 
@@ -58,6 +61,8 @@ def _detect_name_parts(name: str) -> Dict[str, TokensSequence]:
     name_tokens = create_tokens(name)
 
     name_without_weak, weak_words_at_the_end = extract_weak(name_tokens)
+    if not name_without_weak:
+        name_without_weak, weak_words_at_the_end = name_tokens, TokensSequence()
     name_without_legal, legal, other = extract_legal_terms(name_without_weak)
     common_prefixes, name_without_common, common_suffixes = extract_common(name_without_legal)
 

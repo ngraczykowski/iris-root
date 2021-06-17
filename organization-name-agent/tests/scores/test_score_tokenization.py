@@ -69,3 +69,9 @@ def test_tokenization(first, second, tokenization, absolute_tokenization):
     assert score["tokenization"].value == tokenization
     assert score["absolute_tokenization"].value == absolute_tokenization
     assert score["tokenization"].compared == score["absolute_tokenization"].compared
+
+
+@pytest.mark.parametrize("name", ("and", "and and"))
+def test_only_weak_in_name(name):
+    score = compare(name, name)
+    assert score["tokenization"].status.value == "NO_DATA"

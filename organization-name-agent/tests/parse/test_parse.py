@@ -90,3 +90,19 @@ def test_parse_duplicated_entries(name, expected):
     print(information)
     for key, value in expected.items():
         assert set(getattr(information, key)) == set(value)
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    (
+        ("and", {"base": ("and",)}),
+        ("and and", {"base": ("and", "and")}),
+        ("ve", {"base": ("ve",)}),
+    ),
+)
+def test_problematic_strange_names(name, expected):
+    information = parse_name(name)
+    print(repr(information))
+    for key, value in expected.items():
+        assert len(getattr(information, key)) == len(value)
+        assert set(getattr(information, key)) == set(value)

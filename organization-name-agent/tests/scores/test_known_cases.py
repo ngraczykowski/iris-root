@@ -2,7 +2,7 @@ import dataclasses
 
 import pytest
 
-from company_name.compare import compare, Score
+from company_name import compare, Score
 
 
 @dataclasses.dataclass

@@ -29,6 +29,9 @@ def tokenization_score(
 
     common = _common(first_tokens, second_tokens)
     different = _different(first_tokens, second_tokens)
+    if not common and not different:
+        return Score()
+
     return Score(
         value=len(common) if absolute else len(common) / (len(common) + len(different)),
         compared=(first_name.original_tuple, second_name.original_tuple),

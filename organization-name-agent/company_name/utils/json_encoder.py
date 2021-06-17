@@ -1,12 +1,15 @@
 import collections
 import dataclasses
+import enum
 import json
 
 
-class CompanyNamesEncoder(json.JSONEncoder):
+class CompanyNameEncoder(json.JSONEncoder):
     def default(self, obj):
         if dataclasses.is_dataclass(obj):
-            return {k: self.default(getattr(obj, k)) for k in dataclasses.asdict(obj)}
+            return {k: getattr(obj, k) for k in dataclasses.asdict(obj)}
         if isinstance(obj, collections.UserList):
             return obj.data
-        return obj
+        if isinstance(obj, enum.Enum):
+            return obj.value
+        return repr(obj)
