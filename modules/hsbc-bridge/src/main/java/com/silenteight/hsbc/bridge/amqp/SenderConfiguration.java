@@ -13,14 +13,12 @@ class SenderConfiguration {
 
   private final AmqpProperties.Outgoing outgoing;
   private final RabbitTemplate rabbitTemplate;
-  private final ProtoMessageConverter converter;
 
   SenderConfiguration(
       AmqpProperties amqpProperties,
-      RabbitTemplate rabbitTemplate, MessageRegistry messageRegistry) {
+      RabbitTemplate rabbitTemplate) {
     this.outgoing = amqpProperties.getOutgoing();
     this.rabbitTemplate = rabbitTemplate;
-    this.converter = new ProtoMessageConverter(messageRegistry);
   }
 
   @Bean
@@ -31,7 +29,6 @@ class SenderConfiguration {
             .exchangeName(outgoing.getWarehouseExchangeName())
             .routingKey(outgoing.getWarehouseRoutingKey())
             .build())
-        .messageConverter(converter)
         .build();
   }
 
@@ -43,7 +40,6 @@ class SenderConfiguration {
             .exchangeName(outgoing.getModelPersistedExchangeName())
             .routingKey(outgoing.getModelPersistedRoutingKey())
             .build())
-        .messageConverter(converter)
         .build();
   }
 
@@ -56,7 +52,6 @@ class SenderConfiguration {
             .routingKey(outgoing.getWatchlistPersistedRoutingKey())
             .build())
         .amqpTemplate(rabbitTemplate)
-        .messageConverter(converter)
         .build();
   }
 }

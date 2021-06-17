@@ -5,6 +5,4 @@ silenteight.bridge.data.retention.enabled: false
 
 logging.level.com.silenteight: DEBUG
 
-# Disable consul for local development
-spring.cloud.consul.enabled: false
 

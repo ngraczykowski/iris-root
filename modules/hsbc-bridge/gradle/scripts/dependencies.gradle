@@ -75,16 +75,17 @@ libraries.amazon_s3 = [group: 'software.amazon.awssdk', name: 's3', version: '2.
 libraries.amazon_aws = [group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.1017']
 
 // Others
+libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph', version: '4.8.108']
 libraries.commons_compress = [group: 'org.apache.commons', name: 'commons-compress', version: '1.20']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
 libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.8.0']
+libraries.jetbrains_annotations = [group: 'org.jetbrains', name: 'annotations', version: '20.1.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 libraries.orika = [group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4']
 libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
 
 // Messaging
 libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
-libraries.spring_amqp_starter = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: springBootVersion]
 libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
 
 // Testing
@@ -130,6 +131,7 @@ dependencies {
   implementation libraries.adjudication_engine_api
   implementation libraries.amazon_aws
   implementation libraries.amazon_s3
+  implementation libraries.classgraph
   implementation libraries.commons_compress
   implementation libraries.commons_lang3
   implementation libraries.data_source_api
@@ -137,6 +139,7 @@ dependencies {
   implementation libraries.data_source_comments_api
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.io_utils
+  implementation libraries.jetbrains_annotations
   implementation libraries.jjwt
   implementation libraries.liquibase_core
   implementation libraries.liquibase_sessionlock
@@ -146,16 +149,15 @@ dependencies {
   implementation libraries.silenteight_governance_model_api
   implementation libraries.slf4j_api
   implementation libraries.spring_amqp
-  implementation libraries.spring_amqp_starter
   implementation libraries.spring_aspects
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
+  implementation libraries.spring_boot_starter_web
   implementation libraries.spring_cloud_starter_consul_config
   implementation libraries.spring_cloud_starter_consul_discovery
-  implementation libraries.spring_boot_starter_web
   implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_data_jpa
   implementation libraries.spring_rabbit
