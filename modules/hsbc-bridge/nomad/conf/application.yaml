@@ -1,8 +1,8 @@
 silenteight.bridge:
   aws:
     uri: https://minio.silenteight.com
-    accessKey: {{ env "HSBC_BRIDGE_MINIO_ACCESS_KEY" }}
-    secretKey: {{ env "HSBC_BRIDGE_MINIO_PRIVATE_KEY" }}
+    accessKey: ${HSBC_BRIDGE_MINIO_ACCESS_KEY}
+    secretKey: ${HSBC_BRIDGE_MINIO_PRIVATE_KEY}
     buckets:
       modelBucketName: hsbc-model-{{ env "NOMAD_NAMESPACE" }}
       watchlistBucketName: hsbc-model-{{ env "NOMAD_NAMESPACE" }}
