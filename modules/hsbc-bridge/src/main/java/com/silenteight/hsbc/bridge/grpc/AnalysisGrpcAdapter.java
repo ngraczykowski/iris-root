@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
+import static java.util.Optional.ofNullable;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
@@ -90,13 +91,13 @@ class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServic
   @Retryable(value = CannotGetRecommendationsException.class)
   public List<RecommendationDto> getRecommendations(GetRecommendationsDto request) {
     var recommendations = new ArrayList<RecommendationDto>();
-    var gprcRequest = StreamRecommendationsRequest.newBuilder()
-        .setAnalysis(request.getAnalysis())
-        .setDataset(request.getDataset())
-        .build();
+    var builder = StreamRecommendationsRequest.newBuilder()
+        .setAnalysis(request.getAnalysis());
+
+    ofNullable(request.getDataset()).ifPresent(builder::setDataset);
 
     try {
-      getStub().streamRecommendations(gprcRequest)
+      getStub().streamRecommendations(builder.build())
           .forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
     } catch (StatusRuntimeException ex) {
       log.error("Cannot get recommendations", ex);
