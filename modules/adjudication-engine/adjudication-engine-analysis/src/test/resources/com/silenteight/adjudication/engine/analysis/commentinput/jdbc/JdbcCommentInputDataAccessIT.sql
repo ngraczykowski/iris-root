@@ -3,8 +3,8 @@ VALUES (1, now(), now(), 'alert-1', 5),
        (2, now(), now(), 'alert-2', 5),
        (3, now(), now(), 'alert-3', 5);
 
-INSERT INTO ae_analysis(analysis_id, policy, strategy, created_at, state)
-VALUES (1, 'policies/1', 'strategies/1', now(), 'NEW');
+INSERT INTO ae_analysis(analysis_id, policy, strategy, created_at)
+VALUES (1, 'policies/1', 'strategies/1', now());
 
 INSERT INTO ae_dataset(dataset_id, created_at)
 VALUES (1, now()),

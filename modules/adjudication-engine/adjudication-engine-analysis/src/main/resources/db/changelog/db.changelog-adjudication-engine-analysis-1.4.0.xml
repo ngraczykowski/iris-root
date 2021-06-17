@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_1" author="ahaczewski">
+    <dropColumn tableName="ae_analysis" columnName="state"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_2" author="ahaczewski">
+    <dropView viewName="ae_analysis_query"/>
+    <createView
+        viewName="ae_analysis_query"
+        path="sql/view_ae_analysis_query_v2.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+</databaseChangeLog>

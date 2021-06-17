@@ -42,8 +42,8 @@ VALUES (1, 1),
 -- COMMIT;
 
 -- Analysis
-INSERT INTO ae_analysis (analysis_id, policy, strategy, created_at, state)
-VALUES (1, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now(), 'NEW');
+INSERT INTO ae_analysis (analysis_id, policy, strategy, created_at)
+VALUES (1, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now());
 INSERT INTO ae_analysis_category (analysis_category_id, analysis_id, category_id)
 VALUES (11, 1, 1),
        (12, 1, 2)

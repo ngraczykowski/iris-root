@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
 import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.Analysis.State;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import org.hibernate.annotations.Fetch;
@@ -38,6 +39,9 @@ class AnalysisQuery implements IdentifiableEntity {
   @NonNull
   private Long alertCount;
 
+  @NonNull
+  private Long datasetCount;
+
   @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH })
   @JoinColumn(name = "analysis_id", referencedColumnName = "analysis_id")
   @NonNull
@@ -57,10 +61,23 @@ class AnalysisQuery implements IdentifiableEntity {
   @Singular
   private List<AnalysisFeatureQuery> featureQueries;
 
+  long getPendingAlerts() {
+    return pendingAlerts;
+  }
+
+  long getAlertCount() {
+    return alertCount;
+  }
+
+  long getDatasetCount() {
+    return datasetCount;
+  }
+
   Analysis toAnalysis() {
     var builder = analysis.updateBuilder(Analysis.newBuilder())
         .setAlertCount(alertCount)
-        .setPendingAlerts(pendingAlerts);
+        .setPendingAlerts(pendingAlerts)
+        .setState(determineState());
 
     builder.addAllCategories(
         categoryQueries.stream().map(AnalysisCategoryQuery::getName).collect(toUnmodifiableList()));
@@ -68,5 +85,21 @@ class AnalysisQuery implements IdentifiableEntity {
         featureQueries.stream().map(AnalysisFeatureQuery::toFeature).collect(toUnmodifiableList()));
 
     return builder.build();
+  }
+
+  private State determineState() {
+    if (getDatasetCount() == 0 || getAlertCount() == 0)
+      return State.NEW;
+
+    if (getPendingAlerts() == 0)
+      return State.DONE;
+
+    if (getPendingAlerts() >= getAlertCount())
+      return State.PLANNING;
+
+    if (getPendingAlerts() < getAlertCount())
+      return State.RUNNING;
+
+    return State.OUTDATED;
   }
 }

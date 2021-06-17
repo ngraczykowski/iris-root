@@ -1,6 +1,6 @@
 -- One analysis...
 INSERT INTO ae_analysis
-VALUES (1, 'bla', 'bla', NOW(), 'NEW');
+VALUES (1, 'bla', 'bla', NOW());
 
 -- ...and two alerts...
 INSERT INTO ae_alert

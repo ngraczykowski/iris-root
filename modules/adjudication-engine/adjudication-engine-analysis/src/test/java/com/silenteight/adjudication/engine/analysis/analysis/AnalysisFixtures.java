@@ -52,7 +52,6 @@ public class AnalysisFixtures {
 
   static AnalysisEntity randomAnalysisEntity() {
     return AnalysisEntity.builder()
-        .state(getRandomAnalysisState())
         .strategy("strategies/" + STRATEGIES[current().nextInt(0, STRATEGIES.length)])
         .policy("policies/" + UUID.randomUUID())
         .labels(getRandomLabels())
@@ -63,7 +62,6 @@ public class AnalysisFixtures {
 
   static AnalysisEntity randomAnalysisEntityWithoutLabelsCategoriesAndFeatures() {
     return AnalysisEntity.builder()
-        .state(getRandomAnalysisState())
         .strategy("strategies/" + STRATEGIES[current().nextInt(0, STRATEGIES.length)])
         .policy("policies/" + UUID.randomUUID())
         .build();
@@ -121,11 +119,5 @@ public class AnalysisFixtures {
           .build());
     }
     return features;
-  }
-
-  static Analysis.State getRandomAnalysisState() {
-    // subtract 1 to exclude UNSPECIFIED
-    int x = current().nextInt(Analysis.State.class.getEnumConstants().length - 1);
-    return Analysis.State.class.getEnumConstants()[x];
   }
 }

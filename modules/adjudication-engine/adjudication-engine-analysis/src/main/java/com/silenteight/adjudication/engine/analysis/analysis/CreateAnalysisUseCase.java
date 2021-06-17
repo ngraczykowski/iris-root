@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
-import com.silenteight.adjudication.api.v1.Analysis.State;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,6 @@ class CreateAnalysisUseCase {
     var builder = AnalysisEntity.builder();
     builder.policy(analysis.getPolicy());
     builder.strategy(analysis.getStrategy());
-    builder.state(State.NEW);
 
     if (analysis.getLabelsCount() > 0) {
       builder.labels(analysis.getLabelsMap());

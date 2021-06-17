@@ -11,6 +11,11 @@ class InMemoryAnalysisRepository extends BasicInMemoryRepository<AnalysisEntity>
   AnalysisQueryRepository getQueryRepository() {
     return id -> InMemoryAnalysisRepository.this
         .findById(id)
-        .map(a -> AnalysisQuery.builder().analysis(a).alertCount(0L).pendingAlerts(0L).build());
+        .map(a -> AnalysisQuery.builder()
+            .analysis(a)
+            .alertCount(0L)
+            .pendingAlerts(0L)
+            .datasetCount(0L)
+            .build());
   }
 }

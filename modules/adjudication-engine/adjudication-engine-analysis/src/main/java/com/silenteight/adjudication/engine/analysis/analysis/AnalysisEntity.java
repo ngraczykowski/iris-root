@@ -43,11 +43,6 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
   @NonNull
   private String strategy;
 
-  @Column(updatable = false, nullable = false)
-  @NonNull
-  @Enumerated(EnumType.STRING)
-  private Analysis.State state;
-
   @ElementCollection(fetch = LAZY)
   @CollectionTable(joinColumns = @JoinColumn(name = "analysis_id"))
   @MapKeyColumn(name = "name")
@@ -80,7 +75,6 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
         .setName(getName())
         .setPolicy(getPolicy())
         .setStrategy(getStrategy())
-        .setState(getState())
         .setCreateTime(fromOffsetDateTime(getCreatedAt()))
         .putAllLabels(getLabels());
   }

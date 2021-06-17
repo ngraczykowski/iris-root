@@ -10,8 +10,8 @@ VALUES (11, 1, now(), 'alert-1-match-1', 1)
 ;
 
 INSERT INTO ae_analysis
-VALUES (1, 'policies/asd', 'strategy/asd', now(), 'NEW')
-     , (2, 'policies/asd', 'strategy/asd', now(), 'NEW')
+VALUES (1, 'policies/asd', 'strategy/asd', now())
+     , (2, 'policies/asd', 'strategy/asd', now())
 ;
 
 INSERT INTO ae_pending_recommendation

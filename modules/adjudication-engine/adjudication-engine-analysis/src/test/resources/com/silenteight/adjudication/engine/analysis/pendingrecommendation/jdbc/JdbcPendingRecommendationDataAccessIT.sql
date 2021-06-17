@@ -1,7 +1,7 @@
 -- Two analysis..
 INSERT INTO ae_analysis
-VALUES (1, 'policies/1', 'strategies/test', NOW(), 'NEW'),
-       (2, 'policies/1', 'strategies/test', NOW(), 'NEW');
+VALUES (1, 'policies/1', 'strategies/test', NOW()),
+       (2, 'policies/1', 'strategies/test', NOW());
 
 -- ...and three alerts...
 INSERT INTO ae_alert
@@ -28,4 +28,3 @@ VALUES (2, 1, 2, NOW(), 'babol');
 -- ...third solved in second analysis and is not pending...
 INSERT INTO ae_recommendation
 VALUES (3, 2, 3, NOW(), 'blabla');
-
