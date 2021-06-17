@@ -2464,26 +2464,30 @@
   "type" : "object",
   "properties" : {
     "id" : {
-      "type" : "integer",
-      "format" : "int32"
+      "type" : "string"
     },
     "recommendation" : {
-      "$ref" : "#/components/schemas/SolvedAlertStatus"
+      "type" : "string"
     },
     "comment" : {
       "type" : "string"
     },
-    "alertMetada" : {
+    "policy_id" : {
+      "type" : "string"
+    },
+    "step_id" : {
+      "type" : "string"
+    },
+    "fv_signature" : {
+      "type" : "string"
+    },
+    "alertMetadata" : {
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/KeyValue"
       }
     }
   }
-};
-            defs["SolvedAlertStatus"] = {
-  "type" : "string",
-  "enum" : [ "POTENTIAL_TRUE_POSITIVE", "FALSE_POSITIVE", "MANUAL_INVESTIGATION" ]
 };
             defs["WorldCheckEntities"] = {
   "type" : "object",

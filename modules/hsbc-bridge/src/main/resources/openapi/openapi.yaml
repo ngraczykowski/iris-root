@@ -1556,6 +1556,12 @@ components:
           type: string
         comment:
           type: string
+        policy_id:
+          type: string
+        step_id:
+          type: string
+        fv_signature:
+          type: string
         alertMetadata:
           type: array
           items:
