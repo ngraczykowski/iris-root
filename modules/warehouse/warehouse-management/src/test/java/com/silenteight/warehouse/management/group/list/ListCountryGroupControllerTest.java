@@ -1,0 +1,41 @@
+package com.silenteight.warehouse.management.group.list;
+
+import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.warehouse.common.testing.rest.testwithrole.TestWithRole;
+
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+
+import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.COUNTRY_GROUP_DTO;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.COUNTRY_GROUP_URL;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.NAME;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UUID;
+import static java.util.List.of;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
+
+@Import(ListCountryGroupController.class)
+class ListCountryGroupControllerTest extends BaseRestControllerTest {
+
+  @MockBean
+  private ListCountryGroupQuery countryGroupQuery;
+
+  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  void its200_whenCountryGroupFound() {
+    when(countryGroupQuery.listAll()).thenReturn(of(COUNTRY_GROUP_DTO));
+
+    get(COUNTRY_GROUP_URL)
+        .statusCode(OK.value())
+        .body("size()", is(1))
+        .body("[0].id", is(UUID.toString()))
+        .body("[0].name", is(NAME));
+  }
+
+  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  void its403_whenNotPermittedRole() {
+    get(COUNTRY_GROUP_URL).statusCode(FORBIDDEN.value());
+  }
+}
