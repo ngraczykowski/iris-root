@@ -76,13 +76,15 @@ test:
   messaging:
     integration:
       production-indexing-test-client-outbound:
-        exchange-name: alert-indexing
-        routing-key: alert.production
+        exchange-name: bridge.command
+        routing-key: command.index-request.production
       simulation-indexing-test-client-outbound:
-        exchange-name: alert-indexing
-        routing-key: alert.simulation
-      alert-indexed-event-test-listener-inbound:
-        queue-name: client.index-response
+        exchange-name: sim.command
+        routing-key: command.index-request.simulation
+      production-indexed-event-test-listener-inbound:
+        queue-name: bridge.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: sim.index-response.simulation
   generator:
     production-enabled: true
     simulation-enabled: true

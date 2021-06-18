@@ -24,15 +24,15 @@ warehouse:
   messaging:
     integration:
       production-indexing-inbound:
-        queue-name: warehouse.production-index-request
+        queue-name: wh.index-request.production
       production-indexed-outbound:
-        exchange-name: alert-indexed
-        routing-key: alert.production
+        exchange-name: wh.event
+        routing-key: event.index-response.production
       simulation-indexing-inbound:
-        queue-name: warehouse.simulation-index-request
+        queue-name: wh.index-request.simulation
       simulation-indexed-outbound:
-        exchange-name: alert-indexed
-        routing-key: alert.simulation
+        exchange-name: wh.event
+        routing-key: event.index-response.simulation
   environment:
     prefix: local
   minio:
