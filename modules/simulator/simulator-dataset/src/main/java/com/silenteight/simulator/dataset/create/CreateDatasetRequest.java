@@ -1,14 +1,15 @@
 package com.silenteight.simulator.dataset.create;
 
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.simulator.common.audit.AuditableRequest;
-import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -32,21 +33,13 @@ public class CreateDatasetRequest implements AuditableRequest {
   @NonNull
   String createdBy;
   @NonNull
-  AlertSelectionCriteriaDto query;
+  OffsetDateTime rangeFrom;
+  @NonNull
+  OffsetDateTime rangeTo;
+  @Default
+  List<String> countries = new ArrayList<>();
   @Builder.Default
   UUID correlationId = randomUUID();
-
-  public OffsetDateTime getRangeFrom() {
-    return query.getRangeFrom();
-  }
-
-  public OffsetDateTime getRangeTo() {
-    return query.getRangeTo();
-  }
-
-  public List<String> getCountries() {
-    return query.getCountries();
-  }
 
   @Override
   public void preAudit(Consumer<AuditDataDto> logger) {

@@ -33,12 +33,13 @@ class CreateDatasetRestController {
       @RequestBody @Valid CreateDatasetRequestDto dto, Authentication authentication) {
 
     CreateDatasetRequest request = CreateDatasetRequest.builder()
-        .id(dto.getId())
-        .datasetName(dto.getDatasetName())
-        .description(dto.getDescription())
-        .query(dto.getQuery())
-        .createdBy(authentication.getName())
-        .build();
+         .id(dto.getId())
+         .datasetName(dto.getDatasetName())
+         .description(dto.getDescription())
+         .rangeFrom(dto.getQuery().getRangeFrom())
+         .rangeTo(dto.getQuery().getRangeTo())
+         .createdBy(authentication.getName())
+         .build();
     useCase.activate(request);
     return status(CREATED).build();
   }
