@@ -21,6 +21,7 @@ import javax.validation.Valid;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_ID_KEY;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.NameResource.getSplitName;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -28,6 +29,8 @@ import static org.elasticsearch.client.RequestOptions.DEFAULT;
 
 @RequiredArgsConstructor
 public class AlertQueryService {
+
+  private static final String ALERT_SUFFIX_SEARCH = ".keyword";
 
   @NonNull
   private final RestHighLevelClient restHighLevelClient;
@@ -37,7 +40,7 @@ public class AlertQueryService {
   private final ElasticsearchProperties elasticsearchProperties;
 
   public AlertAttributes getSingleAlertAttributes(List<String> fields, String id) {
-    Map<String, Object> singleAlert = searchForAlert(id).stream()
+    Map<String, Object> singleAlert = searchForAlert(getSplitName(id)).stream()
         .findFirst()
         .orElseThrow(
             () -> new AlertNotFoundException(format("Alert with %s id not found.", id)));
@@ -100,11 +103,14 @@ public class AlertQueryService {
 
   private SearchRequest buildSearchRequest(String alertId) {
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder(ALERT_ID_KEY, alertId);
-    sourceBuilder.query(matchQueryBuilder);
+    sourceBuilder.query(getExactMatch(ALERT_ID_KEY, alertId));
     SearchRequest searchRequest = new SearchRequest();
     searchRequest.source(sourceBuilder);
     searchRequest.indices(elasticsearchProperties.getProductionQueryIndex());
     return searchRequest;
+  }
+
+  private static MatchQueryBuilder getExactMatch(String fieldName, String value) {
+    return new MatchQueryBuilder(fieldName + ALERT_SUFFIX_SEARCH, value);
   }
 }

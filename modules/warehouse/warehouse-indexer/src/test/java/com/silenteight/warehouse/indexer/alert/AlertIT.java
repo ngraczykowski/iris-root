@@ -8,11 +8,15 @@ import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttr
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
@@ -110,6 +114,17 @@ class AlertIT {
     assertThat(documentCount).isEqualTo(4);
   }
 
+  @ParameterizedTest
+  @MethodSource("getInvalidAlertIds")
+  @WithElasticAccessCredentials
+  void shouldThrowExceptionWhenAlertIsNotFound(String alertId) {
+    assertThrows(
+        AlertNotFoundException.class,
+        () -> queryUnderTest.getSingleAlertAttributes(
+            ALERT_FIELDS,
+            alertId));
+  }
+
   private void storeData() {
     saveAlert(DOCUMENT_ID_1, ALERT_WITH_MATCHES_1_MAP);
     saveAlert(DOCUMENT_ID_2, ALERT_WITH_MATCHES_2_MAP);
@@ -122,5 +137,13 @@ class AlertIT {
 
   private void cleanData() {
     simpleElasticTestClient.removeIndex(properties.getProductionQueryIndex());
+  }
+
+  private static Stream<Arguments> getInvalidAlertIds() {
+    return Stream.of(
+        Arguments.of(ALERT_ID_2.substring(0, 8)),
+        Arguments.of(ALERT_ID_2 + "invalid"),
+        Arguments.of(ALERT_ID_2.replaceFirst("f", "x"))
+    );
   }
 }
