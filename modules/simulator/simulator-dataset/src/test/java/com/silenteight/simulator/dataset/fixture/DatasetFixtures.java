@@ -59,7 +59,9 @@ public final class DatasetFixtures {
           .id(ID)
           .datasetName(DATASET_NAME)
           .description(DESCRIPTION)
-          .query(selectionCriteria(FROM, TO, COUNTRIES))
+          .rangeFrom(FROM)
+          .rangeTo(TO)
+          .countries(COUNTRIES)
           .createdBy(CREATED_BY)
           .build();
 
