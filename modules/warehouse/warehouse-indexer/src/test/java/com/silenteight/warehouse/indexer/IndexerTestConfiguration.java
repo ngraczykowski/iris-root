@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.indexer;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.auth.token.UserAwareTokenProvider;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
@@ -46,6 +47,7 @@ import static org.mockito.Mockito.*;
 @EnableIntegration
 @EnableIntegrationManagement
 @RequiredArgsConstructor
+@Slf4j
 public class IndexerTestConfiguration {
 
   private final IndexerIntegrationProperties properties;
@@ -53,46 +55,46 @@ public class IndexerTestConfiguration {
 
   @Bean
   Binding productionIndexExchangeToQueueBinding(
-      Exchange commonIndexExchange,
+      Exchange productionCommandExchange,
       Queue productionIndexingQueue) {
-    return BindingBuilder
-        .bind(productionIndexingQueue)
-        .to(commonIndexExchange)
-        .with(testProperties.getProductionIndexingTestClientOutbound().getRoutingKey())
-        .noargs();
+
+    return bind(
+        productionCommandExchange,
+        testProperties.getProductionIndexingTestClientOutbound().getRoutingKey(),
+        productionIndexingQueue);
   }
 
   @Bean
   Binding simulationIndexExchangeToQueueBinding(
-      Exchange commonIndexExchange,
+      Exchange simulationCommandExchange,
       Queue simulationIndexingQueue) {
-    return BindingBuilder
-        .bind(simulationIndexingQueue)
-        .to(commonIndexExchange)
-        .with(testProperties.getSimulationIndexingTestClientOutbound().getRoutingKey())
-        .noargs();
+
+    return bind(
+        simulationCommandExchange,
+        testProperties.getSimulationIndexingTestClientOutbound().getRoutingKey(),
+        simulationIndexingQueue);
   }
 
   @Bean
   Binding productionIndexedExchangeToQueueBinding(
-      Exchange alertIndexedExchange,
-      Queue alertIndexedQueue) {
-    return BindingBuilder
-        .bind(alertIndexedQueue)
-        .to(alertIndexedExchange)
-        .with(properties.getProductionIndexedOutbound().getRoutingKey())
-        .noargs();
+      Exchange whEventExchange,
+      Queue productionIndexedQueue) {
+
+    return bind(
+        whEventExchange,
+        properties.getProductionIndexedOutbound().getRoutingKey(),
+        productionIndexedQueue);
   }
 
   @Bean
   Binding simulationIndexedExchangeToQueueBinding(
-      Exchange alertIndexedExchange,
-      Queue alertIndexedQueue) {
-    return BindingBuilder
-        .bind(alertIndexedQueue)
-        .to(alertIndexedExchange)
-        .with(properties.getSimulationIndexedOutbound().getRoutingKey())
-        .noargs();
+      Exchange whEventExchange,
+      Queue simulationIndexedQueue) {
+
+    return bind(
+        whEventExchange,
+        properties.getSimulationIndexedOutbound().getRoutingKey(),
+        simulationIndexedQueue);
   }
 
   @Bean
@@ -110,7 +112,7 @@ public class IndexerTestConfiguration {
   }
 
   @Bean
-  TopicExchange alertIndexedExchange() {
+  TopicExchange whEventExchange() {
     return ExchangeBuilder
         .topicExchange(properties.getProductionIndexedOutbound().getExchangeName())
         .build();
@@ -124,5 +126,16 @@ public class IndexerTestConfiguration {
   @Bean
   UserAwareTokenProvider userAwareTokenProvider() {
     return mock(UserAwareTokenProvider.class);
+  }
+
+  private Binding bind(Exchange exchange, String routingKey, Queue queue) {
+    log.info("exchange={}, routingKey={}, queue={}",
+        exchange.getName(), routingKey, queue.getName());
+
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(routingKey)
+        .noargs();
   }
 }

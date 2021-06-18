@@ -17,5 +17,9 @@ class IndexedEventIntegrationProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmqpInboundProperties alertIndexedEventTestListenerInbound;
+  private AmqpInboundProperties productionIndexedEventTestListenerInbound;
+
+  @Valid
+  @NestedConfigurationProperty
+  private AmqpInboundProperties simulationIndexedEventTestListenerInbound;
 }

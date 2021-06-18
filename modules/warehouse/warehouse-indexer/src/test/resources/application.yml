@@ -13,15 +13,15 @@ warehouse:
   messaging:
     integration:
       production-indexing-inbound:
-        queue-name: warehouse.production-index-request
+        queue-name: wh.index-request.production
       production-indexed-outbound:
-        exchange-name: alert-indexed
-        routing-key: alert.production
+        exchange-name: wh.event
+        routing-key: event.index-response.production
       simulation-indexing-inbound:
-        queue-name: warehouse.simulation-index-request
+        queue-name: wh.index-request.simulation
       simulation-indexed-outbound:
-        exchange-name: alert-indexed
-        routing-key: alert.simulation
+        exchange-name: wh.event
+        routing-key: event.index-response.simulation
   environment:
     prefix: itest
   es:
@@ -38,10 +38,12 @@ test:
   messaging:
     integration:
       production-indexing-test-client-outbound:
-        exchange-name: alert-indexing
-        routing-key: alert.production
+        exchange-name: testapp.command
+        routing-key: command.index-request.production
       simulation-indexing-test-client-outbound:
-        exchange-name: alert-indexing
-        routing-key: alert.simulation
-      alert-indexed-event-test-listener-inbound:
-        queue-name: client.index-response
+        exchange-name: testapp.command
+        routing-key: command.index-request.simulation
+      production-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.simulation

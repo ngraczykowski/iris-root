@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.ExchangeBuilder;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,9 +53,16 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
-  TopicExchange commonIndexExchange() {
+  DirectExchange productionCommandExchange() {
     return ExchangeBuilder
-        .topicExchange(properties.getProductionIndexingTestClientOutbound().getExchangeName())
+        .directExchange(properties.getProductionIndexingTestClientOutbound().getExchangeName())
+        .build();
+  }
+
+  @Bean
+  DirectExchange simulationCommandExchange() {
+    return ExchangeBuilder
+        .directExchange(properties.getSimulationIndexingTestClientOutbound().getExchangeName())
         .build();
   }
 
