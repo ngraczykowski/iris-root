@@ -51,7 +51,8 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
   public void streamRecommendations(
       StreamRecommendationsRequest request,
       StreamObserver<Recommendation> responseObserver) {
-    respondWithNotFound(responseObserver);
+    analysisService.streamRecommendations(request, responseObserver::onNext);
+    responseObserver.onCompleted();
   }
 
   @Override

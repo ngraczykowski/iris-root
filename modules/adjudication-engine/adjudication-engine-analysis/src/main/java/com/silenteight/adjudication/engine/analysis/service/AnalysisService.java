@@ -11,9 +11,11 @@ import com.silenteight.adjudication.engine.analysis.recommendation.Recommendatio
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static java.util.Collections.singletonList;
 
+@SuppressWarnings("java:S1200")
 @RequiredArgsConstructor
 @Service
 class AnalysisService {
@@ -50,5 +52,11 @@ class AnalysisService {
 
   MatchSolution getMatchSolution(GetMatchSolutionRequest request) {
     return matchSolutionFacade.getMatchSolution(request.getMatchSolution());
+  }
+
+  void streamRecommendations(
+      StreamRecommendationsRequest request, Consumer<Recommendation> onNext) {
+
+    recommendationFacade.streamRecommendations(request, onNext);
   }
 }
