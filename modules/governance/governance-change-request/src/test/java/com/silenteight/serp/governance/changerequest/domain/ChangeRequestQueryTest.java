@@ -4,6 +4,7 @@ import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.changerequest.approval.dto.ModelApprovalDto;
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.UUID;
 
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
@@ -23,6 +25,7 @@ import static com.silenteight.serp.governance.changerequest.fixture.ChangeReques
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
 import static java.time.OffsetDateTime.now;
 import static java.util.Set.of;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -40,7 +43,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
   @Test
   void shouldListPendingChangeRequests() {
     // given
-    persistChangeRequest();
+    persistChangeRequest(CHANGE_REQUEST_ID);
 
     // when
     Collection<ChangeRequestDto> result = underTest.list(of(PENDING));
@@ -60,7 +63,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     // given
     String decider = "jdoe";
     String deciderComment = "Not correct";
-    ChangeRequest changeRequest = persistChangeRequest();
+    ChangeRequest changeRequest = persistChangeRequest(CHANGE_REQUEST_ID);
     changeRequest.reject(decider, deciderComment);
 
     // when
@@ -84,7 +87,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     // given
     String decider = "jdoe";
     String deciderComment = "Looks good";
-    ChangeRequest changeRequest = persistChangeRequest();
+    ChangeRequest changeRequest = persistChangeRequest(CHANGE_REQUEST_ID);
     changeRequest.approve(decider, deciderComment);
 
     // when
@@ -107,9 +110,10 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     // given
     String decider = "jdoe";
     String deciderComment = "Looks good";
-    ChangeRequest changeRequest = persistChangeRequest();
-    OffsetDateTime timeBeforeApproval = now();
-    changeRequest.approve(decider, deciderComment);
+    createChangeRequestWithoutApproval();
+    createApprovedChangeRequest(randomUUID(), decider, deciderComment);
+    OffsetDateTime timeBeforeApproval = createApprovedChangeRequest(
+        CHANGE_REQUEST_ID, decider, deciderComment);
 
     // when
     ModelApprovalDto result = underTest.getApproval(MODEL_NAME);
@@ -119,8 +123,21 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(result.getApprovedBy()).isEqualTo(decider);
   }
 
-  private ChangeRequest persistChangeRequest() {
+  private void createChangeRequestWithoutApproval() {
+    persistChangeRequest(randomUUID());
+  }
+
+  @NotNull
+  private OffsetDateTime createApprovedChangeRequest(
+      UUID changeRequestId, String decider, String deciderComment) {
+    ChangeRequest changeRequest = persistChangeRequest(changeRequestId);
+    OffsetDateTime timeBeforeApproval = now();
+    changeRequest.approve(decider, deciderComment);
+    return timeBeforeApproval;
+  }
+
+  private ChangeRequest persistChangeRequest(UUID changeRequestId) {
     return repository.save(
-        new ChangeRequest(CHANGE_REQUEST_ID, MODEL_NAME, CREATED_BY, CREATOR_COMMENT));
+        new ChangeRequest(changeRequestId, MODEL_NAME, CREATED_BY, CREATOR_COMMENT));
   }
 }

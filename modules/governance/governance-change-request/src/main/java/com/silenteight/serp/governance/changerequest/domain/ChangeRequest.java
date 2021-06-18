@@ -148,4 +148,8 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
         .approvedBy(getDecidedBy())
         .build();
   }
+
+  boolean isApproved() {
+    return isInState(APPROVED);
+  }
 }

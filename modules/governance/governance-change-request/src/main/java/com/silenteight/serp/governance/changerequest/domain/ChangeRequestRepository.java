@@ -15,5 +15,5 @@ interface ChangeRequestRepository extends Repository<ChangeRequest, Long> {
 
   Optional<ChangeRequest> findByChangeRequestId(UUID changeRequestId);
 
-  Optional<ChangeRequest> findByModelName(String modelName);
+  Collection<ChangeRequest> findByModelName(String modelName);
 }

@@ -13,6 +13,7 @@ import com.silenteight.serp.governance.changerequest.domain.exception.ModelAppro
 import com.silenteight.serp.governance.changerequest.list.ListChangeRequestsQuery;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,6 +56,9 @@ class ChangeRequestQuery implements
   public ModelApprovalDto getApproval(@NonNull String modelName) {
     return repository
         .findByModelName(modelName)
+        .stream()
+        .filter(ChangeRequest::isApproved)
+        .max(Comparator.comparing(ChangeRequest::getDecidedAt))
         .map(ChangeRequest::toModelApprovalDto)
         .orElseThrow(() -> new ModelApprovalNotFoundException(modelName));
   }
