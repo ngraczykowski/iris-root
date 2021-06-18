@@ -12,7 +12,7 @@ import java.time.Duration;
 @Validated
 class CommentInputServiceClientProperties {
 
-  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
+  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
 
   private Duration timeout = DEFAULT_TIMEOUT;
 }

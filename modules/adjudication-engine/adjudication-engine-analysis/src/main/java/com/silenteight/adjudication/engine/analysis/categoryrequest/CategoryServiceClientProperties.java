@@ -12,7 +12,7 @@ import java.time.Duration;
 @Data
 public class CategoryServiceClientProperties {
 
-  private static final Duration TIMEOUT_DEFAULT = Duration.ofSeconds(5);
+  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
 
-  private Duration timeout = TIMEOUT_DEFAULT;
+  private Duration timeout = DEFAULT_TIMEOUT;
 }
