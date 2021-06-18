@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({ ListVectorsRestController.class, GenericExceptionControllerAdvice.class })
 class ListVectorsRestControllerTest extends BaseRestControllerTest {
 
-  private static final String HEADER_TOTAL_ITEMS = "X-Total-Items";
+  private static final String HEADER_TOTAL_COUNT = "X-Total-Count";
 
   private static final UUID STEP_ID = randomUUID();
   private static final String STEP_NAME = "steps/" + STEP_ID;
@@ -52,7 +52,10 @@ class ListVectorsRestControllerTest extends BaseRestControllerTest {
       .build();
 
   @MockBean
-  private FindMatchingFeatureVectorsUseCase findMatchingFeatureVectorsUseCase;
+  private FindFeatureVectorsSolvedByStepUseCase findVectorsByStepUseCase;
+
+  @MockBean
+  private FindFeatureVectorsSolvedByDefaultPolicyUseCase findVectorsByPolicyUseCase;
 
   @MockBean
   private ListVectorsQuery listVectorsQuery;
@@ -64,7 +67,7 @@ class ListVectorsRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenStepSolvesFeatureVectorsWithPaging() {
-    given(findMatchingFeatureVectorsUseCase.activate(STEP_NAME, new Paging(PAGE_INDEX, PAGE_SIZE)))
+    given(findVectorsByStepUseCase.activate(STEP_NAME, new Paging(PAGE_INDEX, PAGE_SIZE)))
         .willReturn(FEATURE_VECTORS_DTO);
 
     get(POLICY_STEP_FEATURE_VECTORS_PAGING_URL)
@@ -78,12 +81,13 @@ class ListVectorsRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { POLICY_MANAGER })
   void its200_whenListingFeatureVectors() {
-    given(listVectorsQuery.list(new Paging(PAGE_INDEX, PAGE_SIZE))).willReturn(FEATURE_VECTORS_DTO);
+    given(findVectorsByPolicyUseCase.activate(new Paging(PAGE_INDEX, PAGE_SIZE)))
+        .willReturn(FEATURE_VECTORS_DTO);
     given(listVectorsQuery.count()).willReturn(2);
 
     get(LIST_VECTORS_PAGING_URL)
         .statusCode(OK.value())
-        .header(HEADER_TOTAL_ITEMS, "2")
+        .header(HEADER_TOTAL_COUNT, "2")
         .body("columns", is(COLUMNS))
         .body("featureVectors[0].signature", is(SIGNATURE_1))
         .body("featureVectors[0].values", is(FEATURE_VALUES_1))

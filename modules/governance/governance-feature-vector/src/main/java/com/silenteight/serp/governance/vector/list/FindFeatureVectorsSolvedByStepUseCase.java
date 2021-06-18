@@ -21,11 +21,12 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.policy.common.StepResource.fromResourceName;
+import static com.silenteight.serp.governance.policy.common.StepResource.toResourceName;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class FindMatchingFeatureVectorsUseCase {
+class FindFeatureVectorsSolvedByStepUseCase {
 
   @NonNull
   private final FeatureNamesQuery featureNamesQuery;
@@ -67,7 +68,7 @@ class FindMatchingFeatureVectorsUseCase {
     return featureVectorUsageQuery
         .getAllWithUsage()
         .filter(featureVectorSolver::isSolvedWithStep)
-        .map(vector -> vector.standardize(columns))
+        .map(vector -> vector.standardize(columns, toResourceName(stepId)))
         .skip(paging.getSkip())
         .limit(paging.getPageSize())
         .collect(toList());

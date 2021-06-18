@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 import com.silenteight.serp.governance.policy.domain.events.NewPolicyInUseEvent;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 

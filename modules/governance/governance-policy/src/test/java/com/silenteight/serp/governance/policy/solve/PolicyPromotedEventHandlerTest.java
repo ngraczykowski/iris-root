@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.serp.governance.policy.domain.Condition;
+import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 @Data
 @RequiredArgsConstructor
@@ -19,6 +20,6 @@ public class SolveResponse {
 
   @NonNull
   private final FeatureVectorSolution solution;
-
+  @Nullable
   private final UUID stepId;
 }
