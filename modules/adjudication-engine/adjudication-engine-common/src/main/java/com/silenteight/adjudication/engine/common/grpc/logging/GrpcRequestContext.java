@@ -21,6 +21,7 @@ final class GrpcRequestContext<ReqT, RespT> {
   private static final String MDC_EVENT_SEQUENCE = "event.sequence";
   private static final String MDC_GRPC_METHOD = "grpc.method";
   private static final String MDC_GRPC_CALL_ID = "grpc.call_id";
+  private static final String MDC_GRPC_CALL_ATTRIBUTES = "grpc.call_attributes";
 
   private final long callId = CALL_ID_GENERATOR.getAndIncrement();
   private final AtomicLong sequenceNumber = new AtomicLong(1);
@@ -37,6 +38,10 @@ final class GrpcRequestContext<ReqT, RespT> {
 
   String getFullMethodName() {
     return call.getMethodDescriptor().getFullMethodName();
+  }
+
+  String getCallAttributes() {
+    return call.getAttributes().toString();
   }
 
   final class Scope implements AutoCloseable {
@@ -63,6 +68,7 @@ final class GrpcRequestContext<ReqT, RespT> {
       MDC.put(MDC_EVENT_SEQUENCE, Long.toString(sequenceNumber.getAndIncrement()));
       MDC.put(MDC_GRPC_METHOD, getFullMethodName());
       MDC.put(MDC_GRPC_CALL_ID, Long.toString(callId));
+      MDC.put(MDC_GRPC_CALL_ATTRIBUTES, getCallAttributes());
     }
 
     @Override
@@ -72,6 +78,7 @@ final class GrpcRequestContext<ReqT, RespT> {
       MDC.remove(MDC_EVENT_SEQUENCE);
       MDC.remove(MDC_GRPC_METHOD);
       MDC.remove(MDC_GRPC_CALL_ID);
+      MDC.remove(MDC_GRPC_CALL_ATTRIBUTES);
       additionalKeys.forEach(MDC::remove);
     }
   }
