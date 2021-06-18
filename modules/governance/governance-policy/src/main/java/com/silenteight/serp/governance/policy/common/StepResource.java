@@ -15,4 +15,8 @@ public final class StepResource extends AbstractResourceExtractor {
   public static UUID fromResourceName(String resourceName) {
     return fromResourceName(resourceName, RESOURCE_NAME_PREFIX);
   }
+
+  public static String toResourceName(UUID stepId) {
+    return toResourceName(stepId, RESOURCE_NAME_PREFIX);
+  }
 }

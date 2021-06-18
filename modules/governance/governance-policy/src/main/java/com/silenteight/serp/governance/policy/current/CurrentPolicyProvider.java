@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.policy.current;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
+import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 
 import java.util.Optional;
 

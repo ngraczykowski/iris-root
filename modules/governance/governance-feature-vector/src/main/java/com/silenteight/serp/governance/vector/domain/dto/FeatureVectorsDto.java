@@ -5,6 +5,7 @@ import lombok.Builder.Default;
 
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 
 import static java.util.List.of;
 
@@ -36,6 +37,8 @@ public class FeatureVectorsDto {
   @Builder
   public static class FeatureVectorDto {
 
+    @Nullable
+    String step;
     @NonNull
     String signature;
     long matchesCount;

@@ -2,14 +2,13 @@ package com.silenteight.serp.governance.vector.list;
 
 import com.silenteight.serp.governance.common.web.rest.Paging;
 import com.silenteight.serp.governance.policy.domain.Condition;
-import com.silenteight.serp.governance.policy.domain.PolicyByIdQuery;
+import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.solve.DefaultStepsProvider;
 import com.silenteight.serp.governance.policy.solve.SolvingService;
 import com.silenteight.serp.governance.policy.solve.StepsSupplier;
-import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorWithUsageDto;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorsDto;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorsDto.FeatureVectorDto;
@@ -23,18 +22,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_POTENTIAL_TRUE_POSITIVE;
-import static java.util.Arrays.asList;
+import static java.util.Optional.*;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FindMatchingFeatureVectorsUseCaseTest {
+class FindMatchingFeatureVectorsByDefaultPolicyUseCaseTest {
 
   private static final long ID_OF_POLICY = 11;
   private static final UUID POLICY_ID = fromString("306659cf-569d-4138-8a71-2ec0578653b1");
@@ -68,81 +68,79 @@ class FindMatchingFeatureVectorsUseCaseTest {
   @Mock
   private FeatureNamesQuery featureNamesQuery;
   @Mock
-  private PolicyStepsRequestQuery policyStepsRequestQuery;
+  private ListVectorsQuery listVectorsQuery;
   @Mock
-  private PolicyByIdQuery policyByIdQuery;
+  private InUsePolicyQuery inUsePolicyQuery;
 
-  private FindFeatureVectorsSolvedByStepUseCase underTest;
+  private FindFeatureVectorsSolvedByDefaultPolicyUseCase underTest;
 
   @BeforeEach
   void setUp() {
     List<StepConfigurationDto> steps = createSteps();
     StepsSupplier stepsConfigurationSupplier = new DefaultStepsProvider(steps);
 
-    underTest = new FindFeatureVectorsSolvedByStepUseCase(
+    underTest = new FindFeatureVectorsSolvedByDefaultPolicyUseCase(
         featureNamesQuery,
         new SolvingService(),
         featureVectorUsageQuery,
-        policyStepsRequestQuery,
-        policyByIdQuery,
-        policyId -> stepsConfigurationSupplier);
+        policyId -> stepsConfigurationSupplier,
+        inUsePolicyQuery,
+        listVectorsQuery);
   }
 
   @Test
-  void whenStepIsUsed_findMatchingFeatureVectors() {
+  void whenPolicyIsAvailable_findMatchingFeatureVectors() {
     // given
     Stream<FeatureVectorWithUsageDto> featureVectors = createFeatureVectors();
     when(featureNamesQuery.getUniqueFeatureNames()).thenReturn(COLUMNS);
-    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_1)).thenReturn(ID_OF_POLICY);
-    when(policyByIdQuery.getPolicyIdById(ID_OF_POLICY)).thenReturn(POLICY_ID);
+    when(inUsePolicyQuery.getPolicyInUse()).thenReturn(of(POLICY_ID));
     when(featureVectorUsageQuery.getAllWithUsage()).thenReturn(featureVectors);
 
     // when
-    FeatureVectorsDto response = underTest.activate(STEP_NAME_1, PAGING);
+    FeatureVectorsDto response = underTest.activate(PAGING);
 
     // then
-    assertThat(response.getColumns())
-        .isEqualTo(List.of("dateAgent", "genderAgent", "nameAgent", "nationalityAgent"));
+    assertThat(response.getColumns()).isEqualTo(COLUMNS);
     assertThat(response.getFeatureVectors()).isNotEmpty();
     assertThat(response.getFeatureVectors())
         .extracting(FeatureVectorDto::getSignature)
-        .containsExactly(SIGNATURE_1);
+        .containsExactly(SIGNATURE_1, SIGNATURE_2, SIGNATURE_3);
     assertThat(response.getFeatureVectors())
         .extracting(FeatureVectorDto::getMatchesCount)
-        .containsExactly(USAGE_COUNT_1);
+        .containsExactly(USAGE_COUNT_1, USAGE_COUNT_2, USAGE_COUNT_3);
     assertThat(response.getFeatureVectors())
-        .extracting(FeatureVectorDto::getValues)
-        .containsExactly(asList("EXACT", null, "PERFECT_MATCH", "MATCH"));
+        .extracting(FeatureVectorDto::getStep)
+        .containsExactly(STEP_NAME_1, null, null);
   }
 
   @Test
-  void whenStepIsNotUsed_findNoMatchingFeatureVectors() {
+  void whenPolicyIsNotAvailable_findFeatureVectorsWithoutSteps() {
     // given
-    Stream<FeatureVectorWithUsageDto> featureVectors = createFeatureVectors();
-    when(featureVectorUsageQuery.getAllWithUsage()).thenReturn(featureVectors);
-    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_2)).thenReturn(ID_OF_POLICY);
-    when(policyByIdQuery.getPolicyIdById(ID_OF_POLICY)).thenReturn(POLICY_ID);
+    List<FeatureVectorDto> featureVectors = createFeatureVectors()
+        .map(featureVectorWithUsageDto -> featureVectorWithUsageDto.standardize(COLUMNS))
+        .collect(Collectors.toList());
+    FeatureVectorsDto featureVectorsDto = FeatureVectorsDto
+        .builder()
+        .featureVectors(featureVectors)
+        .columns(COLUMNS).build();
+    when(listVectorsQuery.list(any())).thenReturn(featureVectorsDto);
+    when(inUsePolicyQuery.getPolicyInUse()).thenReturn(empty());
 
     // when
-    FeatureVectorsDto response = underTest.activate(STEP_NAME_2, PAGING);
+    FeatureVectorsDto response = underTest.activate(PAGING);
 
     // then
-    assertThat(response.getFeatureVectors()).isEmpty();
-  }
-
-  @Test
-  void whenPreviousStepIsUsed_findNoMatchingFeatureVectors() {
-    // given
-    Stream<FeatureVectorWithUsageDto> featureVectors = createFeatureVectors();
-    when(featureVectorUsageQuery.getAllWithUsage()).thenReturn(featureVectors);
-    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID_3)).thenReturn(ID_OF_POLICY);
-    when(policyByIdQuery.getPolicyIdById(ID_OF_POLICY)).thenReturn(POLICY_ID);
-
-    // when
-    FeatureVectorsDto response = underTest.activate(STEP_NAME_3, PAGING);
-
-    // then
-    assertThat(response.getFeatureVectors()).isEmpty();
+    assertThat(response.getColumns()).isEqualTo(COLUMNS);
+    assertThat(response.getFeatureVectors()).isNotEmpty();
+    assertThat(response.getFeatureVectors())
+        .extracting(FeatureVectorDto::getSignature)
+        .containsExactly(SIGNATURE_1, SIGNATURE_2, SIGNATURE_3);
+    assertThat(response.getFeatureVectors())
+        .extracting(FeatureVectorDto::getMatchesCount)
+        .containsExactly(USAGE_COUNT_1, USAGE_COUNT_2, USAGE_COUNT_3);
+    assertThat(response.getFeatureVectors())
+        .extracting(FeatureVectorDto::getStep)
+        .containsExactly(null, null, null);
   }
 
   private static List<StepConfigurationDto> createSteps() {

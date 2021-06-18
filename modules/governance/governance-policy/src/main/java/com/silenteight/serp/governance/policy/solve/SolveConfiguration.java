@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.solve;
 
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGateway;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 

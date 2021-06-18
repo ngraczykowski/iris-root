@@ -27,14 +27,18 @@ import static org.springframework.http.ResponseEntity.ok;
 class ListVectorsRestController {
 
   private static final String LIST_VECTORS_URL = "/v1/vectors";
-  private static final String HEADER_TOTAL_ITEMS = "X-Total-Items";
+  private static final String HEADER_TOTAL_COUNT = "X-Total-Count";
+  private static final String HEADER_TOTAL_COUNT_ALL = "X-Total-Count-All";
   private static final String PAGE_INDEX = "pageIndex";
   private static final String PAGE_SIZE = "pageSize";
 
   @NonNull
   private final ListVectorsQuery listVectorsQuery;
   @NonNull
-  private final FindMatchingFeatureVectorsUseCase findMatchingFeatureVectorsUseCase;
+  private final FindFeatureVectorsSolvedByStepUseCase findFeatureVectorsSolvedByStepUseCase;
+  @NonNull
+  private final FindFeatureVectorsSolvedByDefaultPolicyUseCase
+      findFeatureVectorsSolvedByDefaultPolicyUseCase;
 
   @GetMapping(value = LIST_VECTORS_URL, params = { PAGE_INDEX, PAGE_SIZE })
   @PreAuthorize("isAuthorized('LIST_VECTORS')")
@@ -43,8 +47,9 @@ class ListVectorsRestController {
       @RequestParam @Min(1) int pageSize) {
 
     return ok()
-        .header(HEADER_TOTAL_ITEMS, valueOf(listVectorsQuery.count()))
-        .body(listVectorsQuery.list(new Paging(pageIndex, pageSize)));
+        .header(HEADER_TOTAL_COUNT, valueOf(listVectorsQuery.count()))
+        .body(findFeatureVectorsSolvedByDefaultPolicyUseCase.activate(
+            new Paging(pageIndex, pageSize)));
   }
 
   @GetMapping(value = LIST_VECTORS_URL, params = {"stepName", PAGE_INDEX, PAGE_SIZE})
@@ -54,7 +59,9 @@ class ListVectorsRestController {
       @RequestParam @Min(0) int pageIndex,
       @RequestParam @Min(1) int pageSize) {
 
-    return ok(findMatchingFeatureVectorsUseCase.activate(
-        stepName, new Paging(pageIndex, pageSize)));
+    return ok()
+        .header(HEADER_TOTAL_COUNT_ALL, valueOf(listVectorsQuery.count()))
+        .body(findFeatureVectorsSolvedByStepUseCase.activate(
+            stepName, new Paging(pageIndex, pageSize)));
   }
 }

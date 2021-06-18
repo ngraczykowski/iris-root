@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.policy.solve;
+package com.silenteight.serp.governance.policy.domain;
 
 import java.util.Optional;
 import java.util.UUID;

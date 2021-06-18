@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.policy.current;
 
-import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
+import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ class CurrentPolicyProviderTest {
 
     Optional<String> currentPolicy = currentPolicyProvider.getCurrentPolicy();
 
-    assertThat(currentPolicy.get()).isEqualTo(CURRENT_POLICY_NAME);
+    assertThat(currentPolicy).isPresent().contains(CURRENT_POLICY_NAME);
   }
 
   @Test

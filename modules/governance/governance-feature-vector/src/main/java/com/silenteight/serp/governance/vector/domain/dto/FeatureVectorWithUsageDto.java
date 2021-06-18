@@ -45,6 +45,15 @@ public class FeatureVectorWithUsageDto {
          .build();
   }
 
+  public FeatureVectorDto standardize(List<String> columns, String stepName) {
+    return FeatureVectorDto.builder()
+        .signature(getSignature())
+        .matchesCount(getUsageCount())
+        .values(mapToValues(columns))
+        .step(stepName)
+        .build();
+  }
+
   private List<String> mapToValues(List<String> columns) {
     Map<String, String> nameValueMap = toNameValueMap();
     return columns

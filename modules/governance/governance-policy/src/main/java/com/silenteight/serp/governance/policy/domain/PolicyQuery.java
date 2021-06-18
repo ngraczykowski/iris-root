@@ -8,7 +8,6 @@ import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 import com.silenteight.serp.governance.policy.domain.exception.PolicyNotFoundException;
 import com.silenteight.serp.governance.policy.list.ListPoliciesRequestQuery;
-import com.silenteight.serp.governance.policy.solve.InUsePolicyQuery;
 import com.silenteight.serp.governance.policy.transfer.export.PolicyExportQuery;
 
 import org.jetbrains.annotations.NotNull;
