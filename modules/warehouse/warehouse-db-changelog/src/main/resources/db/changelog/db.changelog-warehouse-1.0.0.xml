@@ -86,4 +86,29 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="warehouse-1.0.0-3" author="plewandowski">
+    <createTable tableName="warehouse_country_group">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="country_group_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="country_group_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_country_group"
+        indexName="ix_warehouse_country_group_id"
+        unique="true">
+      <column name="country_group_id"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

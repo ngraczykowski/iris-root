@@ -14,6 +14,7 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.IndexerModule;
+import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.production.ProductionReportingModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
@@ -37,6 +38,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     IndexerModule.class,
+    ManagementModule.class,
     ProductionReportingModule.class,
     ReportingModule.class,
     SimulationModule.class,
@@ -104,3 +106,4 @@ public class WarehouseApplication {
     }
   }
 }
+
