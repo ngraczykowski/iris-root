@@ -20,7 +20,6 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 class CreateRecommendationsUseCase {
 
-  private final GenerateCommentsUseCase generateCommentsUseCase;
   private final RecommendationRepository repository;
   private final PendingRecommendationFacade pendingRecommendationFacade;
 

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.comments.domain;
+package com.silenteight.adjudication.engine.comments.comment.domain;
 
 import lombok.*;
 
@@ -9,11 +9,14 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AlertTemplateModel {
+public class AlertContext {
 
+  /**
+   * ae_alert.client_alert_identifier
+   */
   private String alertId;
   private Map<String, Object> commentInput;
   private String recommendedAction;
   @Singular
-  private List<MatchTemplateModel> matches;
+  private List<MatchContext> matches;
 }

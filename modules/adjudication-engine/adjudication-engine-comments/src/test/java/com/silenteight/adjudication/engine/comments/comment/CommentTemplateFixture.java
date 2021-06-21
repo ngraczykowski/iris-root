@@ -11,7 +11,7 @@ class CommentTemplateFixture {
     var engine = new PebbleEngine.Builder()
         .loader(new CommentTemplateLoader(repository))
         .build();
-    var useCase = new GenerateRecommendationCommentUseCase(new ProtoStructConverter(), engine);
+    var useCase = new GenerateCommentUseCase(new ProtoStructConverter(), engine);
     return new CommentFacade(useCase);
   }
 

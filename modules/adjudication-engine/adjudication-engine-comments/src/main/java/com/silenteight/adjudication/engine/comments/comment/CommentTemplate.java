@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode.Include;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
+import java.io.Reader;
+import java.io.StringReader;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +23,7 @@ import static lombok.AccessLevel.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Builder(access = PACKAGE)
-public class CommentTemplate extends BaseEntity implements IdentifiableEntity {
+class CommentTemplate extends BaseEntity implements IdentifiableEntity {
 
   @Id
   @Column(name = "comment_template_id", insertable = false, updatable = false, nullable = false)
@@ -41,4 +43,7 @@ public class CommentTemplate extends BaseEntity implements IdentifiableEntity {
   @NonNull
   private String template;
 
+  Reader toReader() {
+    return new StringReader(getTemplate());
+  }
 }

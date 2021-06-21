@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.comments.comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.comments.domain.AlertTemplateModel;
+import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoStructConverter;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
@@ -18,17 +18,17 @@ import java.io.Writer;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-class GenerateRecommendationCommentUseCase {
+class GenerateCommentUseCase {
 
   private final ProtoStructConverter converter;
   private final PebbleEngine pebbleEngine;
 
-  @Transactional
-  String generate(String templateName, AlertTemplateModel alertTemplateModel) {
+  @Transactional(readOnly = true)
+  String generateComment(String templateName, AlertContext alertContext) {
     var compiledTemplate = pebbleEngine.getTemplate(templateName);
     Writer writer = new StringWriter();
     try {
-      compiledTemplate.evaluate(writer, converter.convert(alertTemplateModel));
+      compiledTemplate.evaluate(writer, converter.convert(alertContext));
     } catch (IOException e) {
       log.warn("Could not generate template", e);
       throw new CommentGenerationException(templateName);

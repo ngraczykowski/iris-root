@@ -2,8 +2,8 @@ package com.silenteight.adjudication.engine.comments.comment;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.comments.domain.AlertTemplateModel;
-import com.silenteight.adjudication.engine.comments.domain.MatchTemplateModel;
+import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
+import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoStructConverter;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
@@ -58,8 +58,8 @@ public class CommentFacadeTest {
     String alertId = UUID.randomUUID().toString();
     String output = "This is template:" + alertId;
 
-    AlertTemplateModel model = AlertTemplateModel.builder().alertId(alertId).build();
-    var evaluated = facade.generate(PEBBLE1_TEMPLATE_NAME, model);
+    AlertContext model = AlertContext.builder().alertId(alertId).build();
+    var evaluated = facade.generateComment(PEBBLE1_TEMPLATE_NAME, model);
 
     assertThat(evaluated).isEqualTo(output);
   }
@@ -69,7 +69,7 @@ public class CommentFacadeTest {
     String name = "Tomasz";
     var alertModel = randomAlertModel();
     String output = "alert/1 v1 1 l1";
-    var evaluated = facade.generate(PEBBLE2_TEMPLATE_NAME, alertModel);
+    var evaluated = facade.generateComment(PEBBLE2_TEMPLATE_NAME, alertModel);
     assertThat(evaluated).isEqualTo(output);
   }
 
@@ -82,11 +82,11 @@ public class CommentFacadeTest {
         .containsKeys("alertId", "commentInput", "recommendedAction", "matches");
   }
 
-  private AlertTemplateModel randomAlertModel() {
-    return AlertTemplateModel.builder()
+  private AlertContext randomAlertModel() {
+    return AlertContext.builder()
         .alertId("alert/1")
         .commentInput(Map.of("o1", "v1", "o2", 1, "o3", List.of("l1", "l2")))
-        .match(MatchTemplateModel.builder().matchId("match/1").build())
+        .match(MatchContext.builder().matchId("match/1").build())
         .recommendedAction("NO_DECISION")
         .build();
   }

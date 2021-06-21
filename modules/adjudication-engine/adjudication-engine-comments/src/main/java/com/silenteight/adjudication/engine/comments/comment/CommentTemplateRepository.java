@@ -4,7 +4,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.Optional;
 
-public interface CommentTemplateRepository extends Repository<CommentTemplate, Long> {
+interface CommentTemplateRepository extends Repository<CommentTemplate, Long> {
 
   Optional<CommentTemplate> findFirstByTemplateNameOrderByRevisionDesc(String name);
 

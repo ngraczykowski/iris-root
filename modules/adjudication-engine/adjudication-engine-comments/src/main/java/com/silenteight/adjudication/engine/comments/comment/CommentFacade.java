@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.comments.comment;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.comments.domain.AlertTemplateModel;
+import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentFacade {
 
-  private final GenerateRecommendationCommentUseCase recommendationCommentUseCase;
+  private final GenerateCommentUseCase generateCommentUseCase;
 
-  public String generate(String templateName, AlertTemplateModel alertTemplateModel) {
-    return recommendationCommentUseCase.generate(templateName, alertTemplateModel);
+  public String generateComment(String templateName, AlertContext alertModel) {
+    return generateCommentUseCase.generateComment(templateName, alertModel);
   }
 }
