@@ -1,11 +1,15 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
+import com.silenteight.adjudication.engine.analysis.analysis.dto.StrategyName;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
-class InMemoryAnalysisRepository extends BasicInMemoryRepository<AnalysisEntity> {
+import org.jetbrains.annotations.NotNull;
+
+class InMemoryAnalysisRepository extends BasicInMemoryRepository<AnalysisEntity>
+    implements AnalysisRepository {
 
   AnalysisRepository getRepository() {
-    return InMemoryAnalysisRepository.this::save;
+    return this;
   }
 
   AnalysisQueryRepository getQueryRepository() {
@@ -17,5 +21,17 @@ class InMemoryAnalysisRepository extends BasicInMemoryRepository<AnalysisEntity>
             .pendingAlerts(0L)
             .datasetCount(0L)
             .build());
+  }
+
+  @NotNull
+  @Override
+  public AnalysisEntity save(
+      AnalysisEntity analysisEntity) {
+    return super.save(analysisEntity);
+  }
+
+  @Override
+  public StrategyName getStrategyById(long analysisId) {
+    return null;
   }
 }

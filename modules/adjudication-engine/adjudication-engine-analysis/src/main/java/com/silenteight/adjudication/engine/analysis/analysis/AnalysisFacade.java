@@ -35,6 +35,9 @@ public class AnalysisFacade {
   private final GetPolicyAndFeatureVectorElementsUseCase
       getPolicyAndFeatureVectorElementsUseCase;
 
+  @NonNull
+  private final GetAnalysisStrategyUseCase getAnalysisStrategyUseCase;
+
   public Analysis createAndGetAnalysis(Analysis analysis) {
     return createAndGetAnalysisUseCase.createAndGetAnalysis(analysis);
   }
@@ -60,5 +63,9 @@ public class AnalysisFacade {
 
     return getPolicyAndFeatureVectorElementsUseCase.getPolicyAndFeatureVectorElements(
         analysisId);
+  }
+
+  public String getAnalysisStrategy(long analysisId) {
+    return getAnalysisStrategyUseCase.getAnalysisStrategy(analysisId);
   }
 }
