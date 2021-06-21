@@ -6,6 +6,7 @@ import com.silenteight.serp.governance.policy.details.PolicyStepsCountQuery;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
+import com.silenteight.serp.governance.policy.step.details.StepRequestQuery;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 import com.silenteight.serp.governance.policy.step.order.list.PolicyStepsOrderRequestQuery;
 
@@ -23,7 +24,8 @@ class StepQuery implements
     PolicyStepsRequestQuery,
     PolicyStepsOrderRequestQuery,
     PolicyStepsConfigurationQuery,
-    PolicyStepsCountQuery {
+    PolicyStepsCountQuery,
+    StepRequestQuery {
 
   private final StepRepository stepRepository;
   private final PolicyRepository policyRepository;
@@ -71,5 +73,10 @@ class StepQuery implements
   @Override
   public long getStepsCount(UUID policyId) {
     return stepRepository.countStepsByPolicyId(policyRepository.getIdByPolicyId(policyId));
+  }
+
+  @Override
+  public StepDto getStep(UUID stepId) {
+    return stepRepository.getStepByStepId(stepId).toDto();
   }
 }

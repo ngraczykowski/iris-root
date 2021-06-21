@@ -38,8 +38,10 @@ sep.auth:
       - "CREATE_STEP"
       - "EDIT_STEP"
       - "REMOVE_STEP"
+      - "STEP_DETAILS"
     VIEW_VECTORS:
       - "LIST_VECTORS"
+      - "STEP_DETAILS"
     MANAGE_QA_ALERTS:
       - "ALERTS_ANALYSIS"
       - "ALERTS_VALIDATION"
