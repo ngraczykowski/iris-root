@@ -42,6 +42,8 @@ dependencies {
   implementation libraries.jakarta_inject
 
   implementation libraries.protobuf_java_util
+  implementation libraries.logback_ecs_encoder
+  implementation libraries.ecs_logging_core
 
   testImplementation project(":warehouse-common-testing")
 
