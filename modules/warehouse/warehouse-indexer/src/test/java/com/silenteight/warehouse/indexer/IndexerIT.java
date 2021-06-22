@@ -25,6 +25,8 @@ import org.springframework.integration.test.context.SpringIntegrationTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.UUID;
+
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ANALYSIS_RESOURCE_PREFIX;
@@ -79,6 +81,7 @@ class IndexerIT {
   void  shouldReturnConfirmationWhenProductionDataIndexRequested() {
     ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
         .addAllAlerts(ALERTS_WITH_MATCHES)
+        .setRequestId(UUID.randomUUID().toString())
         .build();
 
     productionIndexClientGateway.indexRequest(request);

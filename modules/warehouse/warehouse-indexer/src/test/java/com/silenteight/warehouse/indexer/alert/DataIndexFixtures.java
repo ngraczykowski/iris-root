@@ -17,8 +17,6 @@ import static java.util.List.of;
 
 public class DataIndexFixtures {
 
-  static final String INDEX_NAME = "test-index-name";
-
   static final Map<String, String> ALERT_PAYLOAD_WITH_TWO_VALUES =
       Map.of(ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
           ALERT_COUNTRY_KEY, ALERT_COUNTRY

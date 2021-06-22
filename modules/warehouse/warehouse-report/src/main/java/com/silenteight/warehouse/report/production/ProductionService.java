@@ -2,12 +2,14 @@ package com.silenteight.warehouse.report.production;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
+@Slf4j
 @RequiredArgsConstructor
 class ProductionService {
 
@@ -20,11 +22,17 @@ class ProductionService {
   @NonNull
   private final ProductionReportingQuery productionReportingQuery;
 
-  public ReportInstanceReferenceDto createSimulationReport(
+  public ReportInstanceReferenceDto createProductionReport(
       ProductionReportType reportType, String definitionId) {
 
     String tenantName = productionReportingQuery.getTenantName(reportType);
-    return reportingService.createReport(definitionId, tenantName);
+    ReportInstanceReferenceDto report = reportingService.createReport(definitionId, tenantName);
+
+    log.debug("Production report scheduled for generation, "
+            + "reportType={}, definitionId={}, tenantName={}, reference={}",
+        reportType, definitionId, tenantName, report);
+
+    return report;
   }
 
   public KibanaReportDto downloadReport(

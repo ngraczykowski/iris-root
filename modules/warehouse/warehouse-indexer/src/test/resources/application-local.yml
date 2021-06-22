@@ -12,15 +12,15 @@ spring:
     virtual-host: /
   elasticsearch:
     rest:
-      username: admin
-      password: admin
+      username: technicaluser
+      password: technicaluser
       uris: http://localhost:9201,http://localhost:9200
 
 warehouse:
   kibana:
     url: http://localhost:5601
-    username: admin
-    password: admin
+    username: technicaluser
+    password: technicaluser
   minio:
     url: http://localhost:9000
     access-key: admin

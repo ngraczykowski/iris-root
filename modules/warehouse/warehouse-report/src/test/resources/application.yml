@@ -16,10 +16,10 @@ warehouse:
   report:
     default-bucket: reports
     synchronization:
-      production-tenant: admin_tenant
+      production-tenant: ${warehouse.environment.prefix}_production_periodic
       cron: "0 */1 * * * ?"
     simulation:
-      master-tenant: admin_tenant
+      master-tenant: ${warehouse.environment.prefix}_simulation_master
   tenant:
     max-object-count: 100
   environment:

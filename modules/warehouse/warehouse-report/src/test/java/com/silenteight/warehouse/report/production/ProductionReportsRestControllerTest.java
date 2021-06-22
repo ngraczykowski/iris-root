@@ -92,7 +92,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its200_whenReportGenerated() {
-    given(productionService.createSimulationReport(REPORT_TYPE, REPORT_DEFINITION_ID))
+    given(productionService.createProductionReport(REPORT_TYPE, REPORT_DEFINITION_ID))
         .willReturn(REPORT_INSTANCE);
 
     post(TEST_CREATE_REPORT_URL).statusCode(SEE_OTHER.value())
@@ -102,7 +102,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
   void its401_whenKibanaThrows401() {
-    given(productionService.createSimulationReport(REPORT_TYPE, REPORT_DEFINITION_ID))
+    given(productionService.createProductionReport(REPORT_TYPE, REPORT_DEFINITION_ID))
         .willThrow(new OpendistroKibanaClientException(401, "Unauthorized", SAMPLE_KIBANA_URL));
 
     post(TEST_CREATE_REPORT_URL).statusCode(UNAUTHORIZED.value())

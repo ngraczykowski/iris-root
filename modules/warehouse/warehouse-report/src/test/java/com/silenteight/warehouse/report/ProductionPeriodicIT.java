@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
@@ -32,7 +33,6 @@ import java.util.List;
 
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.ADMIN_TENANT;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_KIBANA_INDEX_PATTERN_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
@@ -55,6 +55,7 @@ import static org.awaitility.Awaitility.await;
 @AutoConfigureTestEntityManager
 class ProductionPeriodicIT {
 
+  private static final String PRODUCTION_PERIODIC_TENANT = "itest_production_periodic";
   private static final String TEST_BUCKET = "reports";
 
   @Autowired
@@ -78,6 +79,9 @@ class ProductionPeriodicIT {
   @Autowired
   private OpendistroKibanaClientFactory opendistroKibanaClientFactory;
 
+  @Autowired
+  private OpendistroElasticClient opendistroElasticClient;
+
   private OpendistroKibanaClient opendistroKibanaClient;
 
   @BeforeEach
@@ -85,10 +89,11 @@ class ProductionPeriodicIT {
     opendistroKibanaClient = opendistroKibanaClientFactory.getAdminClient();
     // given
     storeData();
+    createProductionTenant();
     createKibanaIndex();
     createSavedSearch();
     generateReport(createReportDefinition());
-    waitForReportInstances(1, ADMIN_TENANT);
+    waitForReportInstances(1, PRODUCTION_PERIODIC_TENANT);
     createMinioBucket();
   }
 
@@ -122,6 +127,10 @@ class ProductionPeriodicIT {
         PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
   }
 
+  private void createProductionTenant() {
+    opendistroElasticClient.createTenant(PRODUCTION_PERIODIC_TENANT, "Production periodic reports");
+  }
+
   @SneakyThrows
   private void createMinioBucket() {
     minioClient.makeBucket(MakeBucketArgs.builder().bucket(TEST_BUCKET).build());
@@ -129,21 +138,22 @@ class ProductionPeriodicIT {
 
   private void createKibanaIndex() {
     byte[] payload = getJson("json/production/1-create-kibana-index.json");
-    kibanaTestClient.createKibanaIndex(ADMIN_TENANT, PRODUCTION_KIBANA_INDEX_PATTERN_NAME, payload);
+    kibanaTestClient.createKibanaIndex(
+        PRODUCTION_PERIODIC_TENANT, PRODUCTION_KIBANA_INDEX_PATTERN_NAME, payload);
   }
 
   private void createSavedSearch() {
     byte[] payload = getJson("json/production/2-create-saved-search.json");
-    kibanaTestClient.createSavedSearch(ADMIN_TENANT, payload);
+    kibanaTestClient.createSavedSearch(PRODUCTION_PERIODIC_TENANT, payload);
   }
 
   private String createReportDefinition() {
     byte[] payload = getJson("json/3-create-report-definition.json");
-    return kibanaTestClient.createReportDefinition(ADMIN_TENANT, payload);
+    return kibanaTestClient.createReportDefinition(PRODUCTION_PERIODIC_TENANT, payload);
   }
 
   private void generateReport(String reportDefinitionId) {
-    kibanaTestClient.generateReport(ADMIN_TENANT, reportDefinitionId);
+    kibanaTestClient.generateReport(PRODUCTION_PERIODIC_TENANT, reportDefinitionId);
   }
 
   private void waitForReportInstances(int minCount, String tenant) {
@@ -158,7 +168,8 @@ class ProductionPeriodicIT {
   }
 
   private List<ReportDto> getSynchronizedReports() {
-    return new ArrayList<>(reportSynchronizationService.getAllReportsForTenant(ADMIN_TENANT));
+    return new ArrayList<>(
+        reportSynchronizationService.getAllReportsForTenant(PRODUCTION_PERIODIC_TENANT));
   }
 
   @SneakyThrows
@@ -195,16 +206,17 @@ class ProductionPeriodicIT {
 
   private void removeKibanaIndex() {
     opendistroKibanaClient.deleteSavedObjects(
-        ADMIN_TENANT, KIBANA_INDEX_PATTERN, PRODUCTION_KIBANA_INDEX_PATTERN_NAME);
+        PRODUCTION_PERIODIC_TENANT, KIBANA_INDEX_PATTERN, PRODUCTION_KIBANA_INDEX_PATTERN_NAME);
   }
 
   private void removeSavedSearch() {
-    opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVED_SEARCH);
+    opendistroKibanaClient.deleteSavedObjects(PRODUCTION_PERIODIC_TENANT, SEARCH, SAVED_SEARCH);
   }
 
   private void removeReportDefinitions() {
-    opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).forEach(
-        report -> opendistroKibanaClient.deleteReportDefinition(ADMIN_TENANT, report.getId())
+    opendistroKibanaClient.listReportDefinitions(PRODUCTION_PERIODIC_TENANT).forEach(
+        report -> opendistroKibanaClient.deleteReportDefinition(
+            PRODUCTION_PERIODIC_TENANT, report.getId())
     );
   }
 
