@@ -27,13 +27,6 @@ warehouse:
   es:
     production-query-index: ${warehouse.environment.prefix}_production
 
-spring:
-  elasticsearch:
-    rest:
-      username: admin
-      password: admin
-      uris: http://localhost:9201,http://localhost:9200
-
 test:
   messaging:
     integration:

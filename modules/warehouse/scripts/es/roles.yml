@@ -1,0 +1,75 @@
+_meta:
+  type: "roles"
+  config_version: 2
+
+# Restrict users so they can only view visualization and dashboard on kibana
+kibana_read_only:
+  reserved: true
+
+# The security REST API access role is used to assign specific users access to change the security settings through the REST API.
+security_rest_api_access:
+  reserved: true
+
+# Allows users to all Reports functionality
+reports_full_access:
+  reserved: true
+  cluster_permissions:
+    - 'cluster:admin/opendistro/reports/definition/create'
+    - 'cluster:admin/opendistro/reports/definition/update'
+    - 'cluster:admin/opendistro/reports/definition/on_demand'
+    - 'cluster:admin/opendistro/reports/definition/delete'
+    - 'cluster:admin/opendistro/reports/definition/get'
+    - 'cluster:admin/opendistro/reports/definition/list'
+    - 'cluster:admin/opendistro/reports/instance/list'
+    - 'cluster:admin/opendistro/reports/instance/get'
+    - 'cluster:admin/opendistro/reports/menu/download'
+
+technical_user:
+  reserved: false
+  cluster_permissions:
+    - 'cluster:admin/opendistro/reports/definition/list'
+    - 'cluster:admin/opendistro/reports/instance/list'
+    - 'cluster:admin/opendistro/reports/instance/get'
+    - 'cluster:admin/opendistro/reports/definition/on_demand'
+  index_permissions:
+    - index_patterns:
+        - 'itest_production'
+        - 'itest_simulation_*'
+        - 'local_production'
+        - 'local_simulation_*'
+      allowed_actions:
+        - 'indices:data/read/get'
+        - 'indices:data/read/search'
+        - 'indices:data/write/index'
+        - 'indices:data/write/bulk*'
+        - 'indices:monitor/settings/get'
+        - 'indices:admin/create'
+        - 'indices:admin/mapping/put'
+  tenant_permissions:
+    - tenant_patterns:
+        - 'itest_*'
+        - 'local_*'
+      allowed_actions:
+        - 'kibana_all_write'
+
+technical_user_testsetup:
+  reserved: false
+  cluster_permissions:
+    - 'cluster:admin/opendistro/reports/definition/create'
+    - 'cluster:admin/opendistro/reports/definition/delete'
+    - 'cluster:monitor/main'
+  index_permissions:
+    - index_patterns:
+        - 'itest_production'
+        - 'itest_simulation_*'
+        - 'local_production'
+        - 'local_simulation_*'
+      allowed_actions:
+        - 'indices:admin/delete'
+  tenant_permissions:
+    - tenant_patterns:
+        - 'itest_*'
+        - 'local_*'
+      allowed_actions:
+        - 'kibana_all_write'
+

@@ -38,9 +38,9 @@ warehouse:
     default-bucket: reports
   kibana:
     url: http://localhost:5601
-    us  ername: admin
-    password: admin
-  es  :
+    username: technicaluser
+    password: technicaluser
+  es:
     production-query-index: ${warehouse.environment.prefix}_production
   db:
     host: localhost

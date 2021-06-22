@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientFactory;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaTestClient;
@@ -44,6 +45,7 @@ import static org.mockito.Mockito.*;
 })
 class SimulationIT {
 
+  private static final String SIMULATION_MASTER_TENANT = "itest_simulation_master";
   private static final String SIMULATION_TENANT = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
   private static final AnalysisMetadataDto ITEST_ANALYSIS = AnalysisMetadataDto.builder()
       .tenant(SIMULATION_TENANT)
@@ -74,6 +76,9 @@ class SimulationIT {
 
   @Autowired
   private SimulationReportsRestController simulationReportsRestController;
+
+  @Autowired
+  private OpendistroElasticClient opendistroElasticClient;
 
   @Autowired
   private SimulationAnalysisService simulationAnalysisService;
@@ -128,19 +133,25 @@ class SimulationIT {
         SIMULATION_ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
   }
 
+  private void createSimulationMasterTenant() {
+    opendistroElasticClient.createTenant(
+        SIMULATION_MASTER_TENANT, "Blueprints for new simulation tenants");
+  }
+
   private void createKibanaIndex() {
     byte[] payload = getJson("json/simulation/1-create-kibana-index.json");
-    kibanaTestClient.createKibanaIndex(ADMIN_TENANT, SIMULATION_KIBANA_INDEX_PATTERN_NAME, payload);
+    kibanaTestClient.createKibanaIndex(
+        SIMULATION_MASTER_TENANT, SIMULATION_KIBANA_INDEX_PATTERN_NAME, payload);
   }
 
   private void createSavedSearch() {
     byte[] payload = getJson("json/simulation/2-create-saved-search.json");
-    kibanaTestClient.createSavedSearch(ADMIN_TENANT, payload);
+    kibanaTestClient.createSavedSearch(SIMULATION_MASTER_TENANT, payload);
   }
 
   private void createReportDefinition() {
     byte[] payload = getJson("json/3-create-report-definition.json");
-    kibanaTestClient.createReportDefinition(ADMIN_TENANT, payload);
+    kibanaTestClient.createReportDefinition(SIMULATION_MASTER_TENANT, payload);
   }
 
   private void waitForReportInstances(int minCount, String tenant) {
@@ -199,16 +210,17 @@ class SimulationIT {
 
   private void removeKibanaIndex() {
     opendistroKibanaClient.deleteSavedObjects(
-        ADMIN_TENANT, KIBANA_INDEX_PATTERN, SIMULATION_KIBANA_INDEX_PATTERN_NAME);
+        SIMULATION_MASTER_TENANT, KIBANA_INDEX_PATTERN, SIMULATION_KIBANA_INDEX_PATTERN_NAME);
   }
 
   private void removeSavedSearch() {
-    opendistroKibanaClient.deleteSavedObjects(ADMIN_TENANT, SEARCH, SAVED_SEARCH);
+    opendistroKibanaClient.deleteSavedObjects(SIMULATION_MASTER_TENANT, SEARCH, SAVED_SEARCH);
   }
 
   private void removeReportDefinitions() {
-    opendistroKibanaClient.listReportDefinitions(ADMIN_TENANT).forEach(
-        report -> opendistroKibanaClient.deleteReportDefinition(ADMIN_TENANT, report.getId())
+    opendistroKibanaClient.listReportDefinitions(SIMULATION_MASTER_TENANT).forEach(
+        report -> opendistroKibanaClient.deleteReportDefinition(
+            SIMULATION_MASTER_TENANT, report.getId())
     );
   }
 

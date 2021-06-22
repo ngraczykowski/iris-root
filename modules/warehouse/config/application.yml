@@ -16,8 +16,8 @@ spring:
 
   elasticsearch:
     rest:
-      username: admin
-      password: admin
+      username: technicaluser
+      password: technicaluser
       uris: http://localhost:9201,http://localhost:9200
 
 warehouse:
@@ -45,8 +45,8 @@ warehouse:
       cron: "0 0 */1 * * ?"
   kibana:
     url: http://localhost:5601
-    username: admin
-    password: admin
+    username: technicaluser
+    password: technicaluser
   db:
     host: localhost
     port: 24910

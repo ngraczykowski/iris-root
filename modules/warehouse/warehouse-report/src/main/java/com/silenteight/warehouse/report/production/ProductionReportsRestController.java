@@ -65,7 +65,7 @@ public class ProductionReportsRestController {
       @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
 
     ReportInstanceReferenceDto reportInstance =
-        productionService.createSimulationReport(reportType, definitionId);
+        productionService.createProductionReport(reportType, definitionId);
     return status(SEE_OTHER)
         .header("Location", "reports/" + reportInstance.getTimestamp())
         .build();

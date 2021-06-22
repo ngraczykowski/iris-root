@@ -1,12 +1,14 @@
 package com.silenteight.warehouse.indexer.alert;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
 import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
 
+import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,9 +20,9 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -32,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class
 })
+@Slf4j
 class AlertIT {
 
   @Autowired
@@ -43,14 +46,6 @@ class AlertIT {
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
 
-  @Autowired
-  private ElasticsearchProperties properties;
-
-  @BeforeEach
-  void init() {
-    storeData();
-  }
-
   @AfterEach
   void cleanup() {
     cleanData();
@@ -59,11 +54,11 @@ class AlertIT {
   @Test
   @WithElasticAccessCredentials
   void shouldReturnAlertsAttributesListDto() {
-    //when
+    storeData();
+
     AlertsAttributesListDto alertAttributesMapDto =
         queryUnderTest.getMultipleAlertsAttributes(ALERT_FIELDS, LIST_OF_ID);
 
-    //then
     assertThat(alertAttributesMapDto.getAlerts().size()).isEqualTo(2);
     AlertAttributes alertAttributes = alertAttributesMapDto.getAlerts().get(1);
     assertThat(alertAttributes.getAttributes()).containsEntry(ALERT_COUNTRY_KEY, "UK");
@@ -72,12 +67,12 @@ class AlertIT {
   @Test
   @WithElasticAccessCredentials
   void shouldReturnSingleAlertAttributes() {
-    //when
+    storeData();
+
     AlertAttributes singleAlertMapDto =
         queryUnderTest.getSingleAlertAttributes(
             ALERT_FIELDS, "alerts/457b1498-e348-4a81-8093-6079c1173010");
 
-    //then
     assertThat(singleAlertMapDto.getAttributes()).containsEntry(ALERT_COUNTRY_KEY, "UK");
     assertThat(singleAlertMapDto.getAttributes())
         .containsEntry(ALERT_RECOMMENDATION_KEY, "FALSE_POSITIVE");
@@ -86,43 +81,45 @@ class AlertIT {
   @Test
   @WithElasticAccessCredentials
   void shouldReturnEmptyFieldWhenRequestedAttributeDoesNotExistsInKibana() {
-    //when
+    storeData();
+
     AlertAttributes singleAlertMapDto =
         queryUnderTest.getSingleAlertAttributes(
             ALERT_FIELDS_WITH_ONE_NON_EXISTING, "alerts/457b1498-e348-4a81-8093-6079c1173010");
 
-    //then
     assertThat(singleAlertMapDto.getAttributes().get(ALERT_RISK_TYPE_KEY)).isNull();
-  }
-
-  @Test
-  void shouldThrowExceptionWhenAlertHasZeroMatches() {
-    assertThrows(
-        ZeroMatchesException.class,
-        () -> underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), INDEX_NAME));
-  }
-
-  @Test
-  void shouldCreateSingleDocumentForEachMatch() {
-    underTest.indexAlerts(ALERTS_WITH_MATCHES, INDEX_NAME);
-
-    await()
-        .atMost(5, SECONDS)
-        .until(() -> simpleElasticTestClient.getDocumentCount(INDEX_NAME) > 0);
-
-    long documentCount = simpleElasticTestClient.getDocumentCount(INDEX_NAME);
-    assertThat(documentCount).isEqualTo(4);
   }
 
   @ParameterizedTest
   @MethodSource("getInvalidAlertIds")
   @WithElasticAccessCredentials
   void shouldThrowExceptionWhenAlertIsNotFound(String alertId) {
+    storeData();
+
     assertThrows(
         AlertNotFoundException.class,
         () -> queryUnderTest.getSingleAlertAttributes(
             ALERT_FIELDS,
             alertId));
+  }
+
+  @Test
+  void shouldThrowExceptionWhenAlertHasZeroMatches() {
+    assertThrows(
+        ZeroMatchesException.class,
+        () -> underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), PRODUCTION_ELASTIC_INDEX_NAME));
+  }
+
+  @Test
+  void shouldCreateSingleDocumentForEachMatch() {
+    underTest.indexAlerts(ALERTS_WITH_MATCHES, PRODUCTION_ELASTIC_INDEX_NAME);
+
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME) > 0);
+
+    long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME);
+    assertThat(documentCount).isEqualTo(4);
   }
 
   private void storeData() {
@@ -132,11 +129,19 @@ class AlertIT {
   }
 
   private void saveAlert(String alertId, Map<String, Object> alert) {
-    simpleElasticTestClient.storeData(properties.getProductionQueryIndex(), alertId, alert);
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, alertId, alert);
   }
 
   private void cleanData() {
-    simpleElasticTestClient.removeIndex(properties.getProductionQueryIndex());
+    safeDeleteIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+  }
+
+  private void safeDeleteIndex(String index) {
+    try {
+      simpleElasticTestClient.removeIndex(index);
+    } catch (ElasticsearchException e) {
+      log.debug("index not present index={}", index);
+    }
   }
 
   private static Stream<Arguments> getInvalidAlertIds() {

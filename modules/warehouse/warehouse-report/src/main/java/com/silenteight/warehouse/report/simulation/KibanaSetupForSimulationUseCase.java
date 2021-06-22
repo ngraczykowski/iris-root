@@ -30,10 +30,10 @@ public class KibanaSetupForSimulationUseCase implements NewSimulationAnalysisHan
 
     try {
       cloneTenant(analysis, tenant, elasticIndexName);
-      log.info("Simulation report generation triggered successfully. "
+      log.info("Tenant cloned successfully. "
           + "analysis=" + analysis + ", tenant=" + tenant + ", index=" + elasticIndexName);
     } catch (Exception e) {
-      log.error("Exception during simulation report generation. "
+      log.error("Exception during tenant cloning. "
           + "analysis=" + analysis + ", tenant=" + tenant + ", index=" + elasticIndexName, e);
     }
   }
