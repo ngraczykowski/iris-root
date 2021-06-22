@@ -10,8 +10,8 @@ silenteight.bridge:
     outgoing:
       model-persisted-exchange-name: bridge.model
       model-persisted-routing-key: persisted.external
-      warehouse-exchange-name: alert-indexing
-      warehouse-routing-key: alert.production
+      warehouse-exchange-name: bridge.command
+      warehouse-routing-key: command.index-request.production
       watchlist-persisted-exchange-name: bridge.watchlist
       watchlist-persisted-routing-key: persisted
     ingoing:
