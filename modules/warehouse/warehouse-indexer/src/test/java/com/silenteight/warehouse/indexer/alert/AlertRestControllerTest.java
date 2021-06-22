@@ -14,11 +14,13 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.any;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     AlertRestController.class,
-    GenericExceptionControllerAdvice.class
+    GenericExceptionControllerAdvice.class,
+    AlertRestControllerAdvice.class
 })
 class AlertRestControllerTest extends BaseRestControllerTest {
 
@@ -34,6 +36,15 @@ class AlertRestControllerTest extends BaseRestControllerTest {
     get(QA_ALERT_LIST_URL)
         .statusCode(OK.value())
         .body("alerts[0].attributes.alertId", is(ALERT_ID));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { QA })
+  void its404_whenAtLeastOneAlertIdNotExists() {
+    when(alertQueryService.getMultipleAlertsAttributes(any(), any()))
+        .thenThrow(AlertNotFoundException.class);
+
+    get(QA_ALERT_LIST_URL).statusCode(NOT_FOUND.value());
   }
 
   @Test
@@ -53,6 +64,15 @@ class AlertRestControllerTest extends BaseRestControllerTest {
     get(QA_ALERT_URL)
         .statusCode(OK.value())
         .body("attributes.alertId", is(ALERT_ID));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { QA })
+  void its404_whenAtAlertIdNotExists() {
+    when(alertQueryService.getSingleAlertAttributes(any(), any()))
+        .thenThrow(AlertNotFoundException.class);
+
+    get(QA_ALERT_URL).statusCode(NOT_FOUND.value());
   }
 
   @Test
