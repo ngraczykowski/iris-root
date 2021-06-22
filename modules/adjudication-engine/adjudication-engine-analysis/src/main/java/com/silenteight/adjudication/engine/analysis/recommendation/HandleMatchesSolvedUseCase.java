@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 class HandleMatchesSolvedUseCase {
 
-  private final GenerateRecommendationsUseCase generateRecommendationsUseCase;
+  private final GenerateAndSaveRecommendationUseCase generateAndSaveRecommendationUseCase;
 
   Optional<RecommendationsGenerated> handleMatchesSolved(MatchesSolved matchesSolved) {
     if (log.isDebugEnabled()) {
@@ -23,6 +23,7 @@ class HandleMatchesSolvedUseCase {
           matchesSolved.getAnalysis(), matchesSolved.getMatchesCount());
     }
 
-    return generateRecommendationsUseCase.generateRecommendations(matchesSolved.getAnalysis());
+    return Optional.of(generateAndSaveRecommendationUseCase.generateAndSaveRecommendations(
+        matchesSolved.getAnalysis()));
   }
 }

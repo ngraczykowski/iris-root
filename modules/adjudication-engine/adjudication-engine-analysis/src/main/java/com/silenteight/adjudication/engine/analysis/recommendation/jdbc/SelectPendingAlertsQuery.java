@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 import lombok.NonNull;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlertsWithStrategy;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import com.google.common.base.Preconditions;
@@ -14,7 +14,6 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
@@ -32,7 +31,7 @@ class SelectPendingAlertsQuery {
     jdbcTemplate.setMaxRows(fetchSize);
   }
 
-  PendingAlertsWithStrategy execute(long analysisId) {
+  PendingAlerts execute(long analysisId) {
     var pendingAlerts = jdbcTemplate.query(
         "SELECT aamsq.alert_id, aamsq.match_solution\n"
             + "FROM ae_alert_match_solutions_query aamsq\n"
@@ -47,15 +46,7 @@ class SelectPendingAlertsQuery {
             + "  AND ar.recommendation_id IS NULL",
         ROW_MAPPER, analysisId);
 
-    // NOTE(ahaczewski): There is no need to query strategy name when there are no pending alerts.
-    if (pendingAlerts.isEmpty()) {
-      return new PendingAlertsWithStrategy("", List.of());
-    }
-
-    var strategyName = jdbcTemplate.queryForObject(
-        "SELECT strategy FROM ae_analysis WHERE analysis_id = ?", String.class, analysisId);
-
-    return new PendingAlertsWithStrategy(strategyName, pendingAlerts);
+    return new PendingAlerts(pendingAlerts);
   }
 
   private static final class PendingAlertMapper implements RowMapper<PendingAlert> {

@@ -3,19 +3,22 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
+import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.solving.api.v1.BatchSolveAlertsRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -26,16 +29,15 @@ class GenerateRecommendationsUseCase {
 
   private final AlertSolvingClient client;
   private final RecommendationDataAccess recommendationDataAccess;
-  private final CreateRecommendationsUseCase createRecommendationsUseCase;
+  private final AnalysisFacade analysisFacade;
 
-  Optional<RecommendationsGenerated> generateRecommendations(String analysisName) {
+  List<RecommendationInfo> generateRecommendations(
+      String analysisName,
+      Function<SaveRecommendationRequest, List<RecommendationInfo>> saveRecommendation) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
-    var recommendations = new ArrayList<RecommendationInfo>();
+    var recommendationInfos = new ArrayList<RecommendationInfo>();
 
-    if (log.isDebugEnabled()) {
-      log.debug("Starting generating recommendations: analysis={}", analysisName);
-    }
-
+    log.debug("Starting generating recommendations: analysis={}", analysisName);
     do {
       var request = createRequest(analysisId);
 
@@ -46,21 +48,26 @@ class GenerateRecommendationsUseCase {
 
       var response = client.batchSolveAlerts(request.get());
 
-      recommendations.addAll(createRecommendations(analysisId, response));
+      var alertSolutions = createAlertSolutions(response);
+      recommendationInfos.addAll(
+          saveRecommendation.apply(new SaveRecommendationRequest(analysisId, alertSolutions)));
+
+      if (alertSolutions.isEmpty()) {
+        log.info("No recommendations generated: analysis={}", analysisName);
+      }
     } while (true);
+    log.debug("Finished generating recommendations: analysis={}", analysisName);
 
-    if (recommendations.isEmpty()) {
-      log.info("No recommendations generated: analysis={}", analysisName);
-      return Optional.empty();
-    }
+    return recommendationInfos;
+  }
 
-    log.info("Finished generating recommendations: analysis={}, recommendationCount={}",
-        analysisName, recommendations.size());
-
-    return Optional.of(RecommendationsGenerated.newBuilder()
-        .setAnalysis(analysisName)
-        .addAllRecommendationInfos(recommendations)
-        .build());
+  @NotNull
+  private List<AlertSolution> createAlertSolutions(BatchSolveAlertsResponse response) {
+    return response
+        .getSolutionsList()
+        .stream()
+        .map(GenerateRecommendationsUseCase::createAlertSolution)
+        .collect(toList());
   }
 
   private Optional<BatchSolveAlertsRequest> createRequest(long analysisId) {
@@ -76,24 +83,12 @@ class GenerateRecommendationsUseCase {
           analysisId, pendingAlerts.size());
     }
 
-    return Optional.of(pendingAlerts.toBatchSolveAlertsRequest());
+    var strategy = analysisFacade.getAnalysisStrategy(analysisId);
+    return Optional.of(pendingAlerts.toBatchSolveAlertsRequest(strategy));
   }
 
-  private List<RecommendationInfo> createRecommendations(
-      long analysisId, BatchSolveAlertsResponse response) {
-
-    var alertSolutions = response
-        .getSolutionsList()
-        .stream()
-        .map(GenerateRecommendationsUseCase::makeAlertSolution)
-        .collect(toList());
-
-    return createRecommendationsUseCase.createRecommendations(analysisId, alertSolutions);
-  }
-
-  private static AlertSolution makeAlertSolution(SolveAlertSolutionResponse response) {
+  private static AlertSolution createAlertSolution(SolveAlertSolutionResponse response) {
     var alertId = ResourceName.create(response.getAlertName()).getLong("alerts");
-
     return new AlertSolution(alertId, response.getAlertSolution());
   }
 }

@@ -9,7 +9,6 @@ import com.silenteight.adjudication.internal.v1.CommentInputsUpdated;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 
@@ -18,7 +17,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 @Slf4j
 class HandleCommentInputsUpdatedUseCase {
 
-  private final GenerateRecommendationsUseCase generateRecommendationsUseCase;
+  private final GenerateAndSaveRecommendationUseCase generateAndSaveRecommendationUseCase;
 
   List<RecommendationsGenerated> handleCommentInputsUpdated(
       CommentInputsUpdated commentInputsUpdated) {
@@ -31,9 +30,7 @@ class HandleCommentInputsUpdatedUseCase {
     return commentInputsUpdated
         .getAnalysisList()
         .stream()
-        .map(generateRecommendationsUseCase::generateRecommendations)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .map(generateAndSaveRecommendationUseCase::generateAndSaveRecommendations)
         .collect(toUnmodifiableList());
   }
 }

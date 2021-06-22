@@ -1,8 +1,8 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlertsWithStrategy;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
 
 public interface RecommendationDataAccess {
 
-  PendingAlertsWithStrategy selectPendingAlerts(long analysisId);
+  PendingAlerts selectPendingAlerts(long analysisId);
 }

@@ -12,9 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 @Value
 @Getter(AccessLevel.NONE)
-public class PendingAlertsWithStrategy {
-
-  String strategy;
+public class PendingAlerts {
 
   List<PendingAlert> pendingAlerts;
 
@@ -26,7 +24,7 @@ public class PendingAlertsWithStrategy {
     return pendingAlerts.size();
   }
 
-  public BatchSolveAlertsRequest toBatchSolveAlertsRequest() {
+  public BatchSolveAlertsRequest toBatchSolveAlertsRequest(String strategy) {
     var requestAlerts = pendingAlerts.stream().map(PendingAlert::toAlert).collect(toList());
 
     return BatchSolveAlertsRequest

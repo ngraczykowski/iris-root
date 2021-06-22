@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationDataAccess;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlertsWithStrategy;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   @Override
   @Transactional(readOnly = true)
-  public PendingAlertsWithStrategy selectPendingAlerts(long analysisId) {
+  public PendingAlerts selectPendingAlerts(long analysisId) {
     return query.execute(analysisId);
   }
 }
