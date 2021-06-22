@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientException;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.warehouse.indexer.analysis.AnalysisDoesNotExistException;
 import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
@@ -99,6 +100,15 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(OK.value())
         .body("[0].id", is(REPORT_DEFINITION_ID))
         .body("[0].title", is(REPORT_NAME));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  void its404_whenAnalysisNotFound() {
+    given(simulationReportingQuery.getReportsDefinitions(ANALYSIS_ID))
+        .willThrow(AnalysisDoesNotExistException.class);
+
+    get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(NOT_FOUND.value());
   }
 
   @Test
