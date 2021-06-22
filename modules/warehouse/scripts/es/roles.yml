@@ -52,12 +52,32 @@ technical_user:
       allowed_actions:
         - 'kibana_all_write'
 
+business_user:
+  reserved: false
+  cluster_permissions:
+    - 'cluster:admin/opendistro/reports/instance/get'
+  index_permissions:
+    - index_patterns:
+        - 'itest_production'
+        - 'itest_simulation_*'
+        - 'local_production'
+        - 'local_simulation_*'
+      allowed_actions:
+        - 'indices:data/read/get'
+        - 'indices:data/read/search'
+        - 'indices:monitor/settings/get'
+  tenant_permissions:
+    - tenant_patterns:
+        - 'itest_*'
+        - 'local_*'
+      allowed_actions:
+        - 'kibana_all_read'
+
 technical_user_testsetup:
   reserved: false
   cluster_permissions:
     - 'cluster:admin/opendistro/reports/definition/create'
     - 'cluster:admin/opendistro/reports/definition/delete'
-    - 'cluster:monitor/main'
   index_permissions:
     - index_patterns:
         - 'itest_production'

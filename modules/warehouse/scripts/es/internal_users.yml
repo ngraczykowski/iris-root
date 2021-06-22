@@ -27,3 +27,8 @@ technicaluser:
   reserved: false
   description: "Technical user for warehouse"
 
+businessuser:
+  hash: "$2y$12$CwCfe8VwQB1d5920hm7H4OG4xoskNu95//psWitmdMXhPYypyxTla"
+  reserved: false
+  description: "Business user for warehouse"
+

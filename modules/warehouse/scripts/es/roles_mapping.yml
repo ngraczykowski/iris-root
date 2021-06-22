@@ -43,3 +43,7 @@ technical_user_testsetup:
 security_rest_api_access:
   users:
     - "technicaluser"
+
+business_user:
+  users:
+    - "businessuser"
