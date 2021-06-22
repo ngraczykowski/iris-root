@@ -8,8 +8,8 @@ sep.auth.basic.users:
     roles:
       - BUSINESS_OPERATOR
       - QA
-  - username: admin
-    password: admin
+  - username: businessuser
+    password: businessuser
     roles:
       - BUSINESS_OPERATOR
       - QA
