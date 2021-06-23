@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
-import com.silenteight.adjudication.engine.common.protobuf.ProtoStructConverter;
+import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-public class CommentFacadeTest {
+public class GenerateCommentUseCaseTest {
 
-  private ProtoStructConverter converter;
   private InMemoryCommentTemplateRepository commentTemplateRepository =
       new InMemoryCommentTemplateRepository();
   private CommentFacade facade =
@@ -27,8 +26,7 @@ public class CommentFacadeTest {
   private static final String PEBBLE1_TEMPLATE_NAME = "pebble1";
   private static final String PEBBLE2_TEMPLATE_NAME = "pebble2";
 
-  CommentFacadeTest() {
-    this.converter = new ProtoStructConverter();
+  GenerateCommentUseCaseTest() {
     var engine = new PebbleEngine.Builder()
         .cacheActive(true)
         .loader(new CommentTemplateLoader(commentTemplateRepository))
@@ -76,7 +74,7 @@ public class CommentFacadeTest {
   @Test
   public void shouldConvertStructToMapOfObjects() {
     var alertModel = randomAlertModel();
-    var alertModelMap = converter.convert(alertModel);
+    var alertModelMap = ObjectToMapConverter.convert(alertModel);
     assertThat(alertModelMap).isNotEmpty();
     assertThat(alertModelMap)
         .containsKeys("alertId", "commentInput", "recommendedAction", "matches");

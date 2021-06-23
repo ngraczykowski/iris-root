@@ -4,7 +4,7 @@ public class CommentGenerationException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  CommentGenerationException(String message) {
-    super(message);
+  CommentGenerationException(String message, Throwable cause) {
+    super(message, cause);
   }
 }
