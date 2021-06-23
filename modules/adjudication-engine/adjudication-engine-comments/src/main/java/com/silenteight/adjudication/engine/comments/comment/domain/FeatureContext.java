@@ -9,7 +9,7 @@ import java.util.Map;
 @Builder
 public class FeatureContext {
 
-  String agentName;
+  String agentConfig;
   String solution;
   Map<String, Object> reason;
 }
