@@ -22,6 +22,11 @@ variable "http_tags" {
   default = []
 }
 
+variable "grpcui_tags" {
+  type = list(string)
+  default = []
+}
+
 locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
@@ -47,6 +52,8 @@ job "governance" {
       port "http" {
       }
       port "grpc" {
+      }
+      port "grpcui" {
       }
     }
 
@@ -115,6 +122,48 @@ job "governance" {
         "gRPC_port=${NOMAD_PORT_grpc}",
       ]
     }
+
+        service {
+          name = "${var.namespace}-grpcui-governance"
+          port = "grpcui"
+          tags = concat([
+            "grpcui",
+            "traefik.enable=true",
+            "traefik.protocol=http",
+          ], var.grpcui_tags)
+        }
+
+        task "grpcui" {
+          driver = "raw_exec"
+
+          lifecycle {
+            hook = "poststart"
+            sidecar = true
+          }
+
+          artifact {
+            source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
+            options {
+              checksum = "sha256:41b9b606a025561f7df892e78a8ac1819597ed74d2300183797ab8caa7b290a6"
+            }
+          }
+
+          config {
+            command = "grpcui"
+            args = [
+              "-plaintext",
+              "-bind=${NOMAD_IP_grpcui}",
+              "-port=${NOMAD_PORT_grpcui}",
+              "-open-browser=false",
+              "${NOMAD_ADDR_grpc}"
+            ]
+          }
+
+          resources {
+            cpu = 50
+            memory = 100
+          }
+        }
 
     task "governance" {
       driver = "raw_exec"
