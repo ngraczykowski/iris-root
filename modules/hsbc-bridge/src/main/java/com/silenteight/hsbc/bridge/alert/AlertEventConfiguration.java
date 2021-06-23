@@ -19,7 +19,8 @@ class AlertEventConfiguration {
     return new AlertEventListener(alertProcessor, alertUpdater(), eventPublisher);
   }
 
-  private AlertUpdater alertUpdater() {
+  @Bean
+  AlertUpdater alertUpdater() {
     return new AlertUpdater(alertRepository);
   }
 }
