@@ -68,7 +68,8 @@ public class JenkinsModelClient implements ModelClient {
       return objectMapper.readValue(crumbResponse.body(), new TypeReference<>() {});
     } catch (JsonProcessingException e) {
       log.error("Exception occurred on receiving CrumbResponse: ", e);
-      throw new ModelNotReceivedException(e.getMessage());
+      throw new ModelNotReceivedException(
+          "Exception occurred on receiving CrumbResponse: " + e.getMessage());
     }
   }
 
@@ -79,6 +80,7 @@ public class JenkinsModelClient implements ModelClient {
     if (statusCode == 200) {
       return statusCode;
     } else {
+      log.error("Unable to get updated model with status code: " + statusCode);
       throw new ModelNotReceivedException(
           "Unable to get updated model with status code: " + statusCode);
     }
@@ -92,6 +94,7 @@ public class JenkinsModelClient implements ModelClient {
     if (statusCode == 200) {
       return statusCode;
     } else {
+      log.error("Unable to send update model status with code: " + statusCode);
       throw new ModelNotReceivedException(
           "Unable to send update model status with code: " + statusCode);
     }
@@ -112,7 +115,9 @@ public class JenkinsModelClient implements ModelClient {
     try {
       return objectMapper.writeValueAsString(modelStatusUpdated);
     } catch (JsonProcessingException e) {
-      throw new ModelNotReceivedException(e.getMessage());
+      log.error("Error during mapping modelInfoStatusRequest to Json as String: ", e);
+      throw new ModelNotReceivedException(
+          "Error during mapping modelInfoStatusRequest to Json as String: " + e.getMessage());
     }
   }
 
@@ -129,7 +134,9 @@ public class JenkinsModelClient implements ModelClient {
     try {
       return objectMapper.writeValueAsString(modelInfo);
     } catch (JsonProcessingException e) {
-      throw new ModelNotReceivedException(e.getMessage());
+      log.error("Error during mapping ModelInfo to Json as String: ", e);
+      throw new ModelNotReceivedException(
+          "Error during mapping ModelInfo to Json as String: " + e.getMessage());
     }
   }
 
@@ -138,11 +145,13 @@ public class JenkinsModelClient implements ModelClient {
       return httpClient.send(httpRequest, BodyHandlers.ofString());
     } catch (IOException e) {
       log.error("Exception occurred on receiving HttpResponse", e);
-      throw new ModelNotReceivedException(e.getMessage());
+      throw new ModelNotReceivedException(
+          "Exception occurred during sending request to Jenkins: " + e.getMessage());
     } catch (InterruptedException e) {
       log.error("Exception occurred on receiving HttpResponse", e);
       Thread.currentThread().interrupt();
-      throw new ModelNotReceivedException(e.getMessage());
+      throw new ModelNotReceivedException(
+          "Exception occurred during sending request to Jenkins: " + e.getMessage());
     }
   }
 
