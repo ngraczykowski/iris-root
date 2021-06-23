@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status;
+import com.silenteight.hsbc.bridge.analysis.event.AnalysisCompletedEvent;
 import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent;
-import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationsEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -45,21 +45,18 @@ class TimeoutHandler {
     if (hasPendingAlerts(entity.getName())) {
       handleTimeoutError(entity);
     } else {
-      callForRecommendations(entity.getName(), entity.getDataset());
-      entity.setStatus(Status.COMPLETED);
+      handleCompletedAnalysis(entity);
     }
+  }
+
+  private void handleCompletedAnalysis(AnalysisEntity entity) {
+    entity.setStatus(Status.COMPLETED);
+    eventPublisher.publishEvent(new AnalysisCompletedEvent(entity.getName()));
   }
 
   private void handleTimeoutError(AnalysisEntity entity) {
     entity.setStatus(Status.TIMEOUT_ERROR);
     eventPublisher.publishEvent(new AnalysisTimeoutEvent(entity.getId()));
-  }
-
-  private void callForRecommendations(String name, String dataset) {
-    eventPublisher.publishEvent(NewRecommendationsEvent.builder()
-        .analysis(name)
-        .dataset(dataset)
-        .build());
   }
 
   private List<AnalysisEntity> findInProgressTimeoutAnalyses() {

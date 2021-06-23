@@ -3,14 +3,19 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.alert.event.AlertRecommendationReadyEvent;
 import com.silenteight.hsbc.bridge.alert.event.AlertsPreProcessingCompletedEvent;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
+import com.silenteight.hsbc.bridge.analysis.event.RecalculateAnalysisStatusEvent;
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
+import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationInfo;
+import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationsStoredEvent;
+import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGeneratedEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,25 +33,34 @@ class AlertEventListener {
   }
 
   @EventListener
-  public void onAlertRecommendationReadyEvent(AlertRecommendationReadyEvent event) {
-    log.debug("Received alertRecommendationReadyEvent, alertName={}", event.getAlertName());
+  public void onAlertRecommendationReadyEvent(RecommendationsGeneratedEvent event) {
+    var alerts = event.getAlertRecommendationInfos().stream()
+        .map(AlertRecommendationInfo::getAlert)
+        .collect(toList());
 
-    updater.updateWithCompletedStatus(event.getAlertName());
+    log.debug("Received newRecommendationsEvent, analysis={}, no of alerts={}",
+        event.getAnalysis(), alerts.size());
+
+    updater.updateWithRecommendationReadyStatus(alerts);
+
+    eventPublisher.publishEvent(new RecalculateAnalysisStatusEvent(event.getAnalysis()));
+  }
+
+  @EventListener
+  public void onAlertRecommendationsStoredEvent(AlertRecommendationsStoredEvent event) {
+    log.debug("Received alertRecommendationStoreEvent");
+
+    updater.updateWithCompletedStatus(event.getAlerts());
   }
 
   @EventListener
   @Async
   public void onBulkStoredEvent(BulkStoredEvent event) {
-    log.info("NOMAD, bulk stored event handling started");
-
     var bulkId = event.getBulkId();
 
     alertProcessor.preProcessAlertsWithinBulk(bulkId);
-
-    log.info("NOMAD, alerts preprocessing has been finished, bulkId={}", bulkId);
-
     eventPublisher.publishEvent(new AlertsPreProcessingCompletedEvent(bulkId));
 
-    log.info("NOMAD, bulk stored event has been handled");
+    log.debug("BatchStoredEvent handled, batchId={}", bulkId);
   }
 }

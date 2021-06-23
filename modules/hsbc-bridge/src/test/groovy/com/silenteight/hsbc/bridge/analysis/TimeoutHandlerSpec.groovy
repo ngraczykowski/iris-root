@@ -1,8 +1,9 @@
 package com.silenteight.hsbc.bridge.analysis
 
 import com.silenteight.hsbc.bridge.analysis.dto.GetAnalysisResponseDto
+import com.silenteight.hsbc.bridge.analysis.event.AnalysisCompletedEvent
 import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent
-import com.silenteight.hsbc.bridge.recommendation.event.NewRecommendationsEvent
+import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGeneratedEvent
 
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
@@ -31,7 +32,7 @@ class TimeoutHandlerSpec extends Specification {
     1 * analysisServiceClient.getAnalysis(completedAnalysis.name) >> completedAnalysisDto
     1 * analysisServiceClient.getAnalysis(inCompletedAnalysis.name) >> inCompletedAnalysisDto
 
-    1 * eventPublisher.publishEvent(_ as NewRecommendationsEvent)
+    1 * eventPublisher.publishEvent(_ as AnalysisCompletedEvent)
     1 * eventPublisher.publishEvent(_ as AnalysisTimeoutEvent)
   }
 }

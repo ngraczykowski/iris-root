@@ -1,7 +1,9 @@
 package com.silenteight.hsbc.bridge.alert
 
-import com.silenteight.hsbc.bridge.alert.event.AlertRecommendationReadyEvent
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent
+import com.silenteight.hsbc.bridge.analysis.event.RecalculateAnalysisStatusEvent
+import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationInfo
+import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGeneratedEvent
 
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
@@ -27,13 +29,18 @@ class AlertEventListenerSpec extends Specification {
 
   def 'should handle alert recommendation ready event'() {
     given:
-    def alertName = "alert/1"
-    def event = new AlertRecommendationReadyEvent(alertName)
+    def analysis = 'analysis'
+    def alert = 'alert/1'
+    def recommendation = 'recommendation/1'
+    def alertRecommendationInfo = new AlertRecommendationInfo(alert, recommendation)
+    def recommendationInfos = [alertRecommendationInfo]
+    def event = new RecommendationsGeneratedEvent(analysis, recommendationInfos)
 
     when:
     underTest.onAlertRecommendationReadyEvent(event)
 
     then:
-    1 * updater.updateWithCompletedStatus(alertName)
+    1 * updater.updateWithRecommendationReadyStatus([alert])
+    1 * eventPublisher.publishEvent(_ as RecalculateAnalysisStatusEvent)
   }
 }

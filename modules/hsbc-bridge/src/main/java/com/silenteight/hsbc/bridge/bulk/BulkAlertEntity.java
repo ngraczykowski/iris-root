@@ -18,7 +18,6 @@ import static java.util.Objects.isNull;
 import static lombok.AccessLevel.NONE;
 
 @Entity
-@Immutable
 @Table(name = "hsbc_bridge_alert")
 @NoArgsConstructor(access = AccessLevel.NONE)
 @Getter

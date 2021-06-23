@@ -2,24 +2,17 @@ package com.silenteight.hsbc.bridge.analysis;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.analysis.event.AnalysisCompletedEvent;
+import com.silenteight.hsbc.bridge.analysis.event.RecalculateAnalysisStatusEvent;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.transaction.annotation.Transactional;
-
-import static com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status.COMPLETED;
 
 @RequiredArgsConstructor
 class AnalysisEventListener {
 
-  private final AnalysisRepository repository;
+  private final AnalysisStatusHandler statusHandler;
 
   @EventListener
-  @Transactional
-  public void onAnalysisCompletedEvent(AnalysisCompletedEvent event) {
-    repository.findByName(event.getAnalysis()).ifPresent(analysis -> {
-      analysis.setStatus(COMPLETED);
-      repository.save(analysis);
-    });
+  public void onRecalculateAnalysisStatusEvent(RecalculateAnalysisStatusEvent event) {
+    statusHandler.handleStatusChange(event.getAnalysisName());
   }
 }

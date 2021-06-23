@@ -13,4 +13,8 @@ public class GetAnalysisResponseDto {
   public boolean hasPendingAlerts() {
     return pendingAlerts > 0;
   }
+
+  public boolean hasNoPendingAlerts() {
+    return pendingAlerts == 0;
+  }
 }

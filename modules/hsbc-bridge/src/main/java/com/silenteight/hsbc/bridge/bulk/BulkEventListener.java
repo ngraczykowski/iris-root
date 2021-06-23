@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.event.AlertsPreProcessingCompletedEvent;
-import com.silenteight.hsbc.bridge.analysis.event.AnalysisCompletedEvent;
 import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent;
+import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationsStoredEvent;
+import com.silenteight.hsbc.bridge.recommendation.event.FailedToGetRecommendationsEvent;
 
 import org.springframework.context.event.EventListener;
 
@@ -23,10 +24,10 @@ class BulkEventListener {
   }
 
   @EventListener
-  public void onAnalysisCompletedEvent(AnalysisCompletedEvent event) {
-    bulkUpdater.updateWithAnalysisCompleted(event.getAnalysis());
+  public void onAlertRecommendationsStoredEvent(AlertRecommendationsStoredEvent event) {
+    bulkUpdater.updateWithCompletedStatus(event.getAnalysis());
 
-    log.debug("AnalysisCompletedEvent handled, analysis={}", event.getAnalysis());
+    log.debug("AlertRecommendationsStoredEvent handled, analysis={}", event.getAnalysis());
   }
 
   @EventListener
@@ -34,5 +35,12 @@ class BulkEventListener {
     bulkUpdater.updateWithPreProcessedStatus(event.getBulkId());
 
     log.debug("AlertsPreProcessingCompletedEvent handled, bulkId={}", event.getBulkId());
+  }
+
+  @EventListener
+  public void onFailedToGetRecommendationsEvent(FailedToGetRecommendationsEvent event) {
+    bulkUpdater.updateWithUnavailableRecommendation(event.getAnalysis());
+
+    log.debug("FailedToGetRecommendationsEvent handled, analysis={}", event.getAnalysis());
   }
 }

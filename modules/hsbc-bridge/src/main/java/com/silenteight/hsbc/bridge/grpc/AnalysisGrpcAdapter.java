@@ -91,13 +91,12 @@ class AnalysisGrpcAdapter implements AnalysisServiceClient, RecommendationServic
   @Retryable(value = CannotGetRecommendationsException.class)
   public List<RecommendationDto> getRecommendations(GetRecommendationsDto request) {
     var recommendations = new ArrayList<RecommendationDto>();
-    var builder = StreamRecommendationsRequest.newBuilder()
-        .setAnalysis(request.getAnalysis());
-
-    ofNullable(request.getDataset()).ifPresent(builder::setDataset);
+    var grpcRequest = StreamRecommendationsRequest.newBuilder()
+        .setAnalysis(request.getAnalysis())
+        .build();
 
     try {
-      getStub().streamRecommendations(builder.build())
+      getStub().streamRecommendations(grpcRequest)
           .forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
     } catch (StatusRuntimeException ex) {
       log.error("Cannot get recommendations", ex);

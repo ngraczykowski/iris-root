@@ -55,6 +55,11 @@ class AnalysisEntity extends BaseEntity {
         .build();
   }
 
+  @Transient
+  boolean isInProgress() {
+    return status == Status.IN_PROGRESS;
+  }
+
   enum Status {
     IN_PROGRESS,
     COMPLETED,

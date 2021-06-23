@@ -15,8 +15,8 @@ class HandlerConfiguration {
   private final RecommendationRepository recommendationRepository;
 
   @Bean
-  NewRecommendationEventListener recommendationEventListener() {
-    return new NewRecommendationEventListener(recommendationHandler());
+  RecommendationEventListener recommendationEventListener() {
+    return new RecommendationEventListener(recommendationHandler());
   }
 
   @Bean

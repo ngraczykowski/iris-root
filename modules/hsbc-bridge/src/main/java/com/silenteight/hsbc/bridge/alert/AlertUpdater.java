@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ class AlertUpdater {
   private final AlertRepository repository;
 
   @Transactional
-  void updateNames(@NonNull Map<Long, String> alertIdWithName) {
+  public void updateNames(@NonNull Map<Long, String> alertIdWithName) {
     alertIdWithName.forEach((k,v) -> {
       var findResult = repository.findById(k);
 
@@ -28,15 +29,17 @@ class AlertUpdater {
   }
 
   @Transactional
-  void updateWithCompletedStatus(@NonNull String name) {
-    var result = repository.findByName(name);
-
-    if (result.isEmpty()) {
-      log.error("Alert with name: {} has not been found", name);
-    } else {
-      var alert = result.get();
-      alert.setStatus(AlertStatus.COMPLETED);
+  public void updateWithRecommendationReadyStatus(@NonNull List<String> names) {
+    repository.findByNameIn(names).forEach(alert -> {
+      alert.setStatus(AlertStatus.RECOMMENDATION_READY);
       repository.save(alert);
-    }
+    });
+
+    log.debug("Alert with names: {} has not been updated", names);
+  }
+
+  @Transactional
+  public void updateWithCompletedStatus(@NonNull List<String> alerts) {
+    repository.updateStatusByNames(AlertStatus.COMPLETED, alerts);
   }
 }

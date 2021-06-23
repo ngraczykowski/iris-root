@@ -22,7 +22,7 @@ class BulkUpdater {
   }
 
   @Transactional
-  public void updateWithAnalysisCompleted(@NonNull String analysis) {
+  public void updateWithCompletedStatus(@NonNull String analysis) {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
       bulk.setStatus(COMPLETED);
       bulkRepository.save(bulk);
@@ -34,6 +34,14 @@ class BulkUpdater {
     bulkRepository.findById(bulkId).ifPresent(b -> {
       b.setStatus(PRE_PROCESSED);
       bulkRepository.save(b);
+    });
+  }
+
+  @Transactional
+  public void updateWithUnavailableRecommendation(String analysis) {
+    bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
+      bulk.setStatus(ERROR);
+      bulkRepository.save(bulk);
     });
   }
 }
