@@ -18,25 +18,31 @@ service SolvingModelService {
   }
 
   rpc GetSolvingModel(ModelRequest) returns (SolvingModel) {
-      option (google.api.http) = {
+    option (google.api.http) = {
       get: "/v1/{model=solving-models/*}"
     };
   }
 
+  rpc ExportModel(ExportModelRequest) returns (ExportModelResponse) {
+    option (google.api.http) = {
+      get: "/v1/{model=solving-models/*}:export"
+    };
+  }
+
   rpc ImportModel(ImportNewModelRequest) returns (ImportNewModelResponse) {
-      option (google.api.http) = {
+    option (google.api.http) = {
       post: "/v1/solving-models:import"
     };
   }
 
   rpc UseModel(UseModelRequest) returns (google.protobuf.Empty) {
-      option (google.api.http) = {
+    option (google.api.http) = {
       post: "/v1/{model=solving-models/*}:use"
     };
   }
 
   rpc ModelDeployedOnProduction(ModelName) returns (google.protobuf.Empty) {
-      option (google.api.http) = {
+    option (google.api.http) = {
       post: "/v1/{model=solving-models/*}:deployed"
     };
   }
@@ -76,8 +82,18 @@ message Feature {
 message ModelPromotedForProduction {
   // The unique name of the model. This is always system-assigned.
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // URL where model is available as json file
-  string export_url = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for model to be exported
+message ExportModelRequest {
+  // Name of solving model
+  string model = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with exported model
+message ExportModelResponse {
+  // Json with exported model
+  bytes model_json = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Request with new model to import
