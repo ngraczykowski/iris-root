@@ -6,6 +6,7 @@ ae:
     concurrency: 4
     prefetch: 25
 
+  # FIXME(ahaczewski): Rename to `comments.template-engine.cache-invalidation`.
   comments:
     template:
       cache:
@@ -25,6 +26,8 @@ ae:
     jdbc:
       pending-alerts:
         fetch-size: 8192
+    comment:
+      template-name: alert
 
   grpc:
     client:

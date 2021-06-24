@@ -6,16 +6,14 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.Genera
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
 import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
 
-import org.springframework.stereotype.Service;
-
-@Service
 @RequiredArgsConstructor
 class GenerateCommentsUseCase {
 
   private final CommentFacade commentFacade;
+  private final String templateName;
 
   GenerateCommentsResponse generateComments(GenerateCommentsRequest request) {
-    var comment = commentFacade.generateComment("", request.getAlertContext());
+    var comment = commentFacade.generateComment(templateName, request.getAlertContext());
     return new GenerateCommentsResponse();
   }
 }
