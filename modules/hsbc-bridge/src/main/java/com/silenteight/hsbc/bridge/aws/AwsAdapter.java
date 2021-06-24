@@ -3,10 +3,13 @@ package com.silenteight.hsbc.bridge.aws;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.model.transfer.ModelRepository;
+import com.silenteight.hsbc.bridge.watchlist.WatchlistLoader;
 import com.silenteight.hsbc.bridge.watchlist.WatchlistSaver;
 
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
@@ -16,8 +19,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectKey;
+import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectVersion;
+
 @RequiredArgsConstructor
-class AwsAdapter implements ModelRepository, WatchlistSaver {
+class AwsAdapter implements ModelRepository, WatchlistSaver, WatchlistLoader {
 
   private final S3Client client;
   private final String modelBucketName;
@@ -70,6 +76,20 @@ class AwsAdapter implements ModelRepository, WatchlistSaver {
       return toUri(url);
     } catch (IOException e) {
       throw new WatchlistSavingException(e);
+    }
+  }
+
+  @Override
+  public InputStream load(URI uri) throws WatchlistLoadingException {
+    try {
+      var object = client.getObjectAsBytes(GetObjectRequest.builder()
+          .bucket(watchlistBucketName)
+          .key(getObjectKey(uri))
+          .versionId(getObjectVersion(uri))
+          .build());
+      return object.asInputStream();
+    } catch (SdkException e) {
+      throw new WatchlistLoadingException(e);
     }
   }
 }
