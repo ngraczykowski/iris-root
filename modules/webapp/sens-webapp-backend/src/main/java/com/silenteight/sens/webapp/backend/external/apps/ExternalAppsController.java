@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -35,9 +34,10 @@ class ExternalAppsController {
 
   @GetMapping(value = "/apps/reporting")
   @PreAuthorize("isAuthorized('REDIRECT_TO_REPORTING')")
-  public void redirect(HttpServletResponse response) throws IOException {
+  public void redirect(HttpServletResponse response) {
     log.info(INTERNAL, "Redirect to reportingURL");
-    response.sendRedirect(reportingUrl);
+    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+    response.setHeader("Location", response.encodeRedirectURL(reportingUrl));
     log.info(INTERNAL, "Redirect to = " + reportingUrl);
   }
 
