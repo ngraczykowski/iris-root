@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import javax.validation.Valid;
@@ -20,5 +21,11 @@ class JdbcRecommendationConfiguration {
   @Bean
   SelectPendingAlertsQuery selectPendingAlertsQuery(DataSource dataSource) {
     return new SelectPendingAlertsQuery(dataSource, properties.getPendingAlerts().getFetchSize());
+  }
+
+  @Bean
+  SelectAlertRecommendationQuery selectAlertContextQuery(DataSource dataSource) {
+    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    return new SelectAlertRecommendationQuery(jdbcTemplate);
   }
 }

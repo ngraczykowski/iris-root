@@ -1,7 +1,3 @@
--- One analysis...
-INSERT INTO ae_analysis
-VALUES (1, 'bla', 'bla', NOW());
-
 -- ...and two alerts...
 INSERT INTO ae_alert
 VALUES (1, 'ads', NOW(), NOW(), 5);

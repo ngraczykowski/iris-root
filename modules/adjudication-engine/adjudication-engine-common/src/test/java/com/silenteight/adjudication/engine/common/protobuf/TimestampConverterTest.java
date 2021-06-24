@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromInstant;
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromOffsetDateTime;
+import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromSqlTimestamp;
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.toOffsetDateTime;
 import static org.assertj.core.api.Assertions.*;
 
@@ -19,6 +20,12 @@ class TimestampConverterTest {
   void timestampFromInstant() {
     var timestamp = fromInstant(Instant.parse("2007-12-03T10:15:30.00Z"));
     assertThat(Timestamps.toString(timestamp)).isEqualTo("2007-12-03T10:15:30Z");
+  }
+
+  @Test
+  void timestampFromSqlTimestamp() {
+    var timestamp = fromSqlTimestamp(java.sql.Timestamp.valueOf("1983-05-24 12:34:56.0000"));
+    assertThat(Timestamps.toString(timestamp)).isEqualTo("1983-05-24T12:34:56Z");
   }
 
   @Test

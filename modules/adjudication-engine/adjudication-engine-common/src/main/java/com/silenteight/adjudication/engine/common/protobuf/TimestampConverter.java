@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TimestampConverter {
 
+  private static final int MILLIS_PER_SECOND = 1000;
+
   @Nonnull
   public static Timestamp fromInstant(@NonNull Instant instant) {
     return Timestamp
@@ -26,6 +28,14 @@ public class TimestampConverter {
   @Nonnull
   public static Instant toInstant(@NonNull Timestamp timestamp) {
     return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
+  }
+
+  @Nonnull
+  public static Timestamp fromSqlTimestamp(@Nonnull java.sql.Timestamp timestamp) {
+    return Timestamp.newBuilder()
+        .setSeconds(timestamp.getTime() / MILLIS_PER_SECOND)
+        .setNanos(timestamp.getNanos())
+        .build();
   }
 
   @Nonnull
