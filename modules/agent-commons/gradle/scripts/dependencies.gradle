@@ -230,7 +230,7 @@ libraries.univocity_parsers = [group: 'com.univocity', name: 'univocity-parsers'
 
 // Testing
 libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']
-libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all']
+libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.8']
 libraries.hamcrest = [group: 'org.hamcrest', name: 'hamcrest']
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_jupiter_api =
