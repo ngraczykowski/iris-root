@@ -106,6 +106,11 @@ public class JenkinsModelClient implements ModelClient {
         .POST(
             HttpRequest.BodyPublishers.ofString(
                 mapModelInfoStatusRequestToJsonAsString(modelStatusUpdated)))
+        .header(
+            "Authorization",
+            encodeCredentialsToStringForBasicAuth(
+                jenkinsApiProperties.getUsername(),
+                jenkinsApiProperties.getPassword()))
         .header(crumbResponse.getCrumbRequestField(), crumbResponse.getCrumb())
         .uri(URI.create(jenkinsApiProperties.getUpdateModelStatusUri()))
         .build();
@@ -125,6 +130,11 @@ public class JenkinsModelClient implements ModelClient {
       CrumbResponse crumbResponse, ModelInfo modelInfo) {
     return HttpRequest.newBuilder()
         .POST(HttpRequest.BodyPublishers.ofString(mapModelInfoToJsonAsString(modelInfo)))
+        .header(
+            "Authorization",
+            encodeCredentialsToStringForBasicAuth(
+                jenkinsApiProperties.getUsername(),
+                jenkinsApiProperties.getPassword()))
         .header(crumbResponse.getCrumbRequestField(), crumbResponse.getCrumb())
         .uri(URI.create(jenkinsApiProperties.getUpdateModelUri()))
         .build();
