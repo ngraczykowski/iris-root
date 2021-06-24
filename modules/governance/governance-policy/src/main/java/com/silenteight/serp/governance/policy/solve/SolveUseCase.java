@@ -79,8 +79,7 @@ public class SolveUseCase {
     List<String> featureValues = new ArrayList<>(featureVector.getFeatureValueList());
 
     log.debug("Solving feature (featureNames = '{}', featureValues = '{}').",
-              featureNames,
-              featureValues);
+              featureNames, featureValues);
 
     CanonicalFeatureVector canonicalFeatureVector =
         canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
@@ -102,15 +101,16 @@ public class SolveUseCase {
       SolveResponse response) {
 
     if (response.getStepId() == null)
-      log.debug(
+      log.info(
           SOLVED_NO_STEP_MASSAGE, featureNames, featureValues, signature, response.getSolution());
     else
-      log.debug(SOLVED_MASSAGE,
-                featureNames,
-                featureValues,
-                signature,
-                response.getSolution(),
-                response.getStepId());
+      log.info(
+          SOLVED_MASSAGE,
+          featureNames,
+          featureValues,
+          signature,
+          response.getSolution(),
+          response.getStepId());
   }
 
   private static List<String> asFeatureNames(List<Feature> features) {

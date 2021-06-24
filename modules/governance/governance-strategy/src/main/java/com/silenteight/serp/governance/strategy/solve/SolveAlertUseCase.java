@@ -41,13 +41,13 @@ public class SolveAlertUseCase {
   }
 
   private SolveAlertSolutionResponse solveSingle(SolvingStrategy strategy, Alert alert) {
-    log.debug("Solving alert with {} matches using strategy '{}'.",
+    log.info("Solving alert with {} matches using strategy '{}'.",
               alert.getMatchesCount(), strategy.getClass().getSimpleName());
 
     SolveRequest solveRequest = new SolveRequestFactory(alert).create();
     RecommendedAction recommendedAction = strategy.solve(solveRequest).getRecommendedAction();
 
-    log.debug("Solved alert with {} matches using strategy '{}' as '{}'.",
+    log.info("Solved alert with {} matches using strategy '{}' as '{}'.",
               alert.getMatchesCount(), strategy.getClass().getSimpleName(), recommendedAction);
     return SolveAlertSolutionResponse.newBuilder()
         .setAlertName(alert.getName())
