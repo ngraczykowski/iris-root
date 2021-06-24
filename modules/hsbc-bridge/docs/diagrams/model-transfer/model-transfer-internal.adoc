@@ -27,7 +27,6 @@ end box
 
 autonumber
 
-'b -> a: get models URL
 a -> q: send model info
 note left
 {
@@ -39,8 +38,9 @@ end note
 q -> c: get model info
 c -> d: get jenkins-crumb
 c -> d: [POST] model/update
-d -> a: get model
-
+d -> c: get model
+c -> a: download model
+c -> d: response with JSON model
 d -> c1: check status
 d -> c1: model/update
 note left
