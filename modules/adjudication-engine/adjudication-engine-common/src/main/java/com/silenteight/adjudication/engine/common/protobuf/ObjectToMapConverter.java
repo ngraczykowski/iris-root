@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,7 +25,7 @@ public final class ObjectToMapConverter {
         .constructMapType(HashMap.class, String.class, Object.class);
   }
 
-  public static Map<String, Object> convert(Object input) {
+  public static Map<String, Object> convert(@Nullable Object input) {
     if (ObjectUtils.isNotEmpty(input)) {
       return JsonConversionHelper.INSTANCE.objectMapper().convertValue(input, MAP_TYPE);
     } else {
