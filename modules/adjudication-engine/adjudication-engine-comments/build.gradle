@@ -11,6 +11,8 @@ dependencies {
   implementation libraries.pebble
   implementation libraries.silenteight_sep_base_common
   implementation libraries.hibernate_types
+  implementation libraries.caffeine
+
   // Enable aspects
   aspect libraries.silenteight_sep_base_aspects
   compileOnly libraries.spring_tx

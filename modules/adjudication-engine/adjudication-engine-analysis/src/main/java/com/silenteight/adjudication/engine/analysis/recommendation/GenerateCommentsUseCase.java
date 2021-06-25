@@ -14,6 +14,6 @@ class GenerateCommentsUseCase {
 
   GenerateCommentsResponse generateComments(GenerateCommentsRequest request) {
     var comment = commentFacade.generateComment(templateName, request.getAlertContext());
-    return new GenerateCommentsResponse();
+    return new GenerateCommentsResponse(comment);
   }
 }

@@ -24,8 +24,8 @@ class JdbcRecommendationConfiguration {
   }
 
   @Bean
-  SelectAlertRecommendationQuery selectAlertContextQuery(DataSource dataSource) {
+  StreamAlertRecommendationsQuery selectAlertContextQuery(DataSource dataSource) {
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    return new SelectAlertRecommendationQuery(jdbcTemplate);
+    return new StreamAlertRecommendationsQuery(jdbcTemplate);
   }
 }

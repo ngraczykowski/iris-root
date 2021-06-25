@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ import java.util.function.Consumer;
 class StreamRecommendationsUseCase {
 
   private final GenerateCommentsUseCase generateCommentsUseCase;
-  private final RecommendationRepository repository;
+  private final RecommendationDataAccess recommendationDataAccess;
 
   @Transactional(readOnly = true)
   void streamRecommendations(
@@ -28,10 +30,35 @@ class StreamRecommendationsUseCase {
       log.debug("Streaming recommendations: request={}", request);
     }
 
-    var analysisId = ResourceName.create(request.getAnalysis()).getLong("analysis");
+    var resource = request.getDataset().isEmpty() ? request.getAnalysis() : request.getDataset();
 
-    repository.findAllByAnalysisId(analysisId)
-        .map(RecommendationEntity::toRecommendation)
-        .forEach(consumer);
+    var recommendationCount = readAlertRecommendations(resource, ar -> {
+      var comment = generateCommentsUseCase
+          .generateComments(new GenerateCommentsRequest(ar.getAlertContext()))
+          .getComment();
+
+      var recommendation = ar.toRecommendation(comment);
+
+      consumer.accept(recommendation);
+
+    });
+
+    log.info("Finished streaming recommendations: request={}, recommendationCount={}",
+        request, recommendationCount);
+  }
+
+  @SuppressWarnings("FeatureEnvy")
+  private int readAlertRecommendations(
+      String analysisOrDataset, Consumer<AlertRecommendation> consumer) {
+
+    var resource = ResourceName.create(analysisOrDataset);
+
+    if (resource.contains("datasets")) {
+      return recommendationDataAccess.streamAlertRecommendations(
+          resource.getLong("analysis"), resource.getLong("datasets"), consumer);
+    }
+
+    return recommendationDataAccess.streamAlertRecommendations(
+        resource.getLong("analysis"), consumer);
   }
 }

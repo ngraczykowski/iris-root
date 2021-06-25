@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.recommendation.domain;
 
+import lombok.Builder;
 import lombok.Value;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
@@ -10,6 +11,7 @@ import java.sql.Timestamp;
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromSqlTimestamp;
 
 @Value
+@Builder
 public class AlertRecommendation {
 
   long alertId;
@@ -22,7 +24,7 @@ public class AlertRecommendation {
 
   AlertContext alertContext;
 
-  Recommendation toRecommendation(String comment) {
+  public Recommendation toRecommendation(String comment) {
     return Recommendation
         .newBuilder()
         .setAlert("alerts/" + getAlertId())

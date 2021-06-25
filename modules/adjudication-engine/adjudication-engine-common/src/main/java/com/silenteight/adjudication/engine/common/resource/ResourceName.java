@@ -48,6 +48,10 @@ public class ResourceName {
     return this;
   }
 
+  public boolean contains(String name) {
+    return pathTokens.containsKey(name);
+  }
+
   public ResourceName replaceLong(@NonNull String name, long value) {
     pathTokens.replace(name, Long.toString(value));
     return this;

@@ -9,14 +9,15 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.Pendin
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Repository
 public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   private final SelectPendingAlertsQuery selectPendingAlertsQuery;
-  private final SelectAlertRecommendationQuery selectAlertRecommendationQuery;
+  private final StreamAlertRecommendationsQuery streamAlertRecommendationsQuery;
 
   @Override
   @Transactional(readOnly = true)
@@ -25,12 +26,19 @@ public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
   }
 
   @Override
-  public List<AlertRecommendation> selectAlertRecommendation(long analysisId) {
-    return selectAlertRecommendationQuery.execute(analysisId);
+  public int streamAlertRecommendations(long analysisId, Consumer<AlertRecommendation> consumer) {
+    return streamAlertRecommendationsQuery.execute(analysisId, consumer);
   }
 
   @Override
-  public List<AlertRecommendation> selectAlertRecommendation(long alertId, long datasetId) {
-    return selectAlertRecommendationQuery.execute(alertId, datasetId);
+  public int streamAlertRecommendations(
+      long analysisId, long datasetId, @Nonnull Consumer<AlertRecommendation> consumer) {
+
+    return streamAlertRecommendationsQuery.execute(analysisId, datasetId, consumer);
+  }
+
+  @Override
+  public AlertRecommendation getAlertRecommendation(long recommendationId) {
+    return null;
   }
 }

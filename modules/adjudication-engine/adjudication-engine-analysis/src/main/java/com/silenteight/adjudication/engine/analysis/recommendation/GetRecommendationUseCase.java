@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
 import org.springframework.stereotype.Service;
@@ -14,15 +15,18 @@ import org.springframework.stereotype.Service;
 class GetRecommendationUseCase {
 
   private final GenerateCommentsUseCase generateCommentsUseCase;
-  private final RecommendationRepository repository;
+  private final RecommendationDataAccess recommendationDataAccess;
 
   Recommendation getRecommendation(String recommendationName) {
     if (log.isDebugEnabled()) {
       log.debug("Getting recommendation: recommendation={}", recommendationName);
     }
 
-    return repository
-        .getById(ResourceName.create(recommendationName).getLong("recommendations"))
-        .toRecommendation();
+    var recommendationId = ResourceName.create(recommendationName).getLong("recommendations");
+    var alertRecommendation = recommendationDataAccess.getAlertRecommendation(recommendationId);
+    var commentsResponse = generateCommentsUseCase.generateComments(
+        new GenerateCommentsRequest(alertRecommendation.getAlertContext()));
+
+    return alertRecommendation.toRecommendation(commentsResponse.getComment());
   }
 }

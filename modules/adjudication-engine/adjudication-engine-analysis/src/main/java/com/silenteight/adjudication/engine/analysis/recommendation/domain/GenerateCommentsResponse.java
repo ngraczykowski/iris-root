@@ -4,4 +4,6 @@ import lombok.Value;
 
 @Value
 public class GenerateCommentsResponse {
+
+  String comment;
 }

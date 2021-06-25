@@ -1,48 +1,31 @@
-package com.silenteight.adjudication.engine.comments.comment;
+package com.silenteight.adjudication.engine.analysis.recommendation;
 
-
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 
-class CommentTemplateFixture {
+class RecommendationFixture {
 
-  private static final ConcurrentMap<String, AtomicInteger> TEMPLATE_REVISIONS =
-      new ConcurrentHashMap<>();
-
-  static CommentFacade inMemoryCommentFacade(InMemoryCommentTemplateRepository repository) {
-    var pebbleConfiguration = new PebbleConfiguration();
-    var loader = pebbleConfiguration.pebbleLoader(repository);
-    var engine = pebbleConfiguration.pebbleEngine(loader);
-    var useCase = new GenerateCommentUseCase(engine);
-
-    return new CommentFacade(useCase);
-  }
-
-  public static CommentTemplate commentTemplate(String name, String payload) {
-    var revision = TEMPLATE_REVISIONS.computeIfAbsent(name, s -> new AtomicInteger(1));
-    return commentTemplate(name, revision.getAndIncrement(), payload);
-  }
-
-  public static CommentTemplate commentTemplate(String name, int revision, String payload) {
-    return CommentTemplate.builder()
-        .templateName(name)
-        .revision(revision)
-        .template(payload)
+  public static AlertRecommendation createAlertRecommendation() {
+    return AlertRecommendation.builder()
+        .alertId(1)
+        .analysisId(1)
+        .recommendationId(1)
+        .createdTime(Timestamp.valueOf("1983-05-24 12:34:56.0000"))
+        .alertContext(createAlertContext())
         .build();
   }
 
   public static AlertContext createAlertContext() {
     var commentInput = new HashMap<String, Object>();
-    commentInput.put("comment", "input");
+    commentInput.put("key", "value");
     return new AlertContext(
         "2137", commentInput, "recommended action",
         IntStream.range(1, 5).mapToObj(i -> createMatchContext()).collect(

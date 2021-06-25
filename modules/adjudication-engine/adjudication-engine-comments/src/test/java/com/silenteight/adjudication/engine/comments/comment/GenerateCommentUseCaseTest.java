@@ -6,31 +6,28 @@ import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.silenteight.adjudication.engine.comments.comment.CommentTemplateFixture.createAlertContext;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-public class GenerateCommentUseCaseTest {
+class GenerateCommentUseCaseTest {
 
-  private InMemoryCommentTemplateRepository commentTemplateRepository =
+  private final InMemoryCommentTemplateRepository commentTemplateRepository =
       new InMemoryCommentTemplateRepository();
-  private CommentFacade facade =
+
+  private final CommentFacade facade =
       CommentTemplateFixture.inMemoryCommentFacade(commentTemplateRepository);
 
   private static final String PEBBLE1_TEMPLATE_NAME = "pebble1";
   private static final String PEBBLE2_TEMPLATE_NAME = "pebble2";
 
   GenerateCommentUseCaseTest() {
-    var engine = new PebbleEngine.Builder()
-        .cacheActive(true)
-        .loader(new CommentTemplateLoader(commentTemplateRepository))
-        .build();
     commentTemplateRepository.save(CommentTemplate
         .builder()
         .revision(0)
@@ -52,31 +49,43 @@ public class GenerateCommentUseCaseTest {
   }
 
   @Test
-  public void shouldGenerateComment() {
-    String alertId = UUID.randomUUID().toString();
-    String output = "This is template:" + alertId;
+  void shouldGenerateDefaultComment() {
+    var context = createAlertContext();
 
-    AlertContext model = AlertContext.builder().alertId(alertId).build();
-    var evaluated = facade.generateComment(PEBBLE1_TEMPLATE_NAME, model);
+    var evaluated = facade.generateComment("alert", context);
 
-    assertThat(evaluated).isEqualTo(output);
+    assertThat(evaluated)
+        .contains("NOTE: This is the default alert comment template!")
+        .contains("Alert ID: 2137")
+        .contains("Match ID: 123")
+        .contains("Agent Name: agents/dateAgent");
   }
 
   @Test
-  public void shouldGenerateCommentFromStruct() {
-    String name = "Tomasz";
+  void shouldGenerateComment() {
+    var alertId = UUID.randomUUID().toString();
+    var output = "This is template:" + alertId;
+    var context = AlertContext.builder().alertId(alertId).build();
+
+    var evaluated = facade.generateComment(PEBBLE1_TEMPLATE_NAME, context);
+
+    assertThat(evaluated).isEqualToIgnoringNewLines(output);
+  }
+
+  @Test
+  void shouldGenerateCommentFromStruct() {
     var alertModel = randomAlertModel();
-    String output = "alert/1 v1 1 l1";
+    var output = "alert/1 v1 1 l1";
     var evaluated = facade.generateComment(PEBBLE2_TEMPLATE_NAME, alertModel);
-    assertThat(evaluated).isEqualTo(output);
+    assertThat(evaluated).isEqualToIgnoringNewLines(output);
   }
 
   @Test
-  public void shouldConvertStructToMapOfObjects() {
+  void shouldConvertStructToMapOfObjects() {
     var alertModel = randomAlertModel();
     var alertModelMap = ObjectToMapConverter.convert(alertModel);
-    assertThat(alertModelMap).isNotEmpty();
     assertThat(alertModelMap)
+        .isNotEmpty()
         .containsKeys("alertId", "commentInput", "recommendedAction", "matches");
   }
 

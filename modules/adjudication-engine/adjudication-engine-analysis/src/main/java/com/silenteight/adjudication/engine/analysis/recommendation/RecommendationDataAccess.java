@@ -3,13 +3,17 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public interface RecommendationDataAccess {
 
   PendingAlerts selectPendingAlerts(long analysisId);
 
-  List<AlertRecommendation> selectAlertRecommendation(long alertId);
+  int streamAlertRecommendations(
+      long analysisId, Consumer<AlertRecommendation> consumer);
 
-  List<AlertRecommendation> selectAlertRecommendation(long alertId, long datasetId);
+  int streamAlertRecommendations(
+      long analysisId, long datasetId, Consumer<AlertRecommendation> consumer);
+
+  AlertRecommendation getAlertRecommendation(long recommendationId);
 }

@@ -5,6 +5,8 @@ import lombok.Value;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import java.util.Map;
 
 @Value
@@ -15,6 +17,7 @@ public class FeatureContext {
   String solution;
   Map<String, Object> reason;
 
+  @JsonGetter("agentName")
   public String getAgentName() {
     return "agents/" + ResourceName.create(agentConfig).get("agents");
   }

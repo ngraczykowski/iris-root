@@ -1,22 +1,24 @@
 package com.silenteight.adjudication.engine.comments.comment.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Singular;
+import lombok.Value;
 
 import java.util.List;
 import java.util.Map;
 
-@Data
+@Value
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class AlertContext {
 
   /**
    * ae_alert.client_alert_identifier
    */
-  private String alertId;
-  private Map<String, Object> commentInput;
-  private String recommendedAction;
+  String alertId;
+  Map<String, Object> commentInput;
+  String recommendedAction;
   @Singular
-  private List<MatchContext> matches;
+  List<MatchContext> matches;
 }

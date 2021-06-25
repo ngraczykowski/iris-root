@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
@@ -10,6 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlMergeMode;
 import org.springframework.test.context.jdbc.SqlMergeMode.MergeMode;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -38,7 +41,8 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
   @Test
   @Sql(scripts = { "JdbcRecommendationDataAccessIT.context.sql" })
   void shouldSelectAlertsContextFromAnalysis() {
-    var alerts = recommendationDataAccess.selectAlertRecommendation(1);
+    var alerts = new ArrayList<AlertRecommendation>();
+    recommendationDataAccess.streamAlertRecommendations(1, alerts::add);
     assertThat(alerts.size()).isEqualTo(2);
     var alertContext = alerts.get(0);
     assertContextData(alertContext.getAlertContext());
@@ -47,7 +51,8 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
   @Test
   @Sql(scripts = { "JdbcRecommendationDataAccessIT.context.sql" })
   void shouldSelectAlertsContextFromAnalysisAndDataset() {
-    var alerts = recommendationDataAccess.selectAlertRecommendation(1, 1);
+    var alerts = new ArrayList<AlertRecommendation>();
+    recommendationDataAccess.streamAlertRecommendations(1, 1, alerts::add);
     assertThat(alerts.size()).isEqualTo(1);
     var alertContext = alerts.get(0);
     assertContextData(alertContext.getAlertContext());

@@ -55,4 +55,11 @@ class ResourceNameTest {
   void shouldNotFailForOddNumberOfTokens() {
     assertThatNoException().isThrownBy(() -> create("odd/number/of/name/tokens"));
   }
+
+  @Test
+  void shouldContainName() {
+    var resource = create(NAME);
+    assertThat(resource.contains("datasets")).isTrue();
+    assertThat(resource.contains("dummy")).isFalse();
+  }
 }

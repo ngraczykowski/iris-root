@@ -9,7 +9,6 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class MatchContext {
-
   /**
    * ae_match.client_match_identifier
    */

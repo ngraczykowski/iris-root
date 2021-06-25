@@ -14,15 +14,14 @@ class InMemoryCommentTemplateRepository implements CommentTemplateRepository {
 
   @Override
   public Optional<CommentTemplate> findFirstByTemplateNameOrderByRevisionDesc(String name) {
-    log.debug("InMemory findFirstByTemplateNameOrderByRevisionDesc:{}", name);
-    return store.stream().filter(c -> c.getTemplateName().equals(name))
-        .sorted(Comparator.comparingInt(CommentTemplate::getRevision).reversed())
-        .findFirst();
+    return store
+        .stream()
+        .filter(ct -> ct.getTemplateName().equals(name))
+        .max(Comparator.comparingInt(CommentTemplate::getRevision));
   }
 
   @Override
   public synchronized CommentTemplate save(CommentTemplate entity) {
-    log.debug("InMemory save:{}", entity.getTemplateName());
     store.add(entity);
     return entity;
   }

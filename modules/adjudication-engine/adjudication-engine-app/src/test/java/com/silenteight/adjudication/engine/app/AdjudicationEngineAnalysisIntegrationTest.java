@@ -6,6 +6,7 @@ import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
+import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -113,7 +114,22 @@ class AdjudicationEngineAnalysisIntegrationTest {
         .isEqualTo(1);
   }
 
-  // TODO: test recommandation generation
+  @Test
+  void shouldStreamRecommendations() {
+    await()
+        .atMost(Duration.ofSeconds(10))
+        .until(() -> generatedRecommendationCount(jdbcTemplate, 1) > 0);
+
+    var recommendations = analysisService.streamRecommendations(
+        StreamRecommendationsRequest.newBuilder().setAnalysis("analysis/1").build());
+    var recommendation = recommendations.next();
+
+    assertThat(recommendation.getRecommendationComment())
+        .contains("NOTE: This is the default alert comment template!");
+    assertThat(recommendation.getName()).isEqualTo("analysis/1/recommendations/1");
+    assertThat(recommendation.getRecommendedAction()).isEqualTo("MATCH");
+  }
+
   /*
     FIRST APPROACH:
 
