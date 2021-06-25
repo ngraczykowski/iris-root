@@ -31,7 +31,7 @@ class JenkinsModelClientSpec extends Specification {
 
     def updateModelHttpResponse = Mock(HttpResponse) {
       body() >> Fixtures.UPDATE_MODEL_HTTP_RESPONSE
-      statusCode() >> 200
+      statusCode() >> 201
     }
 
     when:
@@ -44,7 +44,7 @@ class JenkinsModelClientSpec extends Specification {
     1 * objectMapper.writeValueAsString(modelInfo) >> modelInfo.toString()
   }
 
-  def 'should throw ModelNotReceivedException when unable to receive model with status code other than 200'() {
+  def 'should throw ModelNotReceivedException when unable to receive model with status code other than 201'() {
     given:
     def modelInfo = fixtures.modelInfo
     def crumbResponse = fixtures.crumbResponse
@@ -80,7 +80,7 @@ class JenkinsModelClientSpec extends Specification {
     }
 
     def modelStatusHttpResponse = Mock(HttpResponse) {
-      statusCode() >> 200
+      statusCode() >> 201
     }
 
     when:
@@ -93,7 +93,7 @@ class JenkinsModelClientSpec extends Specification {
     1 * objectMapper.writeValueAsString(modelStatusUpdatedDto) >> modelStatusUpdatedDto.toString()
   }
 
-  def 'should throw ModelNotReceivedException when unable to send model status with status code other than 200'() {
+  def 'should throw ModelNotReceivedException when unable to send model status with status code other than 201'() {
     def modelStatusUpdatedDto = fixtures.modelStatusUpdatedDto
     def crumbResponse = fixtures.crumbResponse
 

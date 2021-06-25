@@ -77,7 +77,7 @@ public class JenkinsModelClient implements ModelClient {
     var updateModelRequest =
         createUpdateModelHttpRequest(crumbResponse, modelInfo);
     var statusCode = sendRequest(updateModelRequest).statusCode();
-    if (statusCode == 200) {
+    if (statusCode == 201) {
       return statusCode;
     } else {
       log.error("Unable to get updated model with status code: " + statusCode);
@@ -91,7 +91,7 @@ public class JenkinsModelClient implements ModelClient {
     var updateModelStatusRequest =
         createUpdateModelStatusHttpRequest(crumbResponse, modelStatusUpdated);
     int statusCode = sendRequest(updateModelStatusRequest).statusCode();
-    if (statusCode == 200) {
+    if (statusCode == 201) {
       return statusCode;
     } else {
       log.error("Unable to send update model status with code: " + statusCode);
