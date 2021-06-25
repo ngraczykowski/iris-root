@@ -1,5 +1,5 @@
 ### Start the recommendation process
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/14062021-100/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/recommend
 Accept: application/json
 Content-Type: application/json
 
@@ -12,5 +12,5 @@ Accept: application/json
 
 
 ### Check the recommendation results
-GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-101/result
+GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/result
 Accept: application/json

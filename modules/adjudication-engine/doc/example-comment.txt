@@ -1,0 +1,90 @@
+NOTE: This is the default alert comment template!
+Alert ID: CR769FINAL334:SG:GR-ISAN:431618
+Comment Input:
+Recommended Action: ACTION_POTENTIAL_TRUE_POSITIVE
+Matches:
+-   Match ID: 31366
+    Solution: SOLUTION_POTENTIAL_TRUE_POSITIVE
+    Reason:
+        - stepId: value: "\242\220)<\231mO\\\267 Qcs\023\241\212"
+        - featureVectorSignature: 6eYNvaVkNaiykXUiLUl8QYPaSMY=
+    Categories:
+    -   categories/apType: NO_VALUE
+    -   categories/customerType: NO_VALUE
+    Features:
+        features/name:
+            Agent Config: agents/name/versions/1.0.0/configs/1
+            Agent Name: agents/name
+            Solution: EXACT_MATCH
+            Reason:
+                - score: 1.0
+                - alertedValue: ZIMOUSKI ALJAKSANDR LIEANIDAVICH
+                - alertedValues: [ZIMOUSKI ALJAKSANDR LIEANIDAVICH, ALJAKSANDR LIEANIDAVICH ZIMOUSKI]
+                - executionDuration: 0.146473s
+                - matchedValueGroups: [{result=EXACT_MATCH, watchlistNames=[{name=Zimouski Aljaksandr Lieanidavich, type=Name}]}, {result=WEAK_MATCH, watchlistNames=[{name=Akiaksandr Leanidavich Akiaksandr Leanidavich ZIMOUSKI, type=Name}, {name=Aliaksandr Leanidavich Aliaksandr Leanidavich ZIMOUSKI, type=Name}, {name=Alaksandr Lieanidavitch Alaksandr Lieanidavitch ZIMOUSKI, type=Name}, {name=Alaksandr Leanidavich ZIMOWSKI, type=Name}, {name=Alaksandr Leanidavich Alaksandr Leanidavich ZIMOWSKI, type=Name}, {name=Aljaksandr Leanidawitsch Aljaksandr Leanidawitsch Simouski, type=Name}, {name=Zimouszki Aljakszandr Leanidavics, type=Name}, {name=Aljaksandr Leanidavitš Aljaksandr Leanidavitš Zimouski, type=Name}, {name=Aliaksandr Leanidavich ZIMOVSKI, type=Name}, {name=Aliaksandr Leanidavich Aliaksandr Leanidavich ZIMOVSKI, type=Name}, {name=Aliaksandr Leanidavich ZIMOUSKY, type=Name}, {name=Aliaksandr Leanidavich Aliaksandr Leanidavich ZIMOUSKY, type=Name}, {name=Alaksandr Lieanidavich Alaksandr Lieanidavich ZIMOUSKI, type=Name}, {name=Alaksandr Leanidavich ZIMOWSKY, type=Name}, {name=Alaksandr Leanidavich Alaksandr Leanidavich ZIMOWSKY, type=Name}, {name=Alakszandr Leanidavics Zimouszki, type=Name}, {name=Alakszandr Leanidavics Alakszandr Leanidavics Zimouszki, type=Name}, {name=Aliaksandr Leanidavich SIMOWSKI, type=Name}, {name=Aliaksandr Leanidavich Aliaksandr Leanidavich SIMOWSKI, type=Name}, {name=Aljaksandr Leanidavitj Aljaksandr Leanidavitj Zimouski, type=Name}, {name=Aljaksandr Leanidavitj Aljaksandr Leanidavitj Uzimouski, type=Name}, {name=Alaksandr Leanidavich ZIMOUSKY, type=Name}, {name=Alaksandr Leanidavich Alaksandr Leanidavich ZIMOUSKY, type=Name}, {name=Aliaksandr Leanidavich ZIMOWSKY, type=Name}, {name=Aliaksandr Leanidavich Aliaksandr Leanidavich ZIMOWSKY, type=Name}, {name=Alaksandr Leanidavich ZIMOVSKI, type=Name}, {name=Alaksandr Leanidavich Alaksandr Leanidavich ZIMOVSKI, type=Name}, {name=Aliaksandr Lieanidavich Aliaksandr Lieanidavich ZIMOWSKI, type=Name}, {name=Alaksandr Leanidawicz Alaksandr Leanidawicz Zimouski, type=Name}, {name=Alaksandr Leanidavich Alaksandr Leanidavich ZIMOUSKI, type=Name}]}, {result=MATCH, watchlistNames=[{name=Akiaksandr Leanidavich ZIMOUSKI, type=Name}, {name=Aliaksandr Leanidavich ZIMOUSKI, type=Name}, {name=Alaksandr Lieanidavitch ZIMOUSKI, type=Name}, {name=Zimouski Aljaksandr Leanidavitj, type=Name}, {name=Aljaksandr Leanidawitsch Simouski, type=Name}, {name=Aljaksandr Leanidavitj Uzimouski, type=Name}, {name=Zimouski Alaksandr Lieanidavich, type=Name}, {name=Zimouski Alaksandr Lieanidavitch, type=Name}, {name=Aljaksandr Leanidavitš Zimouski, type=Name}, {name=ALJAKSANDR LEANIDAVITS ZIMOUSKI, type=Name}, {name=Zimouski Aljaksandr Leanidavitš, type=Name}, {name=ZIMOUSKI ALJAKSANDR LEANIDAVITS, type=Name}, {name=Alaksandr Lieanidavich ZIMOUSKI, type=Name}, {name=Aljaksandr Leanidavitj Zimouski, type=Name}, {name=Zimouski Aliaksandr Leanidavich, type=Name}, {name=Uzimouski Aljaksandr Leanidavitj, type=Name}, {name=Aliaksandr Lieanidavich ZIMOWSKI, type=Name}, {name=Alaksandr Leanidawicz Zimouski, type=Name}, {name=Alaksandr Leanidavich ZIMOUSKI, type=Name}]}]
+        features/gender:
+            Agent Config: agents/gender/versions/1.0.0/configs/1
+            Agent Name: agents/gender
+            Solution: MATCH
+            Reason:
+                - customerValues: [M]
+                - watchlistValues: [M]
+        features/dateOfBirth:
+            Agent Config: agents/date/versions/1.0.0/configs/1
+            Agent Name: agents/date
+            Solution: EXACT
+            Reason:
+                - customerValues: [10/01/1961, 10-Jan-1961]
+                - watchlistValues: [1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961-01-10, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961, 1961]
+        features/otherCountry:
+            Agent Config: agents/country/versions/1.0.0/configs/1
+            Agent Name: agents/country
+            Solution: MATCH
+            Reason:
+                - customerValue: BY
+                - matchedValues: [BY]
+                - customerValues: [BY, BELARUS;GERMANY, DE]
+                - watchlistValues: [BY DE RU, BELARUS;GERMANY;RUSSIAN FEDERATION, GERMANY]
+        features/otherDocument:
+            Agent Config: agents/document/versions/1.0.0/configs/1
+            Agent Name: agents/document
+            Solution: NO_DATA
+            Reason:
+        features/residencyCountry:
+            Agent Config: agents/country/versions/1.0.0/configs/1
+            Agent Name: agents/country
+            Solution: MATCH
+            Reason:
+                - customerValue: BELARUS
+                - matchedValues: [BY]
+                - customerValues: [, BELARUS, BY]
+                - watchlistValues: [BY RU]
+        features/nationalIdDocument:
+            Agent Config: agents/nationalId/versions/1.0.0/configs/1
+            Agent Name: agents/nationalId
+            Solution: NO_DATA
+            Reason:
+        features/nationalityCountry:
+            Agent Config: agents/country/versions/1.0.0/configs/1
+            Agent Name: agents/country
+            Solution: MATCH
+            Reason:
+                - customerValue: DE
+                - matchedValues: [GERMANY]
+                - customerValues: [, DE, GERMANY]
+                - watchlistValues: [BY ID, GERMANY, DE, ]
+        features/registrationCountry:
+            Agent Config: agents/country/versions/1.0.0/configs/1
+            Agent Name: agents/country
+            Solution: NO_DATA
+            Reason:
+        features/incorporationCountry:
+            Agent Config: agents/country/versions/1.0.0/configs/1
+            Agent Name: agents/country
+            Solution: NO_DATA
+            Reason:
+        features/passportNumberDocument:
+            Agent Config: agents/document/versions/1.0.0/configs/1
+            Agent Name: agents/document
+            Solution: NO_DATA
+            Reason:
