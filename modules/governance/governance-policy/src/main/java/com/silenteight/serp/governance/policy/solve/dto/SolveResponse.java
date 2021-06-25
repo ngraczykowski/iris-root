@@ -9,6 +9,8 @@ import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
+import static com.silenteight.serp.governance.policy.common.StepResource.toResourceName;
+
 @Data
 @RequiredArgsConstructor
 public class SolveResponse {
@@ -22,4 +24,8 @@ public class SolveResponse {
   private final FeatureVectorSolution solution;
   @Nullable
   private final UUID stepId;
+
+  public String getStepName() {
+    return toResourceName(stepId);
+  }
 }

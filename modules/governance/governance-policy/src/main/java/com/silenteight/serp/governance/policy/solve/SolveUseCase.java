@@ -13,8 +13,12 @@ import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
 import com.silenteight.solving.api.v1.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent.Builder;
 
+import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
+
 import java.util.*;
 
+import static com.silenteight.serp.governance.policy.common.PolicyResource.toResourceName;
 import static com.silenteight.solving.api.utils.Timestamps.toTimestamp;
 import static com.silenteight.solving.api.utils.Uuids.fromJavaUuid;
 import static java.util.UUID.fromString;
@@ -35,6 +39,9 @@ public class SolveUseCase {
   private static final String SOLVED_NO_STEP_MASSAGE =
       "Solved feature (featureNames = '{}', featureValues = '{}', signature = '{}') "
           + "as '{}' - no corresponding step in the policy.";
+  private static final String FEATURE_VECTOR_SIGNATURE_REASON_FIELD = "feature_vector_signature";
+  private static final String POLICY_REASON_FIELD = "policy";
+  private static final String STEP_REASON_FIELD = "step";
 
   @NonNull
   private final StepsSupplierProvider stepsSupplierProvider;
@@ -56,11 +63,13 @@ public class SolveUseCase {
     List<SolutionResponse> solutionResponses = request
         .getFeatureVectorsList()
         .stream()
-        .map(featureVector -> solveSingle(stepsSupplier, featureCollection, featureVector))
+        .map(
+            featureVector -> solveSingle(policyId, stepsSupplier, featureCollection, featureVector))
         .collect(toList());
 
     log.info("Solved {} features using policy {}.",
              request.getFeatureVectorsCount(), request.getPolicyName());
+
     return BatchSolveFeaturesResponse.newBuilder()
         .addAllSolutions(solutionResponses)
         .build();
@@ -71,6 +80,7 @@ public class SolveUseCase {
   }
 
   private SolutionResponse solveSingle(
+      UUID policyId,
       StepsSupplier stepsSupplier,
       FeatureCollection featureCollection,
       FeatureVector featureVector) {
@@ -91,7 +101,7 @@ public class SolveUseCase {
         canonicalFeatureVector.getVectorSignature(), response);
 
     logSolved(featureNames, featureValues, canonicalFeatureVector.getVectorSignature(), response);
-    return asSolutionResponse(canonicalFeatureVector.getVectorSignature(), response);
+    return asSolutionResponse(policyId, canonicalFeatureVector.getVectorSignature(), response);
   }
 
   private void logSolved(
@@ -156,15 +166,36 @@ public class SolveUseCase {
   }
 
   private static SolutionResponse asSolutionResponse(
-      Signature signature, SolveResponse solveResponse) {
+      UUID policyId, Signature signature, SolveResponse solveResponse) {
 
     SolutionResponse.Builder responseBuilder = SolutionResponse.newBuilder()
         .setFeatureVectorSolution(solveResponse.getSolution())
         .setFeatureVectorSignature(signature.getValue());
 
-    if (solveResponse.getStepId() != null)
+    Map<String, Value> reasonFields = new HashMap<>();
+    reasonFields.put(
+        FEATURE_VECTOR_SIGNATURE_REASON_FIELD, asStringValue(signature.asString()));
+    reasonFields.put(POLICY_REASON_FIELD, asStringValue(toResourceName(policyId)));
+
+    if (solveResponse.getStepId() != null) {
       responseBuilder.setStepId(fromJavaUuid(solveResponse.getStepId()));
+      reasonFields.put(STEP_REASON_FIELD, asStringValue(solveResponse.getStepName()));
+    }
+
+    responseBuilder.setReason(asReason(reasonFields));
 
     return responseBuilder.build();
+  }
+
+  private static Value asStringValue(String value) {
+    return Value.newBuilder()
+        .setStringValue(value)
+        .build();
+  }
+
+  private static Struct asReason(Map<String, Value> fields) {
+    return Struct.newBuilder()
+        .putAllFields(fields)
+        .build();
   }
 }

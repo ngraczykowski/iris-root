@@ -26,9 +26,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class SolvingServiceTest {
 
-  private static final SolveResponse DEFAULT_SOLUTION =
-      new SolveResponse(SOLUTION_NO_DECISION, null);
-
+  private static final SolveResponse DEFAULT_SOLUTION = new SolveResponse(SOLUTION_NO_DECISION);
   private static final UUID POLICY_ID = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
@@ -68,8 +66,7 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(
-        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
+    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
   }
 
   @Test
@@ -86,8 +83,7 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(
-        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
+    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
   }
 
   @Test
@@ -103,8 +99,7 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(
-        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
+    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
   }
 
   @Test
@@ -152,8 +147,7 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(
-        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_1));
+    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_1));
   }
 
   @Test

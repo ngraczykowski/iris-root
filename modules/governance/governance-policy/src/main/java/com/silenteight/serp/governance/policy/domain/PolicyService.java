@@ -26,6 +26,7 @@ import java.util.UUID;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static java.util.Optional.ofNullable;
 import static java.util.Set.of;
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
@@ -346,14 +347,21 @@ public class PolicyService {
   }
 
   private static Step cloneStep(Step origin) {
-    Step step = new Step(origin.getSolution(), UUID.randomUUID(), origin.getName(),
-        origin.getDescription(), origin.getType(), origin.getSortOrder(), origin.getCreatedBy());
+    Step step = new Step(
+        origin.getSolution(),
+        randomUUID(),
+        origin.getName(),
+        origin.getDescription(),
+        origin.getType(),
+        origin.getSortOrder(),
+        origin.getCreatedBy());
     step.setFeatureLogics(cloneFeatureLogics(origin.getFeatureLogics()));
     return step;
   }
 
   private static Collection<FeatureLogic> cloneFeatureLogics(
       Collection<FeatureLogic> featureLogics) {
+
     return featureLogics
         .stream()
         .map(PolicyService::cloneFeatureLogic)
