@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.provide.grpc;
+package com.silenteight.serp.governance.model.provide;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
@@ -51,7 +51,7 @@ class SolvingModelProviderTest {
 
   @BeforeEach
   void init() throws ModelMisconfiguredException {
-    underTest = new SolvingModelConfiguration().solvingModelProvider(
+    underTest = new ProvideConfiguration().solvingModelProvider(
         currentStrategyProvider,
         policyFeatureProvider,
         matchConditionsNamesProvider);
@@ -107,7 +107,7 @@ class SolvingModelProviderTest {
     lenient().when(matchConditionsNamesProvider.getMatchConditionsNames(CURRENT_POLICY_UUID))
         .thenReturn(List.of(AGENT_FEATURE_NAME, APTYPE_CATEGORY_NAME));
     lenient().when(matchConditionsNamesProvider.getMatchConditionsNames(POLICY_ID))
-             .thenReturn(List.of(AGENT_FEATURE_NAME, ISDENY_CATEGORY_NAME));
+        .thenReturn(List.of(AGENT_FEATURE_NAME, ISDENY_CATEGORY_NAME));
     lenient().when(policyFeatureProvider.resolveFeatures(any())).thenReturn(List.of(getFeature()));
   }
 

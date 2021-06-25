@@ -34,12 +34,13 @@ sg -> sg : Change Request approved
 sg -> sb : Model promoted message
 note over sg,sb
 **modelName**: //models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06//
-**url**: __//https://10.0.0.5/models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06/export__
 end note
 
 sb -> hsbc : New model available
-hsbc -> sg : Get a model
-sg -> hsbc : New model serialized to json
+hsbc -> sb : Get a model
+sb -> sg : Get a model (GRPC call with model name)
+sg -> sb : New model serialized to json
+sb -> hsbc : New model serialized to json
 hsbc -> vb : Update model
 vb -> hsbc : Get model json
 hsbc -> vb : A new model json

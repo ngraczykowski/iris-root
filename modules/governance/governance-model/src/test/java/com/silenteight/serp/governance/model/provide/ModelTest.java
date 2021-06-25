@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.provide.grpc;
+package com.silenteight.serp.governance.model.provide;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
@@ -67,9 +67,9 @@ class ModelTest extends BaseDataJpaTest {
 
     assertThat(solvingModel.getStrategyName()).isEqualTo(CURRENT_STRATEGY_NAME);
     assertThat(solvingModel.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
-    assertThat(solvingModel.getFeaturesList()).extracting(Feature::getName)
-                                              .containsExactlyInAnyOrder(AGENT_FEATURE_NAME,
-                                                                         AGENT_FEATURE_DATE);
+    assertThat(solvingModel.getFeaturesList())
+        .extracting(Feature::getName)
+        .containsExactlyInAnyOrder(AGENT_FEATURE_NAME, AGENT_FEATURE_DATE);
     assertThat(solvingModel.getCategoriesList())
         .containsExactlyInAnyOrder(APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME);
   }

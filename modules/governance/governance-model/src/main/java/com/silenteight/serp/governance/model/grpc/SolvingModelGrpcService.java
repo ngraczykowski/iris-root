@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.provide.grpc;
+package com.silenteight.serp.governance.model.grpc;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -8,14 +8,21 @@ import com.silenteight.model.api.v1.*;
 import com.silenteight.serp.governance.model.NonResolvableResourceException;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
+import com.silenteight.serp.governance.model.provide.DefaultModelQuery;
+import com.silenteight.serp.governance.model.provide.SolvingModelDetailsQuery;
+import com.silenteight.serp.governance.model.provide.SolvingModelQuery;
+import com.silenteight.serp.governance.model.transfer.dto.TransferredModelRootDto;
+import com.silenteight.serp.governance.model.transfer.export.ExportModelUseCase;
 import com.silenteight.serp.governance.model.transfer.importing.ImportModelUseCase;
 import com.silenteight.serp.governance.model.use.UseModelUseCase;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import com.google.rpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import java.util.UUID;
+import javax.validation.constraints.NotNull;
 
 import static com.google.rpc.Code.FAILED_PRECONDITION_VALUE;
 import static com.google.rpc.Code.INTERNAL_VALUE;
@@ -43,7 +50,9 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   @NonNull
   private final SolvingModelDetailsQuery solvingModelDetailsQuery;
   @NonNull
-  private final SolvingModelProvider solvingModelProvider;
+  private final SolvingModelQuery solvingModelQuery;
+  @NonNull
+  private final ExportModelUseCase exportModelUseCase;
   @NonNull
   private final ImportModelUseCase importModelUseCase;
   @NonNull
@@ -93,7 +102,7 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
       StreamObserver<SolvingModel> responseObserver, ModelDto modelDto) {
 
     try {
-      SolvingModel solvingModel = solvingModelProvider.get(modelDto);
+      SolvingModel solvingModel = solvingModelQuery.get(modelDto);
       responseObserver.onNext(solvingModel);
       responseObserver.onCompleted();
     } catch (NonResolvableResourceException e) {
@@ -116,5 +125,24 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
 
     log.error(message, e);
     responseObserver.onError(toStatusRuntimeException(status));
+  }
+
+  @Override
+  public void exportModel(ExportModelRequest request,
+                          StreamObserver<ExportModelResponse> responseObserver) {
+    try {
+      TransferredModelRootDto modelToExport = exportModelUseCase.apply(request.getModel());
+      responseObserver.onNext(toResponse(modelToExport));
+      responseObserver.onCompleted();
+    } catch (RuntimeException e) {
+      handleException(responseObserver, e, INTERNAL_VALUE, USE_MODEL_ERROR);
+    }
+  }
+
+  @NotNull
+  private static ExportModelResponse toResponse(TransferredModelRootDto modelToExport) {
+    return ExportModelResponse.newBuilder()
+        .setModelJson(ByteString.copyFromUtf8(modelToExport.toJson()))
+        .build();
   }
 }

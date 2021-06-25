@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.serp.governance.agent.domain.FeaturesProvider;
 import com.silenteight.serp.governance.agent.domain.dto.FeatureDto;
-import com.silenteight.serp.governance.model.provide.grpc.PolicyFeatureProvider;
+import com.silenteight.serp.governance.model.provide.PolicyFeatureProvider;
 
 import java.util.List;
 

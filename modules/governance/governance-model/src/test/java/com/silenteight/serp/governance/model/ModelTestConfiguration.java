@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.model;
 
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.serp.governance.changerequest.approval.ModelApprovalQuery;
-import com.silenteight.serp.governance.model.provide.grpc.PolicyFeatureProvider;
+import com.silenteight.serp.governance.model.provide.PolicyFeatureProvider;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.PolicyService;

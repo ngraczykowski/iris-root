@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
@@ -22,4 +24,8 @@ public class TransferredModelRootDto implements Serializable {
 
   @NonNull
   private String checksum;
+
+  public String toJson() {
+    return JsonConversionHelper.INSTANCE.serializeToString(this);
+  }
 }

@@ -8,8 +8,8 @@ import com.silenteight.serp.governance.model.domain.exception.ModelMisconfigured
 import com.silenteight.serp.governance.model.domain.exception.ModelNotFoundException;
 import com.silenteight.serp.governance.model.domain.exception.TooManyModelsException;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
-import com.silenteight.serp.governance.model.provide.grpc.DefaultModelQuery;
-import com.silenteight.serp.governance.model.provide.grpc.SolvingModelDetailsQuery;
+import com.silenteight.serp.governance.model.provide.DefaultModelQuery;
+import com.silenteight.serp.governance.model.provide.SolvingModelDetailsQuery;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
 
 import java.util.List;

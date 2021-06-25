@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.provide.grpc;
+package com.silenteight.serp.governance.model.provide;
 
 import lombok.NonNull;
 

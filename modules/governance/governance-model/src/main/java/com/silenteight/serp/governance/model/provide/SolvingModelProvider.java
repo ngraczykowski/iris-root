@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.provide.grpc;
+package com.silenteight.serp.governance.model.provide;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,12 +15,13 @@ import static com.silenteight.serp.governance.policy.common.PolicyResource.fromR
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class SolvingModelProvider {
+class SolvingModelProvider implements SolvingModelQuery {
 
   private final CurrentStrategyProvider currentStrategyProvider;
   private final PolicyFeatureProvider policiesFeaturesProvider;
   private final PolicyStepsMatchConditionsNamesProvider matchConditionsNamesFromPolicyProvider;
 
+  @Override
   public SolvingModel get(ModelDto modelDto) {
     List<String> conditionsNamesFromPolicy = matchConditionsNamesFromPolicyProvider
         .getMatchConditionsNames(fromResourceName(modelDto.getPolicy()));

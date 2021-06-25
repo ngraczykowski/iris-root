@@ -34,6 +34,10 @@ public class ExportModelUseCase {
     return toTransferredRoot(model);
   }
 
+  public TransferredModelRootDto apply(@NonNull String modelName) {
+    return apply(ModelResource.fromResourceName(modelName));
+  }
+
   private TransferredModelRootDto toTransferredRoot(ModelDto model) {
     TransferredModelDto transferredModel = toTransferredModel(model);
 
