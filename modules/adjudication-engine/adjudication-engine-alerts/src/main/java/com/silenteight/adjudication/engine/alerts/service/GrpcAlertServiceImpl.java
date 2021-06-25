@@ -8,11 +8,9 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceImplBase
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.context.annotation.Profile;
 
 @GrpcService
 @RequiredArgsConstructor
-@Profile("!mock")
 class GrpcAlertServiceImpl extends AlertServiceImplBase {
 
   @NonNull

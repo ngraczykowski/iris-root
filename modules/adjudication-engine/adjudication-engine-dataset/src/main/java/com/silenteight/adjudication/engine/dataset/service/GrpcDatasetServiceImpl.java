@@ -9,12 +9,10 @@ import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceImpl
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.context.annotation.Profile;
 
 @GrpcService
 @Slf4j
 @RequiredArgsConstructor
-@Profile("!mock")
 public class GrpcDatasetServiceImpl extends DatasetServiceImplBase {
 
   @NonNull

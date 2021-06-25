@@ -9,10 +9,8 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.context.annotation.Profile;
 
 @GrpcService
-@Profile("!mock")
 @RequiredArgsConstructor
 class GrpcAnalysisService extends AnalysisServiceImplBase {
 
