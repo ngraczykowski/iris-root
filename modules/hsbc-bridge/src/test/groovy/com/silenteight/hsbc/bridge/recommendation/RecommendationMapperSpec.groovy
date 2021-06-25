@@ -1,14 +1,24 @@
 package com.silenteight.hsbc.bridge.recommendation
 
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class RecommendationMapperSpec extends Specification {
 
+  @Shared
+  def falsePositive = 'ACTION_FALSE_POSITIVE'
+  @Shared
+  def manualInvestigation = 'ACTION_INVESTIGATE'
+  @Shared
+  def ptp = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+  @Shared
+  def hintedFP = 'ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE'
+
   var s8ValuesMap = [
-      (S8Recommendation.FALSE_POSITIVE)         : 'FP',
-      (S8Recommendation.MANUAL_INVESTIGATION)   : 'MI',
-      (S8Recommendation.POTENTIAL_TRUE_POSITIVE): 'PTP'
+      (S8Recommendation.FALSE_POSITIVE)         : falsePositive,
+      (S8Recommendation.MANUAL_INVESTIGATION)   : manualInvestigation,
+      (S8Recommendation.POTENTIAL_TRUE_POSITIVE): ptp
   ] as Map
   var userValuesMap = [
       (HsbcRecommendation.AAA_FALSE_POSITIVE): 'AAA False Positive',
@@ -26,22 +36,25 @@ class RecommendationMapperSpec extends Specification {
     result == expectedResult
 
     where:
-    action  | extendedAttribute | expectedResult
-    null    | null              | 'LEVEL_3_REVIEW'
-    ''      | null              | 'LEVEL_3_REVIEW'
-    'Dummy' | null              | 'LEVEL_3_REVIEW'
-    'Dummy' | 'Dummy'           | 'LEVEL_3_REVIEW'
-    'FP'    | 'Dummy'           | 'AAA False Positive'
-    'MI'    | 'Dummy'           | 'Level 1'
-    'PTP'   | 'Dummy'           | 'Level 2'
-    'FP'    | 'SAN'             | 'AAA False Positive'
-    'MI'    | 'SAN'             | 'Level 2'
-    'PTP'   | 'SAN'             | 'LEVEL_3_REVIEW'
-    'PTP'   | 'SAN'             | 'LEVEL_3_REVIEW'
-    'FP'    | 'SSC'             | 'AAA False Positive'
-    'MI'    | 'SSC'             | 'Level 2'
-    'PTP'   | 'SSC'             | 'LEVEL_3_REVIEW'
-    'PTP'   | 'SSC'             | 'LEVEL_3_REVIEW'
+    action              | extendedAttribute | expectedResult
+    null                | null              | 'Level 1'
+    ''                  | null              | 'LEVEL_3_REVIEW'
+    'Dummy'             | null              | 'LEVEL_3_REVIEW'
+    'Dummy'             | 'Dummy'           | 'LEVEL_3_REVIEW'
+    falsePositive       | 'Dummy'           | 'AAA False Positive'
+    manualInvestigation | 'Dummy'           | 'Level 1'
+    hintedFP            | 'Dummy'           | 'Level 1'
+    ptp                 | 'Dummy'           | 'Level 2'
+    falsePositive       | 'SAN'             | 'AAA False Positive'
+    manualInvestigation | 'SAN'             | 'Level 2'
+    hintedFP            | 'SAN'             | 'Level 2'
+    ptp                 | 'SAN'             | 'LEVEL_3_REVIEW'
+    ptp                 | 'SAN'             | 'LEVEL_3_REVIEW'
+    falsePositive       | 'SSC'             | 'AAA False Positive'
+    manualInvestigation | 'SSC'             | 'Level 2'
+    hintedFP            | 'SSC'             | 'Level 2'
+    ptp                 | 'SSC'             | 'LEVEL_3_REVIEW'
+    ptp                 | 'SSC'             | 'LEVEL_3_REVIEW'
 
   }
 }

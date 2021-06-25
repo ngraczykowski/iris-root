@@ -44,9 +44,9 @@ silenteight.bridge:
     username: ${NEXUS_USER:dev}
   recommendation:
     silent-eight-values:
-      FALSE_POSITIVE: False Positive
-      MANUAL_INVESTIGATION: Manual Adjudication
-      POTENTIAL_TRUE_POSITIVE: Potential True Positive
+      FALSE_POSITIVE: ACTION_FALSE_POSITIVE
+      MANUAL_INVESTIGATION: ACTION_INVESTIGATE
+      POTENTIAL_TRUE_POSITIVE: ACTION_POTENTIAL_TRUE_POSITIVE
     user-friendly-values:
       AAA_FALSE_POSITIVE: AAA False Positive
       LEVEL_1_REVIEW: Level 1 Review
