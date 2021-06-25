@@ -33,10 +33,13 @@ import static org.mockito.Mockito.*;
 class SolveUseCaseTest {
 
   private static final String POLICY_NAME_RESOURCE_PREFIX = "policies/";
+  private static final String STEP_NAME_RESOURCE_PREFIX = "steps/";
   private static final UUID POLICY_ID = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
-  private static final String POLICY_NAME = POLICY_NAME_RESOURCE_PREFIX + POLICY_ID.toString();
+  private static final String POLICY_NAME = POLICY_NAME_RESOURCE_PREFIX + POLICY_ID;
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
+  private static final String STEP_NAME_1 = STEP_NAME_RESOURCE_PREFIX + STEP_ID_1;
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+  private static final String STEP_NAME_2 = STEP_NAME_RESOURCE_PREFIX + STEP_ID_2;
   private static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
   private static final Signature SIGNATURE_1 = fromBase64("o7uPxWV913+ljhPW2uH+g7eAFeQ=");
   private static final Signature SIGNATURE_2 = fromBase64("BWrL65LzOy8daIJSWiZCRxG96XA=");
@@ -82,11 +85,17 @@ class SolveUseCaseTest {
         .hasStepId(STEP_ID_2)
         .hasSolution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
         .hasVectorSignature(SIGNATURE_1)
+        .hasReasonField("feature_vector_signature", SIGNATURE_1.asString())
+        .hasReasonField("policy", POLICY_NAME)
+        .hasReasonField("step", STEP_NAME_2)
         .and()
         .solution(1)
         .hasStepId(STEP_ID_1)
         .hasSolution(SOLUTION_FALSE_POSITIVE)
-        .hasVectorSignature(SIGNATURE_2);
+        .hasVectorSignature(SIGNATURE_2)
+        .hasReasonField("feature_vector_signature", SIGNATURE_2.asString())
+        .hasReasonField("policy", POLICY_NAME)
+        .hasReasonField("step", STEP_NAME_1);
   }
 
   @Test
@@ -107,7 +116,8 @@ class SolveUseCaseTest {
         .hasSolutionsCount(1)
         .solution(0)
         .hasNoStepId()
-        .hasSolution(SOLUTION_NO_DECISION);
+        .hasSolution(SOLUTION_NO_DECISION)
+        .hasReasonField("policy", POLICY_NAME);
   }
 
   @Test

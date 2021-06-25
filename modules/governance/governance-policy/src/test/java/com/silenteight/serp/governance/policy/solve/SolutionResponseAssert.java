@@ -4,6 +4,7 @@ import com.silenteight.serp.governance.common.signature.Signature;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import com.silenteight.solving.api.v1.SolutionResponse;
 
+import com.google.protobuf.Value;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.UUID;
@@ -60,6 +61,20 @@ public class SolutionResponseAssert extends
     if (!actual.getFeatureVectorSignature().equals(signature.getValue())) {
       failWithMessage("Expected signature to be <%s>, but was <%s>",
           signature, new Signature(actual.getFeatureVectorSignature()));
+    }
+
+    return this;
+  }
+
+  public SolutionResponseAssert hasReasonField(String key, String stringValue) {
+    Value actualValue = actual.getReason().getFieldsOrThrow(key);
+    Value expectedValue = Value.newBuilder()
+        .setStringValue(stringValue)
+        .build();
+
+    if (!actualValue.equals(expectedValue)) {
+      failWithMessage("Expected reason field <%s> to be <%s>, but was <%s>",
+          key, stringValue, actualValue.getStringValue());
     }
 
     return this;
