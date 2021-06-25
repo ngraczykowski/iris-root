@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: User Management
+  description: User Management API
+  version: 1.0.0
+
+servers:
+  - url: '{environment}/rest/webapp/api/{version}'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24160
+      version:
+        enum:
+          - v1
+        default: v1
+
+paths:
+  /users:
+    get:
+      description: Get list of users.
+      parameters:
+        - in: query
+          description: Filter users by country groups they're in.
+          required: false
+          name: countryGroups
+          explode: false
+          style: form
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example: [c4f5577a-d3d3-4b94-9dee-736d7e97ac6e, c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b]
+      responses:
+        200:
+          description: A list users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+
+    post:
+      description: Create user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        201:
+          description: Created.
+
+  /users/{username}:
+    parameters:
+      - in: path
+        name: username
+        required: true
+        description: Usermname of the edited user.
+        schema:
+          type: string
+          example: johnnybravo
+    get:
+      description: Get user details.
+      responses:
+        200:
+          description: A user details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    patch:
+      description: Edit user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+      responses:
+        204:
+          description: Saved.
+
+    delete:
+      description: Remove user.
+      responses:
+        204:
+          description: User removed.
+
+  /users/{username}/password/reset:
+    patch:
+      description: Reset user password.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: Usermname of the edited user.
+          schema:
+            type: string
+            example: johnnybravo
+      responses:
+        200:
+          description: Temporary password.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temporaryPassword:
+                    type: string
+                    example: TfP5ATaZRpYe2p
+
+  /roles:
+    get:
+      description: List of available roles.
+      responses:
+        200:
+          description: List of available roles.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  type: string
+                example: ["Administrator", "Analyst", "Approver", "Auditor", "Business Operator"]
+
+
+  /users/pageable:
+    get:
+      description: Deprecated yet used api.
+      parameters:
+      - in: query
+        name: page
+        required: true
+        description: Page.
+        schema:
+          type: integer
+          minimum: 0
+        example: 0
+      - in: query
+        name: size
+        required: true
+        description: Page size
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        example: 9999
+      responses:
+        '200':
+          description: A list users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersPageable'
+
+components:
+  schemas:
+    Users:
+      type: array
+      items:
+        type: object
+        properties:
+          userName:
+            type: string
+            example: johnnybravo
+          displayName:
+            type: string
+            example: Johnny Bravo
+          roles:
+            type: array
+            items:
+              type: string
+            example: ["Administrator", "Analyst", "Approver", "Auditor", "Business Operator"]
+          countryGroups:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+          lockedAt:
+            type: string
+            example: 2021-02-16T15:15:15.263Z
+
+    User:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: johnnybravo
+        displayName:
+          type: string
+          example: Johnny Bravo
+        roles:
+          type: array
+          items:
+            type: string
+          example: ["Administrator", "Analyst", "Approver", "Auditor", "Business Operator"]
+        countryGroups:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+        lastLoginAt:
+          type: string
+          example: 2021-02-16T15:15:15.263Z
+        createdAt:
+          type: string
+          example: 2021-02-16T15:15:15.263Z
+        lockedAt:
+          type: string
+          example: 2021-02-16T15:15:15.263Z
+        origin:
+          type: string
+
+
+    CreateUser:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: johnnybravo
+        displayName:
+          type: string
+          example: Johnny Bravo
+        password:
+          type: string
+          example: TfP5ATaZRpYe2p
+        roles:
+          type: array
+          items:
+            type: string
+          example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+        countryGroups:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+
+    EditUser:
+      type: object
+      properties:
+        displayName:
+          type: string
+          example: Johnny Bravo
+          nullable: true
+        roles:
+          type: array
+          items:
+            type: string
+          example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+          nullable: true
+        countryGroups:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+        locked:
+          type: boolean
+          example: false
+          nullable: true
+
+    UsersPageable:
+      type: object
+      example:
+        {
+          "content": [
+            {
+              "userName": "johnnybravo",
+              "displayName": "Johny Bravo",
+              "roles": [
+                  "Administrator",
+                  "Analyst",
+                  "Approver",
+                  "Auditor",
+                  "Business Operator"
+              ],
+              "lastLoginAt": "2021-05-24T11:28:33.858Z",
+              "createdAt": "2021-02-16T15:15:15.263Z",
+              "lockedAt": null,
+              "origin": "SENS"
+            }
+          ],
+          "pageable": {
+            "sort": {
+              "sorted": false,
+              "unsorted": true,
+              "empty": true
+            },
+            "pageNumber": 0,
+            "pageSize": 2000,
+            "offset": 0,
+            "paged": true,
+            "unpaged": false
+          },
+          "last": true,
+          "totalElements": 1,
+          "totalPages": 1,
+          "first": true,
+          "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+          },
+          "number": 0,
+          "numberOfElements": 1,
+          "size": 2000,
+          "empty": false
+        }
