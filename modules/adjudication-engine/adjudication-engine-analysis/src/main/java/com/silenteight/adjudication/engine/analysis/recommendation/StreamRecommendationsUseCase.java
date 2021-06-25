@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
-import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
@@ -23,16 +22,20 @@ class StreamRecommendationsUseCase {
   private final RecommendationDataAccess recommendationDataAccess;
 
   @Transactional(readOnly = true)
-  void streamRecommendations(
-      StreamRecommendationsRequest request, Consumer<Recommendation> consumer) {
+  void streamRecommendations(String analysisOrDataset, Consumer<Recommendation> consumer) {
 
     if (log.isDebugEnabled()) {
-      log.debug("Streaming recommendations: request={}", request);
+      log.debug("Streaming recommendations: resource={}", analysisOrDataset);
     }
 
-    var resource = request.getDataset().isEmpty() ? request.getAnalysis() : request.getDataset();
+    var recommendationCount = generateRecommendations(analysisOrDataset, consumer);
 
-    var recommendationCount = readAlertRecommendations(resource, ar -> {
+    log.info("Finished streaming recommendations: resource={}, recommendationCount={}",
+        analysisOrDataset, recommendationCount);
+  }
+
+  private int generateRecommendations(String analysisOrDataset, Consumer<Recommendation> consumer) {
+    return readAlertRecommendations(analysisOrDataset, ar -> {
       var comment = generateCommentsUseCase
           .generateComments(new GenerateCommentsRequest(ar.getAlertContext()))
           .getComment();
@@ -42,9 +45,6 @@ class StreamRecommendationsUseCase {
       consumer.accept(recommendation);
 
     });
-
-    log.info("Finished streaming recommendations: request={}, recommendationCount={}",
-        request, recommendationCount);
   }
 
   @SuppressWarnings("FeatureEnvy")

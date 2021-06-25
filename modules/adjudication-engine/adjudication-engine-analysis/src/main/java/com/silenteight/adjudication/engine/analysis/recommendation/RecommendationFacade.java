@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
-import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
 import com.silenteight.adjudication.internal.v1.CommentInputsUpdated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
 
@@ -41,8 +40,8 @@ public class RecommendationFacade {
   }
 
   public void streamRecommendations(
-      StreamRecommendationsRequest request, Consumer<Recommendation> recommendationConsumer) {
+      String analysisOrDataset, Consumer<Recommendation> recommendationConsumer) {
 
-    streamRecommendationsUseCase.streamRecommendations(request, recommendationConsumer);
+    streamRecommendationsUseCase.streamRecommendations(analysisOrDataset, recommendationConsumer);
   }
 }

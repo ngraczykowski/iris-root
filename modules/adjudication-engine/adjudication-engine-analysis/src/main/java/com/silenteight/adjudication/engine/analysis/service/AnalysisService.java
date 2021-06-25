@@ -46,6 +46,10 @@ class AnalysisService {
     return analysisFacade.getAnalysis(request.getAnalysis());
   }
 
+  /**
+   * @deprecated Use {@link RecommendationService}.
+   */
+  @Deprecated
   Recommendation getRecommendation(GetRecommendationRequest request) {
     return recommendationFacade.getRecommendation(request.getRecommendation());
   }
@@ -54,9 +58,15 @@ class AnalysisService {
     return matchSolutionFacade.getMatchSolution(request.getMatchSolution());
   }
 
+  /**
+   * @deprecated Use {@link RecommendationService}.
+   */
+  @Deprecated
   void streamRecommendations(
       StreamRecommendationsRequest request, Consumer<Recommendation> onNext) {
 
-    recommendationFacade.streamRecommendations(request, onNext);
+    var resource = request.getDataset().isEmpty() ? request.getAnalysis() : request.getDataset();
+
+    recommendationFacade.streamRecommendations(resource, onNext);
   }
 }
