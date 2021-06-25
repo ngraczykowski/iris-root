@@ -18,6 +18,7 @@ public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   private final SelectPendingAlertsQuery selectPendingAlertsQuery;
   private final StreamAlertRecommendationsQuery streamAlertRecommendationsQuery;
+  private final GetAlertRecommendationQuery getAlertRecommendationQuery;
 
   @Override
   @Transactional(readOnly = true)
@@ -39,6 +40,6 @@ public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   @Override
   public AlertRecommendation getAlertRecommendation(long recommendationId) {
-    return null;
+    return getAlertRecommendationQuery.execute(recommendationId);
   }
 }

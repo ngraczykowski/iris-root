@@ -9,3 +9,8 @@ Content-Type: application/json
 ### Check HSBC Bridge status
 GET {{baseUrl}}/rest/hsbc-bridge/management/info
 Accept: application/json
+
+
+### Check the recommendation results
+GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-101/result
+Accept: application/json
