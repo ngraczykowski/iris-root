@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: Allowed Countries Groups
+  description: Allowed Countries Groups API
+  version: 1.0.0
+
+servers:
+  - url: '{environment}/rest/webapp/api/{version}'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24160
+      version:
+        enum:
+          - v1
+        default: v1
+
+paths:
+  /countryGroups:
+    get:
+      description: Get list of country groups.
+      responses:
+        200:
+          description: A list country groups
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryGroupList'
+
+    post:
+      description: Create country group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCountryGroup'
+      responses:
+        201:
+          description: Created.
+
+  /countryGroups/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: Id of the country group.
+        schema:
+          type: string
+        example: asia-without-china
+    get:
+      description: Get country group details.
+      responses:
+        200:
+          description: Country group details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryGroup'
+    patch:
+      description: Edit country group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditCountryGroup'
+      responses:
+        204:
+          description: Saved.
+    delete:
+      description: Remove country group.
+      responses:
+        204:
+          description: Country group removed.
+
+  /countryGroups/{id}/countries:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: Id of the country group.
+        schema:
+          type: string
+          example: asia-without-china
+    get:
+      description: Get countries configured in country group.
+      responses:
+        200:
+          description: A list countries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Countries'
+
+    put:
+      description: Set countries in country group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Countries'
+      responses:
+        204:
+          description: Country list updated
+
+components:
+  schemas:
+    CountryGroupList:
+      type: array
+      items:
+        $ref: '#/components/schemas/CountryGroup'
+
+    CountryGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          example: c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b
+        name:
+          type: string
+          example: countryGroups/c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b
+        title:
+          type: string
+          example: Asia without China
+
+    CreateCountryGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b
+        name:
+          type: string
+          example: Asia without China
+
+    EditCountryGroup:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Asia without China and Hong Kong
+
+    Countries:
+      type: array
+      items:
+        type: string
+      example: [ af,ba,bg,bt,bx,br,cb,cc,cy,gz,hk,ii,io,ir,iq,iy,is,ja,jo,kn,ko,ku,ls,le,mh,my,mp,np,mk,pk,pp,pf,ph,qa,su,si,xp,ce,sy,th,tu,ts,vm,wj,ye,ys ]
