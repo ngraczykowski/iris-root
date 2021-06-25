@@ -14,7 +14,7 @@ public class GrpcProperties {
 
   Duration defaultDeadline;
 
-  long deadlineInSeconds() {
+  public long deadlineInSeconds() {
     return defaultDeadline.toSecondsPart();
   }
 }

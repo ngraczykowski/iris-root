@@ -10,7 +10,7 @@ import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.Party;
 import com.silenteight.hsbc.datasource.feature.Feature;
-import com.silenteight.hsbc.datasource.feature.FeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.NameFeatureClientValuesRetriever;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
 @RequiredArgsConstructor
-public class NameFeature implements FeatureClientValuesRetriever<NameFeatureInputDto> {
+public class NameFeature implements NameFeatureClientValuesRetriever<NameFeatureInputDto> {
 
   private final NameQuery.Factory nameQueryFactory;
 

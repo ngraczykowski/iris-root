@@ -9,6 +9,7 @@ import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatur
 import com.silenteight.hsbc.datasource.extractors.document.NationalIdDocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.OtherDocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.PassportNumberDocumentQueryConfigurer;
+import com.silenteight.hsbc.datasource.extractors.ispep.IsPepQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer;
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature;
 import com.silenteight.hsbc.datasource.feature.country.OtherCountryFeature;
@@ -16,6 +17,7 @@ import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
 import com.silenteight.hsbc.datasource.feature.dob.DateOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
 import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
+import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
 import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdFeature;
 import com.silenteight.hsbc.datasource.feature.otherdocument.OtherDocumentFeature;
@@ -36,6 +38,7 @@ public class FeatureModel {
     model = Map.ofEntries(
         entry(GENDER, new GenderFeature()),
         entry(NAME, new NameFeature(new NameQueryConfigurer().create())),
+        entry(IS_PEP, new IsPepFeature(new IsPepQueryConfigurer().create())),
         entry(
             NATIONALITY_COUNTRY,
             new NationalityCountryFeature(new NationalityCountryQueryConfigurer().create())),

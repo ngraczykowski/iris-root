@@ -1,0 +1,57 @@
+package com.silenteight.hsbc.datasource.extractors.ispep;
+
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
+
+@RequiredArgsConstructor
+class VerifyIsPepResponseExtractor {
+
+  private final IndividualComposite individualComposite;
+  private final IsPepServiceClient isPepServiceClient;
+
+  public List<IsPepResponseDto> extract(
+      List<String> apFields, GetModelFieldNamesResponseDto modelFieldNamesResponse) {
+
+    var apFieldsMap = createApFieldsMap(apFields);
+
+    return extractIsPepRequestToResponse(apFieldsMap, modelFieldNamesResponse);
+  }
+
+  private Map<String, String> createApFieldsMap(List<String> apFields) {
+    var map = new HashMap<String, String>();
+    var lobCountry = apFields.stream().findFirst();
+    lobCountry.ifPresent(s -> map.put("CustomerIndividuals.LoB Country", s));
+    return map;
+  }
+
+  private List<IsPepResponseDto> extractIsPepRequestToResponse(
+      Map<String, String> apFieldsMap, GetModelFieldNamesResponseDto modelFieldNamesResponse) {
+    return individualComposite.getWorldCheckIndividuals().stream()
+        .flatMap(VerifyIsPepResponseExtractor::extractWorldCheckListRecordIds)
+        .filter(Objects::nonNull)
+        .map(listRecordId -> IsPepRequestDto.builder()
+            .fieldNames(modelFieldNamesResponse.getFieldNames())
+            .apFields(apFieldsMap)
+            .bankRegion(modelFieldNamesResponse.getRegionName())
+            .uid(listRecordId)
+            .build())
+        .map(isPepServiceClient::verifyIfIsPep)
+        .collect(toList());
+  }
+
+  private static Stream<String> extractWorldCheckListRecordIds(
+      WorldCheckIndividual worldCheckIndividual) {
+    return of(worldCheckIndividual.getListRecordId());
+  }
+}

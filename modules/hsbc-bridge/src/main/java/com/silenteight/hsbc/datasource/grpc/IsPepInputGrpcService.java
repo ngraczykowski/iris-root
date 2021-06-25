@@ -10,16 +10,19 @@ import com.silenteight.datasource.api.ispep.v1.IsPepInputServiceGrpc.IsPepInputS
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepFeatureSolutionDto;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputRequest;
+import com.silenteight.hsbc.datasource.dto.ispep.ReasonDto;
 import com.silenteight.hsbc.datasource.provider.IsPepInputProvider;
 
 import com.google.protobuf.Struct;
-import com.google.protobuf.util.Values;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildListValues;
+import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildNumberValue;
+import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildStringValue;
+import static java.util.stream.Collectors.toList;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
@@ -48,7 +51,7 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
             .addAllFeatures(mapFeatureInputs(input.getFeatureInputs()))
             .build()
         )
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private List<Feature> mapFeatureInputs(List<IsPepFeatureInputDto> inputs) {
@@ -57,7 +60,7 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
             .setFeature(i.getFeature())
             .addAllFeatureSolutions(mapFeatureSolutionInputs(i.getFeatureSolutions()))
             .build())
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private List<FeatureSolution> mapFeatureSolutionInputs(List<IsPepFeatureSolutionDto> inputs) {
@@ -66,12 +69,20 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
             .setSolution(i.getSolution())
             .setReason(mapToStruct(i.getReason()))
             .build())
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
-  private Struct mapToStruct(Map<String, String> reason) {
-    var builder = Struct.newBuilder();
-    reason.forEach((key, val) -> builder.putFields(key, Values.of(val)));
+  private Struct mapToStruct(ReasonDto reason) {
+    var builder = Struct.newBuilder()
+        .putFields("message", buildStringValue(reason.getMessage()))
+        .putFields("noPepPositions", buildListValues(reason.getNoPepPositions()))
+        .putFields("notMatchedPositions", buildListValues(reason.getNotMatchedPositions()))
+        .putFields("pepPositions", buildListValues(reason.getPepPositions()))
+        .putFields("linkedPepsUids", buildListValues(reason.getLinkedPepsUids()))
+        .putFields("numberOfNotPepDecisions", buildNumberValue(reason.getNumberOfNotPepDecisions()))
+        .putFields("numberOfPepDecisions", buildNumberValue(reason.getNumberOfPepDecisions()))
+        .putFields("version", buildStringValue(reason.getVersion()))
+        .putFields("regionName", buildStringValue(reason.getRegionName()));
     return builder.build();
   }
 }

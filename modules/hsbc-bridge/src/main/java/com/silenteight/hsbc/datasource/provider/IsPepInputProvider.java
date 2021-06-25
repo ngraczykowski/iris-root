@@ -10,12 +10,15 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputRequest;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputResponse;
+import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.feature.IsPepFeatureClientValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.datasource.feature.Feature.IS_PEP;
+import static com.silenteight.hsbc.datasource.feature.FeatureModel.getFeatureRetriever;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
@@ -24,6 +27,7 @@ public class IsPepInputProvider {
 
   @Getter
   private final MatchFacade matchFacade;
+  private final IsPepServiceClient isPepServiceClient;
 
   public List<IsPepInputResponse> provideInput(@NonNull IsPepInputRequest request) {
     var features = validateFeatures(request.getFeatures());
@@ -36,18 +40,18 @@ public class IsPepInputProvider {
     return matches.stream()
         .map(match -> IsPepInputResponse.builder()
             .match(match.getName())
-            .featureInputs(getFeatureInputs(features, match.getMatchData()))
+            .featureInputs(getFeatureInputs(
+                features, match.getMatchData()))
             .build())
         .collect(Collectors.toList());
   }
 
-  //TODO
-  private List<IsPepFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
+  private List<IsPepFeatureInputDto> getFeatureInputs(
+      List<String> features, MatchData matchData) {
     return features.stream()
-        .map(featureName -> IsPepFeatureInputDto.builder()
-            .feature(featureName)
-//            .featureSolutions() TODO
-            .build())
+        .map(featureName -> (IsPepFeatureInputDto)
+            ((IsPepFeatureClientValuesRetriever) getFeatureRetriever(featureName))
+                .retrieve(matchData, isPepServiceClient))
         .collect(Collectors.toList());
   }
 

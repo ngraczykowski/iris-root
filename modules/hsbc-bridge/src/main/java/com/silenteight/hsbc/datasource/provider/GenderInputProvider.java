@@ -45,8 +45,7 @@ class GenderInputProvider implements DataSourceInputProvider<GenderInputResponse
         .collect(Collectors.toList());
   }
 
-  private List<GenderFeatureInputDto> getFeatureInputs(
-      List<String> features, MatchData matchData) {
+  private List<GenderFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (GenderFeatureInputDto)
             ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))

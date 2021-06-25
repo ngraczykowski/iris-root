@@ -13,6 +13,7 @@ import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
+import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 class DataProvidersConfiguration {
 
   private final MatchFacade matchFacade;
+  private final IsPepServiceClient isPepServiceClient;
   private final NameInformationServiceClient nameInformationServiceClient;
 
   @Bean
@@ -52,7 +54,7 @@ class DataProvidersConfiguration {
 
   @Bean
   IsPepInputProvider isPepInputProvider() {
-    return new IsPepInputProvider(matchFacade);
+    return new IsPepInputProvider(matchFacade, isPepServiceClient);
   }
 
   @Bean

@@ -13,7 +13,7 @@ import com.silenteight.hsbc.datasource.dto.name.NameInputDto;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
-import com.silenteight.hsbc.datasource.feature.FeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.NameFeatureClientValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ class NameInputProvider implements DataSourceInputProvider<NameInputResponse> {
   private List<NameFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (NameFeatureInputDto)
-            ((FeatureClientValuesRetriever) getFeatureRetriever(featureName))
+            ((NameFeatureClientValuesRetriever) getFeatureRetriever(featureName))
                 .retrieve(matchData, nameInformationServiceClient))
         .collect(Collectors.toList());
   }
