@@ -34,7 +34,7 @@ public class ReportSynchronizationUseCase {
 
   @Scheduled(cron = "${warehouse.report.synchronization.cron}")
   public void activate() {
-    log.info("Report synchronization started");
+    log.debug("Report synchronization started");
     getNewReportIds().forEach(this::synchronizeSingleReport);
   }
 
@@ -47,7 +47,7 @@ public class ReportSynchronizationUseCase {
     try {
       Report report = downloadReportFromKibana(kibanaReportInstanceId);
       ReportDto storedReportDto = uploadReportToMinio(report, kibanaReportInstanceId);
-      log.debug("Report synchronized, {}", storedReportDto);
+      log.info("Report synchronized, {}", storedReportDto);
     } catch (RuntimeException e) {
       String msg = format("Failed to synchronize report: tenant=%s, kibanaReportInstanceId=%s",
           productionTenant, kibanaReportInstanceId);
