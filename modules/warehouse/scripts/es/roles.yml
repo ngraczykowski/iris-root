@@ -31,6 +31,7 @@ technical_user:
     - 'cluster:admin/opendistro/reports/instance/list'
     - 'cluster:admin/opendistro/reports/instance/get'
     - 'cluster:admin/opendistro/reports/definition/on_demand'
+    - 'cluster:monitor/health'
   index_permissions:
     - index_patterns:
         - 'itest_production'

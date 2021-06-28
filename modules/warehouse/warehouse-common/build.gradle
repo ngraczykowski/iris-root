@@ -15,11 +15,10 @@ dependencies {
 
   implementation libraries.silenteight_commons_core
   implementation libraries.spring_boot_actuator
+  implementation libraries.spring_boot_actuator_autoconfigure
   implementation libraries.spring_boot_starter_elasticsearch
-
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
-
   implementation libraries.spring_webmvc
 
   implementation libraries.springdoc_ui
