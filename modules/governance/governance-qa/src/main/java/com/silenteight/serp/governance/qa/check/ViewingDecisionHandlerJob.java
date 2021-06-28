@@ -26,9 +26,9 @@ class ViewingDecisionHandlerJob implements Runnable {
 
   @Override
   public void run() {
-    log.info("ViewingDecisionHandlerJob started at {}", now());
+    log.debug("ViewingDecisionHandlerJob started at {}", now());
     decisionService.restartViewingDecisions(getDateTimeOlderThan(maxMs), BATCH_SIZE);
-    log.info("ViewingDecisionHandlerJob finished at {}", now());
+    log.debug("ViewingDecisionHandlerJob finished at {}", now());
   }
 
   private OffsetDateTime getDateTimeOlderThan(Integer maxMs) {
