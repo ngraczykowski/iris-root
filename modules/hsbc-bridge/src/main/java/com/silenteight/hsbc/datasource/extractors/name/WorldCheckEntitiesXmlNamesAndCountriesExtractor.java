@@ -79,10 +79,12 @@ class WorldCheckEntitiesXmlNamesAndCountriesExtractor {
     return matchData.getWorldCheckEntities().stream()
         .flatMap(WorldCheckEntitiesXmlNamesAndCountriesExtractor::extractWorldCheckListRecordIds)
         .filter(Objects::nonNull)
+        .distinct()
         .map(listRecordId -> GetNameInformationRequestDto.builder()
             .watchlistUuid(listRecordId)
             .build())
         .map(nameInformationServiceClient::getNameInformation)
+        .distinct()
         .collect(toList());
   }
 

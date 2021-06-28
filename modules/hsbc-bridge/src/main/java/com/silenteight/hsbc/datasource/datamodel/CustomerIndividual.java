@@ -26,7 +26,7 @@ public interface CustomerIndividual {
 
   String getIdentificationDocument10();
 
-  String getLobCountry();
+  String getEdqLobCountryCode();
 
   String getResidenceCountries();
 

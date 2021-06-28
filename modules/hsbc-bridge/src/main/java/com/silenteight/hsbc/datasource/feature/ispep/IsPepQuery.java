@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public interface IsPepQuery {
 
-  Stream<String> apIndividualExtractLobCountry();
+  Stream<String> apIndividualExtractEdqLobCountryCode();
 
   GetModelFieldNamesResponseDto provideRequiredModelFieldNames();
 

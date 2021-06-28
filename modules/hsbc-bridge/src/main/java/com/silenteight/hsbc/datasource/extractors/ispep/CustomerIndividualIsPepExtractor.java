@@ -13,7 +13,7 @@ class CustomerIndividualIsPepExtractor {
 
   public Stream<String> extract() {
     return Stream.of(
-        customerIndividual.getLobCountry()
+        customerIndividual.getEdqLobCountryCode()
     );
   }
 }

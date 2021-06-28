@@ -89,10 +89,12 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
     return matchData.getWorldCheckIndividuals().stream()
         .flatMap(WorldCheckIndividualsXmlNamesAndCountriesExtractor::extractWorldCheckListRecordIds)
         .filter(Objects::nonNull)
+        .distinct()
         .map(listRecordId -> GetNameInformationRequestDto.builder()
             .watchlistUuid(listRecordId)
             .build())
         .map(nameInformationServiceClient::getNameInformation)
+        .distinct()
         .collect(toList());
   }
 

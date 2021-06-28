@@ -15,7 +15,7 @@ class IsPepQueryFacade implements IsPepQuery {
   private final IsPepServiceClient isPepServiceClient;
 
   @Override
-  public Stream<String> apIndividualExtractLobCountry() {
+  public Stream<String> apIndividualExtractEdqLobCountryCode() {
     var customerIndividual = matchData.getCustomerIndividual();
     return new CustomerIndividualIsPepExtractor(customerIndividual)
         .extract();

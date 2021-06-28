@@ -31,7 +31,7 @@ class VerifyIsPepResponseExtractor {
   private Map<String, String> createApFieldsMap(List<String> apFields) {
     var map = new HashMap<String, String>();
     var lobCountry = apFields.stream().findFirst();
-    lobCountry.ifPresent(s -> map.put("CustomerIndividuals.LoB Country", s));
+    lobCountry.ifPresent(s -> map.put("CustomerIndividuals.edqLoBCountryCode", s));
     return map;
   }
 
@@ -40,6 +40,7 @@ class VerifyIsPepResponseExtractor {
     return individualComposite.getWorldCheckIndividuals().stream()
         .flatMap(VerifyIsPepResponseExtractor::extractWorldCheckListRecordIds)
         .filter(Objects::nonNull)
+        .distinct()
         .map(listRecordId -> IsPepRequestDto.builder()
             .fieldNames(modelFieldNamesResponse.getFieldNames())
             .apFields(apFieldsMap)
@@ -47,6 +48,7 @@ class VerifyIsPepResponseExtractor {
             .uid(listRecordId)
             .build())
         .map(isPepServiceClient::verifyIfIsPep)
+        .distinct()
         .collect(toList());
   }
 

@@ -27,7 +27,7 @@ public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeat
     var inputBuilder = IsPepFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {
-      var apIndividualExtractLobCountry = toDistinctList(query.apIndividualExtractLobCountry());
+      var apIndividualExtractLobCountry = toDistinctList(query.apIndividualExtractEdqLobCountryCode());
       var requiredFields = query.provideRequiredModelFieldNames();
       var responses =
           query.verifyIsPep(apIndividualExtractLobCountry, requiredFields);
