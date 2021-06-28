@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolution;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolutionCollection;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
-import com.silenteight.solving.api.v1.SolutionResponse;
+import com.silenteight.proto.protobuf.Uuid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -47,9 +47,8 @@ class CreateMatchSolutionsUseCase {
         .solution(solutionResponse.getFeatureVectorSolution().toString());
 
     if (!solutionResponse.hasReason()) {
-      var reason =
-          makeDeprecatedReason(solutionResponse, solutionResponse.getFeatureVectorSignature());
-      builder.reason(reason);
+      builder.reason(makeDeprecatedReason(
+          solutionResponse.getFeatureVectorSignature(), solutionResponse.getStepId()));
     } else {
       protoMessageToObjectNodeConverter.convert(solutionResponse.getReason())
           .ifPresentOrElse(builder::reason, () -> log.error(
@@ -60,8 +59,7 @@ class CreateMatchSolutionsUseCase {
     return builder.build();
   }
 
-  private ObjectNode makeDeprecatedReason(
-      SolutionResponse solutionResponse, ByteString featureVectorSignature) {
+  private ObjectNode makeDeprecatedReason(ByteString featureVectorSignature, Uuid stepId) {
 
     var featureVectorSignatureBase = Base64
         .getEncoder()
@@ -70,7 +68,7 @@ class CreateMatchSolutionsUseCase {
     var reason = nodeFactory.objectNode();
 
     reason.set("featureVectorSignature", nodeFactory.textNode(featureVectorSignatureBase));
-    reason.set("stepId", nodeFactory.textNode(solutionResponse.getStepId().toString()));
+    reason.set("stepId", nodeFactory.textNode(stepId.toString()));
 
     return reason;
   }
