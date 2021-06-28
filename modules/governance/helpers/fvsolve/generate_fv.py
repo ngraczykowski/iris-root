@@ -3,7 +3,7 @@ import itertools
 # policy_name used in this example indicates the policy imported from solid-steps.json file
 template = """
 {
-  "policy_name": "policies/2e6a6390-7089-4821-8611-1843c3e2f8ab",
+  "policy_name": "policies/9a4d3b90-833d-4f7b-8bbc-752d129ed301",
   "feature_collection": {
     "feature": [
       %s
@@ -14,33 +14,31 @@ template = """
   ]
 }
 """
-
+# categories
 ap_type_values = ["I", "C"]
-is_deny_values = ["YES", "NO"]
+risk_type_values = ["AML", "OTHER", "PEP", "SAN", "SCION"]
+# features
 name_agent_values = ["STRONG_MATCH", "WEAK_MATCH", "EXACT_MATCH", "HQ_NO_MATCH", "NO_MATCH"]
 date_agent_values = ["EXACT", "NEAR", "OUT_OF_RANGE"]
-national_id_agent_values = ["PERFECT MATCH", "NO_MATCH"]
-passport_agent_values = ["DIGIT_MATCH", "NO_MATCH"]
-document_agent_values = ["PERFECT_MATCH", "NO_MATCH"]
-# national_id_agent_values = ["PERFECT_MATCH", "DIGIT_MATCH", "WEAK_DIGIT_MATCH", "WEAK_MATCH", "NO_MATCH"]
-# passport_agent_values = ["PERFECT_MATCH", "DIGIT_MATCH", "WEAK_DIGIT_MATCH", "WEAK_MATCH", "NO_MATCH"]
-# document_agent_values = ["PERFECT_MATCH", "DIGIT_MATCH", "WEAK_DIGIT_MATCH", "WEAK_MATCH", "NO_MATCH"]
+document_agent_values = ["PERFECT_MATCH", "DIGIT_MATCH", "WEAK_DIGIT_MATCH", "WEAK_MATCH", "NO_MATCH"]
 gender_agent_values = ["MATCH", "NO_MATCH"]
-nationality_agent_values = ["WEAK_MATCH", "MATCH", "NO_MATCH"]
-residency_agent_values = ["WEAK_MATCH", "MATCH", "NO_MATCH"]
+country_agent_values = ["WEAK_MATCH", "MATCH", "NO_MATCH"]
 
 
 features = {
-  "apType": ap_type_values,
-  "isDeny": is_deny_values,
-  "nameAgent": name_agent_values,
-  "dateAgent": date_agent_values,
-  "nationalIdAgent": national_id_agent_values,
-  "passportAgent": passport_agent_values,
-  "documentAgent": document_agent_values,
-  "genderAgent": gender_agent_values,
-  "nationalityAgent": nationality_agent_values,
-  "residencyAgent": residency_agent_values,
+  "categories/customerType": ap_type_values,
+  "categories/hitType": risk_type_values,
+  "features/name": name_agent_values,
+  "features/dateOfBirth": date_agent_values,
+  "features/nationalIdDocument": document_agent_values,
+  "features/passportNumberDocument": document_agent_values,
+  "features/otherDocument": document_agent_values,
+  "features/gender": gender_agent_values,
+  "features/nationalityCountry": country_agent_values,
+  "features/residencyCountry": country_agent_values,
+  "features/incorporationCountry": country_agent_values,
+  "features/registrationCountry": country_agent_values,
+  "features/otherCountry": country_agent_values,
 }
 
 def generate_fv():
@@ -48,19 +46,23 @@ def generate_fv():
 
   features_values_list = list(itertools.product(*[
     ap_type_values,
-    is_deny_values,
+    risk_type_values,
     name_agent_values,
     date_agent_values,
-    passport_agent_values,
+    document_agent_values,
+    document_agent_values,
     document_agent_values,
     gender_agent_values,
-    nationality_agent_values,
-    residency_agent_values,
-    national_id_agent_values,
+    country_agent_values,
+    country_agent_values,
+    country_agent_values,
+    country_agent_values,
+    country_agent_values
   ]))
   vectors = []
 
-  for line in features_values_list:
+  TAKE_EVERY_N_ELEMENT = 1000
+  for line in features_values_list[0::TAKE_EVERY_N_ELEMENT]:
     values_str = ','.join(['"%s"' % value for value in line])
     vectors.append("""{ "feature_value": [%s] }""" % values_str)
 
