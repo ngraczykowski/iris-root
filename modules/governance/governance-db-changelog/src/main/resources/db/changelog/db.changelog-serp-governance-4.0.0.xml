@@ -386,4 +386,43 @@
         onUpdate="CASCADE"
         onDelete="CASCADE"/>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-14" author="tbiedrzycki">
+    <createTable tableName="governance_qa_alert_sampling">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" unique="true"/>
+      </column>
+      <column name="alerts_count" type="INT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="started_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="finished_at" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+      <column name="range_from" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="range_to" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alerts_distribution" type="TEXT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="state" type="VARCHAR(25)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addUniqueConstraint
+        tableName="governance_qa_alert_sampling"
+        columnNames="range_from,range_to,started_at"
+        constraintName="uq_governance_qa_alert_sampling_range_from_range_to_started_at"/>
+  </changeSet>
 </databaseChangeLog>
