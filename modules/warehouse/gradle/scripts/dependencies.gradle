@@ -50,6 +50,7 @@ libraries.spring_amqp_rabbit_junit = [group: 'org.springframework.amqp', name: '
 
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot']
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-actuator']
+libraries.spring_boot_actuator_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-actuator-autoconfigure']
 libraries.spring_boot_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure']
 libraries.spring_boot_autoconfigure_processor = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor']
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor']
