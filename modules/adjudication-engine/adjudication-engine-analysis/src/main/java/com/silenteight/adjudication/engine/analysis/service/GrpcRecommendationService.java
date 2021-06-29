@@ -49,10 +49,8 @@ class GrpcRecommendationService extends RecommendationServiceImplBase {
       GetRecommendationMetadataRequest request,
       StreamObserver<RecommendationMetadata> responseObserver) {
 
-    respondWithNotFound(responseObserver);
-    // TODO(ahaczewski): Uncomment getRecommendationMetadata, once ready, and remove the not found.
-    //responseObserver.onNext(recommendationService.getRecommendationMetadata(request));
-    //responseObserver.onCompleted();
+    responseObserver.onNext(recommendationService.getRecommendationMetadata(request));
+    responseObserver.onCompleted();
   }
 
   private static void respondWithNotFound(StreamObserver<?> responseObserver) {
