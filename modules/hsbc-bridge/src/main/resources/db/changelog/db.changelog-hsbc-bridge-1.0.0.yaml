@@ -451,3 +451,40 @@ databaseChangeLog:
       author: mmrowka
       changes:
         - sql: create or replace view hsbc_bridge_match_category_view(id, multi_value, name) as SELECT mc.id,c.multi_value, ((c.name::text) || '/'::text) || m.name::text AS name FROM hsbc_bridge_match_category mc, hsbc_bridge_match m, hsbc_bridge_category c WHERE mc.match_id = m.id AND mc.category_id = c.id;
+
+  - changeSet:
+      id: 1.0.0-12
+      author: bmartofel
+      changes:
+        - addColumn:
+            tableName: hsbc_bridge_recommendation
+            column:
+              name: recommendation_metadata_id
+              type: bigint
+        - createTable:
+            tableName: hsbc_bridge_recommendation_metadata
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                      primaryKey: true
+                      nullable: false
+              - column:
+                  name: payload
+                  type: jsonb
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+        - addForeigKeyConstaint:
+            baseColumnNames: recommendation_metadata_id
+            baseTableName: hsbc_bridge_recommendation
+            constaintName: fk_recommendation_metadata_id_fk
+            referencedColumnNames: id
+            referencedTableName: hsbc_bridge_recommendation_metadata

@@ -7,7 +7,7 @@ import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase.GetRecommendationRequest;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationDto;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
 
 import java.util.*;
@@ -67,7 +67,7 @@ public class GetBulkResultsUseCase {
     }).collect(Collectors.toList());
   }
 
-  private RecommendationDto getRecommendation(String alertName, List<BulkAlertMetadata> metadata) {
+  private RecommendationWithMetadataDto getRecommendation(String alertName, List<BulkAlertMetadata> metadata) {
     var extendedAttribute5 = getAttribute(metadata);
 
     return getRecommendationUseCase.getRecommendation(new GetRecommendationRequest() {

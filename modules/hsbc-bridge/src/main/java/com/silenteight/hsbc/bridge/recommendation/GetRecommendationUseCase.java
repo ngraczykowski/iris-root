@@ -9,7 +9,7 @@ public class GetRecommendationUseCase {
   private final RecommendationMapper recommendationMapper;
   private final RecommendationRepository repository;
 
-  public RecommendationDto getRecommendation(@NonNull GetRecommendationRequest request) {
+  public RecommendationWithMetadataDto getRecommendation(@NonNull GetRecommendationRequest request) {
     var findResult = repository.findByAlert(request.getAlert());
 
     if (findResult.isEmpty()) {
@@ -20,7 +20,7 @@ public class GetRecommendationUseCase {
     var recommendation = recommendationMapper.getRecommendationValue(
         entity.getRecommendedAction(), request.getExtendedAttribute5());
 
-    return RecommendationDto.builder()
+    return RecommendationWithMetadataDto.builder()
         .alert(entity.getAlert())
         .recommendationComment(entity.getRecommendationComment())
         .recommendedAction(recommendation)

@@ -22,6 +22,11 @@ class HandlerConfiguration {
   @Bean
   RecommendationHandler recommendationHandler() {
     return new RecommendationHandler(
-        recommendationRepository, recommendationServiceClient, eventPublisher);
+        storeRecommendationsUseCase(), recommendationServiceClient, eventPublisher);
+  }
+
+  @Bean
+  StoreRecommendationsUseCase storeRecommendationsUseCase() {
+    return new StoreRecommendationsUseCase(recommendationRepository);
   }
 }

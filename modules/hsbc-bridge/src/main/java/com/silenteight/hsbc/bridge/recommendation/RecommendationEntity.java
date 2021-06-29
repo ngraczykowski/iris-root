@@ -28,7 +28,12 @@ class RecommendationEntity {
   private String name;
   private OffsetDateTime recommendedAt;
 
-  RecommendationEntity(RecommendationDto recommendation) {
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "recommendation_metadata_id")
+  private RecommendationMetadataEntity metadata;
+
+  RecommendationEntity(RecommendationWithMetadataDto recommendation) {
     this.recommendedAction = recommendation.getRecommendedAction();
     this.recommendationComment = recommendation.getRecommendationComment();
     this.alert = recommendation.getAlert();

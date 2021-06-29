@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
+import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
 import com.silenteight.hsbc.bridge.KnownServices;
 import com.silenteight.hsbc.bridge.adjudication.DatasetServiceClient;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
@@ -35,27 +36,38 @@ class GrpcServiceConfiguration {
   @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
   private DatasetServiceBlockingStub datasetServiceBlockingStub;
 
+  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  private RecommendationServiceBlockingStub recommendationServiceBlockingStub;
+
   @GrpcClient(KnownServices.GOVERNANCE)
   private SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
 
   @Bean
   AnalysisGrpcAdapter analysisServiceGrpcApi() {
-    return new AnalysisGrpcAdapter(analysisServiceBlockingStub, grpcProperties.deadlineInSeconds());
+    return new AnalysisGrpcAdapter(analysisServiceBlockingStub, getDeadline());
   }
 
   @Bean
   AlertGrpcAdapter alertServiceGrpcApi() {
-    return new AlertGrpcAdapter(alertServiceBlockingStub, grpcProperties.deadlineInSeconds());
+    return new AlertGrpcAdapter(alertServiceBlockingStub, getDeadline());
   }
 
   @Bean
   DatasetServiceClient datasetServiceGrpcApi() {
-    return new DatasetGrpcAdapter(datasetServiceBlockingStub, grpcProperties.deadlineInSeconds());
+    return new DatasetGrpcAdapter(datasetServiceBlockingStub, getDeadline());
+  }
+
+  @Bean
+  RecommendationGrpcAdapter recommendationServiceGrpcApi() {
+    return new RecommendationGrpcAdapter(recommendationServiceBlockingStub, getDeadline());
   }
 
   @Bean
   ModelServiceClient modelServiceGrpcApi() {
-    return new ModelGrpcAdapter(
-        solvingModelServiceBlockingStub, grpcProperties.deadlineInSeconds());
+    return new ModelGrpcAdapter(solvingModelServiceBlockingStub, getDeadline());
+  }
+
+  private long getDeadline() {
+    return grpcProperties.deadlineInSeconds();
   }
 }
