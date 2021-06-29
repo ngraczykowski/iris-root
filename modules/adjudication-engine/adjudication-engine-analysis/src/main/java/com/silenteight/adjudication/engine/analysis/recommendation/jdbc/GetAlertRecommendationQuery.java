@@ -15,7 +15,7 @@ class GetAlertRecommendationQuery {
 
   AlertRecommendation execute(long recommendationId) {
     return jdbcTemplate.queryForObject(
-        "SELECT * FROM ae_comments_context WHERE recommendation_id = ?",
+        "SELECT * FROM ae_alert_recommendation_query WHERE recommendation_id = ?",
         AlertRecommendationMapper.INSTANCE, recommendationId);
   }
 }

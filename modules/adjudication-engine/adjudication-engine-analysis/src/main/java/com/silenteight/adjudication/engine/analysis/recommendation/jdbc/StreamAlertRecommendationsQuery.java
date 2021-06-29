@@ -17,15 +17,15 @@ class StreamAlertRecommendationsQuery {
 
   int execute(long analysisId, Consumer<AlertRecommendation> consumer) {
     return doExecute("SELECT *\n"
-        + "FROM ae_comments_context acc\n"
-        + "WHERE acc.analysis_id = ?", consumer, analysisId);
+        + "FROM ae_alert_recommendation_query\n"
+        + "WHERE analysis_id = ?", consumer, analysisId);
   }
 
   int execute(long analysisId, long datasetId, Consumer<AlertRecommendation> consumer) {
     return doExecute("SELECT *\n"
-        + "FROM ae_comments_context acc\n"
-        + "WHERE acc.analysis_id = ?\n"
-        + "  AND acc.alert_id "
+        + "FROM ae_alert_recommendation_query aarq\n"
+        + "WHERE analysis_id = ?\n"
+        + "  AND alert_id "
         + "IN (\n"
         + "    SELECT alert_id\n"
         + "    FROM ae_dataset_alert\n"

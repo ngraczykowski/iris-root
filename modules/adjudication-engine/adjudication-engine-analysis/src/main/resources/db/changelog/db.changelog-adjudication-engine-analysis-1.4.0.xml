@@ -32,4 +32,15 @@
         path="sql/view_ae_comments_context_v2.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_5" author="ahaczewski">
+    <dropView viewName="ae_comments_context"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_6" author="ahaczewski">
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="sql/view_ae_alert_recommendation_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>
