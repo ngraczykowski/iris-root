@@ -26,7 +26,7 @@ class AlertFacadeConfiguration {
 
   @Bean
   AlertFinder alertFinder() {
-    return new AlertInfoFinder(alertRepository);
+    return new AlertInfoFinder(alertRepository, alertPayloadConverter);
   }
 
   @Bean

@@ -7,11 +7,13 @@ class AlertInfoFinderSpec extends Specification {
   static Collection<Long> ALERT_IDS = List.of(1L)
 
   def alertRepository = Mock(AlertRepository)
-  def underTest = new AlertInfoFinder(alertRepository)
+  def payloadConverter = Mock(AlertPayloadConverter)
+  def underTest = new AlertInfoFinder(alertRepository, payloadConverter)
 
-  def "Should return find and return collection of Alerts"(){
+  def "Should find and return collection of Alerts"() {
     given:
     alertRepository.findByIdIn(ALERT_IDS) >> ALERT_ENTITIES
+    payloadConverter.convertPayloadToMap(*_) >> new HashMap<String, String>()
 
     when:
     def find = underTest.find(ALERT_IDS)
@@ -27,6 +29,24 @@ class AlertInfoFinderSpec extends Specification {
     def match = alert.matches.first()
     match.name == "matchName1"
     match.metadata.get("id") == "123"
+  }
+
+  def "Should add payload values to map"() {
+    given:
+    def payloadMap = new HashMap<>(
+        "customerId": "someId",
+        "someKey": "someValue"
+    )
+    alertRepository.findByIdIn(ALERT_IDS) >> ALERT_ENTITIES
+    payloadConverter.convertPayloadToMap(*_) >> payloadMap
+
+    when:
+    def find = underTest.find(ALERT_IDS)
+
+    then:
+    def result = find.first().getMetadata()
+    result.get("customerId") == "someId"
+    result.get("someKey") == "someValue"
   }
 
   static List<AlertEntity> ALERT_ENTITIES = [

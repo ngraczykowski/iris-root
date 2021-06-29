@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 class AlertInfoFinder implements AlertFinder {
 
   private final AlertRepository repository;
+  private final AlertPayloadConverter payloadConverter;
 
   @Override
   public Collection<Alert> find(@NonNull Collection<Long> alertIds) {
@@ -48,7 +49,7 @@ class AlertInfoFinder implements AlertFinder {
     };
   }
 
-  private static HashMap<String, String> createAlertMetadata(AlertEntity alertEntity) {
+  private Map<String, String> createAlertMetadata(AlertEntity alertEntity) {
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(alertEntity.getExternalId()));
     map.put("name", nullToEmpty(alertEntity.getName()));
@@ -58,6 +59,9 @@ class AlertInfoFinder implements AlertFinder {
     map.put("status", alertEntity.getStatus().toString());
     map.putAll(alertEntity.getMetadata().stream()
         .collect(Collectors.toMap(AlertMetadata::getKey, AlertMetadata::getValue)));
+
+    var payload = payloadConverter.convertPayloadToMap(alertEntity.getPayload().getPayload());
+    map.putAll(payload);
 
     return map;
   }

@@ -11,15 +11,25 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import one.util.streamex.EntryStream;
+import one.util.streamex.StreamEx;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverter {
 
+  private final TypeReference<Map<String, String>> mapTypeReference = new TypeReference<>() {};
   private final ObjectMapper objectMapper = new ObjectMapper()
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
       .setSerializationInclusion(Include.NON_NULL);
@@ -55,6 +65,27 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   }
 
   @Override
+  public Map<String, String> convertPayloadToMap(byte[] payload) throws AlertConversionException {
+    var result = new HashMap<String, String>();
+    var alertData = convertAlertData(payload);
+
+    var caseInformation = convertToMap(alertData.getCaseInformation());
+    if (caseInformation != null) {
+      result.putAll(caseInformation);
+    }
+
+    var alertMap =
+        objectMapper.convertValue(alertData, new TypeReference<Map<String, Object>>() {});
+    alertMap.remove("DN_CASE");
+
+    alertMap.values().stream()
+        .map(value -> flattenMap((List<?>) value))
+        .forEach(result::putAll);
+
+    return result;
+  }
+
+  @Override
   public void convertAndConsumeAlertData(
       InputCommand command, Consumer<AlertDataComposite> consumer) {
     try (var parser = getJsonFactory().createParser(command.getInputStream())) {
@@ -82,6 +113,39 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       consumer.accept(new AlertDataComposite(command.getBulkId(), payload));
     } catch (Exception ex) {
       log.error("Error on parsing json object, cannot create Alert Data", ex);
+    }
+  }
+
+  private Map<String, String> flattenMap(List<?> list) {
+    var flattenedMap = new HashMap<String, String>();
+    var maps = convertToMapList(list);
+
+    var index = new AtomicInteger(1);
+    StreamEx.of(maps)
+        .zipWith(Stream.generate(index::getAndIncrement))
+        .forKeyValue((map, idx) -> EntryStream.of(map)
+            .mapKeys(key -> withPrefix(idx, key))
+            .forKeyValue(flattenedMap::put));
+
+    return flattenedMap;
+  }
+
+  private static String withPrefix(int index, String key) {
+    return index + "." + key;
+  }
+
+  private List<Map<String, String>> convertToMapList(List<?> list) {
+    return list.stream()
+        .map(this::convertToMap)
+        .collect(Collectors.toList());
+  }
+
+  private Map<String, String> convertToMap(Object object) throws AlertConversionException {
+    try {
+      return objectMapper.convertValue(object, mapTypeReference);
+    } catch (IllegalArgumentException ex) {
+      log.error("Alert data conversion error", ex);
+      throw new AlertConversionException("Alert data conversion error", ex);
     }
   }
 

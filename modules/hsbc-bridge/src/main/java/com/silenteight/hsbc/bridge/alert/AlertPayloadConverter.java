@@ -6,11 +6,14 @@ import com.silenteight.hsbc.bridge.alert.dto.AlertDataComposite;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 
 import java.io.InputStream;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public interface AlertPayloadConverter {
 
   AlertData convertAlertData(byte[] payload) throws AlertConversionException;
+
+  Map<String, String> convertPayloadToMap(byte[] payload) throws AlertConversionException;
 
   void convertAndConsumeAlertData(InputCommand command, Consumer<AlertDataComposite> consumer);
 
