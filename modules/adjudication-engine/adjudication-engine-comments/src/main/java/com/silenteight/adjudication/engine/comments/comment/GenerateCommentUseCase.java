@@ -48,7 +48,7 @@ class GenerateCommentUseCase {
     return writer.toString();
   }
 
-  @Scheduled(cron = "${ae.comments.template.cache.invalidation:0 */15 * * * ?}")
+  @Scheduled(cron = "${ae.comments.template.cache.invalidation:0 * * * * ?}")
   void invalidateCache() {
     log.debug("Comments cache will be invalidated ...");
     pebbleEngine.getTemplateCache().invalidateAll();
