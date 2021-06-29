@@ -8,10 +8,11 @@ import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static java.util.stream.Collectors.toList;
 
-class RecommendationFixture {
+public class RecommendationFixture {
 
   public static AlertRecommendation createAlertRecommendation() {
     return AlertRecommendation.builder()
@@ -20,6 +21,7 @@ class RecommendationFixture {
         .recommendationId(1)
         .createdTime(Timestamp.valueOf("1983-05-24 12:34:56.0000"))
         .alertContext(createAlertContext())
+        .matchIds(LongStream.range(1, 5).toArray())
         .build();
   }
 

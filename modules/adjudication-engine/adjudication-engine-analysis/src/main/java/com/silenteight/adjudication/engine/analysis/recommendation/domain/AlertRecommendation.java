@@ -2,16 +2,32 @@ package com.silenteight.adjudication.engine.analysis.recommendation.domain;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
+import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
+import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Struct;
+import com.google.protobuf.util.JsonFormat;
 
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromSqlTimestamp;
 
 @Value
 @Builder
+@Slf4j
 public class AlertRecommendation {
 
   long alertId;
@@ -24,6 +40,8 @@ public class AlertRecommendation {
 
   AlertContext alertContext;
 
+  long[] matchIds;
+
   public Recommendation toRecommendation(String comment) {
     return Recommendation
         .newBuilder()
@@ -32,6 +50,73 @@ public class AlertRecommendation {
         .setName("analysis/" + getAnalysisId() + "/recommendations/" + getRecommendationId())
         .setRecommendedAction(alertContext.getRecommendedAction())
         .setRecommendationComment(comment)
+        .build();
+  }
+
+  public RecommendationMetadata toMetadata() {
+
+    var matches = alertContext.getMatches();
+
+    var builder = RecommendationMetadata.newBuilder()
+        .setName("analysis/" + analysisId + "/recommendations/" + recommendationId + "/metadata")
+        .setAlert("alerts/" + alertId);
+
+    for (int i = 0; i < matches.size(); i++) {
+      builder.addMatches(convertMatchMetadata(matches.get(i), matchIds[i], alertId));
+    }
+
+    return builder.build();
+  }
+
+  @SuppressWarnings("FeatureEnvy")
+  @Nonnull
+  private static MatchMetadata convertMatchMetadata(
+      MatchContext context, long matchId, long alertId) {
+
+    var reasonJson = JsonConversionHelper.INSTANCE.serializeToString(context.getReason());
+    var reasonStructBuilder = Struct.newBuilder();
+
+    try {
+      JsonFormat.parser().merge(reasonJson, reasonStructBuilder);
+    } catch (InvalidProtocolBufferException e) {
+      throw new JsonStructConversionException("Cannot convert match reason to Struct", e);
+    }
+
+    return MatchMetadata
+        .newBuilder()
+        .setMatch("alerts/" + alertId + "matches/" + matchId)
+        .putAllCategories(context.getCategories())
+        .putAllFeatures(convertFeaturesMap(context.getFeatures()))
+        .setReason(reasonStructBuilder)
+        .setSolution(context.getSolution())
+        .build();
+  }
+
+  private static Map<String, FeatureMetadata> convertFeaturesMap(
+      Map<String, FeatureContext> context) {
+    return context
+        .entrySet()
+        .stream()
+        .collect(Collectors.toMap(Entry::getKey, e -> convertFeatureMetadata(e.getValue())));
+  }
+
+  @SuppressWarnings("FeatureEnvy")
+  private static FeatureMetadata convertFeatureMetadata(FeatureContext context) {
+
+    var reasonJson = JsonConversionHelper.INSTANCE.serializeToString(context.getReason());
+    var reasonStructBuilder = Struct.newBuilder();
+
+    try {
+      JsonFormat.parser().merge(reasonJson, reasonStructBuilder);
+    } catch (InvalidProtocolBufferException e) {
+      throw new JsonStructConversionException("Cannot convert feature reason to Struct", e);
+    }
+
+    return FeatureMetadata
+        .newBuilder()
+        .setReason(reasonStructBuilder)
+        .setAgentConfig(context.getAgentConfig())
+        .setSolution(context.getSolution())
         .build();
   }
 }

@@ -26,12 +26,8 @@ class RecommendationService {
       StreamRecommendationsWithMetadataRequest request,
       Consumer<RecommendationWithMetadata> onNext) {
 
-    // TODO(ahaczewski): Implement with recommendation metadata, instead of returning empty.
-    Consumer<Recommendation> recommendationConsumer = r -> onNext.accept(
-        RecommendationWithMetadata.newBuilder().setRecommendation(r).build());
-
-    recommendationFacade.streamRecommendations(
-        request.getRecommendationSource(), recommendationConsumer);
+    recommendationFacade.streamRecommendationsWithMetadata(
+        request.getRecommendationSource(), onNext);
   }
 
   Recommendation getRecommendation(GetRecommendationRequest request) {

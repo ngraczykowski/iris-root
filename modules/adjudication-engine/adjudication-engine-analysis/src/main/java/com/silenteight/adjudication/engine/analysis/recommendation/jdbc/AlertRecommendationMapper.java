@@ -8,6 +8,7 @@ import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -34,8 +35,8 @@ class AlertRecommendationMapper implements RowMapper<AlertRecommendation> {
     Map<String, Object> commentInput;
 
     try {
-      matches = OBJECT_MAPPER.readValue(rs.getString(8), MatchContext[].class);
       commentInput = OBJECT_MAPPER.readValue(rs.getString(6), MAP_TYPE);
+      matches = OBJECT_MAPPER.readValue(rs.getString(8), MatchContext[].class);
     } catch (JsonProcessingException e) {
       throw new DataRetrievalFailureException("Failed to parse JSON values", e);
     }
@@ -53,6 +54,7 @@ class AlertRecommendationMapper implements RowMapper<AlertRecommendation> {
         .recommendationId(rs.getLong(3))
         .createdTime(rs.getTimestamp(4))
         .alertContext(alertContext)
+        .matchIds((long[]) ArrayUtils.toPrimitive(rs.getArray(9).getArray()))
         .build();
   }
 }

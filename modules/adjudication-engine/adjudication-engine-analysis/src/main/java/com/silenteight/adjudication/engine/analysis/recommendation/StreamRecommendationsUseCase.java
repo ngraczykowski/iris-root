@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
 @Service
 @RequiredArgsConstructor
@@ -23,28 +25,27 @@ class StreamRecommendationsUseCase {
 
   @Transactional(readOnly = true)
   void streamRecommendations(String analysisOrDataset, Consumer<Recommendation> consumer) {
+    log.debug("Streaming recommendations: resource={}", analysisOrDataset);
 
-    if (log.isDebugEnabled()) {
-      log.debug("Streaming recommendations: resource={}", analysisOrDataset);
-    }
-
-    var recommendationCount = generateRecommendations(analysisOrDataset, consumer);
+    var recommendationCount = readAlertRecommendations(
+        analysisOrDataset, ar -> consumer.accept(generateRecommendation(ar)));
 
     log.info("Finished streaming recommendations: resource={}, recommendationCount={}",
         analysisOrDataset, recommendationCount);
   }
 
-  private int generateRecommendations(String analysisOrDataset, Consumer<Recommendation> consumer) {
-    return readAlertRecommendations(analysisOrDataset, ar -> {
-      var comment = generateCommentsUseCase
-          .generateComments(new GenerateCommentsRequest(ar.getAlertContext()))
-          .getComment();
+  @Transactional(readOnly = true)
+  void streamRecommendationsWithMetadata(
+      String analysisOrDataset, Consumer<RecommendationWithMetadata> consumer) {
 
-      var recommendation = ar.toRecommendation(comment);
+    log.debug("Streaming recommendations with metadata: resource={}", analysisOrDataset);
 
-      consumer.accept(recommendation);
+    var recommendationCount = readAlertRecommendations(
+        analysisOrDataset, ar -> consumer.accept(generateRecommendationWithMetadata(ar)));
 
-    });
+    log.info("Finished streaming recommendations with metadata: resource={},"
+            + " recommendationCount={}",
+        analysisOrDataset, recommendationCount);
   }
 
   @SuppressWarnings("FeatureEnvy")
@@ -60,5 +61,25 @@ class StreamRecommendationsUseCase {
 
     return recommendationDataAccess.streamAlertRecommendations(
         resource.getLong("analysis"), consumer);
+  }
+
+  @Nonnull
+  private RecommendationWithMetadata generateRecommendationWithMetadata(AlertRecommendation ar) {
+    var recommendation = generateRecommendation(ar);
+    var metadata = ar.toMetadata();
+
+    return RecommendationWithMetadata
+        .newBuilder()
+        .setRecommendation(recommendation)
+        .setMetadata(metadata)
+        .build();
+  }
+
+  private Recommendation generateRecommendation(AlertRecommendation ar) {
+    var comment = generateCommentsUseCase
+        .generateComments(new GenerateCommentsRequest(ar.getAlertContext()))
+        .getComment();
+
+    return ar.toRecommendation(comment);
   }
 }

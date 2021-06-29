@@ -13,14 +13,11 @@
 .java-version
 
 ### IntelliJ IDEA ###
-.idea/
-
 out/
 *.iws
 *.iml
 *.ipr
 .attach_pid*
-
 
 ### Gradle ###
 build/
