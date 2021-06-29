@@ -28,8 +28,7 @@ import static com.silenteight.adjudication.engine.common.protobuf.TimestampConve
 @Value
 @Builder
 @Slf4j
-public class
-AlertRecommendation {
+public class AlertRecommendation {
 
   long alertId;
 
