@@ -8,6 +8,7 @@ description = "Governance Quality Assurance Alerts"
 configurations {
   implementation.extendsFrom starterCommon
   implementation.extendsFrom starterJackson
+  implementation.extendsFrom starterGrpc
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
@@ -15,6 +16,8 @@ configurations {
 }
 
 dependencies {
+  implementation libraries.cronutils
+
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing

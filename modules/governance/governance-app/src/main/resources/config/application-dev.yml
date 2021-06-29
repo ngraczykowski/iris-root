@@ -48,3 +48,11 @@ spring:
   jackson:
     serialization:
       indent-output: true
+
+serp.governance.qa:
+  sampling:
+    schedule:
+      audit-cron: 0/15 * * * * ?
+      alert-generator-cron: 0 0 1 1 * ?
+  viewing:
+    max-state-reset-delay-ms: 45000

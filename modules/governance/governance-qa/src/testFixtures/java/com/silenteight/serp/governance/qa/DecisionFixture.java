@@ -1,14 +1,14 @@
 package com.silenteight.serp.governance.qa;
 
-import com.silenteight.serp.governance.qa.domain.DecisionLevel;
-import com.silenteight.serp.governance.qa.domain.DecisionState;
+import com.silenteight.serp.governance.qa.manage.domain.DecisionLevel;
+import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.serp.governance.qa.domain.DecisionLevel.ANALYSIS;
-import static com.silenteight.serp.governance.qa.domain.DecisionLevel.VALIDATION;
-import static com.silenteight.serp.governance.qa.domain.DecisionState.FAILED;
-import static com.silenteight.serp.governance.qa.domain.DecisionState.NEW;
+import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
+import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
+import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
+import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.NEW;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
