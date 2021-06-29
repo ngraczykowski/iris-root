@@ -9,7 +9,8 @@ class NewGovernanceModelListenerSpec extends Specification {
 
   def fixtures = new Fixtures()
   def transferManager = Mock(GovernanceModelManager)
-  def underTest = new NewGovernanceModelListener(transferManager)
+  def underTest = new NewGovernanceModelListener(
+      fixtures.bridgeApiProperties.getAddress(), transferManager)
 
   def 'should handle new model from Governance'() {
     given:

@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.model.rest
 
+import com.silenteight.hsbc.bridge.model.ExportModelResponseDto
 import com.silenteight.hsbc.bridge.model.ModelRestController
 import com.silenteight.hsbc.bridge.model.ModelServiceClient
 import com.silenteight.hsbc.bridge.model.SolvingModelDto
@@ -39,7 +40,7 @@ class ModelRestControllerSpec extends Specification {
 
     then:
     1 * modelServiceClient.getSolvingModel() >> model
-    verifyResults(result)
+    verifyResults(result, '{"name":"name","policyName":"policy"}')
   }
 
   def 'should update Governance model'() {
@@ -54,6 +55,19 @@ class ModelRestControllerSpec extends Specification {
     then:
     1 * modelManagers.first().transferModelFromJenkins(_ as ModelInfoRequest)
     result.andExpect(status().isOk())
+  }
+
+  def 'should export governance model'() {
+    given:
+    def name = "solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333"
+    def exportModelResponseDto = createExportModelResponseDto(name)
+
+    when:
+    def result = mockMvc.perform(get('/model/export/' + name))
+
+    then:
+    1 * modelServiceClient.exportModel(name) >> exportModelResponseDto
+    verifyResults(result, '{"modelJson":"solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333"}')
   }
 
   def 'should send BAD_REQUEST status when model is not supported in Governance during updating model'() {
@@ -150,16 +164,22 @@ class ModelRestControllerSpec extends Specification {
     result.andExpect(status().isBadRequest())
   }
 
-  def static verifyResults(ResultActions results) {
+  def static verifyResults(ResultActions results, String result) {
     results.andExpect(status().isOk())
     results.andExpect(content().contentType(APPLICATION_JSON))
-    results.andExpect(content().string('{"name":"name","policyName":"policy"}'))
+    results.andExpect(content().string(result))
   }
 
   def static createSolvingModelDto() {
     return SolvingModelDto.builder()
         .name('name')
         .policyName('policy')
+        .build()
+  }
+
+  def static createExportModelResponseDto(String name) {
+    return ExportModelResponseDto.builder()
+        .modelJson(name.getBytes())
         .build()
   }
 

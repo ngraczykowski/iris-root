@@ -1,4 +1,5 @@
 silenteight.bridge:
+  address: ${BRIDGE_ADDRESS:http://localhost:24802}
   grpc:
     port: 24803
     default-deadline: 5s
@@ -15,7 +16,7 @@ silenteight.bridge:
       watchlist-persisted-exchange-name: bridge.watchlist
       watchlist-persisted-routing-key: persisted
     ingoing:
-      model-promoted-queue: governance.model_promoted
+      model-promoted-queue: bridge.model-promoted.production
       recommendations-queue: bridge.recommendations
       model-loaded-queue: bridge.model.loaded
       model-persisted-queue: bridge.model.persisted.internal
@@ -34,11 +35,12 @@ silenteight.bridge:
     enabled: true
     rate: 1d
   jenkins.api:
-    crumbUri: https://jenkins.silenteight.com/crumbIssuer/api/json
+    crumbUri: ${CRUMB:https://jenkins.silenteight.com/crumbIssuer/api/json}
     password: ${JENKINS_PASSWORD:dev}
-    updateModelStatusUri: https://jenkins.silenteight.com/model/status
-    updateModelUri: https://jenkins.silenteight.com/model/update
     username: ${JENKINS_USER:dev}
+    updateModelStatusUri: ${UPDATE_MODEL_STATUS_URI:https://jenkins.silenteight.com/model/status}
+    updateModelUri: ${UPDATE_MODEL_URI:https://jenkins.silenteight.com/model/update}
+
   nexus.api:
     password: ${NEXUS_PASSWORD:dev}
     username: ${NEXUS_USER:dev}

@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
 import com.silenteight.hsbc.bridge.model.FeatureDto;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 import com.silenteight.hsbc.bridge.model.SolvingModelDto;
@@ -23,6 +24,11 @@ class ModelServiceClientMock implements ModelServiceClient {
             .build()))
         .categories(List.of("category"))
         .build();
+  }
+
+  @Override
+  public ExportModelResponseDto exportModel(String name) {
+    return ExportModelResponseDto.builder().modelJson(name.getBytes()).build();
   }
 
   @Override

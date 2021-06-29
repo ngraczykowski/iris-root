@@ -9,9 +9,11 @@ import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 
 import java.io.IOException;
 
+import static com.silenteight.hsbc.bridge.model.transfer.ChangeType.MAJOR;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.FAILURE;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.SUCCESS;
+import static com.silenteight.hsbc.bridge.model.transfer.ModelType.MODEL;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,7 +25,8 @@ public class GovernanceModelManager implements ModelManager {
 
   @Override
   public void transferModelToJenkins(ModelInfo modelInfo) {
-    jenkinsModelClient.updateModel(modelInfo);
+    var enrichedModelInfo = enrichModelInfo(modelInfo);
+    jenkinsModelClient.updateModel(enrichedModelInfo);
   }
 
   @Override
@@ -39,7 +42,7 @@ public class GovernanceModelManager implements ModelManager {
 
   @Override
   public boolean supportsModelType(ModelType modelType) {
-    return modelType == ModelType.MODEL;
+    return modelType == MODEL;
   }
 
   private ModelStatusUpdatedDto transferModelFromNexus(ModelInfoRequest request) {
@@ -52,5 +55,16 @@ public class GovernanceModelManager implements ModelManager {
       log.error("Unable to update model: " + request.getName(), e);
       return convertToModelStatusUpdated(request, FAILURE);
     }
+  }
+
+  private ModelInfo enrichModelInfo(ModelInfo modelInfo) {
+    var name = modelInfo.getName();
+    var uri = modelInfo.getUrl() + "/model/export/" + name;
+    return ModelInfo.builder()
+        .name(name)
+        .url(uri)
+        .type(MODEL.name())
+        .changeType(MAJOR.name())
+        .build();
   }
 }

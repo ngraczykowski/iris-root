@@ -179,6 +179,11 @@
       "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_3_REVIEW",
       "type": "java.lang.String",
       "description": "User-friendly value for LEVEL 3 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.address",
+      "type": "java.lang.String",
+      "description": "Description for silenteight.bridge.address."
     }
   ]
 }
