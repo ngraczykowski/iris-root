@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
-import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportStatus;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,6 @@ import java.util.List;
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.Long.valueOf;
 import static java.lang.String.format;
-import static org.springframework.http.HttpStatus.PROCESSING;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
@@ -30,6 +29,7 @@ public class ProductionReportsRestController {
   static final String DEFINITION_ID_PARAM = "definitionId";
   static final String TIMESTAMP_PARAM = "timestamp";
   static final String REPORT_TYPE_PARAM = "type";
+  static final String REPORT_STATUS = "/status";
 
   static final String DEFINITIONS_COLLECTION_NAME =
       "/analysis/production/definitions/{" + REPORT_TYPE_PARAM + "}";
@@ -42,7 +42,9 @@ public class ProductionReportsRestController {
       "/v1" + DEFINITIONS_RESOURCE_NAME;
   static final String REPORTS_COLLECTION_URL = DEFINITIONS_RESOURCE_URL + "/reports";
   static final String REPORTS_RESOURCE_URL = REPORTS_COLLECTION_URL + "/{" + TIMESTAMP_PARAM + "}";
-
+  static final String REPORT_STATUS_URL =
+      "/v1" + DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}/reports/{"
+          + TIMESTAMP_PARAM + "}" + REPORT_STATUS;
   @NonNull
   private ProductionReportingQuery productionReportingQuery;
 
@@ -66,8 +68,9 @@ public class ProductionReportsRestController {
 
     ReportInstanceReferenceDto reportInstance =
         productionService.createProductionReport(reportType, definitionId);
+
     return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getTimestamp())
+        .header("Location", "reports/" + reportInstance.getTimestamp() + REPORT_STATUS)
         .build();
   }
 
@@ -78,19 +81,28 @@ public class ProductionReportsRestController {
       @PathVariable(TIMESTAMP_PARAM) String timestamp,
       @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
 
-    try {
-      KibanaReportDto kibanaReportDto =
-          productionService.downloadReport(reportType, definitionId, valueOf(timestamp));
+    KibanaReportDto kibanaReportDto =
+        productionService.downloadReport(reportType, definitionId, valueOf(timestamp));
 
-      String filename = kibanaReportDto.getFilename();
-      String data = kibanaReportDto.getContent();
+    String filename = kibanaReportDto.getFilename();
+    String data = kibanaReportDto.getContent();
 
-      return ok()
-          .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
-          .header("Content-Type", "text/csv")
-          .body(data.getBytes());
-    } catch (ReportInstanceNotFoundException e) {
-      return status(PROCESSING).build();
-    }
+    return ok()
+        .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
+        .header("Content-Type", "text/csv")
+        .body(data.getBytes());
+  }
+
+  @GetMapping(REPORT_STATUS_URL)
+  @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
+  public ResponseEntity<ReportStatus> getReportStatus(
+      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
+      @PathVariable(TIMESTAMP_PARAM) String timestamp,
+      @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
+
+    ReportStatus reportStatus =
+        productionService.getReportGeneratingStatus(reportType, definitionId, valueOf(timestamp));
+
+    return ResponseEntity.ok(reportStatus);
   }
 }

@@ -10,6 +10,8 @@ import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClie
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 
+import java.util.Optional;
+
 import static java.util.Comparator.comparingLong;
 
 @Slf4j
@@ -24,19 +26,27 @@ public class UserAwareReportingService {
   public KibanaReportDto downloadReport(
       String tenantName, String reportDefinitionId, Long timestamp) {
 
+    String reportInstanceId = getReportInstanceId(tenantName, reportDefinitionId, timestamp)
+        .orElseThrow(
+            () -> ReportInstanceNotFoundException.of(tenantName, reportDefinitionId, timestamp));
+
+    return opendistroKibanaClient.getReportContent(tenantName, reportInstanceId);
+  }
+
+  public Optional<String> getReportInstanceId(
+      String tenantName, String reportDefinitionId, Long timestamp) {
+
     ListReportsInstancesRequest request = ListReportsInstancesRequest.builder()
         .tenant(tenantName)
         .build();
-    String reportInstanceId = opendistroElasticClient
+
+    return opendistroElasticClient
         .getReportInstances(request)
         .getReportInstancesList()
         .stream()
         .filter(instance -> instance.hasReportDefinitionId(reportDefinitionId))
         .filter(instance -> instance.isCreatedAfter(timestamp))
         .min(comparingLong(ReportInstance::getCreatedTimeMs))
-        .orElseThrow(ReportInstanceNotFoundException::new)
-        .getId();
-
-    return opendistroKibanaClient.getReportContent(tenantName, reportInstanceId);
+        .map(ReportInstance::getId);
   }
 }

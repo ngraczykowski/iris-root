@@ -159,7 +159,7 @@ class ProductionIT {
             .getHeaders()
             .get("Location")
             .get(0);
-    return location.replace("reports/", "");
+    return location.replace("reports/", "").replace("/status", "");
   }
 
   String downloadReport(String definitionId, String timestamp, ProductionReportType reportType) {

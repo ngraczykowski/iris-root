@@ -9,12 +9,12 @@ import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 
 import static com.silenteight.warehouse.report.production.ProductionReportsRestController.DEFINITIONS_RESOURCE_NAME;
 import static com.silenteight.warehouse.report.production.ProductionReportsRestController.DEFINITION_ID_PARAM;
 import static com.silenteight.warehouse.report.production.ProductionReportsRestController.REPORT_TYPE_PARAM;
+import static java.util.Map.of;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
@@ -56,7 +56,7 @@ class ProductionReportingQuery {
 
   private static String buildName(String reportDefinitionId, ProductionReportType reportType) {
     return fromPath(DEFINITIONS_RESOURCE_NAME)
-        .buildAndExpand(Map.of(
+        .buildAndExpand(of(
             DEFINITION_ID_PARAM, reportDefinitionId,
             REPORT_TYPE_PARAM, reportType.toString()))
         .toUriString();
