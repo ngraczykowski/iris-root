@@ -20,6 +20,7 @@ import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
+import com.silenteight.warehouse.sampling.SamplingModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -41,6 +42,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ManagementModule.class,
     ProductionReportingModule.class,
     ReportingModule.class,
+    SamplingModule.class,
     SimulationModule.class,
     SynchronizationModule.class,
     // Interface modules

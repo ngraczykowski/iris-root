@@ -3,29 +3,28 @@ plugins {
   id "java-test-fixtures"
 }
 
-description = "Warehouse Indexer"
+description = "Warehouse Sampling"
 
 configurations {
   implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
+  implementation.extendsFrom starterGrpc
   implementation.extendsFrom starterMessaging
-
-  testImplementation.extendsFrom starterSpringTest
 }
 
 dependencies {
   implementation project(":warehouse-common")
-  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-indexer")
   implementation libraries.silenteight_commons_core
-  implementation libraries.silenteight_data_api
   implementation libraries.silenteight_sampling_alerts_api
-  implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
 
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
   testImplementation project(":warehouse-common-testing")
-  testImplementation project(":warehouse-test-client")
   testImplementation libraries.awaitility
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }

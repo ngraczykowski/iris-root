@@ -1,0 +1,27 @@
+spring:
+  rabbitmq:
+    #   If multiple brokers required:
+    #   host: <must be empty>
+    #   addresses: host1:port1,host2:port2,...
+
+    #   configuration for common-docker-infrastructure
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
+  elasticsearch:
+    rest:
+      username: technicaluser
+      password: technicaluser
+      uris: http://localhost:9201,http://localhost:9200
+
+warehouse:
+  kibana:
+    url: http://localhost:5601
+    username: technicaluser
+    password: technicaluser
+  minio:
+    url: http://localhost:9000
+    access-key: admin
+    private-key: admin123

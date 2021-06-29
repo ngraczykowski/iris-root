@@ -1,4 +1,9 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.sampling.alert;
+
+import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
+import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
+
+import com.google.protobuf.Timestamp;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +11,11 @@ import java.util.Map;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
 import static java.util.List.of;
 
-public class MappedAlertFixtures {
+public class SamplingTestFixtures {
+
+  static final int REQUESTED_ALERT_COUNT_2 = 2;
+  static final int REQUESTED_ALERT_COUNT_4 = 4;
+
 
   public static final String MATCH_ID_1_1 = "42df75f8-1ba6-4ce8-93d7-d144ef196011";
   public static final String MATCH_ID_1_2 = "af9f1322-2fb6-416d-a7c1-05575741d012";
@@ -20,7 +29,6 @@ public class MappedAlertFixtures {
   public static final String ALERT_ID_3 = "788edd98-af02-49a8-ab75-69cf63397b54";
   public static final String ALERT_ID_4 = "accb9508-3bad-4c5b-825a-8c023e03b7d6";
   public static final String ALERT_ID_5 = "48627744-d573-4edb-89fa-f88a8be4ac11";
-  public static final String DOCUMENT_ID = ALERT_ID_1 + ":" + MATCH_ID_1_1;
   public static final String MATCH_SOLUTION_KEY = "solution";
   public static final String MATCH_SOLUTION_EXACT_MATCH = "EXACT_MATCH";
   public static final String MATCH_SOLUTION_NO_DECISION = "NO_DECISION";
@@ -42,27 +50,6 @@ public class MappedAlertFixtures {
   public static final String DOCUMENT_ID_4 = ALERT_ID_1 + ":" + MATCH_ID_3_1;
   public static final String DOCUMENT_ID_5 = ALERT_ID_4 + ":" + MATCH_ID_4_1;
   public static final String DOCUMENT_ID_6 = ALERT_ID_5 + ":" + MATCH_ID_5_1;
-  public static final String SIMULATION_ANALYSIS_ID = "9630b08f-682c-4565-bf4d-c07064c65615";
-  public static final List<String> ALERT_FIELDS =
-      of(ALERT_RECOMMENDATION_KEY, ALERT_RISK_TYPE_KEY, ALERT_COUNTRY_KEY);
-  public static final List<String> ALERT_FIELDS_WITH_ONE_NON_EXISTING =
-      of(ALERT_RECOMMENDATION_KEY, ALERT_RISK_TYPE_KEY);
-  public static final List<String> LIST_OF_ID =
-      of(
-          "alerts/457b1498-e348-4a81-8093-6079c1173010",
-          "alerts/80a8cfc0-86c3-4360-afed-7a1b9a326020");
-
-  private static final String MATCH_RESOURCE_PREFIX = "matches/";
-  private static final String ALERT_RESOURCE_PREFIX = "alerts/";
-  public static final String ANALYSIS_RESOURCE_PREFIX = "analysis/";
-
-  static final String NO_DATA = "NO_DATA";
-  static final String MATCH_NAME_1_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_1;
-  static final String MATCH_NAME_1_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_2;
-  static final String MATCH_NAME_2_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_1;
-  static final String MATCH_NAME_2_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_2;
-  static final String ALERT_NAME_1 = ALERT_RESOURCE_PREFIX + ALERT_ID_1;
-  static final String ALERT_NAME_2 = ALERT_RESOURCE_PREFIX + ALERT_ID_2;
 
   static final List<String> LIST_OF_MATCHED_ALERT_ID =
       of(ALERT_ID_1, ALERT_ID_2, ALERT_ID_3);
@@ -122,4 +109,46 @@ public class MappedAlertFixtures {
       MATCH_ID_KEY, MATCH_ID_5_1,
       MATCH_PREFIX + MATCH_SOLUTION_KEY, MATCH_SOLUTION_EXACT_MATCH
   );
+
+  private static final RequestedAlertsFilter ALERT_FILTER_BY_COUNTRY_PL =
+      RequestedAlertsFilter.newBuilder()
+          .setFieldName(ALERT_COUNTRY_KEY)
+          .setFieldValue(ALERT_COUNTRY_PL)
+          .build();
+
+  private static final RequestedAlertsFilter ALERT_FILTER_BY_RISK_TYPE_PEP =
+      RequestedAlertsFilter.newBuilder()
+          .setFieldName(ALERT_RISK_TYPE_KEY)
+          .setFieldValue(ALERT_RISK_TYPE_PEP)
+          .build();
+
+  private static final Timestamp FIRST_DAY_OF_JUNE = Timestamp.newBuilder()
+      .setSeconds(1622505601)
+      .setNanos(0)
+      .build();
+
+  private static final Timestamp LAST_DAY_OF_JUNE = Timestamp.newBuilder()
+      .setSeconds(1625097599)
+      .setNanos(0)
+      .build();
+  private static final Timestamp FIRST_DAY_OF_APRIL = Timestamp.newBuilder()
+      .setSeconds(1617235201)
+      .setNanos(0)
+      .build();
+
+  static final AlertsSampleRequest ALERTS_SAMPLE_REQUEST_1 = AlertsSampleRequest.newBuilder()
+      .setTimeRangeFrom(FIRST_DAY_OF_JUNE)
+      .setTimeRangeTo(LAST_DAY_OF_JUNE)
+      .addRequestedAlertsFilter(ALERT_FILTER_BY_COUNTRY_PL)
+      .addRequestedAlertsFilter(ALERT_FILTER_BY_RISK_TYPE_PEP)
+      .setAlertCount(REQUESTED_ALERT_COUNT_2)
+      .build();
+
+  static final AlertsSampleRequest ALERTS_SAMPLE_REQUEST_2 = AlertsSampleRequest.newBuilder()
+      .setTimeRangeFrom(FIRST_DAY_OF_APRIL)
+      .setTimeRangeTo(LAST_DAY_OF_JUNE)
+      .addRequestedAlertsFilter(ALERT_FILTER_BY_RISK_TYPE_PEP)
+      .setAlertCount(REQUESTED_ALERT_COUNT_4)
+      .build();
+
 }

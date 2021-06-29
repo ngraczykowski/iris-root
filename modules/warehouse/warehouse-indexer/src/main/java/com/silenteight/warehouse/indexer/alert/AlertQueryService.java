@@ -6,41 +6,36 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
 
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.validation.Valid;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_ID_KEY;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.NameResource.getSplitName;
+import static com.silenteight.warehouse.indexer.alert.RandomAlertQueryService.getExactMatch;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
-import static org.elasticsearch.client.RequestOptions.DEFAULT;
 
 @RequiredArgsConstructor
-public class AlertQueryService {
-
-  private static final String ALERT_SUFFIX_SEARCH = ".keyword";
+class AlertQueryService {
 
   @NonNull
   private final RestHighLevelClient restHighLevelClient;
 
   @NonNull
-  @Valid
-  private final ElasticsearchProperties elasticsearchProperties;
+  private final AlertSearchService alertSearchService;
+
+  @NonNull
+  ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
   public AlertAttributes getSingleAlertAttributes(List<String> fields, String id) {
-    Map<String, Object> singleAlert = searchForAlert(getSplitName(id)).stream()
+    Map<String, Object> singleAlert = searchForAlert(ALERT_ID_KEY, getSplitName(id)).stream()
         .findFirst()
         .orElseThrow(
             () -> new AlertNotFoundException(format("Alert with %s id not found.", id)));
@@ -87,30 +82,17 @@ public class AlertQueryService {
     alertAttributes.put(requestedAttribute, attributeValue);
   }
 
-  private List<Map<String, Object>> searchForAlert(String alertId) {
-    SearchRequest searchRequest = buildSearchRequest(alertId);
-
-    try {
-      SearchResponse search = restHighLevelClient.search(searchRequest, DEFAULT);
-      SearchHit[] hits = search.getHits().getHits();
-      return Arrays.stream(hits)
-          .map(SearchHit::getSourceAsMap)
-          .collect(toList());
-    } catch (IOException e) {
-      throw new ElasticsearchException("Getting search results from Elasticsearch failed", e);
-    }
+  private List<Map<String, Object>> searchForAlert(String requestedField, String alertId) {
+    SearchRequest searchRequest = buildSearchRequestForSpecificField(requestedField, alertId);
+    return alertSearchService.searchForAlerts(restHighLevelClient, searchRequest);
   }
 
-  private SearchRequest buildSearchRequest(String alertId) {
+  private SearchRequest buildSearchRequestForSpecificField(
+      String requestedField, String requestedValue) {
+
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    sourceBuilder.query(getExactMatch(ALERT_ID_KEY, alertId));
-    SearchRequest searchRequest = new SearchRequest();
-    searchRequest.source(sourceBuilder);
-    searchRequest.indices(elasticsearchProperties.getProductionQueryIndex());
-    return searchRequest;
-  }
-
-  private static MatchQueryBuilder getExactMatch(String fieldName, String value) {
-    return new MatchQueryBuilder(fieldName + ALERT_SUFFIX_SEARCH, value);
+    MatchQueryBuilder matchQueryBuilder = getExactMatch(requestedField, requestedValue);
+    sourceBuilder.query(matchQueryBuilder);
+    return productionSearchRequestBuilder.buildProductionSearchRequest(sourceBuilder);
   }
 }

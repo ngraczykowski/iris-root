@@ -16,6 +16,21 @@ spring:
         {{ if $index }},{{ end -}}
         {{ $es.Address }}:{{ $es.Port -}}
 {{- end }}
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+      service-registry:
+        auto-registration:
+          enabled: false
 
 warehouse:
   messaging:
@@ -52,3 +67,9 @@ keycloak:
     confidential-port: 0
     principal-attribute: preferred_username
     ssl-required: external
+
+grpc:
+  logging:
+    enabled: true
+  server:
+    port: {{ env "NOMAD_PORT_grpc" }}

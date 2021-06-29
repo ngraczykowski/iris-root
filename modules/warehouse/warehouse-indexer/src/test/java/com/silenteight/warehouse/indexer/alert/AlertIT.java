@@ -17,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_SEARCH_CRITERIA;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static java.util.List.of;
@@ -45,6 +47,12 @@ class AlertIT {
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
+
+  @Autowired
+  AlertSearchService underSearchService;
+
+  @Autowired
+  RandomAlertQueryService randomAlertQueryService;
 
   @AfterEach
   void cleanup() {
@@ -122,10 +130,26 @@ class AlertIT {
     assertThat(documentCount).isEqualTo(4);
   }
 
+  @Test
+  @WithElasticAccessCredentials
+  void shouldReturnAlertsId() {
+    storeData();
+
+    List<String> alertsIds =
+        randomAlertQueryService.getRandomAlertIdByCriteria(ALERT_SEARCH_CRITERIA);
+
+    assertThat(alertsIds)
+        .containsAnyElementsOf(
+            of(ALERT_ID_2, ALERT_ID_3));
+  }
+
   private void storeData() {
     saveAlert(DOCUMENT_ID_1, ALERT_WITH_MATCHES_1_MAP);
     saveAlert(DOCUMENT_ID_2, ALERT_WITH_MATCHES_2_MAP);
     saveAlert(DOCUMENT_ID_3, ALERT_WITH_MATCHES_3_MAP);
+    saveAlert(DOCUMENT_ID_4, ALERT_WITH_MATCHES_4_MAP);
+    saveAlert(DOCUMENT_ID_5, ALERT_WITH_MATCHES_5_MAP);
+    saveAlert(DOCUMENT_ID_6, ALERT_WITH_MATCHES_6_MAP);
   }
 
   private void saveAlert(String alertId, Map<String, Object> alert) {
