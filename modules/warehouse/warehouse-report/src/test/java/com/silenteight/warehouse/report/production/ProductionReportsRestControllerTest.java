@@ -5,6 +5,8 @@ import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportStatus;
+import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,11 +42,17 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
 
   private static final ProductionReportType REPORT_TYPE = AI_REASONING;
   private static final long TIMESTAMP = 1622009305142L;
+  private static final String DEFINITION_ID = "22c7466f-5084-40fa-beed-add2a78c5a29";
   private static final ReportInstanceReferenceDto REPORT_INSTANCE =
       new ReportInstanceReferenceDto(TIMESTAMP);
 
   private static final String SAMPLE_KIBANA_URL =
       "/api/reporting/generateReport/KyFUeXkB_K2MGH_UzxPa?timezone=Europe/Warsaw";
+
+  private static final String TEST_REPORT_STATUS_URL =
+      "/v1/analysis/production/definitions/" + REPORT_TYPE + "/" + DEFINITION_ID + "/reports/"
+          + TIMESTAMP
+          + "/status";
 
   private static final String TEST_LIST_REPORT_DEFINITIONS_URL =
       fromUriString(DEFINITIONS_COLLECTION_URL)
@@ -63,11 +71,18 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
           TIMESTAMP_PARAM, TIMESTAMP))
       .toString();
 
+  private static final ReportStatus TEST_REPORT_STATUS = ReportStatus.buildReportStatusOk(
+      "analysis/production/definitions/AI_REASONING/"
+          + "22c7466f-5084-40fa-beed-add2a78c5a29/reports/" + TIMESTAMP);
+
   @MockBean
   ProductionReportingQuery productionReportingQuery;
 
   @MockBean
   ProductionService productionService;
+
+  @MockBean
+  UserAwareReportingService userAwareReportingService;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
@@ -96,7 +111,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
         .willReturn(REPORT_INSTANCE);
 
     post(TEST_CREATE_REPORT_URL).statusCode(SEE_OTHER.value())
-        .header("Location", "reports/" + TIMESTAMP);
+        .header("Location", "reports/" + TIMESTAMP + REPORT_STATUS);
   }
 
   @Test
@@ -135,11 +150,12 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
-  void its102_whenReportNotReady() {
+  void its404_whenReportNotFound() {
     given(productionService.downloadReport(REPORT_TYPE, REPORT_DEFINITION_ID, TIMESTAMP))
-        .willThrow(ReportInstanceNotFoundException.class);
+        .willThrow(
+            ReportInstanceNotFoundException.of("admin_tenant", REPORT_DEFINITION_ID, TIMESTAMP));
 
-    get(TEST_DOWNLOAD_REPORT_URL).statusCode(PROCESSING.value());
+    get(TEST_DOWNLOAD_REPORT_URL).statusCode(NOT_FOUND.value());
   }
 
   @Test
@@ -148,5 +164,22 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
       authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
   void its403_whenNotPermittedRoleForDownloadingReport() {
     get(TEST_DOWNLOAD_REPORT_URL).statusCode(FORBIDDEN.value());
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  void its200_WhenInvokedGetReportStatus() {
+    given(productionService.getReportGeneratingStatus(REPORT_TYPE, DEFINITION_ID, TIMESTAMP))
+        .willReturn(TEST_REPORT_STATUS);
+
+    get(TEST_REPORT_STATUS_URL).statusCode(OK.value()).body("status", is("OK"));
+  }
+
+  @Test
+  @WithMockUser(
+      username = USERNAME,
+      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  void its403_whenNotPermittedRoleForDownloadingReportStatus() {
+    get(TEST_REPORT_STATUS_URL).statusCode(FORBIDDEN.value());
   }
 }

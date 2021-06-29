@@ -6,7 +6,6 @@ import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.warehouse.indexer.analysis.AnalysisDoesNotExistException;
-import com.silenteight.warehouse.report.reporting.ReportInstanceNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
 import org.junit.jupiter.api.Test;
@@ -66,6 +65,9 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
           TIMESTAMP_PARAM, TIMESTAMP))
       .toString();
 
+  private static final String TEST_DOWNLOAD_REPORT_STATUS =
+      TEST_DOWNLOAD_REPORT_URL + REPORT_STATUS;
+
   @MockBean
   private SimulationReportingQuery simulationReportingQuery;
 
@@ -121,12 +123,12 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
-  void its200_whenReportGenerated() {
+  void its303_whenReportGenerated() {
     given(simulationService.createSimulationReport(ANALYSIS_ID, REPORT_DEFINITION_ID))
         .willReturn(REPORT_INSTANCE);
 
     post(TEST_CREATE_REPORT_URL).statusCode(SEE_OTHER.value())
-        .header("Location", "reports/" + TIMESTAMP);
+        .header("Location", "reports/" + TIMESTAMP + REPORT_STATUS);
   }
 
   @Test
@@ -164,19 +166,18 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
-  void its102_whenReportNotReady() {
-    given(simulationService.downloadReport(ANALYSIS_ID, REPORT_DEFINITION_ID, TIMESTAMP))
-        .willThrow(ReportInstanceNotFoundException.class);
-
-    get(TEST_DOWNLOAD_REPORT_URL).statusCode(PROCESSING.value());
+  @WithMockUser(
+      username = USERNAME,
+      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  void its403_whenNotPermittedRoleForDownloadingReport() {
+    get(TEST_DOWNLOAD_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
   @WithMockUser(
       username = USERNAME,
       authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
-  void its403_whenNotPermittedRoleForDownloadingReport() {
-    get(TEST_DOWNLOAD_REPORT_URL).statusCode(FORBIDDEN.value());
+  void its403_whenNotPermittedRoleForDowloadingReportStatus() {
+    get(TEST_DOWNLOAD_REPORT_STATUS).statusCode(FORBIDDEN.value());
   }
 }
