@@ -10,7 +10,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchM
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP_1;
 import static java.time.Instant.parse;
 
 @ComponentScan(basePackageClasses = {
@@ -23,6 +23,6 @@ class AlertTestConfiguration {
 
   @Bean
   TimeSource timeSource() {
-    return new MockTimeSource(parse(PROCESSING_TIMESTAMP));
+    return new MockTimeSource(parse(PROCESSING_TIMESTAMP_1));
   }
 }

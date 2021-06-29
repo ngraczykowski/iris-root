@@ -150,6 +150,21 @@ spring:
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
 
+  #---------------------------------------------------------------------------------------------------
+  # CONSUL
+  #----------------------------------------------------------------------------------------------------
+
+  cloud:
+    discovery:
+      enabled: false
+    consul:
+      enabled: false
+    config:
+      enabled: false
+    service-registry:
+      auto-registration:
+        enabled: false
+
 #---------------------------------------------------------------------------------------------------
 # SEP BASE CONFIGURATION
 #---------------------------------------------------------------------------------------------------
@@ -200,3 +215,7 @@ sep:
         - "COUNTRY_GROUP_MANAGEMENT"
       QA:
         - "VIEW_ALERTS"
+
+grpc:
+  server:
+    port: 24206

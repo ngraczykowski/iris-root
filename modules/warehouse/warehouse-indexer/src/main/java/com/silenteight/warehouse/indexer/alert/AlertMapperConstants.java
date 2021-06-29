@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.indexer.alert;
 
-class AlertMapperConstants {
+public class AlertMapperConstants {
 
   public static final String MATCH_PREFIX = "match_";
   public static final String ALERT_PREFIX = "alert_";

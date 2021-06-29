@@ -11,7 +11,19 @@ import javax.validation.Valid;
 
 @Configuration
 @EnableConfigurationProperties(ElasticsearchProperties.class)
-class AlertConfiguration {
+public class AlertConfiguration {
+
+  @Bean
+  AlertSearchService searchAlertService() {
+    return new AlertSearchService();
+  }
+
+  @Bean
+  ProductionSearchRequestBuilder productionSearchRequestBuilder(
+      @Valid ElasticsearchProperties elasticsearchProperties) {
+
+    return new ProductionSearchRequestBuilder(elasticsearchProperties);
+  }
 
   @Bean
   AlertService alertService(
@@ -26,11 +38,19 @@ class AlertConfiguration {
 
   @Bean
   AlertQueryService alertQueryService(
-      RestHighLevelClient restHighLevelUserAwareClient,
-      @Valid ElasticsearchProperties elasticsearchProperties) {
+      RestHighLevelClient restHighLevelUserAwareClient, AlertSearchService alertSearchService,
+      ProductionSearchRequestBuilder productionSearchRequestBuilder) {
 
-    return new AlertQueryService(
-        restHighLevelUserAwareClient,
-        elasticsearchProperties);
+    return new AlertQueryService(restHighLevelUserAwareClient, alertSearchService,
+        productionSearchRequestBuilder);
+  }
+
+  @Bean
+  RandomAlertQueryService randomAlertQueryService(
+      AlertSearchService alertSearchService, RestHighLevelClient restHighLevelAdminClient,
+      ProductionSearchRequestBuilder productionSearchRequestBuilder) {
+
+    return new RandomAlertQueryService(alertSearchService, restHighLevelAdminClient,
+        productionSearchRequestBuilder);
   }
 }

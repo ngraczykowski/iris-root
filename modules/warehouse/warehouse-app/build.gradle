@@ -24,6 +24,7 @@ dependencies {
   implementation project(":warehouse-indexer")
   implementation project(":warehouse-management")
   implementation project(":warehouse-report")
+  implementation project(":warehouse-sampling")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app

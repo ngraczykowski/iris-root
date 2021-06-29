@@ -19,7 +19,7 @@ public class DataIndexFixtures {
 
   static final Map<String, String> ALERT_PAYLOAD_WITH_TWO_VALUES =
       Map.of(ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
-          ALERT_COUNTRY_KEY, ALERT_COUNTRY
+          ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK
       );
 
   static final Alert ALERT_WITH_MATCHES_1 = Alert.newBuilder()
@@ -48,6 +48,13 @@ public class DataIndexFixtures {
       .setPayload(structWithValue(
           ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_MI))
       .addAllMatches(emptyList())
+      .build();
+
+  static final AlertSearchCriteria ALERT_SEARCH_CRITERIA = AlertSearchCriteria.builder()
+      .timeRangeFrom(PROCESSING_TIMESTAMP_1)
+      .timeRangeTo(PROCESSING_TIMESTAMP_4)
+      .alertLimit(3)
+      .filter(Map.of(ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK))
       .build();
 
   static Builder structWithValue(String key, String value) {

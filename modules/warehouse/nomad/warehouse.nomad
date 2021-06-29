@@ -133,6 +133,40 @@ job "warehouse" {
       }
     }
 
+    service {
+      name = "${var.namespace}-warehouse"
+      port = "grpc"
+      tags = [
+        "grpc",
+        # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
+        "gRPC.port=${NOMAD_PORT_grpc}",
+      ]
+
+      check_restart {
+        limit           = 3
+        grace           = "90s"
+        ignore_warnings = false
+      }
+
+      check {
+        name     = "gRPC Port Alive Check"
+        type     = "tcp"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
+    # Dummy registration of a service required for Spring Consul Discovery.
+    # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
+    service {
+      name = "${var.namespace}-grpc-warehouse"
+      port = "grpc"
+      tags = [
+        "grpc",
+        "gRPC.port=${NOMAD_PORT_grpc}",
+      ]
+    }
+
     task "warehouse" {
       driver = "raw_exec"
 
