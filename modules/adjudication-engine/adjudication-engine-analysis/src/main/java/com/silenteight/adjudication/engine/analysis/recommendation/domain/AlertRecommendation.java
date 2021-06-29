@@ -54,7 +54,6 @@ public class AlertRecommendation {
   }
 
   public RecommendationMetadata toMetadata() {
-
     var matches = alertContext.getMatches();
 
     var builder = RecommendationMetadata.newBuilder()

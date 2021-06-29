@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
@@ -18,9 +19,7 @@ class GetRecommendationUseCase {
   private final RecommendationDataAccess recommendationDataAccess;
 
   Recommendation getRecommendation(String recommendationName) {
-    if (log.isDebugEnabled()) {
-      log.debug("Getting recommendation: recommendation={}", recommendationName);
-    }
+    log.debug("Getting recommendation: recommendation={}", recommendationName);
 
     var recommendationId = ResourceName.create(recommendationName).getLong("recommendations");
     var alertRecommendation = recommendationDataAccess.getAlertRecommendation(recommendationId);
@@ -28,5 +27,14 @@ class GetRecommendationUseCase {
         new GenerateCommentsRequest(alertRecommendation.getAlertContext()));
 
     return alertRecommendation.toRecommendation(commentsResponse.getComment());
+  }
+
+  RecommendationMetadata getRecommendationMetadata(String metadataName) {
+    log.debug("Getting recommendation metadata: recommendationMetadata={}", metadataName);
+
+    var recommendationId = ResourceName.create(metadataName).getLong("recommendations");
+    var alertRecommendation = recommendationDataAccess.getAlertRecommendation(recommendationId);
+
+    return alertRecommendation.toMetadata();
   }
 }

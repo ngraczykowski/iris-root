@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.internal.v1.CommentInputsUpdated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
@@ -38,6 +39,10 @@ public class RecommendationFacade {
 
   public Recommendation getRecommendation(String recommendationName) {
     return getRecommendationUseCase.getRecommendation(recommendationName);
+  }
+
+  public RecommendationMetadata getRecommendationMetadata(String metadataName) {
+    return getRecommendationUseCase.getRecommendationMetadata(metadataName);
   }
 
   public void streamRecommendations(
