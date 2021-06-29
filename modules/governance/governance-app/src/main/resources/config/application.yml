@@ -267,6 +267,9 @@ sep.auth:
       - "VIEW_VECTORS"
 
 serp.governance.qa:
-  scheduled:
-    viewing-decision:
-      max-ms: 45000
+  sampling:
+    schedule:
+      audit-cron: 0/15 * * * * ?
+      alert-generator-cron: 0 0 1 1 * ?
+  viewing:
+    max-state-reset-delay-ms: 45000
