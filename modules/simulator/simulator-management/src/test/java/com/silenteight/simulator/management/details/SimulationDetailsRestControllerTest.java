@@ -24,12 +24,12 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
 
-  private static final String SIMULATION_DETAILS_URL = "/v1/simulations/" + ID.toString();
+  private static final String SIMULATION_DETAILS_URL = "/v1/simulations/" + ID;
 
   @MockBean
   private SimulationDetailsQuery simulationQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER })
   void its200_whenSimulationFound() {
     given(simulationQuery.get(ID)).willReturn(DETAILS_DTO);
     get(SIMULATION_DETAILS_URL)
@@ -45,7 +45,7 @@ class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
         .body("createdBy", is(SimulationFixtures.USERNAME));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
   void its403_whenNotPermittedRole() {
     get(SIMULATION_DETAILS_URL).statusCode(FORBIDDEN.value());
   }

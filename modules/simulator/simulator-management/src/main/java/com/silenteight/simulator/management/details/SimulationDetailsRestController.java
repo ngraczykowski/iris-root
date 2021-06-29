@@ -26,7 +26,7 @@ class SimulationDetailsRestController {
   private final SimulationDetailsQuery simulationQuery;
 
   @GetMapping("/v1/simulations/{simulationId}")
-  @PreAuthorize("isAuthorized('LIST_SIMULATIONS')")
+  @PreAuthorize("isAuthorized('VIEW_SIMULATION')")
   public ResponseEntity<SimulationDetailsDto> get(@PathVariable UUID simulationId) {
     return ok(simulationQuery.get(simulationId));
   }

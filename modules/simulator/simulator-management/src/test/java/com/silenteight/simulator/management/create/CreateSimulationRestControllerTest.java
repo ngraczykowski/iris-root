@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
-import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static com.silenteight.simulator.management.SimulationFixtures.CREATE_SIMULATION_REQUEST;
 import static com.silenteight.simulator.management.create.CreateSimulationRestController.SIMULATIONS_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Import({
     CreateSimulationRestController.class,
@@ -27,7 +29,7 @@ class CreateSimulationRestControllerTest extends BaseRestControllerTest {
   private CreateSimulationUseCase createSimulationUseCase;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
   void its201_whenSimulationCreated() {
     doNothing().when(createSimulationUseCase).activate(any());
 
@@ -36,7 +38,7 @@ class CreateSimulationRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
   void its400_whenSimulationUuidExists() {
     doThrow(NonUniqueSimulationException.class)
         .when(createSimulationUseCase).activate(any());
@@ -48,7 +50,7 @@ class CreateSimulationRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForCreating() {
     post(SIMULATIONS_URL, CREATE_SIMULATION_REQUEST)
         .statusCode(FORBIDDEN.value());
