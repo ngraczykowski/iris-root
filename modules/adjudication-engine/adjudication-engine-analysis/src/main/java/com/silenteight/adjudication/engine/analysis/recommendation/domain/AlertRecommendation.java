@@ -28,7 +28,8 @@ import static com.silenteight.adjudication.engine.common.protobuf.TimestampConve
 @Value
 @Builder
 @Slf4j
-public class AlertRecommendation {
+public class
+AlertRecommendation {
 
   long alertId;
 
@@ -84,7 +85,7 @@ public class AlertRecommendation {
 
     return MatchMetadata
         .newBuilder()
-        .setMatch("alerts/" + alertId + "matches/" + matchId)
+        .setMatch("alerts/" + alertId + "/matches/" + matchId)
         .putAllCategories(context.getCategories())
         .putAllFeatures(convertFeaturesMap(context.getFeatures()))
         .setReason(reasonStructBuilder)
