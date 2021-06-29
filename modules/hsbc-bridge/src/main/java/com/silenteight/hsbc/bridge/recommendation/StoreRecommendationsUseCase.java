@@ -15,7 +15,7 @@ import java.util.Collection;
 @Slf4j
 class StoreRecommendationsUseCase {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper;
   private final RecommendationRepository repository;
 
   @Transactional

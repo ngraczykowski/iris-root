@@ -12,7 +12,7 @@ class HandlerConfiguration {
 
   private final ApplicationEventPublisher eventPublisher;
   private final RecommendationServiceClient recommendationServiceClient;
-  private final RecommendationRepository recommendationRepository;
+  private final StoreRecommendationsUseCase storeRecommendationsUseCase;
 
   @Bean
   RecommendationEventListener recommendationEventListener() {
@@ -22,11 +22,6 @@ class HandlerConfiguration {
   @Bean
   RecommendationHandler recommendationHandler() {
     return new RecommendationHandler(
-        storeRecommendationsUseCase(), recommendationServiceClient, eventPublisher);
-  }
-
-  @Bean
-  StoreRecommendationsUseCase storeRecommendationsUseCase() {
-    return new StoreRecommendationsUseCase(recommendationRepository);
+        storeRecommendationsUseCase, recommendationServiceClient, eventPublisher);
   }
 }

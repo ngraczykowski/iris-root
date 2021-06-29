@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge.recommendation;
 
 import lombok.RequiredArgsConstructor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,16 @@ class UseCaseConfiguration {
 
   private final RecommendationProperties recommendationProperties;
   private final RecommendationRepository repository;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Bean
   GetRecommendationUseCase getRecommendationUseCase() {
-    return new GetRecommendationUseCase(recommendationMapper(), repository);
+    return new GetRecommendationUseCase(recommendationMapper(), repository, objectMapper);
+  }
+
+  @Bean
+  StoreRecommendationsUseCase storeRecommendationsUseCase() {
+    return new StoreRecommendationsUseCase(objectMapper, repository);
   }
 
   private RecommendationMapper recommendationMapper() {

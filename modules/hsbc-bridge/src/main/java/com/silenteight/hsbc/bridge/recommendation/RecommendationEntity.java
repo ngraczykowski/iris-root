@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.OffsetDateTime;
 import javax.persistence.*;
 
+import static java.util.Objects.nonNull;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -32,6 +33,11 @@ class RecommendationEntity {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "recommendation_metadata_id")
   private RecommendationMetadataEntity metadata;
+
+  @Transient
+  boolean hasMetadata() {
+    return nonNull(metadata);
+  }
 
   RecommendationEntity(RecommendationWithMetadataDto recommendation) {
     this.recommendedAction = recommendation.getRecommendedAction();

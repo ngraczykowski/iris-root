@@ -9,6 +9,7 @@ import com.silenteight.hsbc.bridge.bulk.rest.*;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase.GetRecommendationRequest;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
+import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class GetBulkResultsUseCase {
 
   private final BulkRepository bulkRepository;
   private final GetRecommendationUseCase getRecommendationUseCase;
+  private final AlertMetadataCollector alertMetadataCollector = new AlertMetadataCollector();
 
   public BatchSolvedAlerts getResults(String id) {
     var result = bulkRepository.findById(id);
@@ -54,12 +56,32 @@ public class GetBulkResultsUseCase {
       var recommendation = getRecommendation(alert.getName(), metadata);
       solvedAlert.setRecommendation(recommendation.getRecommendedAction());
       solvedAlert.setComment(recommendation.getRecommendationComment());
+      attachRecommendationMetadata(solvedAlert, recommendation.getMetadata());
     }
     return solvedAlert;
   }
 
+  private void attachRecommendationMetadata(SolvedAlert alert, RecommendationMetadata metadata) {
+    var recommendationAlertMetadata =
+        alertMetadataCollector.collectFromRecommendationMetadata(metadata);
+
+    alert.setFvSignature(findByKey("feature_vector_signature", recommendationAlertMetadata));
+    alert.setPolicyId(findByKey("policy", recommendationAlertMetadata));
+    alert.setStepId(findByKey("step", recommendationAlertMetadata));
+
+    alert.getAlertMetadata().addAll(recommendationAlertMetadata);
+  }
+
+  private String findByKey(String key, Collection<AlertMetadata> metadata) {
+    return metadata.stream()
+        .filter(a-> a.getKey().equalsIgnoreCase(key))
+        .map(AlertMetadata::getValue)
+        .findFirst()
+        .orElse("");
+  }
+
   private List<AlertMetadata> map(List<BulkAlertMetadata> alertMetadata) {
-    return alertMetadata.stream().map(a-> {
+    return alertMetadata.stream().map(a -> {
       var metadata = new AlertMetadata();
       metadata.setKey(a.getKey());
       metadata.setValue(a.getValue());
@@ -67,7 +89,8 @@ public class GetBulkResultsUseCase {
     }).collect(Collectors.toList());
   }
 
-  private RecommendationWithMetadataDto getRecommendation(String alertName, List<BulkAlertMetadata> metadata) {
+  private RecommendationWithMetadataDto getRecommendation(
+      String alertName, List<BulkAlertMetadata> metadata) {
     var extendedAttribute5 = getAttribute(metadata);
 
     return getRecommendationUseCase.getRecommendation(new GetRecommendationRequest() {
@@ -85,7 +108,7 @@ public class GetBulkResultsUseCase {
 
   private String getAttribute(List<BulkAlertMetadata> metadata) {
     return metadata.stream()
-        .filter(a-> a.getKey().equals("extendedAttribute5"))
+        .filter(a -> a.getKey().equals("extendedAttribute5"))
         .map(BulkAlertMetadata::getValue)
         .findFirst()
         .orElse("");
