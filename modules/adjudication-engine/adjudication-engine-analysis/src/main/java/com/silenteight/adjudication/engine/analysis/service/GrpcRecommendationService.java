@@ -6,8 +6,6 @@ import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.*;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceImplBase;
 
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
@@ -51,10 +49,5 @@ class GrpcRecommendationService extends RecommendationServiceImplBase {
 
     responseObserver.onNext(recommendationService.getRecommendationMetadata(request));
     responseObserver.onCompleted();
-  }
-
-  private static void respondWithNotFound(StreamObserver<?> responseObserver) {
-    // XXX(ahaczewski): Mocked to return something more useful than UNIMPLEMENTED.
-    responseObserver.onError(new StatusRuntimeException(Status.NOT_FOUND));
   }
 }
