@@ -57,6 +57,8 @@ message GeoComparerReason {
     string watchlist_party_value = 3;
     // do AP value and WP value match?
     MatchType match_type = 4;
+
+    string error_message = 5;
   }
 
   enum MatchType {

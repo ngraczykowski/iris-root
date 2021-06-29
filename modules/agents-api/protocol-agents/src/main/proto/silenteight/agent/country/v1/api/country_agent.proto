@@ -30,9 +30,10 @@ message CompareCountriesResponse {
 
 message CompareCountriesReason {
   string customer_value = 1;
+  repeated string watchlist_values = 2;
   repeated string matched_values = 3;
   repeated string customer_values = 4;
-  repeated string watchlist_values = 2;
+  string error_message = 5;
 }
 
 message ExtractCountriesRequest {

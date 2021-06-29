@@ -22,4 +22,5 @@ message ExtractLocationRequest {
 message ExtractLocationResponse {
     // List of extracted locations
     repeated IdentifiedLocation identified_locations = 1;
+    string error_message = 3;
 }

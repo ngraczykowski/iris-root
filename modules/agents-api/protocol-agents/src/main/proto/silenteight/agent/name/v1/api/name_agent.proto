@@ -67,6 +67,8 @@ message NameAgentReason {
     google.protobuf.Duration execution_duration = 3;
     // Names written in chinese script
     ChineseScriptSolution chinese_script_solution = 6;
+
+    string error_message = 7;
 }
 
 message MatchedNameValueGroup {

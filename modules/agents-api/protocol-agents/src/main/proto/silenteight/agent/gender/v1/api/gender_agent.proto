@@ -26,4 +26,5 @@ message SolveGenderReason {
     string customer_value = 1 [deprecated = true];
     repeated string watchlist_values = 2;
     repeated string customer_values = 3;
+    string error_message = 4;
 }

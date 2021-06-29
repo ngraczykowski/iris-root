@@ -30,6 +30,7 @@ message RecognizeDatesReason {
     repeated string watchlist_values = 2;
     string match_date = 3;
     repeated string customer_values = 4;
+    string error_message = 5;
 }
 
 message DiscountDatesRequest {
