@@ -27,6 +27,8 @@ class RecommendationHandler {
   private final ApplicationEventPublisher eventPublisher;
 
   void getAndStoreRecommendations(@NonNull String analysis) {
+    log.info("Get and store recommendations for analysis={}", analysis);
+
     tryToGetRecommendations(analysis).ifPresent(recommendations -> {
       storeRecommendationsUseCase.store(recommendations);
 

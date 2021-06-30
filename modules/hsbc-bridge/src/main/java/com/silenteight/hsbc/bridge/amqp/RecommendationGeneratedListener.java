@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
@@ -15,12 +16,15 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Slf4j
 class RecommendationGeneratedListener {
 
   private final ApplicationEventPublisher eventPublisher;
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.recommendations-queue}")
   void onRecommendation(RecommendationsGenerated recommendation) {
+    log.info("Received RecommendationsGenerated for analysis={}", recommendation.getAnalysis());
+
     eventPublisher.publishEvent(RecommendationsGeneratedEvent.builder()
             .analysis(recommendation.getAnalysis())
             .alertRecommendationInfos(map(recommendation.getRecommendationInfosList()))
