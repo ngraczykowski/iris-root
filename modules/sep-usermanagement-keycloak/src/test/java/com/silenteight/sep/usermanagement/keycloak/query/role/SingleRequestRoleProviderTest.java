@@ -40,8 +40,6 @@ class SingleRequestRoleProviderTest {
 
   @Mock
   private RealmResource realmResource;
-  @Mock
-  private InternalRoleFilter internalRoleFilter;
 
   @Test
   void returnsEmptyListForRoleClient_whenUserHasNoRolesForClient() {
@@ -71,8 +69,6 @@ class SingleRequestRoleProviderTest {
     when(usersResource.get(rolesForUser.getUserId())).thenReturn(userResource);
 
     when(realmResource.users()).thenReturn(usersResource);
-    if (rolesForUser.getRoles() != null)
-      rolesForUser.getRoles().forEach(name -> when(internalRoleFilter.test(name)).thenReturn(true));
   }
 
   private ClientMappingsRepresentation clientRolesMappings(

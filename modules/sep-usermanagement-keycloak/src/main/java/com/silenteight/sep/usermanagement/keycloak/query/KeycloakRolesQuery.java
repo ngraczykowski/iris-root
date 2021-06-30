@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.usermanagement.api.RolesQuery;
 import com.silenteight.sep.usermanagement.api.dto.RolesDto;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
-import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter;
 
 import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.representations.idm.RoleRepresentation;
@@ -22,8 +21,6 @@ public class KeycloakRolesQuery implements RolesQuery {
   private final ClientQuery clientQuery;
   @NonNull
   private final ClientsResource clientsResource;
-  @NonNull
-  private final InternalRoleFilter internalRoleFilter;
 
   @Override
   public RolesDto list(String scope) {
@@ -37,8 +34,6 @@ public class KeycloakRolesQuery implements RolesQuery {
         .list()
         .stream()
         .map(RoleRepresentation::getName)
-        .sorted()
-        .filter(internalRoleFilter)
         .collect(toList());
   }
 }

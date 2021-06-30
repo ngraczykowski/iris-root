@@ -22,8 +22,6 @@ class SingleRequestRoleProvider implements RolesProvider {
 
   @NonNull
   private final RealmResource realmResource;
-  @NonNull
-  private final InternalRoleFilter internalRoleFilter;
 
   @Override
   public UserRoles getForUserId(String userId, Set<String> roleClientIds) {
@@ -49,8 +47,6 @@ class SingleRequestRoleProvider implements RolesProvider {
         .orElse(emptyList())
         .stream()
         .map(RoleRepresentation::getName)
-        .filter(internalRoleFilter)
-        .sorted()
         .collect(toSet());
   }
 

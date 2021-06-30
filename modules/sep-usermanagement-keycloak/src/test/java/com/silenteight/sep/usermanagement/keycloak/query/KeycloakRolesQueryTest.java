@@ -2,7 +2,6 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 
 import com.silenteight.sep.usermanagement.api.dto.RolesDto;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
-import com.silenteight.sep.usermanagement.keycloak.query.role.InternalRoleFilter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,8 +40,6 @@ class KeycloakRolesQueryTest {
   @Mock
   private ClientResource clientResource;
   @Mock
-  private InternalRoleFilter internalRoleFilter;
-  @Mock
   private RolesResource rolesResource;
 
   private KeycloakRolesQuery underTest;
@@ -50,7 +47,7 @@ class KeycloakRolesQueryTest {
   @BeforeEach
   void setUp() {
     underTest = new KeycloakQueryConfiguration()
-        .keycloakRolesQuery(clientQuery, clientsResource, internalRoleFilter);
+        .keycloakRolesQuery(clientQuery, clientsResource);
   }
 
   @Test
@@ -89,8 +86,6 @@ class KeycloakRolesQueryTest {
     when(clientsResource.get(CLIENT_ID)).thenReturn(clientResource);
     when(clientResource.roles()).thenReturn(rolesResource);
     when(rolesResource.list()).thenReturn(roleRepresentations);
-    when(internalRoleFilter.test(ANALYST)).thenReturn(true);
-    when(internalRoleFilter.test(AUDITOR)).thenReturn(true);
   }
 
   private static RoleRepresentation roleRepresentation(String name) {
