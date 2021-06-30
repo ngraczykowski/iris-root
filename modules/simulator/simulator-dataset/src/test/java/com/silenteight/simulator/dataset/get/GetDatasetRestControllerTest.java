@@ -28,7 +28,7 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private DatasetQuery datasetQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenDatasetFoundWithoutState() {
     given(datasetQuery.get(ID)).willReturn(DATASET_DTO);
     get(GET_DATASET_URL)
@@ -44,7 +44,7 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
         .body("createdBy", is(CREATED_BY));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(GET_DATASET_URL).statusCode(FORBIDDEN.value());
   }

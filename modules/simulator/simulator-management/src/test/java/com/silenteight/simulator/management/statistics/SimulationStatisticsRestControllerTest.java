@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.OK;
     SimulationStatisticsRestController.class,
     GenericExceptionControllerAdvice.class
 })
-@ContextConfiguration(classes = { SimulationStatisticsTestConfiguration.class})
+@ContextConfiguration(classes = { SimulationStatisticsTestConfiguration.class })
 class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
 
   static final String EFFICIENCY_URL = format("/v1//simulations/%s/statistics/efficiency", ID);
@@ -29,7 +29,7 @@ class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private StaticSimulationStatisticsService simulationStatisticsService;
 
-  @TestWithRole(role = BUSINESS_OPERATOR)
+  @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationStatisticsEfficiencyFound() {
     given(simulationStatisticsService
         .getEfficiency(ID))
@@ -40,12 +40,12 @@ class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
         .body("allAlerts", is((int) ALL_ALERTS));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRoleForStatisticsEfficiency() {
     get(EFFICIENCY_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(role = BUSINESS_OPERATOR)
+  @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationStatisticsEffectivenessFound() {
     given(simulationStatisticsService
         .getEffectiveness(ID))
@@ -56,7 +56,7 @@ class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
         .body("analystSolvedAsFalsePositive", is((int) ANALYSTS_SOLVED_AS_FALSE_POSITIVE));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRoleForStatisticsEffectiveness() {
     get(EFFECTIVENESS_URL).statusCode(FORBIDDEN.value());
   }

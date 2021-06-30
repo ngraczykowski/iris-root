@@ -35,7 +35,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ListSimulationsQuery simulationQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationFound() {
     given(simulationQuery.list()).willReturn(of(SIMULATION_DTO));
     get(SIMULATIONS_URL)
@@ -52,12 +52,12 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRoleForListing() {
     get(SIMULATIONS_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationByModelNameFound() {
     given(simulationQuery.findByModel(MODEL)).willReturn(of(SIMULATION_DTO));
     get(SIMULATIONS_BY_MODEL_NAME_URL)
@@ -74,14 +74,14 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its404_whenSimulationByModelNameThrowsInvalidModelNameException() {
     given(simulationQuery.findByModel(MODEL)).willThrow(InvalidModelNameException.class);
     get(SIMULATIONS_BY_MODEL_NAME_URL)
         .statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRoleForGettingByModelName() {
     get(SIMULATIONS_BY_MODEL_NAME_URL).statusCode(FORBIDDEN.value());
   }

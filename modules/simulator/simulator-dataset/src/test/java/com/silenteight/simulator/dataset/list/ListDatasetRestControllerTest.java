@@ -27,7 +27,7 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private DatasetQuery datasetQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenDatasetsFoundWithoutState() {
     given(datasetQuery.list(null)).willReturn(of(DATASET_DTO));
     get("/v1/datasets")
@@ -44,7 +44,7 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", is(CREATED_BY));
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenDatasetsFoundWitState() {
     given(datasetQuery.list(CURRENT)).willReturn(of(DATASET_DTO));
     get("/v1/datasets?state=CURRENT")
@@ -61,7 +61,7 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", is(CREATED_BY));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get("/v1/datasets").statusCode(FORBIDDEN.value());
   }
