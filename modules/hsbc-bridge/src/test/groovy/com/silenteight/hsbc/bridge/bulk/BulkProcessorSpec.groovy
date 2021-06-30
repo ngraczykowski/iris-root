@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.bulk
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade
 import com.silenteight.hsbc.bridge.report.WarehouseFacade
 
+import net.javacrumbs.shedlock.core.LockAssert
 import spock.lang.Specification
 
 class BulkProcessorSpec extends Specification {
@@ -16,6 +17,9 @@ class BulkProcessorSpec extends Specification {
   def underTest = new BulkProcessor(adjudicationFacade, warehouseFacade, bulkRepository)
 
   def 'should process learning bulk'() {
+    given:
+    LockAssert.TestHelper.makeAllAssertsPass(true)
+
     when:
     underTest.processPreProcessedBulks()
 
@@ -26,6 +30,9 @@ class BulkProcessorSpec extends Specification {
   }
 
   def 'should process solving bulk'() {
+    given:
+    LockAssert.TestHelper.makeAllAssertsPass(true)
+
     when:
     underTest.processPreProcessedBulks()
 
