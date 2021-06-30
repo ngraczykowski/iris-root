@@ -40,7 +40,7 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
 
   ViewDecisionCommand command = getViewDecisionCommand();
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA })
   void its404_whenAlertNotFound() {
     doThrow(new WrongAlertNameException(ALERT_NAME)).when(decisionService)
         .view(command.getAlertName(), command.getLevel());
@@ -51,7 +51,7 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
         .view(command.getAlertName(), command.getLevel());
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA })
   void its400_whenAlertAlreadyProcessed() {
     doThrow(new AlertAlreadyProcessedException(ALERT_NAME)).when(decisionService)
         .view(command.getAlertName(), command.getLevel());
@@ -62,7 +62,7 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
         .view(command.getAlertName(), command.getLevel());
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA })
   void its200_whenAlertViewed() {
     post(ALERTS_VIEW_URL).statusCode(ACCEPTED.value());
 
@@ -70,7 +70,7 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
         .view(command.getAlertName(), command.getLevel());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(ALERTS_VIEW_URL).statusCode(FORBIDDEN.value());
   }

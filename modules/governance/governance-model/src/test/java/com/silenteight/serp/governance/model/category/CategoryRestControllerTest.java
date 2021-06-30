@@ -25,7 +25,7 @@ class CategoryRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private CategoryRegistry registry;
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
   void its200_whenInvoked() {
     given(registry.getAllCategories()).willReturn(List.of(APTYPE_CATEGORY));
 
@@ -35,7 +35,7 @@ class CategoryRestControllerTest extends BaseRestControllerTest {
         .body("categories[0].values", is(APTYPE_VALUES));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(CATEGORIES_URL).statusCode(FORBIDDEN.value());
   }

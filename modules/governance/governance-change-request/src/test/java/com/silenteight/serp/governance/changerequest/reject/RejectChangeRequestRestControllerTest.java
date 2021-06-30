@@ -55,7 +55,7 @@ class RejectChangeRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getRejectorComment()).isEqualTo(REJECTOR_COMMENT);
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(mappingForRejection(CHANGE_REQUEST_ID), makeRejectChangeRequestDto()).statusCode(
         FORBIDDEN.value());

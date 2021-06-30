@@ -16,7 +16,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.QA;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
@@ -44,7 +46,7 @@ class SetPolicyStepsOrderRequestRestControllerTest extends BaseRestControllerTes
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenPolicyEdited() {
     List<UUID> steps = of(FIRST_STEP, SECOND_STEP, THIRD_STEP);
     put(STEPS_ORDER_URL, steps)
@@ -59,7 +61,7 @@ class SetPolicyStepsOrderRequestRestControllerTest extends BaseRestControllerTes
     assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, QA })
   void its403_whenNotPermittedRole() {
     List<UUID> steps = of(FIRST_STEP, SECOND_STEP, THIRD_STEP);
     put(STEPS_ORDER_URL, steps)

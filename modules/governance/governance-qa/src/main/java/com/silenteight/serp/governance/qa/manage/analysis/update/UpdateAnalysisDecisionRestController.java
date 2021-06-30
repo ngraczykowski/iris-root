@@ -30,7 +30,7 @@ class UpdateAnalysisDecisionRestController {
   private final UpdateAnalysisDecisionUseCase useCase;
 
   @PatchMapping(UPDATE_DECISION_URL)
-  @PreAuthorize("isAuthorized('ALERTS_ANALYSIS')")
+  @PreAuthorize("isAuthorized('ALERTS_ANALYSIS_DECISION')")
   @ResponseStatus
   public ResponseEntity<Void> update(@PathVariable UUID id,
       @RequestBody @Valid UpdateAnalysisDecisionDto updateAnalysisDecisionDto,

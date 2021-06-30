@@ -51,7 +51,7 @@ class PolicyDetailsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private PolicyDetailsUseCase policyDetailsUseCase;
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { AUDITOR, APPROVER, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its404_whenNoPolicies() {
     given(policyDetailsUseCase.activate(POLICY_UUID))
         .willThrow(new EntityNotFoundException());
@@ -61,12 +61,12 @@ class PolicyDetailsRestControllerTest extends BaseRestControllerTest {
         .statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(getPolicyMapper(POLICY_UUID)).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { AUDITOR, APPROVER, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its200_whenPolicyDetails() {
     given(policyDetailsUseCase.activate(POLICY_UUID)).willReturn(POLICY_DTO);
 

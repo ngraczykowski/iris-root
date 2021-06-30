@@ -43,7 +43,7 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenStepUpdated() {
     when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID)).thenReturn(POLICY_ID);
 
@@ -61,7 +61,7 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
   void its403_whenNotPermittedRole() {
     patch(CREATE_STEP_URL, new EditStepDto(NAME, null, SOLUTION))
         .contentType(anything())

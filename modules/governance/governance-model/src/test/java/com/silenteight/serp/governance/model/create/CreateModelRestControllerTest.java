@@ -33,7 +33,7 @@ class CreateModelRestControllerTest extends BaseRestControllerTest {
   private CreateModelUseCase createModelUseCase;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenModelCreated() {
     post(CREATE_MODEL_URL, makeCreateModelDto())
         .contentType(anything())
@@ -48,7 +48,8 @@ class CreateModelRestControllerTest extends BaseRestControllerTest {
             .build());
   }
 
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @Test
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its409_whenModelAlreadyExists() {
     when(createModelUseCase.activate(any())).thenThrow(ModelAlreadyExistsException.class);
 
@@ -57,7 +58,7 @@ class CreateModelRestControllerTest extends BaseRestControllerTest {
         .statusCode(CONFLICT.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(CREATE_MODEL_URL, makeCreateModelDto())
         .contentType(anything())

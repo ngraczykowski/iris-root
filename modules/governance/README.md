@@ -79,7 +79,7 @@ sep.auth.basic.users:
   - username: bo
     password: bodev
     roles:
-      - BUSINESS_OPERATOR
+      - MODEL_TUNER
   - username: ap
     password: apdev
     roles:

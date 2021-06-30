@@ -33,7 +33,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ChangeRequestDetailsQuery changeRequestDetailsQuery;
 
-  @TestWithRole(roles = { APPROVER, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER })
   void its200WithCorrectBody_whenFound() {
     UUID changeRequestId = fixtures.changeRequest.getId();
     given(changeRequestDetailsQuery.details(changeRequestId)).willReturn(fixtures.changeRequest);
@@ -41,7 +41,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
     get(mappingForDetails(changeRequestId))
         .statusCode(OK.value())
         .body("id", equalTo("05bf9714-b1ee-4778-a733-6151df70fca3"))
-        .body("createdBy", equalTo("Business Operator #1"))
+        .body("createdBy", equalTo("Model Tuner #1"))
         .body("createdAt", notNullValue())
         .body("creatorComment", equalTo("Increase efficiency by 20% on Asia markets"))
         .body("decidedBy", equalTo("Approver 1"))
@@ -51,7 +51,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
         .body("modelName", equalTo(MODEL_NAME));
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(mappingForDetails(fixtures.changeRequest.getId())).statusCode(FORBIDDEN.value());
   }
@@ -64,7 +64,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
 
     ChangeRequestDto changeRequest = ChangeRequestDto.builder()
         .id(fromString("05bf9714-b1ee-4778-a733-6151df70fca3"))
-        .createdBy("Business Operator #1")
+        .createdBy("Model Tuner #1")
         .createdAt(parse("2020-04-15T10:15:30+01:00", ISO_OFFSET_DATE_TIME))
         .creatorComment("Increase efficiency by 20% on Asia markets")
         .decidedBy("Approver 1")

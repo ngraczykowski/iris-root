@@ -19,13 +19,13 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
-class AgentsRestController {
+class FeaturesRestController {
 
   @NonNull
   private final FeaturesProvider featuresProvider;
 
   @GetMapping("/v1/features")
-  @PreAuthorize("isAuthorized('LIST_AGENTS')")
+  @PreAuthorize("isAuthorized('LIST_FEATURES')")
   public ResponseEntity<FeaturesListDto> getFeaturesListDto() {
     return ResponseEntity.ok().body(featuresProvider.getFeaturesListDto());
   }

@@ -39,8 +39,7 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ModelDetailsQuery getModelDetailsQuery;
 
-  @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenModelFound() {
     given(getModelDetailsQuery.get(MODEL_ID)).willReturn(MODEL_DTO);
 
@@ -51,8 +50,7 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
         .body("createdAt", notNullValue());
   }
 
-  @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenModelByPolicyFound() {
     given(getModelDetailsQuery.getByPolicy(POLICY)).willReturn(List.of(MODEL_DTO));
 
@@ -63,28 +61,29 @@ class GetModelRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdAt", notNullValue());
   }
 
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its404_whenModelDoesNotExist() {
     given(getModelDetailsQuery.get(MODEL_ID)).willThrow(ModelNotFoundException.class);
 
     get(GET_MODEL_URL).statusCode(NOT_FOUND.value());
   }
 
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its404_whenModelForPolicyDoesNotExist() {
     given(getModelDetailsQuery.getByPolicy(POLICY)).willThrow(ModelNotFoundException.class);
 
     get(GET_MODEL_BY_POLICY_URL).statusCode(NOT_FOUND.value());
   }
 
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = QA_ISSUE_MANAGER)
   void its500_whenMultipleModelsForPolicyExist() {
     given(getModelDetailsQuery.getByPolicy(POLICY)).willThrow(TooManyModelsException.class);
 
     get(GET_MODEL_URL).statusCode(INTERNAL_SERVER_ERROR.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @Test
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void its403_whenNotPermittedRole() {
     get(GET_MODEL_URL).statusCode(FORBIDDEN.value());
     get(GET_MODEL_BY_POLICY_URL).statusCode(FORBIDDEN.value());

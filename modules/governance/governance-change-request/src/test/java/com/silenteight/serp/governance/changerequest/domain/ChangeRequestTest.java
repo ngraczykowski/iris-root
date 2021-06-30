@@ -16,8 +16,8 @@ class ChangeRequestTest {
 
   private static final UUID CHANGE_CHANGE_ID = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
   private static final String MODEL_NAME = "solving-models/b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
-  private static final String BUSINESS_OPERATOR_USERNAME = "business_operator";
-  private static final String BUSINESS_OPERATOR_COMMENT = "This is comment from Business Operator";
+  private static final String MODEL_TUNER_USERNAME = "MODEL_TUNER";
+  private static final String MODEL_TUNER_COMMENT = "This is comment from Model Tuner";
   private static final String DECIDER_USERNAME = "decider";
   private static final String DECIDER_COMMENT = "decider comment 1234";
 
@@ -28,8 +28,8 @@ class ChangeRequestTest {
     ChangeRequest changeRequest = new ChangeRequest(
         CHANGE_CHANGE_ID,
         MODEL_NAME,
-        BUSINESS_OPERATOR_USERNAME,
-        BUSINESS_OPERATOR_COMMENT);
+        MODEL_TUNER_USERNAME,
+        MODEL_TUNER_COMMENT);
 
     // when
     changeRequest.approve(DECIDER_USERNAME, DECIDER_COMMENT);
@@ -48,8 +48,8 @@ class ChangeRequestTest {
     ChangeRequest changeRequest = new ChangeRequest(
         CHANGE_CHANGE_ID,
         MODEL_NAME,
-        BUSINESS_OPERATOR_USERNAME,
-        BUSINESS_OPERATOR_COMMENT);
+        MODEL_TUNER_USERNAME,
+        MODEL_TUNER_COMMENT);
 
     // when
     changeRequest.reject(DECIDER_USERNAME, DECIDER_COMMENT);
@@ -68,8 +68,8 @@ class ChangeRequestTest {
     ChangeRequest changeRequest = new ChangeRequest(
         CHANGE_CHANGE_ID,
         MODEL_NAME,
-        BUSINESS_OPERATOR_USERNAME,
-        BUSINESS_OPERATOR_COMMENT);
+        MODEL_TUNER_USERNAME,
+        MODEL_TUNER_COMMENT);
 
     // when
     changeRequest.cancel(DECIDER_USERNAME);

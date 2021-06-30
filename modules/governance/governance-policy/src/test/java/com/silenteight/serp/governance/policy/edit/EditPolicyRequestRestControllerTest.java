@@ -22,7 +22,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.UUID;
 
-import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.QA;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
@@ -47,7 +50,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   private UsePolicyEventHandler eventHandler;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenPolicyEdited() {
     patch(EDIT_URL, getEditPolicyDto())
         .contentType(anything())
@@ -61,7 +64,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, QA, USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     patch(EDIT_URL, getEditPolicyDto())
         .contentType(anything())
@@ -77,7 +80,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenSavedStatusChanged() {
     EditPolicyDto editPolicyDto = new EditPolicyDto();
     editPolicyDto.setState(PolicyState.SAVED);
@@ -93,7 +96,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenArchivedStatusChanged() {
     EditPolicyDto editPolicyDto = new EditPolicyDto();
     editPolicyDto.setState(PolicyState.ARCHIVED);
@@ -110,7 +113,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenUseStatusChanged() {
     EditPolicyDto editPolicyDto = new EditPolicyDto();
     editPolicyDto.setState(PolicyState.IN_USE);
@@ -130,6 +133,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
   }
 
   static class UsePolicyEventHandler {
+
     @EventListener
     public void handle(NewPolicyInUseEvent event) {
     }

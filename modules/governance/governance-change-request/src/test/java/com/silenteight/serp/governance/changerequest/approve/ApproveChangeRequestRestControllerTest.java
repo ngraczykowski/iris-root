@@ -56,7 +56,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getApproverComment()).isEqualTo(APPROVER_COMMENT);
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
         .statusCode(FORBIDDEN.value());

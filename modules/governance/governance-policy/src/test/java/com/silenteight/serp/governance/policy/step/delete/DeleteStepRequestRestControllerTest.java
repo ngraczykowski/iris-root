@@ -37,7 +37,7 @@ class DeleteStepRequestRestControllerTest extends BaseRestControllerTest {
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenStepDeleted() {
     when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID)).thenReturn(POLICY_ID);
 
@@ -52,7 +52,7 @@ class DeleteStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getDeletedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
   void its403_whenNotPermittedRole() {
     delete(DELETE_STEP_URL)
         .contentType(anything())

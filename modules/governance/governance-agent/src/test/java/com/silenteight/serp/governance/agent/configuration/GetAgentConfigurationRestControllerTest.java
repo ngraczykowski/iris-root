@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ GetAgentConfigurationRestController.class})
+@Import({ GetAgentConfigurationRestController.class })
 class GetAgentConfigurationRestControllerTest extends BaseRestControllerTest {
 
   private static final String AGENTS_CONFIGURATION_URL = format("/v1/agents/%s/configuration/%s",
@@ -31,7 +31,7 @@ class GetAgentConfigurationRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private AgentsRegistry agentsRegistry;
 
-  @TestWithRole(roles = {POLICY_MANAGER})
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
   void its200_whenInvoked() {
 
     given(agentsRegistry.getAgentConfigurationDetails(DATE_AGENT_ID, AGENT_CONF_DATE_INDV_NORMAL))
@@ -44,13 +44,13 @@ class GetAgentConfigurationRestControllerTest extends BaseRestControllerTest {
         .body("'solvers.date'.generation.min-year", is(1900))
         .body("'solvers.date'.generation.max-year", is(2100))
         .body("'solvers.date'.boundary.min-year", is(1902))
-        .body("'solvers.date'.delimiters", is(of(" ",",")))
+        .body("'solvers.date'.delimiters", is(of(" ", ",")))
         .body("'solvers.date'.inconclusivePatterns", is(of(" to ")));
     verify(agentsRegistry, times(1))
         .getAgentConfigurationDetails(DATE_AGENT_ID, AGENT_CONF_DATE_INDV_NORMAL);
   }
 
-  @TestWithRole(roles = {APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR})
+  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(AGENTS_CONFIGURATION_URL).statusCode(FORBIDDEN.value());
   }
