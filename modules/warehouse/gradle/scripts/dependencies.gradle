@@ -166,6 +166,7 @@ libraries.jackson_dataformat_xml = [group: 'com.fasterxml.jackson.dataformat', n
 libraries.jackson_datatype_jdk8 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8']
 libraries.jackson_datatype_jsr310 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310']
 libraries.jackson_module_afterburner = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-afterburner']
+libraries.jackson_module_kotlin= [group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin']
 libraries.jackson_module_parameter_names = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-parameter-names']
 libraries.jackson_module_paranamer = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-paranamer']
 libraries.jakarta_annotation_api = [group: 'jakarta.annotation', name: 'jakarta.annotation-api']
