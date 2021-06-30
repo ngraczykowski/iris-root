@@ -76,7 +76,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @SneakyThrows
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedGetTenantName() {
     given(simulationReportingQuery.getTenantDtoByAnalysisId(ANALYSIS_ID))
         .willReturn(TENANT_NAME_WRAPPER);
@@ -88,13 +88,13 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForGetTenantName() {
     get(TEST_TENANT_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedGetReportList() {
     given(simulationReportingQuery.getReportsDefinitions(ANALYSIS_ID))
         .willReturn(List.of(REPORT_DEFINITION_DTO));
@@ -105,7 +105,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its404_whenAnalysisNotFound() {
     given(simulationReportingQuery.getReportsDefinitions(ANALYSIS_ID))
         .willThrow(AnalysisDoesNotExistException.class);
@@ -116,13 +116,13 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForGetReportList() {
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its303_whenReportGenerated() {
     given(simulationService.createSimulationReport(ANALYSIS_ID, REPORT_DEFINITION_ID))
         .willReturn(REPORT_INSTANCE);
@@ -132,7 +132,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its401_whenKibanaThrows401() {
     given(simulationService.createSimulationReport(ANALYSIS_ID, REPORT_DEFINITION_ID))
         .willThrow(new OpendistroKibanaClientException(401, "Unauthorized", SAMPLE_KIBANA_URL));
@@ -145,13 +145,13 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForGeneratingReports() {
     post(TEST_CREATE_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadReport() {
     given(simulationService.downloadReport(ANALYSIS_ID, REPORT_DEFINITION_ID, TIMESTAMP))
         .willReturn(KIBANA_REPORT_DTO);
@@ -168,7 +168,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForDownloadingReport() {
     get(TEST_DOWNLOAD_REPORT_URL).statusCode(FORBIDDEN.value());
   }
@@ -176,7 +176,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForDowloadingReportStatus() {
     get(TEST_DOWNLOAD_REPORT_STATUS).statusCode(FORBIDDEN.value());
   }

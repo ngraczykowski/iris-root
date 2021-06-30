@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.synchronization;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -23,8 +24,9 @@ class SynchronizationRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ReportSynchronizationUseCase reportSynchronizationUseCase;
 
+  @Disabled("According to security matrix no one have this permission")
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenSynchronizationSuccessful() {
     doNothing().when(reportSynchronizationUseCase).activate();
 
@@ -35,7 +37,7 @@ class SynchronizationRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { APPROVER, USER_ADMINISTRATOR, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForCreating() {
     post(REPORT_SYNCHRONIZATION_URL)
         .statusCode(FORBIDDEN.value());

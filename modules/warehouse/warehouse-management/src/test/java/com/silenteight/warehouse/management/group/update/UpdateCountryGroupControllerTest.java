@@ -27,7 +27,7 @@ class UpdateCountryGroupControllerTest extends BaseRestControllerTest {
   @MockBean
   private CountryGroupService countryGroupService;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its204_whenCountryGroupUpdated() {
     UpdateCountryGroupRequest dto = new UpdateCountryGroupRequest(NAME);
 
@@ -41,7 +41,7 @@ class UpdateCountryGroupControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getName()).isEqualTo(NAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     UpdateCountryGroupRequest dto = new UpdateCountryGroupRequest(NAME);
 

@@ -23,7 +23,7 @@ class ListCountryGroupControllerTest extends BaseRestControllerTest {
   @MockBean
   private ListCountryGroupQuery countryGroupQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its200_whenCountryGroupFound() {
     when(countryGroupQuery.listAll()).thenReturn(of(COUNTRY_GROUP_DTO));
 
@@ -34,7 +34,7 @@ class ListCountryGroupControllerTest extends BaseRestControllerTest {
         .body("[0].name", is(NAME));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(COUNTRY_GROUP_URL).statusCode(FORBIDDEN.value());
   }

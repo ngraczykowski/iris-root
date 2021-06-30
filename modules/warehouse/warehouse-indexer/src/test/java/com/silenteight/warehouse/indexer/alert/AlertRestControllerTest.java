@@ -8,7 +8,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
+import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA;
+import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.warehouse.indexer.alert.AlertControllerConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -48,9 +49,7 @@ class AlertRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void its403_whenNotPermittedRoleForGetQaAlertsList() {
     get(QA_ALERT_LIST_URL).statusCode(FORBIDDEN.value());
   }
@@ -76,9 +75,7 @@ class AlertRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void its403_whenNotPermittedRoleForGetQaAlert() {
     get(QA_ALERT_LIST_URL).statusCode(FORBIDDEN.value());
   }

@@ -85,7 +85,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   UserAwareReportingService userAwareReportingService;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedGetKibanaReportDefinitionList() {
 
     when(productionReportingQuery.getReportsDefinitions(AI_REASONING_TYPE))
@@ -97,15 +97,14 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @WithMockUser(username = USERNAME, authorities = {
+      USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForGetKibanaReportDefinitionList() {
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenReportGenerated() {
     given(productionService.createProductionReport(REPORT_TYPE, REPORT_DEFINITION_ID))
         .willReturn(REPORT_INSTANCE);
@@ -115,7 +114,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its401_whenKibanaThrows401() {
     given(productionService.createProductionReport(REPORT_TYPE, REPORT_DEFINITION_ID))
         .willThrow(new OpendistroKibanaClientException(401, "Unauthorized", SAMPLE_KIBANA_URL));
@@ -126,15 +125,14 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @WithMockUser(username = USERNAME, authorities = {
+      USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForGeneratingReports() {
     post(TEST_CREATE_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadReport() {
     given(productionService.downloadReport(REPORT_TYPE, REPORT_DEFINITION_ID, TIMESTAMP))
         .willReturn(KIBANA_REPORT_DTO);
@@ -149,7 +147,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its404_whenReportNotFound() {
     given(productionService.downloadReport(REPORT_TYPE, REPORT_DEFINITION_ID, TIMESTAMP))
         .willThrow(
@@ -159,15 +157,14 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @WithMockUser(username = USERNAME, authorities = {
+      USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForDownloadingReport() {
     get(TEST_DOWNLOAD_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { BUSINESS_OPERATOR })
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_WhenInvokedGetReportStatus() {
     given(productionService.getReportGeneratingStatus(REPORT_TYPE, DEFINITION_ID, TIMESTAMP))
         .willReturn(TEST_REPORT_STATUS);
@@ -178,7 +175,7 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForDownloadingReportStatus() {
     get(TEST_REPORT_STATUS_URL).statusCode(FORBIDDEN.value());
   }

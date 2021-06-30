@@ -23,7 +23,7 @@ class CreateCountryGroupRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private CountryGroupService countryGroupService;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its201_whenCountryGroupCreated() {
     CountryGroupDto dto = new CountryGroupDto(UUID, NAME);
 
@@ -34,7 +34,7 @@ class CreateCountryGroupRestControllerTest extends BaseRestControllerTest {
     verify(countryGroupService).create(dto);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     CountryGroupDto dto = new CountryGroupDto(UUID, NAME);
 

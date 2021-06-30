@@ -25,7 +25,7 @@ class GetCountryGroupRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private GetCountryGroupQuery countryGroupQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its200_whenCountryGroupFound() {
     when(countryGroupQuery.get(UUID)).thenReturn(COUNTRY_GROUP_DTO);
 
@@ -35,7 +35,7 @@ class GetCountryGroupRestControllerTest extends BaseRestControllerTest {
         .body("name", is(NAME));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(GET_COUNTRY_GROUP_URL).statusCode(FORBIDDEN.value());
   }

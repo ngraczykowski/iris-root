@@ -6,10 +6,10 @@ sep.auth.basic.users:
   - username: bo
     password: bodev
     roles:
-      - BUSINESS_OPERATOR
+      - MODEL_TUNER
       - QA
   - username: businessuser
     password: businessuser
     roles:
-      - BUSINESS_OPERATOR
+      - MODEL_TUNER
       - QA
