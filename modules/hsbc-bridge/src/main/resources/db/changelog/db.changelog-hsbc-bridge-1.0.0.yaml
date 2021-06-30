@@ -488,3 +488,9 @@ databaseChangeLog:
             constaintName: fk_recommendation_metadata_id_fk
             referencedColumnNames: id
             referencedTableName: hsbc_bridge_recommendation_metadata
+
+  - changeSet:
+      id: 1.0.0-13
+      author: bmartofel
+      changes:
+        - sql: CREATE TABLE shedlock(name VARCHAR(64) NOT NULL, lock_until TIMESTAMP NOT NULL, locked_at TIMESTAMP NOT NULL, locked_by VARCHAR(255) NOT NULL, PRIMARY KEY (name));

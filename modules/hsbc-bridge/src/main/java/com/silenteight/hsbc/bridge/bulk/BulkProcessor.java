@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 import com.silenteight.hsbc.bridge.report.WarehouseFacade;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ class BulkProcessor {
   private final BulkRepository bulkRepository;
 
   @Scheduled(fixedDelay = 15 * 1000, initialDelay = 2000)
+  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT10S", lockAtMostFor = "PT4M")
   @Transactional
   public void processPreProcessedBulks() {
     bulkRepository.findByStatus(PRE_PROCESSED).forEach(this::tryToProcessBulk);

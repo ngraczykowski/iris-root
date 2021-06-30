@@ -83,6 +83,8 @@ libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.8.0']
 libraries.jetbrains_annotations = [group: 'org.jetbrains', name: 'annotations', version: '20.1.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
 libraries.orika = [group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4']
+libraries.shedlock_jdbc_template = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: '4.24.0']
+libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: '4.24.0']
 libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
 
 // Messaging
@@ -150,6 +152,8 @@ dependencies {
   implementation libraries.orika
   implementation libraries.postgresql
   implementation libraries.protobuf_util
+  implementation libraries.shedlock_jdbc_template
+  implementation libraries.shedlock_spring
   implementation libraries.silenteight_governance_model_api
   implementation libraries.slf4j_api
   implementation libraries.spring_amqp
