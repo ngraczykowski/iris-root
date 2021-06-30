@@ -19,8 +19,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ AgentsRestController.class })
-class AgentsRestControllerTest extends BaseRestControllerTest {
+@Import({ FeaturesRestController.class })
+class FeaturesRestControllerTest extends BaseRestControllerTest {
 
   private static final String ALL_AGENTS_URL = "/v1/features";
   private static final List<String> FEATURE_VALUE = of("MATCH", "NO_MATCH", "NO_DATA");
@@ -29,7 +29,7 @@ class AgentsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private FeaturesProvider featuresProvider;
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
   void its200_whenInvoked() {
     given(featuresProvider.getFeaturesListDto()).willReturn(prepareMockData());
 
@@ -38,7 +38,7 @@ class AgentsRestControllerTest extends BaseRestControllerTest {
         .body("features[0].solutions", is(FEATURE_VALUE));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(ALL_AGENTS_URL).statusCode(FORBIDDEN.value());
   }

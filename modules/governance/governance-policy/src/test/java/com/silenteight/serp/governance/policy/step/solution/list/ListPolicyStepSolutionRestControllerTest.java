@@ -26,7 +26,7 @@ class ListPolicyStepSolutionRestControllerTest extends BaseRestControllerTest {
   private PolicyStepSolutionQuery solutionsQuery;
 
   @TestWithRole(roles =
-      { ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, BUSINESS_OPERATOR, POLICY_MANAGER })
+      { USER_ADMINISTRATOR, QA, AUDITOR, APPROVER, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its200WithCorrectBody_whenFound() {
     given(solutionsQuery.list())
         .willReturn(

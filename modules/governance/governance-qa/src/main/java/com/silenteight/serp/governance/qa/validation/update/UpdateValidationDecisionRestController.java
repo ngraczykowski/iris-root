@@ -31,7 +31,7 @@ class UpdateValidationDecisionRestController {
   private final UpdateValidationDecisionUseCase decisionUseCase;
 
   @PatchMapping(UPDATE_VALIDATION_DECISION_URL)
-  @PreAuthorize("isAuthorized('ALERTS_VALIDATION')")
+  @PreAuthorize("isAuthorized('ALERTS_VALIDATION_DECISION')")
   public ResponseEntity<Void> edit(@PathVariable UUID id,
       @RequestBody @Valid UpdateAnalysisDecisionDto updateAnalysisDecisionDto,
       Authentication authentication) {

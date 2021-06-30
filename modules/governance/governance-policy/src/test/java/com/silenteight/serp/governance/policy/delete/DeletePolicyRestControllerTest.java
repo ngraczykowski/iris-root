@@ -41,7 +41,7 @@ class DeletePolicyRestControllerTest extends BaseRestControllerTest {
   private PolicyService policyService;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenPolicyDeleted() {
     delete(DELETE_URL)
         .contentType(anything())
@@ -55,7 +55,7 @@ class DeletePolicyRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenPolicyNotInDraftState() {
     WrongPolicyStateException exception = new WrongPolicyStateException(POLICY_ID, SAVED);
     doThrow(exception).when(policyService).deletePolicy(any());
@@ -66,7 +66,7 @@ class DeletePolicyRestControllerTest extends BaseRestControllerTest {
         .body(containsString(exception.getMessage()));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, AUDITOR, QA, USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     delete(DELETE_URL)
         .contentType(anything())

@@ -60,12 +60,12 @@ class ListVectorsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ListVectorsQuery listVectorsQuery;
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(POLICY_STEP_FEATURE_VECTORS_PAGING_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
   void its200_whenStepSolvesFeatureVectorsWithPaging() {
     given(findVectorsByStepUseCase.activate(STEP_NAME, new Paging(PAGE_INDEX, PAGE_SIZE)))
         .willReturn(FEATURE_VECTORS_DTO);
@@ -79,7 +79,7 @@ class ListVectorsRestControllerTest extends BaseRestControllerTest {
         .body("featureVectors[1].values", is(FEATURE_VALUES_2));
   }
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR })
   void its200_whenListingFeatureVectors() {
     given(findVectorsByPolicyUseCase.activate(new Paging(PAGE_INDEX, PAGE_SIZE)))
         .willReturn(FEATURE_VECTORS_DTO);

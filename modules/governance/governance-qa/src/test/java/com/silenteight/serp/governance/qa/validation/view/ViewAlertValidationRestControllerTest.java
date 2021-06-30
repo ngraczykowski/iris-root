@@ -41,18 +41,19 @@ class ViewAlertValidationRestControllerTest extends BaseRestControllerTest {
 
   ViewDecisionCommand command = getViewDecisionCommand();
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its404_whenAlertNotFound() {
     WrongAlertNameException exception = new WrongAlertNameException(ALERT_NAME);
     doThrow(exception).when(decisionService).view(command.getAlertName(), command.getLevel());
     post(ALERTS_VIEW_URL)
         .statusCode(NOT_FOUND.value())
         .body(containsString(exception.getMessage()));
-    verify(decisionService, times(1)).view(command.getAlertName(),
+    verify(decisionService, times(1)).view(
+        command.getAlertName(),
         command.getLevel());
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its400_whenAlertAlreadyProcessed() {
     AlertAlreadyProcessedException exception = new AlertAlreadyProcessedException(ALERT_NAME);
     doThrow(new AlertAlreadyProcessedException(ALERT_NAME)).when(decisionService)
@@ -65,7 +66,7 @@ class ViewAlertValidationRestControllerTest extends BaseRestControllerTest {
     verify(decisionService, times(1)).view(command.getAlertName(), command.getLevel());
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenUseCaseUsedWithCorrectAlert() {
     post(ALERTS_VIEW_URL).statusCode(ACCEPTED.value());
 
@@ -73,7 +74,7 @@ class ViewAlertValidationRestControllerTest extends BaseRestControllerTest {
         command.getAlertName(), command.getLevel());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     post(ALERTS_VIEW_URL).statusCode(FORBIDDEN.value());
   }

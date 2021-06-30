@@ -34,14 +34,14 @@ class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest
   @MockBean
   AlertDetailsQuery detailsQuery;
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA })
   void its404_whenAlertDetailsNotFound() {
     given(detailsQuery.details(ALERT_ID)).willThrow(new WrongAlertIdException(ALERT_ID));
 
     get(ALERTS_DETAILS_URL).statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(roles = { BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, QA })
   void its200_andAlertDetailsReturned_whenAlertDetailsFound() {
     AlertAnalysisDetailsDto alertAnalysisDetailsDto = new DummyAlertAnalysisDetailsDto();
     given(detailsQuery.details(ALERT_ID)).willReturn(alertAnalysisDetailsDto);
@@ -56,7 +56,7 @@ class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest
         .body("addedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(ALERTS_DETAILS_URL).statusCode(FORBIDDEN.value());
   }

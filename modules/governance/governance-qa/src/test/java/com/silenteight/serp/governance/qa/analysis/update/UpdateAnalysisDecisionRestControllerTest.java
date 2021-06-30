@@ -47,7 +47,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
   UpdateAnalysisDecisionUseCase useCase;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = QA)
   void its404_whenAlertNotFound() {
     WrongAlertNameException exception = new WrongAlertNameException(ALERT_NAME);
     doThrow(exception).when(useCase).activate(any());
@@ -58,9 +58,10 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = QA)
   void its400_whenDecisionAlreadyExists() {
-    DecisionAlreadyExistsException exception = new DecisionAlreadyExistsException(ALERT_NAME,
+    DecisionAlreadyExistsException exception = new DecisionAlreadyExistsException(
+        ALERT_NAME,
         ANALYSIS);
     doThrow(exception).when(useCase).activate(any());
 
@@ -69,7 +70,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = QA)
   void its200_whenUseCaseUsed() {
     //given
     ArgumentCaptor<UpdateDecisionRequest> commandCaptor =
@@ -88,7 +89,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
     assertThat(request.getCreatedAt()).isNotNull();
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, AUDITOR, USER_ADMINISTRATOR, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     patch(UPDATE_DECISION_URL, getUpdateAnalysisDecisionDto()).statusCode(FORBIDDEN.value());
   }

@@ -31,14 +31,14 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
   private static final String USERNAME = "username";
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
-  void its204_whenBusinessOperatorCallsEndpoint() {
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its204_whenModelTunerCallsEndpoint() {
     post(mappingForCancellation(CHANGE_REQUEST_ID))
         .statusCode(NO_CONTENT.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void callsCancelUseCase() {
     post(mappingForCancellation(CHANGE_REQUEST_ID));
 
@@ -51,7 +51,7 @@ class CancelChangeRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getCancellerUsername()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(mappingForCancellation(CHANGE_REQUEST_ID))
         .statusCode(FORBIDDEN.value());

@@ -41,7 +41,7 @@ class ClonePolicyRestControllerTest extends BaseRestControllerTest {
   private PolicyService policyService;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenPolicyUseCaseUsed() {
 
     post(String.format(CLONE_POLICY_URL, POLICY_ID, POLICY_ID_CLONED))
@@ -55,7 +55,7 @@ class ClonePolicyRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getCreatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, AUDITOR, QA, USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     post(String.format(CLONE_POLICY_URL, POLICY_ID, POLICY_ID_CLONED))
         .contentType(anything())
@@ -63,7 +63,7 @@ class ClonePolicyRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its422_whenPolicyIdAlreadyExists() {
     WrongBasePolicyException exception = new WrongBasePolicyException(POLICY_ID);
     Mockito.when(policyService.clonePolicy(any())).thenThrow(exception);

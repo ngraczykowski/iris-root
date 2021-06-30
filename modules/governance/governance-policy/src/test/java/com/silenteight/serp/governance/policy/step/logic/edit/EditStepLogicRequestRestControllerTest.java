@@ -50,7 +50,7 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenLogicSaved() {
     when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID)).thenReturn(POLICY_ID);
 
@@ -106,7 +106,7 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
     return of(featureConfiguration);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
   void its403_whenNotPermittedRole() {
     put(EDIT_LOGIC_URL, new EditStepLogicDto(emptyList()))
         .contentType(anything())

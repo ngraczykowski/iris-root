@@ -34,7 +34,7 @@ class CreatePolicyRequestRestControllerTest extends BaseRestControllerTest {
   private PolicyService policyService;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its202_whenPolicyAdded() {
     post(CREATE_POLICY_URL, new CreatePolicyDto(POLICY_ID, POLICY_NAME, PolicyState.DRAFT))
         .contentType(anything())
@@ -43,7 +43,7 @@ class CreatePolicyRequestRestControllerTest extends BaseRestControllerTest {
     verify(policyService).createPolicy(POLICY_ID, POLICY_NAME, USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, AUDITOR, QA, USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     post(CREATE_POLICY_URL, new CreatePolicyDto(POLICY_ID, POLICY_NAME, PolicyState.DRAFT))
         .contentType(anything())

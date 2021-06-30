@@ -25,7 +25,7 @@ class ExportModelRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ExportModelUseCase exportModelUseCase;
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { MODEL_TUNER })
   void its200_whenModelExported() {
     given(exportModelUseCase.apply(MODEL_ID)).willReturn(transferredModelRoot());
 
@@ -40,7 +40,7 @@ class ExportModelRestControllerTest extends BaseRestControllerTest {
         .body("model.policy.policy.description", is(POLICY_DESCRIPTION));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(EXPORT_MODEL_URL).statusCode(FORBIDDEN.value());
   }

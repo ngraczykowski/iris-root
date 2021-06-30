@@ -31,7 +31,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   private CreateChangeRequestUseCase createChangeRequestUseCase;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = BUSINESS_OPERATOR)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenChangeRequestCreated() {
     post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto())
         .contentType(anything())
@@ -47,7 +47,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
             .build());
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, POLICY_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto())
         .contentType(anything())

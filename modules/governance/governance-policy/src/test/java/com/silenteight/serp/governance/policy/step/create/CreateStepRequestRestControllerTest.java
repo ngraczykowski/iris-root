@@ -41,7 +41,7 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
   private PolicyService policyService;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = POLICY_MANAGER)
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenStepAdded() {
     post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, NAME, DESCRIPTION, SOLUTION, NARROW))
         .contentType(anything())
@@ -58,7 +58,7 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getCreatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
   void its403_whenNotPermittedRole() {
     post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, NAME, DESCRIPTION, SOLUTION, NARROW))
         .contentType(anything())

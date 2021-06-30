@@ -61,7 +61,7 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ListPoliciesRequestQuery listPolicyRequestQuery;
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, QA, QA_ISSUE_MANAGER, AUDITOR, MODEL_TUNER })
   void its200_whenNoPolicies() {
     given(listPolicyRequestQuery.list(of(SAVED))).willReturn(of());
 
@@ -71,12 +71,12 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .body("size()", is(0));
   }
 
-  @TestWithRole(roles = { APPROVER, ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(SAVED_POLICY_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, QA, QA_ISSUE_MANAGER, AUDITOR, MODEL_TUNER })
   void its200_whenNoFilterAndPoliciesFound() {
     given(listPolicyRequestQuery.listAll()).willReturn(of(FIRST_POLICY_DTO));
 
@@ -93,7 +93,7 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].updatedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, QA, QA_ISSUE_MANAGER, AUDITOR, MODEL_TUNER })
   void its200_whenPoliciesFound() {
     given(listPolicyRequestQuery.list(of(SAVED))).willReturn(of(FIRST_POLICY_DTO));
 
@@ -110,7 +110,7 @@ class ListPolicyRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].updatedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { POLICY_MANAGER })
+  @TestWithRole(roles = { APPROVER, QA, QA_ISSUE_MANAGER, AUDITOR, MODEL_TUNER })
   void its200_whenPoliciesFoundInTwoStates() {
     given(listPolicyRequestQuery.list(of(SAVED, DRAFT))).willReturn(
         of(FIRST_POLICY_DTO, SECOND_POLICY_DTO));
