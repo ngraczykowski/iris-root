@@ -26,7 +26,7 @@ class AlertRestController {
   private final AlertQueryService alertQueryService;
 
   @GetMapping(QA_ALERT_LIST_URL)
-  @PreAuthorize("isAuthorized('LIST_ALERTS')")
+  @PreAuthorize("isAuthorized('VIEW_ALERTS_DATA')")
   public ResponseEntity<AlertsAttributesListDto> getAlertsListDto(
       @RequestParam(name = "fields") List<String> fields,
       @RequestParam(name = "name") List<String> names) {
@@ -35,7 +35,7 @@ class AlertRestController {
   }
 
   @GetMapping(QA_ALERT_DETAIL_URL)
-  @PreAuthorize("isAuthorized('LIST_ALERTS')")
+  @PreAuthorize("isAuthorized('VIEW_ALERTS_DATA')")
   public ResponseEntity<AlertAttributes> getSingleAlertDto(
       @PathVariable("id") String id, @RequestParam(name = "fields") List<String> fields) {
 
