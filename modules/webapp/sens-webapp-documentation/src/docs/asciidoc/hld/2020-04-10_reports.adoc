@@ -2,7 +2,7 @@
 
 - Created at: *10.04.2020*
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-602[WA-602]*
-- Reason: As a Business Operator or Auditor I want to generate report on-demand,
+- Reason: As a Model Tuner or Auditor I want to generate report on-demand,
           so I can download it once the report will be ready.
 
 [plantuml, sequence-diagram, svg]

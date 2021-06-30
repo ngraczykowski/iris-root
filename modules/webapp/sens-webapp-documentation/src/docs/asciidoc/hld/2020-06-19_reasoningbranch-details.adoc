@@ -1,14 +1,14 @@
 = HLD #10
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-832[WA-832]*
-- Reason: As a Business Operator or Approver I want to be able to see the Reasoning Branch Details for the RB selected on a list
+- Reason: As a Model Tuner or Approver I want to be able to see the Reasoning Branch Details for the RB selected on a list
 
 [plantuml,bo-a-gets-reasoning-branch-details,svg]
 -----
 @startuml
 header Get Reasoning Branch Details
 
-actor BOA as "Business Operator or Approver"
+actor BOA as "Model Tuner or Approver"
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "RB Browser"

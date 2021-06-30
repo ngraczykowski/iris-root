@@ -1,14 +1,14 @@
 = HLD #7
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-831[WA-831]*
-- Reason: As a Business Operator or Approver I want to be able to list all Reasoning Branches
+- Reason: As a Model Tuner or Approver I want to be able to list all Reasoning Branches
 
 [plantuml,bo-a-gets-list-of-reasoning-branches,svg]
 -----
 @startuml
 header List Reasoning Branches
 
-actor BOA as "Business Operator or Approver"
+actor BOA as "Model Tuner or Approver"
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "RB Browser"

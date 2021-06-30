@@ -7,7 +7,7 @@ import com.silenteight.sens.webapp.user.remove.UserNotFoundException;
 
 import org.mockito.ArgumentCaptor;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMINISTRATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.willThrow;
@@ -20,12 +20,12 @@ class UserRestControllerRemoveUserTest extends UserRestControllerTest {
 
   private static final String USERNAME = "jdoe234";
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its204_whenUserDeleted() {
     delete(userResourcePath()).statusCode(NO_CONTENT.value());
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void appliesCommandOnUseCase() {
     delete(userResourcePath());
 
@@ -39,7 +39,7 @@ class UserRestControllerRemoveUserTest extends UserRestControllerTest {
     assertThat(command.getExpectedOrigin()).isEqualTo(SENS_ORIGIN);
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its409_whenOriginDoesNotMatch() {
     willThrow(new OriginNotMatchingException())
         .given(removeUserUseCase).apply(any(RemoveUserCommand.class));
@@ -47,7 +47,7 @@ class UserRestControllerRemoveUserTest extends UserRestControllerTest {
     delete(userResourcePath()).statusCode(CONFLICT.value());
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its404_whenUserNotFound() {
     willThrow(new UserNotFoundException())
         .given(removeUserUseCase).apply(any(RemoveUserCommand.class));

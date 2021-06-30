@@ -43,6 +43,6 @@ class ReportUserDto {
   }
 
   private boolean isAdmin() {
-    return "admin".equalsIgnoreCase(role);
+    return "User Administrator".equalsIgnoreCase(role);
   }
 }

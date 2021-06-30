@@ -107,7 +107,7 @@ Make sure you have completed at least the following:
 
 1. Create test user
    ```
-   ./bin/serp user create -u business_operator -d "Business Operator" -r "Business Operator" --password "Password1!"
+   ./bin/serp user create -u model_tuner -d "Model Tuner" -r "Model Tuner" --password "Password1!"
    ``` 
    You may want to use `scripts/create-users.sh` to create multiple users with various rules all at once.
 
@@ -210,10 +210,13 @@ You can use `scripts/create-users.sh` script to pre-create the following users:
 | Username         | User role          | Password            
 |------------------|--------------------|---------------------
 |administrator     | Administrator      | Password1! 
-|business_operator | Business Operator  | Password1! 
+|model_tuner       | Model Tuner        | Password1! 
 |approver          | Approver           | Password1! 
 |analyst           | Analyst            | Password1! 
 |auditor           | Auditor            | Password1!
+|user_administrator| User Administrator | Password1!
+|QA                | QA                 | Password1!
+|QA Issue Manager  | QA Issue Manager   | Password1!
 |superuser         | < all above >      | Password1!
  
 This script requires the following services to be running:  Webapp, Keycloak

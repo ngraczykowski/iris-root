@@ -7,10 +7,10 @@ import com.silenteight.sens.webapp.scb.chrome.extension.GetChromeExtensionConfig
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMINISTRATOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.scb.chrome.extension.rest.ChromeExtensionRestControllerFixtures.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
@@ -24,7 +24,7 @@ class ChromeExtensionRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private GetChromeExtensionConfigurationUseCase getConfigurationUseCase;
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, MODEL_TUNER })
   void its200WithCorrectBody_whenAvailable() {
     given(getConfigurationUseCase.apply()).willReturn(CHROME_EXTENSION_CONFIGURATION);
 

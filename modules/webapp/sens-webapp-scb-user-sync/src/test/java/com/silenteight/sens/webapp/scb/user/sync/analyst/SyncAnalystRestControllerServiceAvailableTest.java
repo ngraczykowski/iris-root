@@ -6,10 +6,10 @@ import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ADMINISTRATOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.BUSINESS_OPERATOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.SyncAnalystStatsDtoFixtures.ALL_CHANGED_WITH_ONE_ERROR;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -22,7 +22,7 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
   @MockBean
   private SyncAnalystsUseCase service;
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void producesStats_whenAnalystsAreSync() {
     // given
     when(service.synchronize()).thenReturn(ALL_CHANGED_WITH_ONE_ERROR);
@@ -37,7 +37,7 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
         .body("errors", is(ALL_CHANGED_WITH_ONE_ERROR.getErrors()));
   }
 
-  @TestWithRole(roles = { ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { ANALYST, AUDITOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     post("/users/sync/analysts").statusCode(FORBIDDEN.value());
   }

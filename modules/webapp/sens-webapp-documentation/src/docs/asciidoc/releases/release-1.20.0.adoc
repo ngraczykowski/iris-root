@@ -18,9 +18,9 @@
 include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-645[WA-645]
-|Business Operator can download a CSV report from the Web App presenting the list of reasoning branches.
+|Model Tuner can download a CSV report from the Web App presenting the list of reasoning branches.
 |{issue_url}WA-619[WA-619]
-|Business Operator can cancel any Pending Change Request.
+|Model Tuner can cancel any Pending Change Request.
 |{issue_url}WA-861[WA-861]
 |Front-end developers can use Swagger from serp-master.
 

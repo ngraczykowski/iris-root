@@ -21,6 +21,6 @@
 include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-616[WA-616], {issue_url}WA-617[WA-617]
-|Business Operator can suggest changes in the Reasoning Branch solution, and the Approver can Accept or Reject those suggestions.
+|Model Tuner can suggest changes in the Reasoning Branch solution, and the Approver can Accept or Reject those suggestions.
 
 include::./templates/changelog-table-footer.adoc[]

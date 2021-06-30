@@ -22,7 +22,7 @@ class ConfigurationSolutionRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private SolutionsQuery solutionsQuery;
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, MODEL_TUNER })
   void its200WithCorrectBody_whenFound() {
     given(solutionsQuery.list())
         .willReturn(

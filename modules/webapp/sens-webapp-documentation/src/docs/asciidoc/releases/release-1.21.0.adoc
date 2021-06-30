@@ -18,15 +18,15 @@
 include::./templates/changelog-table-header.adoc[]
 
 |{issue_url}WA-826[WA-826]
-|Business Operator can view archived discrepancies in Circuit Breaker Dashboard.
+|Model Tuner can view archived discrepancies in Circuit Breaker Dashboard.
 
 |{issue_url}WA-173[WA-173]
 |Auditor is able to generate CSV report containing a list of all users.
 
 |{issue_url}WA-936[WA-936]
-|Business Operator is able to select a Hinted Solution if "hinted" feature is turned on.
+|Model Tuner is able to select a Hinted Solution if "hinted" feature is turned on.
 
 |{issue_url}WA-865[WA-865]
-|Business Operator or Approver can view closed Change Requests.
+|Model Tuner or Approver can view closed Change Requests.
 
 include::./templates/changelog-table-footer.adoc[]

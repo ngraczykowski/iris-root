@@ -1,7 +1,7 @@
 = Frontend Test Cases
 
 == Notes
-We assume that, in this document, user having specific role is described by this role, eg. when we say business operator, we can mean either user with role Business Operator or user with role Admin, as Admin role contains all others
+We assume that, in this document, user having specific role is described by this role, eg. when we say Model Tuner, we can mean either user with role Model Tuner or user with role Admin, as Admin role contains all others
 for brevity we have omitted test cases for user with Admin role only, but we encourage tester to test all the happy-paths also for admin user
 
 == Reasoning Branch Management

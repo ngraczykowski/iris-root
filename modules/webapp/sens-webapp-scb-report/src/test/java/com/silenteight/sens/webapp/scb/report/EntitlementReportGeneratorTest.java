@@ -35,7 +35,7 @@ class EntitlementReportGeneratorTest {
         "Entitlement Name,Entitlement Type,Entitlement Description,Entitlement Link",
         "ROLE_ANALYST,USER,A user that can use a SENS Chrome Extension,",
         "ROLE_AUDITOR,USER,A user that can generate and download reports from UI and CLI,",
-        "ROLE_BUSINESS_OPERATOR,USER,"
+        "ROLE_MODEL_TUNER,USER,"
             + "A user that can manage users and submit changes to reasoning branches,",
         "ADMIN,ADMIN,A user that have all roles mentioned above,"
     };

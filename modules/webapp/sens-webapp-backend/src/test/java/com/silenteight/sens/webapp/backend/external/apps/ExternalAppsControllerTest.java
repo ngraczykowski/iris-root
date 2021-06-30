@@ -16,24 +16,24 @@ import static org.springframework.http.HttpStatus.OK;
 
 
 @EnableConfigurationProperties(ExternalAppsProperties.class)
-@Import({  ExternalAppsConfiguration.class, ExternalAppsController.class })
+@Import({ ExternalAppsConfiguration.class, ExternalAppsController.class })
 @TestPropertySource(properties = "sens.webapp.external.apps.reportingUrl=" +
     ExternalAppsControllerTest.REDIRECT_URL)
 class ExternalAppsControllerTest extends BaseRestControllerTest {
 
   static final String REDIRECT_URL = "http://localhost/reporting/ui";
 
-  @TestWithRole(roles = { AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { AUDITOR, APPROVER, MODEL_TUNER, QA })
   void its307_whenProperRole() {
     get("/apps/reporting").statusCode(MOVED_PERMANENTLY.value()).header("Location", REDIRECT_URL);
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, MODEL_TUNER })
   void its200_whenListingApps() {
     get("/apps/list").statusCode(OK.value()).body("apps", equalTo(of("reporting")));
   }
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, APPROVER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, USER_ADMINISTRATOR, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get("/apps/reporting").statusCode(FORBIDDEN.value());
   }

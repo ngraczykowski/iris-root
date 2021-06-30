@@ -1,7 +1,7 @@
 = HLD #9
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-824[WA-824]*
-- Reason: As a Business Operator I can archive all discrepancies related to selected RB
+- Reason: As a Model Tuner I can archive all discrepancies related to selected RB
 
 
 [plantuml,bo-archives-discrepancies,svg]
@@ -9,7 +9,7 @@
 @startuml
 header Archive selected discrepancies
 
-actor "Business Operator"
+actor "Model Tuner"
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "CB Dashboard GUI"
@@ -23,7 +23,7 @@ box "RabbitMQ"
     queue Queue
 end box
 
-"Business Operator" -> Frontend : Archive selected Discrepancies
+"Model Tuner" -> Frontend : Archive selected Discrepancies
 
 Frontend -> Backend : Archive Discrepancies by Discrepancy IDs
 note over Frontend, Backend
@@ -38,7 +38,7 @@ end note
 
 Backend -> Frontend : Command Accepted response
 deactivate Backend
-Frontend->"Business Operator": Inform that request has been accepted
+Frontend->"Model Tuner": Inform that request has been accepted
 
 
 @enduml

@@ -41,7 +41,7 @@ class UserAuthActivityEventProviderTest {
   private static final int REPORT_PERIOD_IN_MINUTES = 60;
 
   private static final UserRoles USER_ROLES =
-      new ScopeUserRoles(Map.of(ROLES_SCOPE, List.of("ADMINISTRATOR", "AUDITOR")));
+      new ScopeUserRoles(Map.of(ROLES_SCOPE, List.of("USER_ADMINISTRATOR", "AUDITOR")));
 
   private static final int SESSION_TIMEOUT = 1800;
 

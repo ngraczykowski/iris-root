@@ -10,7 +10,7 @@ public class UpdateUserDtoFixtures {
   public static final UpdateUserDto VALID_UPDATE_REQUEST = UpdateUserDto
       .builder()
       .displayName("John Doe")
-      .roles(singleton("Admin"))
+      .roles(singleton("User Administrator"))
       .build();
 
   public static final UpdateUserDto VALID_UPDATE_DISPLAYNAME_REQUEST = UpdateUserDto
@@ -20,6 +20,6 @@ public class UpdateUserDtoFixtures {
 
   public static final UpdateUserDto VALID_UPDATE_ROLES_REQUEST = UpdateUserDto
       .builder()
-      .roles(singleton("Admin"))
+      .roles(singleton("User Administrator"))
       .build();
 }

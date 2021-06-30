@@ -67,7 +67,7 @@ class UserAuthActivityReportGeneratorTest {
                 .build(),
             UserAuthActivityEventDto.builder()
                 .username("asmith")
-                .roles(List.of("BUSINESS_OPERATOR"))
+                .roles(List.of("MODEL_TUNER"))
                 .ipAddress("192.122.0.8")
                 .loginTimestamp(Instant.parse("2020-08-16T12:35:27Z").toEpochMilli())
                 .build(),
@@ -88,7 +88,7 @@ class UserAuthActivityReportGeneratorTest {
             "Access_ID,Access_Profile,Access_Country,Access_SourceIP,"
                 + "Access_LoginTimeStamp,Access_LogoutTimeStamp",
             "jdoe,\"ANALYST,AUDITOR\",Global,192.154.0.1,16082020 12:25:14,",
-            "asmith,BUSINESS_OPERATOR,Global,192.122.0.8,16082020 12:35:27,",
+            "asmith,MODEL_TUNER,Global,192.122.0.8,16082020 12:35:27,",
             "jkowalsky,APPROVER,Global,192.122.0.8,16082020 12:45:32,16082020 12:50:38"))));
   }
 

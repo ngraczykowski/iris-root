@@ -39,7 +39,7 @@ class UserRolesRetrieverTest {
   void retrieveRoles() {
     // given
     String username = "jsmith";
-    List<String> roles = List.of("APPROVER", "ANALYST", "BUSINESS_OPERATOR");
+    List<String> roles = List.of("APPROVER", "ANALYST", "MODEL_TUNER");
     List<String> countryGroups = List.of("SG", "HK");
     Map<String, List<String>> rolesByScope = Map.of(
         ROLES_SCOPE, roles,

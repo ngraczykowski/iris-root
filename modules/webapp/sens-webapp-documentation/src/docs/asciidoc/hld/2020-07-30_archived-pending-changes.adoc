@@ -1,14 +1,14 @@
 = HLD #12
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-865*
-- Reason: As a Business Operator or Approver, I can see a list of old ChangeRequests
+- Reason: As a Model Tuner or Approver, I can see a list of old ChangeRequests
 
 [plantuml,bo-gets-list-of-discrepant-branches,svg]
 -----
 @startuml
 header List closed change requests
 
-actor "Business Operator or Approver" as BOA
+actor "Model Tuner or Approver" as BOA
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "Pending Changes"

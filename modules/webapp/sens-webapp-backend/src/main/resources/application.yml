@@ -187,7 +187,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
 
   metrics:
     tags:
@@ -258,89 +258,48 @@ sens.web:
       className: "ai-solution-negative-1"
 
 sens.webapp.roles:
-    roles-scope: ${keycloak.frontend-client-id}
-    country-groups-scope: "kibana"
+  roles-scope: ${keycloak.frontend-client-id}
+  country-groups-scope: "kibana"
 
 # Authorization
 sep.auth:
   permissionMethodsMappings:
-    APPROVE_CHANGE_REQUESTS:
-      - "APPROVE_CHANGE_REQUEST"
-    ARCHIVE_DISCREPANCIES:
-      - "ARCHIVE_DISCREPANCIES"
-    CANCEL_CHANGE_REQUESTS:
-      - "CANCEL_CHANGE_REQUEST"
-    CREATE_CHANGE_REQUESTS:
-      - "CREATE_BULK_CHANGE"
-      - "CREATE_CHANGE_REQUEST"
-      - "GET_DECISION_TREE"
-      - "VALIDATE_REASONING_BRANCHES"
-    GENERATE_REPORTS:
-      - "GENERATE_REPORT"
-      - "GET_DECISION_TREE"
     MANAGE_USERS:
       - "CREATE_USER"
       - "EDIT_USER"
       - "REMOVE_USER"
       - "LIST_ROLES"
       - "RESET_USER_PASSWORD"
-    REJECT_CHANGE_REQUESTS:
-      - "REJECT_CHANGE_REQUEST"
     SYNC_ANALYSTS:
       - "SYNC_ANALYSTS"
-    VIEW_CHANGE_REQUESTS:
-      - "GET_CLOSED_BULK_CHANGE_IDS"
-      - "GET_PENDING_BULK_CHANGE_IDS"
-      - "LIST_CLOSED_BULK_CHANGES"
-      - "LIST_CLOSED_CHANGE_REQUESTS"
-      - "LIST_PENDING_BULK_CHANGES"
-      - "LIST_PENDING_CHANGE_REQUESTS"
-    VIEW_DISCREPANCIES:
-      - "LIST_DISCREPANCIES"
-      - "LIST_DISCREPANT_BRANCH_IDS"
-      - "LIST_DISCREPANT_BRANCHES"
-    VIEW_REASONING_BRANCHES:
-      - "LIST_FEATURE_NAMES"
-      - "LIST_FEATURE_VALUES"
-      - "LIST_REASONING_BRANCHES"
     VIEW_USERS:
       - "LIST_USERS"
-    REPORTING_APP:
+    DOWNLOAD_AUDIT_REPORTS:
+      - "GENERATE_REPORT"
+    DOWNLOAD_USERS_REPORTS:
+      - "GENERATE_REPORT"
+    REPORTING_UI:
       - "REDIRECT_TO_REPORTING"
 
   rolePermissionsMappings:
-    ADMIN:
-      - "GENERATE_REPORTS"
-      - "MANAGE_USERS"
-      - "SYNC_ANALYSTS"
-      - "VIEW_USERS"
-    ADMINISTRATOR:
-      - "GENERATE_REPORTS"
-      - "MANAGE_USERS"
-      - "SYNC_ANALYSTS"
-      - "VIEW_USERS"
     APPROVER:
-      - "APPROVE_CHANGE_REQUESTS"
-      - "GENERATE_REPORTS"
-      - "REJECT_CHANGE_REQUESTS"
-      - "VIEW_CHANGE_REQUESTS"
-      - "VIEW_DECISION_TREE"
-      - "VIEW_FEATURES"
-      - "VIEW_REASONING_BRANCHES"
+      - "DOWNLOAD_SOLVING_REPORTS"
+      - "REPORTING_UI"
     AUDITOR:
-      - "GENERATE_REPORTS"
-      - "VIEW_DECISION_TREE"
-      - "REPORTING_APP"
-    BUSINESS_OPERATOR:
-      - "ARCHIVE_DISCREPANCIES"
-      - "CANCEL_CHANGE_REQUESTS"
-      - "CREATE_CHANGE_REQUESTS"
-      - "GENERATE_REPORTS"
-      - "VIEW_CHANGE_REQUESTS"
-      - "VIEW_DECISION_TREE"
-      - "VIEW_DISCREPANCIES"
-      - "VIEW_REASONING_BRANCHES"
-      - "REPORTING_APP"
+      - "DOWNLOAD_AUDIT_REPORTS"
+      - "DOWNLOAD_USERS_REPORTS"
+      - "REPORTING_UI"
+    USER_ADMINISTRATOR:
+      - "DOWNLOAD_AUDIT_REPORTS"
+      - "DOWNLOAD_USERS_REPORTS"
+      - "MANAGE_USERS"
+      - "VIEW_USERS"
+      - "SYNC_ANALYSTS"
+    MODEL_TUNER:
+      - "DOWNLOAD_SOLVING_REPORTS"
+      - "REPORTING_UI"
+    QA:
+      - "REPORTING_UI"
 
 # Notifications
 sens.webapp.notification.enabled: true

@@ -7,7 +7,7 @@
 -----
 @startuml
 
-actor boa as "Business Operator"
+actor boa as "Model Tuner"
 
 box "SERP CLI" #LightBlue
     database cli as "SERP CLI"

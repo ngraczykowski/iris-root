@@ -1,5 +1,5 @@
 = Management
-Cases here assume you're logged in as user with Business Operator role and are in the "Reasoning Branch Management" tab.
+Cases here assume you're logged in as user with Model Tuner role and are in the "Reasoning Branch Management" tab.
 
 Definitions:
 

@@ -26,7 +26,7 @@ class UserFixtures {
           .displayName("Jan Nowak")
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
-          .roles(new ScopeUserRoles(Map.of(ROLES_SCOPE, singletonList("admin"))))
+          .roles(new ScopeUserRoles(Map.of(ROLES_SCOPE, singletonList("User Administrator"))))
           .origin(SENS_ORIGIN)
           .build(),
       UserDto.builder()
@@ -44,7 +44,7 @@ class UserFixtures {
           .displayName("Jan Nowak")
           .createdAt(DATE_TIME)
           .lastLoginAt(DATE_TIME)
-          .roles(new ScopeUserRoles(Map.of(ROLES_SCOPE, singletonList("admin"))))
+          .roles(new ScopeUserRoles(Map.of(ROLES_SCOPE, singletonList("User Administrator"))))
           .origin(SENS_ORIGIN)
           .build(),
       UserDto.builder()

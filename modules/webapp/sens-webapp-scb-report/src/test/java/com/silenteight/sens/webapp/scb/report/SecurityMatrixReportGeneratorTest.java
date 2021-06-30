@@ -23,29 +23,20 @@ class SecurityMatrixReportGeneratorTest {
   @NotNull
   private static String[] getExpectedReport() {
     return new String[] {
-        "Permissions (technical),\"Permission / Action",
-        "\",Role (business),,,",
-        "hasPermission(),,Administrator,Approver,Auditor,Business Operator",
-        "APPROVE_CHANGE_REQUESTS,May approve Change Request for any Reasoning Branch"
-            + " in the given tree,,x,,",
-        "ARCHIVE_DISCREPANCIES,May archive discrepant alerts that turned off Reasoning Branches"
-            + " by Circuit Breaker,,,,x",
-        "CANCEL_CHANGE_REQUESTS,May cancel already created Change Request for any Reasoning Branch"
-            + " in the given tree,,,,x",
-        "CREATE_CHANGE_REQUESTS,May create a Change Request for any Reasoning Branch"
-            + " in the given tree,,,,x",
-        "GENERATE_REPORTS,Generate all audit reports,x,x,x,x",
-        "MANAGE_USERS,\"Managing users",
-        "Managing roles assignment",
-        "Managing passwords reset for users\",x,,,",
-        "REJECT_CHANGE_REQUESTS,May reject Change Request for any Reasoning Branch"
-            + " in the given tree,,x,,",
-        "SYNC_ANALYSTS,Run analyst synchronization job,x,,,",
-        "VIEW_CHANGE_REQUESTS,View created Change Requests,,x,,x",
-        "VIEW_DISCREPANCIES,View Reasoning Branches with discrepant alerts turned off"
-            + " by Circuit Breaker,,,,x",
-        "VIEW_REASONING_BRANCHES,View Reasoning Branches with all properties,,x,,x",
-        "VIEW_USERS,View users,x,,,"
+        "Permission name,Permission description,User Administrator,Model Tuner,Approver,Auditor,QA",
+        ",,Manages the users in the system,Creates and runs simulations to increase"
+            + " effectiveness and efficiencies in the model,Will review and "
+            + "approve changes to the model,Audit/Assuarance/IMR and "
+            + "internal reviewer access used for read only purposes,"
+            + "Will Quality Assure the False Positive Outcomes from"
+            + " the S8 Solution and ensure they adhere to expected"
+            + " risk appetite for adjudication.",
+        "DOWNLOAD_AUDIT_REPORTS,generate Audit Trail report,X,,,X,",
+        "DOWNLOAD_USERS_REPORTS,generate a user list report,X,,,X,",
+        "MANAGE_USERS,add/modify/remove users,X,,,,",
+        "VIEW_USERS,view the list of users,X,,,,",
+        "REPORTING_UI (not part of MVP),can open ReportingUI service (Kibana),,X,X,X,X",
+        "SYNC_ANALYSTS,,X,,,,",
     };
   }
 }

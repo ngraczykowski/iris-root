@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({  ExternalAppsConfiguration.class, ExternalAppsController.class })
 class NoExternalAppsControllerTest extends BaseRestControllerTest {
 
-  @TestWithRole(roles = { ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, MODEL_TUNER })
   void its200_whenListingApps() {
     get("/apps/list").statusCode(OK.value()).body("apps", equalTo(emptyList()));
   }

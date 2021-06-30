@@ -15,7 +15,7 @@ ALT on the diagram below presents alternatives:
 header Deployment process
 
 box SERP
-actor bo as "Business Operator"
+actor bo as "Model Tuner"
 
 actor a as "Approver"
 

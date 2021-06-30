@@ -12,8 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.QA;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.report.ReportTestFixtures.REPORT_NAME;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.StringContains.containsString;
@@ -29,14 +29,14 @@ class ReportRestControllerIT extends BaseRestControllerTest {
   private AuditTracer auditTracer;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = AUDITOR)
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   @SuppressWarnings("squid:S2699")
   void notFoundResponseWhenNoReportNameFound() {
     get("/reports/WRONG_REPORT_NAME").statusCode(NOT_FOUND.value());
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = AUDITOR)
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void reportDataWhenValidReportNameRequested() {
     given()
         .queryParam("paramA", "paramValueABC")
@@ -53,12 +53,12 @@ class ReportRestControllerIT extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = AUDITOR)
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void badRequestResponseIfMandatoryParameterNotProvided() {
     get("/reports/" + REPORT_NAME).statusCode(BAD_REQUEST.value());
   }
 
-  @TestWithRole(roles = { ANALYST })
+  @TestWithRole(roles = { QA })
   void its403_whenNotPermittedRole() {
     get("/reports/WRONG_REPORT_NAME").statusCode(FORBIDDEN.value());
   }

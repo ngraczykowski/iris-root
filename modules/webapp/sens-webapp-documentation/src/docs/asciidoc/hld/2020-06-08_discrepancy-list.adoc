@@ -1,7 +1,7 @@
 = HLD #6
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-822[WA-822]*
-- Reason: As a Business Operator I want to see list of alerts that disabled Reasoning Branch
+- Reason: As a Model Tuner I want to see list of alerts that disabled Reasoning Branch
 
 
 
@@ -10,7 +10,7 @@
 @startuml
 header List discrepant branches
 
-actor "Business Operator"
+actor "Model Tuner"
 
 box "WebApp Frontend" #MintCream
     participant Frontend as "CB Dashboard GUI"
@@ -24,7 +24,7 @@ box "Circuit Breaker" #LightBlue
     participant CB as "Circuit Breaker" order 48
 end box
 
-"Business Operator" -> Frontend : Select CB Dashboard
+"Model Tuner" -> Frontend : Select CB Dashboard
 
 Frontend -> Backend : Fetch Discrepant Branches
 activate Backend
@@ -36,9 +36,9 @@ end note
 
 Backend -> Frontend : Discrepant Branches list
 deactivate Backend
-Frontend->"Business Operator": Discrepant Branches list
+Frontend->"Model Tuner": Discrepant Branches list
 
-"Business Operator" -> Frontend : Click on a Discrepant Branch
+"Model Tuner" -> Frontend : Click on a Discrepant Branch
 Frontend -> Backend : Get Discrepancy IDs by Discrepant Branch ID
 activate Backend
 Backend <-> CB : Fetch Discrepancy IDs by Discrepant Branch ID
@@ -59,9 +59,9 @@ note over Backend, CB
 end note
 Backend -> Frontend : Discrepancy list
 deactivate Backend
-Frontend->"Business Operator": First page of Discrepancy list
+Frontend->"Model Tuner": First page of Discrepancy list
 
-"Business Operator" -> Frontend : Click to display another page of Discrepancies
+"Model Tuner" -> Frontend : Click to display another page of Discrepancies
 Frontend ->> Frontend : Select a subset of Discrepancy IDs representing the selected page
 
 Frontend -> Backend : Get another page of Discrepancies by Discrepancy IDs
@@ -70,7 +70,7 @@ Backend <-> CB : Get Discrepancies by Ids
 
 Backend -> Frontend : Discrepancy list
 deactivate Backend
-Frontend->"Business Operator": Another page of Discrepancy list
+Frontend->"Model Tuner": Another page of Discrepancy list
 
 
 @enduml

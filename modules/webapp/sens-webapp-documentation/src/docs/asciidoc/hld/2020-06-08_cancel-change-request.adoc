@@ -1,20 +1,20 @@
 = HLD #6
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-619[WA-619]*
-- Reason: As a Business Operator, I want to cancel pending Change Request
+- Reason: As a Model Tuner, I want to cancel pending Change Request
 
 
-== Business Operator flow
+== Model Tuner flow
 
-[plantuml,business-operator-cancels-change-request-queue,svg]
+[plantuml,model-tuner-cancels-change-request-queue,svg]
 -----
 @startuml
-header Business Operator flow
+header Model Tuner flow
 
-actor BusinessOperator
+actor ModelTuner
 
 box "WebApp Frontend" #MintCream
-    participant Frontend as "Business Operator Queue GUI"
+    participant Frontend as "Model Tuner Queue GUI"
 end box
 
 box "WebApp Backend" #LightGreen
@@ -30,23 +30,23 @@ box "RabbitMQ"
     queue Queue order 50
 end box
 
-Frontend -->> BusinessOperator : Present list of Pending Change Requests
+Frontend -->> ModelTuner : Present list of Pending Change Requests
 
 ==  Cancel Change Request  ==
 
-BusinessOperator -> Frontend : Click "Cancel"
+ModelTuner -> Frontend : Click "Cancel"
 Frontend ->> Backend : Change Request Cancel request
 
 Backend -> Queue : Send ChangeRequest Cancel Command
 note over Backend, Queue
     * ChangeRequest Id
-    * Business Operator Username
+    * Model Tuner Username
     * Cancelled At
 end note
 
 Backend -->> Frontend : Cancellation success result
 
-Frontend -->> BusinessOperator : Inform about success
+Frontend -->> ModelTuner : Inform about success
 
 @enduml
 -----

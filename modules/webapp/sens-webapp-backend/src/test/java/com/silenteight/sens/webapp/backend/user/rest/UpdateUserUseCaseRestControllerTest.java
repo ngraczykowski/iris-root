@@ -16,40 +16,40 @@ import static org.springframework.http.HttpStatus.*;
 @SuppressWarnings("squid:S2699")
 class UpdateUserUseCaseRestControllerTest extends UserRestControllerTest {
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its201_whenUseCaseReturnsNoException() {
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(NO_CONTENT.value());
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its422_whenDisplayNameValidationException() {
     doThrow(DisplayNameValidationException.class).when(updateUserUseCase).apply(any());
 
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(UNPROCESSABLE_ENTITY.value());
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its507_whenUpdateDisplayNameUseCaseDomainException() {
     doThrow(UserUpdateException.class).when(updateUserUseCase).apply(any());
 
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(INSUFFICIENT_STORAGE.value());
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its422_whenRolesValidationException() {
     doThrow(RolesValidationException.class).when(updateUserUseCase).apply(any());
 
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(UNPROCESSABLE_ENTITY.value());
   }
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its500_whenOtherExceptionOccur() {
     doThrow(RuntimeException.class).when(updateUserUseCase).apply(any());
 
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(INTERNAL_SERVER_ERROR.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ANALYST, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { APPROVER, ANALYST, AUDITOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(FORBIDDEN.value());
   }

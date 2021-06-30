@@ -1,7 +1,7 @@
 = HLD #5
 
 - Reference ticket: *https://youtrack.silenteight.com/issue/WA-616[WA-616]*
-- Reason: As a Business Operator, I want to create Change Request to suggest changes into a multiple Reasoning Branches
+- Reason: As a Model Tuner, I want to create Change Request to suggest changes into a multiple Reasoning Branches
 
 
 == Maker flow

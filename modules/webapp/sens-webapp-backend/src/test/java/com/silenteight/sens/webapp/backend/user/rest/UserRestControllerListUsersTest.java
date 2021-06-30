@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 class UserRestControllerListUsersTest extends UserRestControllerTest {
 
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its200WithUsersList() {
     given(listUsersUseCase.apply())
         .willReturn(asList(ANALYST_USER, APPROVER_USER));
@@ -43,7 +43,7 @@ class UserRestControllerListUsersTest extends UserRestControllerTest {
   }
 
   @Deprecated
-  @TestWithRole(role = ADMINISTRATOR)
+  @TestWithRole(role = USER_ADMINISTRATOR)
   void its200WithPageableUsersList_Deprecated() {
     given(listUsersUseCase.apply())
         .willReturn(asList(ANALYST_USER, APPROVER_USER));
@@ -69,7 +69,7 @@ class UserRestControllerListUsersTest extends UserRestControllerTest {
         .body("content[1].origin", equalTo(APPROVER_USER.getOrigin()));
   }
 
-  @TestWithRole(roles = { ANALYST, APPROVER, AUDITOR, BUSINESS_OPERATOR })
+  @TestWithRole(roles = { ANALYST, APPROVER, AUDITOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     get(getRequestPath()).statusCode(FORBIDDEN.value());
   }

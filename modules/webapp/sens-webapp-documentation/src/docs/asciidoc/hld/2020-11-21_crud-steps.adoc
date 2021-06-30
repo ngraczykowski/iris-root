@@ -10,7 +10,7 @@ We should keep new or edited steps in the browser memory, and when saving, send 
 @startuml
 header Save project
 
-actor "Business Operator or Approver" as BOA
+actor "Model Tuner or Approver" as BOA
 
 box "WebApp Frontend" #MintCream
     participant Frontend
