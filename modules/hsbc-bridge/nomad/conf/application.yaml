@@ -13,6 +13,7 @@ silenteight.bridge:
     port: {{ env "NOMAD_PORT_grpc" }}
     governance-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
     adjudication-engine-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
+    worldcheck-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-worldcheck
 
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
 {{- with service (print $nomad_namespace "-hsbc-bridge-db") }}
