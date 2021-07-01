@@ -1,7 +1,6 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
 
 import static java.util.Objects.nonNull;
@@ -10,9 +9,14 @@ public interface IndividualComposite {
 
   @Nullable
   CustomerIndividual getCustomerIndividual();
+
   List<WorldCheckIndividual> getWorldCheckIndividuals();
+
   List<PrivateListIndividual> getPrivateListIndividuals();
+
   List<CtrpScreening> getCtrpScreeningIndividuals();
+
+  List<CtrpScreening> getCtrpScreeningEntities();
 
   default boolean hasWorldCheckIndividuals() {
     return nonNull(getWorldCheckIndividuals()) && !getWorldCheckIndividuals().isEmpty();
@@ -20,5 +24,13 @@ public interface IndividualComposite {
 
   default boolean hasPrivateListIndividuals() {
     return nonNull(getPrivateListIndividuals()) && !getPrivateListIndividuals().isEmpty();
+  }
+
+  default boolean hasCtrpScreeningIndividuals() {
+    return nonNull(getCtrpScreeningIndividuals()) && !getCtrpScreeningIndividuals().isEmpty();
+  }
+
+  default boolean hasCtrpScreeningEntities() {
+    return nonNull(getCtrpScreeningIndividuals()) && !getCtrpScreeningIndividuals().isEmpty();
   }
 }

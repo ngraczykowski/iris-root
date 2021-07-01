@@ -31,4 +31,12 @@ public interface PrivateListIndividual {
   String getGivenNamesOriginal();
 
   String getFamilyNameOriginal();
+
+  String getAddressCountry();
+
+  String getResidencyCountry();
+
+  String getCountryOfBirth();
+
+  String getNationalities();
 }

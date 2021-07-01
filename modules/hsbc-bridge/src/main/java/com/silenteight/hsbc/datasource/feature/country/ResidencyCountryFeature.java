@@ -6,7 +6,6 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
-import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQuery.Factory;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFeatureInputDto> {
 
-  private final Factory queryFactory;
+  private final ResidencyCountryFeatureQuery.Factory queryFactory;
 
   @Override
   public CountryFeatureInputDto retrieve(MatchData matchData) {

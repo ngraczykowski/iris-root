@@ -1,48 +1,60 @@
 package com.silenteight.hsbc.datasource.feature.incorporationcountry
 
-import com.silenteight.hsbc.datasource.datamodel.CustomerEntity
-import com.silenteight.hsbc.datasource.datamodel.MatchData
-import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity
+import com.silenteight.hsbc.datasource.datamodel.*
+import com.silenteight.hsbc.datasource.feature.Feature
 
-import spock.lang.Shared
 import spock.lang.Specification
 
 class IncorporationCountryFeatureSpec extends Specification {
 
-  @Shared
   def underTest = new IncorporationCountryFeature()
 
   def "extractCorrectly"() {
     given:
-    def match = [
-        getCustomerEntity    : {
-          [
-              getCountriesOfIncorporation      : {"Poland"},
-              getEdqIncorporationCountries     : {"Polska"},
-              getEdqIncorporationCountriesCodes: {"PL"}
-          ] as CustomerEntity
-        },
-        getWorldCheckEntities: {
-          [
-              [
-                  getCountriesAll   : {"United Kingdom"},
-                  getCountryCodesAll: {"UK"}
-              ] as WorldCheckEntity,
-              [
-                  getCountriesAll   : {"Germany"},
-                  getCountryCodesAll: {"DE"}
-              ] as WorldCheckEntity
-          ]
-        }
-    ] as MatchData
+    def customerEntity = Mock(CustomerEntity) {
+      getCountriesOfIncorporation() >> 'Poland'
+      getEdqIncorporationCountries() >> 'Polska'
+      getEdqIncorporationCountriesCodes() >> 'PL'
+    }
+
+    def worldCheckEntity = Mock(WorldCheckEntity) {
+      getCountriesAll() >> 'United Kingdom'
+      getCountryCodesAll() >> 'UK'
+    }
+
+    def privateListEntity = Mock(PrivateListEntity) {
+      getCountriesAll() >> 'UNITED STATES'
+      getCountryCodesAll() >> 'US'
+    }
+
+    def ctrpScreeningEntity = Mock(CtrpScreening) {
+      getCountryName() >> 'IRAN, ISLAMIC REPUBLIC OF'
+      getCountryCode() >> 'IR'
+      getCtrpValue() >> 'CHABAHAR'
+    }
+
+    def matchData = Mock(MatchData) {
+      isEntity() >> true
+      getCustomerEntity() >> customerEntity
+      getWorldCheckEntities() >> [worldCheckEntity]
+      hasWorldCheckEntities() >> true
+      getPrivateListEntities() >> [privateListEntity]
+      hasPrivateListEntities() >> true
+      getCtrpScreeningEntities() >> [ctrpScreeningEntity]
+      hasCtrpScreeningEntities() >> true
+    }
 
     when:
-    def actual = underTest.retrieve(match)
+    def actual = underTest.retrieve(matchData)
 
     then:
-    actual.with {
-      alertedPartyCountries.containsAll(["Poland", "Polska", "PL"])
-      watchlistCountries.containsAll(["UK", "DE", "United Kingdom", "Germany"])
+    with(actual) {
+      feature == Feature.INCORPORATION_COUNTRY.fullName
+      alertedPartyCountries.size() == 3
+      alertedPartyCountries == ['Poland', 'Polska', 'PL']
+      watchlistCountries.size() == 7
+      watchlistCountries ==
+          ["UK", "United Kingdom", "US", "UNITED STATES", "IRAN, ISLAMIC REPUBLIC OF", "IR", "CHABAHAR"]
     }
   }
 }

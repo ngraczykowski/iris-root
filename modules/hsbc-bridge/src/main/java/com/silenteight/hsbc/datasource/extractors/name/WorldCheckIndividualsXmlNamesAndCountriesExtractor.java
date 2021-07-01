@@ -59,7 +59,7 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
 
     var nationalityCountries =
         new NationalityCountryQueryFacade(matchData)
-            .mpWorldCheckCountries();
+            .mpWorldCheckIndividualCountries();
 
     var residenceCountries =
         new ResidencyCountryFeatureQueryFacade(matchData)

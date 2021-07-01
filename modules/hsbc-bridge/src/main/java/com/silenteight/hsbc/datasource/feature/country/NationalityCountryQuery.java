@@ -12,7 +12,13 @@ public interface NationalityCountryQuery {
 
   Stream<String> mpDocumentCountries();
 
-  Stream<String> mpWorldCheckCountries();
+  Stream<String> mpWorldCheckIndividualCountries();
+
+  Stream<String> mpPrivateListIndividualsCountries();
+
+  Stream<String> mpCtrpScreeningIndividualsCountries();
+
+  Stream<String> getWatchlistIndividualsNationalityCountry();
 
   interface Factory {
 

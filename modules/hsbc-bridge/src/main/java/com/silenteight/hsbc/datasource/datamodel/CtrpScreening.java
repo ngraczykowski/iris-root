@@ -5,4 +5,6 @@ public interface CtrpScreening {
   String getCountryName();
 
   String getCountryCode();
+
+  String getCtrpValue();
 }

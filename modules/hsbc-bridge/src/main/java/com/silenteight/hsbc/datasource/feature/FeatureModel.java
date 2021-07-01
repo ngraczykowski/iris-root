@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.country.OtherCountryQueryConfigurer;
+import com.silenteight.hsbc.datasource.extractors.country.RegistrationCountryFeatureQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatureQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.NationalIdDocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.OtherDocumentQueryConfigurer;
@@ -46,7 +47,10 @@ public class FeatureModel {
             RESIDENCY_COUNTRY,
             new ResidencyCountryFeature(new ResidencyCountryFeatureQueryConfigurer().create())),
         entry(INCORPORATION_COUNTRY, new IncorporationCountryFeature()),
-        entry(REGISTRATION_COUNTRY, new RegistrationCountryFeature()),
+        entry(
+            REGISTRATION_COUNTRY,
+            new RegistrationCountryFeature(
+                new RegistrationCountryFeatureQueryConfigurer().create())),
         entry(OTHER_COUNTRY, new OtherCountryFeature(new OtherCountryQueryConfigurer().create())),
         entry(
             NATIONAL_ID_DOCUMENT,

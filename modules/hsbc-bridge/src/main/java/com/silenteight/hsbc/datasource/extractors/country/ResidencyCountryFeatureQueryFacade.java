@@ -2,7 +2,9 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.datasource.datamodel.CtrpScreening;
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
+import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQuery;
 
@@ -20,12 +22,18 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
         .flatMap(ResidencyCountryFeatureQueryFacade::extractWorldCheckResidencies);
   }
 
-  private static Stream<String> extractWorldCheckResidencies(
-      WorldCheckIndividual worldCheckIndividual) {
-    return Stream.of(
-        worldCheckIndividual.getAddressCountry(),
-        worldCheckIndividual.getResidencyCountry()
-    );
+  @Override
+  public Stream<String> privateListIndividualsResidencies() {
+    return individualComposite.getPrivateListIndividuals()
+        .stream()
+        .flatMap(ResidencyCountryFeatureQueryFacade::extractPrivateListIndividualsResidencies);
+  }
+
+  @Override
+  public Stream<String> ctrpScreeningResidencies() {
+    return individualComposite.getCtrpScreeningIndividuals()
+        .stream()
+        .flatMap(ResidencyCountryFeatureQueryFacade::extractCtrpScreeningResidencies);
   }
 
   @Override
@@ -38,6 +46,31 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
         customerIndividuals.getCountryOfResidence(),
         customerIndividuals.getEdqResidenceCountriesCode(),
         customerIndividuals.getSourceCountry()
+    );
+  }
+
+  private static Stream<String> extractWorldCheckResidencies(
+      WorldCheckIndividual worldCheckIndividual) {
+    return Stream.of(
+        worldCheckIndividual.getAddressCountry(),
+        worldCheckIndividual.getResidencyCountry()
+    );
+  }
+
+  private static Stream<String> extractPrivateListIndividualsResidencies(
+      PrivateListIndividual privateListIndividual) {
+    return Stream.of(
+        privateListIndividual.getAddressCountry(),
+        privateListIndividual.getResidencyCountry()
+    );
+  }
+
+  private static Stream<String> extractCtrpScreeningResidencies(
+      CtrpScreening ctrpScreeningResidencies) {
+    return Stream.of(
+        ctrpScreeningResidencies.getCountryName(),
+        ctrpScreeningResidencies.getCountryCode(),
+        ctrpScreeningResidencies.getCtrpValue()
     );
   }
 }

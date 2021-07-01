@@ -30,7 +30,7 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
       var apFieldsCountries = query.apFieldsIndividualCountries();
 
       var mpDocument = query.mpDocumentCountries();
-      var mpWorldCheckCountries = query.mpWorldCheckCountries();
+      var mpWorldCheckCountries = query.getWatchlistIndividualsNationalityCountry();
 
       inputBuilder.alertedPartyCountries(
           concat(apIdDocumentCountry, apFieldsCountries).distinct().collect(toList()));

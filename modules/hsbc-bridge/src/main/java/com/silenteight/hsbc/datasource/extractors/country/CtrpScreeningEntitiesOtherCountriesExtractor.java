@@ -25,7 +25,8 @@ class CtrpScreeningEntitiesOtherCountriesExtractor {
       CtrpScreening ctrpScreeningEntity) {
     return of(
         ctrpScreeningEntity.getCountryName(),
-        ctrpScreeningEntity.getCountryCode()
+        ctrpScreeningEntity.getCountryCode(),
+        ctrpScreeningEntity.getCtrpValue()
     );
   }
 }

@@ -25,7 +25,9 @@ class ResidencyCountryFeatureSpec extends Specification implements FullMatch {
     then:
     actual.with {
       alertedPartyCountries.containsAll(["PL", "Polska", "IRN", "Iran", "UK"])
-      watchlistCountries.containsAll(["PL", "Polska"])
+      watchlistCountries.
+          containsAll(
+              ["PL", "Polska", "UNITED STATES", "US", 'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR'])
     }
   }
 }
