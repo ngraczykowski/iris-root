@@ -42,7 +42,8 @@ public class UnsolvedMatchesChunk {
     var featureValueCount = matches.get(0).getFeatureValueCount();
     Preconditions.checkArgument(
         featureCount == featureValueCount,
-        "Feature collection has %s features, expected %s", featureCount, featureValueCount);
+        "Matches have %s features, feature collection expected %s", featureValueCount,
+        featureCount);
 
     return BatchSolveFeaturesRequest
         .newBuilder()

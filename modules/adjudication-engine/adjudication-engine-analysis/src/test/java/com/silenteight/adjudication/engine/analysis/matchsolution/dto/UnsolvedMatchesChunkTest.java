@@ -41,7 +41,7 @@ class UnsolvedMatchesChunkTest {
 
     assertThatThrownBy(() -> whenBatchSolveFeaturesRequest("F1", "F2", "F3"))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContainingAll("Feature collection has", "features, expected");
+        .hasMessageContainingAll("Matches have", "features, feature collection expected");
   }
 
   @Test

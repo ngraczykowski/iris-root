@@ -58,6 +58,18 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
     assertContextData(alertContext.getAlertContext());
   }
 
+  /**
+   * When a single alert is in two analysis, the ae_alert_match_solutions_query view
+   * returns duplicated match_ids, which in turn prevents from showing the alert as pending
+   * due to the JOIN condition.
+   */
+  @Test
+  @Sql
+  void shouldReturnSinglePendingAlertForMultipleAnalysis() {
+    var result = recommendationDataAccess.selectPendingAlerts(2);
+    assertThat(result.size()).isEqualTo(1);
+  }
+
   private void assertContextData(AlertContext alertContext) {
     assertThat(alertContext.getAlertId())
         .isEqualTo("AVIR128SCR13925IN123TEST0003:IN:GR-ESAN:273067");

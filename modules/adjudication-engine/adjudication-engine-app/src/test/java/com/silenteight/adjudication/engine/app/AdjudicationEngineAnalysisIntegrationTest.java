@@ -55,15 +55,22 @@ class AdjudicationEngineAnalysisIntegrationTest {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  private Analysis analysisFixture;
+  private Analysis analysis;
+
+  private Analysis secondAnalysis;
 
   private Analysis savedAnalysis;
 
   private Dataset savedDataset;
+  private Dataset dataset;
 
   @BeforeEach
-  public void before() {
-    analysisFixture = Analysis.newBuilder()
+  public void setUp() {
+    var alert = createAlert(alertService, "alert1");
+    createMatch(alertService, alert.getName(), "match1");
+    dataset = createDataset(datasetService, alert.getName());
+
+    var analysisFixture = Analysis.newBuilder()
         .setStrategy("strategies/back_test")
         .setPolicy("policies/af85189b-fa0d-437b-9009-ebb5e5bd5028")
         .addCategories("categories/source_system")
@@ -81,11 +88,9 @@ class AdjudicationEngineAnalysisIntegrationTest {
         .putLabels("SIMULATION", "2021-03")
         .build();
 
-    var analysis = createAnalysis(analysisService, analysisFixture);
-    var alert = createAlert(alertService, "alert1");
-    createMatch(alertService, alert.getName(), "match1");
-    var dataset = createDataset(datasetService, alert.getName());
+    analysis = createAnalysis(analysisService, analysisFixture);
     addDataset(analysisService, analysis.getName(), dataset.getName());
+
     savedAnalysis = getAnalysis(analysisService, analysis.getName());
     savedDataset = getDataset(datasetService, dataset.getName());
   }
@@ -94,41 +99,77 @@ class AdjudicationEngineAnalysisIntegrationTest {
   void shouldSolveAlerts() {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
-    await()
-        .atMost(Duration.ofSeconds(3))
-        .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) > 0);
-
-    assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
-        .isEqualTo(1);
+    assertSolvedAlerts(analysisId);
   }
 
   @Test
   void shouldSaveRecommendations() {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
+    assertGeneratedRecommendation(analysisId);
+  }
+
+  @Test
+  void shouldStreamRecommendations() {
+    assertGeneratedRecommendation("analysis/1/recommendations/1");
+  }
+
+  @Test
+  void shouldSolveAlertsWhenSecondAnalysisAdded() {
+    var analysisId = givenSecondAnalysis();
+
+    assertSolvedAlerts(analysisId);
+  }
+
+  @Test
+  void shouldSaveRecommendationsWhenSecondAnalysisAdded() {
+    var analysisId = givenSecondAnalysis();
+
+    assertGeneratedRecommendation(analysisId);
+  }
+
+  @Test
+  void shouldStreamRecommendationsWhenSecondAnalysisAdded() {
+    givenSecondAnalysis();
+
+    assertGeneratedRecommendation("analysis/2/recommendations/2");
+  }
+
+  private void assertSolvedAlerts(long analysisId) {
     await()
         .atMost(Duration.ofSeconds(10))
+        .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) > 0);
+
+    assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
+        .isEqualTo(1);
+  }
+
+  private void assertGeneratedRecommendation(long analysisId) {
+    await()
+        .atMost(Duration.ofSeconds(10000))
         .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))
         .isEqualTo(1);
   }
 
-  @Test
-  void shouldStreamRecommendations() {
+  private void assertGeneratedRecommendation(String analysisName) {
     await()
         .atMost(Duration.ofSeconds(10))
-        .until(() -> generatedRecommendationCount(jdbcTemplate, 1) > 0);
+        .until(() -> generatedRecommendationCount(
+            jdbcTemplate,
+            ResourceName.create(analysisName).getLong("analysis")) > 0);
 
     var recommendations = analysisService.streamRecommendations(
-        StreamRecommendationsRequest.newBuilder().setAnalysis("analysis/1").build());
+        StreamRecommendationsRequest.newBuilder().setAnalysis(analysisName).build());
     var recommendation = recommendations.next();
 
     assertThat(recommendation.getRecommendationComment())
         .contains("NOTE: This is the default alert comment template!");
-    assertThat(recommendation.getName()).isEqualTo("analysis/1/recommendations/1");
+    assertThat(recommendation.getName()).isEqualTo(analysisName);
     assertThat(recommendation.getRecommendedAction()).isEqualTo("MATCH");
   }
+
 
   /*
     FIRST APPROACH:
@@ -143,7 +184,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
       //rabbitTemplate.receiveAndConvert(
       //    "dont_know_yet", ParameterizedTypeReference.forType(RecommendationsGenerated.class));
    */
-
   @Test
   void shouldSaveOneAlertToDataSet() {
     assertThat(savedDataset.getAlertCount()).isEqualTo(1);
@@ -173,7 +213,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   @Test
   void checkAlertsCountInAnalysisWithSameAlertInTwoDatasets() {
-    var analysis = createAnalysis(analysisService, analysisFixture);
+    var analysis = createAnalysis(analysisService, this.analysis);
     var alert = createAlert(alertService, "alert1");
     createMatch(alertService, alert.getName(), "match1");
     var dataset1 = createDataset(datasetService, alert.getName());
@@ -184,5 +224,27 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
     assertThat(savedAnalysis.getAlertCount()).isEqualTo(1);
     assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(1);
+  }
+
+  private long givenSecondAnalysis() {
+    var secondAnalysisFixture = Analysis.newBuilder()
+        .setStrategy("strategies/back_test")
+        .setPolicy("policies/af85189b-fa0d-437b-9009-ebb5e5bd5028")
+        .addCategories("categories/source_system")
+        .addCategories("categories/country")
+        .addCategories("categories/hit_type")
+        .addFeatures(Feature.newBuilder()
+            .setFeature("features/name")
+            .setAgentConfig("agents/name/versions/1.0.0/configs/1")
+            .build())
+        .addFeatures(Feature.newBuilder()
+            .setFeature("features/nationalIdDocument")
+            .setAgentConfig("agents/nationalId/versions/1.0.0/configs/1")
+            .build())
+        .putLabels("SIMULATION", "2021-03")
+        .build();
+    secondAnalysis = createAnalysis(analysisService, secondAnalysisFixture);
+    addDataset(analysisService, secondAnalysis.getName(), dataset.getName());
+    return ResourceName.create(secondAnalysis.getName()).getLong("analysis");
   }
 }

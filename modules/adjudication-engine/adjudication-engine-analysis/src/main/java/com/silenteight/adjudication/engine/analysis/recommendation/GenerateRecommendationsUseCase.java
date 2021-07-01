@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
@@ -13,10 +14,13 @@ import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -30,6 +34,14 @@ class GenerateRecommendationsUseCase {
   private final AlertSolvingClient client;
   private final RecommendationDataAccess recommendationDataAccess;
   private final AnalysisFacade analysisFacade;
+
+  @Setter
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+
+  List<Map<String, Object>> custom(String sql, Object... args) {
+    return jdbcTemplate.queryForList(sql, args);
+  }
 
   List<RecommendationInfo> generateRecommendations(
       String analysisName,

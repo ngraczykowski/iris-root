@@ -43,4 +43,38 @@
         path="sql/view_ae_alert_recommendation_query.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_7" author="wkeska">
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="sql/view_ae_analysis_match_feature_vector_elements_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_8" author="wkeska">
+    <sqlFile
+        path="sql/remove_duplicated_match_solutions.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_9" author="wkeska">
+    <createIndex
+        tableName="ae_match_solution"
+        indexName="uq_ix_ae_match_solution_analysis_id_match_id"
+        unique="true">
+      <column name="analysis_id"/>
+      <column name="match_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_10" author="wkeska">
+    <dropView viewName="ae_alert_match_solutions_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_11" author="wkeska">
+    <createView
+        viewName="ae_alert_match_solutions_query"
+        path="sql/view_ae_alert_match_solutions_query_v2.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

@@ -85,7 +85,7 @@ class ChunkedResultSetExtractorFactory<T> {
       try {
         chunkHandler.handle(List.copyOf(currentChunk));
       } catch (Exception e) {
-        log.error("Chunk handler failed to process a chunk: chunkSize={}, exception={}, message{}",
+        log.error("Chunk handler failed to process a chunk: chunkSize={}, exception={}, message={}",
             currentChunk.size(), e.getClass().getName(), e.getMessage());
         throw e;
       }
@@ -96,7 +96,7 @@ class ChunkedResultSetExtractorFactory<T> {
       try {
         chunkHandler.finished();
       } catch (Exception e) {
-        log.error("Chunk handler failed to finish: exception={}, message{}",
+        log.error("Chunk handler failed to finish: exception={}, message={}",
             e.getClass().getName(), e.getMessage());
         throw e;
       }

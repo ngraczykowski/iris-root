@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Repository
-public class JdbcRecommendationDataAccess implements RecommendationDataAccess {
+class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   private final SelectPendingAlertsQuery selectPendingAlertsQuery;
   private final StreamAlertRecommendationsQuery streamAlertRecommendationsQuery;
