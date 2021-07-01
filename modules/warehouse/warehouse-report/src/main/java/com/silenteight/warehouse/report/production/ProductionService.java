@@ -10,13 +10,14 @@ import com.silenteight.warehouse.report.reporting.ReportStatus;
 import com.silenteight.warehouse.report.reporting.ReportingService;
 import com.silenteight.warehouse.report.reporting.UserAwareReportingService;
 
+import java.util.Map;
+
 import static com.silenteight.warehouse.report.production.ProductionReportsRestController.DEFINITION_ID_PARAM;
-import static com.silenteight.warehouse.report.production.ProductionReportsRestController.REPORTS_RESOURCE_URL;
+import static com.silenteight.warehouse.report.production.ProductionReportsRestController.REPORTS_RESOURCE_NAME;
 import static com.silenteight.warehouse.report.production.ProductionReportsRestController.REPORT_TYPE_PARAM;
 import static com.silenteight.warehouse.report.production.ProductionReportsRestController.TIMESTAMP_PARAM;
 import static com.silenteight.warehouse.report.reporting.ReportStatus.buildReportStatusGenerating;
 import static com.silenteight.warehouse.report.reporting.ReportStatus.buildReportStatusOk;
-import static java.util.Map.of;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
 @Slf4j
@@ -56,22 +57,22 @@ class ProductionService {
       ProductionReportType reportType, String definitionId, Long timestamp) {
 
     String tenantName = getTenantName(reportType);
-    String downloadReportUrl = buildDownloadReportUrl(reportType, definitionId, timestamp);
+    String reportName = buildReportName(reportType, definitionId, timestamp);
 
     return userAwareReportingService.getReportInstanceId(tenantName, definitionId, timestamp)
-        .map(id -> buildReportStatusOk(downloadReportUrl))
-        .orElse(buildReportStatusGenerating());
+        .map(id -> buildReportStatusOk(reportName))
+        .orElse(buildReportStatusGenerating(reportName));
   }
 
   private String getTenantName(ProductionReportType reportType) {
     return productionReportingQuery.getTenantName(reportType);
   }
 
-  private String buildDownloadReportUrl(
+  private static String buildReportName(
       ProductionReportType reportType, String definitionId, Long timestamp) {
 
-    return fromPath(REPORTS_RESOURCE_URL)
-        .buildAndExpand(of(REPORT_TYPE_PARAM, reportType, DEFINITION_ID_PARAM, definitionId,
+    return fromPath(REPORTS_RESOURCE_NAME)
+        .buildAndExpand(Map.of(REPORT_TYPE_PARAM, reportType, DEFINITION_ID_PARAM, definitionId,
             TIMESTAMP_PARAM, timestamp))
         .toUriString();
   }

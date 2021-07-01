@@ -61,7 +61,7 @@ class SimulationReportingQueryTest {
 
     assertThat(dto.getId()).isEqualTo(REPORT_DEFINITION_ID);
     assertThat(dto.getName()).isEqualTo(
-        "/analysis/" + ANALYSIS_ID + "/definitions/" + REPORT_DEFINITION_ID);
+        "analysis/" + ANALYSIS_ID + "/definitions/" + REPORT_DEFINITION_ID);
     assertThat(dto.getTitle()).isEqualTo(REPORT_NAME);
     assertThat(dto.getDescription()).isEqualTo(REPORT_DESCRIPTION);
   }

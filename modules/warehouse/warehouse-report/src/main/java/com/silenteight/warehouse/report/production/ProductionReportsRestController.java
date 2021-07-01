@@ -32,19 +32,24 @@ public class ProductionReportsRestController {
   static final String REPORT_STATUS = "/status";
 
   static final String DEFINITIONS_COLLECTION_NAME =
-      "/analysis/production/definitions/{" + REPORT_TYPE_PARAM + "}";
+      "analysis/production/definitions/{" + REPORT_TYPE_PARAM + "}";
   static final String DEFINITIONS_RESOURCE_NAME =
       DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}";
 
   static final String DEFINITIONS_COLLECTION_URL =
-      "/v1" + DEFINITIONS_COLLECTION_NAME;
+      "/v1/" + DEFINITIONS_COLLECTION_NAME;
   static final String DEFINITIONS_RESOURCE_URL =
-      "/v1" + DEFINITIONS_RESOURCE_NAME;
+      "/v1/" + DEFINITIONS_RESOURCE_NAME;
   static final String REPORTS_COLLECTION_URL = DEFINITIONS_RESOURCE_URL + "/reports";
   static final String REPORTS_RESOURCE_URL = REPORTS_COLLECTION_URL + "/{" + TIMESTAMP_PARAM + "}";
+
+  static final String REPORTS_RESOURCE_NAME =
+      DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}/reports/{"
+          + TIMESTAMP_PARAM + "}";
+
   static final String REPORT_STATUS_URL =
-      "/v1" + DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}/reports/{"
-          + TIMESTAMP_PARAM + "}" + REPORT_STATUS;
+      "/v1/" + REPORTS_RESOURCE_NAME + REPORT_STATUS;
+
   @NonNull
   private ProductionReportingQuery productionReportingQuery;
 

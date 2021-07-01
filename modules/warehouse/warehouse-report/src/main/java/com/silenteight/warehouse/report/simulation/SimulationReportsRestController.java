@@ -33,7 +33,7 @@ public class SimulationReportsRestController {
   static final String TIMESTAMP_PARAM = "timestamp";
   static final String REPORT_STATUS = "/status";
 
-  static final String ANALYSIS_RESOURCE_NAME = "/analysis/{" + ANALYSIS_ID_PARAM + "}";
+  static final String ANALYSIS_RESOURCE_NAME = "analysis/{" + ANALYSIS_ID_PARAM + "}";
   static final String DEFINITIONS_COLLECTION_NAME = ANALYSIS_RESOURCE_NAME + "/definitions";
   static final String DEFINITIONS_RESOURCE_NAME =
       DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}";
@@ -43,7 +43,12 @@ public class SimulationReportsRestController {
   static final String DEFINITIONS_COLLECTION_URL = "/v1" + DEFINITIONS_COLLECTION_NAME;
   static final String DEFINITIONS_RESOURCE_URL = "/v1" + DEFINITIONS_RESOURCE_NAME;
   static final String REPORTS_COLLECTION_URL = DEFINITIONS_RESOURCE_URL + "/reports";
-  static final String REPORTS_RESOURCE_URL = REPORTS_COLLECTION_URL + "/{" + TIMESTAMP_PARAM + "}";
+  static final String REPORTS_RESOURCE_NAME =
+      DEFINITIONS_RESOURCE_NAME + "/reports/{" + TIMESTAMP_PARAM + "}";
+
+  static final String REPORTS_RESOURCE_URL =
+      "/v1/" + REPORTS_RESOURCE_NAME + "/{" + TIMESTAMP_PARAM + "}";
+
   static final String REPORT_STATUS_URL = REPORTS_RESOURCE_URL + REPORT_STATUS;
 
   @NonNull

@@ -14,7 +14,7 @@ import static com.silenteight.warehouse.report.reporting.ReportStatus.buildRepor
 import static com.silenteight.warehouse.report.reporting.ReportStatus.buildReportStatusOk;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.ANALYSIS_ID_PARAM;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITION_ID_PARAM;
-import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.REPORTS_RESOURCE_URL;
+import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.REPORTS_RESOURCE_NAME;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.TIMESTAMP_PARAM;
 import static java.util.Map.of;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
@@ -54,23 +54,24 @@ class SimulationService {
       String analysisId, String definitionId, Long timestamp) {
 
     String tenantName = getTenantName(analysisId);
-    String downloadReportUrl = buildDownloadReportUrl(analysisId, definitionId, timestamp);
+    String reportName = buildReportName(analysisId, definitionId, timestamp);
 
     return userAwareReportingService.getReportInstanceId(tenantName, definitionId, timestamp)
-        .map(id -> buildReportStatusOk(downloadReportUrl))
-        .orElse(buildReportStatusGenerating());
+        .map(id -> buildReportStatusOk(reportName))
+        .orElse(buildReportStatusGenerating(reportName));
   }
 
   private String getTenantName(String analysisId) {
     return simulationReportingQuery.getTenantIdByAnalysisId(analysisId);
   }
 
-  private static String buildDownloadReportUrl(
+  private static String buildReportName(
       String analysisId, String definitionId, Long timestamp) {
 
-    return fromPath(REPORTS_RESOURCE_URL)
+    return fromPath(REPORTS_RESOURCE_NAME)
         .buildAndExpand(of(ANALYSIS_ID_PARAM, analysisId,
             DEFINITION_ID_PARAM, definitionId,
-            TIMESTAMP_PARAM, timestamp)).toUriString();
+            TIMESTAMP_PARAM, timestamp))
+        .toUriString();
   }
 }

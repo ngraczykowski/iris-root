@@ -24,8 +24,8 @@ class SimulationServiceTest {
   private static final Long TIMESTAMP = 1624542679L;
   private static final String DEFINITION_ID = "75149e08-3c4e-4726-88b6-775e6c2bc565";
   private static final String REPORT_INSTANCE_ID = "7ee3f480-4506-4b2f-a853-7e9a4a3e5162";
-  private static final String EXPECTED_REPORT_DOWNLOAD_URL =
-      "/v1/analysis/" + ANALYSIS_ID + "/definitions/" + DEFINITION_ID + "/reports/" + TIMESTAMP;
+  private static final String EXPECTED_REPORT_NAME =
+      "analysis/" + ANALYSIS_ID + "/definitions/" + DEFINITION_ID + "/reports/" + TIMESTAMP;
 
   @Mock
   ReportingService reportingService;
@@ -53,6 +53,7 @@ class SimulationServiceTest {
             TIMESTAMP);
 
     assertThat(valueOf(reportStatus.getStatus())).isEqualTo("GENERATING");
+    assertThat(reportStatus.getReportName()).isEqualTo(EXPECTED_REPORT_NAME);
   }
 
   @Test
@@ -68,6 +69,6 @@ class SimulationServiceTest {
             TIMESTAMP);
 
     assertThat(valueOf(reportStatus.getStatus())).isEqualTo("OK");
-    assertThat(reportStatus.getDownloadReportUrl()).isEqualTo(EXPECTED_REPORT_DOWNLOAD_URL);
+    assertThat(reportStatus.getReportName()).isEqualTo(EXPECTED_REPORT_NAME);
   }
 }
