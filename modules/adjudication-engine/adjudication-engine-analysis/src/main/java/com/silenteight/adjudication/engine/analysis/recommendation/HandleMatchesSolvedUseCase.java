@@ -23,7 +23,7 @@ class HandleMatchesSolvedUseCase {
           matchesSolved.getAnalysis(), matchesSolved.getMatchesCount());
     }
 
-    return Optional.of(generateAndSaveRecommendationUseCase.generateAndSaveRecommendations(
-        matchesSolved.getAnalysis()));
+    return generateAndSaveRecommendationUseCase.generateAndSaveRecommendations(
+        matchesSolved.getAnalysis());
   }
 }

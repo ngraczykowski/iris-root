@@ -60,6 +60,8 @@ class GenerateAndSaveRecommendationUseCaseTest {
 
     var generated =
         generateAndSaveRecommendationUseCase.generateAndSaveRecommendations("analysis/1");
-    assertThat(generated.getRecommendationInfosCount()).isEqualTo(5);
+    assertThat(generated)
+        .isNotEmpty()
+        .hasValueSatisfying(r -> assertThat(r.getRecommendationInfosCount()).isEqualTo(5));
   }
 }

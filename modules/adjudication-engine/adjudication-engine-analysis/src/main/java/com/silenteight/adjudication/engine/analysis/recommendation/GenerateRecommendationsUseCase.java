@@ -46,6 +46,7 @@ class GenerateRecommendationsUseCase {
   List<RecommendationInfo> generateRecommendations(
       String analysisName,
       Function<SaveRecommendationRequest, List<RecommendationInfo>> saveRecommendation) {
+
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     var recommendationInfos = new ArrayList<RecommendationInfo>();
 
@@ -68,7 +69,9 @@ class GenerateRecommendationsUseCase {
         log.info("No recommendations generated: analysis={}", analysisName);
       }
     } while (true);
-    log.debug("Finished generating recommendations: analysis={}", analysisName);
+
+    log.info("Finished generating recommendations: analysis={}, recommendationCount={}",
+        analysisName, recommendationInfos.size());
 
     return recommendationInfos;
   }
