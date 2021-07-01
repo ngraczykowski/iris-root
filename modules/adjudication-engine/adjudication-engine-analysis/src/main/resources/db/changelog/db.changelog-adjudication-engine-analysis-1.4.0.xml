@@ -51,12 +51,6 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.4.0_8" author="wkeska">
-    <sqlFile
-        path="sql/remove_duplicated_match_solutions.sql"
-        relativeToChangelogFile="true"/>
-  </changeSet>
-
   <changeSet id="adjudication-engine-analysis-1.4.0_9" author="wkeska">
     <createIndex
         tableName="ae_match_solution"
