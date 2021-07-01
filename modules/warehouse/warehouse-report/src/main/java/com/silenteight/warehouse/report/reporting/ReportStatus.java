@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import javax.annotation.Nullable;
-
 
 @Value
 @Builder
@@ -14,19 +12,20 @@ public class ReportStatus {
   @NonNull
   Status status;
 
-  @Nullable
-  String downloadReportUrl;
+  @NonNull
+  String reportName;
 
-  public static ReportStatus buildReportStatusOk(String downloadReportUrl) {
+  public static ReportStatus buildReportStatusOk(String reportName) {
     return ReportStatus.builder()
         .status(Status.OK)
-        .downloadReportUrl(downloadReportUrl)
+        .reportName(reportName)
         .build();
   }
 
-  public static ReportStatus buildReportStatusGenerating() {
+  public static ReportStatus buildReportStatusGenerating(String reportName) {
     return ReportStatus.builder()
         .status(Status.GENERATING)
+        .reportName(reportName)
         .build();
   }
 

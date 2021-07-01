@@ -71,9 +71,11 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
           TIMESTAMP_PARAM, TIMESTAMP))
       .toString();
 
-  private static final ReportStatus TEST_REPORT_STATUS = ReportStatus.buildReportStatusOk(
-      "analysis/production/definitions/AI_REASONING/"
-          + "22c7466f-5084-40fa-beed-add2a78c5a29/reports/" + TIMESTAMP);
+  private static final ReportStatus TEST_REPORT_STATUS_OK =
+      ReportStatus.buildReportStatusOk(TEST_DOWNLOAD_REPORT_URL);
+
+  private static final ReportStatus TEST_REPORT_STATUS_GENERATING =
+      ReportStatus.buildReportStatusGenerating(TEST_DOWNLOAD_REPORT_URL);
 
   @MockBean
   ProductionReportingQuery productionReportingQuery;
@@ -165,11 +167,26 @@ class ProductionReportsRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
-  void its200_WhenInvokedGetReportStatus() {
+  void its200_WhenInvokedGetReportStatusAndReturnedStatusOk() {
     given(productionService.getReportGeneratingStatus(REPORT_TYPE, DEFINITION_ID, TIMESTAMP))
-        .willReturn(TEST_REPORT_STATUS);
+        .willReturn(TEST_REPORT_STATUS_OK);
 
-    get(TEST_REPORT_STATUS_URL).statusCode(OK.value()).body("status", is("OK"));
+    get(TEST_REPORT_STATUS_URL)
+        .statusCode(OK.value())
+        .body("status", is("OK"))
+        .body("reportName", is(TEST_DOWNLOAD_REPORT_URL));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  void its200_WhenInvokedGetReportStatusAndReturnedStatusGenerating() {
+    given(productionService.getReportGeneratingStatus(REPORT_TYPE, DEFINITION_ID, TIMESTAMP))
+        .willReturn(TEST_REPORT_STATUS_GENERATING);
+
+    get(TEST_REPORT_STATUS_URL)
+        .statusCode(OK.value())
+        .body("status", is("GENERATING"))
+        .body("reportName", is(TEST_DOWNLOAD_REPORT_URL));
   }
 
   @Test
