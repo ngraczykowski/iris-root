@@ -52,15 +52,18 @@ class ListVectorsRestController {
             new Paging(pageIndex, pageSize)));
   }
 
-  @GetMapping(value = LIST_VECTORS_URL, params = {"stepName", PAGE_INDEX, PAGE_SIZE})
+  @GetMapping(value = LIST_VECTORS_URL, params = { "stepName", PAGE_INDEX, PAGE_SIZE })
   @PreAuthorize("isAuthorized('LIST_STEP_FEATURE_VECTORS')")
   public ResponseEntity<FeatureVectorsDto> listForStep(
       @RequestParam(required = false) String stepName,
       @RequestParam @Min(0) int pageIndex,
       @RequestParam @Min(1) int pageSize) {
 
+    String count = valueOf(listVectorsQuery.count());
+
     return ok()
-        .header(HEADER_TOTAL_COUNT_ALL, valueOf(listVectorsQuery.count()))
+        .header(HEADER_TOTAL_COUNT_ALL, count)
+        .header(HEADER_TOTAL_COUNT, count)
         .body(findFeatureVectorsSolvedByStepUseCase.activate(
             stepName, new Paging(pageIndex, pageSize)));
   }
