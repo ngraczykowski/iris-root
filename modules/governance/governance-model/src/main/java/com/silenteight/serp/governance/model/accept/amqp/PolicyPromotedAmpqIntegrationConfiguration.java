@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.transfer.export.amqp;
+package com.silenteight.serp.governance.model.accept.amqp;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,24 +16,24 @@ import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 @EnableConfigurationProperties(PolicyPromotedMessagingProperties.class)
 class PolicyPromotedAmpqIntegrationConfiguration {
 
-  private static final String POLICY_PROMOTED_OUTBOUND_CHANNEL = "policyPromotedOutboundChannel";
+  private static final String MODEL_PROMOTED_OUTBOUND_CHANNEL = "modelPromotedOutboundChannel";
 
   private final AmqpOutboundFactory outboundFactory;
 
   @Bean
   GatewayProxyFactoryBean policyPromotedMessageGateway() {
     GatewayProxyFactoryBean result = new GatewayProxyFactoryBean(
-        PolicyPromotedMessageGateway.class);
+        ModelPromotedMessageGateway.class);
     result.setDefaultRequestChannel(new DirectChannel());
-    result.setDefaultReplyChannelName(POLICY_PROMOTED_OUTBOUND_CHANNEL);
+    result.setDefaultRequestChannelName(MODEL_PROMOTED_OUTBOUND_CHANNEL);
     return result;
   }
 
   @Bean
-  IntegrationFlow sendPolicyPublishMessageIntegrationFlow(
+  IntegrationFlow sendModelPublishMessageIntegrationFlow(
       PolicyPromotedMessagingProperties properties) {
     return flow -> flow
-        .channel(POLICY_PROMOTED_OUTBOUND_CHANNEL)
+        .channel(MODEL_PROMOTED_OUTBOUND_CHANNEL)
         .handle(outboundFactory
               .outboundAdapter()
               .exchangeName(properties.getExchange())

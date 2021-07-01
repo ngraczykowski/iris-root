@@ -121,7 +121,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   }
 
   public void publish() {
-    assertAllowedStateChange(TO_BE_USED, SAVED);
+    assertAllowedStateChange(TO_BE_USED, SAVED, TO_BE_USED);
     setState(TO_BE_USED);
   }
 

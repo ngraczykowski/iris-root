@@ -1,7 +1,6 @@
 package com.silenteight.serp.governance.model.accept;
 
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
-import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageUseCase;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 
 import org.springframework.context.annotation.Bean;

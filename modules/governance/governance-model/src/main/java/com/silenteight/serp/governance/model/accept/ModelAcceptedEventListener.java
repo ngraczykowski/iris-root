@@ -7,8 +7,6 @@ import com.silenteight.serp.governance.changerequest.approve.event.ModelAccepted
 import com.silenteight.serp.governance.model.common.ModelResource;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
-import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageCommand;
-import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageUseCase;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyCommand;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 

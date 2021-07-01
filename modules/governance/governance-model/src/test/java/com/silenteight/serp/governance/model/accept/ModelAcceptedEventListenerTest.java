@@ -2,8 +2,6 @@ package com.silenteight.serp.governance.model.accept;
 
 import com.silenteight.serp.governance.changerequest.approve.event.ModelAcceptedEvent;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
-import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageCommand;
-import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageUseCase;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyCommand;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 

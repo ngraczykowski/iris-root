@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.transfer.export;
+package com.silenteight.serp.governance.model.accept;
 
 import lombok.NonNull;
 import lombok.Value;

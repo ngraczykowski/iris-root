@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.transfer.export.amqp;
+package com.silenteight.serp.governance.model.accept.amqp;
 
 import lombok.Data;
 
