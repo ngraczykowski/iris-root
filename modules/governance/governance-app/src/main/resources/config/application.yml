@@ -306,6 +306,8 @@ sep.auth:
       - "DASHBOARD"
     QA_ISSUE_MANAGER:
       - "MANAGE_POLICY"
+      - "VIEW_POLICIES"
+      - "MANAGE_STEPS"
       - "VIEW_QA_VERIFICATION"
       - "MANAGE_QA_VERIFICATION"
       - "DASHBOARD"
