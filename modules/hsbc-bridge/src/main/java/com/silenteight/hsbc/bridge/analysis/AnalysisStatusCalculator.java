@@ -31,11 +31,9 @@ class AnalysisStatusCalculator {
     }
 
     var analysis = entity.get();
-    if (analysis.isInProgress()) {
-      if (hasNoPendingAlerts(name)) {
-        analysis.setStatus(COMPLETED);
-        repository.save(analysis);
-      }
+    if (analysis.isInProgress() && hasNoPendingAlerts(name)) {
+      analysis.setStatus(COMPLETED);
+      repository.save(analysis);
     }
 
     return of(analysis.getStatus());
@@ -51,6 +49,7 @@ class AnalysisStatusCalculator {
   private Optional<GetAnalysisResponseDto> safeGetAnalysisResults(String name) {
     try {
       var analysisResult = analysisServiceClient.getAnalysis(name);
+      log.info("NOMAD, analysis={}, pendingAlerts={}", name, analysisResult.getPendingAlerts());
       return of(analysisResult);
     } catch (Exception ex) {
       log.error("Exception on get analysis", ex);

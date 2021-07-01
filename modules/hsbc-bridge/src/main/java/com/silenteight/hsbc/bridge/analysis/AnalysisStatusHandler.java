@@ -17,6 +17,8 @@ class AnalysisStatusHandler {
   private final ApplicationEventPublisher eventPublisher;
 
   void handleStatusChange(@NonNull String name) {
+    log.info("NOMAD, recalculating analysis status, analysis={}", name);
+
     statusCalculator.recalculateStatus(name)
         .ifPresent(newStatus -> handleNewStatus(name, newStatus));
   }
@@ -24,7 +26,7 @@ class AnalysisStatusHandler {
   private void handleNewStatus(String name, Status newStatus) {
     if (newStatus == Status.COMPLETED) {
       eventPublisher.publishEvent(new AnalysisCompletedEvent(name));
-      log.debug("Analysis: {} has been completed", name);
+      log.info("Analysis: {} has been completed", name);
     }
   }
 }
