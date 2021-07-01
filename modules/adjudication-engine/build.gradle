@@ -95,7 +95,7 @@ subprojects {Project subproject ->
                 "AE_DB_HOST"                  : "postgres",
                 "AE_DB_PORT"                  : "5432",
                 "AE_DB_NAME"                  : "adjudication-engine",
-                "AE_DB_USER"                  : "adjudication-engine",
+                "AE_DB_USERNAME"              : "adjudication-engine",
                 "AE_DB_PASSWORD"              : "adjudication-engine",
                 "SPRING_RABBITMQ_HOST"        : "rabbitmq",
                 "SPRING_RABBITMQ_PORT"        : "5672",
