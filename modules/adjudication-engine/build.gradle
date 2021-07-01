@@ -9,7 +9,7 @@ plugins {
   id "nebula.resolution-rules" version "7.6.0"
   // Spring boot plugin version should be same as Spring version in sep-dependencies
   id "org.springframework.boot" version "2.4.6" apply false
-  id "com.google.cloud.tools.jib" version "2.5.0" apply false
+  id "com.google.cloud.tools.jib" version "3.1.1" apply false
 }
 
 projectSetup {
@@ -76,39 +76,33 @@ subprojects {Project subproject ->
         subproject.jib {
           from {
             // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-            def imageSuffix = "$version".endsWith("-SNAPSHOT") ? "-debug" : ""
+            def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
+                              "-debug" : ""
             image = "gcr.io/distroless/java-debian10:11" + imageSuffix
           }
           to {
-            image = "docker.repo.silenteight.com/cloudapi/${subproject.name}:${version}"
-            if (!"$version".endsWith("-SNAPSHOT"))
+            image = "docker.repo.silenteight.com/ae/${subproject.name}:${version}"
+            if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
+              tags = ["snapshot"]
+            } else {
               tags = ["latest"]
+            }
           }
           container {
             appRoot = "/silenteight/app"
             environment = [
-                "SILENTEIGHT_HOME"          : "/silenteight",
-                "CLOUDAPI_DB_HOST"          : "postgres",
-                "CLOUDAPI_DB_PORT"          : "5432",
-                "CLOUDAPI_DB_NAME"          : "cloudapi",
-                "CLOUDAPI_DB_USER"          : "cloudapi",
-                "CLOUDAPI_DB_PASSWORD"      : "cloudapi",
-                "CLOUDAPI_RABBITMQ_HOST"    : "rabbitmq",
-                "CLOUDAPI_RABBITMQ_PORT"    : "5672",
-                "CLOUDAPI_RABBITMQ_USER"    : "cloudapi",
-                "CLOUDAPI_RABBITMQ_PASSWORD": "cloudapi",
-                "CLOUDAPI_RABBITMQ_VHOST"   : "/",
-                "TRUSTSTORE_PATH"           : "/silenteight/cert/truststore.p12",
-                "TRUSTSTORE_PASSWORD"       : "changeme",
-                "TRUSTSTORE_TYPE"           : "PKCS12",
-                "KEYSTORE_PATH"             : "/silenteight/cert/keystore.p12",
-                "KEYSTORE_PASSWORD"         : "changeme",
-                "KEYSTORE_TYPE"             : "PKCS12",
-                // Validates the server certificate is trusted (i.e., is in the trust store).
-                "TLS_VALIDATE_SERVER"       : "true",
-                // Verifies the actual server host name is as states in the certificate.
-                "TLS_VERIFY_HOSTNAME"       : "true",
-                "SPRING_PROFILES_ACTIVE"    : "",
+                "SILENTEIGHT_HOME"            : "/silenteight",
+                "AE_DB_HOST"                  : "postgres",
+                "AE_DB_PORT"                  : "5432",
+                "AE_DB_NAME"                  : "adjudication-engine",
+                "AE_DB_USER"                  : "adjudication-engine",
+                "AE_DB_PASSWORD"              : "adjudication-engine",
+                "SPRING_RABBITMQ_HOST"        : "rabbitmq",
+                "SPRING_RABBITMQ_PORT"        : "5672",
+                "SPRING_RABBITMQ_USERNAME"    : "dev",
+                "SPRING_RABBITMQ_PASSWORD"    : "dev",
+                "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
+                "SPRING_PROFILES_ACTIVE"      : "",
             ]
             jvmFlags = [
                 "-XX:MaxRAMPercentage=75",
@@ -123,7 +117,6 @@ subprojects {Project subproject ->
             ]
             ports = ["8080", "8081"]
             user = "nonroot"
-            volumes = ["/silenteight/cert"]
             workingDirectory = "/silenteight"
           }
         }
