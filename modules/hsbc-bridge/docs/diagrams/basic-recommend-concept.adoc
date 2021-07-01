@@ -1,0 +1,36 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+participant HSBC as a
+participant "Adjudication Engine API" as b
+
+skinparam ParticipantPadding 200
+
+== ** Solving Alerts** ==
+|||
+note over a: \n /async/batch/v1/{batchId}/recommend \n
+a -> b: [HTTP POST] Batch Request with Alerts to solve
+|||
+
+== ** Status of batch processing ** ==
+|||
+note over a: \n /async/batch/v1/{batchId}/status \n
+loop
+a -> b: [GET] Request for status of processing
+end
+|||
+
+== ** Retrieving results ** ==
+|||
+note over a: \n /async/batch/v1/{batchId}/result \n
+a -> b: [GET] Retrieving recommendations for Alerts
+|||
+
+== ** Acknowledgement of getting results ** ==
+|||
+note over a: \n /async/batch/v1/{batchId}/ack \n
+a -> b: [GET] Acknowledgement of getting recommendations
+|||
+
+@enduml
+-----
