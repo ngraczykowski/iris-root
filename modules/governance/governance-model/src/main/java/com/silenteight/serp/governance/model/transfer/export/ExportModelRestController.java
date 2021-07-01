@@ -24,10 +24,14 @@ import static org.springframework.http.ResponseEntity.ok;
 @Slf4j
 class ExportModelRestController {
 
+  public static final String EXPORT_MODEL_URL_PREFIX = "/v1/solvingModels/";
+  public static final String EXPORT_MODEL_URL_SUFFIX = "/export";
+  private static final String EXPORT_MODEL_URL = EXPORT_MODEL_URL_PREFIX + "{id}" +
+      EXPORT_MODEL_URL_SUFFIX;
   @NonNull
   private final ExportModelUseCase exportModelUseCase;
 
-  @GetMapping("/v1/solvingModels/{id}/export")
+  @GetMapping(EXPORT_MODEL_URL)
   @PreAuthorize("isAuthorized('EXPORT_MODEL')")
   public ResponseEntity<TransferredModelRootDto> export(@PathVariable UUID id) {
     return ok(exportModelUseCase.apply(id));

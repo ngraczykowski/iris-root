@@ -57,3 +57,10 @@ serp:
           routing-key: feature-vector.solved
         receive:
           queue-name: governance.analytics
+
+  model:
+    export:
+      integration:
+        request:
+          exchange: gov.event
+          routingKey: event.model-promoted.production

@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.model;
 
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 import com.silenteight.serp.governance.changerequest.approval.ModelApprovalQuery;
 import com.silenteight.serp.governance.model.provide.PolicyFeatureProvider;
 import com.silenteight.serp.governance.policy.current.CurrentPolicyProvider;
@@ -54,4 +55,7 @@ public class ModelTestConfiguration {
 
   @MockBean
   ModelApprovalQuery modelApprovalQuery;
+
+  @MockBean
+  AmqpOutboundFactory outboundFactory;
 }
