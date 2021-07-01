@@ -8,11 +8,9 @@ import com.silenteight.hsbc.bridge.match.MatchNotFoundException;
 import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
 import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 
-import static io.grpc.Status.DATA_LOSS;
-import static io.grpc.Status.INVALID_ARGUMENT;
-import static io.grpc.Status.NOT_FOUND;
-import static io.grpc.Status.UNKNOWN;
+import static io.grpc.Status.*;
 
 @Slf4j
 class GrpcErrorHandler {
@@ -28,7 +26,9 @@ class GrpcErrorHandler {
   }
 
   private static Status determineStatus(RuntimeException ex) {
-    if (ex instanceof FeatureNotAllowedException) {
+    if (ex instanceof StatusRuntimeException) {
+      return ((StatusRuntimeException) ex).getStatus();
+    }else if (ex instanceof FeatureNotAllowedException) {
       return INVALID_ARGUMENT;
     } else if (ex instanceof MatchNotFoundException) {
       return NOT_FOUND;
