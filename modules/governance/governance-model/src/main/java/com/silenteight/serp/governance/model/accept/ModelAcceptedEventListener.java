@@ -7,6 +7,8 @@ import com.silenteight.serp.governance.changerequest.approve.event.ModelAccepted
 import com.silenteight.serp.governance.model.common.ModelResource;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
+import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageCommand;
+import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageUseCase;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyCommand;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 
@@ -17,9 +19,10 @@ class ModelAcceptedEventListener {
 
   @NonNull
   private final ModelDetailsQuery modelDetailsQuery;
-
   @NonNull
   private final PromotePolicyUseCase promotePolicyUseCase;
+  @NonNull
+  private final SendPromoteMessageUseCase sendPromoteMessageUseCase;
 
   @EventListener
   public void handle(@NonNull ModelAcceptedEvent event) {
@@ -28,7 +31,8 @@ class ModelAcceptedEventListener {
     promotePolicyUseCase.activate(PromotePolicyCommand.of(
         event.getCorrelationId(), modelDto.getPolicy(), event.getPromotedBy()));
     // INFO(kdzieciol): Here we will call promoteUseCase for strategy and agent config set
-    // TODO(kdzieciol): This is the right place to fire up the event to publish message with
-    //  a new model for the Bridge ( https://silent8.atlassian.net/browse/WEB-938 )
+
+    sendPromoteMessageUseCase.activate(SendPromoteMessageCommand.of(
+        event.getCorrelationId(), event.getModelName()));
   }
 }

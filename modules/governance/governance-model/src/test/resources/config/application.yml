@@ -5,3 +5,9 @@ serp:
       agentDetailsSource: classpath:test_agent_details.json
     model:
       categorySource: classpath:test_categories.json
+
+      export:
+        integration:
+          request:
+            exchange: gov.event
+            routingKey: event.model-promoted.production

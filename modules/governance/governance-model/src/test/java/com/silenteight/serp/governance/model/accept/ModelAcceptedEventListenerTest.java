@@ -2,6 +2,8 @@ package com.silenteight.serp.governance.model.accept;
 
 import com.silenteight.serp.governance.changerequest.approve.event.ModelAcceptedEvent;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
+import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageCommand;
+import com.silenteight.serp.governance.model.transfer.export.SendPromoteMessageUseCase;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyCommand;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 
@@ -25,16 +27,18 @@ class ModelAcceptedEventListenerTest {
   private static final UUID CORRELATION_ID = randomUUID();
   @Mock
   private ModelDetailsQuery modelDetailsQuery;
-
   @Mock
   private PromotePolicyUseCase promotePolicyUseCase;
+  @Mock
+  private SendPromoteMessageUseCase sendPromoteMessageUseCase;
 
   private ModelAcceptedEventListener modelAcceptedEventListener;
 
   @BeforeEach
   void setUp() {
     modelAcceptedEventListener = new ModelAcceptConfiguration()
-        .modelAcceptedEventListener(modelDetailsQuery, promotePolicyUseCase);
+        .modelAcceptedEventListener(
+            modelDetailsQuery, promotePolicyUseCase, sendPromoteMessageUseCase);
   }
 
   @Test
@@ -53,5 +57,22 @@ class ModelAcceptedEventListenerTest {
     assertThat(event.getCorrelationId()).isEqualTo(CORRELATION_ID);
     assertThat(event.getPolicyName()).isEqualTo(POLICY);
     assertThat(event.getPromotedBy()).isEqualTo(CREATED_BY);
+  }
+
+  @Test
+  void sendMessageOnPromoteEvent() {
+    when(modelDetailsQuery.get(MODEL_ID)).thenReturn(MODEL_DTO);
+
+    ModelAcceptedEvent modelAcceptedEvent = ModelAcceptedEvent
+        .of(CORRELATION_ID, MODEL_RESOURCE_NAME, CREATED_BY);
+
+    modelAcceptedEventListener.handle(modelAcceptedEvent);
+
+    ArgumentCaptor<SendPromoteMessageCommand> argumentCaptor = ArgumentCaptor
+        .forClass(SendPromoteMessageCommand.class);
+    verify(sendPromoteMessageUseCase).activate(argumentCaptor.capture());
+    SendPromoteMessageCommand command = argumentCaptor.getValue();
+    assertThat(command.getCorrelationId()).isEqualTo(CORRELATION_ID);
+    assertThat(command.getModelName()).isEqualTo(MODEL_RESOURCE_NAME);
   }
 }
