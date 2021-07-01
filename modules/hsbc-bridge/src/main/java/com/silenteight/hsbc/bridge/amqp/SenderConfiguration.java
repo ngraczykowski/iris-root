@@ -33,6 +33,17 @@ class SenderConfiguration {
   }
 
   @Bean
+  AmqpIsPepMessageSender messageIsPepSender() {
+    return AmqpIsPepMessageSender.builder()
+        .amqpTemplate(rabbitTemplate)
+        .configuration(AmqpIsPepMessageSender.Configuration.builder()
+            .exchangeName(outgoing.getIsPepExchangeName())
+            .routingKey(outgoing.getIsPepRoutingKey())
+            .build())
+        .build();
+  }
+
+  @Bean
   ModelPersistedMessageSender modelPersistedMessageSender() {
     return ModelPersistedMessageSender.builder()
         .amqpTemplate(rabbitTemplate)

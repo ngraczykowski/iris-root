@@ -6,6 +6,7 @@ ext {
   //***********************************
   adjudicationEngineApiVersion = "0.5.0-SNAPSHOT"
   governanceModelApiVersion = "1.8.0-SNAPSHOT"
+  silenteightLearningEngineApiVersion = "0.1.0-SNAPSHOT"
   silenteightDataSourceApiVersion = "0.3.0-SNAPSHOT"
   warehouseApiVersion = "1.1.0-SNAPSHOT"
   worldCheckApiVersion = "0.1.0-SNAPSHOT"
@@ -29,6 +30,7 @@ libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
 libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceModelApiVersion]
+libraries.silenteight_learningstore_api = [group: 'com.silenteight.learningengine.api', name: 'learning-store-api', version: silenteightLearningEngineApiVersion]
 libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
 libraries.worldcheck_api = [group: 'com.silenteight.worldcheck.api', name: 'protocol-world-check', version: worldCheckApiVersion]
 
@@ -155,6 +157,7 @@ dependencies {
   implementation libraries.shedlock_jdbc_template
   implementation libraries.shedlock_spring
   implementation libraries.silenteight_governance_model_api
+  implementation libraries.silenteight_learningstore_api
   implementation libraries.slf4j_api
   implementation libraries.spring_amqp
   implementation libraries.spring_aspects

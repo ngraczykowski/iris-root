@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.aws.AwsModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
 import com.silenteight.hsbc.bridge.grpc.GrpcModule;
 import com.silenteight.hsbc.bridge.http.security.SecurityModule;
+import com.silenteight.hsbc.bridge.ispep.IsPepModule;
 import com.silenteight.hsbc.bridge.jenkins.JenkinsModule;
 import com.silenteight.hsbc.bridge.json.JsonModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
@@ -50,6 +51,7 @@ import javax.sql.DataSource;
     GrpcModule.class,
     BulkModule.class,
     DataRetentionModule.class,
+    IsPepModule.class,
     JenkinsModule.class,
     NexusModule.class,
     JsonModule.class,

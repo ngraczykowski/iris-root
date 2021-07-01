@@ -15,6 +15,8 @@ silenteight.bridge:
       warehouse-routing-key: command.index-request.production
       watchlist-persisted-exchange-name: bridge.watchlist
       watchlist-persisted-routing-key: persisted
+      is-pep-exchange-name: bridge.ispep
+      is-pep-routing-key: ispep.ispep-learning-store-request.production
     ingoing:
       model-promoted-queue: bridge.model-promoted.production
       recommendations-queue: bridge.recommendations
