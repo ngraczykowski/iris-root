@@ -17,37 +17,38 @@ import static com.silenteight.adjudication.engine.comments.comment.CommentTempla
 import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
-class CommentTemplateLoaderIT extends BaseDataJpaTest {
+class PebbleCommentTemplateLoaderIT extends BaseDataJpaTest {
 
   protected static final String PAYLOAD = "payload";
   @Autowired
   private CommentTemplateRepository repository;
 
-  private CommentTemplateLoader loader;
+  private PebbleCommentTemplateLoader loader;
 
   @BeforeEach
   void setUp() {
-    loader = new CommentTemplateLoader(repository);
+    loader = new PebbleCommentTemplateLoader(repository);
   }
 
   @Test
   void shouldLoadSavedTemplate() throws IOException {
     String name = UUID.randomUUID().toString();
 
-    repository.save(commentTemplate(name, PAYLOAD));
+    var payload = PAYLOAD;
+    repository.save(pebbleTemplate(name, payload));
 
-    assertThat(readTemplate(name)).isEqualTo(PAYLOAD);
+    assertThat(readTemplate(name)).isEqualTo(payload);
   }
 
   @Test
   void shouldFailOnSameRevisionInsert() {
     var name = UUID.randomUUID().toString();
     var payload = "{{name}} payload";
-    var template = commentTemplate(name, 10, payload);
+    var template = pebbleTemplate(name, 10, payload);
 
     repository.save(template);
 
-    var sameTemplate = commentTemplate(name, 10, payload);
+    var sameTemplate = pebbleTemplate(name, 10, payload);
     assertThatThrownBy(() -> repository.save(sameTemplate))
         .isInstanceOf(DataIntegrityViolationException.class);
   }
@@ -56,19 +57,19 @@ class CommentTemplateLoaderIT extends BaseDataJpaTest {
   void shouldReadLatestVersionOfTheTemplate() throws IOException {
     String name = UUID.randomUUID().toString();
 
-    repository.save(commentTemplate(name, "payload ver 1"));
-    repository.save(commentTemplate(name, "payload ver 2"));
+    repository.save(pebbleTemplate(name, "payload ver 1"));
+    repository.save(pebbleTemplate(name, "payload ver 2"));
 
     assertThat(readTemplate(name)).isEqualTo("payload ver 2");
 
-    repository.save(commentTemplate(name, "payload ver 3"));
+    repository.save(pebbleTemplate(name, "payload ver 3"));
 
     assertThat(readTemplate(name)).isEqualTo("payload ver 3");
   }
 
   @Test
   void shouldUsePrefix() throws IOException {
-    repository.save(commentTemplate("prefix/name", PAYLOAD));
+    repository.save(pebbleTemplate("prefix/name", PAYLOAD));
 
     loader.setPrefix("prefix/");
     assertThat(readTemplate("name")).isEqualTo(PAYLOAD);
@@ -79,9 +80,8 @@ class CommentTemplateLoaderIT extends BaseDataJpaTest {
 
   @Test
   void shouldUseSuffix() throws IOException {
-    repository.save(commentTemplate("name.peb", PAYLOAD));
+    repository.save(pebbleTemplate("name", PAYLOAD));
 
-    loader.setSuffix(".peb");
     assertThat(readTemplate("name")).isEqualTo(PAYLOAD);
   }
 
@@ -89,5 +89,13 @@ class CommentTemplateLoaderIT extends BaseDataJpaTest {
     try (var reader = loader.getReader(name)) {
       return CharStreams.toString(reader);
     }
+  }
+
+  private CommentTemplate pebbleTemplate(String name, String payload) {
+    return commentTemplate(name + ".peb", payload);
+  }
+
+  private CommentTemplate pebbleTemplate(String name, int revision, String payload) {
+    return commentTemplate(name + ".peb", revision, payload);
   }
 }

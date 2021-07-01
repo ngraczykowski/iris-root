@@ -6,6 +6,7 @@ import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContex
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,9 +21,12 @@ class CommentTemplateFixture {
 
   static CommentFacade inMemoryCommentFacade(InMemoryCommentTemplateRepository repository) {
     var pebbleConfiguration = new PebbleConfiguration();
-    var loader = pebbleConfiguration.pebbleLoader(repository);
+    var loader = new PebbleCommentTemplateLoader(repository);
     var engine = pebbleConfiguration.pebbleEngine(loader);
-    var useCase = new GenerateCommentUseCase(engine);
+    var templateEngine = new PebbleTemplateEngine(engine);
+
+    var registry = new TemplateEngineRegistry(List.of(templateEngine));
+    var useCase = new GenerateCommentUseCase(registry);
 
     return new CommentFacade(useCase);
   }
@@ -32,7 +36,9 @@ class CommentTemplateFixture {
     return commentTemplate(name, revision.getAndIncrement(), payload);
   }
 
-  public static CommentTemplate commentTemplate(String name, int revision, String payload) {
+  public static CommentTemplate commentTemplate(
+      String name, int revision, String payload) {
+
     return CommentTemplate.builder()
         .templateName(name)
         .revision(revision)

@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.comments.comment;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.comments.comment.TemplateEngineRegistry.TemplateNotFoundException;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 import static com.silenteight.adjudication.engine.comments.comment.CommentTemplateFixture.createAlertContext;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 class GenerateCommentUseCaseTest {
@@ -31,19 +33,19 @@ class GenerateCommentUseCaseTest {
     commentTemplateRepository.save(CommentTemplate
         .builder()
         .revision(0)
-        .templateName(PEBBLE1_TEMPLATE_NAME)
+        .templateName(PEBBLE1_TEMPLATE_NAME + ".peb")
         .template(TestUtils.readFile("pebble1.tmpl"))
         .build());
     commentTemplateRepository.save(CommentTemplate
         .builder()
         .revision(1)
-        .templateName(PEBBLE1_TEMPLATE_NAME)
+        .templateName(PEBBLE1_TEMPLATE_NAME + ".peb")
         .template(TestUtils.readFile("pebble1.tmpl"))
         .build());
     commentTemplateRepository.save(CommentTemplate
         .builder()
         .revision(0)
-        .templateName(PEBBLE2_TEMPLATE_NAME)
+        .templateName(PEBBLE2_TEMPLATE_NAME + ".peb")
         .template(TestUtils.readFile("pebble2.tmpl"))
         .build());
   }
@@ -87,6 +89,15 @@ class GenerateCommentUseCaseTest {
     assertThat(alertModelMap)
         .isNotEmpty()
         .containsKeys("alertId", "commentInput", "recommendedAction", "matches");
+  }
+
+  @Test
+  void shouldFailWhenPassUnsupportedType() {
+    var alertModel = randomAlertModel();
+
+    assertThrows(
+        TemplateNotFoundException.class,
+        () -> facade.generateComment("some template", alertModel));
   }
 
   private AlertContext randomAlertModel() {

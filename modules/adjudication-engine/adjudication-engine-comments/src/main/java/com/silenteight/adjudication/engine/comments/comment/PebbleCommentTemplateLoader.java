@@ -7,12 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.utils.PathUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.Reader;
 
 @Slf4j
 @RequiredArgsConstructor
-class CommentTemplateLoader implements Loader<String> {
+@Component
+class PebbleCommentTemplateLoader implements Loader<String> {
 
   private final CommentTemplateRepository repository;
 
@@ -21,7 +23,7 @@ class CommentTemplateLoader implements Loader<String> {
 
   private String prefix;
 
-  private String suffix;
+  private String suffix = ".peb";
 
   @Override
   public Reader getReader(@NonNull String templateName) {
@@ -30,7 +32,7 @@ class CommentTemplateLoader implements Loader<String> {
     return repository
         .findFirstByTemplateNameOrderByRevisionDesc(getFullName(templateName))
         .map(CommentTemplate::toReader)
-        .orElseThrow(() -> new TemplateNotFoundException(templateName));
+        .orElseThrow(() -> new PebbleTemplateNotFoundException(templateName));
   }
 
   // NOTE(ahaczewski): Copy-pasted from the Pepple ClasspathLoader class.
@@ -81,6 +83,7 @@ class CommentTemplateLoader implements Loader<String> {
 
   @Override
   public boolean resourceExists(String templateName) {
-    throw new UnsupportedOperationException();
+    return repository.findFirstByTemplateNameOrderByRevisionDesc(getFullName(templateName))
+        .isPresent();
   }
 }

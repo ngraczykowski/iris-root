@@ -23,6 +23,7 @@ import static lombok.AccessLevel.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Builder(access = PACKAGE)
+//@Cacheable // TODO(ahaczewski): FIX ME DO IT
 class CommentTemplate extends BaseEntity implements IdentifiableEntity {
 
   @Id
