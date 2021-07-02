@@ -315,7 +315,9 @@ sep.auth:
 serp.governance.qa:
   sampling:
     schedule:
-      audit-cron: 0/15 * * * * ?
+      audit-cron: 0 0 1 * * ?
       alert-generator-cron: 0 0 1 1 * ?
+    generator:
+      sample-count: 454
   viewing:
     max-state-reset-delay-ms: 45000

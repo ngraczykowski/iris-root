@@ -56,12 +56,13 @@ class AlertsGeneratorTest {
     when(cronExecutionTimeProvider.executionTime()).thenReturn(startedAt);
     when(dateRangeProvider.latestDateRange()).thenReturn(dateRangeDto);
     when(alertSamplingQuery.listFinished(dateRangeDto)).thenReturn(of());
+    when(alertSamplingService.createAlertsSampling(dateRangeDto, startedAt)).thenReturn(1L);
     underTest.generateAlertsIfNeeded();
     //then
     verify(alertSamplingService, atLeastOnce()).failLongRunningTasks(startedAt);
     verify(alertSamplingService, atLeastOnce()).createAlertsSampling(dateRangeDto, startedAt);
     verify(alertSamplingService, atLeastOnce()).finish(any());
-    verify(alertsGeneratorService, atLeastOnce()).generateAlerts(dateRangeDto);
+    verify(alertsGeneratorService, atLeastOnce()).generateAlerts(dateRangeDto, 1L);
     verify(cronExecutionTimeProvider, atLeastOnce()).executionTime();
   }
 
@@ -72,19 +73,21 @@ class AlertsGeneratorTest {
     DateRangeDto dateRangeDto = new DateRangeDto(parse("2021-05-01T01:00:00Z"),
         parse("2021-05-31T01:00:00Z"));
     ArgumentCaptor<DateRangeDto> dateRangeCaptor = ArgumentCaptor.forClass(DateRangeDto.class);
+    ArgumentCaptor<Long> alertSamplingIdCaptor = ArgumentCaptor.forClass(Long.class);
     ArgumentCaptor<OffsetDateTime> startedAtCaptor = ArgumentCaptor.forClass(OffsetDateTime.class);
     //when
     when(cronExecutionTimeProvider.executionTime()).thenReturn(startedAt);
     when(dateRangeProvider.latestDateRange()).thenReturn(dateRangeDto);
     when(alertSamplingQuery.listFinished(dateRangeDto)).thenReturn(of());
     when(alertSamplingService.createAlertsSampling(dateRangeDto, startedAt)).thenReturn(1L);
-    doThrow(RuntimeException.class).when(alertsGeneratorService).generateAlerts(dateRangeDto);
+    doThrow(RuntimeException.class).when(alertsGeneratorService)
+        .generateAlerts(dateRangeDto, 1L);
     underTest.generateAlertsIfNeeded();
     //then
     verify(alertSamplingService, times(1))
         .createAlertsSampling(dateRangeCaptor.capture(), startedAtCaptor.capture());
     verify(alertsGeneratorService, times(1))
-        .generateAlerts(dateRangeCaptor.capture());
+        .generateAlerts(dateRangeCaptor.capture(), alertSamplingIdCaptor.capture());
     verify(alertSamplingService, times(1)).markAsFailed(1L);
   }
 }

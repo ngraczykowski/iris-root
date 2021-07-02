@@ -54,5 +54,7 @@ serp.governance.qa:
     schedule:
       audit-cron: 0/15 * * * * ?
       alert-generator-cron: 0 0 1 1 * ?
+    generator:
+      sample-count: 454
   viewing:
     max-state-reset-delay-ms: 45000

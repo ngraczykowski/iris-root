@@ -7,12 +7,12 @@ import com.silenteight.serp.governance.qa.manage.domain.DecisionService;
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
 
 @RequiredArgsConstructor
-class CreateDecisionUseCase {
+public class CreateDecisionUseCase {
 
   @NonNull
   private final DecisionService decisionService;
 
-  void activate(CreateDecisionRequest request) {
+  public void activate(CreateDecisionRequest request) {
     decisionService.createDecision(request);
   }
 }
