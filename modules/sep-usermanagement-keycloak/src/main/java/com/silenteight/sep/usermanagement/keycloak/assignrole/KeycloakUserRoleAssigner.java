@@ -18,6 +18,7 @@ import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -81,7 +82,8 @@ public class KeycloakUserRoleAssigner {
 
   private Set<String> getRolesToCreate(Set<String> roles, String clientId) {
     Set<String> clientRoles = clientQuery.getRoles(clientId);
-    roles.removeAll(clientRoles);
-    return roles;
+    Set<String> rolesToCreate = new HashSet<>(roles);
+    rolesToCreate.removeAll(clientRoles);
+    return rolesToCreate;
   }
 }
