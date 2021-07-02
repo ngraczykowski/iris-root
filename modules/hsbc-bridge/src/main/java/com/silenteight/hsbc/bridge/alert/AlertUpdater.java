@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,7 +16,7 @@ class AlertUpdater {
 
   private final AlertRepository repository;
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void updateNames(@NonNull Map<Long, String> alertIdWithName) {
     alertIdWithName.forEach((k,v) -> {
       var findResult = repository.findById(k);

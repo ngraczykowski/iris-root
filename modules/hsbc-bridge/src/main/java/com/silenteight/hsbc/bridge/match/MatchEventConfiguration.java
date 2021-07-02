@@ -10,7 +10,12 @@ import org.springframework.context.annotation.Configuration;
 class MatchEventConfiguration {
 
   @Bean
-  MatchEventHandler matchEventHandler(MatchRepository matchRepository) {
-    return new MatchEventHandler(matchRepository);
+  MatchUpdater matchUpdater(MatchRepository matchRepository) {
+    return new MatchUpdater(matchRepository);
+  }
+
+  @Bean
+  MatchEventHandler matchEventHandler(MatchUpdater matchUpdater) {
+    return new MatchEventHandler(matchUpdater);
   }
 }

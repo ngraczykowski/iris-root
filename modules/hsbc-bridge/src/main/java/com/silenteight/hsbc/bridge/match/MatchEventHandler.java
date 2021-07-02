@@ -13,13 +13,12 @@ import javax.transaction.Transactional;
 @Slf4j
 class MatchEventHandler {
 
-  private final MatchRepository matchRepository;
+  private final MatchUpdater matchUpdater;
 
   @EventListener
-  @Transactional
   public void onUpdateMatchWithNameEvent(UpdateMatchWithNameEvent event) {
     log.debug("Received match ids with names = {}", event.getMatchIdsWithNames());
 
-    event.getMatchIdsWithNames().forEach(matchRepository::updateNameById);
+    matchUpdater.updateNames(event.getMatchIdsWithNames());
   }
 }
