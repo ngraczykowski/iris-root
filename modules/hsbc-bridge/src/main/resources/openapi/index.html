@@ -2921,8 +2921,8 @@
                     <li data-group="Default" data-name="asyncBatchV1ProcessingStatusGet" class="">
                       <a href="#api-Default-asyncBatchV1ProcessingStatusGet">asyncBatchV1ProcessingStatusGet</a>
                     </li>
-                    <li data-group="Default" data-name="modelExportNameGet" class="">
-                      <a href="#api-Default-modelExportNameGet">modelExportNameGet</a>
+                    <li data-group="Default" data-name="modelExportGet" class="">
+                      <a href="#api-Default-modelExportGet">modelExportGet</a>
                     </li>
                     <li data-group="Default" data-name="modelGet" class="">
                       <a href="#api-Default-modelGet">modelGet</a>
@@ -5368,10 +5368,10 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-modelExportNameGet">
-                      <article id="api-Default-modelExportNameGet-0" data-group="User" data-name="modelExportNameGet" data-version="0">
+                    <div id="api-Default-modelExportGet">
+                      <article id="api-Default-modelExportGet-0" data-group="User" data-name="modelExportGet" data-version="0">
                         <div class="pull-left">
-                          <h1>modelExportNameGet</h1>
+                          <h1>modelExportGet</h1>
                           <p>Get exported model</p>
                         </div>
                         <div class="pull-right"></div>
@@ -5380,31 +5380,31 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/model/export/{name}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/model/export/**</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-modelExportNameGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-modelExportNameGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-modelExportNameGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-modelExportNameGet-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-modelExportGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-modelExportGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-modelExportGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-modelExportGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-modelExportGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-modelExportGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-modelExportGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-modelExportGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-modelExportGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-modelExportGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-modelExportGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-modelExportNameGet-0-curl">
+                          <div class="tab-pane active" id="examples-Default-modelExportGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//model/export/{name}"</code></pre>
+"//model/export/**"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-modelExportNameGet-0-java">
+                          <div class="tab-pane" id="examples-Default-modelExportGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -5419,17 +5419,17 @@ public class DefaultApiExample {
         
         DefaultApi apiInstance = new DefaultApi();
         try {
-            ExportModelResponse result = apiInstance.modelExportNameGet();
+            ExportModelResponse result = apiInstance.modelExportGet();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#modelExportNameGet");
+            System.err.println("Exception when calling DefaultApi#modelExportGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-modelExportNameGet-0-android">
+                          <div class="tab-pane" id="examples-Default-modelExportGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
@@ -5437,25 +5437,25 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
         try {
-            ExportModelResponse result = apiInstance.modelExportNameGet();
+            ExportModelResponse result = apiInstance.modelExportGet();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#modelExportNameGet");
+            System.err.println("Exception when calling DefaultApi#modelExportGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-modelExportNameGet-0-groovy">
+  <div class="tab-pane" id="examples-Default-modelExportGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-modelExportNameGet-0-objc">
+                            <div class="tab-pane" id="examples-Default-modelExportGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Get exported model
-[apiInstance modelExportNameGetWithCompletionHandler: 
+[apiInstance modelExportGetWithCompletionHandler: 
               ^(ExportModelResponse output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -5467,7 +5467,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-modelExportNameGet-0-javascript">
+                            <div class="tab-pane" id="examples-Default-modelExportGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
 var api = new HscbBridgeBatchApi.DefaultApi()
@@ -5478,14 +5478,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.modelExportNameGet(callback);
+api.modelExportGet(callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-modelExportNameGet-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-modelExportGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-modelExportNameGet-0-csharp">
+                            <div class="tab-pane" id="examples-Default-modelExportGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -5494,7 +5494,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class modelExportNameGetExample
+    public class modelExportGetExample
     {
         public void main()
         {
@@ -5504,12 +5504,12 @@ namespace Example
             try
             {
                 // Get exported model
-                ExportModelResponse result = apiInstance.modelExportNameGet();
+                ExportModelResponse result = apiInstance.modelExportGet();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.modelExportNameGet: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.modelExportGet: " + e.Message );
             }
         }
     }
@@ -5517,22 +5517,22 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-modelExportNameGet-0-php">
+                            <div class="tab-pane" id="examples-Default-modelExportGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
 
 try {
-    $result = $api_instance->modelExportNameGet();
+    $result = $api_instance->modelExportGet();
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->modelExportNameGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->modelExportGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-modelExportNameGet-0-perl">
+                            <div class="tab-pane" id="examples-Default-modelExportGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
@@ -5540,15 +5540,15 @@ use WWW::SwaggerClient::DefaultApi;
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 
 eval { 
-    my $result = $api_instance->modelExportNameGet();
+    my $result = $api_instance->modelExportGet();
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->modelExportNameGet: $@\n";
+    warn "Exception when calling DefaultApi->modelExportGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-modelExportNameGet-0-python">
+                            <div class="tab-pane" id="examples-Default-modelExportGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -5560,10 +5560,10 @@ api_instance = swagger_client.DefaultApi()
 
 try: 
     # Get exported model
-    api_response = api_instance.model_export_name_get()
+    api_response = api_instance.model_export_get()
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->modelExportNameGet: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->modelExportGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -5579,14 +5579,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-modelExportNameGet-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-modelExportGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-modelExportNameGet-200-schema">
-                                  <div id='responses-modelExportNameGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-modelExportGet-200-schema">
+                                  <div id='responses-modelExportGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -5612,14 +5612,14 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-modelExportNameGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-modelExportNameGet-200-schema-200');
+                                        $('#responses-modelExportGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-modelExportGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-modelExportNameGet-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-modelExportGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 

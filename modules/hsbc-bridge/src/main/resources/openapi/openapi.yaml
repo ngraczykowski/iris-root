@@ -192,7 +192,7 @@ paths:
         '200':
           description: Model uploaded.
 
-  /model/export/{name}:
+  /model/export/**:
     get:
       summary: Get exported model
       responses:
