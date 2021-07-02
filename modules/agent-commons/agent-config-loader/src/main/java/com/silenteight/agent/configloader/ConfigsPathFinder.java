@@ -3,18 +3,18 @@ package com.silenteight.agent.configloader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-class ConfigsPathFinder {
+public class ConfigsPathFinder {
 
   static final String AGENT_HOME = "AGENT_HOME";
   private static final String CONF_DIR = "conf";
 
   private final String applicationName;
 
-  ConfigsPathFinder(String applicationName) {
+  public ConfigsPathFinder(String applicationName) {
     this.applicationName = applicationName;
   }
 
-  Path find() {
+  public Path find() {
     Path applicationConfigs = getApplicationConfigsPath();
 
     if (!Files.isDirectory(applicationConfigs)) {
