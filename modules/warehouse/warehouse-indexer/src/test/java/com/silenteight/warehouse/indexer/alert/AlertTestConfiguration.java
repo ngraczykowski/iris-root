@@ -10,7 +10,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchM
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
 
 @ComponentScan(basePackageClasses = {

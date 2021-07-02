@@ -33,6 +33,8 @@ spring:
           enabled: false
 
 warehouse:
+  alert-mapping:
+    country-source-key: lob_country
   messaging:
     integration:
       production-indexing-inbound:

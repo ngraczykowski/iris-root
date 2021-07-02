@@ -8,10 +8,10 @@ import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import static com.silenteight.warehouse.common.opendistro.roles.RolesFixtures.COUNTRY_GROUP_ID;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.management.group.CountryGroupFixtures.COUNTRY_GROUP_URL;
 import static com.silenteight.warehouse.management.group.CountryGroupFixtures.NAME;
-import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UUID;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -25,7 +25,7 @@ class CreateCountryGroupRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its201_whenCountryGroupCreated() {
-    CountryGroupDto dto = new CountryGroupDto(UUID, NAME);
+    CountryGroupDto dto = new CountryGroupDto(COUNTRY_GROUP_ID, NAME);
 
     post(COUNTRY_GROUP_URL, dto)
         .contentType(anything())
@@ -36,7 +36,7 @@ class CreateCountryGroupRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
-    CountryGroupDto dto = new CountryGroupDto(UUID, NAME);
+    CountryGroupDto dto = new CountryGroupDto(COUNTRY_GROUP_ID, NAME);
 
     post(COUNTRY_GROUP_URL, dto)
         .contentType(anything())

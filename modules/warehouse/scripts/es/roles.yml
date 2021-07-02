@@ -32,6 +32,8 @@ technical_user:
     - 'cluster:admin/opendistro/reports/instance/get'
     - 'cluster:admin/opendistro/reports/definition/on_demand'
     - 'cluster:monitor/health'
+#  https://discuss.opendistrocommunity.dev/t/cluster-permission-indices-data-write-bulk-needed-for-adding-data-implications/2237/2
+    - 'indices:data/write/bulk'
   index_permissions:
     - index_patterns:
         - 'itest_production'
@@ -94,3 +96,11 @@ technical_user_testsetup:
       allowed_actions:
         - 'kibana_all_write'
 
+8326aa5a-cffc-4bc5-9f7f-9a4d94db616a:
+  reserved: false
+  index_permissions:
+    - index_patterns:
+        - 'itest_production'
+        - 'itest_simulation_*'
+        - 'local_production'
+        - 'local_simulation_*'

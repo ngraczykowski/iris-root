@@ -47,3 +47,7 @@ security_rest_api_access:
 business_user:
   users:
     - "businessuser"
+
+8326aa5a-cffc-4bc5-9f7f-9a4d94db616a:
+  users:
+    - "businessuser"
