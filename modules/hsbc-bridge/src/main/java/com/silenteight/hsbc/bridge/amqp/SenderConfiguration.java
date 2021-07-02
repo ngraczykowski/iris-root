@@ -32,8 +32,7 @@ class SenderConfiguration {
         .build();
   }
 
-  // TODO: waiting for common-docker-infrastructure and nomad-dev-cluster config
-/*  @Bean
+  @Bean
   AmqpIsPepMessageSender messageIsPepSender() {
     return AmqpIsPepMessageSender.builder()
         .amqpTemplate(rabbitTemplate)
@@ -42,7 +41,7 @@ class SenderConfiguration {
             .routingKey(outgoing.getIsPepRoutingKey())
             .build())
         .build();
-  }*/
+  }
 
   @Bean
   ModelPersistedMessageSender modelPersistedMessageSender() {
