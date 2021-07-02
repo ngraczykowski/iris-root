@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer;
+package com.silenteight.warehouse.indexer.indexing;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import com.silenteight.warehouse.indexer.alert.AlertService;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
 import com.silenteight.warehouse.indexer.analysis.SimulationNamingStrategy;
 import com.silenteight.warehouse.indexer.analysis.UniqueAnalysisFactory;
-import com.silenteight.warehouse.indexer.listener.SimulationIndexRequestCommandHandler;
+import com.silenteight.warehouse.indexer.indexing.listener.SimulationIndexRequestCommandHandler;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
 

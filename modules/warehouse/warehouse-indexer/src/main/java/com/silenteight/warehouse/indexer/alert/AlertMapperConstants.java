@@ -1,5 +1,10 @@
 package com.silenteight.warehouse.indexer.alert;
 
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class AlertMapperConstants {
 
   public static final String MATCH_PREFIX = "match_";

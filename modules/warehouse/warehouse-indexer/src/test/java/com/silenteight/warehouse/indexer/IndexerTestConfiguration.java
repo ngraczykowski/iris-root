@@ -14,6 +14,10 @@ import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
+import com.silenteight.warehouse.indexer.alert.AlertModule;
+import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
+import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
+import com.silenteight.warehouse.indexer.indexing.IndexingModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
@@ -25,14 +29,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
+    AlertModule.class,
+    AnalysisModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
-    IndexerModule.class,
+    IndexingModule.class,
     AmqpCommonModule.class,
     TestElasticSearchModule.class,
     TestClientModule.class
@@ -120,7 +126,7 @@ public class IndexerTestConfiguration {
 
   @Bean
   TimeSource timeSource() {
-    return new MockTimeSource(parse(PROCESSING_TIMESTAMP_1));
+    return new MockTimeSource(parse(PROCESSING_TIMESTAMP));
   }
 
   @Bean

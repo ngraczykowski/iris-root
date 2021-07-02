@@ -1,10 +1,10 @@
-package com.silenteight.warehouse.indexer.gateway;
+package com.silenteight.warehouse.indexer.indexing.gateway;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
-import com.silenteight.warehouse.indexer.IndexerIntegrationProperties;
+import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -25,4 +25,5 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
 
   testImplementation project(":warehouse-common-testing")
+  testImplementation testFixtures(project(':warehouse-indexer'))
 }

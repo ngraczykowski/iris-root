@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer;
+package com.silenteight.warehouse.indexer.indexing;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertService;
 import com.silenteight.warehouse.indexer.analysis.ProductionNamingStrategy;
-import com.silenteight.warehouse.indexer.listener.ProductionIndexRequestCommandHandler;
+import com.silenteight.warehouse.indexer.indexing.listener.ProductionIndexRequestCommandHandler;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
 

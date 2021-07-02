@@ -16,9 +16,11 @@ sep:
       VIEW_USERS:
         - "GET_COUNTRY_GROUP"
         - "LIST_COUNTRY_GROUP"
+        - "GET_COUNTRIES"
       MANAGE_USERS:
         - "CREATE_COUNTRY_GROUP"
         - "UPDATE_COUNTRY_GROUP"
+        - "UPDATE_COUNTRIES"
       VIEW_QA_ALERTS:
         - "VIEW_ALERTS_DATA"
       MANAGE_QA_ALERT:
