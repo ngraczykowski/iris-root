@@ -36,7 +36,7 @@ job "webapp" {
   namespace = "${var.namespace}"
 
   group "webapp" {
-    count = 3
+    count = 2
 
     network {
       port "http" {
