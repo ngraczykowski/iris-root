@@ -16,6 +16,7 @@ import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
@@ -39,9 +40,14 @@ public class AlertGrpcAdapter implements AlertServiceClient {
         .build();
 
     var response = getStub().batchCreateAlerts(gprcRequest);
+    var registeredAlerts = response.getAlertsList();
+
+    //TODO remove it once root cause of the issue is found
+    log.info("NOMAD, Registered alert names={}",
+        registeredAlerts.stream().map(Alert::getName).collect(Collectors.toList()));
 
     return BatchCreateAlertsResponseDto.builder()
-        .alerts(mapAlerts(response.getAlertsList()))
+        .alerts(mapAlerts(registeredAlerts))
         .build();
   }
 
@@ -58,9 +64,15 @@ public class AlertGrpcAdapter implements AlertServiceClient {
         .build();
 
     var response = getStub().batchCreateAlertMatches(gprcRequest);
+    var registeredMatches = response.getMatchesList();
+
+    //TODO remove it once root cause of the issue is found
+    log.info("NOMAD, Create matches for alert={}", request.getAlert());
+    log.info("NOMAD, Registered matches names={}",
+        registeredMatches.stream().map(Match::getName).collect(Collectors.toList()));
 
     return BatchCreateAlertMatchesResponseDto.builder()
-        .alertMatches(mapAlertMatches(response.getMatchesList()))
+        .alertMatches(mapAlertMatches(registeredMatches))
         .build();
   }
 
