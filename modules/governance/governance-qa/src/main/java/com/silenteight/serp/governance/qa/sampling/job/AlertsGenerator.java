@@ -68,7 +68,7 @@ class AlertsGenerator {
   }
 
   private void doGenerateAlerts(DateRangeDto dateRangeDto, Long alertsSamplingId) {
-    alertsGeneratorService.generateAlerts(dateRangeDto);
+    alertsGeneratorService.generateAlerts(dateRangeDto, alertsSamplingId);
     alertSamplingService.finish(alertsSamplingId);
     log.info("Generating alerts finished at {}", timeSource.now());
   }

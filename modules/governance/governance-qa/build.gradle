@@ -10,6 +10,9 @@ configurations {
   implementation.extendsFrom starterJackson
   implementation.extendsFrom starterGrpc
   implementation.extendsFrom starterDatabase
+  implementation.extendsFrom starterGrpcClient
+  implementation.extendsFrom starterJackson
+
   runtimeOnly.extendsFrom starterDatabaseRuntime
 
   testImplementation.extendsFrom starterSpringTest
@@ -21,6 +24,8 @@ dependencies {
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_serp_protocol_base
+  implementation libraries.silenteight_warehouse_api
 
   implementation libraries.spring_webmvc
   implementation libraries.spring_security_config

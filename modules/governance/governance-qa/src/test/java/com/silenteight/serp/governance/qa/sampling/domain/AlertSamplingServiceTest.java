@@ -4,21 +4,28 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
 import com.silenteight.serp.governance.qa.sampling.domain.exception.WrongAlertSamplingIdException;
+import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertDistributionDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.silenteight.serp.governance.qa.sampling.domain.JobState.FAILED;
 import static com.silenteight.serp.governance.qa.sampling.domain.JobState.FINISHED;
 import static com.silenteight.serp.governance.qa.sampling.domain.JobState.STARTED;
+import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.PEP;
+import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.RISK_TYPE;
+import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.SANCTION;
+import static com.silenteight.serp.governance.qa.sampling.generator.dto.DistributionDtoFixture.getDistributionDto;
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.parse;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
-class AlertSamplingByStateServiceTest {
+class AlertSamplingServiceTest {
 
   private AlertSamplingService underTest;
   private AlertSamplingRepository alertSamplingRepository;
@@ -39,7 +46,7 @@ class AlertSamplingByStateServiceTest {
     Long jobId = underTest.createAlertsSampling(currentDateRange, startedAt);
     Optional<AlertSampling> alertSampling = alertSamplingRepository.getById(jobId);
     //then
-    assertThat(alertSampling.isPresent()).isTrue();
+    assertThat(alertSampling).isPresent();
     assertThat(alertSampling.get().getState()).isEqualTo(STARTED);
     assertThat(alertSampling.get().getRangeFrom()).isEqualTo(currentDateRange.getFrom());
     assertThat(alertSampling.get().getRangeTo()).isEqualTo(currentDateRange.getTo());
@@ -91,7 +98,7 @@ class AlertSamplingByStateServiceTest {
     underTest.markAsFailed(alertSampling.getId());
     Optional<AlertSampling> foundAlertSampling = alertSamplingRepository
         .getById(alertSampling.getId());
-    assertThat(foundAlertSampling.isPresent()).isTrue();
+    assertThat(foundAlertSampling).isPresent();
     assertThat(foundAlertSampling.get().getState()).isEqualTo(FAILED);
   }
 
@@ -119,5 +126,30 @@ class AlertSamplingByStateServiceTest {
     assertThat(startedBeforeAlertSampling.getState()).isEqualTo(FAILED);
     assertThat(finishedBeforeAlertSampling.getState()).isEqualTo(FINISHED);
     assertThat(startedCurrentAlertSampling.getState()).isEqualTo(STARTED);
+  }
+
+  @Test
+  void saveAlertDistributionShouldSaveDistributionAndAlertsCount() {
+    //given
+    String expectedAlertsDistribution = "[{\"alertsCount\":2,\"distributions\":["
+        + "{\"fieldName\":\"riskType\",\"fieldValue\":\"sanction\"},"
+        + "{\"fieldName\":\"riskType\",\"fieldValue\":\"pep\"}]}]";
+    AlertSampling alertSampling = alertSamplingRepository.save(new AlertSampling());
+    List<AlertDistributionDto> alertDistributions = List.of(AlertDistributionDto
+        .builder()
+        .alertsCount(2)
+        .distributions(of(
+            getDistributionDto(RISK_TYPE, SANCTION),
+            getDistributionDto(RISK_TYPE, PEP)))
+        .build());
+    //when
+    underTest.saveAlertDistribution(alertSampling.getId(), alertDistributions, 2);
+    Optional<AlertSampling> savedAlertSampling = alertSamplingRepository
+        .getById(alertSampling.getId());
+    //then
+    assertThat(savedAlertSampling).isPresent();
+    assertThat(savedAlertSampling.get().getAlertsCount()).isEqualTo(2);
+    assertThat(savedAlertSampling.get().getAlertsDistribution())
+        .isEqualTo(expectedAlertsDistribution);
   }
 }
