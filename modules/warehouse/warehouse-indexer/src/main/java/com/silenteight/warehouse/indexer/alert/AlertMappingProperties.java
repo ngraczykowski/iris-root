@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.es")
-public class ElasticsearchProperties {
+@ConfigurationProperties(prefix = "warehouse.alert-mapping")
+public class AlertMappingProperties {
 
   @NotBlank
-  String productionQueryIndex;
+  String countrySourceKey;
 }

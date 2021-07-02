@@ -12,7 +12,11 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.silenteight.warehouse.management.group.CountryGroupFixtures.*;
+import static com.silenteight.warehouse.common.opendistro.roles.RolesFixtures.COUNTRY_GROUP_ID;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.COUNTRY_GROUP_DTO;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.NAME;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UPDATED_NAME;
+import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UPDATE_COUNTRY_GROUP_REQUEST;
 import static java.lang.String.format;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
@@ -35,10 +39,11 @@ class CountryGroupServiceTest extends BaseDataJpaTest {
     underTest.create(COUNTRY_GROUP_DTO);
 
     // then
-    Optional<CountryGroupEntity> countryGroup = countryGroupRepository.findByCountryGroupId(UUID);
+    Optional<CountryGroupEntity> countryGroup = countryGroupRepository.findByCountryGroupId(
+        COUNTRY_GROUP_ID);
     assertThat(countryGroup).isPresent();
     CountryGroupEntity result = countryGroup.get();
-    assertThat(result.getCountryGroupId()).isEqualTo(UUID);
+    assertThat(result.getCountryGroupId()).isEqualTo(COUNTRY_GROUP_ID);
     assertThat(result.getName()).isEqualTo(NAME);
   }
 
@@ -55,13 +60,14 @@ class CountryGroupServiceTest extends BaseDataJpaTest {
     underTest.create(COUNTRY_GROUP_DTO);
 
     // when
-    underTest.update(UUID, UPDATE_COUNTRY_GROUP_REQUEST);
+    underTest.update(COUNTRY_GROUP_ID, UPDATE_COUNTRY_GROUP_REQUEST);
 
     // then
-    Optional<CountryGroupEntity> countryGroup = countryGroupRepository.findByCountryGroupId(UUID);
+    Optional<CountryGroupEntity> countryGroup = countryGroupRepository.findByCountryGroupId(
+        COUNTRY_GROUP_ID);
     assertThat(countryGroup).isPresent();
     CountryGroupEntity result = countryGroup.get();
-    assertThat(result.getCountryGroupId()).isEqualTo(UUID);
+    assertThat(result.getCountryGroupId()).isEqualTo(COUNTRY_GROUP_ID);
     assertThat(result.getName()).isEqualTo(UPDATED_NAME);
   }
 
@@ -73,6 +79,8 @@ class CountryGroupServiceTest extends BaseDataJpaTest {
     // then
     assertThatThrownBy(() -> underTest.create(COUNTRY_GROUP_DTO))
         .isInstanceOf(CountryGroupAlreadyExistsException.class)
-        .hasMessageContaining(format("Country Group with UUID %s already exists.", UUID));
+        .hasMessageContaining(format(
+            "Country Group with UUID %s already exists.",
+            COUNTRY_GROUP_ID));
   }
 }

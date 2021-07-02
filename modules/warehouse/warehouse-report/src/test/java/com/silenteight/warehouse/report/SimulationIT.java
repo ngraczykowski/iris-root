@@ -31,7 +31,7 @@ import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_WITH_MATCHES_1;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -130,7 +130,7 @@ class SimulationIT {
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        SIMULATION_ELASTIC_INDEX_NAME, ALERT_ID_1, ALERT_WITH_MATCHES_1_MAP);
+        SIMULATION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_WITH_MATCHES_1);
   }
 
   private void createSimulationMasterTenant() {

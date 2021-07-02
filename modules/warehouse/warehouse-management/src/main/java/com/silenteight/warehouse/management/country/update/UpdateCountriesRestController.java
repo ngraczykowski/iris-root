@@ -2,8 +2,6 @@ package com.silenteight.warehouse.management.country.update;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.warehouse.management.country.CountryService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +26,7 @@ public class UpdateCountriesRestController {
       COUNTRY_GROUPS_URL + "/{" + COUNTRY_GROUP_ID_PARAM + "}/countries";
 
   @Autowired
-  private CountryService countryService;
+  private UpdateCountriesUseCase updateCountriesUseCase;
 
   @PutMapping(COUNTRIES_URL)
   @PreAuthorize("isAuthorized('UPDATE_COUNTRIES')")
@@ -36,7 +34,7 @@ public class UpdateCountriesRestController {
       @PathVariable(COUNTRY_GROUP_ID_PARAM) UUID id,
       @Valid @RequestBody Collection<String> countries) {
 
-    countryService.setCountries(id, countries);
+    updateCountriesUseCase.activate(id, countries);
     return status(NO_CONTENT).build();
   }
 }

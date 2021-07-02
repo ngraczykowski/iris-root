@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.indexer.analysis;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ANALYSIS_RESOURCE_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.ANALYSIS_RESOURCE_PREFIX;
 import static java.lang.String.join;
 
 public class NewAnalysisEventFixture {

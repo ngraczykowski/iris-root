@@ -29,7 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
 import static org.mockito.Mockito.*;
 

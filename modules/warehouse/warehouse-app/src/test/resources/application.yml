@@ -16,6 +16,8 @@ keycloak:
     credentials.secret: 55555555-4444-3333-2222-000111000111
 
 warehouse:
+  alert-mapping:
+    country-source-key: lob_country
   messaging:
     integration:
       production-indexing-inbound:

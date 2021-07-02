@@ -9,10 +9,10 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import static com.silenteight.warehouse.common.opendistro.roles.RolesFixtures.COUNTRY_GROUP_ID;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.management.group.CountryGroupFixtures.COUNTRY_GROUP_URL;
 import static com.silenteight.warehouse.management.group.CountryGroupFixtures.NAME;
-import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @Import({ UpdateCountryGroupController.class, UpdateCountryGroupConfiguration.class })
 class UpdateCountryGroupControllerTest extends BaseRestControllerTest {
 
-  private static final String UPDATE_COUNTRY_GROUP_URL = COUNTRY_GROUP_URL + "/" + UUID;
+  private static final String UPDATE_COUNTRY_GROUP_URL = COUNTRY_GROUP_URL + "/" + COUNTRY_GROUP_ID;
 
   @MockBean
   private CountryGroupService countryGroupService;

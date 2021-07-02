@@ -16,6 +16,5 @@ public class AlertSearchCriteria {
   private String timeRangeTo;
   @NonNull
   private Map<String, String> filter;
-  @NonNull
   private int alertLimit;
 }

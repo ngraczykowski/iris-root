@@ -17,6 +17,7 @@ configurations {
 dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-indexer")
 
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_sep_auth
@@ -25,5 +26,6 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
 
   testImplementation project(":warehouse-common-testing")
+  testImplementation testFixtures(project(':warehouse-common'))
   testImplementation testFixtures(project(':warehouse-indexer'))
 }

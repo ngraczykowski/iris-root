@@ -2,7 +2,7 @@ package com.silenteight.warehouse.management.country.get;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.warehouse.management.country.CountryService;
+import com.silenteight.warehouse.common.opendistro.roles.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +29,11 @@ class GetCountriesRestController {
       COUNTRY_GROUPS_URL + "/{" + COUNTRY_GROUP_ID_PARAM + "}/countries";
 
   @Autowired
-  private CountryService countryService;
+  private RoleService roleService;
 
   @GetMapping(COUNTRIES_URL)
   @PreAuthorize("isAuthorized('UPDATE_COUNTRIES')")
   public ResponseEntity<List<String>> update(@PathVariable(COUNTRY_GROUP_ID_PARAM) UUID id) {
-    return ok(countryService.getCountries(id));
+    return ok(roleService.getCountries(id));
   }
 }

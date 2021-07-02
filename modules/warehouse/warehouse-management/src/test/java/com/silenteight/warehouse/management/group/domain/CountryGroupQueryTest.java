@@ -11,8 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
+import static com.silenteight.warehouse.common.opendistro.roles.RolesFixtures.COUNTRY_GROUP_ID;
 import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UPDATED_NAME;
-import static com.silenteight.warehouse.management.group.CountryGroupFixtures.UUID;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 
@@ -32,10 +32,10 @@ class CountryGroupQueryTest extends BaseDataJpaTest {
     persistCountryGroup();
 
     // when
-    CountryGroupDto result = underTest.get(UUID);
+    CountryGroupDto result = underTest.get(COUNTRY_GROUP_ID);
 
     // then
-    assertThat(result.getId()).isEqualTo(UUID);
+    assertThat(result.getId()).isEqualTo(COUNTRY_GROUP_ID);
     assertThat(result.getName()).isEqualTo(UPDATED_NAME);
   }
 
@@ -50,15 +50,16 @@ class CountryGroupQueryTest extends BaseDataJpaTest {
     // then
     assertThat(result).hasSize(1);
     CountryGroupDto dto = result.get(0);
-    assertThat(dto.getId()).isEqualTo(UUID);
+    assertThat(dto.getId()).isEqualTo(COUNTRY_GROUP_ID);
     assertThat(dto.getName()).isEqualTo(UPDATED_NAME);
   }
 
   @Test
   void shouldThrowCountryGroupDoesNotExistException() {
-    assertThatThrownBy(() -> underTest.get(UUID))
+    assertThatThrownBy(() -> underTest.get(COUNTRY_GROUP_ID))
         .isInstanceOf(CountryGroupDoesNotExistException.class)
-        .hasMessageContaining(format("Country Group with UUID %s does not exist.", UUID));
+        .hasMessageContaining(
+            format("Country Group with UUID %s does not exist.", COUNTRY_GROUP_ID));
   }
 
   @Test
@@ -73,7 +74,7 @@ class CountryGroupQueryTest extends BaseDataJpaTest {
   private void persistCountryGroup() {
     CountryGroupEntity entity = CountryGroupEntity
         .builder()
-        .countryGroupId(UUID)
+        .countryGroupId(COUNTRY_GROUP_ID)
         .name(UPDATED_NAME)
         .build();
 

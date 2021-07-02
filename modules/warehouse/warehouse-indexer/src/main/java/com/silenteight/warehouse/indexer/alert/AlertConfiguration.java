@@ -10,7 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Valid;
 
 @Configuration
-@EnableConfigurationProperties(ElasticsearchProperties.class)
+@EnableConfigurationProperties({
+    ElasticsearchProperties.class,
+    AlertMappingProperties.class
+})
 public class AlertConfiguration {
 
   @Bean
@@ -28,9 +31,10 @@ public class AlertConfiguration {
   @Bean
   AlertService alertService(
       RestHighLevelClient restHighLevelAdminClient,
+      @Valid AlertMappingProperties alertMappingProperties,
       TimeSource timeSource) {
 
-    AlertMapper alertMapper = new AlertMapper(timeSource);
+    AlertMapper alertMapper = new AlertMapper(timeSource, alertMappingProperties);
     return new AlertService(
         restHighLevelAdminClient,
         alertMapper);

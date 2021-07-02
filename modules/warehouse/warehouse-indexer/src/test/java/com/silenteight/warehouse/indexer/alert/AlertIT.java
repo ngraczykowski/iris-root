@@ -26,6 +26,7 @@ import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_W
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_SEARCH_CRITERIA;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.ALERT_NAME_1;
 import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
@@ -38,6 +39,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 })
 @Slf4j
 class AlertIT {
+
+  static final List<String> LIST_OF_ID = of(
+      ResourceName.ALERT_NAME_1,
+      ResourceName.ALERT_NAME_2);
+
+  static final List<String> ALERT_FIELDS = of(
+      SourceAlertKeys.RECOMMENDATION_KEY,
+      SourceAlertKeys.RISK_TYPE_KEY,
+      SourceAlertKeys.COUNTRY_KEY);
 
   @Autowired
   private AlertQueryService queryUnderTest;
@@ -69,7 +79,8 @@ class AlertIT {
 
     assertThat(alertAttributesMapDto.getAlerts().size()).isEqualTo(2);
     AlertAttributes alertAttributes = alertAttributesMapDto.getAlerts().get(1);
-    assertThat(alertAttributes.getAttributes()).containsEntry(ALERT_COUNTRY_KEY, "UK");
+    assertThat(alertAttributes.getAttributes())
+        .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK);
   }
 
   @Test
@@ -78,12 +89,12 @@ class AlertIT {
     storeData();
 
     AlertAttributes singleAlertMapDto =
-        queryUnderTest.getSingleAlertAttributes(
-            ALERT_FIELDS, "alerts/457b1498-e348-4a81-8093-6079c1173010");
+        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, ALERT_NAME_1);
 
-    assertThat(singleAlertMapDto.getAttributes()).containsEntry(ALERT_COUNTRY_KEY, "UK");
     assertThat(singleAlertMapDto.getAttributes())
-        .containsEntry(ALERT_RECOMMENDATION_KEY, "FALSE_POSITIVE");
+        .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK);
+    assertThat(singleAlertMapDto.getAttributes())
+        .containsEntry(SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP);
   }
 
   @Test
@@ -92,10 +103,9 @@ class AlertIT {
     storeData();
 
     AlertAttributes singleAlertMapDto =
-        queryUnderTest.getSingleAlertAttributes(
-            ALERT_FIELDS_WITH_ONE_NON_EXISTING, "alerts/457b1498-e348-4a81-8093-6079c1173010");
+        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, ALERT_NAME_1);
 
-    assertThat(singleAlertMapDto.getAttributes().get(ALERT_RISK_TYPE_KEY)).isNull();
+    assertThat(singleAlertMapDto.getAttributes().get(SourceAlertKeys.RISK_TYPE_KEY)).isNull();
   }
 
   @ParameterizedTest
@@ -138,18 +148,16 @@ class AlertIT {
     List<String> alertsIds =
         randomAlertQueryService.getRandomAlertIdByCriteria(ALERT_SEARCH_CRITERIA);
 
-    assertThat(alertsIds)
-        .containsAnyElementsOf(
-            of(ALERT_ID_2, ALERT_ID_3));
+    assertThat(alertsIds).containsAnyElementsOf(of(ALERT_ID_2, ALERT_ID_3));
   }
 
   private void storeData() {
-    saveAlert(DOCUMENT_ID_1, ALERT_WITH_MATCHES_1_MAP);
-    saveAlert(DOCUMENT_ID_2, ALERT_WITH_MATCHES_2_MAP);
-    saveAlert(DOCUMENT_ID_3, ALERT_WITH_MATCHES_3_MAP);
-    saveAlert(DOCUMENT_ID_4, ALERT_WITH_MATCHES_4_MAP);
-    saveAlert(DOCUMENT_ID_5, ALERT_WITH_MATCHES_5_MAP);
-    saveAlert(DOCUMENT_ID_6, ALERT_WITH_MATCHES_6_MAP);
+    saveAlert(DOCUMENT_ID, MAPPED_ALERT_WITH_MATCHES_1);
+    saveAlert(DOCUMENT_ID_2, MAPPED_ALERT_WITH_MATCHES_2);
+    saveAlert(DOCUMENT_ID_3, MAPPED_ALERT_WITH_MATCHES_3);
+    saveAlert(DOCUMENT_ID_4, MAPPED_ALERT_WITH_MATCHES_4);
+    saveAlert(DOCUMENT_ID_5, MAPPED_ALERT_WITH_MATCHES_5);
+    saveAlert(DOCUMENT_ID_6, MAPPED_ALERT_WITH_MATCHES_6);
   }
 
   private void saveAlert(String alertId, Map<String, Object> alert) {

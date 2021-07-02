@@ -11,32 +11,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.*;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.COUNTRY_UK;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP_4;
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
 
 public class DataIndexFixtures {
 
-  static final Map<String, String> ALERT_PAYLOAD_WITH_TWO_VALUES =
-      Map.of(ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
-          ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK
-      );
+  static final Map<String, String> ALERT_PAYLOAD_WITH_TWO_VALUES = Map.of(
+      SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+      SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK
+  );
 
   static final Alert ALERT_WITH_MATCHES_1 = Alert.newBuilder()
       .setName(ALERT_NAME_1)
       .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
-          match(MATCH_NAME_1_1, MATCH_SOLUTION_KEY, MATCH_SOLUTION_NO_DECISION),
-          match(MATCH_NAME_1_2, MATCH_SOLUTION_KEY, NO_DATA)))
+          match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
+          match(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
       .build();
 
   static final Alert ALERT_WITH_MATCHES_2 = Alert.newBuilder()
       .setName(ALERT_NAME_2)
       .setPayload(structWithValue(
-          ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_MI))
+          SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI))
       .addAllMatches(of(
-          match(MATCH_NAME_2_1, MATCH_SOLUTION_KEY, MATCH_SOLUTION_EXACT_MATCH),
-          match(MATCH_NAME_2_2, MATCH_SOLUTION_KEY, NO_DATA)))
+          match(MATCH_NAME_2_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_EXACT_MATCH),
+          match(MATCH_NAME_2_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
       .build();
 
   public static final List<Alert> ALERTS_WITH_MATCHES = of(
@@ -46,7 +52,7 @@ public class DataIndexFixtures {
   static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
       .setName(ALERT_NAME_1)
       .setPayload(structWithValue(
-          ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_MI))
+          SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI))
       .addAllMatches(emptyList())
       .build();
 
@@ -54,7 +60,7 @@ public class DataIndexFixtures {
       .timeRangeFrom(PROCESSING_TIMESTAMP)
       .timeRangeTo(PROCESSING_TIMESTAMP_4)
       .alertLimit(3)
-      .filter(Map.of(ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK))
+      .filter(Map.of(SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK))
       .build();
 
   static Builder structWithValue(String key, String value) {
