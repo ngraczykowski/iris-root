@@ -1,18 +1,18 @@
-package com.silenteight.warehouse.indexer.listener;
+package com.silenteight.warehouse.indexer.indexing.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 
 @RequiredArgsConstructor
-class ProductionRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdapter {
+class SimulationRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdapter {
 
   @NonNull
-  private final ProductionIndexRequestCommandHandler productionIndexRequestCommandHandler;
+  private final SimulationIndexRequestCommandHandler simulationIndexRequestCommandHandler;
 
   @NonNull
   private final String inboundChannel;
@@ -24,8 +24,8 @@ class ProductionRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdap
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(inboundChannel)
         .handle(
-            ProductionDataIndexRequest.class,
-            (payload, headers) -> productionIndexRequestCommandHandler.handle(payload))
+            SimulationDataIndexRequest.class,
+            (payload, headers) -> simulationIndexRequestCommandHandler.handle(payload))
         .channel(outboundChannel);
   }
 }

@@ -32,7 +32,7 @@ public class MappedAlertFixtures {
   public static final String ALERT_COUNTRY_KEY = "country";
   public static final String ALERT_COUNTRY_UK = "UK";
   public static final String ALERT_COUNTRY_PL = "PL";
-  public static final String PROCESSING_TIMESTAMP_1 = "2021-04-15T12:17:37.098Z";
+  public static final String PROCESSING_TIMESTAMP = "2021-04-15T12:17:37.098Z";
   public static final String PROCESSING_TIMESTAMP_2 = "2021-05-05T18:17:37.098Z";
   public static final String PROCESSING_TIMESTAMP_3 = "2021-06-08T13:17:37.098Z";
   public static final String PROCESSING_TIMESTAMP_4 = "2021-06-18T12:10:31.098Z";
@@ -68,7 +68,7 @@ public class MappedAlertFixtures {
       of(ALERT_ID_1, ALERT_ID_2, ALERT_ID_3);
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_1_MAP = Map.of(
-      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_1,
+      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
       ALERT_ID_KEY, ALERT_ID_1,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK,
@@ -77,7 +77,7 @@ public class MappedAlertFixtures {
   );
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_2_MAP = Map.of(
-      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_1,
+      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
       ALERT_ID_KEY, ALERT_ID_1,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK,
@@ -86,7 +86,7 @@ public class MappedAlertFixtures {
   );
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_3_MAP = Map.of(
-      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_1,
+      INDEX_TIMESTAMP, PROCESSING_TIMESTAMP,
       ALERT_ID_KEY, ALERT_ID_2,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK,

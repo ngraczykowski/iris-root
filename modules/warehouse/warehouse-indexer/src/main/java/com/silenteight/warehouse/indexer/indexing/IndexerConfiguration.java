@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer;
+package com.silenteight.warehouse.indexer.indexing;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.common.environment.EnvironmentProperties;

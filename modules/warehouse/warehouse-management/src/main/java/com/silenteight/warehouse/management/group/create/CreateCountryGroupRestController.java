@@ -22,7 +22,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
-class CreateCountryGroupRestController {
+public class CreateCountryGroupRestController {
 
   @NonNull
   private final CreateCountryGroupUseCase useCase;

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITH_MATCHES_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_WITH_MATCHES_1_MAP;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,7 +18,7 @@ class AlertMapperTest {
 
   @BeforeEach
   public void init() {
-    alertMapper = new AlertMapper(new MockTimeSource(parse(PROCESSING_TIMESTAMP_1)));
+    alertMapper = new AlertMapper(new MockTimeSource(parse(PROCESSING_TIMESTAMP)));
   }
 
   @Test

@@ -51,7 +51,7 @@ public class DataIndexFixtures {
       .build();
 
   static final AlertSearchCriteria ALERT_SEARCH_CRITERIA = AlertSearchCriteria.builder()
-      .timeRangeFrom(PROCESSING_TIMESTAMP_1)
+      .timeRangeFrom(PROCESSING_TIMESTAMP)
       .timeRangeTo(PROCESSING_TIMESTAMP_4)
       .alertLimit(3)
       .filter(Map.of(ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK))

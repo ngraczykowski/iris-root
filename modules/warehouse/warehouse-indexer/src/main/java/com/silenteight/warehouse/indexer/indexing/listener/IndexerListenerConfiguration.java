@@ -1,18 +1,18 @@
-package com.silenteight.warehouse.indexer.listener;
+package com.silenteight.warehouse.indexer.indexing.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
-import com.silenteight.warehouse.indexer.IndexerIntegrationProperties;
+import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 
-import static com.silenteight.warehouse.indexer.gateway.IndexerGatewayConfiguration.PRODUCTION_INDEXED_OUTBOUND_CHANNEL;
-import static com.silenteight.warehouse.indexer.gateway.IndexerGatewayConfiguration.SIMULATION_INDEXED_OUTBOUND_CHANNEL;
+import static com.silenteight.warehouse.indexer.indexing.gateway.IndexerGatewayConfiguration.PRODUCTION_INDEXED_OUTBOUND_CHANNEL;
+import static com.silenteight.warehouse.indexer.indexing.gateway.IndexerGatewayConfiguration.SIMULATION_INDEXED_OUTBOUND_CHANNEL;
 
 @Configuration
 @RequiredArgsConstructor

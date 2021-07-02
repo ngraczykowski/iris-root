@@ -17,7 +17,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
-class AlertRestController {
+public class AlertRestController {
 
   private static final String QA_ALERT_LIST_URL = "/v1/analysis/production/query";
   private static final String QA_ALERT_DETAIL_URL = "/v1/analysis/production/alerts/{id}";
