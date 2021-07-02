@@ -6,12 +6,12 @@ import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContex
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
+import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
 class CommentTemplateFixture {
@@ -21,22 +21,27 @@ class CommentTemplateFixture {
 
   static CommentFacade inMemoryCommentFacade(InMemoryCommentTemplateRepository repository) {
     var pebbleConfiguration = new PebbleConfiguration();
-    var loader = new PebbleCommentTemplateLoader(repository);
-    var engine = pebbleConfiguration.pebbleEngine(loader);
-    var templateEngine = new PebbleTemplateEngine(engine);
+    var pebbleLoader = new PebbleCommentTemplateLoader(repository);
+    var pebbleEngine = pebbleConfiguration.pebbleEngine(pebbleLoader);
+    var pebbleTemplateEngine = new PebbleTemplateEngine(pebbleEngine);
 
-    var registry = new TemplateEngineRegistry(List.of(templateEngine));
+    var freemarkerConfiguration = new FreemarkerConfiguration();
+    var freemarkerLoader = new FreemarkerCommentTemplateLoader(repository);
+    var freemarker = freemarkerConfiguration.freemarker(freemarkerLoader);
+    var freemarkerTemplateEngine = new FreemarkerTemplateEngine(freemarker);
+
+    var registry = new TemplateEngineRegistry(of(freemarkerTemplateEngine, pebbleTemplateEngine));
     var useCase = new GenerateCommentUseCase(registry);
 
     return new CommentFacade(useCase);
   }
 
-  public static CommentTemplate commentTemplate(String name, String payload) {
+  static CommentTemplate commentTemplate(String name, String payload) {
     var revision = TEMPLATE_REVISIONS.computeIfAbsent(name, s -> new AtomicInteger(1));
     return commentTemplate(name, revision.getAndIncrement(), payload);
   }
 
-  public static CommentTemplate commentTemplate(
+  static CommentTemplate commentTemplate(
       String name, int revision, String payload) {
 
     return CommentTemplate.builder()
@@ -46,7 +51,7 @@ class CommentTemplateFixture {
         .build();
   }
 
-  public static AlertContext createAlertContext() {
+  static AlertContext createAlertContext() {
     var commentInput = new HashMap<String, Object>();
     commentInput.put("comment", "input");
     return new AlertContext(

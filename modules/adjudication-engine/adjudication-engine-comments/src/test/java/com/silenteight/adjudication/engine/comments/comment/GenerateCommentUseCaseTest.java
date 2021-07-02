@@ -7,47 +7,36 @@ import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.silenteight.adjudication.engine.comments.comment.CommentTemplateFixture.commentTemplate;
 import static com.silenteight.adjudication.engine.comments.comment.CommentTemplateFixture.createAlertContext;
+import static com.silenteight.adjudication.engine.comments.comment.TestUtils.readFile;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 class GenerateCommentUseCaseTest {
 
-  private final InMemoryCommentTemplateRepository commentTemplateRepository =
+  private final InMemoryCommentTemplateRepository repo =
       new InMemoryCommentTemplateRepository();
 
   private final CommentFacade facade =
-      CommentTemplateFixture.inMemoryCommentFacade(commentTemplateRepository);
+      CommentTemplateFixture.inMemoryCommentFacade(repo);
 
-  private static final String PEBBLE1_TEMPLATE_NAME = "pebble1";
-  private static final String PEBBLE2_TEMPLATE_NAME = "pebble2";
-
-  GenerateCommentUseCaseTest() {
-    commentTemplateRepository.save(CommentTemplate
-        .builder()
-        .revision(0)
-        .templateName(PEBBLE1_TEMPLATE_NAME + ".peb")
-        .template(TestUtils.readFile("pebble1.tmpl"))
-        .build());
-    commentTemplateRepository.save(CommentTemplate
-        .builder()
-        .revision(1)
-        .templateName(PEBBLE1_TEMPLATE_NAME + ".peb")
-        .template(TestUtils.readFile("pebble1.tmpl"))
-        .build());
-    commentTemplateRepository.save(CommentTemplate
-        .builder()
-        .revision(0)
-        .templateName(PEBBLE2_TEMPLATE_NAME + ".peb")
-        .template(TestUtils.readFile("pebble2.tmpl"))
-        .build());
+  private static AlertContext randomAlertModel() {
+    return AlertContext.builder()
+        .alertId("alert/1")
+        .commentInput(Map.of("o1", "v1", "o2", 1, "o3", List.of("l1", "l2")))
+        .match(MatchContext.builder().matchId("match/1").build())
+        .recommendedAction("NO_DECISION")
+        .build();
   }
 
   @Test
@@ -64,22 +53,12 @@ class GenerateCommentUseCaseTest {
   }
 
   @Test
-  void shouldGenerateComment() {
-    var alertId = UUID.randomUUID().toString();
-    var output = "This is template:" + alertId;
-    var context = AlertContext.builder().alertId(alertId).build();
-
-    var evaluated = facade.generateComment(PEBBLE1_TEMPLATE_NAME, context);
-
-    assertThat(evaluated).isEqualToIgnoringNewLines(output);
-  }
-
-  @Test
-  void shouldGenerateCommentFromStruct() {
+  void shouldFailWhenPassUnsupportedType() {
     var alertModel = randomAlertModel();
-    var output = "alert/1 v1 1 l1";
-    var evaluated = facade.generateComment(PEBBLE2_TEMPLATE_NAME, alertModel);
-    assertThat(evaluated).isEqualToIgnoringNewLines(output);
+
+    assertThrows(
+        TemplateNotFoundException.class,
+        () -> facade.generateComment("some template", alertModel));
   }
 
   @Test
@@ -91,21 +70,77 @@ class GenerateCommentUseCaseTest {
         .containsKeys("alertId", "commentInput", "recommendedAction", "matches");
   }
 
-  @Test
-  void shouldFailWhenPassUnsupportedType() {
-    var alertModel = randomAlertModel();
+  @Nested
+  class PebbleTest {
 
-    assertThrows(
-        TemplateNotFoundException.class,
-        () -> facade.generateComment("some template", alertModel));
+    @BeforeEach
+    void setUp() {
+      repo.save(commentTemplate("pebble1.peb", 0, readFile("pebble/pebble1.peb")));
+      repo.save(commentTemplate("pebble1.peb", 1, readFile("pebble/pebble1.peb")));
+      repo.save(commentTemplate("pebble2.peb", readFile("pebble/pebble2.peb")));
+    }
+
+    @Test
+    void shouldGenerateComment() {
+      var alertId = UUID.randomUUID().toString();
+      var output = "This is template:" + alertId;
+      var context = AlertContext.builder().alertId(alertId).build();
+
+      var evaluated = facade.generateComment("pebble1", context);
+
+      assertThat(evaluated).isEqualTo(output);
+    }
+
+    @Test
+    void shouldGenerateCommentFromStruct() {
+      var alertModel = randomAlertModel();
+      var output = "alert/1 v1 1 l1";
+      var evaluated = facade.generateComment("pebble2", alertModel);
+      assertThat(evaluated).isEqualTo(output);
+    }
   }
 
-  private AlertContext randomAlertModel() {
-    return AlertContext.builder()
-        .alertId("alert/1")
-        .commentInput(Map.of("o1", "v1", "o2", 1, "o3", List.of("l1", "l2")))
-        .match(MatchContext.builder().matchId("match/1").build())
-        .recommendedAction("NO_DECISION")
-        .build();
+  @Nested
+  class FreemarkerTest {
+
+    @Test
+    void shouldGenerateCommentFromFreemarkerTemplate() {
+      repo.save(commentTemplate("deps/alert.ftl", readFile("freemarker/deps/alert.ftl")));
+      repo.save(commentTemplate(
+          "deps/nested/nested.ftl", readFile("freemarker/deps/nested/nested.ftl")));
+      repo.save(commentTemplate("freemarker1.ftl", readFile("freemarker/freemarker1.ftl")));
+      var context = createAlertContext();
+
+      var evaluated = facade.generateComment("freemarker1", context);
+
+      assertThat(evaluated).isEqualTo(""
+          + "The Alert ID is: 2137\n"
+          + "This is nested template.");
+    }
+
+    @Test
+    void shouldUseSharedLib() {
+      repo.save(commentTemplate("shared-lib.ftl", readFile("freemarker/shared-lib.ftl")));
+      var context = createAlertContext();
+
+      var evaluated = facade.generateComment("shared-lib", context);
+
+      assertThat(evaluated).isEqualTo("Test shared lib (stringUtils.join): a, b.");
+    }
+  }
+
+  @Nested
+  class OrderTest {
+
+    @Test
+    void shouldUseFreemarkerTemplate() {
+      var context = createAlertContext();
+
+      repo.save(commentTemplate("main.peb", readFile("pebble/main.peb")));
+      assertThat(facade.generateComment("main", context)).isEqualTo("This is pebble template.");
+
+      repo.save(commentTemplate("main.ftl", readFile("freemarker/main.ftl")));
+      assertThat(facade.generateComment("main", context)).isEqualTo("This is freemarker template.");
+    }
   }
 }

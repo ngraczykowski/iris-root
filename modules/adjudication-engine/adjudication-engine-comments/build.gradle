@@ -9,6 +9,7 @@ dependencies {
   implementation libraries.data_source_comments_api
   implementation libraries.guava
   implementation libraries.pebble
+  implementation libraries.freemarker
   implementation libraries.silenteight_sep_base_common
   implementation libraries.hibernate_types
   implementation libraries.caffeine

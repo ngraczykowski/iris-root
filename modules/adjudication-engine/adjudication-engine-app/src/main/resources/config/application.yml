@@ -10,7 +10,7 @@ ae:
   comments:
     template:
       cache:
-        invalidation: "0 */15 * * * ?"
+        invalidation: "0 * * * * ?"
 
   categories:
     missing:

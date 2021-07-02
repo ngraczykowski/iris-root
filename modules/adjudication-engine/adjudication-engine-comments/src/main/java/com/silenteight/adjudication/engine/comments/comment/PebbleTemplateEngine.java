@@ -8,7 +8,6 @@ import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @Order
-class PebbleTemplateEngine implements TemplateEngine {
+class PebbleTemplateEngine implements TemplateEngineWithCache {
 
   private final PebbleEngine pebbleEngine;
 
@@ -55,9 +54,9 @@ class PebbleTemplateEngine implements TemplateEngine {
     return writer.toString().trim();
   }
 
-  @Scheduled(cron = "${ae.comments.template.cache.invalidation:0 * * * * ?}")
-  void invalidateCache() {
-    log.debug("Comments cache will be invalidated ...");
+  @Override
+  public void invalidateCache() {
+    log.debug("Pebble comments cache will be invalidated ...");
     pebbleEngine.getTemplateCache().invalidateAll();
   }
 }
