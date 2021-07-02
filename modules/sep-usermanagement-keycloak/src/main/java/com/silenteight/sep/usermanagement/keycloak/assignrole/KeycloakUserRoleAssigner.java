@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.usermanagement.api.UserRoles;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
+import com.silenteight.sep.usermanagement.keycloak.client.ClientRoleManager;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,8 @@ public class KeycloakUserRoleAssigner {
   private final ClientQuery clientQuery;
   @NonNull
   private final ClientsResource clientsResource;
+  @NonNull
+  private final ClientRoleManager clientRoleManager;
 
   public void assignRoles(KeycloakUserId userId, UserRoles roles) {
     log.info(USER_MANAGEMENT, "Assigning roles to user. userId={}, roles={}", userId, roles);
@@ -44,10 +47,14 @@ public class KeycloakUserRoleAssigner {
   private void assignRoles(KeycloakUserId userId, String roleClientId, Set<String> roles) {
     ClientRepresentation client = clientQuery.getByClientId(roleClientId);
     UserResource user = usersResource.get(userId.getUserId());
-    RoleScopeResource userRoles = user.roles().clientLevel(client.getId());
+    String clientId = client.getId();
+    Set<String> rolesToCreate = getRolesToCreate(roles, clientId);
+    if (!rolesToCreate.isEmpty())
+      clientRoleManager.createRoles(clientId, rolesToCreate);
 
+    RoleScopeResource userRoles = user.roles().clientLevel(clientId);
     userRoles.remove(getRolesToRemove(roles, userRoles));
-    userRoles.add(getRolesToAdd(roles, client.getId()));
+    userRoles.add(getRolesToAdd(roles, clientId));
   }
 
   @NotNull
@@ -70,5 +77,11 @@ public class KeycloakUserRoleAssigner {
         .stream()
         .filter(role -> roles.contains(role.getName()))
         .collect(toList());
+  }
+
+  private Set<String> getRolesToCreate(Set<String> roles, String clientId) {
+    Set<String> clientRoles = clientQuery.getRoles(clientId);
+    roles.removeAll(clientRoles);
+    return roles;
   }
 }
