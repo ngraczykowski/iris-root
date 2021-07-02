@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
+import com.silenteight.hsbc.datasource.dto.allowedlist.AllowedListInputResponse;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputResponse;
 import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputResponse;
@@ -26,6 +27,11 @@ class DataProvidersConfiguration {
   private final MatchFacade matchFacade;
   private final IsPepServiceClient isPepServiceClient;
   private final NameInformationServiceClient nameInformationServiceClient;
+
+  @Bean
+  DataSourceInputProvider<AllowedListInputResponse> allowedListProvider() {
+    return new AllowedListInputProvider(matchFacade);
+  }
 
   @Bean
   DataSourceInputProvider<CountryInputResponse> countryInputProvider() {

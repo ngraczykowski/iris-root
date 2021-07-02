@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Feature {
 
+  ALLOW_LIST("allowList"),
   NAME("name"),
   GENDER("gender"),
   IS_PEP("isPep"),
