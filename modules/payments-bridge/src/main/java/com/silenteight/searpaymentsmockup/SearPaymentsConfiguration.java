@@ -77,11 +77,6 @@ class SearPaymentsConfiguration {
   }
 
   @Bean
-  MessageChannel alertEtlCompletedChannel() {
-    return new QueueChannel(2);
-  }
-
-  @Bean
   IntegrationFlow processSubmittedRequests(
       MessageChannel submitRequestChannel,
       PollerSpec submitRequestPoller,
