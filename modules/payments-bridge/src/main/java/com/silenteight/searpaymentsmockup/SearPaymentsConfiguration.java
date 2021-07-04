@@ -84,7 +84,7 @@ class SearPaymentsConfiguration {
 
     return IntegrationFlows.from(submitRequestChannel)
         .bridge(ec -> ec.poller(submitRequestPoller))
-        .log(Level.INFO, "mockup-training.collected-request", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.collected-request", m -> m)
         .split(RequestDto.class, RequestDto::getAlerts)
         .enrichHeaders(
             hec -> hec.header(MessageHeaders.ERROR_CHANNEL, "damagedAlertDtoChannel")
@@ -109,7 +109,7 @@ class SearPaymentsConfiguration {
   IntegrationFlow pairedAlertIntegrationFlow() {
     // @TODO
     return IntegrationFlows.from("pairedAlertChannel")
-        .log(Level.INFO, "mockup-training.collected-paired-alert", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.collected-paired-alert", m -> m)
         .get();
   }
 
@@ -117,7 +117,7 @@ class SearPaymentsConfiguration {
   IntegrationFlow obsoleteAlertIntegrationFlow() {
     // @TODO
     return IntegrationFlows.from("obsoleteAlertChannel")
-        .log(Level.INFO, "mockup-training.collected-obsolete-alert", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.collected-obsolete-alert", m -> m)
         .get();
   }
 
@@ -127,7 +127,7 @@ class SearPaymentsConfiguration {
     return sf -> sf
         .<AlertDto>handle((p, h) -> alertEtl.invoke(p))
         .enrichHeaders(Map.of(MessageHeaders.ERROR_CHANNEL, "damagedAlertChannel"))
-        .log(Level.INFO, "mockup-training.processing-alert", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.processing-alert", m -> m)
         .handle(this::recommendAlertFunc)
         .channel(ALERT_READY_FOR_CALLBACK_CHANNEL);
   }
@@ -137,7 +137,7 @@ class SearPaymentsConfiguration {
 
     return IntegrationFlows.from(ALERT_READY_FOR_CALLBACK_CHANNEL)
         .handle(this::createCallbackResponseFunc)
-        .log(Level.INFO, "mockup-training.alert-processed", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.alert-processed", m -> m)
         .handle(
             Http.outboundChannelAdapter(
                 "http://localhost:24609/callback-recommendation")
@@ -167,7 +167,7 @@ class SearPaymentsConfiguration {
   @Bean
   IntegrationFlow damagedAlertDtoIntegrationFlow() {
     return IntegrationFlows.from("damagedAlertDtoChannel")
-        .log(Level.INFO, "mockup-training.collected-damaged-alert-dto", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.collected-damaged-alert-dto", m -> m)
         .handle(this::buildAlertFromDamagedAlertDto)
         .channel(ALERT_READY_FOR_CALLBACK_CHANNEL)
         .get();
@@ -182,7 +182,7 @@ class SearPaymentsConfiguration {
   @Bean
   IntegrationFlow damagedAlertIntegrationFlow() {
     return IntegrationFlows.from("damagedAlertChannel")
-        .log(Level.INFO, "mockup-training.collected-damaged-alert", m -> m)
+        .log(Level.INFO, "sear-payments-mockup.collected-damaged-alert", m -> m)
         .handle(this::markAlertAsDamaged)
         .channel(ALERT_READY_FOR_CALLBACK_CHANNEL)
         .get();
