@@ -43,6 +43,9 @@ class MatchRawData implements MatchData {
   @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.WorldCheckIndividual.class)
   private List<WorldCheckIndividual> worldCheckIndividuals;
 
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.CaseComment.class)
+  private List<CaseComment> caseComments;
+
   @JsonIgnore
   public boolean isIndividual() {
     return nonNull(getCustomerIndividual());

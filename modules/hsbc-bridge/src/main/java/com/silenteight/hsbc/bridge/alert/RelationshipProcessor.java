@@ -53,6 +53,7 @@ class RelationshipProcessor {
       hsbcMatch.setPrivateListIndividuals(alertData.getPrivateListIndividuals());
       hsbcMatch.setWorldCheckEntities(alertData.getWorldCheckEntities());
       hsbcMatch.setWorldCheckIndividuals(alertData.getWorldCheckIndividuals());
+      hsbcMatch.setCaseComments(alertData.getCaseComments());
 
       getCustomerEntity().ifPresent(hsbcMatch::setCustomerEntity);
       getCustomerIndividual().ifPresent(hsbcMatch::setCustomerIndividual);

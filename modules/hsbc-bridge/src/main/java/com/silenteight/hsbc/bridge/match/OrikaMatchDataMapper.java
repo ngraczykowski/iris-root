@@ -45,6 +45,9 @@ class OrikaMatchDataMapper implements MatchDataMapper {
     mapperFactory.registerConcreteType(
         WorldCheckIndividual.class,
         com.silenteight.hsbc.bridge.json.internal.model.WorldCheckIndividual.class);
+    mapperFactory.registerConcreteType(
+        CaseComment.class,
+        com.silenteight.hsbc.bridge.json.internal.model.CaseComment.class);
   }
 
   @Override
