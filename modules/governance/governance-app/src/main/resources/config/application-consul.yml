@@ -15,32 +15,6 @@ spring:
 
 grpc:
   client:
-    governance:
-      address: discovery:///grpc-governance
+    warehouse:
+      timeout: 10s
 
-    reco:
-      address: discovery:///grpc-reco
-
-    pipeline:
-      address: discovery:///grpc-pipeline
-
-    gateway:
-      address: discovery:///grpc-gateway
-
-    name-agent:
-      address: discovery:///grpc-name-agent
-
-    document-number-agent:
-      address: discovery:///grpc-document-number-agent
-
-    document-comparer-agent:
-      address: discovery:///grpc-document-comparer-agent
-
-    gender-agent:
-      address: discovery:///grpc-gender-agent
-
-    country-agent:
-      address: discovery:///grpc-country-agent
-
-    date-agent:
-      address: discovery:///grpc-date-agent

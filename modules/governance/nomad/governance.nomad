@@ -190,6 +190,18 @@ job "governance" {
       }
 
       template {
+        data = file("./conf/application-database.yml")
+        destination = "local/conf/application-database.yml"
+        change_mode = "noop"
+      }
+
+      template {
+        data = file("./conf/application-messaging.yml")
+        destination = "local/conf/application-messaging.yml"
+        change_mode = "noop"
+      }
+
+      template {
         data = file("./conf/logback.xml")
         destination = "secrets/conf/logback.xml"
         change_mode = "noop"
