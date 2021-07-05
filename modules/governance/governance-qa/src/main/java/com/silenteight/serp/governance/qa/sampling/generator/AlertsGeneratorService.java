@@ -15,6 +15,7 @@ import com.silenteight.serp.governance.qa.sampling.generator.dto.DistributionDto
 import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
 
 import java.util.List;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
@@ -38,14 +39,15 @@ public class AlertsGeneratorService {
   @NonNull
   private final AlertSamplingService alertSamplingService;
 
+  @Transactional
   public void generateAlerts(@Valid DateRangeDto dateRangeDto, Long alertSamplingId) {
 
     List<AlertDistribution> distribution = distributionProvider.getDistribution(
         dateRangeDto, groupingFields);
-    Long totalAlertsCount = getTotalAlertsCount(distribution);
+    long totalAlertsCount = getTotalAlertsCount(distribution);
 
     if (!canGenerateAlerts(totalAlertsCount)) {
-      log.debug("Cannot generate alerts. Total alerts count is {}", totalAlertsCount);
+      log.warn("Cannot generate alerts. Total alerts count is {}", totalAlertsCount);
       return;
     }
 
@@ -66,17 +68,17 @@ public class AlertsGeneratorService {
         alertSamplingId, toAlertDistributionDtoList(distribution), createDecisionRequests.size());
   }
 
-  private static boolean canGenerateAlerts(Long totalAlertsCount) {
+  private static boolean canGenerateAlerts(long totalAlertsCount) {
     return totalAlertsCount > 0;
   }
 
   private static DistributionCalculator getDistributionCalculator(
-      Long totalSampleCount, Long totalCountOverall) {
+      long totalSampleCount, long totalCountOverall) {
 
     return new DistributionCalculator(totalSampleCount, totalCountOverall);
   }
 
-  private static Long getTotalAlertsCount(List<AlertDistribution> alertDistribution) {
+  private static long getTotalAlertsCount(List<AlertDistribution> alertDistribution) {
     return alertDistribution.stream().mapToLong(AlertDistribution::getAlertCount).sum();
   }
 

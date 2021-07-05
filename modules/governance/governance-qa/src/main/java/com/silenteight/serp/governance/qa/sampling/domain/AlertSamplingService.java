@@ -36,6 +36,7 @@ public class AlertSamplingService {
     return alertSamplingRepository.save(alertSampling).getId();
   }
 
+  @Transactional
   public void finish(Long id) {
     AlertSampling alertSampling = getAlertSampling(id);
     alertSampling.finished(timeSource.offsetDateTime());
@@ -54,6 +55,7 @@ public class AlertSamplingService {
         .orElseThrow(() -> new WrongAlertSamplingIdException(id));
   }
 
+  @Transactional
   public void failLongRunningTasks(OffsetDateTime currentStartingTime) {
     alertSamplingRepository
         .getByStates(singletonList(STARTED))

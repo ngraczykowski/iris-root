@@ -4,7 +4,7 @@ import com.silenteight.serp.governance.qa.sampling.generator.exception.InvalidTo
 
 class DistributionCalculator {
 
-  private final Long totalSampleCount;
+  private final long totalSampleCount;
   private final long totalOverallCount;
 
   DistributionCalculator(long totalSampleCount, long totalOverallCount) {
