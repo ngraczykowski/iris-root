@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.OffsetDateTime;
 
@@ -89,5 +90,22 @@ class AlertsGeneratorTest {
     verify(alertsGeneratorService, times(1))
         .generateAlerts(dateRangeCaptor.capture(), alertSamplingIdCaptor.capture());
     verify(alertSamplingService, times(1)).markAsFailed(1L);
+  }
+
+  @Test
+  void generateAlertsIfNeededDoNothing_whenDataIntegrityViolationExceptionThrown() {
+    //given
+    OffsetDateTime startedAt = parse("2021-06-01T01:00:00Z");
+    DateRangeDto dateRangeDto = new DateRangeDto(parse("2021-05-01T01:00:00Z"),
+                                                 parse("2021-05-31T01:00:00Z"));
+    when(cronExecutionTimeProvider.executionTime()).thenReturn(startedAt);
+    when(dateRangeProvider.latestDateRange()).thenReturn(dateRangeDto);
+    when(alertSamplingQuery.listFinished(dateRangeDto)).thenReturn(of());
+    doThrow(DataIntegrityViolationException.class)
+        .when(alertSamplingService).createAlertsSampling(dateRangeDto, startedAt);
+    //when
+    underTest.generateAlertsIfNeeded();
+    //then
+    verify(alertSamplingService, times(1)).createAlertsSampling(any(), any());
   }
 }

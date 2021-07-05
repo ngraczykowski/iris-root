@@ -13,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.OffsetDateTime;
 
+import static java.util.Optional.ofNullable;
+
 @RequiredArgsConstructor
 @Slf4j
 class AlertsGenerator {
@@ -37,7 +39,7 @@ class AlertsGenerator {
               timeSource.now(), dateRangeDto);
     alertSamplingService.failLongRunningTasks(startedAt);
     if (assertCanBeStarted(dateRangeDto))
-      generateAlerts(dateRangeDto, startedAt);
+      tryGenerateAlerts(dateRangeDto, startedAt);
     log.debug("Generating alerts audit finished at {}", timeSource.now());
   }
 
@@ -45,14 +47,12 @@ class AlertsGenerator {
     return samplingQuery.listFinished(dateRangeDto).isEmpty();
   }
 
-  private void generateAlerts(DateRangeDto dateRangeDto, OffsetDateTime startedAt) {
+  private void tryGenerateAlerts(DateRangeDto dateRangeDto, OffsetDateTime startedAt) {
     log.info("Generating alerts started at {}", timeSource.now());
-    Long alertsSamplingId = createAlertsSampling(dateRangeDto, startedAt);
-
     try {
-      doGenerateAlerts(dateRangeDto, alertsSamplingId);
-    } catch (RuntimeException e) {
-      alertSamplingService.markAsFailed(alertsSamplingId);
+      Long alertsSamplingId = createAlertsSampling(dateRangeDto, startedAt);
+      ofNullable(alertsSamplingId).ifPresent(id -> generateAlerts(dateRangeDto, id));
+    } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
   }
@@ -62,9 +62,18 @@ class AlertsGenerator {
     try {
       alertsSamplingId = alertSamplingService.createAlertsSampling(dateRangeDto, startedAt);
     } catch (DataIntegrityViolationException e) {
-      log.debug("Could not start generating alerts - other instance already running");
+      log.warn("Could not start generating alerts - other instance already running");
     }
     return alertsSamplingId;
+  }
+
+  private void generateAlerts(DateRangeDto dateRangeDto, Long alertsSamplingId) {
+    try {
+      doGenerateAlerts(dateRangeDto, alertsSamplingId);
+    } catch (RuntimeException e) {
+      alertSamplingService.markAsFailed(alertsSamplingId);
+      log.error(e.getMessage(), e);
+    }
   }
 
   private void doGenerateAlerts(DateRangeDto dateRangeDto, Long alertsSamplingId) {

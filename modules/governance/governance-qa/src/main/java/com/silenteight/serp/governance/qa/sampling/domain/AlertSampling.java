@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.qa.sampling.domain;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
@@ -21,6 +22,7 @@ import static com.silenteight.serp.governance.qa.sampling.domain.JobState.STARTE
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
+@Slf4j
 class AlertSampling extends BaseAggregateRoot implements IdentifiableEntity  {
 
   @Id
@@ -80,6 +82,8 @@ class AlertSampling extends BaseAggregateRoot implements IdentifiableEntity  {
   }
 
   void failed() {
+    log.warn("Marking AlertSampling with id {} (range {} - {}) as failed.",
+             getId(), getRangeFrom(), getRangeTo());
     setState(FAILED);
   }
 
