@@ -43,6 +43,7 @@ public class AlertSamplingService {
     alertSamplingRepository.save(alertSampling);
   }
 
+  @Transactional
   public void markAsFailed(Long id) {
     AlertSampling alertSampling = getAlertSampling(id);
     alertSampling.failed();
@@ -55,13 +56,13 @@ public class AlertSamplingService {
         .orElseThrow(() -> new WrongAlertSamplingIdException(id));
   }
 
-  @Transactional
   public void failLongRunningTasks(OffsetDateTime currentStartingTime) {
     alertSamplingRepository
         .getByStates(singletonList(STARTED))
         .stream()
         .filter(alertSampling -> isLongRunning(alertSampling, currentStartingTime))
-        .forEach(AlertSampling::failed);
+        .map(AlertSampling::getId)
+        .forEach(this::markAsFailed);
   }
 
   public void saveAlertDistribution(
