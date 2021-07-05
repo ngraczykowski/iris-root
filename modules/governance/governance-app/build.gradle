@@ -58,6 +58,11 @@ dependencies {
 
   implementation libraries.jaxb_api
 
+  // ANO: jackson_module_kotlin can be removed once spring and or jackson is bumped
+  // kotlin is required by minio
+  // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
+  implementation libraries.jackson_module_kotlin
+
   implementation libraries.jakarta_inject
   implementation libraries.jakarta_mail
 
