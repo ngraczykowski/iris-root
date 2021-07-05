@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
-public interface WorldCheckEntity {
+public interface WorldCheckEntity extends ListRecordId {
 
   String getCountryCodesAll();
 

@@ -52,6 +52,9 @@ class AllowedListInputProvider implements DataSourceInputProvider<AllowedListInp
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return List.of(Feature.ALLOW_LIST);
+    return List.of(
+        Feature.ALLOW_LIST_COMMON_AP,
+        Feature.ALLOW_LIST_COMMON_NAME,
+        Feature.ALLOW_LIST_COMMON_WP);
   }
 }

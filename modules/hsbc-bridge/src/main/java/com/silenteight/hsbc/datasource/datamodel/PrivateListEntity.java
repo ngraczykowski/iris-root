@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
-public interface PrivateListEntity {
+public interface PrivateListEntity extends ListRecordId {
 
   String getEdqTaxNumber();
 

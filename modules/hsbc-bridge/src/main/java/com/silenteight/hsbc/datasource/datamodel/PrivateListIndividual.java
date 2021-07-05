@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
-public interface PrivateListIndividual {
+public interface PrivateListIndividual extends ListRecordId {
 
   String getGender();
 

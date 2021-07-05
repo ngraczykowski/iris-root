@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
-public interface WorldCheckIndividual {
+public interface WorldCheckIndividual extends ListRecordId {
 
   String getGender();
 

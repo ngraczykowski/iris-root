@@ -16,8 +16,6 @@ public interface IndividualComposite {
 
   List<CtrpScreening> getCtrpScreeningIndividuals();
 
-  List<CtrpScreening> getCtrpScreeningEntities();
-
   default boolean hasWorldCheckIndividuals() {
     return nonNull(getWorldCheckIndividuals()) && !getWorldCheckIndividuals().isEmpty();
   }
