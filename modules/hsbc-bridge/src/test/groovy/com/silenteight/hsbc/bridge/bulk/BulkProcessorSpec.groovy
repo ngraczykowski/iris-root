@@ -1,7 +1,8 @@
 package com.silenteight.hsbc.bridge.bulk
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade
-import com.silenteight.hsbc.bridge.report.WarehouseFacade
+import com.silenteight.hsbc.bridge.alert.AlertSender
+import com.silenteight.hsbc.bridge.alert.AlertSender.SendOption
 
 import net.javacrumbs.shedlock.core.LockAssert
 import spock.lang.Specification
@@ -10,11 +11,11 @@ class BulkProcessorSpec extends Specification {
 
   def adjudicationFacade = Mock(AdjudicationFacade)
   def bulkRepository = Mock(BulkRepository)
-  def warehouseFacade = Mock(WarehouseFacade)
+  def alertSender = Mock(AlertSender)
 
   def fixtures = new Fixtures()
 
-  def underTest = new BulkProcessor(adjudicationFacade, warehouseFacade, bulkRepository)
+  def underTest = new BulkProcessor(adjudicationFacade, alertSender, bulkRepository)
 
   def 'should process learning bulk'() {
     given:
@@ -26,7 +27,7 @@ class BulkProcessorSpec extends Specification {
     then:
     1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.learningBulk]
     1 * adjudicationFacade.registerAlertWithMatches(_ as Map)
-    1 * warehouseFacade.findAndSendAlerts(_ as Collection)
+    1 * alertSender.send(_ as Collection, _ as SendOption[])
   }
 
   def 'should process solving bulk'() {
@@ -39,7 +40,7 @@ class BulkProcessorSpec extends Specification {
     then:
     1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.solvingBulk]
     1 * adjudicationFacade.registerAlertWithMatchesAndAnalysis(_ as Map) >> 1L
-    0 * warehouseFacade.findAndSendAlerts(_ as Collection)
+    0 * alertSender.send(_ as Collection, _ as SendOption[])
   }
 
   class Fixtures {

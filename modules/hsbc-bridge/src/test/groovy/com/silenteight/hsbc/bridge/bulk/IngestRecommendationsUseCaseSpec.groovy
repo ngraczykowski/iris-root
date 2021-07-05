@@ -3,21 +3,21 @@ package com.silenteight.hsbc.bridge.bulk
 import com.silenteight.hsbc.bridge.bulk.rest.AlertMetadata
 import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlert
 import com.silenteight.hsbc.bridge.report.Alert
-import com.silenteight.hsbc.bridge.report.WarehouseFacade
+import com.silenteight.hsbc.bridge.report.Warehouse
 
 import spock.lang.Specification
 
 class IngestRecommendationsUseCaseSpec extends Specification {
 
-  def warehouseFacade = Mock(WarehouseFacade)
-  def underTest = new IngestRecommendationsUseCase(warehouseFacade)
+  def warehouseApi = Mock(Warehouse)
+  def underTest = new IngestRecommendationsUseCase(warehouseApi)
 
   def "should convert solvedAlert to Alert"() {
     when:
     underTest.ingest(SOLVED_ALERTS)
 
     then:
-    1 * warehouseFacade.sendAlerts(*_) >> {arguments ->
+    1 * warehouseApi.send(*_) >> {arguments ->
       Collection<Alert> argument = arguments[0] as Collection<Alert>
       assert argument.first().getName() == "someAlertId"
       assert argument.first().getMetadata().get("comment") == "someComment"

@@ -3,8 +3,8 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
+import com.silenteight.hsbc.bridge.alert.WarehouseApi;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
-import com.silenteight.hsbc.bridge.report.WarehouseFacade;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ class BulkUseCaseConfiguration {
 
   private final AlertFacade alertFacade;
   private final ApplicationEventPublisher eventPublisher;
-  private final WarehouseFacade warehouseFacade;
+  private final WarehouseApi warehouseApi;
   private final BulkRepository bulkRepository;
   private final GetRecommendationUseCase getRecommendationUseCase;
 
@@ -47,6 +47,6 @@ class BulkUseCaseConfiguration {
 
   @Bean
   IngestRecommendationsUseCase ingestRecommendationsUseCase() {
-    return new IngestRecommendationsUseCase(warehouseFacade);
+    return new IngestRecommendationsUseCase(warehouseApi);
   }
 }

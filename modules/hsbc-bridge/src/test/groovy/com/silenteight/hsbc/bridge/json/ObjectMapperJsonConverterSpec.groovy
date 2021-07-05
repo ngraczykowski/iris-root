@@ -12,7 +12,7 @@ class ObjectMapperJsonConverterSpec extends Specification {
 
   def "should map payload to hashmap"(){
     when:
-    def result = underTest.convertPayloadToMap(getPayload())
+    def result = underTest.convertAlertDataToMap(getAlertData())
 
     then:
     result.get("DN_CASE.ID") == "1"
@@ -22,17 +22,12 @@ class ObjectMapperJsonConverterSpec extends Specification {
 
   def "should add prefix to key"(){
     when:
-    def result = underTest.convertPayloadToMap(getPayload())
+    def result = underTest.convertAlertDataToMap(getAlertData())
 
     then:
     result.get("1.DN_CASEHISTORY.transition") == "someTransitionOne"
     result.get("2.DN_CASEHISTORY.transition") == "someTransitionTwo"
     result.get("3.DN_CASEHISTORY.transition") == "someTransitionThree"
-  }
-
-  byte[] getPayload(){
-    def alert = getAlertData()
-    return MAPPER.writeValueAsBytes(alert)
   }
 
   AlertData getAlertData(){

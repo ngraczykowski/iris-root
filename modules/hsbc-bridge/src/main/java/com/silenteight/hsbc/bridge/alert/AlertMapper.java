@@ -3,9 +3,10 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.alert.AlertGetter.AlertInformation;
+import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.report.Alert;
 import com.silenteight.hsbc.bridge.report.Alert.Match;
-import com.silenteight.hsbc.bridge.report.AlertFinder;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,40 +17,42 @@ import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class AlertInfoFinder implements AlertFinder {
+class AlertMapper {
 
-  private final AlertRepository repository;
   private final AlertPayloadConverter payloadConverter;
 
-  @Override
-  public Collection<Alert> find(@NonNull Collection<Long> alertIds) {
-    return repository.findByIdIn(alertIds).stream()
+  public Collection<Alert> toReportAlerts(@NonNull Collection<AlertInformation> alerts) {
+    return alerts.stream()
         .map(this::mapToAlert)
         .collect(toList());
   }
 
-  private Alert mapToAlert(AlertEntity alertEntity) {
+  public AlertData toAlertData(byte[] payload) {
+    return payloadConverter.convertAlertData(payload);
+  }
+
+  private Alert mapToAlert(AlertInformation alertInfo) {
     return new Alert() {
       @Override
       public String getName() {
-        return alertEntity.getName();
+        return alertInfo.getAlertEntity().getName();
       }
 
       @Override
       public Map<String, String> getMetadata() {
-        return createAlertMetadata(alertEntity);
+        return createAlertMetadata(alertInfo.getAlertEntity(), alertInfo.getPayload());
       }
 
       @Override
       public Collection<Match> getMatches() {
-        return alertEntity.getMatches().stream()
-            .map(AlertInfoFinder::mapToMatch)
+        return alertInfo.getAlertEntity().getMatches().stream()
+            .map(AlertMapper::mapToMatch)
             .collect(toList());
       }
     };
   }
 
-  private Map<String, String> createAlertMetadata(AlertEntity alertEntity) {
+  private Map<String, String> createAlertMetadata(AlertEntity alertEntity, AlertData alertData) {
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(alertEntity.getExternalId()));
     map.put("name", nullToEmpty(alertEntity.getName()));
@@ -60,7 +63,7 @@ class AlertInfoFinder implements AlertFinder {
     map.putAll(alertEntity.getMetadata().stream()
         .collect(Collectors.toMap(AlertMetadata::getKey, AlertMetadata::getValue)));
 
-    var payload = payloadConverter.convertPayloadToMap(alertEntity.getPayload().getPayload());
+    var payload = payloadConverter.convertAlertDataToMap(alertData);
     map.putAll(payload);
 
     return map;

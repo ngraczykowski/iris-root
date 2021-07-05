@@ -13,7 +13,7 @@ public interface AlertPayloadConverter {
 
   AlertData convertAlertData(byte[] payload) throws AlertConversionException;
 
-  Map<String, String> convertPayloadToMap(byte[] payload) throws AlertConversionException;
+  Map<String, String> convertAlertDataToMap(AlertData alertData) throws AlertConversionException;
 
   void convertAndConsumeAlertData(InputCommand command, Consumer<AlertDataComposite> consumer);
 

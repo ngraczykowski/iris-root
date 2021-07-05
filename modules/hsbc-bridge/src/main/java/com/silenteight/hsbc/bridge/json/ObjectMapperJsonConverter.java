@@ -65,9 +65,8 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   }
 
   @Override
-  public Map<String, String> convertPayloadToMap(byte[] payload) throws AlertConversionException {
+  public Map<String, String> convertAlertDataToMap(AlertData alertData) throws AlertConversionException {
     var result = new HashMap<String, String>();
-    var alertData = convertAlertData(payload);
 
     var caseInformation = convertToMap(alertData.getCaseInformation());
     if (caseInformation != null) {

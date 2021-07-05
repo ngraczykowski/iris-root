@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
+import com.silenteight.hsbc.bridge.alert.AlertSender;
+import com.silenteight.hsbc.bridge.alert.AlertSender.SendOption;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
-import com.silenteight.hsbc.bridge.report.WarehouseFacade;
 
 import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.IS_PEP;
+import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
@@ -27,7 +30,7 @@ import static java.util.stream.Collectors.toMap;
 class BulkProcessor {
 
   private final AdjudicationFacade adjudicationFacade;
-  private final WarehouseFacade warehouseFacade;
+  private final AlertSender alertSender;
   private final BulkRepository bulkRepository;
 
   @Scheduled(fixedDelay = 15 * 1000, initialDelay = 2000)
@@ -78,7 +81,7 @@ class BulkProcessor {
         .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
 
     adjudicationFacade.registerAlertWithMatches(compositeById);
-    sendToWarehouse(alerts);
+    sendAlerts(alerts);
 
     bulk.setStatus(COMPLETED);
   }
@@ -91,12 +94,12 @@ class BulkProcessor {
         .build();
   }
 
-  private void sendToWarehouse(Collection<BulkAlertEntity> alertEntities) {
+  private void sendAlerts(Collection<BulkAlertEntity> alertEntities) {
     var alertIds = alertEntities.stream()
         .map(BulkAlertEntity::getId)
         .collect(Collectors.toSet());
 
-    warehouseFacade.findAndSendAlerts(alertIds);
+    alertSender.send(alertIds, new SendOption[] { IS_PEP, WAREHOUSE });
   }
 
   private static Collection<MatchIdComposite> getMatchIds(

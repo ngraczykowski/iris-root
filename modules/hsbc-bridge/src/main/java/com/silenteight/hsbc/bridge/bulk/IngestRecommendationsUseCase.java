@@ -3,10 +3,10 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.alert.WarehouseApi;
 import com.silenteight.hsbc.bridge.bulk.rest.AlertMetadata;
 import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlert;
 import com.silenteight.hsbc.bridge.report.Alert;
-import com.silenteight.hsbc.bridge.report.WarehouseFacade;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,12 +19,12 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class IngestRecommendationsUseCase {
 
-  private final WarehouseFacade warehouseFacade;
+  private final WarehouseApi warehouseApi;
 
   void ingest(@NonNull List<SolvedAlert> solvedAlerts) {
-    var alerts = prepareAlerts(solvedAlerts);
+    var recommendedAlerts = prepareAlerts(solvedAlerts);
 
-    warehouseFacade.sendAlerts(alerts);
+    warehouseApi.send(recommendedAlerts);
   }
 
   private Collection<Alert> prepareAlerts(List<SolvedAlert> solvedAlerts) {

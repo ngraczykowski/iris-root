@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.report.AlertFinder;
 import com.silenteight.hsbc.bridge.retention.DataCleaner;
 
 import org.springframework.context.annotation.Bean;
@@ -15,6 +14,8 @@ class AlertFacadeConfiguration {
   private final AlertRepository alertRepository;
   private final AlertPayloadConverter alertPayloadConverter;
   private final AlertPayloadRepository alertPayloadRepository;
+  private final WarehouseApi warehouseApi;
+  private final IsPepApi isPepApi;
 
   @Bean
   AlertFacade alertFacade() {
@@ -25,12 +26,20 @@ class AlertFacadeConfiguration {
   }
 
   @Bean
-  AlertFinder alertFinder() {
-    return new AlertInfoFinder(alertRepository, alertPayloadConverter);
+  DataCleaner alertDataCleaner() {
+    return new AlertDataCleaner(alertPayloadRepository);
   }
 
   @Bean
-  DataCleaner alertDataCleaner() {
-    return new AlertDataCleaner(alertPayloadRepository);
+  AlertSender alertSender() {
+    return new AlertSender(warehouseApi, isPepApi, alertInformationFinder());
+  }
+
+  private AlertGetter alertInformationFinder() {
+    return new AlertGetter(alertMapper(), alertRepository);
+  }
+
+  private AlertMapper alertMapper(){
+    return new AlertMapper(alertPayloadConverter);
   }
 }
