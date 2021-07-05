@@ -74,7 +74,17 @@ public interface CustomerIndividual {
 
   String getBirthDate();
 
+  String getPlaceOfBirth();
+
+  String getTownOfBirth();
+
+  String getStateProvinceOrCountyOfBirth();
+
   String getCountryOfBirth();
 
   String getEdqBirthCountryCode();
+
+  String getAddress();
+
+  String getProfileFullAddress();
 }

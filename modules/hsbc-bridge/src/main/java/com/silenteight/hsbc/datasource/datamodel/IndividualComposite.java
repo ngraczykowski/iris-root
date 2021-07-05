@@ -27,8 +27,4 @@ public interface IndividualComposite {
   default boolean hasCtrpScreeningIndividuals() {
     return nonNull(getCtrpScreeningIndividuals()) && !getCtrpScreeningIndividuals().isEmpty();
   }
-
-  default boolean hasCtrpScreeningEntities() {
-    return nonNull(getCtrpScreeningIndividuals()) && !getCtrpScreeningIndividuals().isEmpty();
-  }
 }

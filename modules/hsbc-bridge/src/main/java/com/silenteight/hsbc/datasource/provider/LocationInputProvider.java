@@ -15,9 +15,11 @@ import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static com.silenteight.hsbc.datasource.feature.Feature.GEO_PLACE_OF_BIRTH;
+import static com.silenteight.hsbc.datasource.feature.Feature.GEO_RESIDENCIES;
 import static java.util.List.of;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class LocationInputProvider implements DataSourceInputProvider<LocationInputResponse> {
@@ -41,7 +43,7 @@ class LocationInputProvider implements DataSourceInputProvider<LocationInputResp
             .match(match.getName())
             .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private List<LocationFeatureInputDto> getFeatureInputs(
@@ -49,11 +51,11 @@ class LocationInputProvider implements DataSourceInputProvider<LocationInputResp
     return features.stream()
         .map(featureName -> (LocationFeatureInputDto)
             ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(/*Implement with feature*/);
+    return of(GEO_PLACE_OF_BIRTH, GEO_RESIDENCIES);
   }
 }

@@ -10,6 +10,8 @@ import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatur
 import com.silenteight.hsbc.datasource.extractors.document.NationalIdDocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.OtherDocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.document.PassportNumberDocumentQueryConfigurer;
+import com.silenteight.hsbc.datasource.extractors.geolocation.GeoPlaceOfBirthConfigurer;
+import com.silenteight.hsbc.datasource.extractors.geolocation.GeoResidenciesConfigurer;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonApFeature;
@@ -20,6 +22,8 @@ import com.silenteight.hsbc.datasource.feature.country.OtherCountryFeature;
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
 import com.silenteight.hsbc.datasource.feature.dob.DateOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
+import com.silenteight.hsbc.datasource.feature.geolocation.GeoPlaceOfBirthFeature;
+import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeature;
 import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
 import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
@@ -46,6 +50,12 @@ public class FeatureModel {
         entry(GENDER, new GenderFeature()),
         entry(NAME, new NameFeature(new NameQueryConfigurer().create())),
         entry(IS_PEP, new IsPepFeature(new IsPepQueryConfigurer().create())),
+        entry(
+            GEO_PLACE_OF_BIRTH,
+            new GeoPlaceOfBirthFeature(new GeoPlaceOfBirthConfigurer().create())),
+        entry(
+            GEO_RESIDENCIES,
+            new GeoResidencyFeature(new GeoResidenciesConfigurer().create())),
         entry(
             NATIONALITY_COUNTRY,
             new NationalityCountryFeature(new NationalityCountryQueryConfigurer().create())),

@@ -9,8 +9,11 @@ public interface EntityComposite {
 
   @Nullable
   CustomerEntity getCustomerEntity();
+
   List<WorldCheckEntity> getWorldCheckEntities();
+
   List<PrivateListEntity> getPrivateListEntities();
+
   List<CtrpScreening> getCtrpScreeningEntities();
 
   default boolean hasWorldCheckEntities() {
@@ -19,5 +22,9 @@ public interface EntityComposite {
 
   default boolean hasPrivateListEntities() {
     return nonNull(getPrivateListEntities()) && !getPrivateListEntities().isEmpty();
+  }
+
+  default boolean hasCtrpScreeningEntities() {
+    return nonNull(getCtrpScreeningEntities()) && !getCtrpScreeningEntities().isEmpty();
   }
 }

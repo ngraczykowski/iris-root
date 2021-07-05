@@ -16,6 +16,8 @@ public interface WorldCheckIndividual extends ListRecordId {
 
   String getCountryOfBirth();
 
+  String getPlaceOfBirthOriginal();
+
   String getNationalities();
 
   String getPassportCountry();
@@ -45,4 +47,6 @@ public interface WorldCheckIndividual extends ListRecordId {
   String getDateOfBirth();
 
   String getYearOfBirth();
+
+  String getAddress();
 }

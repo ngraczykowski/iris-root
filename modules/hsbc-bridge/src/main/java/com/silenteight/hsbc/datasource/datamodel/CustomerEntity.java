@@ -47,4 +47,8 @@ public interface CustomerEntity {
   String getOperatingCountries();
 
   String getEdqOperatingCountriesCodes();
+
+  String getAddress();
+
+  String getProfileFullAddress();
 }

@@ -15,6 +15,8 @@ public enum Feature {
   ALLOW_LIST_COMMON_WP("f_common_mp"),
   NAME("name"),
   GENDER("gender"),
+  GEO_PLACE_OF_BIRTH("geoPlaceOfBirth"),
+  GEO_RESIDENCIES("geoResidencies"),
   IS_PEP("isPep"),
   REGISTRATION_COUNTRY("registrationCountry"),
   INCORPORATION_COUNTRY("incorporationCountry"),

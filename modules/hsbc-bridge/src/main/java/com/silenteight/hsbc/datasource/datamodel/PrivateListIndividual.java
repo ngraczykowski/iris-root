@@ -20,6 +20,8 @@ public interface PrivateListIndividual extends ListRecordId {
 
   String getYearOfBirth();
 
+  String getPlaceOfBirth();
+
   String getCountryCodesAll();
 
   String getCountriesAll();
@@ -39,4 +41,6 @@ public interface PrivateListIndividual extends ListRecordId {
   String getCountryOfBirth();
 
   String getNationalities();
+
+  String getAddress();
 }
