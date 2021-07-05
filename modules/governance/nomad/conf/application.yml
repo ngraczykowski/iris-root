@@ -6,6 +6,12 @@ grpc:
     enabled: true
   server:
     port: {{ env "NOMAD_PORT_grpc" }}
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiation-type: PLAINTEXT
+    warehouse:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-warehouse
 
 keycloak:
   adapter:
