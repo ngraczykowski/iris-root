@@ -2,6 +2,8 @@ server:
   port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
+  logging:
+    enabled: true
   server:
     port: {{ env "NOMAD_PORT_grpc" }}
 
@@ -14,12 +16,47 @@ keycloak:
     principal-attribute: preferred_username
     ssl-required: external
 
-serp.governance.qa:
-  sampling:
-    schedule:
-      audit-cron: 0 0/5 * * * ?
-      alert-generator-cron: 0 0/10 * * * ?
-    generator:
-      sample-count: 2
-  viewing:
-    max-state-reset-delay-ms: 45000
+serp:
+  db:
+    name: {{ env "NOMAD_NAMESPACE" }}-governance
+{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+{{- with service (print $nomad_namespace "-governance-db") }}
+    host: {{ (index . 0).Address }}
+    port: {{ (index . 0).Port }}
+{{ end -}}
+
+  governance.qa:
+    sampling:
+      schedule:
+        audit-cron: 0 0/5 * * * ?
+        alert-generator-cron: 0 0/10 * * * ?
+      generator:
+        sample-count: 2
+    viewing:
+      max-state-reset-delay-ms: 45000
+
+spring:
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+      service-registry:
+        auto-registration:
+          enabled: false
+
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
