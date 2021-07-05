@@ -48,6 +48,8 @@ spring:
         register-health-check: false
         catalog-services-watch:
           enabled: true
+        server-list-query-tags:
+          warehouse: grpc
       service-registry:
         auto-registration:
           enabled: false

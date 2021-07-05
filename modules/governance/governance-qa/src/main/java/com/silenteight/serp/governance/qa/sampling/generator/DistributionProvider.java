@@ -18,7 +18,7 @@ import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 class DistributionProvider {
 
   @NonNull
-  private DistributionAlertsServiceBlockingStub distributionStub;
+  private final DistributionAlertsServiceBlockingStub distributionStub;
 
   List<AlertDistribution> getDistribution(@Valid DateRangeDto dateRangeDto,
       List<String> groupingFields) {

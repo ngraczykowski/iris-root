@@ -1,12 +1,14 @@
 package com.silenteight.serp.governance.qa.sampling.generator;
 
+import lombok.Setter;
+
 import com.silenteight.model.api.v1.DistributionAlertsServiceGrpc;
 import com.silenteight.model.api.v1.SamplingAlertsServiceGrpc;
 import com.silenteight.serp.governance.qa.manage.analysis.create.CreateDecisionUseCase;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 
 import io.grpc.Channel;
-import org.springframework.beans.factory.annotation.Qualifier;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,9 @@ import javax.validation.Valid;
 @Configuration
 @EnableConfigurationProperties(AlertsGeneratorProperties.class)
 public class SamplingGeneratorConfiguration {
+
+  @Setter(onMethod_ = @GrpcClient("warehouse"))
+  private Channel warehouseChannel;
 
   @Bean
   AlertsGeneratorService alertsGeneratorService(
@@ -35,18 +40,18 @@ public class SamplingGeneratorConfiguration {
   }
 
   @Bean
-  DistributionProvider distributionProvider(@Qualifier("governance") Channel channel) {
+  DistributionProvider distributionProvider() {
     return new DistributionProvider(
         DistributionAlertsServiceGrpc
-            .newBlockingStub(channel)
+            .newBlockingStub(warehouseChannel)
             .withWaitForReady());
   }
 
   @Bean
-  AlertProvider alertProvider(@Qualifier("governance") Channel channel) {
+  AlertProvider alertProvider() {
     return new AlertProvider(
         SamplingAlertsServiceGrpc
-            .newBlockingStub(channel)
+            .newBlockingStub(warehouseChannel)
             .withWaitForReady());
   }
 }
