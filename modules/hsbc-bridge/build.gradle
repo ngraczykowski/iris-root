@@ -19,3 +19,7 @@ jar {
     attributes "Main-Class": "com.silenteight.hsbc.bridge.BridgeApplication"
   }
 }
+
+if (project.hasProperty('unit')) {
+  test.filter.excludeTestsMatching('*Integration*')
+}
