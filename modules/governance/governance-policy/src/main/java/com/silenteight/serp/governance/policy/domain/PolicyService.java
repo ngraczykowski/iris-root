@@ -401,4 +401,13 @@ public class PolicyService {
     policyRepository.deleteByPolicyId(request.getPolicyId());
     request.postAudit(auditingLogger::log);
   }
+
+  @Transactional
+  public void markPolicyAsUsed(MarkPolicyAsUsedRequest request) {
+    request.preAudit(auditingLogger::log);
+    stopUsingOtherPolicies(request.getActivatedBy());
+    Policy policy = policyRepository.getByPolicyId(request.getPolicyId());
+    policy.use();
+    request.postAudit(auditingLogger::log);
+  }
 }

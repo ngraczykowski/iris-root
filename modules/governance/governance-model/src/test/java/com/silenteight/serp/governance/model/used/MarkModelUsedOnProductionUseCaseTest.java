@@ -1,9 +1,9 @@
-package com.silenteight.serp.governance.model.use;
+package com.silenteight.serp.governance.model.used;
 
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
 import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
-import com.silenteight.serp.governance.policy.domain.dto.UsePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.dto.MarkPolicyAsUsedRequest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UseModelUseCaseTest {
+class MarkModelUsedOnProductionUseCaseTest {
 
   @Mock
   private ModelDetailsQuery modelDetailsQuery;
@@ -27,7 +27,7 @@ class UseModelUseCaseTest {
   private PolicyService policyService;
 
   @InjectMocks
-  private UseModelUseCase underTest;
+  private MarkModelAsUsedOnProductionUseCase underTest;
 
   @Test
   void useModel() {
@@ -39,11 +39,11 @@ class UseModelUseCaseTest {
     underTest.apply(MODEL_RESOURCE_NAME);
 
     // then
-    ArgumentCaptor<UsePolicyRequest> argumentCaptor = ArgumentCaptor
-        .forClass(UsePolicyRequest.class);
-    verify(policyService).usePolicy(argumentCaptor.capture());
-    UsePolicyRequest usePolicyRequest = argumentCaptor.getValue();
-    assertThat(usePolicyRequest.getPolicyId()).isEqualTo(POLICY_ID);
-    assertThat(usePolicyRequest.getActivatedBy()).isEqualTo(UPDATED_BY);
+    ArgumentCaptor<MarkPolicyAsUsedRequest> argumentCaptor = ArgumentCaptor
+        .forClass(MarkPolicyAsUsedRequest.class);
+    verify(policyService).markPolicyAsUsed(argumentCaptor.capture());
+    MarkPolicyAsUsedRequest request = argumentCaptor.getValue();
+    assertThat(request.getPolicyId()).isEqualTo(POLICY_ID);
+    assertThat(request.getActivatedBy()).isEqualTo(UPDATED_BY);
   }
 }
