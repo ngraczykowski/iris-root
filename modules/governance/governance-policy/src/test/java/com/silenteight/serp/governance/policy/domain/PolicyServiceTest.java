@@ -26,10 +26,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.ARCHIVED;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
-import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
@@ -771,5 +768,19 @@ class PolicyServiceTest {
           .orElseThrow(NoSuchElementException::new);
       assertThat(step.getSortOrder()).isEqualTo(expectedStep.getSortOrder());
     }
+  }
+
+  @Test
+  void markPolicyUsedOnToBeUsedWillChangeState() {
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setUpdatedBy(OTHER_USER);
+    policy.setState(TO_BE_USED);
+
+    underTest.markPolicyAsUsed(MarkPolicyAsUsedRequest.of(uuid, OTHER_USER));
+
+    policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(IN_USE);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 }

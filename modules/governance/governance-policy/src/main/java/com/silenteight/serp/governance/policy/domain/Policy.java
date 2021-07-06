@@ -121,7 +121,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   }
 
   public void publish() {
-    assertAllowedStateChange(TO_BE_USED, SAVED, TO_BE_USED);
+    assertAllowedStateChange(TO_BE_USED, SAVED, TO_BE_USED, OBSOLETE, TO_BE_USED);
     setState(TO_BE_USED);
   }
 
@@ -134,6 +134,11 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   public void stopUsing() {
     assertAllowedStateChange(OBSOLETE, IN_USE);
     setState(OBSOLETE);
+  }
+
+  public void archive() {
+    assertAllowedStateChange(ARCHIVED, SAVED, OBSOLETE);
+    setState(ARCHIVED);
   }
 
   private void assertAllowedStateChange(PolicyState desirable, PolicyState... state) {
@@ -216,11 +221,6 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   private void updateOrderOfStep(List<UUID> stepsOrder, String user, Step step) {
     step.setSortOrder(stepsOrder.indexOf(step.getStepId()));
     step.setUpdatedBy(user);
-  }
-
-  public void archive() {
-    assertAllowedStateChange(ARCHIVED, SAVED, OBSOLETE);
-    setState(ARCHIVED);
   }
 
   void assertCanBeDeleted() {

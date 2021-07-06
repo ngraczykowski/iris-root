@@ -6,6 +6,7 @@ import com.silenteight.serp.governance.model.provide.SolvingModelQuery;
 import com.silenteight.serp.governance.model.transfer.export.ExportModelUseCase;
 import com.silenteight.serp.governance.model.transfer.importing.ImportModelUseCase;
 import com.silenteight.serp.governance.model.use.UseModelUseCase;
+import com.silenteight.serp.governance.model.used.MarkModelAsUsedOnProductionUseCase;
 
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,8 @@ class SolvingModelConfiguration {
       SolvingModelQuery solvingModelQuery,
       ExportModelUseCase exportModelUseCase,
       ImportModelUseCase importModelUseCase,
-      UseModelUseCase useModelUseCase) {
+      UseModelUseCase useModelUseCase,
+      MarkModelAsUsedOnProductionUseCase markModelUsedOnProductionUseCase) {
 
     return new SolvingModelGrpcService(
         defaultModelQuery,
@@ -30,7 +32,8 @@ class SolvingModelConfiguration {
         solvingModelQuery,
         exportModelUseCase,
         importModelUseCase,
-        useModelUseCase);
+        useModelUseCase,
+        markModelUsedOnProductionUseCase);
   }
 
 }

@@ -15,6 +15,7 @@ import com.silenteight.serp.governance.model.transfer.dto.TransferredModelRootDt
 import com.silenteight.serp.governance.model.transfer.export.ExportModelUseCase;
 import com.silenteight.serp.governance.model.transfer.importing.ImportModelUseCase;
 import com.silenteight.serp.governance.model.use.UseModelUseCase;
+import com.silenteight.serp.governance.model.used.MarkModelAsUsedOnProductionUseCase;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
@@ -57,6 +58,8 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   private final ImportModelUseCase importModelUseCase;
   @NonNull
   private final UseModelUseCase useModelUseCase;
+  @NonNull
+  private final MarkModelAsUsedOnProductionUseCase markModelUsedOnProductionUseCase;
 
   @Override
   public void getDefaultSolvingModel(Empty request, StreamObserver<SolvingModel> responseObserver) {
@@ -144,5 +147,16 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
     return ExportModelResponse.newBuilder()
         .setModelJson(ByteString.copyFromUtf8(modelToExport.toJson()))
         .build();
+  }
+
+  @Override
+  public void modelDeployedOnProduction(ModelName request, StreamObserver<Empty> responseObserver) {
+    try {
+      markModelUsedOnProductionUseCase.apply(request.getModel());
+      responseObserver.onNext(Empty.newBuilder().build());
+      responseObserver.onCompleted();
+    } catch (RuntimeException e) {
+      handleException(responseObserver, e, INTERNAL_VALUE, USE_MODEL_ERROR);
+    }
   }
 }
