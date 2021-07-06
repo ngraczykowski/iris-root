@@ -1,0 +1,50 @@
+= HLD #26
+
+- Reference ticket: https://silent8.atlassian.net/browse/WEB-1317
+- Reason: Feed Warehouse with data: alerts recommendations (+ metadata) created during the simulation
+
+== Feed WH with data created during the simulation
+[plantuml,feeding-wh,svg]
+-----
+@startuml
+header Feed WH with data created during the simulation
+
+database SimulatorDB as db
+participant Simulator as sim
+participant "Adjudication Engine" as ae
+queue Rabbit as r
+participant Warehouse as wh
+
+autonumber
+
+ae -> r : Some recommendation generated message
+note over ae, r
+this message will be sent several times before analysis will be finished
+end note
+r -> sim : Fetch message
+sim -> db : Set simulation state to **RUNNING**
+sim -> ae : Fetch recommendations based on \na list of recommendations from the message
+ae -> sim : Recommendations with a related alert name
+sim -> ae : Fetch alerts based on \na list of alerts provided in the recommendation
+ae -> sim : Alerts
+sim -> sim : Build SimulationDataIndexRequest message
+sim -> r : Send message on a sim.event exchange
+sim -> db : Add a row with information: \nanalysis_name, SENT, alerts count
+r -> wh : Fetch message from wh.index-request.simulation
+wh -> r : ACK message on wh.event exchange
+r -> sim : Fetch ACK message from sim.index-response.simulation
+sim -> db : Add a row with information: \nanalysis_name, RECEIVED, alerts count
+sim -> ae : Get analysis status
+ae -> sim : Analysis status
+alt Status == **DONE**
+sim -> db : Get sum of alerts **SENT** and **RECEIVED**
+alt **SENT** == **RECEIVED**
+sim -> db : Set simulation state to **DONE**
+end alt
+end alt
+
+@enduml
+-----
+
+=== Cleaning db
+We will clear all rows with SENT/RECEIVED information for specific analysis when the simulation will be archived.
