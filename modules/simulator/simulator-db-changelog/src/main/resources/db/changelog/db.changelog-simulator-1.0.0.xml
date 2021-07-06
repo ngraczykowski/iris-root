@@ -112,4 +112,30 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="simulator-1.0.0-5" author="mmastylo">
+    <createTable tableName="simulator_indexed_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="analysis_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="operation" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="simulator_indexed_alert"
+        indexName="ix_simulator_indexed_alert_analysis_name">
+      <column name="analysis_name"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

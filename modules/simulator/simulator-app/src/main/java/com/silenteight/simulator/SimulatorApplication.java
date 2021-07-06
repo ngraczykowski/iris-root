@@ -9,6 +9,7 @@ import com.silenteight.simulator.common.web.WebModule;
 import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.grpc.GrpcModule;
 import com.silenteight.simulator.management.ManagementModule;
+import com.silenteight.simulator.processing.ProcessingModule;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,6 +22,7 @@ import org.springframework.integration.config.EnableIntegrationManagement;
     // Domain modules
     DatasetModule.class,
     ManagementModule.class,
+    ProcessingModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,
