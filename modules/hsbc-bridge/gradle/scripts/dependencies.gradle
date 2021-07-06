@@ -87,7 +87,7 @@ libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.1
 libraries.orika = [group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4']
 libraries.shedlock_jdbc_template = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: '4.24.0']
 libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: '4.24.0']
-libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.7.3']
+libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.6.8']
 
 // Messaging
 libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java', version: '1.7.1']
