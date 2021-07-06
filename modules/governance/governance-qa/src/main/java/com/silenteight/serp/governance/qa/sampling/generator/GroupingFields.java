@@ -7,7 +7,7 @@ import static java.util.stream.Collectors.toList;
 
 enum GroupingFields {
 
-  RISK_TYPE("riskType");
+  RISK_TYPE("DN_CASE.ExtendedAttribute5");
 
   private final String value;
 
