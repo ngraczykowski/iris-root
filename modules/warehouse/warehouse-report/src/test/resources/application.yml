@@ -24,6 +24,8 @@ warehouse:
     max-object-count: 100
   environment:
     prefix: itest
+  es:
+    production-query-index: ${warehouse.environment.prefix}_production
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

@@ -1,33 +1,28 @@
-package com.silenteight.warehouse.common.opendistro.elastic;
-
-import lombok.RequiredArgsConstructor;
+package com.silenteight.warehouse.indexer.query.grouping;
 
 import com.silenteight.sep.auth.token.UserAwareTokenProvider;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
+import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
+import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    OpendistroModule.class,
+    QueryAlertModule.class,
     ElasticsearchRestClientModule.class,
-    TestElasticSearchModule.class
+    EnvironmentModule.class,
+    OpendistroModule.class,
+    TestElasticSearchModule.class,
 })
-@ImportAutoConfiguration({
-    JacksonAutoConfiguration.class,
-})
-@RequiredArgsConstructor
-public class OpendistroElasticTestConfiguration {
+class GroupingQueryTestConfiguration {
 
   @Bean
   UserAwareTokenProvider userAwareTokenProvider() {
     return mock(UserAwareTokenProvider.class);
   }
 }
-

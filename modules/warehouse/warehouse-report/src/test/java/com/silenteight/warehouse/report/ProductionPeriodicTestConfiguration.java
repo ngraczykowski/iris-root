@@ -20,12 +20,10 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import static org.mockito.Mockito.*;
 
-@Configuration
 @ComponentScan(basePackageClasses = {
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,

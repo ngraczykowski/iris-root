@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
 import org.apache.http.RequestLine;
 import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.elasticsearch.client.*;
@@ -32,6 +33,7 @@ public class OpendistroElasticClient {
   private static final String ROLE_PARAM = "role";
   private static final String LIST_REPORTS_INSTANCES_ENDPOINT = "/_opendistro/_reports/instances";
   private static final String TENANT_ENDPOINT = "/_opendistro/_security/api/tenants/";
+  private static final String SQL_ENDPOINT = "/_opendistro/_sql";
   private static final String ROLES_ENDPOINT =
       "/_opendistro/_security/api/roles/{" + ROLE_PARAM + "}";
   private static final String TENANT_DESCRIPTION = "description";
@@ -156,6 +158,30 @@ public class OpendistroElasticClient {
 
     log.debug("OpendistroElasticClient method=PUT, endpoint={}, statusCode={}, parsedBody={}",
         request.getEndpoint(), response.getStatusLine(), response.getEntity().getContent());
+  }
+
+  public QueryResultDto executeSql(QueryDto queryDto) {
+    try {
+      return doExecuteSql(queryDto);
+    } catch (IOException e) {
+      throw handle("executeSql", e);
+    }
+  }
+
+  private QueryResultDto doExecuteSql(QueryDto queryDto) throws IOException {
+    String path = fromUriString(SQL_ENDPOINT).toUriString();
+
+    Request request = new Request(HttpPost.METHOD_NAME, path);
+    request.setJsonEntity(objectMapper.writeValueAsString(queryDto));
+    Response response = restLowLevelClient.performRequest(request);
+
+    QueryResultDto queryResultDto =
+        objectMapper.readValue(response.getEntity().getContent(), QueryResultDto.class);
+
+    log.debug("OpendistroElasticClient method=POST, endpoint={}, statusCode={}, parsedBody={}",
+        request.getEndpoint(), response.getStatusLine(), queryResultDto);
+
+    return queryResultDto;
   }
 
   private Request createRequest(String name, String description) {

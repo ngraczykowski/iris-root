@@ -16,6 +16,7 @@ import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
 import com.silenteight.warehouse.indexer.indexing.IndexingModule;
+import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.production.ProductionReportingModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
@@ -36,6 +37,9 @@ import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+
+
+
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = {
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
@@ -46,6 +50,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ManagementModule.class,
     ProductionReportingModule.class,
     ReportingModule.class,
+    QueryAlertModule.class,
     SamplingModule.class,
     SimulationModule.class,
     SynchronizationModule.class,
@@ -112,4 +117,3 @@ public class WarehouseApplication {
     }
   }
 }
-

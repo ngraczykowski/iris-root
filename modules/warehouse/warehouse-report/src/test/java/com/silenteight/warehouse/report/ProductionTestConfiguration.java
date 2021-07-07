@@ -12,9 +12,7 @@ import com.silenteight.warehouse.report.production.ProductionReportingModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ComponentScan(basePackageClasses = {
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
