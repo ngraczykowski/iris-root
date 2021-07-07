@@ -2,6 +2,7 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version '2.5.2'
   id "io.spring.dependency-management" version "1.0.11.RELEASE"
+  id "maven-publish"
   id "io.freefair.lombok" version "6.0.0-m2"
 }
 
@@ -13,12 +14,10 @@ repositories {
 }
 
 dependencies {
-  implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
   implementation 'org.springframework.boot:spring-boot-starter'
   implementation 'org.springframework.boot:spring-boot-starter-integration'
   implementation 'org.springframework.integration:spring-integration-http'
   implementation 'org.springframework.integration:spring-integration-security'
-  implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-aop'
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'

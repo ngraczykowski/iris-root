@@ -157,6 +157,7 @@ class SearPaymentsConfiguration {
   }
 
   private static boolean alertIsPaired(AlertDto alertDto) {
+
     return false;
   }
 

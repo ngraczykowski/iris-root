@@ -9,5 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlertFacade {
 
-  void soleAlert() { }
+  public void soleAlert(long alertId) {
+    alertId = 2;
+  }
 }
