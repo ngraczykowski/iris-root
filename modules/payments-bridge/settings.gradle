@@ -1,2 +1,4 @@
 rootProject.name = 'sear-payments-spring-integration-mockup'
+include 'sear-payments-ae'
+include 'sear-payments-app'
 
