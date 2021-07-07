@@ -39,7 +39,6 @@ libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects'
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springBootVersion]
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion]
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion]
-libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion]
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow',version: springBootVersion]
 libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion]
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion]
@@ -163,7 +162,6 @@ dependencies {
   implementation libraries.spring_aspects
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator
-  implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web

@@ -1,12 +1,12 @@
 silenteight.bridge:
   address: ${BRIDGE_ADDRESS:http://localhost:24802}
   grpc:
-    port: 24803
+    port: 0
     default-deadline: 5s
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24801
-  http.port: 24802
+  http.port: 0
   amqp:
     outgoing:
       model-persisted-exchange-name: bridge.model
@@ -57,8 +57,6 @@ silenteight.bridge:
       LEVEL_2_REVIEW: Level 2 Review
       LEVEL_3_REVIEW: Level 3 Review
   recommendations.queue: bridge.recommendations
-  security: false
-  security.endpoints: /async/batch/v1/**,/model
 
 ### GRPC
 
