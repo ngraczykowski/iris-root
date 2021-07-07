@@ -32,8 +32,8 @@ class GetCountriesRestController {
   private RoleService roleService;
 
   @GetMapping(COUNTRIES_URL)
-  @PreAuthorize("isAuthorized('UPDATE_COUNTRIES')")
-  public ResponseEntity<List<String>> update(@PathVariable(COUNTRY_GROUP_ID_PARAM) UUID id) {
+  @PreAuthorize("isAuthorized('GET_COUNTRIES')")
+  public ResponseEntity<List<String>> get(@PathVariable(COUNTRY_GROUP_ID_PARAM) UUID id) {
     return ok(roleService.getCountries(id));
   }
 }
