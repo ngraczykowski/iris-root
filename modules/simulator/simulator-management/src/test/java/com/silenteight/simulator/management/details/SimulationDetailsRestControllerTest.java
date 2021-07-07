@@ -29,7 +29,7 @@ class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private SimulationDetailsQuery simulationQuery;
 
-  @TestWithRole(roles = { MODEL_TUNER, APPROVER })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, QA, QA_ISSUE_MANAGER, AUDITOR })
   void its200_whenSimulationFound() {
     given(simulationQuery.get(ID)).willReturn(DETAILS_DTO);
     get(SIMULATION_DETAILS_URL)
@@ -45,7 +45,7 @@ class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
         .body("createdBy", is(SimulationFixtures.USERNAME));
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(SIMULATION_DETAILS_URL).statusCode(FORBIDDEN.value());
   }
