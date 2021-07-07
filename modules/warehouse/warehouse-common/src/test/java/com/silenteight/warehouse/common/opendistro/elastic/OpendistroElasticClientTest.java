@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import com.silenteight.warehouse.common.opendistro.elastic.RoleDto.IndexPermission;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
+import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
+import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = OpendistroElasticTestConfiguration.class)
@@ -28,6 +31,9 @@ class OpendistroElasticClientTest {
 
   @Autowired
   OpendistroElasticClient opendistroElasticClient;
+
+  @Autowired
+  SimpleElasticTestClient simpleElasticTestClient;
 
   @Test
   @SneakyThrows
@@ -60,4 +66,15 @@ class OpendistroElasticClientTest {
     assertThat(responseRoleDto).isEqualTo(roleDto);
   }
 
+  @Test
+  void shouldExecuteQuery() {
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, "123", emptyMap());
+
+    QueryDto queryDto = QueryDto.builder()
+        .query("select * from " + PRODUCTION_ELASTIC_INDEX_NAME)
+        .build();
+    QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
+
+    assertThat(queryResultDto).isNotNull();
+  }
 }

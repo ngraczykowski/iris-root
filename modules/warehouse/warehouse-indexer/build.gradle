@@ -25,6 +25,8 @@ dependencies {
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
 
+  implementation 'org.jooq:jooq:3.13.4'
+
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
   testImplementation libraries.awaitility
