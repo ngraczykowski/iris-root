@@ -12,7 +12,8 @@ grpc:
     port: 24801
   client:
     data-source:
-      address: static://localhost:${grpc.server.port}
+      address: static://localhost:24803
+      negotiation-type: PLAINTEXT
     governance:
       address: static://localhost:${grpc.server.port}
 
