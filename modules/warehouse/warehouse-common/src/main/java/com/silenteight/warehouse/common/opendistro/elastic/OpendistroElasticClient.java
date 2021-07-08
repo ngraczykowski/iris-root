@@ -215,9 +215,9 @@ public class OpendistroElasticClient {
           statusLine.getStatusCode(),
           statusLine.getReasonPhrase(),
           requestLine.getUri(),
-          context);
+          context, e);
     }
 
-    return new OpendistroElasticClientException(500, e.getMessage(), null, context);
+    return new OpendistroElasticClientException(500, e.getMessage(), null, context, e);
   }
 }

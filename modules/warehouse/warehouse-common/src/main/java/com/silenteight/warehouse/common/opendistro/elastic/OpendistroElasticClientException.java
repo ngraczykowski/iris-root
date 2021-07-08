@@ -13,9 +13,9 @@ public class OpendistroElasticClientException extends RuntimeException {
   private final String url;
 
   public OpendistroElasticClientException(
-      int statusCode, String message, String url, String context) {
+      int statusCode, String message, String url, String context, Exception e) {
 
-    super("Error while calling " + context + " ES response: " + statusCode + ": " + message);
+    super("Error while calling " + context + " ES response: " + statusCode + ": " + message, e);
     this.statusCode = statusCode;
     this.url = url;
   }
