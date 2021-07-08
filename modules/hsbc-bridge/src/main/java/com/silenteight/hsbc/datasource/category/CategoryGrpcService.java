@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.category;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v1.*;
 import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.CategoryServiceImplBase;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @GrpcService
 @RequiredArgsConstructor
+@Slf4j
 class CategoryGrpcService extends CategoryServiceImplBase {
 
   private final GetMatchCategoryValuesUseCase getMatchCategoryValuesUseCase;
@@ -39,6 +41,7 @@ class CategoryGrpcService extends CategoryServiceImplBase {
 
   private BatchGetMatchCategoryValuesResponse getMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
+    log.info("NOMAD: received getMatchCategoryValues request");
 
     var command = GetMatchCategoryValuesCommand.builder()
         .matchValues(request.getMatchValuesList())
