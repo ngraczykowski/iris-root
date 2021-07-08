@@ -36,6 +36,7 @@ public class SamplingTestFixtures {
   public static final String ALERT_RECOMMENDATION_FP = "FALSE_POSITIVE";
   public static final String ALERT_RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
   public static final String ALERT_RISK_TYPE_PEP = "PEP";
+  public static final String ALERT_RISK_TYPE_SAN = "SAN";
   public static final String ALERT_RISK_TYPE_KEY = "riskType";
   public static final String ALERT_COUNTRY_KEY = "country";
   public static final String ALERT_COUNTRY_UK = "UK";
@@ -110,6 +111,21 @@ public class SamplingTestFixtures {
       MATCH_PREFIX + MATCH_SOLUTION_KEY, MATCH_SOLUTION_EXACT_MATCH
   );
 
+  public static final Timestamp FIRST_DAY_OF_JUNE = Timestamp.newBuilder()
+      .setSeconds(1622505601)
+      .setNanos(0)
+      .build();
+
+  public static final Timestamp FIRST_DAY_OF_APRIL = Timestamp.newBuilder()
+      .setSeconds(1617235201)
+      .setNanos(0)
+      .build();
+
+  private static final Timestamp LAST_DAY_OF_JUNE = Timestamp.newBuilder()
+      .setSeconds(1625097599)
+      .setNanos(0)
+      .build();
+
   private static final RequestedAlertsFilter ALERT_FILTER_BY_COUNTRY_PL =
       RequestedAlertsFilter.newBuilder()
           .setFieldName(ALERT_COUNTRY_KEY)
@@ -122,19 +138,6 @@ public class SamplingTestFixtures {
           .setFieldValue(ALERT_RISK_TYPE_PEP)
           .build();
 
-  private static final Timestamp FIRST_DAY_OF_JUNE = Timestamp.newBuilder()
-      .setSeconds(1622505601)
-      .setNanos(0)
-      .build();
-
-  private static final Timestamp LAST_DAY_OF_JUNE = Timestamp.newBuilder()
-      .setSeconds(1625097599)
-      .setNanos(0)
-      .build();
-  private static final Timestamp FIRST_DAY_OF_APRIL = Timestamp.newBuilder()
-      .setSeconds(1617235201)
-      .setNanos(0)
-      .build();
 
   static final AlertsSampleRequest ALERTS_SAMPLE_REQUEST_1 = AlertsSampleRequest.newBuilder()
       .setTimeRangeFrom(FIRST_DAY_OF_JUNE)
