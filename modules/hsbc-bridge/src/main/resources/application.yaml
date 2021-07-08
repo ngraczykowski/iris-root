@@ -1,12 +1,12 @@
 silenteight.bridge:
   address: ${BRIDGE_ADDRESS:http://localhost:24802}
   grpc:
-    port: 0
+    port: 24803
     default-deadline: 5s
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24801
-  http.port: 0
+  http.port: 24802
   amqp:
     outgoing:
       model-persisted-exchange-name: bridge.model
