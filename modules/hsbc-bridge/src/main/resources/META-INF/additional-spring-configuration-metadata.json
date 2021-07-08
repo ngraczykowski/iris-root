@@ -184,6 +184,11 @@
       "name": "silenteight.bridge.amqp.outgoing.is-pep-routing-key",
       "type": "java.lang.String",
       "description": "IsPep learning store exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.dead-letter-queue",
+      "type": "java.lang.String",
+      "description": "Description for silenteight.bridge.amqp.ingoing.dead-letter-queue."
     }
   ]
 }

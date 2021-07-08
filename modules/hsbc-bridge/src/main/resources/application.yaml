@@ -19,6 +19,7 @@ silenteight.bridge:
       is-pep-routing-key: ispep.ispep-learning-store-request.production
     ingoing:
       model-promoted-queue: bridge.model-promoted.production
+      dead-letter-queue: bridge.dlq
       recommendations-queue: bridge.recommendations
       model-loaded-queue: bridge.model.loaded
       model-persisted-queue: bridge.model.persisted.internal
@@ -108,3 +109,12 @@ spring:
     password: ${RABBITMQ_PASSWORD:dev}
     port: ${RABBITMQ_AMQP_PORT:24160}
     username: ${RABBITMQ_USER:dev}
+
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 3000
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: 1.5
