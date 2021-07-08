@@ -15,7 +15,7 @@ class LearningStoreExchangeRequestCreatorSpec extends Specification {
     def alert = result.alertsList.first()
     alert.getAlertId() == "someKeyLabel"
     alert.getMatchId() == "1"
-    alert.getApCountry() == "someEdqLoBCountryCode"
+    alert.getAlertedPartyCountry() == "someEdqLoBCountryCode"
     alert.getWatchlistId() == "1"
 
     def comment = alert.commentsList.first()

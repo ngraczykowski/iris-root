@@ -6,10 +6,9 @@ import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseComment;
 import com.silenteight.hsbc.bridge.json.external.model.CustomerIndividual;
 import com.silenteight.hsbc.bridge.json.external.model.WorldCheckIndividual;
-import com.silenteight.learningstore.v1.api.exchange.Alert;
-import com.silenteight.learningstore.v1.api.exchange.Alert.Builder;
-import com.silenteight.learningstore.v1.api.exchange.Comment;
-import com.silenteight.learningstore.v1.api.exchange.IsPepLearningStoreExchangeRequest;
+import com.silenteight.proto.learningstore.ispep.v1.api.Alert;
+import com.silenteight.proto.learningstore.ispep.v1.api.Comment;
+import com.silenteight.proto.learningstore.ispep.v1.api.IsPepLearningStoreExchangeRequest;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -37,14 +36,14 @@ class LearningStoreExchangeRequestCreator {
         .build();
   }
 
-  private static List<com.silenteight.learningstore.v1.api.exchange.Alert> mapAlert(
+  private static List<com.silenteight.proto.learningstore.ispep.v1.api.Alert> mapAlert(
       Collection<AlertData> alerts) {
     return alerts.stream().map(LearningStoreExchangeRequestCreator::toAlert).collect(toList());
   }
 
-  private static com.silenteight.learningstore.v1.api.exchange.Alert toAlert(AlertData alert) {
+  private static com.silenteight.proto.learningstore.ispep.v1.api.Alert toAlert(AlertData alert) {
     var builder = Alert.newBuilder();
-    findApCountry(alert.getCustomerIndividuals()).ifPresent(builder::setApCountry);
+    findApCountry(alert.getCustomerIndividuals()).ifPresent(builder::setAlertedPartyCountry);
     findWatchlistId(alert.getWorldCheckIndividuals()).ifPresent(builder::setWatchlistId);
 
     return builder

@@ -5,7 +5,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.ispep.IsPepMessageSender;
-import com.silenteight.learningstore.v1.api.exchange.IsPepLearningStoreExchangeRequest;
+import com.silenteight.proto.learningstore.ispep.v1.api.IsPepLearningStoreExchangeRequest;
 
 import org.springframework.amqp.core.AmqpTemplate;
 

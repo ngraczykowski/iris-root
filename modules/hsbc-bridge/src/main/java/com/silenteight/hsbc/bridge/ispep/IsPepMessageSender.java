@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.bridge.ispep;
 
-import com.silenteight.learningstore.v1.api.exchange.IsPepLearningStoreExchangeRequest;
+import com.silenteight.proto.learningstore.ispep.v1.api.IsPepLearningStoreExchangeRequest;
 
 public interface IsPepMessageSender {
 
