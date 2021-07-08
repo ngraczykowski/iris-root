@@ -51,12 +51,6 @@ class SamplingAlertService {
         .build();
   }
 
-  private static String convertTimeToDate(Timestamp rangeTime) {
-    LocalDateTime ldt =
-        ofEpochSecond(rangeTime.getSeconds(), rangeTime.getNanos(), UTC);
-    return ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").format(ldt);
-  }
-
   private static Map<String, String> convertFilterToMap(
       List<RequestedAlertsFilter> requestedAlertsFilter) {
 
@@ -74,4 +68,11 @@ class SamplingAlertService {
         .alertLimit(req.getAlertCount())
         .build();
   }
+
+  private static String convertTimeToDate(Timestamp rangeTime) {
+    LocalDateTime ldt =
+        ofEpochSecond(rangeTime.getSeconds(), rangeTime.getNanos(), UTC);
+    return ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").format(ldt);
+  }
+
 }
