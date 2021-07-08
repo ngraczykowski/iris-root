@@ -71,7 +71,11 @@ grpc:
 
 ### HTTP
 
-server.port: ${silenteight.bridge.http.port}
+
+server:
+  port: ${silenteight.bridge.http.port}
+  http2:
+    enabled: true
 
 spring:
   application.name: hsbc-bridge
