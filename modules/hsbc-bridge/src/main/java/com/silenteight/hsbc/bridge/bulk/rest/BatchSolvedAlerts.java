@@ -12,13 +12,14 @@
 
 package com.silenteight.hsbc.bridge.bulk.rest;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,17 +28,21 @@ import javax.validation.constraints.Size;
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-04-02T11:57:31.043Z[GMT]")
-@Validated
 public class BatchSolvedAlerts {
-  @SerializedName("batchId")
+
+  @JsonProperty("batchId")
+  @NotNull
+  @NotBlank
   private String batchId = null;
 
-  @SerializedName("batchStatus")
+  @JsonProperty("batchStatus")
+  @NotNull
   private BatchStatus batchStatus = null;
 
-  @SerializedName("alerts")
+  @JsonProperty("alerts")
   @NotNull
   @Size(min = 1)
+  @Valid 
   private List<SolvedAlert> alerts = null;
 
   public BatchSolvedAlerts batchId(String batchId) {
@@ -45,10 +50,10 @@ public class BatchSolvedAlerts {
     return this;
   }
 
-   /**
+  /**
    * Get batchId
    * @return batchId
-  **/
+   **/
   @Schema(description = "")
   public String getBatchId() {
     return batchId;
@@ -63,10 +68,10 @@ public class BatchSolvedAlerts {
     return this;
   }
 
-   /**
+  /**
    * Get batchStatus
    * @return batchStatus
-  **/
+   **/
   @Schema(description = "")
   public BatchStatus getBatchStatus() {
     return batchStatus;
@@ -89,10 +94,10 @@ public class BatchSolvedAlerts {
     return this;
   }
 
-   /**
+  /**
    * Get alerts
    * @return alerts
-  **/
+   **/
   @Schema(description = "")
   public List<SolvedAlert> getAlerts() {
     return alerts;

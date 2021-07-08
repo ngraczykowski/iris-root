@@ -12,12 +12,15 @@
 
 package com.silenteight.hsbc.bridge.bulk.rest;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * SolvedAlert
@@ -26,25 +29,39 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-06-16T08:18:56.492Z[GMT]")
 public class SolvedAlert {
 
-  @SerializedName("id")
+  @JsonProperty("id")
+  @NotNull
+  @NotBlank
   private String id = null;
 
-  @SerializedName("recommendation")
+  @JsonProperty("recommendation")
+  @NotNull
+  @NotBlank
   private String recommendation = null;
 
-  @SerializedName("comment")
+  @JsonProperty("comment")
+  @NotNull
+  @NotBlank
   private String comment = null;
 
-  @SerializedName("policy_id")
-  private String policyId = "";
+  @JsonProperty("policy_id")
+  @NotNull
+  @NotBlank
+  private String policyId = null;
 
-  @SerializedName("step_id")
-  private String stepId = "";
+  @JsonProperty("step_id")
+  @NotNull
+  @NotBlank
+  private String stepId = null;
 
-  @SerializedName("fv_signature")
-  private String fvSignature = "";
+  @JsonProperty("fv_signature")
+  @NotNull
+  @NotBlank
+  private String fvSignature = null;
 
-  @SerializedName("alertMetadata")
+  @JsonProperty("alertMetadata")
+  @NotNull
+  @Valid 
   private List<AlertMetadata> alertMetadata = null;
 
   public SolvedAlert id(String id) {

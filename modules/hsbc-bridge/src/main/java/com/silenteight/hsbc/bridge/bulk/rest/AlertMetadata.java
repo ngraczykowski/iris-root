@@ -2,14 +2,22 @@ package com.silenteight.hsbc.bridge.bulk.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @JsonInclude(Include.NON_NULL)
 public class AlertMetadata {
 
-  @SerializedName("key")
+  @JsonProperty("key")
+  @NotNull
+  @NotBlank
   private String key;
-  @SerializedName("value")
+
+  @JsonProperty("value")
+  @NotNull
+  @NotBlank
   private String value;
 
 

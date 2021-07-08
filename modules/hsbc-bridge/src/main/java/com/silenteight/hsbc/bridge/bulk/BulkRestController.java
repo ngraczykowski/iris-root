@@ -10,6 +10,7 @@ import com.silenteight.hsbc.bridge.bulk.rest.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -114,6 +115,21 @@ public class BulkRestController {
   public ResponseEntity<ErrorResponse> handleIOExceptionWithBadRequestStatus(
       IOException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({ MethodArgumentNotValidException.class })
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<ErrorResponse> handleValidationExceptions(
+      MethodArgumentNotValidException exception) {
+
+    var message = exception.getBindingResult()
+        .getFieldErrors()
+        .stream()
+        .findFirst()
+        .map(x -> x.getField() + " " + x.getDefaultMessage())
+        .orElse("");
+
+    return getErrorResponse(message, HttpStatus.BAD_REQUEST);
   }
 
   private ResponseEntity<ErrorResponse> getErrorResponse(String message, HttpStatus httpStatus) {
