@@ -1,5 +1,8 @@
 package com.silenteight.simulator.management;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.State;
 import com.silenteight.model.api.v1.SolvingModel;
@@ -21,7 +24,8 @@ import static java.time.ZoneOffset.UTC;
 import static java.util.Set.of;
 import static java.util.UUID.fromString;
 
-public class SimulationFixtures {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class SimulationFixtures {
 
   public static final UUID ID = fromString("a9b45451-6fde-4832-8dc0-d17b4708d8ca");
   public static final String NAME = "simulations/" + ID;

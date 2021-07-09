@@ -1,15 +1,19 @@
 package com.silenteight.simulator.management.domain;
 
 import lombok.*;
+import lombok.Builder.Default;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.simulator.management.domain.exception.SimulationNotInProperStateException;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
+
+import static com.silenteight.simulator.management.domain.SimulationState.*;
 
 @Entity
 @Data
@@ -58,10 +62,11 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   @Column(name = "analysis_name", nullable = false)
   private String analysisName;
 
+  @Default
   @ToString.Include
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private SimulationState state;
+  private SimulationState state = NEW;
 
   @ToString.Include
   @Column(name = "created_by", nullable = false)
@@ -74,4 +79,24 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   @ToString.Include
   @Column(name = "finished_at")
   private OffsetDateTime finishedAt;
+
+  void run() {
+    assertInState(PENDING);
+    this.state = RUNNING;
+  }
+
+  void finish() {
+    assertInState(RUNNING);
+    this.state = DONE;
+  }
+
+  void archive() {
+    assertInState(DONE);
+    this.state = ARCHIVED;
+  }
+
+  private void assertInState(SimulationState requiredState) {
+    if (this.state != requiredState)
+      throw new SimulationNotInProperStateException(requiredState);
+  }
 }
