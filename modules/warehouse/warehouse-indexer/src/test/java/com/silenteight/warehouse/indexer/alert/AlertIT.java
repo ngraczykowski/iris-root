@@ -141,7 +141,6 @@ class AlertIT {
   }
 
   @Test
-  @WithElasticAccessCredentials
   void shouldReturnAlertsId() {
     storeData();
 

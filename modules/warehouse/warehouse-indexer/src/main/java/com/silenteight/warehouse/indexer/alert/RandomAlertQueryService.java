@@ -3,6 +3,8 @@ package com.silenteight.warehouse.indexer.alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils;
+
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -16,7 +18,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_ID_KEY;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -92,11 +93,11 @@ public class RandomAlertQueryService {
   private static void buildQueryForManyFields(
       Map<String, String> fields, BoolQueryBuilder query) {
 
-    fields.forEach((key, value) -> query.must(getExactMatch(ALERT_PREFIX + key, value)));
+    fields.forEach((key, value) -> query.must(getExactMatch(key, value)));
   }
 
   static MatchQueryBuilder getExactMatch(String fieldName, String value) {
-    return new MatchQueryBuilder(fieldName + ALERT_SUFFIX_SEARCH, value);
+    return new MatchQueryBuilder(OpendistroUtils.getRawField(fieldName), value);
   }
 
   private static BoolQueryBuilder buildQueryForTimeRange(

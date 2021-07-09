@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.Match;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
@@ -60,7 +61,7 @@ public class DataIndexFixtures {
       .timeRangeFrom(PROCESSING_TIMESTAMP)
       .timeRangeTo(PROCESSING_TIMESTAMP_4)
       .alertLimit(3)
-      .filter(Map.of(SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK))
+      .filter(Map.of(MappedKeys.COUNTRY_KEY, COUNTRY_UK))
       .build();
 
   static Builder structWithValue(String key, String value) {
