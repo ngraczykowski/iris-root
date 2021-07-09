@@ -5,17 +5,14 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilte
 
 import com.google.protobuf.Timestamp;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
-import static java.util.List.of;
 
 public class SamplingTestFixtures {
 
   static final int REQUESTED_ALERT_COUNT_2 = 2;
   static final int REQUESTED_ALERT_COUNT_4 = 4;
-
 
   public static final String MATCH_ID_1_1 = "42df75f8-1ba6-4ce8-93d7-d144ef196011";
   public static final String MATCH_ID_1_2 = "af9f1322-2fb6-416d-a7c1-05575741d012";
@@ -51,9 +48,6 @@ public class SamplingTestFixtures {
   public static final String DOCUMENT_ID_4 = ALERT_ID_1 + ":" + MATCH_ID_3_1;
   public static final String DOCUMENT_ID_5 = ALERT_ID_4 + ":" + MATCH_ID_4_1;
   public static final String DOCUMENT_ID_6 = ALERT_ID_5 + ":" + MATCH_ID_5_1;
-
-  static final List<String> LIST_OF_MATCHED_ALERT_ID =
-      of(ALERT_ID_1, ALERT_ID_2, ALERT_ID_3);
 
   public static final Map<String, Object> ALERT_WITH_MATCHES_1_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_1,
@@ -128,13 +122,13 @@ public class SamplingTestFixtures {
 
   private static final RequestedAlertsFilter ALERT_FILTER_BY_COUNTRY_PL =
       RequestedAlertsFilter.newBuilder()
-          .setFieldName(ALERT_COUNTRY_KEY)
+          .setFieldName(ALERT_PREFIX + ALERT_COUNTRY_KEY)
           .setFieldValue(ALERT_COUNTRY_PL)
           .build();
 
   private static final RequestedAlertsFilter ALERT_FILTER_BY_RISK_TYPE_PEP =
       RequestedAlertsFilter.newBuilder()
-          .setFieldName(ALERT_RISK_TYPE_KEY)
+          .setFieldName(ALERT_PREFIX + ALERT_RISK_TYPE_KEY)
           .setFieldValue(ALERT_RISK_TYPE_PEP)
           .build();
 

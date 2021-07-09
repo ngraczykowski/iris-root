@@ -243,7 +243,3 @@ sep:
         - "VIEW_QA_VERIFICATION"
         - "MANAGE_QA_VERIFICATION"
         - "DASHBOARD"
-
-grpc:
-  server:
-    port: 24206

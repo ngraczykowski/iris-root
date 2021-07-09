@@ -55,3 +55,7 @@ warehouse:
     name: warehouse
     username: warehouse
     password: warehouse
+
+grpc:
+  server:
+    port: 24206

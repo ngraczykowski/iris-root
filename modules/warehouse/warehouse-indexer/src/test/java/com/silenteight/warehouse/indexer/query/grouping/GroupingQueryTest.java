@@ -15,14 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.time.OffsetDateTime;
-
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP_4;
+import static com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService.EMPTY_VALUE_PLACEHOLDER;
+import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
@@ -55,8 +55,8 @@ class GroupingQueryTest {
         .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
         .fields(of(COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY))
         .dateField(INDEX_TIMESTAMP)
-        .from(OffsetDateTime.parse(PROCESSING_TIMESTAMP))
-        .to(OffsetDateTime.parse(PROCESSING_TIMESTAMP_4))
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
         .build();
 
     FetchGroupedDataResponse response = underTest.generate(request);
@@ -69,13 +69,29 @@ class GroupingQueryTest {
   }
 
   @Test
+  void shouldReplaceNullValuesWithPlaceholder() {
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(MappedKeys.RISK_TYPE_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP).plusSeconds(1))
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    Row row = response.getRows().get(0);
+    assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(EMPTY_VALUE_PLACEHOLDER);
+  }
+
+  @Test
   void shouldHandleException() {
     FetchGroupedTimeRangedDataRequest invalidRequest = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of())
         .fields(of())
         .dateField(INDEX_TIMESTAMP)
-        .from(OffsetDateTime.parse(PROCESSING_TIMESTAMP))
-        .to(OffsetDateTime.parse(PROCESSING_TIMESTAMP))
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP))
         .build();
 
     assertThatThrownBy(() -> underTest.generate(invalidRequest))

@@ -22,6 +22,8 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class GroupingQueryService {
 
+  static final String EMPTY_VALUE_PLACEHOLDER = "";
+
   @NonNull
   private final SqlBuilder sqlBuilder;
   @NonNull
@@ -70,7 +72,7 @@ public class GroupingQueryService {
       String key = schemaIterator.next().getName();
       String value = ofNullable(dataRowIterator.next())
           .map(Object::toString)
-          .orElse(null);
+          .orElse(EMPTY_VALUE_PLACEHOLDER);
       map.put(key, value);
     }
 
