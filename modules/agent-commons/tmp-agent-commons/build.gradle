@@ -1,0 +1,21 @@
+plugins {
+  id "java-library"
+  id "groovy"
+  id "maven-publish"
+}
+
+description = "Agent File Reading Common"
+
+configurations {
+  testImplementation.extendsFrom starterSpockTest
+}
+
+dependencies {
+  //TODO needed for tests, group properly (after fixing dependency hell) (MI6-638)
+  implementation "io.grpc:grpc-protobuf:1.38.0"
+  implementation "io.grpc:grpc-api:1.38.0"
+  implementation "io.grpc:grpc-core:1.38.0"
+  implementation "org.junit.jupiter:junit-jupiter-api:5.7.2"
+
+  implementation libraries.guava
+}

@@ -7,4 +7,6 @@ include 'agent-autoconfigure'
 include 'agent-starter'
 include 'agent-starter-test'
 include 'file-reading-commons'
+// TODO: rename (after fixing dependency hell) (MI6-638)
+include 'tmp-agent-commons'
 
