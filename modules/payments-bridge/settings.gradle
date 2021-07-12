@@ -1,4 +1,5 @@
 rootProject.name = 'sear-payments-spring-integration-mockup'
+gradle.ext.sepDependenciesVersion = "2.2.0"
 
 include 'sear-payments-ae'
 include 'sear-payments-app'

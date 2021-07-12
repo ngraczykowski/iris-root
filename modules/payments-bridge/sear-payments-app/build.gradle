@@ -1,8 +1,9 @@
 plugins {
-  id 'java'
-  id 'org.springframework.boot' version '2.5.2'
-  id "io.spring.dependency-management" version "1.0.11.RELEASE"
-  id "io.freefair.lombok" version "6.0.0-m2"
+  id "java"
+  id "maven-publish"
+  id "com.google.cloud.tools.jib"
+  id "org.springframework.boot"
+  id "java-library"
 }
 
 group 'com.silenteight'
@@ -15,24 +16,64 @@ repositories {
 dependencies {
   implementation project(":sear-payments-ae")
 
-  implementation group: 'io.grpc', name: 'grpc-stub', version: '1.39.0'
-  implementation group: 'io.grpc', name: 'grpc-protobuf', version: '1.39.0'
-  implementation group: 'io.grpc', name: 'grpc-netty', version: '1.39.0'
-  implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
-  implementation 'org.springframework.boot:spring-boot-starter'
-  implementation 'org.springframework.boot:spring-boot-starter-amqp'
-  implementation 'org.springframework.boot:spring-boot-starter-integration'
-  implementation 'org.springframework.integration:spring-integration-http'
-  implementation 'org.springframework.integration:spring-integration-amqp'
+  implementation libraries.data_source_api
+  implementation libraries.data_source_comments_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.spring_security_web
   implementation 'org.springframework.integration:spring-integration-security'
   implementation 'org.springframework.boot:spring-boot-starter-security'
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-aop'
-  implementation group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: '0.4.0'
-  implementation group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: '0.1.0'
-  implementation group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: '0.1.0'
-  implementation group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: '0.1.0'
-  implementation 'net.devh:grpc-server-spring-boot-starter:2.12.0.RELEASE'
+  implementation libraries.adjudication_engine_api
+  implementation libraries.spring_boot_starter_web
+  // Utilities
+  implementation libraries.commons_lang3
+  implementation libraries.commons_text
+  implementation libraries.guava
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
+
+  // Base Libraries
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+
+  // Application Starters
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_webflux
+  implementation libraries.micrometer_prometheus
+
+  // Spring Sleuth
+  implementation libraries.spring_cloud_starter_sleuth
+
+  // Validator
+  implementation libraries.tomcat_embed_el
+  implementation libraries.hibernate_validator
+
+  // APIs
+  implementation libraries.jakarta_persistence_api
+  implementation libraries.jakarta_transaction_api
+
+  // Messaging
+//  implementation libraries.amqp_client
+  implementation libraries.lz4_java
+  implementation libraries.spring_boot_starter_integration
+  implementation libraries.spring_integration_amqp
+  implementation libraries.spring_integration_core
+  implementation libraries.spring_integration_http
+
+  // GRPC
+  implementation libraries.brave_instrumentation_grpc
+  implementation libraries.grpc_server_spring_boot_starter
+  implementation libraries.grpc_client_spring_boot_starter
+
+  // AspectJ
+  implementation libraries.aspectjrt
+  aspect libraries.silenteight_sep_base_aspects
+
+  // Testing
+  testImplementation libraries.junit_jupiter_api
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.adjudication_engine_api
+  testImplementation libraries.awaitility
 }
 
 test {
