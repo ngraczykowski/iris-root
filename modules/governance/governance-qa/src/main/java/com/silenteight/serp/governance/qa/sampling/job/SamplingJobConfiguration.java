@@ -6,6 +6,8 @@ import com.silenteight.serp.governance.qa.sampling.domain.SamplingDomainConfigur
 import com.silenteight.serp.governance.qa.sampling.generator.AlertsGeneratorService;
 import com.silenteight.serp.governance.qa.sampling.generator.SamplingGeneratorConfiguration;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +23,14 @@ import javax.validation.Valid;
 class SamplingJobConfiguration {
 
   @Bean
+  @ConditionalOnProperty(name = "serp.governance.qa.sampling.schedule.enabled",
+      havingValue = "true")
   AuditJobScheduler auditJobScheduler(AlertsGenerator auditHandlerJob) {
     return new AuditJobScheduler(auditHandlerJob);
   }
 
   @Bean
+  @ConditionalOnBean(AuditJobScheduler.class)
   AlertsGenerator auditHandlerJob(
       AlertSamplingByState alertSamplingQuery,
       AlertSamplingService alertSamplingService,
@@ -48,6 +53,7 @@ class SamplingJobConfiguration {
   }
 
   @Bean
+  @ConditionalOnBean(AuditJobScheduler.class)
   CronExecutionTimeProvider scheduledExecutionTimeProvider(
       @Valid QaScheduledSamplingProperties properties) {
 
