@@ -8,8 +8,10 @@ sep.auth.basic.users:
     roles:
       - MODEL_TUNER
       - QA
+      - USER_ADMINISTRATOR
   - username: businessuser
     password: businessuser
     roles:
       - MODEL_TUNER
       - QA
+      - USER_ADMINISTRATOR

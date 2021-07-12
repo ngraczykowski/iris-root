@@ -2,8 +2,6 @@ package com.silenteight.warehouse.management.country.get;
 
 import lombok.AllArgsConstructor;
 
-import com.silenteight.warehouse.common.opendistro.roles.RoleService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,18 +20,18 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
-class GetCountriesRestController {
+public class GetCountriesRestController {
 
   static final String COUNTRY_GROUP_ID_PARAM = "countryGroupId";
   static final String COUNTRIES_URL =
       COUNTRY_GROUPS_URL + "/{" + COUNTRY_GROUP_ID_PARAM + "}/countries";
 
   @Autowired
-  private RoleService roleService;
+  private GetCountriesQuery getCountriesQuery;
 
   @GetMapping(COUNTRIES_URL)
   @PreAuthorize("isAuthorized('GET_COUNTRIES')")
   public ResponseEntity<List<String>> get(@PathVariable(COUNTRY_GROUP_ID_PARAM) UUID id) {
-    return ok(roleService.getCountries(id));
+    return ok(getCountriesQuery.getCountries(id));
   }
 }

@@ -11,9 +11,11 @@ import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredential
 import com.silenteight.warehouse.indexer.alert.AlertNotFoundException;
 import com.silenteight.warehouse.indexer.alert.AlertRestController;
 import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
+import com.silenteight.warehouse.management.country.get.GetCountriesRestController;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesRestController;
 import com.silenteight.warehouse.management.group.create.CreateCountryGroupRestController;
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
+import com.silenteight.warehouse.management.group.domain.exception.CountryGroupDoesNotExistException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,12 +28,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_WITH_MATCHES_1;
 import static java.util.List.of;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
@@ -53,6 +59,9 @@ class CountryGroupsIT {
   private UpdateCountriesRestController updateCountriesController;
 
   @Autowired
+  private GetCountriesRestController getCountriesRestController;
+
+  @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
 
   @Autowired
@@ -60,6 +69,8 @@ class CountryGroupsIT {
 
   private static final String COUNTRY = "UK";
   private static final String OTHER_COUNTRY = "PL";
+  private static final UUID NEW_COUNTRY_GROUP_ID =
+      fromString("e11f9680-fb3b-4776-8044-571026290a65");
 
   @BeforeEach
   void init() {
@@ -97,6 +108,25 @@ class CountryGroupsIT {
     assertThatThrownBy(
         () -> alertRestController.getSingleAlertDto(ALERT_ID_1, of()))
         .isInstanceOf(AlertNotFoundException.class);
+  }
+
+  @Test
+  void shouldThrowExceptionIfCountryGroupDoesNotExists() {
+    assertThatThrownBy(() -> getCountriesRestController.get(randomUUID()))
+        .isInstanceOf(CountryGroupDoesNotExistException.class);
+  }
+
+  @Test
+  void shouldReturnEmptyListOfCountriesWhenNewCountryGroup() {
+    CountryGroupDto countryGroupDto = CountryGroupDto.builder()
+        .id(NEW_COUNTRY_GROUP_ID)
+        .name("new country group")
+        .build();
+    createCountryGroupRestController.create(countryGroupDto);
+
+    List<String> countries = getCountriesRestController.get(NEW_COUNTRY_GROUP_ID).getBody();
+
+    assertThat(countries).isEmpty();
   }
 
   @SneakyThrows

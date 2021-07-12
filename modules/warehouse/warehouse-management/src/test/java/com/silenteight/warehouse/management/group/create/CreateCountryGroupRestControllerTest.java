@@ -2,7 +2,6 @@ package com.silenteight.warehouse.management.group.create;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.warehouse.management.group.domain.CountryGroupService;
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,11 +16,11 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@Import({ CreateCountryGroupRestController.class, CreateCountryGroupConfiguration.class })
+@Import(CreateCountryGroupRestController.class)
 class CreateCountryGroupRestControllerTest extends BaseRestControllerTest {
 
   @MockBean
-  private CountryGroupService countryGroupService;
+  private CreateCountryGroupUseCase createCountryGroupUseCase;
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its201_whenCountryGroupCreated() {
@@ -31,7 +30,7 @@ class CreateCountryGroupRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(CREATED.value());
 
-    verify(countryGroupService).create(dto);
+    verify(createCountryGroupUseCase).activate(dto);
   }
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
