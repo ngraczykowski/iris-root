@@ -1,5 +1,6 @@
 package com.silenteight.searpaymentsmockup;
 
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -209,5 +210,10 @@ class SearPaymentsConfiguration {
     return IntegrationFlows.from("recommendationGeneratedChannel")
         .log(Level.INFO, "recommendation generated")
         .get();
+  }
+
+  @Bean
+  public UndertowServletWebServerFactory undertowServletWebServerFactory() {
+    return new UndertowServletWebServerFactory();
   }
 }

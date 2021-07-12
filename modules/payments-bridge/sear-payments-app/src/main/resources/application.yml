@@ -47,12 +47,13 @@ server:
 
 
 spring:
+  application:
+    name: sear-payments
+  codec:
+    max-in-memory-size: 1MB
   #-------------------------------------------------------------------------------------------------
   # GENERAL
   #-------------------------------------------------------------------------------------------------
-  application:
-    name: sp
-
   aop:
     auto: false
 
@@ -67,12 +68,12 @@ spring:
 
     scheduling:
       pool:
-        size: 4
+        size: 2
       thread-name-prefix: pool-scheduling-
 
   main:
     banner-mode: 'off'
-    allow-bean-definition-overriding: true
+    allow-bean-definition-overriding : true
 
   #-------------------------------------------------------------------------------------------------
   # RABBITMQ

@@ -97,11 +97,6 @@ subprojects {Project subproject ->
                 "AE_DB_NAME"                  : "adjudication-engine",
                 "AE_DB_USERNAME"              : "adjudication-engine",
                 "AE_DB_PASSWORD"              : "adjudication-engine",
-                "SPRING_RABBITMQ_HOST"        : "rabbitmq",
-                "SPRING_RABBITMQ_PORT"        : "24161",
-                "SPRING_RABBITMQ_USERNAME"    : "dev",
-                "SPRING_RABBITMQ_PASSWORD"    : "dev",
-                "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
                 "SPRING_PROFILES_ACTIVE"      : "",
             ]
             jvmFlags = [

@@ -22,25 +22,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class SearPaymentsApplication {
 
   public static void main(String[] args) {
-    new SpringApplicationTemplate(args, SearPaymentsApplication.class)
-        .contextCallback(new DefaultSpringApplicationContextCallback())
-        .runAndExit(new Configurer());
-  }
-
-
-  private static class Configurer implements ApplicationBuilderConfigurer {
-
-    @Override
-    public ConfigurableApplicationBuilder configure(ConfigurableApplicationBuilder builder) {
-      return builder
-          .bootstrapProperties("spring.application.name=sp");
-    }
-
-    @Override
-    public SpringApplicationBuilder customize(SpringApplicationBuilder springBuilder) {
-      return springBuilder
-          .bannerMode(Mode.OFF)
-          .web(WebApplicationType.REACTIVE);
-    }
+    SpringApplication.run(SearPaymentsApplication.class, args);
   }
 }
