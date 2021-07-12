@@ -111,6 +111,7 @@ dependencies {
     api "com.revinate:assertj-json:1.2.0"
     api "io.rest-assured:rest-assured:$restAssuredVersion"
     api "io.rest-assured:spring-mock-mvc:$restAssuredVersion"
+    api "org.codehaus.groovy:groovy-all:3.0.8"
     api "org.hamcrest:hamcrest:2.2"
   }
 }
