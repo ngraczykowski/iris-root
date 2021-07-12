@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP
+import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP_PROCEDURAL
 import static com.silenteight.hsbc.bridge.model.transfer.ModelType.MODEL
 import static groovy.json.JsonOutput.toJson
 import static org.springframework.http.MediaType.APPLICATION_JSON
@@ -112,8 +112,8 @@ class ModelRestControllerSpec extends Specification {
 
   def 'should update WorldCheck model'() {
     given:
-    worldCheckModelManager.supportsModelType(IS_PEP) >> true
-    def modelInfoRequest = createModelInfoRequest('IS_PEP', 'MAJOR')
+    worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> true
+    def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MAJOR')
 
     when:
     def result = mockMvc.perform(
@@ -126,8 +126,8 @@ class ModelRestControllerSpec extends Specification {
 
   def 'should send BAD_REQUEST status when model is not supported in WorldCheck during updating model'() {
     given:
-    worldCheckModelManager.supportsModelType(IS_PEP) >> false
-    def modelInfoRequest = createModelInfoRequest('IS_PEP', 'MAJOR')
+    worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> false
+    def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MAJOR')
 
     when:
     def result = mockMvc.perform(
@@ -139,8 +139,8 @@ class ModelRestControllerSpec extends Specification {
 
   def 'should send model status to WorldCheck'() {
     given:
-    worldCheckModelManager.supportsModelType(IS_PEP) >> true
-    def modelInfoStatusRequest = createModelInfoStatusRequest('IS_PEP', 'SUCCESS')
+    worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> true
+    def modelInfoStatusRequest = createModelInfoStatusRequest('IS_PEP_PROCEDURAL', 'SUCCESS')
 
     when:
     def result = mockMvc.perform(
@@ -153,8 +153,8 @@ class ModelRestControllerSpec extends Specification {
 
   def 'should send BAD_REQUEST status when model is not supported in WorldCheck during sending model status'() {
     given:
-    worldCheckModelManager.supportsModelType(IS_PEP) >> false
-    def modelInfoStatusRequest = createModelInfoStatusRequest('IS_PEP', 'SUCCESS')
+    worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> false
+    def modelInfoStatusRequest = createModelInfoStatusRequest('IS_PEP_PROCEDURAL', 'SUCCESS')
 
     when:
     def result = mockMvc.perform(

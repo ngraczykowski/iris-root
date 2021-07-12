@@ -11,7 +11,7 @@ import com.silenteight.worldcheck.api.v1.ModelPersisted
 import com.silenteight.worldcheck.api.v1.ModelStatusUpdated
 
 import static com.silenteight.worldcheck.api.v1.ModelStatus.SUCCESS
-import static com.silenteight.worldcheck.api.v1.ModelType.IS_PEP
+import static com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL
 
 class Fixtures {
 
@@ -50,7 +50,7 @@ class Fixtures {
       .build()
 
   def modelInfoWorldCheck = ModelInfo.builder()
-      .type("IS_PEP")
+      .type("IS_PEP_PROCEDURAL")
       .changeType("MINOR")
       .name(testModelName)
       .url(testUrl)
@@ -59,20 +59,20 @@ class Fixtures {
   def modelPersisted = ModelPersisted.newBuilder()
       .setModelName(testModelName)
       .setModelUri(testUrl)
-      .setModelType(IS_PEP)
+      .setModelType(IS_PEP_PROCEDURAL)
       .build()
 
   def modelStatusUpdated = ModelStatusUpdated.newBuilder()
       .setModelName(testModelName)
       .setModelUri(testUrl)
-      .setModelType(IS_PEP)
+      .setModelType(IS_PEP_PROCEDURAL)
       .setModelStatus(SUCCESS)
       .build()
 
   def modelStatusUpdatedDto = ModelStatusUpdatedDto.builder()
       .name(testModelName)
       .url(testUrl)
-      .type(ModelType.IS_PEP.name())
+      .type(ModelType.IS_PEP_PROCEDURAL.name())
       .status(ModelStatus.SUCCESS.name())
       .build()
 

@@ -12,7 +12,8 @@ import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToMo
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.toModelPersisted;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP;
+import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP_HISTORICAL;
+import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP_PROCEDURAL;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelType.NAME_ALIASES;
 
 @Slf4j
@@ -61,6 +62,6 @@ public class WorldCheckModelManager implements ModelManager {
   }
 
   private boolean isPepOrNameAliases(ModelType type) {
-    return type == IS_PEP || type == NAME_ALIASES;
+    return type == IS_PEP_PROCEDURAL || type == IS_PEP_HISTORICAL || type == NAME_ALIASES;
   }
 }

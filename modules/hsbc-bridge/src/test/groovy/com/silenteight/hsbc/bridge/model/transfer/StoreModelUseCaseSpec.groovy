@@ -10,7 +10,7 @@ class StoreModelUseCaseSpec extends Specification {
   def 'should save model'() {
     given:
     def modelStatusUpdated = new ModelStatusUpdatedDto(
-        'test_model', 'test_url', 'IS_PEP', 'SUCCESS')
+        'test_model', 'test_url', 'IS_PEP_PROCEDURAL', 'SUCCESS')
 
     when:
     underTest.storeModel(modelStatusUpdated)

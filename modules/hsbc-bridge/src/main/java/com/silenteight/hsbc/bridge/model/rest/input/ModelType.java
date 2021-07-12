@@ -25,7 +25,8 @@ import java.io.IOException;
 @JsonAdapter(ModelType.Adapter.class)
 public enum ModelType {
   MODEL("MODEL"),
-  IS_PEP("IS_PEP"),
+  IS_PEP_PROCEDURAL("IS_PEP_PROCEDURAL"),
+  IS_PEP_HISTORICAL("IS_PEP_HISTORICAL"),
   NAME_ALIASES("NAME_ALIASES");
 
   private String value;
