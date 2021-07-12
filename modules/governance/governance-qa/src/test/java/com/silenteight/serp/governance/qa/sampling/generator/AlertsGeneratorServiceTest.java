@@ -3,21 +3,27 @@ package com.silenteight.serp.governance.qa.sampling.generator;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertDistribution;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.Distribution;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
-import com.silenteight.serp.governance.qa.manage.analysis.create.CreateDecisionUseCase;
+import com.silenteight.serp.governance.qa.manage.analysis.create.CreateAlertWithDecisionUseCase;
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertDistributionDto;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.DistributionDto;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
+import com.silenteight.serp.governance.qa.send.dto.AlertDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
@@ -33,28 +39,34 @@ import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = {TestSamplingGeneratorConfiguration.class})
+@RunWith(SpringRunner.class)
 class AlertsGeneratorServiceTest {
 
-  @Mock
+  @MockBean
   private DistributionProvider distributionProvider;
 
-  @Mock
+  @MockBean
   private AlertProvider alertProvider;
 
-  @Mock
-  private CreateDecisionUseCase createDecisionUseCase;
+  @MockBean
+  private CreateAlertWithDecisionUseCase createAlertWithDecisionUseCase;
 
-  private final Long totalSampleCount = 454L;
+  @Autowired
+  ApplicationEventPublisher eventPublisher;
 
   private final List<String> groupingFields = GroupingFields.valuesAsStringList();
 
+  @Autowired
   private AlertsGeneratorService underTest;
 
   private DateRangeDto dateRangeDto;
 
-  @Mock
+  @MockBean
   private AlertSamplingService alertSamplingService;
+
+  @Autowired
+  private SendAlertMessageUseCase sendAlertMessageUseCase;
 
   @Captor
   private ArgumentCaptor<List<String>> groupingFieldsCaptor;
@@ -62,16 +74,12 @@ class AlertsGeneratorServiceTest {
   @Captor
   private ArgumentCaptor<List<AlertDistributionDto>> alertDistributionsCaptor;
 
+  @Captor
+  private ArgumentCaptor<SendAlertMessageCommand> messageCommandCaptor;
+
   @BeforeEach
   void setUp() {
     dateRangeDto = new DateRangeDto(parse("2021-05-01T01:00:00Z"), parse("2021-05-31T01:00:00Z"));
-    underTest = new AlertsGeneratorService(
-        distributionProvider,
-        alertProvider,
-        createDecisionUseCase,
-        totalSampleCount,
-        groupingFields,
-        alertSamplingService);
   }
 
   @Test
@@ -172,7 +180,7 @@ class AlertsGeneratorServiceTest {
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
-    verify(createDecisionUseCase, times(2))
+    verify(createAlertWithDecisionUseCase, times(2))
         .activate(createDecisionRequestCaptor.capture());
     assertThat(createDecisionRequestCaptor.getAllValues().get(0).getAlertName())
         .isEqualTo(alertNameFirst);
@@ -207,7 +215,38 @@ class AlertsGeneratorServiceTest {
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
     verify(alertProvider, never()).getAlerts(any());
-    verify(createDecisionUseCase, never()).activate(any());
+    verify(createAlertWithDecisionUseCase, never()).activate(any());
     verify(alertSamplingService, never()).saveAlertDistribution(any(), any(), any());
+  }
+
+  @Test
+  void generateAlertsShouldSendSendAlertMessageCommandWithTwoAlerts() {
+    //given
+    when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
+        .thenReturn(of(
+            getAlertDistribution(1, RISK_TYPE, PEP),
+            getAlertDistribution(1, RISK_TYPE, SANCTION)));
+    String alertNameFirst = generateAlertName();
+    String alertNameSecond = generateAlertName();
+    when(alertProvider.getAlerts(getAlertsSampleRequest(PEP)))
+        .thenReturn(of(alertNameFirst));
+    when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
+        .thenReturn(of(alertNameSecond));
+    //when
+    underTest.generateAlerts(dateRangeDto, 1L);
+    //then
+    verify(sendAlertMessageUseCase, times(1))
+        .activate(messageCommandCaptor.capture());
+    assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(2);
+    assertThat(messageCommandCaptor.getValue().getAlertDtos())
+        .isEqualTo(of(getAlertDto(alertNameFirst), getAlertDto(alertNameSecond)));
+  }
+
+  private AlertDto getAlertDto(String alertName) {
+    return AlertDto.builder()
+        .alertName(alertName)
+        .level(ANALYSIS)
+        .state(NEW)
+        .build();
   }
 }

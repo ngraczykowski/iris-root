@@ -1,0 +1,4 @@
+serp.governance.qa:
+  sampling:
+    generator:
+      sample-count: 454

@@ -63,3 +63,9 @@ serp:
           request:
             exchange: gov.event
             routingKey: event.model-promoted.production
+
+    qa:
+      integration:
+        request:
+          exchange: gov.event
+          routingKey: event.qa-alert

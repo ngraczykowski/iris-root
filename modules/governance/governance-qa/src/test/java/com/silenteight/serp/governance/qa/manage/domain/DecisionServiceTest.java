@@ -6,10 +6,15 @@ import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionReques
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
+import com.silenteight.serp.governance.qa.send.dto.AlertDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,9 +25,11 @@ import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.DecisionFixture.*;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
+import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.NEW;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.VIEWING;
 import static java.lang.String.format;
+import static java.time.OffsetDateTime.now;
 import static java.time.OffsetDateTime.parse;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
@@ -32,17 +39,28 @@ import static org.mockito.Mockito.*;
 class DecisionServiceTest {
 
   private static final OffsetDateTime CREATED_AT = parse("2020-05-21T01:01:01+01:00");
-  private final InMemoryAlertRepository alertRepository = new InMemoryAlertRepository();
-  private final InMemoryDecisionRepository decisionRepository = new InMemoryDecisionRepository(
-      alertRepository);
+
+  private InMemoryAlertRepository alertRepository;
+
+  private InMemoryDecisionRepository decisionRepository;
+
+  private DecisionService underTest;
+
   @Mock
   private AuditingLogger auditingLogger;
-  DecisionService underTest;
+
+  @Mock
+  private SendAlertMessageUseCase sendAlertMessageUseCase;
+
+  @Captor
+  private ArgumentCaptor<SendAlertMessageCommand> messageCommandCaptor;
 
   @BeforeEach
   void setUp() {
+    alertRepository = new InMemoryAlertRepository();
+    decisionRepository = new InMemoryDecisionRepository(alertRepository);
     underTest = new DomainConfiguration().decisionService(alertRepository,
-        decisionRepository, auditingLogger);
+        decisionRepository, auditingLogger, sendAlertMessageUseCase);
   }
 
   @Test
@@ -204,5 +222,42 @@ class DecisionServiceTest {
     decision.setState(state);
     decision.setUpdatedAt(updatedAt);
     return decisionRepository.save(decision);
+  }
+
+  @Test
+  void createDecisionShouldSendSendAlertMessageCommandWithOneAlert() {
+    //given
+    Alert alert = saveAlert(ALERT_NAME);
+    //when
+    underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
+    //then
+    verify(sendAlertMessageUseCase, times(1))
+        .activate(messageCommandCaptor.capture());
+    assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
+    assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
+    AlertDto alertDto = messageCommandCaptor.getValue().getAlertDtos().get(0);
+    assertThat(alertDto.getAlertName()).isEqualTo(alert.getAlertName());
+    assertThat(alertDto.getLevel()).isEqualTo(ANALYSIS);
+    assertThat(alertDto.getState()).isEqualTo(NEW);
+    assertThat(alertDto.getComment()).isNull();
+  }
+
+  @Test
+  void updateDecisionShouldSendSendAlertMessageCommandWithOneAlert() {
+    //given
+    Alert alert = saveAlert(ALERT_NAME);
+    saveDecision(LEVEL_ANALYSIS.getValue(), NEW, now(), alert.getId());
+    //when
+    underTest.updateDecision(getUpdateDecisionRequestForFailed());
+    //then
+    verify(sendAlertMessageUseCase, times(1))
+        .activate(messageCommandCaptor.capture());
+    assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
+    assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
+    AlertDto alertDto = messageCommandCaptor.getValue().getAlertDtos().get(0);
+    assertThat(alertDto.getAlertName()).isEqualTo(alert.getAlertName());
+    assertThat(alertDto.getLevel()).isEqualTo(ANALYSIS);
+    assertThat(alertDto.getState()).isEqualTo(FAILED);
+    assertThat(alertDto.getComment()).isEqualTo(COMMENT_FAILED);
   }
 }

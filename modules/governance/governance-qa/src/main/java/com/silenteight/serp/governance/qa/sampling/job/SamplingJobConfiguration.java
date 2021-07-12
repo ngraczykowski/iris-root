@@ -4,7 +4,6 @@ import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 import com.silenteight.serp.governance.qa.sampling.domain.SamplingDomainConfiguration;
 import com.silenteight.serp.governance.qa.sampling.generator.AlertsGeneratorService;
-import com.silenteight.serp.governance.qa.sampling.generator.SamplingGeneratorConfiguration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,7 +18,7 @@ import javax.validation.Valid;
 @Configuration
 @EnableScheduling
 @EnableConfigurationProperties(QaScheduledSamplingProperties.class)
-@Import({SamplingDomainConfiguration.class, SamplingGeneratorConfiguration.class })
+@Import({SamplingDomainConfiguration.class})
 class SamplingJobConfiguration {
 
   @Bean

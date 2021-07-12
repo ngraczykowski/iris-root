@@ -58,7 +58,7 @@ public class AlertSamplingService {
 
   public void failLongRunningTasks(OffsetDateTime currentStartingTime) {
     alertSamplingRepository
-        .getByStates(singletonList(STARTED))
+        .getAllByStateIn(singletonList(STARTED))
         .stream()
         .filter(alertSampling -> isLongRunning(alertSampling, currentStartingTime))
         .map(AlertSampling::getId)
