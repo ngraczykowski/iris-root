@@ -150,6 +150,12 @@ job "simulator" {
         change_mode = "restart"
       }
 
+      template {
+        data = file("./conf/application-messaging.yml")
+        destination = "local/conf/application-messaging.yml"
+        change_mode = "noop"
+      }
+
       config {
         command = "java"
         args = [
@@ -162,7 +168,7 @@ job "simulator" {
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
           "-jar",
           "local/simulator-app.jar",
-          "--spring.profiles.active=linux,simulator",
+          "--spring.profiles.active=linux,simulator,messaging",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }

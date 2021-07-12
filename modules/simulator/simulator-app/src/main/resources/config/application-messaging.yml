@@ -1,0 +1,8 @@
+simulator:
+  processing:
+    alert:
+      recommendations-inbound:
+        queue-name: sim.recommendations
+      recommendations-outbound:
+        exchange: sim.command
+        routingKey: command.index-request.simulation
