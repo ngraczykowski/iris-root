@@ -89,15 +89,15 @@ Then in our database, we have only usernames and roles, but passwords are kept o
 [plantuml,Simple-SSO-Login-Sequence-Diagram,svg]
 -----
 @startuml
-title Simple SSO Login Sequence Diagram
+title SSO with SAML
 
-actor Admin
 actor User
 participant Frontend
 participant Backend
 participant Keycloak
-database KeycloakDB
+'database KeycloakDB
 participant idp as "Identity Provider"
+actor Admin
 
 == Configure SAML ==
 
@@ -106,11 +106,11 @@ Admin -> Keycloak : import descriptor
 Keycloak -> Admin : export Keycloak descriptor
 Admin -> idp : import Keycloak descriptor
 
-== Sync users ==
-
-Admin -> Backend : sync users from DB
-Backend -> Keycloak : sync users
-Keycloak -> KeycloakDB : CRUD operations
+'== Sync users ==sep
+'
+'Admin -> Backend : sync users from DB
+'Backend -> Keycloak : sync users
+'Keycloak -> KeycloakDB : CRUD operations
 
 == Login ==
 
@@ -120,8 +120,8 @@ Keycloak -> User : login page
 User -> Keycloak : use SAML authentications
 Keycloak -> idp : authenticate user
 idp -> Keycloak : user authentication
-Keycloak -> KeycloakDB: get roles
-KeycloakDB -> Keycloak : user roles
+'Keycloak -> KeycloakDB: get roles
+'KeycloakDB -> Keycloak : user roles
 Keycloak -> Frontend : authenticate user - send token with roles
 Frontend -> Backend : token with roles
 Backend -> Backend : authorize user based on roles from the token
