@@ -8,7 +8,10 @@ import com.silenteight.sep.usermanagement.api.UpdatedUserRepository.UserUpdateEx
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDtoFixtures.VALID_UPDATE_REQUEST;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.*;
 
@@ -49,7 +52,7 @@ class UpdateUserUseCaseRestControllerTest extends UserRestControllerTest {
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(INTERNAL_SERVER_ERROR.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ANALYST, AUDITOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(FORBIDDEN.value());
   }

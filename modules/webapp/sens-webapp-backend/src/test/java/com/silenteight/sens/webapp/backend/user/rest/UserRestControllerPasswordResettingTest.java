@@ -52,7 +52,7 @@ class UserRestControllerPasswordResettingTest extends UserRestControllerTest {
         .statusCode(INTERNAL_SERVER_ERROR.value());
   }
 
-  @TestWithRole(roles = { APPROVER, ANALYST, AUDITOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     patch(getRequestPath()).statusCode(FORBIDDEN.value());
   }

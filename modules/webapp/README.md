@@ -209,10 +209,8 @@ You can use `scripts/create-users.sh` script to pre-create the following users:
 
 | Username         | User role          | Password            
 |------------------|--------------------|---------------------
-|administrator     | Administrator      | Password1! 
 |model_tuner       | Model Tuner        | Password1! 
 |approver          | Approver           | Password1! 
-|analyst           | Analyst            | Password1! 
 |auditor           | Auditor            | Password1!
 |user_administrator| User Administrator | Password1!
 |QA                | QA                 | Password1!

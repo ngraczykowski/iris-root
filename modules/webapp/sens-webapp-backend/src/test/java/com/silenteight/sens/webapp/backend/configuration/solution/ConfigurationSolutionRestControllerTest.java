@@ -9,7 +9,10 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static com.silenteight.sens.webapp.backend.configuration.solution.ConfigurationSolutionRestControllerTest.ConfigurationSolutionRestControllerFixtures.*;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -22,7 +25,7 @@ class ConfigurationSolutionRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private SolutionsQuery solutionsQuery;
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, MODEL_TUNER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, AUDITOR, APPROVER, MODEL_TUNER })
   void its200WithCorrectBody_whenFound() {
     given(solutionsQuery.list())
         .willReturn(

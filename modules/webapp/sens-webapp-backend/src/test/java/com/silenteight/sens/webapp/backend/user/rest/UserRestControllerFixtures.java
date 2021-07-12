@@ -24,11 +24,11 @@ class UserRestControllerFixtures {
 
   static final UsernameNotUniqueError USERNAME_NOT_UNIQUE = new UsernameNotUniqueError(USERNAME);
 
-  static final UserListDto ANALYST_USER = UserListDto.builder()
-      .userName("analyst")
-      .displayName("Analyst")
+  static final UserListDto AUDITOR_USER = UserListDto.builder()
+      .userName("auditor")
+      .displayName("Auditor")
       .origin("SENS")
-      .roles(singletonList("ANALYST"))
+      .roles(singletonList("AUDITOR"))
       .countryGroups(singletonList("SG"))
       .lastLoginAt(parse("2020-05-28T12:42:15+01:00"))
       .createdAt(parse("2020-05-20T10:15:30+01:00"))

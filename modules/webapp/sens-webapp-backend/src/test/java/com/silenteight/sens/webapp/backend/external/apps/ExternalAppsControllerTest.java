@@ -28,12 +28,12 @@ class ExternalAppsControllerTest extends BaseRestControllerTest {
     get("/apps/reporting").statusCode(MOVED_PERMANENTLY.value()).header("Location", REDIRECT_URL);
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, MODEL_TUNER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, AUDITOR, APPROVER, MODEL_TUNER })
   void its200_whenListingApps() {
     get("/apps/list").statusCode(OK.value()).body("apps", equalTo(of("reporting")));
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, USER_ADMINISTRATOR, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, USER_ADMINISTRATOR, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get("/apps/reporting").statusCode(FORBIDDEN.value());
   }

@@ -6,7 +6,7 @@ import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.ANALYST;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
@@ -37,7 +37,7 @@ class SyncAnalystRestControllerServiceAvailableTest extends BaseRestControllerTe
         .body("errors", is(ALL_CHANGED_WITH_ONE_ERROR.getErrors()));
   }
 
-  @TestWithRole(roles = { ANALYST, AUDITOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     post("/users/sync/analysts").statusCode(FORBIDDEN.value());
   }

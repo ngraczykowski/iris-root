@@ -10,7 +10,10 @@ import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
@@ -22,7 +25,7 @@ class ConfigurationAuthRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ConfigurationQuery configurationQuery;
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, ANALYST, AUDITOR, APPROVER, MODEL_TUNER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, AUDITOR, APPROVER, MODEL_TUNER })
   void its200WithCorrectBody_whenFound() {
     String authUrl = "https://auth.silenteight.com";
     String realm = "sens-webapp";

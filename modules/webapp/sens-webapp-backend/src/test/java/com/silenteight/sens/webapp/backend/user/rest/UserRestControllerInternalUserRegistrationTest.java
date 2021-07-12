@@ -9,7 +9,10 @@ import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFi
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_DOMAIN_ERROR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_SUCCESS;
 import static com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDtoFixtures.VALID_REQUEST;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static io.vavr.control.Either.left;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -48,7 +51,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
         .header("Location", Matchers.endsWith("/users/" + UserRestControllerFixtures.USERNAME));
   }
 
-  @TestWithRole(roles = { APPROVER, ANALYST, AUDITOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     post("/users", VALID_REQUEST)
         .statusCode(FORBIDDEN.value());

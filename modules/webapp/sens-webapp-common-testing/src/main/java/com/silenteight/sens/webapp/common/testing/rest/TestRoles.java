@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestRoles {
 
-  public static final String ANALYST = "ANALYST";
   public static final String APPROVER = "APPROVER";
   public static final String AUDITOR = "AUDITOR";
   public static final String MODEL_TUNER = "MODEL_TUNER";
