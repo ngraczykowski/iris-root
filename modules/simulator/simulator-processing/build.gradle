@@ -8,6 +8,7 @@ configurations {
   implementation.extendsFrom starterCommon
   implementation.extendsFrom starterSpringApp
   implmenetation.extendsFrom starterJackson
+  implementation.extendsFrom starterMessaging
 
   implementation.extendsFrom starterDatabase
   runtimeOnly.extendsFrom starterDatabaseRuntime
@@ -18,6 +19,9 @@ configurations {
 dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-db-changelog")
+
+  implementation libraries.silenteight_adjudication_api
+  implementation libraries.silenteight_data_api
 
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
