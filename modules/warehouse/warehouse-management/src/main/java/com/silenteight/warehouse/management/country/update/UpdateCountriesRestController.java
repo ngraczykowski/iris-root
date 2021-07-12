@@ -13,8 +13,7 @@ import javax.validation.Valid;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static com.silenteight.warehouse.management.group.common.CountryGroupResource.COUNTRY_GROUPS_URL;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping(ROOT)
@@ -30,11 +29,11 @@ public class UpdateCountriesRestController {
 
   @PutMapping(COUNTRIES_URL)
   @PreAuthorize("isAuthorized('UPDATE_COUNTRIES')")
-  public ResponseEntity<Void> update(
+  public ResponseEntity<Collection<String>> update(
       @PathVariable(COUNTRY_GROUP_ID_PARAM) UUID id,
       @Valid @RequestBody Collection<String> countries) {
 
     updateCountriesUseCase.activate(id, countries);
-    return status(NO_CONTENT).build();
+    return ok(countries);
   }
 }

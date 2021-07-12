@@ -13,8 +13,9 @@ import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.management.country.CountriesFixtures.COUNTRIES;
 import static com.silenteight.warehouse.management.country.update.UpdateCountriesRestController.COUNTRIES_URL;
 import static com.silenteight.warehouse.management.country.update.UpdateCountriesRestController.COUNTRY_GROUP_ID_PARAM;
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Import(UpdateCountriesRestController.class)
@@ -29,7 +30,9 @@ class UpdateCountriesRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its200_whenCountriesFound() {
-    put(TEST_UPDATE_COUNTRIES_URL, COUNTRIES).statusCode(NO_CONTENT.value());
+    put(TEST_UPDATE_COUNTRIES_URL, COUNTRIES)
+        .statusCode(OK.value())
+        .body("$", is(COUNTRIES));
   }
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
