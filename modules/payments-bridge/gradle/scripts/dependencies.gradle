@@ -1,0 +1,268 @@
+ext {
+  libraries = [:]
+
+  //***********************************
+  // Silent Eight
+  //***********************************
+  adjudicationEngineApiVersion = "0.4.0"
+  governanceApiVersion = "1.7.0"
+  agentsApiVersion = "0.4.0"
+  silenteightDataSourceApiVersion = "0.1.0"
+  silenteightCommonsVersion = "2.1.0"
+  silenteightSepBaseVersion = "1.12.0"
+}
+
+// @formatter:off
+
+// Silent Eight
+libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
+libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
+libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
+libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
+libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
+libraries.governance_api = [group: 'com.silenteight.governance.api', name: 'se-governance-api', version: governanceApiVersion]
+libraries.governance_solving_api = [group: 'com.silenteight.governance.api', name: 'se-solving-api', version: governanceApiVersion]
+libraries.agents_api = [group: 'com.silenteight.agent.api', name: 'agents-api', version: agentsApiVersion]
+libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
+libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
+libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
+libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
+libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
+
+// Spring
+libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']
+libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects']
+libraries.spring_beans = [group: 'org.springframework', name: 'spring-beans']
+libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
+libraries.spring_context_support = [group: 'org.springframework', name: 'spring-context-support']
+libraries.spring_core = [group: 'org.springframework', name: 'spring-core']
+libraries.spring_expression = [group: 'org.springframework', name: 'spring-expression']
+libraries.spring_instrument = [group: 'org.springframework', name: 'spring-instrument']
+libraries.spring_jdbc = [group: 'org.springframework', name: 'spring-jdbc']
+libraries.spring_messaging = [group: 'org.springframework', name: 'spring-messaging']
+libraries.spring_orm = [group: 'org.springframework', name: 'spring-orm']
+libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retry']
+libraries.spring_test = [group: 'org.springframework', name: 'spring-test']
+libraries.spring_tx = [group: 'org.springframework', name: 'spring-tx']
+libraries.spring_web = [group: 'org.springframework', name: 'spring-web']
+libraries.spring_webmvc = [group: 'org.springframework', name: 'spring-webmvc']
+libraries.spring_webflux = [group: 'org.springframework', name: 'spring-webflux']
+
+libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp']
+libraries.spring_amqp_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit']
+libraries.spring_amqp_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test']
+libraries.spring_amqp_rabbit_junit = [group: 'org.springframework.amqp', name: 'spring-rabbit-junit']
+
+libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot']
+libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-actuator']
+libraries.spring_boot_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure']
+libraries.spring_boot_autoconfigure_processor = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor']
+libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor']
+libraries.spring_boot_starter_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator']
+libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp']
+libraries.spring_boot_starter_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa']
+libraries.spring_boot_starter_elasticsearch = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch']
+libraries.spring_boot_starter_integration = [group: 'org.springframework.boot', name: 'spring-boot-starter-integration']
+libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
+libraries.spring_boot_starter_mail = [group: 'org.springframework.boot', name: 'spring-boot-starter-mail']
+libraries.spring_boot_starter_quartz = [group: 'org.springframework.boot', name: 'spring-boot-starter-quartz']
+libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
+libraries.spring_boot_starter_webflux = [group: 'org.springframework.boot', name: 'spring-boot-starter-webflux']
+libraries.spring_boot_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test']
+libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
+libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
+
+libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring-batch-core']
+libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', name: 'spring-batch-infrastructure']
+libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
+
+libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
+libraries.spring_cloud_starter_consul = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul']
+libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
+libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
+libraries.spring_cloud_test_support = [group: 'org.springframework.cloud', name: 'spring-cloud-test-support']
+libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
+
+libraries.spring_data_commons = [group: 'org.springframework.data', name: 'spring-data-commons']
+libraries.spring_data_jpa = [group: 'org.springframework.data', name: 'spring-data-jpa']
+libraries.spring_data_elasticsearch = [group: 'org.springframework.data', name: 'spring-data-elasticsearch']
+
+libraries.spring_integration_amqp = [group: 'org.springframework.integration', name: 'spring-integration-amqp']
+libraries.spring_integration_core = [group: 'org.springframework.integration', name: 'spring-integration-core']
+libraries.spring_integration_http = [group: 'org.springframework.integration', name: 'spring-integration-http']
+libraries.spring_integration_mail = [group: 'org.springframework.integration', name: 'spring-integration-mail']
+libraries.spring_integration_test = [group: 'org.springframework.integration', name: 'spring-integration-test']
+
+libraries.spring_security_acl = [group: 'org.springframework.security', name: 'spring-security-acl']
+libraries.spring_security_cas = [group: 'org.springframework.security', name: 'spring-security-cas']
+libraries.spring_security_config = [group: 'org.springframework.security', name: 'spring-security-config']
+libraries.spring_security_core = [group: 'org.springframework.security', name: 'spring-security-core']
+libraries.spring_security_test = [group: 'org.springframework.security', name: 'spring-security-test']
+libraries.spring_security_web = [group: 'org.springframework.security', name: 'spring-security-web']
+
+// Project Reactor
+libraries.reactor_adapter = [group: 'io.projectreactor.addons', name: 'reactor-adapter']
+libraries.reactor_bom = [group: 'io.projectreactor', name: 'reactor-bom']
+libraries.reactor_core = [group: 'io.projectreactor', name: 'reactor-core']
+libraries.reactor_extra = [group: 'io.projectreactor.addons', name: 'reactor-extra']
+libraries.reactor_rabbitmq = [group: 'io.projectreactor.rabbitmq', name: 'reactor-rabbitmq']
+libraries.reactor_test = [group: 'io.projectreactor', name: 'reactor-test']
+
+// APIs
+libraries.jsr305 = [group: 'com.google.code.findbugs', name: 'jsr305']
+libraries.jetbrains_annotations = [group: 'org.jetbrains', name: 'annotations']
+libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api']
+
+// Others
+libraries.amqp_client = [group: 'com.rabbitmq', name: 'amqp-client']
+libraries.antlr4 = [group: 'org.antlr', name: 'antlr4']
+libraries.antlr4_runtime = [group: 'org.antlr', name: 'antlr4-runtime']
+libraries.aspectjrt = [group: 'org.aspectj', name: 'aspectjrt', version: '1.9.6']
+libraries.aspectjtools = [group: 'org.aspectj', name: 'aspectjtools', version: libraries.aspectjrt.version]
+libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver']
+libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
+libraries.blaze_persistence_core_api = [group: 'com.blazebit', name: 'blaze-persistence-core-api']
+libraries.blaze_persistence_core_impl = [group: 'com.blazebit', name: 'blaze-persistence-core-impl']
+libraries.blaze_persistence_entity_view_api = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-api']
+libraries.blaze_persistence_entity_view_impl = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-impl']
+libraries.blaze_persistence_entity_view_processor = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-processor']
+libraries.blaze_persistence_entity_view_spring = [group: 'com.blazebit', name: 'blaze-persistence-integration-entity-view-spring']
+libraries.blaze_persistence_integration_hibernate_5_4 = [group: 'com.blazebit', name: 'blaze-persistence-integration-hibernate-5.4']
+libraries.blaze_persistence_integration_spring_data_2_3 = [group: 'com.blazebit', name: 'blaze-persistence-integration-spring-data-2.3']
+libraries.bouncycastle_bcmail = [group: 'org.bouncycastle', name: 'bcmail-jdk15on']
+libraries.bouncycastle_bcpg = [group: 'org.bouncycastle', name: 'bcpg-jdk15on']
+libraries.bouncycastle_bcpkix = [group: 'org.bouncycastle', name: 'bcpkix-jdk15on']
+libraries.bouncycastle_bcprov = [group: 'org.bouncycastle', name: 'bcprov-jdk15on']
+libraries.bouncycastle_bcprov_ext = [group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on']
+libraries.brave_instrumentation_grpc = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc']
+libraries.byte_buddy = [group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.7']
+libraries.byte_buddy_agent = [group: 'net.bytebuddy', name: 'byte-buddy-agent', version: libraries.byte_buddy.version]
+libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
+libraries.caffeine_jcache = [group: 'com.github.ben-manes.caffeine', name: 'jcache']
+libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph']
+libraries.commons_codec = [group: 'commons-codec', name: 'commons-codec']
+libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-collections4',version: '4.4']
+libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3']
+libraries.commons_text = [group: 'org.apache.commons', name: 'commons-text']
+libraries.consul_client = [group: "com.orbitz.consul", name: "consul-client"]
+libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
+libraries.feign_slf4j = [group: "io.github.openfeign", name: "feign-slf4j"]
+libraries.fastutil = [group: 'it.unimi.dsi', name: 'fastutil']
+libraries.freemarker = [group: 'org.freemarker', name: 'freemarker', version: '2.3.31']
+libraries.grpc_api = [group: 'io.grpc', name: 'grpc-api']
+libraries.grpc_auth = [group: 'io.grpc', name: 'grpc-auth']
+libraries.grpc_context = [group: 'io.grpc', name: 'grpc-context']
+libraries.grpc_core = [group: 'io.grpc', name: 'grpc-core']
+libraries.grpc_netty = [group: 'io.grpc', name: 'grpc-netty']
+libraries.grpc_protobuf = [group: 'io.grpc', name: 'grpc-protobuf']
+libraries.grpc_services = [group: 'io.grpc', name: 'grpc-services']
+libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter']
+libraries.grpc_server_spring_boot_starter = [group: 'net.devh', name: 'grpc-server-spring-boot-starter']
+libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']
+libraries.grpc_stub = [group: 'io.grpc', name: 'grpc-stub']
+libraries.grpc_testing = [group: 'io.grpc', name: 'grpc-testing']
+libraries.guava = [group: 'com.google.guava', name: 'guava', version: '30.1.1-jre']
+libraries.hibernate_core = [group: 'org.hibernate', name: 'hibernate-core']
+libraries.hibernate_envers = [group: 'org.hibernate', name: 'hibernate-envers']
+libraries.hibernate_jcache = [group: 'org.hibernate', name: 'hibernate-jcache']
+libraries.hibernate_types = [group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.11.1']
+libraries.hibernate_validator = [group: 'org.hibernate.validator', name: 'hibernate-validator']
+libraries.hikari_cp = [group: 'com.zaxxer', name: 'HikariCP']
+libraries.jackson_annotations = [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations']
+libraries.jackson_databind = [group: 'com.fasterxml.jackson.core', name: 'jackson-databind']
+libraries.jackson_dataformat_xml = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml']
+libraries.jackson_datatype_jdk8 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8']
+libraries.jackson_datatype_jsr310 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310']
+libraries.jackson_module_afterburner = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-afterburner']
+libraries.jackson_module_parameter_names = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-parameter-names']
+libraries.jackson_module_paranamer = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-paranamer']
+libraries.jakarta_annotation_api = [group: 'jakarta.annotation', name: 'jakarta.annotation-api']
+libraries.jakarta_inject = [group: 'jakarta.inject', name: 'jakarta.inject-api']
+libraries.jakarta_mail = [group: 'com.sun.mail', name: 'jakarta.mail', version: '1.6.5']
+libraries.jakarta_mail_api = [group: 'jakarta.mail', name: 'jakarta.mail-api', version: libraries.jakarta_mail.version]
+libraries.jakarta_persistence_api = [group: 'jakarta.persistence', name: 'jakarta.persistence-api']
+libraries.jakarta_servlet_api = [group: 'jakarta.servlet', name: 'jakarta.servlet-api']
+libraries.jakarta_transaction_api = [group: 'jakarta.transaction', name: 'jakarta.transaction-api']
+libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.validation-api']
+libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
+libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
+libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt']
+libraries.kryo_shaded = [group: 'com.esotericsoftware', name: 'kryo-shaded']
+libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.10.3']
+libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock', version: '1.4.0']
+libraries.logback_access = [group: 'ch.qos.logback', name: 'logback-access']
+libraries.logback_classic = [group: 'ch.qos.logback', name: 'logback-classic']
+libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
+libraries.logstash_logback_encoder = [group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.6']
+libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java']
+libraries.micrometer_core = [group: 'io.micrometer', name: 'micrometer-core']
+libraries.micrometer_influx = [group: 'io.micrometer', name: 'micrometer-registry-influx']
+libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus']
+libraries.oracle = [group: 'com.oracle', name: 'ojdbc8']
+libraries.paranamer = [group: 'com.thoughtworks.paranamer', name: 'paranamer']
+libraries.pebble = [group: 'io.pebbletemplates', name: 'pebble',version: '3.1.5']
+libraries.picocli = [group: 'info.picocli', name: 'picocli']
+libraries.postgresql = [group: 'org.postgresql', name: 'postgresql']
+libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java']
+libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-java-util']
+libraries.querydsl_apt_jpa = [group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa']
+libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
+libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
+libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
+libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
+
+// Testing
+libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']
+libraries.awaitility = [group: 'org.awaitility', name: 'awaitility', version: '4.1.0']
+libraries.hamcrest = [group: 'org.hamcrest', name: 'hamcrest']
+libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
+libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api']
+libraries.objenesis = [group: 'org.objenesis', name: 'objenesis']
+libraries.rabbitmq_mock = [group: 'com.github.fridujo', name: 'rabbitmq-mock', version: '1.1.1']
+libraries.rest_assured = [group: 'io.rest-assured', name: 'rest-assured']
+libraries.rest_assured_spring_mock_mvc = [group: 'io.rest-assured', name: 'spring-mock-mvc']
+libraries.spock_core = [group: 'org.spockframework', name: 'spock-core']
+libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring']
+libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers']
+libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'junit-jupiter']
+libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
+libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
+
+// @formatter:on
+
+configurations.all {
+  exclude group: 'org.glassfish', module: 'javax.el'
+  exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+
+  resolutionStrategy {
+    cacheChangingModulesFor 0, 'seconds'
+    failOnVersionConflict()
+    preferProjectModules()
+
+    force libraries.byte_buddy
+    force libraries.byte_buddy_agent
+    force libraries.guava
+    force libraries.aspectjrt
+    force libraries.aspectjtools
+    force libraries.liquibase_core
+    force libraries.ecs_logging_core
+    force libraries.logback_ecs_encoder
+
+    // Fix for running with JDK11
+    force group: 'org.jboss.xnio', name: 'xnio-api', version: '3.5.9.Final'
+    force group: 'org.jboss.xnio', name: 'xnio-nio', version: '3.5.9.Final'
+  }
+}
+
+dependencies {
+  implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  implementation platform("org.testcontainers:testcontainers-bom:1.15.2")
+  annotationProcessor platform(
+      "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+
+  implementation platform("com.blazebit:blaze-persistence-bom:1.6.0")
+  annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")
+
+  implementation libraries.slf4j_api
+}

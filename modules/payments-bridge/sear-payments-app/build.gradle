@@ -53,7 +53,7 @@ dependencies {
   implementation libraries.jakarta_transaction_api
 
   // Messaging
-//  implementation libraries.amqp_client
+  implementation libraries.amqp_client
   implementation libraries.lz4_java
   implementation libraries.spring_boot_starter_integration
   implementation libraries.spring_integration_amqp
