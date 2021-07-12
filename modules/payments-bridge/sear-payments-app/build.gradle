@@ -15,16 +15,24 @@ repositories {
 dependencies {
   implementation project(":sear-payments-ae")
 
+  implementation group: 'io.grpc', name: 'grpc-stub', version: '1.39.0'
+  implementation group: 'io.grpc', name: 'grpc-protobuf', version: '1.39.0'
+  implementation group: 'io.grpc', name: 'grpc-netty', version: '1.39.0'
   implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
   implementation 'org.springframework.boot:spring-boot-starter'
+  implementation 'org.springframework.boot:spring-boot-starter-amqp'
   implementation 'org.springframework.boot:spring-boot-starter-integration'
   implementation 'org.springframework.integration:spring-integration-http'
+  implementation 'org.springframework.integration:spring-integration-amqp'
   implementation 'org.springframework.integration:spring-integration-security'
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-aop'
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  implementation group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: '0.4.0'
+  implementation group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: '0.1.0'
+  implementation group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: '0.1.0'
+  implementation group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: '0.1.0'
+  implementation 'net.devh:grpc-server-spring-boot-starter:2.12.0.RELEASE'
 }
 
 test {

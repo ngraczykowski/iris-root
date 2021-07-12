@@ -1,5 +1,7 @@
 package com.silenteight.searpaymentsmockup;
 
+import net.devh.boot.grpc.server.security.authentication.BasicGrpcAuthenticationReader;
+import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,6 +58,11 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   AccessDecisionManager accessDecisionManager(
       MethodInterceptor methodSecurityInterceptor) {
     return ((MethodSecurityInterceptor) methodSecurityInterceptor).getAccessDecisionManager();
+  }
+
+  @Bean
+  GrpcAuthenticationReader grpcAuthenticationReader() {
+    return new BasicGrpcAuthenticationReader();
   }
 
   @Bean

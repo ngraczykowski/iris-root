@@ -1,4 +1,4 @@
-package com.silenteight.searpaymentsmockup.integration;
+package com.silenteight.sear.payments.ae.alert.integration;
 
 import lombok.RequiredArgsConstructor;
 
@@ -10,14 +10,10 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
 @Component
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class AlertReadyToSolveIntegrationFlow extends IntegrationFlowAdapter {
 
   private final AlertFacade alertFacade;
-
-  AlertReadyToSolveIntegrationFlow(AlertFacade alertFacade) {
-    this.alertFacade = alertFacade;
-  }
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {

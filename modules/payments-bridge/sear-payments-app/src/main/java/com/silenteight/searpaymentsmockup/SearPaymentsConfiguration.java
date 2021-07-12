@@ -203,4 +203,11 @@ class SearPaymentsConfiguration {
     channelSecurityInterceptor.setAccessDecisionManager(accessDecisionManager);
     return channelSecurityInterceptor;
   }
+
+  @Bean
+  IntegrationFlow recommendationGenerated() {
+    return IntegrationFlows.from("recommendationGeneratedChannel")
+        .log(Level.INFO, "recommendation generated")
+        .get();
+  }
 }
