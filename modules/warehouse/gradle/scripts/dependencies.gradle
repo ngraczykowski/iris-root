@@ -247,6 +247,7 @@ configurations.all {
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  implementation platform("org.testcontainers:testcontainers-bom:1.15.3")
   annotationProcessor platform(
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
 
