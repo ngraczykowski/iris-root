@@ -12,4 +12,9 @@ class CreateDecisionConfiguration {
   CreateDecisionUseCase createDecisionUseCase(DecisionService decisionService) {
     return new CreateDecisionUseCase(decisionService);
   }
+
+  @Bean
+  CreateAlertWithDecisionUseCase createAlertWithDecisionUseCase(DecisionService decisionService) {
+    return new CreateAlertWithDecisionUseCase(decisionService);
+  }
 }

@@ -8,6 +8,7 @@ import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.serp.governance.common.audit.AuditableRequest;
 import com.silenteight.serp.governance.qa.manage.domain.DecisionLevel;
 import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
+import com.silenteight.serp.governance.qa.send.dto.AlertDto;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -64,5 +65,14 @@ public class UpdateDecisionRequest implements AuditableRequest {
   enum ActionType {
     UPDATE_DECISION_REQUEST,
     UPDATED_DECISION_REQUEST
+  }
+
+  public AlertDto toAlertDto() {
+    return AlertDto.builder()
+        .alertName(getAlertName())
+        .level(getLevel())
+        .state(getState())
+        .comment(getComment())
+        .build();
   }
 }

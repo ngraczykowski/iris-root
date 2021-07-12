@@ -9,12 +9,15 @@ import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionReques
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import javax.transaction.Transactional;
 
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.VIEWING;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 public class DecisionService {
@@ -25,6 +28,15 @@ public class DecisionService {
   private final DecisionRepository decisionRepository;
   @NonNull
   private final AuditingLogger auditingLogger;
+  @NonNull
+  private final SendAlertMessageUseCase sendAlertMessageUseCase;
+
+  @Transactional
+  public Alert addAlert(String alertName) {
+    Alert alert = new Alert();
+    alert.setAlertName(alertName);
+    return alertRepository.save(alert);
+  }
 
   public Decision updateDecision(UpdateDecisionRequest request) {
     request.preAudit(auditingLogger::log);
@@ -35,6 +47,8 @@ public class DecisionService {
     decision.setDecidedAt(request.getCreatedAt());
     decision.setDecidedBy(request.getCreatedBy());
     decision = decisionRepository.save(decision);
+
+    sendAlertMessageUseCase.activate(SendAlertMessageCommand.of(of(request.toAlertDto())));
 
     request.postAudit(auditingLogger::log);
     return decision;
@@ -64,6 +78,9 @@ public class DecisionService {
     decision.setState(request.getState());
     decision.setLevel(request.getLevel().getValue());
     decisionRepository.save(decision);
+
+    sendAlertMessageUseCase.activate(SendAlertMessageCommand.of(of(request.toAlertDto())));
+
     request.postAudit(auditingLogger::log);
   }
 

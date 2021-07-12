@@ -25,7 +25,8 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
-  implementation libraries.silenteight_warehouse_api
+  implementation libraries.silenteight_warehouse_sampling_api
+  implementation libraries.silenteight_warehouse_data_api
 
   implementation libraries.spring_webmvc
   implementation libraries.spring_security_config

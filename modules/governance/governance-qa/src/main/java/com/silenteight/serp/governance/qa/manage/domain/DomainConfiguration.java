@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.qa.manage.domain;
 
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +31,11 @@ class DomainConfiguration {
 
   @Bean
   DecisionService decisionService(AlertRepository alertRepository,
-      DecisionRepository decisionRepository, AuditingLogger auditingLogger) {
+      DecisionRepository decisionRepository,
+      AuditingLogger auditingLogger,
+      SendAlertMessageUseCase sendAlertMessageUseCase) {
 
-    return new DecisionService(alertRepository, decisionRepository, auditingLogger);
+    return new DecisionService(
+        alertRepository, decisionRepository, auditingLogger, sendAlertMessageUseCase);
   }
 }

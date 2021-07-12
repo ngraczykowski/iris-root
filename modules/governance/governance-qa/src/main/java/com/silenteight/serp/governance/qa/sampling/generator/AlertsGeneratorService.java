@@ -6,16 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertDistribution;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.Distribution;
-import com.silenteight.serp.governance.qa.manage.analysis.create.CreateDecisionUseCase;
+import com.silenteight.serp.governance.qa.manage.analysis.create.CreateAlertWithDecisionUseCase;
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertDistributionDto;
+import com.silenteight.serp.governance.qa.sampling.generator.dto.DecisionCreatedEvent;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.DistributionDto;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
@@ -32,16 +36,17 @@ public class AlertsGeneratorService {
   @NonNull
   private final AlertProvider alertProvider;
   @NonNull
-  private final CreateDecisionUseCase createDecisionUseCase;
+  private final CreateAlertWithDecisionUseCase createAlertWithDecisionUseCase;
   private final long totalSampleCount;
   @NonNull
   private final List<String> groupingFields;
   @NonNull
   private final AlertSamplingService alertSamplingService;
+  @NonNull
+  private final ApplicationEventPublisher eventPublisher;
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void generateAlerts(@Valid DateRangeDto dateRangeDto, Long alertSamplingId) {
-
     List<AlertDistribution> distribution = distributionProvider.getDistribution(
         dateRangeDto, groupingFields);
     long totalAlertsCount = getTotalAlertsCount(distribution);
@@ -57,15 +62,15 @@ public class AlertsGeneratorService {
     List<CreateDecisionRequest> createDecisionRequests = distribution.stream()
         .map(alertDistribution
             -> toAlertSampleRequest(alertDistribution, distributionCalculator, dateRangeDto))
-        .map(alertProvider::getAlerts)
-        .flatMap(List::stream)
+        .map(alertProvider::getAlerts).flatMap(List::stream)
         .map(this::getCreateDecisionRequest)
+        .peek(createAlertWithDecisionUseCase::activate)
         .collect(toList());
-
-    createDecisionRequests.forEach(createDecisionUseCase::activate);
 
     alertSamplingService.saveAlertDistribution(
         alertSamplingId, toAlertDistributionDtoList(distribution), createDecisionRequests.size());
+
+    eventPublisher.publishEvent(DecisionCreatedEvent.of(createDecisionRequests));
   }
 
   private static boolean canGenerateAlerts(long totalAlertsCount) {
@@ -109,7 +114,8 @@ public class AlertsGeneratorService {
   private static AlertDistributionDto toAlertDistributionDto(AlertDistribution alertDistribution) {
     return AlertDistributionDto.builder()
         .alertsCount(alertDistribution.getAlertCount())
-        .distributions(toDistributionDtoList(alertDistribution.getGroupingFieldsList()))
+        .distributions(
+            toDistributionDtoList(alertDistribution.getGroupingFieldsList()))
         .build();
   }
 

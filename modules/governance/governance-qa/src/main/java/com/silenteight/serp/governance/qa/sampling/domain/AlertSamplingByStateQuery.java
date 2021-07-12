@@ -23,7 +23,8 @@ public class AlertSamplingByStateQuery implements AlertSamplingByState {
   @Override
   public List<AlertSamplingDto> listFinished(@Valid DateRangeDto dateRangeDto) {
     return alertSamplingRepository
-        .getByDateRangeAndStates(dateRangeDto.getFrom(), dateRangeDto.getTo(), of(FINISHED))
+        .getAllByRangeFromAndRangeToAndStateIn(
+            dateRangeDto.getFrom(), dateRangeDto.getTo(), of(FINISHED))
         .stream()
         .map(AlertSampling::toDto)
         .collect(toList());

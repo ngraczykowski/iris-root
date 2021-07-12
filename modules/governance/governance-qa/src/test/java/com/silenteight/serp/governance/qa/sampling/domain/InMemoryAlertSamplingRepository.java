@@ -13,7 +13,7 @@ class InMemoryAlertSamplingRepository
     implements AlertSamplingRepository {
 
   @Override
-  public List<AlertSampling> getByDateRangeAndStates(
+  public List<AlertSampling> getAllByRangeFromAndRangeToAndStateIn(
       OffsetDateTime rangeFrom, OffsetDateTime rangeTo, List<JobState> states) {
 
     return stream()
@@ -24,7 +24,7 @@ class InMemoryAlertSamplingRepository
   }
 
   @Override
-  public List<AlertSampling> getByStates(List<JobState> states) {
+  public List<AlertSampling> getAllByStateIn(List<JobState> states) {
     return stream()
         .filter(alertSampling -> states.contains(alertSampling.getState()))
         .collect(toList());

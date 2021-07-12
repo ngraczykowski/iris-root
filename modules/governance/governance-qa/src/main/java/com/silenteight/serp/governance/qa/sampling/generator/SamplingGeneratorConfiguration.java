@@ -4,12 +4,13 @@ import lombok.Setter;
 
 import com.silenteight.model.api.v1.DistributionAlertsServiceGrpc;
 import com.silenteight.model.api.v1.SamplingAlertsServiceGrpc;
-import com.silenteight.serp.governance.qa.manage.analysis.create.CreateDecisionUseCase;
+import com.silenteight.serp.governance.qa.manage.analysis.create.CreateAlertWithDecisionUseCase;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 
 @Configuration
 @EnableConfigurationProperties(AlertsGeneratorProperties.class)
-public class SamplingGeneratorConfiguration {
+class SamplingGeneratorConfiguration {
 
   @Setter(onMethod_ = @GrpcClient("warehouse"))
   private Channel warehouseChannel;
@@ -26,17 +27,19 @@ public class SamplingGeneratorConfiguration {
   AlertsGeneratorService alertsGeneratorService(
       DistributionProvider distributionProvider,
       AlertProvider alertProvider,
-      CreateDecisionUseCase createDecisionUseCase,
+      CreateAlertWithDecisionUseCase createAlertWithDecisionUseCase,
       @Valid AlertsGeneratorProperties alertsGeneratorProperties,
-      AlertSamplingService alertSamplingService) {
+      AlertSamplingService alertSamplingService,
+      ApplicationEventPublisher applicationEventPublisher) {
 
     return new AlertsGeneratorService(
         distributionProvider,
         alertProvider,
-        createDecisionUseCase,
+        createAlertWithDecisionUseCase,
         alertsGeneratorProperties.getSampleCount(),
         GroupingFields.valuesAsStringList(),
-        alertSamplingService);
+        alertSamplingService,
+        applicationEventPublisher);
   }
 
   @Bean
