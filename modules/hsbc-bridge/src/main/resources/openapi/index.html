@@ -798,12 +798,16 @@
       "type" : "integer"
     },
     "status" : {
-      "$ref" : "#/components/schemas/BatchStatus"
+      "$ref" : "#/components/schemas/BatchAlertItemStatus"
     },
     "errorMessage" : {
       "type" : "string"
     }
   }
+};
+            defs["BatchAlertItemStatus"] = {
+  "type" : "string",
+  "enum" : [ "PROCESSING", "ERROR", "COMPLETED", "STORED" ]
 };
             defs["BatchCancelResponse"] = {
   "type" : "object",

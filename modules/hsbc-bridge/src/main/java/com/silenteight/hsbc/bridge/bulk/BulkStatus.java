@@ -8,5 +8,9 @@ public enum BulkStatus {
   ERROR,
   COMPLETED,
   DELIVERED,
-  CANCELLED
+  CANCELLED;
+
+  public boolean isInternal() {
+    return this == PRE_PROCESSED;
+  }
 }

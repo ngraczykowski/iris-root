@@ -22,7 +22,7 @@ public class BatchAlertItem {
   private String id = null;
 
   @JsonProperty("status")
-  private BatchStatus status = null;
+  private BatchAlertItemStatus status = null;
 
   @JsonProperty("errorMessage")
   private String errorMessage = null;
@@ -47,7 +47,7 @@ public class BatchAlertItem {
     this.id = id;
   }
 
-  public BatchAlertItem status(BatchStatus status) {
+  public BatchAlertItem status(BatchAlertItemStatus status) {
     this.status = status;
     return this;
   }
@@ -60,11 +60,11 @@ public class BatchAlertItem {
   @Schema(description = "")
 
   @Valid
-  public BatchStatus getStatus() {
+  public BatchAlertItemStatus getStatus() {
     return status;
   }
 
-  public void setStatus(BatchStatus status) {
+  public void setStatus(BatchAlertItemStatus status) {
     this.status = status;
   }
 

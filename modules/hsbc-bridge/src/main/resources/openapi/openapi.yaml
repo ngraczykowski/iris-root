@@ -1613,13 +1613,21 @@ components:
         - CANCELLED
         - STORED
 
+    BatchAlertItemStatus:
+      type: string
+      enum:
+        - PROCESSING
+        - ERROR
+        - COMPLETED
+        - STORED
+
     BatchAlertItem:
       type: object
       properties:
         id:
           type: integer
         status:
-          $ref: '#/components/schemas/BatchStatus'
+          $ref: '#/components/schemas/BatchAlertItemStatus'
         errorMessage:
           type: string
 

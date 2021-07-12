@@ -5,15 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
-import com.silenteight.hsbc.bridge.bulk.rest.BatchStatus;
-import com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItem;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatusResponse;
 
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class AcknowledgeBulkDeliveryUseCase {
@@ -36,22 +30,6 @@ public class AcknowledgeBulkDeliveryUseCase {
     batch.delivered();
     bulkRepository.save(batch);
 
-    var response = new BatchStatusResponse();
-    response.setBatchId(id);
-    response.setBatchStatus(
-        BatchStatus.fromValue(
-            batch.getStatus().name()));
-    response.setRequestedAlerts(getRequestedAlerts(batch.getAlerts()));
-
-    return response;
-  }
-
-  private List<BatchAlertItem> getRequestedAlerts(Collection<BulkAlertEntity> alerts) {
-    return alerts.stream().map(r -> {
-      var alertItem = new BatchAlertItem();
-      alertItem.setId(r.getExternalId());
-      alertItem.setStatus(BatchStatus.fromValue(r.getStatus().name()));
-      return alertItem;
-    }).collect(Collectors.toList());
+    return BatchResponseCreator.create(batch);
   }
 }
