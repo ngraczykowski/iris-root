@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.management.country.get;
 
-import com.silenteight.warehouse.common.opendistro.roles.RoleService;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.testing.rest.testwithrole.TestWithRole;
 
@@ -28,11 +27,11 @@ class GetCountriesRestControllerTest extends BaseRestControllerTest {
       .toString();
 
   @MockBean
-  private RoleService roleService;
+  private GetCountriesQuery getCountriesQuery;
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its200_whenCountriesFound() {
-    when(roleService.getCountries(COUNTRY_GROUP_ID)).thenReturn(COUNTRIES);
+    when(getCountriesQuery.getCountries(COUNTRY_GROUP_ID)).thenReturn(COUNTRIES);
 
     get(TEST_GET_COUNTRIES_URL)
         .statusCode(OK.value())
