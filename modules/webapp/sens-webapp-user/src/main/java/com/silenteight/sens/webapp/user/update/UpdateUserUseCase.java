@@ -55,7 +55,6 @@ public class UpdateUserUseCase {
 
     command.getDisplayName().ifPresent(this::validateDisplayName);
     command.getRoles().ifPresent(roles -> this.validateRoles(rolesScope, roles));
-    command.getCountryGroups().ifPresent(roles -> this.validateRoles(countryGroupsScope, roles));
     update(command);
   }
 

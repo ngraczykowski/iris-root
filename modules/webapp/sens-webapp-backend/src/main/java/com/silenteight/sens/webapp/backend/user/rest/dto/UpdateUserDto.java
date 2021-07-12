@@ -7,6 +7,8 @@ import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserComma
 import java.util.Set;
 import javax.annotation.Nullable;
 
+import static java.util.Collections.emptySet;
+
 @Builder
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,12 +24,16 @@ public class UpdateUserDto {
   @Nullable
   private Boolean locked;
 
+  @Builder.Default
+  private Set<String> countryGroups = emptySet();
+
   public UpdateUserCommand toCommand(String username) {
     return UpdateUserCommand
         .builder()
         .username(username)
         .displayName(displayName)
         .roles(roles)
+        .countryGroups(countryGroups)
         .locked(locked)
         .build();
   }
