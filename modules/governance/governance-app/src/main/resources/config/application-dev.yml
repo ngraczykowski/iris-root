@@ -52,6 +52,7 @@ spring:
 serp.governance.qa:
   sampling:
     schedule:
+      enabled: false
       audit-cron: 0/15 * * * * ?
       alert-generator-cron: 0 0 1 1 * ?
     generator:

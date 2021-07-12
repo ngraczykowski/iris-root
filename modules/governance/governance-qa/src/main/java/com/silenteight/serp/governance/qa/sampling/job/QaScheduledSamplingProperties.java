@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 class QaScheduledSamplingProperties {
 
   @NotNull
+  Boolean enabled;
+  @NotNull
   String auditCron;
   @NotNull
   String alertGeneratorCron;

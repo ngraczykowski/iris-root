@@ -26,6 +26,7 @@ serp:
   governance.qa:
     sampling:
       schedule:
+        enabled: true
         audit-cron: 0 0/5 * * * ?
         alert-generator-cron: 0 0/10 * * * ?
       generator:
