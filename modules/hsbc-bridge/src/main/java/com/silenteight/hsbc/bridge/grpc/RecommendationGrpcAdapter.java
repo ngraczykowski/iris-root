@@ -6,14 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.api.v2.StreamRecommendationsWithMetadataRequest;
+import com.silenteight.hsbc.bridge.common.protobuf.StructMapper;
 import com.silenteight.hsbc.bridge.recommendation.metadata.FeatureMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.MatchMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 
-import com.google.protobuf.Struct;
-import com.google.protobuf.Value;
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
@@ -81,7 +80,7 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
       matchMetadata.setFeatures(mapFeatures(m.getFeaturesMap()));
       matchMetadata.setMatch(m.getMatch());
       matchMetadata.setSolution(m.getSolution());
-      matchMetadata.setReason(mapReason(m.getReason()));
+      matchMetadata.setReason(StructMapper.toMap(m.getReason()));
 
       return matchMetadata;
     }).collect(toList());
@@ -99,24 +98,8 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
     var featureMetadata = new FeatureMetadata();
     featureMetadata.setAgentConfig(metadata.getAgentConfig());
     featureMetadata.setSolution(metadata.getSolution());
-    featureMetadata.setReason(mapReason(metadata.getReason()));
+    featureMetadata.setReason(StructMapper.toMap(metadata.getReason()));
     return featureMetadata;
-  }
-
-  private Map<String, String> mapReason(Struct reason) {
-    return reason.getFieldsMap()
-        .entrySet()
-        .stream()
-        .collect(toMap(Map.Entry::getKey, e -> mapValue(e.getValue())));
-  }
-
-  private String mapValue(Value value) {
-    if (value.hasStringValue()) {
-      return value.getStringValue();
-    } else {
-      log.warn("Value type = {} not supported", value.getKindCase());
-      return "";
-    }
   }
 }
 
