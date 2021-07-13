@@ -37,10 +37,9 @@ bridge -> bridge: process
 
 bridge <-> queue: send learning data for isPep
 bridge <-> queue: send learning data for warehouse
+bridge <-> queue: send learning data for historical decisions
 deactivate bridge
 
 ||10||
-
-
 @enduml
 -----
