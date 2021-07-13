@@ -33,12 +33,23 @@ class SenderConfiguration {
   }
 
   @Bean
-  AmqpIsPepMessageSender messageIsPepSender() {
+  AmqpIsPepMessageSender isPepMessageSender() {
     return AmqpIsPepMessageSender.builder()
         .amqpTemplate(rabbitTemplate)
         .configuration(AmqpIsPepMessageSender.Configuration.builder()
             .exchangeName(outgoing.getIsPepExchangeName())
             .routingKey(outgoing.getIsPepRoutingKey())
+            .build())
+        .build();
+  }
+
+  @Bean
+  AmqpHistoricalDecisionMessageSender historicalDecisionMessageSender() {
+    return AmqpHistoricalDecisionMessageSender.builder()
+        .amqpTemplate(rabbitTemplate)
+        .configuration(AmqpHistoricalDecisionMessageSender.Configuration.builder()
+            .exchangeName(outgoing.getHistoricalDecisionExchangeName())
+            .routingKey(outgoing.getHistoricalDecisionRoutingKey())
             .build())
         .build();
   }

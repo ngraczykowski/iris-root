@@ -9,11 +9,10 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("dev")
 @Slf4j
-class IsPepMessageSenderMockConfiguration {
+class HistoricalDecisionMessageSenderMockConfiguration {
 
   @Bean
-  IsPepMessageSender isPepMessageSender() {
-    return isPepLearningStoreExchangeRequest ->
-        log.warn("IsPepLearningStoreExchangeRequest has been sent");
+  HistoricalDecisionMessageSender historicalDecisionMessageSender() {
+    return request -> log.warn("HistoricalDecisionLearningStoreExchangeRequest has been sent");
   }
 }

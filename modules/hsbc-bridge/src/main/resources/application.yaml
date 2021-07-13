@@ -17,6 +17,8 @@ silenteight.bridge:
       watchlist-persisted-routing-key: persisted
       is-pep-exchange-name: bridge.ispep
       is-pep-routing-key: ispep.ispep-learning-store-request.production
+      historical-decision-exchange-name: historical.ispep
+      historical-decision-routing-key: historical.historical-decisions-request.production
     ingoing:
       model-promoted-queue: bridge.model-promoted.production
       dead-letter-queue: bridge.dlq

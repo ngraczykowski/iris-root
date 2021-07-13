@@ -189,6 +189,16 @@
       "name": "silenteight.bridge.amqp.ingoing.dead-letter-queue",
       "type": "java.lang.String",
       "description": "Description for silenteight.bridge.amqp.ingoing.dead-letter-queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.historical-decision-exchange-name",
+      "type": "java.lang.String",
+      "description": "Historical decision learning store exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.historical-decision-routing-key",
+      "type": "java.lang.String",
+      "description": "Historical decision learning store routing key."
     }
   ]
 }
