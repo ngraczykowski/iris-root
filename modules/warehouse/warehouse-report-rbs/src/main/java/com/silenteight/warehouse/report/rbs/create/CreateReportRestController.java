@@ -24,13 +24,13 @@ class CreateReportRestController {
   @NonNull
   private final CreateReportUseCase generateReportUseCase;
 
-  @PostMapping("/v1/analysis/production/definitions/RB_SCORER/{reportName}/reports")
+  @PostMapping("/v1/analysis/production/definitions/RB_SCORER/{reportId}/reports")
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<Void> createReport(
-      @PathVariable("reportName") String reportName) {
+      @PathVariable("reportId") String reportId) {
 
     ReportInstanceReferenceDto reportInstance =
-        generateReportUseCase.createProductionReport(reportName);
+        generateReportUseCase.createProductionReport(reportId);
 
     return status(SEE_OTHER)
         .header("Location", "reports/" + reportInstance.getTimestamp() + "/status")

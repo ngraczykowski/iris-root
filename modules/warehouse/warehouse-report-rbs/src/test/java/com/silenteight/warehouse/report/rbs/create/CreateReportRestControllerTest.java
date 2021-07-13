@@ -35,7 +35,8 @@ class CreateReportRestControllerTest extends BaseRestControllerTest {
     when(reportService.createReportInstance(ReportDefinition.DAY))
         .thenReturn(new ReportInstanceReferenceDto(REPORT_ID));
 
-    post("/v1/analysis/production/definitions/RB_SCORER/rb-scorer-1-day/reports")
+    post("/v1/analysis/production/definitions/RB_SCORER/"
+             + "f21af598-c78a-4e3a-a3ac-04e1f3d11ea4/reports")
         .statusCode(SEE_OTHER.value())
         .header("location", is("reports/" + REPORT_ID + "/status"));
   }

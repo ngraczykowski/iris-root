@@ -11,8 +11,7 @@ public class CreateReportUseCase {
 
   private final RbsReportService reportService;
 
-  ReportInstanceReferenceDto createProductionReport(String reportName) {
-    ReportDefinition reportType = ReportDefinition.getReportType(reportName);
-    return reportService.createReportInstance(reportType);
+  ReportInstanceReferenceDto createProductionReport(String reportId) {
+    return reportService.createReportInstance(ReportDefinition.getReportType(reportId));
   }
 }

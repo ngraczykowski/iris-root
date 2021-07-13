@@ -65,11 +65,11 @@ public enum ReportDefinition {
         .collect(toList());
   }
 
-  public static ReportDefinition getReportType(String name) {
+  public static ReportDefinition getReportType(String id) {
     return stream(values())
-        .filter(reportDefinition -> reportDefinition.hasName(name))
+        .filter(reportDefinition -> reportDefinition.hasId(id))
         .findAny()
-        .orElseThrow(() -> new ReportTypeNotFoundException(name));
+        .orElseThrow(() -> new ReportTypeNotFoundException(id));
   }
 
   private ReportDefinitionDto toReportDefinitionDto() {
@@ -91,7 +91,7 @@ public enum ReportDefinition {
     return now;
   }
 
-  private boolean hasName(String name) {
-    return this.getName().equals(name);
+  private boolean hasId(String id) {
+    return this.getId().equals(id);
   }
 }
