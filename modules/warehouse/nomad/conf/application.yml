@@ -75,3 +75,15 @@ grpc:
     enabled: true
   server:
     port: {{ env "NOMAD_PORT_grpc" }}
+
+warehouse.report.rbs:
+  #  I will set it up just for a testing purpose - need to be updated to valid fields
+  columns:
+    - name: alert_1.CustomerEntities.edqLoBCountryCode
+      label: Country Code
+  grouping-columns:
+    - name: alert_DN_CASE.ExtendedAttribute5
+      label: Risk Type
+      grouping-values: [SAN, PEP]
+      add-counter: true
+  date-field-name: index_timestamp

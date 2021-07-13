@@ -12,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Valid;
 
 @Configuration
-@EnableConfigurationProperties({
-    IndexerIntegrationProperties.class
-})
+@EnableConfigurationProperties(IndexerIntegrationProperties.class)
 class IndexerConfiguration {
 
   @Bean
@@ -36,5 +34,11 @@ class IndexerConfiguration {
 
     return new ProductionAlertIndexUseCase(
         alertService, timeSource, environmentProperties.getPrefix());
+  }
+
+  @Bean
+  ProductionIndexingQuery productionIndexingQuery(
+      @Valid EnvironmentProperties environmentProperties) {
+    return new ProductionIndexingQuery(environmentProperties.getPrefix());
   }
 }
