@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.IS_PEP;
+import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
@@ -99,7 +99,7 @@ class BulkProcessor {
         .map(BulkAlertEntity::getId)
         .collect(Collectors.toSet());
 
-    alertSender.send(alertIds, new SendOption[] { IS_PEP, WAREHOUSE });
+    alertSender.send(alertIds, new SendOption[] { AGENTS, WAREHOUSE });
   }
 
   private static Collection<MatchIdComposite> getMatchIds(

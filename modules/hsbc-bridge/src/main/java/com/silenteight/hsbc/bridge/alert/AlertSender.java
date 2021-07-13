@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.IS_PEP;
+import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
 import static org.apache.commons.lang3.ArrayUtils.contains;
 
@@ -17,14 +17,14 @@ import static org.apache.commons.lang3.ArrayUtils.contains;
 public class AlertSender {
 
   private final WarehouseApi warehouseApi;
-  private final IsPepApi isPepApi;
+  private final AgentApi agentApi;
   private final AlertGetter alertGetter;
 
   public void send(Set<Long> ids, SendOption[] options) {
     var alerts = getAlerts(ids);
 
-    if (contains(options, IS_PEP)) {
-      sendToIsPep(alerts);
+    if (contains(options, AGENTS)) {
+      sendToAgents(alerts);
     }
 
     if (contains(options, WAREHOUSE)) {
@@ -32,12 +32,12 @@ public class AlertSender {
     }
   }
 
-  private void sendToIsPep(Collection<AlertInformation> alerts) {
+  private void sendToAgents(Collection<AlertInformation> alerts) {
     var alertsData = alerts.stream()
         .map(AlertInformation::getPayload)
         .collect(Collectors.toList());
 
-    isPepApi.send(alertsData);
+    agentApi.send(alertsData);
   }
 
   private void sendToWarehouse(Collection<AlertInformation> alerts) {
@@ -50,7 +50,7 @@ public class AlertSender {
   }
 
   public enum SendOption {
-    IS_PEP,
+    AGENTS,
     WAREHOUSE
   }
 }

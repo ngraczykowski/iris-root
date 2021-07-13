@@ -15,7 +15,7 @@ class AlertFacadeConfiguration {
   private final AlertPayloadConverter alertPayloadConverter;
   private final AlertPayloadRepository alertPayloadRepository;
   private final WarehouseApi warehouseApi;
-  private final IsPepApi isPepApi;
+  private final AgentApi agentApi;
 
   @Bean
   AlertFacade alertFacade() {
@@ -32,7 +32,7 @@ class AlertFacadeConfiguration {
 
   @Bean
   AlertSender alertSender() {
-    return new AlertSender(warehouseApi, isPepApi, alertInformationFinder());
+    return new AlertSender(warehouseApi, agentApi, alertInformationFinder());
   }
 
   private AlertGetter alertInformationFinder() {

@@ -92,7 +92,7 @@ class RelationshipProcessor {
 
     private boolean existWatchlistDataWithoutRelationship() {
       var watchlistRecordIds = Stream.of(
-          alertData.getCtrpScreeningEntities().stream().map(CtrpScreeningIndividual::getRecordId),
+          alertData.getCtrpScreeningEntities().stream().map(CtrpScreeningEntity::getRecordId),
           alertData.getCtrpScreeningIndividuals().stream().map(CtrpScreeningIndividual::getRecordId),
           alertData.getPrivateListEntities().stream().map(PrivateListEntity::getRecordId),
           alertData.getPrivateListIndividuals().stream().map(PrivateListIndividual::getRecordId),

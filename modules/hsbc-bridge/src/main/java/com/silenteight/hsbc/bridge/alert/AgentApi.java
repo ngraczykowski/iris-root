@@ -4,7 +4,7 @@ import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 
 import java.util.Collection;
 
-public interface IsPepApi {
+public interface AgentApi {
 
   void send(Collection<AlertData> alerts);
 }

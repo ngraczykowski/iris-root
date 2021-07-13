@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.ispep;
+package com.silenteight.hsbc.bridge.agent;
 
 import lombok.experimental.UtilityClass;
 
@@ -10,25 +10,16 @@ import com.silenteight.proto.learningstore.ispep.v1.api.Alert;
 import com.silenteight.proto.learningstore.ispep.v1.api.Comment;
 import com.silenteight.proto.learningstore.ispep.v1.api.IsPepLearningStoreExchangeRequest;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.silenteight.hsbc.bridge.agent.AgentUtils.toUnixTimestamp;
 import static java.util.stream.Collectors.toList;
 
 @UtilityClass
 class LearningStoreExchangeRequestCreator {
-
-  private static final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-      .parseCaseInsensitive().appendPattern("dd-MMM-yy")
-      .toFormatter(Locale.ENGLISH);
 
   public static IsPepLearningStoreExchangeRequest create(Collection<AlertData> alerts) {
     return IsPepLearningStoreExchangeRequest.newBuilder()
@@ -36,12 +27,14 @@ class LearningStoreExchangeRequestCreator {
         .build();
   }
 
-  private static List<com.silenteight.proto.learningstore.ispep.v1.api.Alert> mapAlert(
-      Collection<AlertData> alerts) {
-    return alerts.stream().map(LearningStoreExchangeRequestCreator::toAlert).collect(toList());
+  private static List<Alert> mapAlert(Collection<AlertData> alerts) {
+    return alerts.stream()
+        .filter(e -> !e.getWorldCheckIndividuals().isEmpty())
+        .map(LearningStoreExchangeRequestCreator::toAlert)
+        .collect(toList());
   }
 
-  private static com.silenteight.proto.learningstore.ispep.v1.api.Alert toAlert(AlertData alert) {
+  private static Alert toAlert(AlertData alert) {
     var builder = Alert.newBuilder();
     findApCountry(alert.getCustomerIndividuals()).ifPresent(builder::setAlertedPartyCountry);
     findWatchlistId(alert.getWorldCheckIndividuals()).ifPresent(builder::setWatchlistId);
@@ -58,18 +51,9 @@ class LearningStoreExchangeRequestCreator {
         .map(e -> Comment.newBuilder()
             .setId(e.getCommentId())
             .setValue(e.getCaseComment())
-            .setCreatedAt(parseCommentDate(e.getCommentDateTime()))
+            .setCreatedAt(toUnixTimestamp(e.getCommentDateTime()))
             .build())
         .collect(Collectors.toList());
-  }
-
-  private static long parseCommentDate(String rawDate) {
-    try {
-      var date = LocalDate.parse(rawDate, DATE_FORMATTER);
-      return date.atStartOfDay(ZoneId.of("UTC")).toEpochSecond();
-    } catch (DateTimeParseException e) {
-      throw new DateParsingException(e);
-    }
   }
 
   private static Optional<String> findApCountry(List<CustomerIndividual> customers) {

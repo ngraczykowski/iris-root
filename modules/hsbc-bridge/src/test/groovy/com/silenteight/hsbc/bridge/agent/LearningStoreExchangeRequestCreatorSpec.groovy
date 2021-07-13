@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.ispep
+package com.silenteight.hsbc.bridge.agent
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 

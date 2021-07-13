@@ -1,0 +1,149 @@
+package com.silenteight.hsbc.bridge.agent;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
+
+import com.silenteight.hsbc.bridge.json.external.model.AlertData;
+import com.silenteight.hsbc.bridge.json.external.model.CaseHistory;
+import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.silenteight.hsbc.bridge.agent.AgentUtils.toUnixTimestamp;
+import static com.silenteight.hsbc.bridge.agent.HistoricalDecisionRequestCreator.WatchlistType.*;
+
+@UtilityClass
+class HistoricalDecisionRequestCreator {
+
+  static HistoricalDecisionLearningStoreExchangeRequest create(Collection<AlertData> alerts) {
+    return HistoricalDecisionLearningStoreExchangeRequest.newBuilder()
+        .addAllAlerts(mapAlerts(alerts))
+        .build();
+  }
+
+  private static List<Alert> mapAlerts(Collection<AlertData> alerts) {
+    return alerts
+        .stream()
+        .map(HistoricalDecisionRequestCreator::toAlert)
+        .collect(Collectors.toList());
+  }
+
+  private static Alert toAlert(AlertData alert) {
+    return Alert.newBuilder()
+        .setAlertId(alert.getId())
+        .setMatchId(alert.getCaseId())
+        .setAlertedParty(createAlertedParty(alert))
+        .setWatchlist(createWatchlist(alert))
+        .addAllDecisions(mapDecisions(alert.getCaseHistory()))
+        .build();
+  }
+
+  private static List<Decision> mapDecisions(List<CaseHistory> history) {
+    return history.stream()
+        .filter(e -> "currentState".equals(e.getAttribute()))
+        .map(HistoricalDecisionRequestCreator::toDecision)
+        .collect(Collectors.toList());
+  }
+
+  private static Decision toDecision(CaseHistory caseHistory) {
+    return Decision.newBuilder()
+        .setId(createDecisionId(caseHistory))
+        .setValue(caseHistory.getNewValue())
+        .setCreatedAt(toUnixTimestamp(caseHistory.getModifiedDateTime()))
+        .build();
+  }
+
+  private static String createDecisionId(CaseHistory caseHistory) {
+    var allValues = caseHistory.getModifiedBy()
+        + caseHistory.getModifiedDateTime()
+        + caseHistory.getAttribute()
+        + caseHistory.getOldValue()
+        + caseHistory.getNewValue()
+        + caseHistory.getTransition();
+
+    return DigestUtils.sha1Hex(allValues);
+  }
+
+  private Watchlist createWatchlist(AlertData alert) {
+
+    if (!alert.getWorldCheckIndividuals().isEmpty()) {
+      var wl = alert.getWorldCheckIndividuals().get(0);
+      return getWatchlist(wl.getListRecordId(), WORLDCHECK_INDIVIDUALS);
+    }
+
+    if (!alert.getWorldCheckEntities().isEmpty()) {
+      var wl = alert.getWorldCheckEntities().get(0);
+      return getWatchlist(wl.getListRecordId(), WORLDCHECK_ENTITIES);
+    }
+
+    if (!alert.getPrivateListIndividuals().isEmpty()) {
+      var wl = alert.getPrivateListIndividuals().get(0);
+      return getWatchlist(wl.getListRecordId(), PRIVATE_LIST_INDIVIDUALS);
+    }
+
+    if (!alert.getPrivateListEntities().isEmpty()) {
+      var wl = alert.getPrivateListEntities().get(0);
+      return getWatchlist(wl.getListRecordId(), PRIVATE_LIST_ENTITIES);
+    }
+
+    if (!alert.getCtrpScreeningIndividuals().isEmpty()) {
+      var wl = alert.getCtrpScreeningIndividuals().get(0);
+      return getWatchlist(wl.getCountryCode(), CTRPPRHB_LIST_INDIVIDUALS);
+    }
+
+    if (!alert.getCtrpScreeningEntities().isEmpty()) {
+      var wl = alert.getCtrpScreeningEntities().get(0);
+      return getWatchlist(wl.getCountryCode(), CTRPPRHB_LIST_ENTITIES);
+    }
+
+    return Watchlist.getDefaultInstance();
+  }
+
+  private Watchlist getWatchlist(String listRecordId, WatchlistType type) {
+    return Watchlist.newBuilder()
+        .setId(listRecordId)
+        .setType(type.getLabel())
+        .build();
+  }
+
+  private AlertedParty createAlertedParty(AlertData alert) {
+    var dnsCase = alert.getCaseInformation();
+    var builder = AlertedParty.newBuilder();
+
+    findApCountry(alert).ifPresent(builder::setCountry);
+    return builder
+        .setId(dnsCase.getParentId())
+        .build();
+  }
+
+  private static Optional<String> findApCountry(AlertData alertData) {
+    var individuals = alertData.getCustomerIndividuals();
+    var entities = alertData.getCustomerEntities();
+
+    if (!individuals.isEmpty()) {
+      return Optional.of(individuals.get(0).getEdqLobCountryCode());
+    } else if (!entities.isEmpty()) {
+      return Optional.of(entities.get(0).getEdqLobCountryCode());
+    }
+    return Optional.empty();
+  }
+
+  @RequiredArgsConstructor
+  enum WatchlistType {
+    CTRPPRHB_LIST_ENTITIES("CTRPPRHBListEntities"),
+    CTRPPRHB_LIST_INDIVIDUALS("CTRPPRHBListIndividuals"),
+    WORLDCHECK_INDIVIDUALS("WorldCheckIndividuals"),
+    WORLDCHECK_ENTITIES("WorldCheckEntities"),
+    PRIVATE_LIST_INDIVIDUALS("PrivateListIndividuals"),
+    PRIVATE_LIST_ENTITIES("PrivateListEntities");
+
+    @Getter
+    private final String label;
+  }
+}

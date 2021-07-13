@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.ispep;
+package com.silenteight.hsbc.bridge.agent;
 
 class DateParsingException extends RuntimeException {
 

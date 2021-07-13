@@ -28,7 +28,7 @@ public class AlertData {
   @JsonProperty("PrivateListEntities")
   private final List<PrivateListEntity> privateListEntities = new ArrayList<>();
   @JsonProperty("CTRPPRHBListEntities")
-  private final List<CtrpScreeningIndividual> ctrpScreeningEntities = new ArrayList<>();
+  private final List<CtrpScreeningEntity> ctrpScreeningEntities = new ArrayList<>();
   @JsonProperty("DN_CASE")
   private CaseInformation caseInformation;
   @JsonProperty("DN_CASECOMMENT")

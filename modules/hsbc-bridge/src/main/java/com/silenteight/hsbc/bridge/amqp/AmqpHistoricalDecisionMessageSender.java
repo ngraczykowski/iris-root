@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.ispep.HistoricalDecisionMessageSender;
+import com.silenteight.hsbc.bridge.agent.HistoricalDecisionMessageSender;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.HistoricalDecisionLearningStoreExchangeRequest;
 
 import org.springframework.amqp.core.AmqpTemplate;
