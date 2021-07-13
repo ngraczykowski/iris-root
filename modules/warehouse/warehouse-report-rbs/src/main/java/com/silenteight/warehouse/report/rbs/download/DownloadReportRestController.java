@@ -29,7 +29,7 @@ class DownloadReportRestController {
 
   @GetMapping("/v1/analysis/production/definitions/RB_SCORER/{definitionId}/reports/{id}")
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<byte[]> downloadReport(
+  public ResponseEntity<String> downloadReport(
       @PathVariable("definitionId") String definitionId,
       @PathVariable("id") Long id) {
 
@@ -42,6 +42,6 @@ class DownloadReportRestController {
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
         .header("Content-Type", "text/csv")
-        .body(data.getBytes());
+        .body(data);
   }
 }

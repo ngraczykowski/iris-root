@@ -33,14 +33,16 @@ class DownloadReportRestControllerTest extends BaseRestControllerTest {
     when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(FILE_NAME, CONTENT));
 
     String expectedContentDisposition = format("attachment; filename=\"%s\"", FILE_NAME);
-    byte[] response = get(
+    String response = get(
         "/v1/analysis/production/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID)
         .statusCode(OK.value())
         .contentType("text/csv")
         .header("Content-Disposition", expectedContentDisposition)
-        .extract().body().asByteArray();
+        .extract()
+        .body()
+        .asString();
 
-    assertThat(response).isEqualTo(CONTENT.getBytes());
+    assertThat(response).isEqualTo(CONTENT);
     verify(reportService).removeReport(REPORT_ID);
   }
 }
