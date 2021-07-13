@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.alert;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.data.api.v1.Alert;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
@@ -22,7 +23,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_2;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_SEARCH_CRITERIA;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
@@ -122,22 +124,28 @@ class AlertIT {
   }
 
   @Test
-  void shouldThrowExceptionWhenAlertHasZeroMatches() {
-    assertThrows(
-        ZeroMatchesException.class,
-        () -> underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), PRODUCTION_ELASTIC_INDEX_NAME));
-  }
-
-  @Test
-  void shouldCreateSingleDocumentForEachMatch() {
-    underTest.indexAlerts(ALERTS_WITH_MATCHES, PRODUCTION_ELASTIC_INDEX_NAME);
+  void shouldIgnoreMissingMatches() {
+    underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), PRODUCTION_ELASTIC_INDEX_NAME);
 
     await()
         .atMost(5, SECONDS)
         .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME) > 0);
 
     long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME);
-    assertThat(documentCount).isEqualTo(4);
+    assertThat(documentCount).isEqualTo(1);
+  }
+
+  @Test
+  void shouldCreateSingleDocumentForEachAlert() {
+    List<Alert> alerts = of(ALERT_1, ALERT_2);
+    underTest.indexAlerts(alerts, PRODUCTION_ELASTIC_INDEX_NAME);
+
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME) > 0);
+
+    long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME);
+    assertThat(documentCount).isEqualTo(alerts.size());
   }
 
   @Test
@@ -151,12 +159,12 @@ class AlertIT {
   }
 
   private void storeData() {
-    saveAlert(DOCUMENT_ID, MAPPED_ALERT_WITH_MATCHES_1);
-    saveAlert(DOCUMENT_ID_2, MAPPED_ALERT_WITH_MATCHES_2);
-    saveAlert(DOCUMENT_ID_3, MAPPED_ALERT_WITH_MATCHES_3);
-    saveAlert(DOCUMENT_ID_4, MAPPED_ALERT_WITH_MATCHES_4);
-    saveAlert(DOCUMENT_ID_5, MAPPED_ALERT_WITH_MATCHES_5);
-    saveAlert(DOCUMENT_ID_6, MAPPED_ALERT_WITH_MATCHES_6);
+    saveAlert(DOCUMENT_ID, MAPPED_ALERT_1);
+    saveAlert(DOCUMENT_ID_2, MAPPED_ALERT_2);
+    saveAlert(DOCUMENT_ID_3, MAPPED_ALERT_3);
+    saveAlert(DOCUMENT_ID_4, MAPPED_ALERT_4);
+    saveAlert(DOCUMENT_ID_5, MAPPED_ALERT_5);
+    saveAlert(DOCUMENT_ID_6, MAPPED_ALERT_6);
   }
 
   private void saveAlert(String alertId, Map<String, Object> alert) {

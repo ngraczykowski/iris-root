@@ -22,15 +22,15 @@ class SqlBuilderTest {
 
   @Test
   void shouldCreateSqlQuery() {
-    List<String> fields = of(MappedKeys.COUNTRY_KEY, MappedKeys.SOLUTION_KEY);
+    List<String> fields = of(MappedKeys.COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY);
     String query = underTest.groupByBetweenDates(of(PRODUCTION_ELASTIC_INDEX_NAME), fields,
         AlertMapperConstants.INDEX_TIMESTAMP, timestamp, timestamp.plusHours(1));
 
     assertThat(query).isEqualToIgnoringWhitespace(""
-        + "select alert_lob_country, match_solution, count(*) "
+        + "select alert_lob_country, alert_risk_type, count(*) "
         + "from itest_production "
         + "where (index_timestamp >= timestamp('2021-04-15 12:17:37.098') "
         + "  and  index_timestamp < timestamp('2021-04-15 13:17:37.098')) "
-        + "group by alert_lob_country, match_solution");
+        + "group by alert_lob_country, alert_risk_type");
   }
 }

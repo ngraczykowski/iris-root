@@ -9,7 +9,6 @@ import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.*;
@@ -29,7 +28,7 @@ public class DataIndexFixtures {
       SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK
   );
 
-  static final Alert ALERT_WITH_MATCHES_1 = Alert.newBuilder()
+  public static final Alert ALERT_1 = Alert.newBuilder()
       .setName(ALERT_NAME_1)
       .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
@@ -37,7 +36,7 @@ public class DataIndexFixtures {
           match(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
       .build();
 
-  static final Alert ALERT_WITH_MATCHES_2 = Alert.newBuilder()
+  public static final Alert ALERT_2 = Alert.newBuilder()
       .setName(ALERT_NAME_2)
       .setPayload(structWithValue(
           SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI))
@@ -45,10 +44,6 @@ public class DataIndexFixtures {
           match(MATCH_NAME_2_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_EXACT_MATCH),
           match(MATCH_NAME_2_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
       .build();
-
-  public static final List<Alert> ALERTS_WITH_MATCHES = of(
-      ALERT_WITH_MATCHES_1,
-      ALERT_WITH_MATCHES_2);
 
   static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
       .setName(ALERT_NAME_1)

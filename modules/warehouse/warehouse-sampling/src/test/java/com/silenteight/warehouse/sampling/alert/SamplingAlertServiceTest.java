@@ -6,8 +6,8 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
-import com.silenteight.warehouse.indexer.alert.AlertSearchService;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,13 +32,15 @@ import static org.assertj.core.api.Assertions.*;
 class SamplingAlertServiceTest {
 
   @Autowired
-  AlertSearchService alertSearchService;
-
-  @Autowired
-  SamplingAlertService underTest;
+  private SamplingAlertService underTest;
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
+
+  @AfterEach
+  void removeData() {
+    simpleElasticTestClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+  }
 
   @ParameterizedTest
   @MethodSource("getAlertsSampleRequests")
@@ -54,7 +56,7 @@ class SamplingAlertServiceTest {
     int idsCount = randomAlertResponse.getAlertsCount();
     assertThat(idsCount).isEqualTo(alertsCount);
     List<String> idsList = convertResponseToIdsList(randomAlertResponse);
-    assertThat(idsList).containsAll(expectedIds);
+    assertThat(idsList).containsExactlyInAnyOrder(expectedIds.toArray(String[]::new));
   }
 
   private List<String> convertResponseToIdsList(AlertsSampleResponse randomAlertResponse) {
@@ -66,12 +68,11 @@ class SamplingAlertServiceTest {
   }
 
   private void storeData() {
-    saveAlert(DOCUMENT_ID_1, ALERT_WITH_MATCHES_1_MAP);
-    saveAlert(DOCUMENT_ID_2, ALERT_WITH_MATCHES_2_MAP);
-    saveAlert(DOCUMENT_ID_3, ALERT_WITH_MATCHES_3_MAP);
-    saveAlert(DOCUMENT_ID_4, ALERT_WITH_MATCHES_4_MAP);
-    saveAlert(DOCUMENT_ID_5, ALERT_WITH_MATCHES_5_MAP);
-    saveAlert(DOCUMENT_ID_6, ALERT_WITH_MATCHES_6_MAP);
+    saveAlert(DOCUMENT_ID_1, ALERT_1_MAP);
+    saveAlert(DOCUMENT_ID_2, ALERT_2_MAP);
+    saveAlert(DOCUMENT_ID_3, ALERT_3_MAP);
+    saveAlert(DOCUMENT_ID_4, ALERT_4_MAP);
+    saveAlert(DOCUMENT_ID_5, ALERT_5_MAP);
   }
 
   private void saveAlert(String alertId, Map<String, Object> alert) {

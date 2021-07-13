@@ -1,7 +1,5 @@
 package com.silenteight.warehouse.indexer.query.grouping;
 
-import lombok.SneakyThrows;
-
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClientException;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
@@ -9,7 +7,6 @@ import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestC
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,15 +31,10 @@ import static org.assertj.core.api.Assertions.*;
 class GroupingQueryTest {
 
   @Autowired
-  SimpleElasticTestClient simpleElasticTestClient;
+  SimpleElasticTestClient testClient;
 
   @Autowired
   GroupingQueryService underTest;
-
-  @BeforeEach
-  public void init() {
-    storeData();
-  }
 
   @AfterEach
   public void cleanup() {
@@ -51,6 +43,10 @@ class GroupingQueryTest {
 
   @Test
   void shouldReturnGroupingByResult() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
+
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
         .fields(of(COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY))
@@ -70,6 +66,9 @@ class GroupingQueryTest {
 
   @Test
   void shouldReplaceNullValuesWithPlaceholder() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_3);
+
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
         .fields(of(MappedKeys.RISK_TYPE_KEY))
@@ -86,6 +85,8 @@ class GroupingQueryTest {
 
   @Test
   void shouldHandleException() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+
     FetchGroupedTimeRangedDataRequest invalidRequest = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of())
         .fields(of())
@@ -100,17 +101,7 @@ class GroupingQueryTest {
         .isEqualTo(400);
   }
 
-  @SneakyThrows
-  private void storeData() {
-    simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_WITH_MATCHES_1);
-    simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_WITH_MATCHES_3);
-    simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_WITH_MATCHES_3);
-  }
-
   private void removeData() {
-    simpleElasticTestClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+    testClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
   }
 }
