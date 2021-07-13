@@ -21,4 +21,7 @@ public class RolesProperties {
 
   @NotNull
   private final String countryGroupsScope;
+
+  @NotNull
+  private final String defaultCountryGroupRole;
 }

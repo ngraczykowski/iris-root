@@ -46,6 +46,8 @@ public class UpdateUserUseCase {
   private final String rolesScope;
   @NonNull
   private final String countryGroupsScope;
+  @NonNull
+  private final String defaultCountryGroupRole;
 
   public void apply(UpdateUserCommand command) {
     log.info(USER_MANAGEMENT, "Updating user. command={}", command);
@@ -79,7 +81,8 @@ public class UpdateUserUseCase {
     Set<String> currentRoles = userRolesRetriever
         .rolesOf(command.getUsername())
         .getRoles(rolesScope);
-    UpdatedUser updatedUser = command.toUpdatedUser(rolesScope, countryGroupsScope);
+    UpdatedUser updatedUser = command.toUpdatedUser(
+        rolesScope, countryGroupsScope, defaultCountryGroupRole);
     updatedUserRepository.save(updatedUser);
     auditTracer.save(
         new UserUpdatedEvent(
@@ -131,7 +134,8 @@ public class UpdateUserUseCase {
       return ofNullable(countryGroups);
     }
 
-    UpdatedUser toUpdatedUser(String rolesClientId, String countryGroupsClientId) {
+    UpdatedUser toUpdatedUser(
+        String rolesClientId, String countryGroupsClientId, String defaultCountryGroupRole) {
       UpdatedUserBuilder result = UpdatedUser.builder()
           .username(username)
           .updateDate(timeSource.offsetDateTime());
@@ -141,21 +145,30 @@ public class UpdateUserUseCase {
       if (locked != null)
         result.locked(locked);
 
-      result.roles(scopeRoles(rolesClientId, countryGroupsClientId));
+      result.roles(scopeRoles(rolesClientId, countryGroupsClientId, defaultCountryGroupRole));
 
       return result.build();
     }
 
     private UserRoles scopeRoles(
-        String rolesClientId, String countryGroupsClientId) {
+        String rolesClientId, String countryGroupsClientId,
+        String defaultCountryGroupRole) {
 
       Map<String, List<String>> scopeRoles = new HashMap<>();
       if (roles != null)
         scopeRoles.put(rolesClientId, new ArrayList<>(roles));
       if (countryGroups != null)
-        scopeRoles.put(countryGroupsClientId, new ArrayList<>(countryGroups));
+        scopeRoles.put(
+            countryGroupsClientId, getCountryGroupsRoles(countryGroups, defaultCountryGroupRole));
 
       return new ScopeUserRoles(scopeRoles);
+    }
+
+    private ArrayList<String> getCountryGroupsRoles(
+        Set<String> countryGroups, String defaultCountryGroupRole) {
+      ArrayList<String> result = new ArrayList<>(countryGroups);
+      result.add(defaultCountryGroupRole);
+      return result;
     }
   }
 }

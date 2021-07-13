@@ -260,6 +260,7 @@ sens.web:
 sens.webapp.roles:
   roles-scope: ${keycloak.frontend-client-id}
   country-groups-scope: "kibana"
+  default-country-group-role: "warehouse_business_user_dev"
 
 # Authorization
 sep.auth:

@@ -22,11 +22,13 @@ import java.util.*;
 
 import static com.silenteight.sens.webapp.audit.api.trace.AuditEvent.EntityAction.UPDATE;
 import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.COUNTRY_GROUPS_SCOPE;
+import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.COUNTRY_GROUP_ROLE;
 import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.NEW_DISPLAY_NAME_COMMAND;
 import static com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCaseFixtures.ROLES_SCOPE;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.ROLES;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.UPDATED_USER;
 import static com.silenteight.sens.webapp.user.update.UpdateUserUseCaseFixtures.UPDATE_USER_COMMAND;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -49,6 +51,7 @@ class UpdateUserUseCaseTest {
   void setUp() {
     given(rolesProperties.getRolesScope()).willReturn(ROLES_SCOPE);
     given(rolesProperties.getCountryGroupsScope()).willReturn(COUNTRY_GROUPS_SCOPE);
+    given(rolesProperties.getDefaultCountryGroupRole()).willReturn(COUNTRY_GROUP_ROLE);
 
     underTest = new UserUpdateUseCaseConfiguration().updateUserUseCase(
         updatedUserRepository,
@@ -62,8 +65,9 @@ class UpdateUserUseCaseTest {
   @Test
   void updateDisplayNameCommand_updateUserInRepo() {
     // given
-    List<String> roles = List.of("role1", "role3");
-    Map<String, List<String>> scopeRoles = Map.of(ROLES_SCOPE, roles);
+    List<String> roles = of("role1", "role3");
+    Map<String, List<String>> scopeRoles = Map.of(
+        ROLES_SCOPE, roles, COUNTRY_GROUPS_SCOPE, of("PL"));
     UserRoles userRoles = new ScopeUserRoles(scopeRoles);
     when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(userRoles);
 
@@ -78,7 +82,7 @@ class UpdateUserUseCaseTest {
   void updateDisplayNameCommand_registerEvents() {
     // given
     UUID correlationId = RequestCorrelation.id();
-    List<String> roles = List.of("role1", "role3");
+    List<String> roles = of("role1", "role3");
     Map<String, List<String>> scopeRoles = Map.of(ROLES_SCOPE, roles);
     UserRoles userRoles = new ScopeUserRoles(scopeRoles);
     when(userRolesRetriever.rolesOf(NEW_DISPLAY_NAME_COMMAND.getUsername())).thenReturn(userRoles);

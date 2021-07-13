@@ -16,6 +16,7 @@ class UpdateUserDisplayNameUseCaseFixtures {
   static final OffsetDateTime OFFSET_DATE_TIME = MOCK_TIME_SOURCE.offsetDateTime();
   static final String ROLES_SCOPE = "frontend";
   static final String COUNTRY_GROUPS_SCOPE = "kibana";
+  static final String COUNTRY_GROUP_ROLE = "wh_business_user";
 
   static final UpdateUserDisplayNameCommand NEW_DISPLAY_NAME_COMMAND =
       UpdateUserDisplayNameCommand

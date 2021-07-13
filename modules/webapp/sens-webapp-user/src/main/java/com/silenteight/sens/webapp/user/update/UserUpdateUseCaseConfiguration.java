@@ -57,6 +57,7 @@ class UserUpdateUseCaseConfiguration {
         auditTracer, 
         userRolesRetriever,
         rolesProperties.getRolesScope(),
-        rolesProperties.getCountryGroupsScope());
+        rolesProperties.getCountryGroupsScope(),
+        rolesProperties.getDefaultCountryGroupRole());
   }
 }
