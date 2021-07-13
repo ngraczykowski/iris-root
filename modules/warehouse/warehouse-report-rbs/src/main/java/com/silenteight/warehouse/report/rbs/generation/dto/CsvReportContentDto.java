@@ -17,8 +17,4 @@ public class CsvReportContentDto {
   public String getReport() {
     return concat(Stream.of(labels), lines.stream()).collect(joining());
   }
-
-  public byte[] getBytes() {
-    return getReport().getBytes();
-  }
 }

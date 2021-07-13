@@ -8,5 +8,5 @@ public class ReportDto {
 
   @NonNull
   String filename;
-  byte[] content;
+  String content;
 }

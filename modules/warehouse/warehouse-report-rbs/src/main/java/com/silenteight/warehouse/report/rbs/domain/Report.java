@@ -42,7 +42,7 @@ class Report extends BaseEntity implements IdentifiableEntity {
 
   @Basic(fetch = FetchType.LAZY)
   @Column(name = "data")
-  private byte[] file;
+  private String file;
 
   static Report of(ReportDefinition reportType) {
     Report rbsReport = new Report();
@@ -59,7 +59,7 @@ class Report extends BaseEntity implements IdentifiableEntity {
     state = DONE;
   }
 
-  void storeReport(byte[] report) {
+  void storeReport(String report) {
     file = report;
   }
 

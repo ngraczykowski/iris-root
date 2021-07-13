@@ -12,8 +12,6 @@ import java.time.temporal.TemporalAmount;
 import java.util.List;
 
 import static java.time.Period.ofDays;
-import static java.time.Period.ofMonths;
-import static java.time.Period.ofWeeks;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -29,22 +27,22 @@ public enum ReportDefinition {
       ofDays(1)),
   WEEK(
       "ddce27a5-4560-4dc7-83c3-b4e618986c03",
-      "RB Scorer - Last week",
-      "rb-scorer-1-week",
-      "RB Scorer report - Last week",
-      ofWeeks(1)),
+      "RB Scorer - Last 7 days",
+      "rb-scorer-7-days",
+      "RB Scorer report - Last 7 days",
+      ofDays(7)),
   MONTH(
       "df7b3309-8f25-4aae-ae5c-48e174332d1a",
-      "RB Scorer - Last month",
-      "rb-scorer-1-month",
-      "RB Scorer report - Last month",
-      ofMonths(1)),
+      "RB Scorer - Last 30 days",
+      "rb-scorer-30-days",
+      "RB Scorer report - Last 30 days",
+      ofDays(30)),
   THREE_MONTHS(
       "87834a2e-abf8-4b0a-a35a-2c109404a43b",
-      "RB Scorer - Last 3 months",
-      "rb-scorer-3-months",
-      "RB Scorer report - Last 3 months",
-      ofMonths(3));
+      "RB Scorer - Last 90 days",
+      "rb-scorer-90-days",
+      "RB Scorer report - Last 90 days",
+      ofDays(90));
 
   private static final String REPORT_TYPE = "RB_SCORER";
   @NonNull

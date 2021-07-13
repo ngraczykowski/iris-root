@@ -34,7 +34,7 @@ public class AsyncRbsReportGenerationService {
         ofInstant(reportType.getFrom(timeSource.now()), timeSource.timeZone().toZoneId()),
         ofInstant(reportType.getTo(timeSource.now()), timeSource.timeZone().toZoneId()),
         PRODUCTION_ANALYSIS_NAME);
-    report.storeReport(reportContent.getBytes());
+    report.storeReport(reportContent.getReport());
     report.done();
     repository.save(report);
   }

@@ -35,13 +35,13 @@ class DownloadReportRestController {
 
     ReportDto reportDto = reportDataQuery.getReport(id);
     String filename = reportDto.getFilename();
-    byte[] data = reportDto.getContent();
+    String data = reportDto.getContent();
 
     reportService.removeReport(id);
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
         .header("Content-Type", "text/csv")
-        .body(data);
+        .body(data.getBytes());
   }
 }

@@ -53,7 +53,6 @@ class AsyncReportGenerationServiceTest {
 
     rbsReport = rbsReportRepository.getById(rbsReport.getId());
     assertThat(rbsReport.getState()).isEqualTo(ReportState.DONE);
-    assertThat(rbsReport.getState()).isEqualTo(ReportState.DONE);
-    assertThat(rbsReport.getFile()).isEqualTo(REPORT_CONTENT.getBytes());
+    assertThat(rbsReport.getFile()).isEqualTo(REPORT_CONTENT.getReport());
   }
 }
