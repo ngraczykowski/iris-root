@@ -64,6 +64,6 @@ class Report extends BaseEntity implements IdentifiableEntity {
   }
 
   ReportDto toDto() {
-    return ReportDto.of(reportType.getTitle(), getFile());
+    return ReportDto.of(reportType.getFilename(), getFile());
   }
 }

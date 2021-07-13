@@ -26,10 +26,10 @@ class ListReportsRestControllerTest extends BaseRestControllerTest {
   void its200_whenInvokedGetReportList() {
     get(LIST_REPORTS_URL)
         .statusCode(OK.value())
-        .body("[0].name", is(DAY.getName()))
-        .body("[1].name", is(WEEK.getName()))
-        .body("[2].name", is(MONTH.getName()))
-        .body("[3].name", is(THREE_MONTHS.getName()));
+        .body("[0].title", is(DAY.getTitle()))
+        .body("[1].title", is(WEEK.getTitle()))
+        .body("[2].title", is(MONTH.getTitle()))
+        .body("[3].title", is(THREE_MONTHS.getTitle()));
   }
 
   @Test

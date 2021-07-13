@@ -36,7 +36,7 @@ class ReportServiceTest {
     ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
 
     ReportDto report = query.getReport(reportInstance.getTimestamp());
-    assertThat(report.getFilename()).isEqualTo(TYPE.getTitle());
+    assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
     assertThat(rbsReportRepository.findById(reportInstance.getTimestamp()))
         .isPresent()
         .get()
@@ -49,7 +49,7 @@ class ReportServiceTest {
     ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
 
     ReportDto report = query.getReport(reportInstance.getTimestamp());
-    assertThat(report.getFilename()).isEqualTo(TYPE.getTitle());
+    assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
 
     service.removeReport(reportInstance.getTimestamp());
 
