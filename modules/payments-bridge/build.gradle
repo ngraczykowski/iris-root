@@ -94,9 +94,9 @@ subprojects {Project subproject ->
                 "SILENTEIGHT_HOME"            : "/silenteight",
                 "AE_DB_HOST"                  : "postgres",
                 "AE_DB_PORT"                  : "5432",
-                "AE_DB_NAME"                  : "adjudication-engine",
-                "AE_DB_USERNAME"              : "adjudication-engine",
-                "AE_DB_PASSWORD"              : "adjudication-engine",
+                "AE_DB_NAME"                  : "sear-payments-bridge",
+                "AE_DB_USERNAME"              : "sear-payments-bridge",
+                "AE_DB_PASSWORD"              : "sear-payments-bridge",
                 "SPRING_PROFILES_ACTIVE"      : "",
             ]
             jvmFlags = [

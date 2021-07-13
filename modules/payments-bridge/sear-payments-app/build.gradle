@@ -33,6 +33,17 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.aspectjrt
+  // Database
+  implementation libraries.liquibase_core
+  implementation libraries.spring_jdbc
+  implementation libraries.spring_data_jpa
+  implementation libraries.hikari_cp
+  implementation libraries.hibernate_core
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.hibernate_jcache
+  runtimeOnly libraries.caffeine
+  runtimeOnly libraries.caffeine_jcache
+  runtimeOnly libraries.liquibase_sessionlock
 }
 
 test {
