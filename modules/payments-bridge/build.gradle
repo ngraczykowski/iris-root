@@ -1,30 +1,138 @@
 plugins {
-  id 'java'
-  id 'org.springframework.boot' version '2.5.2'
-  id "io.spring.dependency-management" version "1.0.11.RELEASE"
-  id "io.freefair.lombok" version "6.0.0-m2"
+  id "maven-publish"
+  id "org.sonarqube" version "2.8"
+  id "com.silenteight.gradle.convention" version "1.20.0"
+  id "com.silenteight.gradle.release" version "1.4.0"
+  id "com.silenteight.gradle.wrapper" version "1.1.0"
+  id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
+  id "io.freefair.aspectj" version "5.3.0" apply false
+  id "nebula.resolution-rules" version "7.6.0"
+  // Spring boot plugin version should be same as Spring version in sep-dependencies
+  id "org.springframework.boot" version "2.4.6" apply false
+  id "com.google.cloud.tools.jib" version "3.1.1" apply false
 }
 
-group 'com.silenteight'
-version '1.0-SNAPSHOT'
-
-repositories {
-  mavenCentral()
+projectSetup {
+  javaVersion = JavaVersion.VERSION_11
 }
 
-dependencies {
-  implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
-  implementation 'org.springframework.boot:spring-boot-starter'
-  implementation 'org.springframework.boot:spring-boot-starter-integration'
-  implementation 'org.springframework.integration:spring-integration-http'
-  implementation 'org.springframework.integration:spring-integration-security'
-  implementation 'org.springframework.boot:spring-boot-starter-security'
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-aop'
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+ext {
+  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
 }
 
-test {
-  useJUnitPlatform()
+apply from: "${gradleScriptDir}/ide.gradle"
+apply from: "${gradleScriptDir}/resolutionRules.gradle"
+
+subprojects {Project subproject ->
+  pluginManager.withPlugin("java") {
+    subproject.apply from: "${gradleScriptDir}/dependencies.gradle"
+
+    subproject.pluginManager.apply "maven-publish"
+    subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
+
+    subproject.dependencies {
+      implementation libraries.jaxb_api
+
+      aspect libraries.spring_aspects
+      aspect libraries.silenteight_sep_base_aspects
+
+      // Required by aspects
+      aspect libraries.spring_web
+      aspect libraries.spring_tx
+
+      annotationProcessor libraries.spring_boot_configuration_processor
+    }
+
+    subproject.aspectj {
+      version = libraries.aspectjtools.version
+    }
+
+    subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
+      def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
+
+      java.dependsOn processResources
+    }
+
+    def ajcArgs = [
+        "-Xlintfile", "${rootProject.projectDir}/Xlint.properties".toString(),
+    ]
+
+    subproject.tasks.withType(JavaCompile).configureEach {JavaCompile java ->
+      java.ajc.options.compilerArgs = ajcArgs
+      java.options.fork = true
+      java.options.compilerArgs << "-parameters"
+    }
+
+    subproject.afterEvaluate {
+      if (!subproject.pluginManager.hasPlugin("java-library"))
+        generateClassPathInManifest(subproject)
+
+      subproject.jar {
+        preserveFileTimestamps false
+        reproducibleFileOrder true
+      }
+
+      if (subproject.pluginManager.hasPlugin("com.google.cloud.tools.jib")) {
+        subproject.jib {
+          from {
+            // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+            def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
+                              "-debug" : ""
+            image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+          }
+          to {
+            image = "docker.repo.silenteight.com/ae/${subproject.name}:${version}"
+            if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
+              tags = ["snapshot"]
+            } else {
+              tags = ["latest"]
+            }
+          }
+          container {
+            appRoot = "/silenteight/app"
+            environment = [
+                "SILENTEIGHT_HOME"            : "/silenteight",
+                "AE_DB_HOST"                  : "postgres",
+                "AE_DB_PORT"                  : "5432",
+                "AE_DB_NAME"                  : "adjudication-engine",
+                "AE_DB_USERNAME"              : "adjudication-engine",
+                "AE_DB_PASSWORD"              : "adjudication-engine",
+                "SPRING_PROFILES_ACTIVE"      : "",
+            ]
+            jvmFlags = [
+                "-XX:MaxRAMPercentage=75",
+                "-Dfile.encoding=UTF-8",
+                "-Dsun.jnu.encoding=UTF-8",
+                "-Djava.net.preferIPv4Stack=true",
+                "-Djava.io.tmpdir=/tmp",
+                "-Dsilenteight.home=/silenteight",
+                "-Dspring.profiles.include=container",
+                "-Dserver.port=8080",
+                "-Dgrpc.server.port=8081",
+            ]
+            ports = ["8080", "8081"]
+            user = "nonroot"
+            workingDirectory = "/silenteight"
+          }
+        }
+      }
+    }
+  }
+}
+
+static def generateClassPathInManifest(Project project) {
+  // Generates Class-Path in .jar manifest
+  project.tasks.named(JavaPlugin.JAR_TASK_NAME).configure {Jar jar ->
+    jar.doFirst {
+      jar.manifest {
+        def runtimeClasspath = project.configurations.runtimeClasspath
+
+        if (!runtimeClasspath.isEmpty()) {
+          def classPathJars = runtimeClasspath.collect {it.getName()}.join(" ")
+
+          attributes "Class-Path": classPathJars
+        }
+      }
+    }
+  }
 }

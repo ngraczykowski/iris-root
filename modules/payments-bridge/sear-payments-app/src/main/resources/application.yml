@@ -1,0 +1,101 @@
+#---------------------------------------------------------------------------------------------------
+# MESSAGING CONCURRENCY
+#---------------------------------------------------------------------------------------------------
+ae:
+  messaging:
+    concurrency: 4
+    prefetch: 25
+
+  # FIXME(ahaczewski): Rename to `comments.template-engine.cache-invalidation`.
+  comments:
+    template:
+      cache:
+        invalidation: "0 * * * * ?"
+
+  categories:
+    missing:
+      batch-size:
+        insert: 1024
+        select: 4096
+
+  comment-input:
+    jdbc:
+      missing-batch-size-select: 8192
+
+  recommendation:
+    jdbc:
+      pending-alerts:
+        fetch-size: 8192
+    comment:
+      template-name: alert
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+
+# Embedded server configuration
+server:
+  forward-headers-strategy: native
+  undertow:
+    threads:
+      io: ${ae.web.threads.io:4}
+      worker: ${ae.web.threads.worker:16}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+
+spring:
+  application:
+    name: sear-payments
+  codec:
+    max-in-memory-size: 1MB
+  #-------------------------------------------------------------------------------------------------
+  # GENERAL
+  #-------------------------------------------------------------------------------------------------
+  aop:
+    auto: false
+
+  task:
+    execution:
+      pool:
+        core-size: 8
+        keep-alive: 10s
+        max-size: 16
+        queue-capacity: 10000
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool:
+        size: 2
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+    allow-bean-definition-overriding : true
+
+  #-------------------------------------------------------------------------------------------------
+  # RABBITMQ
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
+
+  jackson:
+    default-property-inclusion: NON_NULL
+
+  webflux:
+    base-path: /rest/${spring.application.name}
+
+info:
+  env: ${ae.env:local}
+
+
+grpc:
+  server:
+    port: 24803
+

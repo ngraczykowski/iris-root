@@ -1,3 +1,5 @@
 /.gradle
 /.idea
 /build
+/sear-payments-app/build
+/sear-payments-scb-etl/build
