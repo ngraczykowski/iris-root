@@ -33,13 +33,13 @@ class SearPaymentsConfiguration {
   private static final String ALERT_READY_FOR_CALLBACK_CHANNEL = "alertReadyForCallbackChannel";
 
   @Bean
-  LogRequestAspect logRequestAspect(ApplicationContext applicationContext) {
-    return new LogRequestAspect(applicationContext);
+  LogRequestAspect logRequestAspect() {
+    return new LogRequestAspect();
   }
 
   @Bean
-  CmapiAuthenticateAspect cmapiAuthenticate(ApplicationContext applicationContext) {
-    return new CmapiAuthenticateAspect(applicationContext);
+  CmapiAuthenticateAspect cmapiAuthenticate() {
+    return new CmapiAuthenticateAspect();
   }
 
   @Bean
@@ -48,7 +48,7 @@ class SearPaymentsConfiguration {
   }
 
   @Bean
-  @SecuredChannel(interceptor = "channelSecurityInterceptor", sendAccess = "ROLE_SUBMIT_REQUEST")
+  //@SecuredChannel(interceptor = "channelSecurityInterceptor", sendAccess = "ROLE_SUBMIT_REQUEST")
   MessageChannel submitRequestChannel() {
     return new QueueChannel(2);
   }

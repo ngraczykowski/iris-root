@@ -13,7 +13,8 @@ import org.aspectj.lang.annotation.Pointcut;
 @RequiredArgsConstructor
 class AddDcToRequestDto {
 
-  @Pointcut("execution(* com.silenteight.searpaymentsmockup.AlertController.foo(..)) && args(requestDto, dc)")
+  @Pointcut("execution(* com.silenteight.searpaymentsmockup2.AlertController.foo(..))"
+      + " && args(requestDto, dc)")
   public void callAt(RequestDto requestDto, String dc) {
     throw new UnsupportedOperationException();
   }

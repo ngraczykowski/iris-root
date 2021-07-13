@@ -1,4 +1,4 @@
-rootProject.name = 'sear-payments'
+rootProject.name = 'sear-payments-bridge'
 gradle.ext.sepDependenciesVersion = "2.2.0"
 
 include 'sear-payments-app'

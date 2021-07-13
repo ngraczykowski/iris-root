@@ -2,6 +2,7 @@ plugins {
   id 'java'
   id 'org.springframework.boot'
   id "io.spring.dependency-management"
+  id "io.freefair.aspectj.post-compile-weaving"
 }
 
 group 'com.silenteight'
@@ -32,7 +33,6 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.aspectjrt
-  implementation libraries.aspectjtools
 }
 
 test {
