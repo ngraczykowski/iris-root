@@ -17,7 +17,6 @@ public class AlertMetadata {
 
   @JsonProperty("value")
   @NotNull
-  @NotBlank
   private String value;
 
 

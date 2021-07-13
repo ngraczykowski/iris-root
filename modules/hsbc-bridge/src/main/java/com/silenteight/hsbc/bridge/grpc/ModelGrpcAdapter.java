@@ -8,7 +8,7 @@ import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 import com.silenteight.hsbc.bridge.model.SolvingModelDto;
 import com.silenteight.model.api.v1.ExportModelRequest;
 import com.silenteight.model.api.v1.ImportNewModelRequest;
-import com.silenteight.model.api.v1.ModelName;
+import com.silenteight.model.api.v1.ModelDeployedOnProductionRequest;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
@@ -38,7 +38,7 @@ class ModelGrpcAdapter implements ModelServiceClient {
   @Retryable(value = StatusRuntimeException.class)
   public ExportModelResponseDto exportModel(String name) {
     var exportModelResponse =
-        getStub().exportModel(ExportModelRequest.newBuilder().setModel(name).build());
+        getStub().exportModel(ExportModelRequest.newBuilder().setName(name).build());
     return mapToExportModelResponse(exportModelResponse);
   }
 
@@ -56,8 +56,8 @@ class ModelGrpcAdapter implements ModelServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public void sendStatus(String modelName) {
-    var model = ModelName.newBuilder()
-        .setModel(modelName)
+    var model = ModelDeployedOnProductionRequest.newBuilder()
+        .setName(modelName)
         .build();
 
     getStub().modelDeployedOnProduction(model);

@@ -51,7 +51,6 @@ public class SolvedAlert {
 
   @JsonProperty("step_id")
   @NotNull
-  @NotBlank
   private String stepId = null;
 
   @JsonProperty("fv_signature")
