@@ -37,7 +37,7 @@ import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSear
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_KIBANA_INDEX_PATTERN_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_WITH_MATCHES_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
@@ -124,7 +124,7 @@ class ProductionPeriodicIT {
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_WITH_MATCHES_1);
+        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_1);
   }
 
   private void createProductionTenant() {

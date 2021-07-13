@@ -27,11 +27,12 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.UUID;
 
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERTS_WITH_MATCHES;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_WITH_MATCHES_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.SIMULATION_ANALYSIS_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SIMULATION_ANALYSIS_ID;
+import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -80,7 +81,7 @@ class IndexerIT {
   @Test
   void shouldReturnConfirmationWhenProductionDataIndexRequested() {
     ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
-        .addAllAlerts(ALERTS_WITH_MATCHES)
+        .addAllAlerts(of(ALERT_1))
         .setRequestId(UUID.randomUUID().toString())
         .build();
 
@@ -95,14 +96,14 @@ class IndexerIT {
         .isEqualTo(request.getRequestId());
 
     var source = simpleElasticTestClient.getSource(PRODUCTION_INDEX_NAME, DOCUMENT_ID);
-    assertThat(source).isEqualTo(MAPPED_ALERT_WITH_MATCHES_1);
+    assertThat(source).isEqualTo(MAPPED_ALERT_1);
   }
 
   @Test
   void shouldReturnConfirmationWhenSimulationDataIndexRequested() {
     SimulationDataIndexRequest request = SimulationDataIndexRequest.newBuilder()
         .setAnalysisName(SIMULATION_ANALYSIS_NAME)
-        .addAllAlerts(ALERTS_WITH_MATCHES)
+        .addAllAlerts(of(ALERT_1))
         .build();
 
     simulationIndexClientGateway.indexRequest(request);
@@ -116,7 +117,7 @@ class IndexerIT {
         .isEqualTo(request.getRequestId());
 
     var source = simpleElasticTestClient.getSource(SIMULATION_INDEX_NAME, DOCUMENT_ID);
-    assertThat(source).isEqualTo(MAPPED_ALERT_WITH_MATCHES_1);
+    assertThat(source).isEqualTo(MAPPED_ALERT_1);
   }
 
   private void removeData() {

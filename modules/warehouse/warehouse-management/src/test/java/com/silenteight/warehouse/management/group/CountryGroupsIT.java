@@ -34,7 +34,7 @@ import java.util.UUID;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_WITH_MATCHES_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
@@ -132,7 +132,7 @@ class CountryGroupsIT {
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_WITH_MATCHES_1);
+        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_1);
   }
 
   private void removeData() {
