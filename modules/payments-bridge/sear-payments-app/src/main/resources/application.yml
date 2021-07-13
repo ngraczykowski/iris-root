@@ -79,22 +79,11 @@ spring:
   # RABBITMQ
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
-    listener:
-      type: simple
-      direct:
-        consumers-per-queue: ${ae.messaging.concurrency:4}
-        prefetch: ${ae.messaging.prefetch:25}
-        retry:
-          enabled: true
-          multiplier: 2
-      simple:
-        concurrency: 1
-        max-concurrency: ${ae.messaging.concurrency:4}
-        prefetch: ${ae.messaging.prefetch:25}
-        retry:
-          enabled: true
-          multiplier: 2
-    port: 24161
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
 
   jackson:
     default-property-inclusion: NON_NULL

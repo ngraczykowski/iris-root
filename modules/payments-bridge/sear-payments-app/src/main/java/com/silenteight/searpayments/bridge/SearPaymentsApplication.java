@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import static java.lang.System.getProperty;
 
 @SpringBootApplication
-@ComponentScan("com.silenteight.searpayments.scb.etl")
 public class SearPaymentsApplication {
 
   public static void main(String[] args) {
