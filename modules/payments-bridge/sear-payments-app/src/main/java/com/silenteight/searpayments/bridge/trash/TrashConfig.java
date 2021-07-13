@@ -8,17 +8,17 @@ import org.springframework.context.annotation.Configuration;
 class TrashConfig {
 
   @Bean
-  LogRequestAspect logRequestAspect(ApplicationContext applicationContext) {
-    return new LogRequestAspect(applicationContext);
+  LogRequestAspect logRequestAspect() {
+    return new LogRequestAspect();
   }
 
   @Bean
-  CmapiAuthenticateAspect cmapiAuthenticate(ApplicationContext applicationContext) {
-    return new CmapiAuthenticateAspect(applicationContext);
+  CmapiAuthenticateAspect cmapiAuthenticate() {
+    return new CmapiAuthenticateAspect();
   }
 
   @Bean
-  AddDcToRequestDto addDcToRequestDto() {
-    return new AddDcToRequestDto();
+  com.silenteight.searpaymentsmockup.AddDcToRequestDto addDcToRequestDto() {
+    return new com.silenteight.searpaymentsmockup.AddDcToRequestDto();
   }
 }

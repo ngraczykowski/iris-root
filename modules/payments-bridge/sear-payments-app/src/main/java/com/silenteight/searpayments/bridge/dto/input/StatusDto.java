@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.tsaas.bridge.dto.validator.MinimalAlertDefinition;
-
+import com.silenteight.searpayments.bridge.dto.validator.MinimalAlertDefinition;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;

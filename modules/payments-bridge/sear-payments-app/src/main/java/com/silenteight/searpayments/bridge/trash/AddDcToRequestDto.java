@@ -13,7 +13,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 @Slf4j
 @RequiredArgsConstructor
-class AddDcToRequestDto {
+public class AddDcToRequestDto {
 
   @Pointcut("execution(* com.silenteight.searpaymentsmockup2.AlertController.foo(..))"
       + " && args(requestDto, dc)")
