@@ -1,0 +1,89 @@
+= HLD #26
+
+- Reference ticket: https://silent8.atlassian.net/browse/WEB-1307
+- Reason: Downloading RBS report
+
+== Downloading RBS report - queue
+[plantuml,downloading-rbs-report,svg]
+-----
+@startuml
+header Downloading RBS report
+
+actor user as u
+participant Warehouse as wh
+database WarehouseDB as db
+queue Rabbit as r
+
+autonumber
+
+==Requesting==
+u -> wh : Generate RBS report
+wh -> db : Store RBS request - state Generating
+wh -> r : Message to generate Report
+wh -> u : Approved - generating report
+==Generating==
+autonumber 1
+r -> wh : Read message
+wh -> db : Read report query details
+db -> wh : Report query details
+wh -> wh : Generating report
+...
+wh -> db : Store report
+wh -> db : Update state
+==Status==
+autonumber 5
+u -> wh : Get report status
+wh -> db : Get status
+db -> wh : Status
+wh -> u : Status
+==Downloading==
+u -> wh : Download report
+wh -> db : Get report data
+db -> wh : Report
+wh -> u : Report
+wh -> db : Remove report
+
+@enduml
+-----
+
+
+== Downloading RBS report - thread
+[plantuml,downloading-rbs-report-thread,svg]
+-----
+@startuml
+header Downloading RBS report
+
+actor user as u
+participant Warehouse as wh
+database WarehouseDB as db
+
+autonumber
+
+==Requesting==
+u -> wh : Generate RBS report
+wh -> db : Store RBS request - state Generating
+wh -> wh : Run in another thread
+wh -> u : Approved - generating report
+==Generating in a thread==
+autonumber 1
+wh -> db : Read report query details
+db -> wh : Report query details
+wh -> wh : Generating report
+...
+wh -> db : Store report
+wh -> db : Update state
+==Status==
+autonumber 5
+u -> wh : Get report status
+wh -> db : Get status
+db -> wh : Status
+wh -> u : Status
+==Downloading==
+u -> wh : Download report
+wh -> db : Get report data
+db -> wh : Report
+wh -> u : Report
+wh -> db : Remove report
+
+@enduml
+-----

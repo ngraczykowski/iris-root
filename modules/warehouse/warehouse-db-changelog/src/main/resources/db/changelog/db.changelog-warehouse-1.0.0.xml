@@ -111,4 +111,21 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="warehouse-1.0.0-4" author="kdzieciol">
+    <createTable tableName="warehouse_report_rbs">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>
