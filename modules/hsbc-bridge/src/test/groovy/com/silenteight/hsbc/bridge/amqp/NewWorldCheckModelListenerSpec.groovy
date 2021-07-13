@@ -9,12 +9,13 @@ class NewWorldCheckModelListenerSpec extends Specification {
 
   def fixtures = new Fixtures()
   def transferManager = Mock(WorldCheckModelManager)
-  def underTest = new NewWorldCheckModelListener(transferManager)
+  def underTest = new NewWorldCheckModelListener(
+      fixtures.bridgeApiProperties.getAddress(), transferManager)
 
   def 'should handle new model from WorldCheck'() {
     given:
     def modelPersisted = fixtures.modelPersisted
-    def modelInfo = fixtures.modelInfoWorldCheck
+    def modelInfo = fixtures.modelInfoWorldCheckIsPepProcedural
 
     when:
     underTest.onModelChange(modelPersisted)

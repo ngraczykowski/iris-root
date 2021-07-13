@@ -11,12 +11,12 @@ import com.silenteight.worldcheck.api.v1.ModelPersisted
 import com.silenteight.worldcheck.api.v1.ModelStatusUpdated
 
 import static com.silenteight.worldcheck.api.v1.ModelStatus.SUCCESS
-import static com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL
 
 class Fixtures {
 
   static TEST_UUID = "a5250934-a67d-11eb-bcbc-0242ac130002"
   static SOLVING_MODEL_WITH_UID = "solvingModels/" + TEST_UUID
+  static TEST_BUCKET_WITH_UID = "/testbucket/" + TEST_UUID
   static JENKINS_URI = "https://jenkins.silenteight.com/crumbIssuer/api/json"
   static JENKINS_SENDING_STATUS_URI = "https://jenkins.silenteight.com/model/status"
   static UPDATE_MODEL_URI = "https://jenkins.silenteight.com/model/update"
@@ -28,13 +28,22 @@ class Fixtures {
   static BRIDGE_ADDRESS = "http://localhost:24802"
   static CRUMB_TOKEN = "ba4742b9d92606f4236456568a"
   static CRUMB_REQUEST = "Jenkins-Crumb"
+  static MODEL = "MODEL/"
+  static IS_PEP_HISTORICAL = "IS_PEP_HISTORICAL"
+  static IS_PEP_PROCEDURAL = "IS_PEP_PROCEDURAL"
+  static NAME_ALIASES = "NAME_ALIASES"
   static CRUMB_HTTP_RESPONSE = "{crumbRequestField:" + CRUMB_REQUEST + ",crumb:" + CRUMB_TOKEN + "}"
   static UPDATE_MODEL_HTTP_RESPONSE = "{version:" + TEST_UUID + SNAPSHOT + ":url:" +
       TEST_NEXUS_URL + TEST_UUID + SNAPSHOT_JSON + "}"
 
   def testNexusUrl = TEST_NEXUS_URL + TEST_UUID + SNAPSHOT_JSON
-  def testModelName = SOLVING_MODEL_WITH_UID
-  def testUrl = BRIDGE_ADDRESS + MODEL_EXPORT + SOLVING_MODEL_WITH_UID
+  def testGovernanceModelName = SOLVING_MODEL_WITH_UID
+  def testWorldCheckModelName = TEST_BUCKET_WITH_UID
+  def testGovernanceUrl = BRIDGE_ADDRESS + MODEL_EXPORT + MODEL + SOLVING_MODEL_WITH_UID
+  def testWorldCheckIsPepProceduralUrl = BRIDGE_ADDRESS + MODEL_EXPORT + IS_PEP_PROCEDURAL +
+      TEST_BUCKET_WITH_UID
+  def testWorldCheckIsPepHistoricalUrl = BRIDGE_ADDRESS + MODEL_EXPORT + IS_PEP_HISTORICAL +
+      TEST_BUCKET_WITH_UID
   def testCrumb = CRUMB_TOKEN
   def testCrumbRequestField = CRUMB_REQUEST
   def jenkinsApiProperties = new JenkinsApiProperties(
@@ -45,39 +54,46 @@ class Fixtures {
   def modelInfo = ModelInfo.builder()
       .type("MODEL")
       .changeType("MAJOR")
-      .name(testModelName)
-      .url(testUrl)
+      .name(testGovernanceModelName)
+      .url(testGovernanceUrl)
       .build()
 
-  def modelInfoWorldCheck = ModelInfo.builder()
+  def modelInfoWorldCheckIsPepProcedural = ModelInfo.builder()
       .type("IS_PEP_PROCEDURAL")
       .changeType("MINOR")
-      .name(testModelName)
-      .url(testUrl)
+      .name(testWorldCheckModelName)
+      .url(testWorldCheckIsPepProceduralUrl)
+      .build()
+
+  def modelInfoWorldCheckIsPepHistorical = ModelInfo.builder()
+      .type("IS_PEP_HISTORICAL")
+      .changeType("MINOR")
+      .name(testWorldCheckModelName)
+      .url(testWorldCheckIsPepHistoricalUrl)
       .build()
 
   def modelPersisted = ModelPersisted.newBuilder()
-      .setModelName(testModelName)
-      .setModelUri(testUrl)
-      .setModelType(IS_PEP_PROCEDURAL)
+      .setModelName(testWorldCheckModelName)
+      .setModelUri(testWorldCheckIsPepProceduralUrl)
+      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
       .build()
 
   def modelStatusUpdated = ModelStatusUpdated.newBuilder()
-      .setModelName(testModelName)
-      .setModelUri(testUrl)
-      .setModelType(IS_PEP_PROCEDURAL)
+      .setModelName(testWorldCheckModelName)
+      .setModelUri(testWorldCheckIsPepProceduralUrl)
+      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
       .setModelStatus(SUCCESS)
       .build()
 
   def modelStatusUpdatedDto = ModelStatusUpdatedDto.builder()
-      .name(testModelName)
-      .url(testUrl)
+      .name(testWorldCheckModelName)
+      .url(testWorldCheckIsPepProceduralUrl)
       .type(ModelType.IS_PEP_PROCEDURAL.name())
       .status(ModelStatus.SUCCESS.name())
       .build()
 
   def modelPromotedForProduction = ModelPromotedForProduction.newBuilder()
-      .setName(testModelName)
+      .setName(testGovernanceModelName)
       .build()
 
   def crumbResponse =

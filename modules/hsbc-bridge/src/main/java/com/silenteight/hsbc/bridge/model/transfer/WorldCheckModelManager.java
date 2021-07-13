@@ -3,10 +3,16 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
+import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
+
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
@@ -22,8 +28,10 @@ public class WorldCheckModelManager implements ModelManager {
 
   private final ModelClient jenkinsModelClient;
   private final StoreModelUseCase storeModelUseCase;
+  private final GetModelUseCase getModelUseCase;
   private final WorldCheckMessageSender worldCheckMessageSender;
   private final ModelRepository modelRepository;
+  private final ModelTransferModelLoader modelTransferModelLoader;
 
   @Override
   public void transferModelToJenkins(ModelInfo modelInfo) {
@@ -40,6 +48,15 @@ public class WorldCheckModelManager implements ModelManager {
   public void transferModelStatus(ModelInfoStatusRequest request) {
     var modelPersisted = toModelPersisted(request);
     worldCheckMessageSender.send(modelPersisted);
+  }
+
+  @Override
+  public ExportModelResponse exportModel(Details details) {
+    var model = getModelUseCase.getModel(details.getType());
+    var modelJson = tryLoadModel(model.getMinIoUrl());
+    var exportModelResponseDto = ExportModelResponseDto.builder()
+        .modelJson(modelJson).build();
+    return ExportModelResponseCreator.of(exportModelResponseDto).create();
   }
 
   @Override
@@ -61,7 +78,27 @@ public class WorldCheckModelManager implements ModelManager {
     }
   }
 
+  private byte[] tryLoadModel(String minioUrl) {
+    try {
+      var uri = new URI(minioUrl);
+      var inputStream = modelTransferModelLoader.loadModel(uri);
+      return IOUtils.toByteArray(inputStream);
+    } catch (IOException | URISyntaxException e) {
+      log.error("Unable to load model from minio uri: " + minioUrl, e);
+      throw new ModelLoadingException("Unable to load model from minio uri: " + e.getMessage());
+    }
+  }
+
   private boolean isPepOrNameAliases(ModelType type) {
     return type == IS_PEP_PROCEDURAL || type == IS_PEP_HISTORICAL || type == NAME_ALIASES;
+  }
+
+  private static class ModelLoadingException extends RuntimeException {
+
+    private static final long serialVersionUID = 330005480374857470L;
+
+    public ModelLoadingException(String message) {
+      super(message);
+    }
   }
 }

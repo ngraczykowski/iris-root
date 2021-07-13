@@ -29,7 +29,7 @@ class ListenerConfiguration {
   @Bean
   NewWorldCheckModelListener newWorldCheckModelListener(
       WorldCheckModelManager worldCheckModelManager) {
-    return new NewWorldCheckModelListener(worldCheckModelManager);
+    return new NewWorldCheckModelListener(bridgeApiProperties.getAddress(), worldCheckModelManager);
   }
 
   @Bean

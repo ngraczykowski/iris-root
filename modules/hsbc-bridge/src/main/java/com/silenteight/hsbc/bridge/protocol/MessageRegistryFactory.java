@@ -69,7 +69,7 @@ public class MessageRegistryFactory {
     Class<? extends Message> type = classInfo.loadClass(Message.class, true);
 
     if (type == null) {
-      log.warn("Could not load message type: class={}", classInfo.getName());
+      log.warn("Could not loadWatchlist message type: class={}", classInfo.getName());
     } else {
       if (log.isTraceEnabled())
         log.trace("Loaded message type: class={}", type.getName());

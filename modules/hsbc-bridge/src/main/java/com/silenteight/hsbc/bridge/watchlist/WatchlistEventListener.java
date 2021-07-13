@@ -18,9 +18,9 @@ class WatchlistEventListener {
   @Async
   @EventListener
   public void onOriginalWatchlistSaved(OriginalWatchlistSavedEvent event) {
-    var core = watchlistLoader.load(
+    var core = watchlistLoader.loadWatchlist(
         URI.create(event.getCoreWatchlistUri()));
-    var aliases = watchlistLoader.load(
+    var aliases = watchlistLoader.loadWatchlist(
         URI.create(event.getAliasesWatchlistUri()));
 
     processWatchlist.process(RetrievedWatchlist.builder()

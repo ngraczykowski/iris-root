@@ -1,11 +1,12 @@
 package com.silenteight.hsbc.bridge.model.rest
 
-import com.silenteight.hsbc.bridge.model.ExportModelResponseDto
+import com.silenteight.hsbc.bridge.model.ModelDetails
 import com.silenteight.hsbc.bridge.model.ModelRestController
 import com.silenteight.hsbc.bridge.model.ModelServiceClient
 import com.silenteight.hsbc.bridge.model.SolvingModelDto
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest
+import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse
 import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager
 
@@ -59,14 +60,17 @@ class ModelRestControllerSpec extends Specification {
 
   def 'should export governance model'() {
     given:
+    governanceModelManager.supportsModelType(MODEL) >> true
     def name = "solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333"
-    def exportModelResponseDto = createExportModelResponseDto(name)
+    def type = "MODEL"
+    def modelDetails = createModelDetails(type, name)
+    def exportModelResponse = createExportModelResponse(name)
 
     when:
-    def result = mockMvc.perform(get('/model/export/' + name))
+    def result = mockMvc.perform(get('/model/export/' + type + '/' + name))
 
     then:
-    1 * modelServiceClient.exportModel(name) >> exportModelResponseDto
+    1 * modelManagers.first().exportModel(modelDetails) >> exportModelResponse
     verifyResults(result, '{"modelJson":"solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333"}')
   }
 
@@ -124,6 +128,22 @@ class ModelRestControllerSpec extends Specification {
     result.andExpect(status().isOk())
   }
 
+  def 'should export WorldCheck model'() {
+    given:
+    worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> true
+    def name = "solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333"
+    def type = "IS_PEP_PROCEDURAL"
+    def modelDetails = createModelDetails(type, name)
+    def exportModelResponse = createExportModelResponse(name)
+
+    when:
+    def result = mockMvc.perform(get('/model/export/' + type + '/' + name))
+
+    then:
+    1 * modelManagers.get(1).exportModel(modelDetails) >> exportModelResponse
+    verifyResults(result, '{"modelJson":"solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333"}')
+  }
+
   def 'should send BAD_REQUEST status when model is not supported in WorldCheck during updating model'() {
     given:
     worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> false
@@ -177,10 +197,15 @@ class ModelRestControllerSpec extends Specification {
         .build()
   }
 
-  def static createExportModelResponseDto(String name) {
-    return ExportModelResponseDto.builder()
-        .modelJson(name.getBytes())
+  def static createModelDetails(String type, String name) {
+    return ModelDetails.builder()
+        .type(type)
+        .name(name)
         .build()
+  }
+
+  def static createExportModelResponse(String name) {
+    return new ExportModelResponse("modelJson": name)
   }
 
   static ModelInfoRequest createModelInfoRequest(String modelType, String changeType) {

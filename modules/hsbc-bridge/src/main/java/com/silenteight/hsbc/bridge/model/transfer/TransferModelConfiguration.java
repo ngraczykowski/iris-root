@@ -14,17 +14,21 @@ class TransferModelConfiguration {
   private final ModelClient jenkinsModelClient;
   private final RepositoryClient repositoryClient;
   private final ModelServiceClient modelServiceClient;
+  private final ModelTransferModelLoader modelTransferModelLoader;
 
   @Bean
   WorldCheckModelManager worldCheckModelManager(
       ModelRepository modelRepository,
       StoreModelUseCase storeModelUseCase,
+      GetModelUseCase getModelUseCase,
       WorldCheckMessageSender worldCheckMessageSender) {
     return new WorldCheckModelManager(
         jenkinsModelClient,
         storeModelUseCase,
+        getModelUseCase,
         worldCheckMessageSender,
-        modelRepository);
+        modelRepository,
+        modelTransferModelLoader);
   }
 
   @Bean

@@ -7,12 +7,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-class StoreModelUseCaseConfiguration {
+class ModelUseCaseConfiguration {
 
   private final ModelInformationRepository modelRepository;
 
   @Bean
   StoreModelUseCase storeModelUseCase() {
     return new StoreModelUseCase(modelRepository);
+  }
+
+  @Bean
+  GetModelUseCase getModelUseCase() {
+    return new GetModelUseCase(modelRepository);
   }
 }

@@ -2,7 +2,9 @@ package com.silenteight.hsbc.bridge.aws;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.model.transfer.ModelTransferModelLoader;
 import com.silenteight.hsbc.bridge.model.transfer.ModelRepository;
+import com.silenteight.hsbc.bridge.watchlist.LoadingException;
 import com.silenteight.hsbc.bridge.watchlist.WatchlistLoader;
 import com.silenteight.hsbc.bridge.watchlist.WatchlistSaver;
 
@@ -23,7 +25,8 @@ import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectKey;
 import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectVersion;
 
 @RequiredArgsConstructor
-class AwsAdapter implements ModelRepository, WatchlistSaver, WatchlistLoader {
+class AwsAdapter implements ModelRepository, WatchlistSaver, WatchlistLoader,
+    ModelTransferModelLoader {
 
   private final S3Client client;
   private final String modelBucketName;
@@ -80,7 +83,7 @@ class AwsAdapter implements ModelRepository, WatchlistSaver, WatchlistLoader {
   }
 
   @Override
-  public InputStream load(URI uri) throws WatchlistLoadingException {
+  public InputStream loadWatchlist(URI uri) throws LoadingException {
     try {
       var object = client.getObjectAsBytes(GetObjectRequest.builder()
           .bucket(watchlistBucketName)
@@ -89,7 +92,21 @@ class AwsAdapter implements ModelRepository, WatchlistSaver, WatchlistLoader {
           .build());
       return object.asInputStream();
     } catch (SdkException e) {
-      throw new WatchlistLoadingException(e);
+      throw new LoadingException(e);
+    }
+  }
+
+  @Override
+  public InputStream loadModel(URI uri) throws LoadingException {
+    try {
+      var object = client.getObjectAsBytes(GetObjectRequest.builder()
+          .bucket(modelBucketName)
+          .key(getObjectKey(uri))
+          .versionId(getObjectVersion(uri))
+          .build());
+      return object.asInputStream();
+    } catch (SdkException e) {
+      throw new LoadingException(e);
     }
   }
 }

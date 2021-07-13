@@ -13,6 +13,7 @@ import static com.silenteight.hsbc.bridge.model.transfer.ChangeType.MINOR;
 @RequiredArgsConstructor
 class NewWorldCheckModelListener {
 
+  private final String address;
   private final WorldCheckModelManager worldCheckModelManager;
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.model-persisted-queue}")
@@ -22,10 +23,12 @@ class NewWorldCheckModelListener {
   }
 
   private ModelInfo convertToModelInfo(ModelPersisted modelPersisted) {
+    var name = modelPersisted.getModelName();
+    var type = modelPersisted.getModelType().name();
     return ModelInfo.builder()
-        .name(modelPersisted.getModelName())
-        .url(modelPersisted.getModelUri())
-        .type(modelPersisted.getModelType().name())
+        .name(name)
+        .url(address + "/model/export/" + type + name)
+        .type(type)
         .changeType(MINOR.name())
         .build();
   }

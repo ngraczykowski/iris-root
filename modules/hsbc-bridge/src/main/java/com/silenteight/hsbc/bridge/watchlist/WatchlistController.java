@@ -74,7 +74,7 @@ class WatchlistController {
   }
 
   @ExceptionHandler({
-      WatchlistLoader.WatchlistLoadingException.class,
+      LoadingException.class,
       WatchlistSaver.WatchlistSavingException.class,
       IncorrectFileExtensionException.class })
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)

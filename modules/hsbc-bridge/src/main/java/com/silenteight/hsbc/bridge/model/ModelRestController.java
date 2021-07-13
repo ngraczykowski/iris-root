@@ -5,17 +5,16 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
+import com.silenteight.hsbc.bridge.model.rest.input.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 import com.silenteight.hsbc.bridge.model.rest.output.SimpleModelResponse;
 import com.silenteight.hsbc.bridge.model.transfer.ModelManager;
-import com.silenteight.hsbc.bridge.model.transfer.ModelType;
 
 import liquibase.util.StringUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -40,10 +39,10 @@ public class ModelRestController {
 
   @GetMapping("/export/**")
   public ResponseEntity<ExportModelResponse> export(HttpServletRequest request) {
-    checkRequestUri(request.getRequestURI());
-    var name = request.getRequestURI().split("export/")[1];
-    var exportModelResponseDto = modelServiceClient.exportModel(name);
-    return ok(createExportModelResponse(exportModelResponseDto));
+    var modelDetails = getModelDetailsFromUri(request.getRequestURI());
+    var managers = getMatchingModelManagers(ModelType.fromValue(modelDetails.getType()));
+    var modelManager = managers.stream().findFirst().get();
+    return ok(modelManager.exportModel(modelDetails));
   }
 
   @PostMapping
@@ -77,8 +76,7 @@ public class ModelRestController {
         httpStatus);
   }
 
-  private Set<ModelManager> getMatchingModelManagers(
-      com.silenteight.hsbc.bridge.model.rest.input.ModelType modelType) {
+  private Set<ModelManager> getMatchingModelManagers(ModelType modelType) {
     var matchingManagers = modelManagers.stream()
         .filter(manager -> manager.supportsModelType(mapToModelType(modelType)))
         .collect(Collectors.toSet());
@@ -89,9 +87,15 @@ public class ModelRestController {
     return matchingManagers;
   }
 
-  private ModelType mapToModelType(
-      com.silenteight.hsbc.bridge.model.rest.input.ModelType requestType) {
-    return ModelType.valueOf(requestType.name());
+  private com.silenteight.hsbc.bridge.model.transfer.ModelType mapToModelType(ModelType type) {
+    return com.silenteight.hsbc.bridge.model.transfer.ModelType.valueOf(type.name());
+  }
+
+  private ModelDetails getModelDetailsFromUri(String requestUri) {
+    checkRequestUri(requestUri);
+    var typeWithName = requestUri.split("export/")[1];
+    var splitTypeAndName = typeWithName.split("/", 2);
+    return new ModelDetails(splitTypeAndName[0], splitTypeAndName[1]);
   }
 
   private void checkRequestUri(String name) {
@@ -104,12 +108,6 @@ public class ModelRestController {
     var response = new SimpleModelResponse();
     response.setName(model.getName());
     response.setPolicyName(model.getPolicyName());
-    return response;
-  }
-
-  private ExportModelResponse createExportModelResponse(ExportModelResponseDto exportModel) {
-    var response = new ExportModelResponse();
-    response.setModelJson(new String(exportModel.getModelJson(), StandardCharsets.UTF_8));
     return response;
   }
 }

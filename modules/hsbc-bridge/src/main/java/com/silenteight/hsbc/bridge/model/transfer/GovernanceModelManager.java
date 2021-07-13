@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
+import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 
 import java.io.IOException;
 
-import static com.silenteight.hsbc.bridge.model.transfer.ChangeType.MAJOR;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.FAILURE;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.SUCCESS;
@@ -25,8 +25,7 @@ public class GovernanceModelManager implements ModelManager {
 
   @Override
   public void transferModelToJenkins(ModelInfo modelInfo) {
-    var enrichedModelInfo = enrichModelInfo(modelInfo);
-    jenkinsModelClient.updateModel(enrichedModelInfo);
+    jenkinsModelClient.updateModel(modelInfo);
   }
 
   @Override
@@ -38,6 +37,12 @@ public class GovernanceModelManager implements ModelManager {
   @Override
   public void transferModelStatus(ModelInfoStatusRequest request) {
     governanceServiceClient.sendStatus(request.getName());
+  }
+
+  @Override
+  public ExportModelResponse exportModel(Details details) {
+    var exportModelResponseDto = governanceServiceClient.exportModel(details.getName());
+    return ExportModelResponseCreator.of(exportModelResponseDto).create();
   }
 
   @Override
@@ -55,16 +60,5 @@ public class GovernanceModelManager implements ModelManager {
       log.error("Unable to update model: " + request.getName(), e);
       return convertToModelStatusUpdated(request, FAILURE);
     }
-  }
-
-  private ModelInfo enrichModelInfo(ModelInfo modelInfo) {
-    var name = modelInfo.getName();
-    var uri = modelInfo.getUrl() + "/model/export/" + name;
-    return ModelInfo.builder()
-        .name(name)
-        .url(uri)
-        .type(MODEL.name())
-        .changeType(MAJOR.name())
-        .build();
   }
 }
