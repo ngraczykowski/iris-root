@@ -25,7 +25,7 @@ service SolvingModelService {
 
   rpc ExportModel(ExportModelRequest) returns (ExportModelResponse) {
     option (google.api.http) = {
-      get: "/v1/{model=solving-models/*}:export"
+      get: "/v1/{model.name=solving-models/*}:export"
     };
   }
 
@@ -41,9 +41,9 @@ service SolvingModelService {
     };
   }
 
-  rpc ModelDeployedOnProduction(ModelName) returns (google.protobuf.Empty) {
+  rpc ModelDeployedOnProduction(ModelDeployedOnProductionRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/{model=solving-models/*}:deployed"
+      post: "/v1/{model.name=solving-models/*}:deployed"
     };
   }
 }
@@ -82,18 +82,30 @@ message Feature {
 message ModelPromotedForProduction {
   // The unique name of the model. This is always system-assigned.
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Version of the solving model
+  string version = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // Request for model to be exported
 message ExportModelRequest {
-  // Name of solving model
-  string model = 1 [(google.api.field_behavior) = REQUIRED];
+  oneof model {
+    // Name of solving model
+    string name = 1;
+    // Version of the solving model
+    string version = 2;
+  }
 }
 
 // Response with exported model
 message ExportModelResponse {
   // Json with exported model
-  bytes model_json = 1 [(google.api.field_behavior) = REQUIRED];
+  bytes model_json = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Id of the solving model, may be different on a different environment
+  int32 id = 2 [(google.api.field_behavior) = OUTPUT_ONLY, deprecated = true];
+  // Name of solving model
+  string name = 3;
+  // Version of the solving model
+  string version = 4;
 }
 
 // Request with new model to import
@@ -111,11 +123,15 @@ message ImportNewModelResponse {
 // Request to use the specific model for solving alerts
 message UseModelRequest {
   // Name of the model to use for solving alerts
-  string model = 1 [(google.api.field_behavior) = REQUIRED];
+  string model = 1;
 }
 
-// Model name
-message ModelName {
-  // The unique name of the model. This is always system-assigned.
-  string model = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+// Request for model deployed on production
+message ModelDeployedOnProductionRequest {
+  oneof model {
+    // Name of solving model
+    string name = 1;
+    // Version of the solving model
+    string version = 2;
+  }
 }
