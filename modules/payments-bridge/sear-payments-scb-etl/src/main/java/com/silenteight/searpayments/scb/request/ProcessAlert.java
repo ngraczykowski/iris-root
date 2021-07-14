@@ -2,10 +2,10 @@ package com.silenteight.searpayments.scb.request;
 
 import com.silenteight.sep.base.aspects.logging.LogContext;
 import com.silenteight.sep.base.aspects.logging.LogContext.LogContextAction;
-import com.silenteight.tsaas.bridge.domain.Alert;
-import com.silenteight.tsaas.bridge.domain.Alert.AlertStatus;
-import com.silenteight.tsaas.bridge.domain.Alert.DamageReason;
-import com.silenteight.tsaas.bridge.domain.AlertService;
+import com.silenteight.searpayments.scb.domain.Alert;
+import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
+import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
+import com.silenteight.searpayments.scb.domain.AlertService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

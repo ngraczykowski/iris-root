@@ -1,7 +1,7 @@
 package com.silenteight.searpayments.scb.request;
 
-import com.silenteight.tsaas.bridge.domain.Alert;
-import com.silenteight.tsaas.bridge.domain.AlertService;
+import com.silenteight.searpayments.scb.domain.Alert;
+import com.silenteight.searpayments.scb.domain.AlertService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

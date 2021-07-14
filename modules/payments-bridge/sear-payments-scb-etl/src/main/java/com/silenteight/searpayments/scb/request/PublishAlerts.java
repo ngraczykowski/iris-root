@@ -1,8 +1,8 @@
 package com.silenteight.searpayments.scb.request;
 
+import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.sep.base.aspects.logging.LogContext;
 import com.silenteight.sep.base.aspects.logging.LogContext.LogContextAction;
-import com.silenteight.tsaas.bridge.domain.Alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.silenteight.tsaas.bridge.app.util.MessagingUtil.toPayload;
+import static com.silenteight.searpayments.scb.util.MessagingUtil.toPayload;
 
 @Slf4j
 @RequiredArgsConstructor

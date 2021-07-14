@@ -1,11 +1,11 @@
 package com.silenteight.searpayments.scb.request;
 
-import com.silenteight.tsaas.bridge.app.rest.mapper.CreateAlertsFromRequestFactory;
-import com.silenteight.tsaas.bridge.domain.Alert;
-import com.silenteight.tsaas.bridge.domain.Alert.AlertStatus;
-import com.silenteight.tsaas.bridge.domain.Alert.DamageReason;
-import com.silenteight.tsaas.bridge.domain.AlertService;
-import com.silenteight.tsaas.bridge.dto.input.RequestDto;
+import com.silenteight.searpayments.scb.mapper.CreateAlertsFromRequestFactory;
+import com.silenteight.searpayments.scb.domain.Alert;
+import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
+import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
+import com.silenteight.searpayments.scb.domain.AlertService;
+import com.silenteight.searpayments.bridge.dto.input.RequestDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class HandleRequestFacade {
 
 
   @NonNull private final CreateAlertsFromRequestFactory createAlertsFromRequestFactory;
-  @NonNull private final com.silenteight.tsaas.bridge.app.request.ProcessAlerts processAlerts;
+  @NonNull private final ProcessAlerts processAlerts;
   @NonNull private final PublishAlerts publishAlerts;
   @NonNull private final AlertService alertService;
 

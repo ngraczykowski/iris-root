@@ -1,7 +1,7 @@
 package com.silenteight.searpayments.scb.request;
 
-import com.silenteight.tsaas.bridge.app.rest.mapper.CreateAlertsFromRequestFactory;
-import com.silenteight.tsaas.bridge.domain.AlertService;
+import com.silenteight.searpayments.scb.mapper.CreateAlertsFromRequestFactory;
+import com.silenteight.searpayments.scb.domain.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,13 +17,13 @@ class HandleRequestConfiguration {
 
   @Bean
   PrevalidateAlertStrategy prevalidateAlertStrategy() {
-    return new com.silenteight.tsaas.bridge.app.request.MaxHitsPrevalidateAlertStrategy(maxHitsPerAlert);
+    return new MaxHitsPrevalidateAlertStrategy(maxHitsPerAlert);
   }
 
   @Bean
   HandleRequestFacade handleRequestFacade(
       CreateAlertsFromRequestFactory createAlertsFromRequestFactory,
-      com.silenteight.tsaas.bridge.app.request.ProcessAlerts handleRequestProcessAlerts,
+      ProcessAlerts handleRequestProcessAlerts,
       PublishAlerts publishAlerts,
       AlertService alertService) {
     return new HandleRequestFacade(
@@ -34,10 +34,10 @@ class HandleRequestConfiguration {
   }
 
   @Bean
-  com.silenteight.tsaas.bridge.app.request.ProcessAlerts handleRequestProcessAlerts(
+  ProcessAlerts handleRequestProcessAlerts(
       AlertService alertService,
       PrevalidateAlertStrategy prevalidateAlertStrategy) {
-    return new com.silenteight.tsaas.bridge.app.request.ProcessAlerts(alertService, prevalidateAlertStrategy);
+    return new ProcessAlerts(alertService, prevalidateAlertStrategy);
   }
 
   @Bean

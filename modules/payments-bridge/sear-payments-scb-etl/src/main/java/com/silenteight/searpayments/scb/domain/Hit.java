@@ -86,20 +86,28 @@ public class Hit {
     @Column(name = "name")
     private Collection<String> names = new ArrayList<>();
 
+    @Setter
     private String freeTextAgentRequest;
 
+    @Setter
     private String crossmatchAgentRequest;
 
+    @Setter
     private String nameAgentRequest;
 
+    @Setter
     private String geoAgentRequest;
 
+    @Setter
     private String oneLineAddressAgentRequest;
 
+    @Setter
     private String specificTermsAgentRequest;
 
+    @Setter
     private String delimiterInNameLineAgentRequest;
 
+    @Setter
     private String matchtextFirstTokenOfAddressAgentRequest;
 
     @Setter

@@ -1,6 +1,6 @@
 package com.silenteight.searpayments.scb.request;
 
-import com.silenteight.tsaas.bridge.domain.Alert;
+import com.silenteight.searpayments.scb.domain.Alert;
 import lombok.NonNull;
 
 class MaxHitsPrevalidateAlertStrategy implements PrevalidateAlertStrategy {

@@ -12,6 +12,8 @@ dependencies {
     implementation project(':sear-payments-app')
     implementation libraries.silenteight_commons_app
 
+    implementation libraries.commons_collections
+
     // Database
     implementation libraries.liquibase_core
     implementation libraries.spring_jdbc
@@ -19,5 +21,24 @@ dependencies {
     implementation libraries.hikari_cp
     implementation libraries.hibernate_core
 
+    implementation libraries.silenteight_sep_base_common
+    implementation libraries.silenteight_commons_app
+
     testImplementation libraries.spock_core
+
+    // Application Starters
+    implementation libraries.spring_boot_starter_security
+
+    // Validator
+    implementation libraries.tomcat_embed_el
+    implementation libraries.hibernate_validator
+
+    // Grpc
+    implementation libraries.brave_instrumentation_grpc
+    implementation libraries.grpc_protobuf
+    implementation libraries.grpc_stub
+    implementation libraries.grpc_client_spring_boot_starter
+
+    implementation libraries.silenteight_agents_protocol
+    implementation libraries.protobuf_java_util
 }
