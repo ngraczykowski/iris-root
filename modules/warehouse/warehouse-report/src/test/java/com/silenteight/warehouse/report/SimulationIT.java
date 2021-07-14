@@ -30,7 +30,7 @@ import java.util.Optional;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.KIBANA_INDEX_PATTERN;
 import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType.SEARCH;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.*;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
@@ -124,13 +124,13 @@ class SimulationIT {
     // Download report and verify the content
     waitForReportInstances(1, SIMULATION_TENANT);
     String report = downloadReport(SIMULATION_ANALYSIS_ID, reportDefinitionId, timestamp);
-    assertThat(report).contains(ALERT_ID_1);
+    assertThat(report).contains(DISCRIMINATOR_1);
   }
 
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        SIMULATION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_1);
+        SIMULATION_ELASTIC_INDEX_NAME, DISCRIMINATOR_1, MAPPED_ALERT_1);
   }
 
   private void createSimulationMasterTenant() {

@@ -29,7 +29,7 @@ import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_KIBANA_INDEX_PATTERN_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static com.silenteight.warehouse.report.production.ProductionReportType.ACCURACY;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -99,13 +99,13 @@ class ProductionIT {
     // Download report and verify the content
     waitForReportInstances(1, PRODUCTION_TENANT);
     String report = downloadReport(reportDefinitionId, timestamp, REPORT_TYPE);
-    assertThat(report).contains(ALERT_ID_1);
+    assertThat(report).contains(DISCRIMINATOR_1);
   }
 
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_1);
+        PRODUCTION_ELASTIC_INDEX_NAME, DISCRIMINATOR_1, MAPPED_ALERT_1);
   }
 
   private void createProductionTenant() {

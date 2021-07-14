@@ -75,15 +75,16 @@ class SamplingAlertServiceTest {
     saveAlert(DOCUMENT_ID_5, ALERT_5_MAP);
   }
 
-  private void saveAlert(String alertId, Map<String, Object> alert) {
-    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, alertId, alert);
+  private void saveAlert(String discriminator, Map<String, Object> alert) {
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, discriminator, alert);
   }
 
   private static Stream<Arguments> getAlertsSampleRequests() {
     return Stream.of(
-        Arguments.of(ALERTS_SAMPLE_REQUEST_1, REQUESTED_ALERT_COUNT_2, of(ALERT_ID_4, ALERT_ID_5)),
+        Arguments.of(ALERTS_SAMPLE_REQUEST_1, REQUESTED_ALERT_COUNT_2, of(DISCRIMINATOR_4,
+            DISCRIMINATOR_5)),
         Arguments.of(ALERTS_SAMPLE_REQUEST_2, REQUESTED_ALERT_COUNT_4,
-            of(ALERT_ID_2, ALERT_ID_3, ALERT_ID_5, ALERT_ID_4))
+            of(DISCRIMINATOR_2, DISCRIMINATOR_3, DISCRIMINATOR_5, DISCRIMINATOR_4))
     );
   }
 }

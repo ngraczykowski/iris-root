@@ -14,9 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_ID_KEY;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
-import static com.silenteight.warehouse.indexer.alert.NameResource.getSplitName;
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.RandomAlertQueryService.getExactMatch;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -34,11 +33,11 @@ class AlertQueryService {
   @NonNull
   ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
-  public AlertAttributes getSingleAlertAttributes(List<String> fields, String id) {
-    Map<String, Object> singleAlert = searchForAlert(ALERT_ID_KEY, getSplitName(id)).stream()
+  public AlertAttributes getSingleAlertAttributes(List<String> fields, String discriminator) {
+    Map<String, Object> singleAlert = searchForAlert(DISCRIMINATOR, discriminator).stream()
         .findFirst()
         .orElseThrow(
-            () -> new AlertNotFoundException(format("Alert with %s id not found.", id)));
+            () -> new AlertNotFoundException(format("Alert with %s id not found.", discriminator)));
 
     return AlertAttributes.builder()
         .attributes(convertSingleAlertToAttributes(fields, singleAlert))
@@ -46,14 +45,10 @@ class AlertQueryService {
   }
 
   public AlertsAttributesListDto getMultipleAlertsAttributes(
-      List<String> fields, List<String> idList) {
+      List<String> fields, List<String> discriminatorList) {
 
-    List<String> splitIdList = idList.stream()
-        .map(NameResource::getSplitName)
-        .collect(toList());
-
-    List<AlertAttributes> alertAttributesList = splitIdList.stream()
-        .map(alertId -> getSingleAlertAttributes(fields, alertId))
+    List<AlertAttributes> alertAttributesList = discriminatorList.stream()
+        .map(discriminator -> getSingleAlertAttributes(fields, discriminator))
         .collect(toList());
 
     return AlertsAttributesListDto.builder()
@@ -82,8 +77,8 @@ class AlertQueryService {
     alertAttributes.put(requestedAttribute, attributeValue);
   }
 
-  private List<Map<String, Object>> searchForAlert(String requestedField, String alertId) {
-    SearchRequest searchRequest = buildSearchRequestForSpecificField(requestedField, alertId);
+  private List<Map<String, Object>> searchForAlert(String requestedField, String discriminator) {
+    SearchRequest searchRequest = buildSearchRequestForSpecificField(requestedField, discriminator);
     return alertSearchService.searchForAlerts(restHighLevelClient, searchRequest);
   }
 

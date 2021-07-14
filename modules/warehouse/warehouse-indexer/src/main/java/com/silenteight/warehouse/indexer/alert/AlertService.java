@@ -15,7 +15,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import java.io.IOException;
 import java.util.List;
 
-import static com.silenteight.warehouse.indexer.alert.NameResource.getSplitName;
 import static org.elasticsearch.action.support.WriteRequest.RefreshPolicy.WAIT_UNTIL;
 
 @Slf4j
@@ -40,7 +39,7 @@ public class AlertService {
 
   private IndexRequest convertAlertToDocument(String indexName, Alert alert) {
     IndexRequest indexRequest = new IndexRequest(indexName);
-    indexRequest.id(getSplitName(alert.getName()));
+    indexRequest.id(alert.getDiscriminator());
     indexRequest.source(alertMapper.convertAlertToAttributes(alert));
 
     return indexRequest;

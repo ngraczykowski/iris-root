@@ -13,10 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_ID_KEY;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.alert.NameResource.getSplitName;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Optional.ofNullable;
@@ -34,7 +33,7 @@ class AlertMapper {
     Map<String, String> documentAttributes = new LinkedHashMap<>();
 
     documentAttributes.put(INDEX_TIMESTAMP, now.format(ISO_DATE_TIME));
-    documentAttributes.put(ALERT_ID_KEY, getSplitName(alert.getName()));
+    documentAttributes.put(DISCRIMINATOR, alert.getDiscriminator());
     documentAttributes.put(
         COUNTRY_KEY, extractAlertField(alert, alertMappingProperties.getCountrySourceKey()));
     documentAttributes.putAll(convertPayloadToMap(alert.getPayload(), ALERT_PREFIX));

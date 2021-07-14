@@ -33,7 +33,7 @@ import java.util.UUID;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
@@ -95,7 +95,7 @@ class CountryGroupsIT {
     updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
 
     AlertAttributes allowedAlert =
-        alertRestController.getSingleAlertDto(ALERT_ID_1, of()).getBody();
+        alertRestController.getSingleAlertDto(DISCRIMINATOR_1, of()).getBody();
     assertThat(allowedAlert).isNotNull();
   }
 
@@ -106,7 +106,7 @@ class CountryGroupsIT {
     updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
 
     assertThatThrownBy(
-        () -> alertRestController.getSingleAlertDto(ALERT_ID_1, of()))
+        () -> alertRestController.getSingleAlertDto(DISCRIMINATOR_1, of()))
         .isInstanceOf(AlertNotFoundException.class);
   }
 
@@ -132,7 +132,7 @@ class CountryGroupsIT {
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_1);
+        PRODUCTION_ELASTIC_INDEX_NAME, DISCRIMINATOR_1, MAPPED_ALERT_1);
   }
 
   private void removeData() {

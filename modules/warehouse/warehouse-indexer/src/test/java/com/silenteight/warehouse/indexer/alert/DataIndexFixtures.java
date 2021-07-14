@@ -2,7 +2,7 @@ package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.Match;
-import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
@@ -11,10 +11,11 @@ import com.google.protobuf.Value;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.*;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_2;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_2_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_2_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.COUNTRY_UK;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP_4;
@@ -29,7 +30,7 @@ public class DataIndexFixtures {
   );
 
   public static final Alert ALERT_1 = Alert.newBuilder()
-      .setName(ALERT_NAME_1)
+      .setDiscriminator(DISCRIMINATOR_1)
       .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
           match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
@@ -37,7 +38,7 @@ public class DataIndexFixtures {
       .build();
 
   public static final Alert ALERT_2 = Alert.newBuilder()
-      .setName(ALERT_NAME_2)
+      .setDiscriminator(DISCRIMINATOR_2)
       .setPayload(structWithValue(
           SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI))
       .addAllMatches(of(
@@ -46,7 +47,7 @@ public class DataIndexFixtures {
       .build();
 
   static final Alert ALERT_WITHOUT_MATCHES = Alert.newBuilder()
-      .setName(ALERT_NAME_1)
+      .setDiscriminator(DISCRIMINATOR_1)
       .setPayload(structWithValue(
           SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI))
       .addAllMatches(emptyList())

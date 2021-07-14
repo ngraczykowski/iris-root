@@ -54,7 +54,7 @@ class OpendistroElasticClientTest {
     RoleDto roleDto = RoleDto.builder()
         .indexPermissions(List.of(IndexPermission.builder()
             .indexPatterns(List.of("itest_production"))
-            .dls("{\"terms\": {\"country.keyword\": [\"UK\", \"ES\"]}}")
+            .dls("{\"terms\": {\"s8_country.keyword\": [\"UK\", \"ES\"]}}")
             .build()))
         .build();
 

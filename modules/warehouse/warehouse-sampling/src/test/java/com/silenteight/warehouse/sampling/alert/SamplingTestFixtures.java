@@ -14,11 +14,11 @@ public class SamplingTestFixtures {
   static final int REQUESTED_ALERT_COUNT_2 = 2;
   static final int REQUESTED_ALERT_COUNT_4 = 4;
 
-  public static final String ALERT_ID_1 = "457b1498-e348-4a81-8093-6079c1173010";
-  public static final String ALERT_ID_2 = "80a8cfc0-86c3-4360-afed-7a1b9a326020";
-  public static final String ALERT_ID_3 = "788edd98-af02-49a8-ab75-69cf63397b54";
-  public static final String ALERT_ID_4 = "accb9508-3bad-4c5b-825a-8c023e03b7d6";
-  public static final String ALERT_ID_5 = "48627744-d573-4edb-89fa-f88a8be4ac11";
+  public static final String DISCRIMINATOR_1 = "457b1498-e348-4a81-8093-6079c1173010";
+  public static final String DISCRIMINATOR_2 = "80a8cfc0-86c3-4360-afed-7a1b9a326020";
+  public static final String DISCRIMINATOR_3 = "788edd98-af02-49a8-ab75-69cf63397b54";
+  public static final String DISCRIMINATOR_4 = "accb9508-3bad-4c5b-825a-8c023e03b7d6";
+  public static final String DISCRIMINATOR_5 = "48627744-d573-4edb-89fa-f88a8be4ac11";
   public static final String ALERT_RECOMMENDATION_KEY = "recommendation";
   public static final String ALERT_RECOMMENDATION_FP = "FALSE_POSITIVE";
   public static final String ALERT_RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
@@ -32,36 +32,36 @@ public class SamplingTestFixtures {
   public static final String PROCESSING_TIMESTAMP_2 = "2021-05-05T18:17:37.098Z";
   public static final String PROCESSING_TIMESTAMP_3 = "2021-06-08T13:17:37.098Z";
   public static final String PROCESSING_TIMESTAMP_4 = "2021-06-18T12:10:31.098Z";
-  public static final String DOCUMENT_ID_1 = ALERT_ID_1;
-  public static final String DOCUMENT_ID_2 = ALERT_ID_2;
-  public static final String DOCUMENT_ID_3 = ALERT_ID_3;
-  public static final String DOCUMENT_ID_4 = ALERT_ID_4;
-  public static final String DOCUMENT_ID_5 = ALERT_ID_5;
+  public static final String DOCUMENT_ID_1 = DISCRIMINATOR_1;
+  public static final String DOCUMENT_ID_2 = DISCRIMINATOR_2;
+  public static final String DOCUMENT_ID_3 = DISCRIMINATOR_3;
+  public static final String DOCUMENT_ID_4 = DISCRIMINATOR_4;
+  public static final String DOCUMENT_ID_5 = DISCRIMINATOR_5;
 
   public static final Map<String, Object> ALERT_1_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_1,
-      ALERT_ID_KEY, ALERT_ID_1,
+      DISCRIMINATOR, DISCRIMINATOR_1,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK
   );
 
   public static final Map<String, Object> ALERT_2_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_1,
-      ALERT_ID_KEY, ALERT_ID_2,
+      DISCRIMINATOR, DISCRIMINATOR_2,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK,
       ALERT_PREFIX + ALERT_RISK_TYPE_KEY, ALERT_RISK_TYPE_PEP
   );
   public static final Map<String, Object> ALERT_3_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_2,
-      ALERT_ID_KEY, ALERT_ID_3,
+      DISCRIMINATOR, DISCRIMINATOR_3,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_UK,
       ALERT_PREFIX + ALERT_RISK_TYPE_KEY, ALERT_RISK_TYPE_PEP
       );
   public static final Map<String, Object> ALERT_4_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_3,
-      ALERT_ID_KEY, ALERT_ID_4,
+      DISCRIMINATOR, DISCRIMINATOR_4,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_MI,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_PL,
       ALERT_PREFIX + ALERT_RISK_TYPE_KEY, ALERT_RISK_TYPE_PEP
@@ -69,7 +69,7 @@ public class SamplingTestFixtures {
 
   public static final Map<String, Object> ALERT_5_MAP = Map.of(
       INDEX_TIMESTAMP, PROCESSING_TIMESTAMP_4,
-      ALERT_ID_KEY, ALERT_ID_5,
+      DISCRIMINATOR, DISCRIMINATOR_5,
       ALERT_PREFIX + ALERT_RECOMMENDATION_KEY, ALERT_RECOMMENDATION_FP,
       ALERT_PREFIX + ALERT_COUNTRY_KEY, ALERT_COUNTRY_PL,
       ALERT_PREFIX + ALERT_RISK_TYPE_KEY, ALERT_RISK_TYPE_PEP
