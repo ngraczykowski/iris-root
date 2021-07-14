@@ -138,4 +138,24 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="simulator-1.0.0-6" author="mmastylo">
+    <createIndex
+        tableName="simulator_simulation_dataset_name"
+        indexName="ix_simulator_simulation_dataset_name_simulation_id">
+      <column name="simulation_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="simulator_simulation_dataset_name"
+        indexName="ix_simulator_simulation_dataset_name_dataset_name">
+      <column name="dataset_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="simulator_dataset"
+        indexName="ix_simulator_dataset_external_resource_name">
+      <column name="external_resource_name"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

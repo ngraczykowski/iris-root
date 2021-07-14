@@ -33,11 +33,13 @@ public final class SimulationFixtures {
   public static final String DESCRIPTION = "Simulation description";
   public static final String MODEL = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   public static final State ANALYSIS_STATE = DONE;
-  public static final UUID DATASET_ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
-  public static final String DATASET = "datasets/" + DATASET_ID;
-  public static final String DATASET_EXTERNAL_NAME =
-      "datasets/b6855a6f-fc63-422f-84a7-677a0c8f9a9a";
-  public static final Set<String> DATASETS = of(DATASET);
+  public static final UUID DATASET_ID_1 = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  public static final String DATASET_NAME_1 = "datasets/" + DATASET_ID_1;
+  public static final long DATASET__ALERT_COUNT_1 = 5L;
+  public static final UUID DATASET_ID_2 = fromString("04e81eda-5ce7-4ce7-843c-34ee32a5182f");
+  public static final String DATASET_NAME_2 = "datasets/" + DATASET_ID_2;
+  public static final long DATASET__ALERT_COUNT_2 = 3L;
+  public static final Set<String> DATASETS = of(DATASET_NAME_1, DATASET_NAME_2);
   public static final String PROGRESS_STATE = ANALYSIS_STATE.toString();
   public static final String USERNAME = "USERNAME";
   public static final SimulationState STATE = PENDING;
@@ -57,7 +59,7 @@ public final class SimulationFixtures {
           .simulationName(SIMULATION_NAME)
           .description(DESCRIPTION)
           .model(MODEL)
-          .datasets(of(DATASET))
+          .datasets(DATASETS)
           .createdBy(USERNAME)
           .build();
 

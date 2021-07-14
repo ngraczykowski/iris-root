@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
+import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -36,5 +37,10 @@ public class SimulationService {
     } catch (DataIntegrityViolationException e) {
       throw new NonUniqueSimulationException(request.getId());
     }
+  }
+
+  public long countAllAlerts(String analysis) {
+    return repository.countAllAlerts(analysis)
+        .orElseThrow(() -> new SimulationNotFoundException(analysis));
   }
 }

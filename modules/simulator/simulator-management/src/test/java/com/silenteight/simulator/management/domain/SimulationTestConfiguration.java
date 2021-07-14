@@ -1,7 +1,7 @@
 package com.silenteight.simulator.management.domain;
 
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.management.ManagementModule;
 import com.silenteight.simulator.management.create.AnalysisService;
 import com.silenteight.simulator.management.create.TestAnalysisService;
@@ -13,7 +13,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackageClasses = ManagementModule.class)
+@ComponentScan(basePackageClasses = {
+    DatasetModule.class,
+    ManagementModule.class
+})
 class SimulationTestConfiguration {
 
   @Bean
@@ -34,10 +37,5 @@ class SimulationTestConfiguration {
   @Bean
   AnalysisService analysisService() {
     return new TestAnalysisService();
-  }
-
-  @Bean
-  DatasetQuery datasetQuery() {
-    return Mockito.mock(DatasetQuery.class);
   }
 }

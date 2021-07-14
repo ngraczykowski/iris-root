@@ -47,13 +47,15 @@ class CreateSimulationUseCaseTest {
     // given
     when(modelService.getModel(CREATE_SIMULATION_REQUEST.getModel())).thenReturn(SOLVING_MODEL);
     when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(ANALYSIS);
-    when(datasetQuery.getExternalResourceName(DATASET_ID)).thenReturn(DATASET_EXTERNAL_NAME);
+    when(datasetQuery.getExternalResourceName(DATASET_ID_1)).thenReturn(DATASET_NAME_1);
+    when(datasetQuery.getExternalResourceName(DATASET_ID_2)).thenReturn(DATASET_NAME_2);
 
     // when
     underTest.activate(CREATE_SIMULATION_REQUEST);
 
     // then
-    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_EXTERNAL_NAME);
+    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_1);
+    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_2);
     verify(simulationService).createSimulation(
         CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS.getName());
     var logCaptor = forClass(AuditDataDto.class);

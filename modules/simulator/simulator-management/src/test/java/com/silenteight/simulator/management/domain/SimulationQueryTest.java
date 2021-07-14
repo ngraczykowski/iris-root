@@ -67,7 +67,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
   void shouldThrowIfSimulationNotFound() {
     assertThatThrownBy(() -> underTest.get(ID))
         .isInstanceOf(SimulationNotFoundException.class)
-        .hasMessageContaining("simulationId");
+        .hasMessageContaining("simulationId=" + ID);
   }
 
   private void persistSimulation() {
