@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet id="db.changelog-sear-payments-scb-1.1.0-1" author="wkeska">
+    <createTable tableName="scb_alert">
+      <column name="alert_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="alert_name" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="create_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="priority" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="scb_match">
+      <column name="match_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="create_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint
+        columnNames="match_id, alert_id"
+        constraintName="uq_sp_match_match_id_alert_id"
+        tableName="scb_match"/>
+
+    <addForeignKeyConstraint
+        baseTableName="scb_match"
+        baseColumnNames="alert_id"
+        constraintName="fk_scb_match_alert_id"
+        referencedTableName="scb_alert"
+        referencedColumnNames="alert_id"/>
+  </changeSet>
+</databaseChangeLog>
