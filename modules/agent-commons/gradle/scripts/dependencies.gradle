@@ -275,8 +275,8 @@ configurations.all {
 }
 
 dependencies {
-  implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-  annotationProcessor platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  implementation platform(project(":agent-dependencies-common"))
+  annotationProcessor platform(project(":agent-dependencies-common"))
 
   implementation libraries.slf4j_api
 }

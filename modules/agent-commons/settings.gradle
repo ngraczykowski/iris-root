@@ -1,5 +1,4 @@
 rootProject.name = 'agent-commons'
-gradle.ext.sepDependenciesVersion = "2.2.0"
 
 include 'agent-dependencies-common'
 include 'agent-config-loader'
