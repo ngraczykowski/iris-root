@@ -1,7 +1,7 @@
 package com.silenteight.simulator.processing.alert.index.domain;
 
-public enum Operation {
+public enum State {
 
-  SEND,
-  ACK
+  SENT,
+  ACKED
 }

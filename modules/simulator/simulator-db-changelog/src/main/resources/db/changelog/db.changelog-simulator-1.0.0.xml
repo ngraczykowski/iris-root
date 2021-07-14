@@ -158,4 +158,23 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="simulator-1.0.0-7" author="mmastylo">
+    <addColumn tableName="simulator_indexed_alert">
+      <column name="request_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+
+    <renameColumn
+        tableName="simulator_indexed_alert"
+        oldColumnName="operation"
+        newColumnName="state"/>
+
+    <createIndex
+        tableName="simulator_indexed_alert"
+        indexName="ix_simulator_indexed_alert_request_id">
+      <column name="request_id"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

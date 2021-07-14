@@ -1,0 +1,17 @@
+package com.silenteight.simulator.processing.alert.index.domain;
+
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+@Configuration
+@EntityScan
+@EnableJpaRepositories
+class IndexedAlertDomainConfiguration {
+
+  @Bean
+  IndexedAlertService indexAlertEntityService(IndexedAlertRepository repository) {
+    return new IndexedAlertService(repository);
+  }
+}
