@@ -9,17 +9,19 @@ import io.grpc.ServerServiceDefinition;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.util.MutableHandlerRegistry;
+import net.devh.boot.grpc.server.serverfactory.GrpcServerConfigurer;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkState;
 
-//TODO move to proper module (after fixing dependency hell) (MI6-638)
 public class GrpcServerExtension implements BeforeEachCallback, AfterEachCallback {
 
   @Getter
@@ -28,6 +30,8 @@ public class GrpcServerExtension implements BeforeEachCallback, AfterEachCallbac
   private Server server;
   private String serverName;
   private MutableHandlerRegistry serviceRegistry;
+  @Nullable
+  private GrpcServerConfigurer configurer;
   private boolean useDirectExecutor;
 
   /**
@@ -40,12 +44,15 @@ public class GrpcServerExtension implements BeforeEachCallback, AfterEachCallbac
     return this;
   }
 
-  //TODO not used? (MI6-638)
+  public final GrpcServerExtension configure(GrpcServerConfigurer grpcServerConfigurer) {
+    configurer = grpcServerConfigurer;
+    return this;
+  }
+
   public final void addService(ServerServiceDefinition service) {
     serviceRegistry.addService(service);
   }
 
-  //TODO not used? (MI6-638)
   public final void addService(BindableService bindableService) {
     serviceRegistry.addService(bindableService);
   }
@@ -56,15 +63,18 @@ public class GrpcServerExtension implements BeforeEachCallback, AfterEachCallbac
 
     serviceRegistry = new MutableHandlerRegistry();
 
-    InProcessServerBuilder serverBuilder = InProcessServerBuilder.forName(serverName)
+    var serverBuilder = InProcessServerBuilder.forName(serverName)
         .fallbackHandlerRegistry(serviceRegistry);
 
     if (useDirectExecutor)
       serverBuilder.directExecutor();
 
+    Optional.ofNullable(configurer)
+        .ifPresent(configurer -> configurer.accept(serverBuilder));
+
     server = serverBuilder.build().start();
 
-    InProcessChannelBuilder channelBuilder = InProcessChannelBuilder.forName(serverName);
+    var channelBuilder = InProcessChannelBuilder.forName(serverName);
 
     if (useDirectExecutor)
       channelBuilder.directExecutor();
