@@ -36,7 +36,7 @@ message SimulationDataIndexRequest {
 
 message Alert {
   // Name of the alert
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string name = 1 [(google.api.field_behavior) = OPTIONAL, deprecated = true];
   // Payload of the alert that should be stored.
   // If an alert with this name is already stored, the payload will be merged into an existing
   // content. Because order of processing messages is not guaranteed, values for existing keys
@@ -44,6 +44,10 @@ message Alert {
   google.protobuf.Struct payload = 2 [(google.api.field_behavior) = REQUIRED];
   // Matches associated with the alert that should be stored.
   repeated Match matches = 3 [(google.api.field_behavior) = OPTIONAL];
+  // Discriminator to be able to join various messages into one document.
+  // All messages describing the same alert should have the same value in this field.
+  // This field should be unique across the whole system.
+  string discriminator = 4  [(google.api.field_behavior) = REQUIRED];
 }
 
 message Match {
