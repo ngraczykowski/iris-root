@@ -36,7 +36,7 @@ import static com.silenteight.warehouse.common.opendistro.kibana.SavedObjectType
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_KIBANA_INDEX_PATTERN_NAME;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.SAVED_SEARCH;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_ID_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -118,13 +118,13 @@ class ProductionPeriodicIT {
 
     String reportFilename = synchronizedReports.get(0).getFilename();
     String reportContent = getReportContentFromMinio(reportFilename);
-    assertThat(reportContent).contains(ALERT_ID_1);
+    assertThat(reportContent).contains(DISCRIMINATOR_1);
   }
 
   @SneakyThrows
   private void storeData() {
     simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, ALERT_ID_1, MAPPED_ALERT_1);
+        PRODUCTION_ELASTIC_INDEX_NAME, DISCRIMINATOR_1, MAPPED_ALERT_1);
   }
 
   private void createProductionTenant() {

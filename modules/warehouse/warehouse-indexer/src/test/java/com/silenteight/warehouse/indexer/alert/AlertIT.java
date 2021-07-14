@@ -28,7 +28,6 @@ import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_2;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_SEARCH_CRITERIA;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.ALERT_NAME_1;
 import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
@@ -43,8 +42,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AlertIT {
 
   static final List<String> LIST_OF_ID = of(
-      ResourceName.ALERT_NAME_1,
-      ResourceName.ALERT_NAME_2);
+      DISCRIMINATOR_1,
+      DISCRIMINATOR_2);
 
   static final List<String> ALERT_FIELDS = of(
       SourceAlertKeys.RECOMMENDATION_KEY,
@@ -91,7 +90,7 @@ class AlertIT {
     storeData();
 
     AlertAttributes singleAlertMapDto =
-        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, ALERT_NAME_1);
+        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
 
     assertThat(singleAlertMapDto.getAttributes())
         .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK);
@@ -105,22 +104,22 @@ class AlertIT {
     storeData();
 
     AlertAttributes singleAlertMapDto =
-        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, ALERT_NAME_1);
+        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
 
     assertThat(singleAlertMapDto.getAttributes().get(SourceAlertKeys.RISK_TYPE_KEY)).isNull();
   }
 
   @ParameterizedTest
-  @MethodSource("getInvalidAlertIds")
+  @MethodSource("getInvalidDiscriminators")
   @WithElasticAccessCredentials
-  void shouldThrowExceptionWhenAlertIsNotFound(String alertId) {
+  void shouldThrowExceptionWhenAlertIsNotFound(String discriminatorId) {
     storeData();
 
     assertThrows(
         AlertNotFoundException.class,
         () -> queryUnderTest.getSingleAlertAttributes(
             ALERT_FIELDS,
-            alertId));
+            discriminatorId));
   }
 
   @Test
@@ -149,13 +148,13 @@ class AlertIT {
   }
 
   @Test
-  void shouldReturnAlertsId() {
+  void shouldReturnDiscriminators() {
     storeData();
 
     List<String> alertsIds =
-        randomAlertQueryService.getRandomAlertIdByCriteria(ALERT_SEARCH_CRITERIA);
+        randomAlertQueryService.getRandomDiscriminatorByCriteria(ALERT_SEARCH_CRITERIA);
 
-    assertThat(alertsIds).containsAnyElementsOf(of(ALERT_ID_2, ALERT_ID_3));
+    assertThat(alertsIds).containsAnyElementsOf(of(DISCRIMINATOR_2, DISCRIMINATOR_3));
   }
 
   private void storeData() {
@@ -167,8 +166,8 @@ class AlertIT {
     saveAlert(DOCUMENT_ID_6, MAPPED_ALERT_6);
   }
 
-  private void saveAlert(String alertId, Map<String, Object> alert) {
-    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, alertId, alert);
+  private void saveAlert(String discriminator, Map<String, Object> alert) {
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, discriminator, alert);
   }
 
   private void cleanData() {
@@ -183,11 +182,11 @@ class AlertIT {
     }
   }
 
-  private static Stream<Arguments> getInvalidAlertIds() {
+  private static Stream<Arguments> getInvalidDiscriminators() {
     return Stream.of(
-        Arguments.of(ALERT_ID_2.substring(0, 8)),
-        Arguments.of(ALERT_ID_2 + "invalid"),
-        Arguments.of(ALERT_ID_2.replaceFirst("f", "x"))
+        Arguments.of(DISCRIMINATOR_2.substring(0, 8)),
+        Arguments.of(DISCRIMINATOR_2 + "invalid"),
+        Arguments.of(DISCRIMINATOR_2.replaceFirst("f", "x"))
     );
   }
 }

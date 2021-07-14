@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_ID_KEY;
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -28,8 +28,7 @@ import static org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders.
 @RequiredArgsConstructor
 public class RandomAlertQueryService {
 
-  private static final String[] ALERTS_IDS_LIST = new String[] { ALERT_ID_KEY };
-  private static final String ALERT_SUFFIX_SEARCH = ".keyword";
+  private static final String[] ALERTS_IDS_LIST = new String[] { DISCRIMINATOR };
 
   @NonNull
   private final AlertSearchService alertSearchService;
@@ -41,7 +40,7 @@ public class RandomAlertQueryService {
   @Valid
   private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
-  public List<String> getRandomAlertIdByCriteria(AlertSearchCriteria criteria) {
+  public List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria criteria) {
     SearchRequest searchRequest =
         buildSearchRequestForRandomAlerts(
             criteria.getTimeRangeFrom(), criteria.getTimeRangeTo(), criteria.getFilter(),
@@ -51,7 +50,7 @@ public class RandomAlertQueryService {
         alertSearchService.searchForAlerts(restHighLevelAdminClient, searchRequest);
 
     return maps.stream()
-        .map(alert -> alert.get(ALERT_ID_KEY).toString())
+        .map(alert -> alert.get(DISCRIMINATOR).toString())
         .distinct()
         .collect(toList());
   }

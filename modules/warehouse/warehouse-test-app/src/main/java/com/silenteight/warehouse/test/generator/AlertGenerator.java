@@ -22,10 +22,11 @@ class AlertGenerator {
 
   Alert generate() {
     return Alert.newBuilder()
-        .setName(getRandomAlertName())
+        .setDiscriminator(getRandomDiscriminator())
         .setPayload(convertMapToPayload(Map.of(
             "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"),
-            "lob_country", getRandomValue("PL", "DE", "UK"))))
+            "lob_country", getRandomValue("PL", "DE", "UK"),
+            "risk_type", getRandomValue("SAN", "PEP"))))
         .addAllMatches(of(
             match(getRandomMatchName(), "solution", "NO_DECISION")))
         .build();
@@ -49,8 +50,8 @@ class AlertGenerator {
     return Value.newBuilder().setStringValue(entry.getValue()).build();
   }
 
-  private String getRandomAlertName() {
-    return "alerts/" + randomUUID().toString();
+  private String getRandomDiscriminator() {
+    return randomUUID().toString();
   }
 
   private String getRandomMatchName() {

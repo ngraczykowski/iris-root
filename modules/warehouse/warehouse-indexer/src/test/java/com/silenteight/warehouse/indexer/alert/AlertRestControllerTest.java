@@ -13,7 +13,6 @@ import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMIN
 import static com.silenteight.warehouse.indexer.alert.AlertControllerConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.any;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -36,12 +35,12 @@ class AlertRestControllerTest extends BaseRestControllerTest {
 
     get(QA_ALERT_LIST_URL)
         .statusCode(OK.value())
-        .body("alerts[0].attributes.alertId", is(ALERT_ID));
+        .body("alerts[0].attributes.s8_discriminator", is(DISCRIMINATOR_ID));
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
-  void its404_whenAtLeastOneAlertIdNotExists() {
+  void its404_whenAtLeastOneDiscriminatorNotExists() {
     when(alertQueryService.getMultipleAlertsAttributes(any(), any()))
         .thenThrow(AlertNotFoundException.class);
 
@@ -62,12 +61,12 @@ class AlertRestControllerTest extends BaseRestControllerTest {
 
     get(QA_ALERT_URL)
         .statusCode(OK.value())
-        .body("attributes.alertId", is(ALERT_ID));
+        .body("attributes.s8_discriminator", is(DISCRIMINATOR_ID));
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
-  void its404_whenAtAlertIdNotExists() {
+  void its404_whenAlertNotExists() {
     when(alertQueryService.getSingleAlertAttributes(any(), any()))
         .thenThrow(AlertNotFoundException.class);
 

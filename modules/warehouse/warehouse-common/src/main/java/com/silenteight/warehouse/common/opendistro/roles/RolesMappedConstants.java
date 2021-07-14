@@ -7,5 +7,5 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class RolesMappedConstants {
 
-  public static final String COUNTRY_KEY = "country";
+  public static final String COUNTRY_KEY = "s8_country";
 }

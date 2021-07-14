@@ -34,7 +34,7 @@ spring:
 
 warehouse:
   alert-mapping:
-    country-source-key: lob_country
+    country-source-key: alert_1.CustomerEntities.edqLoBCountryCode
   messaging:
     integration:
       production-indexing-inbound:
