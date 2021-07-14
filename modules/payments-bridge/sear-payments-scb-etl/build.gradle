@@ -10,6 +10,7 @@ version '1.0-SNAPSHOT'
 
 dependencies {
     implementation project(':sear-payments-app')
+    implementation libraries.spring_context
     implementation libraries.silenteight_commons_app
 
     implementation libraries.commons_collections
