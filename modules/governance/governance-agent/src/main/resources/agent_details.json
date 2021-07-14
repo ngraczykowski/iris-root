@@ -11,7 +11,8 @@
       "NO_MATCH",
       "EXACT_MATCH",
       "HQ_NO_MATCH",
-      "NO_DATA"
+      "NO_DATA",
+      "INCONCLUSIVE"
     ],
     "configurations": [
       {
@@ -36,7 +37,8 @@
       "EXACT",
       "NEAR",
       "OUT_OF_RANGE",
-      "NO_DATA"
+      "NO_DATA",
+      "INCONCLUSIVE"
     ],
     "configurations": [
       {
@@ -57,7 +59,8 @@
       "WEAK_DIGIT_MATCH",
       "WEAK_MATCH",
       "NO_MATCH",
-      "NO_DATA"
+      "NO_DATA",
+      "INCONCLUSIVE"
     ],
     "configurations": [
       {
@@ -77,7 +80,8 @@
       "WEAK_DIGIT_MATCH",
       "WEAK_MATCH",
       "NO_MATCH",
-      "NO_DATA"
+      "NO_DATA",
+      "INCONCLUSIVE"
     ],
     "configurations": [
       {
@@ -94,7 +98,8 @@
     "responses": [
       "MATCH",
       "NO_MATCH",
-      "NO_DATA"
+      "NO_DATA",
+      "INCONCLUSIVE"
     ],
     "configurations": [
       {
@@ -116,6 +121,104 @@
       "MATCH",
       "WEAK_MATCH",
       "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/historicalDecision/versions/1.0.0/configs/1": {
+    "agentId": "6ca7f680-8a1b-44f4-8bfb-5aa62f8e543d",
+    "features": [
+      "features/isTpMarked",
+      "features/isApTpMarked",
+      "features/isCaseTpMarked"
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/invalidAlert/versions/1.0.0/configs/1": {
+    "agentId": "cdf2ffda-2011-4dd9-9d56-e8740becda35",
+    "features": [
+      "features/invalidAlert"
+    ],
+    "responses": [
+      "FI",
+      "YES",
+      "NO"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/allowList/versions/1.0.0/configs/1": {
+    "agentId": "1b6b5c3b-0fed-4c59-bbdd-bbc1affe177c",
+    "features": [
+      "features/commonNames",
+      "features/commonAp",
+      "features/commonMp"
+    ],
+    "responses": [
+      "YES",
+      "NO",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/geo/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geoResidency",
+      "features/geoPlaceOfBirth"
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/pep/versions/1.0.0/configs/1": {
+    "agentId": "84b322ed-018e-4bff-9518-12376f536e63",
+    "features": [
+      "features/isHsbcPep"
+    ],
+    "responses": [
+      "INCONCLUSIVE",
+      "NOT_PEP_ANYMORE",
+      "NOT_PEP_HISTORICAL",
+      "NOT_PEP_PROCEDURAL",
       "NO_DATA"
     ],
     "configurations": [
