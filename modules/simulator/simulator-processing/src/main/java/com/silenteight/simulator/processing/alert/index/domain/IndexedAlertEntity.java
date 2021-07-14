@@ -28,13 +28,17 @@ class IndexedAlertEntity extends BaseEntity implements IdentifiableEntity, Seria
   private Long id;
 
   @ToString.Include
+  @Column(name = "request_id", nullable = false)
+  private String requestId;
+
+  @ToString.Include
   @Column(name = "analysis_name", nullable = false)
   private String analysisName;
 
   @ToString.Include
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private Operation operation;
+  private State state;
 
   @ToString.Include
   @Column(name = "alert_count", nullable = false)
