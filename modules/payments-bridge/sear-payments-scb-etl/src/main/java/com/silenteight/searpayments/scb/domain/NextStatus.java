@@ -11,7 +11,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "nextStatus")
+@Table(name = "scb_next_status")
 public class NextStatus {
 
   @Id

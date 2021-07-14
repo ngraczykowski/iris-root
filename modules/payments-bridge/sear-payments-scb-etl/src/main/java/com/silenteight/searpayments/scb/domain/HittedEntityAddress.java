@@ -13,7 +13,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "hitted_entity_address")
+@Table(name = "scb_hitted_entity_address")
 public class HittedEntityAddress {
 
   @Id

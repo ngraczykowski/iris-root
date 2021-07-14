@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.EAGER;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "hit")
+@Table(name = "scb_hit")
 @Builder
 public class Hit {
 
