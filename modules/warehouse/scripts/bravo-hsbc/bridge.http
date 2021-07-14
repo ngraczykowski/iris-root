@@ -1,0 +1,15 @@
+### Step 1: Ingest Recommendation
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/ingestRecommendations
+Accept: application/json
+Content-Type: application/json
+
+< ./ingestResults.json
+
+
+### Step 2: Learning
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/learning
+Accept: application/json
+Content-Type: application/json
+
+< ./learning.json
+
