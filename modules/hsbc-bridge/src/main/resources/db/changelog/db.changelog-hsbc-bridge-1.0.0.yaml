@@ -509,3 +509,12 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: timestamp
+
+  - changeSet:
+      id: 1.0.0-15
+      author: smrozowski
+      changes:
+        - modifyDataType:
+            tableName: hsbc_bridge_alert
+            columnName: external_id
+            newDataType: varchar(120)
