@@ -33,6 +33,10 @@ public class IndexedEventListener {
     return responses.size() > 0;
   }
 
+  public boolean hasAtLeastEventCount(int count) {
+    return responses.size() >= count;
+  }
+
   public Optional<DataIndexResponse> getLastEvent() {
     if (!hasAnyEvent()) {
       return empty();

@@ -2,7 +2,10 @@ package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.Match;
-import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
@@ -11,7 +14,8 @@ import com.google.protobuf.Value;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_2_1;
@@ -75,7 +79,7 @@ public class DataIndexFixtures {
         .build();
   }
 
-  private static Builder convertMapToPayload(Map<String, String> payload) {
+  public static Builder convertMapToPayload(Map<String, String> payload) {
     Builder builder = Struct.newBuilder();
     Map<String, Value> convertedMap = new HashMap<>();
     for (String key : payload.keySet()) {
