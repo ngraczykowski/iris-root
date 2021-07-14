@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+    <changeSet id="tsaas-bridge-1.23.0-1" author="ajaromin">
+        <insert tableName="available_agent">
+            <column name="name" value="MESSAGE_TYPE_AGENT"/>
+            <column name="order" value="10"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="APPLICATION_CODE_AGENT"/>
+            <column name="order" value="11"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="TAG_AGENT"/>
+            <column name="order" value="12"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="SOLUTION_TYPE_AGENT"/>
+            <column name="order" value="13"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="WATCHLIST_TYPE_AGENT"/>
+            <column name="order" value="14"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="DIRECTION_AGENT"/>
+            <column name="order" value="15"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="ORIGIN_AGENT"/>
+            <column name="order" value="16"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="DESIGNATION_AGENT"/>
+            <column name="order" value="17"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="MESSAGE_FIELD_STRUCTURE_AGENT"/>
+            <column name="order" value="18"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-2" author="ajaromin">
+        <addColumn tableName="hit">
+            <column name="direction" type="VARCHAR(64)"/>
+        </addColumn>
+        <addColumn tableName="hit">
+            <column name="message_field_structure" type="VARCHAR(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-3" author="mwilkowski">
+        <createIndex
+                tableName="alert"
+                indexName="ix_alert_created_at_desc">
+            <column name="created_at" descending="true"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-4" author="msitarski">
+        <insert tableName="available_agent">
+            <column name="name" value="SPECIFIC_TERMS_AGENT"/>
+            <column name="order" value="19"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-5" author="msitarski">
+        <addColumn tableName="hit">
+            <column name="specific_terms_agent_request" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-6" author="jgajewski">
+        <insert tableName="available_agent">
+            <column name="name" value="CHINESE_COMMERCIAL_CODES_AGENT"/>
+            <column name="order" value="20"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-7" author="msitarski">
+        <update tableName="available_agent">
+            <column name="active" value="false"/>
+            <where>name='GEO_AGENT_STATE'</where>
+        </update>
+        <update tableName="available_agent">
+            <column name="active" value="false"/>
+            <where>name='GEO_AGENT_CITY'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-8" author="ajaromin">
+        <modifyDataType
+                columnName="value"
+                newDataType="varchar(256)"
+                tableName="feature_vector"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-9" author="msitarski">
+        <insert tableName="available_agent">
+            <column name="name" value="OVERRIDE_NAME_AGENT"/>
+            <column name="order" value="21"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-10" author="ajaromin">
+        <insert tableName="available_agent">
+            <column name="name" value="IS_TWO_LINES_NAME_AGENT"/>
+            <column name="order" value="22"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="tsaas-bridge-1.23.0-11" author="msitarski">
+        <insert tableName="available_agent">
+            <column name="name" value="IS_DELIMITER_IN_NAME_LINE_AGENT"/>
+            <column name="order" value="23"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-12" author="msitarski">
+        <addColumn tableName="hit">
+            <column name="delimiter_in_name_line_agent_request" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-13" author="msitarski">
+        <insert tableName="available_agent">
+            <column name="name" value="IS_MATCHTEXT_FIRST_TOKEN_OF_ADDRESS_AGENT"/>
+            <column name="order" value="24"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-14" author="msitarski">
+        <addColumn tableName="hit">
+            <column name="matchtext_first_token_of_address_agent_request" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-15" author="wkuziow">
+        <sqlFile path="db/changelog/sql/create_tsaas_ai_reasoning_report_2.sql"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-16" author="jgajewski">
+        <addColumn tableName="alert">
+            <column name="country_code" type="VARCHAR(8)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-17" author="wkuziow">
+        <addColumn tableName="hit">
+            <column name="account_number" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-18" author="msitarski">
+        <addColumn tableName="hit">
+            <column name="two_lines_name_agent_request" type="VARCHAR(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-19" author="msitarski">
+        <modifyDataType
+                columnName="two_lines_name_agent_request"
+                newDataType="VARCHAR(256)"
+                tableName="hit"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-19" author="wkuziow">
+        <update tableName="available_agent">
+            <column name="active" value="false"/>
+            <where>name='OVERRIDE_NAME_AGENT'</where>
+        </update>
+        <insert tableName="available_agent">
+            <column name="name" value="HISTORICAL_RISK_ASSESSMENT_AGENT"/>
+            <column name="active" value="true"/>
+            <column name="order" value="25"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.23.0-20" author="msitarski">
+        <modifyDataType
+                columnName="current_status_name"
+                newDataType="VARCHAR(65)"
+                tableName="alert"/>
+        <modifyDataType
+                columnName="current_status_checksum"
+                newDataType="VARCHAR(66)"
+                tableName="alert"/>
+        <modifyDataType
+                columnName="current_status_id"
+                newDataType="VARCHAR(67)"
+                tableName="alert"/>
+        <modifyDataType
+                columnName="current_status_routing_code"
+                newDataType="VARCHAR(68)"
+                tableName="alert"/>
+        <modifyDataType
+                columnName="output_status_name"
+                newDataType="VARCHAR(69)"
+                tableName="alert"/>
+        <modifyDataType
+                columnName="damage_reason_code"
+                newDataType="VARCHAR(70)"
+                tableName="alert"/>
+        <modifyDataType
+                columnName="override_reason"
+                newDataType="VARCHAR(71)"
+                tableName="alert_reco"/>
+        <modifyDataType
+                columnName="name"
+                newDataType="VARCHAR(72)"
+                tableName="available_agent"/>
+        <modifyDataType
+                columnName="wl_type"
+                newDataType="VARCHAR(73)"
+                tableName="crossmatch_agent"/>
+        <modifyDataType
+                columnName="ap_entity_type"
+                newDataType="VARCHAR(74)"
+                tableName="crossmatch_agent_ap_entities"/>
+        <modifyDataType
+                columnName="ap_property_name"
+                newDataType="VARCHAR(75)"
+                tableName="feature_vector_ap_properties"/>
+        <modifyDataType
+                columnName="wl_type"
+                newDataType="VARCHAR(76)"
+                tableName="freetext_agent"/>
+        <modifyDataType
+                columnName="account_number"
+                newDataType="VARCHAR(77)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="tag"
+                newDataType="VARCHAR(78)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="watchlist_type"
+                newDataType="VARCHAR(79)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="origin"
+                newDataType="VARCHAR(80)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="designation"
+                newDataType="VARCHAR(81)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="one_line_address_agent_request"
+                newDataType="VARCHAR(82)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="direction"
+                newDataType="VARCHAR(83)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="message_field_structure"
+                newDataType="VARCHAR(84)"
+                tableName="hit"/>
+        <modifyDataType
+                columnName="override_reason"
+                newDataType="VARCHAR(85)"
+                tableName="hit_reco"/>
+        <modifyDataType
+                columnName="override_reason"
+                newDataType="VARCHAR(86)"
+                tableName="hit_reco"/>
+        <modifyDataType
+                columnName="checksum"
+                newDataType="VARCHAR(87)"
+                tableName="next_status"/>
+        <modifyDataType
+                columnName="name"
+                newDataType="VARCHAR(88)"
+                tableName="next_status"/>
+    </changeSet>
+</databaseChangeLog>

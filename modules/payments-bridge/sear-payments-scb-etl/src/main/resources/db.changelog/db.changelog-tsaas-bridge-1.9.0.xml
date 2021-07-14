@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="tsaas-bridge-1.9.0-1" author="mwilkowski">
+
+        <createIndex
+                tableName="hitted_entity_address"
+                indexName="ix_hitted_entity_address_hit_id">
+            <column name="hit_id"/>
+        </createIndex>
+    </changeSet>
+
+
+    <changeSet id="tsaas-bridge-1.9.0-2" author="tbozek" runAlways="true">
+        <createView viewName="recommendation_report" replaceIfExists="true">
+            select a.system_id, r.recommendation, r.comment, a.data_center, a.message_type,
+            a.application_code,r.created_at
+            from alert a, alert_reco r
+            where a.alert_id = r.alert_id
+        </createView>
+    </changeSet>
+
+    <!-- Those two are run alway of you wan to change the select just edit sql file -->
+    <changeSet id="tsaas-bridge-1.9.0-3" author="tbozek">
+        <sqlFile path="db/changelog/sql/create_tsaas_ai_reasoning_report.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/sql/drop_tsaas_ai_reasoning_report.sql"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.9.0-4" author="tbozek">
+        <createProcedure
+                procedureName="refresh_ai_reasoning_report"
+                path="db/changelog/sql/create_tsaas_ai_reasoning_report_refresh_procedure.sql"/>
+        <rollback>
+            <dropProcedure procedureName="refresh_ai_reasoning_report"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.9.0-5" author="tbozek">
+        <createTable tableName="unit">
+            <column name="name" type="VARCHAR(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(128)">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.9.0-6" author="tbozek">
+        <sqlFile path="db/changelog/sql/insert_tsaas_unit.sql"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.9.0-7" author="tbozek">
+        <addColumn tableName="alert">
+            <column name="transaction_reference" type="VARCHAR(128)"/>
+            <column name="direction" type="VARCHAR(128)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.9.0-8" author="tbozek">
+        <sqlFile path="db/changelog/sql/create_tsaas_ai_reasoning_report_1.sql"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.9.0-9" author="tbozek">
+        <createIndex tableName="ai_reasoning_report"
+                     indexName="idx_ai_reasoning_report_alert_timestamp">
+            <column name="alert_timestamp"></column>
+        </createIndex>
+
+        <createIndex tableName="ai_reasoning_report"
+                     indexName="idx_ai_reasoning_report_recommendation_timestamp">
+            <column name="recommendation_timestamp"></column>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

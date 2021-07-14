@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="tsaas-bridge-1.0.12-1" author="mbartecki">
+        <createTable tableName="feature_vector_ap_properties">
+            <column name="feature_vector_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ap_property_name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ap_property_value" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="feature_vector_ap_properties"
+                baseColumnNames="feature_vector_id"
+                constraintName="fk_feature_vector_ap_properties_feature_vector_id"
+                referencedTableName="feature_vector"
+                referencedColumnNames="feature_vector_id"/>
+    </changeSet>
+</databaseChangeLog>

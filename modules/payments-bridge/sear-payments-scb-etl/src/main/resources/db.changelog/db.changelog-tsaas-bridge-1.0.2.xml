@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="tsaas-bridge-1.0.2-1" author="ajaromin">
+
+        <createTable tableName="next_status">
+            <column name="next_status_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="alert_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="id_of_next_status" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="routing_code" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="checksum" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex
+                tableName="next_status"
+                indexName="ix_next_status_next_status_id">
+            <column name="next_status_id"/>
+        </createIndex>
+
+        <addForeignKeyConstraint
+                baseTableName="next_status"
+                baseColumnNames="alert_id"
+                constraintName="fk_next_status_alert_id"
+                referencedTableName="alert"
+                referencedColumnNames="alert_id"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.2-2" author="ajaromin">
+        <addColumn tableName="alert">
+            <column name="current_status_name" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

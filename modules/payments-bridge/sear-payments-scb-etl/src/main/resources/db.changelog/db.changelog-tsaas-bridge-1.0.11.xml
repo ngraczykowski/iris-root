@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="tsaas-bridge-1.0.11-1" author="mwilkowski">
+
+        <createIndex
+                tableName="hit"
+                indexName="ix_hit_alert_id">
+            <column name="alert_id"/>
+        </createIndex>
+
+        <createIndex
+                tableName="hit_name"
+                indexName="ix_hit_name_hit_id">
+            <column name="hit_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.11-2" author="mwilkowski">
+
+        <createIndex
+                tableName="next_status"
+                indexName="ix_next_status_alert_id">
+            <column name="alert_id"/>
+        </createIndex>
+
+        <createIndex
+                tableName="feature_vector"
+                indexName="ix_feature_vector_hit_id">
+            <column name="hit_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

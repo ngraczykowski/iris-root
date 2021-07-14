@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="tsaas-bridge-1.22.0-1" author="ajaromin">
+        <update tableName="available_agent">
+            <column name="name" value="IS_ONELINE_ADDRESS_AGENT"/>
+            <where>name='IS_ONELINER_AGENT'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.22.0-2" author="ajaromin">
+        <addColumn tableName="hit">
+            <column name="one_line_address_agent_request" type="VARCHAR(64)"/>
+        </addColumn>
+        <dropColumn tableName="hit" columnName="one_liner_agent_request" />
+    </changeSet>
+
+</databaseChangeLog>

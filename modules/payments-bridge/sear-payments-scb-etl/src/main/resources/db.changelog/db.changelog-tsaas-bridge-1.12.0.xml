@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="tsaas-bridge-1.12.0-1" author="mwilkowski">
+
+        <createTable tableName="alert_response">
+            <column name="alert_response_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="alert_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="alert_response_body" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex
+                tableName="alert_response"
+                indexName="ix_alert_response_alert_id">
+            <column name="alert_id"/>
+        </createIndex>
+
+        <addForeignKeyConstraint
+                baseTableName="alert_response"
+                baseColumnNames="alert_id"
+                constraintName="fk_alert_response_alert_id"
+                referencedTableName="alert"
+                referencedColumnNames="alert_id"/>
+    </changeSet>
+
+</databaseChangeLog>

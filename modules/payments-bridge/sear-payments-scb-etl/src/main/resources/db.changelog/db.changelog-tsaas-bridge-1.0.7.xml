@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="tsaas-bridge-1.0.7-1" author="mbartecki">
+        <addUniqueConstraint
+                tableName="crossmatch_agent"
+                columnNames="hit_id"/>
+        <addColumn tableName="crossmatch_agent_ap_entities">
+            <column name="hit_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <dropForeignKeyConstraint
+                baseTableName="crossmatch_agent_ap_entities"
+                constraintName="fk_crossmatch_agent_ap_entities_crossmatch_agent_id"/>
+        <dropColumn
+                tableName="crossmatch_agent_ap_entities"
+                columnName="crossmatch_agent_id"/>
+        <addForeignKeyConstraint
+                baseTableName="crossmatch_agent_ap_entities"
+                baseColumnNames="hit_id"
+                constraintName="fk_crossmatch_agent_ap_entities_hit_id"
+                referencedTableName="crossmatch_agent"
+                referencedColumnNames="hit_id"/>
+    </changeSet>
+</databaseChangeLog>

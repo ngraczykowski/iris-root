@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="tsaas-bridge-1.0.0-1" author="mjasinski">
+        <createTable tableName="alert">
+            <column name="alert_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="system_id" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="message_type" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="application_code" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="message_format" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="message_data" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="business_unit_id" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="unit" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="data_center" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <createIndex
+                tableName="alert"
+                indexName="ix_alert_system_id">
+            <column name="system_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-2" author="mjasinski">
+        <createTable tableName="available_agent">
+            <column name="agent_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="active" type="BOOLEAN" defaultValueBoolean="true"/>
+
+            <column name="order" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-3" author="mjasinski">
+        <createTable tableName="hitted_entity_address">
+            <column name="address_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_main" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="hit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postal_address" type="VARCHAR(1024)"/>
+            <column name="city" type="VARCHAR(128)"/>
+            <column name="state" type="VARCHAR(128)"/>
+            <column name="country" type="VARCHAR(128)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-4" author="mjasinski">
+        <createTable tableName="hit">
+            <column name="hit_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="alert_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="entity_text" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tag" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="solution_type" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="matching_text" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="watchlist_type" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="hit"
+                baseColumnNames="alert_id"
+                constraintName="fk_hit_alert_id"
+                referencedTableName="alert"
+                referencedColumnNames="alert_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="hitted_entity_address"
+                baseColumnNames="hit_id"
+                constraintName="fk_hitted_entity_address_hit_id"
+                referencedTableName="hit"
+                referencedColumnNames="hit_id"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-5" author="mjasinski">
+        <createTable tableName="feature_vector">
+            <column name="feature_vector_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="agent_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="hit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="value" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="feature_vector"
+                baseColumnNames="hit_id"
+                constraintName="fk_feature_vector_hit_id"
+                referencedTableName="hit"
+                referencedColumnNames="hit_id"/>
+        <addForeignKeyConstraint
+                baseTableName="feature_vector"
+                baseColumnNames="agent_id"
+                constraintName="fk_feature_vector_agent_id"
+                referencedTableName="available_agent"
+                referencedColumnNames="agent_id"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-6" author="mjasinski">
+        <insert tableName="available_agent">
+            <column name="name" value="FREETEXT_AGENT"/>
+            <column name="order" value="1"/>
+        </insert>
+        <insert tableName="available_agent">
+            <column name="name" value="NAME_VS_ADDRESS_CROSSMATCH_AGENT"/>
+            <column name="order" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-7" author="mjasinski">
+        <createTable tableName="hit_name">
+            <column name="hit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="hit_name"
+                baseColumnNames="hit_id"
+                constraintName="fk_hit_name_hit_id"
+                referencedTableName="hit"
+                referencedColumnNames="hit_id"/>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-8" author="mjasinski">
+        <addColumn tableName="alert">
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="feature_vector">
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tsaas-bridge-1.0.0-9" author="mjasinski">
+        <addColumn tableName="hit">
+            <column name="watchlist_ofac_id" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="watchlist_intervention_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="alert">
+            <column name="message_id" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
