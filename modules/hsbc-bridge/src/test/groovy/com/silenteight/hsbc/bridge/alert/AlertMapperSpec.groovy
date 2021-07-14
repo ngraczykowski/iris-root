@@ -19,7 +19,7 @@ class AlertMapperSpec extends Specification {
 
     then:
     def alert = find.first()
-    alert.name == "alertName1"
+    alert.discriminator == "1234_someDiscriminator"
     alert.metadata.get("id") == "1234"
     alert.metadata.get("status") == "STORED"
     alert.metadata.get("errorMessage") == ""

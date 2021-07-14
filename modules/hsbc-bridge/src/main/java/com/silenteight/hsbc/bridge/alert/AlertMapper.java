@@ -34,8 +34,9 @@ class AlertMapper {
   private Alert mapToAlert(AlertInformation alertInfo) {
     return new Alert() {
       @Override
-      public String getName() {
-        return alertInfo.getAlertEntity().getName();
+      public String getDiscriminator() {
+        var entity = alertInfo.getAlertEntity();
+        return entity.getExternalId() + getDiscriminatorSeparator() + entity.getDiscriminator();
       }
 
       @Override

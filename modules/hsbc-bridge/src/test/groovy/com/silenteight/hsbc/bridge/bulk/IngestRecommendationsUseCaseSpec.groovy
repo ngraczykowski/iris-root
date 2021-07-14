@@ -19,9 +19,10 @@ class IngestRecommendationsUseCaseSpec extends Specification {
     then:
     1 * warehouseApi.send(*_) >> {arguments ->
       Collection<Alert> argument = arguments[0] as Collection<Alert>
-      assert argument.first().getName() == "someAlertId"
+      assert argument.first().getDiscriminator() == "someAlertId_someTrackingId1"
       assert argument.first().getMetadata().get("comment") == "someComment"
-      assert argument.first().getMetadata().get("key1") == "value1"
+      assert argument.first().getMetadata().get("trackingId") == "someTrackingId1"
+      assert argument.first().getMetadata().get("extendedAttribute5") == "value2"
       assert argument.first().getMatches().isEmpty()
     }
   }
@@ -36,11 +37,11 @@ class IngestRecommendationsUseCaseSpec extends Specification {
           fvSignature: 'someFvSignature',
           alertMetadata: [
               new AlertMetadata(
-                  key: 'key1',
-                  value: 'value1'
+                  key: 'trackingId',
+                  value: 'someTrackingId1'
               ),
               new AlertMetadata(
-                  key: 'key2',
+                  key: 'extendedAttribute5',
                   value: 'value2'
               )
           ]

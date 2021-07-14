@@ -36,8 +36,14 @@ class IngestRecommendationsUseCase {
   private Alert mapToAlert(SolvedAlert solvedAlert) {
     return new Alert() {
       @Override
-      public String getName() {
-        return solvedAlert.getId();
+      public String getDiscriminator() {
+        var trackingId = solvedAlert.getAlertMetadata().stream()
+            .filter(alert -> "trackingId".equals(alert.getKey()))
+            .map(AlertMetadata::getValue)
+            .findFirst()
+            .orElse("");
+
+        return solvedAlert.getId() + getDiscriminatorSeparator() + trackingId;
       }
 
       @Override

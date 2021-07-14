@@ -29,7 +29,7 @@ class DataIndexRequestCreator {
 
   private static com.silenteight.data.api.v1.Alert toAlert(Alert alert) {
     return com.silenteight.data.api.v1.Alert.newBuilder()
-        .setName(alert.getName())
+        .setDiscriminator(alert.getDiscriminator())
         .setPayload(toStruct(alert.getMetadata()))
         .addAllMatches(mapMatches(alert.getMatches()))
         .build();
