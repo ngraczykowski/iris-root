@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.tsaas.bridge.dto.input.RequestMessageDto;
+import com.silenteight.searpayments.bridge.dto.input.RequestMessageDto;
 
 import org.jboss.logging.MDC;
 

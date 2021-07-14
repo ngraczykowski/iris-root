@@ -1,37 +1,4 @@
-#---------------------------------------------------------------------------------------------------
-# MESSAGING CONCURRENCY
-#---------------------------------------------------------------------------------------------------
-ae:
-  messaging:
-    concurrency: 4
-    prefetch: 25
 
-  # FIXME(ahaczewski): Rename to `comments.template-engine.cache-invalidation`.
-  comments:
-    template:
-      cache:
-        invalidation: "0 * * * * ?"
-
-  categories:
-    missing:
-      batch-size:
-        insert: 1024
-        select: 4096
-
-  comment-input:
-    jdbc:
-      missing-batch-size-select: 8192
-
-  recommendation:
-    jdbc:
-      pending-alerts:
-        fetch-size: 8192
-    comment:
-      template-name: alert
-
-#---------------------------------------------------------------------------------------------------
-# SERVER
-#---------------------------------------------------------------------------------------------------
 
 # Embedded server configuration
 server:
@@ -45,8 +12,9 @@ server:
     include-exception: true
     include-stacktrace: never
 
-
 spring:
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
   application:
     name: sear-payments
   codec:
@@ -76,25 +44,25 @@ spring:
     allow-bean-definition-overriding : true
 
   #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:24881/sear-payments-bridge?currentSchema=public
+    username: sear-payments-bridge
+    password: sear-payments-bridge
+    initialization-mode: never
+
+  #-------------------------------------------------------------------------------------------------
   # RABBITMQ
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
-    listener:
-      type: simple
-      direct:
-        consumers-per-queue: ${ae.messaging.concurrency:4}
-        prefetch: ${ae.messaging.prefetch:25}
-        retry:
-          enabled: true
-          multiplier: 2
-      simple:
-        concurrency: 1
-        max-concurrency: ${ae.messaging.concurrency:4}
-        prefetch: ${ae.messaging.prefetch:25}
-        retry:
-          enabled: true
-          multiplier: 2
-    port: 24161
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
 
   jackson:
     default-property-inclusion: NON_NULL
@@ -109,4 +77,3 @@ info:
 grpc:
   server:
     port: 24803
-

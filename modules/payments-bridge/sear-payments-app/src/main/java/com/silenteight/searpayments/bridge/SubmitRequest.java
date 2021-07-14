@@ -1,5 +1,7 @@
 package com.silenteight.searpayments.bridge;
 
+import com.silenteight.searpayments.bridge.dto.input.RequestDto;
+
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
 

@@ -1,6 +1,6 @@
 package com.silenteight.searpayments.bridge.dto.validator;
 
-import com.silenteight.tsaas.bridge.dto.input.RequestMessageDto;
+import com.silenteight.searpayments.bridge.dto.input.RequestMessageDto;
 
 public interface RequestMessageDtoValidator {
 

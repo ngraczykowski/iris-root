@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet id="db.changelog-sear-payments-bridge-1.1.0-1" author="wkeska">
+    <createTable tableName="sp_analysis">
+      <column name="analysis_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_name" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="policy" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="strategy" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="create_day" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="sp_dataset">
+      <column name="dataset_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="dataset_name" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="create_day" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint
+        columnNames="analysis_id, dataset_id"
+        constraintName="uq_sp_dataset_dataset_id_analysis_id"
+        tableName="sp_dataset"/>
+
+    <addForeignKeyConstraint
+        baseTableName="sp_dataset"
+        baseColumnNames="analysis_id"
+        constraintName="fk_sp_analysis_id"
+        referencedTableName="sp_analysis"
+        referencedColumnNames="analysis_id"/>
+  </changeSet>
+</databaseChangeLog>

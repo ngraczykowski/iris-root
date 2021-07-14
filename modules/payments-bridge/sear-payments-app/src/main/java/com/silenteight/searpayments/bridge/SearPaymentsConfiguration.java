@@ -35,9 +35,8 @@ class SearPaymentsConfiguration {
 
   private static final String ALERT_READY_FOR_CALLBACK_CHANNEL = "alertReadyForCallbackChannel";
 
-
   @Bean
-  @SecuredChannel(interceptor = "channelSecurityInterceptor", sendAccess = "ROLE_SUBMIT_REQUEST")
+  //@SecuredChannel(interceptor = "channelSecurityInterceptor", sendAccess = "ROLE_SUBMIT_REQUEST")
   MessageChannel submitRequestChannel() {
     return new QueueChannel(2);
   }

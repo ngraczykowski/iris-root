@@ -5,12 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.searpayments.bridge.model.SolutionType;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.silenteight.tsaas.bridge.model.SolutionType.NAME;
 
 @Data
 @AllArgsConstructor
@@ -40,7 +40,7 @@ public class HitDto implements Serializable {
 
   String extractWlName() {
     String wlName = "";
-    if (NAME.getCode().equals(getSolutionType())) {
+    if (SolutionType.NAME.getCode().equals(getSolutionType())) {
       try {
         int parsedIndex;
         if (getSynonymIndex().isEmpty() && getHittedEntity().getNames().size() > 0) {

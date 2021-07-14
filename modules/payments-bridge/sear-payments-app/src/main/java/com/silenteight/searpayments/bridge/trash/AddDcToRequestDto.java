@@ -1,4 +1,4 @@
-package com.silenteight.searpayments.bridge.trash;
+package com.silenteight.searpaymentsmockup;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,10 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 @Slf4j
 @RequiredArgsConstructor
-class AddDcToRequestDto {
+public class AddDcToRequestDto {
 
-  @Pointcut("execution(* com.silenteight.searpayments.bridge.AlertController.foo(..)) && args(requestDto, dc)")
+  @Pointcut("execution(* com.silenteight.searpaymentsmockup2.AlertController.foo(..))"
+      + " && args(requestDto, dc)")
   public void callAt(RequestDto requestDto, String dc) {
     throw new UnsupportedOperationException();
   }
