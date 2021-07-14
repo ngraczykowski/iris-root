@@ -4,9 +4,10 @@ This project represents the high-level implementation of SEAR Payments using hea
 
 ## To run it
 
-### Start Spring Application
-
-Just run the Spring Application using as a main class `SearPaymentsApplication`.
+1. Clone Adjudication Engine project https://gitlab.silenteight.com/sens/adjudication-engine
+2. Follow AE readme to run it
+3. Start db using `docker-compose -d`  
+4. Run the Spring Application using as a main class `SearPaymentsApplication`.
 
 ### Start tsaas-bridge cmapi-mockup
 
