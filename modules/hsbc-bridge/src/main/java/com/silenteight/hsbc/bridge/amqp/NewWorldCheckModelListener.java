@@ -2,13 +2,13 @@ package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.model.transfer.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
 import com.silenteight.worldcheck.api.v1.ModelPersisted;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
-import static com.silenteight.hsbc.bridge.model.transfer.ChangeType.MINOR;
+import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MINOR;
 
 @RequiredArgsConstructor
 class NewWorldCheckModelListener {

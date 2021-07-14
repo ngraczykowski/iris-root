@@ -8,4 +8,7 @@ import lombok.Value;
 public class ExportModelResponseDto {
 
   byte[] modelJson;
+  long id;
+  String name;
+  String version;
 }

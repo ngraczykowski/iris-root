@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP_PROCEDURAL
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.MODEL
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_PROCEDURAL
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.MODEL
 import static groovy.json.JsonOutput.toJson
 import static org.springframework.http.MediaType.APPLICATION_JSON
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*

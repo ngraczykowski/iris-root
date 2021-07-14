@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
-import com.silenteight.hsbc.bridge.model.transfer.ModelInfo;
-import com.silenteight.hsbc.bridge.model.transfer.ModelStatusUpdatedDto;
+import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

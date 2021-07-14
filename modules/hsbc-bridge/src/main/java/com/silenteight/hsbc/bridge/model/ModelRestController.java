@@ -87,8 +87,8 @@ public class ModelRestController {
     return matchingManagers;
   }
 
-  private com.silenteight.hsbc.bridge.model.transfer.ModelType mapToModelType(ModelType type) {
-    return com.silenteight.hsbc.bridge.model.transfer.ModelType.valueOf(type.name());
+  private com.silenteight.hsbc.bridge.model.dto.ModelType mapToModelType(ModelType type) {
+    return com.silenteight.hsbc.bridge.model.dto.ModelType.valueOf(type.name());
   }
 
   private ModelDetails getModelDetailsFromUri(String requestUri) {

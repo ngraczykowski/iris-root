@@ -419,7 +419,6 @@ databaseChangeLog:
                   name: type
                   type: varchar(30)
 
-
   - changeSet:
       id: 1.0.0-10
       author: bmartofel
@@ -469,8 +468,8 @@ databaseChangeLog:
                   type: bigint
                   autoIncrement: true
                   constraints:
-                      primaryKey: true
-                      nullable: false
+                    primaryKey: true
+                    nullable: false
               - column:
                   name: payload
                   type: jsonb
@@ -494,3 +493,19 @@ databaseChangeLog:
       author: bmartofel
       changes:
         - sql: CREATE TABLE shedlock(name VARCHAR(64) NOT NULL, lock_until TIMESTAMP NOT NULL, locked_at TIMESTAMP NOT NULL, locked_by VARCHAR(255) NOT NULL, PRIMARY KEY (name));
+
+  - changeSet:
+      id: 1.0.0-14
+      author: awojcicki
+      changes:
+        - addColumn:
+            tableName: hsbc_bridge_model
+            columns:
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp

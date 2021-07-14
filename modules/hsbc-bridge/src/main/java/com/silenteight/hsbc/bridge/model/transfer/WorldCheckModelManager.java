@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
+import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
@@ -14,13 +17,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.FAILURE;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_HISTORICAL;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_PROCEDURAL;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.NAME_ALIASES;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.toModelPersisted;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP_HISTORICAL;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.IS_PEP_PROCEDURAL;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.NAME_ALIASES;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -52,7 +55,7 @@ public class WorldCheckModelManager implements ModelManager {
 
   @Override
   public ExportModelResponse exportModel(Details details) {
-    var model = getModelUseCase.getModel(details.getType());
+    var model = getModelUseCase.getModel(ModelType.valueOf(details.getType()));
     var modelJson = tryLoadModel(model.getMinIoUrl());
     var exportModelResponseDto = ExportModelResponseDto.builder()
         .modelJson(modelJson).build();

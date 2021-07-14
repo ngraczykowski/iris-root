@@ -37,8 +37,12 @@ class ModelGrpcAdapter implements ModelServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public ExportModelResponseDto exportModel(String name) {
+    //TODO
     var exportModelResponse =
-        getStub().exportModel(ExportModelRequest.newBuilder().setName(name).build());
+        getStub().exportModel(ExportModelRequest.newBuilder()
+            .setName("")
+            .setVersion("")
+            .build());
     return mapToExportModelResponse(exportModelResponse);
   }
 
@@ -55,9 +59,11 @@ class ModelGrpcAdapter implements ModelServiceClient {
 
   @Override
   @Retryable(value = StatusRuntimeException.class)
+  //TODO
   public void sendStatus(String modelName) {
     var model = ModelDeployedOnProductionRequest.newBuilder()
-        .setName(modelName)
+        .setName("")
+        .setVersion("")
         .build();
 
     getStub().modelDeployedOnProduction(model);

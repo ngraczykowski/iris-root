@@ -3,6 +3,9 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
+import com.silenteight.hsbc.bridge.model.dto.ModelType;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor

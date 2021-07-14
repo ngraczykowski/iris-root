@@ -199,6 +199,21 @@
       "name": "silenteight.bridge.amqp.outgoing.historical-decision-routing-key",
       "type": "java.lang.String",
       "description": "Historical decision learning store routing key."
+    },
+    {
+      "name": "silenteight.bridge.model.is-pep-historical-model-export.cron",
+      "type": "java.lang.String",
+      "description": "Cron for silenteight.bridge.model.is-pep-historical-model-export job."
+    },
+    {
+      "name": "silenteight.bridge.schedule.is-pep-procedural-model-export.rate",
+      "type": "java.lang.String",
+      "description": "Cron for silenteight.bridge.model.is-pep-procedural-model-export job."
+    },
+    {
+      "name": "silenteight.bridge.model.name-model-export.cron",
+      "type": "java.lang.String",
+      "description": "Cron for silenteight.bridge.model.name-model-export job."
     }
   ]
 }

@@ -61,6 +61,13 @@ silenteight.bridge:
       LEVEL_3_REVIEW: Level 3 Review
   recommendations.queue: bridge.recommendations
 
+  ### Export model jobs (use "-" value for disabling the particular job)
+
+  model:
+    is-pep-historical-model-export.cron: "-"
+    is-pep-procedural-model-export.cron: "-"
+    name-model-export.cron: "-"
+
 ### GRPC
 
 grpc:
@@ -72,7 +79,6 @@ grpc:
     governance.address: ${silenteight.bridge.grpc.governance-address}
 
 ### HTTP
-
 
 server:
   port: ${silenteight.bridge.http.port}

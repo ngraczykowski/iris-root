@@ -4,6 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelType;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -13,15 +15,16 @@ public class GetModelUseCase {
   private final ModelInformationRepository modelInformationRepository;
 
   @Transactional
-  public ModelInformationEntity getModel(@NonNull String type) {
+  public ModelInformationEntity getModel(@NonNull ModelType type) {
     var modelEntity =
-        modelInformationRepository.findFirstByTypeOrderByCreatedAtDesc(ModelType.valueOf(type));
+        modelInformationRepository.findFirstByTypeOrderByCreatedAtDesc(type);
 
     if (modelEntity.isPresent()) {
       var model = modelEntity.get();
       log.debug("Model for export: {} has been taken", model);
       return model;
     } else {
+      log.error("Model with given type: " + type + " doesn't exist in database");
       throw new ModelNotFoundException(
           "Model with given type: " + type + " doesn't exist in database");
     }

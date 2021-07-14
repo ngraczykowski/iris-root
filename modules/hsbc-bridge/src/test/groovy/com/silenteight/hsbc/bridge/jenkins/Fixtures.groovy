@@ -1,10 +1,10 @@
 package com.silenteight.hsbc.bridge.jenkins
 
 import com.silenteight.hsbc.bridge.BridgeApiProperties
-import com.silenteight.hsbc.bridge.model.transfer.ModelInfo
-import com.silenteight.hsbc.bridge.model.transfer.ModelStatus
-import com.silenteight.hsbc.bridge.model.transfer.ModelStatusUpdatedDto
-import com.silenteight.hsbc.bridge.model.transfer.ModelType
+import com.silenteight.hsbc.bridge.model.dto.ModelInfo
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto
+import com.silenteight.hsbc.bridge.model.dto.ModelType
 import com.silenteight.hsbc.bridge.nexus.NexusApiProperties
 import com.silenteight.model.api.v1.ModelPromotedForProduction
 import com.silenteight.worldcheck.api.v1.ModelPersisted

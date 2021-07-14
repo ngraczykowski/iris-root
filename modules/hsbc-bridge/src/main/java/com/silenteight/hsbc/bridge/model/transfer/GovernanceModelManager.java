@@ -4,16 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
+import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
+import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 
 import java.io.IOException;
 
+import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.FAILURE;
+import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.MODEL;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.SUCCESS;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelType.MODEL;
 
 @Slf4j
 @RequiredArgsConstructor

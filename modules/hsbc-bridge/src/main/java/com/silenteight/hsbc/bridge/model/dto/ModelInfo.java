@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model.transfer;
+package com.silenteight.hsbc.bridge.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ModelStatusUpdatedDto {
+public class ModelInfo {
 
   @NotNull
   @JsonProperty("name")
@@ -28,6 +28,6 @@ public class ModelStatusUpdatedDto {
   String type;
 
   @NotNull
-  @JsonProperty("status")
-  String status;
+  @JsonProperty("changeType")
+  String changeType;
 }

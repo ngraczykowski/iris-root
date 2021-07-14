@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.bridge.model.transfer;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelType;
+
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

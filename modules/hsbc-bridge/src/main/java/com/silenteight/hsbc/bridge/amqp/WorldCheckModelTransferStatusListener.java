@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.model.transfer.ModelStatusUpdatedDto;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
 import com.silenteight.worldcheck.api.v1.ModelStatusUpdated;
 

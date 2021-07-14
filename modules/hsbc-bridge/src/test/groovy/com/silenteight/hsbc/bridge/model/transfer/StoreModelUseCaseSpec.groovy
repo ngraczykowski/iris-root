@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.bridge.model.transfer
 
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto
+
 import spock.lang.Specification
 
 class StoreModelUseCaseSpec extends Specification {

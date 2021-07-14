@@ -3,13 +3,15 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.worldcheck.api.v1.ModelPersisted;
 
 import java.net.URI;
 
-import static com.silenteight.hsbc.bridge.model.transfer.ModelStatus.SUCCESS;
+import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ModelMapper {

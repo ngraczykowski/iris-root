@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model.transfer;
+package com.silenteight.hsbc.bridge.model.dto;
 
 public enum ModelType {
   MODEL,
