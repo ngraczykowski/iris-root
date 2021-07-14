@@ -14,9 +14,9 @@ import org.springframework.context.ApplicationContext;
 @Aspect
 @RequiredArgsConstructor
 @Slf4j
-class LogRequestAspect {
+public class LogRequestAspect {
 
-  @Pointcut("execution(* com.silenteight.searpaymentsmockup2.AlertController.foo(..))"
+  @Pointcut("execution(* com.silenteight.searpayments.bridge.AlertController.foo(..))"
       + " && args(requestDto, dc)")
   public void callAt(RequestDto requestDto, String dc) {
     throw new UnsupportedOperationException();

@@ -19,9 +19,9 @@ import static java.util.Arrays.asList;
 @Aspect
 @RequiredArgsConstructor
 @Slf4j
-class CmapiAuthenticateAspect {
+public class CmapiAuthenticateAspect {
 
-  @Pointcut("execution(* com.silenteight.searpaymentsmockup2.AlertController.foo(..))"
+  @Pointcut("execution(* com.silenteight.searpayments.bridge.AlertController.foo(..))"
       + " && args(requestDto, ..)")
   public void callAt(RequestDto requestDto) {
     throw new UnsupportedOperationException();

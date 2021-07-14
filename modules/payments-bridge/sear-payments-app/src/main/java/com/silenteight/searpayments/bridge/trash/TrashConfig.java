@@ -18,7 +18,7 @@ class TrashConfig {
   }
 
   @Bean
-  com.silenteight.searpaymentsmockup.AddDcToRequestDto addDcToRequestDto() {
-    return new com.silenteight.searpaymentsmockup.AddDcToRequestDto();
+  AddDcToRequestDto addDcToRequestDto() {
+    return new AddDcToRequestDto();
   }
 }

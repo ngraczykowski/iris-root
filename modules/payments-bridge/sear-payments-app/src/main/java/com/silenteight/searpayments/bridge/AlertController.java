@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor
-class AlertController {
+public class AlertController {
 
   private final SubmitRequest submitRequest;
 
