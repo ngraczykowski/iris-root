@@ -1,6 +1,6 @@
 dependencies {
   // Commons
-  starterCommon libraries.silenteight_commons_core
+  starterCommon libraries.s8_commons_core
   starterCommon libraries.commons_lang3
   starterCommon libraries.commons_text
   starterCommon libraries.guava

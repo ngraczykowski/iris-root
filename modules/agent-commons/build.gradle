@@ -48,7 +48,7 @@ subprojects {Project project ->
     }
 
     project.aspectj {
-      version = libraries.aspectjtools.version
+      version = aspectjVersion
     }
 
     project.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
