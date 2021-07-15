@@ -2,7 +2,7 @@ package com.silenteight.searpayments.scb.mapper;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
+import com.silenteight.searpayments.bridge.dto.validator.AlertMessageDtoValidator;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ class AlertConfiguration {
 
   private final CountryCodeExtractor countryCodeExtractor;
   private final CreateHitFactory createHitFactory;
-  private final RequestMessageDtoValidator requestMessageDtoValidator;
+  private final AlertMessageDtoValidator alertMessageDtoValidator;
   @Value("${tsaas.governance.dtp-message-type-null-alias:DTP}")
   private String dtpMessageTypeNullAlias;
 
@@ -41,7 +41,7 @@ class AlertConfiguration {
   CreateAlertFactory createAlertFromMessageFactory() {
     return new CreateAlertFactory(
         createHitsFactory(), createMessageTypeFactory(), countryCodeExtractor,
-        createBasicAlertFactory(), gitCommitId.substring(0, 7), requestMessageDtoValidator);
+        createBasicAlertFactory(), gitCommitId.substring(0, 7), alertMessageDtoValidator);
   }
 
   @Bean
