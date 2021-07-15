@@ -11,7 +11,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 class IndexedAlertDomainConfiguration {
 
   @Bean
-  IndexedAlertService indexAlertEntityService(IndexedAlertRepository repository) {
-    return new IndexedAlertService(repository);
+  IndexedAlertService indexAlertEntityService(
+      IndexedAlertRepository repository, IndexedAlertQuery query) {
+
+    return new IndexedAlertService(repository, query);
+  }
+
+  @Bean
+  IndexedAlertQuery indexedAlertQuery(IndexedAlertRepository indexedAlertRepository) {
+    return new IndexedAlertQuery(indexedAlertRepository);
   }
 }

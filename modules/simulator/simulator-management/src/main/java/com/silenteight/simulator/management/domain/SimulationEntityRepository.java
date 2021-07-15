@@ -15,6 +15,8 @@ interface SimulationEntityRepository extends Repository<SimulationEntity, Long> 
 
   Collection<SimulationEntity> findAllByModelName(String modelName);
 
+  Optional<SimulationEntity> findByAnalysisName(String analysisName);
+
   Optional<SimulationEntity> findBySimulationId(UUID simulationId);
 
   @Query(value = "SELECT SUM(d.initial_alert_count)"

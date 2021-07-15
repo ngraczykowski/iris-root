@@ -62,7 +62,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static Alert toAlertToIndex(com.silenteight.adjudication.api.v1.Alert alert) {
     return Alert.newBuilder()
         .setDiscriminator(alert.getName())
-        .setPayload(toStruct(alert.getLabels()))
+        .setPayload(toStruct(alert.getLabelsMap()))
         .build();
   }
 

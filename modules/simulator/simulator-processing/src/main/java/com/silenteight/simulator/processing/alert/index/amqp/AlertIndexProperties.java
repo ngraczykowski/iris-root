@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @Data
 @Validated
 @ConfigurationProperties(prefix = "simulator.processing.alert")
-public class RecommendationsGeneratedProperties {
+public class AlertIndexProperties {
 
   @Valid
   @NestedConfigurationProperty
@@ -23,4 +23,8 @@ public class RecommendationsGeneratedProperties {
   @Valid
   @NestedConfigurationProperty
   private AmqpOutboundProperties recommendationsOutbound;
+
+  @Valid
+  @NestedConfigurationProperty
+  private AmqpInboundProperties ackMessagesInbound;
 }
