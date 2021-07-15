@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
@@ -9,6 +10,9 @@ import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTes
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
 import com.silenteight.warehouse.indexer.analysis.TestAnalysisMetadataRepository;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
@@ -25,14 +29,17 @@ import org.springframework.integration.test.context.SpringIntegrationTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.UUID;
+import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
+import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.convertMapToPayload;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.SIMULATION_ANALYSIS_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SIMULATION_ANALYSIS_ID;
 import static java.util.List.of;
+import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -82,7 +89,7 @@ class IndexerIT {
   void shouldReturnConfirmationWhenProductionDataIndexRequested() {
     ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
         .addAllAlerts(of(ALERT_1))
-        .setRequestId(UUID.randomUUID().toString())
+        .setRequestId(randomUUID().toString())
         .build();
 
     productionIndexClientGateway.indexRequest(request);
@@ -118,6 +125,37 @@ class IndexerIT {
 
     var source = simpleElasticTestClient.getSource(SIMULATION_INDEX_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(MAPPED_ALERT_1);
+  }
+
+  @Test
+  void shouldMergeMultipleRequestsForTheSameAlert() {
+    sendProductionRequestWithPayload(DISCRIMINATOR_1, Map.of(
+        SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP));
+    sendProductionRequestWithPayload(DISCRIMINATOR_1, Map.of(
+        SourceAlertKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
+
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> indexedEventListener.hasAtLeastEventCount(2));
+
+    var source = simpleElasticTestClient.getSource(PRODUCTION_INDEX_NAME, DOCUMENT_ID);
+    assertThat(source).containsAllEntriesOf(Map.of(
+        MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+        MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
+  }
+
+  private void sendProductionRequestWithPayload(String discriminator, Map<String, String> payload) {
+    Alert alert = Alert.newBuilder()
+        .setDiscriminator(discriminator)
+        .setPayload(convertMapToPayload(payload))
+        .build();
+
+    ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
+        .addAllAlerts(of(alert))
+        .setRequestId(randomUUID().toString())
+        .build();
+
+    productionIndexClientGateway.indexRequest(request);
   }
 
   private void removeData() {

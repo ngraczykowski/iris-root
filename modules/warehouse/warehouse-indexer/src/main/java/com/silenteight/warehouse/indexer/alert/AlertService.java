@@ -8,7 +8,7 @@ import com.silenteight.data.api.v1.Alert;
 
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 
@@ -37,12 +37,12 @@ public class AlertService {
     attemptToSaveAlert(bulkRequest);
   }
 
-  private IndexRequest convertAlertToDocument(String indexName, Alert alert) {
-    IndexRequest indexRequest = new IndexRequest(indexName);
-    indexRequest.id(alert.getDiscriminator());
-    indexRequest.source(alertMapper.convertAlertToAttributes(alert));
+  private UpdateRequest convertAlertToDocument(String indexName, Alert alert) {
+    UpdateRequest updateRequest = new UpdateRequest(indexName, alert.getDiscriminator());
+    updateRequest.doc(alertMapper.convertAlertToAttributes(alert));
+    updateRequest.docAsUpsert(true);
 
-    return indexRequest;
+    return updateRequest;
   }
 
   private void attemptToSaveAlert(BulkRequest indexRequest) {

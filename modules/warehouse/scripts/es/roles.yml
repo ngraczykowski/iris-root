@@ -44,6 +44,8 @@ technical_user:
         - 'indices:data/read/get'
         - 'indices:data/read/search'
         - 'indices:data/write/index'
+        - 'indices:data/write/update'
+        - 'indices:data/write/bulk'
         - 'indices:data/write/bulk*'
         - 'indices:monitor/settings/get'
         - 'indices:admin/create'
@@ -59,6 +61,8 @@ business_user:
   reserved: false
   cluster_permissions:
     - 'cluster:admin/opendistro/reports/instance/get'
+    - 'cluster:admin/opendistro/reports/instance/list'
+    - 'indices:monitor/settings/get'
   index_permissions:
     - index_patterns:
         - 'itest_production'

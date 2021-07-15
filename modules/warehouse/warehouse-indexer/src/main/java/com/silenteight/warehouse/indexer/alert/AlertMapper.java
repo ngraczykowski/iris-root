@@ -11,6 +11,7 @@ import com.google.protobuf.Value;
 import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
@@ -27,16 +28,16 @@ class AlertMapper {
   private final TimeSource timeSource;
   private final AlertMappingProperties alertMappingProperties;
 
-  Map<String, String> convertAlertToAttributes(Alert alert) {
+  Map<String, Object> convertAlertToAttributes(Alert alert) {
     OffsetDateTime now = timeSource.now().atOffset(UTC);
 
-    Map<String, String> documentAttributes = new LinkedHashMap<>();
-
+    Map<String, Object> documentAttributes = new LinkedHashMap<>();
+    documentAttributes.putAll(convertPayloadToMap(alert.getPayload(), ALERT_PREFIX));
     documentAttributes.put(INDEX_TIMESTAMP, now.format(ISO_DATE_TIME));
     documentAttributes.put(DISCRIMINATOR, alert.getDiscriminator());
-    documentAttributes.put(
-        COUNTRY_KEY, extractAlertField(alert, alertMappingProperties.getCountrySourceKey()));
-    documentAttributes.putAll(convertPayloadToMap(alert.getPayload(), ALERT_PREFIX));
+
+    extractAlertField(alert, alertMappingProperties.getCountrySourceKey())
+        .ifPresent(countryValue -> documentAttributes.put(COUNTRY_KEY, countryValue));
 
     return documentAttributes;
   }
@@ -50,9 +51,8 @@ class AlertMapper {
             key -> struct.getFieldsMap().get(key).getStringValue()));
   }
 
-  private String extractAlertField(Alert alert, String fieldname) {
+  private Optional<String> extractAlertField(Alert alert, String fieldname) {
     return ofNullable(alert.getPayload().getFieldsOrDefault(fieldname, null))
-        .map(Value::getStringValue)
-        .orElse(null);
+        .map(Value::getStringValue);
   }
 }
