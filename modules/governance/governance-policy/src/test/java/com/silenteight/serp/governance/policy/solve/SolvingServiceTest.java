@@ -29,7 +29,9 @@ class SolvingServiceTest {
   private static final SolveResponse DEFAULT_SOLUTION = new SolveResponse(SOLUTION_NO_DECISION);
   private static final UUID POLICY_ID = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
+  private static final String STEP_TITLE_1 = "First step";
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+  private static final String STEP_TITLE_2 = "Second step";
   private static final List<Step> STEPS_WITH_IS = createIsSteps();
   private static final List<Step> STEPS_WITH_IS_NOT = createIsNotSteps();
 
@@ -66,7 +68,8 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
+    assertThat(solution).isEqualTo(
+        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2, STEP_TITLE_2));
   }
 
   @Test
@@ -83,7 +86,8 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
+    assertThat(solution).isEqualTo(
+        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2, STEP_TITLE_2));
   }
 
   @Test
@@ -99,7 +103,8 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2));
+    assertThat(solution).isEqualTo(
+        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_2, STEP_TITLE_2));
   }
 
   @Test
@@ -147,7 +152,8 @@ class SolvingServiceTest {
     SolveResponse solution = underTest.solve(stepsConfigurationSupplier, featureValues);
 
     // then
-    assertThat(solution).isEqualTo(new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_1));
+    assertThat(solution).isEqualTo(
+        new SolveResponse(SOLUTION_POTENTIAL_TRUE_POSITIVE, STEP_ID_1, STEP_TITLE_1));
   }
 
   @Test
@@ -171,6 +177,7 @@ class SolvingServiceTest {
         new Step(
             SOLUTION_FALSE_POSITIVE,
             STEP_ID_1,
+            STEP_TITLE_1,
             List.of(
                 createFeatureLogic(
                     2,
@@ -180,6 +187,7 @@ class SolvingServiceTest {
         new Step(
             SOLUTION_POTENTIAL_TRUE_POSITIVE,
             STEP_ID_2,
+            STEP_TITLE_2,
             List.of(
                 createFeatureLogic(
                     2,
@@ -194,6 +202,7 @@ class SolvingServiceTest {
         new Step(
             SOLUTION_POTENTIAL_TRUE_POSITIVE,
             STEP_ID_1,
+            STEP_TITLE_1,
             List.of(
                 createFeatureLogic(
                     2,

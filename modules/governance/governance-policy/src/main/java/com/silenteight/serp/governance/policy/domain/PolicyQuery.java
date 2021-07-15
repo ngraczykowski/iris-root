@@ -8,6 +8,7 @@ import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 import com.silenteight.serp.governance.policy.domain.dto.TransferredPolicyRootDto;
 import com.silenteight.serp.governance.policy.domain.exception.PolicyNotFoundException;
 import com.silenteight.serp.governance.policy.list.ListPoliciesRequestQuery;
+import com.silenteight.serp.governance.policy.solve.PolicyTitleQuery;
 import com.silenteight.serp.governance.policy.transfer.export.PolicyExportQuery;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,8 @@ class PolicyQuery implements
     PolicyByIdQuery,
     InUsePolicyQuery,
     PolicyDetailsQuery,
-    PolicyExportQuery {
+    PolicyExportQuery,
+    PolicyTitleQuery {
 
   @NonNull
   private final PolicyRepository policyRepository;
@@ -76,5 +78,10 @@ class PolicyQuery implements
         .orElseThrow(() -> new PolicyNotFoundException(policyId));
 
     return policy.toTransferablePolicyRootDto();
+  }
+
+  @Override
+  public String getTitle(@NonNull UUID policyId) {
+    return policyRepository.getPolicyName(policyId);
   }
 }

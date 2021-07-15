@@ -15,17 +15,23 @@ import static com.silenteight.serp.governance.policy.common.StepResource.toResou
 @RequiredArgsConstructor
 public class SolveResponse {
 
-  public SolveResponse(FeatureVectorSolution solution) {
+  public SolveResponse(@NonNull FeatureVectorSolution solution) {
     this.solution = solution;
     this.stepId = null;
+    this.stepTitle = null;
   }
 
   @NonNull
   private final FeatureVectorSolution solution;
   @Nullable
   private final UUID stepId;
+  @Nullable
+  private final String stepTitle;
 
   public String getStepName() {
+    if (stepId == null)
+      return null;
+
     return toResourceName(stepId);
   }
 }

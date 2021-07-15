@@ -122,6 +122,7 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
     return StepConfigurationDto
         .builder()
         .id(getStepId())
+        .title(getName())
         .solution(getSolution())
         .featureLogics(featureLogicsToConfigurationDto())
         .build();

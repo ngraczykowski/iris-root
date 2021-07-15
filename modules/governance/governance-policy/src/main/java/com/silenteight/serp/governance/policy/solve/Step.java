@@ -18,11 +18,18 @@ class Step {
 
   FeatureVectorSolution solution;
   UUID stepId;
+  String stepTitle;
   Collection<FeatureLogic> featureLogics;
 
-  Step(FeatureVectorSolution solution, UUID stepId, Collection<FeatureLogic> featureLogics) {
+  Step(
+      FeatureVectorSolution solution,
+      UUID stepId,
+      String stepTitle,
+      Collection<FeatureLogic> featureLogics) {
+
     this.solution = solution;
     this.stepId = stepId;
+    this.stepTitle = stepTitle;
     this.featureLogics = copyOf(featureLogics);
   }
 
@@ -31,6 +38,6 @@ class Step {
   }
 
   SolveResponse getResponse() {
-    return new SolveResponse(solution, stepId);
+    return new SolveResponse(solution, stepId, stepTitle);
   }
 }
