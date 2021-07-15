@@ -3,6 +3,8 @@ package com.silenteight.hsbc.bridge.model;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
+import com.silenteight.hsbc.bridge.model.dto.ModelDetails;
+import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelType;
@@ -93,9 +95,12 @@ public class ModelRestController {
 
   private ModelDetails getModelDetailsFromUri(String requestUri) {
     checkRequestUri(requestUri);
-    var typeWithName = requestUri.split("export/")[1];
-    var splitTypeAndName = typeWithName.split("/", 2);
-    return new ModelDetails(splitTypeAndName[0], splitTypeAndName[1]);
+    var typeWithVersion = requestUri.split("export/")[1];
+    var splitTypeAndVersion = typeWithVersion.split("/", 2);
+    return ModelDetails.builder()
+        .type(splitTypeAndVersion[0])
+        .version(splitTypeAndVersion[1])
+        .build();
   }
 
   private void checkRequestUri(String name) {

@@ -2,11 +2,13 @@ package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
-import com.silenteight.hsbc.bridge.model.FeatureDto;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
-import com.silenteight.hsbc.bridge.model.SolvingModelDto;
+import com.silenteight.hsbc.bridge.model.dto.ExportModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.FeatureDto;
+import com.silenteight.hsbc.bridge.model.dto.ImportNewModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -32,8 +34,11 @@ class ModelServiceClientMock implements ModelServiceClient {
   }
 
   @Override
-  public void transferModel(byte[] model) {
-    log.info("Transfer mocked model started ...");
+  public String transferModel(byte[] jsonModel) {
+    var model =
+        ImportNewModelResponseDto.builder().model(Arrays.toString(jsonModel)).build().getModel();
+    log.info("Imported model: {} is used", model);
+    return model;
   }
 
   @Override

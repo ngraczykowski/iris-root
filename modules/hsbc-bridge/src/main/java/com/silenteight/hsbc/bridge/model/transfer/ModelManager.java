@@ -20,8 +20,8 @@ public interface ModelManager {
 
   interface Details {
 
-    String getName();
-
     String getType();
+
+    String getVersion();
   }
 }

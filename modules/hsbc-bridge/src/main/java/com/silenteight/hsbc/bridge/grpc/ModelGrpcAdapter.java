@@ -2,14 +2,12 @@ package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
-import com.silenteight.hsbc.bridge.model.FeatureDto;
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
-import com.silenteight.hsbc.bridge.model.SolvingModelDto;
-import com.silenteight.model.api.v1.ExportModelRequest;
-import com.silenteight.model.api.v1.ImportNewModelRequest;
-import com.silenteight.model.api.v1.ModelDeployedOnProductionRequest;
-import com.silenteight.model.api.v1.SolvingModel;
+import com.silenteight.hsbc.bridge.model.dto.ExportModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.FeatureDto;
+import com.silenteight.hsbc.bridge.model.dto.ImportNewModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto;
+import com.silenteight.model.api.v1.*;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
 import com.google.protobuf.ByteString;
@@ -36,37 +34,45 @@ class ModelGrpcAdapter implements ModelServiceClient {
 
   @Override
   @Retryable(value = StatusRuntimeException.class)
-  public ExportModelResponseDto exportModel(String name) {
-    //TODO
-    var exportModelResponse =
-        getStub().exportModel(ExportModelRequest.newBuilder()
-            .setName("")
-            .setVersion("")
-            .build());
+  public ExportModelResponseDto exportModel(String version) {
+    var request = ExportModelRequest.newBuilder()
+        .setVersion(version)
+        .build();
+    var exportModelResponse = getStub().exportModel(request);
     return mapToExportModelResponse(exportModelResponse);
   }
 
   @Override
   @Retryable(value = StatusRuntimeException.class)
-  public void transferModel(byte[] model) {
-    var modelRequest =
-        ImportNewModelRequest.newBuilder()
-            .setModelJson(ByteString.copyFrom(model))
-            .build();
+  public void sendStatus(String version) {
+    var request = ModelDeployedOnProductionRequest.newBuilder()
+        .setVersion(version)
+        .build();
+    getStub().modelDeployedOnProduction(request);
+  }
 
-    getStub().importModel(modelRequest);
+  @Retryable(value = StatusRuntimeException.class)
+  public ImportNewModelResponseDto importModel(byte[] model) {
+    var request = ImportNewModelRequest.newBuilder()
+        .setModelJson(ByteString.copyFrom(model))
+        .build();
+    var importNewModelResponse = getStub().importModel(request);
+    return mapToImportNewModel(importNewModelResponse);
+  }
+
+  @Retryable(value = StatusRuntimeException.class)
+  public void useModel(String model) {
+    var request = UseModelRequest.newBuilder()
+        .setModel(model)
+        .build();
+    getStub().useModel(request);
   }
 
   @Override
-  @Retryable(value = StatusRuntimeException.class)
-  //TODO
-  public void sendStatus(String modelName) {
-    var model = ModelDeployedOnProductionRequest.newBuilder()
-        .setName("")
-        .setVersion("")
-        .build();
-
-    getStub().modelDeployedOnProduction(model);
+  public String transferModel(byte[] jsonModel) {
+    var model = importModel(jsonModel).getModel();
+    useModel(model);
+    return model;
   }
 
   private SolvingModelServiceBlockingStub getStub() {
@@ -88,10 +94,16 @@ class ModelGrpcAdapter implements ModelServiceClient {
         .build();
   }
 
-  private ExportModelResponseDto mapToExportModelResponse(
-      com.silenteight.model.api.v1.ExportModelResponse exportModelResponse) {
+  private ExportModelResponseDto mapToExportModelResponse(ExportModelResponse response) {
     return ExportModelResponseDto.builder()
-        .modelJson(exportModelResponse.getModelJson().toByteArray())
+        .modelJson(response.getModelJson().toByteArray())
+        .id(response.getId())
+        .name(response.getName())
+        .version(response.getVersion())
         .build();
+  }
+
+  private ImportNewModelResponseDto mapToImportNewModel(ImportNewModelResponse response) {
+    return ImportNewModelResponseDto.builder().model(response.getModel()).build();
   }
 }

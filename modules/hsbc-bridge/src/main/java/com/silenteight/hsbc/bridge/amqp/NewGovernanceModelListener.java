@@ -1,16 +1,18 @@
 package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
+import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager;
 import com.silenteight.model.api.v1.ModelPromotedForProduction;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MAJOR;
 
+@Slf4j
 @RequiredArgsConstructor
 class NewGovernanceModelListener {
 
@@ -21,16 +23,20 @@ class NewGovernanceModelListener {
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.model-promoted-queue}")
   void onModelChange(ModelPromotedForProduction modelPromoted) {
+    log.info(
+        "Received ModelPromotedForProduction for Governance model with version={}",
+        modelPromoted.getVersion());
+
     var modelInfo = convertToModelInfo(modelPromoted);
     governanceModelManager.transferModelToJenkins(modelInfo);
   }
 
   private ModelInfo convertToModelInfo(ModelPromotedForProduction modelPromoted) {
-    var name = modelPromoted.getName();
+    var version = modelPromoted.getVersion();
     var type = MODEL;
     return ModelInfo.builder()
-        .name(name)
-        .url(address + "/model/export/" + type + "/" + name)
+        .name(version)
+        .url(address + "/model/export/" + type + "/" + version)
         .type(type)
         .changeType(MAJOR.name())
         .build();

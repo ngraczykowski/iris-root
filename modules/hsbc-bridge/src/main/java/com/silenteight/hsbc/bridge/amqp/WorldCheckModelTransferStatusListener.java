@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
@@ -8,6 +9,7 @@ import com.silenteight.worldcheck.api.v1.ModelStatusUpdated;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
+@Slf4j
 @RequiredArgsConstructor
 class WorldCheckModelTransferStatusListener {
 
@@ -15,6 +17,9 @@ class WorldCheckModelTransferStatusListener {
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.model-loaded-queue}")
   public void handleWorldCheckStatus(ModelStatusUpdated modelStatus) {
+    log.info(
+        "Received ModelStatusUpdated for WorldCheck model type={}", modelStatus.getModelType());
+
     var modelStatusUpdated = convertToModelStatusUpdated(modelStatus);
     worldCheckModelManager.transferWorldCheckModelStatus(modelStatusUpdated);
   }

@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model;
+package com.silenteight.hsbc.bridge.model.dto;
 
 import lombok.Builder;
 import lombok.Value;
@@ -8,7 +8,7 @@ import lombok.Value;
 public class ExportModelResponseDto {
 
   byte[] modelJson;
-  long id;
+  int id;
   String name;
   String version;
 }

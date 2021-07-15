@@ -5,7 +5,7 @@ import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDatasetDto
 import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisRequestDto
 import com.silenteight.hsbc.bridge.analysis.dto.CreateAnalysisResponseDto
 import com.silenteight.hsbc.bridge.model.ModelServiceClient
-import com.silenteight.hsbc.bridge.model.SolvingModelDto
+import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto
 
 import spock.lang.Specification
 

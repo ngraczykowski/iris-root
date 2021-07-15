@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model;
+package com.silenteight.hsbc.bridge.model.dto;
 
 import lombok.Builder;
 import lombok.Value;

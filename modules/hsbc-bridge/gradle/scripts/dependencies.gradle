@@ -5,7 +5,7 @@ ext {
   // Silent Eight
   //***********************************
   adjudicationEngineApiVersion = "0.5.0-SNAPSHOT"
-  governanceModelApiVersion = "1.8.0-SNAPSHOT"
+  governanceModelApiVersion = "1.9.0-SNAPSHOT"
   silenteightLearningEngineApiVersion = "0.2.0-SNAPSHOT"
   silenteightDataSourceApiVersion = "0.3.0-SNAPSHOT"
   warehouseApiVersion = "1.4.0"

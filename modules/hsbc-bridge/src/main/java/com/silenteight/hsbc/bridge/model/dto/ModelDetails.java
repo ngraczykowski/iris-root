@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.bridge.model;
+package com.silenteight.hsbc.bridge.model.dto;
 
 import lombok.Builder;
 import lombok.Value;
@@ -10,5 +10,5 @@ import com.silenteight.hsbc.bridge.model.transfer.ModelManager.Details;
 public class ModelDetails implements Details {
 
   String type;
-  String name;
+  String version;
 }

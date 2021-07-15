@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
@@ -10,6 +11,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MINOR;
 
+@Slf4j
 @RequiredArgsConstructor
 class NewWorldCheckModelListener {
 
@@ -18,6 +20,9 @@ class NewWorldCheckModelListener {
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.model-persisted-queue}")
   void onModelChange(ModelPersisted modelPersisted) {
+    log.info(
+        "Received ModelPersisted for WorldCheck model type={}", modelPersisted.getModelType());
+
     var modelInfo = convertToModelInfo(modelPersisted);
     worldCheckModelManager.transferModelToJenkins(modelInfo);
   }

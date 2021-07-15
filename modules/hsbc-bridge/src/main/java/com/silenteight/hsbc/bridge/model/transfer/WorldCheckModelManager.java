@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.ExportModelResponseDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;

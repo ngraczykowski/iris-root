@@ -15,6 +15,7 @@ import static com.silenteight.worldcheck.api.v1.ModelStatus.SUCCESS
 class Fixtures {
 
   static TEST_UUID = "a5250934-a67d-11eb-bcbc-0242ac130002"
+  static TEST_VERSION = "01.08.2021_8:27:34"
   static SOLVING_MODEL_WITH_UID = "solvingModels/" + TEST_UUID
   static TEST_BUCKET_WITH_UID = "/testbucket/" + TEST_UUID
   static JENKINS_URI = "https://jenkins.silenteight.com/crumbIssuer/api/json"
@@ -38,8 +39,9 @@ class Fixtures {
 
   def testNexusUrl = TEST_NEXUS_URL + TEST_UUID + SNAPSHOT_JSON
   def testGovernanceModelName = SOLVING_MODEL_WITH_UID
+  def testGovernanceModelVersion = TEST_VERSION
   def testWorldCheckModelName = TEST_BUCKET_WITH_UID
-  def testGovernanceUrl = BRIDGE_ADDRESS + MODEL_EXPORT + MODEL + SOLVING_MODEL_WITH_UID
+  def testGovernanceUrl = BRIDGE_ADDRESS + MODEL_EXPORT + MODEL + TEST_VERSION
   def testWorldCheckIsPepProceduralUrl = BRIDGE_ADDRESS + MODEL_EXPORT + IS_PEP_PROCEDURAL +
       TEST_BUCKET_WITH_UID
   def testWorldCheckIsPepHistoricalUrl = BRIDGE_ADDRESS + MODEL_EXPORT + IS_PEP_HISTORICAL +
@@ -54,7 +56,7 @@ class Fixtures {
   def modelInfo = ModelInfo.builder()
       .type("MODEL")
       .changeType("MAJOR")
-      .name(testGovernanceModelName)
+      .name(testGovernanceModelVersion)
       .url(testGovernanceUrl)
       .build()
 
@@ -93,7 +95,7 @@ class Fixtures {
       .build()
 
   def modelPromotedForProduction = ModelPromotedForProduction.newBuilder()
-      .setName(testGovernanceModelName)
+      .setVersion(testGovernanceModelVersion)
       .build()
 
   def crumbResponse =

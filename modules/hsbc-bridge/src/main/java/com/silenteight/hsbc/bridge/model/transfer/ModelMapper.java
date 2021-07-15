@@ -11,10 +11,10 @@ import com.silenteight.worldcheck.api.v1.ModelPersisted;
 
 import java.net.URI;
 
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ModelMapper {
+
+  private static final String SUCCESS = ModelStatus.SUCCESS.name();
 
   static ModelPersisted toModelPersisted(ModelInfoStatusRequest request) {
     return ModelPersisted.newBuilder()
@@ -30,7 +30,7 @@ class ModelMapper {
         .name(modelInfoRequest.getName())
         .url(modelUri.toString())
         .type(modelInfoRequest.getType().name())
-        .status(SUCCESS.name())
+        .status(SUCCESS)
         .build();
   }
 
@@ -42,5 +42,22 @@ class ModelMapper {
         .type(modelInfoRequest.getType().name())
         .status(status.name())
         .build();
+  }
+
+  static ModelStatusUpdatedDto convertToModelStatusUpdated(
+      String model, ModelInfoRequest modelInfoRequest, ModelStatus status) {
+    var updateUrl = updateUrl(modelInfoRequest.getUrl(), model);
+    return ModelStatusUpdatedDto.builder()
+        .name(model)
+        .url(updateUrl)
+        .type(modelInfoRequest.getType().name())
+        .status(status.name())
+        .build();
+  }
+
+  private static String updateUrl(String requestUri, String model) {
+    var index = requestUri.lastIndexOf('/');
+    var substring = requestUri.substring(0, index);
+    return substring + "/" + model;
   }
 }

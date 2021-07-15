@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.model.transfer;
 
 import lombok.Value;
 
-import com.silenteight.hsbc.bridge.model.ExportModelResponseDto;
+import com.silenteight.hsbc.bridge.model.dto.ExportModelResponseDto;
 import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 
 import java.nio.charset.StandardCharsets;

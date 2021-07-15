@@ -44,7 +44,7 @@ public class GovernanceModelManager implements ModelManager {
 
   @Override
   public ExportModelResponse exportModel(Details details) {
-    var exportModelResponseDto = governanceServiceClient.exportModel(details.getName());
+    var exportModelResponseDto = governanceServiceClient.exportModel(details.getVersion());
     return ExportModelResponseCreator.of(exportModelResponseDto).create();
   }
 
@@ -56,9 +56,9 @@ public class GovernanceModelManager implements ModelManager {
   private ModelStatusUpdatedDto transferModelFromNexus(ModelInfoRequest request) {
     try {
       var jsonModel = nexusModelClient.updateModel(request.getUrl());
-      governanceServiceClient.transferModel(jsonModel);
+      var model = governanceServiceClient.transferModel(jsonModel);
       log.info("Update model successful!");
-      return convertToModelStatusUpdated(request, SUCCESS);
+      return convertToModelStatusUpdated(model, request, SUCCESS);
     } catch (IOException e) {
       log.error("Unable to update model: " + request.getName(), e);
       return convertToModelStatusUpdated(request, FAILURE);

@@ -50,10 +50,22 @@ class ModelGrpcAdapterTest {
   @Test
   void shouldExportModel() {
     //when
-    var response = underTest.exportModel("solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333");
+    var response = underTest.exportModel("01.08.2021_8:27:34");
 
     //then
     assertNotNull(response.getModelJson());
+    assertEquals(1, response.getId());
+    assertEquals("", response.getName());
+    assertEquals("01.08.2021_8:27:34", response.getVersion());
+  }
+
+  @Test
+  void shouldTransferModel() {
+    //when
+    var response = underTest.transferModel(new byte[0]);
+
+    //then
+    assertNotNull(response);
   }
 
   class MockedSolvingModelServiceGrpcServer extends SolvingModelServiceImplBase {
@@ -79,7 +91,26 @@ class ModelGrpcAdapterTest {
         ExportModelRequest request, StreamObserver<ExportModelResponse> responseObserver) {
       responseObserver.onNext(ExportModelResponse.newBuilder()
           .setModelJson(ByteString.EMPTY)
+          .setId(1)
+          .setName(request.getName())
+          .setVersion(request.getVersion())
           .build());
+      responseObserver.onCompleted();
+    }
+
+    @Override
+    public void importModel(
+        ImportNewModelRequest request, StreamObserver<ImportNewModelResponse> responseObserver) {
+      responseObserver.onNext(ImportNewModelResponse.newBuilder()
+          .setModel(request.getModelJson().toString())
+          .build());
+      responseObserver.onCompleted();
+    }
+
+    @Override
+    public void useModel(
+        UseModelRequest request, StreamObserver<Empty> responseObserver) {
+      responseObserver.onNext(Empty.getDefaultInstance());
       responseObserver.onCompleted();
     }
   }

@@ -37,7 +37,7 @@ class Registerer {
     return analysisServiceClient.createAnalysis(request);
   }
 
-  private static List<FeatureDto> map(List<com.silenteight.hsbc.bridge.model.FeatureDto> features) {
+  private static List<FeatureDto> map(List<com.silenteight.hsbc.bridge.model.dto.FeatureDto> features) {
     return features.stream().map(f ->
         FeatureDto.builder()
             .name(f.getName())
