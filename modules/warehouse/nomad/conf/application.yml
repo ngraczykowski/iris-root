@@ -77,13 +77,47 @@ grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
 
 warehouse.report.rbs:
-  #  I will set it up just for a testing purpose - need to be updated to valid fields
   columns:
-    - name: alert_1.CustomerEntities.edqLoBCountryCode
-      label: Country Code
+    - name: alert_fvSignature
+      label: fv_signature
+    - name: alert_policyId
+      label: policy_id
+    - name: alert_stepId
+      label: step_id
+    - name: alert_recommendation
+      label: recommended action
+    - name: alert_extendedAttribute5
+      label: customer_type
+    - name: alert_dateOfBirthFeatureSolution
+      label: date_of_birth
+    - name: alert_genderFeatureSolution
+      label: gender
+    - name: alert_incorporationCountryFeatureSolution
+      label: incorporation_country
+    - name: alert_nameFeatureSolution
+      label: name
+    - name: alert_nationalIdDocumentFeatureSolution
+      label: national_id_document
+    - name: alert_nationalityCountryFeatureSolution
+      label: national_country
+    - name: alert_otherCountryFeatureSolution
+      label: other_country
+    - name: alert_otherDocumentFeatureSolution
+      label: other_document
+    - name: alert_passportNumberDocumentFeatureSolution
+      label: passport_number_document
+    - name: alert_registrationCountryFeatureSolution
+      label: registration_country
+    - name: alert_residencyCountryFeatureSolution
+      label: residency_country
+
   grouping-columns:
-    - name: alert_DN_CASE.ExtendedAttribute5
-      label: Risk Type
-      grouping-values: [SAN, PEP]
-      add-counter: true
+    #    - name: qa_decision
+    #      label: qa_decision
+    #      grouping-values: [PASS, FAILED]
+    #      add-counter: true
+    - name: alert_DN_CASE.currentState
+      label: analysis_decision
+      grouping-values: Level 1 Review, Level 2 Review
+      add-counter: false
   date-field-name: index_timestamp
