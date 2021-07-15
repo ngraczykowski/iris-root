@@ -180,5 +180,15 @@
       </column>
     </createTable>
   </changeSet>
+  <changeSet id="db.changelog-sear-payments-scb-1.1.0-3" author="msitarski">
+    <createTable tableName="scb_hit_name">
+      <column name="hit_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(1024)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 
 </databaseChangeLog>
