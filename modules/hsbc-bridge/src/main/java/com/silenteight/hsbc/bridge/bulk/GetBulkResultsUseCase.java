@@ -9,10 +9,15 @@ import com.silenteight.hsbc.bridge.bulk.rest.*;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase.GetRecommendationRequest;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
-import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.String.valueOf;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -56,12 +61,14 @@ public class GetBulkResultsUseCase {
       var recommendation = getRecommendation(alert.getName(), metadata);
       solvedAlert.setRecommendation(recommendation.getRecommendedAction());
       solvedAlert.setComment(recommendation.getRecommendationComment());
-      attachRecommendationMetadata(solvedAlert, recommendation.getMetadata());
+      attachRecommendationMetadata(solvedAlert, recommendation);
     }
     return solvedAlert;
   }
 
-  private void attachRecommendationMetadata(SolvedAlert alert, RecommendationMetadata metadata) {
+  private void attachRecommendationMetadata(
+      SolvedAlert alert, RecommendationWithMetadataDto recommendation) {
+    var metadata = recommendation.getMetadata();
     var recommendationAlertMetadata =
         alertMetadataCollector.collectFromRecommendationMetadata(metadata);
 
@@ -69,24 +76,31 @@ public class GetBulkResultsUseCase {
     alert.setPolicyId(findByKey("policy", recommendationAlertMetadata));
     alert.setStepId(findByKey("step", recommendationAlertMetadata));
 
+    alert.getAlertMetadata().addAll(getAlertRecommendationDate(recommendation.getDate()));
     alert.getAlertMetadata().addAll(recommendationAlertMetadata);
+  }
+
+  @NotNull
+  private List<AlertMetadata> getAlertRecommendationDate(OffsetDateTime date) {
+    return of(
+        new AlertMetadata("recommendationYear", valueOf(date.getYear())),
+        new AlertMetadata("recommendationMonth", valueOf(date.getMonth())),
+        new AlertMetadata("recommendationDay", valueOf(date.getDayOfMonth())));
   }
 
   private String findByKey(String key, Collection<AlertMetadata> metadata) {
     return metadata.stream()
-        .filter(a-> a.getKey().equalsIgnoreCase(key))
+        .filter(a -> a.getKey().equalsIgnoreCase(key))
         .map(AlertMetadata::getValue)
         .findFirst()
         .orElse("");
   }
 
   private List<AlertMetadata> map(List<BulkAlertMetadata> alertMetadata) {
-    return alertMetadata.stream().map(a -> {
-      var metadata = new AlertMetadata();
-      metadata.setKey(a.getKey());
-      metadata.setValue(a.getValue());
-      return metadata;
-    }).collect(Collectors.toList());
+    return alertMetadata
+        .stream()
+        .map(a -> new AlertMetadata(a.getKey(), a.getValue()))
+        .collect(Collectors.toList());
   }
 
   private RecommendationWithMetadataDto getRecommendation(
