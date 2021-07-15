@@ -12,7 +12,8 @@ class CountryCodeForUnitMapImpl implements CountryCodeForUnitMap {
 
   @NonNull private final List<UnitCountryCodeTuple> map;
 
-  @NonNull public String map(@NonNull String unit) {
+  @NonNull
+  public String map(@NonNull String unit) {
     for (UnitCountryCodeTuple tuple : map) {
       if (tuple.unit.equals(unit))
         return tuple.countryCode;
@@ -22,6 +23,7 @@ class CountryCodeForUnitMapImpl implements CountryCodeForUnitMap {
 
   @Value
   static class UnitCountryCodeTuple {
+
     String unit;
     String countryCode;
   }

@@ -1,12 +1,14 @@
 package com.silenteight.searpayments.scb.mapper;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.searpayments.bridge.model.SolutionType;
 import com.silenteight.searpayments.scb.domain.Hit;
 import com.silenteight.searpayments.scb.domain.HittedEntityAddress;
 import com.silenteight.searpayments.scb.etl.response.HitAndWatchlistPartyData;
 import com.silenteight.searpayments.scb.etl.response.HitData;
-import com.silenteight.searpayments.bridge.model.SolutionType;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +83,7 @@ class CreateHit {
     hit.setOneLineAddressAgentRequest(
         createOneLinerAgentRequestFactory.create(requestHitDto).create());
     hit.setSpecificTermsAgentRequest(
-            String.join(" ", requestHitDto.getHitAndWlPartyData().getAllMatchingFieldValues()));
+        String.join(" ", requestHitDto.getHitAndWlPartyData().getAllMatchingFieldValues()));
     hit.setTwoLinesNameAgentRequest(
         createSerializedTwoLinesNameAgentRequest(
             requestHitDto.getAlertedPartyData().getAddresses()));

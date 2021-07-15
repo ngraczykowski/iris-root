@@ -1,9 +1,11 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.MessageStructureDtp;
-import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.MessageStructureScstar;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.MessageStructureDtp;
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.MessageStructureScstar;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

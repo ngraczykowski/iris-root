@@ -1,9 +1,10 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.silenteight.searpayments.bridge.dto.input.StatusDto;
-import com.silenteight.searpayments.scb.etl.response.AlertEtlResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import com.silenteight.searpayments.bridge.dto.input.StatusDto;
+import com.silenteight.searpayments.scb.etl.response.AlertEtlResponse;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AlertStatusExtractor {

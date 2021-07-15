@@ -1,8 +1,9 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

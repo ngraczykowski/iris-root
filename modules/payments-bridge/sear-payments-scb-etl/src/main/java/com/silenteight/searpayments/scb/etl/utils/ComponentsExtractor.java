@@ -2,6 +2,7 @@ package com.silenteight.searpayments.scb.etl.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

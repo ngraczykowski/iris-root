@@ -1,9 +1,11 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.silenteight.searpayments.scb.etl.utils.MessageFieldExtractor.MessageNameAddressResult;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import com.silenteight.searpayments.scb.etl.utils.MessageFieldExtractor.MessageNameAddressResult;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.Map.Entry;
 import static java.util.Arrays.copyOfRange;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MessageNameAddressResultExtractorHelper {
+class MessageNameAddressResultExtractorHelper {
 
   /**
    * Simple concatenation based on the hypothesis that words are truncated if hit 35 char-length

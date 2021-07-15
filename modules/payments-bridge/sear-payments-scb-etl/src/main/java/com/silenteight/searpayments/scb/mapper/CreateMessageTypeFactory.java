@@ -1,7 +1,8 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.silenteight.searpayments.scb.etl.response.AlertEtlResponse;
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.searpayments.scb.etl.response.AlertEtlResponse;
 
 @RequiredArgsConstructor
 class CreateMessageTypeFactory {

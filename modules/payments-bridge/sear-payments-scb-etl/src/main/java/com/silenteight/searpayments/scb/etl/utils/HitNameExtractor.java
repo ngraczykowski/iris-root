@@ -1,8 +1,10 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.silenteight.searpayments.bridge.dto.input.RequestHitDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import com.silenteight.searpayments.bridge.dto.input.RequestHitDto;
+
 import org.jetbrains.annotations.Nullable;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

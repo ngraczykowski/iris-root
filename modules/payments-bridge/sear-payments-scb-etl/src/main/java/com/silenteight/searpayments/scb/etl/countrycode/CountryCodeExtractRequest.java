@@ -1,8 +1,9 @@
 package com.silenteight.searpayments.scb.etl.countrycode;
 
-import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.SourceSystem;
 import lombok.NonNull;
 import lombok.Value;
+
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.SourceSystem;
 
 import javax.annotation.Nullable;
 

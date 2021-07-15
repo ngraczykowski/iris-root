@@ -1,8 +1,9 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
 
 @RequiredArgsConstructor
 class CreateBasicAlertFactory {

@@ -1,20 +1,21 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.silenteight.searpayments.scb.domain.Alert;
-import com.silenteight.searpayments.scb.domain.Alert.AlertBuilder;
-import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
-import com.silenteight.searpayments.scb.domain.NextStatus;
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
-import com.silenteight.searpayments.bridge.dto.input.RequestStatusDto;
-import com.silenteight.searpayments.bridge.dto.input.StatusDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
+import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.searpayments.bridge.dto.input.RequestStatusDto;
+import com.silenteight.searpayments.bridge.dto.input.StatusDto;
+import com.silenteight.searpayments.scb.domain.Alert;
+import com.silenteight.searpayments.scb.domain.Alert.AlertBuilder;
+import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
+import com.silenteight.searpayments.scb.domain.NextStatus;
+
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.silenteight.searpayments.scb.domain.Alert.AlertMessageFormat.OTHER;

@@ -1,10 +1,11 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.silenteight.searpayments.scb.etl.response.MessageFieldStructure;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.silenteight.searpayments.scb.etl.response.MessageFieldStructure;
 
 import java.util.ArrayList;
 import java.util.List;

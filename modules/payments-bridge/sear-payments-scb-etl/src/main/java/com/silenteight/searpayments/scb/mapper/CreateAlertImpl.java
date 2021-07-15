@@ -1,19 +1,20 @@
 package com.silenteight.searpayments.scb.mapper;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.Alert.AlertMessageFormat;
 import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
 import com.silenteight.searpayments.scb.domain.Hit;
 import com.silenteight.searpayments.scb.domain.NextStatus;
-import com.silenteight.searpayments.bridge.dto.validator.CompleteAlertDefinition;
-import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
 import com.silenteight.searpayments.scb.etl.AlertParser;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
 import com.silenteight.searpayments.scb.etl.response.AlertEtlResponse;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,7 +89,8 @@ class CreateAlertImpl implements CreateAlert {
     alert = builder.build();
     addNextStatuses();
     alert.markAsDamaged(
-        new DamageReason("REQUEST_MESSAGE_IS_DAMAGED",
+        new DamageReason(
+            "REQUEST_MESSAGE_IS_DAMAGED",
             StringUtils.substring(message, 0, 256)));
   }
 

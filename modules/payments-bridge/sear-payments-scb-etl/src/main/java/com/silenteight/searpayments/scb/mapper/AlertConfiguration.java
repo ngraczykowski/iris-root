@@ -1,8 +1,10 @@
 package com.silenteight.searpayments.scb.mapper;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,11 +36,6 @@ class AlertConfiguration {
     propsConfig.setIgnoreUnresolvablePlaceholders(true);
     return propsConfig;
   }
-
-//  @Bean
-//  CreateAlertsFromRequestFactory createAlertsFromRequestFactory() {
-//    return new CreateAlertsFromRequestFactory(createAlertFromMessageFactory());
-//  }
 
   @Bean
   CreateAlertFactory createAlertFromMessageFactory() {

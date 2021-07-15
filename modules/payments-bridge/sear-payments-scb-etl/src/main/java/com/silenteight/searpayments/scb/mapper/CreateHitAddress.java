@@ -1,9 +1,10 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.silenteight.searpayments.scb.domain.HittedEntityAddress;
-import com.silenteight.searpayments.scb.etl.response.HitAndWatchlistPartyData;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.searpayments.scb.domain.HittedEntityAddress;
+import com.silenteight.searpayments.scb.etl.response.HitAndWatchlistPartyData;
 
 import java.util.List;
 

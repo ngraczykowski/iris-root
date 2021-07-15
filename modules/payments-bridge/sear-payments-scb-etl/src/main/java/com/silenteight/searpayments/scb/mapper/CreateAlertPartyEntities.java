@@ -1,11 +1,13 @@
 package com.silenteight.searpayments.scb.mapper;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.searpayments.scb.etl.response.AlertedPartyData;
 import com.silenteight.searpayments.scb.etl.response.HitData;
 import com.silenteight.searpayments.scb.etl.response.MessageFieldStructure;
 import com.silenteight.searpayments.scb.util.StringUtil;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

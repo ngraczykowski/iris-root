@@ -1,6 +1,7 @@
 package com.silenteight.searpayments.scb.mapper;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

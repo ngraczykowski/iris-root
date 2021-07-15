@@ -1,17 +1,18 @@
 package com.silenteight.searpayments.scb.mapper;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.searpayments.scb.domain.Hit;
 import com.silenteight.searpayments.scb.etl.response.AlertEtlResponse;
 import com.silenteight.searpayments.scb.etl.response.HitData;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @RequiredArgsConstructor
 class CreateHits {
+
   @NonNull private final CreateHitFactory createHitFactory;
   @NonNull private final AlertEtlResponse alertEtlResponse;
 

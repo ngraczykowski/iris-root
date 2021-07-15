@@ -1,10 +1,11 @@
 package com.silenteight.searpayments.scb.etl.countrycode;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.searpayments.scb.etl.countrycode.mts.CountryCodeForUnitMap;
 import com.silenteight.searpayments.scb.etl.countrycode.other.CountryCodeForOther;
 import com.silenteight.searpayments.scb.etl.countrycode.scstar.ExtractCountryFromScstarBic;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class CountryCodeExtractor {

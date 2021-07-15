@@ -1,13 +1,15 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.silenteight.proto.agent.geo.v1.api.CompareLocationsRequest;
-import com.silenteight.searpayments.scb.etl.response.HitData;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+
+import com.silenteight.proto.agent.geo.v1.api.CompareLocationsRequest;
+import com.silenteight.searpayments.scb.etl.response.HitData;
+
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.Printer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ class CreateCompareLocationsRequest {
   @NonNull private final HitData requestHitDto;
 
   private static final Printer PROTO_JSON_PRINTER =
-          JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
+      JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
 
   String create() {
     CompareLocationsRequest compareLocationsRequest = CompareLocationsRequest.newBuilder()

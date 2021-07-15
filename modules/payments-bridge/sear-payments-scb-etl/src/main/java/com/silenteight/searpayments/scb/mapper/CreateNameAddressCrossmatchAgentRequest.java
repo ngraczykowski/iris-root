@@ -1,8 +1,9 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.silenteight.searpayments.scb.etl.response.HitData;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.searpayments.scb.etl.response.HitData;
 
 import java.util.List;
 
@@ -15,12 +16,13 @@ class CreateNameAddressCrossmatchAgentRequest {
   @NonNull private final CreateAlertPartyEntitiesFactory createAlertPartyEntitiesFactory;
 
   String create() {
-    NameAddressCrossmatchAgentRequest nameAddressCrossmatchAgentRequest = NameAddressCrossmatchAgentRequest.builder()
-        .alertPartyEntities(createAlertPartyEntitiesFactory.create(requestHitDto).create())
-        .watchlistName(requestHitDto.getHitAndWlPartyData().getName())
-        .watchlistType(requestHitDto.getHitAndWlPartyData().getWatchlistType().getName())
-        .watchlistCountry(getWatchlistCountryIfExists())
-        .build();
+    NameAddressCrossmatchAgentRequest nameAddressCrossmatchAgentRequest =
+        NameAddressCrossmatchAgentRequest.builder()
+            .alertPartyEntities(createAlertPartyEntitiesFactory.create(requestHitDto).create())
+            .watchlistName(requestHitDto.getHitAndWlPartyData().getName())
+            .watchlistType(requestHitDto.getHitAndWlPartyData().getWatchlistType().getName())
+            .watchlistCountry(getWatchlistCountryIfExists())
+            .build();
 
     return serializeNameAddressCrossmatchAgentRequest(nameAddressCrossmatchAgentRequest);
   }
@@ -30,7 +32,8 @@ class CreateNameAddressCrossmatchAgentRequest {
     return countries.isEmpty() ? "" : countries.get(0);
   }
 
-  private String serializeNameAddressCrossmatchAgentRequest(NameAddressCrossmatchAgentRequest request) {
+  private String serializeNameAddressCrossmatchAgentRequest(
+      NameAddressCrossmatchAgentRequest request) {
     return INSTANCE.serializeToString(request);
   }
 }

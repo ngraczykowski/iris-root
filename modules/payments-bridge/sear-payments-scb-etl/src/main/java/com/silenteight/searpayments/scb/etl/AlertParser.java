@@ -1,5 +1,8 @@
 package com.silenteight.searpayments.scb.etl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
 import com.silenteight.searpayments.bridge.dto.input.RequestHitDto;
 import com.silenteight.searpayments.bridge.metrics.LogMethodTime;
@@ -9,8 +12,7 @@ import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractReques
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
 import com.silenteight.searpayments.scb.etl.response.*;
 import com.silenteight.searpayments.scb.etl.utils.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -138,7 +140,8 @@ public class AlertParser {
       mainTagFieldValues = ComponentExtractorHelper.getElementsFromComponents(components, 0);
       nextTagFieldValues = ComponentExtractorHelper.getElementsFromComponents(components, 2);
     }
-    return new AbstractMessageStructure.MessageStructureDtp(messageType, tag, messageData, matchText, mainTagFieldValues,
+    return new AbstractMessageStructure.MessageStructureDtp(messageType, tag, messageData,
+        matchText, mainTagFieldValues,
         nextTagFieldValues);
   }
 
@@ -156,7 +159,8 @@ public class AlertParser {
 
   @NotNull
   private AbstractMessageStructure.MessageStructureMts messageStructureForMts(
-      String messageType, String tag, String messageData, AbstractMessageStructure.SourceSystem sourceSystem) {
+      String messageType, String tag, String messageData,
+      AbstractMessageStructure.SourceSystem sourceSystem) {
     return new AbstractMessageStructure.MessageStructureMts(
         messageType, tag, messageData, FieldValueExtractor.extractFieldValue(
         sourceSystem.name(), tag, alertMessageDto.getMessageData()));
@@ -176,10 +180,11 @@ public class AlertParser {
             alertMessageDto.getMessageData());
 
     MessageFieldStructure messageFieldStructure = messageStructure.getMessageFieldStructure();
-    MessageFieldExtractor.MessageNameAddressResult messageNameAddressResult = MessageFieldExtractor.extractNameAddress(
-        fieldValues,
-        messageFieldStructure,
-        messageStructure.checkMessageWithoutAccountNum());
+    MessageFieldExtractor.MessageNameAddressResult messageNameAddressResult =
+        MessageFieldExtractor.extractNameAddress(
+            fieldValues,
+            messageFieldStructure,
+            messageStructure.checkMessageWithoutAccountNum());
 
     return AlertedPartyData.builder()
         .names(messageNameAddressResult.getNames())

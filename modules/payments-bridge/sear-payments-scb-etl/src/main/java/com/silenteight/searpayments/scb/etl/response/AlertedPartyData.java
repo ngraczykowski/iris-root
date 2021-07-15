@@ -1,8 +1,9 @@
 package com.silenteight.searpayments.scb.etl.response;
 
-import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.SourceSystem;
 import lombok.Builder;
 import lombok.Value;
+
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.SourceSystem;
 
 import java.util.List;
 

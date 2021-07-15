@@ -1,10 +1,11 @@
 package com.silenteight.searpayments.scb.etl.response;
 
-import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure;
-import com.silenteight.searpayments.bridge.model.SolutionType;
-import com.silenteight.searpayments.bridge.model.WatchlistType;
 import lombok.Builder;
 import lombok.Value;
+
+import com.silenteight.searpayments.bridge.model.SolutionType;
+import com.silenteight.searpayments.bridge.model.WatchlistType;
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure;
 
 import java.util.List;
 

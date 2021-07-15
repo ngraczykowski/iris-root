@@ -1,8 +1,9 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.silenteight.searpayments.scb.etl.response.HitData;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.searpayments.scb.etl.response.HitData;
 
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE;
 
@@ -19,7 +20,7 @@ class CreateOneLinerAgentRequest {
     );
 
     return serializeOneLinerAgentRequest(oneLinerAgentRequest);
-}
+  }
 
   private String serializeOneLinerAgentRequest(OneLinerAgentRequest request) {
     return INSTANCE.serializeToString(request);

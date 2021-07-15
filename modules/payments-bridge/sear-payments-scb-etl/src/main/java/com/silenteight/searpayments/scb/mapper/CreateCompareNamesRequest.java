@@ -1,16 +1,17 @@
 package com.silenteight.searpayments.scb.mapper;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
-import com.silenteight.proto.agent.geo.v1.api.CompareLocationsRequest;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.proto.agent.name.v1.api.CompareNamesInput;
 import com.silenteight.proto.agent.name.v1.api.CompareNamesRequest;
 import com.silenteight.proto.agent.name.v1.api.WatchlistName;
+import com.silenteight.searpayments.bridge.model.WatchlistType;
 import com.silenteight.searpayments.scb.etl.response.HitAndWatchlistPartyData;
 import com.silenteight.searpayments.scb.etl.response.HitData;
-import com.silenteight.searpayments.bridge.model.WatchlistType;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,7 +27,7 @@ class CreateCompareNamesRequest {
   @NonNull private final HitData requestHitDto;
 
   private static final JsonFormat.Printer PROTO_JSON_PRINTER =
-          JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
+      JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
 
   String create() {
     CompareNamesRequest compareNamesRequest = CompareNamesRequest.newBuilder()
