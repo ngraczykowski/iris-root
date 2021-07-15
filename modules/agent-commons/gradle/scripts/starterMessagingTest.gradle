@@ -1,4 +1,0 @@
-dependencies {
-  starterMessagingTest libraries.spring_amqp_rabbit_test
-  starterMessagingTest libraries.spring_amqp_rabbit_junit
-}

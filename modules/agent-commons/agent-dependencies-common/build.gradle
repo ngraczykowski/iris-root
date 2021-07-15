@@ -105,6 +105,7 @@ dependencies {
     api "org.postgresql:postgresql:42.2.20"
     api "org.projectlombok:lombok:1.18.20"
     api "org.slf4j:slf4j-api:1.7.30"
+    api "com.univocity:univocity-parsers:2.9.0"
 
     // Testing
     api "com.jayway.jsonpath:json-path:2.6.0"

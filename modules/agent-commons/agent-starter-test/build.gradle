@@ -5,14 +5,20 @@ plugins {
 
 description = "Agent starter test"
 
-configurations {
-  testImplementation.extendsFrom starterSpockTest
-}
-
 dependencies {
   api libraries.reactor_test
   api libraries.spock_core
   api libraries.groovy_all
+
+  // Enables mocking by Spock
+  testImplementation libraries.byte_buddy
+  testImplementation libraries.objenesis
+
+  // Use Hamcrest matchers with Spock
+  testImplementation libraries.hamcrest
+
+  //enable json path
+  testImplementation libraries.json_path
 }
 
 publishing {

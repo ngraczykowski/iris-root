@@ -6,18 +6,12 @@ plugins {
 
 description = "Agent File Reading Common"
 
-configurations {
-  testImplementation.extendsFrom starterSpockTest
-}
-
 dependencies {
-  //TODO needed for tests, group properly (after fixing dependency hell) (MI6-638)
-  implementation "io.grpc:grpc-protobuf:1.38.0"
-  implementation "io.grpc:grpc-api:1.38.0"
-  implementation "io.grpc:grpc-core:1.38.0"
-  implementation "org.junit.jupiter:junit-jupiter-api:5.7.2"
-  implementation "org.apache.commons:commons-lang3"
-  implementation "net.devh:grpc-server-spring-boot-autoconfigure:2.12.0.RELEASE"
-
+  implementation libraries.grpc_api
+  implementation libraries.grpc_core
+  implementation libraries.grpc_protobuf
+  implementation libraries.junit_jupiter_api
+  implementation libraries.commons_lang3
+  implementation libraries.grpc_client_spring_boot_autoconfigure
   implementation libraries.guava
 }

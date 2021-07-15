@@ -6,11 +6,22 @@ plugins {
 
 description = "Agent File Reading Common"
 
-configurations {
-  testImplementation.extendsFrom starterSpockTest
-}
-
 dependencies {
   api libraries.univocity_parsers
   implementation libraries.guava
+
+  testImplementation libraries.spock_core
+
+  // Optional dependencies for using Spock
+  testImplementation libraries.groovy_all
+
+  // Enables mocking by Spock
+  testImplementation libraries.byte_buddy
+  testImplementation libraries.objenesis
+
+  // Use Hamcrest matchers with Spock
+  testImplementation libraries.hamcrest
+
+  //enable json path
+  testImplementation libraries.json_path
 }

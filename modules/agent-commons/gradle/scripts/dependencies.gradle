@@ -5,23 +5,19 @@ ext {
   // Silent Eight
   //***********************************
   s8commonsVersion = "2.0.0"
-  s8toolsVersion = "1.0.6"
   s8consulDiscoveryVersion = "2.4.0"
   s8consulGrpcRegistrationVersion = "1.0.0"
 
-  aspectjVersion = "1.9.5" //TODO conflict with dep-constrains in build.gradle
-  byteBuddyVersion = "1.10.7" //TODO conflict with dep-constrains in build.gradle
-  guavaVersion = "28.2-jre" //TODO suspicious, we probably have it specified somewhere elses
-  univocityParsersVersion = "2.9.0"
-  groovyAllVersion = "3.0.8" // TODO the same as in build.gradle
+  // TODO all of this should be specified in agent-dependencies-common
+  aspectjVersion = "1.9.5" //TODO conflict with dep-constrains in build.gradle ("1.9.6")
+  byteBuddyVersion = "1.10.7" //TODO conflict with dep-constrains in build.gradle ("1.11.1")
+  guavaVersion = "28.2-jre" //TODO conflict with dep-constrains in build.gradle ("30.1.1-jre")
   jbossXnioVersion = "3.5.9.Final"
+  springBootAutoconfigureVersion = "2.12.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6")
 }
 
-// Silent Eight
-libraries.s8_commons_app = "com.silenteight.commons:silenteight-commons-app:$s8commonsVersion"
+// Silent Eight libraries
 libraries.s8_commons_core = "com.silenteight.commons:silenteight-commons-core:$s8commonsVersion"
-libraries.s8_commons_lucene = "com.silenteight.commons:silenteight-commons-lucene:$s8commonsVersion"
-libraries.s8_csv_converter = "com.silenteight.tools.csvconverter:silenteight-csvconverter:$s8toolsVersion"
 libraries.s8_spring_cloud_consul_discovery = "com.silenteight.spring.cloud.consul.discovery:silenteight-spring-cloud-consul-discovery:$s8consulDiscoveryVersion"
 libraries.consul_grpc_registration = "com.silenteight.commons:consul-grpc-registration:$s8consulGrpcRegistrationVersion"
 
@@ -33,114 +29,41 @@ libraries.spring_context = "org.springframework:spring-context"
 libraries.spring_context_support = "org.springframework:spring-context-support"
 libraries.spring_core = "org.springframework:spring-core"
 libraries.spring_expression = "org.springframework:spring-expression"
-libraries.spring_instrument = "org.springframework:spring-instrument"
-libraries.spring_jdbc = "org.springframework:spring-jdbc"
-libraries.spring_messaging = "org.springframework:spring-messaging"
-libraries.spring_orm = "org.springframework:spring-orm"
-libraries.spring_retry = "org.springframework.retry:spring-retry"
-libraries.spring_test = "org.springframework:spring-test"
-libraries.spring_tx = "org.springframework:spring-tx"
-libraries.spring_web = "org.springframework:spring-web"
-
-libraries.spring_amqp = "org.springframework.amqp:spring-amqp"
-libraries.spring_amqp_rabbit = "org.springframework.amqp:spring-rabbit"
-libraries.spring_amqp_rabbit_test = "org.springframework.amqp:spring-rabbit-test"
-libraries.spring_amqp_rabbit_junit = "org.springframework.amqp:spring-rabbit-junit"
 
 libraries.spring_boot = "org.springframework.boot:spring-boot"
-libraries.spring_boot_actuator = "org.springframework.boot:spring-boot-actuator"
 libraries.spring_boot_autoconfigure = "org.springframework.boot:spring-boot-autoconfigure"
-libraries.spring_boot_autoconfigure_processor = "org.springframework.boot:spring-boot-autoconfigure-processor"
-libraries.spring_boot_configuration_processor = "org.springframework.boot:spring-boot-configuration-processor"
 libraries.spring_boot_starter_actuator = "org.springframework.boot:spring-boot-starter-actuator"
-libraries.spring_boot_starter_amqp = "org.springframework.boot:spring-boot-starter-amqp"
-libraries.spring_boot_starter_elasticsearch = "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-libraries.spring_boot_starter_integration = "org.springframework.boot:spring-boot-starter-integration"
 libraries.spring_boot_starter_logging = "org.springframework.boot:spring-boot-starter-logging"
-libraries.spring_boot_starter_quartz = "org.springframework.boot:spring-boot-starter-quartz"
 libraries.spring_boot_starter_undertow = "org.springframework.boot:spring-boot-starter-undertow"
 libraries.spring_boot_starter_web = "org.springframework.boot:spring-boot-starter-web"
-libraries.spring_boot_starter_webflux = "org.springframework.boot:spring-boot-starter-webflux"
-libraries.spring_boot_test = "org.springframework.boot:spring-boot-test"
-libraries.spring_boot_test_autoconfigure = "org.springframework.boot:spring-boot-test-autoconfigure"
-
-libraries.spring_batch_core = "org.springframework.batch:spring-batch-core"
-libraries.spring_batch_infrastructure = "org.springframework.batch:spring-batch-infrastructure"
-libraries.spring_batch_test = "org.springframework.batch:spring-batch-test"
-
-libraries.spring_cloud_dependencies = "org.springframework.cloud:spring-cloud-dependencies"
-libraries.spring_cloud_starter_consul = "org.springframework.cloud:spring-cloud-starter-consul"
 libraries.spring_cloud_starter_consul_config = "org.springframework.cloud:spring-cloud-starter-consul-config"
 libraries.spring_cloud_starter_sleuth = "org.springframework.cloud:spring-cloud-starter-sleuth"
-libraries.spring_cloud_test_support = "org.springframework.cloud:spring-cloud-test-support"
-
 libraries.spring_data_commons = "org.springframework.data:spring-data-commons"
-libraries.spring_data_jpa = "org.springframework.data:spring-data-jpa"
-libraries.spring_data_elasticsearch = "org.springframework.data:spring-data-elasticsearch"
-
-libraries.spring_security_acl = "org.springframework.security:spring-security-acl"
-libraries.spring_security_cas = "org.springframework.security:spring-security-cas"
-libraries.spring_security_config = "org.springframework.security:spring-security-config"
-libraries.spring_security_core = "org.springframework.security:spring-security-core"
-libraries.spring_security_test = "org.springframework.security:spring-security-test"
-libraries.spring_security_web = "org.springframework.security:spring-security-web"
 
 // Project Reactor
-libraries.reactor_adapter = "io.projectreactor.addons:reactor-adapter"
-libraries.reactor_bom = "io.projectreactor:reactor-bom"
 libraries.reactor_core = "io.projectreactor:reactor-core"
-libraries.reactor_extra = "io.projectreactor.addons:reactor-extra"
-libraries.reactor_rabbitmq = "io.projectreactor.rabbitmq:reactor-rabbitmq"
 libraries.reactor_test = "io.projectreactor:reactor-test"
 
 // APIs
-libraries.jsr305 = "com.google.code.findbugs:jsr305"
-libraries.jetbrains_annotations = "org.jetbrains:annotations"
 libraries.slf4j_api = "org.slf4j:slf4j-api"
 
 // Others
-libraries.amqp_client = "rabbitmq:amqp-client"
-libraries.antlr4 = "org.antlr:antlr4"
-libraries.antlr4_runtime = "org.antlr:antlr4-runtime"
 libraries.aspectjrt = "org.aspectj:aspectjrt:$aspectjVersion"
 libraries.aspectjtools = "org.aspectj:aspectjtools:$aspectjVersion"
-libraries.aspectjweaver = "org.aspectj:aspectjweaver"
-libraries.awaitility = "org.awaitility:awaitility"
-libraries.bouncycastle_bcmail = "org.bouncycastle:bcmail-jdk15on"
-libraries.bouncycastle_bcpg = "org.bouncycastle:bcpg-jdk15on"
-libraries.bouncycastle_bcpkix = "org.bouncycastle:bcpkix-jdk15on"
-libraries.bouncycastle_bcprov = "org.bouncycastle:bcprov-jdk15on"
-libraries.bouncycastle_bcprov_ext = "org.bouncycastle:bcprov-ext-jdk15on"
 libraries.brave_instrumentation_grpc = "io.zipkin.brave:brave-instrumentation-grpc"
 libraries.byte_buddy = "net.bytebuddy:byte-buddy:$byteBuddyVersion"
 libraries.byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:$byteBuddyVersion"
-libraries.caffeine = "github.ben-manes.caffeine:caffeine"
-libraries.caffeine_jcache = "github.ben-manes.caffeine:jcache"
-libraries.classgraph = "io.github.classgraph:classgraph"
-libraries.commons_codec = "commons-codec:commons-codec"
 libraries.commons_lang3 = "org.apache.commons:commons-lang3"
 libraries.commons_text = "org.apache.commons:commons-text"
-libraries.consul_client = "com.orbitz.consul:consul-client"
-libraries.fastutil = "it.unimi.dsi:fastutil"
-libraries.freemarker = "org.freemarker:freemarker"
 libraries.grpc_api = "io.grpc:grpc-api"
-libraries.grpc_auth = "io.grpc:grpc-auth"
-libraries.grpc_context = "io.grpc:grpc-context"
 libraries.grpc_core = "io.grpc:grpc-core"
-libraries.grpc_netty = "io.grpc:grpc-netty"
 libraries.grpc_protobuf = "io.grpc:grpc-protobuf"
-libraries.grpc_services = "io.grpc:grpc-services"
-libraries.grpc_spring_boot_starter = "net.devh:grpc-spring-boot-starter"
 libraries.grpc_server_spring_boot_starter = "net.devh:grpc-server-spring-boot-starter"
 libraries.grpc_client_spring_boot_starter = "net.devh:grpc-client-spring-boot-starter"
+libraries.grpc_client_spring_boot_autoconfigure = "net.devh:grpc-server-spring-boot-autoconfigure:$springBootAutoconfigureVersion" //TODO
 libraries.grpc_stub = "io.grpc:grpc-stub"
-libraries.grpc_testing = "io.grpc:grpc-testing"
 libraries.guava = "com.google.guava:guava:$guavaVersion"
-libraries.hibernate_core = "org.hibernate:hibernate-core"
-libraries.hibernate_envers = "org.hibernate:hibernate-envers"
-libraries.hibernate_jcache = "org.hibernate:hibernate-jcache"
 libraries.hibernate_validator = "org.hibernate.validator:hibernate-validator"
-libraries.hikari_cp = "com.zaxxer:HikariCP"
 libraries.jackson_annotations = "com.fasterxml.jackson.core:jackson-annotations"
 libraries.jackson_databind = "com.fasterxml.jackson.core:jackson-databind"
 libraries.jackson_dataformat_xml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml"
@@ -150,54 +73,24 @@ libraries.jackson_module_afterburner = "com.fasterxml.jackson.module:jackson-mod
 libraries.jackson_module_parameter_names = "com.fasterxml.jackson.module:jackson-module-parameter-names"
 libraries.jackson_module_paranamer = "com.fasterxml.jackson.module:jackson-module-paranamer"
 libraries.jakarta_validation_api = "jakarta.validation:jakarta.validation-api"
-libraries.javax_annotation_api = "javax.annotation:javax.annotation-api"
 libraries.javax_cache_api = "javax.cache:cache-api"
-libraries.javax_inject = "javax.inject:javax.inject"
 libraries.javax_persistence_api = "javax.persistence:javax.persistence-api"
-libraries.javax_servlet_api = "javax.servlet:javax.servlet-api"
 libraries.javax_transaction_api = "javax.transaction:javax.transaction-api"
-libraries.javax_validation_api = "javax.validation:validation-api"
 libraries.jaxb_api = "javax.xml.bind:jaxb-api"
-libraries.jjwt = "io.jsonwebtoken:jjwt"
-libraries.kryo_shaded = "com.esotericsoftware:kryo-shaded"
-libraries.liquibase_core = "org.liquibase:liquibase-core"
-libraries.logback_classic = "ch.qos.logback:logback-classic"
-libraries.logback_ecs_encoder = "co.elastic.logging:logback-ecs-encoder"
-libraries.logstash_logback_encoder = "net.logstash.logback:logstash-logback-encoder"
-libraries.lz4_java = "org.lz4:lz4-java"
-libraries.micrometer_core = "io.micrometer:micrometer-core"
-libraries.micrometer_influx = "io.micrometer:micrometer-registry-influx"
+libraries.junit_jupiter_api = "org.junit.jupiter:junit-jupiter-api"
+
 libraries.micrometer_prometheus = "io.micrometer:micrometer-registry-prometheus"
-libraries.oracle = "com.oracle:ojdbc8"
-libraries.paranamer = "com.thoughtworks.paranamer:paranamer"
-libraries.picocli = "info.picocli:picocli"
-libraries.postgresql = "org.postgresql:postgresql"
-libraries.protobuf_java = "com.google.protobuf:protobuf-java"
-libraries.protobuf_java_util = "com.google.protobuf:protobuf-java-util"
-libraries.querydsl_apt_jpa = [group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa'] //TODO is there a short version that specifies classifier without version?
-libraries.querydsl_jpa = "com.querydsl:querydsl-jpa"
 libraries.reactor_grpc_stub = "com.salesforce.servicelibs:reactor-grpc-stub"
 libraries.snakeyaml = "org.yaml:snakeyaml"
 libraries.tomcat_embed_el = "org.apache.tomcat.embed:tomcat-embed-el"
-libraries.univocity_parsers = "com.univocity:univocity-parsers:$univocityParsersVersion"
+libraries.univocity_parsers = "com.univocity:univocity-parsers"
 
 // Testing
-libraries.assertj_json = "com.revinate:assertj-json"
-libraries.groovy_all = "org.codehaus.groovy:groovy-all:$groovyAllVersion"
+libraries.groovy_all = "org.codehaus.groovy:groovy-all"
 libraries.hamcrest = "org.hamcrest:hamcrest"
 libraries.json_path = "com.jayway.jsonpath:json-path"
-libraries.junit_jupiter_api = "org.junit.jupiter:junit-jupiter-api"
 libraries.objenesis = "org.objenesis:objenesis"
-libraries.rest_assured = "io.rest-assured:rest-assured"
-libraries.rest_assured_spring_mock_mvc = "io.rest-assured:spring-mock-mvc"
 libraries.spock_core = "org.spockframework:spock-core"
-libraries.spock_spring = "org.spockframework:spock-spring"
-libraries.test_containers = "org.testcontainers:testcontainers"
-libraries.test_containers_elasticsearch = "org.testcontainers:elasticsearch"
-libraries.test_containers_junit_jupiter = "org.testcontainers:junit-jupiter"
-libraries.test_containers_oracle_xe = "org.testcontainers:oracle-xe"
-libraries.test_containers_postgresql = "org.testcontainers:postgresql"
-libraries.test_containers_spock = "org.testcontainers:spock"
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -230,43 +123,3 @@ dependencies {
 
   implementation libraries.slf4j_api
 }
-
-configurations {
-  starterCommon
-  starterDatabase
-  starterDatabaseRuntime
-  // Includes both GRPC Server and Client
-  // GRPC Server will listen for incoming GRPC requests on TCP socket
-  starterGrpc
-  starterGrpcClient
-  starterGrpcServer
-  starterGrpcTest
-  starterJackson
-  starterMessaging
-  starterMessagingTest
-  starterSpockTest
-  starterSpring
-  starterSpringApp
-  starterSpringTest
-
-  starterGrpc.extendsFrom starterGrpcClient
-  starterGrpc.extendsFrom starterGrpcServer
-  starterJackson.extendsFrom starterCommon
-  starterSpring.extendsFrom starterCommon
-  starterSpringApp.extendsFrom starterJackson, starterSpring
-  starterSpringTest.extendsFrom starterSpring
-  starterMessagingTest.extendsFrom starterMessaging
-}
-
-apply from: "${gradleScriptDir}/starterCommon.gradle"
-apply from: "${gradleScriptDir}/starterDatabase.gradle"
-apply from: "${gradleScriptDir}/starterGrpcClient.gradle"
-apply from: "${gradleScriptDir}/starterGrpcServer.gradle"
-apply from: "${gradleScriptDir}/starterGrpcTest.gradle"
-apply from: "${gradleScriptDir}/starterJackson.gradle"
-apply from: "${gradleScriptDir}/starterMessaging.gradle"
-apply from: "${gradleScriptDir}/starterMessagingTest.gradle"
-apply from: "${gradleScriptDir}/starterSpockTest.gradle"
-apply from: "${gradleScriptDir}/starterSpring.gradle"
-apply from: "${gradleScriptDir}/starterSpringApp.gradle"
-apply from: "${gradleScriptDir}/starterSpringTest.gradle"
