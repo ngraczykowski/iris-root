@@ -21,6 +21,7 @@ configurations {
 dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-db-changelog")
+  implementation project(":simulator-management")
 
   implementation libraries.silenteight_adjudication_api
   implementation libraries.silenteight_data_api

@@ -13,9 +13,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 import static com.google.common.collect.ImmutableList.of;
 import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static com.silenteight.simulator.management.domain.SimulationState.DONE;
+import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
 import static java.time.OffsetDateTime.now;
 import static org.assertj.core.api.Assertions.*;
 
@@ -32,6 +35,50 @@ class SimulationServiceTest extends BaseDataJpaTest {
 
   @Autowired
   SimulationEntityRepository simulationEntityRepository;
+
+  @Test
+  void shouldCreateSimulation() {
+    // when
+    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
+
+    // then
+    Optional<SimulationEntity> simulation =
+        simulationEntityRepository.findByAnalysisName(ANALYSIS_NAME);
+    assertThat(simulation).isPresent();
+  }
+
+  @Test
+  void shouldThrowNonUniqueSimulationException() {
+    // given
+    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
+
+    // when + then
+    assertThatThrownBy(
+        () -> underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME))
+        .isInstanceOf(NonUniqueSimulationException.class)
+        .hasMessageContaining("simulationId=" + CREATE_SIMULATION_REQUEST.getId());
+  }
+
+  @Test
+  void shouldFinish() {
+    // given
+    SimulationEntity simulation = persistSimulation(RUNNING);
+
+    // when
+    underTest.finish(ANALYSIS_NAME);
+
+    // then
+    SimulationEntity savedSimulation =
+        entityManager.find(SimulationEntity.class, simulation.getId());
+    assertThat(savedSimulation.getState()).isEqualTo(DONE);
+  }
+
+  @Test
+  void shouldThrowIfFinishingAndSimulationNotFound() {
+    assertThatThrownBy(() -> underTest.finish(ANALYSIS_NAME))
+        .isInstanceOf(SimulationNotFoundException.class)
+        .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
+  }
 
   @Test
   void shouldCountAllAlerts() {
@@ -73,19 +120,23 @@ class SimulationServiceTest extends BaseDataJpaTest {
     datasetMetadataService.createMetadata(request, dataset);
   }
 
-  private void persistSimulation() {
+  private SimulationEntity persistSimulation() {
+    return persistSimulation(STATE);
+  }
+
+  private SimulationEntity persistSimulation(SimulationState state) {
     SimulationEntity simulationEntity = SimulationEntity
         .builder()
         .simulationId(ID)
         .name(SIMULATION_NAME)
         .description(DESCRIPTION)
-        .state(STATE)
+        .state(state)
         .createdBy(USERNAME)
         .datasetNames(DATASETS)
         .modelName(MODEL)
         .analysisName(ANALYSIS_NAME)
         .build();
 
-    simulationEntityRepository.save(simulationEntity);
+    return simulationEntityRepository.save(simulationEntity);
   }
 }

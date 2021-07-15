@@ -31,12 +31,20 @@ public class SimulationService {
         .datasetNames(datasets)
         .state(PENDING)
         .build();
+    simulationEntity.run();
 
     try {
       repository.save(simulationEntity);
     } catch (DataIntegrityViolationException e) {
       throw new NonUniqueSimulationException(request.getId());
     }
+  }
+
+  public void finish(String analysis) {
+    SimulationEntity simulationEntity = repository
+        .findByAnalysisName(analysis)
+        .orElseThrow(() -> new SimulationNotFoundException(analysis));
+    simulationEntity.finish();
   }
 
   public long countAllAlerts(String analysis) {

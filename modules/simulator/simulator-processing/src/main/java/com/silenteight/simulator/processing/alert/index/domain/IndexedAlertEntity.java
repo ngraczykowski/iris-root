@@ -8,6 +8,8 @@ import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import static com.silenteight.simulator.processing.alert.index.domain.State.ACKED;
+
 @Entity
 @Data
 @Setter(AccessLevel.PRIVATE)
@@ -43,4 +45,8 @@ class IndexedAlertEntity extends BaseEntity implements IdentifiableEntity, Seria
   @ToString.Include
   @Column(name = "alert_count", nullable = false)
   private long alertCount;
+
+  void ack() {
+    this.state = ACKED;
+  }
 }
