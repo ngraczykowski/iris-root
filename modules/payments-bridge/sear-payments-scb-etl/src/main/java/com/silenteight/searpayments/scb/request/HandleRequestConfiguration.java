@@ -12,7 +12,7 @@ import org.springframework.messaging.MessageChannel;
 @RequiredArgsConstructor
 class HandleRequestConfiguration {
 
-  @Value("${tsaas.max-hits-per-alert}")
+  @Value("${tsaas.max-hits-per-alert:10}")
   private int maxHitsPerAlert;
 
   @Bean

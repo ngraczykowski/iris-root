@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.EAGER;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "scb_alert")
+@Table(name = "scb_alert_big")
 @Builder
 public class Alert {
 

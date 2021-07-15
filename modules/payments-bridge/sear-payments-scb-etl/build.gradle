@@ -35,7 +35,7 @@ dependencies {
     implementation libraries.hibernate_validator
 
     // Grpc
-    implementation libraries.brave_instrumentation_grpc
+//    implementation libraries.brave_instrumentation_grpc
     implementation libraries.grpc_protobuf
     implementation libraries.grpc_stub
     implementation libraries.grpc_client_spring_boot_starter
