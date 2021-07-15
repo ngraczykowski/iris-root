@@ -3,6 +3,7 @@ server:
 
 keycloak:
   frontend-client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
+  client-id: ${keycloak.frontend-client-id}
   adapter:
     auth-server-url: https://auth.silenteight.com
     realm: sens-webapp
