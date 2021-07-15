@@ -54,10 +54,13 @@ class FindMatchingFeatureVectorsUseCaseTest {
   private static final List<String> FEATURE_NAMES_3 = List.of("documentAgent");
   private static final List<String> FEATURE_VALUES_3 = List.of("NEAR_MATCH");
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
+  private static final String STEP_TITLE_1 = "First step";
   private static final String STEP_NAME_1 = "steps/" + STEP_ID_1;
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
+  private static final String STEP_TITLE_2 = "Second step";
   private static final String STEP_NAME_2 = "steps/" + STEP_ID_2;
   private static final UUID STEP_ID_3 = fromString("1f9b8139-9791-1ce1-0b58-4e08de1afe98");
+  private static final String STEP_TITLE_3 = "Third step";
   private static final String STEP_NAME_3 = "steps/" + STEP_ID_3;
   private static final int PAGE_INDEX = 0;
   private static final int PAGE_SIZE = 10;
@@ -149,6 +152,7 @@ class FindMatchingFeatureVectorsUseCaseTest {
     return List.of(
         StepConfigurationDto.builder()
             .id(STEP_ID_1)
+            .title(STEP_TITLE_1)
             .solution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
             .featureLogics(
                 List.of(
@@ -162,6 +166,7 @@ class FindMatchingFeatureVectorsUseCaseTest {
             .build(),
         StepConfigurationDto.builder()
             .id(STEP_ID_2)
+            .title(STEP_TITLE_2)
             .solution(SOLUTION_FALSE_POSITIVE)
             .featureLogics(
                 List.of(
@@ -173,6 +178,7 @@ class FindMatchingFeatureVectorsUseCaseTest {
             .build(),
         StepConfigurationDto.builder()
             .id(STEP_ID_3)
+            .title(STEP_TITLE_3)
             .solution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
             .featureLogics(
                 List.of(

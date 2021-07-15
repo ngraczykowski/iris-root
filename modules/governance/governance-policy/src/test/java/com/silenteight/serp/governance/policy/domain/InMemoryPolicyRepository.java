@@ -60,4 +60,9 @@ class InMemoryPolicyRepository
         .orElseThrow();
     delete(policyToDelete);
   }
+
+  @Override
+  public String getPolicyName(UUID policyId) {
+    return getByPolicyId(policyId).getName();
+  }
 }

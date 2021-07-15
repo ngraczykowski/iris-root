@@ -24,13 +24,15 @@ class SolveConfiguration {
   SolveUseCase solveUseCase(
       StepsSupplierProvider stepsSupplierProvider,
       FeatureVectorSolvedMessageGateway gateway,
-      CanonicalFeatureVectorFactory canonicalFeatureVectorFactory) {
+      CanonicalFeatureVectorFactory canonicalFeatureVectorFactory,
+      PolicyTitleQuery policyDetailsQuery) {
 
     return new SolveUseCase(
         stepsSupplierProvider,
         new SolvingService(),
         gateway,
         canonicalFeatureVectorFactory,
+        policyDetailsQuery,
         DefaultTimeSource.INSTANCE);
   }
 }

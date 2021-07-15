@@ -19,6 +19,8 @@ public class StepConfigurationDto {
   @NonNull
   private UUID id;
   @NonNull
+  private String title;
+  @NonNull
   private FeatureVectorSolution solution;
   @NonNull
   @Default

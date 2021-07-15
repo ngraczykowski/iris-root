@@ -84,11 +84,13 @@ class PolicyPromotedEventHandlerTest {
     return List.of(
         StepConfigurationDto.builder()
             .id(fromString("de1afe98-0b58-4941-9791-4e081f9b8139"))
+            .title("FIRST_STEP")
             .solution(SOLUTION_FALSE_POSITIVE)
             .featureLogics(firstStepFeaturesConfiguration)
             .build(),
         StepConfigurationDto.builder()
             .id(fromString("de1afe98-0b58-4941-9791-4e081f9b8139"))
+            .title("SECOND_STEP")
             .solution(SOLUTION_POTENTIAL_TRUE_POSITIVE)
             .featureLogics(secondStepFeaturesConfiguration)
             .build());

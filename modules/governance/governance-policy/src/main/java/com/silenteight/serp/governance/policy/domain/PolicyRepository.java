@@ -27,4 +27,7 @@ interface PolicyRepository extends Repository<Policy, Long> {
   Policy getById(Long policyId);
 
   void deleteByPolicyId(UUID policyId);
+
+  @Query("select p.name from Policy p where p.policyId = :policyId")
+  String getPolicyName(UUID policyId);
 }

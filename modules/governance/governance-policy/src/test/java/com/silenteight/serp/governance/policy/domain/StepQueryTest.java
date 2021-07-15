@@ -114,12 +114,14 @@ class StepQueryTest extends BaseDataJpaTest {
     StepConfigurationDto firstStep = StepConfigurationDto
         .builder()
         .id(FIRST_STEP_ID)
+        .title(FIRST_STEP_NAME)
         .solution(SOLUTION_NO_DECISION)
         .featureLogics(of(createFeatureLogic(1, featureConfigurationDto)))
         .build();
     StepConfigurationDto secondStep = StepConfigurationDto
         .builder()
         .id(SECOND_STEP_ID)
+        .title(SECOND_STEP_NAME)
         .solution(SOLUTION_FALSE_POSITIVE)
         .build();
     assertThat(result).contains(firstStep, secondStep);

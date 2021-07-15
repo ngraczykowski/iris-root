@@ -38,11 +38,14 @@ class SolveUseCaseTest {
   private static final String POLICY_NAME = POLICY_NAME_RESOURCE_PREFIX + POLICY_ID;
   private static final UUID STEP_ID_1 = fromString("01256804-1ce1-4d52-94d4-d1876910f272");
   private static final String STEP_NAME_1 = STEP_NAME_RESOURCE_PREFIX + STEP_ID_1;
+  private static final String STEP_TITLE_1 = "First step";
   private static final UUID STEP_ID_2 = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
   private static final String STEP_NAME_2 = STEP_NAME_RESOURCE_PREFIX + STEP_ID_2;
+  private static final String STEP_TITLE_2 = "Second step";
   private static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
   private static final Signature SIGNATURE_1 = fromBase64("o7uPxWV913+ljhPW2uH+g7eAFeQ=");
   private static final Signature SIGNATURE_2 = fromBase64("BWrL65LzOy8daIJSWiZCRxG96XA=");
+  private static final String POLICY_TITLE = "Test Policy";
 
   private StepsSupplier stepsSupplier;
   private FeatureVectorSolvedMessageGatewayMock gateway;
@@ -56,11 +59,14 @@ class SolveUseCaseTest {
         new CanonicalFeatureVectorFactory(new SignatureCalculator());
     TimeSource fixed = mock(TimeSource.class);
     when(fixed.now()).thenReturn(NOW);
+    PolicyTitleQuery policyTitleQuery = mock(PolicyTitleQuery.class);
+    when(policyTitleQuery.getTitle(POLICY_ID)).thenReturn(POLICY_TITLE);
     underTest = new SolveUseCase(
         policyId -> stepsSupplier,
         new SolvingService(),
         gateway,
         canonicalFeatureVectorFactory,
+        policyTitleQuery,
         fixed);
   }
 
@@ -87,7 +93,9 @@ class SolveUseCaseTest {
         .hasVectorSignature(SIGNATURE_1)
         .hasReasonField("feature_vector_signature", SIGNATURE_1.asString())
         .hasReasonField("policy", POLICY_NAME)
+        .hasReasonField("policy_title", POLICY_TITLE)
         .hasReasonField("step", STEP_NAME_2)
+        .hasReasonField("step_title", STEP_TITLE_2)
         .and()
         .solution(1)
         .hasStepId(STEP_ID_1)
@@ -150,6 +158,7 @@ class SolveUseCaseTest {
         new Step(
             SOLUTION_FALSE_POSITIVE,
             STEP_ID_1,
+            STEP_TITLE_1,
             List.of(
                 createFeatureLogic(
                     2,
@@ -161,6 +170,7 @@ class SolveUseCaseTest {
         new Step(
             SOLUTION_POTENTIAL_TRUE_POSITIVE,
             STEP_ID_2,
+            STEP_TITLE_2,
             List.of(
                 createFeatureLogic(
                     2,

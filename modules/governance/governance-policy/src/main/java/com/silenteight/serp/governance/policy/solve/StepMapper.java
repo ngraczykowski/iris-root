@@ -11,7 +11,8 @@ import static java.util.stream.Collectors.toList;
 class StepMapper {
 
   public Step map(StepConfigurationDto dto) {
-    return new Step(dto.getSolution(), dto.getId(), mapToFeatureLogics(dto.getFeatureLogics()));
+    return new Step(
+        dto.getSolution(), dto.getId(), dto.getTitle(), mapToFeatureLogics(dto.getFeatureLogics()));
   }
 
   private static Collection<FeatureLogic> mapToFeatureLogics(
