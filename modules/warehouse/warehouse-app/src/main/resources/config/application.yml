@@ -246,25 +246,46 @@ sep:
 
 warehouse.report.rbs:
   columns:
-    - name: fvSignature
-      label: fvSignature
-    - name: policy_id
+    - name: alert_fvSignature
+      label: fv_signature
+    - name: alert_policyId
       label: policy_id
-    - name: step_id
+    - name: alert_stepId
       label: step_id
-    - name: recommended action
+    - name: alert_recommendation
       label: recommended action
-    - name: categories/customerType
-      label: categories/customerType
-    - name: features/name
-      label: features/name
+    - name: alert_extendedAttribute5
+      label: customer_type
+    - name: alert_dateOfBirthFeatureSolution
+      label: date_of_birth
+    - name: alert_genderFeatureSolution
+      label: gender
+    - name: alert_incorporationCountryFeatureSolution
+      label: incorporation_country
+    - name: alert_nameFeatureSolution
+      label: name
+    - name: alert_nationalIdDocumentFeatureSolution
+      label: national_id_document
+    - name: alert_nationalityCountryFeatureSolution
+      label: national_country
+    - name: alert_otherCountryFeatureSolution
+      label: other_country
+    - name: alert_otherDocumentFeatureSolution
+      label: other_document
+    - name: alert_passportNumberDocumentFeatureSolution
+      label: passport_number_document
+    - name: alert_registrationCountryFeatureSolution
+      label: registration_country
+    - name: alert_residencyCountryFeatureSolution
+      label: residency_country
+
   grouping-columns:
-    - name: qa_decision
-      label: qa_decision
-      grouping-values: [PASS, FAILED]
-      add-counter: true
-    - name: analysis_decision
+#    - name: qa_decision
+#      label: qa_decision
+#      grouping-values: [PASS, FAILED]
+#      add-counter: true
+    - name: alert_DN_CASE.currentState
       label: analysis_decision
-      grouping-values: FP, PTP
+      grouping-values: Level 1 Review, Level 2 Review
       add-counter: false
-  date-field-name: alert_timestamp
+  date-field-name: index_timestamp
