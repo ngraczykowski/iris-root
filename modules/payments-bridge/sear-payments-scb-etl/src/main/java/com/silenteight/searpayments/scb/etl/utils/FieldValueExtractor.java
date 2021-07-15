@@ -1,7 +1,7 @@
 package com.silenteight.searpayments.scb.etl.utils;
 
-import com.silenteight.tsaas.bridge.etl.utils.AbstractMessageStructure.MessageStructureDtp;
-import com.silenteight.tsaas.bridge.etl.utils.AbstractMessageStructure.MessageStructureScstar;
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.MessageStructureDtp;
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.MessageStructureScstar;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.silenteight.tsaas.bridge.etl.utils.CommonUtils.escapeRegex;
+import static com.silenteight.searpayments.scb.etl.utils.CommonUtils.escapeRegex;
 import static java.util.Collections.singletonList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

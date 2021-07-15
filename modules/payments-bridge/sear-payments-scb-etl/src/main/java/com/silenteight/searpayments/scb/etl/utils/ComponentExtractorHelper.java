@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.silenteight.tsaas.bridge.etl.utils.CommonUtils.escapeRegex;
+import static com.silenteight.searpayments.scb.etl.utils.CommonUtils.escapeRegex;
 import static java.util.Collections.emptyList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

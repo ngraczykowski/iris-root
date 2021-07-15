@@ -1,6 +1,6 @@
 package com.silenteight.searpayments.scb.etl.response;
 
-import com.silenteight.tsaas.bridge.etl.utils.AbstractMessageStructure.SourceSystem;
+import com.silenteight.searpayments.scb.etl.utils.AbstractMessageStructure.SourceSystem;
 import lombok.Builder;
 import lombok.Value;
 
