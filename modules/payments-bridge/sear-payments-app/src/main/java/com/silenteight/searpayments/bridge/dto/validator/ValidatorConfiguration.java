@@ -4,11 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class RequestMessageDtoValidatorConfiguration {
+class ValidatorConfiguration {
 
   @Bean
   RequestMessageDtoValidator requestMessageDtoValidator() {
     return new RequestMessageDtoValidatorImpl();
   }
 
+  @Bean
+  AlertMessageDtoValidator alertMessageDtoValidator() {
+    return new AlertMessageDtoValidatorImpl();
+  }
 }

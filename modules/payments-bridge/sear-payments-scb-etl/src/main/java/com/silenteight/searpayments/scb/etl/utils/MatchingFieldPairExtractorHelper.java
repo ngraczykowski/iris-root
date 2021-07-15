@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class MatchingFieldPairExtractorHelper {
+class MatchingFieldPairExtractorHelper {
 
   static List<String> extractMatchingFieldPairList(
       @NotNull String tag, @NotNull String messageData) {

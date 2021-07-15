@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.searpayments.bridge.dto.validator.AlertMessageDtoValidator;
+import com.silenteight.searpayments.bridge.dto.validator.CompleteAlertDefinition;
 import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.Alert.AlertMessageFormat;
@@ -33,7 +35,7 @@ class CreateAlertImpl implements CreateAlert {
   @NonNull private final CreateMessageTypeFactory createMessageTypeFactory;
   @NonNull private final CreateBasicAlertFactory createBasicAlertFactory;
   @NonNull private final String gitCommitId;
-  @NonNull private final RequestMessageDtoValidator requestMessageDtoValidator;
+  @NonNull private final AlertMessageDtoValidator alertMessageDtoValidator;
   @NonNull private final CountryCodeExtractor countryCodeExtractor;
   private Alert alert;
   private Alert.AlertBuilder builder;
@@ -43,7 +45,7 @@ class CreateAlertImpl implements CreateAlert {
   public Optional<Alert> create() {
     try {
       createBaseAlertData();
-//      validateRequestMessage();
+      validateAlertMessage();
       createEtlResponse();
       enhanceAlert();
       return Optional.of(alert);
@@ -52,9 +54,9 @@ class CreateAlertImpl implements CreateAlert {
     }
   }
 
-//  private void validateRequestMessage() {
-//    requestMessageDtoValidator.validate(messageDto, CompleteAlertDefinition.class);
-//  }
+  private void validateAlertMessage() {
+    alertMessageDtoValidator.validate(alertMessageDto, CompleteAlertDefinition.class);
+  }
 
   @NotNull
   private Optional<Alert> handleCreateException(Exception e) {
