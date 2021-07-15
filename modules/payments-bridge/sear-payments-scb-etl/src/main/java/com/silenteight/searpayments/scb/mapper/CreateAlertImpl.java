@@ -1,11 +1,11 @@
 package com.silenteight.searpayments.scb.mapper;
 
+import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.Alert.AlertMessageFormat;
 import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
 import com.silenteight.searpayments.scb.domain.Hit;
 import com.silenteight.searpayments.scb.domain.NextStatus;
-import com.silenteight.searpayments.bridge.dto.input.RequestMessageDto;
 import com.silenteight.searpayments.bridge.dto.validator.CompleteAlertDefinition;
 import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
 import com.silenteight.searpayments.scb.etl.AlertParser;
@@ -24,9 +24,9 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 @Slf4j
 @RequiredArgsConstructor
-class CreateAlertFromMessage {
+class CreateAlertImpl implements CreateAlert {
 
-  @NonNull private final RequestMessageDto messageDto;
+  @NonNull private final AlertMessageDto alertMessageDto;
   @NonNull private final String dataCenter;
   @NonNull private final CreateHitsFactory createHitsFactory;
   @NonNull private final CreateMessageTypeFactory createMessageTypeFactory;
@@ -39,10 +39,10 @@ class CreateAlertFromMessage {
   private AlertEtlResponse alertEtlResponse;
   private List<NextStatus> nextStatusList;
 
-  Optional<Alert> create() {
+  public Optional<Alert> create() {
     try {
       createBaseAlertData();
-      validateRequestMessage();
+//      validateRequestMessage();
       createEtlResponse();
       enhanceAlert();
       return Optional.of(alert);
@@ -51,9 +51,9 @@ class CreateAlertFromMessage {
     }
   }
 
-  private void validateRequestMessage() {
-    requestMessageDtoValidator.validate(messageDto, CompleteAlertDefinition.class);
-  }
+//  private void validateRequestMessage() {
+//    requestMessageDtoValidator.validate(messageDto, CompleteAlertDefinition.class);
+//  }
 
   @NotNull
   private Optional<Alert> handleCreateException(Exception e) {
@@ -76,12 +76,12 @@ class CreateAlertFromMessage {
 
   @NotNull
   private String getMessageId() {
-    return messageDto.getMessage().getMessageId();
+    return alertMessageDto.getMessageId();
   }
 
   @NotNull
   private String getSystemId() {
-    return messageDto.getMessage().getSystemId();
+    return alertMessageDto.getSystemId();
   }
 
   private void createDamagedAlert(String message) {
@@ -94,7 +94,7 @@ class CreateAlertFromMessage {
 
   private void createBaseAlertData() {
     var baseAlert = createBasicAlertFactory.create(
-        dataCenter, messageDto.getMessage()).create();
+        dataCenter, alertMessageDto).create();
 
     if (log.isTraceEnabled()) {
       log.trace("baseAlert builder and nextStatuses: {}", baseAlert);
@@ -106,7 +106,7 @@ class CreateAlertFromMessage {
 
   private void createEtlResponse() {
     alertEtlResponse =
-        new AlertParser(countryCodeExtractor, messageDto.getMessage()).invoke();
+        new AlertParser(countryCodeExtractor, alertMessageDto).invoke();
   }
 
   private void enhanceAlert() {

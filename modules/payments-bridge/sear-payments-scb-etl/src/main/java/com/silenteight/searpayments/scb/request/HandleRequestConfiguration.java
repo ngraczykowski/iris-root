@@ -1,6 +1,5 @@
 package com.silenteight.searpayments.scb.request;
 
-import com.silenteight.searpayments.scb.mapper.CreateAlertsFromRequestFactory;
 import com.silenteight.searpayments.scb.domain.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +11,7 @@ import org.springframework.messaging.MessageChannel;
 //@RequiredArgsConstructor
 //class HandleRequestConfiguration {
 //
-//  @Value("${tsaas.max-hits-per-alert:10}")
+//  @Value("${tsaas.max-hits-per-alert}")
 //  private int maxHitsPerAlert;
 //
 //  @Bean

@@ -2,9 +2,8 @@ package com.silenteight.searpayments.scb.mapper;
 
 import com.silenteight.searpayments.scb.domain.Alert;
 
-import java.util.List;
+import java.util.Optional;
 
-//public interface CreateAlertsFromRequest {
-//
-//  List<Alert> create();
-//}
+public interface CreateAlert {
+    Optional<Alert> create();
+}

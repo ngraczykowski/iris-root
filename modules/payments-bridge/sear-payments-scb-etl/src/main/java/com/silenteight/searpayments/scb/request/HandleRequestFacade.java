@@ -1,6 +1,5 @@
 package com.silenteight.searpayments.scb.request;
 
-import com.silenteight.searpayments.scb.mapper.CreateAlertsFromRequestFactory;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
 import com.silenteight.searpayments.scb.domain.Alert.DamageReason;

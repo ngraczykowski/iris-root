@@ -35,14 +35,14 @@ class AlertConfiguration {
     return propsConfig;
   }
 
-  @Bean
-  CreateAlertsFromRequestFactory createAlertsFromRequestFactory() {
-    return new CreateAlertsFromRequestFactory(createAlertFromMessageFactory());
-  }
+//  @Bean
+//  CreateAlertsFromRequestFactory createAlertsFromRequestFactory() {
+//    return new CreateAlertsFromRequestFactory(createAlertFromMessageFactory());
+//  }
 
   @Bean
-  CreateAlertFromMessageFactory createAlertFromMessageFactory() {
-    return new CreateAlertFromMessageFactory(
+  CreateAlertFactory createAlertFromMessageFactory() {
+    return new CreateAlertFactory(
         createHitsFactory(), createMessageTypeFactory(), countryCodeExtractor,
         createBasicAlertFactory(), gitCommitId.substring(0, 7), requestMessageDtoValidator);
   }
