@@ -203,17 +203,17 @@
     {
       "name": "silenteight.bridge.model.is-pep-historical-model-export.cron",
       "type": "java.lang.String",
-      "description": "Description for silenteight.bridge.model.is-pep-historical-model-export.cron."
+      "description": "Cron for is pep historical model export."
     },
     {
       "name": "silenteight.bridge.model.is-pep-procedural-model-export.cron",
       "type": "java.lang.String",
-      "description": "Description for silenteight.bridge.model.is-pep-procedural-model-export.cron."
+      "description": "Cron for is pep procedural model export."
     },
     {
       "name": "silenteight.bridge.model.name-model-export.cron",
       "type": "java.lang.String",
-      "description": "Description for silenteight.bridge.model.name-model-export.cron."
+      "description": "Cron for name aliases model export."
     }
   ]
 }
