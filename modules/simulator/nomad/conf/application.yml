@@ -32,6 +32,7 @@ grpc:
       address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
 
 keycloak:
+  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   adapter:
     auth-server-url: https://auth.silenteight.com
     realm: sens-webapp
