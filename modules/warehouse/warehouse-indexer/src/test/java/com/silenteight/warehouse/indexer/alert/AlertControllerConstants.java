@@ -1,11 +1,10 @@
 package com.silenteight.warehouse.indexer.alert;
 
-import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
-import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
-
+import java.util.Collection;
 import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.RECOMMENDATION_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.RECOMMENDATION_FP;
 import static java.util.List.of;
 
@@ -21,13 +20,9 @@ class AlertControllerConstants {
       "/v1/analysis/production/alerts/c01e5d49-a72d-4e6a-b634-265165916c9a"
           + "?fields=s8_discriminator,alert_recommendation";
 
-  static final AlertAttributes ALERT_ATTRIBUTES = AlertAttributes.builder()
-      .attributes(Map.of(
-          DISCRIMINATOR, DISCRIMINATOR_ID,
-          MappedKeys.RECOMMENDATION_KEY, RECOMMENDATION_FP))
-      .build();
+  static final Map<String, String> ALERT_ATTRIBUTES = Map.of(
+      DISCRIMINATOR, DISCRIMINATOR_ID,
+      RECOMMENDATION_KEY, RECOMMENDATION_FP);
 
-  static final AlertsAttributesListDto ALERT_ATTRIBUTES_LIST_DTO = AlertsAttributesListDto.builder()
-      .alerts(of(ALERT_ATTRIBUTES))
-      .build();
+  static final Collection<Map<String, String>> ALERT_ATTRIBUTES_LIST = of(ALERT_ATTRIBUTES);
 }

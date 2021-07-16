@@ -6,7 +6,6 @@ import com.silenteight.data.api.v1.Alert;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
-import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
 
 import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -75,12 +75,12 @@ class AlertIT {
   void shouldReturnAlertsAttributesListDto() {
     storeData();
 
-    AlertsAttributesListDto alertAttributesMapDto =
+    Collection<Map<String, String>> alertAttributes =
         queryUnderTest.getMultipleAlertsAttributes(ALERT_FIELDS, LIST_OF_ID);
 
-    assertThat(alertAttributesMapDto.getAlerts().size()).isEqualTo(2);
-    AlertAttributes alertAttributes = alertAttributesMapDto.getAlerts().get(1);
-    assertThat(alertAttributes.getAttributes())
+    assertThat(alertAttributes).hasSize(2);
+    Map<String, String> alert = alertAttributes.iterator().next();
+    assertThat(alert)
         .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK);
   }
 
@@ -89,12 +89,11 @@ class AlertIT {
   void shouldReturnSingleAlertAttributes() {
     storeData();
 
-    AlertAttributes singleAlertMapDto =
+    Map<String, String> singleAlertAttributes =
         queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
 
-    assertThat(singleAlertMapDto.getAttributes())
-        .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK);
-    assertThat(singleAlertMapDto.getAttributes())
+    assertThat(singleAlertAttributes)
+        .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK)
         .containsEntry(SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP);
   }
 
@@ -103,10 +102,10 @@ class AlertIT {
   void shouldReturnEmptyFieldWhenRequestedAttributeDoesNotExistsInKibana() {
     storeData();
 
-    AlertAttributes singleAlertMapDto =
+    Map<String, String> singleAlertAttributes =
         queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
 
-    assertThat(singleAlertMapDto.getAttributes().get(SourceAlertKeys.RISK_TYPE_KEY)).isNull();
+    assertThat(singleAlertAttributes.get(SourceAlertKeys.RISK_TYPE_KEY)).isNull();
   }
 
   @ParameterizedTest

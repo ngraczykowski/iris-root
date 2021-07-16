@@ -3,13 +3,12 @@ package com.silenteight.warehouse.indexer.alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
-
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,27 +32,21 @@ class AlertQueryService {
   @NonNull
   ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
-  public AlertAttributes getSingleAlertAttributes(List<String> fields, String discriminator) {
+  public Map<String, String> getSingleAlertAttributes(List<String> fields, String discriminator) {
     Map<String, Object> singleAlert = searchForAlert(DISCRIMINATOR, discriminator).stream()
         .findFirst()
         .orElseThrow(
             () -> new AlertNotFoundException(format("Alert with %s id not found.", discriminator)));
 
-    return AlertAttributes.builder()
-        .attributes(convertSingleAlertToAttributes(fields, singleAlert))
-        .build();
+    return convertSingleAlertToAttributes(fields, singleAlert);
   }
 
-  public AlertsAttributesListDto getMultipleAlertsAttributes(
+  public Collection<Map<String, String>> getMultipleAlertsAttributes(
       List<String> fields, List<String> discriminatorList) {
 
-    List<AlertAttributes> alertAttributesList = discriminatorList.stream()
+    return discriminatorList.stream()
         .map(discriminator -> getSingleAlertAttributes(fields, discriminator))
         .collect(toList());
-
-    return AlertsAttributesListDto.builder()
-        .alerts(alertAttributesList)
-        .build();
   }
 
   private Map<String, String> convertSingleAlertToAttributes(

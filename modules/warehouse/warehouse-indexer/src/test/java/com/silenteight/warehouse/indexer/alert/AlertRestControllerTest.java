@@ -31,11 +31,11 @@ class AlertRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = { QA })
   void its200_whenInvokedGetQaAlertsList() {
     when(alertQueryService.getMultipleAlertsAttributes(any(), any()))
-        .thenReturn(ALERT_ATTRIBUTES_LIST_DTO);
+        .thenReturn(ALERT_ATTRIBUTES_LIST);
 
     get(QA_ALERT_LIST_URL)
         .statusCode(OK.value())
-        .body("alerts[0].attributes.s8_discriminator", is(DISCRIMINATOR_ID));
+        .body("[0].s8_discriminator", containsString(DISCRIMINATOR_ID));
   }
 
   @Test
@@ -61,7 +61,7 @@ class AlertRestControllerTest extends BaseRestControllerTest {
 
     get(QA_ALERT_URL)
         .statusCode(OK.value())
-        .body("attributes.s8_discriminator", is(DISCRIMINATOR_ID));
+        .body("s8_discriminator", containsString(DISCRIMINATOR_ID));
   }
 
   @Test
