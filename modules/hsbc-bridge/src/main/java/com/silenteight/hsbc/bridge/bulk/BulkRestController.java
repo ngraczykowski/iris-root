@@ -63,7 +63,7 @@ public class BulkRestController {
   @PostMapping("/ingestRecommendations")
   public ResponseEntity ingestRecommendations(
       @RequestBody @Valid BatchSolvedAlerts recommendations) {
-    ingestRecommendationsUseCase.ingest(recommendations.getAlerts());
+    ingestRecommendationsUseCase.ingest(recommendations);
 
     return ResponseEntity.ok().build();
   }

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.DISCRIMINATOR;
 import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.EXTENDED_ATTRIBUTE_5;
 import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.TRACKING_ID;
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.PRE_PROCESSED;
@@ -57,9 +58,10 @@ class AlertProcessor {
     fillMetadata(alert.getMetadata(), alertData.getCaseInformation());
   }
 
-  private void fillMetadata(List<AlertMetadata> metadata, CaseInformation caseInformation) {
-    metadata.add(new AlertMetadata(EXTENDED_ATTRIBUTE_5, caseInformation.getExtendedAttribute5()));
-    metadata.add(new AlertMetadata(TRACKING_ID, caseInformation.getFlagKey()));
+  private void fillMetadata(List<AlertMetadata> metadata, CaseInformation info) {
+    metadata.add(new AlertMetadata(DISCRIMINATOR, info.getKeyLabel() + "_" + info.getFlagKey()));
+    metadata.add(new AlertMetadata(EXTENDED_ATTRIBUTE_5, info.getExtendedAttribute5()));
+    metadata.add(new AlertMetadata(TRACKING_ID, info.getFlagKey()));
   }
 
   private void tryToProcessRelationshipsAndCreateMatches(AlertEntity alert, AlertData alertData) {

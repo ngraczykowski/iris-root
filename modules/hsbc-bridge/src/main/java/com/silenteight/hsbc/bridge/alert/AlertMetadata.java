@@ -25,6 +25,7 @@ class AlertMetadata {
   @Getter
   enum MetadataKey {
 
+    DISCRIMINATOR("discriminator"),
     EXTENDED_ATTRIBUTE_5("extendedAttribute5"),
     TRACKING_ID("trackingId");
 
