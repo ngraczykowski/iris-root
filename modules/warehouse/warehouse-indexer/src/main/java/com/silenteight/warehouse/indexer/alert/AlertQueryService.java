@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.RandomAlertQueryService.getExactMatch;
 import static java.lang.String.format;
@@ -63,8 +62,7 @@ class AlertQueryService {
   private void convertSingleAttributeToMap(
       Map<String, Object> alert, Map<String, String> alertAttributes, String requestedAttribute) {
 
-    String prefixedAttributeKey = ALERT_PREFIX + requestedAttribute;
-    String attributeValue = ofNullable(alert.get(prefixedAttributeKey))
+    String attributeValue = ofNullable(alert.get(requestedAttribute))
         .map(Object::toString)
         .orElse(null);
     alertAttributes.put(requestedAttribute, attributeValue);
