@@ -54,7 +54,7 @@ public enum ReportDefinition {
         .atOffset(ZoneOffset.UTC);
   }
 
-  private static final String REPORT_TYPE = "RB_SCORER";
+  private static final String REPORT_TYPE = "BILLING";
   private static final String FILENAME = "billing-report(%s-%s).csv";
   @NonNull
   private final String id;

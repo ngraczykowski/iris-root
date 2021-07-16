@@ -130,8 +130,8 @@ warehouse.report.billing:
     - name: recommendationMonth
       label: MONTH
   grouping-columns:
-    - name: recommended action
+    - name: alert_recommendation
       label: COUNT_SOLVED
-      grouping-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE, MANUAL_INVESTIGATION]
+      grouping-values: [AAA False Positive, Level 1 Review, Level 2 Review, Level 3 Review]
       add-counter: true
   date-field-name: alert_timestamp
