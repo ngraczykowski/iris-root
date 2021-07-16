@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.management.group.create;
 
+import com.silenteight.warehouse.common.opendistro.roles.RolesMappingService;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesUseCase;
 import com.silenteight.warehouse.management.group.domain.CountryGroupService;
 
@@ -12,8 +13,10 @@ class CreateCountryGroupConfiguration {
   @Bean
   CreateCountryGroupUseCase createCountryGroupUseCase(
       CountryGroupService countryGroupService,
-      UpdateCountriesUseCase updateCountriesUseCase) {
+      UpdateCountriesUseCase updateCountriesUseCase,
+      RolesMappingService rolesMappingService) {
 
-    return new CreateCountryGroupUseCase(countryGroupService, updateCountriesUseCase);
+    return new CreateCountryGroupUseCase(
+        countryGroupService, updateCountriesUseCase, rolesMappingService);
   }
 }

@@ -73,6 +73,7 @@ business_user:
         - 'indices:data/read/get'
         - 'indices:data/read/search'
         - 'indices:monitor/settings/get'
+      dls: '{"terms": {"s8_country.keyword": [],"boost": 1}}'
   tenant_permissions:
     - tenant_patterns:
         - 'itest_*'
@@ -108,3 +109,4 @@ technical_user_testsetup:
         - 'itest_simulation_*'
         - 'local_production'
         - 'local_simulation_*'
+      dls: '{"terms": {"s8_country.keyword": ["UK","PL"],"boost": 1}}'

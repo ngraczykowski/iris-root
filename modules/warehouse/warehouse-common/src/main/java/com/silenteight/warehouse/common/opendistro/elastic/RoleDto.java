@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.common.opendistro.elastic;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;

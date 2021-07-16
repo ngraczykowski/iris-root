@@ -13,9 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
+import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE_STRING;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.*;
 
@@ -58,12 +59,27 @@ class OpendistroElasticClientTest {
             .build()))
         .build();
 
-    opendistroElasticClient.setRole(ELASTIC_ALLOWED_ROLE.toString(), roleDto);
+    opendistroElasticClient.setRole(ELASTIC_ALLOWED_ROLE_STRING, roleDto);
 
     RoleDto responseRoleDto =
-        opendistroElasticClient.getCurrentRole(ELASTIC_ALLOWED_ROLE.toString());
+        opendistroElasticClient.getCurrentRole(ELASTIC_ALLOWED_ROLE_STRING);
 
     assertThat(responseRoleDto).isEqualTo(roleDto);
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnRoleMapping() {
+    RoleMappingDto roleMappingDto = RoleMappingDto.builder()
+        .backendRoles(Set.of(ELASTIC_ALLOWED_ROLE_STRING))
+        .build();
+
+    opendistroElasticClient.setRoleMapping(ELASTIC_ALLOWED_ROLE_STRING, roleMappingDto);
+
+    RoleMappingDto responseRoleDto =
+        opendistroElasticClient.getRoleMapping(ELASTIC_ALLOWED_ROLE_STRING);
+
+    assertThat(responseRoleDto).isEqualTo(roleMappingDto);
   }
 
   @Test
