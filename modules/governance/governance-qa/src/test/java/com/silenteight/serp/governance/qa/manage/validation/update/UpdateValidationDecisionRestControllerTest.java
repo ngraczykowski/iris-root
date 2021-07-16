@@ -95,7 +95,7 @@ class UpdateValidationDecisionRestControllerTest extends BaseRestControllerTest 
   private UpdateValidationDecisionDto updateValidationDecisionDto() {
     return UpdateValidationDecisionDto
         .builder()
-        .decision(FAILED)
+        .state(FAILED)
         .comment(DECISION_COMMENT_FAILED)
         .build();
   }

@@ -36,7 +36,7 @@ class UpdateAnalysisDecisionRestController {
 
     useCase.activate(UpdateDecisionRequest.of(
         discriminator,
-        updateAnalysisDecisionDto.getDecision(),
+        updateAnalysisDecisionDto.getState(),
         ANALYSIS,
         updateAnalysisDecisionDto.getComment(),
         authentication.getName(),

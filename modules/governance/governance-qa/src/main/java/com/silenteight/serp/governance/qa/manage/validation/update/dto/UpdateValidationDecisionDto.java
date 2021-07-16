@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class UpdateValidationDecisionDto {
 
   @NotNull
-  private DecisionState decision;
+  private DecisionState state;
   @NotNull
   private String comment;
 }

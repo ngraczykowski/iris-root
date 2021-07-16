@@ -3,8 +3,8 @@ package com.silenteight.serp.governance.qa.manage.validation.update;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.serp.governance.qa.manage.analysis.update.dto.UpdateAnalysisDecisionDto;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
+import com.silenteight.serp.governance.qa.manage.validation.update.dto.UpdateValidationDecisionDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,15 +30,16 @@ class UpdateValidationDecisionRestController {
 
   @PatchMapping(UPDATE_VALIDATION_DECISION_URL)
   @PreAuthorize("isAuthorized('ALERTS_VALIDATION_DECISION')")
-  public ResponseEntity<Void> edit(@PathVariable String discriminator,
-      @RequestBody @Valid UpdateAnalysisDecisionDto updateAnalysisDecisionDto,
+  public ResponseEntity<Void> edit(
+      @PathVariable String discriminator,
+      @RequestBody @Valid UpdateValidationDecisionDto updateValidationDecisionDto,
       Authentication authentication) {
 
     UpdateDecisionRequest request = UpdateDecisionRequest.of(
         discriminator,
-        updateAnalysisDecisionDto.getDecision(),
+        updateValidationDecisionDto.getState(),
         VALIDATION,
-        updateAnalysisDecisionDto.getComment(),
+        updateValidationDecisionDto.getComment(),
         authentication.getName(),
         now()
     );

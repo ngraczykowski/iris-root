@@ -93,7 +93,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
   private UpdateAnalysisDecisionDto getUpdateAnalysisDecisionDto() {
     return UpdateAnalysisDecisionDto
         .builder()
-        .decision(FAILED)
+        .state(FAILED)
         .comment(DECISION_COMMENT_FAILED)
         .build();
   }
