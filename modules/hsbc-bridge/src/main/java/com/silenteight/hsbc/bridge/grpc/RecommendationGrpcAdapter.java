@@ -78,6 +78,7 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
     return metadata.stream().map(m -> {
       var matchMetadata = new MatchMetadata();
       matchMetadata.setFeatures(mapFeatures(m.getFeaturesMap()));
+      matchMetadata.setCategories(m.getCategoriesMap());
       matchMetadata.setMatch(m.getMatch());
       matchMetadata.setSolution(m.getSolution());
       matchMetadata.setReason(StructMapper.toMap(m.getReason()));

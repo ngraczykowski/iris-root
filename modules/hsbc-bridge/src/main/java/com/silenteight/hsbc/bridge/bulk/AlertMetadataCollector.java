@@ -10,6 +10,7 @@ import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadat
 import com.silenteight.hsbc.datasource.feature.Feature;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
@@ -42,6 +43,7 @@ class AlertMetadataCollector {
     Collection<AlertMetadata> collect() {
       addMatchReason(matchMetadata.getReason());
       addFeatures(matchMetadata.getFeatures());
+      addCategories(matchMetadata.getCategories());
 
       return metadataCollection;
     }
@@ -60,6 +62,11 @@ class AlertMetadataCollector {
         add(prefix + "Config", featureMetadata.getAgentConfig());
         add(prefix + "Solution", featureMetadata.getSolution());
       }
+    }
+
+    private void addCategories(Map<String, String> categories) {
+      categories.entrySet().stream()
+          .forEach(c -> add(c.getKey(), c.getValue()));
     }
 
     private void addMatchReason(Map<String, String> reason) {

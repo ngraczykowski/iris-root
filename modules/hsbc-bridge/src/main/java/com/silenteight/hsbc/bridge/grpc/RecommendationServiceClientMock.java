@@ -9,7 +9,6 @@ import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadat
 import org.springframework.retry.annotation.Retryable;
 
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -50,6 +49,11 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
         "feature_vector_signature", "J4VGkp1+FaNsaGDtBXgQsWpUYDo=",
         "policy", "policies/5afc2f12-85c0-4fb3-992e-1552ac843ceb",
         "step", "steps/e6ceb774-ab56-4576-b653-1cdceb2d25e7"
+    ));
+    metadata.setCategories(Map.of(
+        "category_1", "category_1_value",
+        "category_2", "category_2_value",
+        "category_3", "category_3_value"
     ));
     return metadata;
   }
