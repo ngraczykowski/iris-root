@@ -37,7 +37,13 @@ public class GetCommentInputUseCase {
   private CommentInputDto createCommentInput(String alertName, List<MatchCommentInputDto> match) {
     return CommentInputDto.builder()
         .alert(alertName)
-        .alertCommentInput(Map.of())
+        .alertCommentInput(Map.of(
+            "caseId", "",
+            "apId", "",
+            "wlId", "",
+            "apType", "",
+            "wlType", "",
+            "listName", ""))
         .matchCommentInputsDto(match)
         .build();
   }
