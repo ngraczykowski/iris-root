@@ -26,7 +26,7 @@ public class AsyncRbsReportGenerationService {
 
   @Async
   public void generateReport(long id) {
-    Report report = getReport(id);
+    RbsReport report = getReport(id);
     report.generating();
     repository.save(report);
     ReportDefinition reportType = report.getReportType();
@@ -39,7 +39,7 @@ public class AsyncRbsReportGenerationService {
     repository.save(report);
   }
 
-  private Report getReport(long id) {
+  private RbsReport getReport(long id) {
     try {
       return repository.getById(id);
     } catch (RuntimeException e) {

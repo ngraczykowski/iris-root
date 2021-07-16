@@ -35,12 +35,12 @@ class ReportServiceTest {
   void generateReportAndReportAvailable() {
     ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
 
-    ReportDto report = query.getReport(reportInstance.getTimestamp());
+    ReportDto report = query.getReport(reportInstance.getGetInstanceReferenceId());
     assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
-    assertThat(rbsReportRepository.findById(reportInstance.getTimestamp()))
+    assertThat(rbsReportRepository.findById(reportInstance.getGetInstanceReferenceId()))
         .isPresent()
         .get()
-        .extracting(Report::getState)
+        .extracting(RbsReport::getState)
         .isEqualTo(ReportState.NEW);
   }
 
@@ -48,12 +48,12 @@ class ReportServiceTest {
   void removeReport() {
     ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
 
-    ReportDto report = query.getReport(reportInstance.getTimestamp());
+    ReportDto report = query.getReport(reportInstance.getGetInstanceReferenceId());
     assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
 
-    service.removeReport(reportInstance.getTimestamp());
+    service.removeReport(reportInstance.getGetInstanceReferenceId());
 
-    assertThat(rbsReportRepository.findById(reportInstance.getTimestamp())).isEmpty();
+    assertThat(rbsReportRepository.findById(reportInstance.getGetInstanceReferenceId())).isEmpty();
   }
 }
 

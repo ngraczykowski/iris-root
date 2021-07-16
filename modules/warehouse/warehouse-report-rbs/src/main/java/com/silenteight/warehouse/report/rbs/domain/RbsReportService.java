@@ -15,8 +15,8 @@ public class RbsReportService {
   private final AsyncRbsReportGenerationService asyncReportGenerationService;
 
   public ReportInstanceReferenceDto createReportInstance(ReportDefinition reportType) {
-    Report report = Report.of(reportType);
-    Report savedReport = repository.save(report);
+    RbsReport report = RbsReport.of(reportType);
+    RbsReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
     // report. Due to the lack of time, we will generate it in the thread (WEB-1358)
     asyncReportGenerationService.generateReport(savedReport.getId());

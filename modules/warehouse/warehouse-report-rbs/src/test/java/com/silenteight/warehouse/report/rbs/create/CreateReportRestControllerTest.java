@@ -18,10 +18,10 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 
 @Import({
-    CreateReportRestController.class,
-    CreateReportConfiguration.class,
+    CreateRbsReportRestController.class,
+    CreateRbsReportConfiguration.class,
     GenericExceptionControllerAdvice.class,
-    CreateReportControllerAdvice.class,
+    CreateRbsReportControllerAdvice.class,
 })
 class CreateReportRestControllerTest extends BaseRestControllerTest {
 

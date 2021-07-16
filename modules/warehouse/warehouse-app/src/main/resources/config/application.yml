@@ -269,3 +269,15 @@ warehouse.report.rbs:
       add-counter: false
   date-field-name: alert_timestamp
 
+warehouse.report.billing:
+  columns:
+    - name: recommendationYear
+      label: YEAR
+    - name: recommendationMonth
+      label: MONTH
+  grouping-columns:
+    - name: recommended action
+      label: COUNT_SOLVED
+      grouping-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE, MANUAL_INVESTIGATION]
+      add-counter: true
+  date-field-name: alert_timestamp

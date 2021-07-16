@@ -25,6 +25,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Stream.concat;
 
 @RequiredArgsConstructor
 public class RbsReportGenerationService {
@@ -93,7 +94,7 @@ public class RbsReportGenerationService {
     Stream<String> staticCells = properties
         .getListOfStaticFields().stream().map(rowWithGroupedData::getValue);
 
-    Stream<String> rowCells = Stream.concat(staticCells, transposedCells);
+    Stream<String> rowCells = concat(staticCells, transposedCells);
     return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
   }
 
@@ -115,7 +116,7 @@ public class RbsReportGenerationService {
     return result.stream();
   }
 
-  private String getAllNonNullValueSum(Map<String, Long> values) {
+  private static String getAllNonNullValueSum(Map<String, Long> values) {
     long result = values.entrySet()
         .stream()
         .filter(entry -> StringUtils.isNotBlank(entry.getKey()))

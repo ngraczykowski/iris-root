@@ -3,7 +3,7 @@ package com.silenteight.warehouse.report.rbs.domain;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
 public class InMemoryRbsRepository
-    extends BasicInMemoryRepository<Report>
+    extends BasicInMemoryRepository<RbsReport>
     implements RbsReportRepository {
 
   @Override

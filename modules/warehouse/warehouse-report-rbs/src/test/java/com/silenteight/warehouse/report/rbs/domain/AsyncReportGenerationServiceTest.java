@@ -46,7 +46,7 @@ class AsyncReportGenerationServiceTest {
   void generateReportAndReportAvailable() {
     when(reportGenerationService.generateReport(FROM, TO, PRODUCTION_ANALYSIS_NAME))
         .thenReturn(REPORT_CONTENT);
-    Report rbsReport = rbsReportRepository.save(Report.of(TYPE));
+    RbsReport rbsReport = rbsReportRepository.save(RbsReport.of(TYPE));
     assertThat(rbsReport.getState()).isEqualTo(ReportState.NEW);
 
     underTest.generateReport(rbsReport.getId());

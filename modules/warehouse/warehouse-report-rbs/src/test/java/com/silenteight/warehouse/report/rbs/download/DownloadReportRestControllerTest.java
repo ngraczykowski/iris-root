@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(DownloadReportRestController.class)
+@Import(DownloadRbsReportRestController.class)
 class DownloadReportRestControllerTest extends BaseRestControllerTest {
 
   private static final long REPORT_ID = 5;
@@ -23,7 +23,7 @@ class DownloadReportRestControllerTest extends BaseRestControllerTest {
   public static final String CONTENT = "report_content";
 
   @MockBean
-  ReportDataQuery query;
+  RbsReportDataQuery query;
   @MockBean
   RbsReportService reportService;
 
