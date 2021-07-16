@@ -62,6 +62,7 @@ warehouse:
     url: https://kibana.silenteight.com
 
 keycloak:
+  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   adapter:
     auth-server-url: https://auth.silenteight.com
     realm: sens-webapp

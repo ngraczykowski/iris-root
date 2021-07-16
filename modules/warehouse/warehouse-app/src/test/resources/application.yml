@@ -5,6 +5,7 @@ spring:
     enabled: false
 
 keycloak:
+  client-id: warehouse-frontend
   adapter:
     authServerUrl: fakeAuthHost:8000
     realm: sens-webapp
