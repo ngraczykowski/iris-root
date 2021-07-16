@@ -10,7 +10,6 @@ import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestC
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
 import com.silenteight.warehouse.indexer.alert.AlertNotFoundException;
 import com.silenteight.warehouse.indexer.alert.AlertRestController;
-import com.silenteight.warehouse.indexer.alert.AlertsAttributesListDto.AlertAttributes;
 import com.silenteight.warehouse.management.country.get.GetCountriesRestController;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesRestController;
 import com.silenteight.warehouse.management.group.create.CreateCountryGroupRestController;
@@ -29,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
@@ -94,9 +94,10 @@ class CountryGroupsIT {
     Collection<String> allowedCountries = of(COUNTRY);
     updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
 
-    AlertAttributes allowedAlert =
-        alertRestController.getSingleAlertDto(DISCRIMINATOR_1, of()).getBody();
-    assertThat(allowedAlert).isNotNull();
+    Map<String, String> allowedAlert =
+        alertRestController.getSingleAlert(DISCRIMINATOR_1, of()).getBody();
+
+    assertThat(allowedAlert).isEmpty();
   }
 
   @Test
@@ -106,7 +107,7 @@ class CountryGroupsIT {
     updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
 
     assertThatThrownBy(
-        () -> alertRestController.getSingleAlertDto(DISCRIMINATOR_1, of()))
+        () -> alertRestController.getSingleAlert(DISCRIMINATOR_1, of()))
         .isInstanceOf(AlertNotFoundException.class);
   }
 
