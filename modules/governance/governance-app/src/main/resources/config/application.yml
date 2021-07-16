@@ -22,8 +22,8 @@ serp:
       categorySource: classpath:categories.json
 
   ####################################################################################################
-# Error Queue Configuration
-####################################################################################################
+  # Error Queue Configuration
+  ####################################################################################################
   messaging:
     error-queue:
       enabled: true
@@ -100,7 +100,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
     # loggers endpoint is secured with mTLS
     loggers:
       sensitive: false
@@ -216,6 +216,7 @@ sep.auth:
       - "CREATE_CHANGE_REQUEST"
     VIEW_APPROVAL_QUEUE:
       - "LIST_CHANGE_REQUESTS"
+      - "GET_CHANGE_REQUEST"
     VIEW_POLICIES:
       - "LIST_POLICIES"
       - "LIST_STEPS_LOGIC"
@@ -311,6 +312,7 @@ sep.auth:
       - "VIEW_QA_VERIFICATION"
       - "MANAGE_QA_VERIFICATION"
       - "DASHBOARD"
+      - "VIEW_REASONING_BRANCHES"
 
 serp.governance.qa:
   sampling:

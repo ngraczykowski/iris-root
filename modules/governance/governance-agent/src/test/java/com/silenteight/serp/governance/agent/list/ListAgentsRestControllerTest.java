@@ -23,7 +23,7 @@ class ListAgentsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ListAgentQuery listAgentQuery;
 
-  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenInvoked() {
     given(listAgentQuery.list()).willReturn(List.of(LIST_AGENT_DATE_DTO));
 
@@ -36,7 +36,7 @@ class ListAgentsRestControllerTest extends BaseRestControllerTest {
         .body("[0].features", is(LIST_AGENT_DATE_DTO.getFeatures()));
   }
 
-  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(AGENTS_DETAILS_URL).statusCode(FORBIDDEN.value());
   }

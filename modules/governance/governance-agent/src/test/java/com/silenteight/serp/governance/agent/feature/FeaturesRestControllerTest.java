@@ -29,7 +29,7 @@ class FeaturesRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private FeaturesProvider featuresProvider;
 
-  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenInvoked() {
     given(featuresProvider.getFeaturesListDto()).willReturn(prepareMockData());
 
@@ -38,7 +38,7 @@ class FeaturesRestControllerTest extends BaseRestControllerTest {
         .body("features[0].solutions", is(FEATURE_VALUE));
   }
 
-  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(ALL_AGENTS_URL).statusCode(FORBIDDEN.value());
   }

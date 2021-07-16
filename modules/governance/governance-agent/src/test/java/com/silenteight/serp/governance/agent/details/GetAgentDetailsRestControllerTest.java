@@ -23,7 +23,7 @@ class GetAgentDetailsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private AgentDetailsQuery agentDetailsQuery;
 
-  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenInvoked() {
     given(agentDetailsQuery.details(DATE_AGENT_ID)).willReturn(DETAILS_DATE_AGENT_DTO);
 
@@ -37,7 +37,7 @@ class GetAgentDetailsRestControllerTest extends BaseRestControllerTest {
         .body("configurations", is(DETAILS_DATE_AGENT_DTO.getConfigurations()));
   }
 
-  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(AGENTS_DETAILS_URL).statusCode(FORBIDDEN.value());
   }

@@ -24,14 +24,15 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({ GetAgentConfigurationRestController.class })
 class GetAgentConfigurationRestControllerTest extends BaseRestControllerTest {
 
-  private static final String AGENTS_CONFIGURATION_URL = format("/v1/agents/%s/configuration/%s",
+  private static final String AGENTS_CONFIGURATION_URL = format(
+      "/v1/agents/%s/configuration/%s",
       DATE_AGENT_ID,
       AGENT_CONF_DATE_INDV_NORMAL);
 
   @MockBean
   private AgentsRegistry agentsRegistry;
 
-  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenInvoked() {
 
     given(agentsRegistry.getAgentConfigurationDetails(DATE_AGENT_ID, AGENT_CONF_DATE_INDV_NORMAL))
@@ -50,7 +51,7 @@ class GetAgentConfigurationRestControllerTest extends BaseRestControllerTest {
         .getAgentConfigurationDetails(DATE_AGENT_ID, AGENT_CONF_DATE_INDV_NORMAL);
   }
 
-  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(AGENTS_CONFIGURATION_URL).statusCode(FORBIDDEN.value());
   }

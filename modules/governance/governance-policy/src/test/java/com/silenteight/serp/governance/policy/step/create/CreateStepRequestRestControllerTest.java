@@ -24,9 +24,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@Import({ CreateStepRequestRestController.class,
-          CreateStepConfiguration.class,
-          GenericExceptionControllerAdvice.class })
+@Import({
+    CreateStepRequestRestController.class,
+    CreateStepConfiguration.class,
+    GenericExceptionControllerAdvice.class })
 class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID POLICY_ID = UUID.randomUUID();
@@ -58,7 +59,7 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getCreatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, AUDITOR })
   void its403_whenNotPermittedRole() {
     post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, NAME, DESCRIPTION, SOLUTION, NARROW))
         .contentType(anything())

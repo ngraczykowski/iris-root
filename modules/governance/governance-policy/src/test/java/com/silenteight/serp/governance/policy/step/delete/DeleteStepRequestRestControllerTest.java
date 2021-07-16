@@ -22,13 +22,14 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@Import({ DeleteStepRequestRestController.class,
-          DeleteStepConfiguration.class,
-          GenericExceptionControllerAdvice.class })
+@Import({
+    DeleteStepRequestRestController.class,
+    DeleteStepConfiguration.class,
+    GenericExceptionControllerAdvice.class })
 class DeleteStepRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID STEP_ID = UUID.randomUUID();
-  private static final String DELETE_STEP_URL = "/v1/steps/" + STEP_ID.toString();
+  private static final String DELETE_STEP_URL = "/v1/steps/" + STEP_ID;
   private static final long POLICY_ID = 123L;
 
   @MockBean
@@ -52,7 +53,7 @@ class DeleteStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getDeletedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, AUDITOR })
   void its403_whenNotPermittedRole() {
     delete(DELETE_STEP_URL)
         .contentType(anything())
