@@ -25,7 +25,7 @@ public class CreateDecisionRequest implements AuditableRequest {
   UUID correlationId = randomUUID();
   String entityClass = "Decision";
   @NonNull
-  String alertName;
+  String discriminator;
   @NonNull
   DecisionState state;
   @NonNull
@@ -52,7 +52,7 @@ public class CreateDecisionRequest implements AuditableRequest {
         .eventId(randomUUID())
         .timestamp(from(now()))
         .type(this.getClass().getSimpleName())
-        .entityId(alertName)
+        .entityId(discriminator)
         .entityClass(entityClass)
         .entityAction(actionType.toString())
         .details(this.toString())
@@ -67,7 +67,7 @@ public class CreateDecisionRequest implements AuditableRequest {
 
   public AlertDto toAlertDto() {
     return AlertDto.builder()
-        .alertName(getAlertName())
+        .discriminator(getDiscriminator())
         .level(getLevel())
         .state(getState())
         .build();

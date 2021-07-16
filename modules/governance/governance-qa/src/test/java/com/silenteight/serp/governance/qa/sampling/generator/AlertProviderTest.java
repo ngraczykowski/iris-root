@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
 import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.RISK_TYPE;
 import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.SANCTION;
 import static java.time.OffsetDateTime.parse;
@@ -73,7 +73,7 @@ class AlertProviderTest {
   private Alert getAlert() {
     return Alert
         .newBuilder()
-        .setName(generateAlertName())
+        .setName(generateDiscriminator())
         .build();
   }
 

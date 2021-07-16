@@ -7,7 +7,7 @@ import com.silenteight.serp.governance.qa.manage.analysis.details.DecisionAlread
 import com.silenteight.serp.governance.qa.manage.analysis.update.dto.UpdateAnalysisDecisionDto;
 import com.silenteight.serp.governance.qa.manage.common.AlertControllerAdvice;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,13 +15,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.UUID;
-
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
+import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static java.lang.String.format;
-import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.*;
@@ -38,9 +36,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 })
 class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
 
-  private static final UUID ALERT_ID = fromString("015d8483-b3b1-467f-801a-3530037f220a");
-  private static final String ALERT_NAME = format("alerts/%s", ALERT_ID);
-  private static final String UPDATE_DECISION_URL = format("/v1/qa/0/alerts/%s", ALERT_ID);
+  private static final String UPDATE_DECISION_URL = format("/v1/qa/0/alerts/%s", DISCRIMINATOR);
   private static final String DECISION_COMMENT_FAILED = "FAILED";
 
   @MockBean
@@ -49,7 +45,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = QA)
   void its404_whenAlertNotFound() {
-    WrongAlertNameException exception = new WrongAlertNameException(ALERT_NAME);
+    WrongDiscriminatorException exception = new WrongDiscriminatorException(DISCRIMINATOR);
     doThrow(exception).when(useCase).activate(any());
 
     patch(UPDATE_DECISION_URL, getUpdateAnalysisDecisionDto()).statusCode(
@@ -61,7 +57,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = QA)
   void its400_whenDecisionAlreadyExists() {
     DecisionAlreadyExistsException exception = new DecisionAlreadyExistsException(
-        ALERT_NAME,
+        DISCRIMINATOR,
         ANALYSIS);
     doThrow(exception).when(useCase).activate(any());
 
@@ -81,7 +77,7 @@ class UpdateAnalysisDecisionRestControllerTest extends BaseRestControllerTest {
     //then
     verify(useCase, times(1)).activate(commandCaptor.capture());
     UpdateDecisionRequest request = commandCaptor.getValue();
-    assertThat(request.getAlertName()).isEqualTo(ALERT_NAME);
+    assertThat(request.getDiscriminator()).isEqualTo(DISCRIMINATOR);
     assertThat(request.getState()).isEqualTo(FAILED);
     assertThat(request.getComment()).isEqualTo(DECISION_COMMENT_FAILED);
     assertThat(request.getLevel()).isEqualTo(ANALYSIS);

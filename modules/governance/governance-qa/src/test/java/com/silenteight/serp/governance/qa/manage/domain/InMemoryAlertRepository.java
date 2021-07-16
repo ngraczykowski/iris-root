@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.qa.manage.domain;
 
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -20,11 +20,11 @@ class InMemoryAlertRepository
   }
 
   @Override
-  public Alert findByAlertName(String alertName) {
+  public Alert findByDiscriminator(String discriminator) {
     return stream()
-        .filter(alert -> alert.getAlertName().equals(alertName))
+        .filter(alert -> alert.getDiscriminator().equals(discriminator))
         .findFirst()
-        .orElseThrow(() -> new WrongAlertNameException(alertName));
+        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
   }
 
   public List<Alert> findNewerThan(OffsetDateTime createdAt, Integer limit) {

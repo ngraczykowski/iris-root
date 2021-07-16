@@ -22,6 +22,6 @@ class Alert extends BaseEntity implements IdentifiableEntity {
   private Long id;
 
   @ToString.Include
-  @Column(nullable = false, length = 80, unique = true)
-  private String alertName;
+  @Column(nullable = false, length = 120, unique = true)
+  private String discriminator;
 }

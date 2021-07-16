@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.common.web.exception.ControllerAdviceOrde
 import com.silenteight.serp.governance.qa.manage.analysis.details.DecisionAlreadyExistsException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertIdException;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +29,8 @@ public class AlertControllerAdvice {
     return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
   }
 
-  @ExceptionHandler(WrongAlertNameException.class)
-  public ResponseEntity<String> handleWrongAlertNameException(WrongAlertNameException e) {
+  @ExceptionHandler(WrongDiscriminatorException.class)
+  public ResponseEntity<String> handleWrongDiscriminatorException(WrongDiscriminatorException e) {
     log(e);
     return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
   }

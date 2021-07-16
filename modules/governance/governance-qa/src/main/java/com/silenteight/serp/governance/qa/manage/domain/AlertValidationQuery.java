@@ -10,9 +10,7 @@ import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValida
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
-import static com.silenteight.serp.governance.qa.manage.common.AlertResource.toResourceName;
 import static com.silenteight.serp.governance.qa.manage.common.DecisionStateConverter.asStringList;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
 
@@ -35,8 +33,8 @@ class AlertValidationQuery implements AlertDetailsQuery, ListAlertValidationQuer
   }
 
   @Override
-  public AlertValidationDetailsDto details(UUID id) {
-    return decisionRepository.findValidationDetails(toResourceName(id), VALIDATION_STATE);
+  public AlertValidationDetailsDto details(String discriminator) {
+    return decisionRepository.findValidationDetails(discriminator, VALIDATION_STATE);
   }
 
   @Override

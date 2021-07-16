@@ -87,7 +87,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
         .header(HEADER_TOTAL_ITEMS, is("1"))
         .header(HEADER_NEXT_ITEM, is(alertAnalysisDto.getAddedAt().toString()))
         .statusCode(OK.value())
-        .body("[0].alertName", is(alertAnalysisDto.getAlertName()))
+        .body("[0].discriminator", is(alertAnalysisDto.getDiscriminator()))
         .body("[0].state", is(alertAnalysisDto.getState().toString()))
         .body("[0].decisionComment", is(alertAnalysisDto.getDecisionComment()))
         .body("[0].decisionAt", notNullValue())

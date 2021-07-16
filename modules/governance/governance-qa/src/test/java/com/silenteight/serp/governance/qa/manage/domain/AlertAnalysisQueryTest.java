@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
-import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
+import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.NEW;
@@ -68,7 +67,7 @@ class AlertAnalysisQueryTest {
     Alert alert = mock(Alert.class);
     doCallRealMethod().when(alert).setId(any());
     doCallRealMethod().when(alert).getId();
-    when(alert.getAlertName()).thenReturn(generateAlertName());
+    when(alert.getDiscriminator()).thenReturn(generateDiscriminator());
     when(alert.getCreatedAt()).thenReturn(createdAt);
     return alert;
   }
@@ -103,13 +102,13 @@ class AlertAnalysisQueryTest {
   @Test
   void detailsWillReturnAnalysisDetails() {
     Alert alert = new Alert();
-    alert.setAlertName(ALERT_NAME);
+    alert.setDiscriminator(DISCRIMINATOR);
     alert = alertRepository.save(alert);
     Decision analysisDecision = decisionRepository.save(getDecision(alert.getId(), FAILED));
 
-    AlertAnalysisDetailsDto analysisDetailsDto = underTest.details(ALERT_ID);
+    AlertAnalysisDetailsDto analysisDetailsDto = underTest.details(DISCRIMINATOR);
     assertThat(analysisDetailsDto).isNotNull();
-    assertThat(analysisDetailsDto.getAlertName()).isEqualTo(alert.getAlertName());
+    assertThat(analysisDetailsDto.getDiscriminator()).isEqualTo(alert.getDiscriminator());
     assertThat(analysisDetailsDto.getState()).isEqualTo(analysisDecision.getState());
     assertThat(analysisDetailsDto.getDecisionComment()).isEqualTo(analysisDecision.getComment());
     assertThat(analysisDetailsDto.getDecisionBy()).isEqualTo(analysisDecision.getDecidedBy());
