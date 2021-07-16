@@ -17,7 +17,7 @@ class ChecksumGenerator {
         102, 56, 99, 54 };
 
   public static String generateChecksum(List<String> reportData) {
-    String data = new String(SALT, StandardCharsets.UTF_8) + String.join("", reportData);
+    String data = new String(SALT, StandardCharsets.UTF_8) + "\n" + String.join("", reportData);
     return new DigestUtils("SHA3-256").digestAsHex(data).toUpperCase();
   }
 }

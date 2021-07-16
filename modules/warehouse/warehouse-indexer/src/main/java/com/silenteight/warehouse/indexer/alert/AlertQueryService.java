@@ -8,10 +8,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.RandomAlertQueryService.getExactMatch;
@@ -31,21 +28,25 @@ class AlertQueryService {
   @NonNull
   ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
-  public Map<String, String> getSingleAlertAttributes(List<String> fields, String discriminator) {
-    Map<String, Object> singleAlert = searchForAlert(DISCRIMINATOR, discriminator).stream()
-        .findFirst()
-        .orElseThrow(
-            () -> new AlertNotFoundException(format("Alert with %s id not found.", discriminator)));
-
-    return convertSingleAlertToAttributes(fields, singleAlert);
-  }
-
   public Collection<Map<String, String>> getMultipleAlertsAttributes(
       List<String> fields, List<String> discriminatorList) {
 
     return discriminatorList.stream()
-        .map(discriminator -> getSingleAlertAttributes(fields, discriminator))
+        .map(discriminator -> getAlert(fields, discriminator))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .collect(toList());
+  }
+
+  public Map<String, String> getSingleAlertAttributes(List<String> fields, String discriminator) {
+    return getAlert(fields, discriminator).orElseThrow(
+        () -> new AlertNotFoundException(format("Alert with %s id not found.", discriminator)));
+  }
+
+  private Optional<Map<String, String>> getAlert(List<String> fields, String discriminator) {
+    return searchForAlert(DISCRIMINATOR, discriminator).stream()
+        .findFirst()
+        .map(singleAlert -> convertSingleAlertToAttributes(fields, singleAlert));
   }
 
   private Map<String, String> convertSingleAlertToAttributes(

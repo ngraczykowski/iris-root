@@ -13,6 +13,6 @@ class ChecksumGeneratorTest {
   @Test
   void generateChecksum() {
     assertThat(ChecksumGenerator.generateChecksum(of("first", "second")))
-        .isEqualTo("BB30DF9A5F0F7CE04AE8CD201C95979147E5F4587557BD0D0BA6458164966A36");
+        .isEqualTo("F075FD2810D32E73FD71D852EE720DA2A5775711F271AB8D393ABD046D3C51D7");
   }
 }

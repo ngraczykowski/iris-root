@@ -88,7 +88,7 @@ class ReportGenerationServiceTest {
             + "2020,2,24150,20000,150,4000\n"
             + "2020,3,19090,15000,90,4000\n"
             + "\n"
-            + "checksum,16E801BCD84E7D704472EC3BE2B211B8D709D02B3C98B58C7B384D303C0D632C\n"
+            + "checksum,5184FE85DFADEF63DA8EBC283365E7331A734782EA17AE7F4881BD88F56B00A2\n"
     );
   }
 
