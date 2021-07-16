@@ -125,9 +125,9 @@ warehouse.report.rbs:
 
 warehouse.report.billing:
   columns:
-    - name: recommendationYear
+    - name: alert_recommendationYear
       label: YEAR
-    - name: recommendationMonth
+    - name: alert_recommendationMonth
       label: MONTH
   grouping-columns:
     - name: alert_recommendation
