@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 interface IndexedAlertRepository extends Repository<IndexedAlertEntity, Long> {
@@ -16,16 +17,12 @@ interface IndexedAlertRepository extends Repository<IndexedAlertEntity, Long> {
 
   Optional<IndexedAlertEntity> findByRequestId(String requestId);
 
+  long countAllByAnalysisNameAndStateIn(String analysisName, List<State> states);
+
   @Query(value = "SELECT s.analysis_name"
       + " FROM simulator_indexed_alert s"
       + " WHERE s.request_id = :requestId", nativeQuery = true)
   Optional<String> findAnalysisNameUsingRequestId(String requestId);
-
-  @Query(value = "SELECT COUNT(*)"
-      + " FROM simulator_indexed_alert s"
-      + " WHERE s.state != 'ACKED'"
-      + " AND s.analysis_name = :analysisName", nativeQuery = true)
-  long getAmountOfNonAckedWithAnalysisName(String analysisName);
 
   @Query(value = "SELECT SUM(s.alert_count)"
       + " FROM simulator_indexed_alert s"

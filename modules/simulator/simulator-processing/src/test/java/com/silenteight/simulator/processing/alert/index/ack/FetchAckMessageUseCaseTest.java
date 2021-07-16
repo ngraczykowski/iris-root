@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.silenteight.simulator.processing.alert.index.ack.AckMessageFixtures.ANALYSIS;
 import static com.silenteight.simulator.processing.alert.index.ack.AckMessageFixtures.ANALYSIS_NAME;
 import static com.silenteight.simulator.processing.alert.index.ack.AckMessageFixtures.INDEX_RESPONSE;
+import static com.silenteight.simulator.processing.alert.index.domain.State.SENT;
+import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -37,7 +39,9 @@ class FetchAckMessageUseCaseTest {
     doNothing().when(indexedAlertService).ack(any());
     when(indexedAlertQuery.getAnalysisNameByRequestId(any())).thenReturn(ANALYSIS_NAME);
     when(analysisService.getAnalysis(ANALYSIS_NAME)).thenReturn(ANALYSIS);
-    when(indexedAlertQuery.areAllIndexedAlertsAcked(ANALYSIS_NAME)).thenReturn(true);
+    when(indexedAlertQuery.count(ANALYSIS_NAME, of(SENT)))
+        .thenReturn(0L);
+
     when(indexedAlertQuery.sumAllAlertsCountWithAnalysisName(ANALYSIS_NAME)).thenReturn(10L);
     when(simulationService.countAllAlerts(ANALYSIS_NAME)).thenReturn(10L);
 

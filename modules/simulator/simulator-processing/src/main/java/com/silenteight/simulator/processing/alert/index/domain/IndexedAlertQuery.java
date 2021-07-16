@@ -36,8 +36,8 @@ public class IndexedAlertQuery {
         .orElseThrow(() -> new IndexedAlertEntityNotFoundException(requestId));
   }
 
-  public boolean areAllIndexedAlertsAcked(@NonNull String analysisName) {
-    return repository.getAmountOfNonAckedWithAnalysisName(analysisName) == 0;
+  public long count(@NonNull String analysisName, @NonNull List<State> states) {
+    return repository.countAllByAnalysisNameAndStateIn(analysisName, states);
   }
 
   public long sumAllAlertsCountWithAnalysisName(@NonNull String analysisName) {

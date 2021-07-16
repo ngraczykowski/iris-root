@@ -12,6 +12,8 @@ import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertQuery
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertService;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
+import static com.silenteight.simulator.processing.alert.index.domain.State.SENT;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 public class FetchAckMessageUseCase implements AckMessageHandler {
@@ -48,7 +50,7 @@ public class FetchAckMessageUseCase implements AckMessageHandler {
   }
 
   private boolean areAllIndexedAlertsAcked(String analysisName) {
-    return indexedAlertQuery.areAllIndexedAlertsAcked(analysisName);
+    return indexedAlertQuery.count(analysisName, of(SENT)) == 0;
   }
 
   private static boolean isAnalysisDone(Analysis analysis) {

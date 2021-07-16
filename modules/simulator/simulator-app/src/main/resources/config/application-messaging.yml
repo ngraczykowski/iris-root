@@ -5,6 +5,6 @@ simulator:
         queue-name: sim.recommendations
       recommendations-outbound:
         exchange: sim.command
-        routingKey: command.index-request.simulation
+        routing-key: command.index-request.simulation
       ack-messages-inbound:
         queue-name: sim.index-response.simulation

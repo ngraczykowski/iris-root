@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.silenteight.simulator.processing.alert.index.domain.IndexedAlertFixtures.*;
+import static com.silenteight.simulator.processing.alert.index.domain.State.ACKED;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -80,28 +82,28 @@ class IndexedAlertQueryTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldReturnTrueWhenAllIndexedAlertsAreAcked() {
-    // given
-    repository.save(ACKED_INDEXED_ALERT_ENTITY);
-
-    // when
-    boolean result = underTest.areAllIndexedAlertsAcked(ANALYSIS_NAME);
-
-    // then
-    assertThat(result).isTrue();
-  }
-
-  @Test
-  void shouldReturnFalseWhenSomeIndexedAlertsAreNotAcked() {
+  void shouldReturn1WhenThereIsAckedIndexedAlert() {
     // given
     repository.save(ACKED_INDEXED_ALERT_ENTITY);
     repository.save(SENT_INDEXED_ALERT_ENTITY);
 
     // when
-    boolean result = underTest.areAllIndexedAlertsAcked(ANALYSIS_NAME);
+    long result = underTest.count(ANALYSIS_NAME, of(ACKED));
 
     // then
-    assertThat(result).isFalse();
+    assertThat(result).isEqualTo(1L);
+  }
+
+  @Test
+  void shouldReturn0WhenThereIsNoAckedIndexedAlerts() {
+    // given
+    repository.save(SENT_INDEXED_ALERT_ENTITY);
+
+    // when
+    long result = underTest.count(ANALYSIS_NAME, of(ACKED));
+
+    // then
+    assertThat(result).isZero();
   }
 
   @Test
