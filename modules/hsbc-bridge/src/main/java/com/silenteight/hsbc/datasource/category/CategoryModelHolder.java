@@ -44,10 +44,10 @@ class CategoryModelHolder {
 
     var hitType = CategoryModel.builder()
         .name(CATEGORIES_PREFIX + "hitType")
-        .displayName("Hit Type")
+        .displayName("Risk Type")
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
-        .allowedValues(List.of("SAN", "PEP", "AM"))
+        .allowedValues(List.of("AML", "OTHER", "SAN", "PEP", "AM"))
         .valueRetriever(matchData -> {
           var caseInformation = matchData.getCaseInformation();
           return List.of(ofNullable(caseInformation.getExtendedAttribute5()).orElse(""));

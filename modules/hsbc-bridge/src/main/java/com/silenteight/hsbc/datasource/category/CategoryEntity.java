@@ -12,7 +12,6 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Data
 @NoArgsConstructor(access = PROTECTED)
-@Setter(NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
