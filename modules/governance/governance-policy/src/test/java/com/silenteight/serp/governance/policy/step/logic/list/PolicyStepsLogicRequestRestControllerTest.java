@@ -63,7 +63,7 @@ class PolicyStepsLogicRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private FeatureLogicRequestQuery policyStepsLogicRequestQuery;
 
-  @TestWithRole(roles = { APPROVER, QA, AUDITOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, QA, AUDITOR, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its200_whenNoLogic() {
     given(policyStepsLogicRequestQuery.listStepsFeaturesLogic(STEP_ID)).willReturn(
         FeaturesLogicDto.builder().build());
@@ -75,12 +75,12 @@ class PolicyStepsLogicRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].featuresLogic", nullValue());
   }
 
-  @TestWithRole(roles = { QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(POLICY_STEPS_LOGIC_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { APPROVER, QA, AUDITOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, QA, AUDITOR, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its200_whenPoliciesFound() {
     given(policyStepsLogicRequestQuery.listStepsFeaturesLogic(STEP_ID)).willReturn(LOGIC_DTO);
 

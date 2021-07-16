@@ -68,7 +68,7 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
-  @TestWithRole(roles = { APPROVER, AUDITOR, QA, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, AUDITOR, QA, MODEL_TUNER, QA_ISSUE_MANAGER })
   void its200_whenNoLogic() {
     given(policyStepsRequestQuery.listSteps(POLICY_ID)).willReturn(emptyList());
 
@@ -78,7 +78,7 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
         .body("size()", is(0));
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRole() {
     get(POLICY_STEPS_ORDER_URL).statusCode(FORBIDDEN.value());
   }

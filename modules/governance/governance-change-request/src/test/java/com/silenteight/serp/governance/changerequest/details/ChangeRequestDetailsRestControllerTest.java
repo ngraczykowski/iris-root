@@ -33,7 +33,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ChangeRequestDetailsQuery changeRequestDetailsQuery;
 
-  @TestWithRole(roles = { APPROVER, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR })
   void its200WithCorrectBody_whenFound() {
     UUID changeRequestId = fixtures.changeRequest.getId();
     given(changeRequestDetailsQuery.details(changeRequestId)).willReturn(fixtures.changeRequest);
@@ -51,7 +51,7 @@ class ChangeRequestDetailsRestControllerTest extends BaseRestControllerTest {
         .body("modelName", equalTo(MODEL_NAME));
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(mappingForDetails(fixtures.changeRequest.getId())).statusCode(FORBIDDEN.value());
   }

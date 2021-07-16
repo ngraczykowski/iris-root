@@ -106,7 +106,7 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
     return of(featureConfiguration);
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, AUDITOR })
   void its403_whenNotPermittedRole() {
     put(EDIT_LOGIC_URL, new EditStepLogicDto(emptyList()))
         .contentType(anything())

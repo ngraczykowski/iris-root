@@ -17,6 +17,7 @@ sep.auth:
       - "CREATE_CHANGE_REQUEST"
     VIEW_APPROVAL_QUEUE:
       - "LIST_CHANGE_REQUESTS"
+      - "GET_CHANGE_REQUEST"
     VIEW_POLICIES:
       - "LIST_POLICIES"
       - "LIST_STEPS_LOGIC"
@@ -29,10 +30,6 @@ sep.auth:
       - "STEP_DETAILS"
     IMPORT_POLICY:
       - "IMPORT_POLICY"
-    MANAGE_MODEL:
-      - "CREATE_MODEL"
-      - "EXPORT_MODEL"
-      - "LIST_MODELS"
     MANAGE_POLICY:
       - "EDIT_POLICY"
       - "CLONE_POLICY"
@@ -71,6 +68,8 @@ sep.auth:
       - "ALERTS_VALIDATION"
       - "LIST_POLICIES"
       - "ALERTS_VALIDATION_DECISION"
+    MANAGE_SIMULATION:
+      - "CREATE_MODEL"
 
   rolePermissionsMappings:
     APPROVER:
@@ -85,6 +84,7 @@ sep.auth:
       - "VIEW_POLICIES"
       - "IMPORT_POLICY"
       - "MANAGE_STEPS"
+      - "MANAGE_SIMULATION"
       - "PROMOTE_MODEL_AS_CHANGE_REQUEST"
       - "VIEW_APPROVAL_QUEUE"
       - "CANCEL_APPROVAL_TICKET"
@@ -92,7 +92,6 @@ sep.auth:
       - "VIEW_AI_SUGGESTIONS"
       - "MANAGE_AI_SUGGESTION"
       - "VIEW_REASONING_BRANCHES"
-      - "MANAGE_MODEL" # add to excel?
     AUDITOR:
       - "VIEW_POLICIES"
       - "VIEW_APPROVAL_QUEUE"
@@ -109,6 +108,9 @@ sep.auth:
       - "DASHBOARD"
     QA_ISSUE_MANAGER:
       - "MANAGE_POLICY"
+      - "VIEW_POLICIES"
+      - "MANAGE_STEPS"
       - "VIEW_QA_VERIFICATION"
       - "MANAGE_QA_VERIFICATION"
       - "DASHBOARD"
+      - "VIEW_REASONING_BRANCHES"

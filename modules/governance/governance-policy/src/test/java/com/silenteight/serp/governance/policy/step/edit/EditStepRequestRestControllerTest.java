@@ -24,13 +24,14 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@Import({ EditStepRequestRestController.class,
-          EditStepConfiguration.class,
-          GenericExceptionControllerAdvice.class })
+@Import({
+    EditStepRequestRestController.class,
+    EditStepConfiguration.class,
+    GenericExceptionControllerAdvice.class })
 class EditStepRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID STEP_ID = UUID.randomUUID();
-  private static final String CREATE_STEP_URL = "/v1/steps/" + STEP_ID.toString();
+  private static final String CREATE_STEP_URL = "/v1/steps/" + STEP_ID;
 
   private static final long POLICY_ID = 123L;
 
@@ -61,7 +62,7 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER, AUDITOR })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, AUDITOR })
   void its403_whenNotPermittedRole() {
     patch(CREATE_STEP_URL, new EditStepDto(NAME, null, SOLUTION))
         .contentType(anything())
