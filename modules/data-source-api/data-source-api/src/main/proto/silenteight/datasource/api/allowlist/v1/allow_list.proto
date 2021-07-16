@@ -36,5 +36,5 @@ message AllowListInput {
 message AllowListFeatureInput {
   string feature = 1;
   repeated string characteristics_values = 2;
-  string allow_list_name = 3;
+  repeated string allow_list_name = 3;
 }
