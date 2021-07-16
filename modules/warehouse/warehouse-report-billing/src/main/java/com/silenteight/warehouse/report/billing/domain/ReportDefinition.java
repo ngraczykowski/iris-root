@@ -98,7 +98,7 @@ public enum ReportDefinition {
   }
 
   private String getReportName(String id) {
-    return "analysis/production/definitions/RB_SCORER/" + id + "/reports";
+    return "analysis/production/definitions/" + REPORT_TYPE + "/" + id + "/reports";
   }
 
   private boolean hasId(String id) {

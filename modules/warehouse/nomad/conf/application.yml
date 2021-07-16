@@ -134,4 +134,4 @@ warehouse.report.billing:
       label: COUNT_SOLVED
       grouping-values: [AAA False Positive, Level 1 Review, Level 2 Review, Level 3 Review]
       add-counter: true
-  date-field-name: alert_timestamp
+  date-field-name: index_timestamp
