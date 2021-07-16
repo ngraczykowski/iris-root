@@ -46,9 +46,9 @@ class AlertIT {
       DISCRIMINATOR_2);
 
   static final List<String> ALERT_FIELDS = of(
-      SourceAlertKeys.RECOMMENDATION_KEY,
-      SourceAlertKeys.RISK_TYPE_KEY,
-      SourceAlertKeys.COUNTRY_KEY);
+      MappedKeys.RECOMMENDATION_KEY,
+      MappedKeys.RISK_TYPE_KEY,
+      MappedKeys.COUNTRY_KEY);
 
   @Autowired
   private AlertQueryService queryUnderTest;
@@ -81,7 +81,7 @@ class AlertIT {
     assertThat(alertAttributes).hasSize(2);
     Map<String, String> alert = alertAttributes.iterator().next();
     assertThat(alert)
-        .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK);
+        .containsEntry(MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK);
   }
 
   @Test
@@ -93,8 +93,8 @@ class AlertIT {
         queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
 
     assertThat(singleAlertAttributes)
-        .containsEntry(SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK)
-        .containsEntry(SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP);
+        .containsEntry(MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK)
+        .containsEntry(MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP);
   }
 
   @Test
@@ -105,7 +105,7 @@ class AlertIT {
     Map<String, String> singleAlertAttributes =
         queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
 
-    assertThat(singleAlertAttributes.get(SourceAlertKeys.RISK_TYPE_KEY)).isNull();
+    assertThat(singleAlertAttributes.get(MappedKeys.RISK_TYPE_KEY)).isNull();
   }
 
   @ParameterizedTest
