@@ -49,4 +49,146 @@
         referencedTableName="scb_alert"
         referencedColumnNames="alert_id"/>
   </changeSet>
+
+  <changeSet id="db.changelog-sear-payments-scb-1.1.0-2" author="msitarski">
+    <createTable tableName="scb_alert_big">
+      <column autoIncrement="true" name="alert_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="alert_pkey"/>
+      </column>
+      <column name="system_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="message_type" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="application_code" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="message_format" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="message_data" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="business_unit_id" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unit" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data_center" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="message_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="current_status_name" type="VARCHAR(65)"/>
+      <column name="output_status_name" type="VARCHAR(69)"/>
+      <column name="transaction_reference" type="VARCHAR(128)"/>
+      <column name="direction" type="VARCHAR(128)"/>
+      <column name="current_status_id" type="VARCHAR(67)"/>
+      <column name="current_status_routing_code" type="VARCHAR(68)"/>
+      <column name="current_status_checksum" type="VARCHAR(66)"/>
+      <column name="hit_count" type="INTEGER"/>
+      <column name="recommendation_sent_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+      <column name="git_commit_id" type="VARCHAR(7)"/>
+      <column name="damage_reason_code" type="VARCHAR(70)"/>
+      <column name="damage_reason_description" type="VARCHAR(256)"/>
+      <column name="country_code" type="VARCHAR(8)"/>
+    </createTable>
+    <createTable tableName="scb_hit">
+      <column autoIncrement="true" name="hit_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="hit_pkey"/>
+      </column>
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="entity_text" type="VARCHAR(1024)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tag" type="VARCHAR(78)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="solution_type" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="matching_text" type="VARCHAR(1024)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="watchlist_type" type="VARCHAR(79)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="watchlist_ofac_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="watchlist_intervention_id" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="watchlist_name" type="VARCHAR(1024)"/>
+      <column name="free_text_agent_request" type="TEXT"/>
+      <column name="crossmatch_agent_request" type="TEXT"/>
+      <column name="name_agent_request" type="TEXT"/>
+      <column name="geo_agent_request" type="TEXT"/>
+      <column name="origin" type="VARCHAR(80)"/>
+      <column name="designation" type="VARCHAR(81)"/>
+      <column name="one_line_address_agent_request" type="VARCHAR(82)"/>
+      <column name="direction" type="VARCHAR(83)"/>
+      <column name="message_field_structure" type="VARCHAR(84)"/>
+      <column name="specific_terms_agent_request" type="TEXT"/>
+      <column name="delimiter_in_name_line_agent_request" type="TEXT"/>
+      <column name="matchtext_first_token_of_address_agent_request" type="TEXT"/>
+      <column name="account_number" type="VARCHAR(77)"/>
+      <column name="two_lines_name_agent_request" type="VARCHAR(256)"/>
+    </createTable>
+    <createTable tableName="scb_hitted_entity_address">
+      <column autoIncrement="true" name="address_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="hitted_entity_address_pkey"/>
+      </column>
+      <column defaultValueBoolean="false" name="is_main" type="BOOLEAN"/>
+      <column name="hit_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="postal_address" type="VARCHAR(1024)"/>
+      <column name="city" type="VARCHAR(128)"/>
+      <column name="state" type="VARCHAR(128)"/>
+      <column name="country" type="VARCHAR(128)"/>
+    </createTable>
+    <createTable tableName="scb_next_status">
+      <column autoIncrement="true" name="next_status_id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="next_status_pkey"/>
+      </column>
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="id_of_next_status" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(88)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="routing_code" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="checksum" type="VARCHAR(87)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="db.changelog-sear-payments-scb-1.1.0-3" author="msitarski">
+    <createTable tableName="scb_hit_name">
+      <column name="hit_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(1024)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
 </databaseChangeLog>

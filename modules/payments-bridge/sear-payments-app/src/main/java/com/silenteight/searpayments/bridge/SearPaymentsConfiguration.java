@@ -1,5 +1,6 @@
 package com.silenteight.searpayments.bridge;
 
+import com.silenteight.searpayments.bridge.dto.input.AlertDataCenterDto;
 import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
 import com.silenteight.searpayments.bridge.dto.input.RequestDto;
 import com.silenteight.searpayments.bridge.util.NamedThreadFactory;
@@ -69,12 +70,13 @@ class SearPaymentsConfiguration {
     return IntegrationFlows.from(submitRequestChannel)
         .bridge(ec -> ec.poller(submitRequestPoller))
         .log(Level.INFO, "sear-payments-mockup.collected-request", m -> m)
-        .split(RequestDto.class, RequestDto::getAlerts)
+        .split(RequestDto.class, RequestDto::getAlertDataCenters)
         .enrichHeaders(
             hec -> hec.header(MessageHeaders.ERROR_CHANNEL, "damagedAlertMessageDtoChannel")
-                .<AlertMessageDto>headerFunction("systemId", a -> a.getPayload().getSystemId()))
-        .<AlertMessageDto, Boolean>route(
-            SearPaymentsConfiguration::alertIsObsolete,
+                .<AlertDataCenterDto>headerFunction(
+                    "systemId", a -> a.getPayload().getAlertMessageDto().getSystemId()))
+        .<AlertDataCenterDto, Boolean>route(
+            alertDataCenterDto -> alertIsObsolete(alertDataCenterDto.getAlertMessageDto()),
             m -> m.channelMapping(true, "obsoleteAlertChannel")
                 .subFlowMapping(false, subflowAlertNotObsolete))
         .get();
@@ -83,8 +85,8 @@ class SearPaymentsConfiguration {
   @Bean
   IntegrationFlow subflowAlertNotObsolete(
       IntegrationFlow subflowProcessAlert) {
-    return sf -> sf.<AlertMessageDto, Boolean>route(
-        SearPaymentsConfiguration::alertIsPaired,
+    return sf -> sf.<AlertDataCenterDto, Boolean>route(
+        alertDataCenterDto -> alertIsPaired(alertDataCenterDto.getAlertMessageDto()),
         m2 -> m2.channelMapping(true, "pairedAlertChannel")
             .subFlowMapping(false, subflowProcessAlert));
   }
@@ -109,7 +111,7 @@ class SearPaymentsConfiguration {
   IntegrationFlow subflowProcessAlert(
       AlertEtl alertEtl) {
     return sf -> sf
-        .<AlertMessageDto>handle((p, h) -> alertEtl.invoke(p))
+        .<AlertDataCenterDto>handle((p, h) -> alertEtl.invoke(p))
         .enrichHeaders(Map.of(MessageHeaders.ERROR_CHANNEL, "damagedAlertChannel"))
         .log(Level.INFO, "sear-payments-mockup.processing-alert", m -> m)
         .handle(this::recommendAlertFunc)
