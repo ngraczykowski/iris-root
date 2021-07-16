@@ -18,7 +18,7 @@ class ModelInfoCreator {
 
     return ModelInfo.builder()
         .name(name)
-        .url(address + "/model/export/" + type + name)
+        .url(address + "/model/export/" + type + "/" + name)
         .type(type)
         .changeType(MINOR)
         .build();

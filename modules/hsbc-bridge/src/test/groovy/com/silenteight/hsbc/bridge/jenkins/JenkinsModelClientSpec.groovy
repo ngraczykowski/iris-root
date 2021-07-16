@@ -72,7 +72,7 @@ class JenkinsModelClientSpec extends Specification {
 
   def 'should send status of transferred model from Governance'() {
     given:
-    def modelStatusUpdatedDto = fixtures.modelStatusUpdatedDto
+    def modelStatusUpdatedDto = fixtures.governanceModelStatusUpdatedDto
     def crumbResponse = fixtures.crumbResponse
 
     def crumbHttpResponse = Mock(HttpResponse) {
@@ -94,7 +94,7 @@ class JenkinsModelClientSpec extends Specification {
   }
 
   def 'should throw ModelNotReceivedException when unable to send model status with status code other than 201'() {
-    def modelStatusUpdatedDto = fixtures.modelStatusUpdatedDto
+    def modelStatusUpdatedDto = fixtures.governanceModelStatusUpdatedDto
     def crumbResponse = fixtures.crumbResponse
 
     def crumbHttpResponse = Mock(HttpResponse) {

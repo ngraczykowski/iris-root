@@ -22,7 +22,7 @@ public class StoreModelUseCase {
     log.info("New model: {} has been stored", modelEntity);
   }
 
-  private ModelInformationEntity toModelEntity(ModelStatusUpdatedDto modelStatusUpdated) {
+  private static ModelInformationEntity toModelEntity(ModelStatusUpdatedDto modelStatusUpdated) {
     return ModelInformationEntity.builder()
         .name(modelStatusUpdated.getName())
         .minIoUrl(modelStatusUpdated.getUrl())

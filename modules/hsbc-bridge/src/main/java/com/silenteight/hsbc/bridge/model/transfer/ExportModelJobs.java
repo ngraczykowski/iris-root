@@ -20,11 +20,11 @@ class ExportModelJobs {
   private final ModelClient jenkinsModelClient;
   private final GetModelUseCase getModelUseCase;
 
-  @Scheduled(cron = "${silenteight.bridge.model.is-pep-historical-model-export.cron}")
-  void exportIsPepHistoricalModel() {
-    log.info("Running exportIsPepHistoricalModel job");
+  @Scheduled(cron = "${silenteight.bridge.model.name-model-export.cron}")
+  void exportNameModel() {
+    log.info("Running exportNameModel job");
 
-    exportModel(IS_PEP_HISTORICAL);
+    exportModel(NAME_ALIASES);
   }
 
   @Scheduled(cron = "${silenteight.bridge.model.is-pep-procedural-model-export.cron}")
@@ -34,11 +34,11 @@ class ExportModelJobs {
     exportModel(IS_PEP_PROCEDURAL);
   }
 
-  @Scheduled(cron = "${silenteight.bridge.model.name-model-export.cron}")
-  void exportNameModel() {
-    log.info("Running exportNameModel job");
+  @Scheduled(cron = "${silenteight.bridge.model.is-pep-historical-model-export.cron}")
+  void exportIsPepHistoricalModel() {
+    log.info("Running exportIsPepHistoricalModel job");
 
-    exportModel(NAME_ALIASES);
+    exportModel(IS_PEP_HISTORICAL);
   }
 
   private void exportModel(@NonNull ModelType modelType) {

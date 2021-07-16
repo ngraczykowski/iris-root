@@ -28,11 +28,11 @@ class NewWorldCheckModelListener {
   }
 
   private ModelInfo convertToModelInfo(ModelPersisted modelPersisted) {
-    var name = modelPersisted.getModelName();
+    var version = modelPersisted.getModelVersion();
     var type = modelPersisted.getModelType().name();
     return ModelInfo.builder()
-        .name(name)
-        .url(address + "/model/export/" + type + name)
+        .name(version)
+        .url(address + "/model/export/" + type + "/" + version)
         .type(type)
         .changeType(MINOR.name())
         .build();
