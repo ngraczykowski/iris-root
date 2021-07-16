@@ -14,6 +14,7 @@ import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.DELIVERED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.ERROR;
 import static java.util.Objects.nonNull;
+import static java.util.function.Predicate.not;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -75,6 +76,11 @@ class Bulk extends BaseEntity {
   @Transient
   Collection<BulkAlertEntity> getValidAlerts() {
     return alerts.stream().filter(BulkAlertEntity::isValid).collect(Collectors.toList());
+  }
+
+  @Transient
+  Collection<BulkAlertEntity> getInvalidAlerts() {
+    return alerts.stream().filter(not(BulkAlertEntity::isValid)).collect(Collectors.toList());
   }
 
   @Transient

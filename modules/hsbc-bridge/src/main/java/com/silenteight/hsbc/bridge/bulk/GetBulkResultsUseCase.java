@@ -44,11 +44,24 @@ public class GetBulkResultsUseCase {
     response.setBatchStatus(BatchStatus.valueOf(
         batch.getStatus().name()));
     response.setAlerts(getSolvedAlerts(batch.getValidAlerts()));
+    response.setErrorAlerts(getErrorAlerts(batch.getInvalidAlerts()));
     return response;
+  }
+
+  private List<ErrorAlert> getErrorAlerts(Collection<BulkAlertEntity> items) {
+    return items.stream().map(this::getErrorAlert).collect(Collectors.toList());
   }
 
   private List<SolvedAlert> getSolvedAlerts(Collection<BulkAlertEntity> items) {
     return items.stream().map(this::getSolvedAlert).collect(Collectors.toList());
+  }
+
+  private ErrorAlert getErrorAlert(BulkAlertEntity alert) {
+    var errorAlert = new ErrorAlert();
+    errorAlert.setId(alert.getExternalId());
+    errorAlert.setErrorMessage(alert.getErrorMessage());
+    errorAlert.setAlertMetadata(map(alert.getMetadata()));
+    return errorAlert;
   }
 
   private SolvedAlert getSolvedAlert(BulkAlertEntity alert) {

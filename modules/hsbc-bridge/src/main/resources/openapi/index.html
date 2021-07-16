@@ -687,7 +687,7 @@
 </head>
 <body>
   <script>
-    // Script section to loadWatchlist models into a JS Var
+    // Script section to load models into a JS Var
     var defs = {}
             defs["Alert"] = {
   "type" : "object",
@@ -855,6 +855,12 @@
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/SolvedAlert"
+      }
+    },
+    "errorAlerts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/ErrorAlert"
       }
     }
   }
@@ -1923,6 +1929,23 @@
     },
     "CustomerIndividuals.Dummy" : {
       "type" : "string"
+    }
+  }
+};
+            defs["ErrorAlert"] = {
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "errorMessage" : {
+      "type" : "string"
+    },
+    "alertMetadata" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/KeyValue"
+      }
     }
   }
 };
@@ -7807,7 +7830,7 @@ except ApiException as e:
   
   	// style-loader: Adds some css to the DOM by adding a <style> tag
   	
-  	// loadWatchlist the styles
+  	// load the styles
   	var content = __webpack_require__(3);
   	if(typeof content === 'string') content = [[module.id, content, '']];
   	// add the styles to the DOM
