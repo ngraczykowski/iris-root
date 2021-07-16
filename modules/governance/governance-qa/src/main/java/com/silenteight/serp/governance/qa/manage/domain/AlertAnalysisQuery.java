@@ -7,11 +7,9 @@ import com.silenteight.serp.governance.qa.manage.analysis.details.AlertDetailsQu
 import com.silenteight.serp.governance.qa.manage.analysis.details.dto.AlertAnalysisDetailsDto;
 import com.silenteight.serp.governance.qa.manage.analysis.list.ListAlertQuery;
 import com.silenteight.serp.governance.qa.manage.analysis.list.dto.AlertAnalysisDto;
-import com.silenteight.serp.governance.qa.manage.common.AlertResource;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static com.silenteight.serp.governance.qa.manage.common.DecisionStateConverter.asStringList;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
@@ -40,8 +38,7 @@ public class AlertAnalysisQuery implements ListAlertQuery, AlertDetailsQuery {
   }
 
   @Override
-  public AlertAnalysisDetailsDto details(UUID id) {
-    return decisionRepository.findAnalysisDetails(AlertResource.toResourceName(id),
-        ANALYSIS.getValue());
+  public AlertAnalysisDetailsDto details(String discriminator) {
+    return decisionRepository.findAnalysisDetails(discriminator, ANALYSIS.getValue());
   }
 }

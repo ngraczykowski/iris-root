@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.OffsetDateTime;
 
 import static com.rabbitmq.client.ConnectionFactoryConfigurator.USERNAME;
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
+import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
 import static com.silenteight.serp.governance.qa.DecisionFixture.*;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
@@ -49,7 +49,7 @@ class UpdateAnalysisDecisionUseCaseTest {
     verify(decisionService, times(1))
         .updateDecision(updateRequestCaptor.capture());
     UpdateDecisionRequest updateDecisionRequest = updateRequestCaptor.getValue();
-    assertThat(updateDecisionRequest.getAlertName()).isEqualTo(ALERT_NAME);
+    assertThat(updateDecisionRequest.getDiscriminator()).isEqualTo(DISCRIMINATOR);
     assertThat(updateDecisionRequest.getState()).isEqualTo(STATE_NEW);
     assertThat(updateDecisionRequest.getComment()).isEqualTo(COMMENT_OK);
     assertThat(updateDecisionRequest.getLevel()).isEqualTo(ANALYSIS);
@@ -59,7 +59,7 @@ class UpdateAnalysisDecisionUseCaseTest {
 
   private UpdateDecisionRequest getUpdateDecisionRequest(DecisionState state, String comment) {
     return UpdateDecisionRequest.of(
-        ALERT_NAME,
+        DISCRIMINATOR,
         state,
         LEVEL_ANALYSIS,
         comment,
@@ -81,7 +81,7 @@ class UpdateAnalysisDecisionUseCaseTest {
     verify(decisionService, times(1))
         .updateDecision(updateRequestCaptor.capture());
     UpdateDecisionRequest updateDecisionRequest = updateRequestCaptor.getValue();
-    assertThat(updateDecisionRequest.getAlertName()).isEqualTo(ALERT_NAME);
+    assertThat(updateDecisionRequest.getDiscriminator()).isEqualTo(DISCRIMINATOR);
     assertThat(updateDecisionRequest.getState()).isEqualTo(FAILED);
     assertThat(updateDecisionRequest.getComment()).isEqualTo(COMMENT_FAILED);
     assertThat(updateDecisionRequest.getLevel()).isEqualTo(ANALYSIS);
@@ -92,7 +92,7 @@ class UpdateAnalysisDecisionUseCaseTest {
         .createDecision(createRequestCaptor.capture());
 
     CreateDecisionRequest createDecisionRequest = createRequestCaptor.getValue();
-    assertThat(createDecisionRequest.getAlertName()).isEqualTo(ALERT_NAME);
+    assertThat(createDecisionRequest.getDiscriminator()).isEqualTo(DISCRIMINATOR);
     assertThat(createDecisionRequest.getState()).isEqualTo(STATE_NEW);
     assertThat(createDecisionRequest.getLevel()).isEqualTo(VALIDATION);
     assertThat(createDecisionRequest.getCreatedBy()).isEqualTo(USERNAME);

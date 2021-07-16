@@ -3,7 +3,7 @@ package com.silenteight.serp.governance.qa.manage.domain;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 import com.silenteight.serp.governance.qa.manage.analysis.details.dto.AlertAnalysisDetailsDto;
 import com.silenteight.serp.governance.qa.manage.analysis.list.dto.AlertAnalysisDto;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
 import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertValidationDetailsDto;
 import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValidationDto;
 
@@ -26,7 +26,7 @@ class InMemoryDecisionRepository
   }
 
   @Override
-  public Optional<Decision> findByAlertNameAndLevel(String alertName, Integer level) {
+  public Optional<Decision> findByDiscriminatorAndLevel(String discriminator, Integer level) {
     return stream().filter(decision -> level.equals(decision.getLevel()))
         .findFirst();
   }
@@ -40,12 +40,12 @@ class InMemoryDecisionRepository
   }
 
   @Override
-  public AlertAnalysisDetailsDto findAnalysisDetails(String name, Integer level) {
-    Alert alert = alertRepository.findByAlertName(name);
-    Decision decision = findDecisionByAlertIdAndLevel(alert, level);
+  public AlertAnalysisDetailsDto findAnalysisDetails(String discriminator, Integer level) {
+    Alert alert = alertRepository.findByDiscriminator(discriminator);
+    Decision decision = findDecisionByDiscriminatorAndLevel(alert, level);
 
     return DummyAlertAnalysisDetailsDto.builder()
-        .alertName(alert.getAlertName())
+        .discriminator(alert.getDiscriminator())
         .state(decision.getState())
         .decisionComment(decision.getComment())
         .decisionBy(decision.getDecidedBy())
@@ -54,10 +54,10 @@ class InMemoryDecisionRepository
         .build();
   }
 
-  private Decision findDecisionByAlertIdAndLevel(Alert alert, Integer level) {
+  private Decision findDecisionByDiscriminatorAndLevel(Alert alert, Integer level) {
     return stream().filter(current ->
         current.getAlertId().equals(alert.getId()) && current.getLevel().equals(level))
-        .findFirst().orElseThrow(() -> new WrongAlertNameException(alert.getAlertName()));
+        .findFirst().orElseThrow(() -> new WrongDiscriminatorException(alert.getDiscriminator()));
   }
 
   @Override
@@ -69,7 +69,7 @@ class InMemoryDecisionRepository
           Alert alert = alertRepository.findById(decision.getAlertId());
 
           return AlertAnalysisDtoBuilder.builder()
-              .alertName(alert.getAlertName())
+              .discriminator(alert.getDiscriminator())
               .addedAt(toInstant(alert.getCreatedAt()))
               .state(decision.getState())
               .decisionAt(toInstant(decision.getDecidedAt()))
@@ -97,7 +97,7 @@ class InMemoryDecisionRepository
           Alert alert = alertRepository.findById(decision.getAlertId());
 
           return AlertValidationDtoBuilder.builder()
-              .alertName(alert.getAlertName())
+              .discriminator(alert.getDiscriminator())
               .addedAt(toInstant(alert.getCreatedAt()))
               .state(decision.getState())
               .decisionAt(toInstant(decision.getDecidedAt()))
@@ -112,13 +112,12 @@ class InMemoryDecisionRepository
   }
 
   @Override
-  public AlertValidationDetailsDto findValidationDetails(
-      String name, Integer level) {
-    Alert alert = alertRepository.findByAlertName(name);
-    Decision decision = findDecisionByAlertIdAndLevel(alert, level);
+  public AlertValidationDetailsDto findValidationDetails(String discriminator, Integer level) {
+    Alert alert = alertRepository.findByDiscriminator(discriminator);
+    Decision decision = findDecisionByDiscriminatorAndLevel(alert, level);
 
     return AlertValidationDetailsDtoBuilder.builder()
-        .alertName(alert.getAlertName())
+        .discriminator(alert.getDiscriminator())
         .state(decision.getState())
         .decisionComment(decision.getComment())
         .decisionBy(decision.getDecidedBy())

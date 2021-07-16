@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 class AlertValidationDetailsDtoBuilder implements AlertValidationDetailsDto {
 
   @NonNull
-  String alertName;
+  String discriminator;
   @NonNull
   DecisionState state;
   OffsetDateTime decisionAt;

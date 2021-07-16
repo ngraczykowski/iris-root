@@ -425,4 +425,24 @@
         columnNames="range_from,range_to,started_at"
         constraintName="uq_governance_qa_alert_sampling_range_from_range_to_started_at"/>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-15" author="tbiedrzycki">
+    <dropUniqueConstraint tableName="governance_qa_alert"
+                          uniqueColumns="alert_name"
+                          constraintName="governance_qa_alert_alert_name_key"/>
+    <renameColumn oldColumnName="alert_name"
+                  newColumnName="discriminator"
+                  tableName="governance_qa_alert" />
+    <modifyDataType tableName="governance_qa_alert"
+                    columnName="discriminator"
+                    newDataType="VARCHAR(120)" />
+    <addUniqueConstraint
+        tableName="governance_qa_alert"
+        columnNames="discriminator"
+        constraintName="uq_governance_qa_discriminator"/>
+    <createIndex
+        tableName="governance_qa_alert"
+        indexName="ix_governance_qa_alert_discriminator">
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

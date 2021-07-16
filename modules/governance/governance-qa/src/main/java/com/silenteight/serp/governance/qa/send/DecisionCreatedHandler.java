@@ -40,7 +40,7 @@ public class DecisionCreatedHandler {
       CreateDecisionRequest createDecisionRequest) {
 
     return AlertDto.builder()
-        .alertName(createDecisionRequest.getAlertName())
+        .discriminator(createDecisionRequest.getDiscriminator())
         .level(createDecisionRequest.getLevel())
         .state(createDecisionRequest.getState())
         .build();

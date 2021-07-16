@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
-import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
+import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.NEW;
@@ -52,7 +51,7 @@ class AlertValidationQueryTest {
     List<AlertValidationDto> alertDtos = underTest.list(List.of(FAILED), ALERT_BEFORE_DATE,2);
     //then
     assertThat(alertDtos.size()).isEqualTo(1);
-    assertThat(alertDtos.get(0).getAlertName()).isEqualTo(alertFailedAfter.getAlertName());
+    assertThat(alertDtos.get(0).getDiscriminator()).isEqualTo(alertFailedAfter.getDiscriminator());
     assertThat(alertDtos.get(0).getState()).isEqualTo(decisionFailedAfter.getState());
     assertThat(alertDtos.get(0).getAddedAt()).isAfter(ALERT_BEFORE_DATE.toInstant());
   }
@@ -61,7 +60,7 @@ class AlertValidationQueryTest {
     Alert alert = mock(Alert.class);
     doCallRealMethod().when(alert).setId(any());
     doCallRealMethod().when(alert).getId();
-    when(alert.getAlertName()).thenReturn(generateAlertName());
+    when(alert.getDiscriminator()).thenReturn(generateDiscriminator());
     when(alert.getCreatedAt()).thenReturn(createdAt);
     return alert;
   }
@@ -93,14 +92,14 @@ class AlertValidationQueryTest {
   @Test
   void detailsWillReturnValidationDetails() {
     Alert alert = new Alert();
-    alert.setAlertName(ALERT_NAME);
+    alert.setDiscriminator(DISCRIMINATOR);
     alert = alertRepository.save(alert);
     decisionRepository.save(getDecision(alert.getId(), NEW));
     Decision validationDecision = decisionRepository.save(getDecision(alert.getId(), NEW));
 
-    AlertValidationDetailsDto validationDetailsDto = underTest.details(ALERT_ID);
+    AlertValidationDetailsDto validationDetailsDto = underTest.details(DISCRIMINATOR);
     assertThat(validationDetailsDto).isNotNull();
-    assertThat(validationDetailsDto.getAlertName()).isEqualTo(alert.getAlertName());
+    assertThat(validationDetailsDto.getDiscriminator()).isEqualTo(alert.getDiscriminator());
     assertThat(validationDetailsDto.getState()).isEqualTo(validationDecision.getState());
     assertThat(validationDetailsDto.getDecisionComment())
         .isEqualTo(validationDecision.getComment());

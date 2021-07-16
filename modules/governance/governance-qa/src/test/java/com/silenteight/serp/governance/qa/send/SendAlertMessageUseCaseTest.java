@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
 import static com.silenteight.serp.governance.qa.DecisionFixture.COMMENT_OK;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.PASSED;
@@ -53,14 +53,14 @@ class SendAlertMessageUseCaseTest {
     assertThat(messageCaptor.getValue().getAlertsCount()).isEqualTo(1);
     assertThat(messageCaptor.getValue().getRequestId()).isEmpty();
     assertThat(messageCaptor.getValue().getAlerts(0).getName())
-        .isEqualTo(alertDto.getAlertName());
+        .isEqualTo(alertDto.getDiscriminator());
     assertThat(messageCaptor.getValue().getAlerts(0).getPayload().getFieldsMap())
         .isEqualTo(expectedPayload);
   }
 
   private AlertDto getAlertDto() {
     return AlertDto.builder()
-        .alertName(generateAlertName())
+        .discriminator(generateDiscriminator())
         .level(ANALYSIS)
         .state(PASSED)
         .comment(COMMENT_OK)

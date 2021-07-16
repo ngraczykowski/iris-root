@@ -11,3 +11,11 @@ sep.auth.basic.users:
     password: apdev
     roles:
       - APPROVER
+  - username: su
+    password: sudev
+    roles:
+      - APPROVER
+      - AUDITOR
+      - MODEL_TUNER
+      - QA
+      - QA_ISSUE_MANAGER

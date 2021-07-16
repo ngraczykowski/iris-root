@@ -4,7 +4,7 @@ import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTes
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.qa.manage.common.AlertControllerAdvice;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertIdException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
 import com.silenteight.serp.governance.qa.manage.validation.DummyAlertValidationDetailsDto;
 import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertValidationDetailsDto;
 
@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
+import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
 import static io.restassured.http.ContentType.JSON;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -30,15 +30,15 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest {
 
-  private static final String ALERTS_DETAILS_URL = format("/v1/qa/1/alerts/%s", ALERT_ID);
+  private static final String ALERTS_DETAILS_URL = format("/v1/qa/1/alerts/%s", DISCRIMINATOR);
 
   @MockBean
   AlertDetailsQuery query;
 
   @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its404_whenAlertDetailsNotFound() {
-    WrongAlertIdException exception = new WrongAlertIdException(ALERT_ID);
-    given(query.details(ALERT_ID)).willThrow(exception);
+    WrongDiscriminatorException exception = new WrongDiscriminatorException(DISCRIMINATOR);
+    given(query.details(DISCRIMINATOR)).willThrow(exception);
 
     get(ALERTS_DETAILS_URL)
         .statusCode(NOT_FOUND.value())
@@ -48,12 +48,12 @@ class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest
   @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_andAlertDetailsReturned_whenFound() {
     AlertValidationDetailsDto validationDetailsDto = new DummyAlertValidationDetailsDto();
-    given(query.details(ALERT_ID)).willReturn(validationDetailsDto);
+    given(query.details(DISCRIMINATOR)).willReturn(validationDetailsDto);
 
     get(ALERTS_DETAILS_URL)
         .contentType(JSON)
         .statusCode(OK.value())
-        .body("alertName", is(validationDetailsDto.getAlertName()))
+        .body("discriminator", is(validationDetailsDto.getDiscriminator()))
         .body("state", is(validationDetailsDto.getState().toString()))
         .body("decisionComment", is(validationDetailsDto.getDecisionComment()))
         .body("decisionAt", notNullValue())

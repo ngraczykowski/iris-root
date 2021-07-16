@@ -14,7 +14,7 @@ import java.util.Optional;
 
 interface DecisionRepository extends Repository<Decision, Long> {
   String FIND_ALL_BY_LEVEL_AND_STATES_NEWER_THAN_QUERY_VALUE = ""
-      + "SELECT a.alert_name as alertName, d.state AS state, d.decided_at AS decisionAt, "
+      + "SELECT a.discriminator as discriminator, d.state AS state, d.decided_at AS decisionAt, "
       + "d.decided_by AS decisionBy, d.comment AS decisionComment, a.created_at AS addedAt "
       + "FROM governance_qa_decision AS d "
       + "JOIN governance_qa_alert AS a ON a.id = d.alert_id "
@@ -23,17 +23,17 @@ interface DecisionRepository extends Repository<Decision, Long> {
       + "LIMIT :limit";
 
   String FIND_DETAILS_QUERY_VALUE = ""
-      + "SELECT a.alertName AS alertName, d.state AS state, "
+      + "SELECT a.discriminator AS discriminator, d.state AS state, "
       + "d.decidedAt AS decisionAt, d.decidedBy AS decisionBy, d.comment AS decisionComment, "
       + "a.createdAt AS addedAt "
       + "FROM Decision AS d "
-      + "JOIN Alert AS a ON a.id = d.alertId AND a.alertName = :name "
+      + "JOIN Alert AS a ON a.id = d.alertId AND a.discriminator = :discriminator "
       + "WHERE d.level = :level";
 
   @Query("SELECT d FROM Decision AS d "
-      + "JOIN Alert AS a ON a.id = d.alertId AND a.alertName = :alertName "
+      + "JOIN Alert AS a ON a.id = d.alertId AND a.discriminator = :discriminator "
       + "WHERE d.level = :level")
-  Optional<Decision> findByAlertNameAndLevel(String alertName, Integer level);
+  Optional<Decision> findByDiscriminatorAndLevel(String discriminator, Integer level);
 
   Decision save(Decision decision);
 
@@ -44,7 +44,7 @@ interface DecisionRepository extends Repository<Decision, Long> {
   int countAllByLevelAndStates(Integer level, List<DecisionState> states);
 
   @Query(value = FIND_DETAILS_QUERY_VALUE)
-  AlertAnalysisDetailsDto findAnalysisDetails(String name, Integer level);
+  AlertAnalysisDetailsDto findAnalysisDetails(String discriminator, Integer level);
 
   @Query(value =  FIND_ALL_BY_LEVEL_AND_STATES_NEWER_THAN_QUERY_VALUE, nativeQuery = true)
   List<AlertAnalysisDto> findAllAnalysisByStatesNewerThan(Integer level, List<String> states,
@@ -55,7 +55,7 @@ interface DecisionRepository extends Repository<Decision, Long> {
       OffsetDateTime createdAt, Integer limit);
 
   @Query(value = FIND_DETAILS_QUERY_VALUE)
-  AlertValidationDetailsDto findValidationDetails(String name, Integer level);
+  AlertValidationDetailsDto findValidationDetails(String discriminator, Integer level);
 
   @Query(value = "SELECT d.* FROM governance_qa_decision AS d "
       + "WHERE d.state = :state AND d.updated_at < :olderThan "

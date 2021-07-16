@@ -6,7 +6,7 @@ import java.time.OffsetDateTime;
 
 public interface AlertValidationDetailsDto {
 
-  String getAlertName();
+  String getDiscriminator();
 
   DecisionState getState();
 

@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 class DummyAlertAnalysisDetailsDto implements AlertAnalysisDetailsDto {
 
   @NonNull
-  String alertName;
+  String discriminator;
   @NonNull
   DecisionState state;
   OffsetDateTime decisionAt;

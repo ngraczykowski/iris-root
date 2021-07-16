@@ -27,7 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.NEW;
 import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.PEP;
@@ -162,8 +162,8 @@ class AlertsGeneratorServiceTest {
         = ArgumentCaptor.forClass(CreateDecisionRequest.class);
     final ArgumentCaptor<Long> alertSamplingId = ArgumentCaptor.forClass(Long.class);
     final ArgumentCaptor<Integer> alertsCount = ArgumentCaptor.forClass(Integer.class);
-    final String alertNameFirst = generateAlertName();
-    final String alertNameSecond = generateAlertName();
+    final String discriminatorFirst = generateDiscriminator();
+    final String discriminatorSecond = generateDiscriminator();
     final List<AlertDistribution> distributions = of(
         getAlertDistribution(1, RISK_TYPE, PEP),
         getAlertDistribution(1, RISK_TYPE, SANCTION));
@@ -174,18 +174,18 @@ class AlertsGeneratorServiceTest {
     when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
         .thenReturn(distributions);
     when(alertProvider.getAlerts(getAlertsSampleRequest(PEP)))
-        .thenReturn(of(alertNameFirst));
+        .thenReturn(of(discriminatorFirst));
     when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
-        .thenReturn(of(alertNameSecond));
+        .thenReturn(of(discriminatorSecond));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
     verify(createAlertWithDecisionUseCase, times(2))
         .activate(createDecisionRequestCaptor.capture());
-    assertThat(createDecisionRequestCaptor.getAllValues().get(0).getAlertName())
-        .isEqualTo(alertNameFirst);
-    assertThat(createDecisionRequestCaptor.getAllValues().get(1).getAlertName())
-        .isEqualTo(alertNameSecond);
+    assertThat(createDecisionRequestCaptor.getAllValues().get(0).getDiscriminator())
+        .isEqualTo(discriminatorFirst);
+    assertThat(createDecisionRequestCaptor.getAllValues().get(1).getDiscriminator())
+        .isEqualTo(discriminatorSecond);
     assertThat(createDecisionRequestCaptor.getValue().getCreatedBy())
         .isEqualTo(underTest.getClass().getSimpleName());
     assertThat(createDecisionRequestCaptor.getValue().getLevel())
@@ -226,12 +226,12 @@ class AlertsGeneratorServiceTest {
         .thenReturn(of(
             getAlertDistribution(1, RISK_TYPE, PEP),
             getAlertDistribution(1, RISK_TYPE, SANCTION)));
-    String alertNameFirst = generateAlertName();
-    String alertNameSecond = generateAlertName();
+    String discriminatorFirst = generateDiscriminator();
+    String discriminatorSecond = generateDiscriminator();
     when(alertProvider.getAlerts(getAlertsSampleRequest(PEP)))
-        .thenReturn(of(alertNameFirst));
+        .thenReturn(of(discriminatorFirst));
     when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
-        .thenReturn(of(alertNameSecond));
+        .thenReturn(of(discriminatorSecond));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
@@ -239,12 +239,12 @@ class AlertsGeneratorServiceTest {
         .activate(messageCommandCaptor.capture());
     assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(2);
     assertThat(messageCommandCaptor.getValue().getAlertDtos())
-        .isEqualTo(of(getAlertDto(alertNameFirst), getAlertDto(alertNameSecond)));
+        .isEqualTo(of(getAlertDto(discriminatorFirst), getAlertDto(discriminatorSecond)));
   }
 
-  private AlertDto getAlertDto(String alertName) {
+  private AlertDto getAlertDto(String discriminator) {
     return AlertDto.builder()
-        .alertName(alertName)
+        .discriminator(discriminator)
         .level(ANALYSIS)
         .state(NEW)
         .build();

@@ -27,7 +27,7 @@ class UpdateAnalysisDecisionUseCase {
       UpdateDecisionRequest request) {
 
     return CreateDecisionRequest.of(
-        request.getAlertName(),
+        request.getDiscriminator(),
         NEW,
         VALIDATION,
         request.getCreatedBy(),

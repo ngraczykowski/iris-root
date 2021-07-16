@@ -6,7 +6,7 @@ interface AlertRepository extends Repository<Alert, Long> {
 
   Alert findById(Long id);
 
-  Alert findByAlertName(String alertName);
+  Alert findByDiscriminator(String discriminator);
 
   Alert save(Alert alert);
 }
