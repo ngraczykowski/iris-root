@@ -82,7 +82,7 @@ public class SimulationReportsRestController {
     ReportInstanceReferenceDto reportInstance =
         simulationService.createSimulationReport(analysisId, definitionId);
     return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getTimestamp() + REPORT_STATUS)
+        .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + REPORT_STATUS)
         .build();
   }
 

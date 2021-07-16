@@ -4,11 +4,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
-import com.silenteight.warehouse.report.rbs.download.ReportDataQuery;
-import com.silenteight.warehouse.report.rbs.state.ReportStatusQuery;
+import com.silenteight.warehouse.report.rbs.download.RbsReportDataQuery;
+import com.silenteight.warehouse.report.rbs.status.RbsReportStatusQuery;
 
 @RequiredArgsConstructor
-class RbsReportQuery implements ReportStatusQuery, ReportDataQuery {
+class RbsReportQuery implements RbsReportStatusQuery, RbsReportDataQuery {
 
   @NonNull
   private final RbsReportRepository repository;

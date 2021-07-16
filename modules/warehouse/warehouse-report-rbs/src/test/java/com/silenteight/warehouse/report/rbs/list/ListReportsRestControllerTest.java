@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(ListReportsRestController.class)
+@Import(ListRbsReportsRestController.class)
 class ListReportsRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_REPORTS_URL = "/v1/analysis/production/definitions/RB_SCORER";

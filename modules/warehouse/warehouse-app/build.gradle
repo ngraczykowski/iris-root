@@ -24,6 +24,7 @@ dependencies {
   implementation project(":warehouse-indexer")
   implementation project(":warehouse-management")
   implementation project(":warehouse-report")
+  implementation project(":warehouse-report-billing")
   implementation project(":warehouse-report-rbs")
   implementation project(":warehouse-sampling")
 
