@@ -31,11 +31,14 @@ public class OpendistroElasticClient {
   private final RestClient restLowLevelClient;
   private final ObjectMapper objectMapper;
   private static final String ROLE_PARAM = "role";
+  private static final String ROLEMAPPING_PARAM = "rolemapping";
   private static final String LIST_REPORTS_INSTANCES_ENDPOINT = "/_opendistro/_reports/instances";
   private static final String TENANT_ENDPOINT = "/_opendistro/_security/api/tenants/";
   private static final String SQL_ENDPOINT = "/_opendistro/_sql";
   private static final String ROLES_ENDPOINT =
       "/_opendistro/_security/api/roles/{" + ROLE_PARAM + "}";
+  private static final String ROLES_MAPPING_ENDPOINT =
+      "/_opendistro/_security/api/rolesmapping/{" + ROLEMAPPING_PARAM + "}";
   private static final String TENANT_DESCRIPTION = "description";
   private static final String CONTENT_TYPE = "Content-type";
   private static final String APPLICATION_JSON = "application/json";
@@ -150,6 +153,54 @@ public class OpendistroElasticClient {
   private void doSetRole(String roleId, RoleDto roleDto) throws IOException {
     String path = fromUriString(ROLES_ENDPOINT)
         .buildAndExpand(of(ROLE_PARAM, roleId))
+        .toUriString();
+
+    Request request = new Request(HttpPut.METHOD_NAME, path);
+    request.setJsonEntity(objectMapper.writeValueAsString(roleDto));
+    Response response = restLowLevelClient.performRequest(request);
+
+    log.debug("OpendistroElasticClient method=PUT, endpoint={}, statusCode={}, parsedBody={}",
+        request.getEndpoint(), response.getStatusLine(), response.getEntity().getContent());
+  }
+
+  public RoleMappingDto getRoleMapping(String roleId) {
+    try {
+      return doGetRoleMapping(roleId);
+    } catch (IOException e) {
+      throw handle("getRoleMapping", e);
+    }
+  }
+
+  private RoleMappingDto doGetRoleMapping(String roleId) throws IOException {
+    TypeReference<Map<String, RoleMappingDto>> typeRef = new TypeReference<>() {};
+
+    String path = fromUriString(ROLES_MAPPING_ENDPOINT)
+        .buildAndExpand(of(ROLEMAPPING_PARAM, roleId))
+        .toUriString();
+
+    Request request = new Request(METHOD_NAME, path);
+    Response response = restLowLevelClient.performRequest(request);
+
+    Map<String, RoleMappingDto> role = objectMapper.readValue(
+        response.getEntity().getContent(), typeRef);
+
+    log.debug("OpendistroElasticClient method=GET, endpoint={}, statusCode={}, parsedBody={}",
+        request.getEndpoint(), response.getStatusLine(), role);
+
+    return role.get(roleId);
+  }
+
+  public void setRoleMapping(String roleId, RoleMappingDto roleDto) {
+    try {
+      doSetRoleMapping(roleId, roleDto);
+    } catch (IOException e) {
+      throw handle("setRoleMapping", e);
+    }
+  }
+
+  private void doSetRoleMapping(String roleId, RoleMappingDto roleDto) throws IOException {
+    String path = fromUriString(ROLES_MAPPING_ENDPOINT)
+        .buildAndExpand(of(ROLEMAPPING_PARAM, roleId))
         .toUriString();
 
     Request request = new Request(HttpPut.METHOD_NAME, path);

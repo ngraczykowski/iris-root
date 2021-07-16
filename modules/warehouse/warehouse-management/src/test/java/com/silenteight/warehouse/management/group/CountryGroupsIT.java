@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
@@ -63,6 +64,9 @@ class CountryGroupsIT {
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
+
+  @Autowired
+  private OpendistroElasticClient opendistroElasticClient;
 
   @Autowired
   private AlertRestController alertRestController;
