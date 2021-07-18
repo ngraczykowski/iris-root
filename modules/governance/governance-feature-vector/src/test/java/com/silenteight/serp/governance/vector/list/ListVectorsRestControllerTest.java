@@ -50,6 +50,7 @@ class ListVectorsRestControllerTest extends BaseRestControllerTest {
   private static final FeatureVectorsDto FEATURE_VECTORS_DTO = FeatureVectorsDto.builder()
       .columns(COLUMNS)
       .featureVectors(FEATURE_VECTORS)
+      .count(FEATURE_VECTORS.size())
       .build();
 
   @MockBean

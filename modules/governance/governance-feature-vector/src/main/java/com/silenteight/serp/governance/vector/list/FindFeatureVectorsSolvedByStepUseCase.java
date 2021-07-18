@@ -44,20 +44,14 @@ class FindFeatureVectorsSolvedByStepUseCase {
   @Transactional(readOnly = true)
   public FeatureVectorsDto activate(@NonNull String stepName, @Valid @NonNull Paging paging) {
     List<String> columns = getColumns();
-    List<FeatureVectorDto> featureVectors = getFeatureVectors(
-        fromResourceName(stepName), columns, paging);
-
-    return FeatureVectorsDto.builder()
-        .columns(columns)
-        .featureVectors(featureVectors)
-        .build();
+    return getFeatureVectors(fromResourceName(stepName), columns, paging);
   }
 
   private List<String> getColumns() {
     return featureNamesQuery.getUniqueFeatureNames();
   }
 
-  private List<FeatureVectorDto> getFeatureVectors(
+  private FeatureVectorsDto getFeatureVectors(
       UUID stepId, List<String> columns, @Valid Paging paging) {
 
     Long idOfPolicy = policyStepsRequestQuery.getPolicyIdForStep(stepId);
@@ -65,13 +59,23 @@ class FindFeatureVectorsSolvedByStepUseCase {
     StepsSupplier stepsSupplier = stepsSupplierProvider.getStepsSupplier(policyId);
     FeatureVectorSolver featureVectorSolver = new FeatureVectorSolver(stepsSupplier, stepId);
 
-    return featureVectorUsageQuery
+    List<FeatureVectorDto> fvSolvedByStep = featureVectorUsageQuery
         .getAllWithUsage()
         .filter(featureVectorSolver::isSolvedWithStep)
         .map(vector -> vector.standardize(columns, toResourceName(stepId)))
+        .collect(toList());
+
+    List<FeatureVectorDto> featureVectors = fvSolvedByStep
+        .stream()
         .skip(paging.getSkip())
         .limit(paging.getPageSize())
         .collect(toList());
+
+    return FeatureVectorsDto.builder()
+        .columns(columns)
+        .featureVectors(featureVectors)
+        .count(fvSolvedByStep.size())
+        .build();
   }
 
   @RequiredArgsConstructor

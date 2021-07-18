@@ -1,7 +1,9 @@
 package com.silenteight.serp.governance.vector.domain.dto;
 
-import lombok.*;
+import lombok.Builder;
 import lombok.Builder.Default;
+import lombok.NonNull;
+import lombok.Value;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +21,8 @@ public class FeatureVectorsDto {
   @NonNull
   @Default
   Collection<FeatureVectorDto> featureVectors = of();
+  @Default
+  int count = 0;
 
   /**
    * This class contains only values for each vector and can't live without FeatureVectorsDto

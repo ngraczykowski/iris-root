@@ -59,12 +59,13 @@ class ListVectorsRestController {
       @RequestParam @Min(0) int pageIndex,
       @RequestParam @Min(1) int pageSize) {
 
-    String count = valueOf(listVectorsQuery.count());
+    String countAll = valueOf(listVectorsQuery.count());
+    FeatureVectorsDto response = findFeatureVectorsSolvedByStepUseCase.activate(
+        stepName, new Paging(pageIndex, pageSize));
 
     return ok()
-        .header(HEADER_TOTAL_COUNT_ALL, count)
-        .header(HEADER_TOTAL_COUNT, count)
-        .body(findFeatureVectorsSolvedByStepUseCase.activate(
-            stepName, new Paging(pageIndex, pageSize)));
+        .header(HEADER_TOTAL_COUNT_ALL, countAll)
+        .header(HEADER_TOTAL_COUNT, valueOf(response.getCount()))
+        .body(response);
   }
 }
