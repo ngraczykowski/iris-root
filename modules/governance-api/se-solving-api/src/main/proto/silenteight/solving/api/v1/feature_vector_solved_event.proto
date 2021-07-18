@@ -11,6 +11,10 @@ option java_package = "com.silenteight.solving.api.v1";
 option java_outer_classname = "FeatureVectorSolvedEventProto";
 option java_multiple_files = true;
 
+message FeatureVectorSolvedEventBatch {
+  repeated FeatureVectorSolvedEvent events = 1;
+}
+
 message FeatureVectorSolvedEvent {
   // Identifier of an event
   protobuf.Uuid id = 1;
