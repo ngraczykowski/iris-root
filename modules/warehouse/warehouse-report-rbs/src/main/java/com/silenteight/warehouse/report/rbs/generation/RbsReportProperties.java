@@ -42,7 +42,9 @@ public class RbsReportProperties {
 
   List<String> getListOfLabels() {
     List<String> result = new ArrayList<>();
-    getColumns().forEach(column -> result.addAll(column.getLabels()));
+    getStaticColumns().forEach(column -> result.addAll(column.getLabels()));
+    result.add("matches_count");
+    getGroupingColumns().forEach(column -> result.addAll(column.getLabels()));
     return result;
   }
 

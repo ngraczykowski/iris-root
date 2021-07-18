@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReportGenerationServiceTest {
+class RbsReportGenerationServiceTest {
 
   @Mock
   private GroupingQueryService groupingQueryService;
@@ -106,12 +106,12 @@ class ReportGenerationServiceTest {
 
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
-            + "categories/apType,categories/riskType,features/name,features/dob,"
+            + "categories/apType,categories/riskType,features/name,features/dob,matches_count,"
             + "QA_count,QA_PASS,QA_FAILED,Learning_FP,Learning_PTP\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/3456,"
-            + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,2,0,1,0,0\n"
+            + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,3,2,0,1,0,0\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/94526,"
-            + "MANUAL_INVESTIGATION,I,SAN,MATCH,NO_MATCH,0,0,0,8,2\n"
+            + "MANUAL_INVESTIGATION,I,SAN,MATCH,NO_MATCH,2,0,0,0,8,2\n"
     );
   }
 
