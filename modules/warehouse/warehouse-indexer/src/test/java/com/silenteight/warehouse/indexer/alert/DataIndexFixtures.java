@@ -28,18 +28,14 @@ import static java.util.List.of;
 
 public class DataIndexFixtures {
 
-  static final Map<String, String> ALERT_PAYLOAD_WITH_FOUR_VALUES = Map.of(
+  static final Map<String, String> ALERT_PAYLOAD_WITH_TWO_VALUES = Map.of(
       SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK,
-      SourceAlertKeys.WORLD_CHECK_ENTITIES + ".State", "Crimea",
-      SourceAlertKeys.WORLD_CHECK_ENTITIES + ".Risk Score", "82",
-      SourceAlertKeys.DN_CASE_HISTORY + ".attribute", "stateExpiry",
-      SourceAlertKeys.DN_CASE_HISTORY + ".newValue", "false"
+      SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK
   );
 
   public static final Alert ALERT_1 = Alert.newBuilder()
       .setDiscriminator(DISCRIMINATOR_1)
-      .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_FOUR_VALUES))
+      .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
           match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
           match(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))

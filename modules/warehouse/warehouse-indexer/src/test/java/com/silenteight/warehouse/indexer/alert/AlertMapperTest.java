@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 class AlertMapperTest {
 
   private static final Predicate<String> DO_NOT_SKIP_KEYS = key -> true;
+  private static final Predicate<String> SKIP_ALL_GENERIC_KEYS = key -> false;
 
   private AlertMapper underTest;
 
@@ -49,5 +50,19 @@ class AlertMapperTest {
     assertThat(preparedMap)
         .doesNotContainKey(MappedKeys.COUNTRY_KEY)
         .doesNotContainKey(RolesMappedConstants.COUNTRY_KEY);
+  }
+
+  @Test
+  void shouldSkipAllFields() {
+    AlertMappingProperties alertMappingProperties = new AlertMappingProperties();
+    alertMappingProperties.setCountrySourceKey(SourceAlertKeys.COUNTRY_KEY);
+    MockTimeSource mockTimeSource = new MockTimeSource(parse(PROCESSING_TIMESTAMP));
+
+    underTest = new AlertMapper(mockTimeSource, alertMappingProperties, SKIP_ALL_GENERIC_KEYS);
+    var preparedMap = underTest.convertAlertToAttributes(ALERT_1);
+
+    assertThat(preparedMap)
+        .doesNotContainKey(MappedKeys.RECOMMENDATION_KEY)
+        .doesNotContainKey(MappedKeys.COUNTRY_KEY);
   }
 }

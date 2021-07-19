@@ -12,9 +12,6 @@ keycloak:
 warehouse:
   alert-mapping:
     country-source-key: lob_country
-    ignored-keys:
-      - .DN_CASEHISTORY.
-      - .WorldCheckEntities
   kibana:
     timezone: Europe/Warsaw
   tenant:
