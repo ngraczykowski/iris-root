@@ -1,6 +1,7 @@
 {
   "batchId": "{{batchId}}",
   "batchStatus": "COMPLETED",
+  "errorAlerts": [],
   "alerts": [
     {
       "id": "AVIR114SCR11877TW180SAN0021:TW:GR-ESAN:2420869",

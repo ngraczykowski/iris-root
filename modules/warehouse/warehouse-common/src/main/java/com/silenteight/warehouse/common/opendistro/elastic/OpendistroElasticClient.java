@@ -30,6 +30,8 @@ public class OpendistroElasticClient {
   static final String HEADER_SECURITY_TENANT = "securitytenant";
   private final RestClient restLowLevelClient;
   private final ObjectMapper objectMapper;
+  private final Integer maxObjectCount;
+  private static final String MAX_ITEMS_PARAM = "maxItems";
   private static final String ROLE_PARAM = "role";
   private static final String ROLEMAPPING_PARAM = "rolemapping";
   private static final String LIST_REPORTS_INSTANCES_ENDPOINT = "/_opendistro/_reports/instances";
@@ -89,7 +91,11 @@ public class OpendistroElasticClient {
   public ListReportsInstancesResponse getReportInstances(
       ListReportsInstancesRequest listReportsInstancesRequest) {
 
-    Request request = new Request(METHOD_NAME, LIST_REPORTS_INSTANCES_ENDPOINT);
+    String path = fromUriString(LIST_REPORTS_INSTANCES_ENDPOINT)
+        .queryParam(MAX_ITEMS_PARAM, maxObjectCount)
+        .toUriString();
+
+    Request request = new Request(METHOD_NAME, path);
     String securityTenant = listReportsInstancesRequest.getTenant();
     request.setOptions(getRequestOptions(securityTenant));
 

@@ -47,6 +47,8 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: wh.event
         routing-key: event.index-response.simulation
+  opendistro:
+    max-object-count: 10000
   environment:
     prefix: dev
   db:

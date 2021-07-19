@@ -5,8 +5,8 @@ spring:
 warehouse:
   kibana:
     timezone: Europe/Warsaw
-  tenant:
-    max-object-count: 100
+  opendistro:
+    max-object-count: 1000
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

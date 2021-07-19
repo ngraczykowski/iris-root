@@ -6,8 +6,8 @@ warehouse:
     country-source-key: lob_country
   kibana:
     timezone: Europe/Warsaw
-  tenant:
-    max-object-count: 100
+  opendistro:
+    max-object-count: 1000
   environment:
     prefix: itest
   es:

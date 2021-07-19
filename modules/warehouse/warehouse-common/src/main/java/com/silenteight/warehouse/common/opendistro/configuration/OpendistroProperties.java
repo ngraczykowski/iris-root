@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.common.opendistro.tenant;
+package com.silenteight.warehouse.common.opendistro.configuration;
 
 import lombok.Data;
 
@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.tenant")
-public class TenantProperties {
+@ConfigurationProperties(prefix = "warehouse.opendistro")
+public class OpendistroProperties {
 
   @NotNull
   Integer maxObjectCount;

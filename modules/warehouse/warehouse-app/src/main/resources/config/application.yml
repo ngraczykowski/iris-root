@@ -50,8 +50,8 @@ warehouse:
       cron: "0 */1 * * * ?"
     simulation:
       master-tenant: ${warehouse.environment.prefix}_simulation_master
-  tenant:
-    max-object-count: 100
+  opendistro:
+    max-object-count: 1000
   es:
     production-query-index: ${warehouse.environment.prefix}_production
 
