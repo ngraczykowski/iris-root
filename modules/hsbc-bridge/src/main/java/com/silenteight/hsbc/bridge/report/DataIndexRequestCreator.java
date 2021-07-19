@@ -11,7 +11,9 @@ import com.google.protobuf.Value;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
 @UtilityClass
@@ -37,7 +39,11 @@ class DataIndexRequestCreator {
 
   private static Struct toStruct(Map<String, String> metadata) {
     var builder = Struct.newBuilder();
-    metadata.forEach((k,v) -> builder.putFields(k, Value.newBuilder().setStringValue(v).build()));
+    metadata.forEach((k,v) -> {
+      if (nonNull(v)) {
+        builder.putFields(k, Value.newBuilder().setStringValue(v).build());
+      }
+    });
     return builder.build();
   }
 

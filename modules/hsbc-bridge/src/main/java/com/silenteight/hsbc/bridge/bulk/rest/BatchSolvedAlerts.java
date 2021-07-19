@@ -43,11 +43,11 @@ public class BatchSolvedAlerts {
   @NotNull
   @Size(min = 1)
   @Valid 
-  private List<SolvedAlert> alerts = null;
+  private List<SolvedAlert> alerts = new ArrayList<>();
 
   @JsonProperty("errorAlerts")
   @Valid
-  private List<ErrorAlert> errorAlerts = null;
+  private List<ErrorAlert> errorAlerts = new ArrayList<>();
 
   public BatchSolvedAlerts batchId(String batchId) {
     this.batchId = batchId;
