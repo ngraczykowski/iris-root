@@ -35,6 +35,9 @@ spring:
 warehouse:
   alert-mapping:
     country-source-key: 1.CustomerEntities.edqLoBCountryCode
+    ignored-keys:
+      - .DN_CASEHISTORY.
+      - .WorldCheckEntities
   messaging:
     integration:
       production-indexing-inbound:

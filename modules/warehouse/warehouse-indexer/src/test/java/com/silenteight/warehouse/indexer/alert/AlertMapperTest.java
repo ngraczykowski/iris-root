@@ -3,7 +3,6 @@ package com.silenteight.warehouse.indexer.alert;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
-import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +10,12 @@ import org.junit.jupiter.api.Test;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys.COUNTRY_KEY;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys.DN_CASE_HISTORY;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys.WORLD_CHECK_ENTITIES;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
 class AlertMapperTest {
@@ -22,8 +25,8 @@ class AlertMapperTest {
   @BeforeEach
   public void init() {
     AlertMappingProperties alertMappingProperties = new AlertMappingProperties();
-    alertMappingProperties.setCountrySourceKey(SourceAlertKeys.COUNTRY_KEY);
-
+    alertMappingProperties.setCountrySourceKey(COUNTRY_KEY);
+    alertMappingProperties.setIgnoredKeys(of(WORLD_CHECK_ENTITIES, DN_CASE_HISTORY));
     MockTimeSource mockTimeSource = new MockTimeSource(parse(PROCESSING_TIMESTAMP));
 
     alertMapper = new AlertMapper(mockTimeSource, alertMappingProperties);
@@ -36,6 +39,8 @@ class AlertMapperTest {
 
     //then
     assertThat(preparedMap).isEqualTo(MAPPED_ALERT_1);
+    assertThat(preparedMap)
+        .doesNotContainKeys(WORLD_CHECK_ENTITIES, DN_CASE_HISTORY);
   }
 
   @Test

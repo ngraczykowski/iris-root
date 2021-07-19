@@ -46,13 +46,19 @@ class AlertMapper {
     return struct.getFieldsMap()
         .keySet()
         .stream()
+        .filter(this::allowedKeys)
         .collect(toMap(
             key -> prefix + key,
             key -> struct.getFieldsMap().get(key).getStringValue()));
   }
 
-  private Optional<String> extractAlertField(Alert alert, String fieldname) {
-    return ofNullable(alert.getPayload().getFieldsOrDefault(fieldname, null))
+  private Optional<String> extractAlertField(Alert alert, String fieldName) {
+    return ofNullable(alert.getPayload().getFieldsOrDefault(fieldName, null))
         .map(Value::getStringValue);
+  }
+
+  private boolean allowedKeys(String key) {
+    return alertMappingProperties.getIgnoredKeys().stream()
+        .noneMatch(ignoredKey -> key.contains(ignoredKey));
   }
 }

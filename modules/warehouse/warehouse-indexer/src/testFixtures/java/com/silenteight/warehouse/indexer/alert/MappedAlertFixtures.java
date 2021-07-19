@@ -6,6 +6,7 @@ import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
+import static java.util.Map.of;
 
 public class MappedAlertFixtures {
 
@@ -34,6 +35,8 @@ public class MappedAlertFixtures {
     public static final String COUNTRY_KEY = "lob_country";
     public static final String RECOMMENDATION_KEY = "recommendation";
     public static final String RISK_TYPE_KEY = "risk_type";
+    public static final String WORLD_CHECK_ENTITIES = ".WorldCheckEntities";
+    public static final String DN_CASE_HISTORY = ".DN_CASEHISTORY";
   }
 
   public static class SourceMatchKeys {
@@ -79,7 +82,7 @@ public class MappedAlertFixtures {
         ANALYSIS_RESOURCE_PREFIX + SIMULATION_ANALYSIS_ID;
   }
 
-  public static final Map<String, Object> MAPPED_ALERT_1 = Map.of(
+  public static final Map<String, Object> MAPPED_ALERT_1 = of(
       DISCRIMINATOR, DISCRIMINATOR_1,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
@@ -87,7 +90,7 @@ public class MappedAlertFixtures {
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
-  public static final Map<String, Object> MAPPED_ALERT_2 = Map.of(
+  public static final Map<String, Object> MAPPED_ALERT_2 = of(
       DISCRIMINATOR, DISCRIMINATOR_2,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
@@ -95,7 +98,7 @@ public class MappedAlertFixtures {
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
-  public static final Map<String, Object> MAPPED_ALERT_3 = Map.of(
+  public static final Map<String, Object> MAPPED_ALERT_3 = of(
       DISCRIMINATOR, DISCRIMINATOR_3,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
@@ -104,7 +107,7 @@ public class MappedAlertFixtures {
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
-  public static final Map<String, Object> MAPPED_ALERT_4 = Map.of(
+  public static final Map<String, Object> MAPPED_ALERT_4 = of(
       DISCRIMINATOR, DISCRIMINATOR_4,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
@@ -112,7 +115,7 @@ public class MappedAlertFixtures {
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_2,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
-  public static final Map<String, Object> MAPPED_ALERT_5 = Map.of(
+  public static final Map<String, Object> MAPPED_ALERT_5 = of(
       DISCRIMINATOR, DISCRIMINATOR_5,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_PL,
@@ -121,7 +124,7 @@ public class MappedAlertFixtures {
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_PL
   );
 
-  public static final Map<String, Object> MAPPED_ALERT_6 = Map.of(
+  public static final Map<String, Object> MAPPED_ALERT_6 = of(
       DISCRIMINATOR, DISCRIMINATOR_6,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_PL,

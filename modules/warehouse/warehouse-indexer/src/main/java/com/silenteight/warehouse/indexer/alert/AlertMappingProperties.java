@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -14,4 +15,6 @@ public class AlertMappingProperties {
 
   @NotBlank
   String countrySourceKey;
+
+  List<String> ignoredKeys;
 }
