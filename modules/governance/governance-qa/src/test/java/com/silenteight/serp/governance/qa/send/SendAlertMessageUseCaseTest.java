@@ -52,7 +52,7 @@ class SendAlertMessageUseCaseTest {
     verify(alertMessageGateway, times(1)).send(messageCaptor.capture());
     assertThat(messageCaptor.getValue().getAlertsCount()).isEqualTo(1);
     assertThat(messageCaptor.getValue().getRequestId()).isEmpty();
-    assertThat(messageCaptor.getValue().getAlerts(0).getName())
+    assertThat(messageCaptor.getValue().getAlerts(0).getDiscriminator())
         .isEqualTo(alertDto.getDiscriminator());
     assertThat(messageCaptor.getValue().getAlerts(0).getPayload().getFieldsMap())
         .isEqualTo(expectedPayload);
