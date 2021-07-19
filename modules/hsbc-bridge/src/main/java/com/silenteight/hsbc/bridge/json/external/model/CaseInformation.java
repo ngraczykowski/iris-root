@@ -99,6 +99,8 @@ public class CaseInformation {
   private String extendedAttribute12;
   @JsonProperty("DN_CASE.ExtendedAttribute13")
   private String extendedAttribute13;
+  @JsonProperty("DN_CASE.ExtendedAttribute13_date_time")
+  private String extendedAttribute13DateTime;
   @JsonProperty("DN_CASE.ExtendedAttribute14")
   private String extendedAttribute14;
   @JsonProperty("DN_CASE.ExtendedAttribute15")

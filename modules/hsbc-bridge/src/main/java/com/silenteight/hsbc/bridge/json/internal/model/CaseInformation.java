@@ -51,5 +51,8 @@ public class CaseInformation implements com.silenteight.hsbc.datasource.datamode
   private String extendedAttribute11;
   private String extendedAttribute12;
   private String extendedAttribute13;
+  private String extendedAttribute13DateTime;
+  private String extendedAttribute14;
+  private String extendedAttribute15;
   private String alertUrl;
 }
