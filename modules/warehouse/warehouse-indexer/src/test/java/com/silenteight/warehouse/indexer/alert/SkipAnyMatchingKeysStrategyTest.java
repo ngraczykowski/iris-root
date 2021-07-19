@@ -6,14 +6,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 
-class ListedIgnoredKeysStrategyTest {
+class SkipAnyMatchingKeysStrategyTest {
 
   private static final String TEST_VALUE = "1.TestValue.attribute";
   private static final String MATCHING_REGEXP_1 = "\\d\\.TestValue\\.attribute";
