@@ -62,15 +62,15 @@ public class FeatureVectorSolvedAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow featureVectorSolvedQueueToChannelIntegrationFlow() {
     return createInputFlow(
-        FEATURE_VECTOR_SOLVED_INBOUND_CHANNEL,
-        properties.getReceive().getQueueName());
+        FEATURE_VECTOR_SOLVED_INBOUND_CHANNEL, properties.getReceive());
   }
 
-  private IntegrationFlow createInputFlow(String channel, String queue) {
+  private IntegrationFlow createInputFlow(
+      String channel, AmqpInboundProperties properties) {
     return IntegrationFlows
         .from(inboundFactory
             .simpleAdapter()
-            .configureContainer(c -> c.addQueueNames(queue)))
+            .configureContainer(c -> c.addQueueNames(properties.getQueueName())))
         .channel(channel)
         .get();
   }

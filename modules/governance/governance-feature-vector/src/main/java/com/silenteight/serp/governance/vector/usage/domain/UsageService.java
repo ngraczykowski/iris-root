@@ -11,13 +11,12 @@ public class UsageService {
   @NonNull
   private final AnalyticsFeatureVectorUsageRepository analyticsFeatureVectorUsageRepository;
 
-  public void markAsUsed(CanonicalFeatureVector canonicalFeatureVector) {
+  public void markAsUsed(CanonicalFeatureVector canonicalFeatureVector, long count) {
     FeatureVectorUsage featureVectorUsage = analyticsFeatureVectorUsageRepository
         .findByVectorSignature(canonicalFeatureVector.getVectorSignature())
         .orElseGet(() -> asFeatureVectorUsage(canonicalFeatureVector));
 
-    featureVectorUsage.markAsUsed();
-
+    featureVectorUsage.markAsUsed(count);
     analyticsFeatureVectorUsageRepository.save(featureVectorUsage);
   }
 

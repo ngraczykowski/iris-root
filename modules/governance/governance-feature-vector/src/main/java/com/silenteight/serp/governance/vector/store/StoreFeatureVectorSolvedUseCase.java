@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 @RequiredArgsConstructor
 public class StoreFeatureVectorSolvedUseCase {
@@ -30,18 +32,25 @@ public class StoreFeatureVectorSolvedUseCase {
   private final CanonicalFeatureVectorFactory canonicalFeatureVectorFactory;
 
   @Transactional
-  public void activate(FeatureVectorSolvedEvent event) {
-    List<String> featureNames = event.getFeatureCollection()
+  public void activate(List<FeatureVectorSolvedEvent> event) {
+    Map<CanonicalFeatureVector, Long> distinctFeatureVectors = event
+        .stream()
+        .map(this::getCanonicalFeatureVector)
+        .collect(groupingBy(Function.identity(), counting()));
+
+    distinctFeatureVectors.keySet().forEach(featureVectorService::storeUniqueFeatureVector);
+    distinctFeatureVectors.forEach(usageService::markAsUsed);
+  }
+
+  private CanonicalFeatureVector getCanonicalFeatureVector(FeatureVectorSolvedEvent event) {
+    List<String> featureNames = event
+        .getFeatureCollection()
         .getFeatureList()
         .stream()
         .map(Feature::getName)
         .collect(toList());
     List<String> featureValues = new ArrayList<>(event.getFeatureVector().getFeatureValueList());
 
-    CanonicalFeatureVector canonicalFeatureVector =
-        canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
-
-    featureVectorService.storeUniqueFeatureVector(canonicalFeatureVector);
-    usageService.markAsUsed(canonicalFeatureVector);
+    return canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
   }
 }
