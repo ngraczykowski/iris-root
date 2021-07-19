@@ -21,17 +21,17 @@ class RecommendationsGeneratedUseCaseTest {
   private RecommendationsGeneratedUseCase underTest;
 
   @Mock
-  private AlertService alertService;
+  private RecommendationService recommendationService;
   @Mock
   private IndexedAlertService indexedAlertService;
   @Mock
   private RequestIdGenerator requestIdGenerator;
 
   @Test
-  void shouldGetAlert() {
+  void shouldHandleMessage() {
     // given
     when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);
-    when(alertService.getAlert(ALERT_NAME)).thenReturn(ALERT);
+    when(recommendationService.getRecommendation(RECOMMENDATION_NAME)).thenReturn(RECOMMENDATION);
 
     // when
     SimulationDataIndexRequest indexRequest = underTest.handle(REQUEST);

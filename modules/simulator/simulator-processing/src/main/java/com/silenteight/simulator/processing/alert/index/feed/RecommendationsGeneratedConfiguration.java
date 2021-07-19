@@ -10,9 +10,9 @@ class RecommendationsGeneratedConfiguration {
 
   @Bean
   RecommendationsGeneratedUseCase recommendationsGeneratedUseCase(
-      AlertService alertService, IndexedAlertService indexedAlertService) {
+      RecommendationService recommendationService, IndexedAlertService indexedAlertService) {
 
     return new RecommendationsGeneratedUseCase(
-        alertService, indexedAlertService, new RequestIdGenerator());
+        recommendationService, indexedAlertService, new RequestIdGenerator());
   }
 }
