@@ -13,7 +13,7 @@ variable "memory" {
 }
 
 variable "namespace" {
-  type    = string
+  type = string
   default = "dev"
 }
 
@@ -156,6 +156,16 @@ job "simulator" {
         change_mode = "noop"
       }
 
+      template {
+        data = file("./conf/logback.xml")
+        destination = "secrets/conf/logback.xml"
+        change_mode = "noop"
+      }
+
+      env {
+        LOG_PATH = "${NOMAD_ALLOC_DIR}/logs"
+      }
+
       config {
         command = "java"
         args = [
@@ -166,6 +176,7 @@ job "simulator" {
           "-Dsun.jnu.encoding=UTF-8",
           "-Djava.net.preferIPv4Stack=true",
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
+          "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/simulator-app.jar",
           "--spring.profiles.active=linux,simulator,messaging",
@@ -181,6 +192,39 @@ job "simulator" {
       resources {
         cpu = 400
         memory = var.memory
+      }
+    }
+
+    task "fluentbit" {
+      driver = "docker"
+
+      lifecycle {
+        hook = "prestart"
+        sidecar = true
+      }
+
+      config {
+        image = "fluent/fluent-bit:1.7.7"
+        network_mode = "host"
+        volumes = [
+          "secrets/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf",
+          "local/fluent-parsers.conf:/fluent-bit/etc/fluent-parsers.conf",
+        ]
+      }
+
+      resources {
+        cpu = 50
+        memory = 100
+      }
+
+      template {
+        data = file("./conf/fluent-bit.conf")
+        destination = "secrets/fluent-bit.conf"
+      }
+
+      template {
+        data = file("./conf/fluent-parsers.conf")
+        destination = "local/fluent-parsers.conf"
       }
     }
   }

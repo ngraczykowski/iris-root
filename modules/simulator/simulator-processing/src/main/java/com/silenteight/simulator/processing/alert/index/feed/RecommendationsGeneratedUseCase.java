@@ -2,6 +2,7 @@ package com.silenteight.simulator.processing.alert.index.feed;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
@@ -21,6 +22,7 @@ import java.util.Map.Entry;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+@Slf4j
 @RequiredArgsConstructor
 class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessageHandler {
 
@@ -34,6 +36,10 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   @Override
   public SimulationDataIndexRequest handle(RecommendationsGenerated request) {
     String requestId = requestIdGenerator.generate();
+    log.info("Recommendations generated: "
+        + " requestId=" + requestId
+        + " count=" + request.getRecommendationInfosCount());
+
     SimulationDataIndexRequest indexRequest = toIndexRequest(requestId, request);
     indexedAlertService.saveAsSent(
         requestId, request.getAnalysis(), request.getRecommendationInfosCount());
