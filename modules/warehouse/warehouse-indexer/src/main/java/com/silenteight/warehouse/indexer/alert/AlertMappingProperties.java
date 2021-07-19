@@ -16,5 +16,5 @@ public class AlertMappingProperties {
   @NotBlank
   String countrySourceKey;
 
-  List<String> ignoredKeys;
+  List<String> ignoredKeys = List.of();
 }

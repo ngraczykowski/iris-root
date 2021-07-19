@@ -26,7 +26,9 @@ class AlertGenerator {
         .setPayload(convertMapToPayload(Map.of(
             "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"),
             "lob_country", getRandomValue("PL", "DE", "UK"),
-            "risk_type", getRandomValue("SAN", "PEP"))))
+            "risk_type", getRandomValue("SAN", "PEP"),
+            "1.CustomerEntities.Address", "Fixed Value CE1",
+            "2.CustomerEntities.Address", "Fixed Value CE2")))
         .addAllMatches(of(
             match(getRandomMatchName(), "solution", "NO_DECISION")))
         .build();

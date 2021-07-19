@@ -36,8 +36,12 @@ warehouse:
   alert-mapping:
     country-source-key: 1.CustomerEntities.edqLoBCountryCode
     ignored-keys:
-      - .DN_CASEHISTORY.
-      - .WorldCheckEntities
+      - "[02-9]{1,}\\.CustomerEntities\\..*"
+      - "\\d{1,}\\.DN_CASECOMMENT\\..*"
+      - "\\d{1,}\\.DN_CASEHISTORY\\..*"
+      - "\\d{1,}\\.Relationships\\..*"
+      - "\\d{1,}\\.WorldCheckEntities\\..*"
+      - "DN_CASE\\..*"
   messaging:
     integration:
       production-indexing-inbound:
