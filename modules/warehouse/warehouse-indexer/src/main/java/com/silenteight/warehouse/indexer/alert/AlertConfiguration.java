@@ -34,10 +34,13 @@ public class AlertConfiguration {
       @Valid AlertMappingProperties alertMappingProperties,
       TimeSource timeSource) {
 
-    AlertMapper alertMapper = new AlertMapper(timeSource, alertMappingProperties);
-    return new AlertService(
-        restHighLevelAdminClient,
-        alertMapper);
+    SkipAnyMatchingKeysStrategy ignoredKeysStrategy =
+        new SkipAnyMatchingKeysStrategy(alertMappingProperties.getIgnoredKeys());
+
+    AlertMapper alertMapper =
+        new AlertMapper(timeSource, alertMappingProperties, ignoredKeysStrategy);
+
+    return new AlertService(restHighLevelAdminClient, alertMapper);
   }
 
   @Bean

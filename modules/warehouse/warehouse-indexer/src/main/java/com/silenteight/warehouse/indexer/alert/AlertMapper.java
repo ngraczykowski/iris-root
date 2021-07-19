@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
@@ -27,6 +28,7 @@ class AlertMapper {
 
   private final TimeSource timeSource;
   private final AlertMappingProperties alertMappingProperties;
+  private final Predicate<String> allowedKeysPredicate;
 
   Map<String, Object> convertAlertToAttributes(Alert alert) {
     OffsetDateTime now = timeSource.now().atOffset(UTC);
@@ -46,13 +48,14 @@ class AlertMapper {
     return struct.getFieldsMap()
         .keySet()
         .stream()
+        .filter(allowedKeysPredicate)
         .collect(toMap(
             key -> prefix + key,
             key -> struct.getFieldsMap().get(key).getStringValue()));
   }
 
-  private Optional<String> extractAlertField(Alert alert, String fieldname) {
-    return ofNullable(alert.getPayload().getFieldsOrDefault(fieldname, null))
+  private Optional<String> extractAlertField(Alert alert, String fieldName) {
+    return ofNullable(alert.getPayload().getFieldsOrDefault(fieldName, null))
         .map(Value::getStringValue);
   }
 }

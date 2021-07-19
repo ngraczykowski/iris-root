@@ -8,6 +8,8 @@ import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKe
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Predicate;
+
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
@@ -17,7 +19,10 @@ import static org.assertj.core.api.Assertions.*;
 
 class AlertMapperTest {
 
-  AlertMapper alertMapper;
+  private static final Predicate<String> DO_NOT_SKIP_KEYS = key -> true;
+  private static final Predicate<String> SKIP_ALL_GENERIC_KEYS = key -> false;
+
+  private AlertMapper underTest;
 
   @BeforeEach
   public void init() {
@@ -26,13 +31,13 @@ class AlertMapperTest {
 
     MockTimeSource mockTimeSource = new MockTimeSource(parse(PROCESSING_TIMESTAMP));
 
-    alertMapper = new AlertMapper(mockTimeSource, alertMappingProperties);
+    underTest = new AlertMapper(mockTimeSource, alertMappingProperties, DO_NOT_SKIP_KEYS);
   }
 
   @Test
   void shouldReturnAlertMapWithMatch() {
     //when
-    var preparedMap = alertMapper.convertAlertToAttributes(ALERT_1);
+    var preparedMap = underTest.convertAlertToAttributes(ALERT_1);
 
     //then
     assertThat(preparedMap).isEqualTo(MAPPED_ALERT_1);
@@ -40,10 +45,24 @@ class AlertMapperTest {
 
   @Test
   void shouldNotMapCountryIfNotPresent() {
-    var preparedMap = alertMapper.convertAlertToAttributes(ALERT_2);
+    var preparedMap = underTest.convertAlertToAttributes(ALERT_2);
 
     assertThat(preparedMap)
         .doesNotContainKey(MappedKeys.COUNTRY_KEY)
         .doesNotContainKey(RolesMappedConstants.COUNTRY_KEY);
+  }
+
+  @Test
+  void shouldSkipAllFields() {
+    AlertMappingProperties alertMappingProperties = new AlertMappingProperties();
+    alertMappingProperties.setCountrySourceKey(SourceAlertKeys.COUNTRY_KEY);
+    MockTimeSource mockTimeSource = new MockTimeSource(parse(PROCESSING_TIMESTAMP));
+
+    underTest = new AlertMapper(mockTimeSource, alertMappingProperties, SKIP_ALL_GENERIC_KEYS);
+    var preparedMap = underTest.convertAlertToAttributes(ALERT_1);
+
+    assertThat(preparedMap)
+        .doesNotContainKey(MappedKeys.RECOMMENDATION_KEY)
+        .doesNotContainKey(MappedKeys.COUNTRY_KEY);
   }
 }
