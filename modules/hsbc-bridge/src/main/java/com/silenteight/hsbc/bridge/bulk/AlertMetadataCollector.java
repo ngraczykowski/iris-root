@@ -10,7 +10,6 @@ import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadat
 import com.silenteight.hsbc.datasource.feature.Feature;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
@@ -49,24 +48,35 @@ class AlertMetadataCollector {
     }
 
     private void addFeatures(Map<String, FeatureMetadata> features) {
-      stream(Feature.values())
-          .forEach(f -> addFeature(f, features));
+      features.entrySet().stream()
+          .forEach(feature -> addFeature(feature.getKey(), feature.getValue()));
     }
 
-    private void addFeature(Feature feature, Map<String, FeatureMetadata> features) {
-      var featureName = feature.getFullName();
-      if (features.containsKey(featureName)) {
-        var featureMetadata = features.get(featureName);
-        var prefix = feature.getName() + "Feature";
+    private void addFeature(String featureKey, FeatureMetadata featureMetadata) {
+      var featureOpt = getFeature(featureKey);
 
-        add(prefix + "Config", featureMetadata.getAgentConfig());
-        add(prefix + "Solution", featureMetadata.getSolution());
-      }
+      featureOpt.ifPresentOrElse(
+          feature -> {
+            var prefix = feature.getName() + "Feature";
+            add(prefix + "Config", featureMetadata.getAgentConfig());
+            add(prefix + "Solution", featureMetadata.getSolution());
+          },
+          () -> {
+            add(featureKey + "Config", featureMetadata.getAgentConfig());
+            add(featureKey + "Solution", featureMetadata.getSolution());
+          }
+      );
+    }
+
+    private static Optional<Feature> getFeature(String featureKey) {
+      return stream(Feature.values())
+          .filter(feature -> feature.getFullName().equalsIgnoreCase(featureKey))
+          .findFirst();
     }
 
     private void addCategories(Map<String, String> categories) {
       categories.entrySet().stream()
-          .forEach(c -> add(c.getKey(), c.getValue()));
+          .forEach(category -> add(category.getKey(), category.getValue()));
     }
 
     private void addMatchReason(Map<String, String> reason) {

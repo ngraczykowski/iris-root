@@ -97,8 +97,10 @@ public class GetBulkResultsUseCase {
   private List<AlertMetadata> getAlertRecommendationDate(OffsetDateTime date) {
     return of(
         new AlertMetadata("recommendationYear", valueOf(date.getYear())),
-        new AlertMetadata("recommendationMonth", valueOf(date.getMonth())),
-        new AlertMetadata("recommendationDay", valueOf(date.getDayOfMonth())));
+        new AlertMetadata("recommendationMonth", valueOf(date.getMonthValue())),
+        new AlertMetadata("recommendationDay", valueOf(date.getDayOfMonth())),
+        new AlertMetadata("recommendationDate", valueOf(date))
+    );
   }
 
   private String findByKey(String key, Collection<AlertMetadata> metadata) {

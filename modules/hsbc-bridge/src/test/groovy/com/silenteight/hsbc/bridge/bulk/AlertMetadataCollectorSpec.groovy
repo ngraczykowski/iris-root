@@ -43,7 +43,7 @@ class AlertMetadataCollectorSpec extends Specification {
     def result = underTest.collectFromRecommendationMetadata(recommendationMetadata)
 
     then:
-    result.size() == 5
+    result.size() == 7
     with (result.first()) {
       key == 'feature_vector_signature'
       value == 'fv-1'
@@ -64,6 +64,14 @@ class AlertMetadataCollectorSpec extends Specification {
       key == 'nameFeatureSolution'
       value == 'EXACT_MATCH'
     }
+    with (result[5]) {
+      key == 'features/unknownConfig'
+      value == 'agents/unknown/versions/1.0.0/configs/1'
+    }
+    with (result[6]) {
+      key == 'features/unknownSolution'
+      value == 'EXACT_MATCH'
+    }
   }
 
   class Fixtures {
@@ -82,6 +90,11 @@ class AlertMetadataCollectorSpec extends Specification {
           features: [
               'features/name': new FeatureMetadata(
                   agentConfig: 'agents/name/versions/1.0.0/configs/1',
+                  solution: 'EXACT_MATCH',
+                  reason: [] as Map
+              ),
+              'features/unknown': new FeatureMetadata(
+                  agentConfig: 'agents/unknown/versions/1.0.0/configs/1',
                   solution: 'EXACT_MATCH',
                   reason: [] as Map
               )
