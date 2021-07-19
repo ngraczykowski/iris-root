@@ -116,7 +116,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(
       username = USERNAME,
-      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
+      authorities = { USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForGetReportList() {
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(FORBIDDEN.value());
   }

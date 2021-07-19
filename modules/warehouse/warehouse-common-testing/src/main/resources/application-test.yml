@@ -51,6 +51,7 @@ sep:
         - "DOWNLOAD_SOLVING_REPORTS"
         - "DASHBOARD"
       AUDITOR:
+        - "VIEW_SIMULATION_RESULT"
         - "VIEW_QA_ALERTS"
         - "DASHBOARD"
       QA:
