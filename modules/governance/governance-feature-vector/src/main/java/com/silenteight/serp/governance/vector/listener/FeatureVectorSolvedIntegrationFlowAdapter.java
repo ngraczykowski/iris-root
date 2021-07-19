@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.vector.listener;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
+import com.silenteight.solving.api.v1.FeatureVectorSolvedEventBatch;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
@@ -18,7 +18,7 @@ class FeatureVectorSolvedIntegrationFlowAdapter extends IntegrationFlowAdapter {
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(FEATURE_VECTOR_SOLVED_INBOUND_CHANNEL)
         .handle(
-            FeatureVectorSolvedEvent.class,
+            FeatureVectorSolvedEventBatch.class,
             (payload, headers) -> {
               featureVectorSolvedMessageHandler.handle(payload);
               return null;

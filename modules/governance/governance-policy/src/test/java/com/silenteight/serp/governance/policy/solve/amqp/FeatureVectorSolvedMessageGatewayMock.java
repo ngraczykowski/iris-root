@@ -2,16 +2,15 @@ package com.silenteight.serp.governance.policy.solve.amqp;
 
 import lombok.Getter;
 
-import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
+import com.silenteight.solving.api.v1.FeatureVectorSolvedEventBatch;
 
 public class FeatureVectorSolvedMessageGatewayMock implements FeatureVectorSolvedMessageGateway {
 
   @Getter
-  private FeatureVectorSolvedEvent lastEvent;
+  private FeatureVectorSolvedEventBatch lastEvent;
 
   @Override
-  public void send(FeatureVectorSolvedEvent event) {
+  public void send(FeatureVectorSolvedEventBatch event) {
     lastEvent = event;
   }
-
 }

@@ -142,7 +142,9 @@ class SolveUseCaseTest {
     underTest.solve(solutionsRequest);
 
     // then
-    FeatureVectorSolvedEvent event = gateway.getLastEvent();
+    FeatureVectorSolvedEventBatch events = gateway.getLastEvent();
+    assertThat(events.getEventsCount()).isEqualTo(1);
+    FeatureVectorSolvedEvent event = events.getEvents(0);
     assertThat(event).isNotNull();
     assertThat(event.getStepId()).isEqualTo(fromJavaUuid(STEP_ID_2));
     assertThat(event.getCreatedAt()).isEqualTo(toTimestamp(NOW));

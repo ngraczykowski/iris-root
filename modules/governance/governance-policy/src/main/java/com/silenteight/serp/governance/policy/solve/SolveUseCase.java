@@ -15,6 +15,7 @@ import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent.Builder;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -63,7 +64,7 @@ public class SolveUseCase {
     String policyName = policyTitleQuery.getTitle(policyId);
     StepsSupplier stepsSupplier = stepsSupplierProvider.getStepsSupplier(policyId);
     FeatureCollection featureCollection = request.getFeatureCollection();
-    List<SolutionResponse> solutionResponses = request
+    List<SolvedFeatureVector> solvedFeatureVectors = request
         .getFeatureVectorsList()
         .stream()
         .map(featureVector -> solveSingle(
@@ -73,12 +74,12 @@ public class SolveUseCase {
     log.info("Solved {} features using policy {}.",
              request.getFeatureVectorsCount(), request.getPolicyName());
 
-    return BatchSolveFeaturesResponse.newBuilder()
-        .addAllSolutions(solutionResponses)
-        .build();
+    emitEvent(solvedFeatureVectors);
+
+    return getResponse(solvedFeatureVectors);
   }
 
-  private SolutionResponse solveSingle(
+  private SolvedFeatureVector solveSingle(
       UUID policyId,
       String policyName,
       StepsSupplier stepsSupplier,
@@ -97,12 +98,14 @@ public class SolveUseCase {
     Map<String, String> featureValuesByName = asFeatureValues(featureNames, featureValues);
     SolveResponse response = solvingService.solve(stepsSupplier, featureValuesByName);
 
-    emitEvent(featureCollection, featureVector,
-        canonicalFeatureVector.getVectorSignature(), response);
+    FeatureVectorSolvedEvent solvedEvent = buildEvent(
+        featureCollection, featureVector, canonicalFeatureVector.getVectorSignature(), response);
 
     logSolved(featureNames, featureValues, canonicalFeatureVector.getVectorSignature(), response);
-    return asSolutionResponse(
+    SolutionResponse solutionResponse = asSolutionResponse(
         policyId, policyName, canonicalFeatureVector.getVectorSignature(), response);
+
+    return SolvedFeatureVector.of(solvedEvent, solutionResponse);
   }
 
   private void logSolved(
@@ -142,7 +145,7 @@ public class SolveUseCase {
         .collect(toMap(i -> keyIterator.next(), i -> valueIterator.next()));
   }
 
-  private void emitEvent(
+  private FeatureVectorSolvedEvent buildEvent(
       FeatureCollection featureCollection,
       FeatureVector featureVector,
       Signature signature,
@@ -162,8 +165,7 @@ public class SolveUseCase {
 
     FeatureVectorSolvedEvent event = eventBuilder.build();
     log.debug("Sending FV event: {}", event);
-
-    featureVectorSolvedMessageGateway.send(event);
+    return event;
   }
 
   private static SolutionResponse asSolutionResponse(
@@ -203,5 +205,30 @@ public class SolveUseCase {
     return Struct.newBuilder()
         .putAllFields(fields)
         .build();
+  }
+
+  private void emitEvent(List<SolvedFeatureVector> solvedFeatureVectors) {
+    List<FeatureVectorSolvedEvent> solvedEvents = solvedFeatureVectors
+        .stream().map(SolvedFeatureVector::getEvent).collect(toList());
+
+    FeatureVectorSolvedEventBatch batchEvent = FeatureVectorSolvedEventBatch
+        .newBuilder().addAllEvents(solvedEvents).build();
+    featureVectorSolvedMessageGateway.send(batchEvent);
+  }
+
+  @NotNull
+  private BatchSolveFeaturesResponse getResponse(
+      List<SolvedFeatureVector> solvedFeatureVectors) {
+    List<SolutionResponse> solutionResponses = solvedFeatureVectors
+        .stream().map(SolvedFeatureVector::getResponse).collect(toList());
+
+    return BatchSolveFeaturesResponse.newBuilder().addAllSolutions(solutionResponses).build();
+  }
+
+  @lombok.Value(staticConstructor = "of")
+  private static class SolvedFeatureVector {
+
+    FeatureVectorSolvedEvent event;
+    SolutionResponse response;
   }
 }

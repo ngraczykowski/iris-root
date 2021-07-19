@@ -40,7 +40,7 @@ class FeatureVectorUsage implements IdentifiableEntity {
     this.usageCount = usageCount;
   }
 
-  void markAsUsed() {
-    usageCount++;
+  void markAsUsed(long count) {
+    usageCount += count;
   }
 }
