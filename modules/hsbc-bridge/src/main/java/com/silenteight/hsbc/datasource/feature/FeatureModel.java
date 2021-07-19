@@ -17,6 +17,7 @@ import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonApFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonNameFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonWpFeature;
+import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListInvalidAlertFeature;
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature;
 import com.silenteight.hsbc.datasource.feature.country.OtherCountryFeature;
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
@@ -47,6 +48,7 @@ public class FeatureModel {
         entry(ALLOW_LIST_COMMON_AP, new AllowListCommonApFeature()),
         entry(ALLOW_LIST_COMMON_NAME, new AllowListCommonNameFeature()),
         entry(ALLOW_LIST_COMMON_WP, new AllowListCommonWpFeature()),
+        entry(ALLOW_LIST_INVALID_ALERT, new AllowListInvalidAlertFeature()),
         entry(GENDER, new GenderFeature()),
         entry(NAME, new NameFeature(new NameQueryConfigurer().create())),
         entry(IS_PEP, new IsPepFeature(new IsPepQueryConfigurer().create())),

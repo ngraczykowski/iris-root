@@ -25,12 +25,12 @@ public class AllowListCommonNameFeature
 
     return AllowListFeatureInputDto.builder()
         .feature(getFeatureName())
-        .allowListName("hsbc_common_name")
+        .allowListNames(List.of("hsbc_common_name"))
         .characteristicsValues(characteristicsValues)
         .build();
   }
 
-  private List<String> getCharacteristicsValues(MatchData matchData) {
+  protected List<String> getCharacteristicsValues(MatchData matchData) {
     var values = new ArrayList<String>();
     if (matchData.isIndividual()) {
       values.addAll(extractNamesFromIndividual(matchData.getCustomerIndividual()));

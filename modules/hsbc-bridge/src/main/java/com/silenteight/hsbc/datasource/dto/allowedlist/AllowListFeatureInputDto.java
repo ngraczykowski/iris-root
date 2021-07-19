@@ -14,5 +14,5 @@ public class AllowListFeatureInputDto {
   String feature;
   @Builder.Default
   List<String> characteristicsValues = emptyList();
-  String allowListName;
+  List<String> allowListNames;
 }

@@ -20,7 +20,7 @@ public class AllowListCommonApFeature
 
     return AllowListFeatureInputDto.builder()
         .feature(getFeatureName())
-        .allowListName("hsbc_common_alerted_party")
+        .allowListNames(List.of("hsbc_common_alerted_party"))
         .characteristicsValues(characteristicsValues)
         .build();
   }

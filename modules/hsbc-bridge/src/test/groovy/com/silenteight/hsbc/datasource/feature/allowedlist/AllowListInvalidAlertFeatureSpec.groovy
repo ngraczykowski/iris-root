@@ -1,12 +1,14 @@
 package com.silenteight.hsbc.datasource.feature.allowedlist
 
-import com.silenteight.hsbc.datasource.datamodel.*
+import com.silenteight.hsbc.datasource.datamodel.CustomerEntity
+import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
+import com.silenteight.hsbc.datasource.datamodel.MatchData
 
 import spock.lang.Specification
 
-class AllowListCommonNameFeatureSpec extends Specification {
+class AllowListInvalidAlertFeatureSpec extends Specification {
 
-  def underTest = new AllowListCommonNameFeature()
+  def underTest = new AllowListInvalidAlertFeature()
 
   def 'should return feature values for individual'() {
     given:
@@ -27,10 +29,10 @@ class AllowListCommonNameFeatureSpec extends Specification {
 
     then:
     with(result) {
-      allowListNames == ['hsbc_common_name']
+      allowListNames == ['hsbc_invalid_names', 'hsbc_financial_institution']
       characteristicsValues == ['givenName', 'familyNameOriginal', 'fullNameDerived',
                                 'middleName', 'originalScriptName', 'profileFullName']
-      feature == 'features/f_common_names'
+      feature == 'features/f_invalid_alert'
     }
   }
 
@@ -50,9 +52,9 @@ class AllowListCommonNameFeatureSpec extends Specification {
 
     then:
     with(result) {
-      allowListNames == ['hsbc_common_name']
+      allowListNames == ['hsbc_invalid_names', 'hsbc_financial_institution']
       characteristicsValues == ['entityName', 'entityNameOriginal', 'originalScriptName']
-      feature == 'features/f_common_names'
+      feature == 'features/f_invalid_alert'
     }
   }
 }

@@ -13,6 +13,7 @@ public enum Feature {
   ALLOW_LIST_COMMON_AP("f_common_ap"),
   ALLOW_LIST_COMMON_NAME("f_common_names"),
   ALLOW_LIST_COMMON_WP("f_common_mp"),
+  ALLOW_LIST_INVALID_ALERT("f_invalid_alert"),
   NAME("name"),
   GENDER("gender"),
   GEO_PLACE_OF_BIRTH("geoPlaceOfBirth"),

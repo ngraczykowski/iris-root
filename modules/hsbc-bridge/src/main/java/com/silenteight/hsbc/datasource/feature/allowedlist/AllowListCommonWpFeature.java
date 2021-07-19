@@ -22,7 +22,7 @@ public class AllowListCommonWpFeature
 
     return AllowListFeatureInputDto.builder()
         .feature(getFeatureName())
-        .allowListName("hsbc_common_watchlist_party")
+        .allowListNames(List.of("hsbc_common_watchlist_party"))
         .characteristicsValues(characteristicsValues)
         .build();
   }

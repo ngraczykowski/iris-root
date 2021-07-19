@@ -61,7 +61,7 @@ class AllowedListInputGrpcService extends AllowListInputServiceImplBase {
     return inputs.stream()
         .map(i -> AllowListFeatureInput.newBuilder()
             .setFeature(i.getFeature())
-            .addAllAllowListName(List.of(i.getAllowListName()))
+            .addAllAllowListName(i.getAllowListNames())
             .addAllCharacteristicsValues(i.getCharacteristicsValues())
             .build())
         .collect(Collectors.toList());

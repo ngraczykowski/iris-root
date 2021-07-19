@@ -22,7 +22,7 @@ class AllowListCommonApFeatureSpec extends Specification {
 
     then:
     with(result) {
-      allowListName == 'hsbc_common_alerted_party'
+      allowListNames == ['hsbc_common_alerted_party']
       characteristicsValues == ['parentId']
       feature == 'features/f_common_ap'
     }

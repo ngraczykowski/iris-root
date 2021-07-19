@@ -55,6 +55,7 @@ class AllowedListInputProvider implements DataSourceInputProvider<AllowedListInp
     return List.of(
         Feature.ALLOW_LIST_COMMON_AP,
         Feature.ALLOW_LIST_COMMON_NAME,
-        Feature.ALLOW_LIST_COMMON_WP);
+        Feature.ALLOW_LIST_COMMON_WP,
+        Feature.ALLOW_LIST_INVALID_ALERT);
   }
 }
