@@ -7,11 +7,9 @@ import com.silenteight.hsbc.bridge.bulk.rest.AlertMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.FeatureMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.MatchMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
-import com.silenteight.hsbc.datasource.feature.Feature;
 
 import java.util.*;
 
-import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
@@ -53,25 +51,8 @@ class AlertMetadataCollector {
     }
 
     private void addFeature(String featureKey, FeatureMetadata featureMetadata) {
-      var featureOpt = getFeature(featureKey);
-
-      featureOpt.ifPresentOrElse(
-          feature -> {
-            var prefix = feature.getName() + "Feature";
-            add(prefix + "Config", featureMetadata.getAgentConfig());
-            add(prefix + "Solution", featureMetadata.getSolution());
-          },
-          () -> {
-            add(featureKey + "Config", featureMetadata.getAgentConfig());
-            add(featureKey + "Solution", featureMetadata.getSolution());
-          }
-      );
-    }
-
-    private static Optional<Feature> getFeature(String featureKey) {
-      return stream(Feature.values())
-          .filter(feature -> feature.getFullName().equalsIgnoreCase(featureKey))
-          .findFirst();
+      add(featureKey + ":config", featureMetadata.getAgentConfig());
+      add(featureKey + ":solution", featureMetadata.getSolution());
     }
 
     private void addCategories(Map<String, String> categories) {

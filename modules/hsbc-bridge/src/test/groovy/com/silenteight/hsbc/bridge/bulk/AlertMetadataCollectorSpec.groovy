@@ -57,19 +57,19 @@ class AlertMetadataCollectorSpec extends Specification {
       value == 'step1'
     }
     with (result[3]) {
-      key == 'nameFeatureConfig'
+      key == 'features/name:config'
       value == 'agents/name/versions/1.0.0/configs/1'
     }
     with (result[4]) {
-      key == 'nameFeatureSolution'
+      key == 'features/name:solution'
       value == 'EXACT_MATCH'
     }
     with (result[5]) {
-      key == 'features/unknownConfig'
+      key == 'features/unknown:config'
       value == 'agents/unknown/versions/1.0.0/configs/1'
     }
     with (result[6]) {
-      key == 'features/unknownSolution'
+      key == 'features/unknown:solution'
       value == 'EXACT_MATCH'
     }
   }

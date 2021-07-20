@@ -12,7 +12,6 @@ import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,13 +88,15 @@ public class GetBulkResultsUseCase {
     alert.setPolicyId(findByKey("policy", recommendationAlertMetadata));
     alert.setStepId(findByKey("step", recommendationAlertMetadata));
 
-    alert.getAlertMetadata().addAll(getAlertRecommendationDate(recommendation.getDate()));
+    alert.getAlertMetadata().addAll(getAlertRecommendation(recommendation));
     alert.getAlertMetadata().addAll(recommendationAlertMetadata);
   }
 
   @NotNull
-  private List<AlertMetadata> getAlertRecommendationDate(OffsetDateTime date) {
+  private List<AlertMetadata> getAlertRecommendation(RecommendationWithMetadataDto recommendation) {
+    var date = recommendation.getDate();
     return of(
+        new AlertMetadata("s8_recommendation", recommendation.getRecommendedAction()),
         new AlertMetadata("recommendationYear", valueOf(date.getYear())),
         new AlertMetadata("recommendationMonth", valueOf(date.getMonthValue())),
         new AlertMetadata("recommendationDay", valueOf(date.getDayOfMonth())),
