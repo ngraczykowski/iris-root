@@ -24,5 +24,6 @@ class MatchesSolvedRecommendationIntegrationFlow extends IntegrationFlowAdapter 
             (payload, headers) -> facade.handleMatchesSolved(payload).orElse(null))
         .log(Level.TRACE, getClass().getName())
         .channel(RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL);
+
   }
 }

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.matchsolution.unsolvedmatchesreader;
+package com.silenteight.adjudication.engine.analysis.matchsolution.jdbc;
 
 import lombok.extern.slf4j.Slf4j;
 

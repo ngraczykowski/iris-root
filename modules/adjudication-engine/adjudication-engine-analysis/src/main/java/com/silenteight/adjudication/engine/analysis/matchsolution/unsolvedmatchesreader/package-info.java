@@ -1,4 +1,0 @@
-@ParametersAreNonnullByDefault
-package com.silenteight.adjudication.engine.analysis.matchsolution.unsolvedmatchesreader;
-
-import javax.annotation.ParametersAreNonnullByDefault;
