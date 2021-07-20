@@ -40,7 +40,6 @@ class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
         .body("state", is(STATE.toString()))
         .body("datasets", hasItems(DATASET_NAME_1))
         .body("model", is(MODEL))
-        .body("progressState", is(PROGRESS_STATE))
         .body("createdAt", notNullValue())
         .body("createdBy", is(SimulationFixtures.USERNAME));
   }

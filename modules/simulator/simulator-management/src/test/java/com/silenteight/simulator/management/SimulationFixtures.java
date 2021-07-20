@@ -40,7 +40,6 @@ public final class SimulationFixtures {
   public static final String DATASET_NAME_2 = "datasets/" + DATASET_ID_2;
   public static final long DATASET__ALERT_COUNT_2 = 3L;
   public static final Set<String> DATASETS = of(DATASET_NAME_1, DATASET_NAME_2);
-  public static final String PROGRESS_STATE = ANALYSIS_STATE.toString();
   public static final String USERNAME = "USERNAME";
   public static final SimulationState STATE = PENDING;
   public static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
@@ -71,7 +70,6 @@ public final class SimulationFixtures {
           .state(STATE)
           .model(MODEL)
           .datasets(DATASETS)
-          .progressState(PROGRESS_STATE)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
           .build();
@@ -99,7 +97,6 @@ public final class SimulationFixtures {
           .model(MODEL)
           .analysis(ANALYSIS_NAME)
           .datasets(DATASETS)
-          .progressState(PROGRESS_STATE)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
           .build();

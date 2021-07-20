@@ -31,8 +31,6 @@ public class SimulationDetailsDto {
   @NonNull
   String analysis;
   @NonNull
-  String progressState;
-  @NonNull
   String createdBy;
   @NonNull
   OffsetDateTime createdAt;

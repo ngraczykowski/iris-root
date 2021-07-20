@@ -16,7 +16,7 @@ import static com.silenteight.simulator.management.domain.SimulationState.PENDIN
 public class SimulationService {
 
   @NonNull
-  private final SimulationEntityRepository repository;
+  private final SimulationRepository repository;
 
   public void createSimulation(
       CreateSimulationRequest request, Set<String> datasets, String analysis) {

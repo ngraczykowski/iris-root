@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.support.hibernate.StringListConverter;
+import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
+import com.silenteight.simulator.dataset.dto.DatasetDto;
+import com.silenteight.simulator.dataset.dto.RangeQueryDto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.simulator.dataset.common.DatasetResource.toResourceName;
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -82,4 +86,32 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @Convert(converter = StringListConverter.class)
   @Column(name = "countries")
   private List<String> countries;
+
+  DatasetDto toDto() {
+    return DatasetDto.builder()
+        .id(getDatasetId())
+        .name(toResourceName(getDatasetId()))
+        .datasetName(getName())
+        .description(getDescription())
+        .state(getState())
+        .alertsCount(getInitialAlertCount())
+        .query(toQuery())
+        .createdAt(getCreatedAt())
+        .createdBy(getCreatedBy())
+        .build();
+  }
+
+  private AlertSelectionCriteriaDto toQuery() {
+    return AlertSelectionCriteriaDto.builder()
+        .alertGenerationDate(toRange())
+        .countries(getCountries())
+        .build();
+  }
+
+  private RangeQueryDto toRange() {
+    return RangeQueryDto.builder()
+        .from(getGenerationDateFrom())
+        .to(getGenerationDateTo())
+        .build();
+  }
 }

@@ -34,7 +34,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
   DatasetMetadataService datasetMetadataService;
 
   @Autowired
-  SimulationEntityRepository simulationEntityRepository;
+  SimulationRepository simulationRepository;
 
   @Test
   void shouldCreateSimulation() {
@@ -43,7 +43,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
 
     // then
     Optional<SimulationEntity> simulation =
-        simulationEntityRepository.findByAnalysisName(ANALYSIS_NAME);
+        simulationRepository.findByAnalysisName(ANALYSIS_NAME);
     assertThat(simulation).isPresent();
   }
 
@@ -137,6 +137,6 @@ class SimulationServiceTest extends BaseDataJpaTest {
         .analysisName(ANALYSIS_NAME)
         .build();
 
-    return simulationEntityRepository.save(simulationEntity);
+    return simulationRepository.save(simulationEntity);
   }
 }

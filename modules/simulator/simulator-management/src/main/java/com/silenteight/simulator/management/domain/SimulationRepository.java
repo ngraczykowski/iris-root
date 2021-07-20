@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-interface SimulationEntityRepository extends Repository<SimulationEntity, Long> {
+interface SimulationRepository extends Repository<SimulationEntity, Long> {
 
   SimulationEntity save(SimulationEntity simulationEntity);
 

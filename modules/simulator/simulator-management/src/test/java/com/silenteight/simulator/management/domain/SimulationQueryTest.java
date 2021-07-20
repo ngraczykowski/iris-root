@@ -25,7 +25,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
   SimulationQuery underTest;
 
   @Autowired
-  SimulationEntityRepository simulationEntityRepository;
+  SimulationRepository simulationRepository;
 
   @Test
   void shouldListSimulations() {
@@ -40,7 +40,6 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDto.getState()).isEqualTo(STATE);
     assertThat(simulationDto.getDatasets()).isEqualTo(DATASETS);
     assertThat(simulationDto.getModel()).isEqualTo(MODEL);
-    assertThat(simulationDto.getProgressState()).isEqualTo(PROGRESS_STATE);
     assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(simulationDto.getCreatedAt()).isNotNull();
   }
@@ -58,7 +57,6 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(result.getDatasets()).isEqualTo(DATASETS);
     assertThat(result.getModel()).isEqualTo(MODEL);
     assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME);
-    assertThat(result.getProgressState()).isEqualTo(PROGRESS_STATE);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(result.getCreatedAt()).isNotNull();
   }
@@ -83,6 +81,6 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .analysisName(ANALYSIS_NAME)
         .build();
 
-    simulationEntityRepository.save(simulationEntity);
+    simulationRepository.save(simulationEntity);
   }
 }
