@@ -11,6 +11,8 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDa
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +89,7 @@ public class BillingReportGenerationService {
   }
 
   private String getLine(List<Row> rowsToTranspose) {
-    Stream<String> transposedCells = properties
-        .getGroupingColumns()
-        .stream()
-        .flatMap(column -> getValues(column, rowsToTranspose));
+    Stream<String> transposedCells = getValues(properties.getTransposeColumn(), rowsToTranspose);
 
     Row rowWithGroupedData = rowsToTranspose.stream().findAny().orElseThrow();
     Stream<String> staticCells = properties
@@ -100,13 +99,10 @@ public class BillingReportGenerationService {
     return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
   }
 
-  private Stream<String> getValues(GroupingColumnProperties column, List<Row> rows) {
+  private Stream<String> getValues(TransposeColumnProperties column, List<Row> rows) {
     List<String> result = new ArrayList<>();
     Map<String, Long> values = rows.stream().collect(
         toMap(row -> row.getValue(column.getName()).toLowerCase(), Row::getCount, Long::sum));
-
-    if (column.isAddCounter())
-      result.add(getAllValuesSum(values));
 
     column.getGroupingValues()
           .stream()
@@ -115,7 +111,31 @@ public class BillingReportGenerationService {
           .map(String::valueOf)
           .forEach(result::add);
 
+    result.add(getAllSignificantValuesSum(values,
+                                          getSignificantValues()));
+    result.add(getAllValuesSum(values));
+
     return result.stream();
+  }
+
+  @NotNull
+  private List<String> getSignificantValues() {
+    return properties
+        .getTransposeColumn()
+        .getSignificantValues()
+        .stream()
+        .map(String::toLowerCase)
+        .collect(toList());
+  }
+
+  private static String getAllSignificantValuesSum(
+      Map<String, Long> values, List<String> significantValues) {
+    return valueOf(values
+        .keySet()
+        .stream()
+        .filter(significantValues::contains)
+        .mapToLong(values::get)
+        .sum());
   }
 
   private static String getAllValuesSum(Map<String, Long> values) {

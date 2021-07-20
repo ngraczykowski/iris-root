@@ -18,7 +18,6 @@ import java.util.Map;
 import static java.time.OffsetDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -41,12 +40,13 @@ class ReportGenerationServiceTest {
                       BillingScorerFixtures.BILLING_YEAR_LABEL),
             getColumn(BillingScorerFixtures.BILLING_MONTH_FIELD,
                       BillingScorerFixtures.BILLING_MONTH_LABEL)),
-        singletonList(
-            new GroupingColumnProperties(
+        new TransposeColumnProperties(
                 BillingScorerFixtures.RECOMMENDED_ACTION,
-                "COUNT_SOLVED",
+                "count_solved",
                 asList("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE", "MANUAL_INVESTIGATION"),
-                "ALL")));
+                "count_alerts_received",
+                asList("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"),
+                "count_alerts_solved"));
 
     underTest = new BillingReportGenerationConfiguration().billingReportGenerationService(
         groupingQueryService, indexerQuery, billingReportProperties);
@@ -82,13 +82,13 @@ class ReportGenerationServiceTest {
         now(), now(), "analysis/production");
 
     assertThat(reportContent.getReport()).isEqualTo(
-        "YEAR,MONTH,COUNT_SOLVED_ALL,COUNT_SOLVED_FALSE_POSITIVE,"
-            + "COUNT_SOLVED_POTENTIAL_TRUE_POSITIVE,COUNT_SOLVED_MANUAL_INVESTIGATION\n"
-            + "2020,1,33100,30000,100,3000\n"
-            + "2020,2,24150,20000,150,4000\n"
-            + "2020,3,19090,15000,90,4000\n"
+        "year,month,count_solved_FALSE_POSITIVE,count_solved_POTENTIAL_TRUE_POSITIVE,"
+            + "count_solved_MANUAL_INVESTIGATION,count_alerts_solved,count_alerts_received\n"
+            + "2020,1,30000,100,3000,30100,33100\n"
+            + "2020,2,20000,150,4000,20150,24150\n"
+            + "2020,3,15000,90,4000,15090,19090\n"
             + "\n"
-            + "checksum,5184FE85DFADEF63DA8EBC283365E7331A734782EA17AE7F4881BD88F56B00A2\n"
+            + "checksum,B8263AB2929D9CA175611C2F000D09072A0E522B466665086A49595B63A367C9\n"
     );
   }
 

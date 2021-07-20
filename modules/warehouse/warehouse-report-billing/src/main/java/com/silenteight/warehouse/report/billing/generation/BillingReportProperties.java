@@ -30,7 +30,7 @@ public class BillingReportProperties {
   List<ColumnProperties> columns;
   @Valid
   @NotNull
-  List<GroupingColumnProperties> groupingColumns;
+  TransposeColumnProperties transposeColumn;
 
   List<String> getListOfFields() {
     return getColumns().stream().map(Column::getName).collect(toUnmodifiableList());
@@ -48,7 +48,7 @@ public class BillingReportProperties {
 
   private List<Column> getColumns() {
     List<Column> result = getStaticColumns();
-    result.addAll(getGroupingColumns());
+    result.add(getTransposeColumn());
     return unmodifiableList(result);
   }
 

@@ -139,14 +139,16 @@ warehouse.report.rbs:
 warehouse.report.billing:
   columns:
     - name: alert_recommendationYear
-      label: YEAR
+      label: year
     - name: alert_recommendationMonth
-      label: MONTH
-  grouping-columns:
-    - name: alert_recommendation
-      label: COUNT_SOLVED
-      grouping-values: [AAA False Positive, Level 1 Review, Level 2 Review, Level 3 Review]
-      counterSuffix: ALL
+      label: month
+  transpose-column:
+    name: alert_s8_recommendation
+    label: count_solved
+    grouping-values: [AAA False Positive, Level 1 Review, Level 2 Review, Level 3 Review]
+    counter-label: count_alerts_received
+    significant-values: [AAA False Positive, Level 1 Review]
+    significant-summation-label: count_alerts_solved
   date-field-name: index_timestamp
 
 warehouse.report.sm:
