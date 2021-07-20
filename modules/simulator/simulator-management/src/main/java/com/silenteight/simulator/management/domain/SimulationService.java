@@ -7,6 +7,7 @@ import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -46,6 +47,7 @@ public class SimulationService {
         .isPresent();
   }
 
+  @Transactional
   public void finish(String analysis) {
     SimulationEntity simulationEntity = repository
         .findByAnalysisName(analysis)

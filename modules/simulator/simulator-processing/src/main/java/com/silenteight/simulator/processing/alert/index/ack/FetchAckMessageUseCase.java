@@ -48,24 +48,26 @@ public class FetchAckMessageUseCase implements AckMessageHandler {
       analyzeAckedMessages(analysisName);
   }
 
+  private static boolean isAnalysisDone(Analysis analysis) {
+    return DONE == analysis.getState();
+  }
+
   private void analyzeAckedMessages(String analysisName) {
     if (areAllIndexedAlertsAcked(analysisName))
       analyzeAlertCount(analysisName);
-  }
-
-  private void analyzeAlertCount(String analysisName) {
-    long sumAlertCount = indexedAlertQuery.sumAllAlertsCountWithAnalysisName(analysisName);
-    SimulationDetailsDto simulation = simulationQuery.get(analysisName);
-    long initialAlertCount = datasetService.countAllAlerts(simulation.getDatasets());
-    if (sumAlertCount == initialAlertCount)
-      simulationService.finish(analysisName);
   }
 
   private boolean areAllIndexedAlertsAcked(String analysisName) {
     return indexedAlertQuery.count(analysisName, of(SENT)) == 0;
   }
 
-  private static boolean isAnalysisDone(Analysis analysis) {
-    return DONE == analysis.getState();
+  private void analyzeAlertCount(String analysisName) {
+    long sumAlertCount = indexedAlertQuery.sumAllAlertsCountWithAnalysisName(analysisName);
+    SimulationDetailsDto simulation = simulationQuery.get(analysisName);
+    long initialAlertCount = datasetService.countAllAlerts(simulation.getDatasets());
+    if (sumAlertCount == initialAlertCount) {
+      simulationService.finish(analysisName);
+      log.info("Simulation with analysisName=" + analysisName + " is finished");
+    }
   }
 }
