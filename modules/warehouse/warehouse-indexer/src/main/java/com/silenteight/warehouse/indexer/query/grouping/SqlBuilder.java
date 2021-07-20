@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.indexer.query.grouping;
 
+import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -55,7 +56,13 @@ public class SqlBuilder {
 
   private static Stream<Field<Object>> asFields(List<String> fields) {
     return fields.stream()
+        .map(SqlBuilder::surroundWithApostrophes)
         .map(DSL::field);
+  }
+
+  @NotNull
+  private static String surroundWithApostrophes(String field) {
+    return "`" + field + "`";
   }
 
   private static Stream<Table<Record>> asTables(List<String> indexes) {

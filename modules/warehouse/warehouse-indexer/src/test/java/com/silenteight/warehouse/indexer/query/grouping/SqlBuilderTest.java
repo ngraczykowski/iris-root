@@ -27,10 +27,10 @@ class SqlBuilderTest {
         AlertMapperConstants.INDEX_TIMESTAMP, timestamp, timestamp.plusHours(1));
 
     assertThat(query).isEqualToIgnoringWhitespace(""
-        + "select alert_lob_country, alert_risk_type, count(*) "
+        + "select `alert_lob_country`, `alert_risk_type`, count(*) "
         + "from itest_production "
         + "where (index_timestamp >= timestamp('2021-04-15 12:17:37.098') "
         + "  and  index_timestamp < timestamp('2021-04-15 13:17:37.098')) "
-        + "group by alert_lob_country, alert_risk_type");
+        + "group by `alert_lob_country`, `alert_risk_type`");
   }
 }

@@ -18,6 +18,7 @@ import java.util.Set;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE_STRING;
 import static java.util.Collections.emptyMap;
+import static java.util.Map.of;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = OpendistroElasticTestConfiguration.class)
@@ -88,6 +89,22 @@ class OpendistroElasticClientTest {
 
     QueryDto queryDto = QueryDto.builder()
         .query("select * from " + PRODUCTION_ELASTIC_INDEX_NAME)
+        .build();
+    QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
+
+    assertThat(queryResultDto).isNotNull();
+  }
+
+  @Test
+  void shouldExecuteQueryWithFields() {
+    simpleElasticTestClient.storeData(
+        PRODUCTION_ELASTIC_INDEX_NAME,
+        "123",
+        of("feature/name", "feature value", "key", "value"));
+
+    QueryDto queryDto = QueryDto
+        .builder()
+        .query("select `feature/name` from " + PRODUCTION_ELASTIC_INDEX_NAME)
         .build();
     QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
 
