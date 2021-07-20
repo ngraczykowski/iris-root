@@ -51,7 +51,7 @@ class CategoryServiceClient {
           .stream()
           .map(categoryValueName ->
               CategoryValue.newBuilder()
-                  .setSingleValue("NO_VALUE")
+                  .setSingleValue("DATA_SOURCE_ERROR")
                   .setName(categoryValueName)
                   .build())
           .collect(Collectors.toList());
