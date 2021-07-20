@@ -94,8 +94,9 @@ public class RbsReportGenerationService {
     Stream<String> staticCells = properties
         .getListOfStaticFields().stream().map(rowWithGroupedData::getValue);
 
+    long matchCount = rowsToTranspose.stream().mapToLong(Row::getCount).sum();
     Stream<String> staticCellsWithCount = concat(
-        staticCells, Stream.of(String.valueOf(rowsToTranspose.stream().count())));
+        staticCells, Stream.of(String.valueOf(matchCount)));
 
     Stream<String> rowCells = concat(staticCellsWithCount, transposedCells);
     return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));

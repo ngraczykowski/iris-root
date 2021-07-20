@@ -97,7 +97,7 @@ warehouse.report.rbs:
     - name: alert_recommendation
       label: recommended action
     - name: alert_extendedAttribute5
-      label: customer_type
+      label: risk_type
     - name: alert_dateOfBirthFeatureSolution
       label: date_of_birth
     - name: alert_genderFeatureSolution
