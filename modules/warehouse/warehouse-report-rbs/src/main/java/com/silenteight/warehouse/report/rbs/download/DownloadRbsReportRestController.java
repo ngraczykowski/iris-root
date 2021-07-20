@@ -3,7 +3,6 @@ package com.silenteight.warehouse.report.rbs.download;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
 import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
 
 import org.springframework.http.ResponseEntity;
@@ -23,21 +22,17 @@ import static org.springframework.http.ResponseEntity.ok;
 class DownloadRbsReportRestController {
 
   @NonNull
-  private final RbsReportDataQuery reportDataQuery;
-  @NonNull
-  private final RbsReportService reportService;
+  private final DownloadRbsReportUseCase useCase;
 
   @GetMapping("/v1/analysis/production/definitions/RB_SCORER/{definitionId}/reports/{id}")
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<String> downloadReport(
       @PathVariable("definitionId") String definitionId,
-      @PathVariable("id") Long id) {
+      @PathVariable("id") long id) {
 
-    ReportDto reportDto = reportDataQuery.getReport(id);
+    ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
-
-    reportService.removeReport(id);
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))

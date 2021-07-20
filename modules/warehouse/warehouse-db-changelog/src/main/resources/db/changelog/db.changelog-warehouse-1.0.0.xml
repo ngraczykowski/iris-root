@@ -146,6 +146,25 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="warehouse-1.0.0-6" author="tbiedrzycki">
+    <createTable tableName="warehouse_report_sm">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+    </createTable>
+  </changeSet>
+
   <changeSet id="warehouse-1.0.0-7" author="tbiedrzycki">
     <createTable tableName="warehouse_message_backup">
       <column name="id" type="BIGINT" autoIncrement="true">

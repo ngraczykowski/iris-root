@@ -41,4 +41,10 @@ class IndexerConfiguration {
       @Valid EnvironmentProperties environmentProperties) {
     return new ProductionIndexingQuery(environmentProperties.getPrefix());
   }
+
+  @Bean
+  SimulationIndexingQuery simulationIndexingQuery(
+      @Valid EnvironmentProperties environmentProperties) {
+    return new SimulationIndexingQuery(environmentProperties.getPrefix());
+  }
 }

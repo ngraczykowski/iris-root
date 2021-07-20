@@ -15,7 +15,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(DownloadRbsReportRestController.class)
+@Import({
+    DownloadRbsReportRestController.class,
+    DownloadRbsReportConfiguration.class
+})
 class DownloadReportRestControllerTest extends BaseRestControllerTest {
 
   private static final long REPORT_ID = 5;

@@ -282,3 +282,15 @@ warehouse.report.billing:
       grouping-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE, MANUAL_INVESTIGATION]
       counterSuffix: ALL
   date-field-name: alert_timestamp
+
+warehouse.report.sm:
+  risk-type:
+    name: riskType
+    label: Risk Type
+  country:
+    name: country
+    label: Country
+  recommendation-field:
+    name: recommended action
+    decision-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE]
+  date-field-name: alert_timestamp

@@ -72,6 +72,9 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   private SimulationReportingQuery simulationReportingQuery;
 
   @MockBean
+  private SimulationReportsDefinitionsUseCase simulationReportsDefinitionsUseCase;
+
+  @MockBean
   private SimulationService simulationService;
 
   @Test
@@ -96,7 +99,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedGetReportList() {
-    given(simulationReportingQuery.getReportsDefinitions(ANALYSIS_ID))
+    given(simulationReportsDefinitionsUseCase.activate(ANALYSIS_ID))
         .willReturn(List.of(REPORT_DEFINITION_DTO));
 
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(OK.value())
@@ -107,7 +110,7 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its404_whenAnalysisNotFound() {
-    given(simulationReportingQuery.getReportsDefinitions(ANALYSIS_ID))
+    given(simulationReportsDefinitionsUseCase.activate(ANALYSIS_ID))
         .willThrow(AnalysisDoesNotExistException.class);
 
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(NOT_FOUND.value());

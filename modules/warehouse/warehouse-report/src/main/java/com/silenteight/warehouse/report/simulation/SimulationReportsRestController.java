@@ -52,6 +52,9 @@ public class SimulationReportsRestController {
   static final String REPORT_STATUS_URL = REPORTS_RESOURCE_URL + REPORT_STATUS;
 
   @NonNull
+  private SimulationReportsDefinitionsUseCase reportsDefinitionsUseCase;
+
+  @NonNull
   private SimulationReportingQuery simulationReportingQuery;
 
   @NonNull
@@ -70,7 +73,7 @@ public class SimulationReportsRestController {
   public ResponseEntity<List<ReportDefinitionDto>> getReportsDtoList(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId) {
 
-    return ok().body(simulationReportingQuery.getReportsDefinitions(analysisId));
+    return ok().body(reportsDefinitionsUseCase.activate(analysisId));
   }
 
   @PostMapping(REPORTS_COLLECTION_URL)
