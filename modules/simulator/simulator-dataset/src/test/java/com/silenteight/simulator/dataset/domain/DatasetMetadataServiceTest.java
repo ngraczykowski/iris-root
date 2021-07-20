@@ -1,28 +1,31 @@
 package com.silenteight.simulator.dataset.domain;
 
+import com.silenteight.sep.base.testing.BaseDataJpaTest;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.DATASET;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.EXTERNAL_RESOURCE_NAME;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class DatasetMetadataServiceTest {
+@Transactional
+@TestPropertySource("classpath:/data-test.properties")
+@ContextConfiguration(classes = { DatasetTestConfiguration.class })
+class DatasetMetadataServiceTest extends BaseDataJpaTest {
 
-  @InjectMocks
-  private DatasetMetadataService underTest;
+  @Autowired
+  DatasetMetadataService underTest;
 
-  @Mock
-  DatasetEntityRepository datasetEntityRepository;
+  @Autowired
+  DatasetEntityRepository repository;
 
   @Test
   void createMetadata() {
@@ -30,11 +33,41 @@ class DatasetMetadataServiceTest {
     underTest.createMetadata(CREATE_DATASET_REQUEST, DATASET);
 
     // then
-    ArgumentCaptor<DatasetEntity> captor = ArgumentCaptor.forClass(DatasetEntity.class);
-    verify(datasetEntityRepository).save(captor.capture());
-    DatasetEntity value = captor.getValue();
-    assertThat(value.getDatasetId()).isEqualTo(ID);
-    assertThat(value.getState()).isEqualTo(CURRENT);
-    assertThat(value.getExternalResourceName()).isEqualTo(EXTERNAL_RESOURCE_NAME);
+    Optional<DatasetEntity> datasetOpt = repository.findByDatasetId(ID);
+    assertThat(datasetOpt).isPresent();
+    DatasetEntity dataset = datasetOpt.get();
+    assertThat(dataset.getDatasetId()).isEqualTo(ID);
+    assertThat(dataset.getState()).isEqualTo(CURRENT);
+    assertThat(dataset.getExternalResourceName()).isEqualTo(EXTERNAL_RESOURCE_NAME);
+  }
+
+  @Test
+  void countAllAlerts() {
+    // given
+    persistDataset(ID, ALERTS_COUNT);
+    persistDataset(SECOND_ID, SECOND_ALERTS_COUNT);
+
+    // when
+    long result = underTest.countAllAlerts(Set.of(RESOURCE_NAME, SECOND_RESOURCE_NAME));
+
+    // then
+    assertThat(result).isEqualTo(ALERTS_COUNT + SECOND_ALERTS_COUNT);
+  }
+
+  private void persistDataset(UUID datasetId, long initialAlertCount) {
+    DatasetEntity datasetEntity = DatasetEntity.builder()
+        .datasetId(datasetId)
+        .createdBy(CREATED_BY)
+        .name(DATASET_NAME)
+        .description(DESCRIPTION)
+        .externalResourceName(EXTERNAL_RESOURCE_NAME)
+        .initialAlertCount(initialAlertCount)
+        .state(CURRENT)
+        .generationDateFrom(FROM)
+        .generationDateTo(TO)
+        .countries(COUNTRIES)
+        .build();
+
+    repository.save(datasetEntity);
   }
 }

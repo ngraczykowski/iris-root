@@ -52,10 +52,4 @@ public class SimulationService {
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
     simulationEntity.finish();
   }
-
-  public long countAllAlerts(String analysis) {
-    return repository
-        .countAllAlerts(analysis)
-        .orElseThrow(() -> new SimulationNotFoundException(analysis));
-  }
 }

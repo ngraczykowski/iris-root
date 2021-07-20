@@ -50,4 +50,12 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
         .map(SimulationEntity::toDetailsDto)
         .orElseThrow(() -> new SimulationNotFoundException(simulationId));
   }
+
+  @Override
+  public SimulationDetailsDto get(@NonNull String analysisName) {
+    return repository
+        .findByAnalysisName(analysisName)
+        .map(SimulationEntity::toDetailsDto)
+        .orElseThrow(() -> new SimulationNotFoundException(analysisName));
+  }
 }

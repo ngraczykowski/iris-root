@@ -6,7 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.data.api.v1.DataIndexResponse;
+import com.silenteight.simulator.dataset.domain.DatasetMetadataService;
 import com.silenteight.simulator.management.create.AnalysisService;
+import com.silenteight.simulator.management.details.SimulationDetailsQuery;
+import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationService;
 import com.silenteight.simulator.processing.alert.index.amqp.listener.AckMessageHandler;
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertQuery;
@@ -24,6 +27,10 @@ public class FetchAckMessageUseCase implements AckMessageHandler {
   private final AnalysisService analysisService;
   @NonNull
   private final IndexedAlertService indexedAlertService;
+  @NonNull
+  private final SimulationDetailsQuery simulationQuery;
+  @NonNull
+  private final DatasetMetadataService datasetService;
   @NonNull
   private final SimulationService simulationService;
   @NonNull
@@ -48,7 +55,8 @@ public class FetchAckMessageUseCase implements AckMessageHandler {
 
   private void analyzeAlertCount(String analysisName) {
     long sumAlertCount = indexedAlertQuery.sumAllAlertsCountWithAnalysisName(analysisName);
-    long initialAlertCount = simulationService.countAllAlerts(analysisName);
+    SimulationDetailsDto simulation = simulationQuery.get(analysisName);
+    long initialAlertCount = datasetService.countAllAlerts(simulation.getDatasets());
     if (sumAlertCount == initialAlertCount)
       simulationService.finish(analysisName);
   }

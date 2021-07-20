@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface SimulationDetailsQuery {
 
   SimulationDetailsDto get(@NonNull UUID simulationId);
+
+  SimulationDetailsDto get(@NonNull String analysisName);
 }
