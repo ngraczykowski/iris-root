@@ -5,7 +5,9 @@ import lombok.Builder.Default;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.exception.SimulationNotInProperStateException;
+import com.silenteight.simulator.management.list.dto.SimulationDto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -13,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.simulator.management.common.SimulationResource.toResourceName;
 import static com.silenteight.simulator.management.domain.SimulationState.*;
 
 @Entity
@@ -98,5 +101,33 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   private void assertInState(SimulationState requiredState) {
     if (this.state != requiredState)
       throw new SimulationNotInProperStateException(requiredState);
+  }
+
+  SimulationDto toDto() {
+    return SimulationDto.builder()
+        .id(getSimulationId())
+        .name(toResourceName(getSimulationId()))
+        .simulationName(getName())
+        .state(getState())
+        .datasets(getDatasetNames())
+        .model(getModelName())
+        .createdAt(getCreatedAt())
+        .createdBy(getCreatedBy())
+        .build();
+  }
+
+  SimulationDetailsDto toDetailsDto() {
+    return SimulationDetailsDto.builder()
+        .id(getSimulationId())
+        .name(toResourceName(getSimulationId()))
+        .description(getDescription())
+        .simulationName(getName())
+        .state(getState())
+        .datasets(getDatasetNames())
+        .analysis(getAnalysisName())
+        .model(getModelName())
+        .createdAt(getCreatedAt())
+        .createdBy(getCreatedBy())
+        .build();
   }
 }

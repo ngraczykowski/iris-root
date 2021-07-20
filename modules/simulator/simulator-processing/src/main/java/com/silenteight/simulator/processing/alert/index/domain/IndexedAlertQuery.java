@@ -20,7 +20,7 @@ public class IndexedAlertQuery {
     return repository
         .findAllByAnalysisName(analysisName)
         .stream()
-        .map(IndexedAlertQuery::toDto)
+        .map(IndexedAlertEntity::toDto)
         .collect(toList());
   }
 
@@ -42,14 +42,5 @@ public class IndexedAlertQuery {
 
   public long sumAllAlertsCountWithAnalysisName(@NonNull String analysisName) {
     return repository.sumAllAlertsCountWithAnalysisName(analysisName);
-  }
-
-  private static IndexedAlertDto toDto(@NonNull IndexedAlertEntity entity) {
-    return IndexedAlertDto.builder()
-        .analysisName(entity.getAnalysisName())
-        .alertCount(entity.getAlertCount())
-        .state(entity.getState())
-        .requestId(entity.getRequestId())
-        .build();
   }
 }

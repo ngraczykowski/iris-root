@@ -27,8 +27,6 @@ public class SimulationDto {
   @NonNull
   String model;
   @NonNull
-  String progressState;
-  @NonNull
   String createdBy;
   @NonNull
   OffsetDateTime createdAt;

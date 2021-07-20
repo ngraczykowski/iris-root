@@ -212,10 +212,6 @@ components:
         state:
           type: object
           $ref: '#/components/schemas/SimulationState'
-        progressState:
-          type: object
-          $ref: '#/components/schemas/AnalysisState'
-          description: Progress state of simulation processing. This field is fetched directly from the AE by the Simulator and will have the same values as the analysis state in the proto file.
         datasets:
           type: array
           items:
@@ -238,7 +234,6 @@ components:
         description: 'Simulation description'
         datasets: ['datasets/b4708d8c-4832-6fde-8dc0-d17b4708d8ca']
         model: 'models/d17b4708-6fde-8dc0-4832-d17b4708d8ca'
-        progressState: 'RUNNING'
         state: 'PENDING'
         createdAt: '2004-02-12T15:19:21Z'
         createdBy: 'UserName'
@@ -256,10 +251,6 @@ components:
         state:
           type: object
           $ref: '#/components/schemas/SimulationState'
-        progressState:
-          type: object
-          $ref: '#/components/schemas/AnalysisState'
-          description: Progress state of simulation processing. This field is fetched directly from the AE by the Simulator and will have the same values as the analysis state in the proto file.
         datasets:
           type: array
           items:

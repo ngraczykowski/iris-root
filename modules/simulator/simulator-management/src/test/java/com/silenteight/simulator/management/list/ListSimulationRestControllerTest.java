@@ -47,7 +47,6 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].state", is(STATE.toString()))
         .body("[0].datasets", hasItems(DATASET_NAME_1))
         .body("[0].model", is(MODEL))
-        .body("[0].progressState", is(PROGRESS_STATE))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
@@ -69,7 +68,6 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].state", is(STATE.toString()))
         .body("[0].datasets", hasItems(DATASET_NAME_1))
         .body("[0].model", is(MODEL))
-        .body("[0].progressState", is(PROGRESS_STATE))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }

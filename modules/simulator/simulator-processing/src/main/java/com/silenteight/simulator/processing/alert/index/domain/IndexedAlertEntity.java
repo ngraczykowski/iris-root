@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.simulator.processing.alert.index.dto.IndexedAlertDto;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -48,5 +49,14 @@ class IndexedAlertEntity extends BaseEntity implements IdentifiableEntity, Seria
 
   void ack() {
     this.state = ACKED;
+  }
+
+  IndexedAlertDto toDto() {
+    return IndexedAlertDto.builder()
+        .analysisName(getAnalysisName())
+        .alertCount(getAlertCount())
+        .state(getState())
+        .requestId(getRequestId())
+        .build();
   }
 }
