@@ -1,0 +1,26 @@
+plugins {
+  id "java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Backup"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+  implementation.extendsFrom starterMessaging
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":warehouse-common")
+
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_data_api
+  implementation libraries.jakarta_validation_api
+  implementation libraries.silenteight_sep_base_common
+
+  testFixturesImplementation testFixtures(project(':warehouse-common'))
+}
