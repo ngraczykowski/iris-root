@@ -5,13 +5,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
-import com.silenteight.sep.base.common.time.LocalWithTimeZoneDateFormatter;
 import com.silenteight.warehouse.report.billing.domain.exception.ReportTypeNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
 import static com.silenteight.sep.base.common.time.DefaultTimeSource.INSTANCE;
 import static com.silenteight.sep.base.common.time.DefaultTimeSource.TIME_CONVERTER;
 import static java.lang.String.format;
@@ -32,6 +33,10 @@ public enum ReportDefinition {
       "Billing report - previous year",
       getStartOfPreviousYear(),
       getStartOfYear());
+
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                                                      .withZone(
+                                                                          TIME_ZONE.toZoneId());
 
   @NonNull
   private static OffsetDateTime getStartOfYear() {
@@ -90,11 +95,7 @@ public enum ReportDefinition {
   }
 
   private String generateDescription() {
-    return format("%s (%s - %s)", title, asDescString(from), asDescString(to));
-  }
-
-  private String asDescString(OffsetDateTime value) {
-    return LocalWithTimeZoneDateFormatter.INSTANCE.format(value);
+    return format("Billing report from %s to %s", FORMATTER.format(from), FORMATTER.format(to));
   }
 
   private String getReportName(String id) {
