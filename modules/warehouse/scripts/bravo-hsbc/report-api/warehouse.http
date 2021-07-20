@@ -1,0 +1,26 @@
+### Reports API: Step 1: list production reports
+GET {{baseUrl}}/rest/warehouse/api/v1/analysis/production/definitions/{{type}}
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}
+
+
+### Reports API: Step 2: generate report
+POST {{baseUrl}}/rest/warehouse/api/v1/analysis/production/definitions/{{type}}/{{definitionId}}/reports
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}
+
+
+### Reports API: Step 3: check report status
+GET {{baseUrl}}/rest/warehouse/api/v1/analysis/production/definitions/{{type}}/{{definitionId}}/reports/{{timestamp}}/status
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}
+
+
+### Reports API: Step 4: download report
+GET {{baseUrl}}/rest/warehouse/api/v1/analysis/production/definitions/{{type}}/{{definitionId}}/reports/{{timestamp}}
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}

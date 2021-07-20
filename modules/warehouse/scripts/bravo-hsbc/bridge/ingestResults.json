@@ -4,16 +4,20 @@
   "errorAlerts": [],
   "alerts": [
     {
-      "id": "AVIR114SCR11877TW180SAN0021:TW:GR-ESAN:2420869",
+      "id": "{{alertId}}",
       "recommendation": "AAA False Positive",
-      "comment": "Alert ID: AVIR114SCR11877TW180SAN0021:TW:GR-ESAN:2420869",
+      "comment": "Alert ID: {{alertId}}",
       "policy_id": "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
       "step_id": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
       "fv_signature": "Jjqv6JCr9UuCw1r9aEeqTUwKmgI=",
       "alertMetadata": [
         {
+          "key": "discriminator",
+          "value": "{{alertId}}_{{discriminator}}"
+        },
+        {
           "key": "trackingId",
-          "value": "e97a90b0834f13baaf1d3c2feed132c4"
+          "value": "{{discriminator}}"
         },
         {
           "key": "extendedAttribute5",
