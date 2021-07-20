@@ -35,10 +35,8 @@ public final class SimulationFixtures {
   public static final State ANALYSIS_STATE = DONE;
   public static final UUID DATASET_ID_1 = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
   public static final String DATASET_NAME_1 = "datasets/" + DATASET_ID_1;
-  public static final long DATASET__ALERT_COUNT_1 = 5L;
   public static final UUID DATASET_ID_2 = fromString("04e81eda-5ce7-4ce7-843c-34ee32a5182f");
   public static final String DATASET_NAME_2 = "datasets/" + DATASET_ID_2;
-  public static final long DATASET__ALERT_COUNT_2 = 3L;
   public static final Set<String> DATASETS = of(DATASET_NAME_1, DATASET_NAME_2);
   public static final String USERNAME = "USERNAME";
   public static final SimulationState STATE = PENDING;

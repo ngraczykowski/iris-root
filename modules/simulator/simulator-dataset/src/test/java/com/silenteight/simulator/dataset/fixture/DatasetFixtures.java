@@ -23,13 +23,16 @@ import static java.util.UUID.fromString;
 public final class DatasetFixtures {
 
   public static final UUID ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  public static final UUID SECOND_ID = fromString("d17b4708-6fde-8dc0-4832-d17b4708d8ca");
   public static final String RESOURCE_NAME = "datasets/" + ID;
+  public static final String SECOND_RESOURCE_NAME = "datasets/" + SECOND_ID;
   public static final String DATASET_NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
   public static final String EXTERNAL_RESOURCE_NAME =
       "datasets/b6855a6f-fc63-422f-84a7-677a0c8f9a9a";
   public static final DatasetState STATE = CURRENT;
   public static final long ALERTS_COUNT = 5L;
+  public static final long SECOND_ALERTS_COUNT = 4L;
   public static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);
   public static final OffsetDateTime TO = OffsetDateTime.of(2020, 10, 10, 23, 59, 59, 0, UTC);
   public static final OffsetDateTime CREATED_AT =
@@ -41,8 +44,7 @@ public final class DatasetFixtures {
       new CreateDatasetRequestDto(
           ID, DATASET_NAME, DESCRIPTION, selectionCriteria(FROM, TO, COUNTRIES));
 
-  public static final DatasetDto DATASET_DTO = DatasetDto
-      .builder()
+  public static final DatasetDto DATASET_DTO = DatasetDto.builder()
       .id(ID)
       .name(RESOURCE_NAME)
       .datasetName(DATASET_NAME)
@@ -65,10 +67,11 @@ public final class DatasetFixtures {
           .createdBy(CREATED_BY)
           .build();
 
-  public static final Dataset DATASET = Dataset.newBuilder()
-      .setName(EXTERNAL_RESOURCE_NAME)
-      .setAlertCount(ALERTS_COUNT)
-      .build();
+  public static final Dataset DATASET =
+      Dataset.newBuilder()
+          .setName(EXTERNAL_RESOURCE_NAME)
+          .setAlertCount(ALERTS_COUNT)
+          .build();
 
   private static AlertSelectionCriteriaDto selectionCriteria(
       OffsetDateTime from, OffsetDateTime to, List<String> countries) {

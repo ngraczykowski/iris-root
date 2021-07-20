@@ -20,6 +20,7 @@ configurations {
 
 dependencies {
   implementation project(":simulator-common-web")
+  implementation project(":simulator-dataset")
   implementation project(":simulator-db-changelog")
   implementation project(":simulator-management")
 

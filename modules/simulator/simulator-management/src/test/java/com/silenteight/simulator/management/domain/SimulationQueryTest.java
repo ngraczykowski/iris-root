@@ -45,11 +45,44 @@ class SimulationQueryTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldGetSimulationDetails() {
+  void shouldGetSimulationDetailsById() {
+    // given
     persistSimulation();
 
+    // when
     SimulationDetailsDto result = underTest.get(ID);
 
+    // then
+    assertSimulationDetails(result);
+  }
+
+  @Test
+  void shouldThrowIfSimulationNotFoundById() {
+    assertThatThrownBy(() -> underTest.get(ID))
+        .isInstanceOf(SimulationNotFoundException.class)
+        .hasMessageContaining("simulationId=" + ID);
+  }
+
+  @Test
+  void shouldGetSimulationDetailsByAnalysisName() {
+    // given
+    persistSimulation();
+
+    // when
+    SimulationDetailsDto result = underTest.get(ANALYSIS_NAME);
+
+    // then
+    assertSimulationDetails(result);
+  }
+
+  @Test
+  void shouldThrowIfSimulationNotFoundByAnalysisName() {
+    assertThatThrownBy(() -> underTest.get(ANALYSIS_NAME))
+        .isInstanceOf(SimulationNotFoundException.class)
+        .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
+  }
+
+  private static void assertSimulationDetails(SimulationDetailsDto result) {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
     assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
@@ -59,13 +92,6 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(result.getCreatedAt()).isNotNull();
-  }
-
-  @Test
-  void shouldThrowIfSimulationNotFound() {
-    assertThatThrownBy(() -> underTest.get(ID))
-        .isInstanceOf(SimulationNotFoundException.class)
-        .hasMessageContaining("simulationId=" + ID);
   }
 
   private void persistSimulation() {
