@@ -25,10 +25,13 @@ warehouse:
     country-source-key: lob_country
     ignored-keys:
       - "[02-9]{1,}\\.CustomerEntities\\..*"
+      - "\\d{1,}\\.PrivateListEntities\\..*"
+      - "\\d{1,}\\.CustomerIndividuals\\..*"
       - "\\d{1,}\\.DN_CASECOMMENT\\..*"
       - "\\d{1,}\\.DN_CASEHISTORY\\..*"
       - "\\d{1,}\\.Relationships\\..*"
       - "\\d{1,}\\.WorldCheckEntities\\..*"
+      - "\\d{1,}\\.WorldCheckIndividuals\\..*"
       - "DN_CASE\\..*"
   messaging:
     integration:
