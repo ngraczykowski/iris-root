@@ -7,17 +7,17 @@ import com.silenteight.datasource.comments.api.v1.CommentInput;
 import com.silenteight.datasource.comments.api.v1.CommentInputServiceGrpc.CommentInputServiceBlockingStub;
 import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
+
+import static java.util.Collections.emptyList;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -55,17 +55,15 @@ class CommentInputServiceClient {
       log.trace("Requesting comment inputs: deadline={}, request={}", deadline, request);
     }
 
-    Iterator<CommentInput> elements;
+    List<CommentInput> commentInputs;
     try {
-      elements = stub.withDeadline(deadline).streamCommentInputs(request);
+      commentInputs = Lists.newArrayList(stub.withDeadline(deadline).streamCommentInputs(request));
     } catch (StatusRuntimeException status) {
       // FIXME(ahaczewski): Remove that mockup once data source is fixed.
       log.warn("Oh well, data source failed to tell us comment inputs... we'll figuring it"
           + " out ourselves");
-      elements = Iterators.forArray(new CommentInput[0]);
+      commentInputs = emptyList();
     }
-
-    var commentInputs = Lists.newArrayList(elements);
 
     if (log.isTraceEnabled()) {
       log.trace("Received comment inputs: response={}", commentInputs);
