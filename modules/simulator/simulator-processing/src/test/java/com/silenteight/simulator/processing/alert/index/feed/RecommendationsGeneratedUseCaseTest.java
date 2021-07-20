@@ -36,6 +36,7 @@ class RecommendationsGeneratedUseCaseTest {
     when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
     when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);
     when(recommendationService.getRecommendation(RECOMMENDATION_NAME)).thenReturn(RECOMMENDATION);
+    when(recommendationService.getMetadata(RECOMMENDATION_NAME)).thenReturn(METADATA);
 
     // when
     SimulationDataIndexRequest indexRequest = underTest.handle(REQUEST);
