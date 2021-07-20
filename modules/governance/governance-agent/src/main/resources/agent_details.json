@@ -141,6 +141,7 @@
     "responses": [
       "TRUE_POSITIVE",
       "NOT_TRUE_POSITIVE",
+      "INCONCLUSIVE",
       "NO_DATA"
     ],
     "configurations": [
@@ -220,6 +221,23 @@
       "NOT_PEP_HISTORICAL",
       "NOT_PEP_PROCEDURAL",
       "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "Date Indv Normal",
+        "configFile": "agents/configurations/date-indv-normal.yml"
+      }
+    ]
+  },
+  "agents/logicalDiscountingDob/versions/1.0.0/configs/1": {
+    "agentId": "f4a4911e-f57d-4a34-a6a6-b3e47e242a80",
+    "features": [
+      "features/logicalDiscountingDob"
+    ],
+    "responses": [
+      "IMBOSSIBLE",
+      "UNLIKELY",
+      "INCONCLUSIVE"
     ],
     "configurations": [
       {
