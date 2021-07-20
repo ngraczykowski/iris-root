@@ -2,7 +2,6 @@ package com.silenteight.adjudication.engine.comments.comment;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.comments.comment.TemplateEngineRegistry.TemplateNotFoundException;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
@@ -19,7 +18,6 @@ import static com.silenteight.adjudication.engine.comments.comment.CommentTempla
 import static com.silenteight.adjudication.engine.comments.comment.CommentTemplateFixture.createAlertContext;
 import static com.silenteight.adjudication.engine.comments.comment.TestUtils.readFile;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 class GenerateCommentUseCaseTest {
@@ -53,12 +51,22 @@ class GenerateCommentUseCaseTest {
   }
 
   @Test
-  void shouldFailWhenPassUnsupportedType() {
+  void shouldNotFailWhenPassUnsupportedType() {
     var alertModel = randomAlertModel();
 
-    assertThrows(
-        TemplateNotFoundException.class,
-        () -> facade.generateComment("some template", alertModel));
+    var evaluated = facade.generateComment("some template", alertModel);
+
+    assertThat(evaluated).isEmpty();
+  }
+
+  @Test
+  void shouldNotFailWhenPassBuggyTemplate() {
+    repo.save(commentTemplate("buggy.ftl", readFile("freemarker/buggy.ftl")));
+    var alertModel = randomAlertModel();
+
+    var evaluated = facade.generateComment("buggy", alertModel);
+
+    assertThat(evaluated).isEmpty();
   }
 
   @Test
