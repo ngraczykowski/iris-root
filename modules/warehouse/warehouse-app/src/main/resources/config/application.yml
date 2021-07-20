@@ -255,8 +255,8 @@ warehouse.report.rbs:
       label: step_id
     - name: recommended action
       label: recommended action
-    - name: categories/customerType
-      label: categories/customerType
+    - name: "categories/customerType"
+      label: "categories/customerType"
     - name: features/name
       label: features/name
   grouping-columns:
