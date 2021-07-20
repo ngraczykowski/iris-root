@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import javax.validation.Valid;
 
 @Configuration
@@ -37,9 +38,17 @@ class SimulationConfiguration {
 
   @Bean
   SimulationReportingQuery simulationReportingQuery(
-      ReportingService reportingService,
-      SimulationAnalysisService simulationAnalysisService) {
+      ReportingService reportingService, SimulationAnalysisService simulationAnalysisService) {
 
     return new SimulationReportingQuery(reportingService, simulationAnalysisService);
+  }
+
+  @Bean
+  SimulationReportsDefinitionsUseCase simulationReportsDefinitionsUseCase(
+      SimulationReportingQuery simulationReportingQuery,
+      List<SimulationReportsProvider> simulationReportsProviders) {
+
+    return new SimulationReportsDefinitionsUseCase(
+        simulationReportingQuery, simulationReportsProviders);
   }
 }

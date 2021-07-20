@@ -30,7 +30,8 @@ public class SimulationReportingQuery {
   List<ReportDefinitionDto> getReportsDefinitions(String analysisId) {
     String tenantName = getTenantIdByAnalysisId(analysisId);
 
-    return reportingService.listReportDefinitions(tenantName)
+    return reportingService
+        .listReportDefinitions(tenantName)
         .stream()
         .map(reportDefinitionDto -> convertToDefinitionDto(reportDefinitionDto, analysisId))
         .collect(toList());

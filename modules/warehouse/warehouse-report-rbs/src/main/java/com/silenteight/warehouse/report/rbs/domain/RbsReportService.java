@@ -23,7 +23,7 @@ public class RbsReportService {
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 
-  public void removeReport(Long id) {
+  public void removeReport(long id) {
     repository.deleteById(id);
   }
 }

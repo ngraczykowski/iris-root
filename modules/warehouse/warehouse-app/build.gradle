@@ -27,6 +27,7 @@ dependencies {
   implementation project(":warehouse-report")
   implementation project(":warehouse-report-billing")
   implementation project(":warehouse-report-rbs")
+  implementation project(":warehouse-report-sm")
   implementation project(":warehouse-sampling")
 
   implementation libraries.silenteight_sep_base_common
