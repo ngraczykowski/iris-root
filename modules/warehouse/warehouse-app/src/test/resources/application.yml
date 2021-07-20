@@ -21,6 +21,8 @@ warehouse:
     country-source-key: lob_country
   messaging:
     integration:
+      backup-indexing-inbound:
+        queue-name: wh.index-request.backup
       production-indexing-inbound:
         queue-name: wh.index-request.production
       production-indexed-outbound:
