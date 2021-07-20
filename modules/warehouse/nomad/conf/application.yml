@@ -100,30 +100,30 @@ warehouse.report.rbs:
     - name: alert_stepId
       label: step_id
     - name: alert_recommendation
-      label: recommended action
+      label: alert_s8_recommendation
     - name: alert_extendedAttribute5
       label: risk_type
-    - name: alert_dateOfBirthFeatureSolution
+    - name: alert_features/dateOfBirth:solution
       label: date_of_birth
-    - name: alert_genderFeatureSolution
+    - name: alert_features/gender:solution
       label: gender
-    - name: alert_incorporationCountryFeatureSolution
+    - name: alert_features/incorporationCountry:solution
       label: incorporation_country
-    - name: alert_nameFeatureSolution
+    - name: alert_features/name:solution
       label: name
-    - name: alert_nationalIdDocumentFeatureSolution
+    - name: alert_features/nationalIdDocument:solution
       label: national_id_document
-    - name: alert_nationalityCountryFeatureSolution
+    - name: alert_features/nationalityCountry:solution
       label: national_country
-    - name: alert_otherCountryFeatureSolution
+    - name: alert_features/otherCountry:solution
       label: other_country
-    - name: alert_otherDocumentFeatureSolution
+    - name: alert_features/otherDocument:solution
       label: other_document
-    - name: alert_passportNumberDocumentFeatureSolution
+    - name: alert_features/passportNumberDocument:solution
       label: passport_number_document
-    - name: alert_registrationCountryFeatureSolution
+    - name: alert_features/registrationCountry:solution
       label: registration_country
-    - name: alert_residencyCountryFeatureSolution
+    - name: alert_features/residencyCountry:solution
       label: residency_country
   grouping-columns:
 #    - name: alert_qa.level-0.state
