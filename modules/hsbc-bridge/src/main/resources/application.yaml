@@ -36,7 +36,7 @@ silenteight.bridge:
     secretKey: minioadmin
     uri: http://127.0.0.1:9000
   data.retention:
-    duration: 5d
+    duration: 180d
     enabled: true
     rate: 1d
   jenkins.api:
