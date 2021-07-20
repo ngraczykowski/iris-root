@@ -132,7 +132,10 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static Map<String, Value> toMatchFields(MatchMetadata matchMetadata) {
     Map<String, Value> fields = new HashMap<>();
     fields.put(MATCH_SOLUTION_FIELD, toValue(matchMetadata.getSolution()));
-    fields.put(MATCH_REASON_FIELD, toValue(matchMetadata.getReason().toString()));
+    matchMetadata
+        .getReason()
+        .getFieldsMap()
+        .forEach((key, value) -> fields.put(MATCH_REASON_FIELD + ":" + key, value));
     matchMetadata
         .getFeaturesMap()
         .forEach((key, value) -> fields.putAll(toFeatureFields(key, value)));
