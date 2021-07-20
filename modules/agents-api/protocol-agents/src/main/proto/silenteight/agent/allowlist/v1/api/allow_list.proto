@@ -14,7 +14,7 @@ service AllowListAgent {
 
 message VerifyRequest {
   repeated string characteristics_value = 1;
-  string allow_list_name = 2;
+  repeated string allow_list_name = 2;
 }
 
 message VerifyResponse {
