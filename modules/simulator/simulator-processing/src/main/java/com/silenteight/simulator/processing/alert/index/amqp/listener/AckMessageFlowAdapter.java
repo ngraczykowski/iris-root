@@ -15,9 +15,6 @@ class AckMessageFlowAdapter extends IntegrationFlowAdapter {
   private final String inboundChannel;
 
   @NonNull
-  private final String outboundChannel;
-
-  @NonNull
   private final AckMessageHandler handler;
 
   @Override
@@ -25,8 +22,7 @@ class AckMessageFlowAdapter extends IntegrationFlowAdapter {
     return from(inboundChannel)
         .handle(DataIndexResponse.class, (p, h) -> {
           handler.handle(p);
-          return p;
-        })
-        .channel(outboundChannel);
+          return null;
+        });
   }
 }

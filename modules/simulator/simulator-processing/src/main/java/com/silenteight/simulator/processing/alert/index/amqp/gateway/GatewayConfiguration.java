@@ -18,11 +18,7 @@ import javax.validation.Valid;
 @EnableConfigurationProperties(AlertIndexProperties.class)
 public class GatewayConfiguration {
 
-  public static final String RECOMMENDATIONS_OUTBOUND_CHANNEL =
-      "recommendationsOutboundChannel";
-
-  public static final String ACK_MESSAGES_OUTBOUND_CHANNEL =
-      "ackMessagesOutboundChannel";
+  public static final String RECOMMENDATIONS_OUTBOUND_CHANNEL = "recommendationsOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
