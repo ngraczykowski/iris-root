@@ -48,6 +48,27 @@ class SimulationServiceTest extends BaseDataJpaTest {
   }
 
   @Test
+  void exists() {
+    // given
+    persistSimulation();
+
+    // when
+    boolean result = underTest.exists(ANALYSIS_NAME);
+
+    // then
+    assertThat(result).isTrue();
+  }
+
+  @Test
+  void doesNotExist() {
+    // when
+    boolean result = underTest.exists(ANALYSIS_NAME);
+
+    // then
+    assertThat(result).isFalse();
+  }
+
+  @Test
   void shouldThrowNonUniqueSimulationException() {
     // given
     underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);

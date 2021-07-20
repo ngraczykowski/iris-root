@@ -9,6 +9,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
+import com.silenteight.simulator.management.domain.SimulationService;
 import com.silenteight.simulator.processing.alert.index.amqp.listener.RecommendationsGeneratedMessageHandler;
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertService;
 
@@ -34,6 +35,8 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static final String RECOMMENDATION_COMMENT_FIELD = "recommendation_comment";
 
   @NonNull
+  private final SimulationService simulationService;
+  @NonNull
   private final RecommendationService recommendationService;
   @NonNull
   private final IndexedAlertService indexedAlertService;
@@ -42,6 +45,11 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
 
   @Override
   public SimulationDataIndexRequest handle(RecommendationsGenerated request) {
+    if (!simulationExists(request.getAnalysis())) {
+      log.debug("Analysis is not a simulation: analysis=" + request.getAnalysis());
+      return null;
+    }
+
     String requestId = requestIdGenerator.generate();
     log.info("Recommendations generated: "
         + " requestId=" + requestId
@@ -50,7 +58,12 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     SimulationDataIndexRequest indexRequest = toIndexRequest(requestId, request);
     indexedAlertService.saveAsSent(
         requestId, request.getAnalysis(), request.getRecommendationInfosCount());
+
     return indexRequest;
+  }
+
+  private boolean simulationExists(String analysisName) {
+    return simulationService.exists(analysisName);
   }
 
   private SimulationDataIndexRequest toIndexRequest(

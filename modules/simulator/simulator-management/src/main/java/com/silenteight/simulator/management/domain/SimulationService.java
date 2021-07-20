@@ -40,6 +40,12 @@ public class SimulationService {
     }
   }
 
+  public boolean exists(String analysis) {
+    return repository
+        .findByAnalysisName(analysis)
+        .isPresent();
+  }
+
   public void finish(String analysis) {
     SimulationEntity simulationEntity = repository
         .findByAnalysisName(analysis)
@@ -48,7 +54,8 @@ public class SimulationService {
   }
 
   public long countAllAlerts(String analysis) {
-    return repository.countAllAlerts(analysis)
+    return repository
+        .countAllAlerts(analysis)
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
   }
 }

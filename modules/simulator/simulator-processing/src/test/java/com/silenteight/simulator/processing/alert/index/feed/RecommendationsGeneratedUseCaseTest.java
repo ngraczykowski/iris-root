@@ -2,6 +2,7 @@ package com.silenteight.simulator.processing.alert.index.feed;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
+import com.silenteight.simulator.management.domain.SimulationService;
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertService;
 
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ class RecommendationsGeneratedUseCaseTest {
   private RecommendationsGeneratedUseCase underTest;
 
   @Mock
+  private SimulationService simulationService;
+  @Mock
   private RecommendationService recommendationService;
   @Mock
   private IndexedAlertService indexedAlertService;
@@ -28,8 +31,9 @@ class RecommendationsGeneratedUseCaseTest {
   private RequestIdGenerator requestIdGenerator;
 
   @Test
-  void shouldHandleMessage() {
+  void shouldHandleMessageWhenSimulationExists() {
     // given
+    when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
     when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);
     when(recommendationService.getRecommendation(RECOMMENDATION_NAME)).thenReturn(RECOMMENDATION);
 
@@ -43,5 +47,18 @@ class RecommendationsGeneratedUseCaseTest {
     assertThat(indexRequest.getAnalysisName()).isEqualTo(ANALYSIS_NAME);
     assertThat(indexRequest.getAlertsList())
         .extracting(Alert::getDiscriminator).containsExactly(ALERT_NAME);
+  }
+
+  @Test
+  void shouldHandleMessageWhenSimulationDoesNotExist() {
+    // given
+    when(simulationService.exists(ANALYSIS_NAME)).thenReturn(false);
+
+    // when
+    underTest.handle(REQUEST);
+
+    // then
+    verifyNoInteractions(recommendationService);
+    verifyNoInteractions(indexedAlertService);
   }
 }
