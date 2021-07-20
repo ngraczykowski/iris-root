@@ -6,8 +6,15 @@ import lombok.NoArgsConstructor;
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
 
+import com.google.protobuf.Struct;
 import com.google.protobuf.Timestamp;
+import com.google.protobuf.Value;
+
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
 
@@ -24,6 +31,9 @@ final class FeedFixtures {
       .build();
   static final String RECOMMENDED_ACTION = "FALSE_POSITIVE";
   static final String RECOMMENDATION_COMMENT = "This is not that person";
+  static final String MATCH_NAME = "matches/a9b45451-6fde-4832-8dc0-d17b4708d8ca";
+  static final String FEATURE_SOLUTION = "FALSE_POSITIVE";
+  static final String MATCH_SOLUTION = "FALSE_POSITIVE";
 
   static final Recommendation RECOMMENDATION =
       Recommendation.newBuilder()
@@ -44,5 +54,35 @@ final class FeedFixtures {
       RecommendationsGenerated.newBuilder()
           .setAnalysis(ANALYSIS_NAME)
           .addAllRecommendationInfos(singletonList(RECOMMENDATION_INFO))
+          .build();
+
+  static final Struct FEATURE_REASON =
+      Struct.newBuilder()
+          .putAllFields(
+              Map.of("reason-1", Value.newBuilder()
+                  .setStringValue("This is reason")
+                  .build()))
+          .build();
+
+  static final FeatureMetadata FEATURE_METADATA =
+      FeatureMetadata.newBuilder()
+          .setAgentConfig("agent-config")
+          .setSolution(FEATURE_SOLUTION)
+          .setReason(FEATURE_REASON)
+          .build();
+
+  static final MatchMetadata MATCH_METADATA =
+      MatchMetadata.newBuilder()
+          .setMatch(MATCH_NAME)
+          .setSolution(MATCH_SOLUTION)
+          .putAllCategories(Map.of("category-1", "category-value-1"))
+          .putAllFeatures(Map.of("feature-name", FEATURE_METADATA))
+          .build();
+
+  static final RecommendationMetadata METADATA =
+      RecommendationMetadata.newBuilder()
+          .setName(RECOMMENDATION_NAME + "/metadata")
+          .setAlert(ALERT_NAME)
+          .addMatches(MATCH_METADATA)
           .build();
 }
