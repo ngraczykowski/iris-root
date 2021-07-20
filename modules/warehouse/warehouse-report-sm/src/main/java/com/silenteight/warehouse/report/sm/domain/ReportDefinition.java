@@ -40,6 +40,7 @@ public enum ReportDefinition {
         .builder()
         .id(id)
         .name(getReportName(analysisId, id))
+        .reportType(name())
         .title(title)
         .description(description)
         .build();
