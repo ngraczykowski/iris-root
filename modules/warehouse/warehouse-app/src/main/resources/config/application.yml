@@ -280,5 +280,5 @@ warehouse.report.billing:
     - name: recommended action
       label: COUNT_SOLVED
       grouping-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE, MANUAL_INVESTIGATION]
-      add-counter: true
+      counterSuffix: ALL
   date-field-name: alert_timestamp

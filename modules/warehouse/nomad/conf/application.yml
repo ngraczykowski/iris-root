@@ -98,6 +98,8 @@ warehouse.report.rbs:
       label: recommended action
     - name: alert_extendedAttribute5
       label: risk_type
+    - name: alert_categories/apType
+      label: ap_type
     - name: alert_dateOfBirthFeatureSolution
       label: date_of_birth
     - name: alert_genderFeatureSolution
@@ -120,12 +122,11 @@ warehouse.report.rbs:
       label: registration_country
     - name: alert_residencyCountryFeatureSolution
       label: residency_country
-
   grouping-columns:
-    #    - name: qa_decision
-    #      label: qa_decision
-    #      grouping-values: [PASS, FAILED]
-    #      add-counter: true
+    - name: alert_qa.level-0.state
+      label: qa_decision
+      grouping-values: [PASSED, FAILED]
+      add-counter: true
     - name: alert_DN_CASE.currentState
       label: analysis_decision
       grouping-values: Level 1 Review, Level 2 Review
@@ -142,5 +143,5 @@ warehouse.report.billing:
     - name: alert_recommendation
       label: COUNT_SOLVED
       grouping-values: [AAA False Positive, Level 1 Review, Level 2 Review, Level 3 Review]
-      add-counter: true
+      counterSuffix: ALL
   date-field-name: index_timestamp
