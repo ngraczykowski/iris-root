@@ -146,4 +146,21 @@
       </column>
     </createTable>
   </changeSet>
+  <changeSet id="warehouse-1.0.0-7" author="tbiedrzycki">
+    <createTable tableName="warehouse_message_backup">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="request_id" type="VARCHAR(40)">
+      </column>
+      <column name="analysis_name" type="VARCHAR(64)">
+      </column>
+      <column name="data" type="BYTEA">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>
