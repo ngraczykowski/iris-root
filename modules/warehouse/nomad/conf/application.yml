@@ -121,10 +121,10 @@ warehouse.report.rbs:
     - name: alert_residencyCountryFeatureSolution
       label: residency_country
   grouping-columns:
-    - name: alert_qa.level-0.state
-      label: qa_decision
-      grouping-values: [PASSED, FAILED]
-      add-counter: true
+#    - name: alert_qa.level-0.state
+#      label: qa_decision
+#      grouping-values: [PASSED, FAILED]
+#      add-counter: true
     - name: alert_DN_CASE.currentState
       label: analysis_decision
       grouping-values: Level 1 Review, Level 2 Review
