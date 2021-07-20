@@ -98,8 +98,8 @@ warehouse.report.rbs:
       label: policy_id
     - name: alert_stepId
       label: step_id
-    - name: alert_recommendation
-      label: alert_s8_recommendation
+    - name: alert_s8_recommendation
+      label: alert_recommendation
     - name: alert_extendedAttribute5
       label: risk_type
     - name: alert_features/dateOfBirth:solution
