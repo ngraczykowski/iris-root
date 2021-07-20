@@ -98,8 +98,6 @@ warehouse.report.rbs:
       label: recommended action
     - name: alert_extendedAttribute5
       label: risk_type
-    - name: "alert_categories/apType"
-      label: ap_type
     - name: alert_dateOfBirthFeatureSolution
       label: date_of_birth
     - name: alert_genderFeatureSolution
