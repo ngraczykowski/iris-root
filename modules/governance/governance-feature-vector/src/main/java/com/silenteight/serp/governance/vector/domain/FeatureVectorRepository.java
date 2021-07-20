@@ -50,6 +50,17 @@ interface FeatureVectorRepository extends Repository<FeatureVector, Long> {
       + " LIMIT :limit", nativeQuery = true)
   Stream<FeatureVectorWithUsage> findAllWithUsagePageable(long offset, int limit);
 
+  @Query(value = "SELECT"
+      + "   fv.names as names,"
+      + "   fv.values as values,"
+      + "   fvu.usage_count as usageCount,"
+      + "   fv.vector_signature as signature"
+      + " FROM governance_analytics_feature_vector fv"
+      + " JOIN governance_analytics_feature_vector_usage fvu "
+      + "   ON fv.vector_signature = fvu.vector_signature"
+      + " WHERE fv.vector_signature = :signature", nativeQuery = true)
+  FeatureVectorWithUsage findByVectorSignatureWithUsage(String signature);
+
   @Query(value = "SELECT DISTINCT fv.names"
       + " FROM governance_analytics_feature_vector fv", nativeQuery = true)
   List<String> findDistinctFeatureNames();

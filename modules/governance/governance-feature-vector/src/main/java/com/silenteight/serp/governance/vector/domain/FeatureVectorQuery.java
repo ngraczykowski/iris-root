@@ -3,7 +3,9 @@ package com.silenteight.serp.governance.vector.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 import com.silenteight.serp.governance.common.web.rest.Paging;
+import com.silenteight.serp.governance.vector.domain.details.VectorDetailQuery;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorWithUsageDto;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorsDto;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorsDto.FeatureVectorDto;
@@ -18,11 +20,13 @@ import java.util.stream.Stream;
 import javax.validation.Valid;
 
 import static com.google.common.base.Splitter.on;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 @RequiredArgsConstructor
-class FeatureVectorQuery implements FeatureVectorUsageQuery, FeatureNamesQuery, ListVectorsQuery {
+class FeatureVectorQuery implements
+    FeatureVectorUsageQuery, FeatureNamesQuery, ListVectorsQuery, VectorDetailQuery {
 
   @NonNull
   private final FeatureVectorRepository analyticsFeatureVectorRepository;
@@ -35,7 +39,8 @@ class FeatureVectorQuery implements FeatureVectorUsageQuery, FeatureNamesQuery, 
   }
 
   private static FeatureVectorWithUsageDto mapToDto(FeatureVectorWithUsage featureVector) {
-    return FeatureVectorWithUsageDto.builder()
+    return FeatureVectorWithUsageDto
+        .builder()
         .signature(featureVector.getSignature())
         .usageCount(featureVector.getUsageCount())
         .names(split(featureVector.getNames()))
@@ -71,7 +76,8 @@ class FeatureVectorQuery implements FeatureVectorUsageQuery, FeatureNamesQuery, 
         .map(vector -> vector.standardize(columns))
         .collect(toList());
 
-    return FeatureVectorsDto.builder()
+    return FeatureVectorsDto
+        .builder()
         .columns(columns)
         .featureVectors(featureVectorDtos)
         .build();
@@ -80,5 +86,13 @@ class FeatureVectorQuery implements FeatureVectorUsageQuery, FeatureNamesQuery, 
   @Override
   public int count() {
     return analyticsFeatureVectorRepository.countAll();
+  }
+
+  @Override
+  public FeatureVectorWithUsageDto findByFvSignature(String fvSignature) {
+    return ofNullable(
+        analyticsFeatureVectorRepository.findByVectorSignatureWithUsage(fvSignature))
+        .map(FeatureVectorQuery::mapToDto)
+        .orElseThrow(EntityNotFoundException::new);
   }
 }

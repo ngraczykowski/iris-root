@@ -35,6 +35,14 @@ public class InMemoryAnalyticsFeatureVectorRepository
     return findAllWithUsage().skip(offset).limit(limit);
   }
 
+  @Override
+  public FeatureVectorWithUsage findByVectorSignatureWithUsage(String signature) {
+    return findAllWithUsage()
+        .filter(featureVectorWithUsage -> featureVectorWithUsage.getSignature().equals(signature))
+        .findFirst()
+        .orElseThrow();
+  }
+
   private static final FeatureVectorWithUsage mapToFeatureVectorWithUsage(
       FeatureVector featureVector) {
 
