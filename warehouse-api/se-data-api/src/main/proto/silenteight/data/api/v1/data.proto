@@ -36,7 +36,7 @@ message SimulationDataIndexRequest {
 
 message Alert {
   // Name of the alert
-  string name = 1 [(google.api.field_behavior) = OPTIONAL, deprecated = true];
+  string name = 1 [(google.api.field_behavior) = OPTIONAL];
   // Payload of the alert that should be stored.
   // If an alert with this name is already stored, the payload will be merged into an existing
   // content. Because order of processing messages is not guaranteed, values for existing keys
