@@ -27,6 +27,7 @@ class AlertMetadata {
 
     DISCRIMINATOR("discriminator"),
     EXTENDED_ATTRIBUTE_5("extendedAttribute5"),
+    S8_LOB_COUNTRY_CODE("s8_lobCountryCode"),
     TRACKING_ID("trackingId");
 
     private String name;

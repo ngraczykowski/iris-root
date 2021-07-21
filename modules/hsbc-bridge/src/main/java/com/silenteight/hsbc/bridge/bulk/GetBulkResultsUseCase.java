@@ -24,7 +24,8 @@ public class GetBulkResultsUseCase {
 
   private final BulkRepository bulkRepository;
   private final GetRecommendationUseCase getRecommendationUseCase;
-  private final AlertMetadataCollector alertMetadataCollector = new AlertMetadataCollector();
+  private final RecommendationMetadataCollector
+      recommendationMetadataCollector = new RecommendationMetadataCollector();
 
   public BatchSolvedAlerts getResults(String id) {
     var result = bulkRepository.findById(id);
@@ -82,7 +83,7 @@ public class GetBulkResultsUseCase {
       SolvedAlert alert, RecommendationWithMetadataDto recommendation) {
     var metadata = recommendation.getMetadata();
     var recommendationAlertMetadata =
-        alertMetadataCollector.collectFromRecommendationMetadata(metadata);
+        recommendationMetadataCollector.collectFromRecommendationMetadata(metadata);
 
     alert.setFvSignature(findByKey("feature_vector_signature", recommendationAlertMetadata));
     alert.setPolicyId(findByKey("policy", recommendationAlertMetadata));

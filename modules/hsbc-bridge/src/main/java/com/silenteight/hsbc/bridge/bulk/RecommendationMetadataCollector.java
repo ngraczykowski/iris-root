@@ -14,7 +14,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
 @Slf4j
-class AlertMetadataCollector {
+class RecommendationMetadataCollector {
 
   Collection<AlertMetadata> collectFromRecommendationMetadata(RecommendationMetadata metadata) {
     var matchesMetadata = metadata.getMatchesMetadata();

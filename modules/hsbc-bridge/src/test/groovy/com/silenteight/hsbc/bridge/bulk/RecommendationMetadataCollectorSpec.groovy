@@ -6,9 +6,9 @@ import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadat
 
 import spock.lang.Specification
 
-class AlertMetadataCollectorSpec extends Specification {
+class RecommendationMetadataCollectorSpec extends Specification {
 
-  def underTest = new AlertMetadataCollector()
+  def underTest = new RecommendationMetadataCollector()
   def fixtures = new Fixtures()
 
   def 'should not collect metadata from recommendation metadata when list is null'() {
