@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.management.details.SimulationDetailsQuery;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
 
@@ -23,6 +25,8 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
 
   @Override
   public List<SimulationDto> list() {
+    log.debug("Listing all SimulationDto");
+
     return repository
         .findAll()
         .stream()
@@ -32,8 +36,9 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
 
   @Override
   public List<SimulationDto> findByModel(@NonNull String model) {
-    Collection<SimulationEntity> simulationEntities = repository.findAllByModelName(model);
+    log.debug("Listing all SimulationDto by model={}", model);
 
+    Collection<SimulationEntity> simulationEntities = repository.findAllByModelName(model);
     if (simulationEntities.isEmpty())
       throw new InvalidModelNameException(model);
 
@@ -45,6 +50,8 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
 
   @Override
   public SimulationDetailsDto get(@NonNull UUID simulationId) {
+    log.debug("Getting SimulationDetailsDto by simulationId={}", simulationId);
+
     return repository
         .findBySimulationId(simulationId)
         .map(SimulationEntity::toDetailsDto)
@@ -53,6 +60,8 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
 
   @Override
   public SimulationDetailsDto get(@NonNull String analysisName) {
+    log.debug("Getting SimulationDetailsDto by analysisName={}", analysisName);
+
     return repository
         .findByAnalysisName(analysisName)
         .map(SimulationEntity::toDetailsDto)

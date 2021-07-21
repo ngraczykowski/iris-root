@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.create;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 
@@ -19,6 +20,7 @@ import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.status;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
@@ -32,15 +34,19 @@ class CreateDatasetRestController {
   public ResponseEntity<Void> create(
       @RequestBody @Valid CreateDatasetRequestDto dto, Authentication authentication) {
 
+    log.info("Create dataset. DatasetRequestDto={}.", dto);
+
     CreateDatasetRequest request = CreateDatasetRequest.builder()
-         .id(dto.getId())
-         .datasetName(dto.getDatasetName())
-         .description(dto.getDescription())
-         .rangeFrom(dto.getQuery().getRangeFrom())
-         .rangeTo(dto.getQuery().getRangeTo())
-         .createdBy(authentication.getName())
-         .build();
+        .id(dto.getId())
+        .datasetName(dto.getDatasetName())
+        .description(dto.getDescription())
+        .rangeFrom(dto.getQuery().getRangeFrom())
+        .rangeTo(dto.getQuery().getRangeTo())
+        .createdBy(authentication.getName())
+        .build();
     useCase.activate(request);
+    log.debug("Create dataset request processed.");
+
     return status(CREATED).build();
   }
 }

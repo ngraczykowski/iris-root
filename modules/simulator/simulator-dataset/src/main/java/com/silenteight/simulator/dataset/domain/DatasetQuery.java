@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DatasetQuery {
 
@@ -19,6 +21,8 @@ public class DatasetQuery {
   private final DatasetEntityRepository repository;
 
   public List<DatasetDto> list(DatasetState state) {
+    log.trace("Getting all DatasetDto with state={}", state);
+
     return findAll(state)
         .stream()
         .map(DatasetEntity::toDto)
@@ -33,6 +37,8 @@ public class DatasetQuery {
   }
 
   public DatasetDto get(@NonNull UUID datasetId) {
+    log.trace("Getting DatasetDto by datasetId={}", datasetId);
+
     return repository
         .findByDatasetId(datasetId)
         .map(DatasetEntity::toDto)
@@ -40,6 +46,8 @@ public class DatasetQuery {
   }
 
   public String getExternalResourceName(@NonNull UUID datasetId) {
+    log.trace("Getting ExternalResourceName by datasetId={}", datasetId);
+
     return repository
         .findByDatasetId(datasetId)
         .map(DatasetEntity::getExternalResourceName)

@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.create;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.auditing.bs.AuditingLogger;
@@ -12,6 +13,7 @@ import com.silenteight.simulator.management.domain.SimulationService;
 
 import java.util.Set;
 
+@Slf4j
 @AllArgsConstructor
 public class CreateSimulationUseCase {
 
@@ -48,6 +50,8 @@ public class CreateSimulationUseCase {
         .map(datasetQuery::getExternalResourceName)
         .forEach(resourceName -> analysisService.addDatasetToAnalysis(
             analysis.getName(), resourceName));
+
+    log.debug("Run analysis={}", analysis);
     return analysis;
   }
 

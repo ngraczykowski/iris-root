@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.grpc.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
@@ -17,6 +18,7 @@ import java.util.List;
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static java.util.Map.of;
 
+@Slf4j
 @RequiredArgsConstructor
 class GrpcCreateDatasetService implements CreateDatasetService {
 
@@ -27,6 +29,8 @@ class GrpcCreateDatasetService implements CreateDatasetService {
 
   @Override
   public Dataset createDataset(CreateDatasetRequest request) {
+    log.debug("Creating dataset with CreateDatasetRequest={}", request);
+
     return datasetStub.createDataset(toGrpcRequest(request));
   }
 

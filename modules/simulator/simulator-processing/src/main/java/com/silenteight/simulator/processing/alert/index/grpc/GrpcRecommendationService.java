@@ -2,6 +2,7 @@ package com.silenteight.simulator.processing.alert.index.grpc;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.GetRecommendationMetadataRequest;
@@ -10,6 +11,7 @@ import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
 import com.silenteight.simulator.processing.alert.index.feed.RecommendationService;
 
+@Slf4j
 @RequiredArgsConstructor
 class GrpcRecommendationService implements RecommendationService {
 
@@ -20,6 +22,8 @@ class GrpcRecommendationService implements RecommendationService {
 
   @Override
   public Recommendation getRecommendation(@NonNull String recommendationName) {
+    log.debug("Getting Recommendation by recommendationName={}", recommendationName);
+
     return recommendationStub.getRecommendation(toGetRecommendationRequest(recommendationName));
   }
 

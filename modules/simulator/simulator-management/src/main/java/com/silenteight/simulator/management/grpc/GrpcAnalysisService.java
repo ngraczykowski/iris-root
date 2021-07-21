@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.grpc;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.AddDatasetRequest;
 import com.silenteight.adjudication.api.v1.Analysis;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 class GrpcAnalysisService implements AnalysisService {
 
@@ -24,6 +26,8 @@ class GrpcAnalysisService implements AnalysisService {
 
   @Override
   public Analysis createAnalysis(SolvingModel model) {
+    log.debug("Creating Analysis with model={}", model);
+
     return analysisStub.createAnalysis(toCreateAnalysisRequest(model));
   }
 
@@ -60,6 +64,8 @@ class GrpcAnalysisService implements AnalysisService {
 
   @Override
   public void addDatasetToAnalysis(String analysis, String dataset) {
+    log.debug("Adding dataset={} to analysis={}", analysis, dataset);
+
     analysisStub.addDataset(toAddDatasetRequest(analysis, dataset));
   }
 
@@ -72,6 +78,8 @@ class GrpcAnalysisService implements AnalysisService {
 
   @Override
   public Analysis getAnalysis(String analysis) {
+    log.debug("Getting analysis by name={}", analysis);
+
     return analysisStub.getAnalysis(toGetAnalysisRequest(analysis));
   }
 
