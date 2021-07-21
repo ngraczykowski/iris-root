@@ -35,7 +35,8 @@ class DownloadReportsRestControllerTest extends BaseRestControllerTest {
   private static final long REPORT_ID = 4;
   private static final ReportDto REPORT_DTO = ReportDto.of(REPORT_FILENAME, REPORT_CONTENT);
   private static final String DOWNLOAD_REPORT_URL =
-      fromUriString("/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/reports/{id}")
+      fromUriString("/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/"
+                        + "1acb8a9f-c560-4b5c-95a3-c69bcf32b22e/reports/{id}")
           .build(Map.of("analysisId", ANALYSIS_ID, "id", REPORT_ID))
           .toString();
 

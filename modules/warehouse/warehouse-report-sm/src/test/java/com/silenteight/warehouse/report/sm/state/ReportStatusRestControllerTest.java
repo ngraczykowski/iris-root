@@ -28,7 +28,8 @@ class ReportStatusRestControllerTest extends BaseRestControllerTest {
   private static final long REPORT_ID = 5;
   private static final String ANALYSIS_ID = "07fdee7c-9a66-416d-b835-32aebcb63013";
   private static final String REPORT_STATUS_URL =
-      fromUriString("/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/reports/{id}/status")
+      fromUriString("/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/"
+                        + "1acb8a9f-c560-4b5c-95a3-c69bcf32b22e/reports/{id}/status")
           .build(Map.of("analysisId", ANALYSIS_ID, "id", REPORT_ID))
           .toString();
 

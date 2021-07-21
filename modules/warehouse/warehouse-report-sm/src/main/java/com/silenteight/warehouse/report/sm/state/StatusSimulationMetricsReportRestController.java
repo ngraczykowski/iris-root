@@ -21,9 +21,10 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 public class StatusSimulationMetricsReportRestController {
 
   private static final String REPORT_STATUS_URL =
-      "/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/reports/{id}/status";
+      "/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/{definitionId}/reports/{id}/status";
 
   private static final String ANALYSIS_ID_PARAM = "analysisId";
+  private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
 
   @NonNull
@@ -33,6 +34,7 @@ public class StatusSimulationMetricsReportRestController {
   @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
   public ResponseEntity<ReportStatus> getReportStatus(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
+      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(ID_PARAM) long id) {
 
     ReportState state = reportQuery.getReportGeneratingState(id);

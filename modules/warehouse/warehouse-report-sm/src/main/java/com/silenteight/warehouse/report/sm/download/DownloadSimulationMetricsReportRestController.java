@@ -21,8 +21,9 @@ import static org.springframework.http.ResponseEntity.ok;
 class DownloadSimulationMetricsReportRestController {
 
   private static final String DOWNLOAD_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/reports/{id}";
+      "/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/{definitionId}/reports/{id}";
   private static final String ANALYSIS_ID_PARAM = "analysisId";
+  private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
 
   private final DownloadSimulationMetricsReportUseCase useCase;
@@ -31,6 +32,7 @@ class DownloadSimulationMetricsReportRestController {
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
   public ResponseEntity<String> downloadReport(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
+      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(ID_PARAM) long id) {
     ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
