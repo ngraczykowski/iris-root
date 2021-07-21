@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.billing.download;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.billing.domain.BillingReportService;
 import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
@@ -17,6 +18,7 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
@@ -38,6 +40,7 @@ class DownloadBillingReportRestController {
     String data = reportDto.getContent();
 
     reportService.removeReport(id);
+    log.debug("Billing report removed, reportId={},id");
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))

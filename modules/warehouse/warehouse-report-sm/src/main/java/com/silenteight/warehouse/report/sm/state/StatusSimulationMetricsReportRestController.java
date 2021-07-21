@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.sm.state;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.ReportStatus;
 import com.silenteight.warehouse.report.sm.domain.ReportState;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
@@ -36,6 +38,9 @@ public class StatusSimulationMetricsReportRestController {
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
       @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(ID_PARAM) long id) {
+
+    log.debug("Getting simulation metrics report status, analysisId={}, reportId={}", analysisId,
+        id);
 
     ReportState state = reportQuery.getReportGeneratingState(id);
     return ResponseEntity.ok(state.getReportStatus(getReportName(analysisId, definitionId, id)));

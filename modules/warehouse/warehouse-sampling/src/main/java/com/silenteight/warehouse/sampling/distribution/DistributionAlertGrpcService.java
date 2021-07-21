@@ -26,12 +26,14 @@ public class DistributionAlertGrpcService extends DistributionAlertsServiceImplB
       AlertsDistributionRequest request,
       StreamObserver<AlertsDistributionResponse> responseObserver) {
 
+    log.info("AlertsDistributionRequest received, request={}", request);
     try {
       AlertsDistributionResponse response =
           distributionAlertsService.getAlertsDistribution(request);
 
       responseObserver.onNext(response);
       responseObserver.onCompleted();
+      log.debug("Alerts distribution request processed, response={}", response);
     } catch (RuntimeException e) {
       handleException(
           responseObserver, e, INTERNAL_VALUE, "Getting alerts distribution response failed.");

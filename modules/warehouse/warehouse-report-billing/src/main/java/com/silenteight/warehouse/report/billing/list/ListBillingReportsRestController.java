@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.report.billing.list;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.warehouse.report.billing.domain.ReportDefinition;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 class ListBillingReportsRestController {
@@ -21,6 +24,7 @@ class ListBillingReportsRestController {
   @GetMapping("/v1/analysis/production/definitions/BILLING")
   @PreAuthorize("isAuthorized('LIST_PRODUCTION_ON_DEMAND_REPORTS')")
   public ResponseEntity<List<ReportDefinitionDto>> getProductionReportDefinitions() {
+    log.debug("Getting production report definitions.");
     return ok().body(ReportDefinition.toReportsDefinitionDto());
   }
 }
