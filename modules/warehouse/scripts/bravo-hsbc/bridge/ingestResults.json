@@ -6,14 +6,14 @@
     {
       "id": "{{alertId}}",
       "recommendation": "AAA False Positive",
-      "comment": "Alert ID: {{alertId}}",
+      "comment": "",
       "policy_id": "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
       "step_id": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
-      "fv_signature": "Jjqv6JCr9UuCw1r9aEeqTUwKmgI=",
+      "fv_signature": "2N0tYNabpg9ywOrtEOECk1r2f2E=",
       "alertMetadata": [
         {
-          "key": "discriminator",
-          "value": "{{alertId}}_{{discriminator}}"
+          "key": "s8_lobCountryCode",
+          "value": "IN"
         },
         {
           "key": "trackingId",
@@ -24,8 +24,32 @@
           "value": "SAN"
         },
         {
+          "key": "discriminator",
+          "value": "{{alertId}}_{{discriminator}}"
+        },
+        {
+          "key": "s8_recommendation",
+          "value": "AAA False Positive"
+        },
+        {
+          "key": "recommendationYear",
+          "value": "2021"
+        },
+        {
+          "key": "recommendationMonth",
+          "value": "7"
+        },
+        {
+          "key": "recommendationDay",
+          "value": "21"
+        },
+        {
+          "key": "recommendationDate",
+          "value": "2021-07-21T08:24:33.985376Z"
+        },
+        {
           "key": "feature_vector_signature",
-          "value": "Jjqv6JCr9UuCw1r9aEeqTUwKmgI="
+          "value": "2N0tYNabpg9ywOrtEOECk1r2f2E="
         },
         {
           "key": "policy",
@@ -36,92 +60,100 @@
           "value": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93"
         },
         {
-          "key": "nameFeatureConfig",
+          "key": "features/name:config",
           "value": "agents/name/versions/1.0.0/configs/1"
         },
         {
-          "key": "nameFeatureSolution",
+          "key": "features/name:solution",
           "value": "DATA_SOURCE_ERROR"
         },
         {
-          "key": "genderFeatureConfig",
+          "key": "features/gender:config",
           "value": "agents/gender/versions/1.0.0/configs/1"
         },
         {
-          "key": "genderFeatureSolution",
+          "key": "features/gender:solution",
           "value": "NO_DATA"
         },
         {
-          "key": "registrationCountryFeatureConfig",
-          "value": "agents/country/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "registrationCountryFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "incorporationCountryFeatureConfig",
-          "value": "agents/country/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "incorporationCountryFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "residencyCountryFeatureConfig",
-          "value": "agents/country/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "residencyCountryFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "nationalityCountryFeatureConfig",
-          "value": "agents/country/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "nationalityCountryFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "otherCountryFeatureConfig",
-          "value": "agents/country/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "otherCountryFeatureSolution",
-          "value": "NO_MATCH"
-        },
-        {
-          "key": "nationalIdDocumentFeatureConfig",
-          "value": "agents/nationalId/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "nationalIdDocumentFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "passportNumberDocumentFeatureConfig",
-          "value": "agents/document/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "passportNumberDocumentFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "otherDocumentFeatureConfig",
-          "value": "agents/document/versions/1.0.0/configs/1"
-        },
-        {
-          "key": "otherDocumentFeatureSolution",
-          "value": "NO_DATA"
-        },
-        {
-          "key": "dateOfBirthFeatureConfig",
+          "key": "features/dateOfBirth:config",
           "value": "agents/date/versions/1.0.0/configs/1"
         },
         {
-          "key": "dateOfBirthFeatureSolution",
+          "key": "features/dateOfBirth:solution",
           "value": "NO_DATA"
+        },
+        {
+          "key": "features/otherCountry:config",
+          "value": "agents/country/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/otherCountry:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/otherDocument:config",
+          "value": "agents/document/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/otherDocument:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/residencyCountry:config",
+          "value": "agents/country/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/residencyCountry:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/nationalIdDocument:config",
+          "value": "agents/nationalId/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/nationalIdDocument:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/nationalityCountry:config",
+          "value": "agents/country/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/nationalityCountry:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/registrationCountry:config",
+          "value": "agents/country/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/registrationCountry:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/incorporationCountry:config",
+          "value": "agents/country/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/incorporationCountry:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "features/passportNumberDocument:config",
+          "value": "agents/document/versions/1.0.0/configs/1"
+        },
+        {
+          "key": "features/passportNumberDocument:solution",
+          "value": "NO_DATA"
+        },
+        {
+          "key": "categories/apType",
+          "value": "DATA_SOURCE_ERROR"
+        },
+        {
+          "key": "categories/isDeny",
+          "value": "DATA_SOURCE_ERROR"
         }
       ]
     }
