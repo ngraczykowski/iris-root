@@ -32,14 +32,14 @@ class AlertFacadeConfiguration {
 
   @Bean
   AlertSender alertSender() {
-    return new AlertSender(warehouseApi, agentApi, alertInformationFinder());
+    return new AlertSender(warehouseApi, agentApi, alertGetter());
   }
 
-  private AlertGetter alertInformationFinder() {
+  private AlertGetter alertGetter() {
     return new AlertGetter(alertMapper(), alertRepository);
   }
 
-  private AlertMapper alertMapper(){
+  private AlertMapper alertMapper() {
     return new AlertMapper(alertPayloadConverter);
   }
 }

@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
+import java.util.Optional;
+
 import static java.util.Objects.nonNull;
 
 public interface MatchData extends EntityComposite, IndividualComposite {
@@ -12,5 +14,9 @@ public interface MatchData extends EntityComposite, IndividualComposite {
 
   default boolean isEntity() {
     return nonNull(getCustomerEntity());
+  }
+
+  default Optional<String> getWatchlistId() {
+    return isIndividual() ? getIndividualWatchlistId() : getEntityWatchlistId();
   }
 }

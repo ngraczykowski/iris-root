@@ -73,6 +73,7 @@ public class MatchFacade {
     return MatchComposite.builder()
         .id(matchEntity.getId())
         .name(name)
+        .externalId(matchEntity.getExternalId())
         .matchData(getMatchRawData(name, payloadEntity.getPayload()))
         .build();
   }
@@ -107,5 +108,12 @@ public class MatchFacade {
 
     var matchEntity = matchResult.get();
     return toMatchComposite(matchEntity);
+  }
+
+  public List<MatchComposite> getMatchesByAlertNames(@NonNull List<String> alerts) {
+    return matchRepository.findByAlertNames(alerts)
+        .stream()
+        .map(this::toMatchComposite)
+        .collect(Collectors.toList());
   }
 }

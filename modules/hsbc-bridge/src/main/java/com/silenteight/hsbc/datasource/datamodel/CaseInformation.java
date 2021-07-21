@@ -7,4 +7,8 @@ public interface CaseInformation {
   String getExtendedAttribute5();
 
   String getParentId();
+
+  String getExtendedAttribute10();
+
+  String getExternalId();
 }

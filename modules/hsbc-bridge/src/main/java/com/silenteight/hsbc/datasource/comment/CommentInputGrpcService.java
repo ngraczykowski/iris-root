@@ -8,11 +8,14 @@ import com.silenteight.datasource.comments.api.v1.MatchCommentInput;
 import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 
 import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
+import java.util.Map;
 
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
 @GrpcService
@@ -43,10 +46,20 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
     return commentInputsDto.stream()
         .map(commentInputDto -> CommentInput.newBuilder()
             .setAlert(commentInputDto.getAlert())
-            .setAlertCommentInput(Struct.getDefaultInstance())
+            .setAlertCommentInput(toStruct(commentInputDto.getAlertCommentInput()))
             .addAllMatchCommentInputs(mapToMatchCommentInputs(commentInputDto))
             .build())
         .collect(toList());
+  }
+
+  private static Struct toStruct(Map<String, String> commentData) {
+    var builder = Struct.newBuilder();
+    commentData.forEach((k,v) -> {
+      if (nonNull(v)) {
+        builder.putFields(k, Value.newBuilder().setStringValue(v).build());
+      }
+    });
+    return builder.build();
   }
 
   private List<MatchCommentInput> mapToMatchCommentInputs(CommentInputDto commentInputDto) {

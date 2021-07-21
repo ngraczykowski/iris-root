@@ -2,65 +2,88 @@ package com.silenteight.hsbc.datasource.comment;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade;
-import com.silenteight.hsbc.bridge.alert.AlertInfo;
+import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
+import com.silenteight.hsbc.datasource.datamodel.MatchData;
 
+import one.util.streamex.StreamEx;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.sort;
 
 @RequiredArgsConstructor
 public class GetCommentInputUseCase {
 
-  private final AlertFacade alertFacade;
+  private static final String INDIVIDUAL = "I";
+  private static final String ENTITY = "C";
   private final MatchFacade matchFacade;
 
   @Transactional(readOnly = true)
   public List<CommentInputDto> getInputRequestsResponse(StreamCommentInputsRequestDto request) {
+    var alertsSorted = new ArrayList<>(request.getAlerts());
+    sort(alertsSorted);
+
+    var matches = matchFacade.getMatchesByAlertNames(alertsSorted);
+
+    return createCommentInputList(matches, alertsSorted);
+  }
+
+  private ArrayList<CommentInputDto> createCommentInputList(
+      List<MatchComposite> matches, List<String> alertsName) {
     var commentInputs = new ArrayList<CommentInputDto>();
 
-    request.getAlerts().forEach(alertName -> {
-      var alertIds = getAlertIds(alertName);
-      alertIds.forEach(alertId -> {
-        var matchCommentInputs = createMatchCommentInputs(alertId);
-        commentInputs.add(createCommentInput(alertName, matchCommentInputs));
-      });
-    });
+    var index = new AtomicInteger(0);
+    StreamEx.of(matches)
+        .zipWith(Stream.generate(index::getAndIncrement))
+        .forKeyValue((match, idx) -> commentInputs.add(
+            CommentInputDto.builder()
+                .alert(alertsName.get(idx))
+                .alertCommentInput(toAlertCommentMap(match))
+                .matchCommentInputsDto(createMatchCommentInputs(match))
+                .build()));
+
     return commentInputs;
   }
 
-  private CommentInputDto createCommentInput(String alertName, List<MatchCommentInputDto> match) {
-    return CommentInputDto.builder()
-        .alert(alertName)
-        .alertCommentInput(Map.of(
-            "caseId", "",
-            "apId", "",
-            "wlId", "",
-            "apType", "",
-            "wlType", "",
-            "listName", ""))
-        .matchCommentInputsDto(match)
-        .build();
+  private Map<String, String> toAlertCommentMap(MatchComposite matchComposite) {
+    var comments = new HashMap<String, String>();
+    var type = getType(matchComposite.getMatchData());
+
+    comments.put("caseId", matchComposite.getExternalId());
+    comments.put("apId", getAlertedPartyId(matchComposite.getMatchData()));
+    comments.put("wlId", getWatchlistId(matchComposite.getMatchData()));
+    comments.put("apType", type);
+    comments.put("wlType", type);
+    comments.put("listName", getListName(matchComposite.getMatchData()));
+
+    return comments;
   }
 
-  private List<MatchCommentInputDto> createMatchCommentInputs(Long alertId) {
-    return matchFacade.getMatchesByAlertId(alertId).stream()
-        .map(matchComposite ->
-            MatchCommentInputDto.builder()
-                .match(matchComposite.getName())
-                .commentInput(Map.of())
-                .build())
-        .collect(toList());
+  private String getWatchlistId(MatchData matchData) {
+    return matchData.getWatchlistId().orElse("");
   }
 
-  private List<Long> getAlertIds(String alertName) {
-    return alertFacade.getAlertByName(alertName).stream()
-        .map(AlertInfo::getId)
-        .collect(toList());
+  private String getAlertedPartyId(MatchData matchData) {
+    return matchData.getCaseInformation().getExternalId();
+  }
+
+  private String getListName(MatchData matchData) {
+    return matchData.getCaseInformation().getExtendedAttribute10();
+  }
+
+  private String getType(MatchData matchData) {
+    return matchData.isIndividual() ? INDIVIDUAL : ENTITY;
+  }
+
+  private List<MatchCommentInputDto> createMatchCommentInputs(MatchComposite matchComposite) {
+    return List.of(
+        MatchCommentInputDto.builder()
+            .match(matchComposite.getName())
+            .commentInput(Map.of())
+            .build());
   }
 }

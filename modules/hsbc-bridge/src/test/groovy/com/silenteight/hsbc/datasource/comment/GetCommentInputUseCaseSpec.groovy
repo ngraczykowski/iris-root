@@ -1,17 +1,19 @@
 package com.silenteight.hsbc.datasource.comment
 
-import com.silenteight.hsbc.bridge.alert.AlertFacade
-import com.silenteight.hsbc.bridge.alert.AlertInfo
+
 import com.silenteight.hsbc.bridge.match.MatchComposite
 import com.silenteight.hsbc.bridge.match.MatchFacade
+import com.silenteight.hsbc.datasource.datamodel.CaseInformation
+import com.silenteight.hsbc.datasource.datamodel.MatchData
 
 import spock.lang.Specification
 
 class GetCommentInputUseCaseSpec extends Specification {
 
-  def alertFacade = Mock(AlertFacade)
   def matchFacade = Mock(MatchFacade)
-  def underTest = new GetCommentInputUseCase(alertFacade, matchFacade)
+  def matchData = Mock(MatchData)
+  def caseInformation = Mock(CaseInformation)
+  def underTest = new GetCommentInputUseCase(matchFacade)
 
   // TODO Struct checks
   def 'should get comment inputs'() {
@@ -24,29 +26,42 @@ class GetCommentInputUseCaseSpec extends Specification {
         .match('alerts/1/matches/1')
         .build()
 
+    def alertCommentInput = [caseId: "1", apId: "1", listName: "someListName", apType: "I", wlType: "I", wlId: "someWlId"]
+
     def response = CommentInputDto.builder()
         .alert('alerts/1')
+        .alertCommentInput(alertCommentInput)
         .matchCommentInputsDto([matchCommentInputDto])
-        .build()
-
-    def alertInfo = AlertInfo.builder()
-        .id(1)
         .build()
 
     def matchComposite = MatchComposite.builder()
         .name('alerts/1/matches/1')
+        .externalId("1")
+        .matchData(matchData)
         .build()
+
 
     when:
     def result = underTest.getInputRequestsResponse(request)
 
     then:
-    1 * alertFacade.getAlertByName(_ as String) >> [alertInfo]
-    1 * matchFacade.getMatchesByAlertId(_ as Long) >> [matchComposite]
+    1 * matchFacade.getMatchesByAlertNames(_ as List<String>) >> [matchComposite]
+    2 * matchData.getCaseInformation() >> caseInformation
+    1 * matchData.isIndividual() >> true
+    1 * matchData.getWatchlistId() >> Optional.of("someWlId")
+    1 * caseInformation.getExternalId() >> "1"
+    1 * caseInformation.getExtendedAttribute10() >> "someListName"
 
     result.size() == 1
     with(result.first()) {
       alert == response.alert
+      with(alertCommentInput as Map<String, String>){
+        def comments = response.alertCommentInput
+        get("caseId") == comments.get("caseId")
+        get("apId") == comments.get("apId")
+        get("listName") == comments.get("listName")
+        get("apType") == comments.get("apType")
+      }
       with(matchCommentInputsDto as List<MatchCommentInputDto>) {
         size() == 1
         first().match == response.matchCommentInputsDto.first().match
