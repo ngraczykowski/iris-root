@@ -28,8 +28,8 @@ class CreateReportsRestControllerTest extends BaseRestControllerTest {
       new ReportInstanceReferenceDto(TIMESTAMP);
 
   private static final String CREATE_REPORT_URL =
-      fromUriString("/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/reports")
-      .build(of("analysisId", ANALYSIS_ID))
+      fromUriString("/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/{id}/reports")
+      .build(of("analysisId", ANALYSIS_ID, "id", "1acb8a9f-c560-4b5c-95a3-c69bcf32b22e"))
       .toString();
 
   @MockBean
