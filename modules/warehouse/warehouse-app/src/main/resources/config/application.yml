@@ -285,15 +285,15 @@ warehouse.report.rbs:
         label: "categories/customerType"
       - name: features/name
         label: features/name
-    grouping-columns:
-      - name: qa_decision
-        label: qa_decision
-        grouping-values: [PASS, FAILED]
-        add-counter: true
-      - name: analysis_decision
-        label: analysis_decision
-        grouping-values: FP, PTP
-        add-counter: false
+#    grouping-columns:
+#      - name: qa_decision
+#        label: qa_decision
+#        grouping-values: [PASS, FAILED]
+#        add-counter: true
+#      - name: analysis_decision
+#        label: analysis_decision
+#        grouping-values: FP, PTP
+#        add-counter: false
     date-field-name: alert_timestamp
 
 warehouse.report.billing:

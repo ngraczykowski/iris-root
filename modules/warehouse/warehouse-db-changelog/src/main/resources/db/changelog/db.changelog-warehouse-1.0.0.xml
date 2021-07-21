@@ -182,4 +182,12 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="warehouse-1.0.0-8" author="kdzieciol">
+    <addColumn tableName="warehouse_report_sm">
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
