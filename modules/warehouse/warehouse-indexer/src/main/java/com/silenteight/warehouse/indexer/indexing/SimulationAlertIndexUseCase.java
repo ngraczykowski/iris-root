@@ -41,7 +41,7 @@ public class SimulationAlertIndexUseCase implements SimulationIndexRequestComman
 
     alertService.indexAlerts(request.getAlertsList(), analysisMetadataDto.getElasticIndexName());
 
-    log.trace("SimulationDataIndexRequest processed, requestId={}, strategy={}, analysis={}",
+    log.debug("SimulationDataIndexRequest processed, requestId={}, strategy={}, analysis={}",
         request.getRequestId(), namingStrategy, analysisMetadataDto);
 
     return DataIndexResponse.newBuilder()

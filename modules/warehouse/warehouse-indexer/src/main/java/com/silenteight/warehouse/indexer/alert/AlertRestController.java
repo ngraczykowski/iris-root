@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.alert;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import java.util.Map;
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
@@ -31,6 +33,7 @@ public class AlertRestController {
       @RequestParam(name = "fields") List<String> fields,
       @RequestParam(name = "name") List<String> names) {
 
+    log.debug("Getting alerts list, fields={}, names={}",fields,names);
     return ok().body(alertQueryService.getMultipleAlertsAttributes(fields, names));
   }
 
@@ -39,6 +42,7 @@ public class AlertRestController {
   public ResponseEntity<Map<String, String>> getSingleAlert(
       @PathVariable("id") String id, @RequestParam(name = "fields") List<String> fields) {
 
+    log.debug("Getting single alert, alertId={}, fields={}", id,fields);
     return ok().body(alertQueryService.getSingleAlertAttributes(fields, id));
   }
 }

@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.sm.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
@@ -17,6 +18,7 @@ import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.status;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
@@ -34,8 +36,15 @@ class CreateSimulationMetricsReportRestController {
       @PathVariable String analysisId,
       @PathVariable String id) {
 
+    log.info("Create simulation metric report request received, analysisId={},id={}", analysisId,
+        id);
+
     ReportInstanceReferenceDto reportInstance = createSimulationMetricsReportUseCase
         .activate(analysisId);
+
+    log.debug("Create simulation metric report request processed, analysisId={},id={}, reportId={}",
+        analysisId,
+        id, reportInstance.getGetInstanceReferenceId());
 
     return status(SEE_OTHER)
         .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))

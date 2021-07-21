@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.production;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
@@ -61,6 +63,7 @@ public class ProductionReportsRestController {
   public ResponseEntity<List<ReportDefinitionDto>> getProductionReportDefinitionDto(
       @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
 
+    log.debug("Getting report definition list for reportType={}", reportType);
     return ok()
         .body(productionReportingQuery.getReportsDefinitions(reportType));
   }
@@ -71,8 +74,14 @@ public class ProductionReportsRestController {
       @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
 
+    log.info("Create production report request received, definitionId={},reportType={}",
+        definitionId, reportType);
+
     ReportInstanceReferenceDto reportInstance =
         productionService.createProductionReport(reportType, definitionId);
+
+    log.debug("Create production report request processed, definitionId={},reportType={}",
+        definitionId, reportType);
 
     return status(SEE_OTHER)
         .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + REPORT_STATUS)
@@ -86,11 +95,20 @@ public class ProductionReportsRestController {
       @PathVariable(TIMESTAMP_PARAM) String timestamp,
       @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
 
+    log.info(
+        "Download production report request received, definitionId={},timestamp={},reportType={}",
+        definitionId, timestamp, reportType);
+
     KibanaReportDto kibanaReportDto =
         productionService.downloadReport(reportType, definitionId, valueOf(timestamp));
 
     String filename = kibanaReportDto.getFilename();
     String data = kibanaReportDto.getContent();
+
+    log.debug(
+        "Download production report request processed,"
+            + " definitionId={},timestamp={},reportType={}, reportName={}",
+        definitionId, timestamp, reportType, kibanaReportDto.getFilename());
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
@@ -105,8 +123,16 @@ public class ProductionReportsRestController {
       @PathVariable(TIMESTAMP_PARAM) String timestamp,
       @PathVariable(REPORT_TYPE_PARAM) ProductionReportType reportType) {
 
+    log.debug("Request for report status received, definitionId={},timestamp={},reportType={}",
+        definitionId, timestamp, reportType);
+
     ReportStatus reportStatus =
         productionService.getReportGeneratingStatus(reportType, definitionId, valueOf(timestamp));
+
+    log.debug(
+        "Request for report status processed,"
+            + " definitionId={},timestamp={},reportType={},reportStatus={}",
+        definitionId, timestamp, reportType, reportStatus.getStatus());
 
     return ResponseEntity.ok(reportStatus);
   }

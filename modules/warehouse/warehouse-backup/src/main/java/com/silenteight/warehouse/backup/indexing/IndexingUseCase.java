@@ -26,7 +26,7 @@ class IndexingUseCase implements ProductionIndexRequestCommandHandler {
 
     storageService.save(request);
 
-    log.trace("ProductionDataIndexRequest processed, requestId={}",
+    log.debug("ProductionDataIndexRequest processed, requestId={}",
         request.getRequestId());
   }
 }

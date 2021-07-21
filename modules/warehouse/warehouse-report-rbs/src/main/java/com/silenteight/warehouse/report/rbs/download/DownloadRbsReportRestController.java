@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.rbs.download;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
 
@@ -16,6 +17,7 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
@@ -26,13 +28,19 @@ class DownloadRbsReportRestController {
 
   @GetMapping("/v1/analysis/production/definitions/RB_SCORER/{definitionId}/reports/{id}")
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<String> downloadReport(
+  public ResponseEntity<String> downloadProductionReport(
       @PathVariable("definitionId") String definitionId,
       @PathVariable("id") long id) {
+
+    log.info("Download production report on demand request received, reportId={}", id);
 
     ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
+
+    log.debug(
+        "Download production report on demand request processed, reportId={}, reportName={}", id,
+        reportDto.getFilename());
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
@@ -42,14 +50,20 @@ class DownloadRbsReportRestController {
 
   @GetMapping("/v1/analysis/{analysisId}/definitions/RB_SCORER/{definitionId}/reports/{id}")
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
-  public ResponseEntity<String> downloadReport(
+  public ResponseEntity<String> downloadSimulationReport(
       @PathVariable("analysisId") String analysisId,
       @PathVariable("definitionId") String definitionId,
       @PathVariable("id") long id) {
 
+    log.info("Download rbscorer simulation report request received, reportId={}", id);
+
     ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
+
+    log.debug(
+        "Download simulation report request processed, reportId={}, reportName={}", id,
+        reportDto.getFilename());
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))

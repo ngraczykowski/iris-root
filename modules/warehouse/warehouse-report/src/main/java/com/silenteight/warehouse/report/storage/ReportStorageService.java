@@ -2,12 +2,14 @@ package com.silenteight.warehouse.report.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 
 import java.io.FileNotFoundException;
 
+@Slf4j
 @AllArgsConstructor
 public class ReportStorageService {
 
@@ -23,6 +25,7 @@ public class ReportStorageService {
   public void saveReport(Report report) {
     try {
       client.putObject(prepareReportObjectToSave(report));
+      log.info("Report has been successfully saved in Minio, reportName={}",report.getReportName());
     } catch (Exception e) {
       throw new AlertNotSavedException("Alert has not been successfully saved.", e);
     }

@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.billing.status;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.billing.domain.ReportState;
 import com.silenteight.warehouse.report.reporting.ReportStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
@@ -28,6 +30,8 @@ class StatusBillingReportRestController {
   public ResponseEntity<ReportStatus> getReportStatus(
       @PathVariable("definitionId") String definitionId, @PathVariable("id") Long id) {
     ReportState state = reportQuery.getReportGeneratingState(id);
+
+    log.debug("Getting billing report status, definitionId={}, reportId={}", definitionId, id);
     return ResponseEntity.ok(state.getReportStatus(getReportName(definitionId, id)));
   }
 

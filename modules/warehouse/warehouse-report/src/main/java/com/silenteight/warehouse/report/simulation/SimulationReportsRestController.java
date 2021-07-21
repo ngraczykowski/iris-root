@@ -65,6 +65,7 @@ public class SimulationReportsRestController {
   public ResponseEntity<TenantDto> getTenantNameWrapper(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId) {
 
+    log.debug("Getting tenant name for analysisId={}", analysisId);
     return ok().body(simulationReportingQuery.getTenantDtoByAnalysisId(analysisId));
   }
 
@@ -73,6 +74,7 @@ public class SimulationReportsRestController {
   public ResponseEntity<List<ReportDefinitionDto>> getReportsDtoList(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId) {
 
+    log.debug("Getting report definition list for analysisId={}", analysisId);
     return ok().body(reportsDefinitionsUseCase.activate(analysisId));
   }
 
@@ -82,8 +84,19 @@ public class SimulationReportsRestController {
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
       @PathVariable(DEFINITION_ID_PARAM) String definitionId) {
 
+    log.info(
+        "Create simulation report request received, analysisId={}, definitionId={}",
+        analysisId,
+        definitionId);
+
     ReportInstanceReferenceDto reportInstance =
         simulationService.createSimulationReport(analysisId, definitionId);
+
+    log.debug(
+        "Create simulation report request processed, analysisId={}, definitionId={}, reportId={}",
+        analysisId,
+        definitionId, reportInstance.getGetInstanceReferenceId());
+
     return status(SEE_OTHER)
         .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + REPORT_STATUS)
         .build();
@@ -96,11 +109,20 @@ public class SimulationReportsRestController {
       @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(TIMESTAMP_PARAM) String timestamp) {
 
+    log.info(
+        "Download simulation report request received, analysisId={},definitionId={},timestamp={}",
+        analysisId, definitionId, timestamp);
+
     KibanaReportDto kibanaReportDto =
         simulationService.downloadReport(analysisId, definitionId, valueOf(timestamp));
 
     String filename = kibanaReportDto.getFilename();
     String data = kibanaReportDto.getContent();
+
+    log.debug(
+        "Download simulation report request processed, "
+            + "analysisId={},definitionId={},timestamp={},reportName={}",
+        analysisId, definitionId, timestamp, kibanaReportDto.getFilename());
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
@@ -115,8 +137,18 @@ public class SimulationReportsRestController {
       @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(TIMESTAMP_PARAM) String timestamp) {
 
+    log.debug(
+        "Request for simulation report status received, analysisId={},definitionId={},timestamp={}",
+        analysisId, definitionId, timestamp);
+
     ReportStatus reportStatus =
         simulationService.getReportGeneratingStatus(analysisId, definitionId, valueOf(timestamp));
+
+    log.debug(
+        "Request for simulation report status processed,"
+            + " analysisId={},definitionId={},timestamp={}, reportStatus={}",
+        analysisId, definitionId, timestamp, reportStatus.getStatus());
+
     return ResponseEntity.ok(reportStatus);
   }
 }

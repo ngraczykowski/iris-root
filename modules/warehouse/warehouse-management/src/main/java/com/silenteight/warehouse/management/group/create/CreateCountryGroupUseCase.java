@@ -2,6 +2,7 @@ package com.silenteight.warehouse.management.group.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.roles.RolesMappingService;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesUseCase;
@@ -10,6 +11,7 @@ import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 
 import static java.util.Collections.emptyList;
 
+@Slf4j
 @RequiredArgsConstructor
 class CreateCountryGroupUseCase {
 
@@ -26,5 +28,8 @@ class CreateCountryGroupUseCase {
     groupService.create(countryGroupDto);
     updateCountriesUseCase.activate(countryGroupDto.getId(), emptyList());
     rolesMappingService.attachBackendRoleToRole(countryGroupDto.getId());
+
+    log.info("Country group created and roles has been added for countryGroupDtoId={}",
+        countryGroupDto.getId());
   }
 }

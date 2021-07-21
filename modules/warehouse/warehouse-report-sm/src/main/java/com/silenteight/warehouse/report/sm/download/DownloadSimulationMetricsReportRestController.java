@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.sm.download;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.sm.domain.dto.ReportDto;
 
@@ -15,6 +16,7 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
@@ -37,6 +39,8 @@ class DownloadSimulationMetricsReportRestController {
     ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
+
+    log.info("Download simulation metrics report request received, reportId={}", id);
 
     return ok()
         .header("Content-Disposition", getContentDisposition(filename))
