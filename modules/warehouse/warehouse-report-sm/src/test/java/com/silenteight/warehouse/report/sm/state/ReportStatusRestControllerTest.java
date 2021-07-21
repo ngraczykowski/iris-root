@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.sm.state;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -44,7 +45,7 @@ class ReportStatusRestControllerTest extends BaseRestControllerTest {
     get(REPORT_STATUS_URL)
         .statusCode(OK.value())
         .body("status", is("GENERATING"))
-        .body("reportName", is(ANALYSIS_ID));
+        .body("reportName", is(getReportName()));
   }
 
   @Test
@@ -55,7 +56,13 @@ class ReportStatusRestControllerTest extends BaseRestControllerTest {
     get(REPORT_STATUS_URL)
         .statusCode(OK.value())
         .body("status", is("OK"))
-        .body("reportName", is(ANALYSIS_ID));
+        .body("reportName", is(getReportName()));
+  }
+
+  @NotNull
+  private String getReportName() {
+    return "analysis/" + ANALYSIS_ID + "/definitions/SIMULATION_METRICS/"
+        + "1acb8a9f-c560-4b5c-95a3-c69bcf32b22e/reports/" + REPORT_ID;
   }
 
   @Test

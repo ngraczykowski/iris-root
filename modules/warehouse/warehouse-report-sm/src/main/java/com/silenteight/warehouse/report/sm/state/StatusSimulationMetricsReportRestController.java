@@ -38,6 +38,11 @@ public class StatusSimulationMetricsReportRestController {
       @PathVariable(ID_PARAM) long id) {
 
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(state.getReportStatus(analysisId));
+    return ResponseEntity.ok(state.getReportStatus(getReportName(analysisId, definitionId, id)));
+  }
+
+  private String getReportName(String analysis, String definitionId, long id) {
+    return String.format(
+        "analysis/%s/definitions/SIMULATION_METRICS/%s/reports/%d", analysis, definitionId, id);
   }
 }
