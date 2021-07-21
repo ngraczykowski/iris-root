@@ -200,9 +200,9 @@ warehouse.report.sm:
   risk-type:
     name: alert_categories/hitType:value
     label: Risk Type
-  customer-type:
-    name: alert_categories/customerType:value
-    label: Customer Type
+  country:
+    name: s8_country
+    label: Country
   recommendation-field:
     name: alert_recommendation_recommended_action
     decision-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE]
