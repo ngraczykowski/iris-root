@@ -1,7 +1,8 @@
-package com.silenteight.warehouse.indexer.query.grouping;
+package com.silenteight.warehouse.indexer.query;
 
 import com.silenteight.warehouse.indexer.alert.AlertMapperConstants;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
+import com.silenteight.warehouse.indexer.query.SqlBuilder;
 
 import org.junit.jupiter.api.Test;
 

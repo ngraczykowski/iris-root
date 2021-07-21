@@ -7,14 +7,13 @@ import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClie
 import com.silenteight.warehouse.common.opendistro.elastic.QueryDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto.SchemaEntry;
+import com.silenteight.warehouse.indexer.query.SqlBuilder;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
+import com.silenteight.warehouse.indexer.query.index.QueryIndexService;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static com.silenteight.warehouse.indexer.query.grouping.SqlBuilder.KEY_COUNT;
+import static com.silenteight.warehouse.indexer.query.SqlBuilder.KEY_COUNT;
 import static java.lang.Integer.parseInt;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -28,13 +27,18 @@ public class GroupingQueryService {
   private final SqlBuilder sqlBuilder;
   @NonNull
   private final OpendistroElasticClient opendistroElasticClient;
+  @NonNull
+  private final QueryIndexService queryIndexService;
 
   public FetchGroupedDataResponse generate(
       FetchGroupedTimeRangedDataRequest fetchGroupedDataRequest) {
 
+    List<String> existingFields = filterOutNonExistingFields(
+        fetchGroupedDataRequest.getIndexes(), fetchGroupedDataRequest.getFields());
+
     String query = sqlBuilder.groupByBetweenDates(
         fetchGroupedDataRequest.getIndexes(),
-        fetchGroupedDataRequest.getFields(),
+        existingFields,
         fetchGroupedDataRequest.getDateField(),
         fetchGroupedDataRequest.getFrom(),
         fetchGroupedDataRequest.getTo());
@@ -47,7 +51,17 @@ public class GroupingQueryService {
     return asFetchGroupedDataResponse(queryResultDto);
   }
 
-  FetchGroupedDataResponse asFetchGroupedDataResponse(QueryResultDto queryResultDto) {
+  private List<String> filterOutNonExistingFields(List<String> indexes, List<String> fields) {
+    List<String> allAvailableFields = indexes.stream()
+        .flatMap(index -> queryIndexService.getFieldsList(index).stream())
+        .collect(toList());
+
+    List<String> filteredFields = new ArrayList<>(fields);
+    filteredFields.retainAll(allAvailableFields);
+    return filteredFields;
+  }
+
+  private FetchGroupedDataResponse asFetchGroupedDataResponse(QueryResultDto queryResultDto) {
     List<SchemaEntry> schema = queryResultDto.getSchema();
 
     List<Row> rows = queryResultDto.getDatarows().stream()

@@ -27,6 +27,10 @@ public class FetchGroupedDataResponse {
       return data.get(fieldName);
     }
 
+    public String getValueOrDefault(String fieldName, String defaultValue) {
+      return data.getOrDefault(fieldName, defaultValue);
+    }
+
     public long getCount() {
       return count;
     }

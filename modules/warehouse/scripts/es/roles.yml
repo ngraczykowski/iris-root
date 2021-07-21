@@ -50,6 +50,7 @@ technical_user:
         - 'indices:monitor/settings/get'
         - 'indices:admin/create'
         - 'indices:admin/mapping/put'
+        - 'indices:admin/mappings/fields/get'
   tenant_permissions:
     - tenant_patterns:
         - 'itest_*'
