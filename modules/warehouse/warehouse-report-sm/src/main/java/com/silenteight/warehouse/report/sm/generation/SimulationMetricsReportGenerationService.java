@@ -28,6 +28,7 @@ public class SimulationMetricsReportGenerationService {
 
   private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.000");
 
+  private static final String EMPTY_STRING = "";
   private static final String DELIMITER = ",";
   private static final DefaultTimeSource INSTANCE = DefaultTimeSource.INSTANCE;
   private static final TimeConverter TIME_CONVERTER = DefaultTimeSource.TIME_CONVERTER;
@@ -100,14 +101,15 @@ public class SimulationMetricsReportGenerationService {
     return properties
         .getRecommendationField()
         .getDecisionValues()
-        .contains(row.getValue(properties.getRecommendationField().getName()));
+        .contains(row.getValueOrDefault(
+            properties.getRecommendationField().getName(), EMPTY_STRING));
   }
 
   private String getStaticValue(List<Row> rows, String field) {
     return rows
         .stream()
         .findFirst()
-        .map(row -> row.getValue(field))
+        .map(row -> row.getValueOrDefault(field, EMPTY_STRING))
         .orElseThrow();
   }
 
@@ -115,7 +117,7 @@ public class SimulationMetricsReportGenerationService {
     return properties
         .getStaticFields()
         .stream()
-        .map(row::getValue)
+        .map(fieldName -> row.getValueOrDefault(fieldName, EMPTY_STRING))
         .collect(joining(DELIMITER));
   }
 }

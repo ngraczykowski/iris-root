@@ -30,6 +30,7 @@ import static java.util.stream.Stream.concat;
 public class RbsReportGenerationService {
 
   private static final String DELIMITER = ",";
+  private static final String EMPTY_STRING = "";
   @NonNull
   private final GroupingQueryService groupingQueryService;
 
@@ -81,7 +82,7 @@ public class RbsReportGenerationService {
     return properties
         .getListOfStaticFields()
         .stream()
-        .map(row::getValue)
+        .map(fieldName -> row.getValueOrDefault(fieldName, EMPTY_STRING))
         .collect(joining(DELIMITER));
   }
 
@@ -93,7 +94,9 @@ public class RbsReportGenerationService {
 
     Row rowWithGroupedData = rowsToTranspose.stream().findAny().orElseThrow();
     Stream<String> staticCells = properties
-        .getListOfStaticFields().stream().map(rowWithGroupedData::getValue);
+        .getListOfStaticFields()
+        .stream()
+        .map(fieldName -> rowWithGroupedData.getValueOrDefault(fieldName, EMPTY_STRING));
 
     long matchCount = rowsToTranspose.stream().mapToLong(Row::getCount).sum();
     Stream<String> staticCellsWithCount = concat(
@@ -105,8 +108,11 @@ public class RbsReportGenerationService {
 
   private Stream<String> getValues(GroupingColumnProperties column, List<Row> rows) {
     List<String> result = new ArrayList<>();
-    Map<String, Long> values = rows.stream().collect(
-        toMap(row -> row.getValue(column.getName()).toLowerCase(), Row::getCount, Long::sum));
+    Map<String, Long> values = rows
+        .stream()
+        .collect(toMap(row -> row.getValueOrDefault(column.getName(), EMPTY_STRING).toLowerCase(),
+                       Row::getCount,
+                       Long::sum));
 
     if (column.isAddCounter())
       result.add(getAllNonNullValueSum(values));

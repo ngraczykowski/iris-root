@@ -30,6 +30,7 @@ import static java.util.stream.Stream.concat;
 public class BillingReportGenerationService {
 
   private static final String DELIMITER = ",";
+  private static final String EMPTY_STRING = "";
   @NonNull
   private final GroupingQueryService groupingQueryService;
   @NonNull
@@ -84,7 +85,7 @@ public class BillingReportGenerationService {
   private String generateStaticFields(Row row) {
     return properties.getListOfStaticFields()
                      .stream()
-                     .map(row::getValue)
+                     .map(fieldName -> row.getValueOrDefault(fieldName, EMPTY_STRING))
                      .collect(joining(DELIMITER));
   }
 
@@ -93,7 +94,9 @@ public class BillingReportGenerationService {
 
     Row rowWithGroupedData = rowsToTranspose.stream().findAny().orElseThrow();
     Stream<String> staticCells = properties
-        .getListOfStaticFields().stream().map(rowWithGroupedData::getValue);
+        .getListOfStaticFields()
+        .stream()
+        .map(fieldName -> rowWithGroupedData.getValueOrDefault(fieldName, EMPTY_STRING));
 
     Stream<String> rowCells = concat(staticCells, transposedCells);
     return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
@@ -101,8 +104,11 @@ public class BillingReportGenerationService {
 
   private Stream<String> getValues(TransposeColumnProperties column, List<Row> rows) {
     List<String> result = new ArrayList<>();
-    Map<String, Long> values = rows.stream().collect(
-        toMap(row -> row.getValue(column.getName()).toLowerCase(), Row::getCount, Long::sum));
+    Map<String, Long> values = rows
+        .stream()
+        .collect(toMap(row -> row.getValueOrDefault(column.getName(), EMPTY_STRING).toLowerCase(),
+                       Row::getCount,
+                       Long::sum));
 
     column.getGroupingValues()
           .stream()
