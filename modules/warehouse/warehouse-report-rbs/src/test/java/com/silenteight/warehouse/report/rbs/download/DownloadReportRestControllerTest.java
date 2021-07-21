@@ -48,4 +48,23 @@ class DownloadReportRestControllerTest extends BaseRestControllerTest {
     assertThat(response).isEqualTo(CONTENT);
     verify(reportService).removeReport(REPORT_ID);
   }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  void its200_whenDownloadingSimReport() {
+    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(FILE_NAME, CONTENT));
+
+    String expectedContentDisposition = format("attachment; filename=\"%s\"", FILE_NAME);
+    String response = get(
+        "/v1/analysis/123/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID)
+        .statusCode(OK.value())
+        .contentType("text/csv")
+        .header("Content-Disposition", expectedContentDisposition)
+        .extract()
+        .body()
+        .asString();
+
+    assertThat(response).isEqualTo(CONTENT);
+    verify(reportService).removeReport(REPORT_ID);
+  }
 }

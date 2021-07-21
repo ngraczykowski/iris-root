@@ -91,48 +91,83 @@ grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
 
 warehouse.report.rbs:
-  columns:
-    - name: alert_fvSignature
-      label: fv_signature
-    - name: alert_policyId
-      label: policy_id
-    - name: alert_stepId
-      label: step_id
-    - name: alert_s8_recommendation
-      label: alert_recommendation
-    - name: alert_extendedAttribute5
-      label: risk_type
-    - name: alert_features/dateOfBirth:solution
-      label: date_of_birth
-    - name: alert_features/gender:solution
-      label: gender
-    - name: alert_features/incorporationCountry:solution
-      label: incorporation_country
-    - name: alert_features/name:solution
-      label: name
-    - name: alert_features/nationalIdDocument:solution
-      label: national_id_document
-    - name: alert_features/nationalityCountry:solution
-      label: national_country
-    - name: alert_features/otherCountry:solution
-      label: other_country
-    - name: alert_features/otherDocument:solution
-      label: other_document
-    - name: alert_features/passportNumberDocument:solution
-      label: passport_number_document
-    - name: alert_features/registrationCountry:solution
-      label: registration_country
-    - name: alert_features/residencyCountry:solution
-      label: residency_country
-  grouping-columns:
-#    - name: alert_qa.level-0.state
-#      label: qa_decision
-#      grouping-values: [PASSED, FAILED]
-#      add-counter: true
-    - name: alert_DN_CASE.currentState
-      label: analysis_decision
-      grouping-values: Level 1 Review, Level 2 Review
-      add-counter: false
+  production:
+    columns:
+      - name: alert_fvSignature
+        label: fv_signature
+      - name: alert_policyId
+        label: policy_id
+      - name: alert_stepId
+        label: step_id
+      - name: alert_s8_recommendation
+        label: alert_recommendation
+      - name: alert_extendedAttribute5
+        label: risk_type
+      - name: alert_features/dateOfBirth:solution
+        label: date_of_birth
+      - name: alert_features/gender:solution
+        label: gender
+      - name: alert_features/incorporationCountry:solution
+        label: incorporation_country
+      - name: alert_features/name:solution
+        label: name
+      - name: alert_features/nationalIdDocument:solution
+        label: national_id_document
+      - name: alert_features/nationalityCountry:solution
+        label: national_country
+      - name: alert_features/otherCountry:solution
+        label: other_country
+      - name: alert_features/otherDocument:solution
+        label: other_document
+      - name: alert_features/passportNumberDocument:solution
+        label: passport_number_document
+      - name: alert_features/registrationCountry:solution
+        label: registration_country
+      - name: alert_features/residencyCountry:solution
+        label: residency_country
+    grouping-columns:
+  #    - name: alert_qa.level-0.state
+  #      label: qa_decision
+  #      grouping-values: [PASSED, FAILED]
+  #      add-counter: true
+      - name: alert_DN_CASE.currentState
+        label: analysis_decision
+        grouping-values: Level 1 Review, Level 2 Review
+        add-counter: false
+  simulation:
+    columns:
+      - name: alert_match_reason:feature_vector_signature
+        label: fv_signature
+      - name: alert_match_reason:policy
+        label: policy_id
+      - name: alert_match_reason:step
+        label: step_id
+      - name: alert_recommendation_recommended_action
+        label: alert_recommendation
+      - name: alert_categories/hitType:value
+        label: risk_type
+      - name: alert_features/dateOfBirth:solution
+        label: date_of_birth
+      - name: alert_features/gender:solution
+        label: gender
+      - name: alert_features/incorporationCountry:solution
+        label: incorporation_country
+      - name: alert_features/name:solution
+        label: name
+      - name: alert_features/nationalIdDocument:solution
+        label: national_id_document
+      - name: alert_features/nationalityCountry:solution
+        label: national_country
+      - name: alert_features/otherCountry:solution
+        label: other_country
+      - name: alert_features/otherDocument:solution
+        label: other_document
+      - name: alert_features/passportNumberDocument:solution
+        label: passport_number_document
+      - name: alert_features/registrationCountry:solution
+        label: registration_country
+      - name: alert_features/residencyCountry:solution
+        label: residency_country
   date-field-name: index_timestamp
 
 warehouse.report.billing:

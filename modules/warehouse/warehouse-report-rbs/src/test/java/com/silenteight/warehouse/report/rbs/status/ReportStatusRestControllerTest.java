@@ -45,4 +45,31 @@ class ReportStatusRestControllerTest extends BaseRestControllerTest {
         .body("reportName",
               is("analysis/production/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID));
   }
+
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  void its200WithGenerating_whenRequestingGeneratingSimReport() {
+    when(reportStatusQuery.getReportGeneratingState(REPORT_ID)).thenReturn(ReportState.GENERATING);
+
+    get("/v1/analysis/123/definitions/RB_SCORER/rb-scorer-1-day/reports/" +
+            REPORT_ID + "/status")
+        .statusCode(OK.value())
+        .body("status", is("GENERATING"))
+        .body("reportName",
+              is("analysis/123/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  void its200WithDone_whenRequestingFinishedSimReport() {
+    when(reportStatusQuery.getReportGeneratingState(REPORT_ID)).thenReturn(ReportState.DONE);
+
+    get("/v1/analysis/123/definitions/RB_SCORER/rb-scorer-1-day/reports/" +
+            REPORT_ID + "/status")
+        .statusCode(OK.value())
+        .body("status", is("OK"))
+        .body("reportName",
+              is("analysis/123/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID));
+  }
 }

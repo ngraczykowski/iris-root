@@ -1,11 +1,11 @@
 package com.silenteight.warehouse.report.rbs.generation;
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +18,7 @@ import java.util.Map;
 import static java.time.OffsetDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -26,32 +27,13 @@ class RbsReportGenerationServiceTest {
 
   @Mock
   private GroupingQueryService groupingQueryService;
-  @Mock
-  private IndexesQuery indexerQuery;
 
   private RbsReportGenerationService underTest;
 
   @BeforeEach
   void setUp() {
-    RbsReportProperties rbScorerProperties = new RbsReportProperties(
-        "alert_date",
-        asList(
-            getColumn(RbScorerFixtures.FV_SIGNATURE_FIELD_NAME,
-                      RbScorerFixtures.FV_SIGNATURE_FIELD_LABEL),
-            getColumn(RbScorerFixtures.POLICY_NAME_FIELD),
-            getColumn(RbScorerFixtures.STEP_NAME_FIELD),
-            getColumn(RbScorerFixtures.RECOMMENDED_ACTION),
-            getColumn(RbScorerFixtures.CATEGORIES_AP_TYPE_FIELD),
-            getColumn(RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD),
-            getColumn(RbScorerFixtures.FEATURES_NAME_FIELD),
-            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)),
-        asList(
-            getGroupingColumn(
-                RbScorerFixtures.QA_DECISION_FIELD, "QA", asList("PASS", "FAILED"), true),
-            getGroupingColumn(
-                RbScorerFixtures.ANALYST_DECISION_FIELD, "Learning", asList("FP", "PTP"), false)));
     underTest = new RbsReportGenerationConfiguration().rbsReportGenerationService(
-        groupingQueryService, indexerQuery, rbScorerProperties);
+        groupingQueryService);
   }
 
   @Test
@@ -60,7 +42,7 @@ class RbsReportGenerationServiceTest {
         FetchGroupedDataResponse.builder().rows(emptyList()).build());
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), "analysis/production");
+        now(), now(), of("index123"), getRbsReportDefinition());
     assertThat(reportContent.getLines()).isEmpty();
   }
 
@@ -102,7 +84,7 @@ class RbsReportGenerationServiceTest {
     when(groupingQueryService.generate(any())).thenReturn(response);
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), "analysis/production");
+        now(), now(), of("index123"), getRbsReportDefinition());
 
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
@@ -148,6 +130,27 @@ class RbsReportGenerationServiceTest {
 
   private ColumnProperties getColumn(String name, String label) {
     return new ColumnProperties(name, label);
+  }
+
+  @NotNull
+  private RbsReportDefinition getRbsReportDefinition() {
+    return new RbsReportDefinition(
+        "alert_date",
+        asList(
+            getColumn(RbScorerFixtures.FV_SIGNATURE_FIELD_NAME,
+                      RbScorerFixtures.FV_SIGNATURE_FIELD_LABEL),
+            getColumn(RbScorerFixtures.POLICY_NAME_FIELD),
+            getColumn(RbScorerFixtures.STEP_NAME_FIELD),
+            getColumn(RbScorerFixtures.RECOMMENDED_ACTION),
+            getColumn(RbScorerFixtures.CATEGORIES_AP_TYPE_FIELD),
+            getColumn(RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD),
+            getColumn(RbScorerFixtures.FEATURES_NAME_FIELD),
+            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)),
+        asList(
+            getGroupingColumn(
+                RbScorerFixtures.QA_DECISION_FIELD, "QA", asList("PASS", "FAILED"), true),
+            getGroupingColumn(
+                RbScorerFixtures.ANALYST_DECISION_FIELD, "Learning", asList("FP", "PTP"), false)));
   }
 
   private ColumnProperties getColumn(String name) {

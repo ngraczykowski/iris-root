@@ -39,4 +39,21 @@ class DownloadRbsReportRestController {
         .header("Content-Type", "text/csv")
         .body(data);
   }
+
+  @GetMapping("/v1/analysis/{analysisId}/definitions/RB_SCORER/{definitionId}/reports/{id}")
+  @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
+  public ResponseEntity<String> downloadReport(
+      @PathVariable("analysisId") String analysisId,
+      @PathVariable("definitionId") String definitionId,
+      @PathVariable("id") long id) {
+
+    ReportDto reportDto = useCase.activate(id);
+    String filename = reportDto.getFilename();
+    String data = reportDto.getContent();
+
+    return ok()
+        .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
+        .header("Content-Type", "text/csv")
+        .body(data);
+  }
 }

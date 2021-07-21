@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.commons.CSVUtils;
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
@@ -33,26 +32,27 @@ public class RbsReportGenerationService {
   private static final String DELIMITER = ",";
   @NonNull
   private final GroupingQueryService groupingQueryService;
-  @NonNull
-  private final IndexesQuery indexerQuery;
-  @NonNull
-  private final RbsReportProperties properties;
 
   public CsvReportContentDto generateReport(
-      OffsetDateTime from, OffsetDateTime to, String analysisName) {
-    FetchGroupedDataResponse rawData = fetchRawData(from, to, analysisName);
-    return CsvReportContentDto.of(getLabelsRow(), transpose(rawData));
+      OffsetDateTime from,
+      OffsetDateTime to,
+      List<String> indexes,
+      RbsReportDefinition properties) {
+    FetchGroupedDataResponse rawData = fetchRawData(from, to, indexes, properties);
+    return CsvReportContentDto.of(getLabelsRow(properties), transpose(rawData, properties));
   }
 
-  private String getLabelsRow() {
+  private String getLabelsRow(RbsReportDefinition properties) {
     return CSVUtils.getCSVRecordWithDefaultDelimiter(
         properties.getListOfLabels().toArray(String[]::new));
   }
 
   private FetchGroupedDataResponse fetchRawData(
-      OffsetDateTime from, OffsetDateTime to, String analysisName) {
+      OffsetDateTime from,
+      OffsetDateTime to,
+      List<String> indexes,
+      RbsReportDefinition properties) {
 
-    List<String> indexes = indexerQuery.getIndexesForAnalysis(analysisName);
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest
         .builder()
         .from(from)
@@ -64,27 +64,28 @@ public class RbsReportGenerationService {
     return groupingQueryService.generate(request);
   }
 
-  private List<String> transpose(FetchGroupedDataResponse rawData) {
+  private List<String> transpose(FetchGroupedDataResponse rawData, RbsReportDefinition properties) {
     Map<String, List<Row>> rowsToTranspose = rawData
         .getRows()
         .stream()
-        .collect(groupingBy(this::generateStaticFields));
+        .collect(groupingBy(row -> generateStaticFields(row, properties)));
 
     return rowsToTranspose
         .keySet()
         .stream()
-        .map(key -> getLine(rowsToTranspose.get(key)))
+        .map(key -> getLine(rowsToTranspose.get(key), properties))
         .collect(toList());
   }
 
-  private String generateStaticFields(Row row) {
-    return properties.getListOfStaticFields()
+  private String generateStaticFields(Row row, RbsReportDefinition properties) {
+    return properties
+        .getListOfStaticFields()
         .stream()
         .map(row::getValue)
         .collect(joining(DELIMITER));
   }
 
-  private String getLine(List<Row> rowsToTranspose) {
+  private String getLine(List<Row> rowsToTranspose, RbsReportDefinition properties) {
     Stream<String> transposedCells = properties
         .getGroupingColumns()
         .stream()
@@ -110,7 +111,8 @@ public class RbsReportGenerationService {
     if (column.isAddCounter())
       result.add(getAllNonNullValueSum(values));
 
-    column.getGroupingValues()
+    column
+        .getGroupingValues()
         .stream()
         .map(String::toLowerCase)
         .map(groupingValue -> values.getOrDefault(groupingValue, 0L))
@@ -121,7 +123,8 @@ public class RbsReportGenerationService {
   }
 
   private static String getAllNonNullValueSum(Map<String, Long> values) {
-    long result = values.entrySet()
+    long result = values
+        .entrySet()
         .stream()
         .filter(entry -> StringUtils.isNotBlank(entry.getKey()))
         .mapToLong(Entry::getValue)
