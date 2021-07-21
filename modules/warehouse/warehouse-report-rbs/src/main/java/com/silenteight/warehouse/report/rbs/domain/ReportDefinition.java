@@ -120,6 +120,7 @@ public enum ReportDefinition {
     return ReportDefinitionDto
         .builder()
         .id(id)
+        .reportType(name())
         .name(getReportName(analysisId, id))
         .title(title)
         .description(description)

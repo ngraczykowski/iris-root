@@ -17,7 +17,7 @@ public enum ReportDefinition {
   SIMULATION_METRICS(
       "1acb8a9f-c560-4b5c-95a3-c69bcf32b22e",
       "simulation-metrics.csv",
-      "simulation - metrics",
+      "Simulation - metrics",
       "Simulation metrics report");
 
   @NonNull
