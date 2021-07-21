@@ -33,7 +33,7 @@ class ReportServiceTest {
 
   @Test
   void generateReportAndReportAvailable() {
-    ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
+    ReportInstanceReferenceDto reportInstance = service.createProductionReportInstance(TYPE);
 
     ReportDto report = query.getReport(reportInstance.getGetInstanceReferenceId());
     assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
@@ -46,7 +46,7 @@ class ReportServiceTest {
 
   @Test
   void removeReport() {
-    ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
+    ReportInstanceReferenceDto reportInstance = service.createProductionReportInstance(TYPE);
 
     ReportDto report = query.getReport(reportInstance.getGetInstanceReferenceId());
     assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());

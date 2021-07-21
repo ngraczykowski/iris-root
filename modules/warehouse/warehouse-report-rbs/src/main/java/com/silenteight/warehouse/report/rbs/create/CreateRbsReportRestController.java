@@ -36,4 +36,18 @@ class CreateRbsReportRestController {
         .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + "/status")
         .build();
   }
+
+  @PostMapping("/v1/analysis/{analysisId}/definitions/RB_SCORER/{reportId}/reports")
+  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
+  public ResponseEntity<Void> createReport(
+      @PathVariable("analysisId") String analysisId,
+      @PathVariable("reportId") String reportId) {
+
+    ReportInstanceReferenceDto reportInstance =
+        createRbsReportUseCase.createSimulationReport(analysisId);
+
+    return status(SEE_OTHER)
+        .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + "/status")
+        .build();
+  }
 }

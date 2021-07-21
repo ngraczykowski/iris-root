@@ -246,29 +246,55 @@ sep:
         - "DASHBOARD"
 
 warehouse.report.rbs:
-  columns:
-    - name: fvSignature
-      label: fvSignature
-    - name: policy_id
-      label: policy_id
-    - name: step_id
-      label: step_id
-    - name: recommended action
-      label: recommended action
-    - name: "categories/customerType"
-      label: "categories/customerType"
-    - name: features/name
-      label: features/name
-  grouping-columns:
-    - name: qa_decision
-      label: qa_decision
-      grouping-values: [PASS, FAILED]
-      add-counter: true
-    - name: analysis_decision
-      label: analysis_decision
-      grouping-values: FP, PTP
-      add-counter: false
-  date-field-name: alert_timestamp
+  production:
+    columns:
+      - name: fvSignature
+        label: fvSignature
+      - name: policy_id
+        label: policy_id
+      - name: step_id
+        label: step_id
+      - name: recommended action
+        label: recommended action
+      - name: categories/customerType
+        label: categories/customerType
+      - name: features/name
+        label: features/name
+    grouping-columns:
+      - name: qa_decision
+        label: qa_decision
+        grouping-values: [PASS, FAILED]
+        add-counter: true
+      - name: analysis_decision
+        label: analysis_decision
+        grouping-values: FP, PTP
+        add-counter: false
+    date-field-name: alert_timestamp
+
+  simulation:
+    columns:
+      - name: fvSignature
+        label: fvSignature
+      - name: policy_id
+        label: policy_id
+      - name: step_id
+        label: step_id
+      - name: recommended action
+        label: recommended action
+      - name: "categories/customerType"
+        label: "categories/customerType"
+      - name: features/name
+        label: features/name
+    grouping-columns:
+      - name: qa_decision
+        label: qa_decision
+        grouping-values: [PASS, FAILED]
+        add-counter: true
+      - name: analysis_decision
+        label: analysis_decision
+        grouping-values: FP, PTP
+        add-counter: false
+    date-field-name: alert_timestamp
 
 warehouse.report.billing:
   columns:

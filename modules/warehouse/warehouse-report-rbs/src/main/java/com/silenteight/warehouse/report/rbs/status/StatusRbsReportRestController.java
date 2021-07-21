@@ -28,11 +28,21 @@ class StatusRbsReportRestController {
   public ResponseEntity<ReportStatus> getReportStatus(
       @PathVariable("definitionId") String definitionId, @PathVariable("id") Long id) {
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(state.getReportStatus(getReportName(definitionId, id)));
+    return ResponseEntity.ok(state.getReportStatus(getReportName("production", definitionId, id)));
   }
 
-  private String getReportName(String definitionId, long id) {
+  @GetMapping("/v1/analysis/{analysisId}/definitions/RB_SCORER/{definitionId}/reports/{id}/status")
+  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
+  public ResponseEntity<ReportStatus> getReportStatus(
+      @PathVariable("analysisId") String analysisId,
+      @PathVariable("definitionId") String definitionId,
+      @PathVariable("id") Long id) {
+    ReportState state = reportQuery.getReportGeneratingState(id);
+    return ResponseEntity.ok(state.getReportStatus(getReportName(analysisId, definitionId, id)));
+  }
+
+  private String getReportName(String analysis, String definitionId, long id) {
     return String.format(
-        "analysis/production/definitions/RB_SCORER/%s/reports/%d", definitionId, id);
+        "analysis/%s/definitions/RB_SCORER/%s/reports/%d", analysis, definitionId, id);
   }
 }

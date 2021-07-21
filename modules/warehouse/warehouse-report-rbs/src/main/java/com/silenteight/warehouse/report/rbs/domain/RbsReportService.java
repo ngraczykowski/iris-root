@@ -8,13 +8,12 @@ import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 @RequiredArgsConstructor
 public class RbsReportService {
 
-  static final String PRODUCTION_ANALYSIS_NAME = "production";
   @NonNull
   private final RbsReportRepository repository;
   @NonNull
   private final AsyncRbsReportGenerationService asyncReportGenerationService;
 
-  public ReportInstanceReferenceDto createReportInstance(ReportDefinition reportType) {
+  public ReportInstanceReferenceDto createProductionReportInstance(ReportDefinition reportType) {
     RbsReport report = RbsReport.of(reportType);
     RbsReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
@@ -25,5 +24,15 @@ public class RbsReportService {
 
   public void removeReport(long id) {
     repository.deleteById(id);
+  }
+
+  public ReportInstanceReferenceDto createSimulationReportInstance(
+      String analysisId, ReportDefinition reportType) {
+
+    RbsReport report = RbsReport.of(reportType);
+    RbsReport savedReport = repository.save(report);
+
+    asyncReportGenerationService.generateReport(savedReport.getId(), analysisId);
+    return new ReportInstanceReferenceDto(savedReport.getId());
   }
 }
