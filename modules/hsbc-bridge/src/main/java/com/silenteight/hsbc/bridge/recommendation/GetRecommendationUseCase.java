@@ -39,6 +39,7 @@ public class GetRecommendationUseCase {
         .alert(entity.getAlert())
         .recommendationComment(entity.getRecommendationComment())
         .recommendedAction(recommendation)
+        .s8recommendedAction(entity.getRecommendedAction())
         .date(entity.getRecommendedAt())
         .name(entity.getName());
 

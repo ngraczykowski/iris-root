@@ -18,4 +18,5 @@ public class RecommendationWithMetadataDto {
   @NonNull String recommendationComment;
   OffsetDateTime date;
   RecommendationMetadata metadata;
+  String s8recommendedAction;
 }

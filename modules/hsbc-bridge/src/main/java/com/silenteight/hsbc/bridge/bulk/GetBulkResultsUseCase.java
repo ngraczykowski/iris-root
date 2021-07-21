@@ -41,8 +41,7 @@ public class GetBulkResultsUseCase {
 
     var response = new BatchSolvedAlerts();
     response.setBatchId(batch.getId());
-    response.setBatchStatus(BatchStatus.valueOf(
-        batch.getStatus().name()));
+    response.setBatchStatus(BatchStatus.valueOf(batch.getStatus().name()));
     response.setAlerts(getSolvedAlerts(batch.getValidAlerts()));
     response.setErrorAlerts(getErrorAlerts(batch.getInvalidAlerts()));
     return response;
@@ -97,7 +96,7 @@ public class GetBulkResultsUseCase {
   private List<AlertMetadata> getAlertRecommendation(RecommendationWithMetadataDto recommendation) {
     var date = recommendation.getDate();
     return of(
-        new AlertMetadata("s8_recommendation", recommendation.getRecommendedAction()),
+        new AlertMetadata("s8_recommendation", recommendation.getS8recommendedAction()),
         new AlertMetadata("recommendationYear", valueOf(date.getYear())),
         new AlertMetadata("recommendationMonth", valueOf(date.getMonthValue())),
         new AlertMetadata("recommendationDay", valueOf(date.getDayOfMonth())),

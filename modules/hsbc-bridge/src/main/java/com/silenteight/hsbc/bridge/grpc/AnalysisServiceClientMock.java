@@ -32,7 +32,7 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
   public GetAnalysisResponseDto getAnalysis(String analysis) {
     return GetAnalysisResponseDto.builder()
         .alertsCount(2)
-        .pendingAlerts(random.nextInt(2))
+        .pendingAlerts(0)
         .build();
   }
 

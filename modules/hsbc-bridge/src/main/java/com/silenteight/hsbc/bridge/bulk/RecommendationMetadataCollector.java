@@ -33,14 +33,10 @@ class RecommendationMetadataCollector {
     private final MatchMetadata matchMetadata;
     private final List<AlertMetadata> metadataCollection = new ArrayList<>();
 
-    private static final String FV_SIGNATURE = "feature_vector_signature";
-    private static final String POLICY = "policy";
-    private static final String STEP = "step";
-
     Collection<AlertMetadata> collect() {
-      addMatchReason(matchMetadata.getReason());
+      addAll(matchMetadata.getCategories());
+      addAll(matchMetadata.getReason());
       addFeatures(matchMetadata.getFeatures());
-      addCategories(matchMetadata.getCategories());
 
       return metadataCollection;
     }
@@ -55,15 +51,9 @@ class RecommendationMetadataCollector {
       add(featureKey + ":solution", featureMetadata.getSolution());
     }
 
-    private void addCategories(Map<String, String> categories) {
-      categories.entrySet().stream()
-          .forEach(category -> add(category.getKey(), category.getValue()));
-    }
-
-    private void addMatchReason(Map<String, String> reason) {
-      add(FV_SIGNATURE, reason.getOrDefault(FV_SIGNATURE, ""));
-      add(POLICY, reason.getOrDefault(POLICY, ""));
-      add(STEP, reason.getOrDefault(STEP, ""));
+    private void addAll(Map<String, String> values) {
+      values.entrySet().stream()
+          .forEach(v -> add(v.getKey(), v.getValue()));
     }
 
     private void add(String key, String value) {

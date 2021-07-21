@@ -43,7 +43,7 @@ class RecommendationMetadataCollectorSpec extends Specification {
     def result = underTest.collectFromRecommendationMetadata(recommendationMetadata)
 
     then:
-    result.size() == 7
+    result.size() == 9
     with (result.first()) {
       key == 'feature_vector_signature'
       value == 'fv-1'
@@ -57,18 +57,26 @@ class RecommendationMetadataCollectorSpec extends Specification {
       value == 'step1'
     }
     with (result[3]) {
+      key == 'policy_title'
+      value == 'policyTitle'
+    }
+    with (result[4]) {
+      key == 'step_title'
+      value == 'stepTitle'
+    }
+    with (result[5]) {
       key == 'features/name:config'
       value == 'agents/name/versions/1.0.0/configs/1'
     }
-    with (result[4]) {
+    with (result[6]) {
       key == 'features/name:solution'
       value == 'EXACT_MATCH'
     }
-    with (result[5]) {
+    with (result[7]) {
       key == 'features/unknown:config'
       value == 'agents/unknown/versions/1.0.0/configs/1'
     }
-    with (result[6]) {
+    with (result[8]) {
       key == 'features/unknown:solution'
       value == 'EXACT_MATCH'
     }
@@ -85,7 +93,9 @@ class RecommendationMetadataCollectorSpec extends Specification {
           reason: [
               'feature_vector_signature': 'fv-1',
               'policy': 'policy1',
-              'step': 'step1'
+              'step': 'step1',
+              'policy_title': 'policyTitle',
+              'step_title': 'stepTitle'
           ] as Map,
           features: [
               'features/name': new FeatureMetadata(
