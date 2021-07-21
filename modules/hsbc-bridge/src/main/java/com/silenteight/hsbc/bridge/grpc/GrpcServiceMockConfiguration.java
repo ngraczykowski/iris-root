@@ -17,11 +17,6 @@ class GrpcServiceMockConfiguration {
   }
 
   @Bean
-  RecommendationServiceClientMock recommendationServiceApiMock() {
-    return new RecommendationServiceClientMock();
-  }
-
-  @Bean
   AlertServiceClientMock alertServiceApiMock() {
     return new AlertServiceClientMock();
   }

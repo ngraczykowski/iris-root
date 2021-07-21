@@ -12,10 +12,16 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 class RecommendationGeneratorConfiguration {
 
+  private final RecommendationRepository repository;
   private final ApplicationEventPublisher eventPublisher;
 
   @Bean
   RecommendationGenerator recommendationGenerator() {
     return new RecommendationGenerator(eventPublisher);
+  }
+
+  @Bean
+  RecommendationServiceClientMock recommendationServiceApiMock() {
+    return new RecommendationServiceClientMock(repository);
   }
 }

@@ -1,7 +1,7 @@
-package com.silenteight.hsbc.bridge.grpc;
+package com.silenteight.hsbc.bridge.recommendation;
 
-import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.hsbc.bridge.recommendation.metadata.FeatureMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.MatchMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
@@ -12,26 +12,30 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static java.lang.System.currentTimeMillis;
-
+@RequiredArgsConstructor
 class RecommendationServiceClientMock implements RecommendationServiceClient {
+
+  private final RecommendationRepository repository;
 
   @Override
   @Retryable(value = CannotGetRecommendationsException.class)
   public List<RecommendationWithMetadataDto> getRecommendations(String analysis) {
-    throwRandomRuntimeException();
+    return getAlerts(analysis).stream().map(alert ->
+        RecommendationWithMetadataDto.builder()
+            .alert(alert)
+            .name("recommendations/recommendation-" + UUID.randomUUID())
+            .date(OffsetDateTime.now())
+            .recommendedAction("MANUAL_INVESTIGATION")
+            .recommendationComment("S8 Recommendation: Manual Investigation")
+            .metadata(createMetadata())
+            .build())
+        .collect(Collectors.toList());
+  }
 
-    // TODO here we could get proper alerts names from analysis
-
-    return List.of(RecommendationWithMetadataDto.builder()
-        .alert("alerts/" + currentTimeMillis())
-        .name("recommendations/recommendation-" + UUID.randomUUID())
-        .date(OffsetDateTime.now())
-        .recommendedAction("MANUAL_INVESTIGATION")
-        .recommendationComment("S8 Recommendation: Manual Investigation")
-        .metadata(createMetadata())
-        .build());
+  private List<String> getAlerts(String analysis) {
+    return repository.getAlertsByAnalysis(analysis);
   }
 
   private RecommendationMetadata createMetadata() {
@@ -60,7 +64,7 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
 
   private Map<String, FeatureMetadata> createFeatures() {
     return Map.of(
-      "features/name", createFeatureMetadata()
+        "features/name", createFeatureMetadata()
     );
   }
 
@@ -72,11 +76,5 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
         "name", "Some dummy reason"
     ));
     return metadata;
-  }
-
-  private void throwRandomRuntimeException() throws CannotGetRecommendationsException {
-    if (currentTimeMillis() % 5 == 0) {
-      throw new CannotGetRecommendationsException();
-    }
   }
 }
