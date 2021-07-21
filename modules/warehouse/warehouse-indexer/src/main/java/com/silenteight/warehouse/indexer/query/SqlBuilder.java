@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.query.grouping;
+package com.silenteight.warehouse.indexer.query;
 
 import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
@@ -19,7 +19,7 @@ import static org.jooq.impl.SQLDataType.OTHER;
 
 public class SqlBuilder {
 
-  static final String KEY_COUNT = "count(*)";
+  public static final String KEY_COUNT = "count(*)";
   private static final DateTimeFormatter ES_DATETIME_FORMAT = ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
   static {
@@ -28,6 +28,10 @@ public class SqlBuilder {
 
   private static void preventDisplayingJooqLogo() {
     System.getProperties().setProperty("org.jooq.no-logo", "true");
+  }
+
+  public String describeTables(String index) {
+    return "DESCRIBE TABLES LIKE " + index;
   }
 
   public String groupByBetweenDates(
@@ -47,11 +51,14 @@ public class SqlBuilder {
     Condition dateTimeFrom = field(dateField).greaterOrEqual(asTimestamp(from));
     Condition dateTimeTo = field(dateField).lessThan(asTimestamp(to));
 
-    return select(selectColumns)
+    var sqlQuery = select(selectColumns)
         .from(tables)
-        .where(dateTimeFrom, dateTimeTo)
-        .groupBy(groupByColumns)
-        .getSQL();
+        .where(dateTimeFrom, dateTimeTo);
+
+    if (!groupByColumns.isEmpty())
+      sqlQuery.groupBy(groupByColumns);
+
+    return sqlQuery.getSQL();
   }
 
   private static Stream<Field<Object>> asFields(List<String> fields) {

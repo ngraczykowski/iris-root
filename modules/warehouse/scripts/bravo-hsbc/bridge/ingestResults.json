@@ -6,7 +6,7 @@
     {
       "id": "{{alertId}}",
       "recommendation": "AAA False Positive",
-      "comment": "",
+      "comment": "AlertId: {{alertId}}",
       "policy_id": "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
       "step_id": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
       "fv_signature": "2N0tYNabpg9ywOrtEOECk1r2f2E=",

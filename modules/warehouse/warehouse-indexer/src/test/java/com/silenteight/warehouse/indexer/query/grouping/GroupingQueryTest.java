@@ -30,6 +30,9 @@ import static org.assertj.core.api.Assertions.*;
 })
 class GroupingQueryTest {
 
+  private static final String NOT_EXISTING_KEY = "NOT_EXISTING_KEY";
+  private static final String NOT_EXISTING_VALUE = "NOT_EXISTING_VALUE";
+
   @Autowired
   SimpleElasticTestClient testClient;
 
@@ -81,6 +84,45 @@ class GroupingQueryTest {
 
     Row row = response.getRows().get(0);
     assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(EMPTY_VALUE_PLACEHOLDER);
+  }
+
+  @Test
+  void shouldHandleNonExistingValue() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(MappedKeys.RISK_TYPE_KEY, NOT_EXISTING_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    assertThat(response.getRows()).hasSize(1);
+    Row row = response.getRows().get(0);
+    String notExistingVey = row.getValueOrDefault(NOT_EXISTING_KEY, NOT_EXISTING_VALUE);
+    assertThat(notExistingVey).isEqualTo(NOT_EXISTING_VALUE);
+  }
+
+  @Test
+  void shouldHandleEmptyGroupValue() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(NOT_EXISTING_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    assertThat(response.getRows()).hasSize(1);
+    Row row = response.getRows().get(0);
+    assertThat(row.getCount()).isEqualTo(1);
   }
 
   @Test
