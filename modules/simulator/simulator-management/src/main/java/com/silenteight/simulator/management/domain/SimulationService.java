@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
 
+@Slf4j
 @RequiredArgsConstructor
 public class SimulationService {
 
@@ -36,6 +38,7 @@ public class SimulationService {
 
     try {
       repository.save(simulationEntity);
+      log.debug("Saved SimulationEntity={}", simulationEntity);
     } catch (DataIntegrityViolationException e) {
       throw new NonUniqueSimulationException(request.getId());
     }
@@ -53,5 +56,6 @@ public class SimulationService {
         .findByAnalysisName(analysis)
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
     simulationEntity.finish();
+    log.debug("Saved as 'DONE' SimulationEntity={}", simulationEntity);
   }
 }

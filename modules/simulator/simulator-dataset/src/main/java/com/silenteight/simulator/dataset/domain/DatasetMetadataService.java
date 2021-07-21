@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.simulator.dataset.common.DatasetResource;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DatasetMetadataService {
 
@@ -34,9 +36,12 @@ public class DatasetMetadataService {
         .countries(request.getCountries())
         .build();
     repository.save(datasetEntity);
+    log.trace("Created Metadata DatasetEntity={}", datasetEntity);
   }
 
   public long countAllAlerts(Set<String> datasetNames) {
+    log.debug("Summing all alerts in datasets={}", datasetNames);
+
     return repository.sumAlertsInDatasets(toDatasetIds(datasetNames));
   }
 

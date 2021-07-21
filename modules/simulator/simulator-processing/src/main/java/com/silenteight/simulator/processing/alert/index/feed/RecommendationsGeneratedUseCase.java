@@ -59,13 +59,14 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     }
 
     String requestId = requestIdGenerator.generate();
-    log.info("Recommendations generated: "
+    log.debug("Recommendations generated: "
         + " requestId=" + requestId
         + " count=" + request.getRecommendationInfosCount());
 
     SimulationDataIndexRequest indexRequest = toIndexRequest(requestId, request);
     indexedAlertService.saveAsSent(
         requestId, request.getAnalysis(), request.getRecommendationInfosCount());
+    log.debug("Sending recommendations to feed: requestId=" + requestId);
 
     return indexRequest;
   }
