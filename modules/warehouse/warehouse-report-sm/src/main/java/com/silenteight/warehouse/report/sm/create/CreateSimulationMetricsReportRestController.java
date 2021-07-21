@@ -23,14 +23,16 @@ import static org.springframework.http.ResponseEntity.status;
 class CreateSimulationMetricsReportRestController {
 
   private static final String CREATE_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/reports";
+      "/v1/analysis/{analysisId}/definitions/SIMULATION_METRICS/{id}/reports";
 
   @NonNull
   private final CreateSimulationMetricsReportUseCase createSimulationMetricsReportUseCase;
 
   @PostMapping(CREATE_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
-  public ResponseEntity<Void> createReport(@PathVariable String analysisId) {
+  public ResponseEntity<Void> createReport(
+      @PathVariable String analysisId,
+      @PathVariable String id) {
 
     ReportInstanceReferenceDto reportInstance = createSimulationMetricsReportUseCase
         .activate(analysisId);
