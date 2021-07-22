@@ -191,7 +191,7 @@
   "agents/geo/versions/1.0.0/configs/1": {
     "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
     "features": [
-      "features/geoResidency",
+      "features/geoResidencies",
       "features/geoPlaceOfBirth"
     ],
     "responses": [
@@ -214,7 +214,7 @@
   "agents/pep/versions/1.0.0/configs/1": {
     "agentId": "84b322ed-018e-4bff-9518-12376f536e63",
     "features": [
-      "features/isHsbcPep"
+      "features/isPep"
     ],
     "responses": [
       "INCONCLUSIVE",
