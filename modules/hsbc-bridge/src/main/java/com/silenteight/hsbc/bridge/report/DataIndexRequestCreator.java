@@ -11,7 +11,6 @@ import com.google.protobuf.Value;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
@@ -31,6 +30,7 @@ class DataIndexRequestCreator {
 
   private static com.silenteight.data.api.v1.Alert toAlert(Alert alert) {
     return com.silenteight.data.api.v1.Alert.newBuilder()
+        .setName(alert.getName())
         .setDiscriminator(alert.getDiscriminator())
         .setPayload(toStruct(alert.getMetadata()))
         .addAllMatches(mapMatches(alert.getMatches()))
@@ -39,7 +39,7 @@ class DataIndexRequestCreator {
 
   private static Struct toStruct(Map<String, String> metadata) {
     var builder = Struct.newBuilder();
-    metadata.forEach((k,v) -> {
+    metadata.forEach((k, v) -> {
       if (nonNull(v)) {
         builder.putFields(k, Value.newBuilder().setStringValue(v).build());
       }

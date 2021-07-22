@@ -41,9 +41,17 @@ class IngestRecommendationsUseCase {
 
   private Alert mapToAlert(SolvedAlert solvedAlert) {
     return new Alert() {
+
+      final List<AlertMetadata> alertMetadata = solvedAlert.getAlertMetadata();
+
+      @Override
+      public String getName() {
+        return IngestRecommendationsUseCase.getFromMetadata(alertMetadata, "name");
+      }
+
       @Override
       public String getDiscriminator() {
-        return IngestRecommendationsUseCase.getDiscriminator(solvedAlert.getAlertMetadata());
+        return IngestRecommendationsUseCase.getFromMetadata(alertMetadata, "discriminator");
       }
 
       @Override
@@ -72,9 +80,16 @@ class IngestRecommendationsUseCase {
   private Alert mapToAlert(ErrorAlert errorAlert) {
     return new Alert() {
 
+      final List<AlertMetadata> alertMetadata = errorAlert.getAlertMetadata();
+
+      @Override
+      public String getName() {
+        return IngestRecommendationsUseCase.getFromMetadata(alertMetadata, "name");
+      }
+
       @Override
       public String getDiscriminator() {
-        return IngestRecommendationsUseCase.getDiscriminator(errorAlert.getAlertMetadata());
+        return IngestRecommendationsUseCase.getFromMetadata(alertMetadata, "discriminator");
       }
 
       @Override
@@ -96,9 +111,9 @@ class IngestRecommendationsUseCase {
     };
   }
 
-  private static String getDiscriminator(List<AlertMetadata> alertMetadata) {
+  private static String getFromMetadata(List<AlertMetadata> alertMetadata, String key) {
     return alertMetadata.stream()
-        .filter(alert -> "discriminator".equals(alert.getKey()))
+        .filter(alert -> key.equals(alert.getKey()))
         .map(AlertMetadata::getValue)
         .findFirst()
         .orElse("");

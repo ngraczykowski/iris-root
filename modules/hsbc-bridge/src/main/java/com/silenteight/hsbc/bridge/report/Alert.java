@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface Alert {
 
+  String getName();
+
   String getDiscriminator();
 
   Map<String, String> getMetadata();

@@ -33,20 +33,26 @@ class AlertMapper {
 
   private Alert mapToAlert(AlertInformation alertInfo) {
     return new Alert() {
+      final AlertEntity entity = alertInfo.getAlertEntity();
+
+      @Override
+      public String getName() {
+        return entity.getName();
+      }
+
       @Override
       public String getDiscriminator() {
-        var entity = alertInfo.getAlertEntity();
         return entity.getExternalId() + getDiscriminatorSeparator() + entity.getDiscriminator();
       }
 
       @Override
       public Map<String, String> getMetadata() {
-        return createAlertMetadata(alertInfo.getAlertEntity(), alertInfo.getPayload());
+        return createAlertMetadata(entity, alertInfo.getPayload());
       }
 
       @Override
       public Collection<Match> getMatches() {
-        return alertInfo.getAlertEntity().getMatches().stream()
+        return entity.getMatches().stream()
             .map(AlertMapper::mapToMatch)
             .collect(toList());
       }
