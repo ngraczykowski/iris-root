@@ -1,0 +1,10 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.data_source_comments_api
+}

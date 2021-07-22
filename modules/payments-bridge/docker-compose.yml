@@ -5,11 +5,11 @@ services:
     image: docker.io/library/postgres:12
     restart: unless-stopped
     ports:
-      - "${POSTGRES_PORT:-24881}:5432"
+      - "${POSTGRES_PORT:-24681}:5432"
     environment:
-      POSTGRES_DB: "${POSTGRES_DB:-sear-payments-bridge}"
-      POSTGRES_USER: "${POSTGRES_USER:-sear-payments-bridge}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-sear-payments-bridge}"
+      POSTGRES_DB: "${POSTGRES_DB:-paymentsbridge}"
+      POSTGRES_USER: "${POSTGRES_USER:-paymentsbridge}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-paymentsbridge}"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - postgres-storage:/var/lib/postgresql/data

@@ -1,0 +1,51 @@
+# Spring `dev` profile configuration
+serp:
+  show-env: true
+  messaging:
+    error-queue:
+      declare: false
+      enabled: true
+      name: payments.error-queue
+
+logging:
+  level:
+    com.silenteight.sep: DEBUG
+    com.silenteight.searpayments.bridge: DEBUG
+    io.opencensus: INFO
+    io.netty: INFO
+    io.grpc.netty: INFO
+    org.quartz.core.JobRunShell: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+
+management:
+  info:
+    git:
+      mode: full
+
+  endpoints:
+    enabled-by-default: true
+
+    web:
+      exposure:
+        include: "*"
+
+server:
+  error:
+    include-stacktrace: on_trace_param
+
+spring:
+  liquibase:
+    # NOTE(tbozek): This property controls whether liquibase drops whole schema before applying
+    #  changesets, and it defaults to `false`. For development purposes you can set it to
+    #  `true` for a single run, to clean your local database.
+    drop-first: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate.generate_statistics: true
+
+  jackson:
+    serialization:
+      indent-output: true

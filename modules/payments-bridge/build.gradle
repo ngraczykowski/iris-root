@@ -6,7 +6,7 @@ plugins {
   id "com.silenteight.gradle.wrapper" version "1.1.0"
   id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
   id "io.freefair.aspectj" version "5.3.0" apply false
-  id "nebula.resolution-rules" version "7.6.0"
+  id "nebula.resolution-rules" version "7.8.7"
   // Spring boot plugin version should be same as Spring version in sep-dependencies
   id "org.springframework.boot" version "2.4.6" apply false
   id "com.google.cloud.tools.jib" version "3.1.1" apply false
@@ -31,6 +31,7 @@ subprojects {Project subproject ->
     subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
     subproject.dependencies {
+      // Required for Java 11+ ¯\_(ツ)_/¯
       implementation libraries.jaxb_api
 
       aspect libraries.spring_aspects
@@ -70,51 +71,6 @@ subprojects {Project subproject ->
       subproject.jar {
         preserveFileTimestamps false
         reproducibleFileOrder true
-      }
-
-      if (subproject.pluginManager.hasPlugin("com.google.cloud.tools.jib")) {
-        subproject.jib {
-          from {
-            // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-            def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
-                              "-debug" : ""
-            image = "gcr.io/distroless/java-debian10:11" + imageSuffix
-          }
-          to {
-            image = "docker.repo.silenteight.com/ae/${subproject.name}:${version}"
-            if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
-              tags = ["snapshot"]
-            } else {
-              tags = ["latest"]
-            }
-          }
-          container {
-            appRoot = "/silenteight/app"
-            environment = [
-                "SILENTEIGHT_HOME"            : "/silenteight",
-                "AE_DB_HOST"                  : "postgres",
-                "AE_DB_PORT"                  : "5432",
-                "AE_DB_NAME"                  : "sear-payments-bridge",
-                "AE_DB_USERNAME"              : "sear-payments-bridge",
-                "AE_DB_PASSWORD"              : "sear-payments-bridge",
-                "SPRING_PROFILES_ACTIVE"      : "",
-            ]
-            jvmFlags = [
-                "-XX:MaxRAMPercentage=75",
-                "-Dfile.encoding=UTF-8",
-                "-Dsun.jnu.encoding=UTF-8",
-                "-Djava.net.preferIPv4Stack=true",
-                "-Djava.io.tmpdir=/tmp",
-                "-Dsilenteight.home=/silenteight",
-                "-Dspring.profiles.include=container",
-                "-Dserver.port=8080",
-                "-Dgrpc.server.port=8081",
-            ]
-            ports = ["8080", "8081"]
-            user = "nonroot"
-            workingDirectory = "/silenteight"
-          }
-        }
       }
     }
   }

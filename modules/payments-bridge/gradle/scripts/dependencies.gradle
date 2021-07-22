@@ -66,6 +66,7 @@ libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: '
 libraries.spring_boot_starter_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa']
 libraries.spring_boot_starter_elasticsearch = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch']
 libraries.spring_boot_starter_integration = [group: 'org.springframework.boot', name: 'spring-boot-starter-integration']
+libraries.spring_boot_starter_jdbc = [group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc']
 libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
 libraries.spring_boot_starter_mail = [group: 'org.springframework.boot', name: 'spring-boot-starter-mail']
 libraries.spring_boot_starter_quartz = [group: 'org.springframework.boot', name: 'spring-boot-starter-quartz']

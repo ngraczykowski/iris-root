@@ -1,12 +1,12 @@
-# sear-payments-spring-integration-mockup
+# SEAR Payments Bridge
 
 This project represents the high-level implementation of SEAR Payments using heavily Spring Integration as a platform. It assumes using Adjudication Engine (AE) as alert recommendation platform (not using our own agents and implementation here).  
 
 ## To run it
 
 1. Clone Adjudication Engine project https://gitlab.silenteight.com/sens/adjudication-engine
-2. Follow AE readme to run it
-3. Start db using `docker-compose -d`
+2. Follow the AE readme to run it
+3. Start the database using `make up`
 4. In Run configuration settings change 'Use class path module' to 'sear-payments-bridge.sear-payments-scb-etl.main'
 5. Run the Spring Application using as a main class `SearPaymentsApplication`.
 

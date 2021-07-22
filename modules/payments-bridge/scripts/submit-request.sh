@@ -399,4 +399,4 @@ curl -v \
     }
 }
 ' \
-  http://localhost:8080/foo?dc=UK
+  http://localhost:24602/rest/payments/cmapi?dc=UK

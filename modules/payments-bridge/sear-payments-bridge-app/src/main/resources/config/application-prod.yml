@@ -1,0 +1,6 @@
+serp:
+  messaging:
+    error-queue:
+      declare: false
+      enabled: true
+      name: payments.error-queue

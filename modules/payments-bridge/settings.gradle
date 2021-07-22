@@ -2,4 +2,8 @@ rootProject.name = 'sear-payments-bridge'
 gradle.ext.sepDependenciesVersion = "2.2.0"
 
 include 'sear-payments-app'
+include 'sear-payments-bridge-app'
+include 'sear-payments-bridge-common'
+include 'sear-payments-bridge-datasource'
+include 'sear-payments-bridge-testing'
 include 'sear-payments-scb-etl'
