@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 public class AlertDataCenterDto {
 
-    @NonNull private AlertMessageDto alertMessageDto;
-    @NonNull private String dataCenter;
+  @NonNull private AlertMessageDto alertMessageDto;
+  @NonNull private String dataCenter;
 
 }

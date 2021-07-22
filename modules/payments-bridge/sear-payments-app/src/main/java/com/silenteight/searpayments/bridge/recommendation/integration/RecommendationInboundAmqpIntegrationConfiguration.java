@@ -3,7 +3,6 @@ package com.silenteight.searpayments.bridge.recommendation.integration;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
-import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

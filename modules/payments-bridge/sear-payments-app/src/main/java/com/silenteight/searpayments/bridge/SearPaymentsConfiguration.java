@@ -142,12 +142,12 @@ class SearPaymentsConfiguration {
     return alertId;
   }
 
-  private static boolean alertIsPaired(AlertMessageDto AlertMessageDto) {
+  private static boolean alertIsPaired(AlertMessageDto alertMessageDto) {
 
     return false;
   }
 
-  private static boolean alertIsObsolete(AlertMessageDto AlertMessageDto) {
+  private static boolean alertIsObsolete(AlertMessageDto alertMessageDto) {
     return false;
   }
 
@@ -160,7 +160,7 @@ class SearPaymentsConfiguration {
         .get();
   }
 
-  long buildAlertFromDamagedAlertMessageDto(AlertMessageDto AlertMessageDto, MessageHeaders mh) {
+  long buildAlertFromDamagedAlertMessageDto(AlertMessageDto alertMessageDto, MessageHeaders mh) {
     // build alert here, use some class, bean, etc.
     // return alertId
     return 1L;

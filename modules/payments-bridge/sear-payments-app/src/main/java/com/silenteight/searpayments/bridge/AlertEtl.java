@@ -1,11 +1,10 @@
 package com.silenteight.searpayments.bridge;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertDataCenterDto;
 import lombok.NonNull;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.searpayments.bridge.dto.input.AlertDataCenterDto;
 
 public interface AlertEtl {
 
-  long invoke(@NonNull AlertDataCenterDto AlertDataCenterDto);
+  long invoke(@NonNull AlertDataCenterDto alertDataCenterDto);
 }

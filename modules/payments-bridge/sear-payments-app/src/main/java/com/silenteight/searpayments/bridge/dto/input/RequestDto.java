@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,11 +34,11 @@ public class RequestDto implements Serializable {
 
   public List<AlertDataCenterDto> getAlertDataCenters() {
     return body.getAlerts()
-            .stream()
-            .map(alert -> AlertDataCenterDto.builder()
-                    .alertMessageDto(alert)
-                    .dataCenter(dataCenter)
-                    .build())
-            .collect(Collectors.toList());
+        .stream()
+        .map(alert -> AlertDataCenterDto.builder()
+            .alertMessageDto(alert)
+            .dataCenter(dataCenter)
+            .build())
+        .collect(Collectors.toList());
   }
 }
