@@ -5,7 +5,7 @@ silenteight.bridge:
     default-deadline: 5s
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
-    worldcheck-address: static://localhost:24801
+    worldcheck-address: static://localhost:24813
   http.port: 24802
   amqp:
     outgoing:

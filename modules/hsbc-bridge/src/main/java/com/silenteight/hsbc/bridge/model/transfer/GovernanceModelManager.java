@@ -56,10 +56,11 @@ public class GovernanceModelManager implements ModelManager {
   private ModelStatusUpdatedDto transferModelFromNexus(ModelInfoRequest request) {
     try {
       var jsonModel = nexusModelClient.updateModel(request.getUrl());
+      log.info("Transferring model length = {}", jsonModel.length);
       var model = governanceServiceClient.transferModel(jsonModel);
       log.info("Update model successful!");
       return convertToModelStatusUpdated(model, request, SUCCESS);
-    } catch (IOException e) {
+    } catch (IOException | RuntimeException e) {
       log.error("Unable to update model: " + request.getName(), e);
       return convertToModelStatusUpdated(request, FAILURE);
     }
