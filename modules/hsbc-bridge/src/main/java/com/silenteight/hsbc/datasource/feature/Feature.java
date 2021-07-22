@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Feature {
 
-  ALLOW_LIST_COMMON_AP("f_common_ap"),
-  ALLOW_LIST_COMMON_NAME("f_common_names"),
-  ALLOW_LIST_COMMON_WP("f_common_mp"),
-  ALLOW_LIST_INVALID_ALERT("f_invalid_alert"),
+  ALLOW_LIST_COMMON_AP("commonAp"),
+  ALLOW_LIST_COMMON_NAME("commonNames"),
+  ALLOW_LIST_COMMON_WP("commonMp"),
+  ALLOW_LIST_INVALID_ALERT("invalidAlert"),
   NAME("name"),
   GENDER("gender"),
   GEO_PLACE_OF_BIRTH("geoPlaceOfBirth"),

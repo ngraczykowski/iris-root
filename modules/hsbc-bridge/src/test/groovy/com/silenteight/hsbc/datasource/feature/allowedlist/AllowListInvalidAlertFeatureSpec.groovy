@@ -32,7 +32,7 @@ class AllowListInvalidAlertFeatureSpec extends Specification {
       allowListNames == ['hsbc_invalid_names', 'hsbc_financial_institution']
       characteristicsValues == ['givenName', 'familyNameOriginal', 'fullNameDerived',
                                 'middleName', 'originalScriptName', 'profileFullName']
-      feature == 'features/f_invalid_alert'
+      feature == 'features/invalidAlert'
     }
   }
 
@@ -54,7 +54,7 @@ class AllowListInvalidAlertFeatureSpec extends Specification {
     with(result) {
       allowListNames == ['hsbc_invalid_names', 'hsbc_financial_institution']
       characteristicsValues == ['entityName', 'entityNameOriginal', 'originalScriptName']
-      feature == 'features/f_invalid_alert'
+      feature == 'features/invalidAlert'
     }
   }
 }

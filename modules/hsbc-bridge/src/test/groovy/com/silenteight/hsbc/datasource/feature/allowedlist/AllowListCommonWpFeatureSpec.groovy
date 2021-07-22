@@ -41,7 +41,7 @@ class AllowListCommonWpFeatureSpec extends Specification {
     with(result) {
       allowListNames == ['hsbc_common_watchlist_party']
       characteristicsValues == ['worldCheckListId', 'privateListId', 'countryCode']
-      feature == 'features/f_common_mp'
+      feature == 'features/commonMp'
     }
   }
 
@@ -73,7 +73,7 @@ class AllowListCommonWpFeatureSpec extends Specification {
     with(result) {
       allowListNames == ['hsbc_common_watchlist_party']
       characteristicsValues == ['worldCheckListId', 'privateListId', 'countryCode']
-      feature == 'features/f_common_mp'
+      feature == 'features/commonMp'
     }
   }
 }

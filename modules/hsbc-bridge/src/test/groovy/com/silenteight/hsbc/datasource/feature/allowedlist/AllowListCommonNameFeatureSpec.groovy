@@ -30,7 +30,7 @@ class AllowListCommonNameFeatureSpec extends Specification {
       allowListNames == ['hsbc_common_name']
       characteristicsValues == ['givenName', 'familyNameOriginal', 'fullNameDerived',
                                 'middleName', 'originalScriptName', 'profileFullName']
-      feature == 'features/f_common_names'
+      feature == 'features/commonNames'
     }
   }
 
@@ -52,7 +52,7 @@ class AllowListCommonNameFeatureSpec extends Specification {
     with(result) {
       allowListNames == ['hsbc_common_name']
       characteristicsValues == ['entityName', 'entityNameOriginal', 'originalScriptName']
-      feature == 'features/f_common_names'
+      feature == 'features/commonNames'
     }
   }
 }
