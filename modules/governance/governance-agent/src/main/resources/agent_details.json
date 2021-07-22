@@ -131,7 +131,7 @@
       }
     ]
   },
-  "agents/historicalDecision/versions/1.0.0/configs/1": {
+  "agents/historicalDecisions/versions/1.0.0/configs/1": {
     "agentId": "6ca7f680-8a1b-44f4-8bfb-5aa62f8e543d",
     "features": [
       "features/isTpMarked",
