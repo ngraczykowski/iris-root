@@ -47,7 +47,8 @@ class RecommendationsGeneratedUseCaseTest {
     assertThat(indexRequest.getRequestId()).isEqualTo(REQUEST_ID);
     assertThat(indexRequest.getAnalysisName()).isEqualTo(ANALYSIS_NAME);
     assertThat(indexRequest.getAlertsList())
-        .extracting(Alert::getDiscriminator).containsExactly(ALERT_NAME);
+        .extracting(Alert::getDiscriminator, Alert::getName)
+        .containsExactly(tuple(ALERT_NAME, ALERT_NAME));
   }
 
   @Test

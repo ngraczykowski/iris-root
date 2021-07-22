@@ -100,6 +100,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
 
     return Alert.newBuilder()
         .setDiscriminator(recommendationInfo.getAlert())
+        .setName(recommendationInfo.getAlert())
         .setPayload(toStruct(recommendation, metadata))
         .build();
   }
