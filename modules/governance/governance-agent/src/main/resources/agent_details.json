@@ -211,7 +211,7 @@
       }
     ]
   },
-  "agents/pep/versions/1.0.0/configs/1": {
+  "agents/ispep/versions/1.0.0/configs/1": {
     "agentId": "84b322ed-018e-4bff-9518-12376f536e63",
     "features": [
       "features/isPep"
