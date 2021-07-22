@@ -1,0 +1,21 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource ignored files
+/dataSources/
+/dataSources.xml
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Gradle
+/modules/
+/gradle.xml
+# Sonar
+/sonarlint/
+/sonarlint.xml
+/sonarlint-state.xml
+# Other crap
+/compiler.xml
+/jarRepositories.xml
+/libraries-with-intellij-classes.xml
+/uiDesigner.xml

@@ -1,5 +1,27 @@
-/.gradle
-/.idea
-/build
-/sear-payments-app/build
-/sear-payments-scb-etl/build
+### Various ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.DS_Store
+*.bak
+*.orig
+
+### jenv ###
+.java-version
+
+### IntelliJ IDEA ###
+out/
+*.iws
+*.iml
+*.ipr
+.attach_pid*
+
+### Gradle ###
+build/
+/.gradle/
+
+### Docker ###
+/.env
