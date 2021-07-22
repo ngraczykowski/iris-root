@@ -1,17 +1,21 @@
 package com.silenteight.hsbc.datasource.category;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import static java.util.Optional.ofNullable;
 
+@RequiredArgsConstructor
 class CategoryModelHolder {
 
-  private static final List<CategoryModel> CATEGORIES = createCategories();
   private static final String CATEGORIES_PREFIX = "categories/";
 
-  private static List<CategoryModel> createCategories() {
+  private final List<CategoryModel> categories = createCategories();
+  private final Map<String, List<String>> categoryProperties;
 
+  private List<CategoryModel> createCategories() {
     var sourceSystem = CategoryModel.builder()
         .name(CATEGORIES_PREFIX + "sourceSystem")
         .displayName("Source System")
@@ -63,39 +67,15 @@ class CategoryModelHolder {
         hitType);
   }
 
-  private static String mapSourceRiskTypeValue(String sourceValue) {
-    switch (sourceValue) {
-      case "AML":
-      case "CTF-P2":
-      case "INNIA":
-      case "MX-AML":
-      case "MX-SHCP":
-        return "AML";
-      case "AE-MEWOLF":
-      case "MENA-GREY":
-      case "MEWOLF":
-      case "MX-DARK-GREY":
-      case "SAN":
-      case "US-HBUS":
-        return "SAN";
-      case "PEP":
-        return "PEP";
-      case "SCION":
-        return "EXITS";
-      case "SSC":
-        return "SSC";
-      default:
-        return "OTHER";
-    }
+  String mapSourceRiskTypeValue(String sourceValue) {
+    return categoryProperties.entrySet().stream()
+        .filter(e -> e.getValue().contains(sourceValue))
+        .map(Map.Entry::getKey)
+        .findFirst()
+        .orElse("OTHER");
   }
 
-  static List<CategoryModel> getCategories() {
-    return CATEGORIES;
-  }
-
-  static Optional<CategoryModel> getCategoryModelByName(String name) {
-    return CATEGORIES.stream()
-        .filter(c -> c.getName().equals(name))
-        .findFirst();
+  List<CategoryModel> getCategories() {
+    return List.copyOf(categories);
   }
 }

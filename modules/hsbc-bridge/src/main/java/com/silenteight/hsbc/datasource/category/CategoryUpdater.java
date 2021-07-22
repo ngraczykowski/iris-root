@@ -5,18 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 class CategoryUpdater {
 
   private final CategoryRepository categoryRepository;
+  private final CategoryModelHolder categoryModelHolder;
 
   @EventListener(ApplicationStartedEvent.class)
   @Transactional
@@ -29,7 +28,7 @@ class CategoryUpdater {
   }
 
   private void updateCategories() {
-    var categories = CategoryModelHolder.getCategories();
+    var categories = categoryModelHolder.getCategories();
     var existingCategories = categoryRepository.findAll();
 
     categories.forEach(categoryModel -> {
@@ -62,7 +61,7 @@ class CategoryUpdater {
     log.debug("Category name: {} has been updated.", entity.getName());
   }
 
-  private Optional<CategoryEntity> findByName(String name,  Collection<CategoryEntity> categories) {
-    return categories.stream().filter(n -> n.getName().equalsIgnoreCase(name)).findFirst();
+  private Optional<CategoryEntity> findByName(String name, Collection<CategoryEntity> categories) {
+    return categories.stream().filter(n -> name.equalsIgnoreCase(n.getName())).findFirst();
   }
 }

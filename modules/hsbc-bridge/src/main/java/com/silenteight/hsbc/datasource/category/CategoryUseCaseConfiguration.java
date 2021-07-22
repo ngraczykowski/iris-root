@@ -24,7 +24,8 @@ class CategoryUseCaseConfiguration {
   }
 
   @Bean
-  StoreMatchCategoriesUseCase storeMatchCategoriesUseCase() {
-    return new StoreMatchCategoriesUseCase(categoryRepository, matchCategoryRepository);
+  StoreMatchCategoriesUseCase storeMatchCategoriesUseCase(CategoryModelHolder categoryModelHolder) {
+    return new StoreMatchCategoriesUseCase(
+        categoryRepository, matchCategoryRepository, categoryModelHolder);
   }
 }

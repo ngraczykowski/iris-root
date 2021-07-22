@@ -214,6 +214,31 @@
       "name": "silenteight.bridge.model.name-model-export.cron",
       "type": "java.lang.String",
       "description": "Cron for name aliases model export."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.SAN",
+      "type": "java.util.List",
+      "description": "Map's key value SAN for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.AML",
+      "type": "java.util.List",
+      "description": "Map's key value AML for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.PEP",
+      "type": "java.util.List",
+      "description": "Map's key value PEP for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.EXITS",
+      "type": "java.util.List",
+      "description": "Map's key value EXITS for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.SSC",
+      "type": "java.util.List",
+      "description": "Map's key value SSC for risk type values."
     }
   ]
 }

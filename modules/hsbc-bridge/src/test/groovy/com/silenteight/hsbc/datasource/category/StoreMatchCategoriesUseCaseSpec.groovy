@@ -9,36 +9,63 @@ import spock.lang.Specification
 
 class StoreMatchCategoriesUseCaseSpec extends Specification {
 
+  def fixtures = new Fixtures()
   def categoryRepository = Mock(CategoryRepository)
   def matchCategoryRepository = Mock(MatchCategoryRepository)
-  def underTest = new StoreMatchCategoriesUseCase(categoryRepository, matchCategoryRepository)
-
-  def numberOfCategories = CategoryModelHolder.getCategories().size()
+  def categoryModelHolder = Mock(CategoryModelHolder)
+  def underTest = new StoreMatchCategoriesUseCase(
+      categoryRepository, matchCategoryRepository, categoryModelHolder)
 
   def 'should store match categories'() {
     given:
-    def matchData = [
-        getCaseInformation: {
-          [
-              getExtendedAttribute5: {'AM'},
-              getSourceName        : {'sourceName'}
-          ] as CaseInformation
-        },
-        isIndividual      : {true}
-    ] as MatchData
-    def matchComposite = MatchComposite.builder()
-        .id(1L)
-        .name('matchName')
-        .matchData(matchData)
-        .build()
-    def command = new StoreMatchCategoriesCommand([matchComposite])
+    def command = new StoreMatchCategoriesCommand([fixtures.matchComposite])
+    categoryModelHolder.getCategories() >> fixtures.categories
 
     when:
     underTest.storeMatchCategories(command)
 
     then:
-    numberOfCategories * categoryRepository.findByName(_ as String) >> new CategoryEntity()
-    (numberOfCategories * command.getMatchComposites().size()) *
+    fixtures.numberOfCategories * categoryRepository.findByName(_ as String) >> new CategoryEntity()
+    (fixtures.numberOfCategories * command.getMatchComposites().size()) *
         matchCategoryRepository.save(_ as MatchCategoryEntity)
   }
+
+  class Fixtures {
+
+    def categories = [
+        CategoryModel.builder()
+            .name('categories/sourceSystem')
+            .displayName('Source System')
+            .multiValue(false)
+            .type(CategoryType.ANY_STRING)
+            .allowedValues([])
+            .valueRetriever(
+                new CategoryValueRetriever() {
+
+                  @Override
+                  List<String> retrieve(MatchData matchData) {
+                    return List.of("dummy1", "dummy2")
+                  }
+                })
+            .build()
+    ] as List
+
+    def numberOfCategories = categories.size()
+
+    def matchComposite = MatchComposite.builder()
+        .id(1L)
+        .name('matchName')
+        .matchData(matchData)
+        .build()
+  }
+
+  def matchData = [
+      getCaseInformation: {
+        [
+            getExtendedAttribute5: {'AM'},
+            getSourceName        : {'sourceName'}
+        ] as CaseInformation
+      },
+      isIndividual      : {true}
+  ] as MatchData
 }

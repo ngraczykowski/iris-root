@@ -14,12 +14,13 @@ class StoreMatchCategoriesUseCase {
 
   private final CategoryRepository categoryRepository;
   private final MatchCategoryRepository matchCategoryRepository;
+  private final CategoryModelHolder categoryModelHolder;
 
   @Transactional
   void storeMatchCategories(@NonNull StoreMatchCategoriesCommand command) {
     var matchComposites = command.getMatchComposites();
 
-    CategoryModelHolder.getCategories()
+    categoryModelHolder.getCategories()
         .forEach(categoryModel -> matchComposites.forEach(match -> {
           var matchId = match.getId();
           var category = categoryRepository.findByName(categoryModel.getName());

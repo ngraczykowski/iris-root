@@ -61,6 +61,28 @@ silenteight.bridge:
       LEVEL_3_REVIEW: Level 3 Review
   recommendations.queue: bridge.recommendations
 
+  category:
+    risk-type-values:
+      SAN:
+        - AE-MEWOLF
+        - MENA-GREY
+        - MEWOLF
+        - MX-DARK-GREY
+        - SAN
+        - US-HBUS
+      AML:
+        - AML
+        - CTF-P2
+        - INNIA
+        - MX-AML
+        - MX-SHCP
+      PEP:
+        - PEP
+      EXITS:
+        - SCION
+      SSC:
+        - SSC
+
   ### Export model jobs (use "-" value for disabling the particular job)
 
   model:
