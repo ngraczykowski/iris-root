@@ -3,10 +3,10 @@ package com.silenteight.searpayments.scb.etl.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.searpayments.bridge.dto.input.AddressCityDto;
-import com.silenteight.searpayments.bridge.dto.input.AddressCountryDto;
-import com.silenteight.searpayments.bridge.dto.input.AddressStateDto;
-import com.silenteight.searpayments.bridge.dto.input.RequestHitDto;
+import com.silenteight.payments.bridge.dto.input.AddressCityDto;
+import com.silenteight.payments.bridge.dto.input.AddressCountryDto;
+import com.silenteight.payments.bridge.dto.input.AddressStateDto;
+import com.silenteight.payments.bridge.dto.input.RequestHitDto;
 
 import org.jetbrains.annotations.NotNull;
 

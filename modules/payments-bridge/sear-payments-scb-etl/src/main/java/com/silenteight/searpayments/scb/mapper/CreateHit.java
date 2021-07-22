@@ -3,7 +3,7 @@ package com.silenteight.searpayments.scb.mapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.searpayments.bridge.model.SolutionType;
+import com.silenteight.payments.bridge.model.SolutionType;
 import com.silenteight.searpayments.scb.domain.Hit;
 import com.silenteight.searpayments.scb.domain.HittedEntityAddress;
 import com.silenteight.searpayments.scb.etl.response.HitAndWatchlistPartyData;

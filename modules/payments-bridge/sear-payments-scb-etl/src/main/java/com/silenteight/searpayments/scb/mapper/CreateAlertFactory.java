@@ -3,14 +3,12 @@ package com.silenteight.searpayments.scb.mapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
-import com.silenteight.searpayments.bridge.dto.validator.AlertMessageDtoValidator;
-import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
+import com.silenteight.payments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.dto.validator.AlertMessageDtoValidator;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
 
 @RequiredArgsConstructor
-public
-class CreateAlertFactory {
+public class CreateAlertFactory {
 
   @NonNull private final CreateHitsFactory createHitsFactory;
   @NonNull private final CreateMessageTypeFactory createMessageTypeFactory;

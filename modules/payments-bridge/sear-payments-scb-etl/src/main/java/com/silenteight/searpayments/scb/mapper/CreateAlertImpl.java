@@ -4,10 +4,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
-import com.silenteight.searpayments.bridge.dto.validator.AlertMessageDtoValidator;
-import com.silenteight.searpayments.bridge.dto.validator.CompleteAlertDefinition;
-import com.silenteight.searpayments.bridge.dto.validator.RequestMessageDtoValidator;
+import com.silenteight.payments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.dto.validator.AlertMessageDtoValidator;
+import com.silenteight.payments.bridge.dto.validator.CompleteAlertDefinition;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.Alert.AlertMessageFormat;
 import com.silenteight.searpayments.scb.domain.Alert.DamageReason;

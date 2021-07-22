@@ -1,12 +1,8 @@
 plugins {
-  id 'java'
-  id 'org.springframework.boot'
-  id "io.spring.dependency-management"
-  id "io.freefair.aspectj.post-compile-weaving"
+  id "java"
+  id "groovy"
+  id "org.springframework.boot"
 }
-
-group 'com.silenteight'
-version '1.0-SNAPSHOT'
 
 dependencies {
   implementation group: 'io.grpc', name: 'grpc-stub', version: '1.39.0'
@@ -44,8 +40,4 @@ dependencies {
   runtimeOnly libraries.caffeine
   runtimeOnly libraries.caffeine_jcache
   runtimeOnly libraries.liquibase_sessionlock
-}
-
-test {
-  useJUnitPlatform()
 }

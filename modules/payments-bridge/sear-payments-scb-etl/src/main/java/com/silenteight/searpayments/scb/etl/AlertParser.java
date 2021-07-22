@@ -3,11 +3,11 @@ package com.silenteight.searpayments.scb.etl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
-import com.silenteight.searpayments.bridge.dto.input.RequestHitDto;
-import com.silenteight.searpayments.bridge.metrics.LogMethodTime;
-import com.silenteight.searpayments.bridge.model.SolutionType;
-import com.silenteight.searpayments.bridge.model.WatchlistType;
+import com.silenteight.payments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.dto.input.RequestHitDto;
+import com.silenteight.payments.bridge.metrics.LogMethodTime;
+import com.silenteight.payments.bridge.model.SolutionType;
+import com.silenteight.payments.bridge.model.WatchlistType;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractRequest;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
 import com.silenteight.searpayments.scb.etl.response.*;

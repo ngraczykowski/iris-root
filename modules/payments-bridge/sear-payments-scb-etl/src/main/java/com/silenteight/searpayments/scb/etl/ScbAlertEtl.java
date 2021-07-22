@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.searpayments.bridge.AlertEtl;
-import com.silenteight.searpayments.bridge.dto.input.AlertDataCenterDto;
+import com.silenteight.payments.bridge.AlertEtl;
+import com.silenteight.payments.bridge.dto.input.AlertDataCenterDto;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.AlertService;
 import com.silenteight.searpayments.scb.mapper.CreateAlertFactory;

@@ -3,10 +3,10 @@ package com.silenteight.searpayments.scb.mapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.model.WatchlistType;
 import com.silenteight.proto.agent.name.v1.api.CompareNamesInput;
 import com.silenteight.proto.agent.name.v1.api.CompareNamesRequest;
 import com.silenteight.proto.agent.name.v1.api.WatchlistName;
-import com.silenteight.searpayments.bridge.model.WatchlistType;
 import com.silenteight.searpayments.scb.etl.response.HitAndWatchlistPartyData;
 import com.silenteight.searpayments.scb.etl.response.HitData;
 

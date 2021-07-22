@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.searpayments.bridge.dto.input.AlertMessageDto;
-import com.silenteight.searpayments.bridge.dto.input.RequestStatusDto;
-import com.silenteight.searpayments.bridge.dto.input.StatusDto;
+import com.silenteight.payments.bridge.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.dto.input.RequestStatusDto;
+import com.silenteight.payments.bridge.dto.input.StatusDto;
 import com.silenteight.searpayments.scb.domain.Alert;
 import com.silenteight.searpayments.scb.domain.Alert.AlertBuilder;
 import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;

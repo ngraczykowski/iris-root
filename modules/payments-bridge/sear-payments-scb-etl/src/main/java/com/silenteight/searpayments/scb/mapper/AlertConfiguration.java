@@ -2,7 +2,7 @@ package com.silenteight.searpayments.scb.mapper;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.searpayments.bridge.dto.validator.AlertMessageDtoValidator;
+import com.silenteight.payments.bridge.dto.validator.AlertMessageDtoValidator;
 import com.silenteight.searpayments.scb.etl.countrycode.CountryCodeExtractor;
 
 import org.springframework.beans.factory.annotation.Value;

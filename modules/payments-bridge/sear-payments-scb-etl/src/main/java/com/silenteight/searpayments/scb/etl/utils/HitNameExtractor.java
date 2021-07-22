@@ -3,7 +3,7 @@ package com.silenteight.searpayments.scb.etl.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.searpayments.bridge.dto.input.RequestHitDto;
+import com.silenteight.payments.bridge.dto.input.RequestHitDto;
 
 import org.jetbrains.annotations.Nullable;
 
