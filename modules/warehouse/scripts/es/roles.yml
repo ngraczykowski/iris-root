@@ -34,6 +34,8 @@ technical_user:
     - 'cluster:monitor/health'
 #  https://discuss.opendistrocommunity.dev/t/cluster-permission-indices-data-write-bulk-needed-for-adding-data-implications/2237/2
     - 'indices:data/write/bulk'
+    - 'indices:data/read/search'
+    - 'cluster:admin/opendistro/reports/definition/create'
   index_permissions:
     - index_patterns:
         - 'itest_production'

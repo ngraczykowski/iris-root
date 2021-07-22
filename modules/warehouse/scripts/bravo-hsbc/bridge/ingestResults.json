@@ -1,35 +1,34 @@
 {
   "batchId": "{{batchId}}",
   "batchStatus": "COMPLETED",
-  "errorAlerts": [],
   "alerts": [
     {
       "id": "{{alertId}}",
       "recommendation": "AAA False Positive",
-      "comment": "AlertId: {{alertId}}",
+      "comment": "S8 recommended action: False Positive\n\nGR-ESAN 2309274:",
       "policy_id": "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
       "step_id": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
-      "fv_signature": "2N0tYNabpg9ywOrtEOECk1r2f2E=",
+      "fv_signature": "qC4MMVPvDOpB/vA+hn8tM8mUgt4=",
       "alertMetadata": [
-        {
-          "key": "s8_lobCountryCode",
-          "value": "IN"
-        },
         {
           "key": "trackingId",
           "value": "{{discriminator}}"
-        },
-        {
-          "key": "extendedAttribute5",
-          "value": "SAN"
         },
         {
           "key": "discriminator",
           "value": "{{alertId}}_{{discriminator}}"
         },
         {
+          "key": "s8_lobCountryCode",
+          "value": "LU"
+        },
+        {
+          "key": "extendedAttribute5",
+          "value": "SAN"
+        },
+        {
           "key": "s8_recommendation",
-          "value": "AAA False Positive"
+          "value": "ACTION_FALSE_POSITIVE"
         },
         {
           "key": "recommendationYear",
@@ -45,19 +44,35 @@
         },
         {
           "key": "recommendationDate",
-          "value": "2021-07-21T08:24:33.985376Z"
+          "value": "2021-07-21T13:01:38.295455Z"
         },
         {
-          "key": "feature_vector_signature",
-          "value": "2N0tYNabpg9ywOrtEOECk1r2f2E="
+          "key": "categories/apType",
+          "value": "DATA_SOURCE_ERROR"
+        },
+        {
+          "key": "categories/isDeny",
+          "value": "DATA_SOURCE_ERROR"
+        },
+        {
+          "key": "step",
+          "value": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93"
         },
         {
           "key": "policy",
           "value": "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"
         },
         {
-          "key": "step",
-          "value": "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93"
+          "key": "step_title",
+          "value": "Name, DOB - no match"
+        },
+        {
+          "key": "policy_title",
+          "value": "AE test - all agents"
+        },
+        {
+          "key": "feature_vector_signature",
+          "value": "qC4MMVPvDOpB/vA+hn8tM8mUgt4="
         },
         {
           "key": "features/name:config",
@@ -89,7 +104,7 @@
         },
         {
           "key": "features/otherCountry:solution",
-          "value": "NO_DATA"
+          "value": "MATCH"
         },
         {
           "key": "features/otherDocument:config",
@@ -146,14 +161,6 @@
         {
           "key": "features/passportNumberDocument:solution",
           "value": "NO_DATA"
-        },
-        {
-          "key": "categories/apType",
-          "value": "DATA_SOURCE_ERROR"
-        },
-        {
-          "key": "categories/isDeny",
-          "value": "DATA_SOURCE_ERROR"
         }
       ]
     }
