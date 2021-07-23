@@ -18,7 +18,13 @@ public class ErrorAlert {
   private String id = null;
 
   @JsonProperty("errorMessage")
-  private String errorMessage= null;
+  private String errorMessage = null;
+
+  @JsonProperty("recommendation")
+  private String recommendation = null;
+
+  @JsonProperty("comment")
+  private String comment = null;
 
   @JsonProperty("alertMetadata")
   @NotNull
@@ -54,6 +60,30 @@ public class ErrorAlert {
 
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
+  }
+
+  public ErrorAlert recommendation(String recommendation) {
+    this.recommendation = recommendation;
+    return this;
+  }
+
+  @Schema(description = "")
+  public String getRecommendation() { return recommendation; }
+
+  public void setRecommendation(String recommendation) {
+    this.recommendation = recommendation;
+  }
+
+  public ErrorAlert comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  @Schema(description = "")
+  public String getComment() { return comment; }
+
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
   public ErrorAlert alertMetadata(List<AlertMetadata> alertMetadata) {
@@ -94,7 +124,9 @@ public class ErrorAlert {
     }
     ErrorAlert errorAlert = (ErrorAlert) o;
     return Objects.equals(this.id, errorAlert.id) &&
+        Objects.equals(this.comment, errorAlert.comment) &&
         Objects.equals(this.errorMessage, errorAlert.errorMessage) &&
+        Objects.equals(this.recommendation, errorAlert.recommendation) &&
         Objects.equals(this.alertMetadata, errorAlert.alertMetadata);
   }
 
@@ -111,6 +143,8 @@ public class ErrorAlert {
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    errorMessage: ").append(toIndentedString(errorMessage)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    recommendation: ").append(toIndentedString(recommendation)).append("\n");
     sb.append("    alertMetadata: ").append(toIndentedString(alertMetadata)).append("\n");
     sb.append("}");
     return sb.toString();

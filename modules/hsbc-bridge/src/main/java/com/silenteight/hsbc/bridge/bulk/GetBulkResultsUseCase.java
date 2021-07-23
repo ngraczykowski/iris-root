@@ -58,8 +58,11 @@ public class GetBulkResultsUseCase {
   private ErrorAlert getErrorAlert(BulkAlertEntity alert) {
     var errorAlert = new ErrorAlert();
     errorAlert.setId(alert.getExternalId());
+    errorAlert.setComment(
+        "Adjudication failed. Invalid alert data or an unexpected error occurred.");
     errorAlert.setErrorMessage(alert.getErrorMessage());
     errorAlert.setAlertMetadata(map(alert.getMetadata()));
+    errorAlert.setRecommendation(getRecommendationForErrorAlert(alert.getMetadata()));
     return errorAlert;
   }
 
@@ -134,6 +137,11 @@ public class GetBulkResultsUseCase {
         return extendedAttribute5;
       }
     });
+  }
+
+  private String getRecommendationForErrorAlert(List<BulkAlertMetadata> metadata) {
+    var extendedAttribute5 = getAttribute(metadata);
+    return getRecommendationUseCase.getRecommendationForErrorAlert(extendedAttribute5);
   }
 
   private String getAttribute(List<BulkAlertMetadata> metadata) {

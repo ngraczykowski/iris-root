@@ -38,6 +38,9 @@ class RecommendationMapperSpec extends Specification {
     where:
     action              | extendedAttribute | expectedResult
     null                | null              | 'Level 1'
+    null                | 'Dummy'           | 'Level 1'
+    null                | 'SAN'             | 'Level 2'
+    null                | 'SSC'             | 'Level 2'
     ''                  | null              | 'LEVEL_3_REVIEW'
     'Dummy'             | null              | 'LEVEL_3_REVIEW'
     'Dummy'             | 'Dummy'           | 'LEVEL_3_REVIEW'

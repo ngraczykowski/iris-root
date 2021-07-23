@@ -34,8 +34,8 @@ class RecommendationMapper {
   private final String manualInvestigation;
   private final String potentialTruePositive;
 
-  String getRecommendationValue(String recommendedAction, String extendedAttribute3) {
-    var recommendation = toRecommendation(recommendedAction, extendedAttribute3);
+  String getRecommendationValue(String recommendedAction, String extendedAttribute5) {
+    var recommendation = toRecommendation(recommendedAction, extendedAttribute5);
 
     return getUserFriendlyValue(recommendation);
   }

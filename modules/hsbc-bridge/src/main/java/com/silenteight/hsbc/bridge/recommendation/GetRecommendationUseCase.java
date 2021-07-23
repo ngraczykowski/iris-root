@@ -50,6 +50,10 @@ public class GetRecommendationUseCase {
     return builder.build();
   }
 
+  public String getRecommendationForErrorAlert(String extendedAttribute5) {
+    return recommendationMapper.getRecommendationValue(null, extendedAttribute5);
+  }
+
   private RecommendationMetadata mapMetadata(RecommendationMetadataEntity metadata) {
     var objectNode = metadata.getPayload();
     return tryToConvertMetadata(objectNode).orElse(new RecommendationMetadata());

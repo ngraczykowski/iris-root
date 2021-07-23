@@ -47,7 +47,8 @@ class GetRecommendationUseCaseSpec extends Specification {
             metadata: new RecommendationMetadataEntity(1, someObjectNode)
         ))
     1 * mapper.getRecommendationValue('FP', request.getExtendedAttribute5()) >> 'Level 1 Review'
-    1 * objectMapper.treeToValue(someObjectNode, RecommendationMetadata.class) >> new RecommendationMetadata()
+    1 * objectMapper.treeToValue(someObjectNode, RecommendationMetadata.class) >>
+        new RecommendationMetadata()
   }
 
   def 'should throw exception when recommendation for an alert has not been found'() {
@@ -64,5 +65,17 @@ class GetRecommendationUseCaseSpec extends Specification {
     thrown(RecommendationNotFoundException)
     1 * repository.findByAlert(request.getAlert()) >> empty()
     0 * mapper.getRecommendationValue(_ as String, _ as String)
+  }
+
+  def 'should return recommendation for error alert'() {
+    given:
+    def someAttribute = 'SAN'
+
+    when:
+    def result = underTest.getRecommendationForErrorAlert(someAttribute)
+
+    then:
+    1 * mapper.getRecommendationValue(null, someAttribute) >> 'Level 1 Review'
+    result == 'Level 1 Review'
   }
 }
