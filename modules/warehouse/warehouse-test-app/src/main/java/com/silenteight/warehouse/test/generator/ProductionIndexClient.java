@@ -23,7 +23,7 @@ public class ProductionIndexClient {
     String requestId = randomUUID().toString();
     ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
         .setRequestId(requestId)
-        .addAllAlerts(of(alertGenerator.generate()))
+        .addAllAlerts(of(alertGenerator.generateProduction()))
         .build();
 
     productionIndexClientGateway.indexRequest(request);

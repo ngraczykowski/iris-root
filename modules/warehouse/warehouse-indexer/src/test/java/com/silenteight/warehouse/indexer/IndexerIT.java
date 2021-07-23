@@ -129,9 +129,9 @@ class IndexerIT {
 
   @Test
   void shouldMergeMultipleRequestsForTheSameAlert() {
-    sendProductionRequestWithPayload(DISCRIMINATOR_1, Map.of(
+    sendProductionRequestWithPayload(DISCRIMINATOR_1, Values.ALERT_NAME, Map.of(
         SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP));
-    sendProductionRequestWithPayload(DISCRIMINATOR_1, Map.of(
+    sendProductionRequestWithPayload(DISCRIMINATOR_1, Values.ALERT_NAME, Map.of(
         SourceAlertKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
 
     await()
@@ -144,9 +144,32 @@ class IndexerIT {
         MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
   }
 
-  private void sendProductionRequestWithPayload(String discriminator, Map<String, String> payload) {
+  @Test
+  void shouldMergeProductionDataWhenSimulationRequestIsSent() {
+    sendProductionRequestWithPayload(DISCRIMINATOR_1, Values.ALERT_NAME, Map.of(
+        SourceAlertKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> indexedEventListener.hasAtLeastEventCount(1));
+
+    sendSimulationRequestWithPayload(SIMULATION_ANALYSIS_NAME, Values.ALERT_NAME, Map.of(
+        SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP));
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> indexedEventListener.hasAtLeastEventCount(2));
+
+    var source = simpleElasticTestClient.getSource(SIMULATION_INDEX_NAME, Values.ALERT_NAME);
+    assertThat(source).containsAllEntriesOf(Map.of(
+        MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+        MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
+  }
+
+  private void sendProductionRequestWithPayload(
+      String discriminator, String alertName, Map<String, String> payload) {
+
     Alert alert = Alert.newBuilder()
         .setDiscriminator(discriminator)
+        .setName(alertName)
         .setPayload(convertMapToPayload(payload))
         .build();
 
@@ -156,6 +179,24 @@ class IndexerIT {
         .build();
 
     productionIndexClientGateway.indexRequest(request);
+  }
+
+  private void sendSimulationRequestWithPayload(
+      String analysisName, String alertName, Map<String, String> payload) {
+
+    Alert alert = Alert.newBuilder()
+        .setDiscriminator(alertName)
+        .setName(alertName)
+        .setPayload(convertMapToPayload(payload))
+        .build();
+
+    SimulationDataIndexRequest request = SimulationDataIndexRequest.newBuilder()
+        .addAllAlerts(of(alert))
+        .setAnalysisName(analysisName)
+        .setRequestId(randomUUID().toString())
+        .build();
+
+    simulationIndexClientGateway.indexRequest(request);
   }
 
   private void removeData() {

@@ -18,17 +18,31 @@ import static java.util.stream.Collectors.toMap;
 
 class AlertGenerator {
 
+  private static final String[] ALERT_NAMES = { "alerts/123", "alerts/234", "alerts/345" };
+
   private final Random random = new SecureRandom();
 
-  Alert generate() {
+  Alert generateProduction() {
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
+        .setName(getRandomValue(ALERT_NAMES))
         .setPayload(convertMapToPayload(Map.of(
             "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"),
             "lob_country", getRandomValue("PL", "DE", "UK"),
             "risk_type", getRandomValue("SAN", "PEP"),
             "1.CustomerEntities.Address", "Fixed Value CE1",
             "2.CustomerEntities.Address", "Fixed Value CE2")))
+        .addAllMatches(of(
+            match(getRandomMatchName(), "solution", "NO_DECISION")))
+        .build();
+  }
+
+  Alert generateSimulation() {
+    return Alert.newBuilder()
+        .setDiscriminator(getRandomDiscriminator())
+        .setName(getRandomValue(ALERT_NAMES))
+        .setPayload(convertMapToPayload(Map.of(
+            "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"))))
         .addAllMatches(of(
             match(getRandomMatchName(), "solution", "NO_DECISION")))
         .build();

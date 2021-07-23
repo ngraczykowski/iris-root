@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
@@ -38,6 +39,8 @@ class AlertMapper {
     documentAttributes.put(INDEX_TIMESTAMP, now.format(ISO_DATE_TIME));
     documentAttributes.put(DISCRIMINATOR, alert.getDiscriminator());
 
+    extractAlertName(alert)
+        .ifPresent(alertName -> documentAttributes.put(ALERT_NAME, alertName));
     extractAlertField(alert, alertMappingProperties.getCountrySourceKey())
         .ifPresent(countryValue -> documentAttributes.put(COUNTRY_KEY, countryValue));
 
@@ -52,6 +55,10 @@ class AlertMapper {
         .collect(toMap(
             key -> prefix + key,
             key -> struct.getFieldsMap().get(key).getStringValue()));
+  }
+
+  private Optional<String> extractAlertName(Alert alert) {
+    return ofNullable(alert.getName());
   }
 
   private Optional<String> extractAlertField(Alert alert, String fieldName) {
