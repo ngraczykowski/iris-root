@@ -24,8 +24,10 @@ class DetailsVectorsRestController {
 
   @GetMapping(value = "/v1/vectors/details")
   @PreAuthorize("isAuthorized('LIST_VECTORS')")
-  public ResponseEntity<FeatureVectorWithUsageDto> list(
+  public ResponseEntity<FeatureVectorWithUsageDto> getWithUsage(
       @RequestParam("fvSignature") String fvSignature) {
+
+    log.debug("Getting FV with usage for signature: {}", fvSignature);
     return ok().body(vectorDetailQuery.findByFvSignature(fvSignature));
   }
 }
