@@ -8,7 +8,6 @@ dependencies {
   implementation group: 'io.grpc', name: 'grpc-stub', version: '1.39.0'
   implementation group: 'io.grpc', name: 'grpc-protobuf', version: '1.39.0'
   implementation group: 'io.grpc', name: 'grpc-netty', version: '1.39.0'
-  implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
   implementation 'org.springframework.boot:spring-boot-starter'
   implementation 'org.springframework.boot:spring-boot-starter-amqp'
   implementation 'org.springframework.boot:spring-boot-starter-integration'
@@ -40,4 +39,7 @@ dependencies {
   runtimeOnly libraries.caffeine
   runtimeOnly libraries.caffeine_jcache
   runtimeOnly libraries.liquibase_sessionlock
+
+  implementation libraries.jakarta_validation_api
+  implementation libraries.hibernate_validator
 }

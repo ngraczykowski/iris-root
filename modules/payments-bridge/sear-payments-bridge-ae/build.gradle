@@ -1,0 +1,8 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":sear-payments-bridge-governance")
+}

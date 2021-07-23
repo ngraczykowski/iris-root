@@ -9,6 +9,6 @@ import java.util.List;
 @Builder
 public class MatchtextFirstTokenOfAddressAgentRequest {
 
-    List<String> matchingTexts;
-    List<String> addresses;
+  List<String> matchingTexts;
+  List<String> addresses;
 }

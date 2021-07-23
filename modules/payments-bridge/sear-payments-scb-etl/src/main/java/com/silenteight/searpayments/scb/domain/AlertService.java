@@ -1,9 +1,11 @@
 package com.silenteight.searpayments.scb.domain;
 
-import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
-import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
+import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;

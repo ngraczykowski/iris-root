@@ -2,6 +2,7 @@ package com.silenteight.searpayments.scb.domain;
 
 import com.silenteight.searpayments.scb.domain.Alert.AlertStatus;
 import com.silenteight.searpayments.scb.domain.Alert.DamageReason;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;

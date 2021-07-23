@@ -7,8 +7,8 @@ ext {
   adjudicationEngineApiVersion = "0.4.0"
   governanceApiVersion = "1.7.0"
   agentsApiVersion = "0.4.0"
-  agentsProtocolVersion = "0.4.0"
-  silenteightDataSourceApiVersion = "0.2.0"
+  agentsProtocolVersion = "0.6.0"
+  silenteightDataSourceApiVersion = "0.3.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.0"
 }

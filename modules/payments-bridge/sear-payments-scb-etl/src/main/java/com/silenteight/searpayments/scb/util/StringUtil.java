@@ -1,7 +1,9 @@
 package com.silenteight.searpayments.scb.util;
 
-import com.silenteight.searpayments.scb.etl.response.MessageFieldStructure;
 import lombok.NonNull;
+
+import com.silenteight.searpayments.scb.etl.response.MessageFieldStructure;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

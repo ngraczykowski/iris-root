@@ -7,4 +7,6 @@ dependencies {
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
+
+  implementation libraries.grpc_server_spring_boot_starter
 }

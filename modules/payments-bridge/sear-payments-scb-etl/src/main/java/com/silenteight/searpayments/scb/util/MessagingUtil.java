@@ -1,6 +1,7 @@
 package com.silenteight.searpayments.scb.util;
 
 import com.silenteight.searpayments.scb.domain.Alert;
+
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 

@@ -57,28 +57,32 @@ Example case:
 
 - Implements Data Source API gRPC services
   - NameInputService
-  - ? (geo agent service)
+  - LocationInputService (for Geo Agent)
   - CategoryService
   - CommentInputService
 - Internal API for getting data that will get served by Data Source API (a.k.a. ETL API)
   - This API is going to be used by Firco CMAPI integration
-- Receiving, storing and share the features, category values and comment inputs, in a format easy to query via Data Source API, e.g., `NameFeatureInput` from `NameInputService`, or `CategoryValue` from `CategoryService`.
+- Receiving, storing and sharing features, category values and comment inputs, in a format easy to query via Data Source API, e.g., `NameFeatureInput` from `NameInputService`, or `CategoryValue` from `CategoryService`.
 
 ### sear-payments-bridge-firco
 
 - Implements controller for `/ContinuitySendMessage` HTTP endpoint to receive alerts
 - Implements decision submission to `/ContinuityReceiveService` HTTP endpoint to provide alert recommendation
 - Tracks messages and their association with alerts in AE
+- Handles paired alerts
 - Performs mapping of recommended action to Firco status
 - Receiving and transforming the data from `msg_SendMessage` into alerts, matches, features, categories, and comment inputs.
 - Sending back the `msg_ReceiveDecision` for each generated recommendation.
 
-### sear-payments-bridge-resolution
+### sear-payments-bridge-ae
 
 - Registers alerts and matches in AE
-- Handles model from Governance
 - Manages and tracks analysis and datasets in AE
 - Receives from AE and passes back to Firco the recommendation
+
+### sear-payments-bridge-governance
+
+- Manages current model from Governance
 
 ## THINGS NOT CONSIDERED
 

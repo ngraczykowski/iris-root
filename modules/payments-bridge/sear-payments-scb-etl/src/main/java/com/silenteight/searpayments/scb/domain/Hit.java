@@ -1,12 +1,13 @@
 package com.silenteight.searpayments.scb.domain;
 
 import lombok.*;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.persistence.*;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
@@ -23,103 +24,103 @@ import static javax.persistence.FetchType.EAGER;
 @Builder
 public class Hit {
 
-    //  private static final Parser PROTO_JSON_PARSER = JsonFormat.parser().ignoringUnknownFields();
-    //  private static final Printer PROTO_JSON_PRINTER =
-    //      JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
+  //  private static final Parser PROTO_JSON_PARSER = JsonFormat.parser().ignoringUnknownFields();
+  //  private static final Printer PROTO_JSON_PRINTER =
+  //      JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
 
-    @Id
-    @Column(name = "hitId", insertable = false, updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.PROTECTED)
-    private Long id;
+  @Id
+  @Column(name = "hitId", insertable = false, updatable = false, nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Setter(AccessLevel.PROTECTED)
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "alertId", nullable = false)
-    @Setter(AccessLevel.PROTECTED)
-    private Alert alert;
+  @ManyToOne
+  @JoinColumn(name = "alertId", nullable = false)
+  @Setter(AccessLevel.PROTECTED)
+  private Alert alert;
 
-    @NonNull
-    private String entityText;
+  @NonNull
+  private String entityText;
 
-    @NonNull
-    private String tag;
+  @NonNull
+  private String tag;
 
-    @NonNull
-    private String solutionType;
+  @NonNull
+  private String solutionType;
 
-    @NonNull
-    private String matchingText;
+  @NonNull
+  private String matchingText;
 
-    @NonNull
-    private String watchlistType;
+  @NonNull
+  private String watchlistType;
 
-    @NonNull
-    private String watchlistName;
+  @NonNull
+  private String watchlistName;
 
-    @NonNull
-    private String accountNumber;
+  @NonNull
+  private String accountNumber;
 
-    @NonNull
-    private String watchlistOfacId;
+  @NonNull
+  private String watchlistOfacId;
 
-    @NonNull
-    private Integer watchlistInterventionId;
+  @NonNull
+  private Integer watchlistInterventionId;
 
-    @NonNull
-    private String origin;
+  @NonNull
+  private String origin;
 
-    @NonNull
-    private String designation;
+  @NonNull
+  private String designation;
 
-    @NonNull
-    private String messageFieldStructure;
+  @NonNull
+  private String messageFieldStructure;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "hit", cascade = ALL, orphanRemoval = true, fetch = EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    @ToString.Exclude
-    private Collection<HittedEntityAddress> addresses = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "hit", cascade = ALL, orphanRemoval = true, fetch = EAGER)
+  @Fetch(FetchMode.SUBSELECT)
+  @ToString.Exclude
+  private Collection<HittedEntityAddress> addresses = new ArrayList<>();
 
-    @Builder.Default
-    @ElementCollection(fetch = EAGER)
-    @CollectionTable(name = "hit_name", joinColumns = @JoinColumn(name = "hit_id"))
-    @Column(name = "name")
-    private Collection<String> names = new ArrayList<>();
+  @Builder.Default
+  @ElementCollection(fetch = EAGER)
+  @CollectionTable(name = "hit_name", joinColumns = @JoinColumn(name = "hit_id"))
+  @Column(name = "name")
+  private Collection<String> names = new ArrayList<>();
 
-    @Setter
-    private String freeTextAgentRequest;
+  @Setter
+  private String freeTextAgentRequest;
 
-    @Setter
-    private String crossmatchAgentRequest;
+  @Setter
+  private String crossmatchAgentRequest;
 
-    @Setter
-    private String nameAgentRequest;
+  @Setter
+  private String nameAgentRequest;
 
-    @Setter
-    private String geoAgentRequest;
+  @Setter
+  private String geoAgentRequest;
 
-    @Setter
-    private String oneLineAddressAgentRequest;
+  @Setter
+  private String oneLineAddressAgentRequest;
 
-    @Setter
-    private String specificTermsAgentRequest;
+  @Setter
+  private String specificTermsAgentRequest;
 
-    @Setter
-    private String delimiterInNameLineAgentRequest;
+  @Setter
+  private String delimiterInNameLineAgentRequest;
 
-    @Setter
-    private String matchtextFirstTokenOfAddressAgentRequest;
+  @Setter
+  private String matchtextFirstTokenOfAddressAgentRequest;
 
-    @Setter
-    private String twoLinesNameAgentRequest;
+  @Setter
+  private String twoLinesNameAgentRequest;
 
-    public void addAddress(HittedEntityAddress hitAddress) {
-        hitAddress.setHit(this);
-        addresses.add(hitAddress);
-    }
+  public void addAddress(HittedEntityAddress hitAddress) {
+    hitAddress.setHit(this);
+    addresses.add(hitAddress);
+  }
 
-    public void addName(String name) {
-        names.add(name);
-    }
+  public void addName(String name) {
+    names.add(name);
+  }
 
 }
