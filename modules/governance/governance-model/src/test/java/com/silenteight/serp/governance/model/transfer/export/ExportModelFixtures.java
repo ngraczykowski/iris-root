@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.model.transfer.export;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.serp.governance.changerequest.approval.dto.ModelApprovalDto;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.transfer.dto.TransferredModelDto;
@@ -38,6 +39,7 @@ final class ExportModelFixtures {
   static final String POLICY_RESOURCE_NAME = "policies/" + POLICY_ID;
   static final OffsetDateTime CREATED_AT =
       OffsetDateTime.of(2021, 3, 12, 11, 25, 10, 0, UTC);
+  static final String MODEL_VERSION = DigitsOnlyDateFormatter.INSTANCE.format(CREATED_AT);
   static final OffsetDateTime APPROVED_AT =
       OffsetDateTime.of(2021, 5, 6, 8, 12, 59, 0, UTC);
   static final String APPROVED_BY = "jdoe";
@@ -62,6 +64,7 @@ final class ExportModelFixtures {
           .name(MODEL_RESOURCE_NAME)
           .policy(POLICY_RESOURCE_NAME)
           .createdAt(CREATED_AT)
+          .modelVersion(MODEL_VERSION)
           .build();
 
   static final ModelApprovalDto MODEL_APPROVAL =

@@ -13,4 +13,6 @@ interface ModelRepository extends Repository<Model, Long> {
   Optional<Model> findByModelId(UUID modelId);
 
   Collection<Model> findAllByPolicyName(String policyName);
+
+  Optional<Model> findModelByModelVersion(String modelVersion);
 }

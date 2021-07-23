@@ -88,10 +88,10 @@ class ModelQueryTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldThrowExceptionWhenGetMultipeModelsForPolicy() {
+  void shouldThrowExceptionWhenGetMultipleModelsForPolicy() {
     // given
-    persistModel(randomUUID());
-    persistModel(randomUUID());
+    persistModel(randomUUID(), "first");
+    persistModel(randomUUID(), "second");
 
     // when
     assertThatThrownBy(() -> underTest.getByPolicy(POLICY))
@@ -139,10 +139,12 @@ class ModelQueryTest extends BaseDataJpaTest {
   }
 
   private void persistModel() {
-    persistModel(MODEL_ID);
+    persistModel(MODEL_ID, "version");
   }
 
-  private void persistModel(@NonNull UUID modelId) {
-    repository.save(new Model(modelId, POLICY));
+  private void persistModel(@NonNull UUID modelId, String version) {
+    Model model = new Model(modelId, POLICY);
+    model.setModelVersion(version);
+    repository.save(model);
   }
 }

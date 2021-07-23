@@ -445,4 +445,23 @@
       <column name="discriminator"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-16" author="kdzieciol">
+    <addColumn tableName="governance_model">
+      <column name="model_version" type="VARCHAR(16)"/>
+    </addColumn>
+    <comment>
+      Update model_version to have an unique value before we put constrains.
+    </comment>
+    <sql splitStatements="true" endDelimiter=";" stripComments="true">
+      UPDATE governance_model SET model_version = id WHERE model_version is NULL;
+    </sql>
+    <addNotNullConstraint tableName="governance_model" columnName="model_version"/>
+    <addUniqueConstraint tableName="governance_model" columnNames="model_version"/>
+    <createIndex
+        tableName="governance_model"
+        indexName="ix_governance_governance_model_model_version">
+      <column name="model_version"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

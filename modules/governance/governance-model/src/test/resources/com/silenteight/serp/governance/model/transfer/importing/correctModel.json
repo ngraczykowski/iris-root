@@ -1,8 +1,9 @@
 {
-  "checksum": "A4B3C967EB01E884AE6D7B149302AE3C",
+  "checksum": "1FE57332F41331AA52F35684DFA91F18",
   "model": {
     "metadata": {
       "modelId": "de1afe98-0b58-4941-9791-4e081f9b8139",
+      "modelVersion": "20200601112534",
       "approvedBy": "asmith",
       "approvedAt": "2020-06-01 11:25:34.187342"
     },

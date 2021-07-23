@@ -25,4 +25,11 @@ class InMemoryModelRepository
         .filter(model -> model.hasPolicyName(policyName))
         .collect(toList());
   }
+
+  @Override
+  public Optional<Model> findModelByModelVersion(String modelVersion) {
+    return stream()
+        .filter(model -> model.getModelVersion().equals(modelVersion))
+        .findFirst();
+  }
 }

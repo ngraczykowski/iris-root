@@ -15,13 +15,16 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({ "modelId", "approvedBy", "exportedAt" })
+@JsonPropertyOrder({ "modelId", "modelVersion", "approvedBy", "exportedAt" })
 public class TransferredModelMetadataDto implements Serializable {
 
   private static final long serialVersionUID = -6272978266988998927L;
 
   @NonNull
   private UUID modelId;
+
+  @NonNull
+  private String modelVersion;
 
   @NonNull
   private String approvedBy;

@@ -11,6 +11,10 @@ public class ModelNotFoundException extends RuntimeException {
   private static final long serialVersionUID = -6878602047053256900L;
 
   public ModelNotFoundException(@NonNull UUID modelId) {
-    super(format("Model with modelId=%s not found.", modelId.toString()));
+    super(format("Model with modelId=%s not found.", modelId));
+  }
+
+  public ModelNotFoundException(@NonNull String modelVersion) {
+    super(format("Model with modelVersion=%s not found.", modelVersion));
   }
 }

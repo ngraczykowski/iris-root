@@ -41,7 +41,7 @@ class ExportModelUseCaseTest {
     when(exportPolicyUseCase.apply(POLICY_ID)).thenReturn(transferredPolicyRoot());
 
     // when
-    TransferredModelRootDto result = underTest.apply(MODEL_ID);
+    TransferredModelRootDto result = underTest.applyByName(MODEL_ID);
 
     // then
     TransferredModelDto model = result.getModel();
@@ -60,12 +60,12 @@ class ExportModelUseCaseTest {
     when(modelDetailsQuery.get(MODEL_ID)).thenReturn(MODEL);
     when(modelApprovalQuery.getApproval(MODEL_RESOURCE_NAME)).thenReturn(MODEL_APPROVAL);
     when(exportPolicyUseCase.apply(POLICY_ID)).thenReturn(transferredPolicyRoot());
-    TransferredModelRootDto firstResult = underTest.apply(MODEL_ID);
+    TransferredModelRootDto firstResult = underTest.applyByName(MODEL_ID);
 
     when(modelDetailsQuery.get(MODEL_ID)).thenReturn(MODEL);
     when(modelApprovalQuery.getApproval(MODEL_RESOURCE_NAME)).thenReturn(MODEL_APPROVAL);
     when(exportPolicyUseCase.apply(POLICY_ID)).thenReturn(transferredPolicyRoot());
-    TransferredModelRootDto secondResult = underTest.apply(MODEL_ID);
+    TransferredModelRootDto secondResult = underTest.applyByName(MODEL_ID);
 
     assertThat(firstResult.getChecksum()).isEqualTo(secondResult.getChecksum());
   }

@@ -15,5 +15,7 @@ public class ModelDto {
   @NonNull
   String policy;
   @NonNull
+  String modelVersion;
+  @NonNull
   OffsetDateTime createdAt;
 }

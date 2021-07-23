@@ -4,12 +4,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 import com.silenteight.serp.governance.model.domain.dto.AddModelRequest;
 import com.silenteight.serp.governance.model.domain.exception.ModelAlreadyExistsException;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import javax.transaction.Transactional;
 
 import static java.util.UUID.randomUUID;
 
@@ -22,17 +24,18 @@ public class ModelService {
   @NonNull
   private final AuditingLogger auditingLogger;
 
+  @Transactional
   public UUID createModel(
       @NonNull UUID modelId,
       @NonNull String policy,
       @NonNull String createdBy) {
 
     AddModelRequest request = AddModelRequest.builder()
-        .id(modelId)
-        .policy(policy)
-        .createdBy(createdBy)
-        .correlationId(randomUUID())
-        .build();
+                                             .id(modelId)
+                                             .policy(policy)
+                                             .createdBy(createdBy)
+                                             .correlationId(randomUUID())
+                                             .build();
     Model model = addModelInternal(request);
     return model.getModelId();
   }
@@ -55,5 +58,20 @@ public class ModelService {
         .ifPresent(model -> {
           throw new ModelAlreadyExistsException(model.getModelId(), policyName);
         });
+  }
+
+  @Transactional
+  public UUID createModelWithModelVersion(
+      UUID modelId, String policyName, String approvedBy, String modelVersion) {
+    UUID result = createModel(modelId, policyName, approvedBy);
+    setModelVersion(modelId, modelVersion);
+    return result;
+  }
+
+  void setModelVersion(UUID modelId, String modelVersion) {
+    modelRepository
+        .findByModelId(modelId)
+        .orElseThrow(EntityNotFoundException::new)
+        .setModelVersion(modelVersion);
   }
 }

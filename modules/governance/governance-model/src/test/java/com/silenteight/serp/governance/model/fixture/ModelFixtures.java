@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.model.fixture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
@@ -36,6 +37,7 @@ public final class ModelFixtures {
           .name(MODEL_RESOURCE_NAME)
           .policy(POLICY)
           .createdAt(CREATED_AT)
+          .modelVersion(DigitsOnlyDateFormatter.INSTANCE.format(CREATED_AT))
           .build();
 
   public static final ModelDto DEFAULT_MODEL_DTO =
@@ -43,6 +45,7 @@ public final class ModelFixtures {
           .name(MODEL_RESOURCE_DEFAULT_NAME)
           .policy(CURRENT_POLICY_NAME)
           .createdAt(CREATED_AT)
+          .modelVersion(DigitsOnlyDateFormatter.INSTANCE.format(CREATED_AT))
           .build();
 
   public static final PolicyDto POLICY_DTO = PolicyDto.builder()

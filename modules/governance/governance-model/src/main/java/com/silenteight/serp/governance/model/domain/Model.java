@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseAggregateRoot;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 
 import java.util.UUID;
@@ -34,15 +35,28 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
   @Column(name = "policy_name", nullable = false)
   private String policyName;
 
+  @NonNull
+  @ToString.Include
+  @Column(name = "model_version", nullable = false)
+  private String modelVersion;
+
   Model(UUID modelId, String policyName) {
     this.modelId = modelId;
     this.policyName = policyName;
+    this.modelVersion = DigitsOnlyDateFormatter.INSTANCE.format(getCreatedAt());
+  }
+
+  Model(UUID modelId, String policyName, String modelVersion) {
+    this.modelId = modelId;
+    this.policyName = policyName;
+    this.modelVersion = modelVersion;
   }
 
   ModelDto toDto() {
     return ModelDto.builder()
         .name(toResourceName(getModelId()))
         .policy(getPolicyName())
+        .modelVersion(getModelVersion())
         .createdAt(getCreatedAt())
         .build();
   }

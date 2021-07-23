@@ -36,7 +36,7 @@ class MarkModelUsedOnProductionUseCaseTest {
     when(policyDetailsQuery.details(POLICY_ID)).thenReturn(POLICY_DTO);
 
     // when
-    underTest.apply(MODEL_RESOURCE_NAME);
+    underTest.applyByName(MODEL_RESOURCE_NAME);
 
     // then
     ArgumentCaptor<MarkPolicyAsUsedRequest> argumentCaptor = ArgumentCaptor

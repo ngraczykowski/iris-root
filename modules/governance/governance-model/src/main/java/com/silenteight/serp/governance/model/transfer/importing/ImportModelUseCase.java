@@ -35,10 +35,12 @@ public class ImportModelUseCase {
     assertTheSame(root.getChecksum(), transferredModel);
     UUID policyId = importPolicyUseCase.apply(toImportPolicyCommand(transferredModel));
 
-    return modelService.createModel(
+    UUID modelId = modelService.createModelWithModelVersion(
         transferredModel.getModelId(),
         toResourceName(policyId),
-        transferredModel.getApprovedBy());
+        transferredModel.getApprovedBy(),
+        transferredModel.getModelVersion());
+    return modelId;
   }
 
   private static TransferredModelRootDto parse(String modelJson) {
