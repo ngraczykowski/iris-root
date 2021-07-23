@@ -25,7 +25,7 @@ class BatchProcessingSimulator {
   private final BulkRepository bulkRepository;
   private final RecommendationGenerator generator;
 
-  @Scheduled(fixedRateString = "PT30S", initialDelay = 2000)
+  @Scheduled(fixedRateString = "PT15S", initialDelay = 2000)
   @Transactional
   public void simulate() {
     findBatchInProcessing().ifPresent(b -> {
@@ -52,6 +52,6 @@ class BatchProcessingSimulator {
   }
 
   private Optional<Bulk> findBatchInProcessing() {
-    return bulkRepository.findByStatus(PROCESSING).stream().findFirst();
+    return bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PROCESSING);
   }
 }

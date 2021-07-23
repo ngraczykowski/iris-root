@@ -25,7 +25,7 @@ class BulkProcessorSpec extends Specification {
     underTest.processPreProcessedBulks()
 
     then:
-    1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.learningBulk]
+    1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSED) >> Optional.of(fixtures.learningBulk)
     1 * adjudicationFacade.registerAlertWithMatches(_ as Map)
     1 * alertSender.send(_ as Collection, _ as SendOption[])
   }
@@ -38,7 +38,7 @@ class BulkProcessorSpec extends Specification {
     underTest.processPreProcessedBulks()
 
     then:
-    1 * bulkRepository.findByStatus(BulkStatus.PRE_PROCESSED) >> [fixtures.solvingBulk]
+    1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSED) >> Optional.of(fixtures.solvingBulk)
     1 * adjudicationFacade.registerAlertWithMatchesAndAnalysis(_ as Map) >> 1L
     0 * alertSender.send(_ as Collection, _ as SendOption[])
   }

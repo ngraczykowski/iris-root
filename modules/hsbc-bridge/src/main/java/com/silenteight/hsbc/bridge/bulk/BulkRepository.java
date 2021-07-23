@@ -25,7 +25,7 @@ interface BulkRepository extends Repository<Bulk, UUID> {
 
   boolean existsById(String id);
 
-  Collection<Bulk> findByStatus(BulkStatus status);
+  Optional<Bulk> findFirstByStatusOrderByCreatedAtAsc(BulkStatus status);
 
   @Query("select  b from Bulk b, AnalysisEntity a where a.name = :analysis and b.analysis.id = a.id")
   Optional<Bulk> findByAnalysisName(@Param("analysis") String analysis);

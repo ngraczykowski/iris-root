@@ -33,13 +33,14 @@ class BulkProcessor {
   private final AlertSender alertSender;
   private final BulkRepository bulkRepository;
 
-  @Scheduled(fixedDelay = 15 * 1000, initialDelay = 2000)
-  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT10S", lockAtMostFor = "PT4M")
+  @Scheduled(fixedDelay = 3 * 1000, initialDelay = 2000)
+  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT2S", lockAtMostFor = "PT4M")
   @Transactional
   public void processPreProcessedBulks() {
     LockAssert.assertLocked();
 
-    bulkRepository.findByStatus(PRE_PROCESSED).forEach(this::tryToProcessBulk);
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED)
+        .ifPresent(this::tryToProcessBulk);
   }
 
   private void tryToProcessBulk(Bulk bulk) {
