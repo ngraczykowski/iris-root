@@ -93,6 +93,6 @@ class FeatureVectorQuery implements
     return ofNullable(
         analyticsFeatureVectorRepository.findByVectorSignatureWithUsage(fvSignature))
         .map(FeatureVectorQuery::mapToDto)
-        .orElseThrow(EntityNotFoundException::new);
+        .orElseThrow(() -> new EntityNotFoundException(fvSignature));
   }
 }
