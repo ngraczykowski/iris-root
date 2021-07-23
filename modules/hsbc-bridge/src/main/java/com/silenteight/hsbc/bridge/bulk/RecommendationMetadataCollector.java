@@ -57,9 +57,7 @@ class RecommendationMetadataCollector {
     }
 
     private void add(String key, String value) {
-      var metadata = new AlertMetadata();
-      metadata.setKey(key);
-      metadata.setValue(value);
+      var metadata = new AlertMetadata(key, value);
       metadataCollection.add(metadata);
     }
   }

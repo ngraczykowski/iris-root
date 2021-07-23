@@ -70,14 +70,8 @@ class AlertMapperSpec extends Specification {
                 )
             ],
             metadata: [
-                new AlertMetadata(
-                    key: "extendedAttribute5",
-                    value: "SAN"
-                ),
-                new AlertMetadata(
-                    key: "trackingId",
-                    value: "ddcc1234"
-                )
+                new AlertMetadata("extendedAttribute5", "SAN"),
+                new AlertMetadata("trackingId", "ddcc1234")
             ]
         ),
           new AlertData()

@@ -46,23 +46,14 @@ class IngestRecommendationsUseCaseSpec extends Specification {
     }
   }
 
-  static List<SolvedAlert> ERROR_ALERTS = [
+  static List<ErrorAlert> ERROR_ALERTS = [
       new ErrorAlert(
           id: 'someAlertId1',
           errorMessage: 'Some error',
           alertMetadata: [
-              new AlertMetadata(
-                  key: 'trackingId',
-                  value: 'someTrackingId0'
-              ),
-              new AlertMetadata(
-                  key: 'discriminator',
-                  value: 'someDiscriminator0'
-              ),
-              new AlertMetadata(
-                  key: 'extendedAttribute5',
-                  value: 'value3'
-              )
+              new AlertMetadata('trackingId', 'someTrackingId0'),
+              new AlertMetadata('discriminator', 'someDiscriminator0'),
+              new AlertMetadata('extendedAttribute5', 'value3')
           ]
       )
   ]
@@ -76,18 +67,9 @@ class IngestRecommendationsUseCaseSpec extends Specification {
           stepId: 'someStepId',
           fvSignature: 'someFvSignature',
           alertMetadata: [
-              new AlertMetadata(
-                  key: 'trackingId',
-                  value: 'someTrackingId1'
-              ),
-              new AlertMetadata(
-                  key: 'discriminator',
-                  value: 'someDiscriminator1'
-              ),
-              new AlertMetadata(
-                  key: 'extendedAttribute5',
-                  value: 'value2'
-              )
+              new AlertMetadata('trackingId', 'someTrackingId1'),
+              new AlertMetadata('discriminator', 'someDiscriminator1'),
+              new AlertMetadata('extendedAttribute5', 'value2')
           ]
       )
   ]
