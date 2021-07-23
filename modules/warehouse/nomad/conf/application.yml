@@ -205,4 +205,4 @@ warehouse.report.sm:
     label: Country
   recommendation-field:
     name: alert_recommendation_recommended_action
-    decision-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE]
+    decision-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
