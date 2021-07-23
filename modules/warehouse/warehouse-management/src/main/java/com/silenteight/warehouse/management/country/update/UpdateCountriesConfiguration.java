@@ -19,6 +19,6 @@ class UpdateCountriesConfiguration {
       @Valid ElasticsearchProperties elasticsearchProperties) {
 
     return new UpdateCountriesUseCase(
-        roleService, elasticsearchProperties.getProductionQueryIndex());
+        roleService, elasticsearchProperties.getCountryRolesIndexes());
   }
 }

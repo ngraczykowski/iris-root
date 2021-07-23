@@ -54,6 +54,9 @@ warehouse:
     max-object-count: 1000
   es:
     production-query-index: ${warehouse.environment.prefix}_production
+    country-roles-indexes:
+      - ${warehouse.es.production-query-index}
+      - ${warehouse.environment.prefix}_simulation*
 
 spring:
   #-------------------------------------------------------------------------------------------------
