@@ -890,46 +890,6 @@
     }
   }
 };
-            defs["body"] = {
-  "type" : "object",
-  "properties" : {
-    "coreWatchlist" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "nameAliasesWatchlist" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "keywordsWatchlist" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "coreChecksum" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "aliasesChecksum" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    }
-  }
-};
             defs["CaseComments"] = {
   "type" : "object",
   "properties" : {
@@ -1944,6 +1904,12 @@
     "errorMessage" : {
       "type" : "string"
     },
+    "recommendation" : {
+      "type" : "string"
+    },
+    "comment" : {
+      "type" : "string"
+    },
     "alertMetadata" : {
       "type" : "array",
       "items" : {
@@ -2523,6 +2489,46 @@
       "type" : "array",
       "items" : {
         "$ref" : "#/components/schemas/KeyValue"
+      }
+    }
+  }
+};
+            defs["v1_upload_body"] = {
+  "type" : "object",
+  "properties" : {
+    "coreWatchlist" : {
+      "type" : "array",
+      "format" : "binary",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "nameAliasesWatchlist" : {
+      "type" : "array",
+      "format" : "binary",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "keywordsWatchlist" : {
+      "type" : "array",
+      "format" : "binary",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "coreChecksum" : {
+      "type" : "array",
+      "format" : "binary",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "aliasesChecksum" : {
+      "type" : "array",
+      "format" : "binary",
+      "items" : {
+        "type" : "string"
       }
     }
   }

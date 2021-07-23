@@ -1586,6 +1586,10 @@ components:
           type: string
         errorMessage:
           type: string
+        recommendation:
+          type: string
+        comment:
+          type: string
         alertMetadata:
           type: array
           items:
