@@ -104,12 +104,34 @@ warehouse.report.rbs:
         label: alert_recommendation
       - name: alert_extendedAttribute5
         label: risk_type
+      - name: alert_features/commonAp:solution
+        label: common_ap
+      - name: alert_features/commonMp:solution
+        label: common_mp
+      - name: alert_features/commonNames:solution
+        label: common_names
       - name: alert_features/dateOfBirth:solution
         label: date_of_birth
       - name: alert_features/gender:solution
         label: gender
+      - name: alert_features/geoPlaceOfBirth:solution
+        label: geo_place_of_birth
+      - name: alert_features/geoResidencies:solution
+        label: get_residencies
       - name: alert_features/incorporationCountry:solution
         label: incorporation_country
+      - name: alert_features/invalidAlert:solution
+        label: invalid_alert
+      - name: alert_features/isApTpMarked:solution
+        label: is_ap_tp_marked
+      - name: alert_features/isCaseTpMarked:solution
+        label: is_case_tp_marked
+      - name: alert_features/isPep:solution
+        label: is_pep
+      - name: alert_features/isTpMarked:solution
+        label: is_tp_marked
+      - name: alert_features/logicalDiscountingDob:solution
+        label: logical_discounting_dob
       - name: alert_features/name:solution
         label: name
       - name: alert_features/nationalIdDocument:solution
@@ -148,12 +170,34 @@ warehouse.report.rbs:
         label: alert_recommendation
       - name: alert_categories/hitType:value
         label: risk_type
+      - name: alert_features/commonAp:solution
+        label: common_ap
+      - name: alert_features/commonMp:solution
+        label: common_mp
+      - name: alert_features/commonNames:solution
+        label: common_names
       - name: alert_features/dateOfBirth:solution
         label: date_of_birth
       - name: alert_features/gender:solution
         label: gender
+      - name: alert_features/geoPlaceOfBirth:solution
+        label: geo_place_of_birth
+      - name: alert_features/geoResidencies:solution
+        label: get_residencies
       - name: alert_features/incorporationCountry:solution
         label: incorporation_country
+      - name: alert_features/invalidAlert:solution
+        label: invalid_alert
+      - name: alert_features/isApTpMarked:solution
+        label: is_ap_tp_marked
+      - name: alert_features/isCaseTpMarked:solution
+        label: is_case_tp_marked
+      - name: alert_features/isPep:solution
+        label: is_pep
+      - name: alert_features/isTpMarked:solution
+        label: is_tp_marked
+      - name: alert_features/logicalDiscountingDob:solution
+        label: logical_discounting_dob
       - name: alert_features/name:solution
         label: name
       - name: alert_features/nationalIdDocument:solution
