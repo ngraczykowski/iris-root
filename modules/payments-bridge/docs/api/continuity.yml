@@ -1,0 +1,992 @@
+openapi: 3.0.1
+info:
+  title: TSaaS API
+  version: 0.0.1
+servers:
+  - url: 'http://localhost:24600/tsaas-bridge/'
+    description: Generated server url
+tags:
+  - name: Actuator
+    description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: 'https://docs.spring.io/spring-boot/docs/current/actuator-api/html/'
+paths:
+  /learn-analyst-solutions:
+    post:
+      tags:
+        - learning-controller
+      operationId: processAnalystSolutions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAnalystSolutionsDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AckDto'
+  /queues:
+    get:
+      tags:
+        - status-controller
+      operationId: getQueues
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/QueuesDto'
+  '/report/{reportName}':
+    post:
+      tags:
+        - report-controller
+      operationId: generateReport
+      parameters:
+        - name: reportName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CsvReportFilter'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/FileSystemResource'
+  /alert:
+    post:
+      tags:
+        - alert-controller
+      operationId: processAlert
+      parameters:
+        - name: dc
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AckDto'
+  /status:
+    get:
+      tags:
+        - status-controller
+      operationId: getStatus
+      responses:
+        '200':
+          description: default response
+  /learn-alerts:
+    post:
+      tags:
+        - learning-controller
+      operationId: processAlerts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestSendMessageDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AckDto'
+  '/report/refresh/{reportName}':
+    get:
+      tags:
+        - report-controller
+      operationId: refreshAiReasoningReport
+      parameters:
+        - name: reportName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: string
+  /management/caches:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'caches'
+      operationId: handle_10
+      responses:
+        '200':
+          description: default response
+          content: {}
+    delete:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'caches'
+      operationId: handle_0
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/heapdump:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'heapdump'
+      operationId: handle_1
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/beans:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'beans'
+      operationId: handle_2
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/shutdown:
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'shutdown'
+      operationId: handle_3
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator root web endpoint
+      operationId: links_4
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/prometheus:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'prometheus'
+      operationId: handle_5
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/integrationgraph:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'integrationgraph'
+      operationId: handle_25
+      responses:
+        '200':
+          description: default response
+          content: {}
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'integrationgraph'
+      operationId: handle_6
+      responses:
+        '200':
+          description: default response
+          content: {}
+  '/management/metrics/{requiredMetricName}':
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      operationId: handle_7
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/configprops:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'configprops'
+      operationId: handle_8
+      responses:
+        '200':
+          description: default response
+          content: {}
+  '/management/env/{toMatch}':
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'env-toMatch'
+      operationId: handle_9
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/threaddump:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'threaddump'
+      operationId: handle_11_1_20
+      responses:
+        '200':
+          description: default response
+  /management/restart:
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'restart'
+      operationId: handle_12
+      responses:
+        '200':
+          description: default response
+          content: {}
+  '/management/caches/{cache}':
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'caches-cache'
+      operationId: handle_13
+      responses:
+        '200':
+          description: default response
+          content: {}
+    delete:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'caches-cache'
+      operationId: handle_31
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/info:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'info'
+      operationId: handle_14
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/pause:
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'pause'
+      operationId: handle_15
+      responses:
+        '200':
+          description: default response
+          content: {}
+  '/management/loggers/{name}':
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'loggers-name'
+      operationId: handle_16
+      responses:
+        '200':
+          description: default response
+          content: {}
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'loggers-name'
+      operationId: handle_27
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/mappings:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'mappings'
+      operationId: handle_17
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/features:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'features'
+      operationId: handle_18
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/metrics:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'metrics'
+      operationId: handle_19
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/scheduledtasks:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'scheduledtasks'
+      operationId: handle_21
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/resume:
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'resume'
+      operationId: handle_22
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/health/**:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'health-path'
+      operationId: handle_23
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/liquibase:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'liquibase'
+      operationId: handle_24
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/refresh:
+    post:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'refresh'
+      operationId: handle_26
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/env:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'env'
+      operationId: handle_28
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/health:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'health'
+      operationId: handle_29
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/loggers:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'loggers'
+      operationId: handle_30
+      responses:
+        '200':
+          description: default response
+          content: {}
+  /management/conditions:
+    get:
+      tags:
+        - Actuator
+      summary: Actuator web endpoint 'conditions'
+      operationId: handle_32
+      responses:
+        '200':
+          description: default response
+          content: {}
+components:
+  schemas:
+    ActionDto:
+      type: object
+      properties:
+        DateTime:
+          type: string
+        Operator:
+          type: string
+        Comment:
+          type: string
+          description: Analyst comment
+        Status:
+          $ref: '#/components/schemas/StatusDto'
+    AnalystSolutionDto:
+      required:
+        - SystemID
+      type: object
+      properties:
+        SystemID:
+          type: string
+        Actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestActionDto'
+    RequestActionDto:
+      type: object
+      properties:
+        Action:
+          $ref: '#/components/schemas/ActionDto'
+    RequestAnalystSolutionsDto:
+      required:
+        - Messages
+      type: object
+      properties:
+        VersionTag:
+          type: string
+        Authentication:
+          $ref: '#/components/schemas/RequestAuthenticationDto'
+        Messages:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalystSolutionDto'
+    RequestAuthenticationDto:
+      type: object
+      properties:
+        UserLogin:
+          type: string
+        UserPassword:
+          type: string
+        UserRealm:
+          type: string
+    StatusDto:
+      required:
+        - Checksum
+        - ID
+        - Name
+        - RoutingCode
+      type: object
+      properties:
+        ID:
+          type: string
+        Name:
+          type: string
+          description: Analyst solution
+          enum:
+            - NO_SOLUTION
+            - FALSE_POSITIVE
+            - POTENTIAL_TRUE_POSITIVE
+            - TRUE_POSITIVE
+            - OTHER
+            - UNRECOGNIZED
+        RoutingCode:
+          type: string
+        Checksum:
+          type: string
+    AckBodyDto:
+      type: object
+      properties:
+        msg_Acknowledgement:
+          $ref: '#/components/schemas/AckMessageDto'
+    AckDto:
+      type: object
+      properties:
+        Header:
+          type: string
+        Body:
+          $ref: '#/components/schemas/AckBodyDto'
+    AckMessageDto:
+      type: object
+      properties:
+        faultcode:
+          type: string
+        faultstring:
+          type: string
+        faultactor:
+          type: string
+    QueueDto:
+      type: object
+      properties:
+        Size:
+          type: integer
+          format: int32
+    QueuesDto:
+      type: object
+      properties:
+        Queues:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/QueueDto'
+    CsvReportFilter:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        filters:
+          type: object
+          additionalProperties:
+            type: string
+    FileSystemResource:
+      type: object
+      properties:
+        path:
+          type: string
+        file:
+          type: string
+          format: binary
+        readable:
+          type: boolean
+        writable:
+          type: boolean
+        url:
+          type: string
+          format: url
+        outputStream:
+          type: object
+        description:
+          type: string
+        uri:
+          type: string
+          format: uri
+        filename:
+          type: string
+        inputStream:
+          type: object
+        open:
+          type: boolean
+    AddressCityDto:
+      type: object
+      properties:
+        City:
+          type: string
+    AddressCountryDto:
+      type: object
+      properties:
+        Country:
+          type: string
+    AddressDto:
+      type: object
+      properties:
+        IsMain:
+          type: string
+        PostalAddress:
+          type: string
+        Cities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressCityDto'
+        States:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressStateDto'
+        Countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressCountryDto'
+    AddressStateDto:
+      type: object
+      properties:
+        State:
+          type: string
+    AlertMessageDto:
+      required:
+        - ApplicationCode
+        - CurrentStatus
+        - MessageData
+        - MessageID
+        - NextStatuses
+        - SystemID
+        - Unit
+      type: object
+      properties:
+        Unit:
+          type: string
+        BusinessUnit:
+          type: string
+        MessageID:
+          type: string
+        SystemID:
+          type: string
+        Bypass:
+          type: string
+        Command:
+          type: string
+        BusinessType:
+          type: string
+        MessageType:
+          type: string
+        IOIndicator:
+          type: string
+        SenderReference:
+          type: string
+        Currency:
+          type: string
+        Amount:
+          type: string
+        ApplicationCode:
+          type: string
+        ToApplication:
+          type: string
+        MessageFormat:
+          type: string
+        SenderCode:
+          type: string
+        ReceiverCode:
+          type: string
+        ApplicationPriority:
+          type: string
+        CutoffTime:
+          type: string
+        NormalizedAmount:
+          type: string
+        MessageData:
+          type: string
+        LastComment:
+          type: string
+        LastOperator:
+          type: string
+        ValueDate:
+          type: string
+        FilteredDate:
+          type: string
+        RelatedReference:
+          type: string
+        CreatedDate:
+          type: string
+        Priority:
+          type: string
+        Confidentiality:
+          type: string
+        Blocking:
+          type: string
+        NonBlocking:
+          type: string
+        CopyService:
+          type: string
+        Hits:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestHitDto'
+        Actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestActionDto'
+        CurrentStatus:
+          $ref: '#/components/schemas/StatusDto'
+        NextStatuses:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestStatusDto'
+    CodeDto:
+      type: object
+      properties:
+        Name:
+          type: string
+        Type:
+          type: string
+    DateOfBirthDto:
+      type: object
+      properties:
+        DateOfBirth:
+          type: string
+    HideIdDto:
+      type: object
+      properties:
+        HideID:
+          type: string
+    HideInTagDto:
+      type: object
+      properties:
+        HideInTag:
+          type: string
+    HideOnlyIdDto:
+      type: object
+      properties:
+        HideOnlyID:
+          type: string
+    HideOriginDto:
+      type: object
+      properties:
+        HideOrigin:
+          type: string
+    HideSenderReceiverDto:
+      type: object
+      properties:
+        HideSenderReceiver:
+          type: string
+    HideUnitDto:
+      type: object
+      properties:
+        HideUnit:
+          type: string
+    HitDto:
+      type: object
+      properties:
+        MatchingText:
+          type: string
+        Positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestPositionDto'
+        Score:
+          type: string
+        Tag:
+          type: string
+        SolutionType:
+          type: string
+        SynonymIndex:
+          type: string
+        RulesContext:
+          $ref: '#/components/schemas/RulesContextDto'
+        EntityText:
+          type: string
+        HittedEntity:
+          $ref: '#/components/schemas/HittedEntityDto'
+    HittedEntityCodeDto:
+      type: object
+      properties:
+        Code:
+          $ref: '#/components/schemas/CodeDto'
+    HittedEntityDto:
+      type: object
+      properties:
+        ID:
+          type: string
+        IsException:
+          type: string
+        OfficialReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestOfficialReferenceDto'
+        Names:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameDto'
+        Addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestAddressDto'
+        Origin:
+          type: string
+        Designation:
+          type: string
+        Keywords:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeywordDto'
+        Type:
+          type: string
+        Codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HittedEntityCodeDto'
+        AdditionalInfo:
+          type: string
+        DatesOfBirth:
+          type: array
+          items:
+            $ref: '#/components/schemas/DateOfBirthDto'
+        PlacesOfBirth:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceOfBirthDto'
+        Hyperlinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/HyperlinkDto'
+        UserData1:
+          type: string
+        UserData2:
+          type: string
+        Nationality:
+          type: string
+        IsPEP:
+          type: string
+        IsFEP:
+          type: string
+        HideOnlyIDs:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideOnlyIdDto'
+        HideIDs:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideIdDto'
+        HideOrigins:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideOriginDto'
+        HideInTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideInTagDto'
+        HideUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideUnitDto'
+        HideSenderReceivers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideSenderReceiverDto'
+    HyperlinkDto:
+      type: object
+      properties:
+        Hyperlink:
+          type: string
+    KeywordDto:
+      type: object
+      properties:
+        Keyword:
+          type: string
+    NameDto:
+      type: object
+      properties:
+        Name:
+          type: string
+    OfficialReferenceDto:
+      type: object
+      properties:
+        Name:
+          type: string
+    PlaceOfBirthDto:
+      type: object
+      properties:
+        PlaceOfBirth:
+          type: string
+    PositionDto:
+      type: object
+      properties:
+        PositionStart:
+          type: string
+        PositionEnd:
+          type: string
+    RequestAddressDto:
+      type: object
+      properties:
+        Address:
+          $ref: '#/components/schemas/AddressDto'
+    RequestBodyDto:
+      required:
+        - msg_SendMessage
+      type: object
+      properties:
+        msg_SendMessage:
+          $ref: '#/components/schemas/RequestSendMessageDto'
+    RequestDto:
+      required:
+        - Body
+      type: object
+      properties:
+        Header:
+          type: string
+        Body:
+          $ref: '#/components/schemas/RequestBodyDto'
+        DataCenter:
+          type: string
+    RequestHitDto:
+      type: object
+      properties:
+        Hit:
+          $ref: '#/components/schemas/HitDto'
+    RequestMessageDto:
+      required:
+        - Message
+      type: object
+      properties:
+        Message:
+          $ref: '#/components/schemas/AlertMessageDto'
+    RequestOfficialReferenceDto:
+      type: object
+      properties:
+        OfficialReference:
+          $ref: '#/components/schemas/OfficialReferenceDto'
+    RequestPositionDto:
+      type: object
+      properties:
+        Position:
+          $ref: '#/components/schemas/PositionDto'
+    RequestSendMessageDto:
+      required:
+        - Messages
+      type: object
+      properties:
+        VersionTag:
+          type: string
+        Authentication:
+          $ref: '#/components/schemas/RequestAuthenticationDto'
+        Messages:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestMessageDto'
+    RequestStatusDto:
+      required:
+        - Status
+      type: object
+      properties:
+        Status:
+          $ref: '#/components/schemas/StatusDto'
+    RulesContextDto:
+      type: object
+      properties:
+        Type:
+          type: string
+        Priority:
+          type: string
+        Confidentiality:
+          type: string
+        Info:
+          type: string
