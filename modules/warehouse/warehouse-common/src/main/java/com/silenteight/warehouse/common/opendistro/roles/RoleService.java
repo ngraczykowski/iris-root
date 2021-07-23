@@ -27,13 +27,13 @@ public class RoleService {
   private final DlsQueryProcessor dlsQueryProcessor;
 
   public void setCountries(
-      UUID countryGroupId, Collection<String> countries, String productionIndexQueryPattern) {
+      UUID countryGroupId, Collection<String> countries, List<String> allowedIndexQueryPatterns) {
 
     TermsQueryBuilder queryBuilder = new TermsQueryBuilder(getRawField(COUNTRY_KEY), countries);
     String terms = dlsQueryProcessor.serialize(queryBuilder);
 
     IndexPermission indexPermission = IndexPermission.builder()
-        .indexPatterns(of(productionIndexQueryPattern))
+        .indexPatterns(allowedIndexQueryPatterns)
         .dls(terms)
         .build();
 
