@@ -16,27 +16,6 @@ class CategoryModelHolder {
   private final Map<String, List<String>> categoryProperties;
 
   private List<CategoryModel> createCategories() {
-    var sourceSystem = CategoryModel.builder()
-        .name(CATEGORIES_PREFIX + "sourceSystem")
-        .displayName("Source System")
-        .type(CategoryType.ANY_STRING)
-        .multiValue(false)
-        .allowedValues(List.of())
-        .valueRetriever(matchData -> {
-          var caseInformation = matchData.getCaseInformation();
-          return List.of(ofNullable(caseInformation.getSourceName()).orElse(""));
-        })
-        .build();
-
-    var country = CategoryModel.builder()
-        .name(CATEGORIES_PREFIX + "country")
-        .displayName("Country")
-        .type(CategoryType.ANY_STRING)
-        .multiValue(true)
-        .allowedValues(List.of())
-        .valueRetriever(matchData -> List.of())
-        .build();
-
     var customerType = CategoryModel.builder()
         .name(CATEGORIES_PREFIX + "customerType")
         .displayName("Customer Type")
@@ -60,11 +39,7 @@ class CategoryModelHolder {
         })
         .build();
 
-    return List.of(
-        sourceSystem,
-        country,
-        customerType,
-        hitType);
+    return List.of(customerType, hitType);
   }
 
   String mapSourceRiskTypeValue(String sourceValue) {
