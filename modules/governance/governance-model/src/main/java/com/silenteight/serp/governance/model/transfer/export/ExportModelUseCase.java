@@ -29,13 +29,17 @@ public class ExportModelUseCase {
   @NonNull
   private final ExportPolicyUseCase exportPolicyUseCase;
 
-  public TransferredModelRootDto apply(@NonNull UUID modelId) {
-    ModelDto model = modelDetailsQuery.get(modelId);
-    return toTransferredRoot(model);
+  public TransferredModelRootDto applyByName(@NonNull String modelName) {
+    return applyByName(ModelResource.fromResourceName(modelName));
   }
 
-  public TransferredModelRootDto apply(@NonNull String modelName) {
-    return apply(ModelResource.fromResourceName(modelName));
+  public TransferredModelRootDto applyByVersion(String version) {
+    return applyByName(modelDetailsQuery.getModelIdByVersion(version));
+  }
+
+  public TransferredModelRootDto applyByName(@NonNull UUID modelId) {
+    ModelDto model = modelDetailsQuery.get(modelId);
+    return toTransferredRoot(model);
   }
 
   private TransferredModelRootDto toTransferredRoot(ModelDto model) {
@@ -59,6 +63,7 @@ public class ExportModelUseCase {
 
     TransferredModelMetadataDto metadata = new TransferredModelMetadataDto();
     metadata.setModelId(ModelResource.fromResourceName(model.getName()));
+    metadata.setModelVersion(model.getModelVersion());
     metadata.setApprovedAt(modelApproval.getApprovedAt().toInstant());
     metadata.setApprovedBy(modelApproval.getApprovedBy());
     return metadata;

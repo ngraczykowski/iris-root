@@ -12,4 +12,6 @@ public interface ModelDetailsQuery {
   ModelDto get(@NonNull UUID id);
 
   List<ModelDto> getByPolicy(@NonNull String policy);
+
+  UUID getModelIdByVersion(String version);
 }

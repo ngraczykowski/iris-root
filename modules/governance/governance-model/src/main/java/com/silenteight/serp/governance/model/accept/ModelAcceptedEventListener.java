@@ -31,6 +31,6 @@ class ModelAcceptedEventListener {
     // INFO(kdzieciol): Here we will call promoteUseCase for strategy and agent config set
 
     sendPromoteMessageUseCase.activate(SendPromoteMessageCommand.of(
-        event.getCorrelationId(), event.getModelName()));
+        event.getCorrelationId(), event.getModelName(), modelDto.getModelVersion()));
   }
 }

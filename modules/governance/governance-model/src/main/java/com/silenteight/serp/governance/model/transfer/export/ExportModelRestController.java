@@ -34,6 +34,6 @@ class ExportModelRestController {
   @GetMapping(EXPORT_MODEL_URL)
   @PreAuthorize("isAuthorized('EXPORT_MODEL')")
   public ResponseEntity<TransferredModelRootDto> export(@PathVariable UUID id) {
-    return ok(exportModelUseCase.apply(id));
+    return ok(exportModelUseCase.applyByName(id));
   }
 }

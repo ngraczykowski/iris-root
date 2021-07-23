@@ -13,11 +13,14 @@ public class SendPromoteMessageCommand {
   UUID correlationId;
   @NonNull
   String modelName;
+  @NonNull
+  String modelVersion;
 
   ModelPromotedForProduction toMessage() {
     return ModelPromotedForProduction
         .newBuilder()
         .setName(modelName)
+        .setVersion(modelVersion)
         .build();
   }
 }

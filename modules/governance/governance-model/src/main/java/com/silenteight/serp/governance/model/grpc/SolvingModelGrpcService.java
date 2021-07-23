@@ -8,6 +8,8 @@ import com.silenteight.model.api.v1.*;
 import com.silenteight.serp.governance.model.NonResolvableResourceException;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.domain.exception.ModelMisconfiguredException;
+import com.silenteight.serp.governance.model.grpc.exception.InvalidExportModelRequestException;
+import com.silenteight.serp.governance.model.grpc.exception.InvalidModelDeployedOnProductionRequestException;
 import com.silenteight.serp.governance.model.provide.DefaultModelQuery;
 import com.silenteight.serp.governance.model.provide.SolvingModelDetailsQuery;
 import com.silenteight.serp.governance.model.provide.SolvingModelQuery;
@@ -134,7 +136,17 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   public void exportModel(ExportModelRequest request,
                           StreamObserver<ExportModelResponse> responseObserver) {
     try {
-      TransferredModelRootDto modelToExport = exportModelUseCase.apply(request.getModel());
+      TransferredModelRootDto modelToExport;
+      switch (request.getModelCase()) {
+        case NAME:
+          modelToExport = exportModelUseCase.applyByName(request.getName());
+          break;
+        case VERSION:
+          modelToExport = exportModelUseCase.applyByVersion(request.getVersion());
+          break;
+        default:
+          throw new InvalidExportModelRequestException();
+      }
       responseObserver.onNext(toResponse(modelToExport));
       responseObserver.onCompleted();
     } catch (RuntimeException e) {
@@ -146,13 +158,26 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   private static ExportModelResponse toResponse(TransferredModelRootDto modelToExport) {
     return ExportModelResponse.newBuilder()
         .setModelJson(ByteString.copyFromUtf8(modelToExport.toJson()))
+        .setVersion(modelToExport.getModelVersion())
+        .setName(modelToExport.getModelName())
         .build();
   }
 
   @Override
-  public void modelDeployedOnProduction(ModelName request, StreamObserver<Empty> responseObserver) {
+  public void modelDeployedOnProduction(ModelDeployedOnProductionRequest request,
+                                        StreamObserver<Empty> responseObserver) {
     try {
-      markModelUsedOnProductionUseCase.apply(request.getModel());
+      switch (request.getModelCase()) {
+        case NAME:
+          markModelUsedOnProductionUseCase.applyByName(request.getName());
+          break;
+        case VERSION:
+          markModelUsedOnProductionUseCase.applyByVersion(request.getVersion());
+          break;
+        default:
+        case MODEL_NOT_SET:
+          throw new InvalidModelDeployedOnProductionRequestException();
+      }
       responseObserver.onNext(Empty.newBuilder().build());
       responseObserver.onCompleted();
     } catch (RuntimeException e) {

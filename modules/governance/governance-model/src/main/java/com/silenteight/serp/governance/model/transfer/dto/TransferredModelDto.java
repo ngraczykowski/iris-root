@@ -41,4 +41,9 @@ public class TransferredModelDto implements Serializable {
   public String getPolicyCreatedBy() {
     return policy.getCreatedBy();
   }
+
+  @JsonIgnore
+  public String getModelVersion() {
+    return metadata.getModelVersion();
+  }
 }

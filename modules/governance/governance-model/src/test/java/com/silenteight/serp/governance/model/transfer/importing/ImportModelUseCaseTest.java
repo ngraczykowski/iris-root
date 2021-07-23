@@ -40,8 +40,8 @@ class ImportModelUseCaseTest {
     UUID modelId = fromString("de1afe98-0b58-4941-9791-4e081f9b8139");
     String modelJson = loadResourceAsString("correctModel.json");
     when(importPolicyUseCase.apply(any(ImportPolicyCommand.class))).thenReturn(policyId);
-    when(modelService.createModel(modelId, "policies/" + policyId, "asmith"))
-        .thenReturn(modelId);
+    when(modelService.createModelWithModelVersion(
+        modelId, "policies/" + policyId, "asmith", "20200601112534")).thenReturn(modelId);
 
     // when
     UUID result = underTest.apply(modelJson);
