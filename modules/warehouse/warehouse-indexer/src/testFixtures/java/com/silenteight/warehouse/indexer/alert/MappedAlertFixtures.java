@@ -67,6 +67,7 @@ public class MappedAlertFixtures {
     public static final String PROCESSING_TIMESTAMP_2 = "2021-05-05T18:17:37.098Z";
     public static final String PROCESSING_TIMESTAMP_3 = "2021-06-08T13:17:37.098Z";
     public static final String PROCESSING_TIMESTAMP_4 = "2021-06-18T12:10:31.098Z";
+    public static final String ALERT_NAME = "alerts/123";
   }
 
   public static class ResourceName {
@@ -87,6 +88,7 @@ public class MappedAlertFixtures {
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
+      AlertMapperConstants.ALERT_NAME, Values.ALERT_NAME,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 

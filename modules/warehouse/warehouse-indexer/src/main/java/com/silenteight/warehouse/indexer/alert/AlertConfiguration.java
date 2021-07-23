@@ -60,4 +60,16 @@ public class AlertConfiguration {
     return new RandomAlertQueryService(alertSearchService, restHighLevelAdminClient,
         productionSearchRequestBuilder);
   }
+
+  @Bean
+  AlertCopyDataService alertCopyDataService(
+      RestHighLevelClient restHighLevelAdminClient,
+      AlertSearchService alertSearchService,
+      ProductionSearchRequestBuilder productionSearchRequestBuilder) {
+
+    return new AlertCopyDataService(
+        restHighLevelAdminClient,
+        alertSearchService,
+        productionSearchRequestBuilder);
+  }
 }

@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.indexing;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.common.environment.EnvironmentProperties;
+import com.silenteight.warehouse.indexer.alert.AlertCopyDataService;
 import com.silenteight.warehouse.indexer.alert.AlertService;
 import com.silenteight.warehouse.indexer.analysis.UniqueAnalysisFactory;
 
@@ -19,11 +20,16 @@ class IndexerConfiguration {
   SimulationAlertIndexUseCase simulationAlertIndexUseCase(
       AlertService alertService,
       UniqueAnalysisFactory uniqueAnalysisFactory,
+      AlertCopyDataService alertCopyDataService,
       TimeSource timeSource,
       @Valid EnvironmentProperties environmentProperties) {
 
     return new SimulationAlertIndexUseCase(
-        alertService, uniqueAnalysisFactory, timeSource, environmentProperties.getPrefix());
+        alertService,
+        uniqueAnalysisFactory,
+        alertCopyDataService,
+        timeSource,
+        environmentProperties.getPrefix());
   }
 
   @Bean

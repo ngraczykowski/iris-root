@@ -25,7 +25,7 @@ public class SimulationIndexClient {
     SimulationDataIndexRequest request = SimulationDataIndexRequest.newBuilder()
         .setRequestId(requestId)
         .setAnalysisName(analysisName)
-        .addAllAlerts(of(alertGenerator.generate())).build();
+        .addAllAlerts(of(alertGenerator.generateSimulation())).build();
 
     simulationIndexClientGateway.indexRequest(request);
     log.info("Simulation msg sent, requestId={}, analysis={}", requestId, analysisName);

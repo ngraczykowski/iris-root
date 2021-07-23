@@ -35,6 +35,7 @@ public class DataIndexFixtures {
 
   public static final Alert ALERT_1 = Alert.newBuilder()
       .setDiscriminator(DISCRIMINATOR_1)
+      .setName(Values.ALERT_NAME)
       .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
           match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
