@@ -65,7 +65,8 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   }
 
   @Override
-  public Map<String, String> convertAlertDataToMap(AlertData alertData) throws AlertConversionException {
+  public Map<String, String> convertAlertDataToMap(AlertData alertData) throws
+      AlertConversionException {
     var result = new HashMap<String, String>();
 
     var caseInformation = convertToMap(alertData.getCaseInformation());
@@ -86,7 +87,7 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
 
   @Override
   public void convertAndConsumeAlertData(
-      InputCommand command, Consumer<AlertDataComposite> consumer) {
+      InputCommand command, Consumer<AlertDataComposite> consumer) throws IOException {
     try (var parser = getJsonFactory().createParser(command.getInputStream())) {
 
       if (parser.nextToken() != JsonToken.START_ARRAY) {
@@ -94,25 +95,21 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       }
 
       while (parser.nextToken() == JsonToken.START_OBJECT) {
-        tryToParseAndConsumeAlertData(command, consumer, parser);
+        parseAndConsumeAlertData(command, consumer, parser);
       }
-    } catch (RuntimeException | IOException exception) {
+    } catch (RuntimeException exception) {
       log.error("Error on parsing json", exception);
       throw new JsonConversionException("Error on parsing the input stream", exception);
     }
   }
 
-  private void tryToParseAndConsumeAlertData(
+  private void parseAndConsumeAlertData(
       InputCommand command, Consumer<AlertDataComposite> consumer,
-      com.fasterxml.jackson.core.JsonParser parser) {
-    try {
-      var alertData = objectMapper.readValue(parser, AlertData.class);
-      var payload = objectMapper.writeValueAsBytes(alertData);
+      com.fasterxml.jackson.core.JsonParser parser) throws IOException {
+    var alertData = objectMapper.readValue(parser, AlertData.class);
+    var payload = objectMapper.writeValueAsBytes(alertData);
 
-      consumer.accept(new AlertDataComposite(command.getBulkId(), payload));
-    } catch (Exception ex) {
-      log.error("Error on parsing json object, cannot create Alert Data", ex);
-    }
+    consumer.accept(new AlertDataComposite(command.getBulkId(), payload));
   }
 
   private Map<String, String> flattenMap(List<?> list) {

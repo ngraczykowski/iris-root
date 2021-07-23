@@ -28,17 +28,27 @@ class StoreBulkUseCase {
     validateBulkId(bulkId);
 
     storeBulkWithAlerts(bulkId, command.isLearning(), command.getInputStream());
-
-    eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
   }
 
   @Transactional
   public void storeBulkWithAlerts(String bulkId, boolean learning, InputStream inputStream) {
     var bulk = new Bulk(bulkId, learning);
     bulkRepository.save(bulk);
+    tryToCreateAlerts(inputStream, bulk);
 
-    alertFacade.createRawAlerts(bulkId, inputStream);
     log.info("Batch has been stored, ID: {}", bulkId);
+  }
+
+  private void tryToCreateAlerts(InputStream inputStream, Bulk bulk) {
+    var bulkId = bulk.getId();
+    try {
+      alertFacade.createRawAlerts(bulkId, inputStream);
+      eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
+    } catch (Exception e) {
+      log.error("Cannot create alert data json, batchId = {}", bulkId, e);
+      bulk.error("Enable to create alerts, due to: " + e.getMessage());
+      bulkRepository.save(bulk);
+    }
   }
 
   private void validateBulkId(String bulkId) {

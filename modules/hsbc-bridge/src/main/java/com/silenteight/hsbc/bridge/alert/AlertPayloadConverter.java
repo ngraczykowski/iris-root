@@ -5,6 +5,7 @@ import lombok.Value;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDataComposite;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -15,7 +16,8 @@ public interface AlertPayloadConverter {
 
   Map<String, String> convertAlertDataToMap(AlertData alertData) throws AlertConversionException;
 
-  void convertAndConsumeAlertData(InputCommand command, Consumer<AlertDataComposite> consumer);
+  void convertAndConsumeAlertData(
+      InputCommand command, Consumer<AlertDataComposite> consumer) throws IOException;
 
   @Value
   class InputCommand {

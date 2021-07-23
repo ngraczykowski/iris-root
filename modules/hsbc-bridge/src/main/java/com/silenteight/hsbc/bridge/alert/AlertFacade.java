@@ -9,6 +9,7 @@ import com.silenteight.hsbc.bridge.alert.dto.AlertDataComposite;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.function.Consumer;
@@ -23,7 +24,7 @@ public class AlertFacade implements Consumer<AlertDataComposite> {
   private final AlertRepository repository;
 
   @Transactional
-  public void createRawAlerts(String bulkId, @NonNull InputStream inputStream) {
+  public void createRawAlerts(String bulkId, @NonNull InputStream inputStream) throws IOException {
     alertPayloadConverter.convertAndConsumeAlertData(new InputCommand(bulkId, inputStream), this);
   }
 
