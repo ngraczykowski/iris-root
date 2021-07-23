@@ -98,8 +98,12 @@ warehouse.report.rbs:
         label: fv_signature
       - name: alert_policyId
         label: policy_id
+      - name: alert_policy_title
+        label: policy_title
       - name: alert_stepId
         label: step_id
+      - name: alert_step_title
+        label: step_title
       - name: alert_s8_recommendation
         label: alert_recommendation
       - name: alert_extendedAttribute5
@@ -164,8 +168,12 @@ warehouse.report.rbs:
         label: fv_signature
       - name: alert_match_reason:policy
         label: policy_id
+      - name: alert_match_reason:policy_title
+        label: policy_title
       - name: alert_match_reason:step
         label: step_id
+      - name: alert_match_reason:step_title
+        label: step_title
       - name: alert_recommendation_recommended_action
         label: alert_recommendation
       - name: alert_categories/hitType:value
