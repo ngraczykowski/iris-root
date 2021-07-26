@@ -9,9 +9,9 @@ ext {
   s8consulGrpcRegistrationVersion = "1.0.0"
 
   // TODO all of this should be specified in agent-dependencies-common
-  aspectjVersion = "1.9.5" //TODO conflict with dep-constrains in build.gradle ("1.9.6")
-  byteBuddyVersion = "1.10.7" //TODO conflict with dep-constrains in build.gradle ("1.11.1")
-  guavaVersion = "28.2-jre" //TODO conflict with dep-constrains in build.gradle ("30.1.1-jre")
+  aspectjVersion = "1.9.6" //TODO use version from platform
+  byteBuddyVersion = "1.11.1" //TODO use version from platform
+  guavaVersion = "30.1.1-jre" //TODO use version from platform
   jbossXnioVersion = "3.5.9.Final"
   springBootAutoconfigureVersion = "2.12.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6")
 }
@@ -55,6 +55,8 @@ libraries.byte_buddy = "net.bytebuddy:byte-buddy:$byteBuddyVersion"
 libraries.byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:$byteBuddyVersion"
 libraries.commons_lang3 = "org.apache.commons:commons-lang3"
 libraries.commons_text = "org.apache.commons:commons-text"
+
+// gRPC
 libraries.grpc_api = "io.grpc:grpc-api"
 libraries.grpc_core = "io.grpc:grpc-core"
 libraries.grpc_protobuf = "io.grpc:grpc-protobuf"
@@ -62,8 +64,8 @@ libraries.grpc_server_spring_boot_starter = "net.devh:grpc-server-spring-boot-st
 libraries.grpc_client_spring_boot_starter = "net.devh:grpc-client-spring-boot-starter"
 libraries.grpc_client_spring_boot_autoconfigure = "net.devh:grpc-server-spring-boot-autoconfigure:$springBootAutoconfigureVersion" //TODO
 libraries.grpc_stub = "io.grpc:grpc-stub"
-libraries.guava = "com.google.guava:guava:$guavaVersion"
-libraries.hibernate_validator = "org.hibernate.validator:hibernate-validator"
+
+// Jackson
 libraries.jackson_annotations = "com.fasterxml.jackson.core:jackson-annotations"
 libraries.jackson_databind = "com.fasterxml.jackson.core:jackson-databind"
 libraries.jackson_dataformat_xml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml"
@@ -72,6 +74,9 @@ libraries.jackson_datatype_jsr310 = "com.fasterxml.jackson.datatype:jackson-data
 libraries.jackson_module_afterburner = "com.fasterxml.jackson.module:jackson-module-afterburner"
 libraries.jackson_module_parameter_names = "com.fasterxml.jackson.module:jackson-module-parameter-names"
 libraries.jackson_module_paranamer = "com.fasterxml.jackson.module:jackson-module-paranamer"
+
+libraries.guava = "com.google.guava:guava:$guavaVersion"
+libraries.hibernate_validator = "org.hibernate.validator:hibernate-validator"
 libraries.jakarta_validation_api = "jakarta.validation:jakarta.validation-api"
 libraries.javax_cache_api = "javax.cache:cache-api"
 libraries.javax_persistence_api = "javax.persistence:javax.persistence-api"
@@ -105,6 +110,7 @@ configurations.all {
     failOnVersionConflict()
     preferProjectModules()
 
+    //TODO try to remove those force
     force libraries.byte_buddy
     force libraries.byte_buddy_agent
     force libraries.guava

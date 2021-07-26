@@ -13,11 +13,15 @@ javaPlatform {
 ext {
   // NOTE(ahaczewski): Keep sorted alphabetically.
   antlr4Version = "4.9.2"
+  apacheCommonsCsvVersion = "1.8"
   aspectjVersion = "1.9.6"
-  bouncyCastleVersion = "1.69"
   bouncyCastleExtVersion = "1.69"
+  bouncyCastleVersion = "1.69"
   byteBuddyVersion = "1.11.1"
   caffeineVersion = "3.0.2"
+  elasticLoggingVersion = "1.0.1"
+  groovyAllVersion = "3.0.8"
+  guavaVersion = "30.1.1-jre"
   hibernateVersion = "5.4.32.Final"
   jakartaElVersion = "3.0.3"
   jakartaMailVersion = "1.6.5"
@@ -44,15 +48,16 @@ dependencies {
   // NOTE(ahaczewski): Keep each group sorted alphabetically.
   constraints {
     // Miscellaneous Dependencies
-    api "co.elastic.logging:logback-ecs-encoder:1.0.1"
+    api "co.elastic.logging:logback-ecs-encoder:$elasticLoggingVersion"
+    api "co.elastic.logging:ecs-logging-core:$elasticLoggingVersion"
     api "com.esotericsoftware:kryo-shaded:4.0.2"
     api "com.github.ben-manes.caffeine:caffeine:$caffeineVersion"
     api "com.github.ben-manes.caffeine:jcache:$caffeineVersion"
     api "com.google.code.findbugs:jsr305:3.0.2"
-    api "com.google.guava:guava:30.1.1-jre"
+    api "com.google.guava:guava:$guavaVersion"
     api "com.oracle:ojdbc8:12.2.0.1"
     api "com.orbitz.consul:consul-client:1.5.2"
-    api "com.querydsl:querydsl-apt:$queryDslVersion:jpa"
+    api "com.querydsl:querydsl-apt:$queryDslVersion:jpa" //TODO
     api "com.querydsl:querydsl-jpa:$queryDslVersion"
     api "com.salesforce.servicelibs:reactor-grpc-stub:1.0.1"
     api "com.sun.mail:jakarta.mail:$jakartaMailVersion"
@@ -83,6 +88,7 @@ dependencies {
     api "org.apache.commons:commons-collections4:4.4"
     api "org.apache.commons:commons-math3:3.6.1"
     api "org.apache.commons:commons-text:1.9"
+    api "org.apache.commons:commons-csv:$apacheCommonsCsvVersion"
     api "org.aspectj:aspectjrt:$aspectjVersion"
     api "org.aspectj:aspectjtools:$aspectjVersion"
     api "org.aspectj:aspectjweaver:$aspectjVersion"
@@ -112,7 +118,7 @@ dependencies {
     api "com.revinate:assertj-json:1.2.0"
     api "io.rest-assured:rest-assured:$restAssuredVersion"
     api "io.rest-assured:spring-mock-mvc:$restAssuredVersion"
-    api "org.codehaus.groovy:groovy-all:3.0.8"
+    api "org.codehaus.groovy:groovy-all:$groovyAllVersion"
     api "org.hamcrest:hamcrest:2.2"
   }
 }
