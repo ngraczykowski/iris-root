@@ -14,9 +14,12 @@ import com.google.protobuf.Struct;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class FeedFixtures {
@@ -55,6 +58,18 @@ final class FeedFixtures {
           .setAnalysis(ANALYSIS_NAME)
           .addAllRecommendationInfos(singletonList(RECOMMENDATION_INFO))
           .build();
+
+  private static final List<RecommendationInfo> RECOMMENDATIONS_LIST = IntStream
+      .range(0, 10)
+      .boxed()
+      .map(v -> RECOMMENDATION_INFO)
+      .collect(toList());
+
+  static final RecommendationsGenerated MULTIPLE_ALERTS_REQUEST = RecommendationsGenerated
+      .newBuilder()
+      .setAnalysis(ANALYSIS_NAME)
+      .addAllRecommendationInfos(RECOMMENDATIONS_LIST)
+      .build();
 
   static final Struct FEATURE_REASON =
       Struct.newBuilder()

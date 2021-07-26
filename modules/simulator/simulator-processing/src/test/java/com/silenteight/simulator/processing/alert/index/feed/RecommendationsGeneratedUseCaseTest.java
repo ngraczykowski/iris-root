@@ -63,4 +63,23 @@ class RecommendationsGeneratedUseCaseTest {
     verifyNoInteractions(recommendationService);
     verifyNoInteractions(indexedAlertService);
   }
+
+  @Test
+  void shouldHandleMessageWithMultipleAlertrsWhenSimulationExists() {
+    // given
+    when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
+    when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);
+    when(recommendationService.getRecommendation(RECOMMENDATION_NAME)).thenReturn(RECOMMENDATION);
+    when(recommendationService.getMetadata(RECOMMENDATION_NAME)).thenReturn(METADATA);
+
+    // when
+    SimulationDataIndexRequest indexRequest = underTest.handle(MULTIPLE_ALERTS_REQUEST);
+
+    // then
+    verify(indexedAlertService).saveAsSent(
+        REQUEST_ID, ANALYSIS_NAME, MULTIPLE_ALERTS_REQUEST.getRecommendationInfosCount());
+    assertThat(indexRequest.getRequestId()).isEqualTo(REQUEST_ID);
+    assertThat(indexRequest.getAnalysisName()).isEqualTo(ANALYSIS_NAME);
+    assertThat(indexRequest.getAlertsList()).hasSize(10);
+  }
 }

@@ -23,7 +23,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -41,6 +44,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static final String FEATURE_SOLUTION_FIELD_POSTFIX = ":solution";
   private static final String FEATURE_REASON_FIELD_POSTFIX = ":reason";
   private static final String CATEGORY_FIELD_POSTFIX = ":value";
+  private static final int THREADS_COUNT = 4;
 
   @NonNull
   private final SimulationService simulationService;
@@ -86,13 +90,21 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   }
 
   private Collection<Alert> toAlertsToIndex(List<RecommendationInfo> recommendations) {
-    return recommendations
-        .stream()
-        .map(this::toAlertToIndex)
+    log.debug("Fetching recommendation in {} threads.", THREADS_COUNT);
+    ForkJoinPool fjPool = new ForkJoinPool(THREADS_COUNT);
+
+    List<CompletableFuture<Alert>> futures = recommendations
+        .parallelStream()
+        .map(recommendationInfo -> supplyAsync(() -> toAlertToIndex(recommendationInfo), fjPool))
         .collect(toList());
+
+    return futures.stream().map(CompletableFuture::join).collect(toList());
   }
 
   private Alert toAlertToIndex(RecommendationInfo recommendationInfo) {
+    if (log.isTraceEnabled())
+      log.trace("Fetching recommendation in thread {}", Thread.currentThread().getName());
+
     Recommendation recommendation =
         recommendationService.getRecommendation(recommendationInfo.getRecommendation());
     RecommendationMetadata metadata =
