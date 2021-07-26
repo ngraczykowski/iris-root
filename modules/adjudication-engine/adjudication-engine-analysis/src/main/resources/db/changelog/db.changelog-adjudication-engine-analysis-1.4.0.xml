@@ -71,4 +71,15 @@
         path="sql/view_ae_alert_match_solutions_query_v2.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_12" author="ahaczewski">
+    <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_13" author="ahaczewski">
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="sql/view_ae_analysis_match_feature_vector_elements_query_v2.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

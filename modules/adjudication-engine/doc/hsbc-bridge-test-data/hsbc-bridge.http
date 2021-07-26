@@ -1,12 +1,12 @@
 ### Start the recommendation process for batch request
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26072021-100/recommend
 Accept: application/json
 Content-Type: application/json
 
 < hsbc-bridge-request-full.json
 
 ### Start the recommendation process for single-alert request
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26072021-200/recommend
 Accept: application/json
 Content-Type: application/json
 
@@ -19,5 +19,5 @@ Accept: application/json
 
 
 ### Check the recommendation results
-GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/result
+GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26072021-200/result
 Accept: application/json
