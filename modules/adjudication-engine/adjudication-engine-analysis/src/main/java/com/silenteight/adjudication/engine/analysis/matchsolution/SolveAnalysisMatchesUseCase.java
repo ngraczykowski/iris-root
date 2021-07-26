@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.SolveMatchesRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ class SolveAnalysisMatchesUseCase {
   private final AnalysisFeatureVectorElementsProvider analysisFeatureVectorElementsProvider;
   private final SolveMatchesUseCase solveMatchesUseCase;
 
+  @Timed("ae.analysis.use_case.matchsolution.solve_analysis_matches")
   List<String> solveAnalysisMatches(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     var featureVectorElements = analysisFeatureVectorElementsProvider.get(analysisId);

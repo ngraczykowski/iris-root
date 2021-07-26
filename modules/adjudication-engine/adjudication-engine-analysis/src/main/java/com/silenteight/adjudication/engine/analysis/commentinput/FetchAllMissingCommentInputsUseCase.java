@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.comments.commentinput.AlertCommentInp
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.datasource.comments.api.v1.CommentInput;
 import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ class FetchAllMissingCommentInputsUseCase {
   private final CommentInputServiceClient commentInputClient;
   private final AlertCommentInputFacade alertCommentInputFacade;
 
+  @Timed("ae.analysis.use_case.commentinput.fetch_all_missing_comment_inputs_values")
   void fetchAllMissingCommentInputsValues(@NotNull String analysis) {
     var analysisId = ResourceName.create(analysis).getLong("analysis");
 

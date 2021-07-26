@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ class CreateRecommendationsUseCase {
   private final RecommendationRepository repository;
   private final PendingRecommendationFacade pendingRecommendationFacade;
 
+  @Timed("ae.analysis.use_case.recommendation.create_recommendations")
   @Transactional
   List<RecommendationInfo> createRecommendations(
       long analysisId, List<AlertSolution> alertSolutions) {

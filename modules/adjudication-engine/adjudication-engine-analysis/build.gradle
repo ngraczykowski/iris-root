@@ -21,6 +21,8 @@ dependencies {
   implementation libraries.governance_solving_api
   implementation libraries.protobuf_java_util
 
+  implementation libraries.silenteight_sep_base_aspects
+
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.spring_data_jpa
   implementation libraries.silenteight_sep_base_common

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.internal.v1.MatchCategoriesUpdated;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ class FetchAllMissingCategoryValuesUseCase {
   private final MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
   private final CategoryServiceClient categoryServiceClient;
 
+  @Timed("ae.analysis.use_case.categoryrequest.fetch_all_missing_category_values")
   MatchCategoriesUpdated fetchAllMissingCategoryValues(String analysis) {
     log.info("Fetching missing category values: analysis={}", analysis);
 

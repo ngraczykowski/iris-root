@@ -3,6 +3,8 @@ package com.silenteight.adjudication.engine.analysis.agentexchange;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ class GetFeatureToIdsMapUseCase {
 
   private final AgentExchangeFeatureQueryRepository repository;
 
+  @Timed("ae.analysis.use_case.agentexchange.get_feature_to_ids_map")
   @Transactional(readOnly = true)
   Map<String, Long> getFeatureToIdsMap(UUID agentExchangeRequestId) {
     if (!repository.agentExchangeRequestExists(agentExchangeRequestId)) {

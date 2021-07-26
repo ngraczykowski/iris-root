@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ class FindAnalysisByPendingMatchesUseCase {
 
   private final AnalysisDataAccess analysisDataAccess;
 
+  @Timed("ae.analysis.use_case.analysis.find_analysis_by_pending_matches")
   List<String> findAnalysisByPendingMatches(List<String> matches) {
     var matchIds = matches
         .stream()

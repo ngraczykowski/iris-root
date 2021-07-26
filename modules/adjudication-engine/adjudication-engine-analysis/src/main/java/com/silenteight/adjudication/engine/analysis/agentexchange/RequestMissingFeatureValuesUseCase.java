@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ class RequestMissingFeatureValuesUseCase {
   private final AgentRequestHandler agentRequestHandler;
   private final AgentExchangeRequestGateway gateway;
 
+  @Timed("ae.analysis.use_case.agentexchange.request_missing_feature_values")
   void requestMissingFeatureValues(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
 

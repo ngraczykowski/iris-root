@@ -8,6 +8,7 @@ import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolut
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolutionCollection;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.proto.protobuf.Uuid;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -30,6 +31,7 @@ class CreateMatchSolutionsUseCase {
   private ObjectMapper objectMapper = new ObjectMapper();
 
   @Transactional
+  @Timed("ae.analysis.use_case.matchsolution.create_match_solutions")
   void createMatchSolutions(MatchSolutionCollection collection) {
     collection
         .getMatchSolutions()

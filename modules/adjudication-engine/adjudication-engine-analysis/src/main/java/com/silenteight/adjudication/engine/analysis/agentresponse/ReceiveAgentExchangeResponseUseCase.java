@@ -10,6 +10,7 @@ import com.silenteight.adjudication.internal.v1.MatchFeaturesUpdated;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ class ReceiveAgentExchangeResponseUseCase {
   private final MatchFeatureValueFacade matchFeatureValueFacade;
   private final FeatureIdsProvider featureIdsProvider;
 
+  @Timed("ae.analysis.use_case.agentresponse.receive_agent_exchange_response")
   Optional<MatchFeaturesUpdated> receiveAgentExchangeResponse(
       UUID agentExchangeRequestId, AgentExchangeResponse response) {
 

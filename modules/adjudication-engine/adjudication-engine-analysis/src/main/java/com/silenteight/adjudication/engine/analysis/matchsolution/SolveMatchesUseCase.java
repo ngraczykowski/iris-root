@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.analysis.matchsolution.UnsolvedMatchesReader.ChunkHandler;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.SolveMatchesRequest;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.UnsolvedMatchesChunk;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ class SolveMatchesUseCase {
   private final PolicyStepsClient solvingApiClient;
   private final CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
 
+  @Timed("ae.analysis.use_case.matchsolution.solve_matches")
   List<String> solveMatches(SolveMatchesRequest request) {
     var chunkHandler = new SolvedMatchChunkHandler(request);
 
