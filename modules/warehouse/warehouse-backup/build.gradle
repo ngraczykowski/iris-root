@@ -16,11 +16,16 @@ configurations {
 
 dependencies {
   implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
 
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_data_api
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation project(":warehouse-test-client")
+  testImplementation libraries.awaitility
 
   testFixturesImplementation testFixtures(project(':warehouse-common'))
 }

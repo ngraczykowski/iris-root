@@ -12,11 +12,11 @@ import com.silenteight.warehouse.backup.indexing.ProductionDataIndexStorable;
 public class StorageService implements ProductionDataIndexStorable {
 
   @NonNull
-  private final MessageRepository messageRepository;
+  private final BackupMessageRepository backupMessageRepository;
 
   @Override
   public void save(ProductionDataIndexRequest request) {
-    messageRepository.save(buildMessage(request));
+    backupMessageRepository.save(buildMessage(request));
   }
 
   private static BackupMessage buildMessage(ProductionDataIndexRequest request) {
