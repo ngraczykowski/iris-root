@@ -12,10 +12,11 @@ class CategoryUseCaseConfiguration {
   private final CategoryRepository categoryRepository;
   private final MatchCategoryRepository matchCategoryRepository;
   private final MatchCategoryViewRepository matchCategoryViewRepository;
+  private final CategoryModelHolder categoryModelHolder;
 
   @Bean
   ListCategoriesUseCase listCategoriesUseCase() {
-    return new ListCategoriesUseCase(categoryRepository);
+    return new ListCategoriesUseCase(categoryModelHolder);
   }
 
   @Bean

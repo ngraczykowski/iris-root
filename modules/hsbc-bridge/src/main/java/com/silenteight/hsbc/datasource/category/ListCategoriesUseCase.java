@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ListCategoriesUseCase {
 
-  private final CategoryRepository categoryRepository;
+  private final CategoryModelHolder categoryModelHolder;
 
   public List<CategoryDto> getCategories() {
 
-    return categoryRepository.findAll().stream()
+    return categoryModelHolder.getCategories().stream()
         .map(e -> CategoryDto.builder()
             .name(e.getName())
             .displayName(e.getDisplayName())
