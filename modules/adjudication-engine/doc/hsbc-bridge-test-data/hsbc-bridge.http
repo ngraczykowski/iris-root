@@ -1,9 +1,16 @@
-### Start the recommendation process
+### Start the recommendation process for batch request
 POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/recommend
 Accept: application/json
 Content-Type: application/json
 
-< hsbc-bridge-request-1.json
+< hsbc-bridge-request-full.json
+
+### Start the recommendation process for single-alert request
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/25062021-102/recommend
+Accept: application/json
+Content-Type: application/json
+
+< hsbc-bridge-request-single.json
 
 
 ### Check HSBC Bridge status
