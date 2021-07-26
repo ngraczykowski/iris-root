@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 class StorageConfiguration {
 
   @Bean
-  StorageService storageService(MessageRepository messageRepository) {
-    return new StorageService(messageRepository);
+  StorageService storageService(BackupMessageRepository backupMessageRepository) {
+    return new StorageService(backupMessageRepository);
   }
 }

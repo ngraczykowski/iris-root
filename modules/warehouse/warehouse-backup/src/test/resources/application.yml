@@ -1,0 +1,40 @@
+keycloak:
+  adapter:
+    authServerUrl: fakeAuthHost:8000
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials.secret: 55555555-4444-3333-2222-000111000111
+
+warehouse:
+  alert-mapping:
+    country-source-key: lob_country
+  kibana:
+    timezone: Europe/Warsaw
+  opendistro:
+    max-object-count: 1000
+  messaging:
+    integration:
+      backup-indexing-inbound:
+        queue-name: wh.index-request.backup
+  environment:
+    prefix: itest
+  es:
+    production-query-index: ${warehouse.environment.prefix}_production
+
+test:
+  messaging:
+    integration:
+      production-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.production
+      simulation-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.simulation
+      production-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.simulation
