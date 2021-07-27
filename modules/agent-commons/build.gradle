@@ -7,7 +7,7 @@ buildscript {
 plugins {
   id "idea"
   id "maven-publish"
-  //TODO how to unify versions across repos? single convention plugin?
+  //TODO how to unify versions across repos? single convention plugin? (MI6-638)
   id "com.silenteight.gradle.convention" version "1.15.0"
   id "com.silenteight.gradle.release" version "1.0.9"
   id "com.silenteight.gradle.wrapper" version "1.0.25"
@@ -42,11 +42,11 @@ subprojects {Project project ->
   pluginManager.withPlugin("java") {
     project.apply from: "${gradleScriptDir}/dependencies.gradle"
 
-    //TODO which version is taken here? is it `from project.aspectj`?
+    //TODO which version is taken here? is it `from project.aspectj`? (MI6-638)
     project.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
     project.dependencies {
-      implementation libraries.jaxb_api //TODO
+      implementation libraries.jaxb_api //TODO does it need to be here? move it to convention plugin (MI6-638)
     }
 
     project.aspectj {

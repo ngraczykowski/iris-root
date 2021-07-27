@@ -8,12 +8,12 @@ ext {
   s8consulDiscoveryVersion = "2.4.0"
   s8consulGrpcRegistrationVersion = "1.0.0"
 
-  // TODO all of this should be specified in agent-dependencies-common
-  aspectjVersion = "1.9.6" //TODO use version from platform
-  byteBuddyVersion = "1.11.1" //TODO use version from platform
-  guavaVersion = "30.1.1-jre" //TODO use version from platform
+  // TODO all of this should be specified in agent-dependencies-common (MI6-638)
+  aspectjVersion = "1.9.6" //TODO use version from platform (MI6-638)
+  byteBuddyVersion = "1.11.1" //TODO use version from platform (MI6-638)
+  guavaVersion = "30.1.1-jre" //TODO use version from platform (MI6-638)
   jbossXnioVersion = "3.5.9.Final"
-  springBootAutoconfigureVersion = "2.12.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6")
+  springBootAutoconfigureVersion = "2.12.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6") (MI6-638)
 }
 
 // Silent Eight libraries
@@ -62,7 +62,7 @@ libraries.grpc_core = "io.grpc:grpc-core"
 libraries.grpc_protobuf = "io.grpc:grpc-protobuf"
 libraries.grpc_server_spring_boot_starter = "net.devh:grpc-server-spring-boot-starter"
 libraries.grpc_client_spring_boot_starter = "net.devh:grpc-client-spring-boot-starter"
-libraries.grpc_client_spring_boot_autoconfigure = "net.devh:grpc-server-spring-boot-autoconfigure:$springBootAutoconfigureVersion" //TODO
+libraries.grpc_client_spring_boot_autoconfigure = "net.devh:grpc-server-spring-boot-autoconfigure:$springBootAutoconfigureVersion" //TODO (MI6-638)
 libraries.grpc_stub = "io.grpc:grpc-stub"
 
 // Jackson
@@ -110,7 +110,7 @@ configurations.all {
     failOnVersionConflict()
     preferProjectModules()
 
-    //TODO try to remove those force
+    //TODO try to remove those force (MI6-638)
     force libraries.byte_buddy
     force libraries.byte_buddy_agent
     force libraries.guava
