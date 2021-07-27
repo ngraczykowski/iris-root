@@ -73,7 +73,8 @@ job "adjudication-engine" {
       config {
         image   = "postgres:10"
         ports   = [
-          "tcp"]
+          "tcp"
+        ]
         volumes = [
           "${local.database_volume}:/var/lib/postgresql/data"
         ]

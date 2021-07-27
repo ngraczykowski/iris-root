@@ -72,10 +72,24 @@ class SelectUnsolvedMatchesQuery {
           analysisId, limit);
     }
 
-    return queryTemplate.execute(ROW_MAPPER, new UnsolvedMatchChunkHandler(chunkHandler), ps -> {
-      ps.setLong(1, analysisId);
-      ps.setInt(2, limit);
-    });
+    var total = 0;
+
+    do {
+      var count =
+          queryTemplate.execute(ROW_MAPPER, new UnsolvedMatchChunkHandler(chunkHandler), ps -> {
+            ps.setLong(1, analysisId);
+            ps.setInt(2, limit);
+          });
+
+      total += count;
+
+      if (count < limit) {
+        break;
+      }
+
+    } while (true);
+
+    return total;
   }
 
   private static final class UnsolvedMatchMapper implements RowMapper<UnsolvedMatch> {

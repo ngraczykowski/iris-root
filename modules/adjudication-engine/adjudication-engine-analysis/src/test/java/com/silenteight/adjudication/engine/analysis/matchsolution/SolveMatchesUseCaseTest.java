@@ -39,6 +39,6 @@ class SolveMatchesUseCaseTest {
     var matchesRequest = createSolveMatchesRequest(10);
     solveMatchesUseCase.solveMatches(matchesRequest);
 
-    verify(policyStepsClient, times(10)).batchSolveFeatures(any());
+    verify(policyStepsClient).batchSolveFeatures(any());
   }
 }

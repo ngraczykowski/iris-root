@@ -31,17 +31,11 @@ class SolveMatchesUseCase {
           request.getAnalysisId(), request.getPolicy(), request.getFeatureCount());
     }
 
-    var matchCount = 0;
-    var totalCount = 0;
-    do {
-      matchCount = unsolvedMatchesReader.readInChunks(
-          request.getAnalysisId(), chunkHandler);
-      totalCount += matchCount;
-    } while (matchCount > 0);
+    var matchCount = unsolvedMatchesReader.readInChunks(request.getAnalysisId(), chunkHandler);
 
-    if (totalCount > 0) {
+    if (matchCount > 0) {
       log.info("Finished solving matches: analysisId={}, matchCount={}",
-          request.getAnalysisId(), totalCount);
+          request.getAnalysisId(), matchCount);
     } else {
       log.debug("No matches solved: analysisId={}", request.getAnalysisId());
     }
