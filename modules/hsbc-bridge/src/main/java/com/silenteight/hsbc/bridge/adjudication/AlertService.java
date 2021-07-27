@@ -117,7 +117,7 @@ class AlertService {
 
   @AllArgsConstructor
   @Getter
-  private class AlertIdWithName {
+  private static class AlertIdWithName {
 
     private long alertInternalId;
     private String name;
@@ -125,7 +125,7 @@ class AlertService {
 
   @AllArgsConstructor
   @Getter
-  private class MatchIdWithName {
+  private static class MatchIdWithName {
 
     private long matchInternalId;
     private String name;
@@ -133,7 +133,7 @@ class AlertService {
 
   @AllArgsConstructor
   @Getter
-  private class MatchWithAlert {
+  private static class MatchWithAlert {
 
     private String alertExternalId;
     private String alertName;

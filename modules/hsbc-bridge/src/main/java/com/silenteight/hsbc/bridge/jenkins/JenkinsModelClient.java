@@ -3,9 +3,9 @@ package com.silenteight.hsbc.bridge.jenkins;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
+import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,6 +22,8 @@ import java.util.Base64;
 @RequiredArgsConstructor
 @Slf4j
 public class JenkinsModelClient implements ModelClient {
+
+  private static final String AUTHORIZATION = "Authorization";
 
   private final ObjectMapper objectMapper;
   private final HttpClient httpClient;
@@ -50,7 +52,7 @@ public class JenkinsModelClient implements ModelClient {
     return HttpRequest.newBuilder()
         .GET()
         .header(
-            "Authorization",
+            AUTHORIZATION,
             encodeCredentialsToStringForBasicAuth(
                 jenkinsApiProperties.getUsername(),
                 jenkinsApiProperties.getPassword()))
@@ -69,7 +71,7 @@ public class JenkinsModelClient implements ModelClient {
     } catch (JsonProcessingException e) {
       log.error("Exception occurred on receiving CrumbResponse: ", e);
       throw new ModelNotReceivedException(
-          "Exception occurred on receiving CrumbResponse: " + e.getMessage());
+          "Exception occurred on receiving CrumbResponse: " + e.getMessage(), e);
     }
   }
 
@@ -107,7 +109,7 @@ public class JenkinsModelClient implements ModelClient {
             HttpRequest.BodyPublishers.ofString(
                 mapModelInfoStatusRequestToJsonAsString(modelStatusUpdated)))
         .header(
-            "Authorization",
+            AUTHORIZATION,
             encodeCredentialsToStringForBasicAuth(
                 jenkinsApiProperties.getUsername(),
                 jenkinsApiProperties.getPassword()))
@@ -122,7 +124,7 @@ public class JenkinsModelClient implements ModelClient {
     } catch (JsonProcessingException e) {
       log.error("Error during mapping modelInfoStatusRequest to Json as String: ", e);
       throw new ModelNotReceivedException(
-          "Error during mapping modelInfoStatusRequest to Json as String: " + e.getMessage());
+          "Error during mapping modelInfoStatusRequest to Json as String: " + e.getMessage(), e);
     }
   }
 
@@ -131,7 +133,7 @@ public class JenkinsModelClient implements ModelClient {
     return HttpRequest.newBuilder()
         .POST(HttpRequest.BodyPublishers.ofString(mapModelInfoToJsonAsString(modelInfo)))
         .header(
-            "Authorization",
+            AUTHORIZATION,
             encodeCredentialsToStringForBasicAuth(
                 jenkinsApiProperties.getUsername(),
                 jenkinsApiProperties.getPassword()))
@@ -146,7 +148,7 @@ public class JenkinsModelClient implements ModelClient {
     } catch (JsonProcessingException e) {
       log.error("Error during mapping ModelInfo to Json as String: ", e);
       throw new ModelNotReceivedException(
-          "Error during mapping ModelInfo to Json as String: " + e.getMessage());
+          "Error during mapping ModelInfo to Json as String: " + e.getMessage(), e);
     }
   }
 
@@ -156,18 +158,22 @@ public class JenkinsModelClient implements ModelClient {
     } catch (IOException e) {
       log.error("Exception occurred on receiving HttpResponse", e);
       throw new ModelNotReceivedException(
-          "Exception occurred during sending request to Jenkins: " + e.getMessage());
+          "Exception occurred during sending request to Jenkins: " + e.getMessage(), e);
     } catch (InterruptedException e) {
       log.error("Exception occurred on receiving HttpResponse", e);
       Thread.currentThread().interrupt();
       throw new ModelNotReceivedException(
-          "Exception occurred during sending request to Jenkins: " + e.getMessage());
+          "Exception occurred during sending request to Jenkins: " + e.getMessage(), e);
     }
   }
 
   private static class ModelNotReceivedException extends RuntimeException {
 
     private static final long serialVersionUID = 330005480374608070L;
+
+    public ModelNotReceivedException(String message, Throwable cause) {
+      super(message, cause);
+    }
 
     public ModelNotReceivedException(String message) {
       super(message);

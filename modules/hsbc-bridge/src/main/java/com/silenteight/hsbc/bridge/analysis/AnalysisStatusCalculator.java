@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status.COMPLETED;
+import static java.lang.Boolean.FALSE;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -43,7 +44,7 @@ class AnalysisStatusCalculator {
     var result = safeGetAnalysisResults(name);
     return result
         .map(GetAnalysisResponseDto::hasNoPendingAlerts)
-        .orElse(false);
+        .orElse(FALSE);
   }
 
   private Optional<GetAnalysisResponseDto> safeGetAnalysisResults(String name) {

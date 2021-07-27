@@ -13,8 +13,8 @@ public interface RecommendationServiceClient {
 
     private static final long serialVersionUID = 1433166629282519205L;
 
-    public CannotGetRecommendationsException() {
-      super(ERROR_MESSAGE);
+    public CannotGetRecommendationsException(Throwable cause) {
+      super(ERROR_MESSAGE, cause);
     }
   }
 }

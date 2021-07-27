@@ -7,16 +7,19 @@ import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.Recommendat
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.api.v2.StreamRecommendationsWithMetadataRequest;
 import com.silenteight.hsbc.bridge.common.protobuf.StructMapper;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
+import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
 import com.silenteight.hsbc.bridge.recommendation.metadata.FeatureMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.MatchMetadata;
 import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
-import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -45,7 +48,7 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
           .forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
     } catch (StatusRuntimeException ex) {
       log.error("Cannot get recommendations", ex);
-      throw new CannotGetRecommendationsException();
+      throw new CannotGetRecommendationsException(ex);
     }
 
     return recommendations;

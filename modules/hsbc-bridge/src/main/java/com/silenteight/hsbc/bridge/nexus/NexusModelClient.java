@@ -60,17 +60,21 @@ public class NexusModelClient implements RepositoryClient {
       return httpClient.send(httpRequest, BodyHandlers.ofInputStream());
     } catch (IOException e) {
       log.error("Exception occurred on receiving HttpResponse", e);
-      throw new NexusResponseNotReceivedException(e.getMessage());
+      throw new NexusResponseNotReceivedException(e.getMessage(), e);
     } catch (InterruptedException e) {
       log.error("Exception occurred on receiving HttpResponse", e);
       Thread.currentThread().interrupt();
-      throw new NexusResponseNotReceivedException(e.getMessage());
+      throw new NexusResponseNotReceivedException(e.getMessage(), e);
     }
   }
 
   private static class NexusResponseNotReceivedException extends RuntimeException {
 
     private static final long serialVersionUID = 7105701841811530177L;
+
+    public NexusResponseNotReceivedException(String message, Throwable cause) {
+      super(message, cause);
+    }
 
     public NexusResponseNotReceivedException(String message) {
       super(message);

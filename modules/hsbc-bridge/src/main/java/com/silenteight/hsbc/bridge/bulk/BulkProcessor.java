@@ -67,7 +67,7 @@ class BulkProcessor {
         .stream()
         .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite, (e, n) -> e));
 
-    log.info("NOMAD, number of composite by id: {}", compositeById.keySet().size());
+    log.info("NOMAD, number of composite by id: {}", compositeById.size());
 
     var analysisId = adjudicationFacade.registerAlertWithMatchesAndAnalysis(compositeById);
 

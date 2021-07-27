@@ -50,7 +50,7 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       return objectMapper.writeValueAsBytes(value);
     } catch (JsonProcessingException e) {
       log.error("Error on object conversion", e);
-      throw new JsonConversionException();
+      throw new JsonConversionException("Error on object conversion", e);
     }
   }
 
@@ -58,9 +58,9 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   public AlertData convertAlertData(byte[] payload) throws AlertConversionException {
     try {
       return convert(payload, AlertData.class);
-    } catch (Exception ex) {
-      log.error("Alert data conversion error", ex);
-      throw new AlertConversionException("Alert data conversion error", ex);
+    } catch (Exception e) {
+      log.error("Alert data conversion error", e);
+      throw new AlertConversionException("Alert data conversion error", e);
     }
   }
 
@@ -139,9 +139,9 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   private Map<String, String> convertToMap(Object object) throws AlertConversionException {
     try {
       return objectMapper.convertValue(object, mapTypeReference);
-    } catch (IllegalArgumentException ex) {
-      log.error("Alert data conversion error", ex);
-      throw new AlertConversionException("Alert data conversion error", ex);
+    } catch (IllegalArgumentException e) {
+      log.error("Alert data conversion error", e);
+      throw new AlertConversionException("Alert data conversion error", e);
     }
   }
 

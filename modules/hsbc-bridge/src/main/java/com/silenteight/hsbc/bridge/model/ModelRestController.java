@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.silenteight.hsbc.bridge.model.rest.input.ModelType.fromValue;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -42,21 +42,20 @@ public class ModelRestController {
   @GetMapping("/export/**")
   public ResponseEntity<ExportModelResponse> export(HttpServletRequest request) {
     var modelDetails = getModelDetailsFromUri(request.getRequestURI());
-    var managers = getMatchingModelManagers(ModelType.fromValue(modelDetails.getType()));
-    var modelManager = managers.stream().findFirst().get();
+    var modelManager = getMatchingModelManager(fromValue(modelDetails.getType()));
     return ok(modelManager.exportModel(modelDetails));
   }
 
   @PostMapping
   public void modelUpdate(@RequestBody ModelInfoRequest request) {
-    getMatchingModelManagers(request.getType())
-        .forEach(manager -> manager.transferModelFromJenkins(request));
+    var modelManager = getMatchingModelManager(request.getType());
+    modelManager.transferModelFromJenkins(request);
   }
 
   @PutMapping
   public void modelStatus(@RequestBody ModelInfoStatusRequest request) {
-    getMatchingModelManagers(request.getType())
-        .forEach(manager -> manager.transferModelStatus(request));
+    var modelManager = getMatchingModelManager(request.getType());
+    modelManager.transferModelStatus(request);
   }
 
   @ExceptionHandler({ ModelNotRecognizedException.class, RequestNotValidException.class })
@@ -78,15 +77,16 @@ public class ModelRestController {
         httpStatus);
   }
 
-  private Set<ModelManager> getMatchingModelManagers(ModelType modelType) {
+  private ModelManager getMatchingModelManager(ModelType modelType) {
     var matchingManagers = modelManagers.stream()
         .filter(manager -> manager.supportsModelType(mapToModelType(modelType)))
-        .collect(Collectors.toSet());
+        .distinct()
+        .collect(toList());
 
     if (matchingManagers.isEmpty()) {
       throw new ModelNotRecognizedException(modelType.name());
     }
-    return matchingManagers;
+    return matchingManagers.get(0);
   }
 
   private com.silenteight.hsbc.bridge.model.dto.ModelType mapToModelType(ModelType type) {

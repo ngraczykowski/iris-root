@@ -82,7 +82,7 @@ public class MatchFacade {
     try {
       return objectConverter.convert(payload, MatchRawData.class);
     } catch (ObjectConversionException e) {
-      throw new MatchDataNoLongerAvailableException(name);
+      throw new MatchDataNoLongerAvailableException(name, e);
     }
   }
 
