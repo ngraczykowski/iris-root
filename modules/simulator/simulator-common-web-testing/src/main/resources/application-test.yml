@@ -48,6 +48,7 @@ sep.auth:
       - "VIEW_DATASETS"
       - "DASHBOARD"
       - "VIEW_AI_SUGGESTIONS"
+      - "VIEW_SIMULATION_RESULT"
     QA:
       - "DASHBOARD"
     QA_ISSUE_MANAGER:
