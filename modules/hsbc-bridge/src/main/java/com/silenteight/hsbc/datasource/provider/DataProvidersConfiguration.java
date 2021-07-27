@@ -10,6 +10,7 @@ import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
 import com.silenteight.hsbc.datasource.dto.document.DocumentInputResponse;
 import com.silenteight.hsbc.datasource.dto.event.EventInputResponse;
 import com.silenteight.hsbc.datasource.dto.gender.GenderInputResponse;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalInputResponse;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
@@ -81,5 +82,10 @@ class DataProvidersConfiguration {
   @Bean
   DataSourceInputProvider<TransactionInputResponse> transactionInputProvider() {
     return new TransactionInputProvider(matchFacade);
+  }
+
+  @Bean
+  DataSourceInputProvider<HistoricalInputResponse> historicalInputProvider() {
+    return new HistoricalInputProvider(matchFacade);
   }
 }

@@ -27,7 +27,10 @@ public enum Feature {
   NATIONAL_ID_DOCUMENT("nationalIdDocument"),
   PASSPORT_NUMBER_DOCUMENT("passportNumberDocument"),
   OTHER_DOCUMENT("otherDocument"),
-  DATE_OF_BIRTH("dateOfBirth");
+  DATE_OF_BIRTH("dateOfBirth"),
+  HISTORICAL_IS_CASE_TP_MARKED("isCaseTpMarked"),
+  HISTORICAL_IS_AP_TP_MARKED("isApTpMarked"),
+  HISTORICAL_IS_TP_MARKED("isTpMarked");
 
   private final static String PREFIX = "features/";
 
