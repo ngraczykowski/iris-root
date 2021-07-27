@@ -7,7 +7,7 @@ public class UnexpectedFeaturesReceivedException extends IllegalArgumentExceptio
   private static final long serialVersionUID = -4658475950677830434L;
 
   UnexpectedFeaturesReceivedException(Collection<String> unexpectedFeatures) {
-    super("Received unexpected features in agent exchange response: [" + String.join(", ",
-        unexpectedFeatures) + "].");
+    super("Received unexpected features in agent exchange response: ["
+        + String.join(", ", unexpectedFeatures) + "].");
   }
 }

@@ -17,7 +17,7 @@ class FindAnalysisByPendingMatchesUseCase {
 
   private final AnalysisDataAccess analysisDataAccess;
 
-  @Timed("ae.analysis.use_case.analysis.find_analysis_by_pending_matches")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   List<String> findAnalysisByPendingMatches(List<String> matches) {
     var matchIds = matches
         .stream()

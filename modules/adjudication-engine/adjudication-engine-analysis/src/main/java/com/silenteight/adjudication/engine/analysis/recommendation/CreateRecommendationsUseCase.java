@@ -24,7 +24,7 @@ class CreateRecommendationsUseCase {
   private final RecommendationRepository repository;
   private final PendingRecommendationFacade pendingRecommendationFacade;
 
-  @Timed("ae.analysis.use_case.recommendation.create_recommendations")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   @Transactional
   List<RecommendationInfo> createRecommendations(
       long analysisId, List<AlertSolution> alertSolutions) {

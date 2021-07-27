@@ -16,7 +16,7 @@ class GetAnalysisUseCase {
 
   private final AnalysisQueryRepository repository;
 
-  @Timed("ae.analysis.use_case.analysis.get_analysis")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   @Transactional(readOnly = true)
   Analysis getAnalysis(String analysisName) {
     long analysisId = ResourceName.create(analysisName).getLong("analysis");

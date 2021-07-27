@@ -22,9 +22,9 @@ import static com.silenteight.adjudication.engine.analysis.agentexchange.domain.
 
 /**
  * @implNote For optimal performance, this implementation does not group matches by features.
- *           This might result in requesting more match feature values than necessary, BUT given
- *           current implementation of {@link RequestMissingFeatureValuesUseCase} the features
- *           are iterated one analysis at a time, and an analysis has a constant set of features.
+ *     This might result in requesting more match feature values than necessary, BUT given current
+ *     implementation of {@link RequestMissingFeatureValuesUseCase} the features are iterated one
+ *     analysis at a time, and an analysis has a constant set of features.
  */
 @NotThreadSafe
 @Slf4j

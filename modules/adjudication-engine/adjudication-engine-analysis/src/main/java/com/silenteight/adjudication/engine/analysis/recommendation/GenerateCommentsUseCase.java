@@ -13,7 +13,7 @@ class GenerateCommentsUseCase {
   private final CommentFacade commentFacade;
   private final String templateName;
 
-  @Timed("ae.analysis.use_case.recommendation.generate_comments")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   GenerateCommentsResponse generateComments(GenerateCommentsRequest request) {
     var comment = commentFacade.generateComment(templateName, request.getAlertContext());
     return new GenerateCommentsResponse(comment);

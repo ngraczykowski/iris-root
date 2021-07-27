@@ -21,7 +21,7 @@ class CreateAndGetAnalysisUseCase {
   @NonNull
   private final GetAnalysisUseCase getAnalysisUseCase;
 
-  @Timed("ae.analysis.use_case.analysis.create_and_get_analysis")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   Analysis createAndGetAnalysis(Analysis prototype) {
     var analysisName = createAnalysisUseCase.createAnalysis(prototype);
     var analysis = getAnalysisUseCase.getAnalysis(analysisName);

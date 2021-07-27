@@ -10,7 +10,8 @@ import org.springframework.transaction.event.TransactionalEventListener;
 /**
  * Listens for {@link AddedAnalysisDatasets} application event and passes it to the gateway.
  * <p/>
- * The gateway couldn't be used directly, as the event listener is executed after successful commit.
+ * The gateway couldn't be used directly, as the event listener is executed after successful
+ * commit.
  */
 @RequiredArgsConstructor
 @Component

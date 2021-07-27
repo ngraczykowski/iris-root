@@ -21,7 +21,7 @@ class AddAndListDatasetsInAnalysisUseCase {
   @NonNull
   private final ListAnalysisDatasetUseCase listAnalysisDatasetUseCase;
 
-  @Timed("ae.analysis.use_case.analysis.add_datasets")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   List<AnalysisDataset> addAndListDatasets(String analysis, List<String> datasets) {
     var saved = addDatasetsToAnalysisUseCase.addDatasets(analysis, datasets);
 

@@ -10,6 +10,7 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 import com.silenteight.adjudication.engine.common.protobuf.TimestampConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ class CreateDatasetUseCase {
   @NonNull
   private final DatasetAlertRepository datasetAlertRepository;
 
+  @Timed(value = "ae.dataset.use_cases", extraTags = { "package", "dataset" })
   @Transactional
   Dataset createDataset(NamedAlerts namedAlerts) {
     var dataset = datasetRepository.save(DatasetEntity.builder().build());

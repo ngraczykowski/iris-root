@@ -31,7 +31,7 @@ class ReceiveAgentExchangeResponseUseCase {
   private final MatchFeatureValueFacade matchFeatureValueFacade;
   private final FeatureIdsProvider featureIdsProvider;
 
-  @Timed("ae.analysis.use_case.agentresponse.receive_agent_exchange_response")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentresponse" })
   Optional<MatchFeaturesUpdated> receiveAgentExchangeResponse(
       UUID agentExchangeRequestId, AgentExchangeResponse response) {
 

@@ -17,7 +17,7 @@ class SolveAnalysisMatchesUseCase {
   private final AnalysisFeatureVectorElementsProvider analysisFeatureVectorElementsProvider;
   private final SolveMatchesUseCase solveMatchesUseCase;
 
-  @Timed("ae.analysis.use_case.matchsolution.solve_analysis_matches")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "matchsolution" })
   List<String> solveAnalysisMatches(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     var featureVectorElements = analysisFeatureVectorElementsProvider.get(analysisId);

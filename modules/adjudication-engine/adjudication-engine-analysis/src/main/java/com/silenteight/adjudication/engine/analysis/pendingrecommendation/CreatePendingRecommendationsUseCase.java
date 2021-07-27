@@ -15,7 +15,7 @@ class CreatePendingRecommendationsUseCase {
 
   private final PendingRecommendationDataAccess dataAccess;
 
-  @Timed("ae.analysis.use_case.pendingrecommendation.create_pending_recommendations")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "pendingrecommendation" })
   @Transactional
   boolean createPendingRecommendations(long analysisId) {
     var pendingCount = dataAccess.createPendingRecommendations(analysisId);

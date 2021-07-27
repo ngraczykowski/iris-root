@@ -12,7 +12,7 @@ class GetAnalysisStrategyUseCase {
 
   private final AnalysisRepository analysisRepository;
 
-  @Timed("ae.analysis.use_case.analysis.get_analysis_strategy")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   String getAnalysisStrategy(long analysisId) {
     return analysisRepository.getStrategyById(analysisId).getStrategy();
   }

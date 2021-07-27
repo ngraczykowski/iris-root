@@ -20,7 +20,7 @@ class GetFeatureToIdsMapUseCase {
 
   private final AgentExchangeFeatureQueryRepository repository;
 
-  @Timed("ae.analysis.use_case.agentexchange.get_feature_to_ids_map")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentexchange" })
   @Transactional(readOnly = true)
   Map<String, Long> getFeatureToIdsMap(UUID agentExchangeRequestId) {
     if (!repository.agentExchangeRequestExists(agentExchangeRequestId)) {

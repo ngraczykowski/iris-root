@@ -24,7 +24,8 @@ class HandleCommentInputsUpdatedUseCase {
       CommentInputsUpdated commentInputsUpdated) {
 
     if (log.isDebugEnabled()) {
-      log.debug("Handling comment inputs updated: analysisList={}",
+      log.debug(
+          "Handling comment inputs updated: analysisList={}",
           commentInputsUpdated.getAnalysisList());
     }
 

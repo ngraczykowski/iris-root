@@ -16,7 +16,8 @@ class HandlePendingRecommendationsUseCase {
 
   void handlePendingRecommendations(PendingRecommendations pendingRecommendations) {
     if (log.isDebugEnabled()) {
-      log.debug("Handling pending recommendations: analysisList={}",
+      log.debug(
+          "Handling pending recommendations: analysisList={}",
           pendingRecommendations.getAnalysisList());
     }
 

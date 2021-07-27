@@ -22,7 +22,7 @@ class SolveMatchesUseCase {
   private final PolicyStepsClient solvingApiClient;
   private final CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
 
-  @Timed("ae.analysis.use_case.matchsolution.solve_matches")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "matchsolution" })
   List<String> solveMatches(SolveMatchesRequest request) {
     var chunkHandler = new SolvedMatchChunkHandler(request);
 

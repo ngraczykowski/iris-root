@@ -32,7 +32,7 @@ class GenerateRecommendationsUseCase {
   private final RecommendationDataAccess recommendationDataAccess;
   private final AnalysisFacade analysisFacade;
 
-  @Timed("ae.analysis.use_case.recommendation.generate_recommendations")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   List<RecommendationInfo> generateRecommendations(
       String analysisName,
       Function<SaveRecommendationRequest, List<RecommendationInfo>> saveRecommendation) {

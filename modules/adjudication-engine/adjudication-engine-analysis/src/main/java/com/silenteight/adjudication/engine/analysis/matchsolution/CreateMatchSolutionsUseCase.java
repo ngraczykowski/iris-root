@@ -31,7 +31,7 @@ class CreateMatchSolutionsUseCase {
   private ObjectMapper objectMapper = new ObjectMapper();
 
   @Transactional
-  @Timed("ae.analysis.use_case.matchsolution.create_match_solutions")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "matchsolution" })
   void createMatchSolutions(MatchSolutionCollection collection) {
     collection
         .getMatchSolutions()

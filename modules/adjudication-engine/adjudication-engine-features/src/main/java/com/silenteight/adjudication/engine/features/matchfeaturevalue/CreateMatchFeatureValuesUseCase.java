@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValueDto;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ class CreateMatchFeatureValuesUseCase {
   private final MatchFeatureValueRepository repository;
   private final ProtoMessageToObjectNodeConverter converter;
 
+  @Timed(value = "ae.features.use_cases", extraTags = { "package", "matchfeaturevalue" })
   void createMatchFeatureValues(Collection<MatchFeatureValueDto> valueDtos) {
     var entities = valueDtos.stream().map(this::createEntity).collect(Collectors.toList());
     repository.saveAll(entities);

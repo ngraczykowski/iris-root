@@ -19,7 +19,7 @@ class FetchAllMissingCategoryValuesUseCase {
   private final MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
   private final CategoryServiceClient categoryServiceClient;
 
-  @Timed("ae.analysis.use_case.categoryrequest.fetch_all_missing_category_values")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "categoryrequest" })
   MatchCategoriesUpdated fetchAllMissingCategoryValues(String analysis) {
     log.info("Fetching missing category values: analysis={}", analysis);
 

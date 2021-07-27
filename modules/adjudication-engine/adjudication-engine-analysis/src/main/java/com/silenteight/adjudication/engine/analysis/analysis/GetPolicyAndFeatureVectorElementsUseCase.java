@@ -15,7 +15,7 @@ class GetPolicyAndFeatureVectorElementsUseCase {
   @NonNull
   private final AnalysisDataAccess analysisDataAccess;
 
-  @Timed("ae.analysis.use_case.analysis.get_policy_and_feature_vector_elements")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   PolicyAndFeatureVectorElements getPolicyAndFeatureVectorElements(long analysisId) {
     return analysisDataAccess.getPolicyAndFeatureVectorElements(analysisId);
   }

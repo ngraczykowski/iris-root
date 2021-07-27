@@ -20,7 +20,7 @@ class RequestMissingFeatureValuesUseCase {
   private final AgentRequestHandler agentRequestHandler;
   private final AgentExchangeRequestGateway gateway;
 
-  @Timed("ae.analysis.use_case.agentexchange.request_missing_feature_values")
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentexchange" })
   void requestMissingFeatureValues(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
 
