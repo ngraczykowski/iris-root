@@ -12,14 +12,15 @@ javaPlatform {
 // NOTE: it stems from com.silenteight.sep:sep-dependencies:2.2.0
 ext {
   // Silent Eight
-  s8consulDiscoveryVersion = "2.2.0"
+  s8consulDiscoveryVersion = "2.4.0"
   s8consulGrpcRegistrationVersion = "1.0.0"
   s8commonsVersion = "2.0.0"
 
   // Keep sorted alphabetically.
   antlr4Version = "4.9.2"
-  apacheCommonsCsvVersion = "1.8"
   apacheCommonsCollectionsVersion = "4.4"
+  apacheCommonsCsvVersion = "1.8"
+  archunitJunitVersion = "0.15.0"
   aspectjVersion = "1.9.6"
   bouncyCastleExtVersion = "1.69"
   bouncyCastleVersion = "1.69"
@@ -73,6 +74,7 @@ dependencies {
     api "com.querydsl:querydsl-jpa:$queryDslVersion"
     api "com.salesforce.servicelibs:reactor-grpc-stub:1.0.1"
     api "com.sun.mail:jakarta.mail:$jakartaMailVersion"
+    api "com.tngtech.archunit:archunit-junit5:$archunitJunitVersion"
     api "com.thoughtworks.paranamer:paranamer:2.8"
     api "com.zaxxer:HikariCP:4.0.3"
     api "commons-io:commons-io:$commonsIoVersion"
@@ -124,7 +126,10 @@ dependencies {
     api "org.postgresql:postgresql:42.2.20"
     api "org.projectlombok:lombok:1.18.20"
     api "org.slf4j:slf4j-api:1.7.30"
+    api "org.threeten:threeten-extra:1.4"
     api "com.univocity:univocity-parsers:2.9.0"
+    api "com.opencsv:opencsv:5.4"
+    api "com.google.protobuf:protobuf-java-util:3.15.6"
 
     // Testing
     api "com.jayway.jsonpath:json-path:2.6.0"
