@@ -30,7 +30,7 @@ public class TestWithRoleExtension implements TestTemplateInvocationContextProvi
     Method testMethod = context.getRequiredTestMethod();
     String displayName = context.getDisplayName();
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    TestWithRole repeatedTest = findAnnotation(testMethod, TestWithRole.class).get();
+    TestWithRole repeatedTest = findAnnotation(testMethod, TestWithRole.class).orElseThrow();
 
     return getRoles(repeatedTest)
         .map(role -> new ForEachRoleTemplateInvocationContext(

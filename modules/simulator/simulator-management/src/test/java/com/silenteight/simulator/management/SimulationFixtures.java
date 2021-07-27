@@ -31,7 +31,7 @@ public final class SimulationFixtures {
   public static final String NAME = "simulations/" + ID;
   public static final String SIMULATION_NAME = "New simulation";
   public static final String DESCRIPTION = "Simulation description";
-  public static final String MODEL = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
+  public static final String MODEL_NAME = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   public static final State ANALYSIS_STATE = DONE;
   public static final UUID DATASET_ID_1 = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
   public static final String DATASET_NAME_1 = "datasets/" + DATASET_ID_1;
@@ -41,7 +41,7 @@ public final class SimulationFixtures {
   public static final String USERNAME = "USERNAME";
   public static final SimulationState STATE = PENDING;
   public static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
-  public static final String POLICY = "policies/de1afe98-0b58-4941-9791-4e081f9b8139";
+  public static final String POLICY_NAME = "policies/de1afe98-0b58-4941-9791-4e081f9b8139";
   public static final String STRATEGY_NAME = "UNSOLVED_ALERTS";
   public static final List<String> CATEGORIES = List.of("category-1", "category-2");
   public static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
@@ -55,7 +55,7 @@ public final class SimulationFixtures {
           .id(ID)
           .simulationName(SIMULATION_NAME)
           .description(DESCRIPTION)
-          .model(MODEL)
+          .model(MODEL_NAME)
           .datasets(DATASETS)
           .createdBy(USERNAME)
           .build();
@@ -66,7 +66,7 @@ public final class SimulationFixtures {
           .name(NAME)
           .simulationName(SIMULATION_NAME)
           .state(STATE)
-          .model(MODEL)
+          .model(MODEL_NAME)
           .datasets(DATASETS)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
@@ -74,8 +74,9 @@ public final class SimulationFixtures {
 
   public static final SolvingModel SOLVING_MODEL =
       SolvingModel.newBuilder()
+          .setName(MODEL_NAME)
           .setStrategyName(STRATEGY_NAME)
-          .setPolicyName(POLICY)
+          .setPolicyName(POLICY_NAME)
           .addAllCategories(CATEGORIES)
           .build();
 
@@ -92,7 +93,7 @@ public final class SimulationFixtures {
           .simulationName(SIMULATION_NAME)
           .description(DESCRIPTION)
           .state(STATE)
-          .model(MODEL)
+          .model(MODEL_NAME)
           .analysis(ANALYSIS_NAME)
           .datasets(DATASETS)
           .createdAt(NOW.atOffset(UTC))

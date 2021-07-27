@@ -46,7 +46,7 @@ public abstract class BaseRestControllerTest {
   protected static final String USERNAME = "username";
 
   @RegisterExtension
-  public static TestWithRoleExtension testWithRoleExtension =
+  public static final TestWithRoleExtension TEST_WITH_ROLE_EXTENSION =
       new TestWithRoleExtension(new NewContextRoleSetter());
 
   @BeforeEach

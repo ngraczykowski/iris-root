@@ -13,16 +13,14 @@ class StaticSimulationStatisticsService {
   static final long ALL_ALERTS = 10000L;
 
   public EfficiencyDto getEfficiency(UUID simulationId) {
-    return EfficiencyDto
-        .builder()
+    return EfficiencyDto.builder()
         .solvedAlerts(SOLVED_ALERTS)
         .allAlerts(ALL_ALERTS)
         .build();
   }
 
   public EffectivenessDto getEffectiveness(UUID simulationId) {
-    return EffectivenessDto
-        .builder()
+    return EffectivenessDto.builder()
         .aiSolvedAsFalsePositive(AI_SOLVED_AS_FALSE_POSITIVE)
         .analystSolvedAsFalsePositive(ANALYSTS_SOLVED_AS_FALSE_POSITIVE)
         .build();

@@ -20,10 +20,10 @@ class GrpcModelService implements ModelService {
   public SolvingModel getModel(String model) {
     log.trace("Getting SolvingModel by name={}", model);
 
-    return solvingModelStub.getSolvingModel(toGrpcRequest(model));
+    return solvingModelStub.getSolvingModel(toModelRequest(model));
   }
 
-  private static ModelRequest toGrpcRequest(String model) {
+  private static ModelRequest toModelRequest(String model) {
     return ModelRequest.newBuilder()
         .setModel(model)
         .build();

@@ -4,6 +4,7 @@ import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -14,6 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({
@@ -29,7 +31,7 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
   private DatasetQuery datasetQuery;
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
-  void its200_whenDatasetFoundWithoutState() {
+  void its200_whenDatasetFound() {
     given(datasetQuery.get(ID)).willReturn(DATASET_DTO);
     get(GET_DATASET_URL)
         .statusCode(OK.value())
@@ -42,6 +44,13 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
         .body("query", notNullValue())
         .body("createdAt", notNullValue())
         .body("createdBy", is(CREATED_BY));
+  }
+
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
+  void its404_whenDatasetNotFound() {
+    given(datasetQuery.get(ID)).willThrow(DatasetNotFoundException.class);
+    get(GET_DATASET_URL)
+        .statusCode(NOT_FOUND.value());
   }
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
