@@ -29,9 +29,9 @@ dependencies {
 
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base
-  implementation libraries.silenteight_spring_cloud_consul_discovery
 
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_undertow
@@ -40,6 +40,7 @@ dependencies {
   implementation libraries.spring_context_support
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
+  implementation libraries.spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
 
   implementation libraries.commons_lang3

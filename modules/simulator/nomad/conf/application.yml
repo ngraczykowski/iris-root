@@ -10,6 +10,24 @@ spring:
     # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+  #-------------------------------------------------------------------------------------------------
+  # Consul Service Discovery
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+    service-registry:
+      auto-registration:
+        enabled: false
 
 simulator:
   db:
