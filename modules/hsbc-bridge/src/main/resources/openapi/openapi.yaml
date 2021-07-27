@@ -1559,10 +1559,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CasesWithAlertURL'
-    SolvedAlert:
+
+    AlertRecommendation:
       type: object
       properties:
         id:
+          type: string
+        status:
+          $ref: '#/components/schemas/BatchAlertItemStatus'
+        errorMessage:
           type: string
         recommendation:
           type: string
@@ -1573,22 +1578,6 @@ components:
         step_id:
           type: string
         fv_signature:
-          type: string
-        alertMetadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/KeyValue'
-
-    ErrorAlert:
-      type: object
-      properties:
-        id:
-          type: string
-        errorMessage:
-          type: string
-        recommendation:
-          type: string
-        comment:
           type: string
         alertMetadata:
           type: array
@@ -1698,11 +1687,7 @@ components:
         alerts:
           type: array
           items:
-            $ref: '#/components/schemas/SolvedAlert'
-        errorAlerts:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAlert'
+            $ref: '#/components/schemas/AlertRecommendation'
 
     SimpleModelResponse:
       type: object

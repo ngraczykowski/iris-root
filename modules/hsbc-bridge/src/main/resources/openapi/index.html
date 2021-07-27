@@ -766,6 +766,41 @@
     }
   }
 };
+            defs["AlertRecommendation"] = {
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "status" : {
+      "$ref" : "#/components/schemas/BatchAlertItemStatus"
+    },
+    "errorMessage" : {
+      "type" : "string"
+    },
+    "recommendation" : {
+      "type" : "string"
+    },
+    "comment" : {
+      "type" : "string"
+    },
+    "policy_id" : {
+      "type" : "string"
+    },
+    "step_id" : {
+      "type" : "string"
+    },
+    "fv_signature" : {
+      "type" : "string"
+    },
+    "alertMetadata" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/KeyValue"
+      }
+    }
+  }
+};
             defs["Alerts"] = {
   "type" : "object",
   "properties" : {
@@ -854,13 +889,7 @@
     "alerts" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/SolvedAlert"
-      }
-    },
-    "errorAlerts" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/ErrorAlert"
+        "$ref" : "#/components/schemas/AlertRecommendation"
       }
     }
   }
@@ -1895,29 +1924,6 @@
     }
   }
 };
-            defs["ErrorAlert"] = {
-  "type" : "object",
-  "properties" : {
-    "id" : {
-      "type" : "string"
-    },
-    "errorMessage" : {
-      "type" : "string"
-    },
-    "recommendation" : {
-      "type" : "string"
-    },
-    "comment" : {
-      "type" : "string"
-    },
-    "alertMetadata" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/KeyValue"
-      }
-    }
-  }
-};
             defs["ExportModelResponse"] = {
   "type" : "object",
   "properties" : {
@@ -2461,35 +2467,6 @@
     },
     "policyName" : {
       "type" : "string"
-    }
-  }
-};
-            defs["SolvedAlert"] = {
-  "type" : "object",
-  "properties" : {
-    "id" : {
-      "type" : "string"
-    },
-    "recommendation" : {
-      "type" : "string"
-    },
-    "comment" : {
-      "type" : "string"
-    },
-    "policy_id" : {
-      "type" : "string"
-    },
-    "step_id" : {
-      "type" : "string"
-    },
-    "fv_signature" : {
-      "type" : "string"
-    },
-    "alertMetadata" : {
-      "type" : "array",
-      "items" : {
-        "$ref" : "#/components/schemas/KeyValue"
-      }
     }
   }
 };
