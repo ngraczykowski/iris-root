@@ -4,6 +4,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Dataset;
+import com.silenteight.adjudication.api.v1.FilteredAlerts;
+import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
+import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
+import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelsFilter;
 import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 import com.silenteight.simulator.dataset.domain.DatasetState;
@@ -15,8 +19,10 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
 import static java.time.ZoneOffset.UTC;
+import static java.util.Map.of;
 import static java.util.UUID.fromString;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -38,6 +44,7 @@ public final class DatasetFixtures {
   public static final OffsetDateTime CREATED_AT =
       OffsetDateTime.of(2021, 3, 12, 11, 25, 10, 0, UTC);
   public static final String CREATED_BY = "asmith";
+  public static final String COUNTRY_LABEL = "country";
   public static final List<String> COUNTRIES = List.of("PL", "RU", "DE");
 
   public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
@@ -88,4 +95,26 @@ public final class DatasetFixtures {
         .to(to)
         .build();
   }
+
+  private static final AlertTimeRange ALERT_TIME_RANGE =
+      AlertTimeRange.newBuilder()
+          .setStartTime(toTimestamp(FROM))
+          .setEndTime(toTimestamp(TO))
+          .build();
+
+  private static final LabelValues LABEL_VALUES =
+      LabelValues.newBuilder()
+          .addAllValue(COUNTRIES)
+          .build();
+
+  private static final LabelsFilter LABELS_FILTER =
+      LabelsFilter.newBuilder()
+          .putAllLabels(of(COUNTRY_LABEL, LABEL_VALUES))
+          .build();
+
+  public static final FilteredAlerts FILTERED_ALERTS =
+      FilteredAlerts.newBuilder()
+          .setAlertTimeRange(ALERT_TIME_RANGE)
+          .setLabelsFilter(LABELS_FILTER)
+          .build();
 }

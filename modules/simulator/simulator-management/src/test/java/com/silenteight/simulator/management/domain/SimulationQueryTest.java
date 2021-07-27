@@ -29,19 +29,35 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
   @Test
   void shouldListSimulations() {
+    // given
     persistSimulation();
 
+    // when
     List<SimulationDto> result = underTest.list();
 
+    // then
     assertThat(result).hasSize(1);
-    SimulationDto simulationDto = result.get(0);
-    assertThat(simulationDto.getId()).isEqualTo(ID);
-    assertThat(simulationDto.getSimulationName()).isEqualTo(SIMULATION_NAME);
-    assertThat(simulationDto.getState()).isEqualTo(STATE);
-    assertThat(simulationDto.getDatasets()).isEqualTo(DATASETS);
-    assertThat(simulationDto.getModel()).isEqualTo(MODEL);
-    assertThat(simulationDto.getCreatedBy()).isEqualTo(USERNAME);
-    assertThat(simulationDto.getCreatedAt()).isNotNull();
+    assertSimulation(result.get(0));
+  }
+
+  @Test
+  void shouldFindSimulationByModel() {
+    // given
+    persistSimulation();
+
+    // when
+    List<SimulationDto> result = underTest.findByModel(MODEL_NAME);
+
+    // then
+    assertThat(result).hasSize(1);
+    assertSimulation(result.get(0));
+  }
+
+  @Test
+  void shouldThrowIfSimulationsNotFoundByModel() {
+    assertThatThrownBy(() -> underTest.findByModel(MODEL_NAME))
+        .isInstanceOf(InvalidModelNameException.class)
+        .hasMessageContaining("modelName=" + MODEL_NAME);
   }
 
   @Test
@@ -82,13 +98,23 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
   }
 
+  private static void assertSimulation(SimulationDto result) {
+    assertThat(result.getId()).isEqualTo(ID);
+    assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
+    assertThat(result.getState()).isEqualTo(STATE);
+    assertThat(result.getDatasets()).isEqualTo(DATASETS);
+    assertThat(result.getModel()).isEqualTo(MODEL_NAME);
+    assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
+    assertThat(result.getCreatedAt()).isNotNull();
+  }
+
   private static void assertSimulationDetails(SimulationDetailsDto result) {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
     assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
     assertThat(result.getState()).isEqualTo(STATE);
     assertThat(result.getDatasets()).isEqualTo(DATASETS);
-    assertThat(result.getModel()).isEqualTo(MODEL);
+    assertThat(result.getModel()).isEqualTo(MODEL_NAME);
     assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(result.getCreatedAt()).isNotNull();
@@ -103,7 +129,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .state(STATE)
         .createdBy(USERNAME)
         .datasetNames(DATASETS)
-        .modelName(MODEL)
+        .modelName(MODEL_NAME)
         .analysisName(ANALYSIS_NAME)
         .build();
 

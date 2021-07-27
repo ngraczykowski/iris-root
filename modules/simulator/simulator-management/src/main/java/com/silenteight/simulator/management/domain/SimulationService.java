@@ -40,7 +40,7 @@ public class SimulationService {
       repository.save(simulationEntity);
       log.debug("Saved SimulationEntity={}", simulationEntity);
     } catch (DataIntegrityViolationException e) {
-      throw new NonUniqueSimulationException(request.getId());
+      throw new NonUniqueSimulationException(request.getId(), e);
     }
   }
 

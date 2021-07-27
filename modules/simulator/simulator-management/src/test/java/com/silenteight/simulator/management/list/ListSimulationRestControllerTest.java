@@ -30,7 +30,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   private static final String SIMULATIONS_URL = "/v1/simulations";
   private static final String SIMULATIONS_BY_MODEL_NAME_URL =
-      format("/v1/simulations?model=%s", MODEL);
+      format("/v1/simulations?model=%s", MODEL_NAME);
 
   @MockBean
   private ListSimulationsQuery simulationQuery;
@@ -46,7 +46,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].simulationName", is(SIMULATION_NAME))
         .body("[0].state", is(STATE.toString()))
         .body("[0].datasets", hasItems(DATASET_NAME_1))
-        .body("[0].model", is(MODEL))
+        .body("[0].model", is(MODEL_NAME))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
@@ -58,7 +58,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationByModelNameFound() {
-    given(simulationQuery.findByModel(MODEL)).willReturn(of(SIMULATION_DTO));
+    given(simulationQuery.findByModel(MODEL_NAME)).willReturn(of(SIMULATION_DTO));
     get(SIMULATIONS_BY_MODEL_NAME_URL)
         .statusCode(OK.value())
         .body("size()", is(1))
@@ -67,14 +67,14 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].simulationName", is(SIMULATION_NAME))
         .body("[0].state", is(STATE.toString()))
         .body("[0].datasets", hasItems(DATASET_NAME_1))
-        .body("[0].model", is(MODEL))
+        .body("[0].model", is(MODEL_NAME))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its404_whenSimulationByModelNameThrowsInvalidModelNameException() {
-    given(simulationQuery.findByModel(MODEL)).willThrow(InvalidModelNameException.class);
+    given(simulationQuery.findByModel(MODEL_NAME)).willThrow(InvalidModelNameException.class);
     get(SIMULATIONS_BY_MODEL_NAME_URL)
         .statusCode(NOT_FOUND.value());
   }

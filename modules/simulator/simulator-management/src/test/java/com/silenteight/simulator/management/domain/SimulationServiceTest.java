@@ -37,9 +37,23 @@ class SimulationServiceTest extends BaseDataJpaTest {
     underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
 
     // then
-    Optional<SimulationEntity> simulation =
+    Optional<SimulationEntity> simulationOpt =
         simulationRepository.findByAnalysisName(ANALYSIS_NAME);
-    assertThat(simulation).isPresent();
+    assertThat(simulationOpt).isPresent();
+    SimulationEntity simulation = simulationOpt.get();
+    assertThat(simulation.getState()).isEqualTo(RUNNING);
+  }
+
+  @Test
+  void shouldThrowNonUniqueSimulationException() {
+    // given
+    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
+
+    // when + then
+    assertThatThrownBy(
+        () -> underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME))
+        .isInstanceOf(NonUniqueSimulationException.class)
+        .hasMessageContaining("simulationId=" + CREATE_SIMULATION_REQUEST.getId());
   }
 
   @Test
@@ -61,18 +75,6 @@ class SimulationServiceTest extends BaseDataJpaTest {
 
     // then
     assertThat(result).isFalse();
-  }
-
-  @Test
-  void shouldThrowNonUniqueSimulationException() {
-    // given
-    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
-
-    // when + then
-    assertThatThrownBy(
-        () -> underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME))
-        .isInstanceOf(NonUniqueSimulationException.class)
-        .hasMessageContaining("simulationId=" + CREATE_SIMULATION_REQUEST.getId());
   }
 
   @Test
@@ -109,7 +111,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
         .state(state)
         .createdBy(USERNAME)
         .datasetNames(DATASETS)
-        .modelName(MODEL)
+        .modelName(MODEL_NAME)
         .analysisName(ANALYSIS_NAME)
         .build();
 
