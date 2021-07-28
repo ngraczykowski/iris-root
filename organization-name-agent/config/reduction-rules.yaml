@@ -3,7 +3,15 @@ rules:
     threshold: 1
     solution: MATCH
 
-  - feature: fuzzy
+  - feature: token_inclusion
+    threshold: 1
+    solution: MATCH
+
+  - feature: partial_fuzzy
+    threshold: 1
+    solution: MATCH
+
+  - feature: first_token
     threshold: 1
     solution: MATCH
 
@@ -12,19 +20,11 @@ rules:
     solution: MATCH
     solution_probability: 0.8
 
-  - source: scb-logistic-regression.model
+  - source: model/tsaas-logistic-regression-2021.07.12.bin
     solutions:
-      - solution: MATCH
-        label: 0
-        threshold: 0.85
       - solution: NO_MATCH
-        label: 1
-        threshold: 0.85
-    no_data_values:
-      fuzzy_on_suffix: 0.7211805175038047
-      legal_terms: 0.6611847338445395
-      country: 0.9570552147239264
-      phonetics_on_base: 0.46824247219388504
-      phonetics: 0.5356983104780098
-      potential_subsidiary: 1.0
-      token_inclusion: 0.4774873524451939
+        label: NO_MATCH
+        threshold: 0.9
+      - solution: MATCH
+        label: MATCH
+        threshold: 0
