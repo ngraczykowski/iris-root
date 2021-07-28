@@ -518,3 +518,59 @@ databaseChangeLog:
             tableName: hsbc_bridge_alert
             columnName: external_id
             newDataType: varchar(120)
+
+  - changeSet:
+      id: 1.0.0-16
+      author: bmartofel
+      changes:
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: alert
+            indexName: idx_bridge_recommendation_alert
+            tableName: hsbc_bridge_recommendation
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: name
+            indexName: idx_bridge_recommendation_name
+            tableName: hsbc_bridge_recommendation
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: name
+            indexName: idx_bridge_match_name
+            tableName: hsbc_bridge_match
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: analysis_id
+            indexName: idx_bridge_bulk_analysis_id
+            tableName: hsbc_bridge_bulk
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: status
+            indexName: idx_bridge_bulk_status
+            tableName: hsbc_bridge_bulk
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: name
+            indexName: idx_bridge_analysis_name
+            tableName: hsbc_bridge_analysis
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: timeout_at
+              - column:
+                  name: status
+            indexName: idx_bridge_analysis_timeout_status
+            tableName: hsbc_bridge_analysis

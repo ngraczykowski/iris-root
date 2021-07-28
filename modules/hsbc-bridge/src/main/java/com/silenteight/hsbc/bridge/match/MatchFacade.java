@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,10 +23,6 @@ public class MatchFacade {
   private final MatchDataMapper matchDataMapper;
   private final MatchRepository matchRepository;
   private final ApplicationEventPublisher eventPublisher;
-
-  public List<MatchComposite> getMatchesByAlertId(long alertId) {
-    return toMatchComposites(matchRepository.findMatchEntitiesByAlertId(alertId));
-  }
 
   @Transactional
   public void prepareAndSaveMatches(long alertId, List<Match> matches) {
@@ -86,28 +83,29 @@ public class MatchFacade {
     }
   }
 
-  private List<MatchComposite> toMatchComposites(List<MatchEntity> matchEntities) {
-    return matchEntities.stream()
+  @Transactional(readOnly = true)
+  public List<MatchComposite> getMatches(@NonNull List<String> names) {
+    var foundMatchEntities = matchRepository.findByNameIn(names);
+
+    verifyResults(foundMatchEntities, names);
+
+    return foundMatchEntities.stream()
         .map(this::toMatchComposite)
         .collect(Collectors.toList());
   }
 
-  @Transactional(readOnly = true)
-  public List<MatchComposite> getMatches(@NonNull List<String> names) {
-    return names.stream()
-        .map(this::getMatch)
-        .collect(Collectors.toList());
-  }
+  private void verifyResults(Collection<MatchEntity> matchEntities, List<String> names) {
+    if (matchEntities.size() != names.size()) {
+      var foundNames = matchEntities.stream()
+          .map(MatchEntity::getName)
+          .collect(Collectors.toList());
 
-  private MatchComposite getMatch(String name) {
-    var matchResult = matchRepository.findByName(name);
-
-    if (matchResult.isEmpty()) {
-      throw new MatchNotFoundException(name);
+      names.forEach(name -> {
+        if (!foundNames.contains(name)) {
+          throw new MatchNotFoundException(name);
+        }
+      });
     }
-
-    var matchEntity = matchResult.get();
-    return toMatchComposite(matchEntity);
   }
 
   public List<MatchComposite> getMatchesByAlertNames(@NonNull List<String> alerts) {

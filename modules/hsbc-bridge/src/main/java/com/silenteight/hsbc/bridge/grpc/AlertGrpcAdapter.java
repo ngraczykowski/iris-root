@@ -31,7 +31,7 @@ public class AlertGrpcAdapter implements AlertServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
-    log.info("NOMAD, batchCreateAlerts alertIds={}", alertIds);
+    log.info("batchCreateAlerts alertIds={}", alertIds);
 
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alertIds.stream()
@@ -43,7 +43,7 @@ public class AlertGrpcAdapter implements AlertServiceClient {
     var registeredAlerts = response.getAlertsList();
 
     //TODO remove it once root cause of the issue is found
-    log.info("NOMAD, Registered alert names={}",
+    log.info("registered alert names={}",
         registeredAlerts.stream().map(Alert::getName).collect(Collectors.toList()));
 
     return BatchCreateAlertsResponseDto.builder()
@@ -67,8 +67,8 @@ public class AlertGrpcAdapter implements AlertServiceClient {
     var registeredMatches = response.getMatchesList();
 
     //TODO remove it once root cause of the issue is found
-    log.info("NOMAD, Create matches for alert={}", request.getAlert());
-    log.info("NOMAD, Registered matches names={}",
+    log.info("Create matches for alert={}", request.getAlert());
+    log.info("Registered matches names={}",
         registeredMatches.stream().map(Match::getName).collect(Collectors.toList()));
 
     return BatchCreateAlertMatchesResponseDto.builder()

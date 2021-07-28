@@ -32,7 +32,7 @@ class DatasetGrpcAdapter implements DatasetServiceClient {
             .build())
         .build();
 
-    log.info("NOMAD, create dataset with alerts={}", alerts);
+    log.info("Create dataset with alerts={}", alerts);
 
     var response = datasetServiceBlockingStub
         .withDeadlineAfter(deadlineInSeconds, SECONDS)

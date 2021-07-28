@@ -28,8 +28,6 @@ class AlertService {
   private final ApplicationEventPublisher eventPublisher;
 
   Collection<String> registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
-    log.info("NOMAD, registerAlerts = {}", alertMatchIds.keySet());
-
     var alerts = registerAlerts(alertMatchIds.keySet());
     var matches = registerMatches(alertMatchIds, alerts);
 

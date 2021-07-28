@@ -33,8 +33,8 @@ class BulkProcessor {
   private final AlertSender alertSender;
   private final BulkRepository bulkRepository;
 
-  @Scheduled(fixedDelay = 3 * 1000, initialDelay = 2000)
-  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT2S", lockAtMostFor = "PT4M")
+  @Scheduled(fixedDelay = 2 * 1000, initialDelay = 2000)
+  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT1S", lockAtMostFor = "PT2M")
   @Transactional
   public void processPreProcessedBulks() {
     LockAssert.assertLocked();
@@ -61,18 +61,13 @@ class BulkProcessor {
   }
 
   private void processSolvingBulk(Bulk bulk) {
-    log.info("NOMAD, number of valid alerts within bulk: {}", bulk.getValidAlerts().size());
-
     var compositeById = bulk.getValidAlerts()
         .stream()
         .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite, (e, n) -> e));
 
-    log.info("NOMAD, number of composite by id: {}", compositeById.size());
-
     var analysisId = adjudicationFacade.registerAlertWithMatchesAndAnalysis(compositeById);
 
     bulk.setAnalysisId(analysisId);
-
     bulk.setStatus(PROCESSING);
   }
 

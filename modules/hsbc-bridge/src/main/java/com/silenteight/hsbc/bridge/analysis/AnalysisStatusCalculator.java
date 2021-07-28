@@ -50,7 +50,7 @@ class AnalysisStatusCalculator {
   private Optional<GetAnalysisResponseDto> safeGetAnalysisResults(String name) {
     try {
       var analysisResult = analysisServiceClient.getAnalysis(name);
-      log.info("NOMAD, analysis={}, pendingAlerts={}", name, analysisResult.getPendingAlerts());
+      log.info("GetAnalysisRequest, analysis={}, pendingAlerts={}", name, analysisResult.getPendingAlerts());
       return of(analysisResult);
     } catch (Exception ex) {
       log.error("Exception on get analysis", ex);

@@ -6,8 +6,6 @@ import com.silenteight.hsbc.bridge.json.ObjectConverter.ObjectConversionExceptio
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
-import static java.util.Optional.of
-
 class MatchFacadeSpec extends Specification {
 
   def objectConverter = Mock(ObjectConverter)
@@ -18,6 +16,18 @@ class MatchFacadeSpec extends Specification {
 
   def fixtures = new Fixtures()
 
+  def 'should throw exception when try to get non existing match'() {
+    given:
+    def someName = fixtures.someName
+
+    when:
+    underTest.getMatches([someName])
+
+    then:
+    thrown(MatchNotFoundException)
+    1 * repository.findByNameIn([someName]) >> []
+  }
+
   def 'should throw exception when try to get archived match'() {
     given:
     def someName = fixtures.someName
@@ -27,7 +37,7 @@ class MatchFacadeSpec extends Specification {
 
     then:
     thrown(MatchDataNoLongerAvailableException)
-    1 * repository.findByName(someName) >> of(fixtures.archivedMatch)
+    1 * repository.findByNameIn([someName]) >> [fixtures.archivedMatch]
   }
 
   def 'should throw exception when try to get match with non-convertible content'() {
@@ -39,7 +49,7 @@ class MatchFacadeSpec extends Specification {
 
     then:
     thrown(MatchDataNoLongerAvailableException)
-    1 * repository.findByName(someName) >> of(fixtures.match)
+    1 * repository.findByNameIn([someName]) >> [fixtures.match]
     1 * objectConverter.convert(fixtures.somePayload, MatchRawData.class) >>
         {throw new ObjectConversionException(null)}
   }
@@ -53,7 +63,7 @@ class MatchFacadeSpec extends Specification {
 
     then:
     thrown(MatchNotFoundException)
-    1 * repository.findByName(someName) >> Optional.empty()
+    1 * repository.findByNameIn([someName]) >> []
   }
 
   def 'should get matches by names'() {
@@ -70,7 +80,7 @@ class MatchFacadeSpec extends Specification {
       matchData == fixtures.someMatchData
     }
 
-    1 * repository.findByName(someName) >> of(fixtures.match)
+    1 * repository.findByNameIn([someName]) >> [fixtures.match]
     1 * objectConverter.convert(fixtures.somePayload, MatchRawData.class) >> fixtures.someMatchData
   }
 

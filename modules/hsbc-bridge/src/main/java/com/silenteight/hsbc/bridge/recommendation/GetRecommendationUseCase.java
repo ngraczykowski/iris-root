@@ -25,6 +25,7 @@ public class GetRecommendationUseCase {
 
   public RecommendationWithMetadataDto getRecommendation(
       @NonNull GetRecommendationRequest request) {
+    //TODO - it could be retrieved once using findByAlertIn
     var findResult = repository.findByAlert(request.getAlert());
 
     if (findResult.isEmpty()) {
