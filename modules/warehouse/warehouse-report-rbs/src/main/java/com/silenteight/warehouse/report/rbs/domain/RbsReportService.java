@@ -2,11 +2,16 @@ package com.silenteight.warehouse.report.rbs.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.report.remove.ReportsRemoval;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
+import java.time.OffsetDateTime;
+
 @RequiredArgsConstructor
-public class RbsReportService {
+@Slf4j
+public class RbsReportService implements ReportsRemoval {
 
   @NonNull
   private final RbsReportRepository repository;
@@ -35,4 +40,12 @@ public class RbsReportService {
     asyncReportGenerationService.generateReport(savedReport.getId(), analysisId);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
+
+  @Override
+  public long removeOlderThan(OffsetDateTime dayToRemoveReports) {
+    long numberOfRemovedReports = repository.deleteByCreatedAtBefore(dayToRemoveReports);
+    log.info("Number of removed RB Scorer reports reportsCount={}", numberOfRemovedReports);
+    return numberOfRemovedReports;
+  }
+
 }

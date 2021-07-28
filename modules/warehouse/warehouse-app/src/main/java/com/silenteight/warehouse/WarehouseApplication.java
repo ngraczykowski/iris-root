@@ -22,6 +22,7 @@ import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.production.ProductionReportingModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
+import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.sm.SimulationMetricsReportModule;
@@ -53,6 +54,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ManagementModule.class,
     ProductionReportingModule.class,
     ReportingModule.class,
+    ReportsRemovalModule.class,
     RbsReportModule.class,
     QueryAlertModule.class,
     SamplingModule.class,

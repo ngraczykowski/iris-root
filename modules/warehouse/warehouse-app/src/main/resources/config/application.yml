@@ -48,6 +48,9 @@ warehouse:
     synchronization:
       production-tenant: ${warehouse.environment.prefix}_production_periodic
       cron: "0 */1 * * * ?"
+    removal:
+      cron: "0 0 1 * * ?"
+      duration-time: P1D
     simulation:
       master-tenant: ${warehouse.environment.prefix}_simulation_master
   opendistro:
