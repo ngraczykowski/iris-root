@@ -141,6 +141,10 @@ spring:
       check-template-location: false
 
   cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
     service-registry:
       enabled: ${serp.consul.enabled}
       auto-registration:
