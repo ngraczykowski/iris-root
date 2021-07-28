@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Getter
@@ -32,7 +32,7 @@ public enum ReportDefinition {
   public static List<ReportDefinitionDto> toReportsDefinitionDto(String analysisId) {
     return stream(ReportDefinition.values())
         .map(reportDefinition -> reportDefinition.toReportDefinitionDto(analysisId))
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private ReportDefinitionDto toReportDefinitionDto(String analysisId) {
