@@ -1,9 +1,11 @@
 package com.silenteight.serp.governance;
 
+import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
+import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
+import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
+import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
-import com.silenteight.sep.base.common.app.SerpApplicationContextCallback;
-import com.silenteight.sep.base.common.app.SerpApplicationTemplate;
 import com.silenteight.serp.governance.agent.AgentModule;
 import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
@@ -19,10 +21,16 @@ import com.silenteight.serp.governance.solutiondiscrepancy.SolutionDiscrepancyMo
 import com.silenteight.serp.governance.strategy.StrategyModule;
 import com.silenteight.serp.governance.vector.FeatureVectorModule;
 
+import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
+
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = {
@@ -51,9 +59,48 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 public class GovernanceApplication {
 
   public static void main(String[] args) {
-    new SerpApplicationTemplate("governance", args, GovernanceApplication.class)
-        .profiles("database", "rabbitmq", "messaging")
-        .contextCallback(new SerpApplicationContextCallback())
-        .runAndExit();
+    setUpSystemProperties();
+    setUpSecuritySystemProperties();
+
+    new SpringApplicationTemplate(args, GovernanceApplication.class)
+        .contextCallback(new DefaultSpringApplicationContextCallback())
+        .runAndExit(new Configurer());
+  }
+
+  private static void setUpSystemProperties() {
+    setProperty("java.security.egd", "file:/dev/./urandom");
+  }
+
+  private static void setUpSecuritySystemProperties() {
+    setSystemPropertyFromEnvironment("javax.net.ssl.trustStore", "TRUSTSTORE_PATH");
+    setSystemPropertyFromEnvironment("javax.net.ssl.trustStorePassword", "TRUSTSTORE_PASSWORD");
+    setSystemPropertyFromEnvironment("javax.net.ssl.trustStoreType", "TRUSTSTORE_TYPE");
+    setSystemPropertyFromEnvironment("javax.net.ssl.keyStore", "KEYSTORE_PATH");
+    setSystemPropertyFromEnvironment("javax.net.ssl.keyStorePassword", "KEYSTORE_PASSWORD");
+    setSystemPropertyFromEnvironment("javax.net.ssl.keyStoreType", "KEYSTORE_TYPE");
+  }
+
+  private static void setSystemPropertyFromEnvironment(
+      String property, String environmentVariable) {
+
+    var environmentVariableValue = System.getenv(environmentVariable);
+
+    if (getProperty(property) == null && isNotBlank(environmentVariableValue))
+      System.setProperty(property, environmentVariableValue);
+  }
+
+  private static class Configurer implements ApplicationBuilderConfigurer {
+
+    @Override
+    public ConfigurableApplicationBuilder configure(ConfigurableApplicationBuilder builder) {
+      return builder
+          .bootstrapProperties("spring.application.name=governance");
+    }
+
+    @Override
+    public SpringApplicationBuilder customize(SpringApplicationBuilder springBuilder) {
+      return springBuilder
+          .bannerMode(Mode.OFF);
+    }
   }
 }
