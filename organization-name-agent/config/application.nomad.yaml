@@ -1,0 +1,27 @@
+grpc:
+  client:
+    data-source:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
+      timeout: 10
+
+rabbitmq:
+  addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+  virtualhost: /{{ env "NOMAD_NAMESPACE" }}
+
+consul:
+  host: localhost
+  port: 8500
+
+agent:
+  processes: 2
+  messaging:
+    agent-exchange:
+      request:
+        queue-name: 'agent.companyname-requests'
+
+      response:
+        exchange: 'agent.response'
+

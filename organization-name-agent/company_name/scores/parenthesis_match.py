@@ -14,7 +14,7 @@ def parenthesis_score(first: NameInformation, second: NameInformation) -> Score:
         status=Score.ScoreStatus.OK,
         value=float(first_base_appeared or second_base_appeared),
         compared=(
-            (second.base.original_name, ) if second_base_appeared else (),
-            (first.base.original_name, ) if first_base_appeared else (),
+            (second.base.original_name,) if second_base_appeared else (),
+            (first.base.original_name,) if first_base_appeared else (),
         ),
     )

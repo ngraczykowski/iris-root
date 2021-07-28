@@ -1,11 +1,11 @@
 import dataclasses
 import string
-from typing import Tuple, Generator, Sequence
+from typing import Generator, Sequence, Tuple
 
 from company_name.datasources.special_words import WEAK_WORDS
 from company_name.names.name_information import NameInformation, Token, TokensSequence
-from company_name.utils.clear_name import clear_name, POSSIBLE_SEPARATORS
 from company_name.scores.score import Score
+from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 
 
 @dataclasses.dataclass

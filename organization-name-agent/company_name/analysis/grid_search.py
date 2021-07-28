@@ -1,15 +1,12 @@
 import collections
-import itertools
-import random
-import multiprocessing
 import csv
+import itertools
+import multiprocessing
+import random
+from typing import Any, List, Tuple
 
 import numpy
-
-from typing import List, Tuple, Any
-
 from compare import score
-
 
 scores_keys = {
     "abbreviation",

@@ -2,7 +2,6 @@ from typing import Mapping
 
 from company_name.names.name_information import NameInformation
 from company_name.names.parse.parse import parse_name
-
 from company_name.scores.abbreviation import abbreviation_score
 from company_name.scores.blacklist import blacklist_score
 from company_name.scores.country import country_score

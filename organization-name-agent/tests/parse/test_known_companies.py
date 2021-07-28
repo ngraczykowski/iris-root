@@ -26,7 +26,7 @@ from company_name.names.parse.parse import parse_name
             "PREDUZECE KANEGO DOO KRAGUJEVAC",
             {"base": "PREDUZECE KANEGO", "legal": "DOO", "other": "KRAGUJEVAC"},
         ),
-        ("\"S & T COMPANY\" d.o.o.", {"base": "\"S & T", "legal": "COMPANY\" d.o.o."}),
+        ('"S & T COMPANY" d.o.o.', {"base": '"S & T', "legal": 'COMPANY" d.o.o.'}),
         (
             "Corporation of The Town of Whitby, The ",
             {"base": "Corporation of The Town of Whitby"},

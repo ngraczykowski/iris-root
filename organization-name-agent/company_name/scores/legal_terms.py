@@ -1,5 +1,5 @@
 import statistics
-from typing import Sequence, Set, Generator
+from typing import Generator, Sequence, Set
 
 from company_name.datasources.legal_terms import LEGAL_TERMS, LegalTerm
 from company_name.names.name_information import TokensSequence

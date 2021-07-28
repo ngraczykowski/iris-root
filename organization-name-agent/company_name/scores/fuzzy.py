@@ -1,6 +1,6 @@
 from typing import Tuple
 
-import fuzzywuzzy.fuzz
+import rapidfuzz.fuzz as fuzz
 
 from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
@@ -19,7 +19,7 @@ def fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
         return Score()
 
     return Score(
-        value=fuzzywuzzy.fuzz.ratio(*_without_whitespaces(first, second)) / 100,
+        value=fuzz.ratio(*_without_whitespaces(first, second)) / 100,
         compared=_to_compared(first, second),
     )
 
@@ -29,7 +29,7 @@ def partial_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
         return Score()
 
     return Score(
-        value=fuzzywuzzy.fuzz.partial_ratio(*_without_whitespaces(first, second)) / 100,
+        value=fuzz.partial_ratio(*_without_whitespaces(first, second)) / 100,
         compared=_to_compared(first, second),
     )
 
@@ -39,6 +39,6 @@ def sorted_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
         return Score()
 
     return Score(
-        value=fuzzywuzzy.fuzz.token_sort_ratio(first, second) / 100,
+        value=fuzz.token_sort_ratio(str(first), str(second)) / 100,
         compared=_to_compared(first, second),
     )

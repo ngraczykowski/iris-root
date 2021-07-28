@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.compare import compare, Score
+from company_name.compare import Score, compare
 
 
 @pytest.mark.parametrize(

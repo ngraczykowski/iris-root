@@ -1,5 +1,6 @@
 import pytest
-from company_name import CompanyNameAgent, Result, Solution, Reason
+
+from company_name import CompanyNameAgent, Reason, Result, Solution
 
 
 @pytest.mark.parametrize(

@@ -1,4 +1,5 @@
 import pytest
+
 from company_name.compare import parse_name
 
 

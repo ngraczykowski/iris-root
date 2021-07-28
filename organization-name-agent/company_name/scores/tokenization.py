@@ -1,5 +1,5 @@
 import collections
-from typing import List, Iterable, Counter
+from typing import Counter, Iterable, List
 
 from company_name.datasources.special_words import WEAK_WORDS
 from company_name.names.name_information import TokensSequence

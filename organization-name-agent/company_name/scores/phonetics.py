@@ -1,8 +1,8 @@
 import itertools
 from typing import Tuple
 
-import fuzzywuzzy.fuzz
 import phonetics
+import rapidfuzz.fuzz as fuzz
 
 from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
@@ -16,13 +16,13 @@ def _compared(
 ) -> Tuple[Tuple[str, ...], Tuple[str, ...]]:
     return (
         (f"{first_phonetic} ({first_name.original_name})",),
-        (f"{second_phonetic} ({second_name.original_name})",)
+        (f"{second_phonetic} ({second_name.original_name})",),
     )
 
 
 def phonetic_score(first_name: TokensSequence, second_name: TokensSequence) -> Score:
     scores = [
-        (fuzzywuzzy.fuzz.ratio(n1, n2) / 100, (n1, n2))
+        (fuzz.ratio(n1, n2) / 100, (n1, n2))
         for n1, n2 in itertools.product(
             phonetics.dmetaphone(first_name.original_name),
             phonetics.dmetaphone(second_name.original_name),

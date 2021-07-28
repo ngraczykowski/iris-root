@@ -1,6 +1,7 @@
 import dataclasses
-from company_name.names.tokens_sequence import TokensSequence
+
 from company_name.names.token import Token
+from company_name.names.tokens_sequence import TokensSequence
 
 
 @dataclasses.dataclass

@@ -1,6 +1,6 @@
+from company_name.datasources.legal_terms import LEGAL_TERMS
 from company_name.names.name_information import NameInformation
 from company_name.scores.score import Score
-from company_name.datasources.legal_terms import LEGAL_TERMS
 
 
 def _potential_subsidiary_parent(name: NameInformation) -> bool:

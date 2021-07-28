@@ -5,7 +5,7 @@ def test_potential_subsidiary():
     result = compare("XBS Group", "XBS")
     print(result)
     assert result["potential_subsidiary"].value == 1
-    assert result["potential_subsidiary"].compared == (("XBS Group", ), ())
+    assert result["potential_subsidiary"].compared == (("XBS Group",), ())
 
 
 def test_not_potential_subsidiary():

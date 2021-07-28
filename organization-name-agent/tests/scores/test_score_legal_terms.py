@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.compare import compare, Score
+from company_name.compare import Score, compare
 
 
 def _get_legal_terms_result(first_legal: str, second_legal: str) -> float:

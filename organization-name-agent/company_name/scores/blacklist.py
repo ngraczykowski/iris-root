@@ -4,11 +4,8 @@ from typing import List
 from company_name.names.name_information import NameInformation
 from company_name.scores.score import Score
 
-
 BLACKLIST = {"gazprom", "vtb"}
-BLACKLIST_REGEX = re.compile(
-    r"\b(" + "|".join(BLACKLIST) + r")\b", re.IGNORECASE
-)
+BLACKLIST_REGEX = re.compile(r"\b(" + "|".join(BLACKLIST) + r")\b", re.IGNORECASE)
 
 
 def _blacklisted(name: str) -> List[str]:

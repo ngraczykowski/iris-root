@@ -3,11 +3,15 @@ import json
 import pathlib
 from typing import Set
 
-from company_name.utils.clear_name import clear_name, divide
-from company_name.names.name_information import TokensSequence
-from company_name.datasources.term_sources import TermSources
+import importlib_resources
 
-COUNTRIES_PATH = pathlib.Path(__file__).parent / "countries.json"
+from company_name.datasources.term_sources import TermSources
+from company_name.names.name_information import TokensSequence
+from company_name.utils.clear_name import clear_name, divide
+
+COUNTRIES_PATH = (
+    importlib_resources.files("company_name") / "resources" / "countries.json"
+)
 
 
 class Countries:

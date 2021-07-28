@@ -2,7 +2,7 @@ import dataclasses
 
 import pytest
 
-from company_name import compare, Score
+from company_name import Score, compare
 
 
 @dataclasses.dataclass
@@ -156,7 +156,13 @@ ANY_COMPARED = (AnyValue(), AnyValue())
                 ),
                 "legal_terms": Score(
                     value=EstimatedValue(lower=0.8, upper=0.9),
-                    compared=(("GROUP", "CORPORATION",), ("Group", "Corp", "Ltd")),
+                    compared=(
+                        (
+                            "GROUP",
+                            "CORPORATION",
+                        ),
+                        ("Group", "Corp", "Ltd"),
+                    ),
                 ),
             },
         ),

@@ -1,13 +1,13 @@
 import dataclasses
 import pathlib
 import pickle
-from typing import Any, Sequence, Optional, Mapping, Union, Tuple
+from typing import Any, Mapping, Optional, Sequence, Tuple, Union
 
 import sklearn  # noqa: F401
 import yaml
 
-from company_name.solution.solution import Solution
 from company_name.scores.score import Score
+from company_name.solution.solution import Solution
 
 SolutionWithProbability = Tuple[Solution, float]
 

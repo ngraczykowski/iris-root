@@ -1,0 +1,66 @@
+@Library('pipeline-shared-library') _
+def utils = new com.silenteight.jenkins.ci.Utils()
+def jenkins = new com.silenteight.jenkins.ci.Jenkins()
+
+pipeline {
+    agent none
+    environment {
+        PYPI_URL = credentials('pypi-readonly-url')
+    }
+
+    stages {
+        stage('Prepare python image') {
+            agent any
+            steps {
+                sh 'docker pull python:3.7'
+            }
+        }
+        stage('Prepare') {
+            agent {
+                docker {
+                    image 'python:3.7'
+                }
+            }
+            stages {
+                stage('Build') {
+                    steps {
+                        sh './scripts/bootstrap.sh --index-url $PYPI_URL'
+                        sh './scripts/prepare_artifacts.sh --index-url $PYPI_URL'
+                    }
+                }
+                stage('Test') {
+                    steps {
+                        sh 'rm -rf .tox'
+                        sh './scripts/test.sh --index-url $PYPI_URL'
+                    }
+                }
+            }
+            post {
+                always {
+                    junit '.tox/*.xml'
+                    archiveArtifacts artifacts: 'dist/*', fingerprint: true
+                }
+                success {
+                    stash includes: 'dist/*', name: 'artifacts'
+                }
+            }
+        }
+
+        stage('Deploy on Nomad Dev'){
+            agent {
+                label 'nomad'
+            }
+            steps {
+                unstash 'artifacts'
+                script {
+                    if (utils.getGitBranch() == 'master') {
+                        sh './nomad/deploy.sh'
+                    } else {
+                        echo 'This is not a release branch'
+                    }
+                }
+            }
+       }
+    }
+}
+

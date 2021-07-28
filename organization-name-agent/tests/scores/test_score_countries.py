@@ -20,8 +20,8 @@ def test_matching_countries(first, first_country, second, second_country):
     print(repr(first), repr(second))
     scored = compare(first, second)
     print(scored)
-    assert scored['country'].value == 1
-    assert scored['country'].compared == ((first_country,), (second_country,))
+    assert scored["country"].value == 1
+    assert scored["country"].compared == ((first_country,), (second_country,))
 
 
 @pytest.mark.parametrize(
@@ -32,8 +32,8 @@ def test_different_countries(first, first_country, second, second_country):
     print(repr(first), repr(second))
     scored = compare(first, second)
     print(scored)
-    assert scored['country'].value == 0
-    assert scored['country'].compared == ((first_country,), (second_country,))
+    assert scored["country"].value == 0
+    assert scored["country"].compared == ((first_country,), (second_country,))
 
 
 @pytest.mark.parametrize(
@@ -47,4 +47,4 @@ def test_no_countries(first, second):
     print(repr(first), repr(second))
     scored = compare(first, second)
     print(scored)
-    assert not scored['country'].value
+    assert not scored["country"].value

@@ -1,13 +1,11 @@
 from typing import Tuple
 
-from company_name.datasources.legal_terms import LEGAL_TERMS
-from company_name.datasources.countries import COUNTRIES
 from company_name.datasources.common_prefixes import COMMON_PREFIXES
 from company_name.datasources.common_suffixes import COMMON_SUFFIXES
-
-from company_name.names.name_information import TokensSequence
+from company_name.datasources.countries import COUNTRIES
+from company_name.datasources.legal_terms import LEGAL_TERMS
 from company_name.datasources.term_sources import TermSources
-
+from company_name.names.name_information import TokensSequence
 from company_name.names.parse.cut_terms import cut_terms, cut_until_any_term_matches
 
 
@@ -29,7 +27,9 @@ def extract_legal_terms(
 def extract_common(
     name: TokensSequence,
 ) -> Tuple[TokensSequence, TokensSequence, TokensSequence]:
-    without_prefixes, common_prefixes = cut_terms(name, COMMON_PREFIXES, from_start=True)
+    without_prefixes, common_prefixes = cut_terms(
+        name, COMMON_PREFIXES, from_start=True
+    )
     if not without_prefixes:
         without_prefixes, common_prefixes = name, TokensSequence()
 

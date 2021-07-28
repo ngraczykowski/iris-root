@@ -1,10 +1,9 @@
-from typing import Tuple, Sequence, Union, Optional, Dict
-
+from typing import Dict, Optional, Sequence, Tuple, Union
 
 from company_name.datasources.legal_terms import LEGAL_TERMS
+from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.parse.cut_terms import cut_terms
 from company_name.names.parse.extract_information import extract_countries, extract_weak
-from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.tokens_sequence import TokensSequence
 
 ParenthesisInformation = Union[str, TokensSequence]

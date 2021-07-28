@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.compare import compare, Score
+from company_name.compare import Score, compare
 
 
 @pytest.mark.parametrize(
@@ -26,10 +26,7 @@ def test_first_token(first, second):
             "Yingchuang (Qingdao) Interconnection Intelligence Co., Ltd.",
             "Interconnection Intelligence Yingchuang Co., Ltd.",
         ),
-        (
-            "The Associated Press",
-            "The Athlete Agency"
-        )
+        ("The Associated Press", "The Athlete Agency"),
     ),
 )
 def test_different_first_token(first, second):

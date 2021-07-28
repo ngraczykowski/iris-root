@@ -1,8 +1,7 @@
 import numpy
 import pandas
-from sklearn.metrics import recall_score, precision_score, accuracy_score
 from sklearn.linear_model import LogisticRegression
-
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 df = pandas.read_csv("../data/company_pairs_with_results.csv")
 

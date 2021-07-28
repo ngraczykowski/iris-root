@@ -1,20 +1,16 @@
 import re
-from typing import Tuple, Dict, Sequence
-
-from company_name.utils.clear_name import clear_name
+from typing import Dict, Sequence, Tuple
 
 from company_name.datasources.special_words import JOINING_WORDS
-
 from company_name.names.name_information import NameInformation, Token, TokensSequence
-from company_name.names.parse.parse_parentheses import (
-    detect_parentheses_information,
-)
+from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.parse.extract_information import (
     extract_common,
     extract_legal_terms,
     extract_weak,
 )
-from company_name.names.parse.create_tokens import create_tokens
+from company_name.names.parse.parse_parentheses import detect_parentheses_information
+from company_name.utils.clear_name import clear_name
 
 
 def _fix_expression_divided(
@@ -64,7 +60,9 @@ def _detect_name_parts(name: str) -> Dict[str, TokensSequence]:
     if not name_without_weak:
         name_without_weak, weak_words_at_the_end = name_tokens, TokensSequence()
     name_without_legal, legal, other = extract_legal_terms(name_without_weak)
-    common_prefixes, name_without_common, common_suffixes = extract_common(name_without_legal)
+    common_prefixes, name_without_common, common_suffixes = extract_common(
+        name_without_legal
+    )
 
     information = _fix_expression_divided(
         (

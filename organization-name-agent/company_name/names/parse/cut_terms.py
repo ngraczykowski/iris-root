@@ -1,8 +1,8 @@
-from typing import Tuple, Optional, Generator, Sequence
-from company_name.datasources.special_words import WEAK_WORDS
+from typing import Generator, Optional, Sequence, Tuple
 
-from company_name.names.name_information import Token, TokensSequence
+from company_name.datasources.special_words import WEAK_WORDS
 from company_name.datasources.term_sources import TermSources
+from company_name.names.name_information import Token, TokensSequence
 
 
 def _divide_name_for_possible_terms(
@@ -57,9 +57,11 @@ def cut_terms(
     if with_weak_words:
         terms_to_cut = terms_to_cut + TermSources({(w,) for w in WEAK_WORDS})
 
-    name, saved_word = next(
-        _divide_name_for_possible_terms(name, 1, from_start=not from_start)
-    ) if saving_at_least_one_word else (name, TokensSequence())
+    name, saved_word = (
+        next(_divide_name_for_possible_terms(name, 1, from_start=not from_start))
+        if saving_at_least_one_word
+        else (name, TokensSequence())
+    )
 
     name_left, found_terms = _cut_all_matching(
         name, terms_to_cut, from_start=from_start

@@ -1,5 +1,6 @@
 import pytest
-from company_name.compare import compare, Score
+
+from company_name.compare import Score, compare
 
 
 def _get_single_token(score):

@@ -1,6 +1,6 @@
 import dataclasses
 import enum
-from typing import Tuple, Any
+from typing import Any, Tuple
 
 
 @dataclasses.dataclass

@@ -1,5 +1,5 @@
 import collections
-from typing import Tuple, Sequence, Any
+from typing import Any, Sequence, Tuple
 
 
 class TokensSequence(collections.UserList):

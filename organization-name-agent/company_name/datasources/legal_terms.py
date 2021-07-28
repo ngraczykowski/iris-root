@@ -1,12 +1,16 @@
 import itertools
 import json
 import pathlib
-from typing import Sequence, Set, Tuple, NamedTuple, Dict, List, Any
+from typing import Any, Dict, List, NamedTuple, Sequence, Set, Tuple
 
-from company_name.utils.clear_name import clear_name, divide
+import importlib_resources
+
 from company_name.datasources.term_sources import TermSources
+from company_name.utils.clear_name import clear_name, divide
 
-LEGAL_TERMS_PATH = pathlib.Path(__file__).parent / "legal_terms.json"
+LEGAL_TERMS_PATH = (
+    importlib_resources.files("company_name") / "resources" / "legal_terms.json"
+)
 
 
 class LegalTermJsonEntity(NamedTuple):

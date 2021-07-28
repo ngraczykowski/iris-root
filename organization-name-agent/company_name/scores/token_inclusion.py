@@ -1,7 +1,7 @@
 import itertools
 from typing import Sequence
 
-from company_name.names.name_information import NameInformation, TokensSequence, Token
+from company_name.names.name_information import NameInformation, Token, TokensSequence
 from company_name.scores.score import Score
 from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 
@@ -9,17 +9,24 @@ from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 def _tokens(name: NameInformation) -> Sequence[TokensSequence]:
     return (
         name.name(),
-        TokensSequence(list(itertools.chain.from_iterable(
-            [Token(original=o, cleaned=clear_name(o)) for o in POSSIBLE_SEPARATORS.split(word)]
-            for word in name.name().original_tuple
-        ))),
+        TokensSequence(
+            list(
+                itertools.chain.from_iterable(
+                    [
+                        Token(original=o, cleaned=clear_name(o))
+                        for o in POSSIBLE_SEPARATORS.split(word)
+                    ]
+                    for word in name.name().original_tuple
+                )
+            )
+        ),
     )
 
 
 def _token_inclusion(name: TokensSequence, tokens: TokensSequence) -> Score:
     return Score(
         value=float(len(name) == 1 and name[0] in tokens),
-        compared=(name.original_tuple, tokens.original_tuple)
+        compared=(name.original_tuple, tokens.original_tuple),
     )
 
 
@@ -34,5 +41,8 @@ def token_inclusion_score(first: NameInformation, second: NameInformation) -> Sc
 
     return max(
         *(_token_inclusion(first.name(), tokens) for tokens in _tokens(second)),
-        *(reversed(_token_inclusion(second.name(), tokens)) for tokens in _tokens(first))
+        *(
+            reversed(_token_inclusion(second.name(), tokens))
+            for tokens in _tokens(first)
+        )
     )

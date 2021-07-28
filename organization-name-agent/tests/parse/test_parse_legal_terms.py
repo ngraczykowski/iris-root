@@ -1,7 +1,7 @@
 import pytest
 
-from company_name.datasources.legal_terms import LegalTerms
 from company_name.compare import parse_name
+from company_name.datasources.legal_terms import LegalTerms
 
 
 def test_basic_legal_terms():
