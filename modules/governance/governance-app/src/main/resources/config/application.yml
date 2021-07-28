@@ -53,7 +53,7 @@ serp.show-env: true
 #---------------------------------------------------------------------------------------------------
 # SERVICE DISCOVERY
 #---------------------------------------------------------------------------------------------------
-serp.consul.discovery.enabled: ${serp.consul.enabled}
+serp.consul.discovery.enabled: false
 
 #---------------------------------------------------------------------------------------------------
 # mTLS - enabled by default
@@ -146,9 +146,9 @@ spring:
         enabled: false
       enabled: false
     service-registry:
-      enabled: ${serp.consul.enabled}
+      enabled: false
       auto-registration:
-        enabled: ${serp.consul.enabled}
+        enabled: false
 
   servlet:
     multipart.max-file-size: 10MB
