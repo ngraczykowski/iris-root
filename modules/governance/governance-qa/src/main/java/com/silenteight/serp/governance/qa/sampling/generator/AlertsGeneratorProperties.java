@@ -5,6 +5,7 @@ import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
+import java.util.List;
 import javax.validation.constraints.NotNull;
 
 @Value
@@ -14,4 +15,7 @@ class AlertsGeneratorProperties {
 
   @NotNull
   Long sampleCount;
+
+  @NotNull
+  List<String> groupingFields;
 }

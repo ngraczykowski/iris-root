@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackageClasses = {
-    SamplingGeneratorConfiguration.class
+    SamplingGeneratorConfiguration.class,
 })
 class TestSamplingGeneratorConfiguration {
 

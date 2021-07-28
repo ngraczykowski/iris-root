@@ -57,5 +57,7 @@ serp.governance.qa:
       alert-generator-cron: 0 0 1 1 * ?
     generator:
       sample-count: 454
+      grouping-fields:
+        - alert_extendedAttribute5
   viewing:
     max-state-reset-delay-ms: 45000

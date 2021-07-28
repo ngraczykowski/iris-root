@@ -2,3 +2,5 @@ serp.governance.qa:
   sampling:
     generator:
       sample-count: 454
+      grouping-fields:
+        - alert_extendedAttribute5
