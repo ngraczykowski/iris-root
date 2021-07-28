@@ -55,7 +55,8 @@ class AlertsGeneratorServiceTest {
   @Autowired
   ApplicationEventPublisher eventPublisher;
 
-  private final List<String> groupingFields = GroupingFields.valuesAsStringList();
+  @Autowired
+  private AlertsGeneratorProperties properties;
 
   @Autowired
   private AlertsGeneratorService underTest;
@@ -86,7 +87,7 @@ class AlertsGeneratorServiceTest {
   void generateAlertsShouldCallDistributionProviderWithDateRangeAndGroupingFields() {
     //given
     ArgumentCaptor<DateRangeDto> dateRangeDtoCaptor = ArgumentCaptor.forClass(DateRangeDto.class);
-    when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(of(getAlertDistribution(1, RISK_TYPE, PEP)));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
@@ -94,7 +95,7 @@ class AlertsGeneratorServiceTest {
     verify(distributionProvider, times(1))
         .getDistribution(dateRangeDtoCaptor.capture(), groupingFieldsCaptor.capture());
     assertThat(dateRangeDtoCaptor.getValue()).isEqualTo(dateRangeDto);
-    assertThat(groupingFieldsCaptor.getAllValues()).containsExactly(groupingFields);
+    assertThat(groupingFieldsCaptor.getAllValues()).containsExactly(properties.getGroupingFields());
   }
 
   @Test
@@ -102,7 +103,7 @@ class AlertsGeneratorServiceTest {
     //given
     ArgumentCaptor<GetAlertsSampleRequest> alertsSampleRequestCaptor =
         ArgumentCaptor.forClass(GetAlertsSampleRequest.class);
-    when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(of(
             getAlertDistribution(1400, RISK_TYPE, PEP),
             getAlertDistribution(1200, RISK_TYPE, SANCTION)));
@@ -171,7 +172,7 @@ class AlertsGeneratorServiceTest {
         getAlertDistributionDto(1, of(getDistributionDto(RISK_TYPE, PEP))),
         getAlertDistributionDto(1, of(getDistributionDto(RISK_TYPE, SANCTION)))
     );
-    when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(distributions);
     when(alertProvider.getAlerts(getAlertsSampleRequest(PEP)))
         .thenReturn(of(discriminatorFirst));
@@ -207,7 +208,7 @@ class AlertsGeneratorServiceTest {
 
   @Test
   void generateAlertsShouldNotCallGetAlertsWhenTotalAlertCountIsZero() {
-    when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(of(
             getAlertDistribution(0, RISK_TYPE, PEP),
             getAlertDistribution(0, RISK_TYPE, SANCTION)));
@@ -222,7 +223,7 @@ class AlertsGeneratorServiceTest {
   @Test
   void generateAlertsShouldSendSendAlertMessageCommandWithTwoAlerts() {
     //given
-    when(distributionProvider.getDistribution(dateRangeDto, groupingFields))
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(of(
             getAlertDistribution(1, RISK_TYPE, PEP),
             getAlertDistribution(1, RISK_TYPE, SANCTION)));
