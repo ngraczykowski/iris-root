@@ -1,6 +1,26 @@
 server:
   port: {{ env "NOMAD_PORT_http" }}
 
+spring:
+  #-------------------------------------------------------------------------------------------------
+  # Consul Service Discovery
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+    service-registry:
+      auto-registration:
+        enabled: false
+
 keycloak:
   frontend-client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   client-id: ${keycloak.frontend-client-id}

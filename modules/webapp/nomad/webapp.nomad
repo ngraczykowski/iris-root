@@ -69,7 +69,7 @@ job "webapp" {
         type = "http"
         path = "/rest/webapp/management/health"
         method = "GET"
-        interval = "10s"
+        interval = "30s"
         timeout = "2s"
       }
     }

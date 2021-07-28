@@ -39,6 +39,9 @@ info:
   component: "SENS Web App REST API"
 
 spring:
+  application:
+    name: webapp
+
   aop:
     proxy-target-class: true
 
@@ -115,6 +118,13 @@ spring:
   integration:
     start-delay-seconds: 15
     poll-period-millis: 1000
+
+  # Spring Cloud
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
 
 springdoc:
   api-docs:
