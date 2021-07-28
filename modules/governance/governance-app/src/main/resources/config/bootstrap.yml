@@ -23,9 +23,9 @@ serp.config.secret: change_me_to_secret_key
 spring:
   cloud:
     consul:
-      enabled: ${serp.consul.enabled}
+      enabled: false
       config:
-        enabled: ${serp.consul.config.enabled}
+        enabled: false
         watch:
           # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
           #  Do not enable.
