@@ -36,7 +36,7 @@ job "webapp" {
   namespace = "${var.namespace}"
 
   group "webapp" {
-    count = 2
+    count = 1
 
     network {
       port "http" {
@@ -129,7 +129,7 @@ job "webapp" {
           "-Dserp.show-env=true",
           "-jar",
           "local/sens-webapp-backend.jar",
-          "--spring.profiles.active=linux,webapp,database,rabbitmq,messaging,consul",
+          "--spring.profiles.active=linux,webapp,database,rabbitmq,messaging,consul,debug",
           "--spring.config.additional-location=file:${NOMAD_TASK_DIR}/conf/",
           # todo tkleszcz: enable consul for SD, in future change to envoy
           "--spring.cloud.consul.discovery.register=false",
