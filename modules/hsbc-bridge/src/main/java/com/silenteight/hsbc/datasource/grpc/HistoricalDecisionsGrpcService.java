@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
-public class HistoricalDecisionGrpcService extends HistoricalDecisionsInputServiceImplBase {
+public class HistoricalDecisionsGrpcService extends HistoricalDecisionsInputServiceImplBase {
 
   private final DataSourceInputProvider<HistoricalInputResponse> inputProvider;
 

@@ -10,6 +10,7 @@ ext {
   silenteightDataSourceApiVersion = "0.3.0-SNAPSHOT"
   warehouseApiVersion = "1.5.0"
   worldCheckApiVersion = "0.1.0-SNAPSHOT"
+  historicalDecisionsApiVersion = "0.1.0"
 
   //***********************************
   // Dependency Versions
@@ -33,6 +34,7 @@ libraries.silenteight_governance_model_api = [group: 'com.silenteight.governance
 libraries.silenteight_learningstore_api = [group: 'com.silenteight.learningengine.api', name: 'learning-store-api', version: silenteightLearningEngineApiVersion]
 libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
 libraries.worldcheck_api = [group: 'com.silenteight.worldcheck.api', name: 'protocol-world-check', version: worldCheckApiVersion]
+libraries.historical_decisions_api = [group: 'com.silenteight.historicaldecisions.api', name: 'historical-decisions-model-api', version: historicalDecisionsApiVersion]
 
 // Spring
 libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
@@ -175,6 +177,7 @@ dependencies {
   implementation libraries.streamex
   implementation libraries.warehouse_api
   implementation libraries.worldcheck_api
+  implementation libraries.historical_decisions_api
   implementation libraries.micrometer_prometheus
   runtimeOnly libraries.ecs_logging_core
   runtimeOnly libraries.logback_ecs_encoder

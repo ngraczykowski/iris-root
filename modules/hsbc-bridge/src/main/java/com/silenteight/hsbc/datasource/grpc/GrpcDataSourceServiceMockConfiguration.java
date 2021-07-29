@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.datasource.grpc;
 
+import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
@@ -19,5 +20,10 @@ class GrpcDataSourceServiceMockConfiguration {
   @Bean
   NameInformationServiceClient nameInformationServiceApiMock() {
     return new NameInformationServiceClientMock();
+  }
+
+  @Bean
+  HistoricalDecisionsServiceClient historicalDecisionsServiceApiMock() {
+    return new HistoricalDecisionsServiceClientMock();
   }
 }
