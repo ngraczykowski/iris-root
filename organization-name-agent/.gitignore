@@ -9,4 +9,7 @@ __pycache__
 .idea
 .vscode
 
+build
+dist
 venv
+nomad/artifacts

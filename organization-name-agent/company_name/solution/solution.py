@@ -8,7 +8,6 @@ class Solution(enum.Enum):
     INCONCLUSIVE = "INCONCLUSIVE"
     NO_MATCH = "NO_MATCH"
     NO_DATA = "NO_DATA"
-    AGENT_SKIPPED = "AGENT_SKIPPED"
     UNEXPECTED_ERROR = "UNEXPECTED_ERROR"
 
     def __lt__(self, other: "Solution") -> bool:

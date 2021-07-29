@@ -124,7 +124,7 @@ class CompanyNameAgentExchange(AgentExchange):
             return AgentOutput.Feature(
                 feature=response_feature or name_feature_input.feature,
                 feature_solution=AgentOutput.FeatureSolution(
-                    solution=Solution.AGENT_SKIPPED.value
+                    solution=Solution.NO_DATA.value
                 ),
             )
 

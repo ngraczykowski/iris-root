@@ -71,6 +71,7 @@ def get_solutions(
             )
 
 
+@pytest.mark.rabbitmq
 async def test_single_request_returns_correct_identificators(
     ae_mock: AdjudicationEngineMock,
 ):
@@ -89,6 +90,7 @@ async def test_single_request_returns_correct_identificators(
         assert solutions[0] == (match, feature, "NO_DATA")
 
 
+@pytest.mark.rabbitmq
 async def test_multiple_matches(ae_mock: AdjudicationEngineMock):
     match_no = 10
     correlation_id = await ae_mock.send(
@@ -108,6 +110,7 @@ async def test_multiple_matches(ae_mock: AdjudicationEngineMock):
     )
 
 
+@pytest.mark.rabbitmq
 async def test_multiple_queries_with_different_times(
     ae_mock: AdjudicationEngineMock, data_source_mock: DataSourceMock
 ):
@@ -132,7 +135,7 @@ async def test_multiple_queries_with_different_times(
             {
                 "alerted_party_type": NameFeatureInput.EntityType.INDIVIDUAL,
             },
-            "AGENT_SKIPPED",
+            "NO_DATA",
         ),
         ({}, "NO_DATA"),
         ({"alerted_party_names": [], "watchlist_names": ["google"]}, "NO_DATA"),
@@ -157,6 +160,7 @@ async def test_multiple_queries_with_different_times(
         ),
     ),
 )
+@pytest.mark.rabbitmq
 async def test_solution(
     ae_mock: AdjudicationEngineMock,
     data_source_mock: DataSourceMock,

@@ -1,13 +1,14 @@
 from typing import Optional, Tuple
 
 from company_name.names.name_information import NameInformation
+from company_name.names.token import Token
 from company_name.scores.score import Score
 
 
 def _compared(
-    first: Optional[str], second: Optional[str]
+    first: Optional[Token], second: Optional[Token]
 ) -> Tuple[Tuple[str, ...], Tuple[str, ...]]:
-    return (first,) if first else (), (second,) if second else ()
+    return (first.original,) if first else (), (second.original,) if second else ()
 
 
 def first_token_score(first: NameInformation, second: NameInformation) -> Score:
