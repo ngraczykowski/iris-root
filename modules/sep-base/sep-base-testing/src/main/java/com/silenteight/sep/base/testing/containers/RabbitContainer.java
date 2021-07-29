@@ -29,7 +29,7 @@ public final class RabbitContainer {
     USERNAME = "rabbit_" + randomAlphabetic(6);
     PASSWORD = randomAlphanumeric(12);
 
-    CONTAINER = new GenericContainer<>("rabbitmq:3")
+    CONTAINER = new GenericContainer<>("rabbitmq:3.8.16")
         .withEnv("RABBITMQ_DEFAULT_USER", USERNAME)
         .withEnv("RABBITMQ_DEFAULT_PASS", PASSWORD)
         .withEnv("RABBITMQ_VM_MEMORY_HIGH_WATERMARK", "256MiB")
