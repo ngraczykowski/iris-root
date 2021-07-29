@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Profile;
     bearerFormat = "jwt",
     flows = @OAuthFlows(
         authorizationCode = @OAuthFlow(
-            authorizationUrl = "${keycloak.adapter.auth-server-url}/realms/${keycloak.adapter.realm}"
-                + "/protocol/openid-connect/auth",
+            authorizationUrl = "${keycloak.adapter.auth-server-url}/realms/"
+                + "${keycloak.adapter.realm}/protocol/openid-connect/auth",
             tokenUrl = "${keycloak.adapter.auth-server-url}/realms/${keycloak.adapter.realm}"
                 + "/protocol/openid-connect/token"
         )
