@@ -1,5 +1,5 @@
 rootProject.name = 'webapp'
-gradle.ext.sepDependenciesVersion = '2.2.0'
+gradle.ext.sepDependenciesVersion = '2.2.1'
 
 include 'sens-webapp-audit'
 include 'sens-webapp-audit-api'
