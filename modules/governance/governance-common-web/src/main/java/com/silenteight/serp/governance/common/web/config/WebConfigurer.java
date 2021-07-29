@@ -3,7 +3,6 @@ package com.silenteight.serp.governance.common.web.config;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.common.web.rest.RestConstants;
-import com.silenteight.serp.governance.common.web.security.RestAccessDeniedHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -48,10 +47,5 @@ class WebConfigurer
       source.registerCorsConfiguration(RestConstants.MANAGEMENT_PREFIX + "/**", config);
     }
     return new CorsFilter(source);
-  }
-
-  @Bean
-  RestAccessDeniedHandler restAccessDeniedHandler() {
-    return new RestAccessDeniedHandler(objectMapper);
   }
 }
