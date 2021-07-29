@@ -1,5 +1,5 @@
 rootProject.name = 'warehouse'
-gradle.ext.sepDependenciesVersion = '1.12.1'
+gradle.ext.sepDependenciesVersion = '2.2.1'
 
 include 'warehouse-app'
 include 'warehouse-backup'
