@@ -6,8 +6,8 @@ ext {
   //***********************************
   silenteightAuditBsVersion = "1.2.0"
   silenteightCommonsVersion = "2.1.0"
-  silenteightSepAuthVersion = "1.5.0"
-  silenteightSepBaseVersion = "1.10.1"
+  silenteightSepAuthVersion = "1.9.0"
+  silenteightSepBaseVersion = "1.12.2"
   silenteightDataApiVersion = "1.5.0"
   silenteightSamplingAlertsApiVersion = "1.3.0"
 }
@@ -24,7 +24,6 @@ libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
 libraries.silenteight_data_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: silenteightDataApiVersion]
 libraries.silenteight_sampling_alerts_api = [group: 'com.silenteight.warehouse.api', name: 'se-sampling-alerts-api', version: silenteightSamplingAlertsApiVersion]
-libraries.silenteight_spring_cloud_consul_discovery = [group: 'com.silenteight.spring.cloud.consul.discovery', name: 'silenteight-spring-cloud-consul-discovery', version: '2.4.0']
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 
 // Spring
@@ -73,6 +72,7 @@ libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring
 libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', name: 'spring-batch-infrastructure']
 libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
 
+libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
 libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
 libraries.spring_cloud_starter_consul = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul']
 libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']

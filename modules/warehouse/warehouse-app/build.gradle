@@ -40,6 +40,7 @@ dependencies {
   implementation libraries.spring_context_support
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
+  implementation libraries.spring_cloud_consul_discovery
 
   implementation libraries.commons_lang3
 
