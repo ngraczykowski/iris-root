@@ -38,6 +38,14 @@ management:
       application: ${spring.application.name}
 
 warehouse:
+  web:
+    cors:
+      allowed-origins-patterns: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      exposed-headers: "Authorization,Link,X-Total-Count"
+      allow-credentials: true
+      max-age: 1800
   messaging:
     concurrency: 4
     prefetch: 25
