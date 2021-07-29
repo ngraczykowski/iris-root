@@ -218,7 +218,7 @@ serp:
 ####################################################################################################
 sens.web:
   cors:
-    allowed-origins: "*"
+    allowed-origins-patterns: "*"
     allowed-methods: "*"
     allowed-headers: "*"
     exposed-headers: "Authorization,Link,X-Total-Count"
