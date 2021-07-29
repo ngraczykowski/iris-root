@@ -9,6 +9,7 @@ import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -32,6 +33,7 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   private final TypeReference<Map<String, String>> mapTypeReference = new TypeReference<>() {};
   private final ObjectMapper objectMapper = new ObjectMapper()
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+      .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
       .setSerializationInclusion(Include.NON_NULL);
 
   @Override
