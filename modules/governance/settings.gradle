@@ -1,5 +1,5 @@
 rootProject.name = 'serp-governance'
-gradle.ext.sepDependenciesVersion = '2.2.0'
+gradle.ext.sepDependenciesVersion = '2.2.1'
 
 include 'governance-agent'
 include 'governance-app'
