@@ -26,7 +26,7 @@ ext {
   bouncyCastleVersion = "1.69"
   byteBuddyVersion = "1.11.1"
   caffeineVersion = "3.0.2"
-  commonsIoVersion = "2.6"
+  commonsIoVersion = "2.8.0"
   elasticLoggingVersion = "1.0.1"
   groovyAllVersion = "3.0.8"
   guavaVersion = "30.1.1-jre"
@@ -70,7 +70,7 @@ dependencies {
     api "com.google.guava:guava:$guavaVersion"
     api "com.oracle:ojdbc8:12.2.0.1"
     api "com.orbitz.consul:consul-client:1.5.2"
-    api "com.querydsl:querydsl-apt:$queryDslVersion:jpa" //TODO do we need both? (MI6-638)
+    api "com.querydsl:querydsl-apt:$queryDslVersion:jpa" //TODO do we need both? (MI6-638) looks like no agent is using it anyway
     api "com.querydsl:querydsl-jpa:$queryDslVersion"
     api "com.salesforce.servicelibs:reactor-grpc-stub:1.0.1"
     api "com.sun.mail:jakarta.mail:$jakartaMailVersion"
