@@ -38,6 +38,28 @@ RFU:
 - `[env]_production_custom` - RFU, production flow, custom report definitions created by user
 - `[env]_simulation_custom` - RFU, simulation flow, custom report definitions created by user
 
+## Kibana configuration synchronization
+
+In order to transfer kibana configuration from one environment to another,
+please follow the steps below for each tenant that you wish to synchronize:
+
+1. setup environment settings in `./scripts/export/.env`
+1. setup credentials in `./scripts/export/.netrc`
+1. export the configuration `./scripts/export/export-kibana-configuration.sh <tenant_name>`
+1. setup the configuration for target environment: 
+    
+   ```
+   ./scripts/prepare-kibana-configuration.sh \
+         <tenant_name> \
+         <taget_tenant_name> \
+         <source_environment_prefix> \
+         <target_environment_prefix>
+   ```
+1. import the configuration via grpc: 
+   
+    - service.method: `ConfigurationManagementService.ImportConfiguration`
+    - payload: `./scripts/export/import-defintions`
+
 ## Development Setup
 
 Before you can run Warehouse, you need to have a few infrastructural services running:

@@ -8,8 +8,9 @@ ext {
   silenteightCommonsVersion = "2.1.0"
   silenteightSepAuthVersion = "1.14.0"
   silenteightSepBaseVersion = "1.12.2"
-  silenteightDataApiVersion = "1.5.0"
-  silenteightSamplingAlertsApiVersion = "1.3.0"
+  silenteightDataApiVersion = "1.6.0"
+  silenteightSamplingAlertsApiVersion = "1.6.0"
+  silenteightWarehouseInternalApiVersion = "1.6.0"
 }
 
 // @formatter:off
@@ -24,6 +25,7 @@ libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
 libraries.silenteight_data_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: silenteightDataApiVersion]
 libraries.silenteight_sampling_alerts_api = [group: 'com.silenteight.warehouse.api', name: 'se-sampling-alerts-api', version: silenteightSamplingAlertsApiVersion]
+libraries.silenteight_warehouse_internal_api = [group: 'com.silenteight.warehouse.api', name: 'se-warehouse-internal-api', version: silenteightWarehouseInternalApiVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 
 // Spring
@@ -115,6 +117,8 @@ libraries.springdoc_security = [group: 'org.springdoc', name: 'springdoc-openapi
 
 
 // Others
+libraries.apache_httpclient = [group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13']
+libraries.apache_httpmime = [group: 'org.apache.httpcomponents', name: 'httpmime', version: libraries.apache_httpclient]
 libraries.amqp_client = [group: 'com.rabbitmq', name: 'amqp-client']
 libraries.antlr4 = [group: 'org.antlr', name: 'antlr4']
 libraries.antlr4_runtime = [group: 'org.antlr', name: 'antlr4-runtime']
