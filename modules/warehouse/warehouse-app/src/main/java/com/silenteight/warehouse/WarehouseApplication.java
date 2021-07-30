@@ -14,6 +14,7 @@ import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
+import com.silenteight.warehouse.configurationmanagement.ConfigurationManagementModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
 import com.silenteight.warehouse.indexer.indexing.IndexingModule;
@@ -50,6 +51,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AnalysisModule.class,
     BackupModule.class,
     BillingReportModule.class,
+    ConfigurationManagementModule.class,
     IndexingModule.class,
     ManagementModule.class,
     ProductionReportingModule.class,

@@ -25,6 +25,8 @@ dependencies {
   implementation libraries.springdoc_data_rest
   implementation libraries.springdoc_security
   implementation libraries.protobuf_java_util
+  implementation libraries.apache_httpclient
+  implementation libraries.apache_httpmime
 
   testImplementation project(":warehouse-common-testing")
   testImplementation libraries.awaitility
