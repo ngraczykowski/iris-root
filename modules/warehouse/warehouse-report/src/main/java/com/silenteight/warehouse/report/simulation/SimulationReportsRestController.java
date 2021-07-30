@@ -120,7 +120,7 @@ public class SimulationReportsRestController {
     log.debug(
         "Download simulation report request processed, "
             + "analysisId={},definitionId={},timestamp={},reportName={}",
-        analysisId, definitionId, timestamp, kibanaReportDto.getFilename());
+        analysisId, definitionId, timestamp, filename);
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))

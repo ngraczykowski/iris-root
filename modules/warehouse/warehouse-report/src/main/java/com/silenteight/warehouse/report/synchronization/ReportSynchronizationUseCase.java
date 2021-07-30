@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.util.Set;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,7 +61,11 @@ public class ReportSynchronizationUseCase {
         productionTenant, kibanaReportInstanceId);
     return new InMemoryReport(
         kibanaReportDto.getFilename(),
-        kibanaReportDto.getContent().getBytes());
+        getContentAsBytes(kibanaReportDto.getContent()));
+  }
+
+  private static byte[] getContentAsBytes(String content) {
+    return isNotBlank(content) ? content.getBytes() : new byte[0];
   }
 
   private ReportDto uploadReportToMinio(Report report, String kibanaReportInstanceId) {

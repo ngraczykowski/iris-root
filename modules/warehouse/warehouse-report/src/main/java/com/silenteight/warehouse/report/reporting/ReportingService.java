@@ -43,7 +43,8 @@ public class ReportingService {
   }
 
   public KibanaReportDto getReport(String tenant, String reportInstanceId) {
-    return opendistroKibanaClient.getReportContent(tenant, reportInstanceId);
+    return opendistroKibanaClient
+        .getReportContent(tenant, reportInstanceId);
   }
 
   public ReportInstanceReferenceDto createReport(String reportDefinitionId, String tenant) {
