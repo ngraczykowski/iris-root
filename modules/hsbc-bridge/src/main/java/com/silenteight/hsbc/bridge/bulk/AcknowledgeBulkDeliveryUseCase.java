@@ -4,7 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
-import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException.Reason;
 import com.silenteight.hsbc.bridge.bulk.rest.BatchStatusResponse;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class AcknowledgeBulkDeliveryUseCase {
 
     var batch = result.get();
     if (batch.isNotCompleted()) {
-      throw new BatchProcessingNotCompletedException(id);
+      throw new BatchResultNotAvailableException(id, Reason.NOT_COMPLETED);
     }
 
     batch.delivered();

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.StoreBulkUseCase.StoreBulkUseCaseCommand;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
-import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
 
@@ -29,10 +29,6 @@ public class BulkRestController {
   private final GetBulkResultsUseCase getBulkResultsUseCase;
   private final IngestRecommendationsUseCase ingestRecommendationsUseCase;
   private final StoreBulkUseCase storeBulkUseCase;
-
-  private static final String[] OWS_HEADER =
-      { "Alert-key", "Action", "Reference", "Ad Reason Code", "Alert Description" };
-  private static final String OWS_FILE_NAME = "owsResponse.ows";
 
   @PostMapping("/{batchId}/recommend")
   public ResponseEntity<BatchAcceptedResponse> receiveBatch(
@@ -96,7 +92,7 @@ public class BulkRestController {
     return ResponseEntity.ok(cancelBulkUseCase.cancel(id));
   }
 
-  @ExceptionHandler({ BatchIdNotFoundException.class, BatchProcessingNotCompletedException.class })
+  @ExceptionHandler({ BatchIdNotFoundException.class, BatchResultNotAvailableException.class })
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleExceptionWithNotFoundStatus(
       RuntimeException exception) {

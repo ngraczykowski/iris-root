@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.bridge.bulk
 
-import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException
+import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException
 
 import spock.lang.Specification
 
@@ -33,7 +33,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
     }
   }
 
-  def 'should not update bulk status to DELIVERY and throw BulkProcessingNotCompletedException'() {
+  def 'should not update bulk status to DELIVERY and throw BatchResultNotAvailableException'() {
     given:
     def bulk = new Bulk('20210101-1111')
     bulk.setStatus(PROCESSING)
@@ -44,7 +44,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
     then:
     1 * bulkRepository.findById(_ as String) >> Optional.of(bulk)
     0 * bulkRepository.save(_ as Bulk)
-    def exception = thrown(BatchProcessingNotCompletedException)
+    def exception = thrown(BatchResultNotAvailableException)
     exception.message == "Batch processing is not completed, id=20210101-1111"
   }
 }

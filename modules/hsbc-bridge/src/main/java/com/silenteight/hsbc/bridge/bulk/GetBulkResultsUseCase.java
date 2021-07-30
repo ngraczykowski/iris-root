@@ -1,10 +1,12 @@
 package com.silenteight.hsbc.bridge.bulk;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
-import com.silenteight.hsbc.bridge.bulk.exception.BatchProcessingNotCompletedException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException.Reason;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase.GetRecommendationRequest;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
@@ -27,17 +29,8 @@ public class GetBulkResultsUseCase {
   private final RecommendationMetadataCollector
       recommendationMetadataCollector = new RecommendationMetadataCollector();
 
-  public BatchSolvedAlerts getResults(String id) {
-    var result = bulkRepository.findById(id);
-
-    if (result.isEmpty()) {
-      throw new BatchIdNotFoundException(id);
-    }
-
-    var batch = result.get();
-    if (batch.isNotCompleted()) {
-      throw new BatchProcessingNotCompletedException(id);
-    }
+  public BatchSolvedAlerts getResults(@NonNull String id) {
+    var batch = getAndVerifyBatch(id);
 
     var response = new BatchSolvedAlerts();
     response.setBatchId(batch.getId());
@@ -45,6 +38,28 @@ public class GetBulkResultsUseCase {
     response.setAlerts(getSolvedAlerts(batch.getValidAlerts()));
     response.setErrorAlerts(getErrorAlerts(batch.getInvalidAlerts()));
     return response;
+  }
+
+  private Bulk getAndVerifyBatch(String id) {
+    var result = bulkRepository.findById(id);
+
+    if (result.isEmpty()) {
+      throw new BatchIdNotFoundException(id);
+    }
+
+    var batch = result.get();
+    verifyBatch(id, batch);
+    return batch;
+  }
+
+  private void verifyBatch(String id, Bulk batch) {
+    if (batch.isNotCompleted()) {
+      throw new BatchResultNotAvailableException(id, Reason.NOT_COMPLETED);
+    }
+
+    if (batch.isLearning()) {
+      throw new BatchResultNotAvailableException(id, Reason.LEARNING_BATCH);
+    }
   }
 
   private List<ErrorAlert> getErrorAlerts(Collection<BulkAlertEntity> items) {
