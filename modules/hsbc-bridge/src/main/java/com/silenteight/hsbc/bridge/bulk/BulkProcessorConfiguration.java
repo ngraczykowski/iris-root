@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
-import com.silenteight.hsbc.bridge.alert.AlertSender;
+import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,10 @@ class BulkProcessorConfiguration {
 
   private final AdjudicationFacade adjudicationFacade;
   private final BulkRepository bulkRepository;
-  private final AlertSender alertSender;
+  private final LearningAlertProcessor learningAlertProcessor;
 
   @Bean
   BulkProcessor bulkProcessor() {
-    return new BulkProcessor(adjudicationFacade, alertSender, bulkRepository);
+    return new BulkProcessor(adjudicationFacade, learningAlertProcessor, bulkRepository);
   }
 }

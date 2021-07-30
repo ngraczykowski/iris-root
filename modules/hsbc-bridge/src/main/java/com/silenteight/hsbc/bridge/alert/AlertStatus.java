@@ -6,12 +6,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AlertStatus {
 
+  COMPLETED(false),
+  ERROR(false),
+  LEARNING_COMPLETED(true),
   STORED(false),
   PRE_PROCESSED(true),
   PROCESSING(false),
-  RECOMMENDATION_READY(true),
-  ERROR(false),
-  COMPLETED(false);
+  RECOMMENDATION_READY(true);
 
   @Getter
   private boolean internal;

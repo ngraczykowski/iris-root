@@ -31,12 +31,12 @@ class AlertFacadeConfiguration {
   }
 
   @Bean
-  AlertSender alertSender() {
-    return new AlertSender(warehouseApi, agentApi, alertGetter());
+  LearningAlertProcessor learningAlertProcessor() {
+    return new LearningAlertProcessor(alertRepository, alertSender());
   }
 
-  private AlertGetter alertGetter() {
-    return new AlertGetter(alertMapper(), alertRepository);
+  private AlertSender alertSender() {
+    return new AlertSender(warehouseApi, agentApi, alertMapper());
   }
 
   private AlertMapper alertMapper() {

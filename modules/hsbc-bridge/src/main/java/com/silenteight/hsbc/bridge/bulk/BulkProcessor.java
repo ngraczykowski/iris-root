@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
-import com.silenteight.hsbc.bridge.alert.AlertSender;
-import com.silenteight.hsbc.bridge.alert.AlertSender.SendOption;
+import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 
@@ -17,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
@@ -30,7 +27,7 @@ import static java.util.stream.Collectors.toMap;
 class BulkProcessor {
 
   private final AdjudicationFacade adjudicationFacade;
-  private final AlertSender alertSender;
+  private final LearningAlertProcessor learningAlertProcessor;
   private final BulkRepository bulkRepository;
 
   @Scheduled(fixedDelay = 2 * 1000, initialDelay = 2000)
@@ -77,7 +74,7 @@ class BulkProcessor {
         .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
 
     adjudicationFacade.registerAlertWithMatches(compositeById);
-    sendAlerts(alerts);
+    processLearningAlerts(alerts);
 
     bulk.setStatus(COMPLETED);
   }
@@ -90,12 +87,12 @@ class BulkProcessor {
         .build();
   }
 
-  private void sendAlerts(Collection<BulkAlertEntity> alertEntities) {
+  private void processLearningAlerts(Collection<BulkAlertEntity> alertEntities) {
     var alertIds = alertEntities.stream()
         .map(BulkAlertEntity::getId)
         .collect(Collectors.toSet());
 
-    alertSender.send(alertIds, new SendOption[] { AGENTS, WAREHOUSE });
+    learningAlertProcessor.process(alertIds);
   }
 
   private static Collection<MatchIdComposite> getMatchIds(

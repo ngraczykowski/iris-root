@@ -3,7 +3,7 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.alert.AlertGetter.AlertInformation;
+import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.report.Alert;
 import com.silenteight.hsbc.bridge.report.Alert.Match;
@@ -21,7 +21,7 @@ class AlertMapper {
 
   private final AlertPayloadConverter payloadConverter;
 
-  public Collection<Alert> toReportAlerts(@NonNull Collection<AlertInformation> alerts) {
+  public Collection<Alert> toReportAlerts(@NonNull Collection<AlertDataComposite> alerts) {
     return alerts.stream()
         .map(this::mapToAlert)
         .collect(toList());
@@ -31,7 +31,7 @@ class AlertMapper {
     return payloadConverter.convertAlertData(payload);
   }
 
-  private Alert mapToAlert(AlertInformation alertInfo) {
+  private Alert mapToAlert(AlertDataComposite alertInfo) {
     return new Alert() {
       final AlertEntity entity = alertInfo.getAlertEntity();
 

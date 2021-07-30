@@ -1,12 +1,14 @@
 package com.silenteight.hsbc.bridge.alert;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
-import com.silenteight.hsbc.bridge.alert.AlertGetter.AlertInformation;
+import com.silenteight.hsbc.bridge.json.external.model.AlertData;
+import com.silenteight.hsbc.bridge.report.Alert;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
@@ -14,42 +16,55 @@ import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE
 import static org.apache.commons.lang3.ArrayUtils.contains;
 
 @RequiredArgsConstructor
-public class AlertSender {
+class AlertSender {
 
   private final WarehouseApi warehouseApi;
   private final AgentApi agentApi;
-  private final AlertGetter alertGetter;
+  private final AlertMapper mapper;
 
-  public void send(Set<Long> ids, SendOption[] options) {
-    var alerts = getAlerts(ids);
+  void send(@NonNull Collection<AlertEntity> alerts, SendOption[] options) {
+    var alertComposites = getAlertInformation(alerts);
 
     if (contains(options, AGENTS)) {
-      sendToAgents(alerts);
+      sendToAgents(alertComposites);
     }
 
     if (contains(options, WAREHOUSE)) {
-      sendToWarehouse(alerts);
+      sendToWarehouse(alertComposites);
     }
   }
 
-  private void sendToAgents(Collection<AlertInformation> alerts) {
+  private void sendToAgents(Collection<AlertDataComposite> alerts) {
     var alertsData = alerts.stream()
-        .map(AlertInformation::getPayload)
+        .map(AlertDataComposite::getPayload)
         .collect(Collectors.toList());
 
     agentApi.send(alertsData);
   }
 
-  private void sendToWarehouse(Collection<AlertInformation> alerts) {
-    var reportAlerts = alertGetter.getReportAlerts(alerts);
+  private void sendToWarehouse(Collection<AlertDataComposite> alerts) {
+    var reportAlerts = getReportAlerts(alerts);
     warehouseApi.send(reportAlerts);
   }
 
-  private List<AlertInformation> getAlerts(Collection<Long> ids) {
-    return alertGetter.getAlertInformation(ids);
+  private List<AlertDataComposite> getAlertInformation(Collection<AlertEntity> alerts) {
+    return alerts.stream()
+        .map(e -> new AlertDataComposite(e, mapper.toAlertData(e.getPayload().getPayload())))
+        .collect(Collectors.toList());
   }
 
-  public enum SendOption {
+  private Collection<Alert> getReportAlerts(Collection<AlertDataComposite> alerts) {
+    return mapper.toReportAlerts(alerts);
+  }
+
+  @Value
+  public static class AlertDataComposite {
+
+    AlertEntity alertEntity;
+    AlertData payload;
+  }
+
+  enum SendOption {
     AGENTS,
     WAREHOUSE
   }

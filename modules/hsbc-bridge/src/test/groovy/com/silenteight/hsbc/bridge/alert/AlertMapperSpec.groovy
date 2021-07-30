@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.bridge.alert
 
-import com.silenteight.hsbc.bridge.alert.AlertGetter.AlertInformation
+import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 
 import spock.lang.Specification
@@ -47,8 +47,8 @@ class AlertMapperSpec extends Specification {
     result.get("someKey") == "someValue"
   }
 
-  static List<AlertInformation> ALERT_INFORMATION = [
-      new AlertInformation(
+  static List<AlertDataComposite> ALERT_INFORMATION = [
+      new AlertDataComposite(
         new AlertEntity(
             id: 10,
             externalId: "1234",
