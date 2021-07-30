@@ -179,7 +179,7 @@ job "simulator" {
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/simulator-app.jar",
-          "--spring.profiles.active=linux,simulator,messaging",
+          "--spring.profiles.active=linux,simulator,messaging,debug",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }
