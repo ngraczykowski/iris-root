@@ -50,6 +50,8 @@ class AccountsReportGenerator implements ReportGenerator {
 
   @Override
   public Report generateReport(Map<String, String> parameters) {
+    log.debug("Generating Accounts Report with parameters={}", parameters);
+
     return new AccountsReport(FILE_NAME, getReportData());
   }
 

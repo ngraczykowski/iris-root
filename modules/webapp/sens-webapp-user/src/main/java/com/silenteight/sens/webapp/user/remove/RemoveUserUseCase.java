@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
@@ -13,6 +14,7 @@ import com.silenteight.sep.usermanagement.api.dto.UserDto;
 
 import static java.util.Set.of;
 
+@Slf4j
 @RequiredArgsConstructor
 public class RemoveUserUseCase {
 
@@ -31,6 +33,7 @@ public class RemoveUserUseCase {
 
   public void apply(RemoveUserCommand command) {
     String username = command.getUsername();
+    log.debug("Removing user with username={}", username);
 
     auditTracer.save(
         new UserRemovalRequestedEvent(

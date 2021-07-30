@@ -2,9 +2,13 @@ package com.silenteight.sens.webapp.backend.report.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.OffsetDateTime;
 
+import static com.silenteight.sep.base.common.logging.LogMarkers.INTERNAL;
+
+@Slf4j
 @RequiredArgsConstructor
 public class ReportMetadataService {
 
@@ -12,6 +16,8 @@ public class ReportMetadataService {
   private final ReportMetadataRepository repository;
 
   public OffsetDateTime getStartTime(String reportName) {
+    log.debug(INTERNAL, "Get start time for reportName={}", reportName);
+
     return repository
         .findByReportName(reportName)
         .map(ReportMetadata::getStartTime)
@@ -19,6 +25,8 @@ public class ReportMetadataService {
   }
 
   public void saveStartTime(String reportName, OffsetDateTime startTime) {
+    log.debug(INTERNAL, "Save startTime={} for reportName={}", startTime, reportName);
+
     repository
         .findByReportName(reportName)
         .ifPresentOrElse(

@@ -37,6 +37,7 @@ class ReportRestController {
       @PathVariable String reportName,
       @RequestParam Map<String, String> parameters) throws IOException {
 
+    log.debug("Generate report: reportName={}, parameters={}", reportName, parameters);
     Report report = reportGeneratorFacade.generate(reportName, from(request), parameters);
     csvResponseWriter.write(response, report.getReportFileName(), report.getReportContent());
   }

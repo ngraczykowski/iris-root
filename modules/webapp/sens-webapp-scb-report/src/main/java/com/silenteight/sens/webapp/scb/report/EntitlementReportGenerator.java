@@ -40,6 +40,8 @@ class EntitlementReportGenerator implements ReportGenerator {
 
   @Override
   public Report generateReport(Map<String, String> parameters) {
+    log.debug("Generating Entitlement Report with parameters={}", parameters);
+
     return new SimpleReport(FILE_NAME, getReportData());
   }
 
