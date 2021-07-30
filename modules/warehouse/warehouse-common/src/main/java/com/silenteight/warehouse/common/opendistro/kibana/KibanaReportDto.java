@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Value
 @Builder
 public class KibanaReportDto {
@@ -12,4 +14,8 @@ public class KibanaReportDto {
   String content;
   @NonNull
   String filename;
+
+  public boolean isContentBlank() {
+    return isBlank(content);
+  }
 }

@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.report.simulation;
 
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportEmptyDataException;
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportGenerationFailedException;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClientException;
 import com.silenteight.warehouse.common.web.exception.AbstractErrorControllerAdvice;
 import com.silenteight.warehouse.common.web.exception.ErrorDto;
@@ -10,10 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static java.util.Map.of;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice(basePackageClasses = SimulationReportsRestController.class)
 class SimulationReportsControllerAdvice extends AbstractErrorControllerAdvice {
@@ -32,5 +31,15 @@ class SimulationReportsControllerAdvice extends AbstractErrorControllerAdvice {
   @ExceptionHandler(AnalysisDoesNotExistException.class)
   public ResponseEntity<ErrorDto> handle(AnalysisDoesNotExistException e) {
     return handle(e, "AnalysisDoesNotExistsError", NOT_FOUND);
+  }
+
+  @ExceptionHandler(KibanaReportGenerationFailedException.class)
+  public ResponseEntity<ErrorDto> handle(KibanaReportGenerationFailedException e) {
+    return handle(e, "KibanaReportGenerationFailed", INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler(KibanaReportEmptyDataException.class)
+  public ResponseEntity<ErrorDto> handle(KibanaReportEmptyDataException e) {
+    return handle(e, "KibanaReportEmptyData", NO_CONTENT);
   }
 }

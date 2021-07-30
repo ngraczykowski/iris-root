@@ -8,6 +8,7 @@ import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesR
 import com.silenteight.warehouse.common.opendistro.elastic.ListReportsInstancesResponse.ReportInstance;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
+import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportEmptyDataException;
 import com.silenteight.warehouse.common.opendistro.kibana.OpendistroKibanaClient;
 
 import java.util.Optional;
@@ -30,7 +31,13 @@ public class UserAwareReportingService {
         .orElseThrow(
             () -> ReportInstanceNotFoundException.of(tenantName, reportDefinitionId, timestamp));
 
-    return opendistroKibanaClient.getReportContent(tenantName, reportInstanceId);
+    KibanaReportDto reportContent = opendistroKibanaClient
+        .getReportContent(tenantName, reportInstanceId);
+
+    if (reportContent.isContentBlank())
+      throw new KibanaReportEmptyDataException(reportInstanceId);
+
+    return reportContent;
   }
 
   public Optional<String> getReportInstanceId(

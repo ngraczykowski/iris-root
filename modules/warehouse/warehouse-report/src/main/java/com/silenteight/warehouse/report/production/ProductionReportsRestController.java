@@ -108,7 +108,7 @@ public class ProductionReportsRestController {
     log.debug(
         "Download production report request processed,"
             + " definitionId={},timestamp={},reportType={}, reportName={}",
-        definitionId, timestamp, reportType, kibanaReportDto.getFilename());
+        definitionId, timestamp, reportType, filename);
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
