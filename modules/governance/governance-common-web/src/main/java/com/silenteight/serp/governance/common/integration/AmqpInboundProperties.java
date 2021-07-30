@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class AmqpInboundProperties {
+public class AmqpInboundProperties {
 
   @NonNull
   private String queueName;

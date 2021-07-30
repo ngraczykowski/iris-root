@@ -10,6 +10,7 @@ import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFa
 import com.silenteight.serp.governance.common.signature.Signature;
 import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGateway;
 import com.silenteight.serp.governance.policy.solve.dto.SolveResponse;
+import com.silenteight.serp.governance.policy.solve.event.FeatureVectorEventStrategyService;
 import com.silenteight.solving.api.v1.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent.Builder;
 
@@ -56,6 +57,8 @@ public class SolveUseCase {
   private final PolicyTitleQuery policyTitleQuery;
   @NonNull
   private final TimeSource timeSource;
+  @NonNull
+  private final FeatureVectorEventStrategyService featureVectorEventStrategyService;
 
   public BatchSolveFeaturesResponse solve(BatchSolveFeaturesRequest request) {
     log.info("Solving {} features using policy {}.",
@@ -74,7 +77,7 @@ public class SolveUseCase {
     log.info("Solved {} features using policy {}.",
              request.getFeatureVectorsCount(), request.getPolicyName());
 
-    emitEvent(solvedFeatureVectors);
+    emitEventIfSolveStrategyEnabled(solvedFeatureVectors);
 
     return getResponse(solvedFeatureVectors);
   }
@@ -205,6 +208,11 @@ public class SolveUseCase {
     return Struct.newBuilder()
         .putAllFields(fields)
         .build();
+  }
+
+  private void emitEventIfSolveStrategyEnabled(List<SolvedFeatureVector> solvedFeatureVectors) {
+    if (featureVectorEventStrategyService.isSolve())
+      emitEvent(solvedFeatureVectors);
   }
 
   private void emitEvent(List<SolvedFeatureVector> solvedFeatureVectors) {

@@ -12,6 +12,7 @@ import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
 import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
 import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
+import com.silenteight.serp.governance.ingest.IngestModule;
 import com.silenteight.serp.governance.mailer.MailerModule;
 import com.silenteight.serp.governance.model.ModelModule;
 import com.silenteight.serp.governance.notifier.NotifierModule;
@@ -40,6 +41,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     BranchModule.class,
     ChangeRequestModule.class,
     FeatureVectorModule.class,
+    IngestModule.class,
     ModelModule.class,
     NotifierModule.class,
     PolicyModule.class,

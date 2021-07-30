@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class AmqpOutboundProperties {
+public class AmqpOutboundProperties {
 
   @NonNull
   private String exchangeName;

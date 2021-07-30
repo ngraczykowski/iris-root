@@ -16,11 +16,11 @@ class RabbitModuleConfiguration {
     MessageRegistryFactory factory = new MessageRegistryFactory(
         "com.silenteight.model.api",
         "com.silenteight.solving.api",
+        "com.silenteight.data.api",
         "com.google.protobuf",
         "com.google.rpc",
         "com.google.type"
     );
-
     return factory.create();
   }
 }
