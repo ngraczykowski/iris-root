@@ -65,7 +65,7 @@ class RecommendationsGeneratedUseCaseTest {
   }
 
   @Test
-  void shouldHandleMessageWithMultipleAlertrsWhenSimulationExists() {
+  void shouldHandleMessageWithMultipleAlertsWhenSimulationExists() {
     // given
     when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
     when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);

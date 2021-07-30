@@ -35,6 +35,7 @@ class GrpcRecommendationService implements RecommendationService {
 
   @Override
   public RecommendationMetadata getMetadata(@NonNull String recommendationName) {
+    log.debug("Getting Recommendation metadata by recommendationName={}", recommendationName);
     return recommendationStub.getRecommendationMetadata(toGetMetadataRequest(recommendationName));
   }
 
