@@ -68,6 +68,10 @@ serp:
           routing-key: feature-vector.solved
         receive:
           queue-name: governance.analytics
+    ingest:
+      integration:
+        receive:
+          queue-name: gov.feature-vector.ingest
 
     model:
       export:

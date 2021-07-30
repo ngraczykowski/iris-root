@@ -330,3 +330,12 @@ serp.governance.qa:
         - alert_extendedAttribute5
   viewing:
     max-state-reset-delay-ms: 45000
+
+serp.governance.featurevector:
+  ingest:
+    repackager:
+      fvSignatureKey: feature_vector_signature
+      feature-or-category-regex: ^(categories\/(\w)+)$|^(features\/(\w)+\:solution)$
+      prefix-and-suffix-regex: ^(features\/)|^(categories\/)|(:solution)$
+  event:
+    strategy: INGEST #[INGEST,SOLVE]

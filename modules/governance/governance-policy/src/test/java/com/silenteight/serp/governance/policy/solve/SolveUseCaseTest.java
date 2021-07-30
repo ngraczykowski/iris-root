@@ -6,6 +6,7 @@ import com.silenteight.serp.governance.common.signature.Signature;
 import com.silenteight.serp.governance.common.signature.SignatureCalculator;
 import com.silenteight.serp.governance.policy.domain.Condition;
 import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGatewayMock;
+import com.silenteight.serp.governance.policy.solve.event.FeatureVectorEventStrategyService;
 import com.silenteight.solving.api.v1.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +50,7 @@ class SolveUseCaseTest {
 
   private StepsSupplier stepsSupplier;
   private FeatureVectorSolvedMessageGatewayMock gateway;
+  private FeatureVectorEventStrategyService featureVectorEventStrategyService;
   private SolveUseCase underTest;
 
   @BeforeEach
@@ -61,13 +63,15 @@ class SolveUseCaseTest {
     when(fixed.now()).thenReturn(NOW);
     PolicyTitleQuery policyTitleQuery = mock(PolicyTitleQuery.class);
     when(policyTitleQuery.getTitle(POLICY_ID)).thenReturn(POLICY_TITLE);
+    featureVectorEventStrategyService = mock(FeatureVectorEventStrategyService.class);
     underTest = new SolveUseCase(
         policyId -> stepsSupplier,
         new SolvingService(),
         gateway,
         canonicalFeatureVectorFactory,
         policyTitleQuery,
-        fixed);
+        fixed,
+        featureVectorEventStrategyService);
   }
 
   @Test
@@ -129,7 +133,7 @@ class SolveUseCaseTest {
   }
 
   @Test
-  void shouldEmitEvent() {
+  void shouldEmitEvent_whenEventStrategyIsSolve() {
     // given
     List<Step> steps = defaultStepsConfiguration();
     when(stepsSupplier.get()).thenReturn(steps);
@@ -137,6 +141,7 @@ class SolveUseCaseTest {
     FeatureVector featureVector = featureVector("PERFECT_MATCH", "EXACT");
     BatchSolveFeaturesRequest solutionsRequest =
         solveFeaturesRequest(POLICY_NAME, featureCollection, featureVector);
+    when(featureVectorEventStrategyService.isSolve()).thenReturn(true);
 
     // when
     underTest.solve(solutionsRequest);
@@ -194,4 +199,23 @@ class SolveUseCaseTest {
 
     return new MatchCondition(name, condition, values);
   }
+
+  @Test
+  void shouldNotEmitEvent_whenEventStrategyIsNotSolve() {
+    // given
+    List<Step> steps = defaultStepsConfiguration();
+    when(stepsSupplier.get()).thenReturn(steps);
+    FeatureCollection featureCollection = featureCollection("nameAgent", "dateAgent");
+    FeatureVector featureVector = featureVector("PERFECT_MATCH", "EXACT");
+    BatchSolveFeaturesRequest solutionsRequest =
+        solveFeaturesRequest(POLICY_NAME, featureCollection, featureVector);
+    when(featureVectorEventStrategyService.isSolve()).thenReturn(false);
+
+    // when
+    underTest.solve(solutionsRequest);
+
+    // then
+    assertThat(gateway.getLastEvent()).isNull();
+  }
+
 }

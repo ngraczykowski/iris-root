@@ -4,6 +4,7 @@ import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
 import com.silenteight.serp.governance.policy.domain.InUsePolicyQuery;
 import com.silenteight.serp.governance.policy.solve.amqp.FeatureVectorSolvedMessageGateway;
+import com.silenteight.serp.governance.policy.solve.event.FeatureVectorEventStrategyService;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,8 @@ class SolveConfiguration {
       StepsSupplierProvider stepsSupplierProvider,
       FeatureVectorSolvedMessageGateway gateway,
       CanonicalFeatureVectorFactory canonicalFeatureVectorFactory,
-      PolicyTitleQuery policyDetailsQuery) {
+      PolicyTitleQuery policyDetailsQuery,
+      FeatureVectorEventStrategyService featureVectorEventStrategyService) {
 
     return new SolveUseCase(
         stepsSupplierProvider,
@@ -33,6 +35,7 @@ class SolveConfiguration {
         gateway,
         canonicalFeatureVectorFactory,
         policyDetailsQuery,
-        DefaultTimeSource.INSTANCE);
+        DefaultTimeSource.INSTANCE,
+        featureVectorEventStrategyService);
   }
 }
