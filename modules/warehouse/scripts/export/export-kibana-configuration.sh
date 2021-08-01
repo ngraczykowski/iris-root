@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e -o pipefail
+# set -o xtrace
 
 # script location is a base dir
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
@@ -12,7 +13,7 @@ set +a
 
 # e.g. ./export-kibana-configuration local_production_ai_reasoning
 TENANT="${1}"
-TIMESTAMP=$(date +"%Y%d%m-%H%M%S")
+TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
 
 printf "Kibana: ${KIBANA_HOSTNAME}\n"
 printf "Timestamp: ${TIMESTAMP}\n"
