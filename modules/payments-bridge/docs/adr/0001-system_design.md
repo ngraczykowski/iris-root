@@ -60,7 +60,7 @@ Example case:
   - LocationInputService (for Geo Agent)
   - CategoryService
   - CommentInputService
-- Internal API for getting data that will get served by Data Source API (a.k.a. ETL API)
+- Internal API for storing data that will get served by Data Source API (a.k.a. ETL API)
   - This API is going to be used by Firco CMAPI integration
 - Receiving, storing and sharing features, category values and comment inputs, in a format easy to query via Data Source API, e.g., `NameFeatureInput` from `NameInputService`, or `CategoryValue` from `CategoryService`.
 
