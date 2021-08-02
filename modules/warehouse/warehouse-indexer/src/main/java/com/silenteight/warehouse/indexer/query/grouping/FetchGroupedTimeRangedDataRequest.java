@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.query.grouping;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -23,4 +24,6 @@ public class FetchGroupedTimeRangedDataRequest {
   OffsetDateTime from;
   @NonNull
   OffsetDateTime to;
+  @Default
+  boolean onlySolvedAlerts = true;
 }

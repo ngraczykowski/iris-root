@@ -49,6 +49,7 @@ class GroupingQueryTest {
     testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
     testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
     testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_4, MAPPED_ALERT_7);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
@@ -63,6 +64,31 @@ class GroupingQueryTest {
     assertThat(response.getRows()).hasSize(2);
     Row row = response.getRows().get(1);
     assertThat(row.getCount()).isEqualTo(2);
+    assertThat(row.getValue(COUNTRY_KEY)).isEqualTo(Values.COUNTRY_UK);
+    assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(Values.RISK_TYPE_PEP);
+  }
+
+  @Test
+  void shouldReturnGroupingByResultWithAlertStatusError() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_4, MAPPED_ALERT_7);
+
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
+        .onlySolvedAlerts(false)
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    assertThat(response.getRows()).hasSize(2);
+    Row row = response.getRows().get(1);
+    assertThat(row.getCount()).isEqualTo(3);
     assertThat(row.getValue(COUNTRY_KEY)).isEqualTo(Values.COUNTRY_UK);
     assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(Values.RISK_TYPE_PEP);
   }

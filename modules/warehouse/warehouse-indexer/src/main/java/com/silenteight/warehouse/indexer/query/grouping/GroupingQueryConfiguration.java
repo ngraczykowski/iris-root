@@ -9,15 +9,24 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.validation.Valid;
+
 @Configuration
-@EnableConfigurationProperties({ ElasticsearchProperties.class })
+@EnableConfigurationProperties({ ElasticsearchProperties.class, DataProductionProperties.class })
 class GroupingQueryConfiguration {
 
   @Bean
+  SqlBuilder sqlBuilder(@Valid DataProductionProperties dataProductionProperties) {
+    return new SqlBuilder(
+        dataProductionProperties.getFieldName(), dataProductionProperties.getCompletedValue());
+  }
+
+  @Bean
   GroupingQueryService customReportingService(
+      SqlBuilder sqlBuilder,
       OpendistroElasticClient opendistroElasticClient,
       QueryIndexService queryIndexService) {
 
-    return new GroupingQueryService(new SqlBuilder(), opendistroElasticClient, queryIndexService);
+    return new GroupingQueryService(sqlBuilder, opendistroElasticClient, queryIndexService);
   }
 }

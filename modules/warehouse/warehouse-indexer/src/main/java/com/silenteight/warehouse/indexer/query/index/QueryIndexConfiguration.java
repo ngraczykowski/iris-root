@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 class QueryIndexConfiguration {
 
   @Bean
-  QueryIndexService indexService(OpendistroElasticClient opendistroElasticClient) {
-    return new QueryIndexService(new SqlBuilder(), opendistroElasticClient);
+  QueryIndexService indexService(
+      SqlBuilder sqlBuilder, OpendistroElasticClient opendistroElasticClient) {
+
+    return new QueryIndexService(sqlBuilder, opendistroElasticClient);
   }
 }
