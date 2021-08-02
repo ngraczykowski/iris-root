@@ -167,7 +167,7 @@ public class SolveUseCase {
       eventBuilder.setStepId(fromJavaUuid(solveResponse.getStepId()));
 
     FeatureVectorSolvedEvent event = eventBuilder.build();
-    log.debug("Sending FV event: {}", event);
+    log.debug("Building FV solved event: {}", event);
     return event;
   }
 
