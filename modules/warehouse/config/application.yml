@@ -32,7 +32,6 @@ warehouse:
       - "\\d{1,}\\.Relationships\\..*"
       - "\\d{1,}\\.WorldCheckEntities\\..*"
       - "\\d{1,}\\.WorldCheckIndividuals\\..*"
-      - "DN_CASE\\..*"
   messaging:
     integration:
       backup-indexing-inbound:

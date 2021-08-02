@@ -8,11 +8,11 @@ import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toMap;
 
@@ -23,17 +23,44 @@ class AlertGenerator {
   private final Random random = new SecureRandom();
 
   Alert generateProduction() {
+    HashMap<String, String> payload = new HashMap<>();
+    payload.put("recommendation", getRandomValue("Level 2 Review", "AAA False Positive"));
+    payload.put("comment", getRandomValue("S8 recommended action - comment"));
+    payload.put(
+        "s8_recommendation",
+        getRandomValue("ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE"));
+    payload.put(
+        "recommendationDate",
+        getRandomValue("2021-07-21T13:01:38.295455Z", "2021-07-21T13:01:38.291792Z"));
+    payload.put("lob_country", getRandomValue("PL", "DE", "UK"));
+    payload.put("risk_type", getRandomValue("SAN", "PEP"));
+    payload.put(
+        "fvSignature",
+        getRandomValue("qC4MMVPvDOpB/vA+hn8tM8mUgt4=", "qC4MMVPvDOpB/vA+hn8tM8mUgt4="));
+    payload.put(
+        "policyId", getRandomValue(
+            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
+            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"));
+    payload.put(
+        "policy", getRandomValue(
+            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
+            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"));
+    payload.put(
+        "stepId", getRandomValue("steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
+            "steps/4461c9c8-4980-4d63-9fc8-afe3e677eacf"));
+    payload.put(
+        "step", getRandomValue("steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
+            "steps/4461c9c8-4980-4d63-9fc8-afe3e677eacf"));
+    payload.put("1.CustomerEntities.LoB Region", getRandomValue("EGY", "ASP"));
+    payload.put("1.CustomerEntities.Address", "Fixed Value CE1");
+    payload.put("2.CustomerEntities.Address", "Fixed Value CE2");
+    payload.put("DN_CASE.ExtendedAttribute5", getRandomValue("SAN", "PEP"));
+    payload.put("status", getRandomValue("OK", "PROCESSING", "ERROR"));
+
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
         .setName(getRandomValue(ALERT_NAMES))
-        .setPayload(convertMapToPayload(Map.of(
-            "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"),
-            "lob_country", getRandomValue("PL", "DE", "UK"),
-            "risk_type", getRandomValue("SAN", "PEP"),
-            "1.CustomerEntities.Address", "Fixed Value CE1",
-            "2.CustomerEntities.Address", "Fixed Value CE2")))
-        .addAllMatches(of(
-            match(getRandomMatchName(), "solution", "NO_DECISION")))
+        .setPayload(convertMapToPayload(payload))
         .build();
   }
 
@@ -43,8 +70,6 @@ class AlertGenerator {
         .setName(getRandomValue(ALERT_NAMES))
         .setPayload(convertMapToPayload(Map.of(
             "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"))))
-        .addAllMatches(of(
-            match(getRandomMatchName(), "solution", "NO_DECISION")))
         .build();
   }
 
@@ -68,10 +93,6 @@ class AlertGenerator {
 
   private String getRandomDiscriminator() {
     return randomUUID().toString();
-  }
-
-  private String getRandomMatchName() {
-    return "matches/" + randomUUID().toString();
   }
 
   private String getRandomValue(String... allowedValues) {
