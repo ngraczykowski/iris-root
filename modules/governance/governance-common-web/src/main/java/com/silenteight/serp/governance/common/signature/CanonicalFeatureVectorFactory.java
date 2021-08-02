@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.common.signature;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.google.protobuf.ByteString;
 
@@ -14,6 +15,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 import static java.util.stream.IntStream.range;
 
 @RequiredArgsConstructor
+@Slf4j
 public class CanonicalFeatureVectorFactory {
 
   private final SignatureCalculator signatureCalculator;
@@ -42,6 +44,8 @@ public class CanonicalFeatureVectorFactory {
     List<String> values = getSortedValues(sortedMap);
     Signature signature = calculateSignature(names, values);
 
+    log.debug("Generating CanonicalFeatureVector (features={}, signature={})",
+              sortedMap, signature);
     return CanonicalFeatureVector.builder()
         .names(names)
         .values(values)
