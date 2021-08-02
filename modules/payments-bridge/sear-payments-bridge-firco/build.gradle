@@ -6,4 +6,12 @@ plugins {
 dependencies {
   implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-ae")
+
+  implementation libraries.spring_context
+  implementation libraries.spring_web
+
+  implementation libraries.hibernate_validator
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_databind
+  implementation libraries.jakarta_validation_api
 }
