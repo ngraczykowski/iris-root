@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.simulator.processing.alert.index.feed.FeedFixtures.*;
+import static com.silenteight.simulator.processing.alert.index.fixtures.RecommendationFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,8 +35,8 @@ class RecommendationsGeneratedUseCaseTest {
     // given
     when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
     when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);
-    when(recommendationService.getRecommendation(RECOMMENDATION_NAME)).thenReturn(RECOMMENDATION);
-    when(recommendationService.getMetadata(RECOMMENDATION_NAME)).thenReturn(METADATA);
+    when(recommendationService.getRecommendationWithMetadata(RECOMMENDATION_NAME))
+        .thenReturn(RECOMMENDATION_WITH_METADATA);
 
     // when
     SimulationDataIndexRequest indexRequest = underTest.handle(REQUEST);
@@ -69,8 +69,8 @@ class RecommendationsGeneratedUseCaseTest {
     // given
     when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
     when(requestIdGenerator.generate()).thenReturn(REQUEST_ID);
-    when(recommendationService.getRecommendation(RECOMMENDATION_NAME)).thenReturn(RECOMMENDATION);
-    when(recommendationService.getMetadata(RECOMMENDATION_NAME)).thenReturn(METADATA);
+    when(recommendationService.getRecommendationWithMetadata(RECOMMENDATION_NAME))
+        .thenReturn(RECOMMENDATION_WITH_METADATA);
 
     // when
     SimulationDataIndexRequest indexRequest = underTest.handle(MULTIPLE_ALERTS_REQUEST);

@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
-import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.simulator.management.domain.SimulationService;
@@ -93,27 +93,26 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   }
 
   private Alert toAlertToIndex(RecommendationInfo recommendationInfo) {
-    Recommendation recommendation =
-        recommendationService.getRecommendation(recommendationInfo.getRecommendation());
-    RecommendationMetadata metadata =
-        recommendationService.getMetadata(recommendationInfo.getRecommendation());
+    RecommendationWithMetadata recommendationWithMetadata =
+        recommendationService.getRecommendationWithMetadata(recommendationInfo.getRecommendation());
 
     return Alert.newBuilder()
         .setDiscriminator(recommendationInfo.getAlert())
         .setName(recommendationInfo.getAlert())
-        .setPayload(toStruct(recommendation, metadata))
+        .setPayload(toStruct(recommendationWithMetadata))
         .build();
   }
 
-  private static Struct toStruct(Recommendation recommendation, RecommendationMetadata metadata) {
+  private static Struct toStruct(RecommendationWithMetadata recommendationWithMetadata) {
     return Struct.newBuilder()
-        .putAllFields(toFields(recommendation, metadata))
+        .putAllFields(toFields(recommendationWithMetadata))
         .build();
   }
 
   private static Map<String, Value> toFields(
-      Recommendation recommendation, RecommendationMetadata metadata) {
+      RecommendationWithMetadata recommendationWithMetadata) {
 
+    Recommendation recommendation = recommendationWithMetadata.getRecommendation();
     Map<String, Value> fields = new HashMap<>();
     fields.put(RECOMMENDATION_ALERT_FIELD, toValue(recommendation.getAlert()));
     fields.put(RECOMMENDATION_CREATE_TIME_FIELD,
@@ -122,7 +121,8 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
         toValue(recommendation.getRecommendedAction()));
     fields.put(RECOMMENDATION_COMMENT_FIELD, toValue(recommendation.getRecommendationComment()));
 
-    metadata
+    recommendationWithMetadata
+        .getMetadata()
         .getMatchesList()
         .stream()
         .findFirst()
