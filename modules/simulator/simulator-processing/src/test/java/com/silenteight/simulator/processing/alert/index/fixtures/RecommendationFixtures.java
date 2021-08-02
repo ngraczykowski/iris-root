@@ -1,4 +1,4 @@
-package com.silenteight.simulator.processing.alert.index.feed;
+package com.silenteight.simulator.processing.alert.index.fixtures;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Timestamp;
@@ -22,23 +23,25 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class FeedFixtures {
+public final class RecommendationFixtures {
 
-  static final String REQUEST_ID = "b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
-  static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
-  static final String RECOMMENDATION_NAME = "recommendations/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
-  static final String ALERT_NAME = "alerts/de1afe98-0b58-4941-9791-4e081f9b8139";
-  static final Timestamp RECOMMENDATION_CREATE_TIME = Timestamp.newBuilder()
+  public static final String REQUEST_ID = "b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
+  public static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
+  public static final String RECOMMENDATION_NAME =
+      "recommendations/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
+  public static final String RECOMMENDATION_METADATA_NAME = RECOMMENDATION_NAME + "/metadata";
+  public static final String ALERT_NAME = "alerts/de1afe98-0b58-4941-9791-4e081f9b8139";
+  public static final Timestamp RECOMMENDATION_CREATE_TIME = Timestamp.newBuilder()
       .setSeconds(1622505601)
       .setNanos(0)
       .build();
-  static final String RECOMMENDED_ACTION = "FALSE_POSITIVE";
-  static final String RECOMMENDATION_COMMENT = "This is not that person";
-  static final String MATCH_NAME = "matches/a9b45451-6fde-4832-8dc0-d17b4708d8ca";
-  static final String FEATURE_SOLUTION = "FALSE_POSITIVE";
-  static final String MATCH_SOLUTION = "FALSE_POSITIVE";
+  public static final String RECOMMENDED_ACTION = "FALSE_POSITIVE";
+  public static final String RECOMMENDATION_COMMENT = "This is not that person";
+  public static final String MATCH_NAME = "matches/a9b45451-6fde-4832-8dc0-d17b4708d8ca";
+  public static final String FEATURE_SOLUTION = "FALSE_POSITIVE";
+  public static final String MATCH_SOLUTION = "FALSE_POSITIVE";
 
-  static final Recommendation RECOMMENDATION =
+  public static final Recommendation RECOMMENDATION =
       Recommendation.newBuilder()
           .setName(RECOMMENDATION_NAME)
           .setAlert(ALERT_NAME)
@@ -47,13 +50,13 @@ final class FeedFixtures {
           .setRecommendationComment(RECOMMENDATION_COMMENT)
           .build();
 
-  static final RecommendationInfo RECOMMENDATION_INFO =
+  public static final RecommendationInfo RECOMMENDATION_INFO =
       RecommendationInfo.newBuilder()
           .setAlert(ALERT_NAME)
           .setRecommendation(RECOMMENDATION_NAME)
           .build();
 
-  static final RecommendationsGenerated REQUEST =
+  public static final RecommendationsGenerated REQUEST =
       RecommendationsGenerated.newBuilder()
           .setAnalysis(ANALYSIS_NAME)
           .addAllRecommendationInfos(singletonList(RECOMMENDATION_INFO))
@@ -65,13 +68,13 @@ final class FeedFixtures {
       .map(v -> RECOMMENDATION_INFO)
       .collect(toList());
 
-  static final RecommendationsGenerated MULTIPLE_ALERTS_REQUEST = RecommendationsGenerated
+  public static final RecommendationsGenerated MULTIPLE_ALERTS_REQUEST = RecommendationsGenerated
       .newBuilder()
       .setAnalysis(ANALYSIS_NAME)
       .addAllRecommendationInfos(RECOMMENDATIONS_LIST)
       .build();
 
-  static final Struct FEATURE_REASON =
+  public static final Struct FEATURE_REASON =
       Struct.newBuilder()
           .putAllFields(
               Map.of("reason-1", Value.newBuilder()
@@ -79,14 +82,14 @@ final class FeedFixtures {
                   .build()))
           .build();
 
-  static final FeatureMetadata FEATURE_METADATA =
+  public static final FeatureMetadata FEATURE_METADATA =
       FeatureMetadata.newBuilder()
           .setAgentConfig("agent-config")
           .setSolution(FEATURE_SOLUTION)
           .setReason(FEATURE_REASON)
           .build();
 
-  static final MatchMetadata MATCH_METADATA =
+  public static final MatchMetadata MATCH_METADATA =
       MatchMetadata.newBuilder()
           .setMatch(MATCH_NAME)
           .setSolution(MATCH_SOLUTION)
@@ -94,10 +97,16 @@ final class FeedFixtures {
           .putAllFeatures(Map.of("feature-name", FEATURE_METADATA))
           .build();
 
-  static final RecommendationMetadata METADATA =
+  public static final RecommendationMetadata METADATA =
       RecommendationMetadata.newBuilder()
-          .setName(RECOMMENDATION_NAME + "/metadata")
+          .setName(RECOMMENDATION_METADATA_NAME)
           .setAlert(ALERT_NAME)
           .addMatches(MATCH_METADATA)
+          .build();
+
+  public static final RecommendationWithMetadata RECOMMENDATION_WITH_METADATA =
+      RecommendationWithMetadata.newBuilder()
+          .setRecommendation(RECOMMENDATION)
+          .setMetadata(METADATA)
           .build();
 }
