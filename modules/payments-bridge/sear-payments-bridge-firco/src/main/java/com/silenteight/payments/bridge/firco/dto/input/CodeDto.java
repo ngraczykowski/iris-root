@@ -13,6 +13,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CodeDto implements Serializable {
 
+  private static final long serialVersionUID = -5273726119096949439L;
+
   @JsonProperty("Name")
   private String name; // "KDBKKPPY"
 
