@@ -6,7 +6,7 @@ import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
-import com.silenteight.payments.bridge.SearPaymentsBridgeModule;
+import com.silenteight.payments.bridge.PaymentsBridgeModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.WebApplicationType;
@@ -29,22 +29,22 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = SearPaymentsBridgeModule.class)
+@ComponentScan(basePackageClasses = PaymentsBridgeModule.class)
 @EnableIntegration
 @EnableIntegrationGraphController
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableScheduling
-@EntityScan(basePackageClasses = SearPaymentsBridgeModule.class)
-@IntegrationComponentScan(basePackageClasses = SearPaymentsBridgeModule.class)
+@EntityScan(basePackageClasses = PaymentsBridgeModule.class)
+@IntegrationComponentScan(basePackageClasses = PaymentsBridgeModule.class)
 @Slf4j
-public class SearPaymentsBridgeApplication {
+public class PaymentsBridgeApplication {
 
   public static void main(String[] args) {
     setUpSystemProperties();
     setUpSecuritySystemProperties();
 
     Schedulers.enableMetrics();
-    new SpringApplicationTemplate(args, SearPaymentsBridgeApplication.class)
+    new SpringApplicationTemplate(args, PaymentsBridgeApplication.class)
         .contextCallback(new DefaultSpringApplicationContextCallback())
         .runAndExit(new Configurer());
   }

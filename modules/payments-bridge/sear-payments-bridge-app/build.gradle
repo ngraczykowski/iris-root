@@ -78,6 +78,6 @@ dependencies {
 
 jar {
   manifest {
-    attributes "Main-Class": "com.silenteight.searpayments.bridge.app.SearPaymentsBridgeApplication"
+    attributes "Main-Class": "com.silenteight.payments.bridge.app.PaymentsBridgeApplication"
   }
 }
