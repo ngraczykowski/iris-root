@@ -2,10 +2,12 @@ package com.silenteight.serp.governance.vector.usage.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 
 @RequiredArgsConstructor
+@Slf4j
 public class UsageService {
 
   @NonNull
@@ -16,6 +18,8 @@ public class UsageService {
         .findByVectorSignature(canonicalFeatureVector.getVectorSignature())
         .orElseGet(() -> asFeatureVectorUsage(canonicalFeatureVector));
 
+    log.debug("Feature vector (fv_signature={}) used {} times.",
+              canonicalFeatureVector.getVectorSignature(), count);
     featureVectorUsage.markAsUsed(count);
     analyticsFeatureVectorUsageRepository.save(featureVectorUsage);
   }
