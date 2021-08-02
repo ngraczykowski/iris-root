@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.ingest.repackager;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.solving.api.v1.*;
@@ -15,6 +16,7 @@ import static com.silenteight.solving.api.utils.Uuids.fromJavaUuid;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 public class IngestDataToSolvedEventRepackagerService {
 
   @NonNull
@@ -29,10 +31,12 @@ public class IngestDataToSolvedEventRepackagerService {
   }
 
   public FeatureVectorSolvedEventBatch activate(List<Alert> alertsList) {
-    return FeatureVectorSolvedEventBatch
+    FeatureVectorSolvedEventBatch result = FeatureVectorSolvedEventBatch
         .newBuilder()
         .addAllEvents(repackAlertsToEvents(alertsList))
         .build();
+    log.debug("FeatureVectorSolvedEventBatch = {}", result);
+    return result;
   }
 
   private List<FeatureVectorSolvedEvent> repackAlertsToEvents(List<Alert> alertsList) {
@@ -44,11 +48,13 @@ public class IngestDataToSolvedEventRepackagerService {
 
   private FeatureVectorSolvedEvent repackEventIfNeeded(Alert alert) {
     List<String> components = fetchVectorsComponentsFields(alert);
-    FeatureVectorSolvedEvent featureVectorSolvedEvent = null;
-    if (!components.isEmpty()) {
-      featureVectorSolvedEvent = repackEvent(alert, components);
+    if (components.isEmpty()) {
+      log.warn("No features nor categories found in alert (alertDiscriminator={})",
+               alert.getDiscriminator());
+      return null;
     }
-    return featureVectorSolvedEvent;
+
+    return repackEvent(alert, components);
   }
 
   private FeatureVectorSolvedEvent repackEvent(Alert alert, List<String> components) {
