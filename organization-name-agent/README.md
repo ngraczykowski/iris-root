@@ -99,6 +99,13 @@ For final solution for two set of names:
 Result(solution=<Solution.MATCH: 'MATCH'>, reason=Reason(partials=[PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, names=('HP, INC', 'HP CO.')), PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, names=('HP, INC', 'HEWLETT-PACKARD COMPANY'))]))
 ```
 
+or, if you want to solution as simple python dict:
+```
+>>> from company_name.utils import simplify
+>>> simplify(agent.resolve(['HP, INC'], ['HEWLETT-PACKARD COMPANY',  'HP CO.']))
+{'solution': 'MATCH', 'reason': {'partials': [{'solution': 'MATCH', 'solution_probability': 1, 'names': ['HP, INC', 'HP CO.']}, {'solution': 'MATCH', 'solution_probability': 0.8, 'names': ['HP, INC', 'HEWLETT-PACKARD COMPANY']}]}}
+```
+
 <a name="deploying"/>
 
 ## Deploying

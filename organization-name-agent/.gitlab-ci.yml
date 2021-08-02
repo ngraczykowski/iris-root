@@ -27,6 +27,7 @@ build:
     - master
     - merge_requests
   script:
+    - scripts/bootstrap.sh
     - scripts/prepare_artifacts.sh
     - scripts/test.sh
   artifacts:
