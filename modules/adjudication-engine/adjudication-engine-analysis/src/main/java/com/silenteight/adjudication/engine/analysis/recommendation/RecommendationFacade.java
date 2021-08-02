@@ -45,6 +45,10 @@ public class RecommendationFacade {
     return getRecommendationUseCase.getRecommendationMetadata(metadataName);
   }
 
+  public RecommendationWithMetadata getRecommendationWithMetadata(String recommendation) {
+    return getRecommendationUseCase.getRecommendationWithMetadata(recommendation);
+  }
+
   public void streamRecommendations(
       String analysisOrDataset, Consumer<Recommendation> recommendationConsumer) {
 

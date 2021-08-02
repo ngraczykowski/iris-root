@@ -37,4 +37,8 @@ class RecommendationService {
   RecommendationMetadata getRecommendationMetadata(GetRecommendationMetadataRequest request) {
     return recommendationFacade.getRecommendationMetadata(request.getRecommendationMetadata());
   }
+
+  RecommendationWithMetadata getRecommendationWithMetadata(GetRecommendationRequest request) {
+    return recommendationFacade.getRecommendationWithMetadata(request.getRecommendation());
+  }
 }

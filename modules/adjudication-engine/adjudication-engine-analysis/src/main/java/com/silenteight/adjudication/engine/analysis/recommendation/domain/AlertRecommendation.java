@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
@@ -65,6 +66,14 @@ public class AlertRecommendation {
     }
 
     return builder.build();
+  }
+
+  public RecommendationWithMetadata toRecommendationWithMetadata(String comment) {
+    return RecommendationWithMetadata
+        .newBuilder()
+        .setRecommendation(toRecommendation(comment))
+        .setMetadata(toMetadata())
+        .build();
   }
 
   @SuppressWarnings("FeatureEnvy")

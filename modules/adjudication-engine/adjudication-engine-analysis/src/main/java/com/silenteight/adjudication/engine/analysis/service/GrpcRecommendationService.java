@@ -50,4 +50,12 @@ class GrpcRecommendationService extends RecommendationServiceImplBase {
     responseObserver.onNext(recommendationService.getRecommendationMetadata(request));
     responseObserver.onCompleted();
   }
+
+  @Override
+  public void getRecommendationWithMetadata(
+      GetRecommendationRequest request,
+      StreamObserver<RecommendationWithMetadata> responseObserver) {
+
+    responseObserver.onNext(recommendationService.getRecommendationWithMetadata(request));
+    responseObserver.onCompleted();  }
 }
