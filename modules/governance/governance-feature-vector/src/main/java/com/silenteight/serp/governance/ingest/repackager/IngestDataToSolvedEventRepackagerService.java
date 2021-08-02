@@ -58,7 +58,8 @@ public class IngestDataToSolvedEventRepackagerService {
   }
 
   private FeatureVectorSolvedEvent repackEvent(Alert alert, List<String> components) {
-    log.debug("Trying to repack alert {}, with components {}", alert, components);
+    if (log.isTraceEnabled())
+      log.trace("Trying to repack alert {}, with components {}", alert, components);
     return FeatureVectorSolvedEvent
         .newBuilder()
         .setId(fromJavaUuid(randomUUID()))
@@ -92,8 +93,9 @@ public class IngestDataToSolvedEventRepackagerService {
         .map(Value::getStringValue)
         .collect(toList());
 
-    log.debug("Features vector = {}, based on components = {}, in alert (alertDiscriminator = {}",
-              result, components, alert.getDiscriminator());
+    if (log.isTraceEnabled())
+      log.trace("Features vector = {}, based on components = {}, in alert (alertDiscriminator = {}",
+                result, components, alert.getDiscriminator());
     return FeatureVector.newBuilder().addAllFeatureValue(result).build();
   }
 
