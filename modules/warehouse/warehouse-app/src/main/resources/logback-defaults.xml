@@ -42,4 +42,5 @@
   <logger name="sun.net" level="WARN"/>
   <logger name="sun.rmi" level="WARN"/>
   <logger name="sun.rmi.transport" level="WARN"/>
+  <logger name="org.keycloak.adapters.KeycloakDeployment" level="WARN"/>
 </included>
