@@ -52,10 +52,13 @@ class GetBulkResultsUseCaseSpec extends Specification {
       ].sort()
       solvedAlertMetadata == expectedAlertMetadata
 
-      def errorAlertMetadata = result.errorAlerts.first().getAlertMetadata()
-      errorAlertMetadata == [
-          new AlertMetadata('key-1', 'value-1')
-      ]
+      with(alerts.last()){
+        errorMessage == 'error message'
+        def errorAlertMetadata = getAlertMetadata()
+        errorAlertMetadata == [
+            new AlertMetadata('key-1', 'value-1')
+        ]
+      }
     }
 
     1 * bulkRepository.findById(bulkId) >> Optional.of(fixtures.bulk)

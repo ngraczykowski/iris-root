@@ -1,25 +1,22 @@
 package com.silenteight.hsbc.bridge.bulk
 
+import com.silenteight.hsbc.bridge.alert.WarehouseApi
 import com.silenteight.hsbc.bridge.bulk.rest.AlertMetadata
+import com.silenteight.hsbc.bridge.bulk.rest.AlertRecommendation
+import com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItemStatus
 import com.silenteight.hsbc.bridge.bulk.rest.BatchSolvedAlerts
-import com.silenteight.hsbc.bridge.bulk.rest.ErrorAlert
-import com.silenteight.hsbc.bridge.bulk.rest.SolvedAlert
 import com.silenteight.hsbc.bridge.report.Alert
-import com.silenteight.hsbc.bridge.report.Warehouse
 
 import spock.lang.Specification
 
 class IngestRecommendationsUseCaseSpec extends Specification {
 
-  def warehouseApi = Mock(Warehouse)
+  def warehouseApi = Mock(WarehouseApi)
   def underTest = new IngestRecommendationsUseCase(warehouseApi)
 
   def "should convert solvedAlert to Alert"() {
     given:
-    def batchAlerts = new BatchSolvedAlerts(
-        alerts: SOLVED_ALERTS,
-        errorAlerts: ERROR_ALERTS
-    )
+    def batchAlerts = new BatchSolvedAlerts(alerts: ALERT_RECOMMENDATION)
 
     when:
     underTest.ingest(batchAlerts)
@@ -31,45 +28,45 @@ class IngestRecommendationsUseCaseSpec extends Specification {
         discriminator == "someDiscriminator0"
         def metadata = getMetadata()
         metadata.get("trackingId") == "someTrackingId0"
-        metadata.get("extendedAttribute5") == "value3"
+        metadata.get("extendedAttribute5") == "value0"
         getMatches().isEmpty()
       }
 
       with(argument[1]) {
-        discriminator == "someDiscriminator1"
+
         def metadata = getMetadata()
-        metadata.get("comment") == "someComment"
+        metadata.get("errorMessage") == "someErrorMessage"
         metadata.get("trackingId") == "someTrackingId1"
-        metadata.get("extendedAttribute5") == "value2"
+        metadata.get("extendedAttribute5") == "value1"
         getMatches().isEmpty()
       }
     }
   }
 
-  static List<ErrorAlert> ERROR_ALERTS = [
-      new ErrorAlert(
-          id: 'someAlertId1',
-          errorMessage: 'Some error',
-          alertMetadata: [
-              new AlertMetadata('trackingId', 'someTrackingId0'),
-              new AlertMetadata('discriminator', 'someDiscriminator0'),
-              new AlertMetadata('extendedAttribute5', 'value3')
-          ]
-      )
-  ]
-
-  static List<SolvedAlert> SOLVED_ALERTS = [
-      new SolvedAlert(
+  static List<AlertRecommendation> ALERT_RECOMMENDATION = [
+      new AlertRecommendation(
           id: 'someAlertId',
+          status: BatchAlertItemStatus.COMPLETED,
           recommendation: 'someRecommendation',
           comment: 'someComment',
           policyId: 'somePolicyId',
           stepId: 'someStepId',
           fvSignature: 'someFvSignature',
           alertMetadata: [
+              new AlertMetadata('trackingId', 'someTrackingId0'),
+              new AlertMetadata('discriminator', 'someDiscriminator0'),
+              new AlertMetadata('extendedAttribute5', 'value0')
+          ]
+      ),
+      new AlertRecommendation(
+          id: 'someAlertId1',
+          status: BatchAlertItemStatus.ERROR,
+          errorMessage: 'someErrorMessage',
+          recommendation: 'someRecommendation',
+          comment: 'someComment',
+          alertMetadata: [
               new AlertMetadata('trackingId', 'someTrackingId1'),
-              new AlertMetadata('discriminator', 'someDiscriminator1'),
-              new AlertMetadata('extendedAttribute5', 'value2')
+              new AlertMetadata('extendedAttribute5', 'value1')
           ]
       )
   ]

@@ -43,11 +43,7 @@ public class BatchSolvedAlerts {
   @NotNull
   @Size(min = 1)
   @Valid 
-  private List<SolvedAlert> alerts = new ArrayList<>();
-
-  @JsonProperty("errorAlerts")
-  @Valid
-  private List<ErrorAlert> errorAlerts = new ArrayList<>();
+  private List<AlertRecommendation> alerts = new ArrayList<>();
 
   public BatchSolvedAlerts batchId(String batchId) {
     this.batchId = batchId;
@@ -85,14 +81,14 @@ public class BatchSolvedAlerts {
     this.batchStatus = batchStatus;
   }
 
-  public BatchSolvedAlerts alerts(List<SolvedAlert> alerts) {
+  public BatchSolvedAlerts alerts(List<AlertRecommendation> alerts) {
     this.alerts = alerts;
     return this;
   }
 
-  public BatchSolvedAlerts addAlertsItem(SolvedAlert alertsItem) {
+  public BatchSolvedAlerts addAlertsItem(AlertRecommendation alertsItem) {
     if (this.alerts == null) {
-      this.alerts = new ArrayList<SolvedAlert>();
+      this.alerts = new ArrayList<AlertRecommendation>();
     }
     this.alerts.add(alertsItem);
     return this;
@@ -103,34 +99,12 @@ public class BatchSolvedAlerts {
    * @return alerts
    **/
   @Schema(description = "")
-  public List<SolvedAlert> getAlerts() {
+  public List<AlertRecommendation> getAlerts() {
     return alerts;
   }
 
-  public void setAlerts(List<SolvedAlert> alerts) {
+  public void setAlerts(List<AlertRecommendation> alerts) {
     this.alerts = alerts;
-  }
-
-  public BatchSolvedAlerts errorAlerts(List<ErrorAlert> errorAlerts) {
-    this.errorAlerts = errorAlerts;
-    return this;
-  }
-
-  public BatchSolvedAlerts addErrorAlertsItem(ErrorAlert alertsItem) {
-    if (this.errorAlerts == null) {
-      this.errorAlerts = new ArrayList<ErrorAlert>();
-    }
-    this.errorAlerts.add(alertsItem);
-    return this;
-  }
-
-  @Schema(description = "")
-  public List<ErrorAlert> getErrorAlerts() {
-    return errorAlerts;
-  }
-
-  public void setErrorAlerts(List<ErrorAlert> errorAlerts) {
-    this.errorAlerts = errorAlerts;
   }
 
   @Override
@@ -144,13 +118,12 @@ public class BatchSolvedAlerts {
     BatchSolvedAlerts batchSolvedAlerts = (BatchSolvedAlerts) o;
     return Objects.equals(this.batchId, batchSolvedAlerts.batchId) &&
         Objects.equals(this.batchStatus, batchSolvedAlerts.batchStatus) &&
-        Objects.equals(this.alerts, batchSolvedAlerts.alerts) &&
-        Objects.equals(this.errorAlerts, batchSolvedAlerts.errorAlerts);
+        Objects.equals(this.alerts, batchSolvedAlerts.alerts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(batchId, batchStatus, alerts, errorAlerts);
+    return Objects.hash(batchId, batchStatus, alerts);
   }
 
 
@@ -162,7 +135,6 @@ public class BatchSolvedAlerts {
     sb.append("    batchId: ").append(toIndentedString(batchId)).append("\n");
     sb.append("    batchStatus: ").append(toIndentedString(batchStatus)).append("\n");
     sb.append("    alerts: ").append(toIndentedString(alerts)).append("\n");
-    sb.append("    errorAlerts: ").append(toIndentedString(errorAlerts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

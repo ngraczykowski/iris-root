@@ -23,16 +23,22 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * SolvedAlert
+ * AlertRecommendation
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-06-16T08:18:56.492Z[GMT]")
-public class SolvedAlert {
+public class AlertRecommendation {
 
   @JsonProperty("id")
   @NotNull
   @NotBlank
   private String id = null;
+
+  @JsonProperty("status")
+  private BatchAlertItemStatus status = null;
+
+  @JsonProperty("errorMessage")
+  private String errorMessage = null;
 
   @JsonProperty("recommendation")
   @NotNull
@@ -45,17 +51,12 @@ public class SolvedAlert {
   private String comment = null;
 
   @JsonProperty("policy_id")
-  @NotNull
-  @NotBlank
   private String policyId = null;
 
   @JsonProperty("step_id")
-  @NotNull
   private String stepId = null;
 
   @JsonProperty("fv_signature")
-  @NotNull
-  @NotBlank
   private String fvSignature = null;
 
   @JsonProperty("alertMetadata")
@@ -63,7 +64,7 @@ public class SolvedAlert {
   @Valid 
   private List<AlertMetadata> alertMetadata = null;
 
-  public SolvedAlert id(String id) {
+  public AlertRecommendation id(String id) {
     this.id = id;
     return this;
   }
@@ -82,7 +83,31 @@ public class SolvedAlert {
     this.id = id;
   }
 
-  public SolvedAlert recommendation(String recommendation) {
+  public AlertRecommendation status(BatchAlertItemStatus status) {
+    this.status = status;
+    return this;
+  }
+
+  @Schema(description = "")
+  public BatchAlertItemStatus getStatus() { return status; }
+
+  public void setStatus(BatchAlertItemStatus status) {
+    this.status = status;
+  }
+
+  public AlertRecommendation errorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+    return this;
+  }
+
+  @Schema(description = "")
+  public String getErrorMessage() { return errorMessage; }
+
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+
+  public AlertRecommendation recommendation(String recommendation) {
     this.recommendation = recommendation;
     return this;
   }
@@ -101,7 +126,7 @@ public class SolvedAlert {
     this.recommendation = recommendation;
   }
 
-  public SolvedAlert comment(String comment) {
+  public AlertRecommendation comment(String comment) {
     this.comment = comment;
     return this;
   }
@@ -120,7 +145,7 @@ public class SolvedAlert {
     this.comment = comment;
   }
 
-  public SolvedAlert policyId(String policyId) {
+  public AlertRecommendation policyId(String policyId) {
     this.policyId = policyId;
     return this;
   }
@@ -139,7 +164,7 @@ public class SolvedAlert {
     this.policyId = policyId;
   }
 
-  public SolvedAlert stepId(String stepId) {
+  public AlertRecommendation stepId(String stepId) {
     this.stepId = stepId;
     return this;
   }
@@ -158,7 +183,7 @@ public class SolvedAlert {
     this.stepId = stepId;
   }
 
-  public SolvedAlert fvSignature(String fvSignature) {
+  public AlertRecommendation fvSignature(String fvSignature) {
     this.fvSignature = fvSignature;
     return this;
   }
@@ -177,12 +202,12 @@ public class SolvedAlert {
     this.fvSignature = fvSignature;
   }
 
-  public SolvedAlert alertMetadata(List<AlertMetadata> alertMetadata) {
+  public AlertRecommendation alertMetadata(List<AlertMetadata> alertMetadata) {
     this.alertMetadata = alertMetadata;
     return this;
   }
 
-  public SolvedAlert addAlertMetadataItem(AlertMetadata alertMetadataItem) {
+  public AlertRecommendation addAlertMetadataItem(AlertMetadata alertMetadataItem) {
     if (this.alertMetadata == null) {
       this.alertMetadata = new ArrayList<AlertMetadata>();
     }
@@ -213,14 +238,14 @@ public class SolvedAlert {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SolvedAlert solvedAlert = (SolvedAlert) o;
-    return Objects.equals(this.id, solvedAlert.id) &&
-        Objects.equals(this.recommendation, solvedAlert.recommendation) &&
-        Objects.equals(this.comment, solvedAlert.comment) &&
-        Objects.equals(this.policyId, solvedAlert.policyId) &&
-        Objects.equals(this.stepId, solvedAlert.stepId) &&
-        Objects.equals(this.fvSignature, solvedAlert.fvSignature) &&
-        Objects.equals(this.alertMetadata, solvedAlert.alertMetadata);
+    AlertRecommendation alert = (AlertRecommendation) o;
+    return Objects.equals(this.id, alert.id) &&
+        Objects.equals(this.recommendation, alert.recommendation) &&
+        Objects.equals(this.comment, alert.comment) &&
+        Objects.equals(this.policyId, alert.policyId) &&
+        Objects.equals(this.stepId, alert.stepId) &&
+        Objects.equals(this.fvSignature, alert.fvSignature) &&
+        Objects.equals(this.alertMetadata, alert.alertMetadata);
   }
 
   @Override

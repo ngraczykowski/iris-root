@@ -79,11 +79,6 @@ class Bulk extends BaseEntity {
   }
 
   @Transient
-  Collection<BulkAlertEntity> getInvalidAlerts() {
-    return alerts.stream().filter(not(BulkAlertEntity::isValid)).collect(Collectors.toList());
-  }
-
-  @Transient
   boolean isNotCompleted() {
     return status != COMPLETED;
   }

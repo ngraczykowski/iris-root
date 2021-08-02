@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItemStatus.COMPLETED;
+import static com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItemStatus.ERROR;
 import static java.lang.String.valueOf;
 import static java.util.List.of;
 
@@ -35,8 +37,8 @@ public class GetBulkResultsUseCase {
     var response = new BatchSolvedAlerts();
     response.setBatchId(batch.getId());
     response.setBatchStatus(BatchStatus.valueOf(batch.getStatus().name()));
-    response.setAlerts(getSolvedAlerts(batch.getValidAlerts()));
-    response.setErrorAlerts(getErrorAlerts(batch.getInvalidAlerts()));
+    response.setAlerts(mapAlerts(batch.getAlerts()));
+
     return response;
   }
 
@@ -62,17 +64,19 @@ public class GetBulkResultsUseCase {
     }
   }
 
-  private List<ErrorAlert> getErrorAlerts(Collection<BulkAlertEntity> items) {
-    return items.stream().map(this::getErrorAlert).collect(Collectors.toList());
+  private List<AlertRecommendation> mapAlerts(Collection<BulkAlertEntity> items) {
+    return items.stream().map(this::getAlertRecommendation).collect(Collectors.toList());
   }
 
-  private List<SolvedAlert> getSolvedAlerts(Collection<BulkAlertEntity> items) {
-    return items.stream().map(this::getSolvedAlert).collect(Collectors.toList());
+  private AlertRecommendation getAlertRecommendation(BulkAlertEntity alert) {
+    return alert.isValid() ? getSolvedAlert(alert) : getErrorAlert(alert);
   }
 
-  private ErrorAlert getErrorAlert(BulkAlertEntity alert) {
-    var errorAlert = new ErrorAlert();
+  private AlertRecommendation getErrorAlert(BulkAlertEntity alert) {
+    var errorAlert = new AlertRecommendation();
     errorAlert.setId(alert.getExternalId());
+    errorAlert.status(ERROR);
+
     errorAlert.setComment(
         "Adjudication failed. Invalid alert data or an unexpected error occurred.");
     errorAlert.setErrorMessage(alert.getErrorMessage());
@@ -81,11 +85,12 @@ public class GetBulkResultsUseCase {
     return errorAlert;
   }
 
-  private SolvedAlert getSolvedAlert(BulkAlertEntity alert) {
-    var solvedAlert = new SolvedAlert();
+  private AlertRecommendation getSolvedAlert(BulkAlertEntity alert) {
+    var solvedAlert = new AlertRecommendation();
     var metadata = alert.getMetadata();
     solvedAlert.setAlertMetadata(map(metadata));
     solvedAlert.setId(alert.getExternalId());
+    solvedAlert.status(COMPLETED);
 
     if (alert.isCompleted()) {
       var recommendation = getRecommendation(alert.getName(), metadata);
@@ -97,7 +102,7 @@ public class GetBulkResultsUseCase {
   }
 
   private void attachRecommendationMetadata(
-      SolvedAlert alert, RecommendationWithMetadataDto recommendation) {
+      AlertRecommendation alert, RecommendationWithMetadataDto recommendation) {
     var metadata = recommendation.getMetadata();
     var recommendationAlertMetadata =
         recommendationMetadataCollector.collectFromRecommendationMetadata(metadata);
