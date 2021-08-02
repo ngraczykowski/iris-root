@@ -58,6 +58,7 @@ public class IngestDataToSolvedEventRepackagerService {
   }
 
   private FeatureVectorSolvedEvent repackEvent(Alert alert, List<String> components) {
+    log.debug("Trying to repack alert {}, with components {}", alert, components);
     return FeatureVectorSolvedEvent
         .newBuilder()
         .setId(fromJavaUuid(randomUUID()))
