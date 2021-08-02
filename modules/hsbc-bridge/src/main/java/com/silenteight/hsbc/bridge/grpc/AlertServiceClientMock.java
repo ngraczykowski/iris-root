@@ -5,15 +5,23 @@ import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.UUID.randomUUID;
 
 class AlertServiceClientMock implements AlertServiceClient {
 
   @Override
-  public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alerts) {
+  public BatchCreateAlertsResponseDto batchCreateAlerts(Stream<AlertForCreation> alerts) {
+    var requestedAlerts = alerts.map(a -> AlertDto.builder()
+            .alertId(a.getId())
+            .name("alerts/" + randomUUID())
+            .build())
+        .collect(Collectors.toList());
+
     return BatchCreateAlertsResponseDto.builder()
-        .alerts(createAlerts(alerts))
+        .alerts(requestedAlerts)
         .build();
   }
 
@@ -29,16 +37,8 @@ class AlertServiceClientMock implements AlertServiceClient {
     return matchIds.stream()
         .map(m -> AlertMatchDto.builder()
             .matchId(m)
-            .name("matches/" + UUID.randomUUID())
+            .name("matches/" + randomUUID())
             .build())
-        .collect(Collectors.toList());
-  }
-
-  private List<AlertDto> createAlerts(Collection<String> alerts) {
-    return alerts.stream().map(a -> AlertDto.builder()
-        .alertId(a)
-        .name("alerts/" + UUID.randomUUID())
-        .build())
         .collect(Collectors.toList());
   }
 }

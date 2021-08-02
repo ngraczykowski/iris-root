@@ -9,6 +9,7 @@ import com.silenteight.hsbc.bridge.alert.AlertStatus;
 
 import org.hibernate.annotations.Immutable;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +32,8 @@ class BulkAlertEntity {
   private String errorMessage;
 
   private String name;
+
+  private OffsetDateTime alertTime;
 
   @Enumerated(EnumType.STRING)
   private AlertStatus status = AlertStatus.STORED;

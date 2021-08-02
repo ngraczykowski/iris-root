@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
+import com.silenteight.hsbc.bridge.alert.AlertServiceClient.AlertForCreation;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDto;
 import com.silenteight.hsbc.bridge.alert.dto.BatchCreateAlertMatchesRequestDto;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
@@ -15,10 +16,12 @@ import com.silenteight.hsbc.bridge.match.event.UpdateMatchWithNameEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +31,7 @@ class AlertService {
   private final ApplicationEventPublisher eventPublisher;
 
   Collection<String> registerAlertsWithMatches(Map<String, AlertMatchIdComposite> alertMatchIds) {
-    var alerts = registerAlerts(alertMatchIds.keySet());
+    var alerts = registerAlerts(alertMatchIds.values());
     var matches = registerMatches(alertMatchIds, alerts);
 
     publishUpdateAlertsWithNameEvent(alerts, alertMatchIds);
@@ -39,8 +42,20 @@ class AlertService {
         .collect(Collectors.toList());
   }
 
-  private List<AlertDto> registerAlerts(Collection<String> alertIds) {
-    return alertServiceClient.batchCreateAlerts(alertIds).getAlerts();
+  private List<AlertDto> registerAlerts(Collection<AlertMatchIdComposite> alertMatchIdComposites) {
+    Stream<AlertForCreation> alertsForCreation = alertMatchIdComposites.stream()
+        .map(a -> new AlertForCreation() {
+          @Override
+          public String getId() {
+            return a.getAlertExternalId();
+          }
+
+          @Override
+          public OffsetDateTime getAlertTime() {
+            return a.getAlertTime();
+          }});
+
+    return alertServiceClient.batchCreateAlerts(alertsForCreation).getAlerts();
   }
 
   private List<MatchWithAlert> registerMatches(
@@ -86,7 +101,8 @@ class AlertService {
   }
 
   private void publishUpdateMatchesWithNameEvent(
-      List<MatchWithAlert> registeredMatches, Map<String, AlertMatchIdComposite> alertIdsWithMatches) {
+      List<MatchWithAlert> registeredMatches,
+      Map<String, AlertMatchIdComposite> alertIdsWithMatches) {
     var matchIdsWithNames = registeredMatches
         .stream()
         .map(a -> {
@@ -98,13 +114,15 @@ class AlertService {
     eventPublisher.publishEvent(new UpdateMatchWithNameEvent(matchIdsWithNames));
   }
 
-  private MatchIdWithName toMatchIdWithName(Collection<MatchIdComposite> matchIds, MatchWithAlert matchWithAlert) {
+  private MatchIdWithName toMatchIdWithName(
+      Collection<MatchIdComposite> matchIds, MatchWithAlert matchWithAlert) {
     var matchExternalId = matchWithAlert.getMatchExternalId();
     var id = findMatchInternalIdByExternalId(matchIds, matchExternalId);
     return new MatchIdWithName(id, matchWithAlert.getName());
   }
 
-  private long findMatchInternalIdByExternalId(Collection<MatchIdComposite> matchIds, String matchExternalId) {
+  private long findMatchInternalIdByExternalId(
+      Collection<MatchIdComposite> matchIds, String matchExternalId) {
     return matchIds
         .stream()
         .filter(m -> m.getExternalId().equals(matchExternalId))

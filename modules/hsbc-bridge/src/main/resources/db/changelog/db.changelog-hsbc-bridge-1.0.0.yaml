@@ -574,3 +574,17 @@ databaseChangeLog:
                   name: status
             indexName: idx_bridge_analysis_timeout_status
             tableName: hsbc_bridge_analysis
+
+  - changeSet:
+      id: 1.0.0-17
+      author: bmartofel
+      changes:
+        - addColumn:
+            tableName: hsbc_bridge_alert
+            columns:
+              - column:
+                  name: alert_time
+                  type: timestamp
+                  defaultValueDate: "CURRENT_TIMESTAMP(3)"
+                  constraints:
+                    nullable: false

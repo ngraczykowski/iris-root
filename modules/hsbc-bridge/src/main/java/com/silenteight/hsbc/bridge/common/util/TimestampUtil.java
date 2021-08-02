@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import com.google.protobuf.Timestamp;
 import com.google.protobuf.TimestampOrBuilder;
 
 import java.time.Instant;
@@ -20,5 +21,12 @@ public class TimestampUtil {
   public static OffsetDateTime toOffsetDateTime(@NonNull TimestampOrBuilder timestamp) {
     Instant instant = toInstant(timestamp);
     return OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
+  }
+
+  public static Timestamp fromOffsetDateTime(@NonNull OffsetDateTime offsetDateTime) {
+    return Timestamp.newBuilder()
+        .setSeconds(offsetDateTime.toEpochSecond())
+        .setNanos(offsetDateTime.getNano())
+        .build();
   }
 }

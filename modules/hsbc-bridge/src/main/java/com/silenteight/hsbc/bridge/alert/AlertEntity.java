@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +35,9 @@ public class AlertEntity extends BaseEntity {
 
   @Setter
   private String discriminator;
+
+  @Setter
+  private OffsetDateTime alertTime;
 
   private String errorMessage;
 

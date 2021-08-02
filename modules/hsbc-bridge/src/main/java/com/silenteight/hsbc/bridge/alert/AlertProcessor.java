@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
+import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
 
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.PRE_PROCESSED;
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.STORED;
@@ -47,9 +50,14 @@ class AlertProcessor {
   }
 
   private void fillAlert(AlertEntity alert, AlertData alertData) {
+    alert.setAlertTime(getAlertTime(alertData.getCaseInformation()));
     alert.setDiscriminator(alertData.getFlagKey());
     alert.setExternalId(alertData.getId());
     alert.getMetadata().addAll(new AlertMetadataCollector().collectFromAlertData(alertData));
+  }
+
+  private static OffsetDateTime getAlertTime(CaseInformation caseInformation) {
+    return caseInformation.getAlertTime().orElse(OffsetDateTime.now());
   }
 
   private void tryToProcessRelationshipsAndCreateMatches(AlertEntity alert, AlertData alertData) {

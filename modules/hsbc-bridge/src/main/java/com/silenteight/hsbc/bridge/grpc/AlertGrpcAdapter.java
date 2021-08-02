@@ -14,10 +14,11 @@ import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.fromOffsetDateTime;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -30,13 +31,11 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
   @Override
   @Retryable(value = StatusRuntimeException.class)
-  public BatchCreateAlertsResponseDto batchCreateAlerts(Collection<String> alertIds) {
-    log.info("batchCreateAlerts alertIds={}", alertIds);
+  public BatchCreateAlertsResponseDto batchCreateAlerts(Stream<AlertForCreation> alerts) {
+    log.info("batchCreateAlerts alerts={}", alerts);
 
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
-        .addAllAlerts(alertIds.stream()
-            .map(a -> Alert.newBuilder().setAlertId(a).build())
-            .collect(toList()))
+        .addAllAlerts(alerts.map(AlertGrpcAdapter::mapAlert).collect(toList()))
         .build();
 
     var response = getStub().batchCreateAlerts(gprcRequest);
@@ -96,5 +95,12 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
   private AlertServiceBlockingStub getStub() {
     return alertServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+  }
+
+  private static Alert mapAlert(AlertForCreation alert) {
+    return Alert.newBuilder()
+        .setAlertId(alert.getId())
+        .setAlertTime(fromOffsetDateTime(alert.getAlertTime()))
+        .build();
   }
 }

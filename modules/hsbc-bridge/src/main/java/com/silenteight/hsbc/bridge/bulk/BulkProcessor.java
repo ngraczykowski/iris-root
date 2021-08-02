@@ -83,6 +83,7 @@ class BulkProcessor {
     return AlertMatchIdComposite.builder()
         .alertExternalId(alert.getExternalId())
         .alertInternalId(alert.getId())
+        .alertTime(alert.getAlertTime())
         .matchIds(getMatchIds(alert.getMatches()))
         .build();
   }
