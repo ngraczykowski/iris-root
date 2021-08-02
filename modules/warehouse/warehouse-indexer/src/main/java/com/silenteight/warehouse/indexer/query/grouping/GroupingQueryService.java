@@ -41,7 +41,8 @@ public class GroupingQueryService {
         existingFields,
         fetchGroupedDataRequest.getDateField(),
         fetchGroupedDataRequest.getFrom(),
-        fetchGroupedDataRequest.getTo());
+        fetchGroupedDataRequest.getTo(),
+        fetchGroupedDataRequest.isOnlySolvedAlerts());
 
     QueryDto queryDto = QueryDto.builder()
         .query(query)
