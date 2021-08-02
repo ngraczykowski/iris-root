@@ -68,10 +68,12 @@ public class IngestDataToSolvedEventRepackagerService {
   }
 
   private FeatureCollection getFeatureCollection(List<String> components) {
-    return FeatureCollection
+    FeatureCollection result = FeatureCollection
         .newBuilder()
         .addAllFeature(getFeaturesList(components))
         .build();
+    log.debug("Features collection = {}, based on components = {}", result, components);
+    return result;
   }
 
   private List<Feature> getFeaturesList(List<String> components) {
@@ -89,6 +91,8 @@ public class IngestDataToSolvedEventRepackagerService {
         .map(Value::getStringValue)
         .collect(toList());
 
+    log.debug("Features vector = {}, based on components = {}, in alert (alertDiscriminator = {}",
+              result, components, alert.getDiscriminator());
     return FeatureVector.newBuilder().addAllFeatureValue(result).build();
   }
 
