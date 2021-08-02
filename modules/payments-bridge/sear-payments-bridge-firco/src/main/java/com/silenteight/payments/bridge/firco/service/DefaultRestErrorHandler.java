@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 public class DefaultRestErrorHandler {
 
   //@ExceptionHandler(Exception.class)
-  public ResponseEntity<AckDto> handleError() {
-    return ResponseEntity.internalServerError().build();
+  public ResponseEntity<AckDto> handleError(Exception e) {
+    return ResponseEntity.ok(AckDto.serverError(e.getMessage()));
   }
 }
