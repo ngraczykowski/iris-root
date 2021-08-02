@@ -230,7 +230,13 @@ public class SolveUseCase {
     List<SolutionResponse> solutionResponses = solvedFeatureVectors
         .stream().map(SolvedFeatureVector::getResponse).collect(toList());
 
-    return BatchSolveFeaturesResponse.newBuilder().addAllSolutions(solutionResponses).build();
+    BatchSolveFeaturesResponse result = BatchSolveFeaturesResponse
+        .newBuilder()
+        .addAllSolutions(solutionResponses)
+        .build();
+
+    log.debug("Batch Solve Feature Response = {}", result);
+    return result;
   }
 
   @lombok.Value(staticConstructor = "of")
