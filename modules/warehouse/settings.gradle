@@ -18,3 +18,5 @@ include 'warehouse-report-sm'
 include 'warehouse-sampling'
 include 'warehouse-test-app'
 include 'warehouse-test-client'
+include 'warehouse-report-statistics'
+
