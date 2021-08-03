@@ -29,7 +29,7 @@ import static java.util.List.of;
 public class DataIndexFixtures {
 
   static final Map<String, String> ALERT_PAYLOAD_WITH_TWO_VALUES = Map.of(
-      SourceAlertKeys.STATUS_KEY, Values.STATUS_OK,
+      SourceAlertKeys.STATUS_KEY, Values.STATUS_COMPLETED,
       SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       SourceAlertKeys.COUNTRY_KEY, COUNTRY_UK
   );
