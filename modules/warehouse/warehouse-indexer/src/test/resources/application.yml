@@ -36,7 +36,7 @@ warehouse:
     production:
       status:
         field-name: alert_status
-        completed-value: OK
+        completed-value: COMPLETED
 
 test:
   messaging:

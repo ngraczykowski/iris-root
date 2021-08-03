@@ -26,7 +26,7 @@ class SqlBuilderTest {
   void setUp() {
     DataProductionProperties productionProperties = new DataProductionProperties();
     productionProperties.setFieldName("alert_status");
-    productionProperties.setCompletedValue("OK");
+    productionProperties.setCompletedValue("COMPLETED");
     underTest = new SqlBuilder(productionProperties.getFieldName(),
         productionProperties.getCompletedValue());
   }
@@ -42,7 +42,7 @@ class SqlBuilderTest {
         + "from itest_production "
         + "where (index_timestamp >= timestamp('2021-04-15 12:17:37.098') "
         + "  and  index_timestamp < timestamp('2021-04-15 13:17:37.098') "
-        + "and alert_status = 'OK') "
+        + "and alert_status = 'COMPLETED') "
         + "group by `alert_lob_country`, `alert_risk_type`");
   }
 

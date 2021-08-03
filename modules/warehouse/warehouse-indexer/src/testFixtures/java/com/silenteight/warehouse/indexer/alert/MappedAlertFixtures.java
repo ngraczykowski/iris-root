@@ -64,7 +64,7 @@ public class MappedAlertFixtures {
     public static final String RISK_TYPE_PEP = "PEP";
     public static final String COUNTRY_UK = "UK";
     public static final String COUNTRY_PL = "PL";
-    public static final String STATUS_OK = "OK";
+    public static final String STATUS_COMPLETED = "COMPLETED";
     public static final String STATUS_ERROR = "ERROR";
     public static final String PROCESSING_TIMESTAMP = "2021-04-15T12:17:37.098Z";
     public static final String PROCESSING_TIMESTAMP_2 = "2021-05-05T18:17:37.098Z";
@@ -90,7 +90,7 @@ public class MappedAlertFixtures {
       DISCRIMINATOR, DISCRIMINATOR_1,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
-      MappedKeys.STATUS_KEY, Values.STATUS_OK,
+      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
       AlertMapperConstants.ALERT_NAME, Values.ALERT_NAME,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
@@ -109,7 +109,7 @@ public class MappedAlertFixtures {
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.STATUS_KEY, Values.STATUS_OK,
+      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
@@ -119,7 +119,7 @@ public class MappedAlertFixtures {
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.STATUS_KEY, Values.STATUS_OK,
+      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_2,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
@@ -128,7 +128,7 @@ public class MappedAlertFixtures {
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_PL,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.STATUS_KEY, Values.STATUS_OK,
+      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_3,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_PL
   );
