@@ -14,16 +14,14 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @RequiredArgsConstructor
 class GrpcLocationInputService extends LocationInputServiceImplBase {
 
-  private final LocationInputService locationInputService;
+  private final FeatureService featureService;
 
   @Override
   public void batchGetMatchLocationInputs(
       BatchGetMatchLocationInputsRequest request,
       StreamObserver<BatchGetMatchLocationInputsResponse> responseObserver) {
 
-    // XXX: See note in GrpcNameInputService for the implementation guide.
-
-    // TODO(ahaczewski): Implement batchGetMatchLocationInputs.
-    responseObserver.onError(Status.UNIMPLEMENTED.asRuntimeException());
+    featureService.batchGetMatchLocationInputs(request, responseObserver::onNext);
+    responseObserver.onCompleted();
   }
 }
