@@ -3,14 +3,17 @@ import pathlib
 from typing import Generator, Tuple
 
 import pytest
-import yaml
+from agent_base.agent import AgentRunner
+from agent_base.utils import Config
 from silenteight.agents.v1.api.exchange.exchange_pb2 import (
     AgentExchangeRequest,
     AgentExchangeResponse,
 )
 from silenteight.datasource.api.name.v1.name_pb2 import NameFeatureInput
 
-from company_name.agent.company_name_agent import CompanyNameAgent
+from company_name.agent.agent import CompanyNameAgent
+from company_name.agent.agent_data_source import CompanyNameAgentDataSource
+from company_name.agent.agent_exchange import CompanyNameAgentExchange
 from tests.agent.mocks.adjudication_engine_mock import AdjudicationEngineMock
 from tests.agent.mocks.data_source_mock import DataSourceMock
 
@@ -18,7 +21,7 @@ from tests.agent.mocks.data_source_mock import DataSourceMock
 # - pytest will execute it as an asyncio task
 pytestmark = pytest.mark.asyncio
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 FEATURE_NAME = "features/companyName"
 
@@ -27,36 +30,42 @@ FEATURE_NAME = "features/companyName"
 def config():
     configuration_path = pathlib.Path("./config/application.yaml")
     configuration_path.symlink_to("application.local.yaml")
-    with configuration_path.open("rt") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
     try:
-        yield config
+        yield Config()
     finally:
         configuration_path.unlink()
 
 
 @pytest.fixture(autouse=True)
 async def ae_mock(config):
-    async with AdjudicationEngineMock(config) as mock:
+    async with AdjudicationEngineMock(config.application_config) as mock:
         yield mock
 
 
 @pytest.fixture(autouse=True)
 async def data_source_mock(config):
     async with DataSourceMock(
-        address=config["grpc"]["client"]["data-source"]["address"]
+        address=config.application_config["grpc"]["client"]["data-source"]["address"]
     ) as mock:
         yield mock
 
 
 @pytest.fixture(autouse=True)
-async def company_name_agent():
-    agent = CompanyNameAgent()
-    await agent.start()
+async def company_name_agent(config):
+    agent = CompanyNameAgent(config)
+    runner = AgentRunner(config.application_config)
+    await runner.start(
+        agent,
+        services=[
+            CompanyNameAgentExchange(
+                config, CompanyNameAgentDataSource(config.application_config)
+            )
+        ],
+    )
     try:
         yield agent
     finally:
-        await agent.stop()
+        await runner.stop()
 
 
 def get_solutions(

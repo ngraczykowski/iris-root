@@ -9,8 +9,8 @@ from company_name.solution.solution import PairResult, Reason, Result, Solution
 
 
 class Resolver:
-    def __init__(self, configuration_dir):
-        self.reduction = ScoresReduction(configuration_dir)
+    def __init__(self, config):
+        self.reduction = ScoresReduction(config)
 
     def _check_pair(
         self, ap_name: NameInformation, mp_name: NameInformation

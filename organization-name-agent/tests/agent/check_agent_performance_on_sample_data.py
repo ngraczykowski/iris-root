@@ -1,35 +1,34 @@
 import asyncio
 import collections
-import contextlib
 import itertools
 import logging
 import math
-import multiprocessing
 import pathlib
-import sys
 import timeit
 
 import yaml
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 
-from company_name.main import main as agent_run
 from tests.agent.mocks.adjudication_engine_mock import AdjudicationEngineMock
-from tests.agent.mocks.data_source_mock import DataSourceMock
+from tests.agent.mocks.utils import (
+    run_agent_in_process,
+    run_data_source_mock_in_process,
+)
 
-NUMBER_OF_MATCHES = 10000
-NUMBER_OF_MATCHES_IN_MESSAGE = 10
-NUMBER_OF_MESSAGES_IN_PROCESSING = 40
+NUMBER_OF_MATCHES = 100
+NUMBER_OF_MATCHES_IN_MESSAGE = 1
+NUMBER_OF_MESSAGES_IN_PROCESSING = 5
 NUMBER_OF_NAMES_PER_SIDE_IN_MATCH = 1
 
 
 class Matches:
-    def __init__(self):
+    def __init__(self, number_of_matches):
+        self.total_number_of_matches = number_of_matches
         self.in_processing = []
         self.to_process = collections.deque(self.all_matches())
 
-    @staticmethod
-    def all_matches():
-        return (f"match_{i}" for i in range(NUMBER_OF_MATCHES))
+    def all_matches(self):
+        return (f"match_{i}" for i in range(self.total_number_of_matches))
 
     def produce_message(self):
         matches = [
@@ -59,35 +58,8 @@ class Matches:
                 )
 
 
-@contextlib.contextmanager
-def _run_in_process(f):
-    p = multiprocessing.Process(target=f, args=())
-    p.start()
-    try:
-        yield
-    except Exception as err:
-        print(repr(err))
-        raise
-    finally:
-        p.kill()
-        p.join()
-
-
-@contextlib.contextmanager
-def run_agent():
-    def f():
-        try:
-            agent_run()
-        finally:
-            sys.stdout.flush()
-            sys.stderr.flush()
-
-    with _run_in_process(f):
-        yield
-
-
-def get_companies():
-    with open("tests/agent/sample_data/company_names.txt") as f:
+def get_companies(filepath):
+    with open(filepath, "rt") as f:
         companies = [line.strip() for line in f]
         for _, c1, c2 in zip(
             range(NUMBER_OF_MATCHES),
@@ -103,35 +75,17 @@ def get_companies():
             yield {"alerted_party_names": c1, "watchlist_names": c2}
 
 
-@contextlib.contextmanager
-def run_data_source_mock():
-    def f():
-        loop = asyncio.get_event_loop()
-        mock = DataSourceMock(CONFIG["grpc"]["client"]["data-source"]["address"])
-        mock.alerts = dict(
-            zip((f"match_{i}" for i in range(NUMBER_OF_MATCHES)), get_companies())
-        )
-        loop.create_task(mock.start())
-        try:
-            loop.run_forever()
-        finally:
-            sys.stdout.flush()
-            loop.run_until_complete(mock.stop())
-
-    with _run_in_process(f):
-        yield
-
-
-async def main(config):
+async def main(config, matches):
     await asyncio.sleep(10)
-    matches = Matches()
 
     async with AdjudicationEngineMock(config) as mock:
         start_time = last_time = timeit.default_timer()
         for _ in range(NUMBER_OF_MESSAGES_IN_PROCESSING):
             await mock.send(matches.produce_message())
+            await asyncio.sleep(1)
 
-        for i in range(math.floor(NUMBER_OF_MATCHES / NUMBER_OF_MATCHES_IN_MESSAGE)):
+        i = 0
+        while matches.in_processing:
             if i and i % 100 == 0:
                 current_time = timeit.default_timer()
                 logging.info(
@@ -140,6 +94,7 @@ async def main(config):
                 last_time = current_time
 
             _, received = await mock.get()
+            i += 1
             matches.accept_received(received)
 
             message = matches.produce_message()
@@ -163,10 +118,18 @@ if __name__ == "__main__":
     with configuration_path.open("rt") as f:
         CONFIG = yaml.load(f, Loader=yaml.FullLoader)
 
+    matches = Matches(NUMBER_OF_MATCHES)
+    random_alerts = dict(
+        zip(
+            matches.all_matches(),
+            get_companies("tests/agent/sample_data/company_names.txt"),
+        )
+    )
     try:
-        with run_data_source_mock():
-            with run_agent():
+        with run_data_source_mock_in_process(CONFIG, random_alerts):
+            with run_agent_in_process():
                 loop = asyncio.get_event_loop()
-                loop.run_until_complete(main(CONFIG))
+                loop.run_until_complete(main(CONFIG, matches))
     finally:
         configuration_path.unlink()
+        print(matches.in_processing)

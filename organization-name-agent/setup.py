@@ -1,15 +1,14 @@
 from setuptools import setup, find_packages
 
 install_require = [
+    "agent-base",
     "agents-api",
-    "aio_pika",
+    "aiohttp",
     "data-source-api",
     "googleapis-common-protos",
     "grpcio",
     "grpcio-tools",
     "importlib_resources",
-    "lz4",
-    "aiohttp",
     "phonetics",
     "python-consul2",
     "pyyaml",

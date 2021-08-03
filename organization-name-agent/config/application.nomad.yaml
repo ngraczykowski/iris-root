@@ -17,11 +17,10 @@ consul:
 
 agent:
   processes: 2
-  messaging:
-    agent-exchange:
-      request:
-        queue-name: 'agent.companyname-requests'
 
-      response:
-        exchange: 'agent.response'
+  agent-exchange:
+    request:
+      queue-name: 'agent.companyname-requests'
 
+    response:
+      exchange: 'agent.response'

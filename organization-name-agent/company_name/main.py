@@ -2,7 +2,12 @@ import argparse
 import logging
 import pathlib
 
-from company_name.agent.company_name_agent import CompanyNameAgent
+from agent_base.agent import AgentRunner
+from agent_base.utils import Config
+
+from company_name.agent.agent import CompanyNameAgent
+from company_name.agent.agent_data_source import CompanyNameAgentDataSource
+from company_name.agent.agent_exchange import CompanyNameAgentExchange
 
 
 def main():
@@ -26,7 +31,17 @@ def main():
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
     )
-    CompanyNameAgent(configuration_dir=args.configuration_dir).run()
+
+    config = Config(configuration_dirs=(args.configuration_dir,), required=True)
+    AgentRunner(config).run(
+        CompanyNameAgent(config),
+        services=[
+            CompanyNameAgentExchange(
+                config,
+                data_source=CompanyNameAgentDataSource(config),
+            )
+        ],
+    )
 
 
 if __name__ == "__main__":

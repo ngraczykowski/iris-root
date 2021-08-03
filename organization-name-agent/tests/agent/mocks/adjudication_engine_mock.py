@@ -32,15 +32,13 @@ class AdjudicationEngineMock:
 
         channel: aio_pika.Channel = await self._connection.channel()
         self._exchange = await channel.get_exchange(
-            self.config["agent"]["messaging"]["agent-exchange"]["request"]["exchange"]
+            self.config["agent"]["agent-exchange"]["request"]["exchange"]
         )
 
         if self.consume_responses:
             self._callback_queue = await channel.declare_queue(name="", exclusive=True)
             await self._callback_queue.bind(
-                exchange=self.config["agent"]["messaging"]["agent-exchange"][
-                    "response"
-                ]["exchange"],
+                exchange=self.config["agent"]["agent-exchange"]["response"]["exchange"],
                 routing_key="#",
             )
         self.logger.info("AEMock started")
@@ -62,9 +60,9 @@ class AdjudicationEngineMock:
         if not correlation_id:
             correlation_id = str(uuid.uuid4())
         if routing_key is None:
-            routing_key = self.config["agent"]["messaging"]["agent-exchange"][
-                "request"
-            ]["routing-key"]
+            routing_key = self.config["agent"]["agent-exchange"]["request"][
+                "routing-key"
+            ]
         assert correlation_id not in self._events
         self._events[correlation_id] = asyncio.Event()
 
@@ -115,9 +113,7 @@ class AdjudicationEngineMock:
         if self._callback_queue:
             await self._callback_queue.cancel(self._callback_queue_tag)
             await self._callback_queue.unbind(
-                exchange=self.config["agent"]["messaging"]["agent-exchange"][
-                    "response"
-                ]["exchange"],
+                exchange=self.config["agent"]["agent-exchange"]["response"]["exchange"],
             )
             await self._callback_queue.delete()
 

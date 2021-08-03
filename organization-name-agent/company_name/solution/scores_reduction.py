@@ -3,7 +3,7 @@ import pathlib
 from typing import Any, Mapping, Optional, Sequence, Tuple, Union
 
 import sklearn  # noqa: F401
-import yaml
+from agent_base.utils import Config
 
 from company_name.scores.score import Score
 from company_name.solution.sklearn_model import SklearnModel
@@ -79,18 +79,19 @@ class ModelRule(ReductionRule):
 class ScoresReduction:
     reduction_file_name = "reduction-rules.yaml"
 
-    def __init__(self, configuration_dir: pathlib.Path):
-        self.rules = self._parse_rules(configuration_dir)
+    def __init__(self, config: Config):
+        self.rules = self._parse_rules(config)
 
     @classmethod
-    def _parse_rules(cls, configuration_dir: pathlib.Path) -> Sequence[ReductionRule]:
-        with open(configuration_dir / cls.reduction_file_name) as config_file:
-            cfg = yaml.load(config_file, Loader=yaml.FullLoader)
+    def _parse_rules(cls, config: Config) -> Sequence[ReductionRule]:
+        cfg = config.load_yaml_config(cls.reduction_file_name, required=True)
 
         rules = []
         for rule in cfg["rules"]:
             if "source" in rule:
-                rule["model"] = SklearnModel(configuration_dir / rule["source"])
+                rule["model"] = SklearnModel(
+                    config.get_config_path(rule["source"], required=True)
+                )
                 rules.append(ModelRule(**rule))
             else:
                 rules.append(FeatureRule(**rule))

@@ -17,13 +17,12 @@ consul:
 
 agent:
   processes: 10
-  messaging:
-    agent-exchange:
-      request:
-        exchange: 'agent.request'
-        routing-key: 'agents.companyName.versions.1_0_0.configs.1'
-        queue-name: 'agent.companyname-requests'
 
-      response:
-        exchange: 'agent.response'
+  agent-exchange:
+    request:
+      exchange: 'agent.request'
+      routing-key: 'agents.companyName.versions.1_0_0.configs.1'
+      queue-name: 'agent.companyname-requests'
 
+    response:
+      exchange: 'agent.response'
