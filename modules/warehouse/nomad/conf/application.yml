@@ -92,7 +92,7 @@ grpc:
 
 warehouse.report.rbs:
   production:
-    date-field-name: index_timestamp
+    date-field-name: alert_recommendationDate
     columns:
       - name: alert_fvSignature
         label: fv_signature
@@ -157,9 +157,9 @@ warehouse.report.rbs:
         label: qa_decision
         grouping-values: [PASSED, FAILED]
         add-counter: true
-      - name: alert_DN_CASE.currentState
+      - name: alert_analyst_decision
         label: analysis_decision
-        grouping-values: Level 1 Review, Level 2 Review
+        grouping-values: analyst_decision_true_positive, analyst_decision_false_positive
         add-counter: false
   simulation:
     date-field-name: index_timestamp
@@ -227,13 +227,13 @@ warehouse.report.rbs:
         label: qa_decision
         grouping-values: [ PASSED, FAILED ]
         add-counter: true
-      - name: alert_DN_CASE.currentState
+      - name: alert_analyst_decision
         label: analysis_decision
-        grouping-values: Level 1 Review, Level 2 Review
+        grouping-values: analyst_decision_true_positive, analyst_decision_false_positive
         add-counter: false
 
 warehouse.report.billing:
-  date-field-name: index_timestamp
+  date-field-name: alert_recommendationDate
   columns:
     - name: alert_recommendationYear
       label: year
@@ -242,9 +242,9 @@ warehouse.report.billing:
   transpose-column:
     name: alert_s8_recommendation
     label: count_solved
-    grouping-values: [AAA False Positive, Level 1 Review, Level 2 Review, Level 3 Review]
+    grouping-values: [ACTION_INVESTIGATE, ACTION_INVESTIGATE, ACTION_POTENTIAL_TRUE_POSITIVE]
     counter-label: count_alerts_received
-    significant-values: [AAA False Positive, Level 1 Review]
+    significant-values: [ACTION_POTENTIAL_TRUE_POSITIVE, ACTION_FALSE_POSITIVE]
     significant-summation-label: count_alerts_solved
 
 warehouse.report.sm:
@@ -260,11 +260,11 @@ warehouse.report.sm:
     decision-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
 
 warehouse.report.statistics:
+  date-field-name: index_timestamp
   ai-decision:
     field: alert_recommendation_recommended_action
     significant-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     false-positive-value: ACTION_FALSE_POSITIVE
   analyst-decision:
-    field: alert_DN_CASE.currentState
-    false-positive-value: Level 1 Review
-  date-field-name: index_timestamp
+    field: alert_analyst_decision
+    false-positive-value: analyst_decision_false_positive
