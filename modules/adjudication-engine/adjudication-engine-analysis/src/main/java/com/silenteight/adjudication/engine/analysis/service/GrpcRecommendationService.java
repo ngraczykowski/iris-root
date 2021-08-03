@@ -57,5 +57,6 @@ class GrpcRecommendationService extends RecommendationServiceImplBase {
       StreamObserver<RecommendationWithMetadata> responseObserver) {
 
     responseObserver.onNext(recommendationService.getRecommendationWithMetadata(request));
-    responseObserver.onCompleted();  }
+    responseObserver.onCompleted();
+  }
 }
