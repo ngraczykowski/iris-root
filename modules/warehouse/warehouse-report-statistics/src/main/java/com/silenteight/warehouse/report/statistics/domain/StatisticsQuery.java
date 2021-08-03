@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.statistics.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeConverter;
@@ -18,8 +19,10 @@ import com.silenteight.warehouse.report.statistics.simulation.SimulationStatisti
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
+@Slf4j
 @RequiredArgsConstructor
 class StatisticsQuery implements SimulationStatisticsQuery {
 
@@ -37,12 +40,27 @@ class StatisticsQuery implements SimulationStatisticsQuery {
 
   @Override
   public StatisticsDto getStatistics(String analysis) {
+    log.info("Getting statistics for analysis={}", analysis);
     FetchGroupedDataResponse response = fetchRawData(analysis);
     List<Row> rows = response.getRows();
+    EfficiencyDto efficiency = toEfficiencyDto(rows);
+    log.debug(
+        "Analysis={}, aiSolvedAsFalsePositive={}, analystSolvedAsFalsePositive={}",
+        analysis,
+        efficiency.getAiSolvedAsFalsePositive(),
+        efficiency.getAnalystSolvedAsFalsePositive());
+
+    EffectivenessDto effectiveness = toEffectivenessDto(rows);
+    log.debug(
+        "Analysis={}, allAlerts={}, solvedAlerts={}",
+        analysis,
+        effectiveness.getAllAlerts(),
+        effectiveness.getSolvedAlerts());
+
     return StatisticsDto
         .builder()
-        .effectiveness(toEffectivenessDto(rows))
-        .efficiency(toEfficiencyDto(rows))
+        .effectiveness(effectiveness)
+        .efficiency(efficiency)
         .build();
   }
 
@@ -100,7 +118,7 @@ class StatisticsQuery implements SimulationStatisticsQuery {
     String analystFalsePositiveValue = analystDecisionProperties.getFalsePositiveValue();
     return rows
         .stream()
-        .filter(row -> row.getValue(analystDecisionField).equals(analystFalsePositiveValue))
+        .filter(row -> analystFalsePositiveValue.equals(row.getValue(analystDecisionField)))
         .mapToLong(Row::getCount)
         .sum();
   }
@@ -111,8 +129,8 @@ class StatisticsQuery implements SimulationStatisticsQuery {
     String aiDecisionField = aiDecisionProperties.getField();
     return rows
         .stream()
-        .filter(row -> row.getValue(aiDecisionField).equals(aiFalsePositiveValue))
-        .collect(Collectors.toList());
+        .filter(row -> aiFalsePositiveValue.equals(row.getValue(aiDecisionField)))
+        .collect(toList());
   }
 
   private static long sumAlerts(List<Row> rows) {

@@ -351,4 +351,4 @@ warehouse.report.statistics:
   analyst-decision:
     field: alert_DN_CASE.currentState
     false-positive-value: Level 1 Review
-  date-field-name: alert_timestamp
+  date-field-name: index_timestamp
