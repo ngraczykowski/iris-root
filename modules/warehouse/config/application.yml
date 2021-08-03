@@ -55,7 +55,7 @@ warehouse:
   report:
     default-bucket: reports
     synchronization:
-      cron: "0 0 */1 * * ?"
+      cron: "-"
   kibana:
     url: http://localhost:5601
     username: technicaluser

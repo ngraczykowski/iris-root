@@ -55,7 +55,7 @@ warehouse:
     default-bucket: reports
     synchronization:
       production-tenant: ${warehouse.environment.prefix}_production_periodic
-      cron: "0 */1 * * * ?"
+      cron: "-"
     removal:
       cron: "0 0 1 * * ?"
       duration-time: P1D
