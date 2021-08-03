@@ -1,17 +1,33 @@
 [plantuml,importing-steps,svg]
 -----
 @startuml
-participant HSBC
-participant "SERP Bridge"
+actor HSBC
+participant "SERP Bridge" as bridge
 
-participant PostgresDB
-== **1) Receive Request for solved Alerts** ==
-HSBC -> "SERP Bridge": Http request for bulk status
-"SERP Bridge" <- PostgresDB: Check bulk status
-HSBC <- "SERP Bridge": Http response with bulk status for given id
+== **1) Request for bulk status** ==
 
-HSBC -> "SERP Bridge": Http request for results of bulk processing
-"SERP Bridge" <- PostgresDB: Retrieve recommendations for given batch id
-"SERP Bridge" --> HSBC: Http response
+HSBC -> bridge: Http request for bulk status
+note left
+    /async/batch/v1/{batchId}/status
+end note
+activate HSBC
+activate bridge
+|||
+HSBC <-- bridge: Http response with bulk status for given id
+deactivate HSBC
+deactivate bridge
+
+== **2) Request for bulk result** ==
+HSBC -> bridge: Http request for results of bulk processing
+note left
+    /async/batch/v1/{batchId}/result
+end note
+activate HSBC
+activate bridge
+|||
+bridge --> HSBC: Http response
+deactivate HSBC
+deactivate bridge
+
 @enduml
 -----

@@ -30,9 +30,8 @@ autonumber
 a -> q: send model info
 note left
 {
-    "id" : "4234-6543-gdf4-fgdf"
-    "modelName" : "models/4234-6543-gdf4-fgdf",
-    "url" : "http://10.2.3.4/models/4234-6543-gdf4-fgdf/export"
+    "name": "solvingModels/c15cd3a0-f03f-11eb-9a03-0242ac130003",
+    "version"”": "20210715101720",
 }
 end note
 q -> c: get model info
@@ -45,9 +44,11 @@ d -> c1: check status
 d -> c1: model/update
 note left
 {
-    "version" : "4234-6543-gdf4-fgdf-SNAPSHOT",
-    "url" : "https://nexus.hsbc.com/maven2/com/silenteight/hsbc/
-    model/4234-6543-gdf4-fgdf/model-4234-6543-gdf4-fgdf-SNAPSHOT.JSON"
+    "name" : "20210715101720",
+    "url" : "https://nexus.hsbc.com/maven2/com/silenteight/hsbc/model/
+               4234-6543-gdf4-fgdf/model-4234-6543-gdf4-fgdf-SNAPSHOT.JSON",
+    "type" : "MODEL",
+    "changeType" : "MAJOR"
 }
 end note
 c1 -> d1: get model

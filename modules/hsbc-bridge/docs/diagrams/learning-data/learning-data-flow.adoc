@@ -9,6 +9,7 @@ participant "Scheduler" as scheduler
 participant "Bridge" as bridge
 database Database as db
 queue RabbitMQ as queue
+participant "Adjudication Engine" as ae
 
 
 ||10||
@@ -35,6 +36,7 @@ activate bridge
 bridge <-> db: get pre processed bulk
 bridge -> bridge: process
 
+bridge <-> ae: [gRPC] register alerts and matches
 bridge <-> queue: send learning data for isPep
 bridge <-> queue: send learning data for warehouse
 bridge <-> queue: send learning data for historical decisions

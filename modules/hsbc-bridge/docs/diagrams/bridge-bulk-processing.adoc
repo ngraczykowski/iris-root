@@ -1,9 +1,9 @@
 [plantuml,importing-steps,svg]
 -----
 @startuml
-participant HSBC as a
+actor HSBC as a
 participant "Bridge" as b
-participant "Bridge DB" as c
+database "Bridge DB" as c
 participant "Adjudication Engine API" as d
 participant "Governance API" as e
 
@@ -11,7 +11,7 @@ participant "Governance API" as e
 a -> b: Http request with data (list of alerts)
 b -> c: Store bulk with payload and bulk items
 b --> b: BulkStoredEvent
-b -> a: Response to HSBC
+b --> a: Response to HSBC
 
 == **2) Bulk pre-processing** ==
 b -> c: Create and store alerts
