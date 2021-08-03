@@ -2,13 +2,15 @@ package com.silenteight.hsbc.bridge.alert
 
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
+import com.silenteight.hsbc.bridge.json.external.model.CaseInformation
 
 import spock.lang.Specification
 
 class AlertMapperSpec extends Specification {
 
   def payloadConverter = Mock(AlertPayloadConverter)
-  def underTest = new AlertMapper(payloadConverter)
+  def analystDecisionMapper = Mock(AnalystDecisionMapper)
+  def underTest = new AlertMapper(payloadConverter, analystDecisionMapper)
 
   def "Should find and return collection of Alerts"() {
     given:
@@ -24,6 +26,7 @@ class AlertMapperSpec extends Specification {
     alert.metadata.get("status") == "STORED"
     alert.metadata.get("errorMessage") == ""
     alert.metadata.get("extendedAttribute5") == "SAN"
+    alert.metadata.get("analyst_decision") == ""
 
     def match = alert.matches.first()
     match.name == "matchName1"
@@ -74,7 +77,11 @@ class AlertMapperSpec extends Specification {
                 new AlertMetadata("trackingId", "ddcc1234")
             ]
         ),
-          new AlertData()
+          new AlertData(
+              caseInformation: new CaseInformation(
+                  currentState: 'someCurrentState'
+              )
+          )
       )
   ]
 }

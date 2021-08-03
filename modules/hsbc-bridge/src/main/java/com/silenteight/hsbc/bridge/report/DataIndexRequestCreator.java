@@ -37,9 +37,9 @@ class DataIndexRequestCreator {
         .build();
   }
 
-  private static Struct toStruct(Map<String, String> metadata) {
+  private static Struct toStruct(Map<String, String> payloadMetadata) {
     var builder = Struct.newBuilder();
-    metadata.forEach((k, v) -> {
+    payloadMetadata.forEach((k, v) -> {
       if (nonNull(v)) {
         builder.putFields(k, Value.newBuilder().setStringValue(v).build());
       }

@@ -40,6 +40,10 @@ class AlertFacadeConfiguration {
   }
 
   private AlertMapper alertMapper() {
-    return new AlertMapper(alertPayloadConverter);
+    return new AlertMapper(alertPayloadConverter, analystDecisionMapper());
+  }
+
+  private AnalystDecisionMapper analystDecisionMapper() {
+    return new AnalystDecisionMapper();
   }
 }

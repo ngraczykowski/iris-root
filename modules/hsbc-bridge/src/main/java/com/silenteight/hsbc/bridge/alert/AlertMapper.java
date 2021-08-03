@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 class AlertMapper {
 
   private final AlertPayloadConverter payloadConverter;
+  private final AnalystDecisionMapper analystDecisionMapper;
 
   public Collection<Alert> toReportAlerts(@NonNull Collection<AlertDataComposite> alerts) {
     return alerts.stream()
@@ -60,6 +61,10 @@ class AlertMapper {
   }
 
   private Map<String, String> createAlertMetadata(AlertEntity alertEntity, AlertData alertData) {
+    var currentState = alertData.getCaseInformation().getCurrentState();
+    var analystDecision = analystDecisionMapper.getAnalystDecision(currentState);
+    var payload = payloadConverter.convertAlertDataToMap(alertData);
+
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(alertEntity.getExternalId()));
     map.put("name", nullToEmpty(alertEntity.getName()));
@@ -67,13 +72,16 @@ class AlertMapper {
     map.put("errorMessage", nullToEmpty(alertEntity.getErrorMessage()));
     map.put("bulkId", alertEntity.getBulkId());
     map.put("status", alertEntity.getStatus().toString());
-    map.putAll(alertEntity.getMetadata().stream()
-        .collect(Collectors.toMap(AlertMetadata::getKey, AlertMetadata::getValue)));
-
-    var payload = payloadConverter.convertAlertDataToMap(alertData);
+    map.put("analyst_decision", nullToEmpty(analystDecision));
     map.putAll(payload);
+    map.putAll(getAlertEntityMetadata(alertEntity));
 
     return map;
+  }
+
+  private Map<String, String> getAlertEntityMetadata(AlertEntity alertEntity) {
+    return alertEntity.getMetadata().stream()
+        .collect(Collectors.toMap(AlertMetadata::getKey, AlertMetadata::getValue));
   }
 
   private static Match mapToMatch(AlertMatchEntity matchEntity) {
