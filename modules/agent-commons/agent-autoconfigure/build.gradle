@@ -10,6 +10,9 @@ dependencies {
   compileOnly libraries.grpc_server_spring_boot_starter
 
   implementation libraries.jakarta_validation_api
+  implementation libraries.commons_lang3
+  implementation libraries.junit_jupiter_api
+  implementation libraries.assertj_core
 
   api libraries.spring_cloud_starter_sleuth
   api libraries.s8_spring_cloud_consul_discovery

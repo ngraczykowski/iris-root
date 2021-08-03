@@ -1,8 +1,8 @@
-package com.silenteight.agent.common.grpc.metadata;
+package com.silenteight.agent.autoconfigure.grpc.metadata;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.agent.common.grpc.metadata.AgentInformationEnhancingServerInterceptor.EnhancingServerInterceptorConfiguration;
+import com.silenteight.agent.autoconfigure.grpc.metadata.AgentInformationEnhancingServerInterceptor.EnhancingServerInterceptorConfiguration;
 
 import io.grpc.ServerBuilder;
 import net.devh.boot.grpc.server.serverfactory.GrpcServerConfigurer;

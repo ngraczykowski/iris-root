@@ -1,4 +1,4 @@
-package com.silenteight.agent.common.grpc.metadata;
+package com.silenteight.agent.autoconfigure.grpc.metadata;
 
 import org.jetbrains.annotations.NotNull;
 

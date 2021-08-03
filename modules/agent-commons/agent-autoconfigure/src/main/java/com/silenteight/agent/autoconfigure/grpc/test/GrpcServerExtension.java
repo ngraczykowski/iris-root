@@ -1,4 +1,4 @@
-package com.silenteight.agent.common.grpc;
+package com.silenteight.agent.autoconfigure.grpc.test;
 
 import lombok.Getter;
 
