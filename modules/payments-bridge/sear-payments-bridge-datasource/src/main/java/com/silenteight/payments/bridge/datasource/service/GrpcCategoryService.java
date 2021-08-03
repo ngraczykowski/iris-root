@@ -1,5 +1,7 @@
 package com.silenteight.payments.bridge.datasource.service;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.CategoryServiceImplBase;
@@ -11,15 +13,17 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
+@RequiredArgsConstructor
 class GrpcCategoryService extends CategoryServiceImplBase {
+
+  private final CategoryService categoryService;
 
   @Override
   public void listCategories(
       ListCategoriesRequest request,
       StreamObserver<ListCategoriesResponse> responseObserver) {
-
-    // TODO(ahaczewski): Implement listCategories.
-    super.listCategories(request, responseObserver);
+    responseObserver.onNext(categoryService.listCategories());
+    responseObserver.onCompleted();
   }
 
   @Override
@@ -27,7 +31,7 @@ class GrpcCategoryService extends CategoryServiceImplBase {
       BatchGetMatchCategoryValuesRequest request,
       StreamObserver<BatchGetMatchCategoryValuesResponse> responseObserver) {
 
-    // TODO(ahaczewski): Implement batchGetMatchCategoryValues.
-    responseObserver.onError(Status.UNIMPLEMENTED.asRuntimeException());
+    responseObserver.onNext(categoryService.batchGetMatchCategoryValues(request));
+    responseObserver.onCompleted();
   }
 }
