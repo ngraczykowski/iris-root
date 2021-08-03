@@ -588,3 +588,11 @@ databaseChangeLog:
                   defaultValueDate: "CURRENT_TIMESTAMP(3)"
                   constraints:
                     nullable: false
+
+  - changeSet:
+      id: 1.0.0-18
+      author: bmartofel
+      changes:
+        - dropNotNullConstraint:
+            tableName: hsbc_bridge_alert
+            columnName: alert_time
