@@ -10,8 +10,6 @@ import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationState;
 import com.silenteight.simulator.management.list.dto.SimulationDto;
-import com.silenteight.simulator.management.statistics.dto.EffectivenessDto;
-import com.silenteight.simulator.management.statistics.dto.EfficiencyDto;
 
 import java.time.Instant;
 import java.util.List;
@@ -98,17 +96,5 @@ public final class SimulationFixtures {
           .datasets(DATASETS)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
-          .build();
-
-  public static final EfficiencyDto SIMULATION_STATISTICS_EFFICIENCY =
-      EfficiencyDto.builder()
-          .solvedAlerts(SOLVED_ALERTS)
-          .allAlerts(ALL_ALERTS)
-          .build();
-
-  public static final EffectivenessDto SIMULATION_STATISTICS_EFFECTIVENESS =
-      EffectivenessDto.builder()
-          .aiSolvedAsFalsePositive(AI_SOLVED_AS_FALSE_POSITIVE)
-          .analystSolvedAsFalsePositive(ANALYSTS_SOLVED_AS_FALSE_POSITIVE)
           .build();
 }
