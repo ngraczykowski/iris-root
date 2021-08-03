@@ -17,7 +17,7 @@ warehouse:
     default-bucket: reports
     synchronization:
       production-tenant: ${warehouse.environment.prefix}_production_periodic
-      cron: "0 */1 * * * ?"
+      cron: "-"
     simulation:
       master-tenant: ${warehouse.environment.prefix}_simulation_master
   opendistro:

@@ -8,11 +8,14 @@ import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.security.SecureRandom;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import static java.time.ZoneOffset.UTC;
+import static java.time.ZonedDateTime.now;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toMap;
 
@@ -30,8 +33,7 @@ class AlertGenerator {
         "s8_recommendation",
         getRandomValue("ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE"));
     payload.put(
-        "recommendationDate",
-        getRandomValue("2021-07-21T13:01:38.295455Z", "2021-07-21T13:01:38.291792Z"));
+        "recommendationDate", now(UTC).format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
     payload.put("lob_country", getRandomValue("PL", "DE", "UK"));
     payload.put("risk_type", getRandomValue("SAN", "PEP"));
     payload.put(
@@ -46,10 +48,12 @@ class AlertGenerator {
             "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
             "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"));
     payload.put(
-        "stepId", getRandomValue("steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
+        "stepId", getRandomValue(
+            "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
             "steps/4461c9c8-4980-4d63-9fc8-afe3e677eacf"));
     payload.put(
-        "step", getRandomValue("steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
+        "step", getRandomValue(
+            "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
             "steps/4461c9c8-4980-4d63-9fc8-afe3e677eacf"));
     payload.put("1.CustomerEntities.LoB Region", getRandomValue("EGY", "ASP"));
     payload.put("1.CustomerEntities.Address", "Fixed Value CE1");
