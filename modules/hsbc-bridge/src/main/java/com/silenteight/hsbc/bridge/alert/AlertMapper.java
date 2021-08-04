@@ -2,25 +2,45 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
+import com.silenteight.hsbc.bridge.json.external.model.CaseComment;
+import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.report.Alert;
 import com.silenteight.hsbc.bridge.report.Alert.Match;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
+import static java.time.LocalDateTime.parse;
+import static java.time.ZoneOffset.UTC;
+import static java.time.temporal.ChronoField.HOUR_OF_DAY;
+import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
+import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Slf4j
 class AlertMapper {
 
   private final AlertPayloadConverter payloadConverter;
   private final AnalystDecisionMapper analystDecisionMapper;
+
+  // TODO ALL-266
+  private static final DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
+      .parseCaseInsensitive()
+      .appendPattern("dd-MMM-yy")
+      .parseDefaulting(HOUR_OF_DAY, 0)
+      .parseDefaulting(MINUTE_OF_HOUR, 0)
+      .toFormatter(Locale.ENGLISH);
 
   public Collection<Alert> toReportAlerts(@NonNull Collection<AlertDataComposite> alerts) {
     return alerts.stream()
@@ -61,10 +81,6 @@ class AlertMapper {
   }
 
   private Map<String, String> createAlertMetadata(AlertEntity alertEntity, AlertData alertData) {
-    var currentState = alertData.getCaseInformation().getCurrentState();
-    var analystDecision = analystDecisionMapper.getAnalystDecision(currentState);
-    var payload = payloadConverter.convertAlertDataToMap(alertData);
-
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(alertEntity.getExternalId()));
     map.put("name", nullToEmpty(alertEntity.getName()));
@@ -72,11 +88,17 @@ class AlertMapper {
     map.put("errorMessage", nullToEmpty(alertEntity.getErrorMessage()));
     map.put("bulkId", alertEntity.getBulkId());
     map.put("status", alertEntity.getStatus().toString());
-    map.put("analyst_decision", nullToEmpty(analystDecision));
-    map.putAll(payload);
+    map.put("analyst_decision", nullToEmpty(getAnalystDecision(alertData.getCaseInformation())));
+    map.putAll(payloadConverter.convertAlertDataToMap(alertData));
     map.putAll(getAlertEntityMetadata(alertEntity));
 
+    getLastCaseComment(alertData.getCaseComments()).ifPresent(c -> map.put("lastCaseComment", c));
+
     return map;
+  }
+
+  private String getAnalystDecision(CaseInformation caseInformation) {
+    return analystDecisionMapper.getAnalystDecision(caseInformation.getCurrentState());
   }
 
   private Map<String, String> getAlertEntityMetadata(AlertEntity alertEntity) {
@@ -104,5 +126,23 @@ class AlertMapper {
     map.put("name", nullToEmpty(matchEntity.getName()));
 
     return map;
+  }
+
+  private static Optional<String> getLastCaseComment(List<CaseComment> caseComments) {
+    return caseComments.stream()
+        .filter(c -> StringUtils.isNotEmpty(c.getCommentDateTime()))
+        .sorted(comparingLong((k) -> toDate(k.getCommentDateTime())))
+        .map(CaseComment::getCaseComment)
+        .filter(StringUtils::isNotEmpty)
+        .findFirst();
+  }
+
+  private static long toDate(@NonNull String commentDateTime) {
+    try {
+      return parse(commentDateTime.toUpperCase(), DATE_TIME_FORMATTER).toEpochSecond(UTC);
+    } catch (DateTimeParseException ex) {
+      log.error("Cannot parse case comment date = {}", commentDateTime, ex);
+      return Long.MIN_VALUE;
+    }
   }
 }

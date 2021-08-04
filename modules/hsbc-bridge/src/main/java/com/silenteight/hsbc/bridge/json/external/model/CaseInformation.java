@@ -24,6 +24,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Slf4j
 public class CaseInformation {
 
+  // TODO ALL-266
   private static final DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
       .parseCaseInsensitive()
       .appendPattern("dd-MMM-yy")
