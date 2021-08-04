@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -133,29 +132,8 @@ public class CaseInformation {
 
   @JsonIgnore
   public Optional<OffsetDateTime> getAlertTime() {
-    return getNewAlertDate()
-        .map(Optional::of)
-        .orElse(getReAlertDate())
+    return safeGetAsDate(stateChangeDateTime)
         .map(l -> l.atStartOfDay(ZoneOffset.UTC).toOffsetDateTime());
-  }
-
-  @JsonIgnore
-  private Optional<LocalDate> getReAlertDate() {
-    return safeGetAsDate(stateChangeDateTime);
-  }
-
-  @JsonIgnore
-  private Optional<LocalDate> getNewAlertDate() {
-    var createdDateResult = safeGetAsDate(createdDateTime);
-    var modifiedDateResult = safeGetAsDate(extendedAttribute13DateTime);
-
-    if (createdDateResult.isEmpty() || modifiedDateResult.isEmpty()) {
-      return empty();
-    }
-
-    var createdDate = createdDateResult.get();
-    var modifiedDate = modifiedDateResult.get();
-    return modifiedDate.isAfter(createdDate) ? of(createdDate) : empty();
   }
 
   private static Optional<LocalDate> safeGetAsDate(String date) {
