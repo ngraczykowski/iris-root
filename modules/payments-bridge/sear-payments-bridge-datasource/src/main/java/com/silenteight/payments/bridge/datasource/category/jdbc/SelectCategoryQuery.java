@@ -6,7 +6,6 @@ import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesR
 
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor

@@ -19,18 +19,20 @@ class GetMatchNameInputsUseCase {
       BatchGetMatchNameInputsRequest request, Consumer<BatchGetMatchNameInputsResponse> consumer) {
 
     readFeatures(
-        request, agentInput -> consumer.accept(generateBatchGetMatchNameInputsResponse(agentInput)));
+        request,
+        agentInput -> consumer.accept(generateBatchGetMatchNameInputsResponse(agentInput)));
   }
 
   private void readFeatures(
       BatchGetMatchNameInputsRequest request, Consumer<String> consumer) {
 
-//    Pass some required data for the query from the request
+    //Pass some required data for the query from the request
     featureDataAccess.streamFeatures(consumer);
   }
 
   private BatchGetMatchNameInputsResponse generateBatchGetMatchNameInputsResponse(
       String agentInput) {
-//    TODO: Implement generateBatchGetMatchNameInputsResponse
-    return null;  }
+    //TODO: Implement generateBatchGetMatchNameInputsResponse
+    return null;
+  }
 }

@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 @Repository
 @RequiredArgsConstructor
-class JdbcFeatureDataAccess implements FeatureDataAccess{
+class JdbcFeatureDataAccess implements FeatureDataAccess {
 
   private final SelectFeaturesQuery selectFeaturesQuery;
 

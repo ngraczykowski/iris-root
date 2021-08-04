@@ -20,18 +20,20 @@ class GetMatchLocationInputsUseCase {
       Consumer<BatchGetMatchLocationInputsResponse> consumer) {
 
     readFeatures(
-        request, agentInput -> consumer.accept(generateBatchGetMatchLocationInputsResponse(agentInput)));
+        request,
+        agentInput -> consumer.accept(generateBatchGetMatchLocationInputsResponse(agentInput)));
   }
+
   private void readFeatures(
       BatchGetMatchLocationInputsRequest request, Consumer<String> consumer) {
 
-//    Pass some required data for the query from the request
+    //Pass some required data for the query from the request
     featureDataAccess.streamFeatures(consumer);
   }
 
   private BatchGetMatchLocationInputsResponse generateBatchGetMatchLocationInputsResponse(
       String agentInput) {
-//    TODO: Implement generateBatchGetMatchLocationInputsResponse
+    //TODO: Implement generateBatchGetMatchLocationInputsResponse
     return null;
   }
 

@@ -24,7 +24,8 @@ class FeatureService {
   }
 
   void batchGetMatchLocationInputs(
-      BatchGetMatchLocationInputsRequest request, Consumer<BatchGetMatchLocationInputsResponse> onNext) {
+      BatchGetMatchLocationInputsRequest request,
+      Consumer<BatchGetMatchLocationInputsResponse> onNext) {
     facade.batchGetMatchLocationInputs(request, onNext);
   }
 

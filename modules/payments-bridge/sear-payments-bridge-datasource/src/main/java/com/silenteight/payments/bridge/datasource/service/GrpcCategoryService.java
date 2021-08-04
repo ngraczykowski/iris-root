@@ -8,7 +8,6 @@ import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.Category
 import com.silenteight.datasource.categories.api.v1.ListCategoriesRequest;
 import com.silenteight.datasource.categories.api.v1.ListCategoriesResponse;
 
-import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 

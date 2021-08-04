@@ -6,7 +6,6 @@ import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsRequest;
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsResponse;
 import com.silenteight.datasource.api.name.v1.NameInputServiceGrpc.NameInputServiceImplBase;
 
-import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
-import com.silenteight.datasource.categories.api.v1.ListCategoriesRequest;
 import com.silenteight.datasource.categories.api.v1.ListCategoriesResponse;
 import com.silenteight.payments.bridge.datasource.category.CategoryFacade;
 
