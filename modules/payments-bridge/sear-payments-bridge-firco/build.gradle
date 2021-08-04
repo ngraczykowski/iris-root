@@ -9,6 +9,7 @@ dependencies {
 
   implementation libraries.spring_context
   implementation libraries.spring_web
+  implementation libraries.spring_webmvc
 
   implementation libraries.hibernate_validator
   implementation libraries.jackson_annotations

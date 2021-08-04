@@ -1,6 +1,8 @@
 package com.silenteight.payments.bridge.firco.dto.common;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import com.silenteight.payments.bridge.firco.dto.validator.MinimalAlertDefinition;
 
