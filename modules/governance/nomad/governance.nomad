@@ -207,6 +207,24 @@ job "governance" {
         change_mode = "noop"
       }
 
+      template {
+        data = file("./conf/agents/agent_configs.json")
+        destination = "local/conf/agents/agent_configs.json"
+        change_mode = "noop"
+      }
+
+      template {
+        data = file("./conf/agents/agent_details.json")
+        destination = "local/conf/agents/agent_details.json"
+        change_mode = "noop"
+      }
+
+      template {
+        data = file("./conf/agents/configurations/date-enty-normal.json")
+        destination = "local/conf/agents/configurations/date-enty-normal.json"
+        change_mode = "noop"
+      }
+
       env {
         LOG_PATH = "${NOMAD_ALLOC_DIR}/logs"
       }

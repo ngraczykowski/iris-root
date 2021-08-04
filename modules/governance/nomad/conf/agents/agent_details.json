@@ -1,0 +1,260 @@
+{
+  "agents/name/versions/1.0.0/configs/1": {
+    "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
+    "features": [
+      "features/name"
+    ],
+    "responses": [
+      "STRONG_MATCH",
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "EXACT_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]},
+  "agents/date/versions/1.0.0/configs/1": {
+    "agentId": "7bfdc601-06d3-4aa2-a13e-015e2bc8f72f",
+    "features": [
+      "features/dateOfBirth"
+    ],
+    "responses": [
+      "EXACT",
+      "NEAR",
+      "OUT_OF_RANGE",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/document/versions/1.0.0/configs/1": {
+    "agentId": "13807c0f-1b88-4043-a32c-dc45b1a9068c",
+    "features": [
+      "features/passportNumberDocument",
+      "features/otherDocument"
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/nationalId/versions/1.0.0/configs/1": {
+    "agentId": "96d59e74-ce9c-11eb-b8bc-0242ac130003",
+    "features": [
+      "features/nationalIdDocument"
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/gender/versions/1.0.0/configs/1": {
+    "agentId": "bf5a2cdd-e797-428d-9657-85a3b241c9ba",
+    "features": [
+      "features/gender"
+    ],
+    "responses": [
+      "MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/country/versions/1.0.0/configs/1": {
+    "agentId": "6d53ff99-2578-4a9e-bfde-9966d4fd31ee",
+    "features": [
+      "features/residencyCountry",
+      "features/registrationCountry",
+      "features/incorporationCountry",
+      "features/nationalityCountry",
+      "features/otherCountry"
+    ],
+    "responses": [
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/historicalDecisions/versions/1.0.0/configs/1": {
+    "agentId": "6ca7f680-8a1b-44f4-8bfb-5aa62f8e543d",
+    "features": [
+      "features/isTpMarked",
+      "features/isApTpMarked",
+      "features/isCaseTpMarked"
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "INCONCLUSIVE",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/invalidAlert/versions/1.0.0/configs/1": {
+    "agentId": "cdf2ffda-2011-4dd9-9d56-e8740becda35",
+    "features": [
+      "features/invalidAlert"
+    ],
+    "responses": [
+      "FI",
+      "YES",
+      "NO",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/allowList/versions/1.0.0/configs/1": {
+    "agentId": "1b6b5c3b-0fed-4c59-bbdd-bbc1affe177c",
+    "features": [
+      "features/commonNames",
+      "features/commonAp",
+      "features/commonMp"
+    ],
+    "responses": [
+      "YES",
+      "NO",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/geo/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geoResidencies",
+      "features/geoPlaceOfBirth"
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/ispep/versions/1.0.0/configs/1": {
+    "agentId": "84b322ed-018e-4bff-9518-12376f536e63",
+    "features": [
+      "features/isPep"
+    ],
+    "responses": [
+      "INCONCLUSIVE",
+      "NOT_PEP_ANYMORE",
+      "NOT_PEP_HISTORICAL",
+      "NOT_PEP_PROCEDURAL",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/logicalDiscountingDob/versions/1.0.0/configs/1": {
+    "agentId": "f4a4911e-f57d-4a34-a6a6-b3e47e242a80",
+    "features": [
+      "features/logicalDiscountingDob"
+    ],
+    "responses": [
+      "IMBOSSIBLE",
+      "UNLIKELY",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/companyName/versions/1.0.0/configs/1": {
+    "agentId": "e7cbc43a-ca0e-400b-b1d5-97a5400273b8",
+    "features": [
+      "features/companyName"
+    ],
+    "responses": [
+      "MATCH",
+      "INCONCLUSIVE",
+      "NO_MATCH",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  }
+}

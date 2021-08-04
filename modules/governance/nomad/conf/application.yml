@@ -24,6 +24,10 @@ keycloak:
     ssl-required: external
 
 serp:
+  governance:
+    agent:
+      agentConfigurationSource: file:conf/agents/agent_configs.json
+      agentDetailsSource: file:conf/agents/agent_details.json
   governance.qa:
     sampling:
       schedule:
