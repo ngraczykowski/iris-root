@@ -1,0 +1,11 @@
+first.cfg:
+  year-exclusions:
+    - 9999
+  month-day-exclusions:
+    - '01-01'
+
+second.cfg:
+  result-priority:
+    - EXACT
+    - NEAR
+    - OUT_OF_RANGE

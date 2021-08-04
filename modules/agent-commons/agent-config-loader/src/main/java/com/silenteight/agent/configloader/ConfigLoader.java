@@ -20,7 +20,7 @@ public class ConfigLoader<PropertiesTypeT> {
     this.configsPathFinder = new ConfigsPathFinder(applicationName);
   }
 
-  ConfigLoader(
+  public ConfigLoader(
       ConfigsPathFinder configsPathFinder, String prefix, Class<PropertiesTypeT> propertiesType) {
     this.configsPathFinder = configsPathFinder;
     this.prefix = prefix;
@@ -39,6 +39,24 @@ public class ConfigLoader<PropertiesTypeT> {
       }
     }
     return agentConfigs;
+  }
+
+  public AgentConfigs<PropertiesTypeT> load(String applicationName) {
+    try {
+      return getConfigLoader(applicationName).load();
+    } catch (IOException e) {
+      throw new IllegalStateException("Cannot load configs for: " + applicationName, e);
+    }
+  }
+
+  private ConfigLoader<PropertiesTypeT> getConfigLoader(String applicationName) {
+    return configsPathFinder != null
+           ? new ConfigLoader<>(configsPathFinder, prefix, propertiesType)
+           : this;
+  }
+
+  public Class<PropertiesTypeT> getPropertiesType() {
+    return propertiesType;
   }
 
   private static String getAgentName(Path configFile) {
