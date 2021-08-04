@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package silenteight.agents.v1.api.exchange;
 
+import "google/api/field_behavior.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 
 option java_package = "com.silenteight.agents.v1.api.exchange";
 option java_outer_classname = "AgentsExchangeProto";
@@ -11,6 +13,14 @@ option java_multiple_files = true;
 message AgentExchangeRequest {
   repeated string matches = 1;
   repeated string features = 2;
+
+  // The time after which the agent solution for the request does not matter.
+  // When not set, then there is no deadline, i.e., the response to the request can come at any
+  // time.
+  // The implementor shall respect the deadline and respond to the request before the deadline
+  // passes. When the deadline is exceeded, the implementor shall respond with the solution
+  // "DEADLINE_EXCEEDED".
+  google.protobuf.Timestamp deadline_time = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message AgentExchangeResponse {
