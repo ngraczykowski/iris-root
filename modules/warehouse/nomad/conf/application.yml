@@ -121,7 +121,7 @@ warehouse.report.rbs:
       - name: alert_features/geoPlaceOfBirth:solution
         label: geo_place_of_birth
       - name: alert_features/geoResidencies:solution
-        label: get_residencies
+        label: geo_residencies
       - name: alert_features/incorporationCountry:solution
         label: incorporation_country
       - name: alert_features/invalidAlert:solution
@@ -141,7 +141,7 @@ warehouse.report.rbs:
       - name: alert_features/nationalIdDocument:solution
         label: national_id_document
       - name: alert_features/nationalityCountry:solution
-        label: national_country
+        label: nationality_country
       - name: alert_features/otherCountry:solution
         label: other_country
       - name: alert_features/otherDocument:solution
@@ -191,7 +191,7 @@ warehouse.report.rbs:
       - name: alert_features/geoPlaceOfBirth:solution
         label: geo_place_of_birth
       - name: alert_features/geoResidencies:solution
-        label: get_residencies
+        label: geo_residencies
       - name: alert_features/incorporationCountry:solution
         label: incorporation_country
       - name: alert_features/invalidAlert:solution
@@ -211,7 +211,7 @@ warehouse.report.rbs:
       - name: alert_features/nationalIdDocument:solution
         label: national_id_document
       - name: alert_features/nationalityCountry:solution
-        label: national_country
+        label: nationality_country
       - name: alert_features/otherCountry:solution
         label: other_country
       - name: alert_features/otherDocument:solution
