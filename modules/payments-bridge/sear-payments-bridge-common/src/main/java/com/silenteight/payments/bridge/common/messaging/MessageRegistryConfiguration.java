@@ -14,12 +14,13 @@ public class MessageRegistryConfiguration {
   @Primary
   MessageRegistry messageRegistryOverwrite() {
     MessageRegistryFactory factory = new MessageRegistryFactory(
-        "com.silenteight.adjudication.engine",
-        "com.silenteight.datasource",
-        "com.silenteight.agents",
+        "com.google.api",
         "com.google.protobuf",
         "com.google.rpc",
-        "com.google.type"
+        "com.google.type",
+        "com.silenteight.agents",
+        "com.silenteight.datasource",
+        "com.silenteight.proto.payments.bridge"
     );
 
     return factory.create();
