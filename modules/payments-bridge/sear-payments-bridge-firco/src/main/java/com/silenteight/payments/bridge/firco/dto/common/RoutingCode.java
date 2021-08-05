@@ -9,8 +9,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum RoutingCode {
-  ROUTING_CODE_INVALID(""), // For times where the input is not on the list wrong.
-  UNKNOWN("-1"), // For when operator opens the message, does nothing to routing.
+  /**
+   * For times where the routing code input value is not on this list.
+   */
+  ROUTING_CODE_INVALID(""),
+  /**
+   * For when an operator opens the message. Means nothing to routing.
+   */
+  UNKNOWN("-1"),
   NO_HIT("0"),
   HIT("1"),
   PASSED("2"),

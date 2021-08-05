@@ -21,13 +21,14 @@ import javax.validation.constraints.NotBlank;
 @Slf4j
 class FircoCaseManagerController {
 
+  private final CaseManagerService caseManagerService;
+
   @PostMapping("/sendMessage")
   public ResponseEntity<AckDto> sendMessage(
       @RequestBody @Validated(MinimalAlertDefinition.class) RequestDto requestDto,
       @RequestParam @NotBlank String dc) {
 
-    // 1. Authenticate
-    // 2. Pass alert(s) to rabbit exchange.
+    caseManagerService.sendMessage(requestDto, dc);
 
     return ResponseEntity.ok(AckDto.ok());
   }

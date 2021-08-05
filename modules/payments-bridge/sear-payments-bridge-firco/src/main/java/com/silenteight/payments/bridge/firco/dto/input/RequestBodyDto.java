@@ -23,6 +23,10 @@ public class RequestBodyDto implements Serializable {
   @Valid
   private RequestSendMessageDto sendMessageDto;
 
+  CaseManagerAuthenticationDto getCaseManagerAuthentication() {
+    return sendMessageDto.getAuthentication();
+  }
+
   List<AlertMessageDto> getAlerts() {
     return sendMessageDto.getAlerts();
   }

@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.firco.dto.output;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,6 +28,7 @@ public class FircoAuthenticationDto implements Serializable {
    * - Password.
    */
   @JsonProperty("ContinuityPassword")
+  @ToString.Exclude
   private String continuityPassword;
 
   /**

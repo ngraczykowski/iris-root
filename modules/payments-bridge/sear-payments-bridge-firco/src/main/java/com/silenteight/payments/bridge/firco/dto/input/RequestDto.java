@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,6 +29,17 @@ public class RequestDto implements Serializable {
   @NotNull
   @Valid
   private RequestBodyDto body;
+
+  public UsernamePasswordAuthenticationToken getAuthenticationToken() {
+    var authentication = getBody().getCaseManagerAuthentication();
+
+    return new UsernamePasswordAuthenticationToken(
+        authentication.getUserLogin(), authentication.getUserPassword());
+  }
+
+  public String getAuthenticationRealm() {
+    return getBody().getCaseManagerAuthentication().getUserRealm();
+  }
 
   public List<AlertDataCenterDto> getAlertDataCenters(@NonNull String dataCenter) {
     return body.getAlerts()

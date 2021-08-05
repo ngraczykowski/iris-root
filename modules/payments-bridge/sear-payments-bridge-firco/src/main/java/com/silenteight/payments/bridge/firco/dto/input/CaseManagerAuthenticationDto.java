@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.firco.dto.input;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +26,7 @@ public class CaseManagerAuthenticationDto implements Serializable {
    * Case manager password.
    */
   @JsonProperty("UserPassword")
+  @ToString.Exclude
   private String userPassword;
 
   /**
