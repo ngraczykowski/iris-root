@@ -30,7 +30,13 @@ class AlertProcessor {
       alerts.forEach(this::tryToPreProcessAlert);
     }
 
+    handleDuplicatedAlerts(bulkId);
     log.debug("Alerts pre-processing have been completed, batchId = {}", bulkId);
+  }
+
+  private void handleDuplicatedAlerts(String bulkId) {
+    repository.findDuplicateAlertsByBulkId(bulkId)
+        .forEach(a -> a.error("Alert ID is duplicated within a batch"));
   }
 
   private void tryToPreProcessAlert(AlertEntity alert) {

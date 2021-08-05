@@ -27,4 +27,9 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   @Modifying
   @Query("update AlertEntity a set a.status=:status where a.name IN :names")
   void updateStatusByNames(@Param("status") AlertStatus status, @Param("names") List<String> names);
+
+  @Query("SELECT a FROM AlertEntity a WHERE a.bulkId = :bulkId AND a.externalId IN "
+      + "(SELECT b.externalId FROM AlertEntity b WHERE b.bulkId = :bulkId"
+      + " GROUP BY b.externalId HAVING COUNT(b.id) > 1) ")
+  List<AlertEntity> findDuplicateAlertsByBulkId(@Param("bulkId") String bulkId);
 }
