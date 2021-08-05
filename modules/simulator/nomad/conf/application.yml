@@ -41,9 +41,6 @@ simulator:
 simulator.consul.enabled: true
 simulator.consul.config.enabled: false
 
-#Temporary drop table on start to clean up.
-spring.liquibase.drop-first: true
-
 grpc:
   client:
     adjudication-engine:
