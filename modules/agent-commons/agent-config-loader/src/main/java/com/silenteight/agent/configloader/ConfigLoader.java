@@ -1,5 +1,7 @@
 package com.silenteight.agent.configloader;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
@@ -7,24 +9,16 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@RequiredArgsConstructor
 public class ConfigLoader<PropertiesTypeT> {
 
+  private final ConfigsPathFinder configsPathFinder;
   private final String prefix;
   private final Class<PropertiesTypeT> propertiesType;
-  private final ConfigsPathFinder configsPathFinder;
 
   public ConfigLoader(
       String applicationName, String prefix, Class<PropertiesTypeT> propertiesType) {
-    this.prefix = prefix;
-    this.propertiesType = propertiesType;
-    this.configsPathFinder = new ConfigsPathFinder(applicationName);
-  }
-
-  public ConfigLoader(
-      ConfigsPathFinder configsPathFinder, String prefix, Class<PropertiesTypeT> propertiesType) {
-    this.configsPathFinder = configsPathFinder;
-    this.prefix = prefix;
-    this.propertiesType = propertiesType;
+    this(new ConfigsPathFinder(applicationName), prefix, propertiesType);
   }
 
   public AgentConfigs<PropertiesTypeT> load() throws IOException {
@@ -39,24 +33,6 @@ public class ConfigLoader<PropertiesTypeT> {
       }
     }
     return agentConfigs;
-  }
-
-  public AgentConfigs<PropertiesTypeT> load(String applicationName) {
-    try {
-      return getConfigLoader(applicationName).load();
-    } catch (IOException e) {
-      throw new IllegalStateException("Cannot load configs for: " + applicationName, e);
-    }
-  }
-
-  private ConfigLoader<PropertiesTypeT> getConfigLoader(String applicationName) {
-    return configsPathFinder != null
-           ? new ConfigLoader<>(configsPathFinder, prefix, propertiesType)
-           : this;
-  }
-
-  public Class<PropertiesTypeT> getPropertiesType() {
-    return propertiesType;
   }
 
   private static String getAgentName(Path configFile) {

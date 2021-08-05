@@ -24,6 +24,10 @@ public class ConfigsPathFinder {
     return applicationConfigs;
   }
 
+  public Path findFile(String subDir, String filePath) {
+    return find().resolve(subDir).resolve(filePath);
+  }
+
   private Path getApplicationConfigsPath() {
     var home = new HomeDirectoryDiscoverer(AGENT_HOME);
     var applicationDir = home.discover()
