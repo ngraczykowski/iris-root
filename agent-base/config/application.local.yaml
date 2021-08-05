@@ -1,0 +1,28 @@
+grpc:
+  client:
+    data-source:
+      address: localhost:24803
+      timeout: 5
+
+rabbitmq:
+  host: localhost
+  port: 24160
+  login: dev
+  password: dev
+  virtualhost: /
+
+consul:
+  host: localhost
+  port: 8500
+
+agent:
+  processes: 10
+
+  agent-exchange:
+    request:
+      exchange: 'agent.request'
+      routing-key: 'agents.EXAMPLE.versions.1_0_0.configs.1'
+      queue-name: 'agent.EXAMPLE-requests'
+
+    response:
+      exchange: 'agent.response'
